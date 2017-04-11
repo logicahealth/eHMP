@@ -1,0 +1,68 @@
+{
+  "apiVersion": "1.0",
+  "data": {
+    "updated": 20140808175950,
+    "totalItems": 2,
+    "currentItemCount": 2,
+    "items": [
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "groupName": "SP 03 1",
+        "categoryCode": "urn:va:lab-category:SP",
+        "categoryName": "Surgical Pathology",
+        "observed": "20030409",
+        "resulted": "200304091021",
+        "specimen": "TISSUE",
+        "kind": "Surgical Pathology",
+        "micro": false,
+        "abnormal": false,
+        "qualifiedName": "null (TISSUE)",
+        "uid": "urn:va:lab:9E7A:204:SP;6969590",
+        "summary": "null (TISSUE)",
+        "pid": "C877;204",
+        "localId": "SP;6969590",
+        "lnccodes": [],
+        "statusCode": "urn:va:lab-status:completed",
+        "organizerType": "accession",
+        "results": [
+          {
+            "localTitle": "LR SURGICAL PATHOLOGY REPORT",
+            "resultUid": "urn:va:document:9E7A:204:SP;6969590",
+            "uid": "urn:va:lab:9E7A:204:SP;6969590"
+          }
+        ],
+        "statusName": "completed"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP BEE",
+        "groupName": "SP 03 1",
+        "categoryCode": "urn:va:lab-category:SP",
+        "categoryName": "Surgical Pathology",
+        "observed": "20030409",
+        "resulted": "200304091021",
+        "specimen": "TISSUE",
+        "kind": "Surgical Pathology",
+        "micro": false,
+        "abnormal": false,
+        "qualifiedName": "null (TISSUE)",
+        "uid": "urn:va:lab:C877:204:SP;6969590",
+        "summary": "null (TISSUE)",
+        "pid": "C877;204",
+        "localId": "SP;6969590",
+        "lnccodes": [],
+        "statusCode": "urn:va:lab-status:completed",
+        "organizerType": "accession",
+        "results": [
+          {
+            "localTitle": "LR SURGICAL PATHOLOGY REPORT",
+            "resultUid": "urn:va:document:C877:204:SP;6969590",
+            "uid": "urn:va:lab:C877:204:SP;6969590"
+          }
+        ],
+        "statusName": "completed"
+      }
+    ]
+  }
+}

@@ -1,0 +1,285 @@
+{
+    "apiVersion": "1.0",
+    "data": {
+        "updated": 20140625122320,
+        "totalItems": 3,
+        "currentItemCount": 3,
+        "items": [
+            {
+                "uid": "urn:va:med:9E7A:116:10256",
+                "summary": "TIMOLOL MALEATE 0.25% SOLN,OPH (EXPIRED)\n ",
+                "pid": "9E7A;116",
+                "facilityCode": "998",
+                "facilityName": "ABILENE (CAA)",
+                "localId": "401908;O",
+                "productFormName": "SOLN",
+                "sig": "",
+                "patientInstruction": "",
+                "overallStart": "19990901",
+                "overallStop": "20000722",
+                "stopped": "20000722",
+                "medStatus": "urn:sct:392521001",
+                "medStatusName": "historical",
+                "medType": "urn:sct:73639000",
+                "vaType": "O",
+                "vaStatus": "EXPIRED",
+                "supply": false,
+                "products": [
+                    {
+                        "summary": "MedicationProduct{uid='null'}",
+                        "ingredientCode": "urn:va:vuid:4019949",
+                        "ingredientCodeName": "TIMOLOL",
+                        "ingredientName": "TIMOLOL SOLN",
+                        "drugClassCode": "urn:vadc:OP101",
+                        "drugClassName": "BETA-BLOCKERS,TOPICAL OPHTHALMIC",
+                        "suppliedCode": "urn:va:vuid:4002851",
+                        "suppliedName": "TIMOLOL MALEATE 0.25% SOLN,OPH",
+                        "ingredientRole": "urn:sct:410942007",
+                        "ingredientRXNCode": "urn:rxnorm:10600"
+                    }
+                ],
+                "dosages": [
+                    {
+                        "summary": "MedicationDose{uid='null'}",
+                        "dose": "",
+                        "units": "",
+                        "routeName": "OPH",
+                        "scheduleName": "OU BID",
+                        "start": "19990901",
+                        "stop": "20000722",
+                        "relativeStart": 0,
+                        "relativeStop": 468000
+                    }
+                ],
+                "orders": [
+                    {
+                        "summary": "MedicationOrder{uid='null'}",
+                        "orderUid": "urn:va:order:9E7A:116:10256",
+                        "prescriptionId": "100001911",
+                        "ordered": "199907221359",
+                        "providerUid": "urn:va:user:9E7A:11817",
+                        "providerName": "RADTECH,FORTYONE",
+                        "pharmacistUid": "urn:va:user:9E7A:923",
+                        "pharmacistName": "PROGRAMMER,TWENTYEIGHT",
+                        "fillCost": "5.13",
+                        "locationName": "ELVAN",
+                        "locationUid": "urn:va:location:9E7A:192",
+                        "quantityOrdered": "1",
+                        "daysSupply": 30,
+                        "fillsAllowed": 1,
+                        "fillsRemaining": 1,
+                        "vaRouting": "W"
+                    }
+                ],
+                "fills": [
+                    {
+                        "summary": "MedicationFill{uid='null'}",
+                        "dispenseDate": "19990901",
+                        "quantityDispensed": "1",
+                        "daysSupplyDispensed": 30,
+                        "routing": "W"
+                    }
+                ],
+                "lastFilled": "19990901",
+                "qualifiedName": "TIMOLOL SOLN",
+                "administrations": [],
+                "codes": [
+                    {
+                        "code": "198283",
+                        "system": "urn:oid:2.16.840.1.113883.6.88",
+                        "display": "Timolol 2.5 MG/ML Ophthalmic Solution"
+                    }
+                ],
+                "rxncodes": [
+                    "urn:vandf:4019949",
+                    "urn:ndfrt:N0000000001",
+                    "urn:ndfrt:N0000010602",
+                    "urn:ndfrt:N0000010582",
+                    "urn:ndfrt:N0000006504",
+                    "urn:rxnorm:10600"
+                ],
+                "kind": "Medication, Outpatient",
+                "units": "",
+                "IMO": false,
+                "name": "TIMOLOL SOLN",
+                "type": "Prescription"
+            },
+            {
+                "uid": "urn:va:med:9E7A:116:10266",
+                "summary": "FAMOTIDINE 10MG TAB (DISCONTINUED)\n TAKE 1 EVERY MORNING",
+                "pid": "9E7A;116",
+                "facilityCode": "500",
+                "facilityName": "CAMP MASTER",
+                "localId": "401844;O",
+                "productFormName": "TAB",
+                "sig": "TAKE 1 EVERY MORNING",
+                "patientInstruction": "",
+                "overallStart": "19990625",
+                "overallStop": "199907231145",
+                "stopped": "199907231145",
+                "medStatus": "urn:sct:73425007",
+                "medStatusName": "not active",
+                "medType": "urn:sct:73639000",
+                "vaType": "O",
+                "vaStatus": "DISCONTINUED",
+                "supply": false,
+                "products": [
+                    {
+                        "summary": "MedicationProduct{uid='null'}",
+                        "ingredientCode": "urn:va:vuid:4017970",
+                        "ingredientCodeName": "FAMOTIDINE",
+                        "ingredientName": "FAMOTIDINE TAB",
+                        "drugClassCode": "urn:vadc:GA301",
+                        "drugClassName": "HISTAMINE ANTAGONISTS",
+                        "suppliedCode": "urn:va:vuid:4003002",
+                        "suppliedName": "FAMOTIDINE 10MG TAB",
+                        "ingredientRole": "urn:sct:410942007",
+                        "strength": "10 MG",
+                        "ingredientRXNCode": "urn:rxnorm:4278"
+                    }
+                ],
+                "dosages": [],
+                "orders": [
+                    {
+                        "summary": "MedicationOrder{uid='null'}",
+                        "orderUid": "urn:va:order:9E7A:116:10266",
+                        "prescriptionId": "100001871",
+                        "ordered": "19990624",
+                        "providerUid": "urn:va:user:9E7A:11817",
+                        "providerName": "RADTECH,FORTYONE",
+                        "pharmacistUid": "urn:va:user:9E7A:11817",
+                        "pharmacistName": "RADTECH,FORTYONE",
+                        "fillCost": "1.8",
+                        "locationName": "DIABETIC",
+                        "locationUid": "urn:va:location:9E7A:285",
+                        "quantityOrdered": "30",
+                        "daysSupply": 30,
+                        "fillsAllowed": 5,
+                        "fillsRemaining": 5,
+                        "vaRouting": "",
+                        "successor": "urn:va:med:9E7A:116:10268"
+                    }
+                ],
+                "fills": [
+                    {
+                        "summary": "MedicationFill{uid='null'}",
+                        "dispenseDate": "19990625",
+                        "quantityDispensed": "30",
+                        "daysSupplyDispensed": 30,
+                        "routing": "W"
+                    }
+                ],
+                "lastFilled": "19990625",
+                "qualifiedName": "FAMOTIDINE TAB",
+                "administrations": [],
+                "codes": [
+                    {
+                        "code": "199047",
+                        "system": "urn:oid:2.16.840.1.113883.6.88",
+                        "display": "Famotidine 10 MG Oral Tablet"
+                    }
+                ],
+                "rxncodes": [
+                    "urn:vandf:4017970",
+                    "urn:ndfrt:N0000000001",
+                    "urn:ndfrt:N0000010588",
+                    "urn:ndfrt:N0000010582",
+                    "urn:ndfrt:N0000006373",
+                    "urn:rxnorm:4278"
+                ],
+                "kind": "Medication, Outpatient",
+                "IMO": false,
+                "name": "FAMOTIDINE TAB",
+                "type": "Prescription"
+            },
+            {
+                "uid": "urn:va:med:9E7A:116:10268",
+                "summary": "FAMOTIDINE 10MG TAB (EXPIRED)\n TAKE 1 EVERY MORNING",
+                "pid": "9E7A;116",
+                "facilityCode": "998",
+                "facilityName": "ABILENE (CAA)",
+                "localId": "401846;O",
+                "productFormName": "TAB",
+                "sig": "TAKE 1 EVERY MORNING",
+                "patientInstruction": "",
+                "overallStart": "19990723",
+                "overallStop": "20000723",
+                "stopped": "20000723",
+                "medStatus": "urn:sct:392521001",
+                "medStatusName": "historical",
+                "medType": "urn:sct:73639000",
+                "vaType": "O",
+                "vaStatus": "EXPIRED",
+                "supply": false,
+                "products": [
+                    {
+                        "summary": "MedicationProduct{uid='null'}",
+                        "ingredientCode": "urn:va:vuid:4017970",
+                        "ingredientCodeName": "FAMOTIDINE",
+                        "ingredientName": "FAMOTIDINE TAB",
+                        "drugClassCode": "urn:vadc:GA301",
+                        "drugClassName": "HISTAMINE ANTAGONISTS",
+                        "suppliedCode": "urn:va:vuid:4003002",
+                        "suppliedName": "FAMOTIDINE 10MG TAB",
+                        "ingredientRole": "urn:sct:410942007",
+                        "strength": "10 MG",
+                        "ingredientRXNCode": "urn:rxnorm:4278"
+                    }
+                ],
+                "dosages": [],
+                "orders": [
+                    {
+                        "summary": "MedicationOrder{uid='null'}",
+                        "orderUid": "urn:va:order:9E7A:116:10268",
+                        "prescriptionId": "100001871B",
+                        "ordered": "19990723",
+                        "providerUid": "urn:va:user:9E7A:11817",
+                        "providerName": "RADTECH,FORTYONE",
+                        "pharmacistUid": "urn:va:user:9E7A:11817",
+                        "pharmacistName": "RADTECH,FORTYONE",
+                        "fillCost": "1.8",
+                        "locationName": "ELVAN",
+                        "locationUid": "urn:va:location:9E7A:192",
+                        "quantityOrdered": "30",
+                        "daysSupply": 30,
+                        "fillsAllowed": 5,
+                        "fillsRemaining": 5,
+                        "vaRouting": "",
+                        "predecessor": "urn:va:med:9E7A:116:10266"
+                    }
+                ],
+                "fills": [
+                    {
+                        "summary": "MedicationFill{uid='null'}",
+                        "dispenseDate": "19990723",
+                        "quantityDispensed": "30",
+                        "daysSupplyDispensed": 30,
+                        "routing": "W"
+                    }
+                ],
+                "lastFilled": "19990723",
+                "qualifiedName": "FAMOTIDINE TAB",
+                "administrations": [],
+                "codes": [
+                    {
+                        "code": "199047",
+                        "system": "urn:oid:2.16.840.1.113883.6.88",
+                        "display": "Famotidine 10 MG Oral Tablet"
+                    }
+                ],
+                "rxncodes": [
+                    "urn:vandf:4017970",
+                    "urn:ndfrt:N0000000001",
+                    "urn:ndfrt:N0000010588",
+                    "urn:ndfrt:N0000010582",
+                    "urn:ndfrt:N0000006373",
+                    "urn:rxnorm:4278"
+                ],
+                "kind": "Medication, Outpatient",
+                "IMO": false,
+                "name": "FAMOTIDINE TAB",
+                "type": "Prescription"
+            }
+        ]
+    }
+}

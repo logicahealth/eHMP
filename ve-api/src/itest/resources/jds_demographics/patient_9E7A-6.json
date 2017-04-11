@@ -1,0 +1,145 @@
+{
+  "apiVersion": "1.0",
+  "data": {
+    "updated": 20140808180011,
+    "totalItems": 1,
+    "currentItemCount": 1,
+    "items": [
+      {
+        "address": [
+          {
+            "state": "NY",
+            "use": "H",
+            "zip": "99998-0071"
+          }
+        ],
+        "admissionUid": "urn:va:visit:9E7A:6:H2506",
+        "birthDate": "19350407",
+        "briefId": "Z9871",
+        "cwadf": "A",
+        "displayName": "Zzzretiredfiftythree,Patient",
+        "domainUpdated": "meds, immunizations, vitals, documents, ptfs, orders, cpts, images, visits, povs, labs, consults, procedures, appointments, allergies",
+        "exposure": [
+          {
+            "name": "No",
+            "uid": "urn:va:ionizing-radiation:N"
+          },
+          {
+            "name": "Unknown",
+            "uid": "urn:va:mst:U"
+          },
+          {
+            "name": "No",
+            "uid": "urn:va:agent-orange:N"
+          },
+          {
+            "name": "No",
+            "uid": "urn:va:sw-asia:N"
+          },
+          {
+            "name": "No",
+            "uid": "urn:va:combat-vet:N"
+          },
+          {
+            "name": "Unknown",
+            "uid": "urn:va:head-neck-cancer:U"
+          }
+        ],
+        "facility": [
+          {
+            "code": "500",
+            "homeSite": false,
+            "latestDate": "19970128",
+            "localPatientId": "6",
+            "name": "CAMP MASTER",
+            "summary": "CAMP MASTER",
+            "systemId": "9E7A"
+          }
+        ],
+        "familyName": "ZZZRETIREDFIFTYTHREE",
+        "fullName": "ZZZRETIREDFIFTYTHREE,PATIENT",
+        "genderCode": "urn:va:pat-gender:M",
+        "genderName": "Male",
+        "givenNames": "PATIENT",
+        "inpatientLocation": "MIKE IP SUBSPECIALTY",
+        "insurance": [
+          {
+            "companyName": "MEDICARE",
+            "groupNumber": "",
+            "id": "6;2",
+            "policyHolder": "OTHER",
+            "policyType": "",
+            "summary": "MEDICARE ()"
+          },
+          {
+            "companyName": "PRIVATE INSURANCE CO INC",
+            "groupNumber": "104",
+            "id": "6;1",
+            "policyHolder": "SELF",
+            "policyType": "",
+            "summary": "PRIVATE INSURANCE CO INC ()"
+          }
+        ],
+        "last4": "9871",
+        "last5": "Z9871",
+        "lastUpdated": "20140808173045.552",
+        "localId": "6",
+        "lrdfn": "20",
+        "maritalStatusCode": "urn:va:pat-maritalStatus:S",
+        "maritalStatusName": "Never Married",
+        "meanStatus": "REQUIRED",
+        "pid": "9E7A;6",
+        "religionCode": "urn:va:pat-religion:22",
+        "religionName": "OTHER",
+        "roomBed": "403-1",
+        "sensitive": true,
+        "serviceConnected": false,
+        "shortInpatientLocation": "MIKE",
+        "specialty": "NHCU",
+        "specialtyService": "NH",
+        "ssn": "666459871",
+        "summary": "gov.va.cpe.vpr.PatientDemographics{pids=[500;6, 666459871, 9E7A;6]}",
+        "syncErrorCount": 0,
+        "teamInfo": {
+          "associateProvider": {
+            "name": "unassigned"
+          },
+          "attendingProvider": {
+            "analogPager": "",
+            "digitalPager": "",
+            "name": "PROVIDER,TEST",
+            "officePhone": "",
+            "uid": "urn:va:user:9E7A:11265"
+          },
+          "inpatientProvider": {
+            "analogPager": "",
+            "digitalPager": "",
+            "name": "PROVIDER,TEST",
+            "officePhone": "",
+            "uid": "urn:va:user:9E7A:11265"
+          },
+          "mhCoordinator": {
+            "mhPosition": "unassigned",
+            "mhTeam": "unassigned",
+            "name": "unassigned"
+          },
+          "primaryProvider": {
+            "name": "unassigned"
+          },
+          "team": {
+            "name": "unassigned"
+          },
+          "text": "No Primary Care Team Assigned.\r\n \r\nNo Primary Care Provider Assigned.\r\n \r\nNo Associate Provider Assigned.\r\n \r\n      Attending Physician:  PROVIDER,TEST\r\n             Analog Pager:  \r\n            Digital Pager:  \r\n             Office Phone:  \r\n \r\n       Inpatient Provider:  PROVIDER,TEST\r\n             Analog Pager:  \r\n            Digital Pager:  \r\n             Office Phone:  \r\n \r\n"
+        },
+        "telecom": [
+          {
+            "use": "H",
+            "value": "(222)555-8235"
+          }
+        ],
+        "uid": "urn:va:patient:9E7A:6:6",
+        "veteran": true
+      }
+    ]
+  }
+}

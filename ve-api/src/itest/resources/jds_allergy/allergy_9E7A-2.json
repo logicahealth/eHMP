@@ -1,0 +1,87 @@
+{
+  "apiVersion": "1.0",
+  "data": {
+    "updated": 20140808174319,
+    "totalItems": 2,
+    "currentItemCount": 2,
+    "items": [
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "entered": "19920630",
+        "verified": "19920630130820",
+        "kind": "Allergy/Adverse Reaction",
+        "originatorName": "<None>",
+        "verifierName": "<auto-verified>",
+        "mechanism": "UNKNOWN",
+        "uid": "urn:va:allergy:9E7A:2:5",
+        "summary": "SULFA DRUGS ( FREE TEXT )",
+        "pid": "9E7A;2",
+        "localId": "5",
+        "historical": true,
+        "reference": "1;GMRD(120.82,",
+        "products": [
+          {
+            "name": "SULFA DRUGS ( FREE TEXT )",
+            "vuid": "urn:va:vuid:",
+            "summary": "AllergyProduct{uid='null'}"
+          }
+        ],
+        "typeName": "OTHER"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "entered": "199210271140",
+        "kind": "Allergy/Adverse Reaction",
+        "originatorName": "WARDCLERK,FIFTYTHREE",
+        "mechanism": "ALLERGY",
+        "uid": "urn:va:allergy:9E7A:2:55",
+        "summary": "PENICILLIN",
+        "pid": "9E7A;2",
+        "localId": "55",
+        "historical": false,
+        "reference": "2505;PS(50.416,",
+        "products": [
+          {
+            "name": "PENICILLIN",
+            "vuid": "urn:va:vuid:4019880",
+            "summary": "AllergyProduct{uid='null'}"
+          }
+        ],
+        "reactions": [
+          {
+            "name": "HIVES",
+            "vuid": "urn:va:vuid:",
+            "summary": "AllergyReaction{uid='null'}"
+          }
+        ],
+        "comments": [
+          {
+            "entered": "199210271140",
+            "enteredByName": "WARDCLERK,FIFTYTHREE",
+            "enteredByDisplayName": "Wardclerk,Fiftythree",
+            "comment": "TEST",
+            "summary": "AllergyComment{uid='null'}",
+            "enteredByUid": "urn:va:user:9E7A:10958"
+          }
+        ],
+        "observations": [
+          {
+            "date": "199210271140",
+            "severity": "",
+            "summary": "AllergyObservation{uid='null'}"
+          }
+        ],
+        "codes": [
+          {
+            "code": "C0220892",
+            "system": "urn:oid:2.16.840.1.113883.6.86",
+            "display": "Penicillin"
+          }
+        ],
+        "typeName": "DRUG"
+      }
+    ]
+  }
+}

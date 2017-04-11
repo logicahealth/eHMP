@@ -1,0 +1,113 @@
+{
+  "apiVersion": "1.0",
+  "data": {
+    "updated": 20140808180013,
+    "totalItems": 1,
+    "currentItemCount": 1,
+    "items": [
+      {
+        "address": [
+          {
+            "city": "ALBANY",
+            "state": "NY",
+            "use": "H",
+            "zip": "99998-0071"
+          }
+        ],
+        "birthDate": "19350407",
+        "briefId": "Z5775",
+        "cwadf": "A",
+        "displayName": "Zzzretfourthirtytwo,Patient",
+        "domainUpdated": "meds, vitals, documents, orders, cpts, images, visits, labs, surgeries, consults, appointments, allergies",
+        "exposure": [
+          {
+            "name": "No",
+            "uid": "urn:va:combat-vet:N"
+          },
+          {
+            "name": "No",
+            "uid": "urn:va:agent-orange:N"
+          },
+          {
+            "name": "Unknown",
+            "uid": "urn:va:mst:U"
+          },
+          {
+            "name": "Unknown",
+            "uid": "urn:va:head-neck-cancer:U"
+          },
+          {
+            "name": "No",
+            "uid": "urn:va:sw-asia:N"
+          },
+          {
+            "name": "No",
+            "uid": "urn:va:ionizing-radiation:N"
+          }
+        ],
+        "facility": [
+          {
+            "code": "500",
+            "homeSite": false,
+            "latestDate": "19940428",
+            "localPatientId": "9",
+            "name": "CAMP MASTER",
+            "summary": "CAMP MASTER",
+            "systemId": "9E7A"
+          }
+        ],
+        "familyName": "ZZZRETFOURTHIRTYTWO",
+        "fullName": "ZZZRETFOURTHIRTYTWO,PATIENT",
+        "genderCode": "urn:va:pat-gender:M",
+        "genderName": "Male",
+        "givenNames": "PATIENT",
+        "last4": "5775",
+        "last5": "Z5775",
+        "lastUpdated": "20140808173045.663",
+        "localId": "9",
+        "lrdfn": "25",
+        "maritalStatusCode": "urn:va:pat-maritalStatus:S",
+        "maritalStatusName": "Never Married",
+        "pid": "9E7A;9",
+        "religionCode": "urn:va:pat-religion:29",
+        "religionName": "UNKNOWN/NO PREFERENCE",
+        "sensitive": false,
+        "serviceConnected": false,
+        "ssn": "666675775",
+        "summary": "gov.va.cpe.vpr.PatientDemographics{pids=[500;9, 666675775, 9E7A;9]}",
+        "syncErrorCount": 0,
+        "teamInfo": {
+          "associateProvider": {
+            "name": "unassigned"
+          },
+          "attendingProvider": {
+            "name": "unassigned"
+          },
+          "inpatientProvider": {
+            "name": "unassigned"
+          },
+          "mhCoordinator": {
+            "mhPosition": "unassigned",
+            "mhTeam": "unassigned",
+            "name": "unassigned"
+          },
+          "primaryProvider": {
+            "name": "unassigned"
+          },
+          "team": {
+            "name": "unassigned"
+          },
+          "text": "No Primary Care Team Assigned.\r\n \r\nNo Primary Care Provider Assigned.\r\n \r\nNo Associate Provider Assigned.\r\n \r\n"
+        },
+        "telecom": [
+          {
+            "use": "H",
+            "value": "(222)555-8235"
+          }
+        ],
+        "uid": "urn:va:patient:9E7A:9:9",
+        "veteran": true
+      }
+    ]
+  }
+}

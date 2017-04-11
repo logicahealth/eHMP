@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="view smart details" content="instructions for viewing smart details in HMP search">
+    <meta name="Veterans Administration" content="HMP View Smart Details Help">
+    <link rel="shortcut icon" href="../../assets/ico/favicon.ico">
+
+    <title>View Smart Details</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="../css/bootstrap3.css"> 
+	<link rel="stylesheet" href="../css/font-awesome.min.css">
+
+
+    <!-- Custom styles for this template -->
+    <link href="../css/SidebarNav3.css" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy this line! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+<!--Top nav beginning -->
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Health Management Platform</a>
+        </div>
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="#about" data-toggle="modal">About CPE</a></li>
+            <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Single-Patient Views</a>
+			<ul class="dropdown-menu">
+			<li><a href="../PatientSelection/PatientSelectionOverview.html">Patient Selection</a></li>
+			<li><a href="../PatientBarPlugIn/PatientBarOverview.htm">Patient Bar</a></li>
+			<li><a href="../Cover Sheet/CoverSheetOverview.html">Cover Sheet</a></li>
+			<li><a href="../NewsFeed/NewsFeedOverview.html">News Feed</a></li>
+			<li><a href="../Search/SearchOverview.html">Search</a></li>
+			<li><a href="../Infobuttons/InfobuttonsOverview.html">Infobuttons</a></li>
+			<li><a href="../Tasks/TasksOverview.html">Tasks</a></li>
+			<li><a href="../Meds Review/MedsReviewOverview.html">Meds Review</a></li>
+			<li><a href="../Documents/DocumentsOverview.html">Documents</a></li>
+			
+			</ul></li>
+			  <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Multipatient Views</a>
+			  <ul class="dropdown-menu">
+			  <li><a href="../Tasks/TasksOverview.html">Tasks</a></li></ul>
+			  </li>
+          </ul>
+          </div>
+      </div>
+    </div>
+<!--End of top nav -->
+
+<!--Beginning of side nav -->
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">		
+		<ul class="nav nav-sidebar">
+		<li class="dropdown active"><a class="dropdown-toggle" data-toggle="dropdown" href="#">General Instructions
+		<span class="caret"></span></a>
+		<ul class="dropdown-menu">
+		<li><a href="../GeneralInstructions/Login.html">Log in to HMP</a></li>
+		<li><a href="../GeneralInstructions/ManagePreferences.html">Manage Preferences</a></li>
+		<li><a href="../GeneralInstructions/SelectApplication.html">Select an Application</a></li></ul></li></ul>
+		
+		<ul class="nav nav-sidebar">
+            <li class="dropdown active"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Patient Selection
+			<span class="caret"></span></a>
+			<ul class="dropdown-menu">
+            <li><a href="../PatientSelection/PatientSelectionOverview.html">Overview</a></li>
+            </ul></li></ul>
+		
+		
+          <ul class="nav nav-sidebar">
+            <li class="dropdown active"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Patient Bar Plug-In 
+			<span class="caret"></span></a>
+			<ul class="dropdown-menu">
+            <li><a href="../PatientBarPlugIn/PatientBarOverview.htm">Overview</a></li>
+            <li><a href="../PatientBarPlugIn/ViewDemographicDetails.html">View Demographic Details</a></li>
+            <li><a href="../PatientBarPlugIn/UpdatePhoneNumbers.html">Update Phone Numbers</a></li>
+			<li><a href="../PatientBarPlugIn/ViewPostingsDetails.html">View Postings Details</a></li>
+			<li><a href="../PatientBarPlugIn/ViewPCMMDetails.html">View Care Team Details</a></li>
+          </ul></li></ul>
+		  <ul class="nav nav-sidebar">
+            <li class="dropdown active"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Cover Sheet
+			<span class="caret"></span></a>
+			<ul class="dropdown-menu">
+            <li><a href="../Cover Sheet/CoverSheetOverview.html">Overview</a></li>
+			  </ul></li></ul>
+			<ul class="nav nav-sidebar">
+            <li class="dropdown active"><a class="dropdown-toggle" data-toggle="dropdown" href="#">News Feed
+			<span class="caret"></span></a>
+			<ul class="dropdown-menu">
+            <li><a href="../NewsFeed/NewsFeedOverview.html">Overview</a></li>
+			  </ul></li></ul>
+            <ul class="nav nav-sidebar">
+            <li class="active"><a href="#">Search</a></li>
+			<li><a href="../Search/SearchOverview.html">Overview</a></li>
+			<li><a href="../Search/SearchBasicTextString.html">Basic Search</a></li>
+			<li><a href="../Search/SearchFiltered.html">Filtered Search</a></li>
+			<li><a href="../Search/SearchCategory.html">Category Search</a></li>
+			<li><a href="../Search/SearchViewDomains.html">Domains</a></li>
+			<li><a href="../Search/SearchResults.html">Results</a></li>
+			<li><a href="../Search/SearchViewSmartDetails.html">Smart Details</a></li>
+			</ul>
+            
+          </ul></li></ul>
+		  <ul class="nav nav-sidebar">
+            <li class="dropdown active"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Infobuttons
+			<span class="caret"></span></a>
+			<ul class="dropdown-menu">
+            <li><a href="../Infobuttons/InfobuttonsOverview.html">Overview</a></li>
+            
+          </ul></li></ul>
+		  <ul class="nav nav-sidebar">
+            <li class="dropdown active"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Tasks
+			<span class="caret"></span></a>
+			<ul class="dropdown-menu">
+            <li><a href="../Tasks/TasksOverview.html">Overview</a></li>
+            <ul></li></ul>
+		  
+          </ul></li></ul>
+		  <ul class="nav nav-sidebar">
+            <li class="dropdown active"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Meds Review
+			<span class="caret"></span></a>
+			<ul class="dropdown-menu">
+            <li class="active"><a href="#">Meds Review</a>
+			<li><a href="../Meds Review/MedsReviewOverview.html">Overview</a></li>
+			<li><a href="../Meds Review/MedsReviewViewInpatient.html">View Inpatient Meds</a></li>
+			<li><a href="../Meds Review/MedReviewViewOutpatient.html">View Outpatient Meds</a></li>
+			<li><a href="../Meds Review/MedsReviewViewOtherMedications.html">View Other Meds</a></li>
+			<li><a href="../Meds Review/MedsReviewSortMedications.html">Sort Medications</a></li>
+			<li><a href="../Meds Review/MedsReviewFilterMedications.html">Filter Medications</a></li>
+            </ul></li></ul>
+			
+            <ul class="nav nav-sidebar">
+            <li class="dropdown active"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Documents
+			<span class="caret"></span></a>
+			<ul class="dropdown-menu">
+            <li><a href="../Documents/DocumentsOverview.html">Overview</a></li>
+            
+          </ul></li></ul>
+               
+        </div>
+		<!--End of side nav -->
+		
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">	
+		<div class="panel panel-info">
+          <div class="panel-heading"><h1>View Smart Details</h1></div>
+		  <div class="panel-body">
+	<p>To view details for an item in the <strong>Results</strong> list, simply click the item. Search displays smart details on the right side of the <strong>Results</strong> pane.</p>
+	<p>Following is a brief discussion about the smart details you can expect to see:</p>
+	<h3><small>Text-Based Items</h3>
+	<p>If you click a document or other text-based item in the <strong>Results</strong> list, Search displays the document's text in its entirety, with search terms highlighted in yellow. In addition, Search displays the document's;</p>
+	<ul>
+	<li>Title</li>
+	<li>Date and time</li>
+	<li>Type</li>
+	<li>Author (surname,first name format)</li>
+	<li>The name of the originating facility</li>
+	<li>Status (<strong>Complete</strong>, for example</li>
+	<li>A facility icon to indicate the document originated outside the local facility&mdash;if applicable.></li>
+	<li>A table of contents that links to child notes and addenda&mdash;if applicable</li>
+	<li>The name of the cosigner or expected cosigner (surname,first name format)&mdash;if applicable</li>
+	<li>An on-hover signature icon&mdash;if applicable&mdash;that displays the signer's name (surname,first name format) and the signature date.</li></ul>
+	<img src="../imgs/SearchDocumentDetail.png" alt="document detail screen capture" class="img-thumbnail img-rounded">
+	<h3><small>Medications</small></h3>
+	<p>Results for medications echo what you might see on the <a href="../Meds Review/MedsReviewOverview.html"><strong>Meds Review</strong></a> tab and include:</p>
+	<ul>
+	<li>Medication name</li>
+	<li>Medication order status</li>
+	<li>Order date and time</li>
+	<li>Last-filled date (for outpatient medications)</li>
+	<li>Medication domain group (Medication, Outpatient or Medication, Inpatient, for example)</li>
+	</ul>
+	<p>Details for medications also include <a href="../Infobuttons/InfobuttonsOverview.html"><strong>Infobuttons</strong></a>. See the <a href="../Meds Review/MedsReviewOverview.html"><strong>Meds Review</strong></a> section for further details.</p>
+	<h3><small>Laboratory Results</small></h3>
+	<p>Search displays lab results that aren't text-based as graphs:</p>
+	<ul>
+	<li>The horizontal axis represents time</li>
+	<li>The vertical axis represents lab values</li>
+	<li>Graphs display data-point values, with data-point details such as abnormal indicators, collection times, reference ranges, ordering providers, and more.</li>
+</ul>	
+		<img src="../imgs/SearchLabsDetail.png" alt="labs detail screen capture" class="img-thumbnail img-rounded">
+		<h3><small>Orders</small></h3>
+		<p>Smart details for orders include the name and code status of the orderable item as well as the following information:</p>
+		<ul><li>Facility</li>
+		<li>Start date and time</li>
+		<li>Status (<i>Active</i>, for example</li>
+		<li>Location</li>
+		<li>Ordering provider</li>
+		<li>Ordering text</li>
+		</ul>
+<h3><small>Problems</small></h3>
+<p>The application often displays two levels of detail when you click results in the <strong>Problem</strong> category: the first level breaks out individual problem entries that Search has rolled up. The Search plug-in displays the second level when you click an individual entry. First-level details include:
+<ul>
+<li>The problem's name</li>
+<li>Its International Classification of Diseases (ICD) or SNOMED CT (SCT) code</li>
+<li>Its status</li>
+<li>The onset date</li>
+</ul>
+<p>Second-level details include:</p>
+<li>The onset date and comments&mdash;if any</li>
+<li>A <a href="../Tasks/TasksOverview.html"><strong>New Tasks</strong></a> link</li>
+<li><a href="../Infobuttons/InfobuttonsOverview.html"><strong>Infobuttons</strong></a> links</li>
+<li>Onset date</li>
+<li>Status or immediacy</li>
+<li>Provider</li>
+<li>Location</li>
+<li>Facility</li>
+<li>Date entered</li>
+<li>Date updated</li>
+<li>ICD-9 name</li>
+</ul>
+<h3><small>Additional Domains</small></h3>
+<p>In addition, the Search plug-in displays smart details for items in the following domains:</p>
+<dl class="dl-horizontal">
+<dt>Immunizations</dt>
+<dd>The immunization name, date of administration, and facility</dd>
+<dt>Vital signs</dt>
+<dd>A graphical display that illustrates measurement values over time</dd>
+<dt>Allergies</dt>
+<dd>Causative agent, nature of reaction, signs and symptoms, drug classes, originator (surname, first name format), date originated, observation date and severity, verified, observed or historical, and comments</dd>
+<dt>Appointments or visits</dt>
+<dd>Date, time, facility, patient class, visit type, appointment status, location, stop code, facility, and provider</dd>
+<dt>Tasks</dt>
+<dd>Task name, due date, domain group, facility, type, description, regarding, created by, and claimed by</dd>
+</dl>
+	</div>
+	</div>
+
+      <div class="modal fade" id="about" role="dialog">
+	<div class="modal-dialog">
+	<div class="modal-content"> 
+	<div class="modal-header">
+	<h2>Clinical Practice Environment</h2>
+		</div>
+	<div class="modal-body">
+	<p>With its CPE (Clinical Practice Environment) application, the HMP Team Facing framework delivers software that serves healthcare teams and helps meet their needs in caring for our veterans. CPE software will help transition Veterans Health Administration from a chart-centric model of care to a team-based, patient-centered model of care through advanced clinical software and a modern software architecture. This software represents an effort to reestablish close clinician-IT collaborative relationships and to build field-driven, web-based modules that meet the following functional and technology goals. </p>
+		<ul>
+		<li>Functional Goals:<ul>
+		<li>Comprehensive, coded, integrated data</li>
+		<li>Knowledge-driven, context-based decision support</li>
+		<li>Role- and conditions-based workflow-driven systems</li>
+		<li>Multi-patient, team-based care </li></ul></li>
+		<li>Technology Goals: <ul>
+		<li>Open source, with a service-oriented architecture (SOA)</li>
+		<li>Web-based, with a flexible, scalable architecture</li>
+		<li>Context-aware, with an extensible, modular platform</li></ul></li></ul>
+		<p>While its initial operating capabilities are present, HMP software is a work-in-progress. Specific features and instructions for using them will evolve as our partners in the clinical community evaluate the software and provide feedback, thus realizing the close collaboration between IT and clinical interests that informed this software's genesis.</p>
+	</div>
+	<div class="modal-footer">
+	<a class="btn btn-primary" data-dismiss="modal">Close</a>
+	</div>
+	</div>
+	</div>
+	</div>
+			
+			<!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/docs.min.js"></script>
+  </body>
+</html>

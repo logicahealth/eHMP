@@ -1,0 +1,523 @@
+{
+  "apiVersion": "1.0",
+  "data": {
+    "updated": 20140808175946,
+    "totalItems": 2,
+    "currentItemCount": 2,
+    "items": [
+      {
+        "address": [
+          {
+            "city": "Any Town",
+            "line1": "Any Street",
+            "state": "WV",
+            "use": "H",
+            "zip": "99998-0071"
+          }
+        ],
+        "birthDate": "19350407",
+        "briefId": "T0010",
+        "contact": [
+          {
+            "name": "VETERAN,BROTHER",
+            "summary": "VETERAN,BROTHER",
+            "typeCode": "urn:va:pat-contact:NOK",
+            "typeName": "Next of Kin"
+          }
+        ],
+        "cwadf": "AD",
+        "disability": [
+          {
+            "disPercent": 30,
+            "name": "SUPRAVENTRICULAR ARRHYTHMIAS",
+            "serviceConnected": true,
+            "summary": "PatientDisability{uid='null'}"
+          },
+          {
+            "disPercent": 10,
+            "name": "AUDITORY CANAL DISEASE",
+            "serviceConnected": true,
+            "summary": "PatientDisability{uid='null'}"
+          }
+        ],
+        "displayName": "Ten,Patient",
+        "domainUpdated": "vitals, ptfs, orders, cpts, images, visits, problems, povs, surgeries, consults, procedures",
+        "exposure": [
+          {
+            "name": "Unknown",
+            "uid": "urn:va:head-neck-cancer:U"
+          },
+          {
+            "name": "Unknown",
+            "uid": "urn:va:mst:U"
+          },
+          {
+            "name": "No",
+            "uid": "urn:va:agent-orange:N"
+          },
+          {
+            "name": "No",
+            "uid": "urn:va:ionizing-radiation:N"
+          },
+          {
+            "name": "No",
+            "uid": "urn:va:combat-vet:N"
+          },
+          {
+            "name": "No",
+            "uid": "urn:va:sw-asia:N"
+          }
+        ],
+        "facility": [
+          {
+            "code": "500",
+            "homeSite": false,
+            "latestDate": "20020408",
+            "localPatientId": "8",
+            "name": "CAMP MASTER",
+            "summary": "CAMP MASTER",
+            "systemId": "9E7A"
+          },
+          {
+            "code": "987",
+            "homeSite": false,
+            "latestDate": "20010101",
+            "name": "ASPEN (CMM)",
+            "summary": "ASPEN (CMM)"
+          },
+          {
+            "code": "988",
+            "homeSite": false,
+            "latestDate": "20010101",
+            "name": "BOCA RATON (CEE)",
+            "summary": "BOCA RATON (CEE)"
+          },
+          {
+            "code": "989",
+            "homeSite": false,
+            "latestDate": "20010101",
+            "name": "PARK CITY  (CII)",
+            "summary": "PARK CITY  (CII)"
+          },
+          {
+            "code": "990",
+            "homeSite": false,
+            "latestDate": "20010101",
+            "name": "SOUTH BEND (CKK)",
+            "summary": "SOUTH BEND (CKK)"
+          },
+          {
+            "code": "991",
+            "homeSite": false,
+            "latestDate": "20010101",
+            "name": "JAMESTOWN (CJJ)",
+            "summary": "JAMESTOWN (CJJ)"
+          },
+          {
+            "code": "992",
+            "homeSite": false,
+            "latestDate": "20010101",
+            "name": "LAREDO (CHH)",
+            "summary": "LAREDO (CHH)"
+          },
+          {
+            "code": "993",
+            "homeSite": false,
+            "latestDate": "20010101",
+            "name": "YUMA  (CGG)",
+            "summary": "YUMA  (CGG)"
+          },
+          {
+            "code": "994",
+            "homeSite": false,
+            "latestDate": "20010101",
+            "name": "LUBBOCK (CDD)",
+            "summary": "LUBBOCK (CDD)"
+          },
+          {
+            "code": "995",
+            "homeSite": false,
+            "latestDate": "20010101",
+            "name": "CENTRAL CITY (CCC)",
+            "summary": "CENTRAL CITY (CCC)"
+          },
+          {
+            "code": "996",
+            "homeSite": false,
+            "latestDate": "20010101",
+            "name": "CHAMPAIGN (CFF)",
+            "summary": "CHAMPAIGN (CFF)"
+          },
+          {
+            "code": "997",
+            "homeSite": false,
+            "latestDate": "20010101",
+            "name": "CHARLESTON (CBB)",
+            "summary": "CHARLESTON (CBB)"
+          },
+          {
+            "code": "998",
+            "homeSite": true,
+            "latestDate": "20010101",
+            "name": "ABILENE (CAA)",
+            "summary": "ABILENE (CAA)"
+          },
+          {
+            "code": "999",
+            "homeSite": false,
+            "latestDate": "20010101",
+            "name": "LYNCHBURG (CLL)",
+            "summary": "LYNCHBURG (CLL)"
+          }
+        ],
+        "familyName": "TEN",
+        "fullName": "TEN,PATIENT",
+        "genderCode": "urn:va:pat-gender:M",
+        "genderName": "Male",
+        "givenNames": "PATIENT",
+        "homeFacility": {
+          "code": "998",
+          "homeSite": true,
+          "latestDate": "20010101",
+          "name": "ABILENE (CAA)",
+          "summary": "ABILENE (CAA)"
+        },
+        "icn": "10110V004877",
+        "insurance": [
+          {
+            "companyName": "PRIVATE INSURANCE CO INC",
+            "groupNumber": "",
+            "id": "8;3",
+            "policyHolder": "OTHER",
+            "policyType": "",
+            "summary": "PRIVATE INSURANCE CO INC ()"
+          },
+          {
+            "companyName": "MEDICARE",
+            "groupNumber": "",
+            "id": "8;2",
+            "policyHolder": "OTHER",
+            "policyType": "",
+            "summary": "MEDICARE ()"
+          },
+          {
+            "companyName": "HEALTH INSURANCE PLUS",
+            "effectiveDate": "29201010",
+            "groupNumber": "415",
+            "id": "8;1",
+            "policyHolder": "SELF",
+            "policyType": "TRICARE",
+            "summary": "HEALTH INSURANCE PLUS (TRICARE)"
+          }
+        ],
+        "last4": "0010",
+        "last5": "T0010",
+        "lastUpdated": "20140808165442.855",
+        "localId": "8",
+        "lrdfn": "24",
+        "maritalStatusCode": "urn:va:pat-maritalStatus:S",
+        "maritalStatusName": "Never Married",
+        "pid": "9E7A;8",
+        "religionCode": "urn:va:pat-religion:24",
+        "religionName": "PROTESTANT",
+        "scPercent": "20",
+        "sensitive": false,
+        "serviceConnected": true,
+        "ssn": "666000010",
+        "summary": "gov.va.cpe.vpr.PatientDemographics{pids=[10110V004877, 500;8, 666000010, 9E7A;8]}",
+        "syncErrorCount": 0,
+        "teamInfo": {
+          "associateProvider": {
+            "name": "unassigned"
+          },
+          "attendingProvider": {
+            "name": "unassigned"
+          },
+          "inpatientProvider": {
+            "name": "unassigned"
+          },
+          "mhCoordinator": {
+            "mhPosition": "unassigned",
+            "mhTeam": "unassigned",
+            "name": "unassigned"
+          },
+          "primaryProvider": {
+            "name": "unassigned"
+          },
+          "team": {
+            "name": "unassigned"
+          },
+          "text": "No Primary Care Team Assigned.\r\n \r\nNo Primary Care Provider Assigned.\r\n \r\nNo Associate Provider Assigned.\r\n \r\n"
+        },
+        "telecom": [
+          {
+            "use": "WP",
+            "value": "(222)555-7720"
+          },
+          {
+            "use": "H",
+            "value": "(222)555-8235"
+          }
+        ],
+        "uid": "urn:va:patient:9E7A:8:8",
+        "veteran": true
+      },
+      {
+        "address": [
+          {
+            "city": "Any Town",
+            "line1": "Any Street",
+            "state": "WV",
+            "use": "H",
+            "zip": "99998-0071"
+          }
+        ],
+        "birthDate": "19350407",
+        "briefId": "T0010",
+        "contact": [
+          {
+            "name": "VETERAN,BROTHER",
+            "summary": "VETERAN,BROTHER",
+            "typeCode": "urn:va:pat-contact:NOK",
+            "typeName": "Next of Kin"
+          }
+        ],
+        "cwadf": "AD",
+        "disability": [
+          {
+            "disPercent": 10,
+            "name": "AUDITORY CANAL DISEASE",
+            "serviceConnected": true,
+            "summary": "PatientDisability{uid='null'}"
+          },
+          {
+            "disPercent": 30,
+            "name": "SUPRAVENTRICULAR ARRHYTHMIAS",
+            "serviceConnected": true,
+            "summary": "PatientDisability{uid='null'}"
+          }
+        ],
+        "displayName": "Ten,Patient",
+        "exposure": [
+          {
+            "name": "No",
+            "uid": "urn:va:ionizing-radiation:N"
+          },
+          {
+            "name": "No",
+            "uid": "urn:va:combat-vet:N"
+          },
+          {
+            "name": "No",
+            "uid": "urn:va:sw-asia:N"
+          },
+          {
+            "name": "No",
+            "uid": "urn:va:agent-orange:N"
+          },
+          {
+            "name": "Unknown",
+            "uid": "urn:va:head-neck-cancer:U"
+          },
+          {
+            "name": "Unknown",
+            "uid": "urn:va:mst:U"
+          }
+        ],
+        "facility": [
+          {
+            "code": "500",
+            "homeSite": false,
+            "latestDate": "20020408",
+            "localPatientId": "8",
+            "name": "CAMP BEE",
+            "summary": "CAMP BEE",
+            "systemId": "C877"
+          },
+          {
+            "code": "987",
+            "homeSite": false,
+            "latestDate": "20010101",
+            "name": "ASPEN (CMM)",
+            "summary": "ASPEN (CMM)"
+          },
+          {
+            "code": "988",
+            "homeSite": false,
+            "latestDate": "20010101",
+            "name": "BOCA RATON (CEE)",
+            "summary": "BOCA RATON (CEE)"
+          },
+          {
+            "code": "989",
+            "homeSite": false,
+            "latestDate": "20010101",
+            "name": "PARK CITY  (CII)",
+            "summary": "PARK CITY  (CII)"
+          },
+          {
+            "code": "990",
+            "homeSite": false,
+            "latestDate": "20010101",
+            "name": "SOUTH BEND (CKK)",
+            "summary": "SOUTH BEND (CKK)"
+          },
+          {
+            "code": "991",
+            "homeSite": false,
+            "latestDate": "20010101",
+            "name": "JAMESTOWN (CJJ)",
+            "summary": "JAMESTOWN (CJJ)"
+          },
+          {
+            "code": "992",
+            "homeSite": false,
+            "latestDate": "20010101",
+            "name": "LAREDO (CHH)",
+            "summary": "LAREDO (CHH)"
+          },
+          {
+            "code": "993",
+            "homeSite": false,
+            "latestDate": "20010101",
+            "name": "YUMA  (CGG)",
+            "summary": "YUMA  (CGG)"
+          },
+          {
+            "code": "994",
+            "homeSite": false,
+            "latestDate": "20010101",
+            "name": "LUBBOCK (CDD)",
+            "summary": "LUBBOCK (CDD)"
+          },
+          {
+            "code": "995",
+            "homeSite": false,
+            "latestDate": "20010101",
+            "name": "CENTRAL CITY (CCC)",
+            "summary": "CENTRAL CITY (CCC)"
+          },
+          {
+            "code": "996",
+            "homeSite": false,
+            "latestDate": "20010101",
+            "name": "CHAMPAIGN (CFF)",
+            "summary": "CHAMPAIGN (CFF)"
+          },
+          {
+            "code": "997",
+            "homeSite": false,
+            "latestDate": "20010101",
+            "name": "CHARLESTON (CBB)",
+            "summary": "CHARLESTON (CBB)"
+          },
+          {
+            "code": "998",
+            "homeSite": true,
+            "latestDate": "20010101",
+            "name": "ABILENE (CAA)",
+            "summary": "ABILENE (CAA)"
+          },
+          {
+            "code": "999",
+            "homeSite": false,
+            "latestDate": "20010101",
+            "name": "LYNCHBURG (CLL)",
+            "summary": "LYNCHBURG (CLL)"
+          }
+        ],
+        "familyName": "TEN",
+        "fullName": "TEN,PATIENT",
+        "genderCode": "urn:va:pat-gender:M",
+        "genderName": "Male",
+        "givenNames": "PATIENT",
+        "homeFacility": {
+          "code": "998",
+          "homeSite": true,
+          "latestDate": "20010101",
+          "name": "ABILENE (CAA)",
+          "summary": "ABILENE (CAA)"
+        },
+        "icn": "10110V004877",
+        "insurance": [
+          {
+            "companyName": "HEALTH INSURANCE PLUS",
+            "effectiveDate": "29201010",
+            "groupNumber": "415",
+            "id": "8;1",
+            "policyHolder": "SELF",
+            "policyType": "TRICARE",
+            "summary": "HEALTH INSURANCE PLUS (TRICARE)"
+          },
+          {
+            "companyName": "MEDICARE",
+            "groupNumber": "",
+            "id": "8;2",
+            "policyHolder": "OTHER",
+            "policyType": "",
+            "summary": "MEDICARE ()"
+          },
+          {
+            "companyName": "PRIVATE INSURANCE CO INC",
+            "groupNumber": "",
+            "id": "8;3",
+            "policyHolder": "OTHER",
+            "policyType": "",
+            "summary": "PRIVATE INSURANCE CO INC ()"
+          }
+        ],
+        "last4": "0010",
+        "last5": "T0010",
+        "lastUpdated": "20140808165417.692",
+        "localId": "8",
+        "lrdfn": "24",
+        "maritalStatusCode": "urn:va:pat-maritalStatus:S",
+        "maritalStatusName": "Never Married",
+        "pid": "9E7A;8",
+        "religionCode": "urn:va:pat-religion:24",
+        "religionName": "PROTESTANT",
+        "scPercent": "20",
+        "sensitive": false,
+        "serviceConnected": true,
+        "ssn": "666000010",
+        "summary": "gov.va.cpe.vpr.PatientDemographics{pids=[10110V004877, 500;8, 666000010, C877;8]}",
+        "syncErrorCount": 0,
+        "teamInfo": {
+          "associateProvider": {
+            "name": "unassigned"
+          },
+          "attendingProvider": {
+            "name": "unassigned"
+          },
+          "inpatientProvider": {
+            "name": "unassigned"
+          },
+          "mhCoordinator": {
+            "mhPosition": "unassigned",
+            "mhTeam": "unassigned",
+            "name": "unassigned"
+          },
+          "primaryProvider": {
+            "name": "unassigned"
+          },
+          "team": {
+            "name": "unassigned"
+          },
+          "text": "No Primary Care Team Assigned.\r\n \r\nNo Primary Care Provider Assigned.\r\n \r\nNo Associate Provider Assigned.\r\n \r\n"
+        },
+        "telecom": [
+          {
+            "use": "H",
+            "value": "(222)555-8235"
+          },
+          {
+            "use": "WP",
+            "value": "(222)555-7720"
+          }
+        ],
+        "uid": "urn:va:patient:C877:8:8",
+        "veteran": true
+      }
+    ]
+  }
+}

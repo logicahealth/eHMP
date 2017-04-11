@@ -1,0 +1,35 @@
+namespace LeiprDemoPolicy {
+	import leipr.Attributes.*
+	import Security.Label.Attributes.*
+	advice breakGlass = "breakglass"
+	policyset BreakGlassDemoPolicySet {
+		target clause Attributes.actionId == "read"
+		apply firstApplicable
+		policy CPRSUserPolicy {
+			target clause userrole == "CPRS"
+			apply firstApplicable
+			rule {
+				target clause warnAcknowledged == "true"
+				permit
+			}
+			rule {
+				target clause celebrity == "true"
+				deny
+				on deny {
+					advice breakGlass {
+						reason = "celebrity"
+					}
+				}
+			}
+			rule {
+				permit
+			}
+		}
+		policy NonCPRSUserPolicy {
+			apply firstApplicable
+			rule {
+				deny
+			}
+		}
+	}
+}

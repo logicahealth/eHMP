@@ -1,0 +1,1510 @@
+{
+  "apiVersion": "1.0",
+  "data": {
+    "updated": 20140808180013,
+    "totalItems": 23,
+    "currentItemCount": 23,
+    "items": [
+      {
+        "facilityCode": "DOD",
+        "facilityName": "DOD",
+        "overallStart": "20131025",
+        "overallStop": "20131124",
+        "vaType": "O",
+        "supply": false,
+        "administrations": [],
+        "kind": "Medication, Outpatient",
+        "uid": "urn:va:med:DOD:0000000009:1000001244",
+        "summary": "HYDRALAZINE HCL, 25 MG, TABLET, ORAL (Active)\n ",
+        "pid": "9E7A;9",
+        "productFormCode": "2165347221",
+        "productFormName": "HYDRALAZINE HCL, 25 MG, TABLET, ORAL",
+        "sig": "",
+        "patientInstruction": "\nNONE",
+        "medStatus": "Active",
+        "medType": "O",
+        "vaStatus": "Active",
+        "IMO": false,
+        "products": [
+          {
+            "suppliedName": "HYDRALAZINE HCL, 25 MG, TABLET, ORAL",
+            "summary": "MedicationProduct{uid='null'}",
+            "strength": "1"
+          }
+        ],
+        "dosages": [],
+        "orders": [
+          {
+            "providerName": "AHLTADTE, ATTEND B",
+            "pharmacistName": "MAIN PHARMACY",
+            "quantityOrdered": "1",
+            "daysSupply": 30,
+            "fillsRemaining": 0,
+            "summary": "MedicationOrder{uid='null'}"
+          }
+        ],
+        "fills": [
+          {
+            "dispenseDate": "20131025",
+            "dispensingPharmacy": "MAIN PHARMACY",
+            "quantityDispensed": "1",
+            "summary": "MedicationFill{uid='null'}"
+          }
+        ],
+        "codes": [
+          {
+            "code": "3000257828",
+            "system": "DOD_NCID"
+          },
+          {
+            "code": "905225",
+            "system": "urn:oid:2.16.840.1.113883.6.88",
+            "display": "Hydralazine Hydrochloride 25 MG Oral Tablet"
+          }
+        ],
+        "rxncodes": [],
+        "name": "HYDRALAZINE HCL, 25 MG, TABLET, ORAL"
+      },
+      {
+        "facilityCode": "DOD",
+        "facilityName": "DOD",
+        "overallStart": "20131025",
+        "overallStop": "20131124",
+        "vaType": "O",
+        "supply": false,
+        "administrations": [],
+        "kind": "Medication, Outpatient",
+        "uid": "urn:va:med:DOD:0000000009:1000001246",
+        "summary": "Hydralazine Hydrochloride 20mg/mL, Solution, Injection (Active)\n ",
+        "pid": "9E7A;9",
+        "productFormCode": "2165347220",
+        "productFormName": "Hydralazine Hydrochloride 20mg/mL, Solution, Injection",
+        "sig": "",
+        "patientInstruction": "\nNONE",
+        "medStatus": "Active",
+        "medType": "O",
+        "vaStatus": "Active",
+        "IMO": false,
+        "products": [
+          {
+            "suppliedName": "Hydralazine Hydrochloride 20mg/mL, Solution, Injection",
+            "summary": "MedicationProduct{uid='null'}",
+            "strength": "1"
+          }
+        ],
+        "dosages": [],
+        "orders": [
+          {
+            "providerName": "AHLTADTE, ATTEND B",
+            "pharmacistName": "MAIN PHARMACY",
+            "quantityOrdered": "1",
+            "daysSupply": 30,
+            "fillsRemaining": 0,
+            "summary": "MedicationOrder{uid='null'}"
+          }
+        ],
+        "fills": [
+          {
+            "dispenseDate": "20131025",
+            "dispensingPharmacy": "MAIN PHARMACY",
+            "quantityDispensed": "1",
+            "summary": "MedicationFill{uid='null'}"
+          }
+        ],
+        "codes": [
+          {
+            "code": "15155310",
+            "system": "DOD_NCID"
+          },
+          {
+            "code": "966571",
+            "system": "urn:oid:2.16.840.1.113883.6.88",
+            "display": "Hydralazine Hydrochloride 20 MG/ML Injectable Solution"
+          }
+        ],
+        "rxncodes": [],
+        "name": "Hydralazine Hydrochloride 20mg/mL, Solution, Injection"
+      },
+      {
+        "facilityCode": "DOD",
+        "facilityName": "DOD",
+        "overallStart": "20131025",
+        "overallStop": "20131124",
+        "vaType": "O",
+        "supply": false,
+        "administrations": [],
+        "kind": "Medication, Outpatient",
+        "uid": "urn:va:med:DOD:0000000009:1000001248",
+        "summary": "Hexachlorophene 3%, Soap, Topical (Active)\n ",
+        "pid": "9E7A;9",
+        "productFormCode": "2165347219",
+        "productFormName": "Hexachlorophene 3%, Soap, Topical",
+        "sig": "",
+        "patientInstruction": "\nNONE",
+        "medStatus": "Active",
+        "medType": "O",
+        "vaStatus": "Active",
+        "IMO": false,
+        "products": [
+          {
+            "suppliedName": "Hexachlorophene 3%, Soap, Topical",
+            "summary": "MedicationProduct{uid='null'}",
+            "strength": "148"
+          }
+        ],
+        "dosages": [],
+        "orders": [
+          {
+            "providerName": "AHLTADTE, ATTEND B",
+            "pharmacistName": "MAIN PHARMACY",
+            "quantityOrdered": "148",
+            "daysSupply": 30,
+            "fillsRemaining": 0,
+            "summary": "MedicationOrder{uid='null'}"
+          }
+        ],
+        "fills": [
+          {
+            "dispenseDate": "20131025",
+            "dispensingPharmacy": "MAIN PHARMACY",
+            "quantityDispensed": "148",
+            "summary": "MedicationFill{uid='null'}"
+          }
+        ],
+        "codes": [
+          {
+            "code": "15172714",
+            "system": "DOD_NCID"
+          }
+        ],
+        "rxncodes": [],
+        "name": "Hexachlorophene 3%, Soap, Topical"
+      },
+      {
+        "facilityCode": "DOD",
+        "facilityName": "DOD",
+        "overallStart": "20131025",
+        "overallStop": "20131124",
+        "vaType": "O",
+        "supply": false,
+        "administrations": [],
+        "kind": "Medication, Outpatient",
+        "uid": "urn:va:med:DOD:0000000009:1000001250",
+        "summary": "Hepatitis B Immune Globulin, Injection (Active)\n ",
+        "pid": "9E7A;9",
+        "productFormCode": "2165347218",
+        "productFormName": "Hepatitis B Immune Globulin, Injection",
+        "sig": "",
+        "patientInstruction": "\nNONE",
+        "medStatus": "Active",
+        "medType": "O",
+        "vaStatus": "Active",
+        "IMO": false,
+        "products": [
+          {
+            "suppliedName": "Hepatitis B Immune Globulin, Injection",
+            "summary": "MedicationProduct{uid='null'}",
+            "strength": "1"
+          }
+        ],
+        "dosages": [],
+        "orders": [
+          {
+            "providerName": "AHLTADTE, ATTEND B",
+            "pharmacistName": "MAIN PHARMACY",
+            "quantityOrdered": "1",
+            "daysSupply": 30,
+            "fillsRemaining": 0,
+            "summary": "MedicationOrder{uid='null'}"
+          }
+        ],
+        "fills": [
+          {
+            "dispenseDate": "20131025",
+            "dispensingPharmacy": "MAIN PHARMACY",
+            "quantityDispensed": "1",
+            "summary": "MedicationFill{uid='null'}"
+          }
+        ],
+        "codes": [
+          {
+            "code": "15168266",
+            "system": "DOD_NCID"
+          }
+        ],
+        "rxncodes": [],
+        "name": "Hepatitis B Immune Globulin, Injection"
+      },
+      {
+        "facilityCode": "DOD",
+        "facilityName": "DOD",
+        "overallStart": "20131025",
+        "overallStop": "20131124",
+        "vaType": "O",
+        "supply": false,
+        "administrations": [],
+        "kind": "Medication, Outpatient",
+        "uid": "urn:va:med:DOD:0000000009:1000001252",
+        "summary": "Heparin Sodium 1000U/mL, Solution, Injection (Active)\n ",
+        "pid": "9E7A;9",
+        "productFormCode": "2165347217",
+        "productFormName": "Heparin Sodium 1000U/mL, Solution, Injection",
+        "sig": "",
+        "patientInstruction": "\nNONE",
+        "medStatus": "Active",
+        "medType": "O",
+        "vaStatus": "Active",
+        "IMO": false,
+        "products": [
+          {
+            "suppliedName": "Heparin Sodium 1000U/mL, Solution, Injection",
+            "summary": "MedicationProduct{uid='null'}",
+            "strength": "1"
+          }
+        ],
+        "dosages": [],
+        "orders": [
+          {
+            "providerName": "AHLTADTE, ATTEND B",
+            "pharmacistName": "MAIN PHARMACY",
+            "quantityOrdered": "1",
+            "daysSupply": 30,
+            "fillsRemaining": 0,
+            "summary": "MedicationOrder{uid='null'}"
+          }
+        ],
+        "fills": [
+          {
+            "dispenseDate": "20131025",
+            "dispensingPharmacy": "MAIN PHARMACY",
+            "quantityDispensed": "1",
+            "summary": "MedicationFill{uid='null'}"
+          }
+        ],
+        "codes": [
+          {
+            "code": "15165601",
+            "system": "DOD_NCID"
+          }
+        ],
+        "rxncodes": [],
+        "name": "Heparin Sodium 1000U/mL, Solution, Injection"
+      },
+      {
+        "facilityCode": "DOD",
+        "facilityName": "DOD",
+        "overallStart": "20131025",
+        "overallStop": "20131124",
+        "vaType": "O",
+        "supply": false,
+        "administrations": [],
+        "kind": "Medication, Outpatient",
+        "uid": "urn:va:med:DOD:0000000009:1000001254",
+        "summary": "Heparin Sodium 100U/mL, Solution, Injection (Active)\n FOR BLOOD THINNING",
+        "pid": "9E7A;9",
+        "productFormCode": "2165347166",
+        "productFormName": "Heparin Sodium 100U/mL, Solution, Injection",
+        "sig": "FOR BLOOD THINNING",
+        "patientInstruction": "\nNONE",
+        "medStatus": "Active",
+        "medType": "O",
+        "vaStatus": "Active",
+        "IMO": false,
+        "products": [
+          {
+            "suppliedName": "Heparin Sodium 100U/mL, Solution, Injection",
+            "summary": "MedicationProduct{uid='null'}",
+            "strength": "1"
+          }
+        ],
+        "dosages": [],
+        "orders": [
+          {
+            "providerName": "AHLTADTE, ATTEND B",
+            "pharmacistName": "MAIN PHARMACY",
+            "quantityOrdered": "1",
+            "daysSupply": 30,
+            "fillsRemaining": 0,
+            "summary": "MedicationOrder{uid='null'}"
+          }
+        ],
+        "fills": [
+          {
+            "dispenseDate": "20131025",
+            "dispensingPharmacy": "MAIN PHARMACY",
+            "quantityDispensed": "1",
+            "summary": "MedicationFill{uid='null'}"
+          }
+        ],
+        "codes": [
+          {
+            "code": "15167468",
+            "system": "DOD_NCID"
+          }
+        ],
+        "rxncodes": [],
+        "name": "Heparin Sodium 100U/mL, Solution, Injection"
+      },
+      {
+        "facilityCode": "DOD",
+        "facilityName": "DOD",
+        "overallStart": "20131025",
+        "overallStop": "20131124",
+        "vaType": "O",
+        "supply": false,
+        "administrations": [],
+        "kind": "Medication, Outpatient",
+        "uid": "urn:va:med:DOD:0000000009:1000001256",
+        "summary": "HALOPERIDOL, 2 MG, TABLET, ORAL (Active)\n FOR",
+        "pid": "9E7A;9",
+        "productFormCode": "2165347164",
+        "productFormName": "HALOPERIDOL, 2 MG, TABLET, ORAL",
+        "sig": "FOR",
+        "patientInstruction": "\nNONE",
+        "medStatus": "Active",
+        "medType": "O",
+        "vaStatus": "Active",
+        "IMO": false,
+        "products": [
+          {
+            "suppliedName": "HALOPERIDOL, 2 MG, TABLET, ORAL",
+            "summary": "MedicationProduct{uid='null'}",
+            "strength": "1"
+          }
+        ],
+        "dosages": [],
+        "orders": [
+          {
+            "providerName": "AHLTADTE, ATTEND B",
+            "pharmacistName": "MAIN PHARMACY",
+            "quantityOrdered": "1",
+            "daysSupply": 30,
+            "fillsRemaining": 0,
+            "summary": "MedicationOrder{uid='null'}"
+          }
+        ],
+        "fills": [
+          {
+            "dispenseDate": "20131025",
+            "dispensingPharmacy": "MAIN PHARMACY",
+            "quantityDispensed": "1",
+            "summary": "MedicationFill{uid='null'}"
+          }
+        ],
+        "codes": [
+          {
+            "code": "3000261401",
+            "system": "DOD_NCID"
+          },
+          {
+            "code": "314034",
+            "system": "urn:oid:2.16.840.1.113883.6.88",
+            "display": "Haloperidol 2 MG Oral Tablet"
+          }
+        ],
+        "rxncodes": [],
+        "name": "HALOPERIDOL, 2 MG, TABLET, ORAL"
+      },
+      {
+        "facilityCode": "DOD",
+        "facilityName": "DOD",
+        "overallStart": "20131025",
+        "overallStop": "20131124",
+        "vaType": "O",
+        "supply": false,
+        "administrations": [],
+        "kind": "Medication, Outpatient",
+        "uid": "urn:va:med:DOD:0000000009:1000001258",
+        "summary": "HALOPERIDOL, 5 MG, TABLET, ORAL (Active)\n DROP",
+        "pid": "9E7A;9",
+        "productFormCode": "2165347165",
+        "productFormName": "HALOPERIDOL, 5 MG, TABLET, ORAL",
+        "sig": "DROP",
+        "patientInstruction": "\nNONE",
+        "medStatus": "Active",
+        "medType": "O",
+        "vaStatus": "Active",
+        "IMO": false,
+        "products": [
+          {
+            "suppliedName": "HALOPERIDOL, 5 MG, TABLET, ORAL",
+            "summary": "MedicationProduct{uid='null'}",
+            "strength": "1"
+          }
+        ],
+        "dosages": [],
+        "orders": [
+          {
+            "providerName": "AHLTADTE, ATTEND B",
+            "pharmacistName": "MAIN PHARMACY",
+            "quantityOrdered": "1",
+            "daysSupply": 30,
+            "fillsRemaining": 0,
+            "summary": "MedicationOrder{uid='null'}"
+          }
+        ],
+        "fills": [
+          {
+            "dispenseDate": "20131025",
+            "dispensingPharmacy": "MAIN PHARMACY",
+            "quantityDispensed": "1",
+            "summary": "MedicationFill{uid='null'}"
+          }
+        ],
+        "codes": [
+          {
+            "code": "3000261403",
+            "system": "DOD_NCID"
+          },
+          {
+            "code": "310672",
+            "system": "urn:oid:2.16.840.1.113883.6.88",
+            "display": "Haloperidol 5 MG Oral Tablet"
+          }
+        ],
+        "rxncodes": [],
+        "name": "HALOPERIDOL, 5 MG, TABLET, ORAL"
+      },
+      {
+        "facilityCode": "DOD",
+        "facilityName": "DOD",
+        "overallStart": "20131025",
+        "overallStop": "20131124",
+        "vaType": "O",
+        "supply": false,
+        "administrations": [],
+        "kind": "Medication, Outpatient",
+        "uid": "urn:va:med:DOD:0000000009:1000001260",
+        "summary": "GUAIFENESIN, 100 MG/5ML, SYRUP, ORAL (Active)\n USE AS DIRECTED",
+        "pid": "9E7A;9",
+        "productFormCode": "2165347163",
+        "productFormName": "GUAIFENESIN, 100 MG/5ML, SYRUP, ORAL",
+        "sig": "USE AS DIRECTED",
+        "patientInstruction": "\nNONE",
+        "medStatus": "Active",
+        "medType": "O",
+        "vaStatus": "Active",
+        "IMO": false,
+        "products": [
+          {
+            "suppliedName": "GUAIFENESIN, 100 MG/5ML, SYRUP, ORAL",
+            "summary": "MedicationProduct{uid='null'}",
+            "strength": "120"
+          }
+        ],
+        "dosages": [],
+        "orders": [
+          {
+            "providerName": "AHLTADTE, ATTEND B",
+            "pharmacistName": "MAIN PHARMACY",
+            "quantityOrdered": "120",
+            "daysSupply": 30,
+            "fillsRemaining": 0,
+            "summary": "MedicationOrder{uid='null'}"
+          }
+        ],
+        "fills": [
+          {
+            "dispenseDate": "20131025",
+            "dispensingPharmacy": "MAIN PHARMACY",
+            "quantityDispensed": "120",
+            "summary": "MedicationFill{uid='null'}"
+          }
+        ],
+        "codes": [
+          {
+            "code": "3000258290",
+            "system": "DOD_NCID"
+          }
+        ],
+        "rxncodes": [],
+        "name": "GUAIFENESIN, 100 MG/5ML, SYRUP, ORAL"
+      },
+      {
+        "facilityCode": "DOD",
+        "facilityName": "DOD",
+        "overallStart": "20131025",
+        "overallStop": "20131124",
+        "vaType": "O",
+        "supply": false,
+        "administrations": [],
+        "kind": "Medication, Outpatient",
+        "uid": "urn:va:med:DOD:0000000009:1000001262",
+        "summary": "GLYCOPYRROLATE, 0.2 MG/ML, VIAL, INJECTION (Active)\n USE IN CLINIC",
+        "pid": "9E7A;9",
+        "productFormCode": "2165347162",
+        "productFormName": "GLYCOPYRROLATE, 0.2 MG/ML, VIAL, INJECTION",
+        "sig": "USE IN CLINIC",
+        "patientInstruction": "\nNONE",
+        "medStatus": "Active",
+        "medType": "O",
+        "vaStatus": "Active",
+        "IMO": false,
+        "products": [
+          {
+            "suppliedName": "GLYCOPYRROLATE, 0.2 MG/ML, VIAL, INJECTION",
+            "summary": "MedicationProduct{uid='null'}",
+            "strength": "1"
+          }
+        ],
+        "dosages": [],
+        "orders": [
+          {
+            "providerName": "AHLTADTE, ATTEND B",
+            "pharmacistName": "MAIN PHARMACY",
+            "quantityOrdered": "1",
+            "daysSupply": 30,
+            "fillsRemaining": 0,
+            "summary": "MedicationOrder{uid='null'}"
+          }
+        ],
+        "fills": [
+          {
+            "dispenseDate": "20131025",
+            "dispensingPharmacy": "MAIN PHARMACY",
+            "quantityDispensed": "1",
+            "summary": "MedicationFill{uid='null'}"
+          }
+        ],
+        "codes": [
+          {
+            "code": "3000262265",
+            "system": "DOD_NCID"
+          }
+        ],
+        "rxncodes": [],
+        "name": "GLYCOPYRROLATE, 0.2 MG/ML, VIAL, INJECTION"
+      },
+      {
+        "facilityCode": "DOD",
+        "facilityName": "DOD",
+        "overallStart": "20131024",
+        "overallStop": "20131123",
+        "vaType": "O",
+        "supply": false,
+        "administrations": [],
+        "kind": "Medication, Outpatient",
+        "uid": "urn:va:med:DOD:0000000009:1000001264",
+        "summary": "Gabapentin 50mg/mL, (Neurontin), Solution, Oral, 5mL (Active)\n TEASPOONFUL",
+        "pid": "9E7A;9",
+        "productFormCode": "2165346524",
+        "productFormName": "Gabapentin 50mg/mL, (Neurontin), Solution, Oral, 5mL",
+        "sig": "TEASPOONFUL",
+        "patientInstruction": "\nNONE",
+        "medStatus": "Active",
+        "medType": "O",
+        "vaStatus": "Active",
+        "IMO": false,
+        "products": [
+          {
+            "suppliedName": "Gabapentin 50mg/mL, (Neurontin), Solution, Oral, 5mL",
+            "summary": "MedicationProduct{uid='null'}",
+            "strength": "1"
+          }
+        ],
+        "dosages": [],
+        "orders": [
+          {
+            "providerName": "AHLTADTE, ATTEND B",
+            "pharmacistName": "MAIN PHARMACY",
+            "quantityOrdered": "1",
+            "daysSupply": 30,
+            "fillsRemaining": 0,
+            "summary": "MedicationOrder{uid='null'}"
+          }
+        ],
+        "fills": [
+          {
+            "dispenseDate": "20131024",
+            "dispensingPharmacy": "MAIN PHARMACY",
+            "quantityDispensed": "1",
+            "summary": "MedicationFill{uid='null'}"
+          }
+        ],
+        "codes": [
+          {
+            "code": "15518112",
+            "system": "DOD_NCID"
+          }
+        ],
+        "rxncodes": [],
+        "name": "Gabapentin 50mg/mL, (Neurontin), Solution, Oral, 5mL"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "overallStart": "199811161500",
+        "overallStop": "199812010000",
+        "vaType": "I",
+        "supply": false,
+        "qualifiedName": "FLURAZEPAM CAP,ORAL",
+        "administrations": [],
+        "kind": "Medication, Inpatient",
+        "uid": "urn:va:med:9E7A:9:8528",
+        "summary": "FLURAZEPAM CAP,ORAL (EXPIRED)\n Give: ",
+        "pid": "9E7A;9",
+        "localId": "1U;I",
+        "productFormName": "CAP,ORAL",
+        "sig": "Give: ",
+        "stopped": "199812010000",
+        "medStatus": "urn:sct:392521001",
+        "medStatusName": "historical",
+        "medType": "urn:sct:105903003",
+        "vaStatus": "EXPIRED",
+        "IMO": false,
+        "products": [
+          {
+            "ingredientCode": "urn:va:vuid:4019763",
+            "ingredientCodeName": "FLURAZEPAM",
+            "ingredientName": "FLURAZEPAM CAP,ORAL",
+            "drugClassCode": "urn:vadc:CN302",
+            "drugClassName": "BENZODIAZEPINE DERIVATIVE SEDATIVES/HYPNOTICS",
+            "suppliedCode": "urn:va:vuid:4002349",
+            "suppliedName": "FLURAZEPAM HCL 30MG CAP",
+            "summary": "MedicationProduct{uid='null'}",
+            "ingredientRole": "urn:sct:410942007",
+            "strength": "30 MG",
+            "ingredientRXNCode": "urn:rxnorm:4501"
+          }
+        ],
+        "dosages": [
+          {
+            "routeName": "PO",
+            "scheduleName": "HS",
+            "scheduleType": "CONTINUOUS",
+            "start": "199811161500",
+            "stop": "199812010000",
+            "relativeStart": 0,
+            "relativeStop": 20700,
+            "scheduleFreq": 1440,
+            "instructions": "30MG",
+            "summary": "MedicationDose{uid='null'}"
+          }
+        ],
+        "orders": [
+          {
+            "orderUid": "urn:va:order:9E7A:9:8528",
+            "ordered": "199811161433",
+            "providerUid": "urn:va:user:9E7A:11733",
+            "providerName": "RADTECH,SEVENTEEN",
+            "pharmacistUid": "urn:va:user:9E7A:11733",
+            "pharmacistName": "RADTECH,SEVENTEEN",
+            "summary": "MedicationOrder{uid='null'}"
+          }
+        ],
+        "fills": [],
+        "codes": [
+          {
+            "code": "1298091",
+            "system": "urn:oid:2.16.840.1.113883.6.88",
+            "display": "Flurazepam Hydrochloride 30 MG Oral Capsule"
+          }
+        ],
+        "rxncodes": [
+          "urn:vandf:4019763",
+          "urn:ndfrt:N0000000002",
+          "urn:ndfrt:N0000007524",
+          "urn:ndfrt:N0000007547",
+          "urn:ndfrt:N0000008260",
+          "urn:ndfrt:N0000008095",
+          "urn:ndfrt:N0000007542",
+          "urn:rxnorm:4501",
+          "urn:ndfrt:N0000147854"
+        ],
+        "name": "FLURAZEPAM CAP,ORAL"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "overallStart": "199811161500",
+        "overallStop": "199812010000",
+        "vaType": "I",
+        "supply": false,
+        "qualifiedName": "DIPHENHYDRAMINE CAP,ORAL",
+        "administrations": [],
+        "kind": "Medication, Inpatient",
+        "uid": "urn:va:med:9E7A:9:8529",
+        "summary": "DIPHENHYDRAMINE CAP,ORAL (EXPIRED)\n Give: ",
+        "pid": "9E7A;9",
+        "localId": "2U;I",
+        "productFormName": "CAP,ORAL",
+        "sig": "Give: ",
+        "stopped": "199812010000",
+        "medStatus": "urn:sct:392521001",
+        "medStatusName": "historical",
+        "medType": "urn:sct:105903003",
+        "vaStatus": "EXPIRED",
+        "IMO": false,
+        "products": [
+          {
+            "ingredientCode": "urn:va:vuid:4019724",
+            "ingredientCodeName": "DIPHENHYDRAMINE",
+            "ingredientName": "DIPHENHYDRAMINE CAP,ORAL",
+            "drugClassCode": "urn:vadc:AH102",
+            "drugClassName": "ANTIHISTAMINES,ETHANOLAMINE",
+            "suppliedCode": "urn:va:vuid:4002557",
+            "suppliedName": "DIPHENHYDRAMINE HCL 50MG CAP",
+            "summary": "MedicationProduct{uid='null'}",
+            "ingredientRole": "urn:sct:410942007",
+            "strength": "50 MG",
+            "ingredientRXNCode": "urn:rxnorm:3498"
+          }
+        ],
+        "dosages": [
+          {
+            "routeName": "PO",
+            "scheduleName": "HS",
+            "scheduleType": "CONTINUOUS",
+            "start": "199811161500",
+            "stop": "199812010000",
+            "relativeStart": 0,
+            "relativeStop": 20700,
+            "scheduleFreq": 1440,
+            "instructions": "50MG",
+            "summary": "MedicationDose{uid='null'}"
+          }
+        ],
+        "orders": [
+          {
+            "orderUid": "urn:va:order:9E7A:9:8529",
+            "ordered": "199811161433",
+            "providerUid": "urn:va:user:9E7A:11733",
+            "providerName": "RADTECH,SEVENTEEN",
+            "pharmacistUid": "urn:va:user:9E7A:11733",
+            "pharmacistName": "RADTECH,SEVENTEEN",
+            "summary": "MedicationOrder{uid='null'}"
+          }
+        ],
+        "fills": [],
+        "codes": [
+          {
+            "code": "1020477",
+            "system": "urn:oid:2.16.840.1.113883.6.88",
+            "display": "Diphenhydramine Hydrochloride 50 MG Oral Capsule"
+          }
+        ],
+        "rxncodes": [
+          "urn:vandf:4019724",
+          "urn:ndfrt:N0000000002",
+          "urn:ndfrt:N0000007525",
+          "urn:ndfrt:N0000007676",
+          "urn:ndfrt:N0000007973",
+          "urn:ndfrt:N0000007528",
+          "urn:ndfrt:N0000008280",
+          "urn:ndfrt:N0000008229",
+          "urn:rxnorm:3498",
+          "urn:ndfrt:N0000147816"
+        ],
+        "name": "DIPHENHYDRAMINE CAP,ORAL"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "overallStart": "199811161500",
+        "overallStop": "199812010000",
+        "vaType": "I",
+        "supply": false,
+        "qualifiedName": "FLURAZEPAM CAP,ORAL",
+        "administrations": [],
+        "kind": "Medication, Inpatient",
+        "uid": "urn:va:med:9E7A:9:8531",
+        "summary": "FLURAZEPAM CAP,ORAL (EXPIRED)\n Give: ",
+        "pid": "9E7A;9",
+        "localId": "4U;I",
+        "productFormName": "CAP,ORAL",
+        "sig": "Give: ",
+        "stopped": "199812010000",
+        "medStatus": "urn:sct:392521001",
+        "medStatusName": "historical",
+        "medType": "urn:sct:105903003",
+        "vaStatus": "EXPIRED",
+        "IMO": false,
+        "products": [
+          {
+            "ingredientCode": "urn:va:vuid:4019763",
+            "ingredientCodeName": "FLURAZEPAM",
+            "ingredientName": "FLURAZEPAM CAP,ORAL",
+            "drugClassCode": "urn:vadc:CN302",
+            "drugClassName": "BENZODIAZEPINE DERIVATIVE SEDATIVES/HYPNOTICS",
+            "suppliedCode": "urn:va:vuid:4002349",
+            "suppliedName": "FLURAZEPAM HCL 30MG CAP",
+            "summary": "MedicationProduct{uid='null'}",
+            "ingredientRole": "urn:sct:410942007",
+            "strength": "30 MG",
+            "ingredientRXNCode": "urn:rxnorm:4501"
+          }
+        ],
+        "dosages": [
+          {
+            "routeName": "PO",
+            "scheduleName": "HS",
+            "scheduleType": "CONTINUOUS",
+            "start": "199811161500",
+            "stop": "199812010000",
+            "relativeStart": 0,
+            "relativeStop": 20700,
+            "scheduleFreq": 1440,
+            "instructions": "30MG",
+            "summary": "MedicationDose{uid='null'}"
+          }
+        ],
+        "orders": [
+          {
+            "orderUid": "urn:va:order:9E7A:9:8531",
+            "ordered": "199811161442",
+            "providerUid": "urn:va:user:9E7A:11733",
+            "providerName": "RADTECH,SEVENTEEN",
+            "pharmacistUid": "urn:va:user:9E7A:11733",
+            "pharmacistName": "RADTECH,SEVENTEEN",
+            "summary": "MedicationOrder{uid='null'}"
+          }
+        ],
+        "fills": [],
+        "codes": [
+          {
+            "code": "1298091",
+            "system": "urn:oid:2.16.840.1.113883.6.88",
+            "display": "Flurazepam Hydrochloride 30 MG Oral Capsule"
+          }
+        ],
+        "rxncodes": [
+          "urn:vandf:4019763",
+          "urn:ndfrt:N0000000002",
+          "urn:ndfrt:N0000007524",
+          "urn:ndfrt:N0000007547",
+          "urn:ndfrt:N0000008260",
+          "urn:ndfrt:N0000008095",
+          "urn:ndfrt:N0000007542",
+          "urn:rxnorm:4501",
+          "urn:ndfrt:N0000147854"
+        ],
+        "name": "FLURAZEPAM CAP,ORAL"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "overallStart": "199811161500",
+        "overallStop": "199812010000",
+        "vaType": "I",
+        "supply": false,
+        "qualifiedName": "DIPHENHYDRAMINE CAP,ORAL",
+        "administrations": [],
+        "kind": "Medication, Inpatient",
+        "uid": "urn:va:med:9E7A:9:8532",
+        "summary": "DIPHENHYDRAMINE CAP,ORAL (EXPIRED)\n Give: ",
+        "pid": "9E7A;9",
+        "localId": "5U;I",
+        "productFormName": "CAP,ORAL",
+        "sig": "Give: ",
+        "stopped": "199812010000",
+        "medStatus": "urn:sct:392521001",
+        "medStatusName": "historical",
+        "medType": "urn:sct:105903003",
+        "vaStatus": "EXPIRED",
+        "IMO": false,
+        "products": [
+          {
+            "ingredientCode": "urn:va:vuid:4019724",
+            "ingredientCodeName": "DIPHENHYDRAMINE",
+            "ingredientName": "DIPHENHYDRAMINE CAP,ORAL",
+            "drugClassCode": "urn:vadc:AH102",
+            "drugClassName": "ANTIHISTAMINES,ETHANOLAMINE",
+            "suppliedCode": "urn:va:vuid:4002557",
+            "suppliedName": "DIPHENHYDRAMINE HCL 50MG CAP",
+            "summary": "MedicationProduct{uid='null'}",
+            "ingredientRole": "urn:sct:410942007",
+            "strength": "50 MG",
+            "ingredientRXNCode": "urn:rxnorm:3498"
+          }
+        ],
+        "dosages": [
+          {
+            "routeName": "PO",
+            "scheduleName": "HS",
+            "scheduleType": "CONTINUOUS",
+            "start": "199811161500",
+            "stop": "199812010000",
+            "relativeStart": 0,
+            "relativeStop": 20700,
+            "scheduleFreq": 1440,
+            "instructions": "50MG",
+            "summary": "MedicationDose{uid='null'}"
+          }
+        ],
+        "orders": [
+          {
+            "orderUid": "urn:va:order:9E7A:9:8532",
+            "ordered": "199811161442",
+            "providerUid": "urn:va:user:9E7A:11733",
+            "providerName": "RADTECH,SEVENTEEN",
+            "pharmacistUid": "urn:va:user:9E7A:11733",
+            "pharmacistName": "RADTECH,SEVENTEEN",
+            "summary": "MedicationOrder{uid='null'}"
+          }
+        ],
+        "fills": [],
+        "codes": [
+          {
+            "code": "1020477",
+            "system": "urn:oid:2.16.840.1.113883.6.88",
+            "display": "Diphenhydramine Hydrochloride 50 MG Oral Capsule"
+          }
+        ],
+        "rxncodes": [
+          "urn:vandf:4019724",
+          "urn:ndfrt:N0000000002",
+          "urn:ndfrt:N0000007525",
+          "urn:ndfrt:N0000007676",
+          "urn:ndfrt:N0000007973",
+          "urn:ndfrt:N0000007528",
+          "urn:ndfrt:N0000008280",
+          "urn:ndfrt:N0000008229",
+          "urn:rxnorm:3498",
+          "urn:ndfrt:N0000147816"
+        ],
+        "name": "DIPHENHYDRAMINE CAP,ORAL"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "overallStart": "199811160900",
+        "overallStop": "199812010000",
+        "vaType": "I",
+        "supply": false,
+        "qualifiedName": "ASPIRIN CAP,ORAL",
+        "administrations": [],
+        "kind": "Medication, Inpatient",
+        "uid": "urn:va:med:9E7A:9:8534",
+        "summary": "ASPIRIN CAP,ORAL (EXPIRED)\n Give: ",
+        "pid": "9E7A;9",
+        "localId": "7U;I",
+        "productFormName": "CAP,ORAL",
+        "sig": "Give: ",
+        "stopped": "199812010000",
+        "medStatus": "urn:sct:392521001",
+        "medStatusName": "historical",
+        "medType": "urn:sct:105903003",
+        "vaStatus": "EXPIRED",
+        "IMO": false,
+        "products": [
+          {
+            "ingredientCode": "urn:va:vuid:4017536",
+            "ingredientCodeName": "ASPIRIN",
+            "ingredientName": "ASPIRIN CAP,ORAL",
+            "drugClassCode": "urn:vadc:CN103",
+            "drugClassName": "NON-OPIOID ANALGESICS",
+            "suppliedCode": "urn:va:vuid:4005767",
+            "suppliedName": "ASPIRIN 325MG BUFFERED TAB",
+            "summary": "MedicationProduct{uid='null'}",
+            "ingredientRole": "urn:sct:410942007",
+            "strength": "325 MG",
+            "ingredientRXNCode": "urn:rxnorm:1191"
+          }
+        ],
+        "dosages": [
+          {
+            "routeName": "PO",
+            "scheduleName": "QD",
+            "start": "199811160900",
+            "stop": "199812010000",
+            "relativeStart": 0,
+            "relativeStop": 21060,
+            "instructions": "35MG",
+            "summary": "MedicationDose{uid='null'}"
+          }
+        ],
+        "orders": [
+          {
+            "orderUid": "urn:va:order:9E7A:9:8534",
+            "ordered": "199811161453",
+            "providerUid": "urn:va:user:9E7A:11733",
+            "providerName": "RADTECH,SEVENTEEN",
+            "pharmacistUid": "urn:va:user:9E7A:11733",
+            "pharmacistName": "RADTECH,SEVENTEEN",
+            "summary": "MedicationOrder{uid='null'}"
+          }
+        ],
+        "fills": [],
+        "codes": [
+          {
+            "code": "212033",
+            "system": "urn:oid:2.16.840.1.113883.6.88",
+            "display": "Aspirin 325 MG Oral Tablet"
+          }
+        ],
+        "rxncodes": [
+          "urn:vandf:4017536",
+          "urn:ndfrt:N0000000002",
+          "urn:ndfrt:N0000007676",
+          "urn:ndfrt:N0000185640",
+          "urn:ndfrt:N0000007628",
+          "urn:ndfrt:N0000005901",
+          "urn:ndfrt:N0000006035",
+          "urn:ndfrt:N0000008137",
+          "urn:ndfrt:N0000145918",
+          "urn:rxnorm:1191"
+        ],
+        "name": "ASPIRIN CAP,ORAL"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "overallStart": "199811161600",
+        "overallStop": "199812010000",
+        "vaType": "I",
+        "supply": false,
+        "qualifiedName": "FLURAZEPAM CAP,ORAL",
+        "administrations": [],
+        "kind": "Medication, Inpatient",
+        "uid": "urn:va:med:9E7A:9:8539",
+        "summary": "FLURAZEPAM CAP,ORAL (EXPIRED)\n Give: ",
+        "pid": "9E7A;9",
+        "localId": "8U;I",
+        "productFormName": "CAP,ORAL",
+        "sig": "Give: ",
+        "stopped": "199812010000",
+        "medStatus": "urn:sct:392521001",
+        "medStatusName": "historical",
+        "medType": "urn:sct:105903003",
+        "vaStatus": "EXPIRED",
+        "IMO": false,
+        "products": [
+          {
+            "ingredientCode": "urn:va:vuid:4019763",
+            "ingredientCodeName": "FLURAZEPAM",
+            "ingredientName": "FLURAZEPAM CAP,ORAL",
+            "drugClassCode": "urn:vadc:CN302",
+            "drugClassName": "BENZODIAZEPINE DERIVATIVE SEDATIVES/HYPNOTICS",
+            "suppliedCode": "urn:va:vuid:4002349",
+            "suppliedName": "FLURAZEPAM HCL 30MG CAP",
+            "summary": "MedicationProduct{uid='null'}",
+            "ingredientRole": "urn:sct:410942007",
+            "strength": "30 MG",
+            "ingredientRXNCode": "urn:rxnorm:4501"
+          }
+        ],
+        "dosages": [
+          {
+            "routeName": "PO",
+            "scheduleName": "HS",
+            "scheduleType": "CONTINUOUS",
+            "start": "199811161600",
+            "stop": "199812010000",
+            "relativeStart": 0,
+            "relativeStop": 20640,
+            "scheduleFreq": 1440,
+            "instructions": "30MG",
+            "summary": "MedicationDose{uid='null'}"
+          }
+        ],
+        "orders": [
+          {
+            "orderUid": "urn:va:order:9E7A:9:8539",
+            "ordered": "199811161556",
+            "providerUid": "urn:va:user:9E7A:11733",
+            "providerName": "RADTECH,SEVENTEEN",
+            "pharmacistUid": "urn:va:user:9E7A:11733",
+            "pharmacistName": "RADTECH,SEVENTEEN",
+            "summary": "MedicationOrder{uid='null'}"
+          }
+        ],
+        "fills": [],
+        "codes": [
+          {
+            "code": "1298091",
+            "system": "urn:oid:2.16.840.1.113883.6.88",
+            "display": "Flurazepam Hydrochloride 30 MG Oral Capsule"
+          }
+        ],
+        "rxncodes": [
+          "urn:vandf:4019763",
+          "urn:ndfrt:N0000000002",
+          "urn:ndfrt:N0000007524",
+          "urn:ndfrt:N0000007547",
+          "urn:ndfrt:N0000008260",
+          "urn:ndfrt:N0000008095",
+          "urn:ndfrt:N0000007542",
+          "urn:rxnorm:4501",
+          "urn:ndfrt:N0000147854"
+        ],
+        "name": "FLURAZEPAM CAP,ORAL"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "overallStart": "199811161600",
+        "overallStop": "199812010000",
+        "vaType": "I",
+        "supply": false,
+        "qualifiedName": "DIPHENHYDRAMINE CAP,ORAL",
+        "administrations": [],
+        "kind": "Medication, Inpatient",
+        "uid": "urn:va:med:9E7A:9:8540",
+        "summary": "DIPHENHYDRAMINE CAP,ORAL (EXPIRED)\n Give: ",
+        "pid": "9E7A;9",
+        "localId": "9U;I",
+        "productFormName": "CAP,ORAL",
+        "sig": "Give: ",
+        "stopped": "199812010000",
+        "medStatus": "urn:sct:392521001",
+        "medStatusName": "historical",
+        "medType": "urn:sct:105903003",
+        "vaStatus": "EXPIRED",
+        "IMO": false,
+        "products": [
+          {
+            "ingredientCode": "urn:va:vuid:4019724",
+            "ingredientCodeName": "DIPHENHYDRAMINE",
+            "ingredientName": "DIPHENHYDRAMINE CAP,ORAL",
+            "drugClassCode": "urn:vadc:AH102",
+            "drugClassName": "ANTIHISTAMINES,ETHANOLAMINE",
+            "suppliedCode": "urn:va:vuid:4002557",
+            "suppliedName": "DIPHENHYDRAMINE HCL 50MG CAP",
+            "summary": "MedicationProduct{uid='null'}",
+            "ingredientRole": "urn:sct:410942007",
+            "strength": "50 MG",
+            "ingredientRXNCode": "urn:rxnorm:3498"
+          }
+        ],
+        "dosages": [
+          {
+            "routeName": "PO",
+            "scheduleName": "HS",
+            "scheduleType": "CONTINUOUS",
+            "start": "199811161600",
+            "stop": "199812010000",
+            "relativeStart": 0,
+            "relativeStop": 20640,
+            "scheduleFreq": 1440,
+            "instructions": "50MG",
+            "summary": "MedicationDose{uid='null'}"
+          }
+        ],
+        "orders": [
+          {
+            "orderUid": "urn:va:order:9E7A:9:8540",
+            "ordered": "199811161557",
+            "providerUid": "urn:va:user:9E7A:11733",
+            "providerName": "RADTECH,SEVENTEEN",
+            "pharmacistUid": "urn:va:user:9E7A:11733",
+            "pharmacistName": "RADTECH,SEVENTEEN",
+            "summary": "MedicationOrder{uid='null'}"
+          }
+        ],
+        "fills": [],
+        "codes": [
+          {
+            "code": "1020477",
+            "system": "urn:oid:2.16.840.1.113883.6.88",
+            "display": "Diphenhydramine Hydrochloride 50 MG Oral Capsule"
+          }
+        ],
+        "rxncodes": [
+          "urn:vandf:4019724",
+          "urn:ndfrt:N0000000002",
+          "urn:ndfrt:N0000007525",
+          "urn:ndfrt:N0000007676",
+          "urn:ndfrt:N0000007973",
+          "urn:ndfrt:N0000007528",
+          "urn:ndfrt:N0000008280",
+          "urn:ndfrt:N0000008229",
+          "urn:rxnorm:3498",
+          "urn:ndfrt:N0000147816"
+        ],
+        "name": "DIPHENHYDRAMINE CAP,ORAL"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "overallStart": "199811161400",
+        "overallStop": "199811200000",
+        "vaType": "I",
+        "supply": false,
+        "qualifiedName": "MYLANTA SUSP",
+        "administrations": [],
+        "kind": "Medication, Inpatient",
+        "uid": "urn:va:med:9E7A:9:8530",
+        "summary": "MYLANTA SUSP (EXPIRED)\n Give: ",
+        "pid": "9E7A;9",
+        "localId": "3U;I",
+        "productFormName": "SUSP",
+        "sig": "Give: ",
+        "stopped": "199811200000",
+        "medStatus": "urn:sct:392521001",
+        "medStatusName": "historical",
+        "medType": "urn:sct:105903003",
+        "vaStatus": "EXPIRED",
+        "IMO": false,
+        "products": [
+          {
+            "ingredientCode": "urn:va:vuid:",
+            "ingredientCodeName": "",
+            "ingredientName": "MYLANTA SUSP",
+            "drugClassCode": "urn:vadc:GA199",
+            "drugClassName": "ANTACIDS,OTHER",
+            "suppliedCode": "urn:va:vuid:",
+            "suppliedName": "",
+            "summary": "MedicationProduct{uid='null'}",
+            "ingredientRole": "urn:sct:410942007"
+          }
+        ],
+        "dosages": [
+          {
+            "routeName": "PO",
+            "scheduleName": "Q4H",
+            "scheduleType": "CONTINUOUS",
+            "start": "199811161400",
+            "stop": "199811200000",
+            "relativeStart": 0,
+            "relativeStop": 4920,
+            "scheduleFreq": 240,
+            "instructions": "35ML",
+            "summary": "MedicationDose{uid='null'}"
+          }
+        ],
+        "orders": [
+          {
+            "orderUid": "urn:va:order:9E7A:9:8530",
+            "ordered": "199811161434",
+            "providerUid": "urn:va:user:9E7A:11733",
+            "providerName": "RADTECH,SEVENTEEN",
+            "pharmacistUid": "urn:va:user:9E7A:11733",
+            "pharmacistName": "RADTECH,SEVENTEEN",
+            "summary": "MedicationOrder{uid='null'}"
+          }
+        ],
+        "fills": [],
+        "rxncodes": [],
+        "name": "MYLANTA SUSP"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "overallStart": "199811161400",
+        "overallStop": "199811200000",
+        "vaType": "I",
+        "supply": false,
+        "qualifiedName": "MYLANTA SUSP",
+        "administrations": [],
+        "kind": "Medication, Inpatient",
+        "uid": "urn:va:med:9E7A:9:8533",
+        "summary": "MYLANTA SUSP (EXPIRED)\n Give: ",
+        "pid": "9E7A;9",
+        "localId": "6U;I",
+        "productFormName": "SUSP",
+        "sig": "Give: ",
+        "stopped": "199811200000",
+        "medStatus": "urn:sct:392521001",
+        "medStatusName": "historical",
+        "medType": "urn:sct:105903003",
+        "vaStatus": "EXPIRED",
+        "IMO": false,
+        "products": [
+          {
+            "ingredientCode": "urn:va:vuid:",
+            "ingredientCodeName": "",
+            "ingredientName": "MYLANTA SUSP",
+            "drugClassCode": "urn:vadc:GA199",
+            "drugClassName": "ANTACIDS,OTHER",
+            "suppliedCode": "urn:va:vuid:",
+            "suppliedName": "",
+            "summary": "MedicationProduct{uid='null'}",
+            "ingredientRole": "urn:sct:410942007"
+          }
+        ],
+        "dosages": [
+          {
+            "routeName": "PO",
+            "scheduleName": "Q4H",
+            "scheduleType": "CONTINUOUS",
+            "start": "199811161400",
+            "stop": "199811200000",
+            "relativeStart": 0,
+            "relativeStop": 4920,
+            "scheduleFreq": 240,
+            "instructions": "35ML",
+            "summary": "MedicationDose{uid='null'}"
+          }
+        ],
+        "orders": [
+          {
+            "orderUid": "urn:va:order:9E7A:9:8533",
+            "ordered": "199811161442",
+            "providerUid": "urn:va:user:9E7A:11733",
+            "providerName": "RADTECH,SEVENTEEN",
+            "pharmacistUid": "urn:va:user:9E7A:11733",
+            "pharmacistName": "RADTECH,SEVENTEEN",
+            "summary": "MedicationOrder{uid='null'}"
+          }
+        ],
+        "fills": [],
+        "rxncodes": [],
+        "name": "MYLANTA SUSP"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "overallStart": "199811161500",
+        "overallStop": "199811200000",
+        "vaType": "I",
+        "supply": false,
+        "qualifiedName": "MYLANTA SUSP",
+        "administrations": [],
+        "kind": "Medication, Inpatient",
+        "uid": "urn:va:med:9E7A:9:8541",
+        "summary": "MYLANTA SUSP (EXPIRED)\n Give: ",
+        "pid": "9E7A;9",
+        "localId": "10U;I",
+        "productFormName": "SUSP",
+        "sig": "Give: ",
+        "stopped": "199811200000",
+        "medStatus": "urn:sct:392521001",
+        "medStatusName": "historical",
+        "medType": "urn:sct:105903003",
+        "vaStatus": "EXPIRED",
+        "IMO": false,
+        "products": [
+          {
+            "ingredientCode": "urn:va:vuid:",
+            "ingredientCodeName": "",
+            "ingredientName": "MYLANTA SUSP",
+            "drugClassCode": "urn:vadc:GA199",
+            "drugClassName": "ANTACIDS,OTHER",
+            "suppliedCode": "urn:va:vuid:",
+            "suppliedName": "",
+            "summary": "MedicationProduct{uid='null'}",
+            "ingredientRole": "urn:sct:410942007"
+          }
+        ],
+        "dosages": [
+          {
+            "routeName": "PO",
+            "scheduleName": "Q4H",
+            "scheduleType": "CONTINUOUS",
+            "start": "199811161500",
+            "stop": "199811200000",
+            "relativeStart": 0,
+            "relativeStop": 4860,
+            "scheduleFreq": 240,
+            "instructions": "35ML",
+            "summary": "MedicationDose{uid='null'}"
+          }
+        ],
+        "orders": [
+          {
+            "orderUid": "urn:va:order:9E7A:9:8541",
+            "ordered": "199811161557",
+            "providerUid": "urn:va:user:9E7A:11733",
+            "providerName": "RADTECH,SEVENTEEN",
+            "pharmacistUid": "urn:va:user:9E7A:11733",
+            "pharmacistName": "RADTECH,SEVENTEEN",
+            "summary": "MedicationOrder{uid='null'}"
+          }
+        ],
+        "fills": [],
+        "rxncodes": [],
+        "name": "MYLANTA SUSP"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "overallStart": "199508142100",
+        "overallStop": "199508290000",
+        "vaType": "I",
+        "supply": false,
+        "qualifiedName": "ASPIRIN/CODEINE TAB",
+        "administrations": [],
+        "kind": "Medication, Inpatient",
+        "uid": "urn:va:med:9E7A:9:8217",
+        "summary": "ASPIRIN/CODEINE TAB (PENDING)\n Give: ",
+        "pid": "9E7A;9",
+        "localId": "516P;I",
+        "productFormName": "TAB",
+        "sig": "Give: ",
+        "stopped": "199508290000",
+        "medStatus": "urn:sct:73425007",
+        "medStatusName": "not active",
+        "medType": "urn:sct:105903003",
+        "vaStatus": "PENDING",
+        "IMO": false,
+        "products": [],
+        "dosages": [
+          {
+            "routeName": "PO",
+            "scheduleName": "TID",
+            "scheduleType": "CONTINUOUS",
+            "start": "199508142100",
+            "stop": "199508290000",
+            "relativeStart": 0,
+            "relativeStop": 20340,
+            "scheduleFreq": 480,
+            "instructions": "100MG",
+            "summary": "MedicationDose{uid='null'}"
+          }
+        ],
+        "orders": [
+          {
+            "orderUid": "urn:va:order:9E7A:9:8217",
+            "ordered": "199508142345",
+            "providerUid": "urn:va:user:9E7A:813",
+            "providerName": "PROGRAMMER,TWENTYTWO",
+            "summary": "MedicationOrder{uid='null'}"
+          }
+        ],
+        "fills": [],
+        "rxncodes": [],
+        "name": "ASPIRIN/CODEINE TAB"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "overallStart": "199508142300",
+        "overallStop": "199508142300",
+        "vaType": "I",
+        "supply": false,
+        "qualifiedName": "CORTISPORIN OINT,OPH",
+        "administrations": [],
+        "kind": "Medication, Inpatient",
+        "uid": "urn:va:med:9E7A:9:8216",
+        "summary": "CORTISPORIN OINT,OPH (PENDING)\n Give: ",
+        "pid": "9E7A;9",
+        "localId": "515P;I",
+        "productFormName": "OINT,OPH",
+        "sig": "Give: ",
+        "stopped": "199508142300",
+        "medStatus": "urn:sct:73425007",
+        "medStatusName": "not active",
+        "medType": "urn:sct:105903003",
+        "vaStatus": "PENDING",
+        "IMO": false,
+        "products": [],
+        "dosages": [
+          {
+            "routeName": "PO",
+            "scheduleName": "ONCE",
+            "scheduleType": "ONE-TIME",
+            "start": "199508142300",
+            "stop": "199508142300",
+            "relativeStart": 0,
+            "relativeStop": 0,
+            "scheduleFreq": 40320,
+            "instructions": "100MG",
+            "summary": "MedicationDose{uid='null'}"
+          }
+        ],
+        "orders": [
+          {
+            "orderUid": "urn:va:order:9E7A:9:8216",
+            "ordered": "199508142345",
+            "providerUid": "urn:va:user:9E7A:813",
+            "providerName": "PROGRAMMER,TWENTYTWO",
+            "summary": "MedicationOrder{uid='null'}"
+          }
+        ],
+        "fills": [],
+        "rxncodes": [],
+        "name": "CORTISPORIN OINT,OPH"
+      }
+    ]
+  }
+}

@@ -1,0 +1,192 @@
+{
+  "apiVersion": "1.0",
+  "data": {
+    "updated": 20140808175954,
+    "totalItems": 6,
+    "currentItemCount": 6,
+    "items": [
+      {
+        "kind": "Imaging",
+        "facilityCode": "998",
+        "facilityName": "ABILENE (CAA)",
+        "orderName": "ABDOMEN 1 VIEW",
+        "statusName": "EXAMINED",
+        "imagingTypeUid": "urn:va:imaging-Type:GENERAL RADIOLOGY",
+        "locationUid": "urn:va:location:9E7A:60",
+        "hasImages": false,
+        "imageLocation": "OPC RADIOLOGY",
+        "uid": "urn:va:image:9E7A:228:7009789.9158-1",
+        "summary": "RADIOLOGIC EXAMINATION, ABDOMEN; SINGLE ANTEROPOSTERIOR VIEW",
+        "pid": "C877;228",
+        "localId": "7009789.9158-1",
+        "typeName": "RADIOLOGIC EXAMINATION, ABDOMEN; SINGLE ANTEROPOSTERIOR VIEW",
+        "dateTime": "199902100841",
+        "category": "RA",
+        "reason": "",
+        "orderUid": "urn:va:order:9E7A:228:9343",
+        "name": "ABDOMEN 1 VIEW",
+        "locationName": "OPC RADIOLOGY",
+        "case": 10
+      },
+      {
+        "kind": "Imaging",
+        "facilityCode": "998",
+        "facilityName": "ABILENE (CAA)",
+        "orderName": "ABDOMEN 1 VIEW",
+        "statusName": "EXAMINED",
+        "imagingTypeUid": "urn:va:imaging-Type:GENERAL RADIOLOGY",
+        "locationUid": "urn:va:location:C877:60",
+        "hasImages": false,
+        "imageLocation": "OPC RADIOLOGY",
+        "uid": "urn:va:image:C877:228:7009789.9158-1",
+        "summary": "RADIOLOGIC EXAMINATION, ABDOMEN; SINGLE ANTEROPOSTERIOR VIEW",
+        "pid": "C877;228",
+        "localId": "7009789.9158-1",
+        "typeName": "RADIOLOGIC EXAMINATION, ABDOMEN; SINGLE ANTEROPOSTERIOR VIEW",
+        "dateTime": "199902100841",
+        "category": "RA",
+        "reason": "",
+        "orderUid": "urn:va:order:C877:228:9343",
+        "name": "ABDOMEN 1 VIEW",
+        "locationName": "OPC RADIOLOGY",
+        "case": 10
+      },
+      {
+        "kind": "Imaging",
+        "facilityCode": "998",
+        "facilityName": "ABILENE (CAA)",
+        "orderName": "CHEST SINGLE VIEW",
+        "statusName": "EXAMINED",
+        "imagingTypeUid": "urn:va:imaging-Type:GENERAL RADIOLOGY",
+        "locationUid": "urn:va:location:9E7A:60",
+        "hasImages": false,
+        "imageLocation": "OPC RADIOLOGY",
+        "uid": "urn:va:image:9E7A:228:7009789.917-1",
+        "summary": "RADIOLOGIC EXAMINATION, CHEST; SINGLE VIEW, FRONTAL",
+        "pid": "C877;228",
+        "localId": "7009789.917-1",
+        "typeName": "RADIOLOGIC EXAMINATION, CHEST; SINGLE VIEW, FRONTAL",
+        "dateTime": "199902100829",
+        "category": "RA",
+        "reason": "",
+        "orderUid": "urn:va:order:9E7A:228:9342",
+        "name": "CHEST SINGLE VIEW",
+        "locationName": "OPC RADIOLOGY",
+        "case": 9
+      },
+      {
+        "kind": "Imaging",
+        "facilityCode": "998",
+        "facilityName": "ABILENE (CAA)",
+        "orderName": "CHEST SINGLE VIEW",
+        "statusName": "EXAMINED",
+        "imagingTypeUid": "urn:va:imaging-Type:GENERAL RADIOLOGY",
+        "locationUid": "urn:va:location:C877:60",
+        "hasImages": false,
+        "imageLocation": "OPC RADIOLOGY",
+        "uid": "urn:va:image:C877:228:7009789.917-1",
+        "summary": "RADIOLOGIC EXAMINATION, CHEST; SINGLE VIEW, FRONTAL",
+        "pid": "C877;228",
+        "localId": "7009789.917-1",
+        "typeName": "RADIOLOGIC EXAMINATION, CHEST; SINGLE VIEW, FRONTAL",
+        "dateTime": "199902100829",
+        "category": "RA",
+        "reason": "",
+        "orderUid": "urn:va:order:C877:228:9342",
+        "name": "CHEST SINGLE VIEW",
+        "locationName": "OPC RADIOLOGY",
+        "case": 9
+      },
+      {
+        "kind": "Imaging",
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "statusName": "COMPLETE",
+        "imagingTypeUid": "urn:va:imaging-Type:GENERAL RADIOLOGY",
+        "locationUid": "urn:va:location:9E7A:40",
+        "hasImages": false,
+        "imageLocation": "RADIOLOGY MAIN FLOOR",
+        "uid": "urn:va:image:9E7A:228:7049578.9163-1",
+        "summary": "RADIOLOGIC EXAMINATION, ANKLE; 2 VIEWS",
+        "pid": "C877;228",
+        "localId": "7049578.9163-1",
+        "typeName": "RADIOLOGIC EXAMINATION, ANKLE; 2 VIEWS",
+        "dateTime": "199504210836",
+        "category": "RA",
+        "reason": "",
+        "providers": [
+          {
+            "providerName": "PROVIDER,THIRTYNINE",
+            "providerDisplayName": "Provider,Thirtynine",
+            "summary": "ProcedureProvider{uid='null'}",
+            "providerUid": "urn:va:user:9E7A:1252"
+          }
+        ],
+        "providerName": "PROVIDER,THIRTYNINE",
+        "providerDisplayName": "Provider,Thirtynine",
+        "results": [
+          {
+            "localTitle": "ANKLE 2 VIEWS",
+            "uid": "urn:va:document:9E7A:228:7049578.9163-1",
+            "summary": "ProcedureResult{uid='urn:va:document:9E7A:228:7049578.9163-1'}"
+          }
+        ],
+        "verified": true,
+        "name": "ANKLE 2 VIEWS",
+        "diagnosis": [
+          {
+            "code": "NORMAL",
+            "primary": true
+          }
+        ],
+        "locationName": "RADIOLOGY MAIN FLOOR",
+        "case": 149
+      },
+      {
+        "kind": "Imaging",
+        "facilityCode": "500",
+        "facilityName": "CAMP BEE",
+        "statusName": "COMPLETE",
+        "imagingTypeUid": "urn:va:imaging-Type:GENERAL RADIOLOGY",
+        "locationUid": "urn:va:location:C877:40",
+        "hasImages": false,
+        "imageLocation": "RADIOLOGY MAIN FLOOR",
+        "uid": "urn:va:image:C877:228:7049578.9163-1",
+        "summary": "RADIOLOGIC EXAMINATION, ANKLE; 2 VIEWS",
+        "pid": "C877;228",
+        "localId": "7049578.9163-1",
+        "typeName": "RADIOLOGIC EXAMINATION, ANKLE; 2 VIEWS",
+        "dateTime": "199504210836",
+        "category": "RA",
+        "reason": "",
+        "providers": [
+          {
+            "providerName": "PROVIDER,THIRTYNINE",
+            "providerDisplayName": "Provider,Thirtynine",
+            "summary": "ProcedureProvider{uid='null'}",
+            "providerUid": "urn:va:user:C877:1252"
+          }
+        ],
+        "providerName": "PROVIDER,THIRTYNINE",
+        "providerDisplayName": "Provider,Thirtynine",
+        "results": [
+          {
+            "localTitle": "ANKLE 2 VIEWS",
+            "uid": "urn:va:document:C877:228:7049578.9163-1",
+            "summary": "ProcedureResult{uid='urn:va:document:C877:228:7049578.9163-1'}"
+          }
+        ],
+        "verified": true,
+        "name": "ANKLE 2 VIEWS",
+        "diagnosis": [
+          {
+            "code": "NORMAL",
+            "primary": true
+          }
+        ],
+        "locationName": "RADIOLOGY MAIN FLOOR",
+        "case": 149
+      }
+    ]
+  }
+}

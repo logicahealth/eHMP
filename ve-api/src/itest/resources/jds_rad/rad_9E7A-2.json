@@ -1,0 +1,118 @@
+{
+  "apiVersion": "1.0",
+  "data": {
+    "updated": 20140808180009,
+    "totalItems": 4,
+    "currentItemCount": 4,
+    "items": [
+      {
+        "kind": "Imaging",
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "statusName": "COMPLETE",
+        "imagingTypeUid": "urn:va:imaging-Type:GENERAL RADIOLOGY",
+        "locationUid": "urn:va:location:9E7A:40",
+        "hasImages": false,
+        "imageLocation": "RADIOLOGY MAIN FLOOR",
+        "uid": "urn:va:image:9E7A:2:7048884.8374-1",
+        "summary": "RADIOLOGIC EXAMINATION, KNEE; 1 OR 2 VIEWS",
+        "pid": "9E7A;2",
+        "localId": "7048884.8374-1",
+        "typeName": "RADIOLOGIC EXAMINATION, KNEE; 1 OR 2 VIEWS",
+        "dateTime": "199511151625",
+        "category": "RA",
+        "reason": "",
+        "name": "KNEE 2 VIEWS",
+        "locationName": "RADIOLOGY MAIN FLOOR",
+        "case": 55
+      },
+      {
+        "kind": "Imaging",
+        "facilityCode": "998",
+        "facilityName": "ABILENE (CAA)",
+        "statusName": "COMPLETE",
+        "imagingTypeUid": "urn:va:imaging-Type:NUCLEAR MEDICINE",
+        "locationUid": "urn:va:location:9E7A:114",
+        "hasImages": false,
+        "imageLocation": "NUCLEAR MEDICINE",
+        "uid": "urn:va:image:9E7A:2:7058895.8699-1",
+        "summary": "BONE AND/OR JOINT IMAGING; WHOLE BODY",
+        "pid": "9E7A;2",
+        "localId": "7058895.8699-1",
+        "typeName": "BONE AND/OR JOINT IMAGING; WHOLE BODY",
+        "dateTime": "199411041300",
+        "category": "RA",
+        "reason": "",
+        "name": "NUC MED BONE, WHOLE BODY",
+        "locationName": "NUCLEAR MEDICINE",
+        "case": 12
+      },
+      {
+        "kind": "Imaging",
+        "facilityCode": "998",
+        "facilityName": "ABILENE (CAA)",
+        "statusName": "COMPLETE",
+        "imagingTypeUid": "urn:va:imaging-Type:NUCLEAR MEDICINE",
+        "locationUid": "urn:va:location:9E7A:114",
+        "hasImages": false,
+        "imageLocation": "NUCLEAR MEDICINE",
+        "uid": "urn:va:image:9E7A:2:7058896.8645-1",
+        "summary": "BONE AND/OR JOINT IMAGING; WHOLE BODY",
+        "pid": "9E7A;2",
+        "localId": "7058896.8645-1",
+        "typeName": "BONE AND/OR JOINT IMAGING; WHOLE BODY",
+        "dateTime": "199411031354",
+        "category": "RA",
+        "reason": "",
+        "name": "NUC MED BONE, WHOLE BODY",
+        "locationName": "NUCLEAR MEDICINE",
+        "case": 11
+      },
+      {
+        "kind": "Imaging",
+        "facilityCode": "998",
+        "facilityName": "ABILENE (CAA)",
+        "statusName": "COMPLETE",
+        "imagingTypeUid": "urn:va:imaging-Type:NUCLEAR MEDICINE",
+        "locationUid": "urn:va:location:9E7A:114",
+        "hasImages": false,
+        "imageLocation": "NUCLEAR MEDICINE",
+        "uid": "urn:va:image:9E7A:2:7068998.8983-1",
+        "summary": "VENOUS THROMBOSIS IMAGING, VENOGRAM; BILATERAL",
+        "pid": "9E7A;2",
+        "localId": "7068998.8983-1",
+        "typeName": "VENOUS THROMBOSIS IMAGING, VENOGRAM; BILATERAL",
+        "dateTime": "199310011016",
+        "category": "RA",
+        "reason": "",
+        "providers": [
+          {
+            "providerName": "PROGRAMMER,TWENTY",
+            "providerDisplayName": "Programmer,Twenty",
+            "summary": "ProcedureProvider{uid='null'}",
+            "providerUid": "urn:va:user:9E7A:755"
+          }
+        ],
+        "providerName": "PROGRAMMER,TWENTY",
+        "providerDisplayName": "Programmer,Twenty",
+        "results": [
+          {
+            "localTitle": "VENOUS THROMBOSIS IMAGING, BILATERAL",
+            "uid": "urn:va:document:9E7A:2:7068998.8983-1",
+            "summary": "ProcedureResult{uid='urn:va:document:9E7A:2:7068998.8983-1'}"
+          }
+        ],
+        "verified": true,
+        "name": "VENOUS THROMBOSIS IMAGING, BILATERAL",
+        "diagnosis": [
+          {
+            "code": "NORMAL",
+            "primary": true
+          }
+        ],
+        "locationName": "NUCLEAR MEDICINE",
+        "case": 22
+      }
+    ]
+  }
+}

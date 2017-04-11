@@ -1,0 +1,489 @@
+{
+  "data": [
+    {
+      "category": "CUFF SIZE",
+      "name": "ADULT CUFF",
+      "vuid": "4500641"
+    },
+    {
+      "category": "CUFF SIZE",
+      "name": "LG ADULT CUFF",
+      "vuid": "4688661"
+    },
+    {
+      "category": "CUFF SIZE",
+      "name": "PEDIATRIC CUFF",
+      "vuid": "4688671"
+    },
+    {
+      "category": "CUFF SIZE",
+      "name": "SM ADULT CUFF",
+      "vuid": "4688705"
+    },
+    {
+      "category": "CUFF SIZE",
+      "name": "THIGH CUFF",
+      "vuid": "4688709"
+    },
+    {
+      "category": "LOCATION",
+      "name": "ABDOMINAL",
+      "vuid": "4688633"
+    },
+    {
+      "category": "LOCATION",
+      "name": "ANKLE",
+      "vuid": "4688636"
+    },
+    {
+      "category": "LOCATION",
+      "name": "APICAL",
+      "vuid": "4688637"
+    },
+    {
+      "category": "LOCATION",
+      "name": "AV FISTULA",
+      "vuid": "4688696"
+    },
+    {
+      "category": "LOCATION",
+      "name": "AXILLARY",
+      "vuid": "4688640"
+    },
+    {
+      "category": "LOCATION",
+      "name": "BILATERAL PERIPHERALS",
+      "vuid": "4688642"
+    },
+    {
+      "category": "LOCATION",
+      "name": "BRACHIAL",
+      "vuid": "4688643"
+    },
+    {
+      "category": "LOCATION",
+      "name": "CALF",
+      "vuid": "4688644"
+    },
+    {
+      "category": "LOCATION",
+      "name": "CAROTID",
+      "vuid": "4688645"
+    },
+    {
+      "category": "LOCATION",
+      "name": "CORE",
+      "vuid": "4688648"
+    },
+    {
+      "category": "LOCATION",
+      "name": "DORSALIS PEDIS",
+      "vuid": "4688651"
+    },
+    {
+      "category": "LOCATION",
+      "name": "FEMORAL",
+      "vuid": "4688655"
+    },
+    {
+      "category": "LOCATION",
+      "name": "HEAD",
+      "vuid": "4688656"
+    },
+    {
+      "category": "LOCATION",
+      "name": "HIP",
+      "vuid": "4697470"
+    },
+    {
+      "category": "LOCATION",
+      "name": "KNEE",
+      "vuid": "4688689"
+    },
+    {
+      "category": "LOCATION",
+      "name": "L ARM",
+      "vuid": "4688657"
+    },
+    {
+      "category": "LOCATION",
+      "name": "L LEG",
+      "vuid": "4688658"
+    },
+    {
+      "category": "LOCATION",
+      "name": "LOWER ARM",
+      "vuid": "4688662"
+    },
+    {
+      "category": "LOCATION",
+      "name": "NECK",
+      "vuid": "4688686"
+    },
+    {
+      "category": "LOCATION",
+      "name": "ORAL",
+      "vuid": "4500642"
+    },
+    {
+      "category": "LOCATION",
+      "name": "PERIPHERAL",
+      "vuid": "4688672"
+    },
+    {
+      "category": "LOCATION",
+      "name": "POPLITEAL",
+      "vuid": "4688673"
+    },
+    {
+      "category": "LOCATION",
+      "name": "POSTERIOR TIBIAL",
+      "vuid": "4688675"
+    },
+    {
+      "category": "LOCATION",
+      "name": "R ARM",
+      "vuid": "4688676"
+    },
+    {
+      "category": "LOCATION",
+      "name": "R LEG",
+      "vuid": "4688677"
+    },
+    {
+      "category": "LOCATION",
+      "name": "RADIAL",
+      "vuid": "4688678"
+    },
+    {
+      "category": "LOCATION",
+      "name": "RECTAL",
+      "vuid": "4688679"
+    },
+    {
+      "category": "LOCATION",
+      "name": "SKIN",
+      "vuid": "4688704"
+    },
+    {
+      "category": "LOCATION",
+      "name": "TEMPORAL",
+      "vuid": "4537028"
+    },
+    {
+      "category": "LOCATION",
+      "name": "THIGH",
+      "vuid": "4688708"
+    },
+    {
+      "category": "LOCATION",
+      "name": "TYMPANIC",
+      "vuid": "4688712"
+    },
+    {
+      "category": "LOCATION",
+      "name": "ULNAR",
+      "vuid": "4688713"
+    },
+    {
+      "category": "LOCATION",
+      "name": "UPPER ARM",
+      "vuid": "4688714"
+    },
+    {
+      "category": "LOCATION",
+      "name": "WRIST",
+      "vuid": "4688717"
+    },
+    {
+      "category": "METHOD",
+      "name": "AEROSOL/HUMIDIFIED MASK",
+      "vuid": "4688635"
+    },
+    {
+      "category": "METHOD",
+      "name": "AFTER EXERCISE",
+      "vuid": "4688702"
+    },
+    {
+      "category": "METHOD",
+      "name": "AMBU BAG",
+      "vuid": "4688698"
+    },
+    {
+      "category": "METHOD",
+      "name": "ARTERIAL LINE",
+      "vuid": "4688701"
+    },
+    {
+      "category": "METHOD",
+      "name": "ASSISTED VENTILATOR",
+      "vuid": "4688638"
+    },
+    {
+      "category": "METHOD",
+      "name": "AT REST",
+      "vuid": "4688697"
+    },
+    {
+      "category": "METHOD",
+      "name": "AUSCULTATE",
+      "vuid": "4688639"
+    },
+    {
+      "category": "METHOD",
+      "name": "BED",
+      "vuid": "4688641"
+    },
+    {
+      "category": "METHOD",
+      "name": "BIPAP",
+      "vuid": "4688695"
+    },
+    {
+      "category": "METHOD",
+      "name": "BIPAP-CPAP",
+      "vuid": "4688691"
+    },
+    {
+      "category": "METHOD",
+      "name": "CHAIR",
+      "vuid": "4688646"
+    },
+    {
+      "category": "METHOD",
+      "name": "CONTROLLED VENTILATOR",
+      "vuid": "4688647"
+    },
+    {
+      "category": "METHOD",
+      "name": "CPAP",
+      "vuid": "4688690"
+    },
+    {
+      "category": "METHOD",
+      "name": "CUFF-AUTOMATED",
+      "vuid": "4688649"
+    },
+    {
+      "category": "METHOD",
+      "name": "CUFF-MANUAL",
+      "vuid": "4688688"
+    },
+    {
+      "category": "METHOD",
+      "name": "DOPPLER",
+      "vuid": "4688650"
+    },
+    {
+      "category": "METHOD",
+      "name": "FACE TENT",
+      "vuid": "4688654"
+    },
+    {
+      "category": "METHOD",
+      "name": "INVASIVE",
+      "vuid": "4688700"
+    },
+    {
+      "category": "METHOD",
+      "name": "LARYNGEAL MASK AIRWAY",
+      "vuid": "4536584"
+    },
+    {
+      "category": "METHOD",
+      "name": "LEAD",
+      "vuid": "4688659"
+    },
+    {
+      "category": "METHOD",
+      "name": "LIFT SCALE",
+      "vuid": "4688684"
+    },
+    {
+      "category": "METHOD",
+      "name": "MASK",
+      "vuid": "4688664"
+    },
+    {
+      "category": "METHOD",
+      "name": "MONITOR",
+      "vuid": "4688665"
+    },
+    {
+      "category": "METHOD",
+      "name": "MUSTACHE CANNULA",
+      "vuid": "4688687"
+    },
+    {
+      "category": "METHOD",
+      "name": "NASAL CANNULA",
+      "vuid": "4688666"
+    },
+    {
+      "category": "METHOD",
+      "name": "NON RE-BREATHER",
+      "vuid": "4688667"
+    },
+    {
+      "category": "METHOD",
+      "name": "NON-INVASIVE",
+      "vuid": "4688668"
+    },
+    {
+      "category": "METHOD",
+      "name": "PALPATED",
+      "vuid": "4688669"
+    },
+    {
+      "category": "METHOD",
+      "name": "PARTIAL RE-BREATHER",
+      "vuid": "4688670"
+    },
+    {
+      "category": "METHOD",
+      "name": "PENDANT CANNULA",
+      "vuid": "4688685"
+    },
+    {
+      "category": "METHOD",
+      "name": "RESERVOIR CANNULA",
+      "vuid": "4693051"
+    },
+    {
+      "category": "METHOD",
+      "name": "ROOM AIR",
+      "vuid": "4688681"
+    },
+    {
+      "category": "METHOD",
+      "name": "SPONTANEOUS",
+      "vuid": "4688706"
+    },
+    {
+      "category": "METHOD",
+      "name": "STANDING WEIGHT",
+      "vuid": "4500643"
+    },
+    {
+      "category": "METHOD",
+      "name": "T-PIECE",
+      "vuid": "4688710"
+    },
+    {
+      "category": "METHOD",
+      "name": "TRACHEOSTOMY COLLAR",
+      "vuid": "4688711"
+    },
+    {
+      "category": "METHOD",
+      "name": "TRANSTRACHEAL",
+      "vuid": "4688683"
+    },
+    {
+      "category": "METHOD",
+      "name": "VENTILATOR",
+      "vuid": "4688715"
+    },
+    {
+      "category": "METHOD",
+      "name": "VENTURI MASK",
+      "vuid": "4688716"
+    },
+    {
+      "category": "METHOD",
+      "name": "WHEELCHAIR SCALE",
+      "vuid": "4688693"
+    },
+    {
+      "category": "METHOD",
+      "name": "WITH ACTIVITY",
+      "vuid": "4688699"
+    },
+    {
+      "category": "METHOD",
+      "name": "WITH AMBULATION",
+      "vuid": "4536421"
+    },
+    {
+      "category": "METHOD",
+      "name": "WITH CAST OR BRACE",
+      "vuid": "4500992"
+    },
+    {
+      "category": "METHOD",
+      "name": "WITH PROSTHESIS",
+      "vuid": "4500993"
+    },
+    {
+      "category": "METHOD",
+      "name": "WITHOUT PROSTHESIS",
+      "vuid": "4500994"
+    },
+    {
+      "category": "POSITION",
+      "name": "LYING",
+      "vuid": "4688663"
+    },
+    {
+      "category": "POSITION",
+      "name": "SEMIFOWLERS",
+      "vuid": "4688682"
+    },
+    {
+      "category": "POSITION",
+      "name": "SITTING",
+      "vuid": "4688703"
+    },
+    {
+      "category": "POSITION",
+      "name": "STANDING",
+      "vuid": "4688707"
+    },
+    {
+      "category": "POSITION",
+      "name": "TRENDELENBURG",
+      "vuid": "4688694"
+    },
+    {
+      "category": "QUALITY",
+      "name": "ACTUAL",
+      "vuid": "4688634"
+    },
+    {
+      "category": "QUALITY",
+      "name": "CALCULATED",
+      "vuid": "4537031"
+    },
+    {
+      "category": "QUALITY",
+      "name": "DRY",
+      "vuid": "4688652"
+    },
+    {
+      "category": "QUALITY",
+      "name": "ESTIMATED",
+      "vuid": "4688653"
+    },
+    {
+      "category": "QUALITY",
+      "name": "ESTIMATED BY ARM SPAN",
+      "vuid": "4691085"
+    },
+    {
+      "category": "QUALITY",
+      "name": "STATED",
+      "vuid": "4688692"
+    },
+    {
+      "category": "SITE",
+      "name": "LEFT",
+      "vuid": "4688660"
+    },
+    {
+      "category": "SITE",
+      "name": "RIGHT",
+      "vuid": "4688680"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+    "apiVersion": "1.0.0",
+    "swaggerVersion": "1.2",
+    "apis": [
+        {
+            "path": "/../vpr.json",
+            "description": "Patient Data Operations"
+        },
+        {
+            "path": "/../data.json",
+            "description": "Operational Data Operations"
+        },
+        {
+            "path": "/../jds.json",
+            "description": "JDS Operations"
+        }
+    ],
+    "info": {
+        "title": "JDS REST API",
+        "description": "This is a experiment in documenting the RESTful API of the JDS with Swagger"
+    }
+}

@@ -1,0 +1,8 @@
+namespace DenyEverything {
+	policy DenyAllRequests {
+		apply denyOverrides
+		rule {
+			deny
+		}
+	}
+}

@@ -1,0 +1,109 @@
+VPRJPS ;SLC/KCM -- Save / Retrieve Patient-Related JSON objects
+ ;;1.0;JSON DATA STORE;;Sep 01, 2012
+ ;
+SAVE(PID,JSON) ; Save a JSON encoded object
+ N UID,COLL,KEY,OBJECT,OLDOBJ,VPRJERR,INDEXER,TLTARY
+ ;
+ ; decode JSON into object and extract required fields
+ D DECODE^VPRJSON("JSON","OBJECT","VPRJERR")
+ I $L($G(VPRJERR)) D SETERROR^VPRJRER(202,VPRJERR) QUIT ""
+ S UID=$G(OBJECT("uid")) I '$L(UID) D SETERROR^VPRJRER(207) QUIT ""
+ ;
+ ; Parse out the collection, and key from the UID
+ ; Currently assuming UID is urn:va:type:vistaAccount:localId...
+ ; For example:  urn:va:med:93EF:34014
+ N COLL S COLL=$P(UID,":",3)
+ I '$L(COLL) D SETERROR^VPRJRER(210,UID) QUIT ""
+ ;
+ ; TODO: replace with a general facility for pre-actions based on collection?
+ ; Next statement is special processing when patient demographics are updated
+ ;   (DEMOG is defined if UPDPT has been called already)
+ I COLL="patient",'$D(DEMOG) S PID=$$UPDPT^VPRJPR(.OBJECT,PID) Q:'$L(PID) ""
+ ;
+ L +^VPRPT(PID,UID):2 E  D SETERROR^VPRJRER(502) QUIT ""
+ ; kill the old indexes and object
+ S OLDOBJ="" M OLDOBJ=^VPRPT(PID,UID)
+ D BLDTLT^VPRJCT1(COLL,.OBJECT,.TLTARY) Q:$G(HTTPERR) ""
+ TSTART
+ K ^VPRPT(PID,UID)
+ K ^VPRPTJ("JSON",PID,UID)
+ ;
+ S ^VPRPTJ("KEY",UID,PID)=""
+ M ^VPRPTJ("JSON",PID,UID)=JSON
+ M ^VPRPTJ("TEMPLATE",PID,UID)=TLTARY
+ M ^VPRPT(PID,UID)=OBJECT
+ D INDEX^VPRJPX(PID,UID,.OLDOBJ,.OBJECT)
+ TCOMMIT
+ L -^VPRPT(PID,UID)
+ S ^VPRPTI(PID,"every","every")=$H  ; timestamps latest update for this PID
+ ;
+ Q $$URLENC^VPRJRUT(UID)  ; no errors
+ ;
+DELETE(PID,KEY) ; Delete an object given its UID
+ N OLDOBJ,OBJECT,COLL
+ S COLL=$P(KEY,":",3)
+ I '$L(COLL) D SETERROR^VPRJRER(210,KEY) QUIT
+ I COLL="patient" D SETERROR^VPRJRER(413,KEY) QUIT ; must delete entire patient instead
+ ;
+ L +^VPRPT(PID,KEY):2 E  D SETERROR^VPRJRER(502) QUIT
+ ; kill the old indexes and object
+ S OBJECT=""
+ S OLDOBJ="" M OLDOBJ=^VPRPT(PID,KEY)
+ TSTART
+ K ^VPRPT(PID,KEY)
+ K ^VPRPTJ("KEY",KEY,PID)
+ K ^VPRPTJ("JSON",PID,KEY)
+ K ^VPRPTJ("TEMPLATE",PID,KEY)
+ D INDEX^VPRJPX(PID,KEY,.OLDOBJ,.OBJECT)
+ TCOMMIT
+ L -^VPRPT(PID,KEY)
+ S ^VPRPTI(PID,"every","every")=$H ; timestamps latest update for the PID
+ Q
+DELCLTN(PID,CLTN,SYSID) ; Delete a collection for a patient
+ I '$L(CLTN) D SETERROR^VPRJRER(215) QUIT
+ N ROOT,LROOT,UID
+ S ROOT="urn:va:"_CLTN_":"
+ I $L($G(SYSID)) S ROOT=ROOT_SYSID_":"
+ S LROOT=$L(ROOT)
+ L +^VPRPT(PID,ROOT):5 E  D SETERROR^VPRJRER() QUIT
+ S UID=ROOT F  S UID=$O(^VPRPT(PID,UID)) Q:$E(UID,1,LROOT)'=ROOT  D DELETE(PID,UID)
+ L -^VPRPT(PID,ROOT)
+ Q
+CLEARPT(PID) ; -- Clear data for patient
+ L +^VPRPT(PID):5 E  D SETERROR^VPRJRER(502) QUIT
+ ; go through with cleanup even if PID not used
+ N PIDUSED
+ S PIDUSED=($D(^VPRPTJ("PID",PID))>0)
+ ;
+ N HASH ; remove cached queries
+ S HASH="" F  S HASH=$O(^VPRTMP("PID",PID,HASH)) Q:HASH=""  K ^VPRTMP(HASH)
+ K ^VPRTMP("PID",PID)
+ ;
+ N KEY ; remove the xref for UID's
+ S KEY="" F  S KEY=$O(^VPRPT(PID,KEY)) Q:KEY=""  K ^VPRPTJ("KEY",KEY,PID)
+ ;
+ D CLRXIDX^VPRJ2P(PID)  ; clear indexes of type xattr
+ D CLRCODES^VPRJ2P(PID) ; clear codes in VPRPTX
+ D CLREVIEW^VPRJ2P(PID) ; clear review dates in VPRPTX
+ D CLRCOUNT^VPRJ2P(PID) ; decrement the cross patient counts
+ ;
+ N ALIAS
+ S ALIAS="" F  S ALIAS=$O(^VPRPTJ("PID",PID,ALIAS)) Q:ALIAS=""  D
+ . I ^VPRPTJ("PID",ALIAS)'=PID D SETERROR^VPRJRER(212) Q
+ . K ^VPRPTJ("PID",ALIAS)
+ K ^VPRPTJ("PID",PID)
+ ;
+ I PIDUSED D
+ . N PCNT ; decrement the count of patients
+ . L +^VPRPTJ("PID"):2 E  D SETERROR^VPRJRER(502,"patient") QUIT
+ . S PCNT=$G(^VPRPTX("count","patient","patient"),0)
+ . S ^VPRPTX("count","patient","patient")=PCNT-1
+ . L -^VPRPTJ("PID")
+ ;
+ K ^VPRPTI(PID)           ; kill all indexes for the patient
+ K ^VPRPT(PID)            ; kill all the data for the patient
+ K ^VPRPTJ("JSON",PID)     ; kill original JSON objects for the patient
+ K ^VPRPTJ("TEMPLATE",PID) ; kill the pre-compiled JSON objects for the patient
+ L -^VPRPT(PID)
+ I 'PIDUSED D SETERROR^VPRJRER(214) QUIT
+ Q

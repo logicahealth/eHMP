@@ -1,0 +1,1150 @@
+{
+  "apiVersion": "1.0",
+  "data": {
+    "updated": 20140808175948,
+    "totalItems": 32,
+    "currentItemCount": 32,
+    "items": [
+      {
+        "kind": "Radiology",
+        "facilityCode": "DOD",
+        "facilityName": "DOD",
+        "statusName": "TRANSCRIBED",
+        "encounterUid": "23564658",
+        "hasImages": false,
+        "imageLocation": "INTERNAL MEDICINE     SEYMOUR JOHNSON AFB, NC",
+        "uid": "urn:va:image:DOD:0000000008:1000001513",
+        "summary": "RADIOLOGIC EXAMINATION, WRIST,RT",
+        "pid": "9E7A;8",
+        "localId": "07000074",
+        "typeName": "RADIOLOGIC EXAMINATION, WRIST,RT",
+        "dateTime": "20070621",
+        "category": "RA",
+        "status": "",
+        "reason": "test",
+        "providers": [
+          {
+            "providerName": "100000059 LARRY, PROVIDER",
+            "providerDisplayName": "100000059 LARRY, PROVIDER",
+            "summary": "ProcedureProvider{uid='null'}"
+          }
+        ],
+        "providerName": "100000059 LARRY, PROVIDER",
+        "providerDisplayName": "100000059 Larry, Provider",
+        "results": [
+          {
+            "localTitle": "WRIST,RT",
+            "report": " 4 ABNORMALITY, ATTN. NEEDED",
+            "summary": "ProcedureResult{uid='null'}"
+          }
+        ],
+        "name": "WRIST,RT",
+        "locationName": "INTERNAL MEDICINE     SEYMOUR JOHNSON AFB, NC"
+      },
+      {
+        "kind": "Radiology",
+        "facilityCode": "DOD",
+        "facilityName": "DOD",
+        "statusName": "TRANSCRIBED",
+        "encounterUid": "23564659",
+        "hasImages": false,
+        "imageLocation": "INTERNAL MEDICINE     SEYMOUR JOHNSON AFB, NC",
+        "uid": "urn:va:image:DOD:0000000008:1000001515",
+        "summary": "RADIOLOGIC EXAMINATION, CHEST,AP",
+        "pid": "9E7A;8",
+        "localId": "07000073",
+        "typeName": "RADIOLOGIC EXAMINATION, CHEST,AP",
+        "dateTime": "20070621",
+        "category": "RA",
+        "status": "",
+        "reason": "test",
+        "providers": [
+          {
+            "providerName": "100000059 LARRY, PROVIDER",
+            "providerDisplayName": "100000059 LARRY, PROVIDER",
+            "summary": "ProcedureProvider{uid='null'}"
+          }
+        ],
+        "providerName": "100000059 LARRY, PROVIDER",
+        "providerDisplayName": "100000059 Larry, Provider",
+        "results": [
+          {
+            "localTitle": "CHEST,AP",
+            "report": " 3 MAJOR ABNORMALITY, NO ATTN. NEEDED",
+            "summary": "ProcedureResult{uid='null'}"
+          }
+        ],
+        "name": "CHEST,AP",
+        "locationName": "INTERNAL MEDICINE     SEYMOUR JOHNSON AFB, NC"
+      },
+      {
+        "kind": "Imaging",
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "orderName": "KNEE 2 VIEWS",
+        "statusName": "WAITING FOR EXAM",
+        "imagingTypeUid": "urn:va:imaging-Type:GENERAL RADIOLOGY",
+        "locationUid": "urn:va:location:9E7A:40",
+        "hasImages": false,
+        "imageLocation": "RADIOLOGY MAIN FLOOR",
+        "uid": "urn:va:image:9E7A:8:7008783.8579-1",
+        "summary": "RADIOLOGIC EXAMINATION, KNEE; 1 OR 2 VIEWS",
+        "pid": "9E7A;8",
+        "localId": "7008783.8579-1",
+        "typeName": "RADIOLOGIC EXAMINATION, KNEE; 1 OR 2 VIEWS",
+        "dateTime": "199912161420",
+        "category": "RA",
+        "reason": "",
+        "orderUid": "urn:va:order:9E7A:8:11088",
+        "name": "KNEE 2 VIEWS",
+        "locationName": "RADIOLOGY MAIN FLOOR",
+        "case": 29
+      },
+      {
+        "kind": "Imaging",
+        "facilityCode": "500",
+        "facilityName": "CAMP BEE",
+        "orderName": "KNEE 2 VIEWS",
+        "statusName": "WAITING FOR EXAM",
+        "imagingTypeUid": "urn:va:imaging-Type:GENERAL RADIOLOGY",
+        "locationUid": "urn:va:location:C877:40",
+        "hasImages": false,
+        "imageLocation": "RADIOLOGY MAIN FLOOR",
+        "uid": "urn:va:image:C877:8:7008783.8579-1",
+        "summary": "RADIOLOGIC EXAMINATION, KNEE; 1 OR 2 VIEWS",
+        "pid": "9E7A;8",
+        "localId": "7008783.8579-1",
+        "typeName": "RADIOLOGIC EXAMINATION, KNEE; 1 OR 2 VIEWS",
+        "dateTime": "199912161420",
+        "category": "RA",
+        "reason": "",
+        "orderUid": "urn:va:order:C877:8:11088",
+        "name": "KNEE 2 VIEWS",
+        "locationName": "RADIOLOGY MAIN FLOOR",
+        "case": 29
+      },
+      {
+        "kind": "Imaging",
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "orderName": "UROGRAM INTRAVENOUS",
+        "statusName": "WAITING FOR EXAM",
+        "imagingTypeUid": "urn:va:imaging-Type:GENERAL RADIOLOGY",
+        "locationUid": "urn:va:location:9E7A:40",
+        "hasImages": false,
+        "imageLocation": "RADIOLOGY MAIN FLOOR",
+        "uid": "urn:va:image:9E7A:8:7008784.8989-1",
+        "summary": "UROGRAPHY (PYELOGRAPHY), INTRAVENOUS, WITH OR WITHOUT KUB, WITH OR WITHOUT TOMOGRAPHY",
+        "pid": "9E7A;8",
+        "localId": "7008784.8989-1",
+        "typeName": "UROGRAPHY (PYELOGRAPHY), INTRAVENOUS, WITH OR WITHOUT KUB, WITH OR WITHOUT TOMOGRAPHY",
+        "dateTime": "199912151010",
+        "category": "RA",
+        "reason": "",
+        "orderUid": "urn:va:order:9E7A:8:11077",
+        "name": "UROGRAM INTRAVENOUS",
+        "locationName": "RADIOLOGY MAIN FLOOR",
+        "case": 28
+      },
+      {
+        "kind": "Imaging",
+        "facilityCode": "500",
+        "facilityName": "CAMP BEE",
+        "orderName": "UROGRAM INTRAVENOUS",
+        "statusName": "WAITING FOR EXAM",
+        "imagingTypeUid": "urn:va:imaging-Type:GENERAL RADIOLOGY",
+        "locationUid": "urn:va:location:C877:40",
+        "hasImages": false,
+        "imageLocation": "RADIOLOGY MAIN FLOOR",
+        "uid": "urn:va:image:C877:8:7008784.8989-1",
+        "summary": "UROGRAPHY (PYELOGRAPHY), INTRAVENOUS, WITH OR WITHOUT KUB, WITH OR WITHOUT TOMOGRAPHY",
+        "pid": "9E7A;8",
+        "localId": "7008784.8989-1",
+        "typeName": "UROGRAPHY (PYELOGRAPHY), INTRAVENOUS, WITH OR WITHOUT KUB, WITH OR WITHOUT TOMOGRAPHY",
+        "dateTime": "199912151010",
+        "category": "RA",
+        "reason": "",
+        "orderUid": "urn:va:order:C877:8:11077",
+        "name": "UROGRAM INTRAVENOUS",
+        "locationName": "RADIOLOGY MAIN FLOOR",
+        "case": 28
+      },
+      {
+        "kind": "Imaging",
+        "facilityCode": "998",
+        "facilityName": "ABILENE (CAA)",
+        "orderName": "VAS-CAROTID DUPLEX SCAN",
+        "statusName": "COMPLETE",
+        "imagingTypeUid": "urn:va:imaging-Type:VASCULAR LAB",
+        "locationUid": "urn:va:location:9E7A:271",
+        "hasImages": false,
+        "imageLocation": "VASCULAR RADIOLOGY",
+        "uid": "urn:va:image:9E7A:8:7018790.8861-1",
+        "summary": "DUPLEX SCAN OF EXTRACRANIAL ARTERIES; COMPLETE BILATERAL STUDY",
+        "pid": "9E7A;8",
+        "localId": "7018790.8861-1",
+        "typeName": "DUPLEX SCAN OF EXTRACRANIAL ARTERIES; COMPLETE BILATERAL STUDY",
+        "dateTime": "199812091138",
+        "category": "RA",
+        "reason": "",
+        "orderUid": "urn:va:order:9E7A:8:8723",
+        "providers": [
+          {
+            "providerName": "PROVIDER,TWOHUNDREDNINETYSEVEN",
+            "providerDisplayName": "Provider,Twohundredninetyseven",
+            "summary": "ProcedureProvider{uid='null'}",
+            "providerUid": "urn:va:user:9E7A:11712"
+          }
+        ],
+        "providerName": "PROVIDER,TWOHUNDREDNINETYSEVEN",
+        "providerDisplayName": "Provider,Twohundredninetyseven",
+        "results": [
+          {
+            "localTitle": "VAS-CAROTID DUPLEX SCAN",
+            "uid": "urn:va:document:9E7A:8:7018790.8861-1",
+            "summary": "ProcedureResult{uid='urn:va:document:9E7A:8:7018790.8861-1'}"
+          }
+        ],
+        "verified": true,
+        "name": "VAS-CAROTID DUPLEX SCAN",
+        "diagnosis": [
+          {
+            "code": "NORMAL",
+            "primary": true
+          }
+        ],
+        "locationName": "VASCULAR RADIOLOGY",
+        "case": 11
+      },
+      {
+        "kind": "Imaging",
+        "facilityCode": "998",
+        "facilityName": "ABILENE (CAA)",
+        "orderName": "VAS-CAROTID DUPLEX SCAN",
+        "statusName": "COMPLETE",
+        "imagingTypeUid": "urn:va:imaging-Type:VASCULAR LAB",
+        "locationUid": "urn:va:location:C877:271",
+        "hasImages": false,
+        "imageLocation": "VASCULAR RADIOLOGY",
+        "uid": "urn:va:image:C877:8:7018790.8861-1",
+        "summary": "DUPLEX SCAN OF EXTRACRANIAL ARTERIES; COMPLETE BILATERAL STUDY",
+        "pid": "9E7A;8",
+        "localId": "7018790.8861-1",
+        "typeName": "DUPLEX SCAN OF EXTRACRANIAL ARTERIES; COMPLETE BILATERAL STUDY",
+        "dateTime": "199812091138",
+        "category": "RA",
+        "reason": "",
+        "orderUid": "urn:va:order:C877:8:8723",
+        "providers": [
+          {
+            "providerName": "PROVIDER,TWOHUNDREDNINETYSEVEN",
+            "providerDisplayName": "Provider,Twohundredninetyseven",
+            "summary": "ProcedureProvider{uid='null'}",
+            "providerUid": "urn:va:user:C877:11712"
+          }
+        ],
+        "providerName": "PROVIDER,TWOHUNDREDNINETYSEVEN",
+        "providerDisplayName": "Provider,Twohundredninetyseven",
+        "results": [
+          {
+            "localTitle": "VAS-CAROTID DUPLEX SCAN",
+            "uid": "urn:va:document:C877:8:7018790.8861-1",
+            "summary": "ProcedureResult{uid='urn:va:document:C877:8:7018790.8861-1'}"
+          }
+        ],
+        "verified": true,
+        "name": "VAS-CAROTID DUPLEX SCAN",
+        "diagnosis": [
+          {
+            "code": "NORMAL",
+            "primary": true
+          }
+        ],
+        "locationName": "VASCULAR RADIOLOGY",
+        "case": 11
+      },
+      {
+        "kind": "Imaging",
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "statusName": "COMPLETE",
+        "imagingTypeUid": "urn:va:imaging-Type:GENERAL RADIOLOGY",
+        "locationUid": "urn:va:location:9E7A:40",
+        "hasImages": false,
+        "imageLocation": "RADIOLOGY MAIN FLOOR",
+        "uid": "urn:va:image:9E7A:8:7039694.8657-1",
+        "summary": "RADIOLOGIC EXAMINATION, ANKLE; 2 VIEWS",
+        "pid": "9E7A;8",
+        "localId": "7039694.8657-1",
+        "typeName": "RADIOLOGIC EXAMINATION, ANKLE; 2 VIEWS",
+        "dateTime": "199603051342",
+        "category": "RA",
+        "reason": "",
+        "name": "ANKLE 2 VIEWS",
+        "locationName": "RADIOLOGY MAIN FLOOR",
+        "case": 113
+      },
+      {
+        "kind": "Imaging",
+        "facilityCode": "500",
+        "facilityName": "CAMP BEE",
+        "statusName": "COMPLETE",
+        "imagingTypeUid": "urn:va:imaging-Type:GENERAL RADIOLOGY",
+        "locationUid": "urn:va:location:C877:40",
+        "hasImages": false,
+        "imageLocation": "RADIOLOGY MAIN FLOOR",
+        "uid": "urn:va:image:C877:8:7039694.8657-1",
+        "summary": "RADIOLOGIC EXAMINATION, ANKLE; 2 VIEWS",
+        "pid": "9E7A;8",
+        "localId": "7039694.8657-1",
+        "typeName": "RADIOLOGIC EXAMINATION, ANKLE; 2 VIEWS",
+        "dateTime": "199603051342",
+        "category": "RA",
+        "reason": "",
+        "name": "ANKLE 2 VIEWS",
+        "locationName": "RADIOLOGY MAIN FLOOR",
+        "case": 113
+      },
+      {
+        "kind": "Imaging",
+        "facilityCode": "402",
+        "facilityName": "TOGUS VAMROC",
+        "statusName": "COMPLETE",
+        "imagingTypeUid": "urn:va:imaging-Type:GENERAL RADIOLOGY",
+        "locationUid": "urn:va:location:9E7A:61",
+        "hasImages": false,
+        "imageLocation": "RAD TEST",
+        "uid": "urn:va:image:9E7A:8:7039785.8458-1",
+        "summary": "RADIOLOGIC EXAMINATION, CHEST, 2 VIEWS, FRONTAL AND LATERAL;",
+        "pid": "9E7A;8",
+        "localId": "7039785.8458-1",
+        "typeName": "RADIOLOGIC EXAMINATION, CHEST, 2 VIEWS, FRONTAL AND LATERAL;",
+        "dateTime": "199602141541",
+        "category": "RA",
+        "reason": "",
+        "name": "CHEST 2 VIEWS PA&LAT",
+        "locationName": "RAD TEST",
+        "case": 112
+      },
+      {
+        "kind": "Imaging",
+        "facilityCode": "402",
+        "facilityName": "TOGUS VAMROC",
+        "statusName": "COMPLETE",
+        "imagingTypeUid": "urn:va:imaging-Type:GENERAL RADIOLOGY",
+        "locationUid": "urn:va:location:C877:61",
+        "hasImages": false,
+        "imageLocation": "RAD TEST",
+        "uid": "urn:va:image:C877:8:7039785.8458-1",
+        "summary": "RADIOLOGIC EXAMINATION, CHEST, 2 VIEWS, FRONTAL AND LATERAL;",
+        "pid": "9E7A;8",
+        "localId": "7039785.8458-1",
+        "typeName": "RADIOLOGIC EXAMINATION, CHEST, 2 VIEWS, FRONTAL AND LATERAL;",
+        "dateTime": "199602141541",
+        "category": "RA",
+        "reason": "",
+        "name": "CHEST 2 VIEWS PA&LAT",
+        "locationName": "RAD TEST",
+        "case": 112
+      },
+      {
+        "kind": "Imaging",
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "statusName": "COMPLETE",
+        "imagingTypeUid": "urn:va:imaging-Type:GENERAL RADIOLOGY",
+        "locationUid": "urn:va:location:9E7A:40",
+        "hasImages": false,
+        "imageLocation": "RADIOLOGY MAIN FLOOR",
+        "uid": "urn:va:image:9E7A:8:7048884.8373-2",
+        "summary": "RADIOLOGIC EXAMINATION, ANKLE, ARTHROGRAPHY, RADIOLOGICAL SUPERVISION AND INTERPRETATION",
+        "pid": "9E7A;8",
+        "localId": "7048884.8373-2",
+        "typeName": "RADIOLOGIC EXAMINATION, ANKLE, ARTHROGRAPHY, RADIOLOGICAL SUPERVISION AND INTERPRETATION",
+        "dateTime": "199511151626",
+        "category": "RA",
+        "reason": "",
+        "providers": [
+          {
+            "providerName": "PROVIDER,THIRTYNINE",
+            "providerDisplayName": "Provider,Thirtynine",
+            "summary": "ProcedureProvider{uid='null'}",
+            "providerUid": "urn:va:user:9E7A:1252"
+          }
+        ],
+        "providerName": "PROVIDER,THIRTYNINE",
+        "providerDisplayName": "Provider,Thirtynine",
+        "results": [
+          {
+            "localTitle": "ARTHROGRAM ANKLE S&I",
+            "uid": "urn:va:document:9E7A:8:7048884.8373-2",
+            "summary": "ProcedureResult{uid='urn:va:document:9E7A:8:7048884.8373-2'}"
+          }
+        ],
+        "verified": true,
+        "name": "ARTHROGRAM ANKLE S&I",
+        "diagnosis": [
+          {
+            "code": "NORMAL",
+            "primary": true
+          }
+        ],
+        "locationName": "RADIOLOGY MAIN FLOOR",
+        "case": 75
+      },
+      {
+        "kind": "Imaging",
+        "facilityCode": "500",
+        "facilityName": "CAMP BEE",
+        "statusName": "COMPLETE",
+        "imagingTypeUid": "urn:va:imaging-Type:GENERAL RADIOLOGY",
+        "locationUid": "urn:va:location:C877:40",
+        "hasImages": false,
+        "imageLocation": "RADIOLOGY MAIN FLOOR",
+        "uid": "urn:va:image:C877:8:7048884.8373-2",
+        "summary": "RADIOLOGIC EXAMINATION, ANKLE, ARTHROGRAPHY, RADIOLOGICAL SUPERVISION AND INTERPRETATION",
+        "pid": "9E7A;8",
+        "localId": "7048884.8373-2",
+        "typeName": "RADIOLOGIC EXAMINATION, ANKLE, ARTHROGRAPHY, RADIOLOGICAL SUPERVISION AND INTERPRETATION",
+        "dateTime": "199511151626",
+        "category": "RA",
+        "reason": "",
+        "providers": [
+          {
+            "providerName": "PROVIDER,THIRTYNINE",
+            "providerDisplayName": "Provider,Thirtynine",
+            "summary": "ProcedureProvider{uid='null'}",
+            "providerUid": "urn:va:user:C877:1252"
+          }
+        ],
+        "providerName": "PROVIDER,THIRTYNINE",
+        "providerDisplayName": "Provider,Thirtynine",
+        "results": [
+          {
+            "localTitle": "ARTHROGRAM ANKLE S&I",
+            "uid": "urn:va:document:C877:8:7048884.8373-2",
+            "summary": "ProcedureResult{uid='urn:va:document:C877:8:7048884.8373-2'}"
+          }
+        ],
+        "verified": true,
+        "name": "ARTHROGRAM ANKLE S&I",
+        "diagnosis": [
+          {
+            "code": "NORMAL",
+            "primary": true
+          }
+        ],
+        "locationName": "RADIOLOGY MAIN FLOOR",
+        "case": 75
+      },
+      {
+        "kind": "Imaging",
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "statusName": "COMPLETE",
+        "imagingTypeUid": "urn:va:imaging-Type:GENERAL RADIOLOGY",
+        "locationUid": "urn:va:location:9E7A:40",
+        "hasImages": false,
+        "imageLocation": "RADIOLOGY MAIN FLOOR",
+        "uid": "urn:va:image:9E7A:8:7049480.8542-1",
+        "summary": "RADIOLOGIC EXAMINATION, ANKLE, ARTHROGRAPHY, RADIOLOGICAL SUPERVISION AND INTERPRETATION",
+        "pid": "9E7A;8",
+        "localId": "7049480.8542-1",
+        "typeName": "RADIOLOGIC EXAMINATION, ANKLE, ARTHROGRAPHY, RADIOLOGICAL SUPERVISION AND INTERPRETATION",
+        "dateTime": "199505191457",
+        "category": "RA",
+        "reason": "",
+        "name": "ARTHROGRAM ANKLE S&I",
+        "locationName": "RADIOLOGY MAIN FLOOR",
+        "case": 14
+      },
+      {
+        "kind": "Imaging",
+        "facilityCode": "500",
+        "facilityName": "CAMP BEE",
+        "statusName": "COMPLETE",
+        "imagingTypeUid": "urn:va:imaging-Type:GENERAL RADIOLOGY",
+        "locationUid": "urn:va:location:C877:40",
+        "hasImages": false,
+        "imageLocation": "RADIOLOGY MAIN FLOOR",
+        "uid": "urn:va:image:C877:8:7049480.8542-1",
+        "summary": "RADIOLOGIC EXAMINATION, ANKLE, ARTHROGRAPHY, RADIOLOGICAL SUPERVISION AND INTERPRETATION",
+        "pid": "9E7A;8",
+        "localId": "7049480.8542-1",
+        "typeName": "RADIOLOGIC EXAMINATION, ANKLE, ARTHROGRAPHY, RADIOLOGICAL SUPERVISION AND INTERPRETATION",
+        "dateTime": "199505191457",
+        "category": "RA",
+        "reason": "",
+        "name": "ARTHROGRAM ANKLE S&I",
+        "locationName": "RADIOLOGY MAIN FLOOR",
+        "case": 14
+      },
+      {
+        "kind": "Imaging",
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "statusName": "COMPLETE",
+        "imagingTypeUid": "urn:va:imaging-Type:GENERAL RADIOLOGY",
+        "locationUid": "urn:va:location:9E7A:40",
+        "hasImages": false,
+        "imageLocation": "RADIOLOGY MAIN FLOOR",
+        "uid": "urn:va:image:9E7A:8:7049480.8554-1",
+        "summary": "RADIOLOGIC EXAMINATION, ANKLE; 2 VIEWS",
+        "pid": "9E7A;8",
+        "localId": "7049480.8554-1",
+        "typeName": "RADIOLOGIC EXAMINATION, ANKLE; 2 VIEWS",
+        "dateTime": "199505191445",
+        "category": "RA",
+        "reason": "",
+        "providers": [
+          {
+            "providerName": "PROGRAMMER,TWENTY",
+            "providerDisplayName": "Programmer,Twenty",
+            "summary": "ProcedureProvider{uid='null'}",
+            "providerUid": "urn:va:user:9E7A:755"
+          }
+        ],
+        "providerName": "PROGRAMMER,TWENTY",
+        "providerDisplayName": "Programmer,Twenty",
+        "results": [
+          {
+            "localTitle": "ANKLE 2 VIEWS",
+            "uid": "urn:va:document:9E7A:8:7049480.8554-1",
+            "summary": "ProcedureResult{uid='urn:va:document:9E7A:8:7049480.8554-1'}"
+          }
+        ],
+        "verified": true,
+        "name": "ANKLE 2 VIEWS",
+        "locationName": "RADIOLOGY MAIN FLOOR",
+        "case": 13
+      },
+      {
+        "kind": "Imaging",
+        "facilityCode": "500",
+        "facilityName": "CAMP BEE",
+        "statusName": "COMPLETE",
+        "imagingTypeUid": "urn:va:imaging-Type:GENERAL RADIOLOGY",
+        "locationUid": "urn:va:location:C877:40",
+        "hasImages": false,
+        "imageLocation": "RADIOLOGY MAIN FLOOR",
+        "uid": "urn:va:image:C877:8:7049480.8554-1",
+        "summary": "RADIOLOGIC EXAMINATION, ANKLE; 2 VIEWS",
+        "pid": "9E7A;8",
+        "localId": "7049480.8554-1",
+        "typeName": "RADIOLOGIC EXAMINATION, ANKLE; 2 VIEWS",
+        "dateTime": "199505191445",
+        "category": "RA",
+        "reason": "",
+        "providers": [
+          {
+            "providerName": "PROGRAMMER,TWENTY",
+            "providerDisplayName": "Programmer,Twenty",
+            "summary": "ProcedureProvider{uid='null'}",
+            "providerUid": "urn:va:user:C877:755"
+          }
+        ],
+        "providerName": "PROGRAMMER,TWENTY",
+        "providerDisplayName": "Programmer,Twenty",
+        "results": [
+          {
+            "localTitle": "ANKLE 2 VIEWS",
+            "uid": "urn:va:document:C877:8:7049480.8554-1",
+            "summary": "ProcedureResult{uid='urn:va:document:C877:8:7049480.8554-1'}"
+          }
+        ],
+        "verified": true,
+        "name": "ANKLE 2 VIEWS",
+        "locationName": "RADIOLOGY MAIN FLOOR",
+        "case": 13
+      },
+      {
+        "kind": "Imaging",
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "statusName": "COMPLETE",
+        "imagingTypeUid": "urn:va:imaging-Type:GENERAL RADIOLOGY",
+        "locationUid": "urn:va:location:9E7A:40",
+        "hasImages": false,
+        "imageLocation": "RADIOLOGY MAIN FLOOR",
+        "uid": "urn:va:image:9E7A:8:7049480.9199-1",
+        "summary": "RADIOLOGIC EXAMINATION, KNEE; 1 OR 2 VIEWS",
+        "pid": "9E7A;8",
+        "localId": "7049480.9199-1",
+        "typeName": "RADIOLOGIC EXAMINATION, KNEE; 1 OR 2 VIEWS",
+        "dateTime": "199505190800",
+        "category": "RA",
+        "reason": "",
+        "providers": [
+          {
+            "providerName": "WARDCLERK,FIFTYTHREE",
+            "providerDisplayName": "Wardclerk,Fiftythree",
+            "summary": "ProcedureProvider{uid='null'}",
+            "providerUid": "urn:va:user:9E7A:10958"
+          }
+        ],
+        "providerName": "WARDCLERK,FIFTYTHREE",
+        "providerDisplayName": "Wardclerk,Fiftythree",
+        "results": [
+          {
+            "localTitle": "KNEE 2 VIEWS",
+            "uid": "urn:va:document:9E7A:8:7049480.9199-1",
+            "summary": "ProcedureResult{uid='urn:va:document:9E7A:8:7049480.9199-1'}"
+          }
+        ],
+        "verified": true,
+        "name": "KNEE 2 VIEWS",
+        "diagnosis": [
+          {
+            "code": "NORMAL",
+            "primary": true
+          }
+        ],
+        "locationName": "RADIOLOGY MAIN FLOOR",
+        "case": 17
+      },
+      {
+        "kind": "Imaging",
+        "facilityCode": "500",
+        "facilityName": "CAMP BEE",
+        "statusName": "COMPLETE",
+        "imagingTypeUid": "urn:va:imaging-Type:GENERAL RADIOLOGY",
+        "locationUid": "urn:va:location:C877:40",
+        "hasImages": false,
+        "imageLocation": "RADIOLOGY MAIN FLOOR",
+        "uid": "urn:va:image:C877:8:7049480.9199-1",
+        "summary": "RADIOLOGIC EXAMINATION, KNEE; 1 OR 2 VIEWS",
+        "pid": "9E7A;8",
+        "localId": "7049480.9199-1",
+        "typeName": "RADIOLOGIC EXAMINATION, KNEE; 1 OR 2 VIEWS",
+        "dateTime": "199505190800",
+        "category": "RA",
+        "reason": "",
+        "providers": [
+          {
+            "providerName": "WARDCLERK,FIFTYTHREE",
+            "providerDisplayName": "Wardclerk,Fiftythree",
+            "summary": "ProcedureProvider{uid='null'}",
+            "providerUid": "urn:va:user:C877:10958"
+          }
+        ],
+        "providerName": "WARDCLERK,FIFTYTHREE",
+        "providerDisplayName": "Wardclerk,Fiftythree",
+        "results": [
+          {
+            "localTitle": "KNEE 2 VIEWS",
+            "uid": "urn:va:document:C877:8:7049480.9199-1",
+            "summary": "ProcedureResult{uid='urn:va:document:C877:8:7049480.9199-1'}"
+          }
+        ],
+        "verified": true,
+        "name": "KNEE 2 VIEWS",
+        "diagnosis": [
+          {
+            "code": "NORMAL",
+            "primary": true
+          }
+        ],
+        "locationName": "RADIOLOGY MAIN FLOOR",
+        "case": 17
+      },
+      {
+        "kind": "Imaging",
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "statusName": "COMPLETE",
+        "imagingTypeUid": "urn:va:imaging-Type:GENERAL RADIOLOGY",
+        "locationUid": "urn:va:location:9E7A:40",
+        "hasImages": false,
+        "imageLocation": "RADIOLOGY MAIN FLOOR",
+        "uid": "urn:va:image:9E7A:8:7068984.8781-1",
+        "summary": "RADIOLOGIC EXAMINATION, ANKLE; 2 VIEWS",
+        "pid": "9E7A;8",
+        "localId": "7068984.8781-1",
+        "typeName": "RADIOLOGIC EXAMINATION, ANKLE; 2 VIEWS",
+        "dateTime": "199310151218",
+        "category": "RA",
+        "reason": "",
+        "providers": [
+          {
+            "providerName": "PROGRAMMER,TWENTY",
+            "providerDisplayName": "Programmer,Twenty",
+            "summary": "ProcedureProvider{uid='null'}",
+            "providerUid": "urn:va:user:9E7A:755"
+          }
+        ],
+        "providerName": "PROGRAMMER,TWENTY",
+        "providerDisplayName": "Programmer,Twenty",
+        "results": [
+          {
+            "localTitle": "ANKLE 2 VIEWS",
+            "uid": "urn:va:document:9E7A:8:7068984.8781-1",
+            "summary": "ProcedureResult{uid='urn:va:document:9E7A:8:7068984.8781-1'}"
+          }
+        ],
+        "verified": true,
+        "name": "ANKLE 2 VIEWS",
+        "diagnosis": [
+          {
+            "code": "ABNORMALITY, ATTN. NEEDED",
+            "primary": true
+          }
+        ],
+        "locationName": "RADIOLOGY MAIN FLOOR",
+        "case": 16,
+        "interpretation": "ABNORMAL"
+      },
+      {
+        "kind": "Imaging",
+        "facilityCode": "500",
+        "facilityName": "CAMP BEE",
+        "statusName": "COMPLETE",
+        "imagingTypeUid": "urn:va:imaging-Type:GENERAL RADIOLOGY",
+        "locationUid": "urn:va:location:C877:40",
+        "hasImages": false,
+        "imageLocation": "RADIOLOGY MAIN FLOOR",
+        "uid": "urn:va:image:C877:8:7068984.8781-1",
+        "summary": "RADIOLOGIC EXAMINATION, ANKLE; 2 VIEWS",
+        "pid": "9E7A;8",
+        "localId": "7068984.8781-1",
+        "typeName": "RADIOLOGIC EXAMINATION, ANKLE; 2 VIEWS",
+        "dateTime": "199310151218",
+        "category": "RA",
+        "reason": "",
+        "providers": [
+          {
+            "providerName": "PROGRAMMER,TWENTY",
+            "providerDisplayName": "Programmer,Twenty",
+            "summary": "ProcedureProvider{uid='null'}",
+            "providerUid": "urn:va:user:C877:755"
+          }
+        ],
+        "providerName": "PROGRAMMER,TWENTY",
+        "providerDisplayName": "Programmer,Twenty",
+        "results": [
+          {
+            "localTitle": "ANKLE 2 VIEWS",
+            "uid": "urn:va:document:C877:8:7068984.8781-1",
+            "summary": "ProcedureResult{uid='urn:va:document:C877:8:7068984.8781-1'}"
+          }
+        ],
+        "verified": true,
+        "name": "ANKLE 2 VIEWS",
+        "diagnosis": [
+          {
+            "code": "ABNORMALITY, ATTN. NEEDED",
+            "primary": true
+          }
+        ],
+        "locationName": "RADIOLOGY MAIN FLOOR",
+        "case": 16,
+        "interpretation": "ABNORMAL"
+      },
+      {
+        "kind": "Imaging",
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "statusName": "COMPLETE",
+        "imagingTypeUid": "urn:va:imaging-Type:GENERAL RADIOLOGY",
+        "locationUid": "urn:va:location:9E7A:40",
+        "hasImages": false,
+        "imageLocation": "RADIOLOGY MAIN FLOOR",
+        "uid": "urn:va:image:9E7A:8:7068984.8873-1",
+        "summary": "RADIOLOGIC EXAMINATION, CHEST, 2 VIEWS, FRONTAL AND LATERAL;",
+        "pid": "9E7A;8",
+        "localId": "7068984.8873-1",
+        "typeName": "RADIOLOGIC EXAMINATION, CHEST, 2 VIEWS, FRONTAL AND LATERAL;",
+        "dateTime": "199310151126",
+        "category": "RA",
+        "reason": "",
+        "providers": [
+          {
+            "providerName": "PROGRAMMER,TWENTY",
+            "providerDisplayName": "Programmer,Twenty",
+            "summary": "ProcedureProvider{uid='null'}",
+            "providerUid": "urn:va:user:9E7A:755"
+          }
+        ],
+        "providerName": "PROGRAMMER,TWENTY",
+        "providerDisplayName": "Programmer,Twenty",
+        "results": [
+          {
+            "localTitle": "CHEST 2 VIEWS PA&LAT",
+            "uid": "urn:va:document:9E7A:8:7068984.8873-1",
+            "summary": "ProcedureResult{uid='urn:va:document:9E7A:8:7068984.8873-1'}"
+          }
+        ],
+        "verified": true,
+        "name": "CHEST 2 VIEWS PA&LAT",
+        "diagnosis": [
+          {
+            "code": "ABNORMALITY, ATTN. NEEDED",
+            "primary": true
+          }
+        ],
+        "locationName": "RADIOLOGY MAIN FLOOR",
+        "case": 9,
+        "interpretation": "ABNORMAL"
+      },
+      {
+        "kind": "Imaging",
+        "facilityCode": "500",
+        "facilityName": "CAMP BEE",
+        "statusName": "COMPLETE",
+        "imagingTypeUid": "urn:va:imaging-Type:GENERAL RADIOLOGY",
+        "locationUid": "urn:va:location:C877:40",
+        "hasImages": false,
+        "imageLocation": "RADIOLOGY MAIN FLOOR",
+        "uid": "urn:va:image:C877:8:7068984.8873-1",
+        "summary": "RADIOLOGIC EXAMINATION, CHEST, 2 VIEWS, FRONTAL AND LATERAL;",
+        "pid": "9E7A;8",
+        "localId": "7068984.8873-1",
+        "typeName": "RADIOLOGIC EXAMINATION, CHEST, 2 VIEWS, FRONTAL AND LATERAL;",
+        "dateTime": "199310151126",
+        "category": "RA",
+        "reason": "",
+        "providers": [
+          {
+            "providerName": "PROGRAMMER,TWENTY",
+            "providerDisplayName": "Programmer,Twenty",
+            "summary": "ProcedureProvider{uid='null'}",
+            "providerUid": "urn:va:user:C877:755"
+          }
+        ],
+        "providerName": "PROGRAMMER,TWENTY",
+        "providerDisplayName": "Programmer,Twenty",
+        "results": [
+          {
+            "localTitle": "CHEST 2 VIEWS PA&LAT",
+            "uid": "urn:va:document:C877:8:7068984.8873-1",
+            "summary": "ProcedureResult{uid='urn:va:document:C877:8:7068984.8873-1'}"
+          }
+        ],
+        "verified": true,
+        "name": "CHEST 2 VIEWS PA&LAT",
+        "diagnosis": [
+          {
+            "code": "ABNORMALITY, ATTN. NEEDED",
+            "primary": true
+          }
+        ],
+        "locationName": "RADIOLOGY MAIN FLOOR",
+        "case": 9,
+        "interpretation": "ABNORMAL"
+      },
+      {
+        "kind": "Imaging",
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "statusName": "COMPLETE",
+        "imagingTypeUid": "urn:va:imaging-Type:GENERAL RADIOLOGY",
+        "locationUid": "urn:va:location:9E7A:40",
+        "hasImages": false,
+        "imageLocation": "RADIOLOGY MAIN FLOOR",
+        "uid": "urn:va:image:9E7A:8:7068984.8964-1",
+        "summary": "RADIOLOGIC EXAMINATION, SPINE, ENTIRE, SURVEY STUDY, ANTEROPOSTERIOR AND LATERAL",
+        "pid": "9E7A;8",
+        "localId": "7068984.8964-1",
+        "typeName": "RADIOLOGIC EXAMINATION, SPINE, ENTIRE, SURVEY STUDY, ANTEROPOSTERIOR AND LATERAL",
+        "dateTime": "199310151035",
+        "category": "RA",
+        "reason": "",
+        "providers": [
+          {
+            "providerName": "PROGRAMMER,TWENTY",
+            "providerDisplayName": "Programmer,Twenty",
+            "summary": "ProcedureProvider{uid='null'}",
+            "providerUid": "urn:va:user:9E7A:755"
+          }
+        ],
+        "providerName": "PROGRAMMER,TWENTY",
+        "providerDisplayName": "Programmer,Twenty",
+        "results": [
+          {
+            "localTitle": "SPINE ENTIRE AP&LAT",
+            "uid": "urn:va:document:9E7A:8:7068984.8964-1",
+            "summary": "ProcedureResult{uid='urn:va:document:9E7A:8:7068984.8964-1'}"
+          }
+        ],
+        "verified": true,
+        "name": "SPINE ENTIRE AP&LAT",
+        "diagnosis": [
+          {
+            "code": "POSSIBLE MALIGNANCY, FOLLOW-UP NEEDED",
+            "primary": true
+          }
+        ],
+        "locationName": "RADIOLOGY MAIN FLOOR",
+        "case": 8,
+        "interpretation": "ABNORMAL"
+      },
+      {
+        "kind": "Imaging",
+        "facilityCode": "500",
+        "facilityName": "CAMP BEE",
+        "statusName": "COMPLETE",
+        "imagingTypeUid": "urn:va:imaging-Type:GENERAL RADIOLOGY",
+        "locationUid": "urn:va:location:C877:40",
+        "hasImages": false,
+        "imageLocation": "RADIOLOGY MAIN FLOOR",
+        "uid": "urn:va:image:C877:8:7068984.8964-1",
+        "summary": "RADIOLOGIC EXAMINATION, SPINE, ENTIRE, SURVEY STUDY, ANTEROPOSTERIOR AND LATERAL",
+        "pid": "9E7A;8",
+        "localId": "7068984.8964-1",
+        "typeName": "RADIOLOGIC EXAMINATION, SPINE, ENTIRE, SURVEY STUDY, ANTEROPOSTERIOR AND LATERAL",
+        "dateTime": "199310151035",
+        "category": "RA",
+        "reason": "",
+        "providers": [
+          {
+            "providerName": "PROGRAMMER,TWENTY",
+            "providerDisplayName": "Programmer,Twenty",
+            "summary": "ProcedureProvider{uid='null'}",
+            "providerUid": "urn:va:user:C877:755"
+          }
+        ],
+        "providerName": "PROGRAMMER,TWENTY",
+        "providerDisplayName": "Programmer,Twenty",
+        "results": [
+          {
+            "localTitle": "SPINE ENTIRE AP&LAT",
+            "uid": "urn:va:document:C877:8:7068984.8964-1",
+            "summary": "ProcedureResult{uid='urn:va:document:C877:8:7068984.8964-1'}"
+          }
+        ],
+        "verified": true,
+        "name": "SPINE ENTIRE AP&LAT",
+        "diagnosis": [
+          {
+            "code": "POSSIBLE MALIGNANCY, FOLLOW-UP NEEDED",
+            "primary": true
+          }
+        ],
+        "locationName": "RADIOLOGY MAIN FLOOR",
+        "case": 8,
+        "interpretation": "ABNORMAL"
+      },
+      {
+        "kind": "Imaging",
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "statusName": "COMPLETE",
+        "imagingTypeUid": "urn:va:imaging-Type:GENERAL RADIOLOGY",
+        "locationUid": "urn:va:location:9E7A:40",
+        "hasImages": false,
+        "imageLocation": "RADIOLOGY MAIN FLOOR",
+        "uid": "urn:va:image:9E7A:8:7079884.8459-1",
+        "summary": "LAMINECTOMY WITH CORDOTOMY, WITH SECTION OF 1 SPINOTHALAMIC TRACT, 1 STAGE; CERVICAL",
+        "pid": "9E7A;8",
+        "localId": "7079884.8459-1",
+        "typeName": "LAMINECTOMY WITH CORDOTOMY, WITH SECTION OF 1 SPINOTHALAMIC TRACT, 1 STAGE; CERVICAL",
+        "dateTime": "199201151540",
+        "category": "RA",
+        "reason": "",
+        "providers": [
+          {
+            "providerName": "PROGRAMMER,TWENTY",
+            "providerDisplayName": "Programmer,Twenty",
+            "summary": "ProcedureProvider{uid='null'}",
+            "providerUid": "urn:va:user:9E7A:755"
+          }
+        ],
+        "providerName": "PROGRAMMER,TWENTY",
+        "providerDisplayName": "Programmer,Twenty",
+        "results": [
+          {
+            "localTitle": "CORDOTOMY",
+            "uid": "urn:va:document:9E7A:8:7079884.8459-1",
+            "summary": "ProcedureResult{uid='urn:va:document:9E7A:8:7079884.8459-1'}"
+          }
+        ],
+        "verified": true,
+        "name": "CORDOTOMY",
+        "diagnosis": [
+          {
+            "code": "NORMAL",
+            "primary": true
+          }
+        ],
+        "locationName": "RADIOLOGY MAIN FLOOR",
+        "case": 16
+      },
+      {
+        "kind": "Imaging",
+        "facilityCode": "500",
+        "facilityName": "CAMP BEE",
+        "statusName": "COMPLETE",
+        "imagingTypeUid": "urn:va:imaging-Type:GENERAL RADIOLOGY",
+        "locationUid": "urn:va:location:C877:40",
+        "hasImages": false,
+        "imageLocation": "RADIOLOGY MAIN FLOOR",
+        "uid": "urn:va:image:C877:8:7079884.8459-1",
+        "summary": "LAMINECTOMY WITH CORDOTOMY, WITH SECTION OF 1 SPINOTHALAMIC TRACT, 1 STAGE; CERVICAL",
+        "pid": "9E7A;8",
+        "localId": "7079884.8459-1",
+        "typeName": "LAMINECTOMY WITH CORDOTOMY, WITH SECTION OF 1 SPINOTHALAMIC TRACT, 1 STAGE; CERVICAL",
+        "dateTime": "199201151540",
+        "category": "RA",
+        "reason": "",
+        "providers": [
+          {
+            "providerName": "PROGRAMMER,TWENTY",
+            "providerDisplayName": "Programmer,Twenty",
+            "summary": "ProcedureProvider{uid='null'}",
+            "providerUid": "urn:va:user:C877:755"
+          }
+        ],
+        "providerName": "PROGRAMMER,TWENTY",
+        "providerDisplayName": "Programmer,Twenty",
+        "results": [
+          {
+            "localTitle": "CORDOTOMY",
+            "uid": "urn:va:document:C877:8:7079884.8459-1",
+            "summary": "ProcedureResult{uid='urn:va:document:C877:8:7079884.8459-1'}"
+          }
+        ],
+        "verified": true,
+        "name": "CORDOTOMY",
+        "diagnosis": [
+          {
+            "code": "NORMAL",
+            "primary": true
+          }
+        ],
+        "locationName": "RADIOLOGY MAIN FLOOR",
+        "case": 16
+      },
+      {
+        "kind": "Imaging",
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "statusName": "COMPLETE",
+        "imagingTypeUid": "urn:va:imaging-Type:GENERAL RADIOLOGY",
+        "locationUid": "urn:va:location:9E7A:40",
+        "hasImages": false,
+        "imageLocation": "RADIOLOGY MAIN FLOOR",
+        "uid": "urn:va:image:9E7A:8:7079884.846-1",
+        "summary": "RADIOLOGIC EXAMINATION, CHEST, COMPLETE, MINIMUM OF 4 VIEWS; WITH FLUOROSCOPY",
+        "pid": "9E7A;8",
+        "localId": "7079884.846-1",
+        "typeName": "RADIOLOGIC EXAMINATION, CHEST, COMPLETE, MINIMUM OF 4 VIEWS; WITH FLUOROSCOPY",
+        "dateTime": "199201151539",
+        "category": "RA",
+        "reason": "",
+        "providers": [
+          {
+            "providerName": "PROGRAMMER,TWENTY",
+            "providerDisplayName": "Programmer,Twenty",
+            "summary": "ProcedureProvider{uid='null'}",
+            "providerUid": "urn:va:user:9E7A:755"
+          }
+        ],
+        "providerName": "PROGRAMMER,TWENTY",
+        "providerDisplayName": "Programmer,Twenty",
+        "results": [
+          {
+            "localTitle": "CHEST INCLUDE FLUORO",
+            "uid": "urn:va:document:9E7A:8:7079884.846-1",
+            "summary": "ProcedureResult{uid='urn:va:document:9E7A:8:7079884.846-1'}"
+          }
+        ],
+        "verified": true,
+        "name": "CHEST INCLUDE FLUORO",
+        "diagnosis": [
+          {
+            "code": "NORMAL",
+            "primary": true
+          }
+        ],
+        "locationName": "RADIOLOGY MAIN FLOOR",
+        "case": 15
+      },
+      {
+        "kind": "Imaging",
+        "facilityCode": "500",
+        "facilityName": "CAMP BEE",
+        "statusName": "COMPLETE",
+        "imagingTypeUid": "urn:va:imaging-Type:GENERAL RADIOLOGY",
+        "locationUid": "urn:va:location:C877:40",
+        "hasImages": false,
+        "imageLocation": "RADIOLOGY MAIN FLOOR",
+        "uid": "urn:va:image:C877:8:7079884.846-1",
+        "summary": "RADIOLOGIC EXAMINATION, CHEST, COMPLETE, MINIMUM OF 4 VIEWS; WITH FLUOROSCOPY",
+        "pid": "9E7A;8",
+        "localId": "7079884.846-1",
+        "typeName": "RADIOLOGIC EXAMINATION, CHEST, COMPLETE, MINIMUM OF 4 VIEWS; WITH FLUOROSCOPY",
+        "dateTime": "199201151539",
+        "category": "RA",
+        "reason": "",
+        "providers": [
+          {
+            "providerName": "PROGRAMMER,TWENTY",
+            "providerDisplayName": "Programmer,Twenty",
+            "summary": "ProcedureProvider{uid='null'}",
+            "providerUid": "urn:va:user:C877:755"
+          }
+        ],
+        "providerName": "PROGRAMMER,TWENTY",
+        "providerDisplayName": "Programmer,Twenty",
+        "results": [
+          {
+            "localTitle": "CHEST INCLUDE FLUORO",
+            "uid": "urn:va:document:C877:8:7079884.846-1",
+            "summary": "ProcedureResult{uid='urn:va:document:C877:8:7079884.846-1'}"
+          }
+        ],
+        "verified": true,
+        "name": "CHEST INCLUDE FLUORO",
+        "diagnosis": [
+          {
+            "code": "NORMAL",
+            "primary": true
+          }
+        ],
+        "locationName": "RADIOLOGY MAIN FLOOR",
+        "case": 15
+      },
+      {
+        "kind": "Imaging",
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "statusName": "COMPLETE",
+        "imagingTypeUid": "urn:va:imaging-Type:GENERAL RADIOLOGY",
+        "locationUid": "urn:va:location:9E7A:40",
+        "hasImages": false,
+        "imageLocation": "RADIOLOGY MAIN FLOOR",
+        "uid": "urn:va:image:9E7A:8:7089680.8572-1",
+        "summary": "RADIOLOGIC EXAMINATION, CHEST, 2 VIEWS, FRONTAL AND LATERAL;",
+        "pid": "9E7A;8",
+        "localId": "7089680.8572-1",
+        "typeName": "RADIOLOGIC EXAMINATION, CHEST, 2 VIEWS, FRONTAL AND LATERAL;",
+        "dateTime": "199103191427",
+        "category": "RA",
+        "reason": "",
+        "name": "CHEST 2 VIEWS PA&LAT",
+        "locationName": "RADIOLOGY MAIN FLOOR",
+        "case": 1
+      },
+      {
+        "kind": "Imaging",
+        "facilityCode": "500",
+        "facilityName": "CAMP BEE",
+        "statusName": "COMPLETE",
+        "imagingTypeUid": "urn:va:imaging-Type:GENERAL RADIOLOGY",
+        "locationUid": "urn:va:location:C877:40",
+        "hasImages": false,
+        "imageLocation": "RADIOLOGY MAIN FLOOR",
+        "uid": "urn:va:image:C877:8:7089680.8572-1",
+        "summary": "RADIOLOGIC EXAMINATION, CHEST, 2 VIEWS, FRONTAL AND LATERAL;",
+        "pid": "9E7A;8",
+        "localId": "7089680.8572-1",
+        "typeName": "RADIOLOGIC EXAMINATION, CHEST, 2 VIEWS, FRONTAL AND LATERAL;",
+        "dateTime": "199103191427",
+        "category": "RA",
+        "reason": "",
+        "name": "CHEST 2 VIEWS PA&LAT",
+        "locationName": "RADIOLOGY MAIN FLOOR",
+        "case": 1
+      }
+    ]
+  }
+}

@@ -1,0 +1,582 @@
+{
+  "apiVersion": "1.0",
+  "data": {
+    "updated": 20140808180017,
+    "totalItems": 19,
+    "currentItemCount": 19,
+    "items": [
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "observed": "200304071003",
+        "resulted": "20030407100340",
+        "locationName": "20 MINUTE",
+        "kind": "Vital Sign",
+        "displayName": "BP",
+        "result": "156/66",
+        "units": "mm[Hg]",
+        "low": "100/60",
+        "high": "210/110",
+        "qualifiedName": "BLOOD PRESSURE",
+        "uid": "urn:va:vital:9E7A:17:2744",
+        "summary": "BLOOD PRESSURE 156/66 mm[Hg]",
+        "pid": "9E7A;17",
+        "localId": "2744",
+        "typeCode": "urn:va:vuid:4500634",
+        "typeName": "BLOOD PRESSURE",
+        "codes": [
+          {
+            "code": "55284-4",
+            "system": "http://loinc.org",
+            "display": "Blood pressure systolic and diastolic"
+          }
+        ],
+        "locationUid": "urn:va:location:9E7A:240"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "observed": "200304071003",
+        "resulted": "20030407100340",
+        "locationName": "20 MINUTE",
+        "kind": "Vital Sign",
+        "displayName": "T",
+        "result": "98.6",
+        "units": "F",
+        "metricResult": "37.0",
+        "metricUnits": "C",
+        "low": "95",
+        "high": "102",
+        "qualifiedName": "TEMPERATURE",
+        "uid": "urn:va:vital:9E7A:17:2745",
+        "summary": "TEMPERATURE 98.6 F",
+        "pid": "9E7A;17",
+        "localId": "2745",
+        "typeCode": "urn:va:vuid:4500638",
+        "typeName": "TEMPERATURE",
+        "codes": [
+          {
+            "code": "8310-5",
+            "system": "http://loinc.org",
+            "display": "Body temperature"
+          }
+        ],
+        "locationUid": "urn:va:location:9E7A:240"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "observed": "200304071003",
+        "resulted": "20030407100340",
+        "locationName": "20 MINUTE",
+        "kind": "Vital Sign",
+        "displayName": "R",
+        "result": "18",
+        "units": "/min",
+        "low": "8",
+        "high": "30",
+        "qualifiedName": "RESPIRATION",
+        "uid": "urn:va:vital:9E7A:17:2746",
+        "summary": "RESPIRATION 18 /min",
+        "pid": "9E7A;17",
+        "localId": "2746",
+        "typeCode": "urn:va:vuid:4688725",
+        "typeName": "RESPIRATION",
+        "codes": [
+          {
+            "code": "9279-1",
+            "system": "http://loinc.org",
+            "display": "Respiratory rate"
+          }
+        ],
+        "locationUid": "urn:va:location:9E7A:240"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "observed": "200304071003",
+        "resulted": "20030407100340",
+        "locationName": "20 MINUTE",
+        "kind": "Vital Sign",
+        "displayName": "P",
+        "result": "62",
+        "units": "/min",
+        "low": "60",
+        "high": "120",
+        "qualifiedName": "PULSE",
+        "uid": "urn:va:vital:9E7A:17:2747",
+        "summary": "PULSE 62 /min",
+        "pid": "9E7A;17",
+        "localId": "2747",
+        "typeCode": "urn:va:vuid:4500636",
+        "typeName": "PULSE",
+        "codes": [
+          {
+            "code": "8867-4",
+            "system": "http://loinc.org",
+            "display": "Heart rate"
+          }
+        ],
+        "locationUid": "urn:va:location:9E7A:240"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "observed": "200304071003",
+        "resulted": "20030407100340",
+        "locationName": "20 MINUTE",
+        "kind": "Vital Sign",
+        "displayName": "PN",
+        "result": "0",
+        "units": "",
+        "qualifiedName": "PAIN",
+        "uid": "urn:va:vital:9E7A:17:2748",
+        "summary": "PAIN 0 ",
+        "pid": "9E7A;17",
+        "localId": "2748",
+        "typeCode": "urn:va:vuid:4500635",
+        "typeName": "PAIN",
+        "codes": [
+          {
+            "code": "72514-3",
+            "system": "http://loinc.org",
+            "display": "Pain severity - 0-10 verbal numeric rating [#] - Reported"
+          }
+        ],
+        "locationUid": "urn:va:location:9E7A:240"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "observed": "200304051002",
+        "resulted": "20030407100317",
+        "locationName": "20 MINUTE",
+        "kind": "Vital Sign",
+        "displayName": "BP",
+        "result": "156/60",
+        "units": "mm[Hg]",
+        "low": "100/60",
+        "high": "210/110",
+        "qualifiedName": "BLOOD PRESSURE",
+        "uid": "urn:va:vital:9E7A:17:2739",
+        "summary": "BLOOD PRESSURE 156/60 mm[Hg]",
+        "pid": "9E7A;17",
+        "localId": "2739",
+        "typeCode": "urn:va:vuid:4500634",
+        "typeName": "BLOOD PRESSURE",
+        "codes": [
+          {
+            "code": "55284-4",
+            "system": "http://loinc.org",
+            "display": "Blood pressure systolic and diastolic"
+          }
+        ],
+        "locationUid": "urn:va:location:9E7A:240"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "observed": "200304051002",
+        "resulted": "20030407100317",
+        "locationName": "20 MINUTE",
+        "kind": "Vital Sign",
+        "displayName": "T",
+        "result": "101.2",
+        "units": "F",
+        "metricResult": "38.4",
+        "metricUnits": "C",
+        "low": "95",
+        "high": "102",
+        "qualifiedName": "TEMPERATURE",
+        "uid": "urn:va:vital:9E7A:17:2740",
+        "summary": "TEMPERATURE 101.2 F",
+        "pid": "9E7A;17",
+        "localId": "2740",
+        "typeCode": "urn:va:vuid:4500638",
+        "typeName": "TEMPERATURE",
+        "codes": [
+          {
+            "code": "8310-5",
+            "system": "http://loinc.org",
+            "display": "Body temperature"
+          }
+        ],
+        "locationUid": "urn:va:location:9E7A:240"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "observed": "200304051002",
+        "resulted": "20030407100317",
+        "locationName": "20 MINUTE",
+        "kind": "Vital Sign",
+        "displayName": "R",
+        "result": "22",
+        "units": "/min",
+        "low": "8",
+        "high": "30",
+        "qualifiedName": "RESPIRATION",
+        "uid": "urn:va:vital:9E7A:17:2741",
+        "summary": "RESPIRATION 22 /min",
+        "pid": "9E7A;17",
+        "localId": "2741",
+        "typeCode": "urn:va:vuid:4688725",
+        "typeName": "RESPIRATION",
+        "codes": [
+          {
+            "code": "9279-1",
+            "system": "http://loinc.org",
+            "display": "Respiratory rate"
+          }
+        ],
+        "locationUid": "urn:va:location:9E7A:240"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "observed": "200304051002",
+        "resulted": "20030407100317",
+        "locationName": "20 MINUTE",
+        "kind": "Vital Sign",
+        "displayName": "P",
+        "result": "88",
+        "units": "/min",
+        "low": "60",
+        "high": "120",
+        "qualifiedName": "PULSE",
+        "uid": "urn:va:vital:9E7A:17:2742",
+        "summary": "PULSE 88 /min",
+        "pid": "9E7A;17",
+        "localId": "2742",
+        "typeCode": "urn:va:vuid:4500636",
+        "typeName": "PULSE",
+        "codes": [
+          {
+            "code": "8867-4",
+            "system": "http://loinc.org",
+            "display": "Heart rate"
+          }
+        ],
+        "locationUid": "urn:va:location:9E7A:240"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "observed": "200304051002",
+        "resulted": "20030407100317",
+        "locationName": "20 MINUTE",
+        "kind": "Vital Sign",
+        "displayName": "PN",
+        "result": "1",
+        "units": "",
+        "qualifiedName": "PAIN",
+        "uid": "urn:va:vital:9E7A:17:2743",
+        "summary": "PAIN 1 ",
+        "pid": "9E7A;17",
+        "localId": "2743",
+        "typeCode": "urn:va:vuid:4500635",
+        "typeName": "PAIN",
+        "codes": [
+          {
+            "code": "72514-3",
+            "system": "http://loinc.org",
+            "display": "Pain severity - 0-10 verbal numeric rating [#] - Reported"
+          }
+        ],
+        "locationUid": "urn:va:location:9E7A:240"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "observed": "200304031002",
+        "resulted": "20030407100250",
+        "locationName": "20 MINUTE",
+        "kind": "Vital Sign",
+        "displayName": "BP",
+        "result": "178/82",
+        "units": "mm[Hg]",
+        "low": "100/60",
+        "high": "210/110",
+        "qualifiedName": "BLOOD PRESSURE",
+        "uid": "urn:va:vital:9E7A:17:2734",
+        "summary": "BLOOD PRESSURE 178/82 mm[Hg]",
+        "pid": "9E7A;17",
+        "localId": "2734",
+        "typeCode": "urn:va:vuid:4500634",
+        "typeName": "BLOOD PRESSURE",
+        "codes": [
+          {
+            "code": "55284-4",
+            "system": "http://loinc.org",
+            "display": "Blood pressure systolic and diastolic"
+          }
+        ],
+        "locationUid": "urn:va:location:9E7A:240"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "observed": "200304031002",
+        "resulted": "20030407100250",
+        "locationName": "20 MINUTE",
+        "kind": "Vital Sign",
+        "displayName": "T",
+        "result": "102.2",
+        "units": "F",
+        "metricResult": "39.0",
+        "metricUnits": "C",
+        "low": "95",
+        "high": "102",
+        "qualifiedName": "TEMPERATURE",
+        "uid": "urn:va:vital:9E7A:17:2735",
+        "summary": "TEMPERATURE 102.2 F",
+        "pid": "9E7A;17",
+        "localId": "2735",
+        "typeCode": "urn:va:vuid:4500638",
+        "typeName": "TEMPERATURE",
+        "codes": [
+          {
+            "code": "8310-5",
+            "system": "http://loinc.org",
+            "display": "Body temperature"
+          }
+        ],
+        "locationUid": "urn:va:location:9E7A:240"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "observed": "200304031002",
+        "resulted": "20030407100250",
+        "locationName": "20 MINUTE",
+        "kind": "Vital Sign",
+        "displayName": "R",
+        "result": "22",
+        "units": "/min",
+        "low": "8",
+        "high": "30",
+        "qualifiedName": "RESPIRATION",
+        "uid": "urn:va:vital:9E7A:17:2736",
+        "summary": "RESPIRATION 22 /min",
+        "pid": "9E7A;17",
+        "localId": "2736",
+        "typeCode": "urn:va:vuid:4688725",
+        "typeName": "RESPIRATION",
+        "codes": [
+          {
+            "code": "9279-1",
+            "system": "http://loinc.org",
+            "display": "Respiratory rate"
+          }
+        ],
+        "locationUid": "urn:va:location:9E7A:240"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "observed": "200304031002",
+        "resulted": "20030407100250",
+        "locationName": "20 MINUTE",
+        "kind": "Vital Sign",
+        "displayName": "P",
+        "result": "88",
+        "units": "/min",
+        "low": "60",
+        "high": "120",
+        "qualifiedName": "PULSE",
+        "uid": "urn:va:vital:9E7A:17:2737",
+        "summary": "PULSE 88 /min",
+        "pid": "9E7A;17",
+        "localId": "2737",
+        "typeCode": "urn:va:vuid:4500636",
+        "typeName": "PULSE",
+        "codes": [
+          {
+            "code": "8867-4",
+            "system": "http://loinc.org",
+            "display": "Heart rate"
+          }
+        ],
+        "locationUid": "urn:va:location:9E7A:240"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "observed": "200304031002",
+        "resulted": "20030407100250",
+        "locationName": "20 MINUTE",
+        "kind": "Vital Sign",
+        "displayName": "PN",
+        "result": "2",
+        "units": "",
+        "qualifiedName": "PAIN",
+        "uid": "urn:va:vital:9E7A:17:2738",
+        "summary": "PAIN 2 ",
+        "pid": "9E7A;17",
+        "localId": "2738",
+        "typeCode": "urn:va:vuid:4500635",
+        "typeName": "PAIN",
+        "codes": [
+          {
+            "code": "72514-3",
+            "system": "http://loinc.org",
+            "display": "Pain severity - 0-10 verbal numeric rating [#] - Reported"
+          }
+        ],
+        "locationUid": "urn:va:location:9E7A:240"
+      },
+      {
+        "facilityCode": "515.6",
+        "facilityName": "TROY",
+        "observed": "199905201449",
+        "resulted": "19990520145633",
+        "locationName": "GEN MED",
+        "kind": "Vital Sign",
+        "displayName": "PO2",
+        "result": "34",
+        "units": "%",
+        "low": "50",
+        "high": "100",
+        "qualifiedName": "PULSE OXIMETRY",
+        "uid": "urn:va:vital:9E7A:17:365",
+        "summary": "PULSE OXIMETRY 34 %",
+        "pid": "9E7A;17",
+        "localId": "365",
+        "typeCode": "urn:va:vuid:4500637",
+        "typeName": "PULSE OXIMETRY",
+        "codes": [
+          {
+            "code": "59408-5",
+            "system": "http://loinc.org",
+            "display": "Oxygen saturation in Arterial blood by Pulse oximetry"
+          }
+        ],
+        "locationUid": "urn:va:location:9E7A:9",
+        "qualifiers": [
+          {
+            "name": "NASAL CANNULA",
+            "vuid": 4688666
+          }
+        ]
+      },
+      {
+        "facilityCode": "515.6",
+        "facilityName": "TROY",
+        "observed": "199903091300",
+        "resulted": "19990309154949",
+        "locationName": "GEN MED",
+        "kind": "Vital Sign",
+        "displayName": "PN",
+        "result": "5",
+        "units": "",
+        "qualifiedName": "PAIN",
+        "uid": "urn:va:vital:9E7A:17:344",
+        "summary": "PAIN 5 ",
+        "pid": "9E7A;17",
+        "localId": "344",
+        "typeCode": "urn:va:vuid:4500635",
+        "typeName": "PAIN",
+        "codes": [
+          {
+            "code": "72514-3",
+            "system": "http://loinc.org",
+            "display": "Pain severity - 0-10 verbal numeric rating [#] - Reported"
+          }
+        ],
+        "locationUid": "urn:va:location:9E7A:9"
+      },
+      {
+        "facilityCode": "515.6",
+        "facilityName": "TROY",
+        "observed": "199902250918",
+        "resulted": "19990225092305",
+        "locationName": "GEN MED",
+        "kind": "Vital Sign",
+        "displayName": "BP",
+        "result": "120/80",
+        "units": "mm[Hg]",
+        "low": "100/60",
+        "high": "210/110",
+        "qualifiedName": "BLOOD PRESSURE",
+        "uid": "urn:va:vital:9E7A:17:290",
+        "summary": "BLOOD PRESSURE 120/80 mm[Hg]",
+        "pid": "9E7A;17",
+        "localId": "290",
+        "typeCode": "urn:va:vuid:4500634",
+        "typeName": "BLOOD PRESSURE",
+        "codes": [
+          {
+            "code": "55284-4",
+            "system": "http://loinc.org",
+            "display": "Blood pressure systolic and diastolic"
+          }
+        ],
+        "locationUid": "urn:va:location:9E7A:9",
+        "qualifiers": [
+          {
+            "name": "L ARM",
+            "vuid": 4688657
+          },
+          {
+            "name": "LYING",
+            "vuid": 4688663
+          },
+          {
+            "name": "CUFF",
+            "vuid": ""
+          },
+          {
+            "name": "ADULT",
+            "vuid": ""
+          }
+        ]
+      },
+      {
+        "facilityCode": "515.6",
+        "facilityName": "TROY",
+        "observed": "199902250918",
+        "resulted": "19990225092305",
+        "locationName": "GEN MED",
+        "kind": "Vital Sign",
+        "displayName": "P",
+        "result": "1",
+        "units": "/min",
+        "low": "60",
+        "high": "120",
+        "qualifiedName": "PULSE",
+        "uid": "urn:va:vital:9E7A:17:291",
+        "summary": "PULSE 1 /min",
+        "pid": "9E7A;17",
+        "localId": "291",
+        "typeCode": "urn:va:vuid:4500636",
+        "typeName": "PULSE",
+        "codes": [
+          {
+            "code": "8867-4",
+            "system": "http://loinc.org",
+            "display": "Heart rate"
+          }
+        ],
+        "locationUid": "urn:va:location:9E7A:9",
+        "qualifiers": [
+          {
+            "name": "LYING",
+            "vuid": 4688663
+          },
+          {
+            "name": "DORSALIS PEDIS",
+            "vuid": 4688651
+          },
+          {
+            "name": "PALPATED",
+            "vuid": 4688669
+          },
+          {
+            "name": "LEFT",
+            "vuid": 4688660
+          }
+        ]
+      }
+    ]
+  }
+}

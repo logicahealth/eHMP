@@ -1,0 +1,29 @@
+namespace LeiprBasicBreakGlassPolicy {
+	import leipr.Attributes.*
+	advice breakGlass = "breakglass"
+	policy BreakGlassPrototypePolicy {
+		target clause Attributes.actionId == "read" 
+		apply firstApplicable
+		rule {
+			target clause Attributes.subjectId == "lu1234"
+			permit
+		}
+		rule {
+			target clause Attributes.subjectId == "pu1234"
+			permit
+			condition leipr.Attributes.warnAcknowledged == "true"
+		}
+		rule {
+			target clause Attributes.subjectId == "pu1234"
+			deny
+			on deny {
+				advice breakGlass {
+					reason = "p-user"
+				}
+			}
+		}
+		rule {
+			deny
+		}
+	}
+}

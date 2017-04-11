@@ -1,0 +1,98 @@
+namespace Attributes {
+
+    attribute subjectId {
+        id = "urn:oasis:names:tc:xacml:1.0:subject:subject-id"
+        type = string
+        category = subjectCat
+    }
+
+    attribute subjectIdQualifier {
+        id = "urn:oasis:names:tc:xacml:1.0:subject:subject-id-qualifier"
+        type = string
+        category = subjectCat
+    }
+
+    attribute subjectKeyInfo {
+        id = "urn:oasis:names:tc:xacml:1.0:subject:key-info"
+        type = string
+        category = subjectCat
+    }
+
+    attribute subjectAuthenticationTime {
+        id = "urn:oasis:names:tc:xacml:1.0:subject:authentication-time"
+        type = dateTime
+        category = subjectCat
+    }
+
+    attribute subjectAuthenticationMethod {
+        id = "urn:oasis:names:tc:xacml:1.0:subject:authentication-method"
+        type = string
+        category = subjectCat
+    }
+
+    attribute subjectRequestTime {
+        id = "urn:oasis:names:tc:xacml:1.0:subject:request-time"
+        type = dateTime
+        category = subjectCat
+    }
+
+    attribute subjectSessionStartTime {
+        id = "urn:oasis:names:tc:xacml:1.0:subject:session-start-time"
+        type = dateTime
+        category = subjectCat
+    }
+
+    attribute subjectLocalityIpAddress {
+        id = "urn:oasis:names:tc:xacml:3.0:subject:authn-locality:ip-address"
+        type = ipAddress
+        category = subjectCat
+    }
+
+    attribute subjectLocalityDnsName {
+        id = "urn:oasis:names:tc:xacml:3.0:subject:authn-locality:dns-name"
+        type = dnsName
+        category = subjectCat
+    }
+
+    attribute resourceId {
+        id = "urn:oasis:names:tc:xacml:1.0:resource:resource-id"
+        type = string
+        category = resourceCat
+    }
+
+    attribute resourceTargetNamespace {
+        id = "urn:oasis:names:tc:xacml:2.0:resource:target-namespace"
+        type = anyURI
+        category = resourceCat
+    }
+
+    attribute actionId {
+        id = "urn:oasis:names:tc:xacml:1.0:action:action-id"
+        type = string
+        category = actionCat
+    }
+
+    attribute impliedAction {
+        id = "urn:oasis:names:tc:xacml:1.0:action:implied-action"
+        type = string
+        category = actionCat
+    }
+
+    attribute currentTime {
+        id = "urn:oasis:names:tc:xacml:1.0:environment:current-time"
+        type = time
+        category = environmentCat
+    }
+
+    attribute currentDate {
+        id = "urn:oasis:names:tc:xacml:1.0:environment:current-date"
+        type = date
+        category = environmentCat
+    }
+
+    attribute currentDateTime {
+        id = "urn:oasis:names:tc:xacml:1.0:environment:current-dateTime"
+        type = dateTime
+        category = environmentCat
+    }
+}

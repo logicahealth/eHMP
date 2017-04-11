@@ -1,0 +1,367 @@
+{
+  "apiVersion": "1.0",
+  "data": {
+    "updated": 20140808174318,
+    "totalItems": 8,
+    "currentItemCount": 8,
+    "items": [
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "entered": "19920630",
+        "verified": "19920630130820",
+        "kind": "Allergy/Adverse Reaction",
+        "originatorName": "<None>",
+        "verifierName": "<auto-verified>",
+        "mechanism": "UNKNOWN",
+        "uid": "urn:va:allergy:9E7A:1:1",
+        "summary": "MILK, ICE CREAM, YOGURT ( FREE TEXT )",
+        "pid": "9E7A;1",
+        "localId": "1",
+        "historical": true,
+        "reference": "1;GMRD(120.82,",
+        "products": [
+          {
+            "name": "MILK, ICE CREAM, YOGURT ( FREE TEXT )",
+            "vuid": "urn:va:vuid:",
+            "summary": "AllergyProduct{uid='null'}"
+          }
+        ],
+        "typeName": "FOOD"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "entered": "199401311422",
+        "verified": "19940131142332",
+        "kind": "Allergy/Adverse Reaction",
+        "originatorName": "WARDCLERK,FIFTYTHREE",
+        "verifierName": "<auto-verified>",
+        "mechanism": "ALLERGY",
+        "uid": "urn:va:allergy:9E7A:1:107",
+        "summary": "CYCLOPHOSPHAMIDE",
+        "pid": "9E7A;1",
+        "localId": "107",
+        "historical": false,
+        "reference": "711;PS(50.416,",
+        "products": [
+          {
+            "name": "CYCLOPHOSPHAMIDE",
+            "vuid": "urn:va:vuid:4018114",
+            "summary": "AllergyProduct{uid='null'}"
+          }
+        ],
+        "reactions": [
+          {
+            "name": "HIVES",
+            "vuid": "urn:va:vuid:",
+            "summary": "AllergyReaction{uid='null'}"
+          },
+          {
+            "name": "ITCHING,WATERING EYES",
+            "vuid": "urn:va:vuid:",
+            "summary": "AllergyReaction{uid='null'}"
+          },
+          {
+            "name": "DRY MOUTH",
+            "vuid": "urn:va:vuid:4538597",
+            "summary": "AllergyReaction{uid='null'}"
+          }
+        ],
+        "comments": [
+          {
+            "entered": "19940131142240",
+            "enteredByName": "WARDCLERK,FIFTYTHREE",
+            "enteredByDisplayName": "Wardclerk,Fiftythree",
+            "comment": " TESTING AN ADVERSE REACTION",
+            "summary": "AllergyComment{uid='null'}",
+            "enteredByUid": "urn:va:user:9E7A:10958"
+          }
+        ],
+        "observations": [
+          {
+            "date": "19940131",
+            "severity": "",
+            "summary": "AllergyObservation{uid='null'}"
+          },
+          {
+            "date": "19940207",
+            "severity": "",
+            "summary": "AllergyObservation{uid='null'}"
+          }
+        ],
+        "codes": [
+          {
+            "code": "C0010583",
+            "system": "urn:oid:2.16.840.1.113883.6.86",
+            "display": "Cyclophosphamide"
+          }
+        ],
+        "typeName": "DRUG"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "entered": "199401311429",
+        "verified": "19940131143017",
+        "kind": "Allergy/Adverse Reaction",
+        "originatorName": "WARDCLERK,FIFTYTHREE",
+        "verifierName": "WARDCLERK,FIFTYTHREE",
+        "mechanism": "ALLERGY",
+        "uid": "urn:va:allergy:9E7A:1:108",
+        "summary": "TESTOSTERONE",
+        "pid": "9E7A;1",
+        "localId": "108",
+        "historical": true,
+        "reference": "122;GMRD(120.82,",
+        "products": [
+          {
+            "name": "TESTOSTERONE",
+            "vuid": "urn:va:vuid:",
+            "summary": "AllergyProduct{uid='null'}"
+          }
+        ],
+        "reactions": [
+          {
+            "name": "ITCHING,WATERING EYES",
+            "vuid": "urn:va:vuid:",
+            "summary": "AllergyReaction{uid='null'}"
+          },
+          {
+            "name": "ANXIETY",
+            "vuid": "urn:va:vuid:4637050",
+            "summary": "AllergyReaction{uid='null'}"
+          },
+          {
+            "name": "HYPOTENSION",
+            "vuid": "urn:va:vuid:4538613",
+            "summary": "AllergyReaction{uid='null'}"
+          }
+        ],
+        "comments": [
+          {
+            "entered": "19940131142953",
+            "enteredByName": "WARDCLERK,FIFTYTHREE",
+            "enteredByDisplayName": "Wardclerk,Fiftythree",
+            "comment": " THIS IS A HISTORICAL RX.",
+            "summary": "AllergyComment{uid='null'}",
+            "enteredByUid": "urn:va:user:9E7A:10958"
+          }
+        ],
+        "typeName": "DRUG, FOOD"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "entered": "199402071026",
+        "verified": "19940207102737",
+        "kind": "Allergy/Adverse Reaction",
+        "originatorName": "WARDCLERK,FIFTYTHREE",
+        "verifierName": "WARDCLERK,FIFTYTHREE",
+        "mechanism": "ALLERGY",
+        "uid": "urn:va:allergy:9E7A:1:112",
+        "summary": "DOG HAIR ( FREE TEXT )",
+        "pid": "9E7A;1",
+        "localId": "112",
+        "historical": false,
+        "reference": "1;GMRD(120.82,",
+        "products": [
+          {
+            "name": "DOG HAIR ( FREE TEXT )",
+            "vuid": "urn:va:vuid:",
+            "summary": "AllergyProduct{uid='null'}"
+          }
+        ],
+        "reactions": [
+          {
+            "name": "ITCHING,WATERING EYES",
+            "vuid": "urn:va:vuid:",
+            "summary": "AllergyReaction{uid='null'}"
+          }
+        ],
+        "comments": [
+          {
+            "entered": "19940207102634",
+            "enteredByName": "WARDCLERK,FIFTYTHREE",
+            "enteredByDisplayName": "Wardclerk,Fiftythree",
+            "comment": " TESTING MANCHESTER",
+            "summary": "AllergyComment{uid='null'}",
+            "enteredByUid": "urn:va:user:9E7A:10958"
+          }
+        ],
+        "observations": [
+          {
+            "date": "19940207",
+            "severity": "MILD",
+            "summary": "AllergyObservation{uid='null'}"
+          }
+        ],
+        "typeName": "OTHER"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "entered": "199405160928",
+        "verified": "20041115184112",
+        "kind": "Allergy/Adverse Reaction",
+        "originatorName": "WARDCLERK,FIFTYTHREE",
+        "verifierName": "<auto-verified>",
+        "mechanism": "ALLERGY",
+        "uid": "urn:va:allergy:9E7A:1:241",
+        "summary": "MESSINA ( FREE TEXT )",
+        "pid": "9E7A;1",
+        "localId": "241",
+        "historical": true,
+        "reference": "1;GMRD(120.82,",
+        "products": [
+          {
+            "name": "MESSINA ( FREE TEXT )",
+            "vuid": "urn:va:vuid:",
+            "summary": "AllergyProduct{uid='null'}"
+          }
+        ],
+        "comments": [
+          {
+            "entered": "20041115184112",
+            "enteredByName": "LABTECH,FORTYEIGHT",
+            "enteredByDisplayName": "Labtech,Fortyeight",
+            "comment": "Auto-verified by patch 19 post-install",
+            "summary": "AllergyComment{uid='null'}",
+            "enteredByUid": "urn:va:user:9E7A:10000000020"
+          }
+        ],
+        "typeName": "OTHER"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "entered": "19920630",
+        "verified": "19920630130820",
+        "kind": "Allergy/Adverse Reaction",
+        "originatorName": "<None>",
+        "verifierName": "<auto-verified>",
+        "mechanism": "UNKNOWN",
+        "uid": "urn:va:allergy:9E7A:1:3",
+        "summary": "PENICILLIN",
+        "pid": "9E7A;1",
+        "localId": "3",
+        "historical": true,
+        "reference": "16;PSNDF(50.6,",
+        "products": [
+          {
+            "name": "PENICILLIN",
+            "vuid": "urn:va:vuid:4019880",
+            "summary": "AllergyProduct{uid='null'}"
+          }
+        ],
+        "comments": [
+          {
+            "entered": "19920630",
+            "enteredByName": "",
+            "enteredByDisplayName": "",
+            "comment": "The reaction to this allergy was RASH",
+            "summary": "AllergyComment{uid='null'}",
+            "enteredByUid": "urn:va:user:9E7A:0"
+          },
+          {
+            "entered": "20070529111415",
+            "enteredByName": "PROGRAMMER,ONE",
+            "enteredByDisplayName": "Programmer,One",
+            "comment": "Updated using auto clean up process from GMRA*4*29.  Changed reactant from PENICILLIN ALLERGY (free text) to PENICILLIN(file - PSNDF(50.6,)",
+            "summary": "AllergyComment{uid='null'}",
+            "enteredByUid": "urn:va:user:9E7A:1"
+          }
+        ],
+        "drugClasses": [
+          {
+            "code": "AM110",
+            "name": "PENICILLIN-G RELATED PENICILLINS",
+            "summary": "AllergyDrugClass{uid='null'}"
+          }
+        ],
+        "codes": [
+          {
+            "code": "C0220892",
+            "system": "urn:oid:2.16.840.1.113883.6.86",
+            "display": "Penicillin"
+          }
+        ],
+        "typeName": "DRUG"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "entered": "199505261218",
+        "verified": "19950526121901",
+        "kind": "Allergy/Adverse Reaction",
+        "originatorName": "PROGRAMMER,TWENTY",
+        "verifierName": "PROGRAMMER,TWENTY",
+        "mechanism": "ALLERGY",
+        "uid": "urn:va:allergy:9E7A:1:361",
+        "summary": "XXX - NKA (DO NOT USE)",
+        "pid": "9E7A;1",
+        "localId": "361",
+        "historical": true,
+        "reference": "135;GMRD(120.82,",
+        "products": [
+          {
+            "name": "XXX - NKA (DO NOT USE)",
+            "vuid": "urn:va:vuid:",
+            "summary": "AllergyProduct{uid='null'}"
+          }
+        ],
+        "reactions": [
+          {
+            "name": "ANXIETY",
+            "vuid": "urn:va:vuid:4637050",
+            "summary": "AllergyReaction{uid='null'}"
+          }
+        ],
+        "typeName": "OTHER"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "entered": "199603141333",
+        "kind": "Allergy/Adverse Reaction",
+        "originatorName": "PROGRAMMER,TWENTY",
+        "mechanism": "UNKNOWN",
+        "uid": "urn:va:allergy:9E7A:1:389",
+        "summary": "TETRACYCLINE",
+        "pid": "9E7A;1",
+        "localId": "389",
+        "historical": false,
+        "reference": "220;PS(50.416,",
+        "products": [
+          {
+            "name": "TETRACYCLINE",
+            "vuid": "urn:va:vuid:4017625",
+            "summary": "AllergyProduct{uid='null'}"
+          }
+        ],
+        "reactions": [
+          {
+            "name": "ANXIETY",
+            "vuid": "urn:va:vuid:4637050",
+            "summary": "AllergyReaction{uid='null'}"
+          }
+        ],
+        "observations": [
+          {
+            "date": "19960314",
+            "severity": "MILD",
+            "summary": "AllergyObservation{uid='null'}"
+          }
+        ],
+        "codes": [
+          {
+            "code": "C0039644",
+            "system": "urn:oid:2.16.840.1.113883.6.86",
+            "display": "Tetracycline"
+          }
+        ],
+        "typeName": "DRUG"
+      }
+    ]
+  }
+}

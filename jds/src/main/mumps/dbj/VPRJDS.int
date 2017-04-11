@@ -1,0 +1,59 @@
+VPRJDS ;SLC/KCM -- Save JSON objects
+ ;;1.0;JSON DATA STORE;;Sep 01, 2012
+ ;
+SAVE(JSON) ; Save a JSON encoded object
+ N UID,COLL,KEY,OBJECT,OLDOBJ,VPRJERR,INDEXER,TLTARY
+ ;
+ ; decode JSON into object and extract required fields
+ D DECODE^VPRJSON("JSON","OBJECT","VPRJERR")
+ I $L($G(VPRJERR)) D SETERROR^VPRJRER(202,VPRJERR) QUIT ""
+ S UID=$G(OBJECT("uid")) I '$L(UID) D SETERROR^VPRJRER(207) QUIT ""
+ ;
+ ; Parse out the collection, and key from the UID
+ ; Currently assuming UID is urn:va:type:vistaAccount...
+ ; For example:  urn:va:fresh:93EF
+ N COLL S COLL=$P(UID,":",3)
+ I '$L(COLL) D SETERROR^VPRJRER(210,UID) QUIT ""
+ ;
+ L +^VPRJD(UID):2 E  D SETERROR^VPRJRER(502) QUIT ""
+ ; kill the old indexes and object
+ S OLDOBJ="" M OLDOBJ=^VPRJD(UID)
+ D BLDTLT^VPRJCT1(COLL,.OBJECT,.TLTARY) Q:$G(HTTPERR) ""
+ TSTART
+ K ^VPRJD(UID)
+ K ^VPRJDJ("JSON",UID)
+ ;
+ M ^VPRJDJ("JSON",UID)=JSON
+ M ^VPRJDJ("TEMPLATE",UID)=TLTARY
+ M ^VPRJD(UID)=OBJECT
+ D INDEX^VPRJDX(UID,.OLDOBJ,.OBJECT)
+ TCOMMIT
+ L -^VPRJD(UID)
+ ;
+ Q $$URLENC^VPRJRUT(UID)  ; no errors
+ ;
+DELETE(KEY) ; Delete an object given its UID
+ N OLDOBJ,OBJECT,COLL
+ S COLL=$P(KEY,":",3)
+ I '$L(COLL) D SETERROR^VPRJRER(210,KEY) QUIT ""
+ ;
+ L +^VPRJD(KEY):2 E  D SETERROR^VPRJRER(502) QUIT ""
+ ; kill the old indexes and object
+ S OBJECT=""
+ S OLDOBJ="" M OLDOBJ=^VPRJD(KEY)
+ TSTART
+ K ^VPRJD(KEY)
+ K ^VPRJDJ("JSON",KEY)
+ K ^VPRJDJ("TEMPLATE",KEY)
+ D INDEX^VPRJDX(KEY,.OLDOBJ,.OBJECT)
+ TCOMMIT
+ L -^VPRJD(KEY)
+ Q
+DELCTN(COLL,SYSID) ; Delete a collection given its name
+ I '$L(COLL) D SETERROR^VPRJRER(215) QUIT ""
+ N ROOT,LROOT,UID
+ S ROOT="urn:va:"_COLL_":"
+ I $L($G(SYSID)) S ROOT=ROOT_SYSID_":"
+ S LROOT=$L(ROOT)
+ S UID=ROOT F  S UID=$O(^VPRJD(UID)) Q:$E(UID,1,LROOT)'=ROOT  D DELETE(UID)
+ Q

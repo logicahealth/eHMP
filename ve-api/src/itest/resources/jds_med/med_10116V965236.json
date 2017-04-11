@@ -1,0 +1,4088 @@
+{
+  "apiVersion": "1.0",
+  "data": {
+    "updated": 20140808175958,
+    "totalItems": 38,
+    "currentItemCount": 38,
+    "items": [
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "overallStart": "20100227",
+        "overallStop": "20110228",
+        "vaType": "O",
+        "supply": false,
+        "lastFilled": "20100227",
+        "qualifiedName": "METOPROLOL TARTRATE TAB",
+        "administrations": [],
+        "kind": "Medication, Outpatient",
+        "units": "MG",
+        "uid": "urn:va:med:9E7A:146:27942",
+        "summary": "METOPROLOL TARTRATE 50MG TAB (EXPIRED)\n TAKE ONE TABLET BY MOUTH TWICE A DAY",
+        "pid": "C877;146",
+        "localId": "403936;O",
+        "productFormName": "TAB",
+        "sig": "TAKE ONE TABLET BY MOUTH TWICE A DAY",
+        "patientInstruction": "",
+        "stopped": "20110228",
+        "medStatus": "urn:sct:392521001",
+        "medStatusName": "historical",
+        "medType": "urn:sct:73639000",
+        "vaStatus": "EXPIRED",
+        "IMO": false,
+        "products": [
+          {
+            "ingredientCode": "urn:va:vuid:4019836",
+            "ingredientCodeName": "METOPROLOL",
+            "ingredientName": "METOPROLOL TARTRATE TAB",
+            "drugClassCode": "urn:vadc:CV100",
+            "drugClassName": "BETA BLOCKERS/RELATED",
+            "suppliedCode": "urn:va:vuid:4004608",
+            "suppliedName": "METOPROLOL TARTRATE 50MG TAB",
+            "summary": "MedicationProduct{uid='null'}",
+            "ingredientRole": "urn:sct:410942007",
+            "strength": "50 MG",
+            "ingredientRXNCode": "urn:rxnorm:6918"
+          }
+        ],
+        "dosages": [
+          {
+            "dose": "50",
+            "units": "MG",
+            "routeName": "PO",
+            "scheduleName": "BID",
+            "scheduleType": "CONTINUOUS",
+            "start": "20100227",
+            "stop": "20110228",
+            "relativeStart": 0,
+            "relativeStop": 527040,
+            "scheduleFreq": 720,
+            "amount": "1",
+            "noun": "TABLET",
+            "instructions": "50MG",
+            "summary": "MedicationDose{uid='null'}"
+          }
+        ],
+        "orders": [
+          {
+            "orderUid": "urn:va:order:9E7A:146:27942",
+            "prescriptionId": "500714",
+            "ordered": "201002270903",
+            "providerUid": "urn:va:user:9E7A:983",
+            "providerName": "PROVIDER,ONE",
+            "pharmacistUid": "urn:va:user:9E7A:10000000056",
+            "pharmacistName": "PHARMACIST,ONE",
+            "fillCost": "2.466",
+            "locationName": "GENERAL MEDICINE",
+            "locationUid": "urn:va:location:9E7A:23",
+            "quantityOrdered": "180",
+            "daysSupply": 90,
+            "fillsAllowed": 3,
+            "fillsRemaining": 3,
+            "vaRouting": "W",
+            "summary": "MedicationOrder{uid='null'}"
+          }
+        ],
+        "fills": [
+          {
+            "dispenseDate": "20100227",
+            "releaseDate": "20100227",
+            "quantityDispensed": "180",
+            "daysSupplyDispensed": 90,
+            "routing": "W",
+            "summary": "MedicationFill{uid='null'}"
+          }
+        ],
+        "codes": [
+          {
+            "code": "866514",
+            "system": "urn:oid:2.16.840.1.113883.6.88",
+            "display": "Metoprolol Tartrate 50 MG Oral Tablet"
+          }
+        ],
+        "rxncodes": [
+          "urn:vandf:4019836",
+          "urn:ndfrt:N0000010595",
+          "urn:ndfrt:N0000000001",
+          "urn:ndfrt:N0000010582",
+          "urn:rxnorm:6918",
+          "urn:ndfrt:N0000007508"
+        ],
+        "name": "METOPROLOL TARTRATE TAB",
+        "type": "Prescription"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "overallStart": "20100227",
+        "overallStop": "20110228",
+        "vaType": "O",
+        "supply": false,
+        "lastFilled": "20100227",
+        "qualifiedName": "SIMVASTATIN TAB",
+        "administrations": [],
+        "kind": "Medication, Outpatient",
+        "units": "MG",
+        "uid": "urn:va:med:9E7A:146:28042",
+        "summary": "SIMVASTATIN 40MG TAB (EXPIRED)\n TAKE ONE TABLET BY MOUTH EVERY EVENING",
+        "pid": "C877;146",
+        "localId": "404036;O",
+        "productFormName": "TAB",
+        "sig": "TAKE ONE TABLET BY MOUTH EVERY EVENING",
+        "patientInstruction": "",
+        "stopped": "20110228",
+        "medStatus": "urn:sct:392521001",
+        "medStatusName": "historical",
+        "medType": "urn:sct:73639000",
+        "vaStatus": "EXPIRED",
+        "IMO": false,
+        "products": [
+          {
+            "ingredientCode": "urn:va:vuid:4020400",
+            "ingredientCodeName": "SIMVASTATIN",
+            "ingredientName": "SIMVASTATIN TAB",
+            "drugClassCode": "urn:vadc:CV350",
+            "drugClassName": "ANTILIPEMIC AGENTS",
+            "suppliedCode": "urn:va:vuid:4010153",
+            "suppliedName": "SIMVASTATIN 40MG TAB",
+            "summary": "MedicationProduct{uid='null'}",
+            "ingredientRole": "urn:sct:410942007",
+            "strength": "40 MG",
+            "ingredientRXNCode": "urn:rxnorm:36567"
+          }
+        ],
+        "dosages": [
+          {
+            "dose": "40",
+            "units": "MG",
+            "routeName": "PO",
+            "scheduleName": "QPM",
+            "scheduleType": "CONTINUOUS",
+            "start": "20100227",
+            "stop": "20110228",
+            "relativeStart": 0,
+            "relativeStop": 527040,
+            "scheduleFreq": 1440,
+            "amount": "1",
+            "noun": "TABLET",
+            "instructions": "40MG",
+            "summary": "MedicationDose{uid='null'}"
+          }
+        ],
+        "orders": [
+          {
+            "orderUid": "urn:va:order:9E7A:146:28042",
+            "prescriptionId": "500814",
+            "ordered": "201002270903",
+            "providerUid": "urn:va:user:9E7A:983",
+            "providerName": "PROVIDER,ONE",
+            "pharmacistUid": "urn:va:user:9E7A:10000000056",
+            "pharmacistName": "PHARMACIST,ONE",
+            "fillCost": "45.378",
+            "locationName": "GENERAL MEDICINE",
+            "locationUid": "urn:va:location:9E7A:23",
+            "quantityOrdered": "90",
+            "daysSupply": 90,
+            "fillsAllowed": 3,
+            "fillsRemaining": 3,
+            "vaRouting": "W",
+            "summary": "MedicationOrder{uid='null'}"
+          }
+        ],
+        "fills": [
+          {
+            "dispenseDate": "20100227",
+            "releaseDate": "20100227",
+            "quantityDispensed": "90",
+            "daysSupplyDispensed": 90,
+            "routing": "W",
+            "summary": "MedicationFill{uid='null'}"
+          }
+        ],
+        "codes": [
+          {
+            "code": "198211",
+            "system": "urn:oid:2.16.840.1.113883.6.88",
+            "display": "Simvastatin 40 MG Oral Tablet"
+          }
+        ],
+        "rxncodes": [
+          "urn:vandf:4020400",
+          "urn:ndfrt:N0000000001",
+          "urn:ndfrt:N0000010582",
+          "urn:ndfrt:N0000010601",
+          "urn:rxnorm:36567",
+          "urn:ndfrt:N0000005842"
+        ],
+        "name": "SIMVASTATIN TAB",
+        "type": "Prescription"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP BEE",
+        "overallStart": "20100227",
+        "overallStop": "20110228",
+        "vaType": "O",
+        "supply": false,
+        "lastFilled": "20100227",
+        "qualifiedName": "METOPROLOL TARTRATE TAB",
+        "administrations": [],
+        "kind": "Medication, Outpatient",
+        "units": "MG",
+        "uid": "urn:va:med:C877:146:27942",
+        "summary": "METOPROLOL TARTRATE 50MG TAB (EXPIRED)\n TAKE ONE TABLET BY MOUTH TWICE A DAY",
+        "pid": "C877;146",
+        "localId": "403936;O",
+        "productFormName": "TAB",
+        "sig": "TAKE ONE TABLET BY MOUTH TWICE A DAY",
+        "patientInstruction": "",
+        "stopped": "20110228",
+        "medStatus": "urn:sct:392521001",
+        "medStatusName": "historical",
+        "medType": "urn:sct:73639000",
+        "vaStatus": "EXPIRED",
+        "IMO": false,
+        "products": [
+          {
+            "ingredientCode": "urn:va:vuid:4019836",
+            "ingredientCodeName": "METOPROLOL",
+            "ingredientName": "METOPROLOL TARTRATE TAB",
+            "drugClassCode": "urn:vadc:CV100",
+            "drugClassName": "BETA BLOCKERS/RELATED",
+            "suppliedCode": "urn:va:vuid:4004608",
+            "suppliedName": "METOPROLOL TARTRATE 50MG TAB",
+            "summary": "MedicationProduct{uid='null'}",
+            "ingredientRole": "urn:sct:410942007",
+            "strength": "50 MG",
+            "ingredientRXNCode": "urn:rxnorm:6918"
+          }
+        ],
+        "dosages": [
+          {
+            "dose": "50",
+            "units": "MG",
+            "routeName": "PO",
+            "scheduleName": "BID",
+            "scheduleType": "CONTINUOUS",
+            "start": "20100227",
+            "stop": "20110228",
+            "relativeStart": 0,
+            "relativeStop": 527040,
+            "scheduleFreq": 720,
+            "amount": "1",
+            "noun": "TABLET",
+            "instructions": "50MG",
+            "summary": "MedicationDose{uid='null'}"
+          }
+        ],
+        "orders": [
+          {
+            "orderUid": "urn:va:order:C877:146:27942",
+            "prescriptionId": "500714",
+            "ordered": "201002270903",
+            "providerUid": "urn:va:user:C877:983",
+            "providerName": "PROVIDER,ONE",
+            "pharmacistUid": "urn:va:user:C877:10000000056",
+            "pharmacistName": "PHARMACIST,ONE",
+            "fillCost": "2.466",
+            "locationName": "GENERAL MEDICINE",
+            "locationUid": "urn:va:location:C877:23",
+            "quantityOrdered": "180",
+            "daysSupply": 90,
+            "fillsAllowed": 3,
+            "fillsRemaining": 3,
+            "vaRouting": "W",
+            "summary": "MedicationOrder{uid='null'}"
+          }
+        ],
+        "fills": [
+          {
+            "dispenseDate": "20100227",
+            "releaseDate": "20100227",
+            "quantityDispensed": "180",
+            "daysSupplyDispensed": 90,
+            "routing": "W",
+            "summary": "MedicationFill{uid='null'}"
+          }
+        ],
+        "codes": [
+          {
+            "code": "866514",
+            "system": "urn:oid:2.16.840.1.113883.6.88",
+            "display": "Metoprolol Tartrate 50 MG Oral Tablet"
+          }
+        ],
+        "rxncodes": [
+          "urn:vandf:4019836",
+          "urn:ndfrt:N0000010595",
+          "urn:ndfrt:N0000000001",
+          "urn:ndfrt:N0000010582",
+          "urn:rxnorm:6918",
+          "urn:ndfrt:N0000007508"
+        ],
+        "name": "METOPROLOL TARTRATE TAB",
+        "type": "Prescription"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP BEE",
+        "overallStart": "20100227",
+        "overallStop": "20110228",
+        "vaType": "O",
+        "supply": false,
+        "lastFilled": "20100227",
+        "qualifiedName": "SIMVASTATIN TAB",
+        "administrations": [],
+        "kind": "Medication, Outpatient",
+        "units": "MG",
+        "uid": "urn:va:med:C877:146:28042",
+        "summary": "SIMVASTATIN 40MG TAB (EXPIRED)\n TAKE ONE TABLET BY MOUTH EVERY EVENING",
+        "pid": "C877;146",
+        "localId": "404036;O",
+        "productFormName": "TAB",
+        "sig": "TAKE ONE TABLET BY MOUTH EVERY EVENING",
+        "patientInstruction": "",
+        "stopped": "20110228",
+        "medStatus": "urn:sct:392521001",
+        "medStatusName": "historical",
+        "medType": "urn:sct:73639000",
+        "vaStatus": "EXPIRED",
+        "IMO": false,
+        "products": [
+          {
+            "ingredientCode": "urn:va:vuid:4020400",
+            "ingredientCodeName": "SIMVASTATIN",
+            "ingredientName": "SIMVASTATIN TAB",
+            "drugClassCode": "urn:vadc:CV350",
+            "drugClassName": "ANTILIPEMIC AGENTS",
+            "suppliedCode": "urn:va:vuid:4010153",
+            "suppliedName": "SIMVASTATIN 40MG TAB",
+            "summary": "MedicationProduct{uid='null'}",
+            "ingredientRole": "urn:sct:410942007",
+            "strength": "40 MG",
+            "ingredientRXNCode": "urn:rxnorm:36567"
+          }
+        ],
+        "dosages": [
+          {
+            "dose": "40",
+            "units": "MG",
+            "routeName": "PO",
+            "scheduleName": "QPM",
+            "scheduleType": "CONTINUOUS",
+            "start": "20100227",
+            "stop": "20110228",
+            "relativeStart": 0,
+            "relativeStop": 527040,
+            "scheduleFreq": 1440,
+            "amount": "1",
+            "noun": "TABLET",
+            "instructions": "40MG",
+            "summary": "MedicationDose{uid='null'}"
+          }
+        ],
+        "orders": [
+          {
+            "orderUid": "urn:va:order:C877:146:28042",
+            "prescriptionId": "500814",
+            "ordered": "201002270903",
+            "providerUid": "urn:va:user:C877:983",
+            "providerName": "PROVIDER,ONE",
+            "pharmacistUid": "urn:va:user:C877:10000000056",
+            "pharmacistName": "PHARMACIST,ONE",
+            "fillCost": "45.378",
+            "locationName": "GENERAL MEDICINE",
+            "locationUid": "urn:va:location:C877:23",
+            "quantityOrdered": "90",
+            "daysSupply": 90,
+            "fillsAllowed": 3,
+            "fillsRemaining": 3,
+            "vaRouting": "W",
+            "summary": "MedicationOrder{uid='null'}"
+          }
+        ],
+        "fills": [
+          {
+            "dispenseDate": "20100227",
+            "releaseDate": "20100227",
+            "quantityDispensed": "90",
+            "daysSupplyDispensed": 90,
+            "routing": "W",
+            "summary": "MedicationFill{uid='null'}"
+          }
+        ],
+        "codes": [
+          {
+            "code": "198211",
+            "system": "urn:oid:2.16.840.1.113883.6.88",
+            "display": "Simvastatin 40 MG Oral Tablet"
+          }
+        ],
+        "rxncodes": [
+          "urn:vandf:4020400",
+          "urn:ndfrt:N0000000001",
+          "urn:ndfrt:N0000010582",
+          "urn:ndfrt:N0000010601",
+          "urn:rxnorm:36567",
+          "urn:ndfrt:N0000005842"
+        ],
+        "name": "SIMVASTATIN TAB",
+        "type": "Prescription"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "overallStart": "20100227",
+        "overallStop": "20100528",
+        "vaType": "O",
+        "supply": false,
+        "lastFilled": "20100227",
+        "qualifiedName": "METFORMIN TAB,SA",
+        "administrations": [],
+        "kind": "Medication, Outpatient",
+        "units": "MG",
+        "uid": "urn:va:med:9E7A:146:27842",
+        "summary": "METFORMIN HCL 500MG TAB,SA (EXPIRED)\n TAKE ONE TABLET MOUTH TWICE A DAY",
+        "pid": "C877;146",
+        "localId": "403836;O",
+        "productFormName": "TAB,SA",
+        "sig": "TAKE ONE TABLET MOUTH TWICE A DAY",
+        "patientInstruction": "",
+        "stopped": "20100528",
+        "medStatus": "urn:sct:392521001",
+        "medStatusName": "historical",
+        "medType": "urn:sct:73639000",
+        "vaStatus": "EXPIRED",
+        "IMO": false,
+        "products": [
+          {
+            "ingredientCode": "urn:va:vuid:4023979",
+            "ingredientCodeName": "METFORMIN",
+            "ingredientName": "METFORMIN TAB,SA",
+            "drugClassCode": "urn:vadc:HS502",
+            "drugClassName": "ORAL HYPOGLYCEMIC AGENTS,ORAL",
+            "suppliedCode": "urn:va:vuid:4014984",
+            "suppliedName": "METFORMIN HCL 500MG TAB,SA",
+            "summary": "MedicationProduct{uid='null'}",
+            "ingredientRole": "urn:sct:410942007",
+            "strength": "500 MG",
+            "ingredientRXNCode": "urn:rxnorm:6809"
+          }
+        ],
+        "dosages": [
+          {
+            "dose": "500",
+            "units": "MG",
+            "routeName": "PO",
+            "scheduleName": "BID",
+            "scheduleType": "CONTINUOUS",
+            "start": "20100227",
+            "stop": "20100528",
+            "relativeStart": 0,
+            "relativeStop": 120000,
+            "scheduleFreq": 720,
+            "amount": "1",
+            "noun": "TABLET",
+            "instructions": "500MG",
+            "summary": "MedicationDose{uid='null'}"
+          }
+        ],
+        "orders": [
+          {
+            "orderUid": "urn:va:order:9E7A:146:27842",
+            "prescriptionId": "500614",
+            "ordered": "201002270903",
+            "providerUid": "urn:va:user:9E7A:983",
+            "providerName": "PROVIDER,ONE",
+            "pharmacistUid": "urn:va:user:9E7A:10000000056",
+            "pharmacistName": "PHARMACIST,ONE",
+            "fillCost": "90",
+            "locationName": "GENERAL MEDICINE",
+            "locationUid": "urn:va:location:9E7A:23",
+            "quantityOrdered": "180",
+            "daysSupply": 90,
+            "fillsAllowed": 0,
+            "fillsRemaining": 0,
+            "vaRouting": "W",
+            "summary": "MedicationOrder{uid='null'}"
+          }
+        ],
+        "fills": [
+          {
+            "dispenseDate": "20100227",
+            "releaseDate": "20100227",
+            "quantityDispensed": "180",
+            "daysSupplyDispensed": 90,
+            "routing": "W",
+            "summary": "MedicationFill{uid='null'}"
+          }
+        ],
+        "codes": [
+          {
+            "code": "860975",
+            "system": "urn:oid:2.16.840.1.113883.6.88",
+            "display": "24 HR Metformin hydrochloride 500 MG Extended Release Tablet"
+          }
+        ],
+        "rxncodes": [
+          "urn:vandf:4023979",
+          "urn:ndfrt:N0000007698",
+          "urn:ndfrt:N0000000002",
+          "urn:ndfrt:N0000007676",
+          "urn:ndfrt:N0000008167",
+          "urn:ndfrt:N0000008038",
+          "urn:rxnorm:6809",
+          "urn:ndfrt:N0000021984"
+        ],
+        "name": "METFORMIN TAB,SA",
+        "type": "Prescription"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP BEE",
+        "overallStart": "20100227",
+        "overallStop": "20100528",
+        "vaType": "O",
+        "supply": false,
+        "lastFilled": "20100227",
+        "qualifiedName": "METFORMIN TAB,SA",
+        "administrations": [],
+        "kind": "Medication, Outpatient",
+        "units": "MG",
+        "uid": "urn:va:med:C877:146:27842",
+        "summary": "METFORMIN HCL 500MG TAB,SA (EXPIRED)\n TAKE ONE TABLET MOUTH TWICE A DAY",
+        "pid": "C877;146",
+        "localId": "403836;O",
+        "productFormName": "TAB,SA",
+        "sig": "TAKE ONE TABLET MOUTH TWICE A DAY",
+        "patientInstruction": "",
+        "stopped": "20100528",
+        "medStatus": "urn:sct:392521001",
+        "medStatusName": "historical",
+        "medType": "urn:sct:73639000",
+        "vaStatus": "EXPIRED",
+        "IMO": false,
+        "products": [
+          {
+            "ingredientCode": "urn:va:vuid:4023979",
+            "ingredientCodeName": "METFORMIN",
+            "ingredientName": "METFORMIN TAB,SA",
+            "drugClassCode": "urn:vadc:HS502",
+            "drugClassName": "ORAL HYPOGLYCEMIC AGENTS,ORAL",
+            "suppliedCode": "urn:va:vuid:4014984",
+            "suppliedName": "METFORMIN HCL 500MG TAB,SA",
+            "summary": "MedicationProduct{uid='null'}",
+            "ingredientRole": "urn:sct:410942007",
+            "strength": "500 MG",
+            "ingredientRXNCode": "urn:rxnorm:6809"
+          }
+        ],
+        "dosages": [
+          {
+            "dose": "500",
+            "units": "MG",
+            "routeName": "PO",
+            "scheduleName": "BID",
+            "scheduleType": "CONTINUOUS",
+            "start": "20100227",
+            "stop": "20100528",
+            "relativeStart": 0,
+            "relativeStop": 120000,
+            "scheduleFreq": 720,
+            "amount": "1",
+            "noun": "TABLET",
+            "instructions": "500MG",
+            "summary": "MedicationDose{uid='null'}"
+          }
+        ],
+        "orders": [
+          {
+            "orderUid": "urn:va:order:C877:146:27842",
+            "prescriptionId": "500614",
+            "ordered": "201002270903",
+            "providerUid": "urn:va:user:C877:983",
+            "providerName": "PROVIDER,ONE",
+            "pharmacistUid": "urn:va:user:C877:10000000056",
+            "pharmacistName": "PHARMACIST,ONE",
+            "fillCost": "90",
+            "locationName": "GENERAL MEDICINE",
+            "locationUid": "urn:va:location:C877:23",
+            "quantityOrdered": "180",
+            "daysSupply": 90,
+            "fillsAllowed": 0,
+            "fillsRemaining": 0,
+            "vaRouting": "W",
+            "summary": "MedicationOrder{uid='null'}"
+          }
+        ],
+        "fills": [
+          {
+            "dispenseDate": "20100227",
+            "releaseDate": "20100227",
+            "quantityDispensed": "180",
+            "daysSupplyDispensed": 90,
+            "routing": "W",
+            "summary": "MedicationFill{uid='null'}"
+          }
+        ],
+        "codes": [
+          {
+            "code": "860975",
+            "system": "urn:oid:2.16.840.1.113883.6.88",
+            "display": "24 HR Metformin hydrochloride 500 MG Extended Release Tablet"
+          }
+        ],
+        "rxncodes": [
+          "urn:vandf:4023979",
+          "urn:ndfrt:N0000007698",
+          "urn:ndfrt:N0000000002",
+          "urn:ndfrt:N0000007676",
+          "urn:ndfrt:N0000008167",
+          "urn:ndfrt:N0000008038",
+          "urn:rxnorm:6809",
+          "urn:ndfrt:N0000021984"
+        ],
+        "name": "METFORMIN TAB,SA",
+        "type": "Prescription"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "overallStart": "20080128",
+        "overallStop": "20090128",
+        "vaType": "O",
+        "supply": false,
+        "lastFilled": "20080426",
+        "qualifiedName": "METFORMIN TAB,SA",
+        "administrations": [],
+        "kind": "Medication, Outpatient",
+        "units": "MG",
+        "uid": "urn:va:med:9E7A:146:21196",
+        "summary": "METFORMIN HCL 500MG TAB,SA (EXPIRED)\n TAKE ONE TABLET BY BY MOUTH TWICE A DAY",
+        "pid": "C877;146",
+        "localId": "403556;O",
+        "productFormName": "TAB,SA",
+        "sig": "TAKE ONE TABLET BY BY MOUTH TWICE A DAY",
+        "patientInstruction": "",
+        "stopped": "20090128",
+        "medStatus": "urn:sct:392521001",
+        "medStatusName": "historical",
+        "medType": "urn:sct:73639000",
+        "vaStatus": "EXPIRED",
+        "IMO": false,
+        "products": [
+          {
+            "ingredientCode": "urn:va:vuid:4023979",
+            "ingredientCodeName": "METFORMIN",
+            "ingredientName": "METFORMIN TAB,SA",
+            "drugClassCode": "urn:vadc:HS502",
+            "drugClassName": "ORAL HYPOGLYCEMIC AGENTS,ORAL",
+            "suppliedCode": "urn:va:vuid:4014984",
+            "suppliedName": "METFORMIN HCL 500MG TAB,SA",
+            "summary": "MedicationProduct{uid='null'}",
+            "ingredientRole": "urn:sct:410942007",
+            "strength": "500 MG",
+            "ingredientRXNCode": "urn:rxnorm:6809"
+          }
+        ],
+        "dosages": [
+          {
+            "dose": "500",
+            "units": "MG",
+            "routeName": "PO",
+            "scheduleName": "BID",
+            "scheduleType": "CONTINUOUS",
+            "start": "20080128",
+            "stop": "20090128",
+            "relativeStart": 0,
+            "relativeStop": 527040,
+            "scheduleFreq": 720,
+            "amount": "1",
+            "noun": "TABLET",
+            "instructions": "500MG",
+            "summary": "MedicationDose{uid='null'}"
+          }
+        ],
+        "orders": [
+          {
+            "orderUid": "urn:va:order:9E7A:146:21196",
+            "prescriptionId": "500298C",
+            "ordered": "200801281423",
+            "providerUid": "urn:va:user:9E7A:994",
+            "providerName": "PROVIDER,ELEVEN",
+            "pharmacistUid": "urn:va:user:9E7A:1",
+            "pharmacistName": "PROGRAMMER,ONE",
+            "fillCost": "90",
+            "locationName": "GENERAL MEDICINE",
+            "locationUid": "urn:va:location:9E7A:23",
+            "quantityOrdered": "180",
+            "daysSupply": 90,
+            "fillsAllowed": 3,
+            "fillsRemaining": 2,
+            "vaRouting": "W",
+            "summary": "MedicationOrder{uid='null'}",
+            "predecessor": "urn:va:med:9E7A:146:18037"
+          }
+        ],
+        "fills": [
+          {
+            "dispenseDate": "20080128",
+            "releaseDate": "20080129",
+            "quantityDispensed": "180",
+            "daysSupplyDispensed": 90,
+            "routing": "W",
+            "summary": "MedicationFill{uid='null'}"
+          },
+          {
+            "dispenseDate": "20080426",
+            "releaseDate": "20080426",
+            "quantityDispensed": "180",
+            "daysSupplyDispensed": 90,
+            "routing": "W",
+            "summary": "MedicationFill{uid='null'}"
+          }
+        ],
+        "codes": [
+          {
+            "code": "860975",
+            "system": "urn:oid:2.16.840.1.113883.6.88",
+            "display": "24 HR Metformin hydrochloride 500 MG Extended Release Tablet"
+          }
+        ],
+        "rxncodes": [
+          "urn:vandf:4023979",
+          "urn:ndfrt:N0000007698",
+          "urn:ndfrt:N0000000002",
+          "urn:ndfrt:N0000007676",
+          "urn:ndfrt:N0000008167",
+          "urn:ndfrt:N0000008038",
+          "urn:rxnorm:6809",
+          "urn:ndfrt:N0000021984"
+        ],
+        "name": "METFORMIN TAB,SA",
+        "type": "Prescription"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "overallStart": "20080128",
+        "overallStop": "20090128",
+        "vaType": "O",
+        "supply": false,
+        "lastFilled": "20080426",
+        "qualifiedName": "METOPROLOL TARTRATE TAB",
+        "administrations": [],
+        "kind": "Medication, Outpatient",
+        "units": "MG",
+        "uid": "urn:va:med:9E7A:146:21197",
+        "summary": "METOPROLOL TARTRATE 50MG TAB (EXPIRED)\n TAKE ONE TABLET BY MOUTH TWICE A DAY",
+        "pid": "C877;146",
+        "localId": "403557;O",
+        "productFormName": "TAB",
+        "sig": "TAKE ONE TABLET BY MOUTH TWICE A DAY",
+        "patientInstruction": "",
+        "stopped": "20090128",
+        "medStatus": "urn:sct:392521001",
+        "medStatusName": "historical",
+        "medType": "urn:sct:73639000",
+        "vaStatus": "EXPIRED",
+        "IMO": false,
+        "products": [
+          {
+            "ingredientCode": "urn:va:vuid:4019836",
+            "ingredientCodeName": "METOPROLOL",
+            "ingredientName": "METOPROLOL TARTRATE TAB",
+            "drugClassCode": "urn:vadc:CV100",
+            "drugClassName": "BETA BLOCKERS/RELATED",
+            "suppliedCode": "urn:va:vuid:4004608",
+            "suppliedName": "METOPROLOL TARTRATE 50MG TAB",
+            "summary": "MedicationProduct{uid='null'}",
+            "ingredientRole": "urn:sct:410942007",
+            "strength": "50 MG",
+            "ingredientRXNCode": "urn:rxnorm:6918"
+          }
+        ],
+        "dosages": [
+          {
+            "dose": "50",
+            "units": "MG",
+            "routeName": "PO",
+            "scheduleName": "BID",
+            "scheduleType": "CONTINUOUS",
+            "start": "20080128",
+            "stop": "20090128",
+            "relativeStart": 0,
+            "relativeStop": 527040,
+            "scheduleFreq": 720,
+            "amount": "1",
+            "noun": "TABLET",
+            "instructions": "50MG",
+            "summary": "MedicationDose{uid='null'}"
+          }
+        ],
+        "orders": [
+          {
+            "orderUid": "urn:va:order:9E7A:146:21197",
+            "prescriptionId": "500521A",
+            "ordered": "200801281423",
+            "providerUid": "urn:va:user:9E7A:994",
+            "providerName": "PROVIDER,ELEVEN",
+            "pharmacistUid": "urn:va:user:9E7A:1",
+            "pharmacistName": "PROGRAMMER,ONE",
+            "fillCost": "2.466",
+            "locationName": "GENERAL MEDICINE",
+            "locationUid": "urn:va:location:9E7A:23",
+            "quantityOrdered": "180",
+            "daysSupply": 90,
+            "fillsAllowed": 3,
+            "fillsRemaining": 2,
+            "vaRouting": "W",
+            "summary": "MedicationOrder{uid='null'}",
+            "predecessor": "urn:va:med:9E7A:146:18035"
+          }
+        ],
+        "fills": [
+          {
+            "dispenseDate": "20080128",
+            "releaseDate": "20080129",
+            "quantityDispensed": "180",
+            "daysSupplyDispensed": 90,
+            "routing": "W",
+            "summary": "MedicationFill{uid='null'}"
+          },
+          {
+            "dispenseDate": "20080426",
+            "releaseDate": "20080426",
+            "quantityDispensed": "180",
+            "daysSupplyDispensed": 90,
+            "routing": "W",
+            "summary": "MedicationFill{uid='null'}"
+          }
+        ],
+        "codes": [
+          {
+            "code": "866514",
+            "system": "urn:oid:2.16.840.1.113883.6.88",
+            "display": "Metoprolol Tartrate 50 MG Oral Tablet"
+          }
+        ],
+        "rxncodes": [
+          "urn:vandf:4019836",
+          "urn:ndfrt:N0000010595",
+          "urn:ndfrt:N0000000001",
+          "urn:ndfrt:N0000010582",
+          "urn:rxnorm:6918",
+          "urn:ndfrt:N0000007508"
+        ],
+        "name": "METOPROLOL TARTRATE TAB",
+        "type": "Prescription"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "overallStart": "20080128",
+        "overallStop": "20090128",
+        "vaType": "O",
+        "supply": false,
+        "lastFilled": "20080426",
+        "qualifiedName": "SIMVASTATIN TAB",
+        "administrations": [],
+        "kind": "Medication, Outpatient",
+        "units": "MG",
+        "uid": "urn:va:med:9E7A:146:21198",
+        "summary": "SIMVASTATIN 40MG TAB (EXPIRED)\n TAKE ONE TABLET BY BY MOUTH EVERY EVENING",
+        "pid": "C877;146",
+        "localId": "403558;O",
+        "productFormName": "TAB",
+        "sig": "TAKE ONE TABLET BY BY MOUTH EVERY EVENING",
+        "patientInstruction": "",
+        "stopped": "20090128",
+        "medStatus": "urn:sct:392521001",
+        "medStatusName": "historical",
+        "medType": "urn:sct:73639000",
+        "vaStatus": "EXPIRED",
+        "IMO": false,
+        "products": [
+          {
+            "ingredientCode": "urn:va:vuid:4020400",
+            "ingredientCodeName": "SIMVASTATIN",
+            "ingredientName": "SIMVASTATIN TAB",
+            "drugClassCode": "urn:vadc:CV350",
+            "drugClassName": "ANTILIPEMIC AGENTS",
+            "suppliedCode": "urn:va:vuid:4010153",
+            "suppliedName": "SIMVASTATIN 40MG TAB",
+            "summary": "MedicationProduct{uid='null'}",
+            "ingredientRole": "urn:sct:410942007",
+            "strength": "40 MG",
+            "ingredientRXNCode": "urn:rxnorm:36567"
+          }
+        ],
+        "dosages": [
+          {
+            "dose": "40",
+            "units": "MG",
+            "routeName": "PO",
+            "scheduleName": "QPM",
+            "scheduleType": "CONTINUOUS",
+            "start": "20080128",
+            "stop": "20090128",
+            "relativeStart": 0,
+            "relativeStop": 527040,
+            "scheduleFreq": 1440,
+            "amount": "1",
+            "noun": "TABLET",
+            "instructions": "40MG",
+            "summary": "MedicationDose{uid='null'}"
+          }
+        ],
+        "orders": [
+          {
+            "orderUid": "urn:va:order:9E7A:146:21198",
+            "prescriptionId": "000063D",
+            "ordered": "200801281423",
+            "providerUid": "urn:va:user:9E7A:994",
+            "providerName": "PROVIDER,ELEVEN",
+            "pharmacistUid": "urn:va:user:9E7A:1",
+            "pharmacistName": "PROGRAMMER,ONE",
+            "fillCost": "45.378",
+            "locationName": "GENERAL MEDICINE",
+            "locationUid": "urn:va:location:9E7A:23",
+            "quantityOrdered": "90",
+            "daysSupply": 90,
+            "fillsAllowed": 3,
+            "fillsRemaining": 2,
+            "vaRouting": "W",
+            "summary": "MedicationOrder{uid='null'}",
+            "predecessor": "urn:va:med:9E7A:146:18038"
+          }
+        ],
+        "fills": [
+          {
+            "dispenseDate": "20080128",
+            "releaseDate": "20080129",
+            "quantityDispensed": "90",
+            "daysSupplyDispensed": 90,
+            "routing": "W",
+            "summary": "MedicationFill{uid='null'}"
+          },
+          {
+            "dispenseDate": "20080426",
+            "releaseDate": "20080426",
+            "quantityDispensed": "90",
+            "daysSupplyDispensed": 90,
+            "routing": "W",
+            "summary": "MedicationFill{uid='null'}"
+          }
+        ],
+        "codes": [
+          {
+            "code": "198211",
+            "system": "urn:oid:2.16.840.1.113883.6.88",
+            "display": "Simvastatin 40 MG Oral Tablet"
+          }
+        ],
+        "rxncodes": [
+          "urn:vandf:4020400",
+          "urn:ndfrt:N0000000001",
+          "urn:ndfrt:N0000010582",
+          "urn:ndfrt:N0000010601",
+          "urn:rxnorm:36567",
+          "urn:ndfrt:N0000005842"
+        ],
+        "name": "SIMVASTATIN TAB",
+        "type": "Prescription"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP BEE",
+        "overallStart": "20080128",
+        "overallStop": "20090128",
+        "vaType": "O",
+        "supply": false,
+        "lastFilled": "20080426",
+        "qualifiedName": "METFORMIN TAB,SA",
+        "administrations": [],
+        "kind": "Medication, Outpatient",
+        "units": "MG",
+        "uid": "urn:va:med:C877:146:21196",
+        "summary": "METFORMIN HCL 500MG TAB,SA (EXPIRED)\n TAKE ONE TABLET BY BY MOUTH TWICE A DAY",
+        "pid": "C877;146",
+        "localId": "403556;O",
+        "productFormName": "TAB,SA",
+        "sig": "TAKE ONE TABLET BY BY MOUTH TWICE A DAY",
+        "patientInstruction": "",
+        "stopped": "20090128",
+        "medStatus": "urn:sct:392521001",
+        "medStatusName": "historical",
+        "medType": "urn:sct:73639000",
+        "vaStatus": "EXPIRED",
+        "IMO": false,
+        "products": [
+          {
+            "ingredientCode": "urn:va:vuid:4023979",
+            "ingredientCodeName": "METFORMIN",
+            "ingredientName": "METFORMIN TAB,SA",
+            "drugClassCode": "urn:vadc:HS502",
+            "drugClassName": "ORAL HYPOGLYCEMIC AGENTS,ORAL",
+            "suppliedCode": "urn:va:vuid:4014984",
+            "suppliedName": "METFORMIN HCL 500MG TAB,SA",
+            "summary": "MedicationProduct{uid='null'}",
+            "ingredientRole": "urn:sct:410942007",
+            "strength": "500 MG",
+            "ingredientRXNCode": "urn:rxnorm:6809"
+          }
+        ],
+        "dosages": [
+          {
+            "dose": "500",
+            "units": "MG",
+            "routeName": "PO",
+            "scheduleName": "BID",
+            "scheduleType": "CONTINUOUS",
+            "start": "20080128",
+            "stop": "20090128",
+            "relativeStart": 0,
+            "relativeStop": 527040,
+            "scheduleFreq": 720,
+            "amount": "1",
+            "noun": "TABLET",
+            "instructions": "500MG",
+            "summary": "MedicationDose{uid='null'}"
+          }
+        ],
+        "orders": [
+          {
+            "orderUid": "urn:va:order:C877:146:21196",
+            "prescriptionId": "500298C",
+            "ordered": "200801281423",
+            "providerUid": "urn:va:user:C877:994",
+            "providerName": "PROVIDER,ELEVEN",
+            "pharmacistUid": "urn:va:user:C877:1",
+            "pharmacistName": "PROGRAMMER,ONE",
+            "fillCost": "90",
+            "locationName": "GENERAL MEDICINE",
+            "locationUid": "urn:va:location:C877:23",
+            "quantityOrdered": "180",
+            "daysSupply": 90,
+            "fillsAllowed": 3,
+            "fillsRemaining": 2,
+            "vaRouting": "W",
+            "summary": "MedicationOrder{uid='null'}",
+            "predecessor": "urn:va:med:C877:146:18037"
+          }
+        ],
+        "fills": [
+          {
+            "dispenseDate": "20080128",
+            "releaseDate": "20080129",
+            "quantityDispensed": "180",
+            "daysSupplyDispensed": 90,
+            "routing": "W",
+            "summary": "MedicationFill{uid='null'}"
+          },
+          {
+            "dispenseDate": "20080426",
+            "releaseDate": "20080426",
+            "quantityDispensed": "180",
+            "daysSupplyDispensed": 90,
+            "routing": "W",
+            "summary": "MedicationFill{uid='null'}"
+          }
+        ],
+        "codes": [
+          {
+            "code": "860975",
+            "system": "urn:oid:2.16.840.1.113883.6.88",
+            "display": "24 HR Metformin hydrochloride 500 MG Extended Release Tablet"
+          }
+        ],
+        "rxncodes": [
+          "urn:vandf:4023979",
+          "urn:ndfrt:N0000007698",
+          "urn:ndfrt:N0000000002",
+          "urn:ndfrt:N0000007676",
+          "urn:ndfrt:N0000008167",
+          "urn:ndfrt:N0000008038",
+          "urn:rxnorm:6809",
+          "urn:ndfrt:N0000021984"
+        ],
+        "name": "METFORMIN TAB,SA",
+        "type": "Prescription"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP BEE",
+        "overallStart": "20080128",
+        "overallStop": "20090128",
+        "vaType": "O",
+        "supply": false,
+        "lastFilled": "20080426",
+        "qualifiedName": "METOPROLOL TARTRATE TAB",
+        "administrations": [],
+        "kind": "Medication, Outpatient",
+        "units": "MG",
+        "uid": "urn:va:med:C877:146:21197",
+        "summary": "METOPROLOL TARTRATE 50MG TAB (EXPIRED)\n TAKE ONE TABLET BY MOUTH TWICE A DAY",
+        "pid": "C877;146",
+        "localId": "403557;O",
+        "productFormName": "TAB",
+        "sig": "TAKE ONE TABLET BY MOUTH TWICE A DAY",
+        "patientInstruction": "",
+        "stopped": "20090128",
+        "medStatus": "urn:sct:392521001",
+        "medStatusName": "historical",
+        "medType": "urn:sct:73639000",
+        "vaStatus": "EXPIRED",
+        "IMO": false,
+        "products": [
+          {
+            "ingredientCode": "urn:va:vuid:4019836",
+            "ingredientCodeName": "METOPROLOL",
+            "ingredientName": "METOPROLOL TARTRATE TAB",
+            "drugClassCode": "urn:vadc:CV100",
+            "drugClassName": "BETA BLOCKERS/RELATED",
+            "suppliedCode": "urn:va:vuid:4004608",
+            "suppliedName": "METOPROLOL TARTRATE 50MG TAB",
+            "summary": "MedicationProduct{uid='null'}",
+            "ingredientRole": "urn:sct:410942007",
+            "strength": "50 MG",
+            "ingredientRXNCode": "urn:rxnorm:6918"
+          }
+        ],
+        "dosages": [
+          {
+            "dose": "50",
+            "units": "MG",
+            "routeName": "PO",
+            "scheduleName": "BID",
+            "scheduleType": "CONTINUOUS",
+            "start": "20080128",
+            "stop": "20090128",
+            "relativeStart": 0,
+            "relativeStop": 527040,
+            "scheduleFreq": 720,
+            "amount": "1",
+            "noun": "TABLET",
+            "instructions": "50MG",
+            "summary": "MedicationDose{uid='null'}"
+          }
+        ],
+        "orders": [
+          {
+            "orderUid": "urn:va:order:C877:146:21197",
+            "prescriptionId": "500521A",
+            "ordered": "200801281423",
+            "providerUid": "urn:va:user:C877:994",
+            "providerName": "PROVIDER,ELEVEN",
+            "pharmacistUid": "urn:va:user:C877:1",
+            "pharmacistName": "PROGRAMMER,ONE",
+            "fillCost": "2.466",
+            "locationName": "GENERAL MEDICINE",
+            "locationUid": "urn:va:location:C877:23",
+            "quantityOrdered": "180",
+            "daysSupply": 90,
+            "fillsAllowed": 3,
+            "fillsRemaining": 2,
+            "vaRouting": "W",
+            "summary": "MedicationOrder{uid='null'}",
+            "predecessor": "urn:va:med:C877:146:18035"
+          }
+        ],
+        "fills": [
+          {
+            "dispenseDate": "20080128",
+            "releaseDate": "20080129",
+            "quantityDispensed": "180",
+            "daysSupplyDispensed": 90,
+            "routing": "W",
+            "summary": "MedicationFill{uid='null'}"
+          },
+          {
+            "dispenseDate": "20080426",
+            "releaseDate": "20080426",
+            "quantityDispensed": "180",
+            "daysSupplyDispensed": 90,
+            "routing": "W",
+            "summary": "MedicationFill{uid='null'}"
+          }
+        ],
+        "codes": [
+          {
+            "code": "866514",
+            "system": "urn:oid:2.16.840.1.113883.6.88",
+            "display": "Metoprolol Tartrate 50 MG Oral Tablet"
+          }
+        ],
+        "rxncodes": [
+          "urn:vandf:4019836",
+          "urn:ndfrt:N0000010595",
+          "urn:ndfrt:N0000000001",
+          "urn:ndfrt:N0000010582",
+          "urn:rxnorm:6918",
+          "urn:ndfrt:N0000007508"
+        ],
+        "name": "METOPROLOL TARTRATE TAB",
+        "type": "Prescription"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP BEE",
+        "overallStart": "20080128",
+        "overallStop": "20090128",
+        "vaType": "O",
+        "supply": false,
+        "lastFilled": "20080426",
+        "qualifiedName": "SIMVASTATIN TAB",
+        "administrations": [],
+        "kind": "Medication, Outpatient",
+        "units": "MG",
+        "uid": "urn:va:med:C877:146:21198",
+        "summary": "SIMVASTATIN 40MG TAB (EXPIRED)\n TAKE ONE TABLET BY BY MOUTH EVERY EVENING",
+        "pid": "C877;146",
+        "localId": "403558;O",
+        "productFormName": "TAB",
+        "sig": "TAKE ONE TABLET BY BY MOUTH EVERY EVENING",
+        "patientInstruction": "",
+        "stopped": "20090128",
+        "medStatus": "urn:sct:392521001",
+        "medStatusName": "historical",
+        "medType": "urn:sct:73639000",
+        "vaStatus": "EXPIRED",
+        "IMO": false,
+        "products": [
+          {
+            "ingredientCode": "urn:va:vuid:4020400",
+            "ingredientCodeName": "SIMVASTATIN",
+            "ingredientName": "SIMVASTATIN TAB",
+            "drugClassCode": "urn:vadc:CV350",
+            "drugClassName": "ANTILIPEMIC AGENTS",
+            "suppliedCode": "urn:va:vuid:4010153",
+            "suppliedName": "SIMVASTATIN 40MG TAB",
+            "summary": "MedicationProduct{uid='null'}",
+            "ingredientRole": "urn:sct:410942007",
+            "strength": "40 MG",
+            "ingredientRXNCode": "urn:rxnorm:36567"
+          }
+        ],
+        "dosages": [
+          {
+            "dose": "40",
+            "units": "MG",
+            "routeName": "PO",
+            "scheduleName": "QPM",
+            "scheduleType": "CONTINUOUS",
+            "start": "20080128",
+            "stop": "20090128",
+            "relativeStart": 0,
+            "relativeStop": 527040,
+            "scheduleFreq": 1440,
+            "amount": "1",
+            "noun": "TABLET",
+            "instructions": "40MG",
+            "summary": "MedicationDose{uid='null'}"
+          }
+        ],
+        "orders": [
+          {
+            "orderUid": "urn:va:order:C877:146:21198",
+            "prescriptionId": "000063D",
+            "ordered": "200801281423",
+            "providerUid": "urn:va:user:C877:994",
+            "providerName": "PROVIDER,ELEVEN",
+            "pharmacistUid": "urn:va:user:C877:1",
+            "pharmacistName": "PROGRAMMER,ONE",
+            "fillCost": "45.378",
+            "locationName": "GENERAL MEDICINE",
+            "locationUid": "urn:va:location:C877:23",
+            "quantityOrdered": "90",
+            "daysSupply": 90,
+            "fillsAllowed": 3,
+            "fillsRemaining": 2,
+            "vaRouting": "W",
+            "summary": "MedicationOrder{uid='null'}",
+            "predecessor": "urn:va:med:C877:146:18038"
+          }
+        ],
+        "fills": [
+          {
+            "dispenseDate": "20080128",
+            "releaseDate": "20080129",
+            "quantityDispensed": "90",
+            "daysSupplyDispensed": 90,
+            "routing": "W",
+            "summary": "MedicationFill{uid='null'}"
+          },
+          {
+            "dispenseDate": "20080426",
+            "releaseDate": "20080426",
+            "quantityDispensed": "90",
+            "daysSupplyDispensed": 90,
+            "routing": "W",
+            "summary": "MedicationFill{uid='null'}"
+          }
+        ],
+        "codes": [
+          {
+            "code": "198211",
+            "system": "urn:oid:2.16.840.1.113883.6.88",
+            "display": "Simvastatin 40 MG Oral Tablet"
+          }
+        ],
+        "rxncodes": [
+          "urn:vandf:4020400",
+          "urn:ndfrt:N0000000001",
+          "urn:ndfrt:N0000010582",
+          "urn:ndfrt:N0000010601",
+          "urn:rxnorm:36567",
+          "urn:ndfrt:N0000005842"
+        ],
+        "name": "SIMVASTATIN TAB",
+        "type": "Prescription"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "overallStart": "20070411",
+        "overallStop": "20080128",
+        "vaType": "O",
+        "supply": false,
+        "lastFilled": "20070411",
+        "qualifiedName": "METOPROLOL TARTRATE TAB",
+        "administrations": [],
+        "kind": "Medication, Outpatient",
+        "units": "MG",
+        "uid": "urn:va:med:9E7A:146:18035",
+        "summary": "METOPROLOL TARTRATE 50MG TAB (DISCONTINUED)\n TAKE ONE TABLET BY MOUTH TWICE A DAY",
+        "pid": "C877;146",
+        "localId": "403254;O",
+        "productFormName": "TAB",
+        "sig": "TAKE ONE TABLET BY MOUTH TWICE A DAY",
+        "patientInstruction": "",
+        "stopped": "20080128",
+        "medStatus": "urn:sct:73425007",
+        "medStatusName": "not active",
+        "medType": "urn:sct:73639000",
+        "vaStatus": "DISCONTINUED",
+        "IMO": false,
+        "products": [
+          {
+            "ingredientCode": "urn:va:vuid:4019836",
+            "ingredientCodeName": "METOPROLOL",
+            "ingredientName": "METOPROLOL TARTRATE TAB",
+            "drugClassCode": "urn:vadc:CV100",
+            "drugClassName": "BETA BLOCKERS/RELATED",
+            "suppliedCode": "urn:va:vuid:4004608",
+            "suppliedName": "METOPROLOL TARTRATE 50MG TAB",
+            "summary": "MedicationProduct{uid='null'}",
+            "ingredientRole": "urn:sct:410942007",
+            "strength": "50 MG",
+            "ingredientRXNCode": "urn:rxnorm:6918"
+          }
+        ],
+        "dosages": [
+          {
+            "dose": "50",
+            "units": "MG",
+            "routeName": "PO",
+            "scheduleName": "BID",
+            "scheduleType": "CONTINUOUS",
+            "start": "20070411",
+            "stop": "20080128",
+            "relativeStart": 0,
+            "relativeStop": 420480,
+            "scheduleFreq": 720,
+            "amount": "1",
+            "noun": "TABLET",
+            "instructions": "50MG",
+            "summary": "MedicationDose{uid='null'}"
+          }
+        ],
+        "orders": [
+          {
+            "orderUid": "urn:va:order:9E7A:146:18035",
+            "prescriptionId": "500521",
+            "ordered": "200704111616",
+            "providerUid": "urn:va:user:9E7A:10000000031",
+            "providerName": "VEHU,ONEHUNDRED",
+            "pharmacistUid": "urn:va:user:9E7A:10000000056",
+            "pharmacistName": "PHARMACIST,ONE",
+            "fillCost": "2.466",
+            "locationName": "GENERAL MEDICINE",
+            "locationUid": "urn:va:location:9E7A:23",
+            "quantityOrdered": "180",
+            "daysSupply": 90,
+            "fillsAllowed": 3,
+            "fillsRemaining": 3,
+            "vaRouting": "M",
+            "summary": "MedicationOrder{uid='null'}",
+            "successor": "urn:va:med:9E7A:146:21197"
+          }
+        ],
+        "fills": [
+          {
+            "dispenseDate": "20070411",
+            "releaseDate": "20070411",
+            "quantityDispensed": "180",
+            "daysSupplyDispensed": 90,
+            "routing": "M",
+            "summary": "MedicationFill{uid='null'}"
+          }
+        ],
+        "codes": [
+          {
+            "code": "866514",
+            "system": "urn:oid:2.16.840.1.113883.6.88",
+            "display": "Metoprolol Tartrate 50 MG Oral Tablet"
+          }
+        ],
+        "rxncodes": [
+          "urn:vandf:4019836",
+          "urn:ndfrt:N0000010595",
+          "urn:ndfrt:N0000000001",
+          "urn:ndfrt:N0000010582",
+          "urn:rxnorm:6918",
+          "urn:ndfrt:N0000007508"
+        ],
+        "name": "METOPROLOL TARTRATE TAB",
+        "type": "Prescription"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "overallStart": "20070411",
+        "overallStop": "20080128",
+        "vaType": "O",
+        "supply": false,
+        "lastFilled": "20070411",
+        "qualifiedName": "METFORMIN TAB,SA",
+        "administrations": [],
+        "kind": "Medication, Outpatient",
+        "units": "MG",
+        "uid": "urn:va:med:9E7A:146:18037",
+        "summary": "METFORMIN HCL 500MG TAB,SA (DISCONTINUED)\n TAKE ONE TABLET BY BY MOUTH TWICE A DAY",
+        "pid": "C877;146",
+        "localId": "403253;O",
+        "productFormName": "TAB,SA",
+        "sig": "TAKE ONE TABLET BY BY MOUTH TWICE A DAY",
+        "patientInstruction": "",
+        "stopped": "20080128",
+        "medStatus": "urn:sct:73425007",
+        "medStatusName": "not active",
+        "medType": "urn:sct:73639000",
+        "vaStatus": "DISCONTINUED",
+        "IMO": false,
+        "products": [
+          {
+            "ingredientCode": "urn:va:vuid:4023979",
+            "ingredientCodeName": "METFORMIN",
+            "ingredientName": "METFORMIN TAB,SA",
+            "drugClassCode": "urn:vadc:HS502",
+            "drugClassName": "ORAL HYPOGLYCEMIC AGENTS,ORAL",
+            "suppliedCode": "urn:va:vuid:4014984",
+            "suppliedName": "METFORMIN HCL 500MG TAB,SA",
+            "summary": "MedicationProduct{uid='null'}",
+            "ingredientRole": "urn:sct:410942007",
+            "strength": "500 MG",
+            "ingredientRXNCode": "urn:rxnorm:6809"
+          }
+        ],
+        "dosages": [
+          {
+            "dose": "500",
+            "units": "MG",
+            "routeName": "PO",
+            "scheduleName": "BID",
+            "scheduleType": "CONTINUOUS",
+            "start": "20070411",
+            "stop": "20080128",
+            "relativeStart": 0,
+            "relativeStop": 420480,
+            "scheduleFreq": 720,
+            "amount": "1",
+            "noun": "TABLET",
+            "instructions": "500MG",
+            "summary": "MedicationDose{uid='null'}"
+          }
+        ],
+        "orders": [
+          {
+            "orderUid": "urn:va:order:9E7A:146:18037",
+            "prescriptionId": "500298B",
+            "ordered": "200704111617",
+            "providerUid": "urn:va:user:9E7A:10000000031",
+            "providerName": "VEHU,ONEHUNDRED",
+            "pharmacistUid": "urn:va:user:9E7A:10000000056",
+            "pharmacistName": "PHARMACIST,ONE",
+            "fillCost": "90",
+            "locationName": "GENERAL MEDICINE",
+            "locationUid": "urn:va:location:9E7A:23",
+            "quantityOrdered": "180",
+            "daysSupply": 90,
+            "fillsAllowed": 3,
+            "fillsRemaining": 3,
+            "vaRouting": "W",
+            "summary": "MedicationOrder{uid='null'}",
+            "predecessor": "urn:va:med:9E7A:146:17304",
+            "successor": "urn:va:med:9E7A:146:21196"
+          }
+        ],
+        "fills": [
+          {
+            "dispenseDate": "20070411",
+            "releaseDate": "20070411",
+            "quantityDispensed": "180",
+            "daysSupplyDispensed": 90,
+            "routing": "W",
+            "summary": "MedicationFill{uid='null'}"
+          }
+        ],
+        "codes": [
+          {
+            "code": "860975",
+            "system": "urn:oid:2.16.840.1.113883.6.88",
+            "display": "24 HR Metformin hydrochloride 500 MG Extended Release Tablet"
+          }
+        ],
+        "rxncodes": [
+          "urn:vandf:4023979",
+          "urn:ndfrt:N0000007698",
+          "urn:ndfrt:N0000000002",
+          "urn:ndfrt:N0000007676",
+          "urn:ndfrt:N0000008167",
+          "urn:ndfrt:N0000008038",
+          "urn:rxnorm:6809",
+          "urn:ndfrt:N0000021984"
+        ],
+        "name": "METFORMIN TAB,SA",
+        "type": "Prescription"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "overallStart": "20070411",
+        "overallStop": "20080128",
+        "vaType": "O",
+        "supply": false,
+        "lastFilled": "20070411",
+        "qualifiedName": "SIMVASTATIN TAB",
+        "administrations": [],
+        "kind": "Medication, Outpatient",
+        "units": "MG",
+        "uid": "urn:va:med:9E7A:146:18038",
+        "summary": "SIMVASTATIN 40MG TAB (DISCONTINUED)\n TAKE ONE TABLET BY BY MOUTH EVERY EVENING",
+        "pid": "C877;146",
+        "localId": "403255;O",
+        "productFormName": "TAB",
+        "sig": "TAKE ONE TABLET BY BY MOUTH EVERY EVENING",
+        "patientInstruction": "",
+        "stopped": "20080128",
+        "medStatus": "urn:sct:73425007",
+        "medStatusName": "not active",
+        "medType": "urn:sct:73639000",
+        "vaStatus": "DISCONTINUED",
+        "IMO": false,
+        "products": [
+          {
+            "ingredientCode": "urn:va:vuid:4020400",
+            "ingredientCodeName": "SIMVASTATIN",
+            "ingredientName": "SIMVASTATIN TAB",
+            "drugClassCode": "urn:vadc:CV350",
+            "drugClassName": "ANTILIPEMIC AGENTS",
+            "suppliedCode": "urn:va:vuid:4010153",
+            "suppliedName": "SIMVASTATIN 40MG TAB",
+            "summary": "MedicationProduct{uid='null'}",
+            "ingredientRole": "urn:sct:410942007",
+            "strength": "40 MG",
+            "ingredientRXNCode": "urn:rxnorm:36567"
+          }
+        ],
+        "dosages": [
+          {
+            "dose": "40",
+            "units": "MG",
+            "routeName": "PO",
+            "scheduleName": "QPM",
+            "scheduleType": "CONTINUOUS",
+            "start": "20070411",
+            "stop": "20080128",
+            "relativeStart": 0,
+            "relativeStop": 420480,
+            "scheduleFreq": 1440,
+            "amount": "1",
+            "noun": "TABLET",
+            "instructions": "40MG",
+            "summary": "MedicationDose{uid='null'}"
+          }
+        ],
+        "orders": [
+          {
+            "orderUid": "urn:va:order:9E7A:146:18038",
+            "prescriptionId": "000063C",
+            "ordered": "200704111617",
+            "providerUid": "urn:va:user:9E7A:10000000031",
+            "providerName": "VEHU,ONEHUNDRED",
+            "pharmacistUid": "urn:va:user:9E7A:10000000056",
+            "pharmacistName": "PHARMACIST,ONE",
+            "fillCost": "45.378",
+            "locationName": "GENERAL MEDICINE",
+            "locationUid": "urn:va:location:9E7A:23",
+            "quantityOrdered": "90",
+            "daysSupply": 30,
+            "fillsAllowed": 5,
+            "fillsRemaining": 5,
+            "vaRouting": "W",
+            "summary": "MedicationOrder{uid='null'}",
+            "predecessor": "urn:va:med:9E7A:146:17302",
+            "successor": "urn:va:med:9E7A:146:21198"
+          }
+        ],
+        "fills": [
+          {
+            "dispenseDate": "20070411",
+            "releaseDate": "20070411",
+            "quantityDispensed": "90",
+            "daysSupplyDispensed": 30,
+            "routing": "W",
+            "summary": "MedicationFill{uid='null'}"
+          }
+        ],
+        "codes": [
+          {
+            "code": "198211",
+            "system": "urn:oid:2.16.840.1.113883.6.88",
+            "display": "Simvastatin 40 MG Oral Tablet"
+          }
+        ],
+        "rxncodes": [
+          "urn:vandf:4020400",
+          "urn:ndfrt:N0000000001",
+          "urn:ndfrt:N0000010582",
+          "urn:ndfrt:N0000010601",
+          "urn:rxnorm:36567",
+          "urn:ndfrt:N0000005842"
+        ],
+        "name": "SIMVASTATIN TAB",
+        "type": "Prescription"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP BEE",
+        "overallStart": "20070411",
+        "overallStop": "20080128",
+        "vaType": "O",
+        "supply": false,
+        "lastFilled": "20070411",
+        "qualifiedName": "METOPROLOL TARTRATE TAB",
+        "administrations": [],
+        "kind": "Medication, Outpatient",
+        "units": "MG",
+        "uid": "urn:va:med:C877:146:18035",
+        "summary": "METOPROLOL TARTRATE 50MG TAB (DISCONTINUED)\n TAKE ONE TABLET BY MOUTH TWICE A DAY",
+        "pid": "C877;146",
+        "localId": "403254;O",
+        "productFormName": "TAB",
+        "sig": "TAKE ONE TABLET BY MOUTH TWICE A DAY",
+        "patientInstruction": "",
+        "stopped": "20080128",
+        "medStatus": "urn:sct:73425007",
+        "medStatusName": "not active",
+        "medType": "urn:sct:73639000",
+        "vaStatus": "DISCONTINUED",
+        "IMO": false,
+        "products": [
+          {
+            "ingredientCode": "urn:va:vuid:4019836",
+            "ingredientCodeName": "METOPROLOL",
+            "ingredientName": "METOPROLOL TARTRATE TAB",
+            "drugClassCode": "urn:vadc:CV100",
+            "drugClassName": "BETA BLOCKERS/RELATED",
+            "suppliedCode": "urn:va:vuid:4004608",
+            "suppliedName": "METOPROLOL TARTRATE 50MG TAB",
+            "summary": "MedicationProduct{uid='null'}",
+            "ingredientRole": "urn:sct:410942007",
+            "strength": "50 MG",
+            "ingredientRXNCode": "urn:rxnorm:6918"
+          }
+        ],
+        "dosages": [
+          {
+            "dose": "50",
+            "units": "MG",
+            "routeName": "PO",
+            "scheduleName": "BID",
+            "scheduleType": "CONTINUOUS",
+            "start": "20070411",
+            "stop": "20080128",
+            "relativeStart": 0,
+            "relativeStop": 420480,
+            "scheduleFreq": 720,
+            "amount": "1",
+            "noun": "TABLET",
+            "instructions": "50MG",
+            "summary": "MedicationDose{uid='null'}"
+          }
+        ],
+        "orders": [
+          {
+            "orderUid": "urn:va:order:C877:146:18035",
+            "prescriptionId": "500521",
+            "ordered": "200704111616",
+            "providerUid": "urn:va:user:C877:10000000031",
+            "providerName": "VEHU,ONEHUNDRED",
+            "pharmacistUid": "urn:va:user:C877:10000000056",
+            "pharmacistName": "PHARMACIST,ONE",
+            "fillCost": "2.466",
+            "locationName": "GENERAL MEDICINE",
+            "locationUid": "urn:va:location:C877:23",
+            "quantityOrdered": "180",
+            "daysSupply": 90,
+            "fillsAllowed": 3,
+            "fillsRemaining": 3,
+            "vaRouting": "M",
+            "summary": "MedicationOrder{uid='null'}",
+            "successor": "urn:va:med:C877:146:21197"
+          }
+        ],
+        "fills": [
+          {
+            "dispenseDate": "20070411",
+            "releaseDate": "20070411",
+            "quantityDispensed": "180",
+            "daysSupplyDispensed": 90,
+            "routing": "M",
+            "summary": "MedicationFill{uid='null'}"
+          }
+        ],
+        "codes": [
+          {
+            "code": "866514",
+            "system": "urn:oid:2.16.840.1.113883.6.88",
+            "display": "Metoprolol Tartrate 50 MG Oral Tablet"
+          }
+        ],
+        "rxncodes": [
+          "urn:vandf:4019836",
+          "urn:ndfrt:N0000010595",
+          "urn:ndfrt:N0000000001",
+          "urn:ndfrt:N0000010582",
+          "urn:rxnorm:6918",
+          "urn:ndfrt:N0000007508"
+        ],
+        "name": "METOPROLOL TARTRATE TAB",
+        "type": "Prescription"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP BEE",
+        "overallStart": "20070411",
+        "overallStop": "20080128",
+        "vaType": "O",
+        "supply": false,
+        "lastFilled": "20070411",
+        "qualifiedName": "METFORMIN TAB,SA",
+        "administrations": [],
+        "kind": "Medication, Outpatient",
+        "units": "MG",
+        "uid": "urn:va:med:C877:146:18037",
+        "summary": "METFORMIN HCL 500MG TAB,SA (DISCONTINUED)\n TAKE ONE TABLET BY BY MOUTH TWICE A DAY",
+        "pid": "C877;146",
+        "localId": "403253;O",
+        "productFormName": "TAB,SA",
+        "sig": "TAKE ONE TABLET BY BY MOUTH TWICE A DAY",
+        "patientInstruction": "",
+        "stopped": "20080128",
+        "medStatus": "urn:sct:73425007",
+        "medStatusName": "not active",
+        "medType": "urn:sct:73639000",
+        "vaStatus": "DISCONTINUED",
+        "IMO": false,
+        "products": [
+          {
+            "ingredientCode": "urn:va:vuid:4023979",
+            "ingredientCodeName": "METFORMIN",
+            "ingredientName": "METFORMIN TAB,SA",
+            "drugClassCode": "urn:vadc:HS502",
+            "drugClassName": "ORAL HYPOGLYCEMIC AGENTS,ORAL",
+            "suppliedCode": "urn:va:vuid:4014984",
+            "suppliedName": "METFORMIN HCL 500MG TAB,SA",
+            "summary": "MedicationProduct{uid='null'}",
+            "ingredientRole": "urn:sct:410942007",
+            "strength": "500 MG",
+            "ingredientRXNCode": "urn:rxnorm:6809"
+          }
+        ],
+        "dosages": [
+          {
+            "dose": "500",
+            "units": "MG",
+            "routeName": "PO",
+            "scheduleName": "BID",
+            "scheduleType": "CONTINUOUS",
+            "start": "20070411",
+            "stop": "20080128",
+            "relativeStart": 0,
+            "relativeStop": 420480,
+            "scheduleFreq": 720,
+            "amount": "1",
+            "noun": "TABLET",
+            "instructions": "500MG",
+            "summary": "MedicationDose{uid='null'}"
+          }
+        ],
+        "orders": [
+          {
+            "orderUid": "urn:va:order:C877:146:18037",
+            "prescriptionId": "500298B",
+            "ordered": "200704111617",
+            "providerUid": "urn:va:user:C877:10000000031",
+            "providerName": "VEHU,ONEHUNDRED",
+            "pharmacistUid": "urn:va:user:C877:10000000056",
+            "pharmacistName": "PHARMACIST,ONE",
+            "fillCost": "90",
+            "locationName": "GENERAL MEDICINE",
+            "locationUid": "urn:va:location:C877:23",
+            "quantityOrdered": "180",
+            "daysSupply": 90,
+            "fillsAllowed": 3,
+            "fillsRemaining": 3,
+            "vaRouting": "W",
+            "summary": "MedicationOrder{uid='null'}",
+            "predecessor": "urn:va:med:C877:146:17304",
+            "successor": "urn:va:med:C877:146:21196"
+          }
+        ],
+        "fills": [
+          {
+            "dispenseDate": "20070411",
+            "releaseDate": "20070411",
+            "quantityDispensed": "180",
+            "daysSupplyDispensed": 90,
+            "routing": "W",
+            "summary": "MedicationFill{uid='null'}"
+          }
+        ],
+        "codes": [
+          {
+            "code": "860975",
+            "system": "urn:oid:2.16.840.1.113883.6.88",
+            "display": "24 HR Metformin hydrochloride 500 MG Extended Release Tablet"
+          }
+        ],
+        "rxncodes": [
+          "urn:vandf:4023979",
+          "urn:ndfrt:N0000007698",
+          "urn:ndfrt:N0000000002",
+          "urn:ndfrt:N0000007676",
+          "urn:ndfrt:N0000008167",
+          "urn:ndfrt:N0000008038",
+          "urn:rxnorm:6809",
+          "urn:ndfrt:N0000021984"
+        ],
+        "name": "METFORMIN TAB,SA",
+        "type": "Prescription"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP BEE",
+        "overallStart": "20070411",
+        "overallStop": "20080128",
+        "vaType": "O",
+        "supply": false,
+        "lastFilled": "20070411",
+        "qualifiedName": "SIMVASTATIN TAB",
+        "administrations": [],
+        "kind": "Medication, Outpatient",
+        "units": "MG",
+        "uid": "urn:va:med:C877:146:18038",
+        "summary": "SIMVASTATIN 40MG TAB (DISCONTINUED)\n TAKE ONE TABLET BY BY MOUTH EVERY EVENING",
+        "pid": "C877;146",
+        "localId": "403255;O",
+        "productFormName": "TAB",
+        "sig": "TAKE ONE TABLET BY BY MOUTH EVERY EVENING",
+        "patientInstruction": "",
+        "stopped": "20080128",
+        "medStatus": "urn:sct:73425007",
+        "medStatusName": "not active",
+        "medType": "urn:sct:73639000",
+        "vaStatus": "DISCONTINUED",
+        "IMO": false,
+        "products": [
+          {
+            "ingredientCode": "urn:va:vuid:4020400",
+            "ingredientCodeName": "SIMVASTATIN",
+            "ingredientName": "SIMVASTATIN TAB",
+            "drugClassCode": "urn:vadc:CV350",
+            "drugClassName": "ANTILIPEMIC AGENTS",
+            "suppliedCode": "urn:va:vuid:4010153",
+            "suppliedName": "SIMVASTATIN 40MG TAB",
+            "summary": "MedicationProduct{uid='null'}",
+            "ingredientRole": "urn:sct:410942007",
+            "strength": "40 MG",
+            "ingredientRXNCode": "urn:rxnorm:36567"
+          }
+        ],
+        "dosages": [
+          {
+            "dose": "40",
+            "units": "MG",
+            "routeName": "PO",
+            "scheduleName": "QPM",
+            "scheduleType": "CONTINUOUS",
+            "start": "20070411",
+            "stop": "20080128",
+            "relativeStart": 0,
+            "relativeStop": 420480,
+            "scheduleFreq": 1440,
+            "amount": "1",
+            "noun": "TABLET",
+            "instructions": "40MG",
+            "summary": "MedicationDose{uid='null'}"
+          }
+        ],
+        "orders": [
+          {
+            "orderUid": "urn:va:order:C877:146:18038",
+            "prescriptionId": "000063C",
+            "ordered": "200704111617",
+            "providerUid": "urn:va:user:C877:10000000031",
+            "providerName": "VEHU,ONEHUNDRED",
+            "pharmacistUid": "urn:va:user:C877:10000000056",
+            "pharmacistName": "PHARMACIST,ONE",
+            "fillCost": "45.378",
+            "locationName": "GENERAL MEDICINE",
+            "locationUid": "urn:va:location:C877:23",
+            "quantityOrdered": "90",
+            "daysSupply": 30,
+            "fillsAllowed": 5,
+            "fillsRemaining": 5,
+            "vaRouting": "W",
+            "summary": "MedicationOrder{uid='null'}",
+            "predecessor": "urn:va:med:C877:146:17302",
+            "successor": "urn:va:med:C877:146:21198"
+          }
+        ],
+        "fills": [
+          {
+            "dispenseDate": "20070411",
+            "releaseDate": "20070411",
+            "quantityDispensed": "90",
+            "daysSupplyDispensed": 30,
+            "routing": "W",
+            "summary": "MedicationFill{uid='null'}"
+          }
+        ],
+        "codes": [
+          {
+            "code": "198211",
+            "system": "urn:oid:2.16.840.1.113883.6.88",
+            "display": "Simvastatin 40 MG Oral Tablet"
+          }
+        ],
+        "rxncodes": [
+          "urn:vandf:4020400",
+          "urn:ndfrt:N0000000001",
+          "urn:ndfrt:N0000010582",
+          "urn:ndfrt:N0000010601",
+          "urn:rxnorm:36567",
+          "urn:ndfrt:N0000005842"
+        ],
+        "name": "SIMVASTATIN TAB",
+        "type": "Prescription"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "overallStart": "20060604",
+        "overallStop": "200704111617",
+        "vaType": "O",
+        "supply": false,
+        "lastFilled": "20060604",
+        "qualifiedName": "WARFARIN TAB",
+        "administrations": [],
+        "kind": "Medication, Outpatient",
+        "units": "MG",
+        "uid": "urn:va:med:9E7A:146:17224",
+        "summary": "WARFARIN NA 5MG TAB,UD (DISCONTINUED)\n TAKE ONE TABLET BY BY MOUTH EVERY DAY AT 1 PM",
+        "pid": "C877;146",
+        "localId": "402950;O",
+        "productFormName": "TAB",
+        "sig": "TAKE ONE TABLET BY BY MOUTH EVERY DAY AT 1 PM",
+        "patientInstruction": "",
+        "stopped": "200704111617",
+        "medStatus": "urn:sct:73425007",
+        "medStatusName": "not active",
+        "medType": "urn:sct:73639000",
+        "vaStatus": "DISCONTINUED",
+        "IMO": false,
+        "products": [
+          {
+            "ingredientCode": "urn:va:vuid:4019972",
+            "ingredientCodeName": "WARFARIN",
+            "ingredientName": "WARFARIN TAB",
+            "drugClassCode": "urn:vadc:BL110",
+            "drugClassName": "ANTICOAGULANTS",
+            "suppliedCode": "urn:va:vuid:4013990",
+            "suppliedName": "WARFARIN NA 5MG TAB,UD",
+            "summary": "MedicationProduct{uid='null'}",
+            "ingredientRole": "urn:sct:410942007",
+            "strength": "5 MG",
+            "ingredientRXNCode": "urn:rxnorm:11289"
+          }
+        ],
+        "dosages": [
+          {
+            "dose": "5",
+            "units": "MG",
+            "routeName": "PO",
+            "scheduleName": "QD-WARF",
+            "start": "20060604",
+            "stop": "200704111617",
+            "relativeStart": 0,
+            "relativeStop": 448817,
+            "amount": "1",
+            "noun": "TABLET",
+            "instructions": "5MG",
+            "summary": "MedicationDose{uid='null'}"
+          }
+        ],
+        "orders": [
+          {
+            "orderUid": "urn:va:order:9E7A:146:17224",
+            "prescriptionId": "500420",
+            "ordered": "200605311606",
+            "providerUid": "urn:va:user:9E7A:10000000031",
+            "providerName": "VEHU,ONEHUNDRED",
+            "pharmacistUid": "urn:va:user:9E7A:20144",
+            "pharmacistName": "PHARMACIST,THIRTY",
+            "fillCost": "1.65",
+            "locationName": "VIST CLINIC",
+            "locationUid": "urn:va:location:9E7A:423",
+            "quantityOrdered": "30",
+            "daysSupply": 30,
+            "fillsAllowed": 5,
+            "fillsRemaining": 5,
+            "vaRouting": "W",
+            "summary": "MedicationOrder{uid='null'}"
+          }
+        ],
+        "fills": [
+          {
+            "dispenseDate": "20060604",
+            "releaseDate": "20060604",
+            "quantityDispensed": "30",
+            "daysSupplyDispensed": 30,
+            "routing": "W",
+            "summary": "MedicationFill{uid='null'}"
+          }
+        ],
+        "codes": [
+          {
+            "code": "855332",
+            "system": "urn:oid:2.16.840.1.113883.6.88",
+            "display": "Warfarin Sodium 5 MG Oral Tablet"
+          }
+        ],
+        "rxncodes": [
+          "urn:vandf:4019972",
+          "urn:ndfrt:N0000000002",
+          "urn:ndfrt:N0000006403",
+          "urn:ndfrt:N0000007905",
+          "urn:ndfrt:N0000008142",
+          "urn:ndfrt:N0000008260",
+          "urn:ndfrt:N0000008095",
+          "urn:ndfrt:N0000007553",
+          "urn:rxnorm:11289",
+          "urn:ndfrt:N0000148057",
+          "urn:rxnorm:114194",
+          "urn:ndfrt:N0000146870"
+        ],
+        "name": "WARFARIN TAB",
+        "type": "Prescription"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "overallStart": "200704111617",
+        "overallStop": "200704111617",
+        "vaType": "N",
+        "supply": false,
+        "qualifiedName": "ASPIRIN TAB,EC",
+        "administrations": [],
+        "kind": "Medication, Non-VA",
+        "units": "MG",
+        "uid": "urn:va:med:9E7A:146:18036",
+        "summary": "ASPIRIN 81MG TAB,EC (ACTIVE)\n TAKE ONE TABLET BY MOUTH EVERY MORNING",
+        "pid": "C877;146",
+        "localId": "1N;O",
+        "productFormName": "TAB,EC",
+        "sig": "TAKE ONE TABLET BY MOUTH EVERY MORNING",
+        "medStatus": "urn:sct:55561003",
+        "medStatusName": "active",
+        "medType": "urn:sct:329505003",
+        "vaStatus": "ACTIVE",
+        "IMO": false,
+        "products": [
+          {
+            "ingredientCode": "urn:va:vuid:4017536",
+            "ingredientCodeName": "ASPIRIN",
+            "ingredientName": "ASPIRIN TAB,EC",
+            "drugClassCode": "urn:vadc:CN103",
+            "drugClassName": "NON-OPIOID ANALGESICS",
+            "suppliedCode": "urn:va:vuid:4005766",
+            "suppliedName": "ASPIRIN 81MG TAB,EC",
+            "summary": "MedicationProduct{uid='null'}",
+            "ingredientRole": "urn:sct:410942007",
+            "strength": "81 MG",
+            "ingredientRXNCode": "urn:rxnorm:1191"
+          }
+        ],
+        "dosages": [
+          {
+            "dose": "81",
+            "units": "MG",
+            "routeName": "PO",
+            "scheduleName": "QAM",
+            "scheduleType": "CONTINUOUS",
+            "relativeStart": 0,
+            "relativeStop": 0,
+            "scheduleFreq": 1440,
+            "amount": "1",
+            "noun": "TABLET",
+            "instructions": "81MG",
+            "startDateString": "Start",
+            "stopDateString": "Start",
+            "summary": "MedicationDose{uid='null'}"
+          }
+        ],
+        "orders": [
+          {
+            "orderUid": "urn:va:order:9E7A:146:18036",
+            "ordered": "200704111617",
+            "providerUid": "urn:va:user:9E7A:10000000031",
+            "providerName": "VEHU,ONEHUNDRED",
+            "locationName": "GENERAL MEDICINE",
+            "locationUid": "urn:va:location:9E7A:23",
+            "summary": "MedicationOrder{uid='null'}"
+          }
+        ],
+        "fills": [],
+        "codes": [
+          {
+            "code": "308416",
+            "system": "urn:oid:2.16.840.1.113883.6.88",
+            "display": "Aspirin 81 MG Enteric Coated Tablet"
+          }
+        ],
+        "rxncodes": [
+          "urn:vandf:4017536",
+          "urn:ndfrt:N0000000002",
+          "urn:ndfrt:N0000007676",
+          "urn:ndfrt:N0000185640",
+          "urn:ndfrt:N0000007628",
+          "urn:ndfrt:N0000005901",
+          "urn:ndfrt:N0000006035",
+          "urn:ndfrt:N0000008137",
+          "urn:ndfrt:N0000145918",
+          "urn:rxnorm:1191"
+        ],
+        "name": "ASPIRIN TAB,EC",
+        "type": "OTC"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP BEE",
+        "overallStart": "20060604",
+        "overallStop": "200704111617",
+        "vaType": "O",
+        "supply": false,
+        "lastFilled": "20060604",
+        "qualifiedName": "WARFARIN TAB",
+        "administrations": [],
+        "kind": "Medication, Outpatient",
+        "units": "MG",
+        "uid": "urn:va:med:C877:146:17224",
+        "summary": "WARFARIN NA 5MG TAB,UD (DISCONTINUED)\n TAKE ONE TABLET BY BY MOUTH EVERY DAY AT 1 PM",
+        "pid": "C877;146",
+        "localId": "402950;O",
+        "productFormName": "TAB",
+        "sig": "TAKE ONE TABLET BY BY MOUTH EVERY DAY AT 1 PM",
+        "patientInstruction": "",
+        "stopped": "200704111617",
+        "medStatus": "urn:sct:73425007",
+        "medStatusName": "not active",
+        "medType": "urn:sct:73639000",
+        "vaStatus": "DISCONTINUED",
+        "IMO": false,
+        "products": [
+          {
+            "ingredientCode": "urn:va:vuid:4019972",
+            "ingredientCodeName": "WARFARIN",
+            "ingredientName": "WARFARIN TAB",
+            "drugClassCode": "urn:vadc:BL110",
+            "drugClassName": "ANTICOAGULANTS",
+            "suppliedCode": "urn:va:vuid:4013990",
+            "suppliedName": "WARFARIN NA 5MG TAB,UD",
+            "summary": "MedicationProduct{uid='null'}",
+            "ingredientRole": "urn:sct:410942007",
+            "strength": "5 MG",
+            "ingredientRXNCode": "urn:rxnorm:11289"
+          }
+        ],
+        "dosages": [
+          {
+            "dose": "5",
+            "units": "MG",
+            "routeName": "PO",
+            "scheduleName": "QD-WARF",
+            "start": "20060604",
+            "stop": "200704111617",
+            "relativeStart": 0,
+            "relativeStop": 448817,
+            "amount": "1",
+            "noun": "TABLET",
+            "instructions": "5MG",
+            "summary": "MedicationDose{uid='null'}"
+          }
+        ],
+        "orders": [
+          {
+            "orderUid": "urn:va:order:C877:146:17224",
+            "prescriptionId": "500420",
+            "ordered": "200605311606",
+            "providerUid": "urn:va:user:C877:10000000031",
+            "providerName": "VEHU,ONEHUNDRED",
+            "pharmacistUid": "urn:va:user:C877:20144",
+            "pharmacistName": "PHARMACIST,THIRTY",
+            "fillCost": "1.65",
+            "locationName": "VIST CLINIC",
+            "locationUid": "urn:va:location:C877:423",
+            "quantityOrdered": "30",
+            "daysSupply": 30,
+            "fillsAllowed": 5,
+            "fillsRemaining": 5,
+            "vaRouting": "W",
+            "summary": "MedicationOrder{uid='null'}"
+          }
+        ],
+        "fills": [
+          {
+            "dispenseDate": "20060604",
+            "releaseDate": "20060604",
+            "quantityDispensed": "30",
+            "daysSupplyDispensed": 30,
+            "routing": "W",
+            "summary": "MedicationFill{uid='null'}"
+          }
+        ],
+        "codes": [
+          {
+            "code": "855332",
+            "system": "urn:oid:2.16.840.1.113883.6.88",
+            "display": "Warfarin Sodium 5 MG Oral Tablet"
+          }
+        ],
+        "rxncodes": [
+          "urn:vandf:4019972",
+          "urn:ndfrt:N0000000002",
+          "urn:ndfrt:N0000006403",
+          "urn:ndfrt:N0000007905",
+          "urn:ndfrt:N0000008142",
+          "urn:ndfrt:N0000008260",
+          "urn:ndfrt:N0000008095",
+          "urn:ndfrt:N0000007553",
+          "urn:rxnorm:11289",
+          "urn:ndfrt:N0000148057",
+          "urn:rxnorm:114194",
+          "urn:ndfrt:N0000146870"
+        ],
+        "name": "WARFARIN TAB",
+        "type": "Prescription"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP BEE",
+        "overallStart": "200704111617",
+        "overallStop": "200704111617",
+        "vaType": "N",
+        "supply": false,
+        "qualifiedName": "ASPIRIN TAB,EC",
+        "administrations": [],
+        "kind": "Medication, Non-VA",
+        "units": "MG",
+        "uid": "urn:va:med:C877:146:18036",
+        "summary": "ASPIRIN 81MG TAB,EC (ACTIVE)\n TAKE ONE TABLET BY MOUTH EVERY MORNING",
+        "pid": "C877;146",
+        "localId": "1N;O",
+        "productFormName": "TAB,EC",
+        "sig": "TAKE ONE TABLET BY MOUTH EVERY MORNING",
+        "medStatus": "urn:sct:55561003",
+        "medStatusName": "active",
+        "medType": "urn:sct:329505003",
+        "vaStatus": "ACTIVE",
+        "IMO": false,
+        "products": [
+          {
+            "ingredientCode": "urn:va:vuid:4017536",
+            "ingredientCodeName": "ASPIRIN",
+            "ingredientName": "ASPIRIN TAB,EC",
+            "drugClassCode": "urn:vadc:CN103",
+            "drugClassName": "NON-OPIOID ANALGESICS",
+            "suppliedCode": "urn:va:vuid:4005766",
+            "suppliedName": "ASPIRIN 81MG TAB,EC",
+            "summary": "MedicationProduct{uid='null'}",
+            "ingredientRole": "urn:sct:410942007",
+            "strength": "81 MG",
+            "ingredientRXNCode": "urn:rxnorm:1191"
+          }
+        ],
+        "dosages": [
+          {
+            "dose": "81",
+            "units": "MG",
+            "routeName": "PO",
+            "scheduleName": "QAM",
+            "scheduleType": "CONTINUOUS",
+            "relativeStart": 0,
+            "relativeStop": 0,
+            "scheduleFreq": 1440,
+            "amount": "1",
+            "noun": "TABLET",
+            "instructions": "81MG",
+            "startDateString": "Start",
+            "stopDateString": "Start",
+            "summary": "MedicationDose{uid='null'}"
+          }
+        ],
+        "orders": [
+          {
+            "orderUid": "urn:va:order:C877:146:18036",
+            "ordered": "200704111617",
+            "providerUid": "urn:va:user:C877:10000000031",
+            "providerName": "VEHU,ONEHUNDRED",
+            "locationName": "GENERAL MEDICINE",
+            "locationUid": "urn:va:location:C877:23",
+            "summary": "MedicationOrder{uid='null'}"
+          }
+        ],
+        "fills": [],
+        "codes": [
+          {
+            "code": "308416",
+            "system": "urn:oid:2.16.840.1.113883.6.88",
+            "display": "Aspirin 81 MG Enteric Coated Tablet"
+          }
+        ],
+        "rxncodes": [
+          "urn:vandf:4017536",
+          "urn:ndfrt:N0000000002",
+          "urn:ndfrt:N0000007676",
+          "urn:ndfrt:N0000185640",
+          "urn:ndfrt:N0000007628",
+          "urn:ndfrt:N0000005901",
+          "urn:ndfrt:N0000006035",
+          "urn:ndfrt:N0000008137",
+          "urn:ndfrt:N0000145918",
+          "urn:rxnorm:1191"
+        ],
+        "name": "ASPIRIN TAB,EC",
+        "type": "OTC"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "overallStart": "20060604",
+        "overallStop": "20060604",
+        "vaType": "O",
+        "supply": false,
+        "lastFilled": "20060604",
+        "qualifiedName": "SIMVASTATIN TAB",
+        "administrations": [],
+        "kind": "Medication, Outpatient",
+        "units": "MG",
+        "uid": "urn:va:med:9E7A:146:17302",
+        "summary": "SIMVASTATIN 40MG TAB (DISCONTINUED)\n TAKE ONE TABLET BY BY MOUTH EVERY EVENING",
+        "pid": "C877;146",
+        "localId": "402949;O",
+        "productFormName": "TAB",
+        "sig": "TAKE ONE TABLET BY BY MOUTH EVERY EVENING",
+        "patientInstruction": "",
+        "stopped": "20060604",
+        "medStatus": "urn:sct:73425007",
+        "medStatusName": "not active",
+        "medType": "urn:sct:73639000",
+        "vaStatus": "DISCONTINUED",
+        "IMO": false,
+        "products": [
+          {
+            "ingredientCode": "urn:va:vuid:4020400",
+            "ingredientCodeName": "SIMVASTATIN",
+            "ingredientName": "SIMVASTATIN TAB",
+            "drugClassCode": "urn:vadc:CV350",
+            "drugClassName": "ANTILIPEMIC AGENTS",
+            "suppliedCode": "urn:va:vuid:4010153",
+            "suppliedName": "SIMVASTATIN 40MG TAB",
+            "summary": "MedicationProduct{uid='null'}",
+            "ingredientRole": "urn:sct:410942007",
+            "strength": "40 MG",
+            "ingredientRXNCode": "urn:rxnorm:36567"
+          }
+        ],
+        "dosages": [
+          {
+            "dose": "40",
+            "units": "MG",
+            "routeName": "PO",
+            "scheduleName": "QPM",
+            "scheduleType": "CONTINUOUS",
+            "start": "20060604",
+            "stop": "20060604",
+            "relativeStart": 0,
+            "relativeStop": 0,
+            "scheduleFreq": 1440,
+            "amount": "1",
+            "noun": "TABLET",
+            "instructions": "40MG",
+            "summary": "MedicationDose{uid='null'}"
+          }
+        ],
+        "orders": [
+          {
+            "orderUid": "urn:va:order:9E7A:146:17302",
+            "prescriptionId": "000063B",
+            "ordered": "200605311624",
+            "providerUid": "urn:va:user:9E7A:10000000031",
+            "providerName": "VEHU,ONEHUNDRED",
+            "pharmacistUid": "urn:va:user:9E7A:20144",
+            "pharmacistName": "PHARMACIST,THIRTY",
+            "fillCost": "72",
+            "locationName": "VIST CLINIC",
+            "locationUid": "urn:va:location:9E7A:423",
+            "quantityOrdered": "90",
+            "daysSupply": 30,
+            "fillsAllowed": 5,
+            "fillsRemaining": 5,
+            "vaRouting": "W",
+            "summary": "MedicationOrder{uid='null'}",
+            "predecessor": "urn:va:med:9E7A:146:16941",
+            "successor": "urn:va:med:9E7A:146:18038"
+          }
+        ],
+        "fills": [
+          {
+            "dispenseDate": "20060604",
+            "releaseDate": "20060604",
+            "quantityDispensed": "90",
+            "daysSupplyDispensed": 30,
+            "routing": "W",
+            "summary": "MedicationFill{uid='null'}"
+          }
+        ],
+        "codes": [
+          {
+            "code": "198211",
+            "system": "urn:oid:2.16.840.1.113883.6.88",
+            "display": "Simvastatin 40 MG Oral Tablet"
+          }
+        ],
+        "rxncodes": [
+          "urn:vandf:4020400",
+          "urn:ndfrt:N0000000001",
+          "urn:ndfrt:N0000010582",
+          "urn:ndfrt:N0000010601",
+          "urn:rxnorm:36567",
+          "urn:ndfrt:N0000005842"
+        ],
+        "name": "SIMVASTATIN TAB",
+        "type": "Prescription"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "overallStart": "20060604",
+        "overallStop": "20060604",
+        "vaType": "O",
+        "supply": false,
+        "lastFilled": "20060604",
+        "qualifiedName": "METFORMIN TAB,SA",
+        "administrations": [],
+        "kind": "Medication, Outpatient",
+        "units": "MG",
+        "uid": "urn:va:med:9E7A:146:17304",
+        "summary": "METFORMIN HCL 500MG TAB,SA (DISCONTINUED)\n TAKE ONE TABLET BY BY MOUTH TWICE A DAY",
+        "pid": "C877;146",
+        "localId": "402948;O",
+        "productFormName": "TAB,SA",
+        "sig": "TAKE ONE TABLET BY BY MOUTH TWICE A DAY",
+        "patientInstruction": "",
+        "stopped": "20060604",
+        "medStatus": "urn:sct:73425007",
+        "medStatusName": "not active",
+        "medType": "urn:sct:73639000",
+        "vaStatus": "DISCONTINUED",
+        "IMO": false,
+        "products": [
+          {
+            "ingredientCode": "urn:va:vuid:4023979",
+            "ingredientCodeName": "METFORMIN",
+            "ingredientName": "METFORMIN TAB,SA",
+            "drugClassCode": "urn:vadc:HS502",
+            "drugClassName": "ORAL HYPOGLYCEMIC AGENTS,ORAL",
+            "suppliedCode": "urn:va:vuid:4014984",
+            "suppliedName": "METFORMIN HCL 500MG TAB,SA",
+            "summary": "MedicationProduct{uid='null'}",
+            "ingredientRole": "urn:sct:410942007",
+            "strength": "500 MG",
+            "ingredientRXNCode": "urn:rxnorm:6809"
+          }
+        ],
+        "dosages": [
+          {
+            "dose": "500",
+            "units": "MG",
+            "routeName": "PO",
+            "scheduleName": "BID",
+            "scheduleType": "CONTINUOUS",
+            "start": "20060604",
+            "stop": "20060604",
+            "relativeStart": 0,
+            "relativeStop": 0,
+            "scheduleFreq": 720,
+            "amount": "1",
+            "noun": "TABLET",
+            "instructions": "500MG",
+            "summary": "MedicationDose{uid='null'}"
+          }
+        ],
+        "orders": [
+          {
+            "orderUid": "urn:va:order:9E7A:146:17304",
+            "prescriptionId": "500298A",
+            "ordered": "200605311624",
+            "providerUid": "urn:va:user:9E7A:10000000031",
+            "providerName": "VEHU,ONEHUNDRED",
+            "pharmacistUid": "urn:va:user:9E7A:20144",
+            "pharmacistName": "PHARMACIST,THIRTY",
+            "fillCost": "90",
+            "locationName": "VIST CLINIC",
+            "locationUid": "urn:va:location:9E7A:423",
+            "quantityOrdered": "180",
+            "daysSupply": 90,
+            "fillsAllowed": 3,
+            "fillsRemaining": 3,
+            "vaRouting": "W",
+            "summary": "MedicationOrder{uid='null'}",
+            "predecessor": "urn:va:med:9E7A:146:16990",
+            "successor": "urn:va:med:9E7A:146:18037"
+          }
+        ],
+        "fills": [
+          {
+            "dispenseDate": "20060604",
+            "releaseDate": "20060604",
+            "quantityDispensed": "180",
+            "daysSupplyDispensed": 90,
+            "routing": "W",
+            "summary": "MedicationFill{uid='null'}"
+          }
+        ],
+        "codes": [
+          {
+            "code": "860975",
+            "system": "urn:oid:2.16.840.1.113883.6.88",
+            "display": "24 HR Metformin hydrochloride 500 MG Extended Release Tablet"
+          }
+        ],
+        "rxncodes": [
+          "urn:vandf:4023979",
+          "urn:ndfrt:N0000007698",
+          "urn:ndfrt:N0000000002",
+          "urn:ndfrt:N0000007676",
+          "urn:ndfrt:N0000008167",
+          "urn:ndfrt:N0000008038",
+          "urn:rxnorm:6809",
+          "urn:ndfrt:N0000021984"
+        ],
+        "name": "METFORMIN TAB,SA",
+        "type": "Prescription"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP BEE",
+        "overallStart": "20060604",
+        "overallStop": "20060604",
+        "vaType": "O",
+        "supply": false,
+        "lastFilled": "20060604",
+        "qualifiedName": "SIMVASTATIN TAB",
+        "administrations": [],
+        "kind": "Medication, Outpatient",
+        "units": "MG",
+        "uid": "urn:va:med:C877:146:17302",
+        "summary": "SIMVASTATIN 40MG TAB (DISCONTINUED)\n TAKE ONE TABLET BY BY MOUTH EVERY EVENING",
+        "pid": "C877;146",
+        "localId": "402949;O",
+        "productFormName": "TAB",
+        "sig": "TAKE ONE TABLET BY BY MOUTH EVERY EVENING",
+        "patientInstruction": "",
+        "stopped": "20060604",
+        "medStatus": "urn:sct:73425007",
+        "medStatusName": "not active",
+        "medType": "urn:sct:73639000",
+        "vaStatus": "DISCONTINUED",
+        "IMO": false,
+        "products": [
+          {
+            "ingredientCode": "urn:va:vuid:4020400",
+            "ingredientCodeName": "SIMVASTATIN",
+            "ingredientName": "SIMVASTATIN TAB",
+            "drugClassCode": "urn:vadc:CV350",
+            "drugClassName": "ANTILIPEMIC AGENTS",
+            "suppliedCode": "urn:va:vuid:4010153",
+            "suppliedName": "SIMVASTATIN 40MG TAB",
+            "summary": "MedicationProduct{uid='null'}",
+            "ingredientRole": "urn:sct:410942007",
+            "strength": "40 MG",
+            "ingredientRXNCode": "urn:rxnorm:36567"
+          }
+        ],
+        "dosages": [
+          {
+            "dose": "40",
+            "units": "MG",
+            "routeName": "PO",
+            "scheduleName": "QPM",
+            "scheduleType": "CONTINUOUS",
+            "start": "20060604",
+            "stop": "20060604",
+            "relativeStart": 0,
+            "relativeStop": 0,
+            "scheduleFreq": 1440,
+            "amount": "1",
+            "noun": "TABLET",
+            "instructions": "40MG",
+            "summary": "MedicationDose{uid='null'}"
+          }
+        ],
+        "orders": [
+          {
+            "orderUid": "urn:va:order:C877:146:17302",
+            "prescriptionId": "000063B",
+            "ordered": "200605311624",
+            "providerUid": "urn:va:user:C877:10000000031",
+            "providerName": "VEHU,ONEHUNDRED",
+            "pharmacistUid": "urn:va:user:C877:20144",
+            "pharmacistName": "PHARMACIST,THIRTY",
+            "fillCost": "72",
+            "locationName": "VIST CLINIC",
+            "locationUid": "urn:va:location:C877:423",
+            "quantityOrdered": "90",
+            "daysSupply": 30,
+            "fillsAllowed": 5,
+            "fillsRemaining": 5,
+            "vaRouting": "W",
+            "summary": "MedicationOrder{uid='null'}",
+            "predecessor": "urn:va:med:C877:146:16941",
+            "successor": "urn:va:med:C877:146:18038"
+          }
+        ],
+        "fills": [
+          {
+            "dispenseDate": "20060604",
+            "releaseDate": "20060604",
+            "quantityDispensed": "90",
+            "daysSupplyDispensed": 30,
+            "routing": "W",
+            "summary": "MedicationFill{uid='null'}"
+          }
+        ],
+        "codes": [
+          {
+            "code": "198211",
+            "system": "urn:oid:2.16.840.1.113883.6.88",
+            "display": "Simvastatin 40 MG Oral Tablet"
+          }
+        ],
+        "rxncodes": [
+          "urn:vandf:4020400",
+          "urn:ndfrt:N0000000001",
+          "urn:ndfrt:N0000010582",
+          "urn:ndfrt:N0000010601",
+          "urn:rxnorm:36567",
+          "urn:ndfrt:N0000005842"
+        ],
+        "name": "SIMVASTATIN TAB",
+        "type": "Prescription"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP BEE",
+        "overallStart": "20060604",
+        "overallStop": "20060604",
+        "vaType": "O",
+        "supply": false,
+        "lastFilled": "20060604",
+        "qualifiedName": "METFORMIN TAB,SA",
+        "administrations": [],
+        "kind": "Medication, Outpatient",
+        "units": "MG",
+        "uid": "urn:va:med:C877:146:17304",
+        "summary": "METFORMIN HCL 500MG TAB,SA (DISCONTINUED)\n TAKE ONE TABLET BY BY MOUTH TWICE A DAY",
+        "pid": "C877;146",
+        "localId": "402948;O",
+        "productFormName": "TAB,SA",
+        "sig": "TAKE ONE TABLET BY BY MOUTH TWICE A DAY",
+        "patientInstruction": "",
+        "stopped": "20060604",
+        "medStatus": "urn:sct:73425007",
+        "medStatusName": "not active",
+        "medType": "urn:sct:73639000",
+        "vaStatus": "DISCONTINUED",
+        "IMO": false,
+        "products": [
+          {
+            "ingredientCode": "urn:va:vuid:4023979",
+            "ingredientCodeName": "METFORMIN",
+            "ingredientName": "METFORMIN TAB,SA",
+            "drugClassCode": "urn:vadc:HS502",
+            "drugClassName": "ORAL HYPOGLYCEMIC AGENTS,ORAL",
+            "suppliedCode": "urn:va:vuid:4014984",
+            "suppliedName": "METFORMIN HCL 500MG TAB,SA",
+            "summary": "MedicationProduct{uid='null'}",
+            "ingredientRole": "urn:sct:410942007",
+            "strength": "500 MG",
+            "ingredientRXNCode": "urn:rxnorm:6809"
+          }
+        ],
+        "dosages": [
+          {
+            "dose": "500",
+            "units": "MG",
+            "routeName": "PO",
+            "scheduleName": "BID",
+            "scheduleType": "CONTINUOUS",
+            "start": "20060604",
+            "stop": "20060604",
+            "relativeStart": 0,
+            "relativeStop": 0,
+            "scheduleFreq": 720,
+            "amount": "1",
+            "noun": "TABLET",
+            "instructions": "500MG",
+            "summary": "MedicationDose{uid='null'}"
+          }
+        ],
+        "orders": [
+          {
+            "orderUid": "urn:va:order:C877:146:17304",
+            "prescriptionId": "500298A",
+            "ordered": "200605311624",
+            "providerUid": "urn:va:user:C877:10000000031",
+            "providerName": "VEHU,ONEHUNDRED",
+            "pharmacistUid": "urn:va:user:C877:20144",
+            "pharmacistName": "PHARMACIST,THIRTY",
+            "fillCost": "90",
+            "locationName": "VIST CLINIC",
+            "locationUid": "urn:va:location:C877:423",
+            "quantityOrdered": "180",
+            "daysSupply": 90,
+            "fillsAllowed": 3,
+            "fillsRemaining": 3,
+            "vaRouting": "W",
+            "summary": "MedicationOrder{uid='null'}",
+            "predecessor": "urn:va:med:C877:146:16990",
+            "successor": "urn:va:med:C877:146:18037"
+          }
+        ],
+        "fills": [
+          {
+            "dispenseDate": "20060604",
+            "releaseDate": "20060604",
+            "quantityDispensed": "180",
+            "daysSupplyDispensed": 90,
+            "routing": "W",
+            "summary": "MedicationFill{uid='null'}"
+          }
+        ],
+        "codes": [
+          {
+            "code": "860975",
+            "system": "urn:oid:2.16.840.1.113883.6.88",
+            "display": "24 HR Metformin hydrochloride 500 MG Extended Release Tablet"
+          }
+        ],
+        "rxncodes": [
+          "urn:vandf:4023979",
+          "urn:ndfrt:N0000007698",
+          "urn:ndfrt:N0000000002",
+          "urn:ndfrt:N0000007676",
+          "urn:ndfrt:N0000008167",
+          "urn:ndfrt:N0000008038",
+          "urn:rxnorm:6809",
+          "urn:ndfrt:N0000021984"
+        ],
+        "name": "METFORMIN TAB,SA",
+        "type": "Prescription"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "overallStart": "20050317",
+        "overallStop": "20060318",
+        "vaType": "O",
+        "supply": false,
+        "lastFilled": "20050317",
+        "qualifiedName": "METOPROLOL TAB",
+        "administrations": [],
+        "kind": "Medication, Outpatient",
+        "units": "MG",
+        "uid": "urn:va:med:9E7A:146:16940",
+        "summary": "METOPROLOL TARTRATE 50MG TAB (EXPIRED)\n TAKE ONE TABLET BY BY MOUTH TWICE A DAY",
+        "pid": "C877;146",
+        "localId": "402744;O",
+        "productFormName": "TAB",
+        "sig": "TAKE ONE TABLET BY BY MOUTH TWICE A DAY",
+        "patientInstruction": "",
+        "stopped": "20060318",
+        "medStatus": "urn:sct:392521001",
+        "medStatusName": "historical",
+        "medType": "urn:sct:73639000",
+        "vaStatus": "EXPIRED",
+        "IMO": false,
+        "products": [
+          {
+            "ingredientCode": "urn:va:vuid:4019836",
+            "ingredientCodeName": "METOPROLOL",
+            "ingredientName": "METOPROLOL TAB",
+            "drugClassCode": "urn:vadc:CV100",
+            "drugClassName": "BETA BLOCKERS/RELATED",
+            "suppliedCode": "urn:va:vuid:4004608",
+            "suppliedName": "METOPROLOL TARTRATE 50MG TAB",
+            "summary": "MedicationProduct{uid='null'}",
+            "ingredientRole": "urn:sct:410942007",
+            "strength": "50 MG",
+            "ingredientRXNCode": "urn:rxnorm:6918"
+          }
+        ],
+        "dosages": [
+          {
+            "dose": "50",
+            "units": "MG",
+            "routeName": "PO",
+            "scheduleName": "BID",
+            "scheduleType": "CONTINUOUS",
+            "start": "20050317",
+            "stop": "20060318",
+            "relativeStart": 0,
+            "relativeStop": 527040,
+            "scheduleFreq": 720,
+            "amount": "1",
+            "noun": "TABLET",
+            "instructions": "50MG",
+            "summary": "MedicationDose{uid='null'}"
+          }
+        ],
+        "orders": [
+          {
+            "orderUid": "urn:va:order:9E7A:146:16940",
+            "prescriptionId": "000062A",
+            "ordered": "200503171350",
+            "providerUid": "urn:va:user:9E7A:11745",
+            "providerName": "LABTECH,SPECIAL",
+            "pharmacistUid": "urn:va:user:9E7A:923",
+            "pharmacistName": "PROGRAMMER,TWENTYEIGHT",
+            "fillCost": "11.88",
+            "quantityOrdered": "180",
+            "daysSupply": 30,
+            "fillsAllowed": 5,
+            "fillsRemaining": 5,
+            "vaRouting": "W",
+            "summary": "MedicationOrder{uid='null'}",
+            "predecessor": "urn:va:med:9E7A:146:15247"
+          }
+        ],
+        "fills": [
+          {
+            "dispenseDate": "20050317",
+            "releaseDate": "20050317",
+            "quantityDispensed": "180",
+            "daysSupplyDispensed": 30,
+            "routing": "W",
+            "summary": "MedicationFill{uid='null'}"
+          }
+        ],
+        "codes": [
+          {
+            "code": "866514",
+            "system": "urn:oid:2.16.840.1.113883.6.88",
+            "display": "Metoprolol Tartrate 50 MG Oral Tablet"
+          }
+        ],
+        "rxncodes": [
+          "urn:vandf:4019836",
+          "urn:ndfrt:N0000010595",
+          "urn:ndfrt:N0000000001",
+          "urn:ndfrt:N0000010582",
+          "urn:rxnorm:6918",
+          "urn:ndfrt:N0000007508"
+        ],
+        "name": "METOPROLOL TAB",
+        "type": "Prescription"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP BEE",
+        "overallStart": "20050317",
+        "overallStop": "20060318",
+        "vaType": "O",
+        "supply": false,
+        "lastFilled": "20050317",
+        "qualifiedName": "METOPROLOL TAB",
+        "administrations": [],
+        "kind": "Medication, Outpatient",
+        "units": "MG",
+        "uid": "urn:va:med:C877:146:16940",
+        "summary": "METOPROLOL TARTRATE 50MG TAB (EXPIRED)\n TAKE ONE TABLET BY BY MOUTH TWICE A DAY",
+        "pid": "C877;146",
+        "localId": "402744;O",
+        "productFormName": "TAB",
+        "sig": "TAKE ONE TABLET BY BY MOUTH TWICE A DAY",
+        "patientInstruction": "",
+        "stopped": "20060318",
+        "medStatus": "urn:sct:392521001",
+        "medStatusName": "historical",
+        "medType": "urn:sct:73639000",
+        "vaStatus": "EXPIRED",
+        "IMO": false,
+        "products": [
+          {
+            "ingredientCode": "urn:va:vuid:4019836",
+            "ingredientCodeName": "METOPROLOL",
+            "ingredientName": "METOPROLOL TAB",
+            "drugClassCode": "urn:vadc:CV100",
+            "drugClassName": "BETA BLOCKERS/RELATED",
+            "suppliedCode": "urn:va:vuid:4004608",
+            "suppliedName": "METOPROLOL TARTRATE 50MG TAB",
+            "summary": "MedicationProduct{uid='null'}",
+            "ingredientRole": "urn:sct:410942007",
+            "strength": "50 MG",
+            "ingredientRXNCode": "urn:rxnorm:6918"
+          }
+        ],
+        "dosages": [
+          {
+            "dose": "50",
+            "units": "MG",
+            "routeName": "PO",
+            "scheduleName": "BID",
+            "scheduleType": "CONTINUOUS",
+            "start": "20050317",
+            "stop": "20060318",
+            "relativeStart": 0,
+            "relativeStop": 527040,
+            "scheduleFreq": 720,
+            "amount": "1",
+            "noun": "TABLET",
+            "instructions": "50MG",
+            "summary": "MedicationDose{uid='null'}"
+          }
+        ],
+        "orders": [
+          {
+            "orderUid": "urn:va:order:C877:146:16940",
+            "prescriptionId": "000062A",
+            "ordered": "200503171350",
+            "providerUid": "urn:va:user:C877:11745",
+            "providerName": "LABTECH,SPECIAL",
+            "pharmacistUid": "urn:va:user:C877:923",
+            "pharmacistName": "PROGRAMMER,TWENTYEIGHT",
+            "fillCost": "11.88",
+            "quantityOrdered": "180",
+            "daysSupply": 30,
+            "fillsAllowed": 5,
+            "fillsRemaining": 5,
+            "vaRouting": "W",
+            "summary": "MedicationOrder{uid='null'}",
+            "predecessor": "urn:va:med:C877:146:15247"
+          }
+        ],
+        "fills": [
+          {
+            "dispenseDate": "20050317",
+            "releaseDate": "20050317",
+            "quantityDispensed": "180",
+            "daysSupplyDispensed": 30,
+            "routing": "W",
+            "summary": "MedicationFill{uid='null'}"
+          }
+        ],
+        "codes": [
+          {
+            "code": "866514",
+            "system": "urn:oid:2.16.840.1.113883.6.88",
+            "display": "Metoprolol Tartrate 50 MG Oral Tablet"
+          }
+        ],
+        "rxncodes": [
+          "urn:vandf:4019836",
+          "urn:ndfrt:N0000010595",
+          "urn:ndfrt:N0000000001",
+          "urn:ndfrt:N0000010582",
+          "urn:rxnorm:6918",
+          "urn:ndfrt:N0000007508"
+        ],
+        "name": "METOPROLOL TAB",
+        "type": "Prescription"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "overallStart": "20050317",
+        "overallStop": "20050317",
+        "vaType": "O",
+        "supply": false,
+        "lastFilled": "20050317",
+        "qualifiedName": "SIMVASTATIN TAB",
+        "administrations": [],
+        "kind": "Medication, Outpatient",
+        "units": "MG",
+        "uid": "urn:va:med:9E7A:146:16941",
+        "summary": "SIMVASTATIN 40MG TAB (DISCONTINUED)\n TAKE ONE TABLET BY BY MOUTH EVERY EVENING",
+        "pid": "C877;146",
+        "localId": "402745;O",
+        "productFormName": "TAB",
+        "sig": "TAKE ONE TABLET BY BY MOUTH EVERY EVENING",
+        "patientInstruction": "",
+        "stopped": "20050317",
+        "medStatus": "urn:sct:73425007",
+        "medStatusName": "not active",
+        "medType": "urn:sct:73639000",
+        "vaStatus": "DISCONTINUED",
+        "IMO": false,
+        "products": [
+          {
+            "ingredientCode": "urn:va:vuid:4020400",
+            "ingredientCodeName": "SIMVASTATIN",
+            "ingredientName": "SIMVASTATIN TAB",
+            "drugClassCode": "urn:vadc:CV350",
+            "drugClassName": "ANTILIPEMIC AGENTS",
+            "suppliedCode": "urn:va:vuid:4010153",
+            "suppliedName": "SIMVASTATIN 40MG TAB",
+            "summary": "MedicationProduct{uid='null'}",
+            "ingredientRole": "urn:sct:410942007",
+            "strength": "40 MG",
+            "ingredientRXNCode": "urn:rxnorm:36567"
+          }
+        ],
+        "dosages": [
+          {
+            "dose": "40",
+            "units": "MG",
+            "routeName": "PO",
+            "scheduleName": "QPM",
+            "scheduleType": "CONTINUOUS",
+            "start": "20050317",
+            "stop": "20050317",
+            "relativeStart": 0,
+            "relativeStop": 0,
+            "scheduleFreq": 1440,
+            "amount": "1",
+            "noun": "TABLET",
+            "instructions": "40MG",
+            "summary": "MedicationDose{uid='null'}"
+          }
+        ],
+        "orders": [
+          {
+            "orderUid": "urn:va:order:9E7A:146:16941",
+            "prescriptionId": "000063A",
+            "ordered": "200503171350",
+            "providerUid": "urn:va:user:9E7A:11745",
+            "providerName": "LABTECH,SPECIAL",
+            "pharmacistUid": "urn:va:user:9E7A:923",
+            "pharmacistName": "PROGRAMMER,TWENTYEIGHT",
+            "fillCost": "72",
+            "quantityOrdered": "90",
+            "daysSupply": 30,
+            "fillsAllowed": 5,
+            "fillsRemaining": 5,
+            "vaRouting": "W",
+            "summary": "MedicationOrder{uid='null'}",
+            "predecessor": "urn:va:med:9E7A:146:15248",
+            "successor": "urn:va:med:9E7A:146:17302"
+          }
+        ],
+        "fills": [
+          {
+            "dispenseDate": "20050317",
+            "releaseDate": "20050317",
+            "quantityDispensed": "90",
+            "daysSupplyDispensed": 30,
+            "routing": "W",
+            "summary": "MedicationFill{uid='null'}"
+          }
+        ],
+        "codes": [
+          {
+            "code": "198211",
+            "system": "urn:oid:2.16.840.1.113883.6.88",
+            "display": "Simvastatin 40 MG Oral Tablet"
+          }
+        ],
+        "rxncodes": [
+          "urn:vandf:4020400",
+          "urn:ndfrt:N0000000001",
+          "urn:ndfrt:N0000010582",
+          "urn:ndfrt:N0000010601",
+          "urn:rxnorm:36567",
+          "urn:ndfrt:N0000005842"
+        ],
+        "name": "SIMVASTATIN TAB",
+        "type": "Prescription"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "overallStart": "20050317",
+        "overallStop": "20050317",
+        "vaType": "O",
+        "supply": false,
+        "lastFilled": "20050317",
+        "qualifiedName": "METFORMIN TAB,SA",
+        "administrations": [],
+        "kind": "Medication, Outpatient",
+        "units": "MG",
+        "uid": "urn:va:med:9E7A:146:16990",
+        "summary": "METFORMIN HCL 500MG TAB,SA (DISCONTINUED)\n TAKE ONE TABLET BY BY MOUTH TWICE A DAY",
+        "pid": "C877;146",
+        "localId": "402794;O",
+        "productFormName": "TAB,SA",
+        "sig": "TAKE ONE TABLET BY BY MOUTH TWICE A DAY",
+        "patientInstruction": "",
+        "stopped": "20050317",
+        "medStatus": "urn:sct:73425007",
+        "medStatusName": "not active",
+        "medType": "urn:sct:73639000",
+        "vaStatus": "DISCONTINUED",
+        "IMO": false,
+        "products": [
+          {
+            "ingredientCode": "urn:va:vuid:4023979",
+            "ingredientCodeName": "METFORMIN",
+            "ingredientName": "METFORMIN TAB,SA",
+            "drugClassCode": "urn:vadc:HS502",
+            "drugClassName": "ORAL HYPOGLYCEMIC AGENTS,ORAL",
+            "suppliedCode": "urn:va:vuid:4014984",
+            "suppliedName": "METFORMIN HCL 500MG TAB,SA",
+            "summary": "MedicationProduct{uid='null'}",
+            "ingredientRole": "urn:sct:410942007",
+            "strength": "500 MG",
+            "ingredientRXNCode": "urn:rxnorm:6809"
+          }
+        ],
+        "dosages": [
+          {
+            "dose": "500",
+            "units": "MG",
+            "routeName": "PO",
+            "scheduleName": "BID",
+            "scheduleType": "CONTINUOUS",
+            "start": "20050317",
+            "stop": "20050317",
+            "relativeStart": 0,
+            "relativeStop": 0,
+            "scheduleFreq": 720,
+            "amount": "1",
+            "noun": "TABLET",
+            "instructions": "500MG",
+            "summary": "MedicationDose{uid='null'}"
+          }
+        ],
+        "orders": [
+          {
+            "orderUid": "urn:va:order:9E7A:146:16990",
+            "prescriptionId": "500298",
+            "ordered": "200503171534",
+            "providerUid": "urn:va:user:9E7A:11745",
+            "providerName": "LABTECH,SPECIAL",
+            "pharmacistUid": "urn:va:user:9E7A:10000000019",
+            "pharmacistName": "TDPHARMACIST,ONE",
+            "fillCost": "90",
+            "quantityOrdered": "180",
+            "daysSupply": 90,
+            "fillsAllowed": 3,
+            "fillsRemaining": 3,
+            "vaRouting": "W",
+            "summary": "MedicationOrder{uid='null'}",
+            "successor": "urn:va:med:9E7A:146:17304"
+          }
+        ],
+        "fills": [
+          {
+            "dispenseDate": "20050317",
+            "releaseDate": "20050318",
+            "quantityDispensed": "180",
+            "daysSupplyDispensed": 90,
+            "routing": "W",
+            "summary": "MedicationFill{uid='null'}"
+          }
+        ],
+        "codes": [
+          {
+            "code": "860975",
+            "system": "urn:oid:2.16.840.1.113883.6.88",
+            "display": "24 HR Metformin hydrochloride 500 MG Extended Release Tablet"
+          }
+        ],
+        "rxncodes": [
+          "urn:vandf:4023979",
+          "urn:ndfrt:N0000007698",
+          "urn:ndfrt:N0000000002",
+          "urn:ndfrt:N0000007676",
+          "urn:ndfrt:N0000008167",
+          "urn:ndfrt:N0000008038",
+          "urn:rxnorm:6809",
+          "urn:ndfrt:N0000021984"
+        ],
+        "name": "METFORMIN TAB,SA",
+        "type": "Prescription"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP BEE",
+        "overallStart": "20050317",
+        "overallStop": "20050317",
+        "vaType": "O",
+        "supply": false,
+        "lastFilled": "20050317",
+        "qualifiedName": "SIMVASTATIN TAB",
+        "administrations": [],
+        "kind": "Medication, Outpatient",
+        "units": "MG",
+        "uid": "urn:va:med:C877:146:16941",
+        "summary": "SIMVASTATIN 40MG TAB (DISCONTINUED)\n TAKE ONE TABLET BY BY MOUTH EVERY EVENING",
+        "pid": "C877;146",
+        "localId": "402745;O",
+        "productFormName": "TAB",
+        "sig": "TAKE ONE TABLET BY BY MOUTH EVERY EVENING",
+        "patientInstruction": "",
+        "stopped": "20050317",
+        "medStatus": "urn:sct:73425007",
+        "medStatusName": "not active",
+        "medType": "urn:sct:73639000",
+        "vaStatus": "DISCONTINUED",
+        "IMO": false,
+        "products": [
+          {
+            "ingredientCode": "urn:va:vuid:4020400",
+            "ingredientCodeName": "SIMVASTATIN",
+            "ingredientName": "SIMVASTATIN TAB",
+            "drugClassCode": "urn:vadc:CV350",
+            "drugClassName": "ANTILIPEMIC AGENTS",
+            "suppliedCode": "urn:va:vuid:4010153",
+            "suppliedName": "SIMVASTATIN 40MG TAB",
+            "summary": "MedicationProduct{uid='null'}",
+            "ingredientRole": "urn:sct:410942007",
+            "strength": "40 MG",
+            "ingredientRXNCode": "urn:rxnorm:36567"
+          }
+        ],
+        "dosages": [
+          {
+            "dose": "40",
+            "units": "MG",
+            "routeName": "PO",
+            "scheduleName": "QPM",
+            "scheduleType": "CONTINUOUS",
+            "start": "20050317",
+            "stop": "20050317",
+            "relativeStart": 0,
+            "relativeStop": 0,
+            "scheduleFreq": 1440,
+            "amount": "1",
+            "noun": "TABLET",
+            "instructions": "40MG",
+            "summary": "MedicationDose{uid='null'}"
+          }
+        ],
+        "orders": [
+          {
+            "orderUid": "urn:va:order:C877:146:16941",
+            "prescriptionId": "000063A",
+            "ordered": "200503171350",
+            "providerUid": "urn:va:user:C877:11745",
+            "providerName": "LABTECH,SPECIAL",
+            "pharmacistUid": "urn:va:user:C877:923",
+            "pharmacistName": "PROGRAMMER,TWENTYEIGHT",
+            "fillCost": "72",
+            "quantityOrdered": "90",
+            "daysSupply": 30,
+            "fillsAllowed": 5,
+            "fillsRemaining": 5,
+            "vaRouting": "W",
+            "summary": "MedicationOrder{uid='null'}",
+            "predecessor": "urn:va:med:C877:146:15248",
+            "successor": "urn:va:med:C877:146:17302"
+          }
+        ],
+        "fills": [
+          {
+            "dispenseDate": "20050317",
+            "releaseDate": "20050317",
+            "quantityDispensed": "90",
+            "daysSupplyDispensed": 30,
+            "routing": "W",
+            "summary": "MedicationFill{uid='null'}"
+          }
+        ],
+        "codes": [
+          {
+            "code": "198211",
+            "system": "urn:oid:2.16.840.1.113883.6.88",
+            "display": "Simvastatin 40 MG Oral Tablet"
+          }
+        ],
+        "rxncodes": [
+          "urn:vandf:4020400",
+          "urn:ndfrt:N0000000001",
+          "urn:ndfrt:N0000010582",
+          "urn:ndfrt:N0000010601",
+          "urn:rxnorm:36567",
+          "urn:ndfrt:N0000005842"
+        ],
+        "name": "SIMVASTATIN TAB",
+        "type": "Prescription"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP BEE",
+        "overallStart": "20050317",
+        "overallStop": "20050317",
+        "vaType": "O",
+        "supply": false,
+        "lastFilled": "20050317",
+        "qualifiedName": "METFORMIN TAB,SA",
+        "administrations": [],
+        "kind": "Medication, Outpatient",
+        "units": "MG",
+        "uid": "urn:va:med:C877:146:16990",
+        "summary": "METFORMIN HCL 500MG TAB,SA (DISCONTINUED)\n TAKE ONE TABLET BY BY MOUTH TWICE A DAY",
+        "pid": "C877;146",
+        "localId": "402794;O",
+        "productFormName": "TAB,SA",
+        "sig": "TAKE ONE TABLET BY BY MOUTH TWICE A DAY",
+        "patientInstruction": "",
+        "stopped": "20050317",
+        "medStatus": "urn:sct:73425007",
+        "medStatusName": "not active",
+        "medType": "urn:sct:73639000",
+        "vaStatus": "DISCONTINUED",
+        "IMO": false,
+        "products": [
+          {
+            "ingredientCode": "urn:va:vuid:4023979",
+            "ingredientCodeName": "METFORMIN",
+            "ingredientName": "METFORMIN TAB,SA",
+            "drugClassCode": "urn:vadc:HS502",
+            "drugClassName": "ORAL HYPOGLYCEMIC AGENTS,ORAL",
+            "suppliedCode": "urn:va:vuid:4014984",
+            "suppliedName": "METFORMIN HCL 500MG TAB,SA",
+            "summary": "MedicationProduct{uid='null'}",
+            "ingredientRole": "urn:sct:410942007",
+            "strength": "500 MG",
+            "ingredientRXNCode": "urn:rxnorm:6809"
+          }
+        ],
+        "dosages": [
+          {
+            "dose": "500",
+            "units": "MG",
+            "routeName": "PO",
+            "scheduleName": "BID",
+            "scheduleType": "CONTINUOUS",
+            "start": "20050317",
+            "stop": "20050317",
+            "relativeStart": 0,
+            "relativeStop": 0,
+            "scheduleFreq": 720,
+            "amount": "1",
+            "noun": "TABLET",
+            "instructions": "500MG",
+            "summary": "MedicationDose{uid='null'}"
+          }
+        ],
+        "orders": [
+          {
+            "orderUid": "urn:va:order:C877:146:16990",
+            "prescriptionId": "500298",
+            "ordered": "200503171534",
+            "providerUid": "urn:va:user:C877:11745",
+            "providerName": "LABTECH,SPECIAL",
+            "pharmacistUid": "urn:va:user:C877:10000000019",
+            "pharmacistName": "TDPHARMACIST,ONE",
+            "fillCost": "90",
+            "quantityOrdered": "180",
+            "daysSupply": 90,
+            "fillsAllowed": 3,
+            "fillsRemaining": 3,
+            "vaRouting": "W",
+            "summary": "MedicationOrder{uid='null'}",
+            "successor": "urn:va:med:C877:146:17304"
+          }
+        ],
+        "fills": [
+          {
+            "dispenseDate": "20050317",
+            "releaseDate": "20050318",
+            "quantityDispensed": "180",
+            "daysSupplyDispensed": 90,
+            "routing": "W",
+            "summary": "MedicationFill{uid='null'}"
+          }
+        ],
+        "codes": [
+          {
+            "code": "860975",
+            "system": "urn:oid:2.16.840.1.113883.6.88",
+            "display": "24 HR Metformin hydrochloride 500 MG Extended Release Tablet"
+          }
+        ],
+        "rxncodes": [
+          "urn:vandf:4023979",
+          "urn:ndfrt:N0000007698",
+          "urn:ndfrt:N0000000002",
+          "urn:ndfrt:N0000007676",
+          "urn:ndfrt:N0000008167",
+          "urn:ndfrt:N0000008038",
+          "urn:rxnorm:6809",
+          "urn:ndfrt:N0000021984"
+        ],
+        "name": "METFORMIN TAB,SA",
+        "type": "Prescription"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "overallStart": "20040330",
+        "overallStop": "20040330",
+        "vaType": "O",
+        "supply": false,
+        "lastFilled": "20040330",
+        "qualifiedName": "METOPROLOL TAB",
+        "administrations": [],
+        "kind": "Medication, Outpatient",
+        "units": "MG",
+        "uid": "urn:va:med:9E7A:146:15247",
+        "summary": "METOPROLOL TARTRATE 50MG TAB (DISCONTINUED)\n TAKE ONE TABLET BY BY MOUTH TWICE A DAY",
+        "pid": "C877;146",
+        "localId": "402316;O",
+        "productFormName": "TAB",
+        "sig": "TAKE ONE TABLET BY BY MOUTH TWICE A DAY",
+        "patientInstruction": "",
+        "stopped": "20040330",
+        "medStatus": "urn:sct:73425007",
+        "medStatusName": "not active",
+        "medType": "urn:sct:73639000",
+        "vaStatus": "DISCONTINUED",
+        "IMO": false,
+        "products": [
+          {
+            "ingredientCode": "urn:va:vuid:4019836",
+            "ingredientCodeName": "METOPROLOL",
+            "ingredientName": "METOPROLOL TAB",
+            "drugClassCode": "urn:vadc:CV100",
+            "drugClassName": "BETA BLOCKERS/RELATED",
+            "suppliedCode": "urn:va:vuid:4004608",
+            "suppliedName": "METOPROLOL TARTRATE 50MG TAB",
+            "summary": "MedicationProduct{uid='null'}",
+            "ingredientRole": "urn:sct:410942007",
+            "strength": "50 MG",
+            "ingredientRXNCode": "urn:rxnorm:6918"
+          }
+        ],
+        "dosages": [
+          {
+            "dose": "50",
+            "units": "MG",
+            "routeName": "PO",
+            "scheduleName": "BID",
+            "scheduleType": "CONTINUOUS",
+            "start": "20040330",
+            "stop": "20040330",
+            "relativeStart": 0,
+            "relativeStop": 0,
+            "scheduleFreq": 720,
+            "amount": "1",
+            "noun": "TABLET",
+            "instructions": "50MG",
+            "summary": "MedicationDose{uid='null'}"
+          }
+        ],
+        "orders": [
+          {
+            "orderUid": "urn:va:order:9E7A:146:15247",
+            "prescriptionId": "000062",
+            "ordered": "200403301504",
+            "providerUid": "urn:va:user:9E7A:11745",
+            "providerName": "LABTECH,SPECIAL",
+            "pharmacistUid": "urn:va:user:9E7A:11745",
+            "pharmacistName": "LABTECH,SPECIAL",
+            "fillCost": "11.88",
+            "quantityOrdered": "180",
+            "daysSupply": 90,
+            "fillsAllowed": 3,
+            "fillsRemaining": 3,
+            "vaRouting": "W",
+            "summary": "MedicationOrder{uid='null'}",
+            "successor": "urn:va:med:9E7A:146:16940"
+          }
+        ],
+        "fills": [
+          {
+            "dispenseDate": "20040330",
+            "quantityDispensed": "180",
+            "daysSupplyDispensed": 90,
+            "routing": "W",
+            "summary": "MedicationFill{uid='null'}"
+          }
+        ],
+        "codes": [
+          {
+            "code": "866514",
+            "system": "urn:oid:2.16.840.1.113883.6.88",
+            "display": "Metoprolol Tartrate 50 MG Oral Tablet"
+          }
+        ],
+        "rxncodes": [
+          "urn:vandf:4019836",
+          "urn:ndfrt:N0000010595",
+          "urn:ndfrt:N0000000001",
+          "urn:ndfrt:N0000010582",
+          "urn:rxnorm:6918",
+          "urn:ndfrt:N0000007508"
+        ],
+        "name": "METOPROLOL TAB",
+        "type": "Prescription"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "overallStart": "20040330",
+        "overallStop": "20040330",
+        "vaType": "O",
+        "supply": false,
+        "lastFilled": "20040330",
+        "qualifiedName": "SIMVASTATIN TAB",
+        "administrations": [],
+        "kind": "Medication, Outpatient",
+        "units": "MG",
+        "uid": "urn:va:med:9E7A:146:15248",
+        "summary": "SIMVASTATIN 40MG TAB (DISCONTINUED)\n TAKE ONE TABLET BY BY MOUTH EVERY EVENING",
+        "pid": "C877;146",
+        "localId": "402317;O",
+        "productFormName": "TAB",
+        "sig": "TAKE ONE TABLET BY BY MOUTH EVERY EVENING",
+        "patientInstruction": "",
+        "stopped": "20040330",
+        "medStatus": "urn:sct:73425007",
+        "medStatusName": "not active",
+        "medType": "urn:sct:73639000",
+        "vaStatus": "DISCONTINUED",
+        "IMO": false,
+        "products": [
+          {
+            "ingredientCode": "urn:va:vuid:4020400",
+            "ingredientCodeName": "SIMVASTATIN",
+            "ingredientName": "SIMVASTATIN TAB",
+            "drugClassCode": "urn:vadc:CV350",
+            "drugClassName": "ANTILIPEMIC AGENTS",
+            "suppliedCode": "urn:va:vuid:4010153",
+            "suppliedName": "SIMVASTATIN 40MG TAB",
+            "summary": "MedicationProduct{uid='null'}",
+            "ingredientRole": "urn:sct:410942007",
+            "strength": "40 MG",
+            "ingredientRXNCode": "urn:rxnorm:36567"
+          }
+        ],
+        "dosages": [
+          {
+            "dose": "40",
+            "units": "MG",
+            "routeName": "PO",
+            "scheduleName": "QPM",
+            "scheduleType": "CONTINUOUS",
+            "start": "20040330",
+            "stop": "20040330",
+            "relativeStart": 0,
+            "relativeStop": 0,
+            "scheduleFreq": 1440,
+            "amount": "1",
+            "noun": "TABLET",
+            "instructions": "40MG",
+            "summary": "MedicationDose{uid='null'}"
+          }
+        ],
+        "orders": [
+          {
+            "orderUid": "urn:va:order:9E7A:146:15248",
+            "prescriptionId": "000063",
+            "ordered": "200403301504",
+            "providerUid": "urn:va:user:9E7A:11745",
+            "providerName": "LABTECH,SPECIAL",
+            "pharmacistUid": "urn:va:user:9E7A:11745",
+            "pharmacistName": "LABTECH,SPECIAL",
+            "fillCost": "72",
+            "quantityOrdered": "90",
+            "daysSupply": 90,
+            "fillsAllowed": 3,
+            "fillsRemaining": 3,
+            "vaRouting": "W",
+            "summary": "MedicationOrder{uid='null'}",
+            "successor": "urn:va:med:9E7A:146:16941"
+          }
+        ],
+        "fills": [
+          {
+            "dispenseDate": "20040330",
+            "quantityDispensed": "90",
+            "daysSupplyDispensed": 90,
+            "routing": "W",
+            "summary": "MedicationFill{uid='null'}"
+          }
+        ],
+        "codes": [
+          {
+            "code": "198211",
+            "system": "urn:oid:2.16.840.1.113883.6.88",
+            "display": "Simvastatin 40 MG Oral Tablet"
+          }
+        ],
+        "rxncodes": [
+          "urn:vandf:4020400",
+          "urn:ndfrt:N0000000001",
+          "urn:ndfrt:N0000010582",
+          "urn:ndfrt:N0000010601",
+          "urn:rxnorm:36567",
+          "urn:ndfrt:N0000005842"
+        ],
+        "name": "SIMVASTATIN TAB",
+        "type": "Prescription"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP BEE",
+        "overallStart": "20040330",
+        "overallStop": "20040330",
+        "vaType": "O",
+        "supply": false,
+        "lastFilled": "20040330",
+        "qualifiedName": "METOPROLOL TAB",
+        "administrations": [],
+        "kind": "Medication, Outpatient",
+        "units": "MG",
+        "uid": "urn:va:med:C877:146:15247",
+        "summary": "METOPROLOL TARTRATE 50MG TAB (DISCONTINUED)\n TAKE ONE TABLET BY BY MOUTH TWICE A DAY",
+        "pid": "C877;146",
+        "localId": "402316;O",
+        "productFormName": "TAB",
+        "sig": "TAKE ONE TABLET BY BY MOUTH TWICE A DAY",
+        "patientInstruction": "",
+        "stopped": "20040330",
+        "medStatus": "urn:sct:73425007",
+        "medStatusName": "not active",
+        "medType": "urn:sct:73639000",
+        "vaStatus": "DISCONTINUED",
+        "IMO": false,
+        "products": [
+          {
+            "ingredientCode": "urn:va:vuid:4019836",
+            "ingredientCodeName": "METOPROLOL",
+            "ingredientName": "METOPROLOL TAB",
+            "drugClassCode": "urn:vadc:CV100",
+            "drugClassName": "BETA BLOCKERS/RELATED",
+            "suppliedCode": "urn:va:vuid:4004608",
+            "suppliedName": "METOPROLOL TARTRATE 50MG TAB",
+            "summary": "MedicationProduct{uid='null'}",
+            "ingredientRole": "urn:sct:410942007",
+            "strength": "50 MG",
+            "ingredientRXNCode": "urn:rxnorm:6918"
+          }
+        ],
+        "dosages": [
+          {
+            "dose": "50",
+            "units": "MG",
+            "routeName": "PO",
+            "scheduleName": "BID",
+            "scheduleType": "CONTINUOUS",
+            "start": "20040330",
+            "stop": "20040330",
+            "relativeStart": 0,
+            "relativeStop": 0,
+            "scheduleFreq": 720,
+            "amount": "1",
+            "noun": "TABLET",
+            "instructions": "50MG",
+            "summary": "MedicationDose{uid='null'}"
+          }
+        ],
+        "orders": [
+          {
+            "orderUid": "urn:va:order:C877:146:15247",
+            "prescriptionId": "000062",
+            "ordered": "200403301504",
+            "providerUid": "urn:va:user:C877:11745",
+            "providerName": "LABTECH,SPECIAL",
+            "pharmacistUid": "urn:va:user:C877:11745",
+            "pharmacistName": "LABTECH,SPECIAL",
+            "fillCost": "11.88",
+            "quantityOrdered": "180",
+            "daysSupply": 90,
+            "fillsAllowed": 3,
+            "fillsRemaining": 3,
+            "vaRouting": "W",
+            "summary": "MedicationOrder{uid='null'}",
+            "successor": "urn:va:med:C877:146:16940"
+          }
+        ],
+        "fills": [
+          {
+            "dispenseDate": "20040330",
+            "quantityDispensed": "180",
+            "daysSupplyDispensed": 90,
+            "routing": "W",
+            "summary": "MedicationFill{uid='null'}"
+          }
+        ],
+        "codes": [
+          {
+            "code": "866514",
+            "system": "urn:oid:2.16.840.1.113883.6.88",
+            "display": "Metoprolol Tartrate 50 MG Oral Tablet"
+          }
+        ],
+        "rxncodes": [
+          "urn:vandf:4019836",
+          "urn:ndfrt:N0000010595",
+          "urn:ndfrt:N0000000001",
+          "urn:ndfrt:N0000010582",
+          "urn:rxnorm:6918",
+          "urn:ndfrt:N0000007508"
+        ],
+        "name": "METOPROLOL TAB",
+        "type": "Prescription"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP BEE",
+        "overallStart": "20040330",
+        "overallStop": "20040330",
+        "vaType": "O",
+        "supply": false,
+        "lastFilled": "20040330",
+        "qualifiedName": "SIMVASTATIN TAB",
+        "administrations": [],
+        "kind": "Medication, Outpatient",
+        "units": "MG",
+        "uid": "urn:va:med:C877:146:15248",
+        "summary": "SIMVASTATIN 40MG TAB (DISCONTINUED)\n TAKE ONE TABLET BY BY MOUTH EVERY EVENING",
+        "pid": "C877;146",
+        "localId": "402317;O",
+        "productFormName": "TAB",
+        "sig": "TAKE ONE TABLET BY BY MOUTH EVERY EVENING",
+        "patientInstruction": "",
+        "stopped": "20040330",
+        "medStatus": "urn:sct:73425007",
+        "medStatusName": "not active",
+        "medType": "urn:sct:73639000",
+        "vaStatus": "DISCONTINUED",
+        "IMO": false,
+        "products": [
+          {
+            "ingredientCode": "urn:va:vuid:4020400",
+            "ingredientCodeName": "SIMVASTATIN",
+            "ingredientName": "SIMVASTATIN TAB",
+            "drugClassCode": "urn:vadc:CV350",
+            "drugClassName": "ANTILIPEMIC AGENTS",
+            "suppliedCode": "urn:va:vuid:4010153",
+            "suppliedName": "SIMVASTATIN 40MG TAB",
+            "summary": "MedicationProduct{uid='null'}",
+            "ingredientRole": "urn:sct:410942007",
+            "strength": "40 MG",
+            "ingredientRXNCode": "urn:rxnorm:36567"
+          }
+        ],
+        "dosages": [
+          {
+            "dose": "40",
+            "units": "MG",
+            "routeName": "PO",
+            "scheduleName": "QPM",
+            "scheduleType": "CONTINUOUS",
+            "start": "20040330",
+            "stop": "20040330",
+            "relativeStart": 0,
+            "relativeStop": 0,
+            "scheduleFreq": 1440,
+            "amount": "1",
+            "noun": "TABLET",
+            "instructions": "40MG",
+            "summary": "MedicationDose{uid='null'}"
+          }
+        ],
+        "orders": [
+          {
+            "orderUid": "urn:va:order:C877:146:15248",
+            "prescriptionId": "000063",
+            "ordered": "200403301504",
+            "providerUid": "urn:va:user:C877:11745",
+            "providerName": "LABTECH,SPECIAL",
+            "pharmacistUid": "urn:va:user:C877:11745",
+            "pharmacistName": "LABTECH,SPECIAL",
+            "fillCost": "72",
+            "quantityOrdered": "90",
+            "daysSupply": 90,
+            "fillsAllowed": 3,
+            "fillsRemaining": 3,
+            "vaRouting": "W",
+            "summary": "MedicationOrder{uid='null'}",
+            "successor": "urn:va:med:C877:146:16941"
+          }
+        ],
+        "fills": [
+          {
+            "dispenseDate": "20040330",
+            "quantityDispensed": "90",
+            "daysSupplyDispensed": 90,
+            "routing": "W",
+            "summary": "MedicationFill{uid='null'}"
+          }
+        ],
+        "codes": [
+          {
+            "code": "198211",
+            "system": "urn:oid:2.16.840.1.113883.6.88",
+            "display": "Simvastatin 40 MG Oral Tablet"
+          }
+        ],
+        "rxncodes": [
+          "urn:vandf:4020400",
+          "urn:ndfrt:N0000000001",
+          "urn:ndfrt:N0000010582",
+          "urn:ndfrt:N0000010601",
+          "urn:rxnorm:36567",
+          "urn:ndfrt:N0000005842"
+        ],
+        "name": "SIMVASTATIN TAB",
+        "type": "Prescription"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "overallStart": "20020305",
+        "overallStop": "20030306",
+        "vaType": "O",
+        "supply": false,
+        "lastFilled": "20020305",
+        "qualifiedName": "SIMVASTATIN TAB",
+        "administrations": [],
+        "kind": "Medication, Outpatient",
+        "units": "MG",
+        "uid": "urn:va:med:9E7A:146:12746",
+        "summary": "SIMVASTATIN 40MG TAB (EXPIRED)\n TAKE ONE TABLET BY BY MOUTH EVERY EVENING",
+        "pid": "C877;146",
+        "localId": "402205;O",
+        "productFormName": "TAB",
+        "sig": "TAKE ONE TABLET BY BY MOUTH EVERY EVENING",
+        "patientInstruction": "",
+        "stopped": "20030306",
+        "medStatus": "urn:sct:392521001",
+        "medStatusName": "historical",
+        "medType": "urn:sct:73639000",
+        "vaStatus": "EXPIRED",
+        "IMO": false,
+        "products": [
+          {
+            "ingredientCode": "urn:va:vuid:4020400",
+            "ingredientCodeName": "SIMVASTATIN",
+            "ingredientName": "SIMVASTATIN TAB",
+            "drugClassCode": "urn:vadc:CV350",
+            "drugClassName": "ANTILIPEMIC AGENTS",
+            "suppliedCode": "urn:va:vuid:4010153",
+            "suppliedName": "SIMVASTATIN 40MG TAB",
+            "summary": "MedicationProduct{uid='null'}",
+            "ingredientRole": "urn:sct:410942007",
+            "strength": "40 MG",
+            "ingredientRXNCode": "urn:rxnorm:36567"
+          }
+        ],
+        "dosages": [
+          {
+            "dose": "40",
+            "units": "MG",
+            "routeName": "PO",
+            "scheduleName": "QPM",
+            "scheduleType": "CONTINUOUS",
+            "start": "20020305",
+            "stop": "20030306",
+            "relativeStart": 0,
+            "relativeStop": 527040,
+            "scheduleFreq": 1440,
+            "amount": "1",
+            "noun": "TABLET",
+            "instructions": "40MG",
+            "summary": "MedicationDose{uid='null'}"
+          }
+        ],
+        "orders": [
+          {
+            "orderUid": "urn:va:order:9E7A:146:12746",
+            "prescriptionId": "800029",
+            "ordered": "200203051359",
+            "providerUid": "urn:va:user:9E7A:20001",
+            "providerName": "VEHU,ONE",
+            "pharmacistUid": "urn:va:user:9E7A:10000000019",
+            "pharmacistName": "TDPHARMACIST,ONE",
+            "fillCost": "72",
+            "quantityOrdered": "90",
+            "daysSupply": 90,
+            "fillsAllowed": 3,
+            "fillsRemaining": 3,
+            "vaRouting": "W",
+            "summary": "MedicationOrder{uid='null'}"
+          }
+        ],
+        "fills": [
+          {
+            "dispenseDate": "20020305",
+            "releaseDate": "20020305",
+            "quantityDispensed": "90",
+            "daysSupplyDispensed": 90,
+            "routing": "W",
+            "summary": "MedicationFill{uid='null'}"
+          }
+        ],
+        "codes": [
+          {
+            "code": "198211",
+            "system": "urn:oid:2.16.840.1.113883.6.88",
+            "display": "Simvastatin 40 MG Oral Tablet"
+          }
+        ],
+        "rxncodes": [
+          "urn:vandf:4020400",
+          "urn:ndfrt:N0000000001",
+          "urn:ndfrt:N0000010582",
+          "urn:ndfrt:N0000010601",
+          "urn:rxnorm:36567",
+          "urn:ndfrt:N0000005842"
+        ],
+        "name": "SIMVASTATIN TAB",
+        "type": "Prescription"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP BEE",
+        "overallStart": "20020305",
+        "overallStop": "20030306",
+        "vaType": "O",
+        "supply": false,
+        "lastFilled": "20020305",
+        "qualifiedName": "SIMVASTATIN TAB",
+        "administrations": [],
+        "kind": "Medication, Outpatient",
+        "units": "MG",
+        "uid": "urn:va:med:C877:146:12746",
+        "summary": "SIMVASTATIN 40MG TAB (EXPIRED)\n TAKE ONE TABLET BY BY MOUTH EVERY EVENING",
+        "pid": "C877;146",
+        "localId": "402205;O",
+        "productFormName": "TAB",
+        "sig": "TAKE ONE TABLET BY BY MOUTH EVERY EVENING",
+        "patientInstruction": "",
+        "stopped": "20030306",
+        "medStatus": "urn:sct:392521001",
+        "medStatusName": "historical",
+        "medType": "urn:sct:73639000",
+        "vaStatus": "EXPIRED",
+        "IMO": false,
+        "products": [
+          {
+            "ingredientCode": "urn:va:vuid:4020400",
+            "ingredientCodeName": "SIMVASTATIN",
+            "ingredientName": "SIMVASTATIN TAB",
+            "drugClassCode": "urn:vadc:CV350",
+            "drugClassName": "ANTILIPEMIC AGENTS",
+            "suppliedCode": "urn:va:vuid:4010153",
+            "suppliedName": "SIMVASTATIN 40MG TAB",
+            "summary": "MedicationProduct{uid='null'}",
+            "ingredientRole": "urn:sct:410942007",
+            "strength": "40 MG",
+            "ingredientRXNCode": "urn:rxnorm:36567"
+          }
+        ],
+        "dosages": [
+          {
+            "dose": "40",
+            "units": "MG",
+            "routeName": "PO",
+            "scheduleName": "QPM",
+            "scheduleType": "CONTINUOUS",
+            "start": "20020305",
+            "stop": "20030306",
+            "relativeStart": 0,
+            "relativeStop": 527040,
+            "scheduleFreq": 1440,
+            "amount": "1",
+            "noun": "TABLET",
+            "instructions": "40MG",
+            "summary": "MedicationDose{uid='null'}"
+          }
+        ],
+        "orders": [
+          {
+            "orderUid": "urn:va:order:C877:146:12746",
+            "prescriptionId": "800029",
+            "ordered": "200203051359",
+            "providerUid": "urn:va:user:C877:20001",
+            "providerName": "VEHU,ONE",
+            "pharmacistUid": "urn:va:user:C877:10000000019",
+            "pharmacistName": "TDPHARMACIST,ONE",
+            "fillCost": "72",
+            "quantityOrdered": "90",
+            "daysSupply": 90,
+            "fillsAllowed": 3,
+            "fillsRemaining": 3,
+            "vaRouting": "W",
+            "summary": "MedicationOrder{uid='null'}"
+          }
+        ],
+        "fills": [
+          {
+            "dispenseDate": "20020305",
+            "releaseDate": "20020305",
+            "quantityDispensed": "90",
+            "daysSupplyDispensed": 90,
+            "routing": "W",
+            "summary": "MedicationFill{uid='null'}"
+          }
+        ],
+        "codes": [
+          {
+            "code": "198211",
+            "system": "urn:oid:2.16.840.1.113883.6.88",
+            "display": "Simvastatin 40 MG Oral Tablet"
+          }
+        ],
+        "rxncodes": [
+          "urn:vandf:4020400",
+          "urn:ndfrt:N0000000001",
+          "urn:ndfrt:N0000010582",
+          "urn:ndfrt:N0000010601",
+          "urn:rxnorm:36567",
+          "urn:ndfrt:N0000005842"
+        ],
+        "name": "SIMVASTATIN TAB",
+        "type": "Prescription"
+      }
+    ]
+  }
+}

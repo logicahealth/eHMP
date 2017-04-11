@@ -1,0 +1,853 @@
+{
+  "apiVersion": "1.0",
+  "data": {
+    "updated": 20140808180011,
+    "totalItems": 19,
+    "currentItemCount": 19,
+    "items": [
+      {
+        "kind": "Radiology",
+        "facilityCode": "DOD",
+        "facilityName": "DOD",
+        "statusName": "TRANSCRIBED",
+        "encounterUid": "23564658",
+        "hasImages": false,
+        "imageLocation": "INTERNAL MEDICINE     SEYMOUR JOHNSON AFB, NC",
+        "uid": "urn:va:image:DOD:0000000005:1000001513",
+        "summary": "RADIOLOGIC EXAMINATION, WRIST,RT",
+        "pid": "9E7A;5",
+        "localId": "07000074",
+        "typeName": "RADIOLOGIC EXAMINATION, WRIST,RT",
+        "dateTime": "20070621",
+        "category": "RA",
+        "status": "",
+        "reason": "test",
+        "providers": [
+          {
+            "providerName": "100000059 LARRY, PROVIDER",
+            "providerDisplayName": "100000059 LARRY, PROVIDER",
+            "summary": "ProcedureProvider{uid='null'}"
+          }
+        ],
+        "providerName": "100000059 LARRY, PROVIDER",
+        "providerDisplayName": "100000059 Larry, Provider",
+        "results": [
+          {
+            "localTitle": "WRIST,RT",
+            "report": " 4 ABNORMALITY, ATTN. NEEDED",
+            "summary": "ProcedureResult{uid='null'}"
+          }
+        ],
+        "name": "WRIST,RT",
+        "locationName": "INTERNAL MEDICINE     SEYMOUR JOHNSON AFB, NC"
+      },
+      {
+        "kind": "Radiology",
+        "facilityCode": "DOD",
+        "facilityName": "DOD",
+        "statusName": "TRANSCRIBED",
+        "encounterUid": "23564659",
+        "hasImages": false,
+        "imageLocation": "INTERNAL MEDICINE     SEYMOUR JOHNSON AFB, NC",
+        "uid": "urn:va:image:DOD:0000000005:1000001515",
+        "summary": "RADIOLOGIC EXAMINATION, CHEST,AP",
+        "pid": "9E7A;5",
+        "localId": "07000073",
+        "typeName": "RADIOLOGIC EXAMINATION, CHEST,AP",
+        "dateTime": "20070621",
+        "category": "RA",
+        "status": "",
+        "reason": "test",
+        "providers": [
+          {
+            "providerName": "100000059 LARRY, PROVIDER",
+            "providerDisplayName": "100000059 LARRY, PROVIDER",
+            "summary": "ProcedureProvider{uid='null'}"
+          }
+        ],
+        "providerName": "100000059 LARRY, PROVIDER",
+        "providerDisplayName": "100000059 Larry, Provider",
+        "results": [
+          {
+            "localTitle": "CHEST,AP",
+            "report": " 3 MAJOR ABNORMALITY, NO ATTN. NEEDED",
+            "summary": "ProcedureResult{uid='null'}"
+          }
+        ],
+        "name": "CHEST,AP",
+        "locationName": "INTERNAL MEDICINE     SEYMOUR JOHNSON AFB, NC"
+      },
+      {
+        "kind": "Imaging",
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "statusName": "COMPLETE",
+        "imagingTypeUid": "urn:va:imaging-Type:GENERAL RADIOLOGY",
+        "locationUid": "urn:va:location:9E7A:40",
+        "hasImages": false,
+        "imageLocation": "RADIOLOGY MAIN FLOOR",
+        "uid": "urn:va:image:9E7A:5:7059375.9074-1",
+        "summary": "RADIOLOGIC EXAMINATION, ABDOMEN; SINGLE ANTEROPOSTERIOR VIEW",
+        "pid": "9E7A;5",
+        "localId": "7059375.9074-1",
+        "typeName": "RADIOLOGIC EXAMINATION, ABDOMEN; SINGLE ANTEROPOSTERIOR VIEW",
+        "dateTime": "199406240925",
+        "category": "RA",
+        "reason": "",
+        "providers": [
+          {
+            "providerName": "PROVIDER,FIFTY",
+            "providerDisplayName": "Provider,Fifty",
+            "summary": "ProcedureProvider{uid='null'}",
+            "providerUid": "urn:va:user:9E7A:1595"
+          }
+        ],
+        "providerName": "PROVIDER,FIFTY",
+        "providerDisplayName": "Provider,Fifty",
+        "results": [
+          {
+            "localTitle": "ABDOMEN 1 VIEW",
+            "uid": "urn:va:document:9E7A:5:7059375.9074-1",
+            "summary": "ProcedureResult{uid='urn:va:document:9E7A:5:7059375.9074-1'}"
+          }
+        ],
+        "verified": true,
+        "name": "ABDOMEN 1 VIEW",
+        "diagnosis": [
+          {
+            "code": "NORMAL",
+            "primary": true
+          }
+        ],
+        "locationName": "RADIOLOGY MAIN FLOOR",
+        "case": 1
+      },
+      {
+        "kind": "Imaging",
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "statusName": "COMPLETE",
+        "imagingTypeUid": "urn:va:imaging-Type:GENERAL RADIOLOGY",
+        "locationUid": "urn:va:location:9E7A:40",
+        "hasImages": false,
+        "imageLocation": "RADIOLOGY MAIN FLOOR",
+        "uid": "urn:va:image:9E7A:5:7059874.9059-1",
+        "summary": "RADIOLOGIC EXAMINATION, CHEST, 2 VIEWS, FRONTAL AND LATERAL;",
+        "pid": "9E7A;5",
+        "localId": "7059874.9059-1",
+        "typeName": "RADIOLOGIC EXAMINATION, CHEST, 2 VIEWS, FRONTAL AND LATERAL;",
+        "dateTime": "199401250940",
+        "category": "RA",
+        "reason": "",
+        "providers": [
+          {
+            "providerName": "PROGRAMMER,TWENTY",
+            "providerDisplayName": "Programmer,Twenty",
+            "summary": "ProcedureProvider{uid='null'}",
+            "providerUid": "urn:va:user:9E7A:755"
+          }
+        ],
+        "providerName": "PROGRAMMER,TWENTY",
+        "providerDisplayName": "Programmer,Twenty",
+        "results": [
+          {
+            "localTitle": "CHEST 2 VIEWS PA&LAT",
+            "uid": "urn:va:document:9E7A:5:7059874.9059-1",
+            "summary": "ProcedureResult{uid='urn:va:document:9E7A:5:7059874.9059-1'}"
+          }
+        ],
+        "verified": true,
+        "name": "CHEST 2 VIEWS PA&LAT",
+        "diagnosis": [
+          {
+            "code": "NORMAL",
+            "primary": true
+          }
+        ],
+        "locationName": "RADIOLOGY MAIN FLOOR",
+        "case": 45
+      },
+      {
+        "kind": "Imaging",
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "statusName": "COMPLETE",
+        "imagingTypeUid": "urn:va:imaging-Type:GENERAL RADIOLOGY",
+        "locationUid": "urn:va:location:9E7A:40",
+        "hasImages": false,
+        "imageLocation": "RADIOLOGY MAIN FLOOR",
+        "uid": "urn:va:image:9E7A:5:7068980.8398-1",
+        "summary": "RADIOLOGIC EXAMINATION, CHEST, 2 VIEWS, FRONTAL AND LATERAL;",
+        "pid": "9E7A;5",
+        "localId": "7068980.8398-1",
+        "typeName": "RADIOLOGIC EXAMINATION, CHEST, 2 VIEWS, FRONTAL AND LATERAL;",
+        "dateTime": "199310191601",
+        "category": "RA",
+        "reason": "",
+        "providers": [
+          {
+            "providerName": "PROGRAMMER,TWENTY",
+            "providerDisplayName": "Programmer,Twenty",
+            "summary": "ProcedureProvider{uid='null'}",
+            "providerUid": "urn:va:user:9E7A:755"
+          }
+        ],
+        "providerName": "PROGRAMMER,TWENTY",
+        "providerDisplayName": "Programmer,Twenty",
+        "results": [
+          {
+            "localTitle": "CHEST 2 VIEWS PA&LAT",
+            "uid": "urn:va:document:9E7A:5:7068980.8398-1",
+            "summary": "ProcedureResult{uid='urn:va:document:9E7A:5:7068980.8398-1'}"
+          }
+        ],
+        "verified": true,
+        "name": "CHEST 2 VIEWS PA&LAT",
+        "diagnosis": [
+          {
+            "code": "NORMAL",
+            "primary": true
+          }
+        ],
+        "locationName": "RADIOLOGY MAIN FLOOR",
+        "case": 1
+      },
+      {
+        "kind": "Imaging",
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "statusName": "COMPLETE",
+        "imagingTypeUid": "urn:va:imaging-Type:GENERAL RADIOLOGY",
+        "locationUid": "urn:va:location:9E7A:40",
+        "hasImages": false,
+        "imageLocation": "RADIOLOGY MAIN FLOOR",
+        "uid": "urn:va:image:9E7A:5:7069079.8898-1",
+        "summary": "RADIOLOGIC EXAMINATION, FOOT; 2 VIEWS",
+        "pid": "9E7A;5",
+        "localId": "7069079.8898-1",
+        "typeName": "RADIOLOGIC EXAMINATION, FOOT; 2 VIEWS",
+        "dateTime": "199309201101",
+        "category": "RA",
+        "reason": "",
+        "providers": [
+          {
+            "providerName": "PROGRAMMER,TWENTY",
+            "providerDisplayName": "Programmer,Twenty",
+            "summary": "ProcedureProvider{uid='null'}",
+            "providerUid": "urn:va:user:9E7A:755"
+          }
+        ],
+        "providerName": "PROGRAMMER,TWENTY",
+        "providerDisplayName": "Programmer,Twenty",
+        "results": [
+          {
+            "localTitle": "FOOT 2 VIEWS",
+            "uid": "urn:va:document:9E7A:5:7069079.8898-1",
+            "summary": "ProcedureResult{uid='urn:va:document:9E7A:5:7069079.8898-1'}"
+          }
+        ],
+        "verified": true,
+        "name": "FOOT 2 VIEWS",
+        "diagnosis": [
+          {
+            "code": "ABNORMALITY, ATTN. NEEDED",
+            "primary": true
+          }
+        ],
+        "locationName": "RADIOLOGY MAIN FLOOR",
+        "case": 20,
+        "interpretation": "ABNORMAL"
+      },
+      {
+        "kind": "Imaging",
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "statusName": "COMPLETE",
+        "imagingTypeUid": "urn:va:imaging-Type:GENERAL RADIOLOGY",
+        "locationUid": "urn:va:location:9E7A:40",
+        "hasImages": false,
+        "imageLocation": "RADIOLOGY MAIN FLOOR",
+        "uid": "urn:va:image:9E7A:5:7069079.8898-2",
+        "summary": "RADIOLOGIC EXAMINATION; FOREARM, 2 VIEWS",
+        "pid": "9E7A;5",
+        "localId": "7069079.8898-2",
+        "typeName": "RADIOLOGIC EXAMINATION; FOREARM, 2 VIEWS",
+        "dateTime": "199309201101",
+        "category": "RA",
+        "reason": "",
+        "providers": [
+          {
+            "providerName": "PROGRAMMER,TWENTY",
+            "providerDisplayName": "Programmer,Twenty",
+            "summary": "ProcedureProvider{uid='null'}",
+            "providerUid": "urn:va:user:9E7A:755"
+          }
+        ],
+        "providerName": "PROGRAMMER,TWENTY",
+        "providerDisplayName": "Programmer,Twenty",
+        "results": [
+          {
+            "localTitle": "FOREARM 2 VIEWS",
+            "uid": "urn:va:document:9E7A:5:7069079.8898-2",
+            "summary": "ProcedureResult{uid='urn:va:document:9E7A:5:7069079.8898-2'}"
+          }
+        ],
+        "verified": true,
+        "name": "FOREARM 2 VIEWS",
+        "diagnosis": [
+          {
+            "code": "ABNORMALITY, ATTN. NEEDED",
+            "primary": true
+          }
+        ],
+        "locationName": "RADIOLOGY MAIN FLOOR",
+        "case": 21,
+        "interpretation": "ABNORMAL"
+      },
+      {
+        "kind": "Imaging",
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "statusName": "COMPLETE",
+        "imagingTypeUid": "urn:va:imaging-Type:GENERAL RADIOLOGY",
+        "locationUid": "urn:va:location:9E7A:40",
+        "hasImages": false,
+        "imageLocation": "RADIOLOGY MAIN FLOOR",
+        "uid": "urn:va:image:9E7A:5:7069079.8898-3",
+        "summary": "RADIOLOGIC EXAMINATION, WRIST; 2 VIEWS",
+        "pid": "9E7A;5",
+        "localId": "7069079.8898-3",
+        "typeName": "RADIOLOGIC EXAMINATION, WRIST; 2 VIEWS",
+        "dateTime": "199309201101",
+        "category": "RA",
+        "reason": "",
+        "providers": [
+          {
+            "providerName": "PROGRAMMER,TWENTY",
+            "providerDisplayName": "Programmer,Twenty",
+            "summary": "ProcedureProvider{uid='null'}",
+            "providerUid": "urn:va:user:9E7A:755"
+          }
+        ],
+        "providerName": "PROGRAMMER,TWENTY",
+        "providerDisplayName": "Programmer,Twenty",
+        "results": [
+          {
+            "localTitle": "WRIST 2 VIEWS",
+            "uid": "urn:va:document:9E7A:5:7069079.8898-3",
+            "summary": "ProcedureResult{uid='urn:va:document:9E7A:5:7069079.8898-3'}"
+          }
+        ],
+        "verified": true,
+        "name": "WRIST 2 VIEWS",
+        "diagnosis": [
+          {
+            "code": "ABNORMALITY, ATTN. NEEDED",
+            "primary": true
+          }
+        ],
+        "locationName": "RADIOLOGY MAIN FLOOR",
+        "case": 22,
+        "interpretation": "ABNORMAL"
+      },
+      {
+        "kind": "Imaging",
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "statusName": "COMPLETE",
+        "imagingTypeUid": "urn:va:imaging-Type:GENERAL RADIOLOGY",
+        "locationUid": "urn:va:location:9E7A:40",
+        "hasImages": false,
+        "imageLocation": "RADIOLOGY MAIN FLOOR",
+        "uid": "urn:va:image:9E7A:5:7069079.8898-4",
+        "summary": "RADIOLOGIC EXAMINATION, ABDOMEN; ANTEROPOSTERIOR AND ADDITIONAL OBLIQUE AND CONE VIEWS",
+        "pid": "9E7A;5",
+        "localId": "7069079.8898-4",
+        "typeName": "RADIOLOGIC EXAMINATION, ABDOMEN; ANTEROPOSTERIOR AND ADDITIONAL OBLIQUE AND CONE VIEWS",
+        "dateTime": "199309201101",
+        "category": "RA",
+        "reason": "",
+        "providers": [
+          {
+            "providerName": "PROGRAMMER,TWENTY",
+            "providerDisplayName": "Programmer,Twenty",
+            "summary": "ProcedureProvider{uid='null'}",
+            "providerUid": "urn:va:user:9E7A:755"
+          }
+        ],
+        "providerName": "PROGRAMMER,TWENTY",
+        "providerDisplayName": "Programmer,Twenty",
+        "results": [
+          {
+            "localTitle": "ABDOMEN 2 VIEWS [01]",
+            "uid": "urn:va:document:9E7A:5:7069079.8898-4",
+            "summary": "ProcedureResult{uid='urn:va:document:9E7A:5:7069079.8898-4'}"
+          }
+        ],
+        "verified": true,
+        "name": "ABDOMEN 2 VIEWS [01]",
+        "diagnosis": [
+          {
+            "code": "NORMAL",
+            "primary": true
+          }
+        ],
+        "locationName": "RADIOLOGY MAIN FLOOR",
+        "case": 23
+      },
+      {
+        "kind": "Imaging",
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "statusName": "COMPLETE",
+        "imagingTypeUid": "urn:va:imaging-Type:GENERAL RADIOLOGY",
+        "locationUid": "urn:va:location:9E7A:40",
+        "hasImages": false,
+        "imageLocation": "RADIOLOGY MAIN FLOOR",
+        "uid": "urn:va:image:9E7A:5:7069079.8948-1",
+        "summary": "RADIOLOGIC EXAMINATION, KNEE; 1 OR 2 VIEWS",
+        "pid": "9E7A;5",
+        "localId": "7069079.8948-1",
+        "typeName": "RADIOLOGIC EXAMINATION, KNEE; 1 OR 2 VIEWS",
+        "dateTime": "199309201051",
+        "category": "RA",
+        "reason": "",
+        "providers": [
+          {
+            "providerName": "PROGRAMMER,TWENTY",
+            "providerDisplayName": "Programmer,Twenty",
+            "summary": "ProcedureProvider{uid='null'}",
+            "providerUid": "urn:va:user:9E7A:755"
+          }
+        ],
+        "providerName": "PROGRAMMER,TWENTY",
+        "providerDisplayName": "Programmer,Twenty",
+        "results": [
+          {
+            "localTitle": "KNEE 2 VIEWS",
+            "uid": "urn:va:document:9E7A:5:7069079.8948-1",
+            "summary": "ProcedureResult{uid='urn:va:document:9E7A:5:7069079.8948-1'}"
+          }
+        ],
+        "verified": true,
+        "name": "KNEE 2 VIEWS",
+        "diagnosis": [
+          {
+            "code": "ABNORMALITY, ATTN. NEEDED",
+            "primary": true
+          }
+        ],
+        "locationName": "RADIOLOGY MAIN FLOOR",
+        "case": 16,
+        "interpretation": "ABNORMAL"
+      },
+      {
+        "kind": "Imaging",
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "statusName": "COMPLETE",
+        "imagingTypeUid": "urn:va:imaging-Type:GENERAL RADIOLOGY",
+        "locationUid": "urn:va:location:9E7A:40",
+        "hasImages": false,
+        "imageLocation": "RADIOLOGY MAIN FLOOR",
+        "uid": "urn:va:image:9E7A:5:7069079.8966-1",
+        "summary": "RADIOLOGIC EXAMINATION, ANKLE; 2 VIEWS",
+        "pid": "9E7A;5",
+        "localId": "7069079.8966-1",
+        "typeName": "RADIOLOGIC EXAMINATION, ANKLE; 2 VIEWS",
+        "dateTime": "199309201033",
+        "category": "RA",
+        "reason": "",
+        "providers": [
+          {
+            "providerName": "PROGRAMMER,TWENTY",
+            "providerDisplayName": "Programmer,Twenty",
+            "summary": "ProcedureProvider{uid='null'}",
+            "providerUid": "urn:va:user:9E7A:755"
+          }
+        ],
+        "providerName": "PROGRAMMER,TWENTY",
+        "providerDisplayName": "Programmer,Twenty",
+        "results": [
+          {
+            "localTitle": "ANKLE 2 VIEWS",
+            "uid": "urn:va:document:9E7A:5:7069079.8966-1",
+            "summary": "ProcedureResult{uid='urn:va:document:9E7A:5:7069079.8966-1'}"
+          }
+        ],
+        "verified": true,
+        "name": "ANKLE 2 VIEWS",
+        "diagnosis": [
+          {
+            "code": "ABNORMALITY, ATTN. NEEDED",
+            "primary": true
+          }
+        ],
+        "locationName": "RADIOLOGY MAIN FLOOR",
+        "case": 9,
+        "interpretation": "ABNORMAL"
+      },
+      {
+        "kind": "Imaging",
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "statusName": "COMPLETE",
+        "imagingTypeUid": "urn:va:imaging-Type:GENERAL RADIOLOGY",
+        "locationUid": "urn:va:location:9E7A:40",
+        "hasImages": false,
+        "imageLocation": "RADIOLOGY MAIN FLOOR",
+        "uid": "urn:va:image:9E7A:5:7069079.8975-1",
+        "summary": "RADIOLOGIC EXAMINATION, CHEST; SINGLE VIEW, FRONTAL",
+        "pid": "9E7A;5",
+        "localId": "7069079.8975-1",
+        "typeName": "RADIOLOGIC EXAMINATION, CHEST; SINGLE VIEW, FRONTAL",
+        "dateTime": "199309201024",
+        "category": "RA",
+        "reason": "",
+        "providers": [
+          {
+            "providerName": "PROGRAMMER,TWENTY",
+            "providerDisplayName": "Programmer,Twenty",
+            "summary": "ProcedureProvider{uid='null'}",
+            "providerUid": "urn:va:user:9E7A:755"
+          }
+        ],
+        "providerName": "PROGRAMMER,TWENTY",
+        "providerDisplayName": "Programmer,Twenty",
+        "results": [
+          {
+            "localTitle": "CHEST SINGLE VIEW",
+            "uid": "urn:va:document:9E7A:5:7069079.8975-1",
+            "summary": "ProcedureResult{uid='urn:va:document:9E7A:5:7069079.8975-1'}"
+          }
+        ],
+        "verified": true,
+        "name": "CHEST SINGLE VIEW",
+        "diagnosis": [
+          {
+            "code": "THIS A TEST DIAG CODE",
+            "primary": true
+          }
+        ],
+        "locationName": "RADIOLOGY MAIN FLOOR",
+        "case": 1,
+        "interpretation": "ABNORMAL"
+      },
+      {
+        "kind": "Imaging",
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "statusName": "COMPLETE",
+        "imagingTypeUid": "urn:va:imaging-Type:GENERAL RADIOLOGY",
+        "locationUid": "urn:va:location:9E7A:40",
+        "hasImages": false,
+        "imageLocation": "RADIOLOGY MAIN FLOOR",
+        "uid": "urn:va:image:9E7A:5:7088978.7699-1",
+        "summary": "RADIOLOGIC EXAMINATION; FOREARM, 2 VIEWS",
+        "pid": "9E7A;5",
+        "localId": "7088978.7699-1",
+        "typeName": "RADIOLOGIC EXAMINATION; FOREARM, 2 VIEWS",
+        "dateTime": "199110212300",
+        "category": "RA",
+        "reason": "",
+        "providers": [
+          {
+            "providerName": "PROGRAMMER,TWENTY",
+            "providerDisplayName": "Programmer,Twenty",
+            "summary": "ProcedureProvider{uid='null'}",
+            "providerUid": "urn:va:user:9E7A:755"
+          }
+        ],
+        "providerName": "PROGRAMMER,TWENTY",
+        "providerDisplayName": "Programmer,Twenty",
+        "results": [
+          {
+            "localTitle": "FOREARM 2 VIEWS",
+            "uid": "urn:va:document:9E7A:5:7088978.7699-1",
+            "summary": "ProcedureResult{uid='urn:va:document:9E7A:5:7088978.7699-1'}"
+          }
+        ],
+        "verified": true,
+        "name": "FOREARM 2 VIEWS",
+        "diagnosis": [
+          {
+            "code": "MAJOR ABNORMALITY, PHYSICIAN AWARE",
+            "primary": true
+          }
+        ],
+        "locationName": "RADIOLOGY MAIN FLOOR",
+        "case": 8
+      },
+      {
+        "kind": "Imaging",
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "statusName": "COMPLETE",
+        "imagingTypeUid": "urn:va:imaging-Type:GENERAL RADIOLOGY",
+        "locationUid": "urn:va:location:9E7A:40",
+        "hasImages": false,
+        "imageLocation": "RADIOLOGY MAIN FLOOR",
+        "uid": "urn:va:image:9E7A:5:7088991.9053-1",
+        "summary": "RADIOLOGIC EXAMINATION, ANKLE; 2 VIEWS",
+        "pid": "9E7A;5",
+        "localId": "7088991.9053-1",
+        "typeName": "RADIOLOGIC EXAMINATION, ANKLE; 2 VIEWS",
+        "dateTime": "199110080946",
+        "category": "RA",
+        "reason": "",
+        "providers": [
+          {
+            "providerName": "PROGRAMMER,TWENTY",
+            "providerDisplayName": "Programmer,Twenty",
+            "summary": "ProcedureProvider{uid='null'}",
+            "providerUid": "urn:va:user:9E7A:755"
+          }
+        ],
+        "providerName": "PROGRAMMER,TWENTY",
+        "providerDisplayName": "Programmer,Twenty",
+        "results": [
+          {
+            "localTitle": "ANKLE 2 VIEWS",
+            "uid": "urn:va:document:9E7A:5:7088991.9053-1",
+            "summary": "ProcedureResult{uid='urn:va:document:9E7A:5:7088991.9053-1'}"
+          }
+        ],
+        "verified": true,
+        "name": "ANKLE 2 VIEWS",
+        "diagnosis": [
+          {
+            "code": "NORMAL",
+            "primary": true
+          }
+        ],
+        "locationName": "RADIOLOGY MAIN FLOOR",
+        "case": 1
+      },
+      {
+        "kind": "Imaging",
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "statusName": "COMPLETE",
+        "imagingTypeUid": "urn:va:imaging-Type:GENERAL RADIOLOGY",
+        "locationUid": "urn:va:location:9E7A:40",
+        "hasImages": false,
+        "imageLocation": "RADIOLOGY MAIN FLOOR",
+        "uid": "urn:va:image:9E7A:5:7088992.7699-1",
+        "summary": "RADIOLOGIC EXAMINATION, ABDOMEN; ANTEROPOSTERIOR AND ADDITIONAL OBLIQUE AND CONE VIEWS",
+        "pid": "9E7A;5",
+        "localId": "7088992.7699-1",
+        "typeName": "RADIOLOGIC EXAMINATION, ABDOMEN; ANTEROPOSTERIOR AND ADDITIONAL OBLIQUE AND CONE VIEWS",
+        "dateTime": "199110072300",
+        "category": "RA",
+        "reason": "",
+        "providers": [
+          {
+            "providerName": "PROGRAMMER,TWENTY",
+            "providerDisplayName": "Programmer,Twenty",
+            "summary": "ProcedureProvider{uid='null'}",
+            "providerUid": "urn:va:user:9E7A:755"
+          }
+        ],
+        "providerName": "PROGRAMMER,TWENTY",
+        "providerDisplayName": "Programmer,Twenty",
+        "results": [
+          {
+            "localTitle": "ABDOMEN 2 VIEWS [01]",
+            "uid": "urn:va:document:9E7A:5:7088992.7699-1",
+            "summary": "ProcedureResult{uid='urn:va:document:9E7A:5:7088992.7699-1'}"
+          }
+        ],
+        "verified": true,
+        "name": "ABDOMEN 2 VIEWS [01]",
+        "diagnosis": [
+          {
+            "code": "NORMAL",
+            "primary": true
+          }
+        ],
+        "locationName": "RADIOLOGY MAIN FLOOR",
+        "case": 6
+      },
+      {
+        "kind": "Imaging",
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "statusName": "COMPLETE",
+        "imagingTypeUid": "urn:va:imaging-Type:GENERAL RADIOLOGY",
+        "locationUid": "urn:va:location:9E7A:40",
+        "hasImages": false,
+        "imageLocation": "RADIOLOGY MAIN FLOOR",
+        "uid": "urn:va:image:9E7A:5:7088992.7769-1",
+        "summary": "RADIOLOGIC EXAMINATION, ABDOMEN; SINGLE ANTEROPOSTERIOR VIEW",
+        "pid": "9E7A;5",
+        "localId": "7088992.7769-1",
+        "typeName": "RADIOLOGIC EXAMINATION, ABDOMEN; SINGLE ANTEROPOSTERIOR VIEW",
+        "dateTime": "199110072230",
+        "category": "RA",
+        "reason": "",
+        "providers": [
+          {
+            "providerName": "PROGRAMMER,TWENTY",
+            "providerDisplayName": "Programmer,Twenty",
+            "summary": "ProcedureProvider{uid='null'}",
+            "providerUid": "urn:va:user:9E7A:755"
+          }
+        ],
+        "providerName": "PROGRAMMER,TWENTY",
+        "providerDisplayName": "Programmer,Twenty",
+        "results": [
+          {
+            "localTitle": "ABDOMEN 1 VIEW",
+            "uid": "urn:va:document:9E7A:5:7088992.7769-1",
+            "summary": "ProcedureResult{uid='urn:va:document:9E7A:5:7088992.7769-1'}"
+          }
+        ],
+        "verified": true,
+        "name": "ABDOMEN 1 VIEW",
+        "diagnosis": [
+          {
+            "code": "NORMAL",
+            "primary": true
+          }
+        ],
+        "locationName": "RADIOLOGY MAIN FLOOR",
+        "case": 5
+      },
+      {
+        "kind": "Imaging",
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "statusName": "COMPLETE",
+        "imagingTypeUid": "urn:va:imaging-Type:GENERAL RADIOLOGY",
+        "locationUid": "urn:va:location:9E7A:59",
+        "hasImages": false,
+        "imageLocation": "MAIN FLOOR",
+        "uid": "urn:va:image:9E7A:5:7089380.9087-1",
+        "summary": "RADIOLOGIC EXAMINATION, ABDOMEN; SINGLE ANTEROPOSTERIOR VIEW",
+        "pid": "9E7A;5",
+        "localId": "7089380.9087-1",
+        "typeName": "RADIOLOGIC EXAMINATION, ABDOMEN; SINGLE ANTEROPOSTERIOR VIEW",
+        "dateTime": "199106190912",
+        "category": "RA",
+        "reason": "",
+        "providers": [
+          {
+            "providerName": "PROVIDER,THIRTYNINE",
+            "providerDisplayName": "Provider,Thirtynine",
+            "summary": "ProcedureProvider{uid='null'}",
+            "providerUid": "urn:va:user:9E7A:1252"
+          }
+        ],
+        "providerName": "PROVIDER,THIRTYNINE",
+        "providerDisplayName": "Provider,Thirtynine",
+        "results": [
+          {
+            "localTitle": "ABDOMEN 1 VIEW",
+            "uid": "urn:va:document:9E7A:5:7089380.9087-1",
+            "summary": "ProcedureResult{uid='urn:va:document:9E7A:5:7089380.9087-1'}"
+          }
+        ],
+        "verified": true,
+        "name": "ABDOMEN 1 VIEW",
+        "diagnosis": [
+          {
+            "code": "NORMAL",
+            "primary": true
+          }
+        ],
+        "locationName": "MAIN FLOOR",
+        "case": 13
+      },
+      {
+        "kind": "Imaging",
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "statusName": "COMPLETE",
+        "imagingTypeUid": "urn:va:imaging-Type:GENERAL RADIOLOGY",
+        "locationUid": "urn:va:location:9E7A:40",
+        "hasImages": false,
+        "imageLocation": "RADIOLOGY MAIN FLOOR",
+        "uid": "urn:va:image:9E7A:5:7098873.838-1",
+        "summary": "RADIOLOGIC EXAMINATION, CHEST, 2 VIEWS, FRONTAL AND LATERAL;",
+        "pid": "9E7A;5",
+        "localId": "7098873.838-1",
+        "typeName": "RADIOLOGIC EXAMINATION, CHEST, 2 VIEWS, FRONTAL AND LATERAL;",
+        "dateTime": "199011261619",
+        "category": "RA",
+        "reason": "",
+        "providers": [
+          {
+            "providerName": "PROGRAMMER,TWENTY",
+            "providerDisplayName": "Programmer,Twenty",
+            "summary": "ProcedureProvider{uid='null'}",
+            "providerUid": "urn:va:user:9E7A:755"
+          }
+        ],
+        "providerName": "PROGRAMMER,TWENTY",
+        "providerDisplayName": "Programmer,Twenty",
+        "results": [
+          {
+            "localTitle": "CHEST 2 VIEWS PA&LAT",
+            "uid": "urn:va:document:9E7A:5:7098873.838-1",
+            "summary": "ProcedureResult{uid='urn:va:document:9E7A:5:7098873.838-1'}"
+          }
+        ],
+        "verified": true,
+        "name": "CHEST 2 VIEWS PA&LAT",
+        "diagnosis": [
+          {
+            "code": "NORMAL",
+            "primary": true
+          }
+        ],
+        "locationName": "RADIOLOGY MAIN FLOOR",
+        "case": 1
+      },
+      {
+        "kind": "Imaging",
+        "facilityCode": "998",
+        "facilityName": "ABILENE (CAA)",
+        "statusName": "COMPLETE",
+        "imagingTypeUid": "urn:va:imaging-Type:GENERAL RADIOLOGY",
+        "locationUid": "urn:va:location:9E7A:60",
+        "hasImages": false,
+        "imageLocation": "OPC RADIOLOGY",
+        "uid": "urn:va:image:9E7A:5:7099888.8549-1",
+        "summary": "RADIOLOGIC EXAMINATION, MANDIBLE; PARTIAL, LESS THAN 4 VIEWS",
+        "pid": "9E7A;5",
+        "localId": "7099888.8549-1",
+        "typeName": "RADIOLOGIC EXAMINATION, MANDIBLE; PARTIAL, LESS THAN 4 VIEWS",
+        "dateTime": "199001111450",
+        "category": "RA",
+        "reason": "",
+        "providers": [
+          {
+            "providerName": "PROVIDER,FORTYTWO",
+            "providerDisplayName": "Provider,Fortytwo",
+            "summary": "ProcedureProvider{uid='null'}",
+            "providerUid": "urn:va:user:9E7A:1259"
+          }
+        ],
+        "providerName": "PROVIDER,FORTYTWO",
+        "providerDisplayName": "Provider,Fortytwo",
+        "results": [
+          {
+            "localTitle": "MANDIBLE LESS THAN 4 VIEWS",
+            "uid": "urn:va:document:9E7A:5:7099888.8549-1",
+            "summary": "ProcedureResult{uid='urn:va:document:9E7A:5:7099888.8549-1'}"
+          }
+        ],
+        "verified": true,
+        "name": "MANDIBLE LESS THAN 4 VIEWS",
+        "diagnosis": [
+          {
+            "code": "NORMAL",
+            "primary": true
+          }
+        ],
+        "locationName": "OPC RADIOLOGY",
+        "case": 38
+      }
+    ]
+  }
+}

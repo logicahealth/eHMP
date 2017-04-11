@@ -1,0 +1,376 @@
+{
+  "apiVersion": "1.0",
+  "data": {
+    "updated": 20140808180018,
+    "totalItems": 5,
+    "currentItemCount": 5,
+    "items": [
+      {
+        "facilityCode": "515.6",
+        "facilityName": "TROY",
+        "overallStart": "199909221440",
+        "overallStop": "199909221356",
+        "vaType": "I",
+        "supply": false,
+        "qualifiedName": "ASCORBIC ACID TAB",
+        "administrations": [],
+        "kind": "Medication, Inpatient",
+        "uid": "urn:va:med:9E7A:17:10559",
+        "summary": "ASCORBIC ACID TAB (DISCONTINUED)\n Give: ",
+        "pid": "9E7A;17",
+        "localId": "7U;I",
+        "productFormName": "TAB",
+        "sig": "Give: ",
+        "stopped": "199909221356",
+        "medStatus": "urn:sct:73425007",
+        "medStatusName": "not active",
+        "medType": "urn:sct:105903003",
+        "vaStatus": "DISCONTINUED",
+        "IMO": false,
+        "products": [
+          {
+            "ingredientCode": "urn:va:vuid:",
+            "ingredientCodeName": "",
+            "ingredientName": "ASCORBIC ACID TAB",
+            "drugClassCode": "urn:vadc:VT400",
+            "drugClassName": "VITAMIN C",
+            "suppliedCode": "urn:va:vuid:",
+            "suppliedName": "",
+            "summary": "MedicationProduct{uid='null'}",
+            "ingredientRole": "urn:sct:410942007"
+          }
+        ],
+        "dosages": [
+          {
+            "routeName": "PO",
+            "scheduleName": "QD",
+            "start": "199909221440",
+            "stop": "199909221356",
+            "relativeStart": 0,
+            "relativeStop": -44,
+            "instructions": "35MG",
+            "summary": "MedicationDose{uid='null'}"
+          }
+        ],
+        "orders": [
+          {
+            "orderUid": "urn:va:order:9E7A:17:10559",
+            "ordered": "199909221344",
+            "providerUid": "urn:va:user:9E7A:11733",
+            "providerName": "RADTECH,SEVENTEEN",
+            "pharmacistUid": "urn:va:user:9E7A:11733",
+            "pharmacistName": "RADTECH,SEVENTEEN",
+            "locationName": "GEN MED",
+            "locationUid": "urn:va:location:9E7A:9",
+            "summary": "MedicationOrder{uid='null'}"
+          }
+        ],
+        "fills": [],
+        "rxncodes": [],
+        "name": "ASCORBIC ACID TAB"
+      },
+      {
+        "facilityCode": "515.6",
+        "facilityName": "TROY",
+        "overallStart": "199909131440",
+        "overallStop": "199900100000",
+        "vaType": "I",
+        "supply": false,
+        "qualifiedName": "MULTIVITAMINS TAB",
+        "administrations": [],
+        "kind": "Medication, Inpatient",
+        "uid": "urn:va:med:9E7A:17:10513",
+        "summary": "MULTIVITAMINS TAB (EXPIRED)\n Give: ",
+        "pid": "9E7A;17",
+        "localId": "5U;I",
+        "productFormName": "TAB",
+        "sig": "Give: ",
+        "stopped": "199900100000",
+        "medStatus": "urn:sct:392521001",
+        "medStatusName": "historical",
+        "medType": "urn:sct:105903003",
+        "vaStatus": "EXPIRED",
+        "IMO": false,
+        "products": [
+          {
+            "ingredientCode": "urn:va:vuid:4022115",
+            "ingredientCodeName": "MULTIVITAMINS",
+            "ingredientName": "MULTIVITAMINS TAB",
+            "drugClassCode": "urn:vadc:VT801",
+            "drugClassName": "MULTIVITAMINS",
+            "suppliedCode": "urn:va:vuid:4002060",
+            "suppliedName": "MULTIVITAMIN TAB",
+            "summary": "MedicationProduct{uid='null'}",
+            "ingredientRole": "urn:sct:410942007",
+            "ingredientRXNCode": "urn:rxnorm:89905"
+          }
+        ],
+        "dosages": [
+          {
+            "routeName": "PO",
+            "scheduleName": "QD",
+            "start": "199909131440",
+            "stop": "199900100000",
+            "relativeStart": 0,
+            "relativeStop": 3440,
+            "instructions": "250MG",
+            "summary": "MedicationDose{uid='null'}"
+          }
+        ],
+        "orders": [
+          {
+            "orderUid": "urn:va:order:9E7A:17:10513",
+            "ordered": "199909131608",
+            "providerUid": "urn:va:user:9E7A:11733",
+            "providerName": "RADTECH,SEVENTEEN",
+            "pharmacistUid": "urn:va:user:9E7A:11733",
+            "pharmacistName": "RADTECH,SEVENTEEN",
+            "locationName": "GEN MED",
+            "locationUid": "urn:va:location:9E7A:9",
+            "summary": "MedicationOrder{uid='null'}"
+          }
+        ],
+        "fills": [],
+        "rxncodes": [
+          "urn:vandf:4022115",
+          "urn:ndfrt:N0000010595",
+          "urn:ndfrt:N0000000001",
+          "urn:ndfrt:N0000010582",
+          "urn:rxnorm:89905",
+          "urn:ndfrt:N0000029360"
+        ],
+        "name": "MULTIVITAMINS TAB"
+      },
+      {
+        "facilityCode": "515.6",
+        "facilityName": "TROY",
+        "overallStart": "199909131700",
+        "overallStop": "199900100000",
+        "vaType": "I",
+        "supply": false,
+        "qualifiedName": "ASCORBIC ACID TAB",
+        "administrations": [],
+        "kind": "Medication, Inpatient",
+        "uid": "urn:va:med:9E7A:17:10515",
+        "summary": "ASCORBIC ACID TAB (EXPIRED)\n Give: ",
+        "pid": "9E7A;17",
+        "localId": "6U;I",
+        "productFormName": "TAB",
+        "sig": "Give: ",
+        "stopped": "199900100000",
+        "medStatus": "urn:sct:392521001",
+        "medStatusName": "historical",
+        "medType": "urn:sct:105903003",
+        "vaStatus": "EXPIRED",
+        "IMO": false,
+        "products": [
+          {
+            "ingredientCode": "urn:va:vuid:4017471",
+            "ingredientCodeName": "ASCORBIC ACID",
+            "ingredientName": "ASCORBIC ACID TAB",
+            "drugClassCode": "urn:vadc:VT400",
+            "drugClassName": "VITAMIN C",
+            "suppliedCode": "urn:va:vuid:4001031",
+            "suppliedName": "ASCORBIC ACID 500MG TAB",
+            "summary": "MedicationProduct{uid='null'}",
+            "ingredientRole": "urn:sct:410942007",
+            "strength": "500 MG",
+            "ingredientRXNCode": "urn:rxnorm:1151"
+          }
+        ],
+        "dosages": [
+          {
+            "routeName": "PO",
+            "scheduleName": "BID",
+            "scheduleType": "CONTINUOUS",
+            "start": "199909131700",
+            "stop": "199900100000",
+            "relativeStart": 0,
+            "relativeStop": 3300,
+            "scheduleFreq": 720,
+            "instructions": "500MG",
+            "summary": "MedicationDose{uid='null'}"
+          }
+        ],
+        "orders": [
+          {
+            "orderUid": "urn:va:order:9E7A:17:10515",
+            "ordered": "199909131608",
+            "providerUid": "urn:va:user:9E7A:11733",
+            "providerName": "RADTECH,SEVENTEEN",
+            "pharmacistUid": "urn:va:user:9E7A:11733",
+            "pharmacistName": "RADTECH,SEVENTEEN",
+            "locationName": "GEN MED",
+            "locationUid": "urn:va:location:9E7A:9",
+            "summary": "MedicationOrder{uid='null'}"
+          }
+        ],
+        "fills": [],
+        "codes": [
+          {
+            "code": "282402",
+            "system": "urn:oid:2.16.840.1.113883.6.88",
+            "display": "Ascorbic Acid 500 MG Oral Tablet"
+          }
+        ],
+        "rxncodes": [
+          "urn:vandf:4017471",
+          "urn:ndfrt:N0000008028",
+          "urn:ndfrt:N0000000002",
+          "urn:ndfrt:N0000007627",
+          "urn:ndfrt:N0000007676",
+          "urn:ndfrt:N0000008137",
+          "urn:rxnorm:1151",
+          "urn:ndfrt:N0000145859",
+          "urn:ndfrt:N0000029269",
+          "urn:ndfrt:N0000146025"
+        ],
+        "name": "ASCORBIC ACID TAB"
+      },
+      {
+        "facilityCode": "515.6",
+        "facilityName": "TROY",
+        "overallStart": "199904090900",
+        "overallStop": "199904120000",
+        "vaType": "I",
+        "supply": false,
+        "qualifiedName": "ASCORBIC ACID TAB",
+        "administrations": [],
+        "kind": "Medication, Inpatient",
+        "uid": "urn:va:med:9E7A:17:9751",
+        "summary": "ASCORBIC ACID TAB (EXPIRED)\n Give: ",
+        "pid": "9E7A;17",
+        "localId": "4U;I",
+        "productFormName": "TAB",
+        "sig": "Give: ",
+        "stopped": "199904120000",
+        "medStatus": "urn:sct:392521001",
+        "medStatusName": "historical",
+        "medType": "urn:sct:105903003",
+        "vaStatus": "EXPIRED",
+        "IMO": false,
+        "products": [
+          {
+            "ingredientCode": "urn:va:vuid:",
+            "ingredientCodeName": "",
+            "ingredientName": "ASCORBIC ACID TAB",
+            "drugClassCode": "urn:vadc:VT400",
+            "drugClassName": "VITAMIN C",
+            "suppliedCode": "urn:va:vuid:",
+            "suppliedName": "",
+            "summary": "MedicationProduct{uid='null'}",
+            "ingredientRole": "urn:sct:410942007"
+          }
+        ],
+        "dosages": [
+          {
+            "routeName": "PO",
+            "scheduleName": "QD",
+            "start": "199904090900",
+            "stop": "199904120000",
+            "relativeStart": 0,
+            "relativeStop": 3780,
+            "instructions": "35MG",
+            "summary": "MedicationDose{uid='null'}"
+          }
+        ],
+        "orders": [
+          {
+            "orderUid": "urn:va:order:9E7A:17:9751",
+            "ordered": "199904090918",
+            "providerUid": "urn:va:user:9E7A:10958",
+            "providerName": "WARDCLERK,FIFTYTHREE",
+            "pharmacistUid": "urn:va:user:9E7A:11733",
+            "pharmacistName": "RADTECH,SEVENTEEN",
+            "locationName": "GEN MED",
+            "locationUid": "urn:va:location:9E7A:9",
+            "summary": "MedicationOrder{uid='null'}"
+          }
+        ],
+        "fills": [],
+        "rxncodes": [],
+        "name": "ASCORBIC ACID TAB"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "overallStart": "199712111500",
+        "overallStop": "19990111145002",
+        "vaType": "V",
+        "supply": false,
+        "qualifiedName": "POTASSIUM CHLORIDE INJ,SOLN in DEXTROSE 5% IN WATER INJ,SOLN",
+        "administrations": [],
+        "kind": "Medication, Infusion",
+        "uid": "urn:va:med:9E7A:17:7418.1",
+        "summary": "DEXTROSE 5% IN WATER INJ,SOLN,POTASSIUM CHLORIDE INJ,SOLN (EXPIRED)\n10 ml/hr ",
+        "pid": "9E7A;17",
+        "localId": "3V;I",
+        "stopped": "19990111145002",
+        "medStatus": "urn:sct:392521001",
+        "medStatusName": "historical",
+        "medType": "urn:sct:105903003",
+        "vaStatus": "EXPIRED",
+        "IMO": false,
+        "products": [
+          {
+            "ingredientName": "POTASSIUM CHLORIDE INJ,SOLN",
+            "drugClassCode": "urn:vadc:TN430",
+            "drugClassName": "POTASSIUM",
+            "summary": "MedicationProduct{uid='null'}",
+            "ingredientRole": "urn:sct:418804003",
+            "strength": "1 MEQ"
+          },
+          {
+            "ingredientCode": "urn:va:vuid:4017760",
+            "ingredientCodeName": "DEXTROSE",
+            "ingredientName": "DEXTROSE 5% IN WATER INJ,SOLN",
+            "drugClassCode": "urn:vadc:TN101",
+            "drugClassName": "IV SOLUTIONS WITHOUT ELECTROLYTES",
+            "suppliedCode": "urn:va:vuid:4014924",
+            "suppliedName": "DEXTROSE 5% INJ,BAG,1000ML ",
+            "summary": "MedicationProduct{uid='null'}",
+            "ingredientRole": "urn:sct:418297009",
+            "volume": "100 ML",
+            "ingredientRXNCode": "urn:rxnorm:4850"
+          }
+        ],
+        "dosages": [
+          {
+            "ivRate": "10 ml/hr",
+            "routeName": "IV",
+            "summary": "MedicationDose{uid='null'}"
+          }
+        ],
+        "orders": [
+          {
+            "orderUid": "urn:va:order:9E7A:17:7418.1",
+            "ordered": "199712111623",
+            "providerUid": "urn:va:user:9E7A:983",
+            "providerName": "PROVIDER,ONE",
+            "pharmacistUid": "urn:va:user:9E7A:923",
+            "pharmacistName": "PROGRAMMER,TWENTYEIGHT",
+            "summary": "MedicationOrder{uid='null'}"
+          }
+        ],
+        "fills": [],
+        "codes": [
+          {
+            "code": "309778",
+            "system": "urn:oid:2.16.840.1.113883.6.88",
+            "display": "Glucose 50 MG/ML Injectable Solution"
+          }
+        ],
+        "rxncodes": [
+          "urn:vandf:4017760",
+          "urn:ndfrt:N0000000001",
+          "urn:ndfrt:N0000010582",
+          "urn:ndfrt:N0000010586",
+          "urn:rxnorm:4850",
+          "urn:ndfrt:N0000147647",
+          "urn:ndfrt:N0000006402"
+        ],
+        "name": "POTASSIUM CHLORIDE INJ,SOLN"
+      }
+    ]
+  }
+}

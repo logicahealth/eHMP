@@ -1,0 +1,345 @@
+{
+    "apiVersion": "1.0.0",
+    "swaggerVersion": "1.2",
+    "basePath": "http://localhost:9080",
+    "resourcePath": "/data",
+    "apis": [
+        {
+            "path": "/data/{uid}",
+            "operations": [
+                {
+                    "method": "GET",
+                    "nickname": "getOperationalDataItemByUniqueId",
+                    "type": "OperationalDataItem",
+                    "parameters": [
+                        {
+                            "paramType": "path",
+                            "name": "uid",
+                            "description": "UID of item that to fetch",
+                            "type": "string",
+                            "required": true
+                        }
+                    ],
+                    "summary": "Fetch an item by UID",
+                    "responseMessages": [
+                        {
+                            "code": 404,
+                            "message": "The item cannot be found"
+                        }
+                    ]
+                },
+                {
+                    "method": "DELETE",
+                    "nickname": "deleteOperationalDataItem",
+                    "parameters": [
+                        {
+                            "paramType": "path",
+                            "name": "uid",
+                            "description": "UID of item to delete",
+                            "type": "string",
+                            "required": true
+                        }
+                    ],
+                    "summary": "Delete an item by UID",
+                    "responseMessages": [
+                        {
+                            "code": 404,
+                            "message": "The item cannot be found"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/data/{uid}/{template}",
+            "operations": [
+                {
+                    "method": "GET",
+                    "nickname": "getOperationalDataItemByUniqueIdWithTemplate",
+                    "parameters": [
+                        {
+                            "paramType": "path",
+                            "name": "uid",
+                            "description": "UID of item that needs to be fetched",
+                            "type": "string",
+                            "required": true
+                        },
+                        {
+                            "paramType": "path",
+                            "name": "template",
+                            "description": "The name of an ODC template to format the response with",
+                            "type": "string",
+                            "required": true
+                        }
+                    ],
+                    "summary": "Fetch an item by UID in a specifc format",
+                    "responseMessages": [
+                        {
+                            "code": 404,
+                            "message": "The item or template cannot be found"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/data/index/{indexName}",
+            "operations": [
+                {
+                    "method": "GET",
+                    "nickname": "getOperationalDataFromIndex",
+                    "parameters": [
+                        {
+                            "paramType": "path",
+                            "name": "indexName",
+                            "description": "The name of the ODC index from which to fetch operational data items",
+                            "type": "string",
+                            "required": true,
+                            "enum": [
+                                "test-name",
+                                "utest-name",
+                                "vprupdate",
+                                "person",
+                                "personphoto",
+                                "team-membership",
+                                "team-categories",
+                                "teams",
+                                "team-positions",
+                                "categories",
+                                "orderable-types",
+                                "clioterminology",
+                                "rosters",
+                                "rosterpats"
+                            ]
+                        },
+                        {
+                            "paramType": "query",
+                            "name": "range",
+                            "description":"",
+                            "type":"string",
+                            "required": false
+                        },
+                        {
+                            "paramType": "query",
+                            "name": "order",
+                            "description":"",
+                            "type":"string",
+                            "required": false
+                        },
+                        {
+                            "paramType": "query",
+                            "name": "template",
+                            "description":"",
+                            "type":"string",
+                            "required": false
+                        },
+                        {
+                            "paramType": "query",
+                            "name": "filter",
+                            "description":"",
+                            "type":"string",
+                            "required": false
+                        },
+                        {
+                            "paramType": "query",
+                            "name": "start",
+                            "description":"",
+                            "type":"string",
+                            "required": false
+                        }
+                    ],
+                    "summary": "Fetch operational data by index",
+                    "responseMessages": [
+                        {
+                            "code": 404,
+                            "message": "The index cannot be found"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/data/index/{indexName}/{template}",
+            "operations": [
+                {
+                    "method": "GET",
+                    "nickname": "getOperationalDataFromIndexWithTemplate",
+                    "parameters": [
+                        {
+                            "paramType": "path",
+                            "name": "indexName",
+                            "description": "The name of the ODC index from which to fetch operational data items",
+                            "type": "string",
+                            "required": true,
+                            "enum": [
+                                "test-name",
+                                "utest-name",
+                                "vprupdate",
+                                "person",
+                                "personphoto",
+                                "team-membership",
+                                "team-categories",
+                                "teams",
+                                "team-positions",
+                                "categories",
+                                "orderable-types",
+                                "clioterminology",
+                                "rosters",
+                                "rosterpats"
+                            ]
+                        },
+                        {
+                            "paramType": "path",
+                            "name": "template",
+                            "description": "The name of an ODC template to format the items with",
+                            "type": "string",
+                            "required": true
+                        }
+                    ],
+                    "summary": "Fetch operational data by index in a specific format",
+                    "responseMessages": [
+                        {
+                            "code": 404,
+                            "message": "The index or template cannot be found"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/data/last/{indexName}",
+            "operations": [
+                {
+                    "method": "GET",
+                    "nickname": "foo",
+                    "nickname": "getOperationalDataFromIndex",
+                    "parameters": [
+                        {
+                            "paramType": "path",
+                            "name": "indexName",
+                            "description": "The name of the ODC index from which to fetch operational data items",
+                            "type": "string",
+                            "required": true
+                        }
+                    ],
+                    "summary": "Fetch the most recent item in the index",
+                    "responseMessages": [
+                        {
+                            "code": 404,
+                            "message": "The index cannot be found"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/data/count/{countName}",
+            "operations": [
+                {
+                    "method": "GET",
+                    "nickname": "foo",
+                    "parameters": [
+                        {
+                            "paramType": "path",
+                            "name": "countName",
+                            "description": "",
+                            "type": "string",
+                            "enum":["test-name-count"],
+                            "required": true
+                        }
+                    ],
+                    "summary": "Fetch counts of operational data"
+                }
+            ]
+        },
+        {
+            "path": "/data/find/{collectionName}",
+            "operations": [
+                {
+                    "method": "GET",
+                    "nickname": "foo"
+                }
+            ]
+        },
+        {
+            "path": "/data/find/{collectionName}/{template}",
+            "operations": [
+                {
+                    "method": "GET",
+                    "nickname": "foo"
+                }
+            ]
+        },
+        {
+            "path": "/data/all/count/{countName}",
+            "operations": [
+                {
+                    "method": "GET",
+                    "nickname": "foo"
+                }
+            ]
+        },
+        {
+            "path": "/data/collection/{collectionName}",
+            "operations": [
+                {
+                    "method": "DELETE",
+                    "nickname": "foo",
+                    "parameters": [
+                        {
+                            "paramType":"path",
+                            "name":"collectionName",
+                            "description": "The name of the collection to delete",
+                            "type": "string",
+                            "required": true
+                        }
+                    ],
+                    "summary": "Delete all items in the specified collection"
+                }
+            ]
+        },
+        {
+            "path": "/data",
+            "operations": [
+                {
+                    "method": "POST",
+                    "nickname": "postOperationalDataItem",
+                    "summary": "Add an item to the Operational Data Collections",
+                    "notes": "Some longer description of this bad bwoy here"
+                },
+                {
+                    "method": "PUT",
+                    "nickname": "putOperationalDataItem",
+                    "summary": "Add an item to the Operational Data Collections"
+                },
+                {
+                    "method": "DELETE",
+                    "nickname": "deleteAllOperationalData",
+                    "summary": "Delete all operational data"
+                }
+            ]
+        }
+    ],
+    "models": {
+        "OperationalDataItem": {
+            "id": "OperationalDataItem",
+            "properties": {
+                "uid": {
+                    "type": "string"
+                }
+            },
+            "required": ["uid"]
+        },
+        "JsonCCollection": {
+            "id": "JsonCCollection",
+            "properties": {
+                "apiVersion": {
+                    "type": "string"
+                },
+                "data": {
+                    "type": "object"
+                }
+            }
+        }
+    }
+}

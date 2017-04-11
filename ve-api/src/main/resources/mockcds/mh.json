@@ -1,0 +1,25 @@
+{
+  "apiVersion": "1.01",
+  "params": {
+    "domain": "CDS.MOCK.DOMAIN",
+    "systemId": "0CD5"
+  },
+  "data": {
+    "updated": "20140409083837",
+    "totalItems": 1,
+    "items": [
+      {
+        "administeredDateTime": 19901017,
+        "displayName": 93,
+        "facilityCode": 400,
+        "facilityName": "CDS DATA",
+        "isCopyright": false,
+        "localId": "39;1;93;1;2901017",
+        "name": "HX2",
+        "providerName": "RESIDENT,NEW",
+        "providerUid": "urn:va:user:0CD5:1000",
+        "uid": "urn:va:mh:0CD5:39:39;1;93;1;2901017"
+      }
+    ]
+  }
+}

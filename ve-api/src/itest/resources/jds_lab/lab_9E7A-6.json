@@ -1,0 +1,784 @@
+{
+  "apiVersion": "1.0",
+  "data": {
+    "updated": 20140808180012,
+    "totalItems": 18,
+    "currentItemCount": 18,
+    "items": [
+      {
+        "facilityCode": "DOD",
+        "facilityName": "4th Medical Group/0090",
+        "categoryCode": "urn:va:lab-category:CH",
+        "categoryName": "Laboratory",
+        "observed": "200706211026",
+        "resulted": "200706210226",
+        "specimen": "BLOOD",
+        "orderId": "23564645",
+        "comment": "",
+        "displayName": "Leukocytes, Blood Quantitative",
+        "result": "25.0",
+        "kind": "Laboratory",
+        "resultNumber": 25.0,
+        "abnormal": false,
+        "micro": false,
+        "qualifiedName": "Leukocytes, Blood Quantitative (BLOOD)",
+        "uid": "urn:va:lab:DOD:0000000006:1000001208",
+        "summary": "Leukocytes, Blood Quantitative (BLOOD) 25.0",
+        "pid": "9E7A;6",
+        "localId": "070621 HE 177^CH",
+        "typeName": "Leukocytes, Blood Quantitative",
+        "codes": [
+          {
+            "code": "20215",
+            "system": "DOD_NCID"
+          },
+          {
+            "code": "26464-8",
+            "system": "http://loinc.org",
+            "display": "Leukocytes [#/volume] in Blood"
+          }
+        ],
+        "lnccodes": [],
+        "statusCode": "urn:va:lab-status:completed",
+        "organizerType": "organizerType",
+        "statusName": "completed",
+        "referenceRange": "(3.4-9.0)"
+      },
+      {
+        "facilityCode": "DOD",
+        "facilityName": "4th Medical Group/0090",
+        "categoryCode": "urn:va:lab-category:CH",
+        "categoryName": "Laboratory",
+        "observed": "200706211026",
+        "resulted": "200706210226",
+        "specimen": "BLOOD",
+        "orderId": "23564645",
+        "comment": "",
+        "displayName": "Erythrocytes, Blood Quantitative Automated Count",
+        "result": "25.00",
+        "kind": "Laboratory",
+        "resultNumber": 25.0,
+        "abnormal": false,
+        "micro": false,
+        "qualifiedName": "Erythrocytes, Blood Quantitative Automated Count (BLOOD)",
+        "uid": "urn:va:lab:DOD:0000000006:1000001209",
+        "summary": "Erythrocytes, Blood Quantitative Automated Count (BLOOD) 25.00",
+        "pid": "9E7A;6",
+        "localId": "070621 HE 177^CH",
+        "typeName": "Erythrocytes, Blood Quantitative Automated Count",
+        "codes": [
+          {
+            "code": "4793",
+            "system": "DOD_NCID"
+          },
+          {
+            "code": "789-8",
+            "system": "http://loinc.org",
+            "display": "Erythrocytes [#/volume] in Blood by Automated count"
+          }
+        ],
+        "lnccodes": [],
+        "statusCode": "urn:va:lab-status:completed",
+        "organizerType": "organizerType",
+        "statusName": "completed",
+        "referenceRange": "(3.91-5.55)"
+      },
+      {
+        "facilityCode": "DOD",
+        "facilityName": "4th Medical Group/0090",
+        "categoryCode": "urn:va:lab-category:CH",
+        "categoryName": "Laboratory",
+        "observed": "200706211026",
+        "resulted": "200706210226",
+        "specimen": "BLOOD",
+        "orderId": "23564645",
+        "comment": "",
+        "displayName": "Hemoglobin, Blood Quantitative",
+        "result": "17.0",
+        "kind": "Laboratory",
+        "resultNumber": 17.0,
+        "abnormal": false,
+        "micro": false,
+        "qualifiedName": "Hemoglobin, Blood Quantitative (BLOOD)",
+        "uid": "urn:va:lab:DOD:0000000006:1000001210",
+        "summary": "Hemoglobin, Blood Quantitative (BLOOD) 17.0",
+        "pid": "9E7A;6",
+        "localId": "070621 HE 177^CH",
+        "typeName": "Hemoglobin, Blood Quantitative",
+        "codes": [
+          {
+            "code": "4718",
+            "system": "DOD_NCID"
+          },
+          {
+            "code": "718-7",
+            "system": "http://loinc.org",
+            "display": "Hemoglobin [Mass/volume] in Blood"
+          }
+        ],
+        "lnccodes": [],
+        "statusCode": "urn:va:lab-status:completed",
+        "organizerType": "organizerType",
+        "statusName": "completed",
+        "referenceRange": "(12.2-17.0)"
+      },
+      {
+        "facilityCode": "DOD",
+        "facilityName": "4th Medical Group/0090",
+        "categoryCode": "urn:va:lab-category:CH",
+        "categoryName": "Laboratory",
+        "observed": "200706211026",
+        "resulted": "200706210226",
+        "specimen": "BLOOD",
+        "orderId": "23564645",
+        "comment": "",
+        "displayName": "Hematocrit, Blood Quantitative Automated Count",
+        "result": "30.0",
+        "kind": "Laboratory",
+        "resultNumber": 30.0,
+        "abnormal": false,
+        "micro": false,
+        "qualifiedName": "Hematocrit, Blood Quantitative Automated Count (BLOOD)",
+        "uid": "urn:va:lab:DOD:0000000006:1000001211",
+        "summary": "Hematocrit, Blood Quantitative Automated Count (BLOOD) 30.0",
+        "pid": "9E7A;6",
+        "localId": "070621 HE 177^CH",
+        "typeName": "Hematocrit, Blood Quantitative Automated Count",
+        "codes": [
+          {
+            "code": "8566",
+            "system": "DOD_NCID"
+          },
+          {
+            "code": "4544-3",
+            "system": "http://loinc.org",
+            "display": "Hematocrit [Volume Fraction] of Blood by Automated count"
+          }
+        ],
+        "lnccodes": [],
+        "statusCode": "urn:va:lab-status:completed",
+        "organizerType": "organizerType",
+        "statusName": "completed",
+        "referenceRange": "(35.5-49.1)"
+      },
+      {
+        "facilityCode": "DOD",
+        "facilityName": "4th Medical Group/0090",
+        "categoryCode": "urn:va:lab-category:CH",
+        "categoryName": "Laboratory",
+        "observed": "200706211026",
+        "resulted": "200706210226",
+        "specimen": "BLOOD",
+        "orderId": "23564645",
+        "comment": "",
+        "displayName": "Mean Corpuscular Volume, RBC Quantitative Automated Count",
+        "result": "25.0",
+        "kind": "Laboratory",
+        "resultNumber": 25.0,
+        "abnormal": false,
+        "micro": false,
+        "qualifiedName": "Mean Corpuscular Volume, RBC Quantitative Automated Count (BLOOD)",
+        "uid": "urn:va:lab:DOD:0000000006:1000001212",
+        "summary": "Mean Corpuscular Volume, RBC Quantitative Automated Count (BLOOD) 25.0",
+        "pid": "9E7A;6",
+        "localId": "070621 HE 177^CH",
+        "typeName": "Mean Corpuscular Volume, RBC Quantitative Automated Count",
+        "codes": [
+          {
+            "code": "4791",
+            "system": "DOD_NCID"
+          },
+          {
+            "code": "787-2",
+            "system": "http://loinc.org",
+            "display": "Erythrocyte mean corpuscular volume [Entitic volume] by Automated count"
+          }
+        ],
+        "lnccodes": [],
+        "statusCode": "urn:va:lab-status:completed",
+        "organizerType": "organizerType",
+        "statusName": "completed",
+        "referenceRange": "(81.7-97.3)"
+      },
+      {
+        "facilityCode": "DOD",
+        "facilityName": "4th Medical Group/0090",
+        "categoryCode": "urn:va:lab-category:CH",
+        "categoryName": "Laboratory",
+        "observed": "200706211026",
+        "resulted": "200706210226",
+        "specimen": "BLOOD",
+        "orderId": "23564645",
+        "comment": "",
+        "displayName": "Erythrocyte Mean Corpuscular Hemoglobin, RBC Quantitative Automated Count",
+        "result": "26.0",
+        "kind": "Laboratory",
+        "resultNumber": 26.0,
+        "abnormal": false,
+        "micro": false,
+        "qualifiedName": "Erythrocyte Mean Corpuscular Hemoglobin, RBC Quantitative Automated Count (BLOOD)",
+        "uid": "urn:va:lab:DOD:0000000006:1000001213",
+        "summary": "Erythrocyte Mean Corpuscular Hemoglobin, RBC Quantitative Automated Count (BLOOD) 26.0",
+        "pid": "9E7A;6",
+        "localId": "070621 HE 177^CH",
+        "typeName": "Erythrocyte Mean Corpuscular Hemoglobin, RBC Quantitative Automated Count",
+        "codes": [
+          {
+            "code": "4789",
+            "system": "DOD_NCID"
+          },
+          {
+            "code": "785-6",
+            "system": "http://loinc.org",
+            "display": "Erythrocyte mean corpuscular hemoglobin [Entitic mass] by Automated count"
+          }
+        ],
+        "lnccodes": [],
+        "statusCode": "urn:va:lab-status:completed",
+        "organizerType": "organizerType",
+        "statusName": "completed",
+        "referenceRange": "(27.9-34.3)"
+      },
+      {
+        "facilityCode": "DOD",
+        "facilityName": "4th Medical Group/0090",
+        "categoryCode": "urn:va:lab-category:CH",
+        "categoryName": "Laboratory",
+        "observed": "200706211026",
+        "resulted": "200706210226",
+        "specimen": "BLOOD",
+        "orderId": "23564645",
+        "comment": "",
+        "displayName": "Erythrocyte Mean Corpuscular Hemoglobin Concentration, RBC Quantitative Automated Count",
+        "result": "27.0",
+        "kind": "Laboratory",
+        "resultNumber": 27.0,
+        "abnormal": false,
+        "micro": false,
+        "qualifiedName": "Erythrocyte Mean Corpuscular Hemoglobin Concentration, RBC Quantitative Automated Count (BLOOD)",
+        "uid": "urn:va:lab:DOD:0000000006:1000001214",
+        "summary": "Erythrocyte Mean Corpuscular Hemoglobin Concentration, RBC Quantitative Automated Count (BLOOD) 27.0",
+        "pid": "9E7A;6",
+        "localId": "070621 HE 177^CH",
+        "typeName": "Erythrocyte Mean Corpuscular Hemoglobin Concentration, RBC Quantitative Automated Count",
+        "codes": [
+          {
+            "code": "4790",
+            "system": "DOD_NCID"
+          },
+          {
+            "code": "786-4",
+            "system": "http://loinc.org",
+            "display": "Erythrocyte mean corpuscular hemoglobin concentration [Mass/volume] by Automated count"
+          }
+        ],
+        "lnccodes": [],
+        "statusCode": "urn:va:lab-status:completed",
+        "organizerType": "organizerType",
+        "statusName": "completed",
+        "referenceRange": "(33.4-35.8)"
+      },
+      {
+        "facilityCode": "DOD",
+        "facilityName": "4th Medical Group/0090",
+        "categoryCode": "urn:va:lab-category:CH",
+        "categoryName": "Laboratory",
+        "observed": "200706211026",
+        "resulted": "200706210226",
+        "specimen": "BLOOD",
+        "orderId": "23564645",
+        "comment": "",
+        "displayName": "Erythrocyte Distribution Width CV, RBC Quantitative Automated Count",
+        "result": "29.0",
+        "kind": "Laboratory",
+        "resultNumber": 29.0,
+        "abnormal": false,
+        "micro": false,
+        "qualifiedName": "Erythrocyte Distribution Width CV, RBC Quantitative Automated Count (BLOOD)",
+        "uid": "urn:va:lab:DOD:0000000006:1000001215",
+        "summary": "Erythrocyte Distribution Width CV, RBC Quantitative Automated Count (BLOOD) 29.0",
+        "pid": "9E7A;6",
+        "localId": "070621 HE 177^CH",
+        "typeName": "Erythrocyte Distribution Width CV, RBC Quantitative Automated Count",
+        "codes": [
+          {
+            "code": "4792",
+            "system": "DOD_NCID"
+          },
+          {
+            "code": "788-0",
+            "system": "http://loinc.org",
+            "display": "Erythrocyte distribution width [Ratio] by Automated count"
+          }
+        ],
+        "lnccodes": [],
+        "statusCode": "urn:va:lab-status:completed",
+        "organizerType": "organizerType",
+        "statusName": "completed",
+        "referenceRange": "(10.8-13.6)"
+      },
+      {
+        "facilityCode": "DOD",
+        "facilityName": "4th Medical Group/0090",
+        "categoryCode": "urn:va:lab-category:CH",
+        "categoryName": "Laboratory",
+        "observed": "200706211026",
+        "resulted": "200706210226",
+        "specimen": "BLOOD",
+        "orderId": "23564645",
+        "comment": "",
+        "displayName": "Granulocytes/100 Leukocytes, Blood Quantitative Automated Count",
+        "result": "55.0",
+        "kind": "Laboratory",
+        "resultNumber": 55.0,
+        "abnormal": false,
+        "micro": false,
+        "qualifiedName": "Granulocytes/100 Leukocytes, Blood Quantitative Automated Count (BLOOD)",
+        "uid": "urn:va:lab:DOD:0000000006:1000001216",
+        "summary": "Granulocytes/100 Leukocytes, Blood Quantitative Automated Count (BLOOD) 55.0",
+        "pid": "9E7A;6",
+        "localId": "070621 HE 177^CH",
+        "typeName": "Granulocytes/100 Leukocytes, Blood Quantitative Automated Count",
+        "codes": [
+          {
+            "code": "21061",
+            "system": "DOD_NCID"
+          },
+          {
+            "code": "19023-1",
+            "system": "http://loinc.org",
+            "display": "Granulocytes/100 leukocytes in Blood by Automated count"
+          }
+        ],
+        "lnccodes": [],
+        "statusCode": "urn:va:lab-status:completed",
+        "organizerType": "organizerType",
+        "statusName": "completed",
+        "referenceRange": "(40.9-74.9)"
+      },
+      {
+        "facilityCode": "DOD",
+        "facilityName": "4th Medical Group/0090",
+        "categoryCode": "urn:va:lab-category:CH",
+        "categoryName": "Laboratory",
+        "observed": "200706211026",
+        "resulted": "200706210226",
+        "specimen": "BLOOD",
+        "orderId": "23564645",
+        "comment": "",
+        "displayName": "Lymphocytes/100 Leukocytes, Blood Quantitative Automated Count",
+        "result": "52.0",
+        "kind": "Laboratory",
+        "resultNumber": 52.0,
+        "abnormal": false,
+        "micro": false,
+        "qualifiedName": "Lymphocytes/100 Leukocytes, Blood Quantitative Automated Count (BLOOD)",
+        "uid": "urn:va:lab:DOD:0000000006:1000001217",
+        "summary": "Lymphocytes/100 Leukocytes, Blood Quantitative Automated Count (BLOOD) 52.0",
+        "pid": "9E7A;6",
+        "localId": "070621 HE 177^CH",
+        "typeName": "Lymphocytes/100 Leukocytes, Blood Quantitative Automated Count",
+        "codes": [
+          {
+            "code": "4736",
+            "system": "DOD_NCID"
+          },
+          {
+            "code": "736-9",
+            "system": "http://loinc.org",
+            "display": "Lymphocytes/100 leukocytes in Blood by Automated count"
+          }
+        ],
+        "lnccodes": [],
+        "statusCode": "urn:va:lab-status:completed",
+        "organizerType": "organizerType",
+        "statusName": "completed",
+        "referenceRange": "(16.1-44.7)"
+      },
+      {
+        "facilityCode": "DOD",
+        "facilityName": "4th Medical Group/0090",
+        "categoryCode": "urn:va:lab-category:CH",
+        "categoryName": "Laboratory",
+        "observed": "200706211026",
+        "resulted": "200706210226",
+        "specimen": "BLOOD",
+        "orderId": "23564645",
+        "comment": "",
+        "displayName": "Monocytes/100 Leukocytes, Blood Quantitative Automated Count",
+        "result": "45.0",
+        "kind": "Laboratory",
+        "resultNumber": 45.0,
+        "abnormal": false,
+        "micro": false,
+        "qualifiedName": "Monocytes/100 Leukocytes, Blood Quantitative Automated Count (BLOOD)",
+        "uid": "urn:va:lab:DOD:0000000006:1000001218",
+        "summary": "Monocytes/100 Leukocytes, Blood Quantitative Automated Count (BLOOD) 45.0",
+        "pid": "9E7A;6",
+        "localId": "070621 HE 177^CH",
+        "typeName": "Monocytes/100 Leukocytes, Blood Quantitative Automated Count",
+        "codes": [
+          {
+            "code": "4744",
+            "system": "DOD_NCID"
+          },
+          {
+            "code": "5905-5",
+            "system": "http://loinc.org",
+            "display": "Monocytes/100 leukocytes in Blood by Automated count"
+          }
+        ],
+        "lnccodes": [],
+        "statusCode": "urn:va:lab-status:completed",
+        "organizerType": "organizerType",
+        "statusName": "completed",
+        "referenceRange": "(4.3-11.9)"
+      },
+      {
+        "facilityCode": "DOD",
+        "facilityName": "4th Medical Group/0090",
+        "categoryCode": "urn:va:lab-category:CH",
+        "categoryName": "Laboratory",
+        "observed": "200706211026",
+        "resulted": "200706210226",
+        "specimen": "BLOOD",
+        "orderId": "23564645",
+        "comment": "",
+        "displayName": "Eosinophils/100 Leukocytes, Blood Quantitative Automated Count",
+        "result": "2.0",
+        "kind": "Laboratory",
+        "resultNumber": 2.0,
+        "abnormal": false,
+        "micro": false,
+        "qualifiedName": "Eosinophils/100 Leukocytes, Blood Quantitative Automated Count (BLOOD)",
+        "uid": "urn:va:lab:DOD:0000000006:1000001219",
+        "summary": "Eosinophils/100 Leukocytes, Blood Quantitative Automated Count (BLOOD) 2.0",
+        "pid": "9E7A;6",
+        "localId": "070621 HE 177^CH",
+        "typeName": "Eosinophils/100 Leukocytes, Blood Quantitative Automated Count",
+        "codes": [
+          {
+            "code": "4713",
+            "system": "DOD_NCID"
+          },
+          {
+            "code": "713-8",
+            "system": "http://loinc.org",
+            "display": "Eosinophils/100 leukocytes in Blood by Automated count"
+          }
+        ],
+        "lnccodes": [],
+        "statusCode": "urn:va:lab-status:completed",
+        "organizerType": "organizerType",
+        "statusName": "completed",
+        "referenceRange": "(0.0-6.6)"
+      },
+      {
+        "facilityCode": "DOD",
+        "facilityName": "4th Medical Group/0090",
+        "categoryCode": "urn:va:lab-category:CH",
+        "categoryName": "Laboratory",
+        "observed": "200706211026",
+        "resulted": "200706210226",
+        "specimen": "BLOOD",
+        "orderId": "23564645",
+        "comment": "",
+        "displayName": "Basophils/100 Leukocytes, Blood Quantitative Automated Count",
+        "result": "2.0",
+        "kind": "Laboratory",
+        "resultNumber": 2.0,
+        "abnormal": false,
+        "micro": false,
+        "qualifiedName": "Basophils/100 Leukocytes, Blood Quantitative Automated Count (BLOOD)",
+        "uid": "urn:va:lab:DOD:0000000006:1000001220",
+        "summary": "Basophils/100 Leukocytes, Blood Quantitative Automated Count (BLOOD) 2.0",
+        "pid": "9E7A;6",
+        "localId": "070621 HE 177^CH",
+        "typeName": "Basophils/100 Leukocytes, Blood Quantitative Automated Count",
+        "codes": [
+          {
+            "code": "4705",
+            "system": "DOD_NCID"
+          },
+          {
+            "code": "706-2",
+            "system": "http://loinc.org",
+            "display": "Basophils/100 leukocytes in Blood by Automated count"
+          }
+        ],
+        "lnccodes": [],
+        "statusCode": "urn:va:lab-status:completed",
+        "organizerType": "organizerType",
+        "statusName": "completed",
+        "referenceRange": "(0.4-1.2)"
+      },
+      {
+        "facilityCode": "DOD",
+        "facilityName": "4th Medical Group/0090",
+        "categoryCode": "urn:va:lab-category:CH",
+        "categoryName": "Laboratory",
+        "observed": "200706211026",
+        "resulted": "200706210226",
+        "specimen": "BLOOD",
+        "orderId": "23564645",
+        "comment": "",
+        "displayName": "Platelets, Blood Quantitative Automated Count",
+        "result": "55",
+        "kind": "Laboratory",
+        "resultNumber": 55.0,
+        "abnormal": false,
+        "micro": false,
+        "qualifiedName": "Platelets, Blood Quantitative Automated Count (BLOOD)",
+        "uid": "urn:va:lab:DOD:0000000006:1000001221",
+        "summary": "Platelets, Blood Quantitative Automated Count (BLOOD) 55",
+        "pid": "9E7A;6",
+        "localId": "070621 HE 177^CH",
+        "typeName": "Platelets, Blood Quantitative Automated Count",
+        "codes": [
+          {
+            "code": "4779",
+            "system": "DOD_NCID"
+          },
+          {
+            "code": "777-3",
+            "system": "http://loinc.org",
+            "display": "Platelets [#/volume] in Blood by Automated count"
+          }
+        ],
+        "lnccodes": [],
+        "statusCode": "urn:va:lab-status:completed",
+        "organizerType": "organizerType",
+        "statusName": "completed",
+        "referenceRange": "(128-368)"
+      },
+      {
+        "facilityCode": "DOD",
+        "facilityName": "4th Medical Group/0090",
+        "categoryCode": "urn:va:lab-category:CH",
+        "categoryName": "Laboratory",
+        "observed": "200706211026",
+        "resulted": "200706210226",
+        "specimen": "BLOOD",
+        "orderId": "23564645",
+        "comment": "",
+        "displayName": "Platelet Mean Volume, Blood Quantitative Automated",
+        "result": "55.0",
+        "kind": "Laboratory",
+        "resultNumber": 55.0,
+        "abnormal": false,
+        "micro": false,
+        "qualifiedName": "Platelet Mean Volume, Blood Quantitative Automated (BLOOD)",
+        "uid": "urn:va:lab:DOD:0000000006:1000001222",
+        "summary": "Platelet Mean Volume, Blood Quantitative Automated (BLOOD) 55.0",
+        "pid": "9E7A;6",
+        "localId": "070621 HE 177^CH",
+        "typeName": "Platelet Mean Volume, Blood Quantitative Automated",
+        "codes": [
+          {
+            "code": "21376",
+            "system": "DOD_NCID"
+          },
+          {
+            "code": "32623-1",
+            "system": "http://loinc.org",
+            "display": "Platelet mean volume [Entitic volume] in Blood by Automated count"
+          }
+        ],
+        "lnccodes": [],
+        "statusCode": "urn:va:lab-status:completed",
+        "organizerType": "organizerType",
+        "statusName": "completed",
+        "referenceRange": "(6.9-10.2)"
+      },
+      {
+        "facilityCode": "DOD",
+        "facilityName": "4th Medical Group/0090",
+        "categoryCode": "urn:va:lab-category:CH",
+        "categoryName": "Laboratory",
+        "observed": "200706211025",
+        "resulted": "200706210226",
+        "specimen": "PLASMA",
+        "orderId": "23564646",
+        "comment": "",
+        "displayName": "Ammonia, Plasma Quantitative",
+        "result": "5",
+        "kind": "Laboratory",
+        "resultNumber": 5.0,
+        "abnormal": false,
+        "micro": false,
+        "qualifiedName": "Ammonia, Plasma Quantitative (PLASMA)",
+        "uid": "urn:va:lab:DOD:0000000006:1000001224",
+        "summary": "Ammonia, Plasma Quantitative (PLASMA) 5",
+        "pid": "9E7A;6",
+        "localId": "070621 LC 326^CH",
+        "typeName": "Ammonia, Plasma Quantitative",
+        "codes": [
+          {
+            "code": "44829",
+            "system": "DOD_NCID"
+          },
+          {
+            "code": "22763-7",
+            "system": "http://loinc.org",
+            "display": "Ammonia [Mass/volume] in Plasma"
+          }
+        ],
+        "lnccodes": [],
+        "statusCode": "urn:va:lab-status:completed",
+        "organizerType": "organizerType",
+        "statusName": "completed",
+        "referenceRange": "(19-60)"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "groupName": "MI 97 10",
+        "groupUid": "urn:va:accession:9E7A:6:MI;7029771.896073",
+        "categoryCode": "urn:va:lab-category:MI",
+        "categoryName": "Microbiology",
+        "observed": "199702271039",
+        "resulted": "199703201422",
+        "specimen": "PHARYNX",
+        "typeCode": "urn:va:ien:60:548:60",
+        "kind": "Microbiology",
+        "abnormal": false,
+        "micro": true,
+        "qualifiedName": "CULTURE & SUSCEPTIBILITY (PHARYNX)",
+        "uid": "urn:va:lab:9E7A:6:MI;7029771.896073",
+        "summary": "CULTURE & SUSCEPTIBILITY (PHARYNX)",
+        "pid": "9E7A;6",
+        "localId": "MI;7029771.896073",
+        "typeName": "CULTURE & SUSCEPTIBILITY",
+        "lnccodes": [
+          "urn:va:ien:60:548:60"
+        ],
+        "statusCode": "urn:va:lab-status:completed",
+        "gramStain": [
+          {
+            "result": "POSITIVE COCCI "
+          }
+        ],
+        "organisms": [
+          {
+            "drugs": [
+              {
+                "interp": "S",
+                "name": "PENICILLIN",
+                "result": "S"
+              },
+              {
+                "interp": "S",
+                "name": "CLINDAM",
+                "result": "S"
+              },
+              {
+                "interp": "S",
+                "name": "VANCOMYCIN",
+                "result": "S"
+              },
+              {
+                "interp": "R",
+                "name": "GENTAMICIN",
+                "result": "R"
+              },
+              {
+                "interp": "R",
+                "name": "CHLORAMPHENICOL",
+                "restrict": "R",
+                "result": "R"
+              },
+              {
+                "interp": "R",
+                "name": "TETRACYCLINE",
+                "result": "R"
+              },
+              {
+                "interp": "R",
+                "name": "BROXACILLIAN",
+                "restrict": "R",
+                "result": "R"
+              },
+              {
+                "interp": "R",
+                "name": "AMPICILLIN",
+                "restrict": "R",
+                "result": "R"
+              },
+              {
+                "interp": "I",
+                "name": "ERYTHROMYCIN",
+                "result": "I"
+              },
+              {
+                "interp": "I",
+                "name": "NITROFURANTOIN",
+                "result": "I"
+              },
+              {
+                "interp": "R",
+                "name": "OXACILLIN",
+                "result": "R"
+              },
+              {
+                "interp": "R",
+                "name": "CEPHALOTHIN",
+                "result": "R"
+              }
+            ],
+            "name": "STREPTOCOCCUS GROUP A",
+            "qty": "100000/MM3 "
+          },
+          {
+            "name": "STREPTOCOCCUS PNEUMONIAE",
+            "qty": "50,000/MM3 "
+          }
+        ],
+        "results": [
+          {
+            "localTitle": "LR MICROBIOLOGY REPORT",
+            "resultUid": "urn:va:document:9E7A:6:MI;7029771.896073",
+            "uid": "MI;7029771.896073"
+          }
+        ],
+        "statusName": "completed",
+        "sample": ""
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "groupName": "MI 95 20",
+        "groupUid": "urn:va:accession:9E7A:6:MI;7049368.865177",
+        "categoryCode": "urn:va:lab-category:MI",
+        "categoryName": "Microbiology",
+        "observed": "199506301348",
+        "specimen": "URINE",
+        "comment": "~SAME AS #10 & #11 ",
+        "typeCode": "urn:va:ien:60:548:71",
+        "kind": "Microbiology",
+        "abnormal": false,
+        "micro": true,
+        "qualifiedName": "CULTURE & SUSCEPTIBILITY (URINE)",
+        "uid": "urn:va:lab:9E7A:6:MI;7049368.865177",
+        "summary": "CULTURE & SUSCEPTIBILITY (URINE)",
+        "pid": "9E7A;6",
+        "localId": "MI;7049368.865177",
+        "typeName": "CULTURE & SUSCEPTIBILITY",
+        "lnccodes": [
+          "urn:va:ien:60:548:71"
+        ],
+        "statusCode": "urn:va:lab-status:completed",
+        "results": [
+          {
+            "localTitle": "LR MICROBIOLOGY REPORT",
+            "resultUid": "urn:va:document:9E7A:6:MI;7049368.865177",
+            "uid": "MI;7049368.865177"
+          }
+        ],
+        "statusName": "completed",
+        "urineScreen": "Negative",
+        "sample": "URINE",
+        "bactRemarks": "NO GROWTH "
+      }
+    ]
+  }
+}

@@ -1,0 +1,76 @@
+VPRJTPS ;SLC/KCM -- Integration tests for saving patient objects
+ ;;1.0;JSON DATA STORE;;Sep 01, 2012
+ ;
+STARTUP  ; Run once before all tests
+ N DATA
+ S VPRJTPID=$G(^VPRPTJ("PID","93EF:-7"))
+ I VPRJTPID D CLEARPT^VPRJPS(VPRJTPID)
+ Q
+SHUTDOWN ; Run once after all tests
+ D CLRPT^VPRJTX
+ Q
+ASSERT(EXPECT,ACTUAL,MSG) ; for convenience
+ D EQ^VPRJT(EXPECT,ACTUAL,$G(MSG))
+ Q
+ ;
+ADDPT ;; @TEST adding a patient
+ N DATA
+ D GETDATA^VPRJTX("DEMOG7","VPRJTP01",.DATA)
+ S VPRJTPID=$P($$PUTPT^VPRJPR("",.DATA),"/",3)
+ D ASSERT(1,$L(VPRJTPID)>0)
+ D ASSERT(10,$D(^VPRPT(VPRJTPID,"urn:va:patient:93EF:-7:-7")))
+ D ASSERT(-77777777,^VPRPT(VPRJTPID,"urn:va:patient:93EF:-7:-7","ssn"))
+ D ASSERT("93EF;-7",VPRJTPID)
+ D ASSERT("93EF;-7",^VPRPTJ("PID",VPRJTPID))
+ D ASSERT("93EF;-7",^VPRPTJ("PID","93EF;-7"))
+ D ASSERT(1,$D(^VPRPTJ("JSON",VPRJTPID,"urn:va:patient:93EF:-7:-7",1)))
+ Q
+ADDOBJ ;; @TEST adding an object
+ N DATA,LOC
+ D GETDATA^VPRJTX("MED1","VPRJTP02",.DATA)
+ S LOC=$$SAVE^VPRJPS(VPRJTPID,.DATA)
+ D ASSERT(10,$D(^VPRPT(VPRJTPID,"urn:va:med:93EF:-7:16982")))
+ D ASSERT("urn:vuid:4023979",^VPRPT(VPRJTPID,"urn:va:med:93EF:-7:16982","products",1,"ingredientCode"))
+ D ASSERT(1,$D(^VPRPTJ("JSON",VPRJTPID,"urn:va:med:93EF:-7:16982",1)))
+ D ASSERT(19350407,+$P(^VPRPTJ("TEMPLATE",VPRJTPID,"urn:va:patient:93EF:-7:-7","summary",1),":",2))
+ D ASSERT(1,^VPRPTI(VPRJTPID,"tally","collection","med"))
+ Q
+CHKIDX ;; @TEST indexes that were built after adding object
+ D ASSERT(1,$D(^VPRPTI(VPRJTPID,"attr","med-class-code","urn:vadc:hs502 ","79939681=","urn:va:med:93EF:-7:16982","products#1")))
+ D ASSERT(1,$D(^VPRPTI(VPRJTPID,"attr","med-provider","labtech,special ","79939681=","urn:va:med:93EF:-7:16982","orders#1")))
+ D ASSERT(1,$D(^VPRPTI(VPRJTPID,"attr","med-qualified-name","metformin ","79939681=","urn:va:med:93EF:-7:16982",1)))
+ D ASSERT(1,$D(^VPRPTI(VPRJTPID,"attr","medication","79939681=","urn:va:med:93EF:-7:16982",1)))
+ D ASSERT("79939681=",^VPRPTI(VPRJTPID,"time","med-time","79949682=","urn:va:med:93EF:-7:16982",1))
+ D ASSERT("79949682=",^VPRPTI(VPRJTPID,"stop","med-time","79939681=","urn:va:med:93EF:-7:16982",1))
+ D ASSERT(1,^VPRPTI(VPRJTPID,"tally","kind","medication, outpatient"))
+ D ASSERT(1,$D(^VPRPTI(VPRJTPID,"attr","med-active-outpt","79939681=","urn:va:med:93EF:-7:16982",1)))
+ Q
+ADDLNK ;; @TEST adding object with links defined
+ N I,TAGS
+ F I=1:1:5 S TAGS(I)="DATA"_I_"^VPRJTP03"
+ D ADDDATA^VPRJTX(.TAGS,VPRJTPID)
+ D ASSERT(1,$D(^VPRPTI(VPRJTPID,"rev","urn:va:utesta:93EF:-7:1","utest-multiple","urn:va:utestc:93EF:-7:23","items#1")))
+ D ASSERT(1,$D(^VPRPTI(VPRJTPID,"rev","urn:va:utestb:93EF:-7:3","utest-multiple","urn:va:utestc:93EF:-7:23","items#2")))
+ D ASSERT(1,$D(^VPRPTI(VPRJTPID,"rev","urn:va:utesta:93EF:-7:2","utest-single","urn:va:utestc:93EF:-7:23",1)))
+ D ASSERT(1,$D(^VPRPTI(VPRJTPID,"rev","urn:va:utesta:93EF:-7:1","utest-multiple","urn:va:utestc:93EF:-7:42","items#1")))
+ D ASSERT(1,$D(^VPRPTI(VPRJTPID,"rev","urn:va:utesta:93EF:-7:1","utest-single","urn:va:utestc:93EF:-7:42",1)))
+ Q
+DELCLTN ;; @TEST delete a collection for a patient
+ D ASSERT(10,$D(^VPRPT(VPRJTPID,"urn:va:utestc:93EF:-7:23")))
+ D ASSERT(10,$D(^VPRPT(VPRJTPID,"urn:va:utestc:93EF:-7:42")))
+ D DELCLTN^VPRJPS(VPRJTPID,"utestc")
+ D ASSERT(0,$D(^VPRPT(VPRJTPID,"urn:va:utestc:93EF:-7:23")))
+ D ASSERT(0,$D(^VPRPT(VPRJTPID,"urn:va:utestc:93EF:-7:42")))
+ D ASSERT(0,$D(^VPRPTI(VPRJTPID,"attr","utest-c","testrels ","urn:va:utestc:93EF:-7:23",1)))
+ D ASSERT(0,$G(^VPRPTI("93EF;-7","tally","collection","utestc"),0))
+ Q
+DELCSRV ;; @TEST delete a collection for a specific server
+ N I,TAGS
+ F I=6:1:7 S TAGS(I)="SRV"_I_"^VPRJTP03"
+ D ADDDATA^VPRJTX(.TAGS,VPRJTPID)
+ D ASSERT(10,$D(^VPRPT(VPRJTPID,"urn:va:utesta:93EF:-7:1")))
+ D ASSERT(10,$D(^VPRPT(VPRJTPID,"urn:va:utesta:9999:-7:6")))
+ D DELCLTN^VPRJPS(VPRJTPID,"utesta","9999")
+ D ASSERT(0,$D(^VPRPT(VPRJTPID,"urn:va:utesta:9999:-7:6")))
+ D ASSERT(10,$D(^VPRPT(VPRJTPID,"urn:va:utesta:93EF:-7:7")))
+ Q

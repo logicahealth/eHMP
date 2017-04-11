@@ -1,0 +1,9 @@
+{
+    "host": "10.2.2.4",
+    "port": "8280",
+    "authentCacheMaxAge" : "600",
+    "authentCacheCapacity" : "10000",
+    "userDelimiter" : ";",
+    "username": "pdp-user",
+    "password": "password"
+}

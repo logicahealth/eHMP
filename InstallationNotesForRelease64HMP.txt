@@ -1,0 +1,494 @@
+Installation Notes for Build S64 - Getting base HMP running
+------------------------------------------------------------
+1. Merged $PRODUCTION/pom.xml with theirs.   
+2. Took their hmp-api/pom.xml   (Only version numbers were affected)
+3. Merging hmp-main/pom.xml
+	- Reorganized the pom files to line up better.   
+		* Made both files of consistent formatting to get rid of white space noise.
+		* Moved <dependencies>....</dependencies> in va pom file to just below <properties>...</properties> so that they were in the same place.
+		* 
+	- Version changed to: 0.7-S64-SNAPSHOT
+	- Added our: <url>http://maven.apache.org</url>
+	- They added: <hmp.build.number>0</hmp.build.number>
+	- They added: 
+		<sass.version>3.2.7</sass.version>
+        <jsduck.version>5.3.4</jsduck.version>
+    - They changed version: <vista-support.version>0.14.1</vista-support.version>
+    - They added: <hamcrest.version>1.3</hamcrest.version>
+    - They changed version: <xmlunit.version>1.5</xmlunit.version>
+    - They changed version: <spring-security.version>3.2.3.RELEASE</spring-security.version>
+    - They changed version: <jackson.version>2.3.1</jackson.version>
+    - They changed version: <metrics.version>3.0.2</metrics.version>
+    - They changed version: <slf4j.version>1.7.6</slf4j.version>
+    - They changed version: <logback.version>1.1.1</logback.version>
+    - They changed version: <solr.version>4.7.2</solr.version>
+    - They added: <yuicompressor.version>2.4.7</yuicompressor.version>
+    - They changed from manual to automatic: <jetty.reload>automatic</jetty.reload>
+    - They updated terminology database versions:  (But since it was off the same UMLS Release - We kept our version numbers)
+    	* Theirs was:
+	    	<termdb.drugdb.version>1.UMLS2013AA.20140225</termdb.drugdb.version>
+	        <termdb.sctdb.version>1.UMLS2013AA.20140225</termdb.sctdb.version>
+	        <termdb.lncdb.version>1.UMLS2013AA.20140225</termdb.lncdb.version>
+	        <termdb.icddb.version>1.UMLS2013AA.20140225</termdb.icddb.version>
+	    * We kept ours:
+	        <termdb.drugdb.version>1.UMLS2013AA.20131017</termdb.drugdb.version>
+	        <termdb.sctdb.version>1.UMLS2013AA.20131017</termdb.sctdb.version>
+	        <termdb.lncdb.version>1.UMLS2013AA.20131017</termdb.lncdb.version>
+	        <termdb.icddb.version>1.UMLS2013AA.20131017</termdb.icddb.version>
+    - Changed to use our hmp-api version: <version>0.7.1</version>
+    - They added a dependency:
+    	<dependency>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-smile</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+    - Added our new dependency:
+    	<dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>1.7.3</version>
+        </dependency>
+    - They added a new dependency:
+    	<dependency>
+            <groupId>org.apache.solr</groupId>
+            <artifactId>solr-test-framework</artifactId>
+            <version>${solr.version}</version>
+            <scope>test</scope>
+        </dependency>
+    - Added our new dependency:
+    	<!-- JDBC drivers -->
+        <dependency>
+            <groupId>com.intersystems</groupId>
+            <artifactId>cachejdbc</artifactId>
+            <version>2011.1.2.701</version>
+            <scope>runtime</scope>
+        </dependency>
+    - They added a new depencency:
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-core</artifactId>
+            <version>${hamcrest.version}</version>
+            <scope>test</scope>
+        </dependency>
+    - They added a new depencency:
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-library</artifactId>
+            <version>${hamcrest.version}</version>
+            <scope>test</scope>
+        </dependency>
+    - They changed the version on a dependency to use variable:
+        <dependency>
+            <groupId>com.yahoo.platform.yui</groupId>
+            <artifactId>yuicompressor</artifactId>
+            <version>${yuicompressor.version}</version>
+            <type>jar</type>
+        </dependency>
+    - Added our new dependencies:
+    	<!-- Start Axiomatics dependencies -->
+        <dependency>
+            <groupId>com.axiomatics</groupId>
+            <artifactId>axio-commons</artifactId>
+            <version>1.3</version>
+        </dependency>
+        <dependency>
+            <groupId>com.axiomatics</groupId>
+            <artifactId>axio-xacml</artifactId>
+            <version>5.37</version>
+        </dependency>
+        <dependency>
+            <groupId>com.axiomatics</groupId>
+            <artifactId>axio-xacml-request-api</artifactId>
+            <version>5.5</version>
+        </dependency>
+        <dependency>
+            <groupId>com.axiomatics</groupId>
+            <artifactId>axiomatics-pep-sdk-for-java</artifactId>
+            <version>5.3.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.ibm.icu</groupId>
+            <artifactId>icu4j</artifactId>
+            <version>4.0.1</version>
+        </dependency>
+        <!-- End Axiomatics dependencies -->
+    - Added our: <debug>true</debug> to the maven-compiler-plugin artifact
+    - Added our new plugin: 
+        <plugin>
+            <groupId>com.github.goldin</groupId>
+            <artifactId>timestamp-maven-plugin</artifactId>
+            <version>0.2.5</version>
+            <executions>
+                <execution>
+                    <id>set-specific-timestamp</id>
+                    <goals>
+                        <goal>timestamp</goal>
+                    </goals>
+                    <phase>initialize</phase>
+                    <configuration>
+                        <time>{{
+                            def newdate = null;
+                            try {
+                            newdate = Date.parse( "${maven.build.timestamp.format}", "${maven.build.timestamp}");
+                            } catch (java.text.ParseException e) {
+                            newdate = Date.parse( "yyyyMMdd-HHmm", "${maven.build.timestamp}");
+                            // println "THANKS JENKINS, FOR JENKINS-9693";
+                            }
+                            newdate
+                            }}
+                        </time>
+                        <timestamp>
+                            <property>hmp.build.date</property>
+                            <pattern>${maven.build.timestamp.format}</pattern>
+                        </timestamp>
+                    </configuration>
+                </execution>
+            </executions>
+        </plugin>
+    - They added new source-includes on configuration of jasmine-maven-plugin
+    	<include>**/IntervalOfTime.js</include>
+    - Added our commenting out of the drools-guvnor-va-hmp artifact.
+    - They added an archive section under the maven-war-plugin artifact
+        <archive>
+            <manifest>
+                <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+            </manifest>
+            <manifestEntries>
+                <Implementation-Build>${buildNumber}</Implementation-Build>
+            </manifestEntries>
+        </archive>
+    - They changed version on maven-dependency-plugin to 2.8
+    - They changed phase on copy-solr-dependencies-to-solr-lib execution from package to process-resources
+    - They added a new terminology database:
+        <artifactItem>
+            <groupId>gov.va.hmp</groupId>
+            <artifactId>termdb</artifactId>
+            <version>${termdb.icddb.version}</version>
+            <classifier>icddb</classifier>
+            <type>zip</type>
+            <overWrite>false</overWrite>
+        </artifactItem>
+    - They changed version of maven-assembly-plugin to 2.4
+    - Added our new maven-release-plugin
+        <plugin>
+            <artifactId>maven-release-plugin</artifactId>
+            <version>2.3.2</version>
+            <configuration>
+                <arguments>-f hmp-main/pom.xml</arguments>
+            </configuration>
+        </plugin>
+    - They changed the version of de.saumya.mojo to 1.0.0-rc4 and they added a new execution ID of:
+        <id>compile-sass-into-css</id>
+    - They added a new dependency on the de.saumya.mojo plugin as well:
+        <dependency>
+            <groupId>rubygems</groupId>
+            <artifactId>sass</artifactId>
+            <version>${sass.version}</version>
+            <type>gem</type>
+        </dependency>
+    - They added a new comment that tells how to build the ICDB terminology database.
+    - They added a new execution under the groovy-maven-plugin plugin
+	    <execution>
+	        <id>set-specific-timestamp</id>
+	        <phase>initialize</phase>
+	        <goals>
+	            <goal>execute</goal>
+	        </goals>
+	        <configuration>
+	            <source>
+	                //println "THANKS JENKINS, FOR JENKINS-9693";
+	                project.properties['hmp.build.date'] = new Date().format(project.properties['maven.build.timestamp.format'])
+	            </source>
+	        </configuration>
+	    </execution>
+	- They changed the version of the yuicompressor dependency under groovy-maven-plugin to use a property: ${yuicompressor.version}
+	- They added the following two new plyugins:
+        <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>license-maven-plugin</artifactId>
+            <configuration>
+                <useMissingFile>true</useMissingFile>
+            </configuration>
+        </plugin>
+        <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>build-helper-maven-plugin</artifactId>
+            <version>1.8</version>
+            <executions>
+                <execution>
+                    <id>add-integration-test-source</id>
+                    <phase>generate-test-sources</phase>
+                    <goals>
+                        <goal>add-test-source</goal>
+                    </goals>
+                    <configuration>
+                        <sources>
+                            <source>src/test-integration/java</source>
+                        </sources>
+                    </configuration>
+                </execution>
+            </executions>
+        </plugin>
+    - Under plugin management - they aded a new maven-compiler-plugin artifact:
+        <pluginExecution>
+            <pluginExecutionFilter>
+                <groupId>
+                    org.apache.maven.plugins
+                </groupId>
+                <artifactId>
+                    maven-compiler-plugin
+                </artifactId>
+                <versionRange>
+                    [2.3.1,)
+                </versionRange>
+                <goals>
+                    <goal>testCompile</goal>
+                    <goal>compile</goal>
+                </goals>
+            </pluginExecutionFilter>
+            <action>
+                <ignore/>
+            </action>
+        </pluginExecution>
+    - They changed the version number on this plugin:
+        <pluginExecution>
+            <pluginExecutionFilter>
+                <groupId>
+                    de.saumya.mojo
+                </groupId>
+                <artifactId>
+                    gem-maven-plugin
+                </artifactId>
+                <versionRange>
+                    [1.0.0,)
+                </versionRange>
+                <goals>
+                    <goal>exec</goal>
+                </goals>
+            </pluginExecutionFilter>
+            <action>
+                <ignore/>
+            </action>
+        </pluginExecution>
+	- They added a new read-project-properties goal on the following plugin:
+        <pluginExecution>
+            <pluginExecutionFilter>
+                <groupId>
+                    org.codehaus.mojo
+                </groupId>
+                <artifactId>
+                    properties-maven-plugin
+                </artifactId>
+                <versionRange>
+                    [1.0-alpha-2,)
+                </versionRange>
+                <goals>
+                    <goal>
+                        read-project-properties
+                    </goal>
+                    <goal>
+                        set-system-properties
+                    </goal>
+                </goals>
+            </pluginExecutionFilter>
+            <action>
+                <ignore/>
+            </action>
+        </pluginExecution>
+    - We added two plugin executions:
+        <pluginExecution>
+            <pluginExecutionFilter>
+                <groupId>
+                com.github.goldin
+            </groupId>
+                <artifactId>
+                timestamp-maven-plugin
+            </artifactId>
+                <versionRange>[0.2.5,)</versionRange>
+                <goals>
+                    <goal>timestamp</goal>
+                </goals>
+            </pluginExecutionFilter>
+            <action>
+                <ignore/>
+            </action>
+        </pluginExecution>
+        <pluginExecution>
+            <pluginExecutionFilter>
+                <groupId>
+                org.codehaus.mojo
+            </groupId>
+                <artifactId>
+                properties-maven-plugin
+            </artifactId>
+                <versionRange>[1.0-alpha-2,)</versionRange>
+                <goals>
+                    <goal>read-project-properties</goal>
+                </goals>
+            </pluginExecutionFilter>
+            <action>
+                <ignore/>
+            </action>
+        </pluginExecution>
+    - Under dependency management - they changed version to property: ${yuicompressor.version}
+    - They changed the version on maven-surefire-report-plugin to 2.16
+    - Under profile jenkins they added a new entry under properties:
+	    <hmp.build.number>${env.BUILD_NUMBER}</hmp.build.number>
+	- We added a new profile for activating compass to compile css from sass
+4. Copied our health-time/pom.xml and fixed version numbers in it
+5. Copied our health-time/health-time-core/pom.xml and fixed version numbers in it
+6. Copied our health-time/health-time-hibernate/pom.xml and fixed version numbers in it
+7. Copied our health-time/health-time-solr/pom.xml and fixed version numbers in it
+8. Copied our health-time/health-time-jackson/pom.xml and fixed version numbers in it
+9. Copied our vista-support/pom.xml and fixed version numbers in it
+10. Copied our vista-support/vista-rpc-client/pom.xml and fixed version numbers in it
+11. Copied our vista-support/vista-rpc-client-metrics/pom.xml and fixed version numbers in it
+12. Copied our vista-support/vista-auth/pom.xml and fixed version numbers in it
+13. Copied entire ThirdParty directory from our $PRODUCTION.  Fixed the version in the pom.xml file that was in ThirdParty.
+14. Attempted to build
+	- Found problem - there was no icd database in Nexus.   
+15. Creating the ICD database.  Using the steps from: https://wiki.vistacore.us/display/VACORE/HMP+Terminology+Handling
+    to create the new database.   
+    - Downloaded the UMLS library.  Added ICD19CM, ICD10PCS, and ICD10CM to the set of terminologies that were extracted.
+    - Created the icddb H2 database using the instructions on the page.
+    - Gave a zip file of the database to System team to place in Nexus
+    - Used the following artifact information for it:
+		<dependency>
+		  <groupId>gov.va.hmp</groupId>
+		  <artifactId>termdb</artifactId>
+		  <version>1.UMLS2013AA.20131017</version>
+		  <classifier>icddb</classifier>
+		  <type>zip</type>
+		</dependency>
+16. Put @Ignore on two unit tests that were failing:
+	- gov.va.cpe.vpr.DrugTherapyTest  --> testInpatientGeneric()
+	- gov.va.cpe.vpr.MedicationTests  --> testDoseAdmin()
+17. Attempted to run by copying teh zip file to a directory, unzipping, and running the tomcat within it.   We got some errors.
+18. Trying to configure...
+	- Updated: hmp-main/src/main/resources/hmp-defaults.properties - Fixed to have the right IP for JDS - everyting else looks OK.
+	- Found it was missing the databases.   I copied them to the deployed hmp-home directory by hand and it stopped the cannot find file error.
+		cp -R termdb-1.UMLS2013AA.20131017-drugdb ../../temp/hmp-0.7-S64-SNAPSHOT/hmp-home
+		cp -R termdb-1.UMLS2013AA.20131017-icddb ../../temp/hmp-0.7-S64-SNAPSHOT/hmp-home
+		cp -R termdb-1.UMLS2013AA.20131017-lncdb ../../temp/hmp-0.7-S64-SNAPSHOT/hmp-home
+		cp -R termdb-1.UMLS2013AA.20131017-sctdb ../../temp/hmp-0.7-S64-SNAPSHOT/hmp-home
+	- Modified conf/context.xml - Uncommented section around <manaer pathname="" />
+	- Copied our logback.xml file 
+	- Copied server.xml - there were two lines different between theirs and ours
+	- NOTE:  tomcat-users.xml were different - decided not to copy that one right now either.
+	- Fixed vista-accounts.json - added in the panorama site information.
+		{
+		  "apiVersion":"0.7-S54",
+		  "data":{
+		    "totalItems":1,
+		    "items":[
+		      {
+		        "name":"PANORAMA",
+		        "vistaId":"9E7A",
+		        "division":"500",
+		        "host":"10.2.2.101",
+		        "port":9210,
+		        "production":false,
+		        "vprUserCredentials":"pu1234;pu1234!!",
+		        "vprAutoUpdate":true
+			    }
+		    ]
+		  }
+		}	
+
+		This seemed to change it and add in other stuff.. It also turned off vprAutoUpdate - I turned it back to true.  The second time
+		it seemed to keep things.  Notice that this one has an encrypted user credentials.  It may be that this is why they overwrote it.
+			{
+			  "apiVersion" : "0.7-S64-SNAPSHOT",
+			  "data" : {
+			    "totalItems" : 1,
+			    "items" : [ {
+			      "vistaId" : "9E7A",
+			      "division" : "500",
+			      "name" : "PANORAMA",
+			      "host" : "10.2.2.101",
+			      "port" : 9210,
+			      "production" : false,
+			      "vprAutoUpdate" : true,
+			      "odcAutoInit" : true,
+			      "encrypted" : true,
+			      "calculatedVistaTimeDiff" : 0,
+			      "vprUserCredentials" : "glZpAEzR0LfglsQreqDuCA=="
+			    } ]
+			  }
+			}		
+	- Copied hmp.properties from our environment - but commented out lines that looked like we had added or changed.  So the file looks as follows:
+		# HMP properties used during development (mvn jetty:run)
+		# They are development-time only and are not "baked" into the build distributions
+		hmp.setup.complete=true
+		hmp.server.id=hmp-development-box
+		hmp.server.port.http=8080
+		hmp.server.port.https=8443
+		hmp.server.host=localhost
+		hmp.rpc.log=true
+		jds.conn-manager.max-per-route=10
+		jds.url=http://10.2.2.110:9080
+		spring.profiles.active=development,vpr-datastore-json,vpr-datastore-solr
+		#activemq.broker.url=vm://hmp-hmp-development-box?waitForStart=1000&create=false
+		#activemq.data.dir=/usr/local/tomcat/default/hmp-home/data/activemq-data
+		#ehcache.disk.store.dir=/usr/local/tomcat/default/hmp-home/data/ehcache
+		#solr.url=http://10.3.3.10:8983/solr/
+
+		# default dev server timeout.  May be overriden by user preference in UserTimeoutIntegrationSessionAttributeListener
+		# Comment out to use the web.xml default (1m)
+		session.timeoutSec=600
+		hdr.enabled=false
+		auth.batch.size=100
+
+		#jmeadows settings
+		#jmeadows.enabled=false
+		#jmeadows.url=http://10.4.4.104/jMeadows/JMeadowsDataService?wsdl
+		#jmeadows.timeoutMS=40000
+		#jmeadows.user.ien=20012
+		#jmeadows.user.name=VEHU,TEN
+		#jmeadows.user.site.code=200
+		#jmeadows.user.site.name=CAMP MASTER
+		#jmeadows.parallelism.min=4
+
+		#DoD document settings
+		#dod.doc.service.enabled=false
+		#doc.retrieve.max.threads=10
+		#doc.retrieve.timeout.ms=40000
+		#doc.convert.office.home=/opt/libreoffice4.2
+		#doc.convert.max.threads=10
+		#doc.convert.timeout.ms=40000
+		#doc.store.file.path=/var/documents/dod
+		#doc.store.service.path=https://10.3.3.4:8443/dod/documents
+19.  Fix the jds.ro file so that we can run JDS on something other than localhost.  Modified line in jds.ro:
+	- Was: I '$$LCLHOST^VPRJRUT() W *-2 G LOOP ; reject & close port if not localhost
+	- Now is::
+		; Disable localhost check for eHMP deployment
+		;I '$$LCLHOST^VPRJRUT() W *-2 G LOOP ; reject & close port if not localhost
+20.  Install jds.ro
+	- D ^%RI
+		Device: /vagrant/mumps/jds.ro
+		Parameters? "RS" =>   <ENTER>
+		Routine Input Option:  All Routines
+		If a selected routine has the same name as one already on file,
+		shall it replace the one on file? No =>  YES
+		Recompile? Yes ==>  <ENTER>
+		Display Syntax Errors? Yes => <ENTER>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

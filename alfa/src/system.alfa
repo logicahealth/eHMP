@@ -1,0 +1,387 @@
+namespace System {
+	ruleCombinator denyOverrides = "urn:oasis:names:tc:xacml:3.0:rule-combining-algorithm:deny-overrides"
+	ruleCombinator permitOverrides = "urn:oasis:names:tc:xacml:3.0:rule-combining-algorithm:permit-overrides"	
+	ruleCombinator firstApplicable = "urn:oasis:names:tc:xacml:1.0:rule-combining-algorithm:first-applicable"
+	ruleCombinator orderedDenyOverrides = "urn:oasis:names:tc:xacml:3.0:rule-combining-algorithm:ordered-deny-overrides"
+	ruleCombinator orderedPermitOverrides = "urn:oasis:names:tc:xacml:3.0:rule-combining-algorithm:ordered-permit-overrides"
+	ruleCombinator denyUnlessPermit = "urn:oasis:names:tc:xacml:3.0:rule-combining-algorithm:deny-unless-permit"
+	ruleCombinator permitUnlessDeny = "urn:oasis:names:tc:xacml:3.0:rule-combining-algorithm:permit-unless-deny"
+
+	policyCombinator denyOverrides = "urn:oasis:names:tc:xacml:3.0:policy-combining-algorithm:deny-overrides"
+	policyCombinator permitOverrides = "urn:oasis:names:tc:xacml:3.0:policy-combining-algorithm:permit-overrides"
+	policyCombinator firstApplicable = "urn:oasis:names:tc:xacml:1.0:policy-combining-algorithm:first-applicable"
+	policyCombinator onlyOneApplicable = "urn:oasis:names:tc:xacml:1.0:policy-combining-algorithm:only-one-applicable"
+	policyCombinator orderedDenyOverrides = "urn:oasis:names:tc:xacml:3.0:policy-combining-algorithm:ordered-deny-overrides"
+	policyCombinator orderedPermitOverrides = "urn:oasis:names:tc:xacml:3.0:policy-combining-algorithm:ordered-permit-overrides"
+	policyCombinator denyUnlessPermit = "urn:oasis:names:tc:xacml:3.0:policy-combining-algorithm:deny-unless-permit"
+	policyCombinator permitUnlessDeny = "urn:oasis:names:tc:xacml:3.0:policy-combining-algorithm:permit-unless-deny"
+		
+	type anyURI = "http://www.w3.org/2001/XMLSchema#anyURI"
+	type boolean = "http://www.w3.org/2001/XMLSchema#boolean"
+	type date = "http://www.w3.org/2001/XMLSchema#date"
+	type dateTime = "http://www.w3.org/2001/XMLSchema#dateTime"
+	type dnsName = "urn:oasis:names:tc:xacml:2.0:data-type:dnsName"
+	type double = "http://www.w3.org/2001/XMLSchema#double"
+	type integer = "http://www.w3.org/2001/XMLSchema#integer"
+	type ipAddress = "urn:oasis:names:tc:xacml:2.0:data-type:ipAddress"
+	type time = "http://www.w3.org/2001/XMLSchema#time"
+	type string = "http://www.w3.org/2001/XMLSchema#string"
+	type dayTimeDuration = "http://www.w3.org/2001/XMLSchema#dayTimeDuration"
+	type yearMonthDuration = "http://www.w3.org/2001/XMLSchema#yearMonthDuration"
+	type x500Name = "urn:oasis:names:tc:xacml:1.0:data-type:x500Name"
+	type rfc822Name = "urn:oasis:names:tc:xacml:1.0:data-type:rfc822Name"
+	type hexBinary = "http://www.w3.org/2001/XMLSchema#hexBinary"
+	type base64Binary = "http://www.w3.org/2001/XMLSchema#base64Binary"
+	type xpath = "urn:oasis:names:tc:xacml:3.0:data-type:xpathExpression"
+	
+	category subjectCat  = "urn:oasis:names:tc:xacml:1.0:subject-category:access-subject"
+	category resourceCat = "urn:oasis:names:tc:xacml:3.0:attribute-category:resource"
+	category actionCat = "urn:oasis:names:tc:xacml:3.0:attribute-category:action"
+	category environmentCat = "urn:oasis:names:tc:xacml:3.0:attribute-category:environment"
+	
+    infix allowbags comm (==) = {
+        "urn:oasis:names:tc:xacml:1.0:function:string-equal" : string string -> boolean
+        "urn:oasis:names:tc:xacml:1.0:function:boolean-equal" : boolean boolean -> boolean
+        "urn:oasis:names:tc:xacml:1.0:function:integer-equal" : integer integer -> boolean
+        "urn:oasis:names:tc:xacml:1.0:function:date-equal" : date date -> boolean
+        "urn:oasis:names:tc:xacml:1.0:function:double-equal" : double double -> boolean
+        "urn:oasis:names:tc:xacml:1.0:function:time-equal" : time time -> boolean
+        "urn:oasis:names:tc:xacml:1.0:function:dateTime-equal" : dateTime dateTime -> boolean
+        "urn:oasis:names:tc:xacml:3.0:function:dayTimeDuration-equal" : dayTimeDuration dayTimeDuration -> boolean
+        "urn:oasis:names:tc:xacml:3.0:function:yearMonthDuration-equal" : yearMonthDuration yearMonthDuration -> boolean
+        "urn:oasis:names:tc:xacml:1.0:function:anyURI-equal" : anyURI anyURI -> boolean
+        "urn:oasis:names:tc:xacml:1.0:function:x500Name-equal" : x500Name x500Name-> boolean
+        "urn:oasis:names:tc:xacml:1.0:function:rfc822Name-equal" : rfc822Name rfc822Name -> boolean
+        "urn:oasis:names:tc:xacml:1.0:function:hexBinary-equal" : hexBinary hexBinary -> boolean
+        "urn:oasis:names:tc:xacml:1.0:function:base64Binary-equal" : base64Binary base64Binary -> boolean
+    }
+    
+    infix allowbags (<) = {
+        "urn:oasis:names:tc:xacml:1.0:function:integer-less-than" : integer integer -> boolean
+        "urn:oasis:names:tc:xacml:1.0:function:double-less-than" : double double -> boolean
+        "urn:oasis:names:tc:xacml:1.0:function:string-less-than" : string string -> boolean
+        "urn:oasis:names:tc:xacml:1.0:function:time-less-than" : time time -> boolean
+        "urn:oasis:names:tc:xacml:1.0:function:dateTime-less-than" : dateTime dateTime -> boolean
+        "urn:oasis:names:tc:xacml:1.0:function:date-less-than" : date date -> boolean
+    } inv >=
+
+    infix allowbags (>=) = {
+        "urn:oasis:names:tc:xacml:1.0:function:integer-greater-than-or-equal" : integer integer -> boolean
+        "urn:oasis:names:tc:xacml:1.0:function:double-greater-than-or-equal" : double double -> boolean
+        "urn:oasis:names:tc:xacml:1.0:function:string-greater-than-or-equal" : string string -> boolean
+        "urn:oasis:names:tc:xacml:1.0:function:time-greater-than-or-equal" : time time -> boolean
+        "urn:oasis:names:tc:xacml:1.0:function:dateTime-greater-than-or-equal" : dateTime dateTime -> boolean
+        "urn:oasis:names:tc:xacml:1.0:function:date-greater-than-or-equal" : date date -> boolean
+    } inv <
+
+    infix allowbags (<=) = {
+        "urn:oasis:names:tc:xacml:1.0:function:integer-less-than-or-equal" : integer integer -> boolean
+        "urn:oasis:names:tc:xacml:1.0:function:double-less-than-or-equal" : double double -> boolean
+        "urn:oasis:names:tc:xacml:1.0:function:string-less-than-or-equal" : string string -> boolean
+        "urn:oasis:names:tc:xacml:1.0:function:time-less-than-or-equal" : time time -> boolean
+        "urn:oasis:names:tc:xacml:1.0:function:dateTime-less-than-or-equal" : dateTime dateTime -> boolean
+        "urn:oasis:names:tc:xacml:1.0:function:date-less-than-or-equal" : date date -> boolean
+    } inv >
+
+    infix allowbags (>) = {
+        "urn:oasis:names:tc:xacml:1.0:function:integer-greater-than" : integer integer -> boolean
+        "urn:oasis:names:tc:xacml:1.0:function:double-greater-than" : double double -> boolean
+        "urn:oasis:names:tc:xacml:1.0:function:string-greater-than" : string string -> boolean
+        "urn:oasis:names:tc:xacml:1.0:function:time-greater-than" : time time -> boolean
+        "urn:oasis:names:tc:xacml:1.0:function:dateTime-greater-than" : dateTime dateTime -> boolean
+        "urn:oasis:names:tc:xacml:1.0:function:date-greater-than" : date date -> boolean
+    } inv <=
+    
+	infix comm (&&) = {"urn:oasis:names:tc:xacml:1.0:function:and" : boolean boolean -> boolean}
+	infix comm (||) = {"urn:oasis:names:tc:xacml:1.0:function:or" : boolean boolean -> boolean}
+
+    infix comm (+) = {
+        "urn:oasis:names:tc:xacml:1.0:function:integer-add" : integer integer -> integer
+        "urn:oasis:names:tc:xacml:1.0:function:double-add" : double double -> double
+        "urn:oasis:names:tc:xacml:2.0:function:string-concatenate" : string string -> string
+    }
+
+    infix comm (-) = {
+        "urn:oasis:names:tc:xacml:1.0:function:integer-subtract" : integer integer -> integer
+        "urn:oasis:names:tc:xacml:1.0:function:double-subtract" : double double -> double
+    }
+    
+    infix comm (*) = {
+        "urn:oasis:names:tc:xacml:1.0:function:integer-multiply" : integer integer -> integer
+        "urn:oasis:names:tc:xacml:1.0:function:double-multiply" : double double -> double
+    }
+
+    infix comm (/) = {
+        "urn:oasis:names:tc:xacml:1.0:function:integer-divide" : integer integer -> integer
+        "urn:oasis:names:tc:xacml:1.0:function:double-divide" : double double -> double
+    }
+    
+    function stringEqual = "urn:oasis:names:tc:xacml:1.0:function:string-equal" : string string -> boolean
+    function booleanEqual = "urn:oasis:names:tc:xacml:1.0:function:boolean-equal" : boolean boolean -> boolean
+    function integerEqual = "urn:oasis:names:tc:xacml:1.0:function:integer-equal" : integer integer -> boolean
+    function doubleEqual = "urn:oasis:names:tc:xacml:1.0:function:double-equal" : double double -> boolean
+    function dateEqual = "urn:oasis:names:tc:xacml:1.0:function:date-equal" : date date -> boolean
+    function timeEqual = "urn:oasis:names:tc:xacml:1.0:function:time-equal" : time time -> boolean
+    function dateTimeEqual = "urn:oasis:names:tc:xacml:1.0:function:dateTime-equal" : dateTime dateTime -> boolean
+    function dayTimeDurationEqual = "urn:oasis:names:tc:xacml:3.0:function:dayTimeDuration-equal" : dayTimeDuration dayTimeDuration -> boolean
+    function yearMonthDurationEqual = "urn:oasis:names:tc:xacml:3.0:function:yearMonthDuration-equal" : yearMonthDuration yearMonthDuration -> boolean
+    function stringEqualIgnoreCase = "urn:oasis:names:tc:xacml:3.0:function:string-equal-ignore-case" : string string -> boolean
+    function anyURIEqual = "urn:oasis:names:tc:xacml:1.0:function:anyURI-equal" : anyURI anyURI -> boolean
+    function x500NameEqual = "urn:oasis:names:tc:xacml:1.0:function:x500Name-equal" : x500Name x500Name -> boolean
+    function rfc822NameEqual = "urn:oasis:names:tc:xacml:1.0:function:rfc822Name-equal" : rfc822Name rfc822Name -> boolean
+    function hexBinaryEqual = "urn:oasis:names:tc:xacml:1.0:function:hexBinary-equal" : hexBinary hexBinary -> boolean
+    function base64BinaryEqual = "urn:oasis:names:tc:xacml:1.0:function:base64Binary-equal" : base64Binary base64Binary -> boolean
+    function integerAdd = "urn:oasis:names:tc:xacml:1.0:function:integer-add" : integer integer integer* -> integer
+    function doubleAdd = "urn:oasis:names:tc:xacml:1.0:function:double-add" : double double double* -> double
+    function integerSubtract = "urn:oasis:names:tc:xacml:1.0:function:integer-subtract" : integer integer -> integer
+    function doubleSubtract = "urn:oasis:names:tc:xacml:1.0:function:double-subtract" : double double -> double
+    function integerMultiply = "urn:oasis:names:tc:xacml:1.0:function:integer-multiply" : integer integer integer* -> integer
+    function doubleMultiply = "urn:oasis:names:tc:xacml:1.0:function:double-multiply" : double double double* -> double
+    function integerDivice = "urn:oasis:names:tc:xacml:1.0:function:integer-divide" : integer integer -> integer
+    function doubleDivide = "urn:oasis:names:tc:xacml:1.0:function:double-divide" : double double -> double
+    function integerMod = "urn:oasis:names:tc:xacml:1.0:function:integer-mod" : integer integer -> integer
+    function integerAbs = "urn:oasis:names:tc:xacml:1.0:function:integer-abs" : integer -> integer
+    function doubleAbs = "urn:oasis:names:tc:xacml:1.0:function:double-abs" : double -> double
+    function round = "urn:oasis:names:tc:xacml:1.0:function:round" : double -> double
+    function floor = "urn:oasis:names:tc:xacml:1.0:function:floor" : double -> double
+    function stringNormalizeSpace = "urn:oasis:names:tc:xacml:1.0:function:string-normalize-space" : string -> string
+    function stringNormalizeToLowerCase = "urn:oasis:names:tc:xacml:1.0:function:string-normalize-to-lower-case" : string -> string
+    function doubleToInteger = "urn:oasis:names:tc:xacml:1.0:function:double-to-integer" : double -> integer
+    function integerToDouble = "urn:oasis:names:tc:xacml:1.0:function:integer-to-double" : integer -> double
+    function orFunction = "urn:oasis:names:tc:xacml:1.0:function:or" : boolean* -> boolean
+    function andFunction = "urn:oasis:names:tc:xacml:1.0:function:and" : boolean* -> boolean
+    function nOf = "urn:oasis:names:tc:xacml:1.0:function:n-of" : integer boolean* -> boolean
+    function not = "urn:oasis:names:tc:xacml:1.0:function:not" : boolean -> boolean
+    function integerGreaterThan = "urn:oasis:names:tc:xacml:1.0:function:integer-greater-than" : integer integer -> boolean
+    function integerGreaterThanOrEqual = "urn:oasis:names:tc:xacml:1.0:function:integer-greater-than-or-equal" : integer integer -> boolean
+    function integerLessThan = "urn:oasis:names:tc:xacml:1.0:function:integer-less-than" : integer integer -> boolean
+    function integerLessThanOrEqual = "urn:oasis:names:tc:xacml:1.0:function:integer-less-than-or-equal" : integer integer -> boolean
+    function doubleGreaterThan = "urn:oasis:names:tc:xacml:1.0:function:double-greater-than" : double double -> boolean
+    function doubleGreaterThanOrEqual = "urn:oasis:names:tc:xacml:1.0:function:double-greater-than-or-equal" : double double -> boolean
+    function doubleLessThan = "urn:oasis:names:tc:xacml:1.0:function:double-less-than" : double double -> boolean
+    function doubleLessThanOrEqual = "urn:oasis:names:tc:xacml:1.0:function:double-less-than-or-equal" : double double -> boolean
+    function dateTimeAddDayTimeDuration = "urn:oasis:names:tc:xacml:3.0:function:dateTime-add-dayTimeDuration" : dateTime dayTimeDuration -> dateTime
+    function dateTimeAddYearMonthDuration = "urn:oasis:names:tc:xacml:3.0:function:dateTime-add-yearMonthDuration" : dateTime yearMonthDuration -> dateTime
+    function dateTimeSubtractDayTimeDuration = "urn:oasis:names:tc:xacml:3.0:function:dateTime-subtract-dayTimeDuration" : dateTime dayTimeDuration -> dateTime
+    function dateTimeSubtractYearMonthDuration = "urn:oasis:names:tc:xacml:3.0:function:dateTime-subtract-yearMonthDuration" : dateTime yearMonthDuration -> dateTime
+    function dateAddYearMonthDuration = "urn:oasis:names:tc:xacml:3.0:function:date-add-yearMonthDuration" : date yearMonthDuration -> date
+    function dateSubtractYearMonthDuration = "urn:oasis:names:tc:xacml:3.0:function:date-subtract-yearMonthDuration" : date yearMonthDuration -> date
+    function stringGreaterThan = "urn:oasis:names:tc:xacml:1.0:function:string-greater-than" : string string -> boolean
+    function stringGreaterThanOrEqual = "urn:oasis:names:tc:xacml:1.0:function:string-greater-than-or-equal" : string string -> boolean
+    function stringLessThan = "urn:oasis:names:tc:xacml:1.0:function:string-less-than" : string string -> boolean
+    function stringLessThanOrEqual = "urn:oasis:names:tc:xacml:1.0:function:string-less-than-or-equal" : string string -> boolean
+    function timeGreaterThan = "urn:oasis:names:tc:xacml:1.0:function:time-greater-than" : time time -> boolean
+    function timeGreaterThanOrEqual = "urn:oasis:names:tc:xacml:1.0:function:time-greater-than-or-equal" : time time -> boolean
+    function timeLessThan = "urn:oasis:names:tc:xacml:1.0:function:time-less-than" : time time -> boolean
+    function timeLessThanOrEqual = "urn:oasis:names:tc:xacml:1.0:function:time-less-than-or-equal" : time time -> boolean
+    function timeInRange = "urn:oasis:names:tc:xacml:2.0:function:time-in-range" : time time time -> boolean
+    function dateTimeGreaterThan = "urn:oasis:names:tc:xacml:1.0:function:dateTime-greater-than" : dateTime dateTime -> boolean
+    function dateTimeGreaterThanOrEqual = "urn:oasis:names:tc:xacml:1.0:function:dateTime-greater-than-or-equal" : dateTime dateTime -> boolean
+    function dateTimeLessThan = "urn:oasis:names:tc:xacml:1.0:function:dateTime-less-than" : dateTime dateTime -> boolean
+    function dateTimeLessThanOrEqual = "urn:oasis:names:tc:xacml:1.0:function:dateTime-less-than-or-equal" : dateTime dateTime -> boolean
+    function dateGreaterThan = "urn:oasis:names:tc:xacml:1.0:function:date-greater-than" : date date -> boolean
+    function dateGreaterThanOrEqual = "urn:oasis:names:tc:xacml:1.0:function:date-greater-than-or-equal" : date date -> boolean
+    function dateLessThan = "urn:oasis:names:tc:xacml:1.0:function:date-less-than" : date date -> boolean
+    function dateLessThanOrEqual = "urn:oasis:names:tc:xacml:1.0:function:date-less-than-or-equal" : date date -> boolean
+    function stringOneAndOnly = "urn:oasis:names:tc:xacml:1.0:function:string-one-and-only" : bag[string] -> string
+    function stringBagSize = "urn:oasis:names:tc:xacml:1.0:function:string-bag-size" : bag[string] -> integer
+    function stringIsIn = "urn:oasis:names:tc:xacml:1.0:function:string-is-in" : string bag[string] -> boolean 
+    function stringBag = "urn:oasis:names:tc:xacml:1.0:function:string-bag" : string* -> bag[string]
+    function booleanOneAndOnly = "urn:oasis:names:tc:xacml:1.0:function:boolean-one-and-only" : bag[boolean] -> boolean
+    function booleanBagSize = "urn:oasis:names:tc:xacml:1.0:function:boolean-bag-size" : bag[boolean] -> integer
+    function booleanIsIn = "urn:oasis:names:tc:xacml:1.0:function:boolean-is-in" : boolean bag[boolean] -> boolean
+    function booleanBag = "urn:oasis:names:tc:xacml:1.0:function:boolean-bag" : boolean* -> bag[boolean]
+    function integerOneAndOnly = "urn:oasis:names:tc:xacml:1.0:function:integer-one-and-only" : bag[integer] -> integer
+    function integerBagSize = "urn:oasis:names:tc:xacml:1.0:function:integer-bag-size" : bag[integer] -> integer
+    function integerIsIn = "urn:oasis:names:tc:xacml:1.0:function:integer-is-in" : integer bag[integer] -> boolean
+    function integerBag = "urn:oasis:names:tc:xacml:1.0:function:integer-bag" : integer* -> bag[integer]
+    function doubleOneAndOnly = "urn:oasis:names:tc:xacml:1.0:function:double-one-and-only" : bag[double] -> double
+    function doubleBagSize = "urn:oasis:names:tc:xacml:1.0:function:double-bag-size" : bag[double] -> integer
+    function doubleIsIn = "urn:oasis:names:tc:xacml:1.0:function:double-is-in" : double bag[double] -> boolean
+    function doubleBag = "urn:oasis:names:tc:xacml:1.0:function:double-bag" : double* -> bag[double]
+    function timeOneAndOnly = "urn:oasis:names:tc:xacml:1.0:function:time-one-and-only" : bag[time] -> time
+    function timeBagSize = "urn:oasis:names:tc:xacml:1.0:function:time-bag-size" : bag[time] -> integer
+    function timeIsIn = "urn:oasis:names:tc:xacml:1.0:function:time-is-in" : time bag[time] -> boolean
+    function timeBag = "urn:oasis:names:tc:xacml:1.0:function:time-bag" : time* -> bag[time]
+    function dateOneAndOnly = "urn:oasis:names:tc:xacml:1.0:function:date-one-and-only" : bag[date] -> date
+    function dateBagSize = "urn:oasis:names:tc:xacml:1.0:function:date-bag-size" : bag[date] -> integer
+    function dateIsIn = "urn:oasis:names:tc:xacml:1.0:function:date-is-in" : date bag[date] -> boolean
+    function dateBag = "urn:oasis:names:tc:xacml:1.0:function:date-bag" : date* -> bag[date]
+    function dateTimeOneAndOnly = "urn:oasis:names:tc:xacml:1.0:function:dateTime-one-and-only" : bag[dateTime] -> dateTime
+    function dateTimeBagSize = "urn:oasis:names:tc:xacml:1.0:function:dateTime-bag-size" : bag[dateTime] -> integer
+    function dateTimeIsIn = "urn:oasis:names:tc:xacml:1.0:function:dateTime-is-in" : dateTime bag[dateTime] -> boolean
+    function dateTimeBag = "urn:oasis:names:tc:xacml:1.0:function:dateTime-bag" : dateTime* -> bag[dateTime]
+    function anyURIOneAndOnly = "urn:oasis:names:tc:xacml:1.0:function:anyURI-one-and-only" : bag[anyURI] -> anyURI
+    function anyURIBagSize = "urn:oasis:names:tc:xacml:1.0:function:anyURI-bag-size" : bag[anyURI] -> integer
+    function anyURIIsIn = "urn:oasis:names:tc:xacml:1.0:function:anyURI-is-in" : anyURI bag[anyURI] -> boolean
+    function anyURIBag = "urn:oasis:names:tc:xacml:1.0:function:anyURI-bag" : anyURI* -> bag[anyURI]
+    function hexBinaryOneAndOnly = "urn:oasis:names:tc:xacml:1.0:function:hexBinary-one-and-only" : bag[hexBinary] -> hexBinary
+    function hexBinaryBagSize = "urn:oasis:names:tc:xacml:1.0:function:hexBinary-bag-size" : bag[hexBinary] -> integer
+    function hexBinaryIsIn = "urn:oasis:names:tc:xacml:1.0:function:hexBinary-is-in" : hexBinary bag[hexBinary] -> boolean
+    function hexBinaryBag = "urn:oasis:names:tc:xacml:1.0:function:hexBinary-bag" : hexBinary* -> bag[hexBinary]
+    function base64BinaryOneAndOnly = "urn:oasis:names:tc:xacml:1.0:function:base64Binary-one-and-only" : bag[base64Binary] -> base64Binary
+    function base64BinaryBagSize = "urn:oasis:names:tc:xacml:1.0:function:base64Binary-bag-size" : bag[base64Binary] -> integer
+    function base64BinaryIsIn = "urn:oasis:names:tc:xacml:1.0:function:base64Binary-is-in" : base64Binary bag[base64Binary] -> boolean
+    function base64BinaryBag = "urn:oasis:names:tc:xacml:1.0:function:base64Binary-bag" : base64Binary* -> bag[base64Binary]
+    function dayTimeDurationOneAndOnly = "urn:oasis:names:tc:xacml:3.0:function:dayTimeDuration-one-and-only" : bag[dayTimeDuration] -> dayTimeDuration
+    function dayTimeDurationBagSize = "urn:oasis:names:tc:xacml:3.0:function:dayTimeDuration-bag-size" : bag[dayTimeDuration] -> integer
+    function dayTimeDurationIsIn = "urn:oasis:names:tc:xacml:3.0:function:dayTimeDuration-is-in" : dayTimeDuration bag[dayTimeDuration] -> boolean
+    function dayTimeDurationBag = "urn:oasis:names:tc:xacml:3.0:function:dayTimeDuration-bag" : dayTimeDuration* -> bag[dayTimeDuration]
+    function yearMonthDurationOneAndOnly = "urn:oasis:names:tc:xacml:3.0:function:yearMonthDuration-one-and-only" : bag[yearMonthDuration] -> yearMonthDuration
+    function yearMonthDurationBagSize = "urn:oasis:names:tc:xacml:3.0:function:yearMonthDuration-bag-size" : bag[yearMonthDuration] -> integer
+    function yearMonthDurationIsIn = "urn:oasis:names:tc:xacml:3.0:function:yearMonthDuration-is-in" : yearMonthDuration bag[yearMonthDuration] -> boolean
+    function yearMonthDurationBag = "urn:oasis:names:tc:xacml:3.0:function:yearMonthDuration-bag" : yearMonthDuration* -> bag[yearMonthDuration]
+    function x500NameOneAndOnly = "urn:oasis:names:tc:xacml:1.0:function:x500Name-one-and-only" : bag[x500Name] -> x500Name
+    function x500NameBagSize = "urn:oasis:names:tc:xacml:1.0:function:x500Name-bag-size" : bag[x500Name] -> integer
+    function x500NameIsIn = "urn:oasis:names:tc:xacml:1.0:function:x500Name-is-in" : x500Name bag[x500Name] -> boolean
+    function x500NameBag = "urn:oasis:names:tc:xacml:1.0:function:x500Name-bag" : x500Name* -> bag[x500Name]
+    function rfc822NameOneAndOnly = "urn:oasis:names:tc:xacml:1.0:function:rfc822Name-one-and-only" : bag[rfc822Name] -> rfc822Name
+    function rfc822NameBagSize = "urn:oasis:names:tc:xacml:1.0:function:rfc822Name-bag-size" : bag[rfc822Name] -> integer
+    function rfc822NameIsIn = "urn:oasis:names:tc:xacml:1.0:function:rfc822Name-is-in" : rfc822Name bag[rfc822Name] -> boolean
+    function rfc822NameBag = "urn:oasis:names:tc:xacml:1.0:function:rfc822Name-bag" : rfc822Name* -> bag[rfc822Name]
+    function ipAddressOneAndOnly = "urn:oasis:names:tc:xacml:2.0:function:ipAddress-one-and-only" : bag[ipAddress] -> ipAddress
+    function ipAddressBagSize = "urn:oasis:names:tc:xacml:2.0:function:ipAddress-bag-size" : bag[ipAddress] -> integer
+    function ipAddressBag = "urn:oasis:names:tc:xacml:2.0:function:ipAddress-bag" : ipAddress* -> bag[ipAddress]
+    function dnsNameOneAndOnly = "urn:oasis:names:tc:xacml:2.0:function:dnsName-one-and-only" : bag[dnsName] -> dnsName
+    function dnsNameBagSize = "urn:oasis:names:tc:xacml:2.0:function:dnsName-bag-size" : bag[dnsName] -> integer
+    function dnsNameBag = "urn:oasis:names:tc:xacml:2.0:function:dnsName-bag" : dnsName* -> bag[dnsName]
+    function stringConcatenate = "urn:oasis:names:tc:xacml:2.0:function:string-concatenate" : string* -> string
+    function booleanFromString = "urn:oasis:names:tc:xacml:3.0:function:boolean-from-string" : string -> boolean
+    function stringFromBoolean = "urn:oasis:names:tc:xacml:3.0:function:string-from-boolean" : boolean -> string
+    function integerFromString = "urn:oasis:names:tc:xacml:3.0:function:integer-from-string" : string -> integer
+    function stringFromInteger = "urn:oasis:names:tc:xacml:3.0:function:string-from-integer" : integer -> string
+    function doubleFromString = "urn:oasis:names:tc:xacml:3.0:function:double-from-string" : string -> double
+    function stringFromDouble = "urn:oasis:names:tc:xacml:3.0:function:string-from-double" : double -> string
+    function timeFromString = "urn:oasis:names:tc:xacml:3.0:function:time-from-string" : string -> time
+    function stringFromTime = "urn:oasis:names:tc:xacml:3.0:function:string-from-time" : time -> string
+    function dateFromString = "urn:oasis:names:tc:xacml:3.0:function:date-from-string" : string -> date
+    function stringFromDate = "urn:oasis:names:tc:xacml:3.0:function:string-from-date" : date -> string
+    function dateTimeFromString = "urn:oasis:names:tc:xacml:3.0:function:dateTime-from-string" : string -> dateTime
+    function stringFromDateTime = "urn:oasis:names:tc:xacml:3.0:function:string-from-dateTime" : dateTime -> string
+    function anyURIFromString = "urn:oasis:names:tc:xacml:3.0:function:anyURI-from-string" : string -> anyURI
+    function stringFromAnyURI = "urn:oasis:names:tc:xacml:3.0:function:string-from-anyURI" : anyURI -> string
+    function dayTimeDurationFromString = "urn:oasis:names:tc:xacml:3.0:function:dayTimeDuration-from-string" : string -> dayTimeDuration
+    function stringFromDayTimeDuration = "urn:oasis:names:tc:xacml:3.0:function:string-from-dayTimeDuration" :  dayTimeDuration-> string
+    function yearMonthDurationFromString = "urn:oasis:names:tc:xacml:3.0:function:yearMonthDuration-from-string" : string -> yearMonthDuration
+    function stringFromYearMonthDuration = "urn:oasis:names:tc:xacml:3.0:function:string-from-yearMonthDuration" : yearMonthDuration -> string
+    function x500NameFromString = "urn:oasis:names:tc:xacml:3.0:function:x500Name-from-string" : string -> x500Name
+    function stringFromX500Name = "urn:oasis:names:tc:xacml:3.0:function:string-from-x500Name" : x500Name -> string
+    function rfc822NameFromString = "urn:oasis:names:tc:xacml:3.0:function:rfc822Name-from-string" : string -> rfc822Name
+    function stringFromRfc822Name = "urn:oasis:names:tc:xacml:3.0:function:string-from-rfc822Name" : rfc822Name -> string
+    function ipAddressFromString = "urn:oasis:names:tc:xacml:3.0:function:ipAddress-from-string" : string -> ipAddress
+    function stringFromIpAddress = "urn:oasis:names:tc:xacml:3.0:function:string-from-ipAddress" : ipAddress -> string
+    function dnsNameFromString = "urn:oasis:names:tc:xacml:3.0:function:dnsName-from-string" : string -> dnsName
+    function stringFromDnsName = "urn:oasis:names:tc:xacml:3.0:function:string-from-dnsName" : dnsName -> string
+    function stringStartWith = "urn:oasis:names:tc:xacml:3.0:function:string-starts-with" : string string -> boolean
+    function anyURIStartsWith = "urn:oasis:names:tc:xacml:3.0:function:anyURI-starts-with" : string anyURI -> boolean
+    function stringEndsWith = "urn:oasis:names:tc:xacml:3.0:function:string-ends-with" : string string -> boolean
+    function anyURIEndsWith = "urn:oasis:names:tc:xacml:3.0:function:anyURI-ends-with" : string anyURI -> boolean
+    function stringContains = "urn:oasis:names:tc:xacml:3.0:function:string-contains" : string string -> boolean
+    function anyURIContains = "urn:oasis:names:tc:xacml:3.0:function:anyURI-contains" : string anyURI -> boolean
+    function stringSubString = "urn:oasis:names:tc:xacml:3.0:function:string-substring" : string integer integer -> string
+    function anyURISubString = "urn:oasis:names:tc:xacml:3.0:function:anyURI-substring" : anyURI integer integer -> string
+
+    // Note that the higher order functions have been renamed in the latest committee draft.
+    // This declarations uses the 1.0 identifier although permitting the 3.0
+    // arguments since that is what APS 4.0.x implements from an early working draft
+    function anyOf = "urn:oasis:names:tc:xacml:1.0:function:any-of" : function anyAtomicOrBag anyAtomicOrBag* -> boolean
+    function allOf = "urn:oasis:names:tc:xacml:1.0:function:all-of" : function anyAtomicOrBag anyAtomicOrBag* -> boolean
+    function anyOfAny = "urn:oasis:names:tc:xacml:1.0:function:any-of-any" : function anyAtomicOrBag anyAtomicOrBag* -> boolean
+    // These are the original 1.0 declarations
+    //function anyOf = "urn:oasis:names:tc:xacml:1.0:function:any-of" : function anyAtomic bag[anyAtomic] -> boolean
+    //function allOf = "urn:oasis:names:tc:xacml:1.0:function:all-of" : function anyAtomic bag[anyAtomic] -> boolean
+    //function anyOfAny = "urn:oasis:names:tc:xacml:1.0:function:any-of-any" : function bag[anyAtomic] bag[anyAtomic] -> boolean
+    // If running on APS 5.0.x, use these 3.0 declarations instead
+    //function anyOf = "urn:oasis:names:tc:xacml:3.0:function:any-of" : function anyAtomicOrBag anyAtomicOrBag* -> boolean
+    //function allOf = "urn:oasis:names:tc:xacml:3.0:function:all-of" : function anyAtomicOrBag anyAtomicOrBag* -> boolean
+    //function anyOfAny = "urn:oasis:names:tc:xacml:3.0:function:any-of-any" : function anyAtomicOrBag anyAtomicOrBag* -> boolean
+
+    function allOfAny = "urn:oasis:names:tc:xacml:1.0:function:all-of-any" : function bag[anyAtomic] bag[anyAtomic] -> boolean
+    function anyOfAll = "urn:oasis:names:tc:xacml:1.0:function:any-of-all" : function bag[anyAtomic] bag[anyAtomic] -> boolean
+    function allOfAll = "urn:oasis:names:tc:xacml:1.0:function:all-of-all" : function bag[anyAtomic] bag[anyAtomic] -> boolean
+    function map = "urn:oasis:names:tc:xacml:1.0:function:map" : function anyAtomicOrBag anyAtomicOrBag* -> bag[anyAtomic]
+
+    function x500NameMatch = "urn:oasis:names:tc:xacml:1.0:function:x500Name-match" : x500Name x500Name -> boolean
+    function rfc822NameMatch = "urn:oasis:names:tc:xacml:1.0:function:rfc822Name-match" : string rfc822Name -> boolean
+    function stringRegexpMatch = "urn:oasis:names:tc:xacml:1.0:function:string-regexp-match" : string string -> boolean
+    function anyURIRegexpMatch = "urn:oasis:names:tc:xacml:2.0:function:anyURI-regexp-match" : string anyURI -> boolean
+    function ipAddressRegexpMatch = "urn:oasis:names:tc:xacml:2.0:function:ipAddress-regexp-match" : string ipAddress -> boolean
+    function dnsNameRegexpMatch = "urn:oasis:names:tc:xacml:2.0:function:dnsName-regexp-match" : string dnsName -> boolean
+    function rfc822NameRegexpMatch = "urn:oasis:names:tc:xacml:2.0:function:rfc822Name-regexp-match" : string rfc822Name -> boolean
+    function x500NameRegexpMatch = "urn:oasis:names:tc:xacml:2.0:function:x500Name-regexp-match" : string x500Name -> boolean
+    
+    function xpathNodeCount = "urn:oasis:names:tc:xacml:3.0:function:xpath-node-count" : xpath -> integer
+    function xpathNodeEqual = "urn:oasis:names:tc:xacml:3.0:function:xpath-node-equal" : xpath xpath -> boolean
+    function xpathNodeMatch = "urn:oasis:names:tc:xacml:3.0:function:xpath-node-match" : xpath xpath -> boolean
+    
+    function stringIntersection = "urn:oasis:names:tc:xacml:1.0:function:string-intersection" : bag[string] bag[string] -> bag[string]
+    function stringAtLeastOneMemberOf = "urn:oasis:names:tc:xacml:1.0:function:string-at-least-one-member-of" : bag[string] bag[string] -> boolean
+    function stringUnion = "urn:oasis:names:tc:xacml:1.0:function:string-union" : bag[string] bag[string] bag[string] * -> bag[string]
+    function stringSubSet = "urn:oasis:names:tc:xacml:1.0:function:string-subset" : bag[string] bag[string] -> boolean
+    function stringSetEquals = "urn:oasis:names:tc:xacml:1.0:function:string-set-equals" : bag[string] bag[string] -> boolean
+    function booleanIntersection = "urn:oasis:names:tc:xacml:1.0:function:boolean-intersection" : bag[boolean] bag[boolean] -> bag[boolean]
+    function booleanAtLeastOneMemberOf = "urn:oasis:names:tc:xacml:1.0:function:boolean-at-least-one-member-of" : bag[boolean] bag[boolean] -> boolean
+    function booleanUnion = "urn:oasis:names:tc:xacml:1.0:function:boolean-union" : bag[boolean] bag[boolean] bag[boolean] * -> bag[boolean]
+    function booleanSubSet = "urn:oasis:names:tc:xacml:1.0:function:boolean-subset" : bag[boolean] bag[boolean] -> boolean
+    function booleanSetEquals = "urn:oasis:names:tc:xacml:1.0:function:boolean-set-equals" : bag[boolean] bag[boolean] -> boolean
+    function integerIntersection = "urn:oasis:names:tc:xacml:1.0:function:integer-intersection" : bag[integer] bag[integer] -> bag[integer]
+    function integerAtLeastOneMemberOf = "urn:oasis:names:tc:xacml:1.0:function:integer-at-least-one-member-of" : bag[integer] bag[integer] -> boolean
+    function integerUnion = "urn:oasis:names:tc:xacml:1.0:function:integer-union" : bag[integer] bag[integer] bag[integer] * -> bag[integer]
+    function integerSubSet = "urn:oasis:names:tc:xacml:1.0:function:integer-subset" : bag[integer] bag[integer] -> boolean
+    function integerSetEquals = "urn:oasis:names:tc:xacml:1.0:function:integer-set-equals" : bag[integer] bag[integer] -> boolean
+    function doubleIntersection = "urn:oasis:names:tc:xacml:1.0:function:double-intersection" : bag[double] bag[double] -> bag[double]
+    function doubleAtLeastOneMemberOf = "urn:oasis:names:tc:xacml:1.0:function:double-at-least-one-member-of" : bag[double] bag[double] -> boolean
+    function doubleUnion = "urn:oasis:names:tc:xacml:1.0:function:double-union" : bag[double] bag[double] bag[double] * -> bag[double]
+    function doubleSubSet = "urn:oasis:names:tc:xacml:1.0:function:double-subset" : bag[double] bag[double] -> boolean
+    function doubleSetEquals = "urn:oasis:names:tc:xacml:1.0:function:double-set-equals" : bag[double] bag[double] -> boolean
+    function timeIntersection = "urn:oasis:names:tc:xacml:1.0:function:time-intersection" : bag[time] bag[time] -> bag[time]
+    function timeAtLeastOneMemberOf = "urn:oasis:names:tc:xacml:1.0:function:time-at-least-one-member-of" : bag[time] bag[time] -> boolean
+    function timeUnion = "urn:oasis:names:tc:xacml:1.0:function:time-union" : bag[time] bag[time] bag[time] * -> bag[time]
+    function timeSubSet = "urn:oasis:names:tc:xacml:1.0:function:time-subset" : bag[time] bag[time] -> boolean
+    function timeSetEquals = "urn:oasis:names:tc:xacml:1.0:function:time-set-equals" : bag[time] bag[time] -> boolean
+    function dateIntersection = "urn:oasis:names:tc:xacml:1.0:function:date-intersection" : bag[date] bag[date] -> bag[date]
+    function dateAtLeastOneMemberOf = "urn:oasis:names:tc:xacml:1.0:function:date-at-least-one-member-of" : bag[date] bag[date] -> boolean
+    function dateUnion = "urn:oasis:names:tc:xacml:1.0:function:date-union" : bag[date] bag[date] bag[date] * -> bag[date]
+    function dateSubSet = "urn:oasis:names:tc:xacml:1.0:function:date-subset" : bag[date] bag[date] -> boolean
+    function dateSetEquals = "urn:oasis:names:tc:xacml:1.0:function:date-set-equals" : bag[date] bag[date] -> boolean
+    function dateTimeIntersection = "urn:oasis:names:tc:xacml:1.0:function:dateTime-intersection" : bag[dateTime] bag[dateTime] -> bag[dateTime]
+    function dateTimeAtLeastOneMemberOf = "urn:oasis:names:tc:xacml:1.0:function:dateTime-at-least-one-member-of" : bag[dateTime] bag[dateTime] -> boolean
+    function dateTimeUnion = "urn:oasis:names:tc:xacml:1.0:function:dateTime-union" : bag[dateTime] bag[dateTime] bag[dateTime] * -> bag[dateTime]
+    function dateTimeSubSet = "urn:oasis:names:tc:xacml:1.0:function:dateTime-subset" : bag[dateTime] bag[dateTime] -> boolean
+    function dateTimeSetEquals = "urn:oasis:names:tc:xacml:1.0:function:dateTime-set-equals" : bag[dateTime] bag[dateTime] -> boolean
+    function anyURIIntersection = "urn:oasis:names:tc:xacml:1.0:function:anyURI-intersection" : bag[anyURI] bag[anyURI] -> bag[anyURI]
+    function anyURIAtLeastOneMemberOf = "urn:oasis:names:tc:xacml:1.0:function:anyURI-at-least-one-member-of" : bag[anyURI] bag[anyURI] -> boolean
+    function anyURIUnion = "urn:oasis:names:tc:xacml:1.0:function:anyURI-union" : bag[anyURI] bag[anyURI] bag[anyURI] * -> bag[anyURI]
+    function anyURISubSet = "urn:oasis:names:tc:xacml:1.0:function:anyURI-subset" : bag[anyURI] bag[anyURI] -> boolean
+    function anyURISetEquals = "urn:oasis:names:tc:xacml:1.0:function:anyURI-set-equals" : bag[anyURI] bag[anyURI] -> boolean
+    function hexBinaryIntersection = "urn:oasis:names:tc:xacml:1.0:function:hexBinary-intersection" : bag[hexBinary] bag[hexBinary] -> bag[hexBinary]
+    function hexBinaryAtLeastOneMemberOf = "urn:oasis:names:tc:xacml:1.0:function:hexBinary-at-least-one-member-of" : bag[hexBinary] bag[hexBinary] -> boolean
+    function hexBinaryUnion = "urn:oasis:names:tc:xacml:1.0:function:hexBinary-union" : bag[hexBinary] bag[hexBinary] bag[hexBinary] * -> bag[hexBinary]
+    function hexBinarySubSet = "urn:oasis:names:tc:xacml:1.0:function:hexBinary-subset" : bag[hexBinary] bag[hexBinary] -> boolean
+    function hexBinarySetEquals = "urn:oasis:names:tc:xacml:1.0:function:hexBinary-set-equals" : bag[hexBinary] bag[hexBinary] -> boolean
+    function base64BinaryIntersection = "urn:oasis:names:tc:xacml:1.0:function:base64Binary-intersection" : bag[base64Binary] bag[base64Binary] -> bag[base64Binary]
+    function base64BinaryAtLeastOneMemberOf = "urn:oasis:names:tc:xacml:1.0:function:base64Binary-at-least-one-member-of" : bag[base64Binary] bag[base64Binary] -> boolean
+    function base64BinaryUnion = "urn:oasis:names:tc:xacml:1.0:function:base64Binary-union" : bag[base64Binary] bag[base64Binary] bag[base64Binary] * -> bag[base64Binary]
+    function base64BinarySubSet = "urn:oasis:names:tc:xacml:1.0:function:base64Binary-subset" : bag[base64Binary] bag[base64Binary] -> boolean
+    function base64BinarySetEquals = "urn:oasis:names:tc:xacml:1.0:function:base64Binary-set-equals" : bag[base64Binary] bag[base64Binary] -> boolean
+    function dayTimeDurationIntersection = "urn:oasis:names:tc:xacml:3.0:function:dayTimeDuration-intersection" : bag[dayTimeDuration] bag[dayTimeDuration] -> bag[dayTimeDuration]
+    function dayTimeDurationAtLeastOneMemberOf = "urn:oasis:names:tc:xacml:3.0:function:dayTimeDuration-at-least-one-member-of" : bag[dayTimeDuration] bag[dayTimeDuration] -> boolean
+    function dayTimeDurationUnion = "urn:oasis:names:tc:xacml:3.0:function:dayTimeDuration-union" : bag[dayTimeDuration] bag[dayTimeDuration] bag[dayTimeDuration] * -> bag[dayTimeDuration]
+    function dayTimeDurationSubSet = "urn:oasis:names:tc:xacml:3.0:function:dayTimeDuration-subset" : bag[dayTimeDuration] bag[dayTimeDuration] -> boolean
+    function dayTimeDurationSetEquals = "urn:oasis:names:tc:xacml:3.0:function:dayTimeDuration-set-equals" : bag[dayTimeDuration] bag[dayTimeDuration] -> boolean
+    function yearMonthDurationIntersection = "urn:oasis:names:tc:xacml:3.0:function:yearMonthDuration-intersection" : bag[yearMonthDuration] bag[yearMonthDuration] -> bag[yearMonthDuration]
+    function yearMonthDurationAtLeastOneMemberOf = "urn:oasis:names:tc:xacml:3.0:function:yearMonthDuration-at-least-one-member-of" : bag[yearMonthDuration] bag[yearMonthDuration] -> boolean
+    function yearMonthDurationUnion = "urn:oasis:names:tc:xacml:3.0:function:yearMonthDuration-union" : bag[yearMonthDuration] bag[yearMonthDuration] bag[yearMonthDuration] * -> bag[yearMonthDuration]
+    function yearMonthDurationSubSet = "urn:oasis:names:tc:xacml:3.0:function:yearMonthDuration-subset" : bag[yearMonthDuration] bag[yearMonthDuration] -> boolean
+    function yearMonthDurationSetEquals = "urn:oasis:names:tc:xacml:3.0:function:yearMonthDuration-set-equals" : bag[yearMonthDuration] bag[yearMonthDuration] -> boolean
+    function x500NameIntersection = "urn:oasis:names:tc:xacml:1.0:function:x500Name-intersection" : bag[x500Name] bag[x500Name] -> bag[x500Name]
+    function x500NameAtLeastOneMemberOf = "urn:oasis:names:tc:xacml:1.0:function:x500Name-at-least-one-member-of" : bag[x500Name] bag[x500Name] -> boolean
+    function x500NameUnion = "urn:oasis:names:tc:xacml:1.0:function:x500Name-union" : bag[x500Name] bag[x500Name] bag[x500Name] * -> bag[x500Name]
+    function x500NameSubSet = "urn:oasis:names:tc:xacml:1.0:function:x500Name-subset" : bag[x500Name] bag[x500Name] -> boolean
+    function x500NameSetEquals = "urn:oasis:names:tc:xacml:1.0:function:x500Name-set-equals" : bag[x500Name] bag[x500Name] -> boolean
+    function rfc822NameIntersection = "urn:oasis:names:tc:xacml:1.0:function:rfc822Name-intersection" : bag[rfc822Name] bag[rfc822Name] -> bag[rfc822Name]
+    function rfc822NameAtLeastOneMemberOf = "urn:oasis:names:tc:xacml:1.0:function:rfc822Name-at-least-one-member-of" : bag[rfc822Name] bag[rfc822Name] -> boolean
+    function rfc822NameUnion = "urn:oasis:names:tc:xacml:1.0:function:rfc822Name-union" : bag[rfc822Name] bag[rfc822Name] bag[rfc822Name] * -> bag[rfc822Name]
+    function rfc822NameSubSet = "urn:oasis:names:tc:xacml:1.0:function:rfc822Name-subset" : bag[rfc822Name] bag[rfc822Name] -> boolean
+    function rfc822NameSetEquals = "urn:oasis:names:tc:xacml:1.0:function:rfc822Name-set-equals" : bag[rfc822Name] bag[rfc822Name] -> boolean
+}

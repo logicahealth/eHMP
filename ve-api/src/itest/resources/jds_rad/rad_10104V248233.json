@@ -1,0 +1,406 @@
+{
+  "apiVersion": "1.0",
+  "data": {
+    "updated": 20140808175934,
+    "totalItems": 12,
+    "currentItemCount": 12,
+    "items": [
+      {
+        "kind": "Imaging",
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "statusName": "COMPLETE",
+        "imagingTypeUid": "urn:va:imaging-Type:GENERAL RADIOLOGY",
+        "locationUid": "urn:va:location:9E7A:40",
+        "hasImages": false,
+        "imageLocation": "RADIOLOGY MAIN FLOOR",
+        "uid": "urn:va:image:9E7A:229:7059168.8441-1",
+        "summary": "RADIOLOGIC EXAMINATION, HIP, UNILATERAL; COMPLETE, MINIMUM OF 2 VIEWS",
+        "pid": "9E7A;229",
+        "localId": "7059168.8441-1",
+        "typeName": "RADIOLOGIC EXAMINATION, HIP, UNILATERAL; COMPLETE, MINIMUM OF 2 VIEWS",
+        "dateTime": "199408311558",
+        "category": "RA",
+        "reason": "",
+        "providers": [
+          {
+            "providerName": "PROGRAMMER,TWENTY",
+            "providerDisplayName": "Programmer,Twenty",
+            "summary": "ProcedureProvider{uid='null'}",
+            "providerUid": "urn:va:user:9E7A:755"
+          }
+        ],
+        "providerName": "PROGRAMMER,TWENTY",
+        "providerDisplayName": "Programmer,Twenty",
+        "results": [
+          {
+            "localTitle": "HIP 2 OR MORE VIEWS",
+            "uid": "urn:va:document:9E7A:229:7059168.8441-1",
+            "summary": "ProcedureResult{uid='urn:va:document:9E7A:229:7059168.8441-1'}"
+          }
+        ],
+        "verified": true,
+        "name": "HIP 2 OR MORE VIEWS",
+        "diagnosis": [
+          {
+            "code": "NORMAL",
+            "primary": true
+          }
+        ],
+        "locationName": "RADIOLOGY MAIN FLOOR",
+        "case": 49
+      },
+      {
+        "kind": "Imaging",
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "statusName": "COMPLETE",
+        "imagingTypeUid": "urn:va:imaging-Type:GENERAL RADIOLOGY",
+        "locationUid": "urn:va:location:9E7A:40",
+        "hasImages": false,
+        "imageLocation": "RADIOLOGY MAIN FLOOR",
+        "uid": "urn:va:image:9E7A:229:7059168.8441-2",
+        "summary": "ULTRASOUND, ABDOMINAL, B-SCAN AND/OR REAL TIME WITH IMAGE DOCUMENTATION; LIMITED (EG, SINGLE ORGAN, QUADRANT, FOLLOW-UP)",
+        "pid": "9E7A;229",
+        "localId": "7059168.8441-2",
+        "typeName": "ULTRASOUND, ABDOMINAL, B-SCAN AND/OR REAL TIME WITH IMAGE DOCUMENTATION; LIMITED (EG, SINGLE ORGAN, QUADRANT, FOLLOW-UP)",
+        "dateTime": "199408311558",
+        "category": "RA",
+        "reason": "",
+        "providers": [
+          {
+            "providerName": "PROGRAMMER,TWENTY",
+            "providerDisplayName": "Programmer,Twenty",
+            "summary": "ProcedureProvider{uid='null'}",
+            "providerUid": "urn:va:user:9E7A:755"
+          }
+        ],
+        "providerName": "PROGRAMMER,TWENTY",
+        "providerDisplayName": "Programmer,Twenty",
+        "results": [
+          {
+            "localTitle": "ECHOGRAM ABDOMEN LTD",
+            "uid": "urn:va:document:9E7A:229:7059168.8441-2",
+            "summary": "ProcedureResult{uid='urn:va:document:9E7A:229:7059168.8441-2'}"
+          }
+        ],
+        "verified": true,
+        "name": "ECHOGRAM ABDOMEN LTD",
+        "diagnosis": [
+          {
+            "code": "NORMAL",
+            "primary": true
+          }
+        ],
+        "locationName": "RADIOLOGY MAIN FLOOR",
+        "case": 50
+      },
+      {
+        "kind": "Imaging",
+        "facilityCode": "500",
+        "facilityName": "CAMP BEE",
+        "statusName": "COMPLETE",
+        "imagingTypeUid": "urn:va:imaging-Type:GENERAL RADIOLOGY",
+        "locationUid": "urn:va:location:C877:40",
+        "hasImages": false,
+        "imageLocation": "RADIOLOGY MAIN FLOOR",
+        "uid": "urn:va:image:C877:229:7059168.8441-1",
+        "summary": "RADIOLOGIC EXAMINATION, HIP, UNILATERAL; COMPLETE, MINIMUM OF 2 VIEWS",
+        "pid": "9E7A;229",
+        "localId": "7059168.8441-1",
+        "typeName": "RADIOLOGIC EXAMINATION, HIP, UNILATERAL; COMPLETE, MINIMUM OF 2 VIEWS",
+        "dateTime": "199408311558",
+        "category": "RA",
+        "reason": "",
+        "providers": [
+          {
+            "providerName": "PROGRAMMER,TWENTY",
+            "providerDisplayName": "Programmer,Twenty",
+            "summary": "ProcedureProvider{uid='null'}",
+            "providerUid": "urn:va:user:C877:755"
+          }
+        ],
+        "providerName": "PROGRAMMER,TWENTY",
+        "providerDisplayName": "Programmer,Twenty",
+        "results": [
+          {
+            "localTitle": "HIP 2 OR MORE VIEWS",
+            "uid": "urn:va:document:C877:229:7059168.8441-1",
+            "summary": "ProcedureResult{uid='urn:va:document:C877:229:7059168.8441-1'}"
+          }
+        ],
+        "verified": true,
+        "name": "HIP 2 OR MORE VIEWS",
+        "diagnosis": [
+          {
+            "code": "NORMAL",
+            "primary": true
+          }
+        ],
+        "locationName": "RADIOLOGY MAIN FLOOR",
+        "case": 49
+      },
+      {
+        "kind": "Imaging",
+        "facilityCode": "500",
+        "facilityName": "CAMP BEE",
+        "statusName": "COMPLETE",
+        "imagingTypeUid": "urn:va:imaging-Type:GENERAL RADIOLOGY",
+        "locationUid": "urn:va:location:C877:40",
+        "hasImages": false,
+        "imageLocation": "RADIOLOGY MAIN FLOOR",
+        "uid": "urn:va:image:C877:229:7059168.8441-2",
+        "summary": "ULTRASOUND, ABDOMINAL, B-SCAN AND/OR REAL TIME WITH IMAGE DOCUMENTATION; LIMITED (EG, SINGLE ORGAN, QUADRANT, FOLLOW-UP)",
+        "pid": "9E7A;229",
+        "localId": "7059168.8441-2",
+        "typeName": "ULTRASOUND, ABDOMINAL, B-SCAN AND/OR REAL TIME WITH IMAGE DOCUMENTATION; LIMITED (EG, SINGLE ORGAN, QUADRANT, FOLLOW-UP)",
+        "dateTime": "199408311558",
+        "category": "RA",
+        "reason": "",
+        "providers": [
+          {
+            "providerName": "PROGRAMMER,TWENTY",
+            "providerDisplayName": "Programmer,Twenty",
+            "summary": "ProcedureProvider{uid='null'}",
+            "providerUid": "urn:va:user:C877:755"
+          }
+        ],
+        "providerName": "PROGRAMMER,TWENTY",
+        "providerDisplayName": "Programmer,Twenty",
+        "results": [
+          {
+            "localTitle": "ECHOGRAM ABDOMEN LTD",
+            "uid": "urn:va:document:C877:229:7059168.8441-2",
+            "summary": "ProcedureResult{uid='urn:va:document:C877:229:7059168.8441-2'}"
+          }
+        ],
+        "verified": true,
+        "name": "ECHOGRAM ABDOMEN LTD",
+        "diagnosis": [
+          {
+            "code": "NORMAL",
+            "primary": true
+          }
+        ],
+        "locationName": "RADIOLOGY MAIN FLOOR",
+        "case": 50
+      },
+      {
+        "kind": "Imaging",
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "statusName": "COMPLETE",
+        "imagingTypeUid": "urn:va:imaging-Type:GENERAL RADIOLOGY",
+        "locationUid": "urn:va:location:9E7A:40",
+        "hasImages": false,
+        "imageLocation": "RADIOLOGY MAIN FLOOR",
+        "uid": "urn:va:image:9E7A:229:7059168.8447-1",
+        "summary": "RADIOLOGIC EXAMINATION, ABDOMEN; ANTEROPOSTERIOR AND ADDITIONAL OBLIQUE AND CONE VIEWS",
+        "pid": "9E7A;229",
+        "localId": "7059168.8447-1",
+        "typeName": "RADIOLOGIC EXAMINATION, ABDOMEN; ANTEROPOSTERIOR AND ADDITIONAL OBLIQUE AND CONE VIEWS",
+        "dateTime": "199408311552",
+        "category": "RA",
+        "reason": "",
+        "name": "ABDOMEN 2 VIEWS [01]",
+        "locationName": "RADIOLOGY MAIN FLOOR",
+        "case": 47
+      },
+      {
+        "kind": "Imaging",
+        "facilityCode": "500",
+        "facilityName": "CAMP BEE",
+        "statusName": "COMPLETE",
+        "imagingTypeUid": "urn:va:imaging-Type:GENERAL RADIOLOGY",
+        "locationUid": "urn:va:location:C877:40",
+        "hasImages": false,
+        "imageLocation": "RADIOLOGY MAIN FLOOR",
+        "uid": "urn:va:image:C877:229:7059168.8447-1",
+        "summary": "RADIOLOGIC EXAMINATION, ABDOMEN; ANTEROPOSTERIOR AND ADDITIONAL OBLIQUE AND CONE VIEWS",
+        "pid": "9E7A;229",
+        "localId": "7059168.8447-1",
+        "typeName": "RADIOLOGIC EXAMINATION, ABDOMEN; ANTEROPOSTERIOR AND ADDITIONAL OBLIQUE AND CONE VIEWS",
+        "dateTime": "199408311552",
+        "category": "RA",
+        "reason": "",
+        "name": "ABDOMEN 2 VIEWS [01]",
+        "locationName": "RADIOLOGY MAIN FLOOR",
+        "case": 47
+      },
+      {
+        "kind": "Imaging",
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "statusName": "COMPLETE",
+        "imagingTypeUid": "urn:va:imaging-Type:GENERAL RADIOLOGY",
+        "locationUid": "urn:va:location:9E7A:40",
+        "hasImages": false,
+        "imageLocation": "RADIOLOGY MAIN FLOOR",
+        "uid": "urn:va:image:9E7A:229:7059382.8389-1",
+        "summary": "RADIOLOGIC EXAMINATION, KNEE; 1 OR 2 VIEWS",
+        "pid": "9E7A;229",
+        "localId": "7059382.8389-1",
+        "typeName": "RADIOLOGIC EXAMINATION, KNEE; 1 OR 2 VIEWS",
+        "dateTime": "199406171610",
+        "category": "RA",
+        "reason": "",
+        "name": "KNEE 2 VIEWS",
+        "locationName": "RADIOLOGY MAIN FLOOR",
+        "case": 91
+      },
+      {
+        "kind": "Imaging",
+        "facilityCode": "500",
+        "facilityName": "CAMP BEE",
+        "statusName": "COMPLETE",
+        "imagingTypeUid": "urn:va:imaging-Type:GENERAL RADIOLOGY",
+        "locationUid": "urn:va:location:C877:40",
+        "hasImages": false,
+        "imageLocation": "RADIOLOGY MAIN FLOOR",
+        "uid": "urn:va:image:C877:229:7059382.8389-1",
+        "summary": "RADIOLOGIC EXAMINATION, KNEE; 1 OR 2 VIEWS",
+        "pid": "9E7A;229",
+        "localId": "7059382.8389-1",
+        "typeName": "RADIOLOGIC EXAMINATION, KNEE; 1 OR 2 VIEWS",
+        "dateTime": "199406171610",
+        "category": "RA",
+        "reason": "",
+        "name": "KNEE 2 VIEWS",
+        "locationName": "RADIOLOGY MAIN FLOOR",
+        "case": 91
+      },
+      {
+        "kind": "Imaging",
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "statusName": "COMPLETE",
+        "imagingTypeUid": "urn:va:imaging-Type:GENERAL RADIOLOGY",
+        "locationUid": "urn:va:location:9E7A:40",
+        "hasImages": false,
+        "imageLocation": "RADIOLOGY MAIN FLOOR",
+        "uid": "urn:va:image:9E7A:229:7059496.894-1",
+        "summary": "RADIOLOGIC EXAMINATION, ANKLE, ARTHROGRAPHY, RADIOLOGICAL SUPERVISION AND INTERPRETATION",
+        "pid": "9E7A;229",
+        "localId": "7059496.894-1",
+        "typeName": "RADIOLOGIC EXAMINATION, ANKLE, ARTHROGRAPHY, RADIOLOGICAL SUPERVISION AND INTERPRETATION",
+        "dateTime": "199405031059",
+        "category": "RA",
+        "reason": "",
+        "name": "ARTHROGRAM ANKLE S&I",
+        "locationName": "RADIOLOGY MAIN FLOOR",
+        "case": 71
+      },
+      {
+        "kind": "Imaging",
+        "facilityCode": "500",
+        "facilityName": "CAMP BEE",
+        "statusName": "COMPLETE",
+        "imagingTypeUid": "urn:va:imaging-Type:GENERAL RADIOLOGY",
+        "locationUid": "urn:va:location:C877:40",
+        "hasImages": false,
+        "imageLocation": "RADIOLOGY MAIN FLOOR",
+        "uid": "urn:va:image:C877:229:7059496.894-1",
+        "summary": "RADIOLOGIC EXAMINATION, ANKLE, ARTHROGRAPHY, RADIOLOGICAL SUPERVISION AND INTERPRETATION",
+        "pid": "9E7A;229",
+        "localId": "7059496.894-1",
+        "typeName": "RADIOLOGIC EXAMINATION, ANKLE, ARTHROGRAPHY, RADIOLOGICAL SUPERVISION AND INTERPRETATION",
+        "dateTime": "199405031059",
+        "category": "RA",
+        "reason": "",
+        "name": "ARTHROGRAM ANKLE S&I",
+        "locationName": "RADIOLOGY MAIN FLOOR",
+        "case": 71
+      },
+      {
+        "kind": "Imaging",
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "statusName": "COMPLETE",
+        "imagingTypeUid": "urn:va:imaging-Type:GENERAL RADIOLOGY",
+        "locationUid": "urn:va:location:9E7A:59",
+        "hasImages": false,
+        "imageLocation": "MAIN FLOOR",
+        "uid": "urn:va:image:9E7A:229:7059496.8969-1",
+        "summary": "RADIOLOGIC EXAMINATION, ANKLE; 2 VIEWS",
+        "pid": "9E7A;229",
+        "localId": "7059496.8969-1",
+        "typeName": "RADIOLOGIC EXAMINATION, ANKLE; 2 VIEWS",
+        "dateTime": "199405031030",
+        "category": "RA",
+        "reason": "",
+        "providers": [
+          {
+            "providerName": "PROGRAMMER,TWENTY",
+            "providerDisplayName": "Programmer,Twenty",
+            "summary": "ProcedureProvider{uid='null'}",
+            "providerUid": "urn:va:user:9E7A:755"
+          }
+        ],
+        "providerName": "PROGRAMMER,TWENTY",
+        "providerDisplayName": "Programmer,Twenty",
+        "results": [
+          {
+            "localTitle": "ANKLE 2 VIEWS",
+            "uid": "urn:va:document:9E7A:229:7059496.8969-1",
+            "summary": "ProcedureResult{uid='urn:va:document:9E7A:229:7059496.8969-1'}"
+          }
+        ],
+        "verified": true,
+        "name": "ANKLE 2 VIEWS",
+        "diagnosis": [
+          {
+            "code": "NORMAL",
+            "primary": true
+          }
+        ],
+        "locationName": "MAIN FLOOR",
+        "case": 8
+      },
+      {
+        "kind": "Imaging",
+        "facilityCode": "500",
+        "facilityName": "CAMP BEE",
+        "statusName": "COMPLETE",
+        "imagingTypeUid": "urn:va:imaging-Type:GENERAL RADIOLOGY",
+        "locationUid": "urn:va:location:C877:59",
+        "hasImages": false,
+        "imageLocation": "MAIN FLOOR",
+        "uid": "urn:va:image:C877:229:7059496.8969-1",
+        "summary": "RADIOLOGIC EXAMINATION, ANKLE; 2 VIEWS",
+        "pid": "9E7A;229",
+        "localId": "7059496.8969-1",
+        "typeName": "RADIOLOGIC EXAMINATION, ANKLE; 2 VIEWS",
+        "dateTime": "199405031030",
+        "category": "RA",
+        "reason": "",
+        "providers": [
+          {
+            "providerName": "PROGRAMMER,TWENTY",
+            "providerDisplayName": "Programmer,Twenty",
+            "summary": "ProcedureProvider{uid='null'}",
+            "providerUid": "urn:va:user:C877:755"
+          }
+        ],
+        "providerName": "PROGRAMMER,TWENTY",
+        "providerDisplayName": "Programmer,Twenty",
+        "results": [
+          {
+            "localTitle": "ANKLE 2 VIEWS",
+            "uid": "urn:va:document:C877:229:7059496.8969-1",
+            "summary": "ProcedureResult{uid='urn:va:document:C877:229:7059496.8969-1'}"
+          }
+        ],
+        "verified": true,
+        "name": "ANKLE 2 VIEWS",
+        "diagnosis": [
+          {
+            "code": "NORMAL",
+            "primary": true
+          }
+        ],
+        "locationName": "MAIN FLOOR",
+        "case": 8
+      }
+    ]
+  }
+}

@@ -1,0 +1,50 @@
+namespace EhmpBaselinePolicySet {
+	import ehmp.Attributes.*
+	advice breakGlass = "breakglass"
+	policyset EhmpBaselinePolicySet {
+		target clause Attributes.actionId == "read" 
+		apply firstApplicable
+		policy cprsUserPolicy {
+		    target clause ehmp.Attributes.cprsCorTabs == "false" and ehmp.Attributes.cprsRptTabs == "false"
+		    apply firstApplicable
+		    rule denyIfNoCprsTabs {
+		        deny
+		    }
+		}
+		policy sensitivePolicy {
+			target clause ehmp.Attributes.sensitive == "true"
+			apply firstApplicable
+			rule mayAccessIsFalse {
+				target clause ehmp.Attributes.mayAccess == "false"
+				deny
+			}
+			rule permitIfNotLogAccess {
+				target clause ehmp.Attributes.logAccess == "false"
+				permit
+			}
+			rule breakGlassIfNotLogAccess {
+				target clause ehmp.Attributes.logAccess == "true"
+				permit
+				condition ehmp.Attributes.warnAcknowledged == "true"
+			}
+			rule breakGlassIfNotLogAccessAndNoAck {
+				target clause ehmp.Attributes.logAccess == "true"
+				deny
+				on deny {
+					advice breakGlass {
+						reason = "SensitiveLogRequired"
+					}
+				}
+			}
+			rule sensitivedefault {
+				deny
+			}
+		}
+		policy notSensitivePolicy {
+			apply firstApplicable
+			rule {
+				permit
+			}
+		}
+	}
+}

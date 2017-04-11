@@ -1,0 +1,417 @@
+{
+  "apiVersion": "1.0",
+  "data": {
+    "updated": 20140808180011,
+    "totalItems": 15,
+    "currentItemCount": 15,
+    "items": [
+      {
+        "facilityCode": "DOD",
+        "categoryCode": "urn:va:lab-category:AP",
+        "categoryName": "Pathology",
+        "observed": "200805230400",
+        "resulted": "200805231200",
+        "specimen": "BONE MARROW",
+        "comment": "Mock data from TMDS for 00002",
+        "displayName": "CYTOLOGIC NON-GYN",
+        "result": "080523 CN 19",
+        "kind": "Pathology",
+        "abnormal": false,
+        "micro": false,
+        "qualifiedName": "null (BONE MARROW)",
+        "uid": "urn:va:lab:DOD:0000000006:1000001199",
+        "summary": "null (BONE MARROW) 080523 CN 19",
+        "pid": "9E7A;6",
+        "localId": "080523 BM 15^AP",
+        "codes": [
+          {
+            "code": "719",
+            "system": "DOD_NCID"
+          }
+        ],
+        "lnccodes": [],
+        "statusCode": "urn:va:lab-status:COMPLETE",
+        "organizerType": "accession",
+        "statusName": "COMPLETE"
+      },
+      {
+        "facilityCode": "DOD",
+        "categoryCode": "urn:va:lab-category:AP",
+        "categoryName": "Pathology",
+        "observed": "200805230337",
+        "resulted": "200805231200",
+        "specimen": "VAGINAL CYTOLOGIC MATERIAL",
+        "comment": "Mock data from TMDS for 00002",
+        "displayName": "TISSUE EXAMINATION",
+        "result": "080523 S 29",
+        "kind": "Pathology",
+        "abnormal": false,
+        "micro": false,
+        "qualifiedName": "null (VAGINAL CYTOLOGIC MATERIAL)",
+        "uid": "urn:va:lab:DOD:0000000006:1000001206",
+        "summary": "null (VAGINAL CYTOLOGIC MATERIAL) 080523 S 29",
+        "pid": "9E7A;6",
+        "localId": "080523 CG 22^AP",
+        "codes": [
+          {
+            "code": "2000",
+            "system": "DOD_NCID"
+          }
+        ],
+        "lnccodes": [],
+        "statusCode": "urn:va:lab-status:COMPLETE",
+        "organizerType": "accession",
+        "statusName": "COMPLETE"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "groupName": "SP 97 6002",
+        "categoryCode": "urn:va:lab-category:SP",
+        "categoryName": "Surgical Pathology",
+        "observed": "199702271200",
+        "specimen": "RIGHT FOOT, [C",
+        "kind": "Surgical Pathology",
+        "abnormal": false,
+        "micro": false,
+        "qualifiedName": "null (RIGHT FOOT, [C)",
+        "uid": "urn:va:lab:9E7A:6:SP;7029771.88",
+        "summary": "null (RIGHT FOOT, [C)",
+        "pid": "9E7A;6",
+        "localId": "SP;7029771.88",
+        "lnccodes": [],
+        "statusCode": "urn:va:lab-status:completed",
+        "organizerType": "accession",
+        "results": [
+          {
+            "localTitle": "LR SURGICAL PATHOLOGY REPORT",
+            "resultUid": "urn:va:document:9E7A:6:SP;7029771.88",
+            "uid": "urn:va:lab:9E7A:6:SP;7029771.88"
+          }
+        ],
+        "statusName": "completed"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "groupName": "SP 91 7",
+        "categoryCode": "urn:va:lab-category:SP",
+        "categoryName": "Surgical Pathology",
+        "observed": "19910701",
+        "resulted": "19910702",
+        "specimen": "SKIN, L.FOREARM",
+        "kind": "Surgical Pathology",
+        "abnormal": false,
+        "micro": false,
+        "qualifiedName": "null (SKIN, L.FOREARM)",
+        "uid": "urn:va:lab:9E7A:6:SP;7089298",
+        "summary": "null (SKIN, L.FOREARM)",
+        "pid": "9E7A;6",
+        "localId": "SP;7089298",
+        "lnccodes": [],
+        "statusCode": "urn:va:lab-status:completed",
+        "organizerType": "accession",
+        "results": [
+          {
+            "localTitle": "LR SURGICAL PATHOLOGY REPORT",
+            "resultUid": "urn:va:document:9E7A:6:SP;7089298",
+            "uid": "urn:va:lab:9E7A:6:SP;7089298"
+          }
+        ],
+        "statusName": "completed"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "groupName": "SP 91 1",
+        "categoryCode": "urn:va:lab-category:SP",
+        "categoryName": "Surgical Pathology",
+        "observed": "199101101900",
+        "specimen": "SKIN RIGHT ELBOW",
+        "kind": "Surgical Pathology",
+        "abnormal": false,
+        "micro": false,
+        "qualifiedName": "null (SKIN RIGHT ELBOW)",
+        "uid": "urn:va:lab:9E7A:6:SP;7089888.81",
+        "summary": "null (SKIN RIGHT ELBOW)",
+        "pid": "9E7A;6",
+        "localId": "SP;7089888.81",
+        "lnccodes": [],
+        "statusCode": "urn:va:lab-status:completed",
+        "organizerType": "accession",
+        "results": [
+          {
+            "localTitle": "LR SURGICAL PATHOLOGY REPORT",
+            "resultUid": "urn:va:document:9E7A:6:SP;7089888.81",
+            "uid": "urn:va:lab:9E7A:6:SP;7089888.81"
+          }
+        ],
+        "statusName": "completed"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "groupName": "SP 90 4",
+        "categoryCode": "urn:va:lab-category:SP",
+        "categoryName": "Surgical Pathology",
+        "observed": "19900918",
+        "resulted": "19900919",
+        "specimen": "PROSTATE CHIPS",
+        "kind": "Surgical Pathology",
+        "abnormal": false,
+        "micro": false,
+        "qualifiedName": "null (PROSTATE CHIPS)",
+        "uid": "urn:va:lab:9E7A:6:SP;7099081",
+        "summary": "null (PROSTATE CHIPS)",
+        "pid": "9E7A;6",
+        "localId": "SP;7099081",
+        "lnccodes": [],
+        "statusCode": "urn:va:lab-status:completed",
+        "organizerType": "accession",
+        "results": [
+          {
+            "localTitle": "LR SURGICAL PATHOLOGY REPORT",
+            "resultUid": "urn:va:document:9E7A:6:SP;7099081",
+            "uid": "urn:va:lab:9E7A:6:SP;7099081"
+          }
+        ],
+        "statusName": "completed"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "groupName": "SP 90 1",
+        "categoryCode": "urn:va:lab-category:SP",
+        "categoryName": "Surgical Pathology",
+        "observed": "19900108",
+        "specimen": "LEFT INDEX FINGER NAIL",
+        "kind": "Surgical Pathology",
+        "abnormal": false,
+        "micro": false,
+        "qualifiedName": "null (LEFT INDEX FINGER NAIL)",
+        "uid": "urn:va:lab:9E7A:6:SP;7099891",
+        "summary": "null (LEFT INDEX FINGER NAIL)",
+        "pid": "9E7A;6",
+        "localId": "SP;7099891",
+        "lnccodes": [],
+        "statusCode": "urn:va:lab-status:completed",
+        "organizerType": "accession",
+        "results": [
+          {
+            "localTitle": "LR SURGICAL PATHOLOGY REPORT",
+            "resultUid": "urn:va:document:9E7A:6:SP;7099891",
+            "uid": "urn:va:lab:9E7A:6:SP;7099891"
+          }
+        ],
+        "statusName": "completed"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "groupName": "SP 89 3",
+        "categoryCode": "urn:va:lab-category:SP",
+        "categoryName": "Surgical Pathology",
+        "observed": "19891012",
+        "resulted": "19900919",
+        "specimen": "TOENAIL",
+        "kind": "Surgical Pathology",
+        "abnormal": false,
+        "micro": false,
+        "qualifiedName": "null (TOENAIL)",
+        "uid": "urn:va:lab:9E7A:6:SP;7108987",
+        "summary": "null (TOENAIL)",
+        "pid": "9E7A;6",
+        "localId": "SP;7108987",
+        "lnccodes": [],
+        "statusCode": "urn:va:lab-status:completed",
+        "organizerType": "accession",
+        "results": [
+          {
+            "localTitle": "LR SURGICAL PATHOLOGY REPORT",
+            "resultUid": "urn:va:document:9E7A:6:SP;7108987",
+            "uid": "urn:va:lab:9E7A:6:SP;7108987"
+          }
+        ],
+        "statusName": "completed"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "groupName": "SP 88 6",
+        "categoryCode": "urn:va:lab-category:SP",
+        "categoryName": "Surgical Pathology",
+        "observed": "19881110",
+        "specimen": "WART, RIGHT INDEX FINGER",
+        "kind": "Surgical Pathology",
+        "abnormal": false,
+        "micro": false,
+        "qualifiedName": "null (WART, RIGHT INDEX FINGER)",
+        "uid": "urn:va:lab:9E7A:6:SP;7118889",
+        "summary": "null (WART, RIGHT INDEX FINGER)",
+        "pid": "9E7A;6",
+        "localId": "SP;7118889",
+        "lnccodes": [],
+        "statusCode": "urn:va:lab-status:completed",
+        "organizerType": "accession",
+        "results": [
+          {
+            "localTitle": "LR SURGICAL PATHOLOGY REPORT",
+            "resultUid": "urn:va:document:9E7A:6:SP;7118889",
+            "uid": "urn:va:lab:9E7A:6:SP;7118889"
+          }
+        ],
+        "statusName": "completed"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "groupName": "SP 88 5",
+        "categoryCode": "urn:va:lab-category:SP",
+        "categoryName": "Surgical Pathology",
+        "observed": "19880812",
+        "specimen": "WART",
+        "kind": "Surgical Pathology",
+        "abnormal": false,
+        "micro": false,
+        "qualifiedName": "null (WART)",
+        "uid": "urn:va:lab:9E7A:6:SP;7119187",
+        "summary": "null (WART)",
+        "pid": "9E7A;6",
+        "localId": "SP;7119187",
+        "lnccodes": [],
+        "statusCode": "urn:va:lab-status:completed",
+        "organizerType": "accession",
+        "results": [
+          {
+            "localTitle": "LR SURGICAL PATHOLOGY REPORT",
+            "resultUid": "urn:va:document:9E7A:6:SP;7119187",
+            "uid": "urn:va:lab:9E7A:6:SP;7119187"
+          }
+        ],
+        "statusName": "completed"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "groupName": "SP 88 4",
+        "categoryCode": "urn:va:lab-category:SP",
+        "categoryName": "Surgical Pathology",
+        "observed": "198805251330",
+        "specimen": "PROSTATE CHIPS",
+        "kind": "Surgical Pathology",
+        "abnormal": false,
+        "micro": false,
+        "qualifiedName": "null (PROSTATE CHIPS)",
+        "uid": "urn:va:lab:9E7A:6:SP;7119473.867",
+        "summary": "null (PROSTATE CHIPS)",
+        "pid": "9E7A;6",
+        "localId": "SP;7119473.867",
+        "lnccodes": [],
+        "statusCode": "urn:va:lab-status:completed",
+        "organizerType": "accession",
+        "results": [
+          {
+            "localTitle": "LR SURGICAL PATHOLOGY REPORT",
+            "resultUid": "urn:va:document:9E7A:6:SP;7119473.867",
+            "uid": "urn:va:lab:9E7A:6:SP;7119473.867"
+          }
+        ],
+        "statusName": "completed"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "groupName": "SP 88 2",
+        "categoryCode": "urn:va:lab-category:SP",
+        "categoryName": "Surgical Pathology",
+        "observed": "198805250730",
+        "specimen": "CECAL POLYP, BIOPSIES FROM COLON AT 60cm, COLON BIOPSY 50cm, COLON BIOPSY 40cm, COLON BIOPSY 30cm, COLON BIOPSY 20cm, BIOPSIES OF SIGMOID STRICTURE, BIOSIES OF RECTUM",
+        "kind": "Surgical Pathology",
+        "abnormal": false,
+        "micro": false,
+        "qualifiedName": "null (CECAL POLYP, BIOPSIES FROM COLON AT 60cm, COLON BIOPSY 50cm, COLON BIOPSY 40cm, COLON BIOPSY 30cm, COLON BIOPSY 20cm, BIOPSIES OF SIGMOID STRICTURE, BIOSIES OF RECTUM)",
+        "uid": "urn:va:lab:9E7A:6:SP;7119473.927",
+        "summary": "null (CECAL POLYP, BIOPSIES FROM COLON AT 60cm, COLON BIOPSY 50cm, COLON BIOPSY 40cm, COLON BIOPSY 30cm, COLON BIOPSY 20cm, BIOPSIES OF SIGMOID STRICTURE, BIOSIES OF RECTUM)",
+        "pid": "9E7A;6",
+        "localId": "SP;7119473.927",
+        "lnccodes": [],
+        "statusCode": "urn:va:lab-status:completed",
+        "organizerType": "accession",
+        "results": [
+          {
+            "localTitle": "LR SURGICAL PATHOLOGY REPORT",
+            "resultUid": "urn:va:document:9E7A:6:SP;7119473.927",
+            "uid": "urn:va:lab:9E7A:6:SP;7119473.927"
+          }
+        ],
+        "statusName": "completed"
+      },
+      {
+        "facilityCode": "DOD",
+        "categoryCode": "urn:va:lab-category:AP",
+        "categoryName": "Pathology",
+        "resulted": "200008041200",
+        "specimen": "RIGHT BREAST MASS",
+        "comment": "",
+        "displayName": "TISSUE ENLARGEMENT",
+        "result": "Comment: LUMP FOUND\nReport: 000807 SP 2486\nCol: 04Aug00\nTISSUE(TISSUE)\n\nHcp: SCOTT,FLOYD E\nReq Loc: VA CLINI\n\nTISSUE E\nC:AME14Aug00@0807\nCoPath Report\n\n  Patient: DODSON,LOURESTA L\nSpecimen #:  S00-2486\nAccessioned: 08/07/00\n  Pathologist: ALAAELDEEN M. ELSAYED, Lt Col, USAF, MC, FS\n                                    **ADDENDUM**\n\n  SPECIMEN:\n    RIGHT BREAST MASS\n\n  CLINICAL DIAGNOSIS AND HISTORY:\n    41 YO FEMALE  W/ RIGHT BREAST MASS FOR 10 YEARS. LAST YEAR GETTING\nLARGER SLOWLY.\n\n  PRE-OPERATIVE DIAGNOSIS:\n    RIGHT BREAST MASS\n\n  POST-OPERATIVE DIAGNOSIS:\n    Post-operative Diagnosis: RIGHT BREAST MASS\n\n  GROSS DESCRIPTION:\n    Received in formalin, labeled with patient's name, identification #\nand \"1 right breast mass\" and consists of a segment of breast/soft tissue\nmeasuring approximately 4.5 x 3.2 x 2.3 cm in the longest dimensions and\nweighing 11.3 grams.  The specimen is inked and serially vertically\nsectioned revealing a greyish white fibrous-like cut surface alternating\nwith yellowish adipose-like areas.  Representative sections are submitted\nin two cassettes labeled A1 and A2.\n\n  FINAL DIAGNOSIS:\n    RIGHT BREAST, EXCISIONAL BIOPSY OF \"MASS\":\n        -  BENIGN BREAST TISSUE WITH PERIDUCTAL FIBROSIS, DUCT ECTASIA,\n           BENIGN INTRADUCTAL PAPILLOMA, AND ATYPICAL INTRADUCTAL\nHYPERPLASIA.\n COMMENT:\n    Case forwarded to the Armed Forces Institute of Pathology Department\nof Breast and Gynecologic Pathology.\n\n    REFERRAL:\n    AFIP\n\n\n    lcd/08/09/00\n** Report Electronically Signed **\nALAAELDEEN M. ELSAYED, Lt Col, USAF, MC, FS\n\n\n  ADDENDUM:\n    ** SIGNED OUT 09/01/00 **\n    This addendum is issued to reflect the results of expert consultation\nin AFIP report #2742601 SEQ 00 and is entered into the electronic report\nby the Pathology Department  transcriptionist. A copy of the AFIP report\nis forwarded to the patient's attending physician and medical records.\n    S00-2486 RIGHT BREAST, BIOPSY: FOCAL DUCTAL INTRAEPITHELIAL NEOPLASIA,\n                                   GRADE 1B (DIN 1B) (ATYPICAL INTRADUCTAL\n                                   HYPERPLASIA),FLAT AND CRIBRIFORM TYPES,\n                                   SEE COMMENT.\n                                 : FIBROCYSTIC CHANGES WITH MICROCYSTS AND\n                                   STROMAL FIBROSIS.\n                                 : SCLEROSING ADENOSIS, MILD.\n                                 : PSEUDOANGIOMATOUS STROMAL HYPERPLASIA\n                                   (PASH), MILD.\n\n    THIS CASE WAS REVIEWED IN STAFF CONFERENCE. THE STAFF ESSENTIALLY\nCONCURS WITH YOUR INTERPRETATIONS BUT PREFERS THE ABOVE TERMINOLOGY.  A\nCOPY OF THE RECENTLY PROPOSED CLASSIFICATION SCHEME FOR INTRADUCTAL\nEPITHELIAL PROLIFERATIONS WITH COMPARISON TO CONVENTIONAL TERMINOLOGY IS\nINCLUDED FOR YOUR REFERENCE.\n\n    ALTHOUGH PSEUDOANGIOMATOUS STROMAL HYPERPLASIA (PASH) MAY BE A CAUSE\nOF A CLINICAL BREAST MASS, FOLLOW UP OF ANY PERSISTENT/RESIDUAL BREAST\nMASS IS SUGGESTED, AS CLINICALLY APPROPRIATE.\n\n    A SMALL, DETACHED INTRADUCTAL EPITHELIAL FRAGMENT WITH PROMINENT\nELECTROCAUTERY ARTIFACT IS NOTED WITHIN THE LUMEN OF A DUCT (SLIDE A1);\nTHIS FINDING IS NON-DIAGNOSTIC, BUT A TINY FRAGMENT OF A PAPILLARY LESION\nCAN NOT BE COMPLETELY RULED OUT.\n\n    SIGNED BY: KRIS M. SHEKITKA, M.D.\n\n    khb/09/01/00\n** Addendum Electronically Signed **\nALAAELDEEN M. ELSAYED, Lt  Col, USAF, MC, FS\n\n  CPT Codes:\n    88305 ; 88305 ; SP:LEVEL IV (88305)\n\n  SNOMED CODES\n    1. M32100; M49000; M72175; M85030; P1141; T04000; T04020\n    2. -",
+        "kind": "Pathology",
+        "abnormal": false,
+        "micro": false,
+        "qualifiedName": "null (RIGHT BREAST MASS)",
+        "uid": "urn:va:lab:DOD:0000000006:1000001186",
+        "summary": "null (RIGHT BREAST MASS) Comment: LUMP FOUND\nReport: 000807 SP 2486\nCol: 04Aug00\nTISSUE(TISSUE)\n\nHcp: SCOTT,FLOYD E\nReq Loc: VA CLINI\n\nTISSUE E\nC:AME14Aug00@0807\nCoPath Report\n\n  Patient: DODSON,LOURESTA L\nSpecimen #:  S00-2486\nAccessioned: 08/07/00\n  Pathologist: ALAAELDEEN M. ELSAYED, Lt Col, USAF, MC, FS\n                                    **ADDENDUM**\n\n  SPECIMEN:\n    RIGHT BREAST MASS\n\n  CLINICAL DIAGNOSIS AND HISTORY:\n    41 YO FEMALE  W/ RIGHT BREAST MASS FOR 10 YEARS. LAST YEAR GETTING\nLARGER SLOWLY.\n\n  PRE-OPERATIVE DIAGNOSIS:\n    RIGHT BREAST MASS\n\n  POST-OPERATIVE DIAGNOSIS:\n    Post-operative Diagnosis: RIGHT BREAST MASS\n\n  GROSS DESCRIPTION:\n    Received in formalin, labeled with patient's name, identification #\nand \"1 right breast mass\" and consists of a segment of breast/soft tissue\nmeasuring approximately 4.5 x 3.2 x 2.3 cm in the longest dimensions and\nweighing 11.3 grams.  The specimen is inked and serially vertically\nsectioned revealing a greyish white fibrous-like cut surface alternating\nwith yellowish adipose-like areas.  Representative sections are submitted\nin two cassettes labeled A1 and A2.\n\n  FINAL DIAGNOSIS:\n    RIGHT BREAST, EXCISIONAL BIOPSY OF \"MASS\":\n        -  BENIGN BREAST TISSUE WITH PERIDUCTAL FIBROSIS, DUCT ECTASIA,\n           BENIGN INTRADUCTAL PAPILLOMA, AND ATYPICAL INTRADUCTAL\nHYPERPLASIA.\n COMMENT:\n    Case forwarded to the Armed Forces Institute of Pathology Department\nof Breast and Gynecologic Pathology.\n\n    REFERRAL:\n    AFIP\n\n\n    lcd/08/09/00\n** Report Electronically Signed **\nALAAELDEEN M. ELSAYED, Lt Col, USAF, MC, FS\n\n\n  ADDENDUM:\n    ** SIGNED OUT 09/01/00 **\n    This addendum is issued to reflect the results of expert consultation\nin AFIP report #2742601 SEQ 00 and is entered into the electronic report\nby the Pathology Department  transcriptionist. A copy of the AFIP report\nis forwarded to the patient's attending physician and medical records.\n    S00-2486 RIGHT BREAST, BIOPSY: FOCAL DUCTAL INTRAEPITHELIAL NEOPLASIA,\n                                   GRADE 1B (DIN 1B) (ATYPICAL INTRADUCTAL\n                                   HYPERPLASIA),FLAT AND CRIBRIFORM TYPES,\n                                   SEE COMMENT.\n                                 : FIBROCYSTIC CHANGES WITH MICROCYSTS AND\n                                   STROMAL FIBROSIS.\n                                 : SCLEROSING ADENOSIS, MILD.\n                                 : PSEUDOANGIOMATOUS STROMAL HYPERPLASIA\n                                   (PASH), MILD.\n\n    THIS CASE WAS REVIEWED IN STAFF CONFERENCE. THE STAFF ESSENTIALLY\nCONCURS WITH YOUR INTERPRETATIONS BUT PREFERS THE ABOVE TERMINOLOGY.  A\nCOPY OF THE RECENTLY PROPOSED CLASSIFICATION SCHEME FOR INTRADUCTAL\nEPITHELIAL PROLIFERATIONS WITH COMPARISON TO CONVENTIONAL TERMINOLOGY IS\nINCLUDED FOR YOUR REFERENCE.\n\n    ALTHOUGH PSEUDOANGIOMATOUS STROMAL HYPERPLASIA (PASH) MAY BE A CAUSE\nOF A CLINICAL BREAST MASS, FOLLOW UP OF ANY PERSISTENT/RESIDUAL BREAST\nMASS IS SUGGESTED, AS CLINICALLY APPROPRIATE.\n\n    A SMALL, DETACHED INTRADUCTAL EPITHELIAL FRAGMENT WITH PROMINENT\nELECTROCAUTERY ARTIFACT IS NOTED WITHIN THE LUMEN OF A DUCT (SLIDE A1);\nTHIS FINDING IS NON-DIAGNOSTIC, BUT A TINY FRAGMENT OF A PAPILLARY LESION\nCAN NOT BE COMPLETELY RULED OUT.\n\n    SIGNED BY: KRIS M. SHEKITKA, M.D.\n\n    khb/09/01/00\n** Addendum Electronically Signed **\nALAAELDEEN M. ELSAYED, Lt  Col, USAF, MC, FS\n\n  CPT Codes:\n    88305 ; 88305 ; SP:LEVEL IV (88305)\n\n  SNOMED CODES\n    1. M32100; M49000; M72175; M85030; P1141; T04000; T04020\n    2. -",
+        "pid": "9E7A;6",
+        "localId": "SP 00 368^AP",
+        "lnccodes": [],
+        "statusCode": "urn:va:lab-status:",
+        "organizerType": "accession",
+        "statusName": ""
+      },
+      {
+        "facilityCode": "DOD",
+        "categoryCode": "urn:va:lab-category:AP",
+        "categoryName": "Pathology",
+        "resulted": "199510191200",
+        "specimen": "RUL NEEDLE BX",
+        "comment": "",
+        "displayName": "",
+        "result": "Report: 36 YEAR OLD WITH AIDS AND RIGHT UPPER LOBE LUNG MASS.\n8 Smears.\nCLASS O     BLOODY, DEGENERATED MATERIAL UNSATISFACTORY FOR EVALUATION.",
+        "kind": "Pathology",
+        "abnormal": false,
+        "micro": false,
+        "qualifiedName": "null (RUL NEEDLE BX)",
+        "uid": "urn:va:lab:DOD:0000000006:1000001189",
+        "summary": "null (RUL NEEDLE BX) Report: 36 YEAR OLD WITH AIDS AND RIGHT UPPER LOBE LUNG MASS.\n8 Smears.\nCLASS O     BLOODY, DEGENERATED MATERIAL UNSATISFACTORY FOR EVALUATION.",
+        "pid": "9E7A;6",
+        "localId": "^AP",
+        "lnccodes": [],
+        "statusCode": "urn:va:lab-status:",
+        "organizerType": "accession",
+        "statusName": ""
+      },
+      {
+        "facilityCode": "DOD",
+        "categoryCode": "urn:va:lab-category:AP",
+        "categoryName": "Pathology",
+        "resulted": "200111071200",
+        "specimen": "LESION BUCCAL MUCOSA",
+        "comment": "",
+        "displayName": "",
+        "result": "Comment: ********** SEE VISTA IMAGINING FOR SCANNED REPORT **********",
+        "kind": "Pathology",
+        "abnormal": false,
+        "micro": false,
+        "qualifiedName": "null (LESION BUCCAL MUCOSA)",
+        "uid": "urn:va:lab:DOD:0000000006:1000001192",
+        "summary": "null (LESION BUCCAL MUCOSA) Comment: ********** SEE VISTA IMAGINING FOR SCANNED REPORT **********",
+        "pid": "9E7A;6",
+        "localId": "CY 01 138^AP",
+        "lnccodes": [],
+        "statusCode": "urn:va:lab-status:",
+        "organizerType": "accession",
+        "statusName": ""
+      }
+    ]
+  }
+}

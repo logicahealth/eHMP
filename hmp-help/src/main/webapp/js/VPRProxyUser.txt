@@ -1,0 +1,37 @@
+Select User Management <SLC-SQA> Option: edit an Existing User
+Select NEW PERSON NAME: VPR
+     1   VPR,APPLICATION PROXY
+     2   VPR,SYNC USER              SUV
+     3   VPR,PROXY
+     4   VPR,USER SYNCTHREE
+     5   VPR,USER SYNCTWO
+Press <RETURN> to see more, '^' to exit this list, OR
+CHOOSE 1-5: 3  VPR,USER
+                             Edit an Existing User
+NAME: VPR,PROXY                                                      Page 1 of 5
+_______________________________________________________________________________
+   NAME... VPR,PROXY                                    INITIAL:
+    TITLE:                                           NICK NAME:
+      SSN:                                                 DOB:
+   DEGREE:                                           MAIL CODE:
+  DISUSER:                                     TERMINATION DATE:
+  Termination Reason:
+
+        +--------------------------------------------------------+
+ Select ¦                                 SECONDARY MENU OPTIONS ¦
+Want to ¦                                                        ¦0vpr
+Want to ¦ SECONDARY MENU OPTIONS: VPR SYNCHRONIZATION CONTEXT    ¦
+        ¦                SYNONYM:                                ¦
+        ¦                                                        ¦
+        +--------------------------------------------------------+
+_______________________________________________________________________________
+Close     Refresh
+
+Enter a command or '^' followed by a caption to jump to a specific field.
+
+
+COMMAND: Close                                 Press <PF1>H for help    Insert
+
+
+
+

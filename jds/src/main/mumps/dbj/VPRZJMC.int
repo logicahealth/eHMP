@@ -1,0 +1,13 @@
+VPRZJMC ; My very own test file
+ ; 
+FIND(VAL) ; Search up to 4 deep for a value and show the global path to it if found.
+ S W="",X="",Y="",Z=""
+ F  S W=$O(^VPRPT(W)) Q:W=""  D
+ . I $D(^VPRPT(W))=1,^VPRPT(W)=VAL W W,!
+ . F  S X=$O(^VPRPT(W,X)) Q:X=""  D
+ . . I $D(^VPRPT(W,X))=1,^VPRPT(W,X)=VAL W W,",",X,!
+ . . F  S Y=$O(^VPRPT(W,X,Y)) Q:Y=""  D
+ . . . I $D(^VPRPT(W,X,Y))=1,^VPRPT(W,X,Y)=VAL W W,",",X,",",Y,!
+ . . . F  S Z=$O(^VPRPT(X,Y,Z)) Q:Z=""  D
+ . . . . I $D(^VPRPT(W,X,Y,Z))=1,^VPRPT(W,X,Y,Z)=VAL W W,",",X,",",Y,",",Z,!
+ Q

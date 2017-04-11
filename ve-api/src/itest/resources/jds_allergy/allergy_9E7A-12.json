@@ -1,0 +1,186 @@
+{
+  "apiVersion": "1.0",
+  "data": {
+    "updated": 20140808174325,
+    "totalItems": 4,
+    "currentItemCount": 4,
+    "items": [
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "entered": "19920630",
+        "verified": "19920630130820",
+        "kind": "Allergy/Adverse Reaction",
+        "originatorName": "<None>",
+        "verifierName": "<auto-verified>",
+        "mechanism": "UNKNOWN",
+        "uid": "urn:va:allergy:9E7A:12:11",
+        "summary": "BRONX TEST ( FREE TEXT )",
+        "pid": "9E7A;12",
+        "localId": "11",
+        "historical": true,
+        "reference": "1;GMRD(120.82,",
+        "products": [
+          {
+            "name": "BRONX TEST ( FREE TEXT )",
+            "vuid": "urn:va:vuid:",
+            "summary": "AllergyProduct{uid='null'}"
+          }
+        ],
+        "comments": [
+          {
+            "entered": "19920630",
+            "enteredByName": "",
+            "enteredByDisplayName": "",
+            "comment": "The reaction to this allergy was RASH",
+            "summary": "AllergyComment{uid='null'}",
+            "enteredByUid": "urn:va:user:9E7A:0"
+          }
+        ],
+        "typeName": "OTHER"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "entered": "199408310853",
+        "verified": "19940831090026",
+        "kind": "Allergy/Adverse Reaction",
+        "originatorName": "PROGRAMMER,TWENTY",
+        "verifierName": "PROGRAMMER,TWENTY",
+        "mechanism": "ALLERGY",
+        "uid": "urn:va:allergy:9E7A:12:263",
+        "summary": "ASPIRIN",
+        "pid": "9E7A;12",
+        "localId": "263",
+        "historical": true,
+        "reference": "57;GMRD(120.82,",
+        "products": [
+          {
+            "name": "ASPIRIN",
+            "vuid": "urn:va:vuid:",
+            "summary": "AllergyProduct{uid='null'}"
+          }
+        ],
+        "reactions": [
+          {
+            "name": "NAUSEA,VOMITING",
+            "vuid": "urn:va:vuid:",
+            "summary": "AllergyReaction{uid='null'}"
+          }
+        ],
+        "comments": [
+          {
+            "entered": "19940831085413",
+            "enteredByName": "PROGRAMMER,TWENTY",
+            "enteredByDisplayName": "Programmer,Twenty",
+            "comment": "testing where this cones up.  Allergy or Adverse Reaction",
+            "summary": "AllergyComment{uid='null'}",
+            "enteredByUid": "urn:va:user:9E7A:755"
+          }
+        ],
+        "drugClasses": [
+          {
+            "code": "CN100",
+            "name": "ANALGESICS",
+            "summary": "AllergyDrugClass{uid='null'}"
+          }
+        ],
+        "typeName": "DRUG, FOOD"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "entered": "199408310900",
+        "verified": "19940831090721",
+        "kind": "Allergy/Adverse Reaction",
+        "originatorName": "PROGRAMMER,TWENTY",
+        "verifierName": "PROGRAMMER,TWENTY",
+        "mechanism": "ALLERGY",
+        "uid": "urn:va:allergy:9E7A:12:264",
+        "summary": "DIAZEPAM",
+        "pid": "9E7A;12",
+        "localId": "264",
+        "historical": true,
+        "reference": "391;PS(50.416,",
+        "products": [
+          {
+            "name": "DIAZEPAM",
+            "vuid": "urn:va:vuid:4017796",
+            "summary": "AllergyProduct{uid='null'}"
+          }
+        ],
+        "reactions": [
+          {
+            "name": "ANXIETY",
+            "vuid": "urn:va:vuid:4637050",
+            "summary": "AllergyReaction{uid='null'}"
+          }
+        ],
+        "comments": [
+          {
+            "entered": "19940831090113",
+            "enteredByName": "PROGRAMMER,TWENTY",
+            "enteredByDisplayName": "Programmer,Twenty",
+            "comment": "BRONX QUES.",
+            "summary": "AllergyComment{uid='null'}",
+            "enteredByUid": "urn:va:user:9E7A:755"
+          }
+        ],
+        "codes": [
+          {
+            "code": "C0012010",
+            "system": "urn:oid:2.16.840.1.113883.6.86",
+            "display": "Diazepam"
+          }
+        ],
+        "typeName": "DRUG"
+      },
+      {
+        "facilityCode": "500",
+        "facilityName": "CAMP MASTER",
+        "entered": "199501241422",
+        "verified": "19950124142346",
+        "kind": "Allergy/Adverse Reaction",
+        "originatorName": "PROGRAMMER,TWENTY",
+        "verifierName": "PROGRAMMER,TWENTY",
+        "mechanism": "ALLERGY",
+        "uid": "urn:va:allergy:9E7A:12:334",
+        "summary": "DX101",
+        "pid": "9E7A;12",
+        "localId": "334",
+        "historical": true,
+        "reference": "3808;PSDRUG(",
+        "products": [
+          {
+            "name": "DX101",
+            "vuid": "urn:va:vuid:",
+            "summary": "AllergyProduct{uid='null'}"
+          }
+        ],
+        "reactions": [
+          {
+            "name": "HIVES",
+            "vuid": "urn:va:vuid:",
+            "summary": "AllergyReaction{uid='null'}"
+          },
+          {
+            "name": "RASH",
+            "vuid": "urn:va:vuid:4538635",
+            "summary": "AllergyReaction{uid='null'}"
+          }
+        ],
+        "comments": [
+          {
+            "entered": "19950124142307",
+            "enteredByName": "PROGRAMMER,TWENTY",
+            "enteredByDisplayName": "Programmer,Twenty",
+            "comment": "TEST PATCH gmra*3*13",
+            "summary": "AllergyComment{uid='null'}",
+            "enteredByUid": "urn:va:user:9E7A:755"
+          }
+        ],
+        "typeName": "DRUG"
+      }
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+namespace LeiprBasicPolicyPIP {
+	import leipr.Attributes.*
+	policy PrototypePolicy {
+		target clause Attributes.actionId == "read" 
+		apply denyUnlessPermit
+		rule {
+			target clause userrole == "CPRS"
+			permit
+		}
+	}
+}

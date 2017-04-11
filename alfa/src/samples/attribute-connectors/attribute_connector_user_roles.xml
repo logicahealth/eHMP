@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<axio:configuration xmlns:axio="http://www.axiomatics.com/csv.config" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.axiomatics.com/csv.config csv.config.xsd ">
+  <!-- this configuration can contain any number of mapping elements such as the one below -->
+  <axio:mapping>
+    <!-- each mapping must contain a single xacmlAttribute -->
+    <!-- each xacmlAttribute element must contain all 4 attributes as follows: AttributeId, Category, DataType, and Issuer. -->
+    <axio:xacmlAttribute AttributeId="userrole" Category="urn:oasis:names:tc:xacml:1.0:subject-category:access-subject" DataType="http://www.w3.org/2001/XMLSchema#string" Issuer=""/>
+    <!-- each mapping must contain a single nativeAttribute -->
+    <axio:nativeAttribute>
+      <!-- Each nativeAttribute must contain a column element: this is the integer value that indicates the number of the column from which to read the attribute value. The first column's value is 1.-->
+      <axio:column>2</axio:column>
+      <!-- Each nativeAttribute must contain a file element: this is an object which defines the path to the file, its character encoding, and the way to load it. -->
+      <axio:file charset="UTF-8" filesystem="true">
+        <!-- Each file element must contain a single name element: this defines the path to the file -->
+        <axio:name>/home/vagrant/userroles.csv</axio:name>
+      </axio:file>
+      <!-- Each nativeAttribute must contain a separator element: this is a string value and represents the separator used in the CSV file. Typical values are a comma (,), a colon (:), or a semi-colon(;) -->
+      <axio:separator>,</axio:separator>
+      <!-- Each nativeAttribute may contain a key element: the key is the variable part of the search query. It points to the XACML attribute that will be used in the values search inside the CSV file. There can be multiple key elements. -->
+      <axio:key column="1">
+        <axio:xacmlAttribute AttributeId="urn:oasis:names:tc:xacml:1.0:subject:subject-id" Category="urn:oasis:names:tc:xacml:1.0:subject-category:access-subject" DataType="http://www.w3.org/2001/XMLSchema#string" Issuer=""/>
+      </axio:key>
+    </axio:nativeAttribute>
+    <!-- each mapping may optionally contain a uId - unique id to associate a caching configuration to an attribute mapping -->
+    <axio:uId>NoCache</axio:uId>
+  </axio:mapping>
+</axio:configuration>

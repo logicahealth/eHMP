@@ -1,0 +1,135 @@
+{
+  "apiVersion": "1.0",
+  "data": {
+    "updated": 20140808180014,
+    "totalItems": 1,
+    "currentItemCount": 1,
+    "items": [
+      {
+        "address": [
+          {
+            "city": "TOWN",
+            "line1": "STREET1",
+            "start": "19940325",
+            "state": "NY",
+            "use": "TMP",
+            "zip": "99998-0716"
+          }
+        ],
+        "admissionUid": "urn:va:visit:9E7A:12:H2649",
+        "birthDate": "19350407",
+        "briefId": "Z1550",
+        "cwadf": "A",
+        "displayName": "Zzzretfourthirteen,Patient",
+        "domainUpdated": "meds, vitals, orders, cpts, images, visits, surgeries, consults, procedures",
+        "exposure": [
+          {
+            "name": "No",
+            "uid": "urn:va:sw-asia:N"
+          },
+          {
+            "name": "Unknown",
+            "uid": "urn:va:head-neck-cancer:U"
+          },
+          {
+            "name": "No",
+            "uid": "urn:va:agent-orange:N"
+          },
+          {
+            "name": "No",
+            "uid": "urn:va:combat-vet:N"
+          },
+          {
+            "name": "Unknown",
+            "uid": "urn:va:mst:U"
+          },
+          {
+            "name": "No",
+            "uid": "urn:va:ionizing-radiation:N"
+          }
+        ],
+        "facility": [
+          {
+            "code": "500",
+            "homeSite": false,
+            "latestDate": "20000131",
+            "localPatientId": "12",
+            "name": "CAMP MASTER",
+            "summary": "CAMP MASTER",
+            "systemId": "9E7A"
+          }
+        ],
+        "familyName": "ZZZRETFOURTHIRTEEN",
+        "fullName": "ZZZRETFOURTHIRTEEN,PATIENT",
+        "genderCode": "urn:va:pat-gender:M",
+        "genderName": "Male",
+        "givenNames": "PATIENT",
+        "inpatientLocation": "MIKE'S IP WARD",
+        "insurance": [
+          {
+            "companyName": "MEDICARE",
+            "effectiveDate": "2930",
+            "groupNumber": "",
+            "id": "12;2",
+            "policyHolder": "SELF",
+            "policyType": "MAJOR MEDICAL EXPENSE INSURANCE",
+            "summary": "MEDICARE (MAJOR MEDICAL EXPENSE INSURANCE)"
+          }
+        ],
+        "last4": "1550",
+        "last5": "Z1550",
+        "lastUpdated": "20140808173754.191",
+        "localId": "12",
+        "lrdfn": "37",
+        "maritalStatusCode": "urn:va:pat-maritalStatus:M",
+        "maritalStatusName": "Married",
+        "meanStatus": "REQUIRED",
+        "pid": "9E7A;12",
+        "religionCode": "urn:va:pat-religion:22",
+        "religionName": "OTHER",
+        "roomBed": "MJB-4",
+        "sensitive": false,
+        "serviceConnected": false,
+        "shortInpatientLocation": "N-MIKE",
+        "specialty": "PSYCH RESID REHAB TRMT PROG",
+        "specialtyService": "P",
+        "ssn": "666121550",
+        "summary": "gov.va.cpe.vpr.PatientDemographics{pids=[500;12, 666121550, 9E7A;12]}",
+        "syncErrorCount": 0,
+        "teamInfo": {
+          "associateProvider": {
+            "name": "unassigned"
+          },
+          "attendingProvider": {
+            "analogPager": "",
+            "digitalPager": "",
+            "name": "WARDCLERK,SIXTYONE",
+            "officePhone": "",
+            "uid": "urn:va:user:9E7A:11267"
+          },
+          "inpatientProvider": {
+            "analogPager": "",
+            "digitalPager": "",
+            "name": "PROVIDER,ONEHUNDREDNINETYONE",
+            "officePhone": "",
+            "uid": "urn:va:user:9E7A:11531"
+          },
+          "mhCoordinator": {
+            "mhPosition": "unassigned",
+            "mhTeam": "unassigned",
+            "name": "unassigned"
+          },
+          "primaryProvider": {
+            "name": "unassigned"
+          },
+          "team": {
+            "name": "unassigned"
+          },
+          "text": "No Primary Care Team Assigned.\r\n \r\nNo Primary Care Provider Assigned.\r\n \r\nNo Associate Provider Assigned.\r\n \r\n      Attending Physician:  WARDCLERK,SIXTYONE\r\n             Analog Pager:  \r\n            Digital Pager:  \r\n             Office Phone:  \r\n \r\n       Inpatient Provider:  PROVIDER,ONEHUNDREDNINETYONE\r\n             Analog Pager:  \r\n            Digital Pager:  \r\n             Office Phone:  \r\n \r\n"
+        },
+        "uid": "urn:va:patient:9E7A:12:12",
+        "veteran": true
+      }
+    ]
+  }
+}

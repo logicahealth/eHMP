@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE suppressions PUBLIC
+        "-//Puppy Crawl//DTD Suppressions 1.1//EN"
+        "http://www.puppycrawl.com/dtds/suppressions_1_1.dtd">
+
+<suppressions>
+
+    <!-- Tone down the checking for test code -->
+    <suppress checks="MagicNumber" files=".*[\\/]src[\\/]test[\\/]"/>
+    <suppress checks="MagicNumber" files=".*[\\/]src[\\/]itest[\\/]"/>
+
+    <suppress checks="VisibilityModifier" files=".*[\\/]src[\\/]test[\\/]"/>
+    <suppress checks="VisibilityModifier" files=".*[\\/]src[\\/]itest[\\/]"/>
+
+    <suppress checks="ParameterNumber" files=".*Resource.java"/>
+
+</suppressions>
