@@ -1,0 +1,40 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "Replaces a role in the list of roles for an ehmp user with a new role",
+	"description": "",
+	"type": "object",
+	"required": [
+		"data",
+		"statusCode",
+		"status"
+	],
+	"properties": {
+		"data": {
+			"type": "object",
+			"required": [
+				"val",
+				"modifiedBy",
+				"modifiedOn"
+			],
+			"properties": {
+				"modifiedBy": {
+					"type": "string"
+				},
+				"modifiedOn": {
+					"type": "string"
+				},
+				"val": {
+					"type": "array",
+					"items": {
+					}
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		},
+		"statusCode": {
+			"type": "integer"
+		}
+	}
+}

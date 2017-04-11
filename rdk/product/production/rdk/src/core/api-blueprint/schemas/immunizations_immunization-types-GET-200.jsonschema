@@ -1,0 +1,672 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "List immunization types",
+	"type": "object",
+	"required": [
+		"data",
+		"status"
+	],
+	"properties": {
+		"data": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"required": [
+					"name",
+					"uri",
+					"class",
+					"selectable_for_historic"
+				],
+				"properties": {
+					"acronym": {
+						"type": "object",
+						"required": [
+							"fmId",
+							"fmType",
+							"value",
+							"type"
+						],
+						"properties": {
+							"fmId": {
+								"type": "string"
+							},
+							"fmType": {
+								"type": "string"
+							},
+							"type": {
+								"type": "string"
+							},
+							"value": {
+								"type": "string"
+							}
+						}
+					},
+					"cdc_full_vaccine_name": {
+						"type": "object",
+						"required": [
+							"fmId",
+							"fmType",
+							"type",
+							"datatype",
+							"value"
+						],
+						"properties": {
+							"datatype": {
+								"type": "string"
+							},
+							"fmId": {
+								"type": "string"
+							},
+							"fmType": {
+								"type": "string"
+							},
+							"type": {
+								"type": "string"
+							},
+							"value": {
+								"type": "string"
+							}
+						}
+					},
+					"cdc_product_name": {
+						"type": "object",
+						"required": [
+							"fmId",
+							"type",
+							"file",
+							"list",
+							"value"
+						],
+						"properties": {
+							"file": {
+								"type": "string"
+							},
+							"fmId": {
+								"type": "string"
+							},
+							"list": {
+								"type": "boolean"
+							},
+							"type": {
+								"type": "string"
+							},
+							"value": {
+								"type": "array",
+								"items": {
+									"type": "object",
+									"required": [
+										"cdc_product_name",
+										"uri"
+									],
+									"properties": {
+										"cdc_product_name": {
+											"type": "object",
+											"required": [
+												"fmId",
+												"fmType",
+												"value",
+												"type"
+											],
+											"properties": {
+												"fmId": {
+													"type": "string"
+												},
+												"fmType": {
+													"type": "string"
+												},
+												"type": {
+													"type": "string"
+												},
+												"value": {
+													"type": "string"
+												}
+											}
+										},
+										"uri": {
+											"type": "object",
+											"required": [
+												"fmId",
+												"fmType",
+												"value",
+												"type",
+												"label"
+											],
+											"properties": {
+												"fmId": {
+													"type": "string"
+												},
+												"fmType": {
+													"type": "string"
+												},
+												"label": {
+													"type": "string"
+												},
+												"type": {
+													"type": "string"
+												},
+												"value": {
+													"type": "string"
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					},
+					"class": {
+						"type": "object",
+						"required": [
+							"fmId",
+							"fmType",
+							"value",
+							"type"
+						],
+						"properties": {
+							"fmId": {
+								"type": "string"
+							},
+							"fmType": {
+								"type": "string"
+							},
+							"type": {
+								"type": "string"
+							},
+							"value": {
+								"type": "string"
+							}
+						}
+					},
+					"coding_system": {
+						"type": "object",
+						"required": [
+							"fmId",
+							"type",
+							"file",
+							"value"
+						],
+						"properties": {
+							"file": {
+								"type": "string"
+							},
+							"fmId": {
+								"type": "string"
+							},
+							"type": {
+								"type": "string"
+							},
+							"value": {
+								"type": "array",
+								"items": {
+									"type": "object",
+									"required": [
+										"coding_system",
+										"uri"
+									],
+									"properties": {
+										"code": {
+											"type": "object",
+											"required": [
+												"fmId",
+												"type",
+												"file",
+												"list",
+												"value"
+											],
+											"properties": {
+												"file": {
+													"type": "string"
+												},
+												"fmId": {
+													"type": "string"
+												},
+												"list": {
+													"type": "boolean"
+												},
+												"type": {
+													"type": "string"
+												},
+												"value": {
+													"type": "array",
+													"items": {
+														"type": "object",
+														"required": [
+															"code",
+															"uri"
+														],
+														"properties": {
+															"code": {
+																"type": "object",
+																"required": [
+																	"fmId",
+																	"fmType",
+																	"value",
+																	"type"
+																],
+																"properties": {
+																	"fmId": {
+																		"type": "string"
+																	},
+																	"fmType": {
+																		"type": "string"
+																	},
+																	"type": {
+																		"type": "string"
+																	},
+																	"value": {
+																		"type": "string"
+																	}
+																}
+															},
+															"uri": {
+																"type": "object",
+																"required": [
+																	"fmId",
+																	"fmType",
+																	"value",
+																	"type",
+																	"label"
+																],
+																"properties": {
+																	"fmId": {
+																		"type": "string"
+																	},
+																	"fmType": {
+																		"type": "string"
+																	},
+																	"label": {
+																		"type": "string"
+																	},
+																	"type": {
+																		"type": "string"
+																	},
+																	"value": {
+																		"type": "string"
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										},
+										"coding_system": {
+											"type": "object",
+											"required": [
+												"fmId",
+												"fmType",
+												"value",
+												"type"
+											],
+											"properties": {
+												"fmId": {
+													"type": "string"
+												},
+												"fmType": {
+													"type": "string"
+												},
+												"type": {
+													"type": "string"
+												},
+												"value": {
+													"type": "string"
+												}
+											}
+										},
+										"uri": {
+											"type": "object",
+											"required": [
+												"fmId",
+												"fmType",
+												"value",
+												"type",
+												"label"
+											],
+											"properties": {
+												"fmId": {
+													"type": "string"
+												},
+												"fmType": {
+													"type": "string"
+												},
+												"label": {
+													"type": "string"
+												},
+												"type": {
+													"type": "string"
+												},
+												"value": {
+													"type": "string"
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					},
+					"combination_immunization_y_n": {
+						"type": "object",
+						"required": [
+							"fmId",
+							"fmType",
+							"value",
+							"type",
+							"datatype"
+						],
+						"properties": {
+							"datatype": {
+								"type": "string"
+							},
+							"fmId": {
+								"type": "string"
+							},
+							"fmType": {
+								"type": "string"
+							},
+							"type": {
+								"type": "string"
+							},
+							"value": {
+								"type": "string"
+							}
+						}
+					},
+					"cvx_code": {
+						"type": "object",
+						"required": [
+							"fmId",
+							"fmType",
+							"value",
+							"type"
+						],
+						"properties": {
+							"fmId": {
+								"type": "string"
+							},
+							"fmType": {
+								"type": "string"
+							},
+							"type": {
+								"type": "string"
+							},
+							"value": {
+								"type": "string"
+							}
+						}
+					},
+					"inactive_flag": {
+						"type": "object",
+						"required": [
+							"fmId",
+							"fmType",
+							"value",
+							"type"
+						],
+						"properties": {
+							"fmId": {
+								"type": "string"
+							},
+							"fmType": {
+								"type": "string"
+							},
+							"type": {
+								"type": "string"
+							},
+							"value": {
+								"type": "string"
+							}
+						}
+					},
+					"max__in_series": {
+						"type": "object",
+						"required": [
+							"fmId",
+							"fmType",
+							"value",
+							"type"
+						],
+						"properties": {
+							"fmId": {
+								"type": "string"
+							},
+							"fmType": {
+								"type": "string"
+							},
+							"type": {
+								"type": "string"
+							},
+							"value": {
+								"type": "string"
+							}
+						}
+					},
+					"mnemonic": {
+						"type": "object",
+						"required": [
+							"fmId",
+							"fmType",
+							"value",
+							"type"
+						],
+						"properties": {
+							"fmId": {
+								"type": "string"
+							},
+							"fmType": {
+								"type": "string"
+							},
+							"type": {
+								"type": "string"
+							},
+							"value": {
+								"type": "string"
+							}
+						}
+					},
+					"name": {
+						"type": "object",
+						"required": [
+							"fmId",
+							"fmType",
+							"value",
+							"type"
+						],
+						"properties": {
+							"fmId": {
+								"type": "string"
+							},
+							"fmType": {
+								"type": "string"
+							},
+							"type": {
+								"type": "string"
+							},
+							"value": {
+								"type": "string"
+							}
+						}
+					},
+					"selectable_for_historic": {
+						"type": "object",
+						"required": [
+							"fmId",
+							"fmType",
+							"value",
+							"type",
+							"datatype"
+						],
+						"properties": {
+							"datatype": {
+								"type": "string"
+							},
+							"fmId": {
+								"type": "string"
+							},
+							"fmType": {
+								"type": "string"
+							},
+							"type": {
+								"type": "string"
+							},
+							"value": {
+								"type": "string"
+							}
+						}
+					},
+					"short_name": {
+						"type": "object",
+						"required": [
+							"fmId",
+							"fmType",
+							"value",
+							"type"
+						],
+						"properties": {
+							"fmId": {
+								"type": "string"
+							},
+							"fmType": {
+								"type": "string"
+							},
+							"type": {
+								"type": "string"
+							},
+							"value": {
+								"type": "string"
+							}
+						}
+					},
+					"uri": {
+						"type": "object",
+						"required": [
+							"fmId",
+							"fmType",
+							"value",
+							"type",
+							"label",
+							"sameAs"
+						],
+						"properties": {
+							"fmId": {
+								"type": "string"
+							},
+							"fmType": {
+								"type": "string"
+							},
+							"label": {
+								"type": "string"
+							},
+							"sameAs": {
+								"type": "string"
+							},
+							"type": {
+								"type": "string"
+							},
+							"value": {
+								"type": "string"
+							}
+						}
+					},
+					"vaccine_information_statement": {
+						"type": "object",
+						"required": [
+							"fmId",
+							"type",
+							"file",
+							"list",
+							"value"
+						],
+						"properties": {
+							"file": {
+								"type": "string"
+							},
+							"fmId": {
+								"type": "string"
+							},
+							"list": {
+								"type": "boolean"
+							},
+							"type": {
+								"type": "string"
+							},
+							"value": {
+								"type": "array",
+								"items": {
+									"type": "object",
+									"required": [
+										"vaccine_information_statement",
+										"uri"
+									],
+									"properties": {
+										"uri": {
+											"type": "object",
+											"required": [
+												"fmId",
+												"fmType",
+												"value",
+												"type",
+												"label"
+											],
+											"properties": {
+												"fmId": {
+													"type": "string"
+												},
+												"fmType": {
+													"type": "string"
+												},
+												"label": {
+													"type": "string"
+												},
+												"type": {
+													"type": "string"
+												},
+												"value": {
+													"type": "string"
+												}
+											}
+										},
+										"vaccine_information_statement": {
+											"type": "object",
+											"required": [
+												"fmId",
+												"fmType",
+												"value",
+												"type",
+												"label",
+												"sameAs"
+											],
+											"properties": {
+												"fmId": {
+													"type": "string"
+												},
+												"fmType": {
+													"type": "string"
+												},
+												"label": {
+													"type": "string"
+												},
+												"sameAs": {
+													"type": "string"
+												},
+												"type": {
+													"type": "string"
+												},
+												"value": {
+													"type": "string"
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

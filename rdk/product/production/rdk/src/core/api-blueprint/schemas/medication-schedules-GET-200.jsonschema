@@ -1,0 +1,39 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"type": "object",
+	"required": [
+		"data",
+		"status"
+	],
+	"properties": {
+		"data": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"required": [
+					"scheduleName",
+					"outpatientExpansion",
+					"scheduleType",
+					"administrationTime"
+				],
+				"properties": {
+					"administrationTime": {
+						"type": "string"
+					},
+					"outpatientExpansion": {
+						"type": "string"
+					},
+					"scheduleName": {
+						"type": "string"
+					},
+					"scheduleType": {
+						"type": "string"
+					}
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

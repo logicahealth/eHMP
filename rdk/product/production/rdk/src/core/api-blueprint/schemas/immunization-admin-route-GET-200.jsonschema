@@ -1,0 +1,39 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"type": "object",
+	"required": [
+		"data",
+		"status"
+	],
+	"properties": {
+		"data": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"required": [
+					"ien",
+					"name",
+					"hl7Code",
+					"status"
+				],
+				"properties": {
+					"hl7Code": {
+						"type": "string"
+					},
+					"ien": {
+						"type": "string"
+					},
+					"name": {
+						"type": "string"
+					},
+					"status": {
+						"type": "string"
+					}
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

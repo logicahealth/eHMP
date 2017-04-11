@@ -1,0 +1,49 @@
+require 'fileutils'
+
+task :reconcile_delete, [:machine_name, :stack_name, :action] do |t, args|
+
+  ENV.has_key?("CHEF_REPO") ? zero= "" : zero = "-z"
+
+  ["#{args[:machine_name]}-#{args[:stack_name]}", "#{args[:machine_name]}-#{args[:stack_name]}-node"].each{ |machine|
+    if File.directory?("#{ENV['WORKSPACE']}/chef-repo/nodes")
+      if args[:action] == "destroy"
+        begin
+          system "yes | /opt/chefdk/bin/knife node delete #{machine} #{zero} --config #{ENV['WORKSPACE']}/.chef/knife.rb"
+        rescue
+          puts "Tried to delete with knife node delete #{zero} ... Failed for some reason"
+        end
+      end
+    end
+  }
+end
+
+task :sync_nodes_between_chef_server_and_chef_zero, [:machine] do |t,args|
+  if ENV.has_key?("CHEF_REPO")
+    upload_to_server(args[:machine])
+    download_to_zero(args[:machine])
+  else
+    download_to_zero(args[:machine])
+    upload_to_server(args[:machine])
+  end
+end
+
+def download_to_zero(machine = "*")
+  nodes = "*"
+  nodes = machine unless machine.nil? || machine.eql?("")
+  if File.directory?("#{ENV['WORKSPACE']}/chef-repo")
+    system "/opt/chefdk/bin/knife download /nodes/#{nodes}-#{ENV['USER']}*.json --config #{ENV['WORKSPACE']}/.chef/knife.rb"
+  end
+end
+
+def upload_to_server(machine)
+  nodes = "*"
+  nodes = machine unless machine.nil? || machine.eql?("")
+  node_folder = "#{ENV['WORKSPACE']}/chef-repo/nodes"
+  if File.directory?(node_folder)
+    begin
+      system "/opt/chefdk/bin/knife node from file #{node_folder}/#{nodes}-#{ENV['USER'].gsub("_", "-")}*.json --config #{ENV['WORKSPACE']}/.chef/knife.rb"
+    rescue
+      puts "Failed to upload some nodes..."
+    end
+  end
+end

@@ -1,0 +1,628 @@
+{
+  "dataList": {
+    "problems": [
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000062"
+        },
+        "enteredBy": {
+          "name": "BHIE, USERONE"
+        },
+        "enteredDate": {
+          "start": "20131206161548",
+          "end": "20131206161548"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "11450-4"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.10002.100001.8",
+              "id": "0056"
+            }
+          ]
+        },
+        "chronicity": [
+          {
+            "display": "Chronic",
+            "primary": true
+          }
+        ],
+        "comment": "Testing AHLTA problem comments",
+        "modifiedDate": {
+          "start": "2013-12-06T16:15:48",
+          "end": "2013-12-06T16:15:48"
+        },
+        "onsetDate": {
+          "start": "1899-12-30T05:00:00",
+          "end": "1899-12-30T05:00:00"
+        },
+        "negationInd": false,
+        "problem": [
+          {
+            "display": "ASTHMA EXERCISE-INDUCED",
+            "primary": true,
+            "code": "33783",
+            "system": "2.16.840.1.113883.6.26"
+          }
+        ],
+        "provider": {
+          "name": "BHIE, USERONE",
+          "primary": true
+        },
+        "sourceOfInfo": [
+          {
+            "display": "BHIE, USERONE",
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "Active",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000063"
+        },
+        "enteredBy": {
+          "name": "BHIE, USERONE"
+        },
+        "enteredDate": {
+          "start": "20131007154131",
+          "end": "20131007154131"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "11450-4"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.10002.100001.8",
+              "id": "0056"
+            }
+          ]
+        },
+        "chronicity": [
+          {
+            "display": "Chronic",
+            "primary": true
+          }
+        ],
+        "comment": null,
+        "modifiedDate": {
+          "start": "2013-10-07T15:41:31",
+          "end": "2013-10-07T15:41:31"
+        },
+        "onsetDate": {
+          "start": "1899-12-30T05:00:00",
+          "end": "1899-12-30T05:00:00"
+        },
+        "negationInd": true,
+        "problem": [
+          {
+            "display": "upper back pain worse with coughing / sneezing",
+            "primary": true,
+            "code": "115184",
+            "system": "2.16.840.1.113883.6.26"
+          }
+        ],
+        "provider": {
+          "name": "BHIE, USERONE",
+          "primary": true
+        },
+        "sourceOfInfo": [
+          {
+            "display": "BHIE, USERONE",
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "Active",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000064"
+        },
+        "enteredBy": {
+          "name": "BHIE, USERONE"
+        },
+        "enteredDate": {
+          "start": "20131206161547",
+          "end": "20131206161547"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "11450-4"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.10002.100001.8",
+              "id": "0056"
+            }
+          ]
+        },
+        "chronicity": [
+          {
+            "display": "Chronic",
+            "primary": true
+          }
+        ],
+        "comment": null,
+        "modifiedDate": {
+          "start": "2013-12-06T16:15:47",
+          "end": "2013-12-06T16:15:47"
+        },
+        "onsetDate": {
+          "start": "1899-12-30T05:00:00",
+          "end": "1899-12-30T05:00:00"
+        },
+        "negationInd": false,
+        "problem": [
+          {
+            "display": "ASTHMA MILD PERSISTENT",
+            "primary": true,
+            "code": "214046",
+            "system": "2.16.840.1.113883.6.26"
+          }
+        ],
+        "provider": {
+          "name": "BHIE, USERONE",
+          "primary": true
+        },
+        "sourceOfInfo": [
+          {
+            "display": "BHIE, USERONE",
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "Active",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000065"
+        },
+        "enteredBy": {
+          "name": "BHIE, USERONE"
+        },
+        "enteredDate": {
+          "start": "20140113202824",
+          "end": "20140113202824"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "11450-4"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.10002.100001.8",
+              "id": "0056"
+            }
+          ]
+        },
+        "chronicity": [
+          {
+            "display": "Chronic",
+            "primary": true
+          }
+        ],
+        "comment": null,
+        "modifiedDate": {
+          "start": "2014-01-13T20:28:24",
+          "end": "2014-01-13T20:28:24"
+        },
+        "onsetDate": {
+          "start": "1899-12-30T05:00:00",
+          "end": "1899-12-30T05:00:00"
+        },
+        "negationInd": false,
+        "problem": [
+          {
+            "display": "coughing up milk",
+            "primary": true,
+            "code": "283062",
+            "system": "2.16.840.1.113883.6.26"
+          }
+        ],
+        "provider": {
+          "name": "BHIE, USERONE",
+          "primary": true
+        },
+        "sourceOfInfo": [
+          {
+            "display": "BHIE, USERONE",
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "Active",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000066"
+        },
+        "enteredBy": {
+          "name": "BHIE, USERONE"
+        },
+        "enteredDate": {
+          "start": "20140113202321",
+          "end": "20140113202321"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "11450-4"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.10002.100001.8",
+              "id": "0056"
+            }
+          ]
+        },
+        "chronicity": [
+          {
+            "display": "Chronic",
+            "primary": true
+          }
+        ],
+        "comment": null,
+        "modifiedDate": {
+          "start": "2014-01-13T20:23:21",
+          "end": "2014-01-13T20:23:21"
+        },
+        "onsetDate": {
+          "start": "1899-12-30T05:00:00",
+          "end": "1899-12-30T05:00:00"
+        },
+        "negationInd": false,
+        "problem": [
+          {
+            "display": "cold right thumb",
+            "primary": true,
+            "code": "281383",
+            "system": "2.16.840.1.113883.6.26"
+          }
+        ],
+        "provider": {
+          "name": "BHIE, USERONE",
+          "primary": true
+        },
+        "sourceOfInfo": [
+          {
+            "display": "BHIE, USERONE",
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "Active",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000067"
+        },
+        "enteredBy": {
+          "name": "MIDTIER, CGL TWO"
+        },
+        "enteredDate": {
+          "start": "20131007155653",
+          "end": "20131007155653"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "11450-4"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.10002.100001.8",
+              "id": "0056"
+            }
+          ]
+        },
+        "chronicity": [
+          {
+            "display": "Chronic",
+            "primary": true
+          }
+        ],
+        "comment": null,
+        "modifiedDate": {
+          "start": "2013-10-07T15:56:53",
+          "end": "2013-10-07T15:56:53"
+        },
+        "onsetDate": {
+          "start": "2013-10-07T15:53:54",
+          "end": "2013-10-07T15:53:54"
+        },
+        "negationInd": false,
+        "problem": [
+          {
+            "display": "COUGH WITH HEMORRHAGE",
+            "primary": true,
+            "code": "278575",
+            "system": "2.16.840.1.113883.6.26"
+          },
+          {
+            "display": "COUGH WITH HEMORRHAGE",
+            "primary": false,
+            "code": "786.3",
+            "system": "2.16.840.1.113883.6.103"
+          }
+        ],
+        "provider": null,
+        "sourceOfInfo": [
+          {
+            "display": "Clinical Evidence",
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "Active",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000068"
+        },
+        "enteredBy": {
+          "name": "BHIE, USERONE"
+        },
+        "enteredDate": {
+          "start": "20140113202156",
+          "end": "20140113202156"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "11450-4"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.10002.100001.8",
+              "id": "0056"
+            }
+          ]
+        },
+        "chronicity": [
+          {
+            "display": "Chronic",
+            "primary": true
+          }
+        ],
+        "comment": null,
+        "modifiedDate": {
+          "start": "2014-01-13T20:21:56",
+          "end": "2014-01-13T20:21:56"
+        },
+        "onsetDate": {
+          "start": "1899-12-30T05:00:00",
+          "end": "1899-12-30T05:00:00"
+        },
+        "negationInd": false,
+        "problem": [
+          {
+            "display": "cold right hand",
+            "primary": true,
+            "code": "2657",
+            "system": "2.16.840.1.113883.6.26"
+          }
+        ],
+        "provider": {
+          "name": "BHIE, USERONE",
+          "primary": true
+        },
+        "sourceOfInfo": [
+          {
+            "display": "BHIE, USERONE",
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "Active",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000069"
+        },
+        "enteredBy": {
+          "name": "MIDTIER, CGL TWO"
+        },
+        "enteredDate": {
+          "start": "20131007155952",
+          "end": "20131007155952"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "11450-4"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.10002.100001.8",
+              "id": "0056"
+            }
+          ]
+        },
+        "chronicity": [
+          {
+            "display": "Chronic",
+            "primary": true
+          }
+        ],
+        "comment": null,
+        "modifiedDate": {
+          "start": "2013-10-29T16:04:03",
+          "end": "2013-10-29T16:04:03"
+        },
+        "onsetDate": {
+          "start": "2013-10-07T15:58:30",
+          "end": "2013-10-07T15:58:30"
+        },
+        "negationInd": false,
+        "problem": [
+          {
+            "display": "headache associated with menstrual cycle",
+            "primary": true,
+            "code": "56",
+            "system": "2.16.840.1.113883.6.26"
+          },
+          {
+            "display": "headache associated with menstrual cycle",
+            "primary": false,
+            "code": "346.40",
+            "system": "2.16.840.1.113883.6.103"
+          }
+        ],
+        "provider": null,
+        "sourceOfInfo": [
+          {
+            "display": "Clinical Evidence",
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "Active",
+            "primary": true
+          }
+        ]
+      }
+    ]
+  }
+}

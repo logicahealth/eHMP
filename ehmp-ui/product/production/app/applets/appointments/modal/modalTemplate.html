@@ -1,0 +1,90 @@
+<div class="row">
+  <div class="col-md-4 text-right" data-detail-label="date">Date:</div>
+  <div class="col-md-8 text-left" data-detail="date">
+  {{#if dateTimeFormatted}}
+    {{dateTimeFormatted}}
+  {{else}}
+    NA
+  {{/if}}</div>
+</div>
+<div class="row">
+  <div class="col-md-4 text-right" data-detail-label="type">Type:</div>
+  <div class="col-md-8 text-left" data-detail="type">
+    {{#if typeDisplayName}}
+      {{typeDisplayName}}
+    {{else}}
+      NA
+    {{/if}}</div>
+</div>
+<div class="row">
+  <div class="col-md-4 text-right" data-detail-label="desc">Description:</div>
+  <div class="col-md-8 text-left" data-detail="desc">
+  {{#if kind}}
+    {{kind}}
+  {{else}}
+    NA
+  {{/if}}</div>
+</div>
+<div class="row">
+  <div class="col-md-4 text-right" data-detail-label="patientClass">Patient Class:</div>
+  <div class="col-md-8 text-left" data-detail="patientClass">
+    {{#if patientClassName}}
+      {{patientClassName}}
+    {{else}}
+      NA
+    {{/if}}</div>
+</div>
+<div class="row">
+  <div class="col-md-4 text-right" data-detail-label="location">Location:</div>
+  <div class="col-md-8 text-left" data-detail="location">
+    {{#if locationName}}
+      {{locationName}}
+    {{else}}
+      NA
+    {{/if}}</div>
+</div>
+<div class="row">
+  <div class="col-md-4 text-right" data-detail-label="status">Status:</div>
+  <div class="col-md-8 text-left" data-detail="status">
+    {{#if appointmentStatus}}
+      {{appointmentStatus}}
+    {{else}}
+      NA
+    {{/if}}</div>
+</div>
+<div class="row">
+  <div class="col-md-4 text-right" data-detail-label="stopCode">Stop Code:</div>
+  <div class="col-md-8 text-left" data-detail="stopCode">
+    {{#if stopCodeName}}
+      {{stopCodeName}}
+    {{else}}
+      NA
+    {{/if}}</div>
+</div>
+<div class="row">
+  <div class="col-md-4 text-right" data-detail-label="provider"> Provider:</div>
+  <div class="col-md-8 text-left" data-detail="provider">
+    {{#if providerDisplayName}}
+      {{providerDisplayName}}
+    {{else}}
+      NA
+    {{/if}}</div>
+</div>
+<div class="row">
+  <div class="col-md-4 text-right" data-detail-label="facility">Facility:</div>
+  <div class="col-md-8 text-left" data-detail="facility">
+    {{#if acilityMoniker}}
+      {{facilityMoniker}}
+    {{else}}
+      NA
+    {{/if}}</div>
+</div>
+{{#if reasonName}}
+<div class="row">
+  <div class="col-md-12">
+    <hr/>
+    <h5 data-detail-label="reason">Reason:</h5>
+    <p data-detail="reason">{{reasonName}}</p>
+  </div>
+</div>
+{{/if}}

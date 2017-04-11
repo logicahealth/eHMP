@@ -1,0 +1,14 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "Temporary endpoint to create the team storage area in JDS",
+	"description": "This should be removed once team addition workflow is finalized. For testing/dev purposes only.",
+	"type": "object",
+	"required": [
+		"status"
+	],
+	"properties": {
+		"status": {
+			"type": "integer"
+		}
+	}
+}

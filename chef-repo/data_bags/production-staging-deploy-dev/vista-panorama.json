@@ -1,0 +1,29 @@
+{
+  "id": "vista-panorama",
+  "normal": {
+    "ipaddress": "172.16.89.163",
+    "vista": {
+      "domain_name": "PANORAMA.VISTACORE.US",
+      "site_recipe": "panorama",
+      "import_recipe": "panorama",
+      "site_id": "9E7A",
+      "site": "PANORAMA",
+      "station_number": "500",
+      "access_code": "PW    ",
+      "verify_code": "PW    !!",
+      "division": "500",
+      "clinics_osync_appointment_request": [
+        {
+          "locationIen": "195",
+          "locationName": "CARDIOLOGY",
+          "hour": 11,
+          "minutes": 37
+        }
+      ]
+    },
+    "stack": "production-staging-deploy-dev",
+    "roles": [
+      "vista-panorama"
+    ]
+  }
+}

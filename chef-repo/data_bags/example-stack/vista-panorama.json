@@ -1,0 +1,14 @@
+{
+  "id": "vista-panorama",
+  "ip_address": "172.16.2.101",
+  "vista": {
+    "domain_name": "PANORAMA.VISTACORE.US",
+    "site_recipe": "panorama",
+    "import_recipe": "panorama",
+    "site_id": "9E7A",
+    "site": "PANORAMA",
+    "access_code": "PW    ",
+    "verify_code": "PW    !!",
+    "division": "500"
+  }
+}

@@ -1,0 +1,143 @@
+{
+	"parameters": {
+	},
+	"schema": {
+		"$schema": "http://json-schema.org/draft-04/schema#",
+		"properties": {
+			"bloodpressure": {
+				"properties": {
+					"value": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"value"
+				],
+				"type": "object"
+			},
+			"circumferencegirth": {
+				"properties": {
+					"units": {
+						"type": "string"
+					},
+					"value": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"value",
+					"units"
+				],
+				"type": "object"
+			},
+			"height": {
+				"properties": {
+					"units": {
+						"type": "string"
+					},
+					"value": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"value",
+					"units"
+				],
+				"type": "object"
+			},
+			"pain": {
+				"properties": {
+					"value": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"value"
+				],
+				"type": "object"
+			},
+			"pid": {
+				"type": "string"
+			},
+			"pulse": {
+				"properties": {
+					"units": {
+						"type": "string"
+					},
+					"value": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"value",
+					"units"
+				],
+				"type": "object"
+			},
+			"pulseoximetry": {
+				"properties": {
+					"units": {
+						"type": "string"
+					},
+					"value": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"value",
+					"units"
+				],
+				"type": "object"
+			},
+			"respiration": {
+				"properties": {
+					"units": {
+						"type": "string"
+					},
+					"value": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"value",
+					"units"
+				],
+				"type": "object"
+			},
+			"temperature": {
+				"properties": {
+					"units": {
+						"type": "string"
+					},
+					"value": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"value",
+					"units"
+				],
+				"type": "object"
+			},
+			"weight": {
+				"properties": {
+					"units": {
+						"type": "string"
+					},
+					"value": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"value",
+					"units"
+				],
+				"type": "object"
+			}
+		},
+		"required": [
+			"pid"
+		],
+		"type": "object"
+	}
+}

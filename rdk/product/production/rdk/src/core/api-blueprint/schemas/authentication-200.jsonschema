@@ -1,0 +1,113 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "Refreshes the current user session",
+	"description": "Expects a session to already occur or it returns a blank object.",
+	"type": "object",
+	"required": [
+		"data",
+		"status"
+	],
+	"properties": {
+		"data": {
+			"type": "object",
+			"required": [
+				"disabled",
+				"divisionSelect",
+				"duz",
+				"facility",
+				"firstname",
+				"lastname",
+				"permissions",
+				"pcmm",
+				"requiresReset",
+				"section",
+				"site",
+				"title",
+				"provider"
+			],
+			"properties": {
+				"disabled": {
+					"type": "boolean"
+				},
+				"divisionSelect": {
+					"type": "boolean"
+				},
+				"duz": {
+					"type": "object",
+					"required": [
+						"9E7A"
+					],
+					"properties": {
+						"9E7A": {
+							"type": "string"
+						}
+					}
+				},
+				"facility": {
+					"type": "string"
+				},
+				"firstname": {
+					"type": "string"
+				},
+				"lastname": {
+					"type": "string"
+				},
+				"pcmm": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"required": [
+							"roles",
+							"service",
+							"team"
+						],
+						"properties": {
+							"roles": {
+								"type": "array",
+								"items": {
+									"type": "string"
+								}
+							},
+							"service": {
+								"type": "array",
+								"items": {
+									"type": "string"
+								}
+							},
+							"team": {
+								"type": "array",
+								"items": {
+									"type": "string"
+								}
+							}
+						}
+					}
+				},
+				"permissions": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					}
+				},
+				"provider": {
+					"type": "boolean"
+				},
+				"requiresReset": {
+					"type": "boolean"
+				},
+				"section": {
+					"type": "string"
+				},
+				"site": {
+					"type": "string"
+				},
+				"title": {
+					"type": "string"
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

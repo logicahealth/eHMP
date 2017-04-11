@@ -1,0 +1,67 @@
+<div class="row">
+    <div class="col-md-12">
+        <h5 class="top-margin-no bottom-margin-no top-padding-no">{{summary}}</h5>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-9">
+        <h5>Symptoms: {{reaction}}</h5>
+    </div>
+    {{#if acuityName}} {{#if severe}}
+    <div class="col-md-3" data-detail="allergySeverity"><span class="label label-error">{{acuityName}}</span></div>
+    {{else}} {{#if moderate}}
+    <div class="col-md-3" data-detail="allergySeverity"><span class="label label-warning">{{acuityName}}</span></div>
+    {{else}}
+    <div class="col-md-3" data-detail="allergySeverity"><span class="label label-info">{{acuityName}}</span></div>
+    {{/if}} {{/if}} {{else}}
+    <div class="col-md-3" data-detail="allergySeverity">Severity Not Noted</div>
+    {{/if}}
+</div>
+<div class="row">
+    <div class="col-md-4 text-right">Drug Classes:</div>
+    <div data-detail="drugClasses" class="col-md-8">{{drugClassesNames}}</div>
+</div>
+<div class="row">
+    <div class="col-md-4 text-right">Nature of Reaction:</div>
+    <div data-detail="natureOfReaction" class="col-md-8">{{mechanism}}</div>
+</div>
+<div class="row">
+    <div class="col-md-4 text-right">Entered By:</div>
+    <div data-detail="originatorName" class="col-md-8">{{originatorName}}</div>
+</div>
+<div class="row">
+    <div class="col-md-4 text-right">Originated:</div>
+    <div data-detail="originatedFormatted" class="col-md-8">{{originatedFormatted}}</div>
+</div>
+<div class="row">
+    <div class="col-md-4 text-right">Verified:</div>
+    <div data-detail="verifierName" class="col-md-8">
+        <!-- {{verifierName}} -->{{formatDate verified "MM/DD/YYYY - HH:mm"}}</div>
+</div>
+<div class="row">
+    <div class="col-md-4 text-right">Observed/Historical:</div>
+    <div data-detail="observedOrHistorical" class="col-md-8">
+        {{#if historical}}Historical {{else}}Observed {{/if}}
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4 text-right">Observed Date:</div>
+    <div data-detail="observedDate" class="col-md-8">{{observedDate}}</div>
+</div>
+<div class="row bottom-padding-sm">
+    <div class="col-md-4 text-right">Site:</div>
+    <div data-detail="facilityName" class="col-md-8">{{facilityName}}</div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <hr/>
+        <h5 class="bottom-padding-no bottom-margin-no">Comments:</h5>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        {{#comments}}
+        <div data-detail="modalAllergyComment" class="col-md-9 col-md-offset-2">{{comment}}</div>
+        {{/comments}}
+    </div>
+</div>

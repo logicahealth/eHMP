@@ -1,0 +1,59 @@
+<div class="row">
+    <div class="col-xs-4 text-right" data-detail-label="Primary_ICD-9-CM_Label">Primary ICD-9-CM:</div>
+    <div class="col-xs-8" data-detail="Primary_ICD-9-CM">{{icdCode}}</div>
+</div>
+<div class="row bottom-padding-lg">
+    <div class="col-xs-4 text-right" data-detail-label="Snomed_Label">SNOMED CT:</div>
+    <div class="col-xs-8" data-detail="Snomed">{{snomedCode}}</div>
+</div>
+<div class="row">
+    <div class="col-xs-4 text-right" data-detail-label="problem_onset_label">Onset:</div>
+    <div class="col-xs-8" data-detail="problem_onset">{{onsetFormatted}}</div>
+</div>
+<div class="row">
+    <div class="col-xs-4 text-right" data-detail-label="problem_acuity_label">Acuity:</div>
+    <div class="col-xs-8" data-detail="problem_acuity">{{acuityName}}</div>
+</div>
+<div class="row">
+    <div class="col-xs-4 text-right" data-detai-label="problem_provider_label">Provider:</div>
+    <div class="col-xs-8" data-detail="problem_provider">{{providerDisplayName}}</div>
+</div>
+<div class="row">
+    <div class="col-xs-4 text-right" data-detail-label="problem_facility_label">Facility:</div>
+    <div class="col-xs-8" data-detail="problem_facility">{{facilityName}}</div>
+</div>
+<div class="row">
+    <div class="col-xs-4 text-right" data-detail-label="problem_location_label">Location:</div>
+    <div class="col-xs-8" data-detail="problem_location">{{locationDisplayName}}</div>
+</div>
+<div class="row bottom-padding-lg">
+    <div class="col-xs-4 text-right" data-detail-label="problem_status_label">Status:</div>
+    <div class="col-xs-8" data-detail="problem_status">{{statusName}}</div>
+</div>
+<div class="row">
+    <div class="col-xs-4 text-right" data-detail-label="problem_entered_label">Entered:</div>
+    <div class="col-xs-8" data-detail="problem_entered">{{formatDate entered}}</div>
+</div>
+<div class="row bottom-padding-lg">
+    <div class="col-xs-4 text-right" data-detail-label="problem_updated_label">Updated:</div>
+    <div class="col-xs-8" data-detail="problem_updated">{{formatDate updated}}</div>
+</div>
+<div class="row">
+    <div class="col-xs-12">
+        <hr>
+        <h5>Comments:</h5>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12">
+        {{#comments}}
+        <div class="row">
+            <div class="col-xs-2 col-xs-offset-2">{{formatDate entered}}</div>
+            <div class="col-xs-7">{{enteredByName}}</div>
+        </div>
+        <div class="row bottom-padding-lg">
+            <div class="col-xs-9 col-xs-offset-2">{{comment}}</div>
+        </div>
+        {{/comments}}
+    </div>
+</div>

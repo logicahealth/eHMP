@@ -1,0 +1,18 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "Get an ICN given a site and DFN",
+	"description": "",
+	"type": "object",
+	"required": [
+		"site",
+		"pid"
+	],
+	"properties": {
+		"pid": {
+			"type": "string"
+		},
+		"site": {
+			"type": "string"
+		}
+	}
+}

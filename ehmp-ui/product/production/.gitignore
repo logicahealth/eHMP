@@ -1,0 +1,5 @@
+/assets
+!/assets/sass/variables.scss
+/min
+/_assets
+app/cache.appcache

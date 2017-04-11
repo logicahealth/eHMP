@@ -1,0 +1,9 @@
+{
+  "id": "config",
+  "passcode": {
+    "encrypted_data": "50yY6MXfTsvUYfe2JmPBFxTM/Gb5GGY02IAPvmhbBMMh///rKydYs26BZWOR\nkVLd\n",
+    "iv": "I+8KmVjB8YE1ckdgB/j2OA==\n",
+    "version": 1,
+    "cipher": "aes-256-cbc"
+  }
+}

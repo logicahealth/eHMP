@@ -1,0 +1,45 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"type": "object",
+	"required": [
+		"data",
+		"statusCode",
+		"status"
+	],
+	"properties": {
+		"data": {
+			"type": "object",
+			"required": [
+				"val",
+				"modifiedBy",
+				"modifiedOn",
+				"additionalPermissions"
+			],
+			"properties": {
+				"additionalPermissions": {
+					"type": "array",
+					"items": {
+					}
+				},
+				"modifiedBy": {
+					"type": "string"
+				},
+				"modifiedOn": {
+					"type": "string"
+				},
+				"val": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					}
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		},
+		"statusCode": {
+			"type": "integer"
+		}
+	}
+}

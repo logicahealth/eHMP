@@ -1,0 +1,45 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "Indicates whether corresponding form fields should be enabled.",
+	"description": "",
+	"type": "object",
+	"required": [
+		"status",
+		"data"
+	],
+	"properties": {
+		"data": {
+			"type": "object",
+			"required": [
+				"exposure"
+			],
+			"properties": {
+				"exposure": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"required": [
+							"name",
+							"summary",
+							"uid"
+						],
+						"properties": {
+							"name": {
+								"type": "string"
+							},
+							"summary": {
+								"type": "string"
+							},
+							"uid": {
+								"type": "string"
+							}
+						}
+					}
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

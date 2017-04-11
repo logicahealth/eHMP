@@ -1,0 +1,120 @@
+{
+  "queryComplete": true,
+  "statusList": [
+    {
+      "partner": {
+        "partnerIdentifier": "2.16.840.1.113883.3.42.126.100001.13",
+        "partnerName": "ahlta",
+        "partnerType": "DOD"
+      },
+      "partnerStatus": "SUCCESS",
+      "expectedCount": 1,
+      "receivedCount": 1
+    }
+  ],
+  "dataList": {
+    "demographics": [
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000691"
+        },
+        "enteredBy": null,
+        "enteredDate": null,
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "52536-0"
+          }
+        ],
+        "facility": null,
+        "addresses": [
+          {
+            "type": "Home Address",
+            "city": "APO",
+            "country": null,
+            "county": null,
+            "postalCode": "09012",
+            "state": "AE",
+            "street": [
+              "PSC 2 BOX 5284"
+            ]
+          }
+        ],
+        "branch": [],
+        "birthDate": {
+          "start": "2010-04-20T00:00:00",
+          "end": "2010-04-20T00:00:00"
+        },
+        "deersEligibility": [],
+        "patientId": [
+          {
+            "id": "D1394687886"
+          }
+        ],
+        "enrollmentLocation": null,
+        "name": {
+          "first": "VICKI",
+          "middle": "LATIA",
+          "last": "CHAPMAN",
+          "suffix": null
+        },
+        "fmp": null,
+        "maritalStatus": [
+          {
+            "display": "Unknown Marital Status",
+            "primary": true
+          }
+        ],
+        "patientCategory": [
+          {
+            "display": "A41 - United States Army (USA) Family Member Active Duty",
+            "primary": true
+          }
+        ],
+        "race": [
+          {
+            "display": "Unknown Race",
+            "primary": true
+          }
+        ],
+        "rank": [
+          {
+            "display": "Lieutenant Colonel O5-A",
+            "primary": true
+          }
+        ],
+        "religion": [
+          {
+            "display": "Unknown",
+            "primary": true
+          }
+        ],
+        "sex": [
+          {
+            "display": "F",
+            "primary": true
+          }
+        ],
+        "sponsor": {
+          "branch": [],
+          "rank": [],
+          "ssn": null,
+          "assignedUnit": null
+        },
+        "assignedUnit": {
+          "name": "W3U814     (W3U8 CC AIR HQ RAMSTEIN)"
+        }
+      }
+    ]
+  }
+}

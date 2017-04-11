@@ -1,0 +1,2257 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "",
+	"description": "",
+	"type": "object",
+	"required": [
+		"data",
+		"status"
+	],
+	"properties": {
+		"data": {
+			"type": "object",
+			"required": [
+				"header",
+				"problems",
+				"encounters",
+				"allergies",
+				"medications",
+				"vitalsigns",
+				"procedures",
+				"immunizations",
+				"results",
+				"assessment",
+				"planOfCare"
+			],
+			"properties": {
+				"allergies": {
+					"type": "object",
+					"required": [
+						"allergy"
+					],
+					"properties": {
+						"allergy": {
+							"type": "array",
+							"items": {
+							}
+						}
+					}
+				},
+				"assessment": {
+					"type": "object",
+					"required": [
+						"encounter"
+					],
+					"properties": {
+						"encounter": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"required": [
+									"categoryCode",
+									"categoryName",
+									"current",
+									"dateTime",
+									"encounterType",
+									"facilityCode",
+									"facilityName",
+									"kind",
+									"lastUpdateTime",
+									"localId",
+									"patientClassCode",
+									"patientClassName",
+									"pid",
+									"stampTime",
+									"typeDisplayName",
+									"typeName",
+									"uid"
+								],
+								"properties": {
+									"categoryCode": {
+										"type": "string"
+									},
+									"categoryName": {
+										"type": "string"
+									},
+									"current": {
+										"type": "boolean"
+									},
+									"dateTime": {
+										"type": "string"
+									},
+									"encounterType": {
+										"type": "string"
+									},
+									"facilityCode": {
+										"type": "string"
+									},
+									"facilityName": {
+										"type": "string"
+									},
+									"kind": {
+										"type": "string"
+									},
+									"lastUpdateTime": {
+										"type": "string"
+									},
+									"localId": {
+										"type": "string"
+									},
+									"locationDisplayName": {
+										"type": "string"
+									},
+									"locationName": {
+										"type": "string"
+									},
+									"locationOos": {
+										"type": "boolean"
+									},
+									"locationUid": {
+										"type": "string"
+									},
+									"patientClassCode": {
+										"type": "string"
+									},
+									"patientClassName": {
+										"type": "string"
+									},
+									"pid": {
+										"type": "string"
+									},
+									"primaryProvider": {
+										"type": "object",
+										"required": [
+											"primary",
+											"providerDisplayName",
+											"providerName",
+											"providerUid",
+											"role",
+											"summary"
+										],
+										"properties": {
+											"primary": {
+												"type": "boolean"
+											},
+											"providerDisplayName": {
+												"type": "string"
+											},
+											"providerName": {
+												"type": "string"
+											},
+											"providerUid": {
+												"type": "string"
+											},
+											"role": {
+												"type": "string"
+											},
+											"summary": {
+												"type": "string"
+											}
+										}
+									},
+									"providers": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"required": [
+												"primary",
+												"providerDisplayName",
+												"providerName",
+												"providerUid",
+												"role",
+												"summary"
+											],
+											"properties": {
+												"primary": {
+													"type": "boolean"
+												},
+												"providerDisplayName": {
+													"type": "string"
+												},
+												"providerName": {
+													"type": "string"
+												},
+												"providerUid": {
+													"type": "string"
+												},
+												"role": {
+													"type": "string"
+												},
+												"summary": {
+													"type": "string"
+												}
+											}
+										}
+									},
+									"reasonName": {
+										"type": "string"
+									},
+									"reasonUid": {
+										"type": "string"
+									},
+									"shortLocationName": {
+										"type": "string"
+									},
+									"stampTime": {
+										"type": "string"
+									},
+									"stopCodeName": {
+										"type": "string"
+									},
+									"stopCodeUid": {
+										"type": "string"
+									},
+									"summary": {
+										"type": "string"
+									},
+									"typeDisplayName": {
+										"type": "string"
+									},
+									"typeName": {
+										"type": "string"
+									},
+									"uid": {
+										"type": "string"
+									},
+									"uidHref": {
+										"type": "string"
+									}
+								}
+							}
+						}
+					}
+				},
+				"encounters": {
+					"type": "object",
+					"required": [
+						"encounter",
+						"document"
+					],
+					"properties": {
+						"document": {
+							"type": "array",
+							"items": {
+							}
+						},
+						"encounter": {
+							"type": "array",
+							"items": {
+							}
+						}
+					}
+				},
+				"header": {
+					"type": "object",
+					"required": [
+						"patient"
+					],
+					"properties": {
+						"patient": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"required": [
+									"address",
+									"birthDate",
+									"displayName",
+									"genderCode",
+									"genderName",
+									"icn",
+									"pid",
+									"ssn",
+									"stampTime",
+									"uid"
+								],
+								"properties": {
+									"address": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"required": [
+												"city",
+												"summary",
+												"use"
+											],
+											"properties": {
+												"city": {
+													"type": "string"
+												},
+												"line1": {
+													"type": "string"
+												},
+												"state": {
+													"type": "string"
+												},
+												"summary": {
+													"type": "string"
+												},
+												"use": {
+													"type": "string"
+												},
+												"zip": {
+													"type": "string"
+												}
+											}
+										}
+									},
+									"birthDate": {
+										"type": "string"
+									},
+									"briefId": {
+										"type": "string"
+									},
+									"contact": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"required": [
+												"name",
+												"summary",
+												"typeCode",
+												"typeName"
+											],
+											"properties": {
+												"name": {
+													"type": "string"
+												},
+												"summary": {
+													"type": "string"
+												},
+												"typeCode": {
+													"type": "string"
+												},
+												"typeName": {
+													"type": "string"
+												}
+											}
+										}
+									},
+									"cwadf": {
+										"type": "string"
+									},
+									"disability": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"required": [
+												"disPercent",
+												"name",
+												"serviceConnected",
+												"summary"
+											],
+											"properties": {
+												"disPercent": {
+													"type": "integer"
+												},
+												"name": {
+													"type": "string"
+												},
+												"serviceConnected": {
+													"type": "boolean"
+												},
+												"summary": {
+													"type": "string"
+												}
+											}
+										}
+									},
+									"displayName": {
+										"type": "string"
+									},
+									"exposure": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"required": [
+												"name",
+												"summary",
+												"uid"
+											],
+											"properties": {
+												"name": {
+													"type": "string"
+												},
+												"summary": {
+													"type": "string"
+												},
+												"uid": {
+													"type": "string"
+												}
+											}
+										}
+									},
+									"facility": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"required": [
+												"code",
+												"homeSite",
+												"name",
+												"summary"
+											],
+											"properties": {
+												"code": {
+													"type": "string"
+												},
+												"homeSite": {
+													"type": "boolean"
+												},
+												"latestDate": {
+													"type": "string"
+												},
+												"localPatientId": {
+													"type": "string"
+												},
+												"name": {
+													"type": "string"
+												},
+												"summary": {
+													"type": "string"
+												},
+												"systemId": {
+													"type": "string"
+												}
+											}
+										}
+									},
+									"familyName": {
+										"type": "string"
+									},
+									"fullName": {
+										"type": "string"
+									},
+									"fullname": {
+										"type": "string"
+									},
+									"genderCode": {
+										"type": "string"
+									},
+									"genderName": {
+										"type": "string"
+									},
+									"givenNames": {
+										"type": "string"
+									},
+									"homeFacility": {
+										"type": "object",
+										"required": [
+											"code",
+											"homeSite",
+											"latestDate",
+											"name",
+											"summary"
+										],
+										"properties": {
+											"code": {
+												"type": "string"
+											},
+											"homeSite": {
+												"type": "boolean"
+											},
+											"latestDate": {
+												"type": "string"
+											},
+											"name": {
+												"type": "string"
+											},
+											"summary": {
+												"type": "string"
+											}
+										}
+									},
+									"icn": {
+										"type": "string"
+									},
+									"insurance": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"required": [
+												"companyName",
+												"id",
+												"summary"
+											],
+											"properties": {
+												"companyName": {
+													"type": "string"
+												},
+												"effectiveDate": {
+													"type": "string"
+												},
+												"groupNumber": {
+													"type": "string"
+												},
+												"id": {
+													"type": "string"
+												},
+												"policyHolder": {
+													"type": "string"
+												},
+												"policyType": {
+													"type": "string"
+												},
+												"summary": {
+													"type": "string"
+												}
+											}
+										}
+									},
+									"last4": {
+										"type": "string"
+									},
+									"last5": {
+										"type": "string"
+									},
+									"lastUpdateTime": {
+										"type": "integer"
+									},
+									"localId": {
+										"type": "string"
+									},
+									"lrdfn": {
+										"type": "string"
+									},
+									"maritalStatusCode": {
+										"type": "string"
+									},
+									"maritalStatusName": {
+										"type": "string"
+									},
+									"pid": {
+										"type": "string"
+									},
+									"religionCode": {
+										"type": "string"
+									},
+									"religionName": {
+										"type": "string"
+									},
+									"scPercent": {
+										"type": "string"
+									},
+									"sensitive": {
+										"type": "boolean"
+									},
+									"serviceConnected": {
+										"type": "boolean"
+									},
+									"ssn": {
+										"type": "string"
+									},
+									"stampTime": {
+										"type": "string"
+									},
+									"teamInfo": {
+										"type": "object",
+										"required": [
+											"associateProvider",
+											"attendingProvider",
+											"inpatientProvider",
+											"mhCoordinator",
+											"primaryProvider",
+											"team",
+											"text"
+										],
+										"properties": {
+											"associateProvider": {
+												"type": "object",
+												"required": [
+													"name"
+												],
+												"properties": {
+													"name": {
+														"type": "string"
+													}
+												}
+											},
+											"attendingProvider": {
+												"type": "object",
+												"required": [
+													"name"
+												],
+												"properties": {
+													"name": {
+														"type": "string"
+													}
+												}
+											},
+											"inpatientProvider": {
+												"type": "object",
+												"required": [
+													"name"
+												],
+												"properties": {
+													"name": {
+														"type": "string"
+													}
+												}
+											},
+											"mhCoordinator": {
+												"type": "object",
+												"required": [
+													"mhPosition",
+													"mhTeam",
+													"name"
+												],
+												"properties": {
+													"mhPosition": {
+														"type": "string"
+													},
+													"mhTeam": {
+														"type": "string"
+													},
+													"name": {
+														"type": "string"
+													}
+												}
+											},
+											"primaryProvider": {
+												"type": "object",
+												"required": [
+													"name"
+												],
+												"properties": {
+													"name": {
+														"type": "string"
+													}
+												}
+											},
+											"team": {
+												"type": "object",
+												"required": [
+													"name"
+												],
+												"properties": {
+													"name": {
+														"type": "string"
+													},
+													"phone": {
+														"type": "string"
+													},
+													"uid": {
+														"type": "string"
+													}
+												}
+											},
+											"text": {
+												"type": "string"
+											}
+										}
+									},
+									"telecom": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"required": [
+												"summary",
+												"use",
+												"value"
+											],
+											"properties": {
+												"summary": {
+													"type": "string"
+												},
+												"use": {
+													"type": "string"
+												},
+												"value": {
+													"type": "string"
+												}
+											}
+										}
+									},
+									"uid": {
+										"type": "string"
+									},
+									"veteran": {
+										"type": "boolean"
+									}
+								}
+							}
+						}
+					}
+				},
+				"immunizations": {
+					"type": "object",
+					"required": [
+						"immunization"
+					],
+					"properties": {
+						"immunization": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"required": [
+									"administeredDateTime",
+									"facilityCode",
+									"facilityName",
+									"kind",
+									"name",
+									"pid",
+									"stampTime",
+									"summary",
+									"uid"
+								],
+								"properties": {
+									"administeredDateTime": {
+										"type": "string"
+									},
+									"codes": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"required": [
+												"code",
+												"system"
+											],
+											"properties": {
+												"code": {
+													"type": "string"
+												},
+												"display": {
+													"type": "string"
+												},
+												"system": {
+													"type": "string"
+												}
+											}
+										}
+									},
+									"comment": {
+										"type": "string"
+									},
+									"contraindicated": {
+										"type": "boolean"
+									},
+									"cptCode": {
+										"type": "string"
+									},
+									"cptName": {
+										"type": "string"
+									},
+									"encounterName": {
+										"type": "string"
+									},
+									"encounterUid": {
+										"type": "string"
+									},
+									"facilityCode": {
+										"type": "string"
+									},
+									"facilityName": {
+										"type": "string"
+									},
+									"kind": {
+										"type": "string"
+									},
+									"lastUpdateTime": {
+										"type": "string"
+									},
+									"localId": {
+										"type": "string"
+									},
+									"locationName": {
+										"type": "string"
+									},
+									"locationUid": {
+										"type": "string"
+									},
+									"name": {
+										"type": "string"
+									},
+									"performerName": {
+										"type": "string"
+									},
+									"performerUid": {
+										"type": "string"
+									},
+									"pid": {
+										"type": "string"
+									},
+									"reactionCode": {
+										"type": "string"
+									},
+									"reactionName": {
+										"type": "string"
+									},
+									"seriesCode": {
+										"type": "string"
+									},
+									"seriesName": {
+										"type": "string"
+									},
+									"stampTime": {
+										"type": "string"
+									},
+									"summary": {
+										"type": "string"
+									},
+									"uid": {
+										"type": "string"
+									},
+									"uidHref": {
+										"type": "string"
+									}
+								}
+							}
+						}
+					}
+				},
+				"medications": {
+					"type": "object",
+					"required": [
+						"medication"
+					],
+					"properties": {
+						"medication": {
+							"type": "array",
+							"items": {
+							}
+						}
+					}
+				},
+				"planOfCare": {
+					"type": "object",
+					"required": [
+						"procedure",
+						"encounter",
+						"imaging",
+						"order"
+					],
+					"properties": {
+						"encounter": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"required": [
+									"appointmentStatus",
+									"categoryCode",
+									"categoryName",
+									"current",
+									"dateTime",
+									"facilityCode",
+									"facilityName",
+									"kind",
+									"lastUpdateTime",
+									"localId",
+									"locationDisplayName",
+									"locationName",
+									"locationUid",
+									"patientClassCode",
+									"patientClassName",
+									"pid",
+									"providers",
+									"shortLocationName",
+									"stampTime",
+									"stopCodeName",
+									"stopCodeUid",
+									"summary",
+									"typeCode",
+									"typeDisplayName",
+									"typeName",
+									"uid"
+								],
+								"properties": {
+									"appointmentStatus": {
+										"type": "string"
+									},
+									"categoryCode": {
+										"type": "string"
+									},
+									"categoryName": {
+										"type": "string"
+									},
+									"checkOut": {
+										"type": "string"
+									},
+									"current": {
+										"type": "boolean"
+									},
+									"dateTime": {
+										"type": "string"
+									},
+									"facilityCode": {
+										"type": "string"
+									},
+									"facilityName": {
+										"type": "string"
+									},
+									"kind": {
+										"type": "string"
+									},
+									"lastUpdateTime": {
+										"type": "string"
+									},
+									"localId": {
+										"type": "string"
+									},
+									"locationDisplayName": {
+										"type": "string"
+									},
+									"locationName": {
+										"type": "string"
+									},
+									"locationUid": {
+										"type": "string"
+									},
+									"patientClassCode": {
+										"type": "string"
+									},
+									"patientClassName": {
+										"type": "string"
+									},
+									"pid": {
+										"type": "string"
+									},
+									"providers": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"required": [
+												"providerDisplayName",
+												"providerName",
+												"providerUid",
+												"summary"
+											],
+											"properties": {
+												"providerDisplayName": {
+													"type": "string"
+												},
+												"providerName": {
+													"type": "string"
+												},
+												"providerUid": {
+													"type": "string"
+												},
+												"summary": {
+													"type": "string"
+												}
+											}
+										}
+									},
+									"service": {
+										"type": "string"
+									},
+									"shortLocationName": {
+										"type": "string"
+									},
+									"stampTime": {
+										"type": "string"
+									},
+									"stopCodeName": {
+										"type": "string"
+									},
+									"stopCodeUid": {
+										"type": "string"
+									},
+									"summary": {
+										"type": "string"
+									},
+									"typeCode": {
+										"type": "string"
+									},
+									"typeDisplayName": {
+										"type": "string"
+									},
+									"typeName": {
+										"type": "string"
+									},
+									"uid": {
+										"type": "string"
+									},
+									"uidHref": {
+										"type": "string"
+									}
+								}
+							}
+						},
+						"imaging": {
+							"type": "array",
+							"items": {
+							}
+						},
+						"order": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"required": [
+									"content",
+									"displayGroup",
+									"entered",
+									"facilityCode",
+									"facilityName",
+									"kind",
+									"lastUpdateTime",
+									"localId",
+									"locationName",
+									"locationUid",
+									"name",
+									"oiCode",
+									"oiName",
+									"oiPackageRef",
+									"pid",
+									"providerDisplayName",
+									"providerName",
+									"providerUid",
+									"service",
+									"stampTime",
+									"start",
+									"statusCode",
+									"statusName",
+									"statusVuid",
+									"stop",
+									"summary",
+									"uid"
+								],
+								"properties": {
+									"children": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"required": [
+												"content",
+												"displayGroup",
+												"entered",
+												"facilityCode",
+												"facilityName",
+												"localId",
+												"locationName",
+												"locationUid",
+												"name",
+												"oiCode",
+												"oiName",
+												"oiPackageRef",
+												"providerName",
+												"providerUid",
+												"service",
+												"start",
+												"statusCode",
+												"statusName",
+												"statusVuid",
+												"stop",
+												"uid"
+											],
+											"properties": {
+												"content": {
+													"type": "string"
+												},
+												"displayGroup": {
+													"type": "string"
+												},
+												"entered": {
+													"type": "integer"
+												},
+												"facilityCode": {
+													"type": "integer"
+												},
+												"facilityName": {
+													"type": "string"
+												},
+												"localId": {
+													"type": "integer"
+												},
+												"locationName": {
+													"type": "string"
+												},
+												"locationUid": {
+													"type": "string"
+												},
+												"name": {
+													"type": "string"
+												},
+												"oiCode": {
+													"type": "string"
+												},
+												"oiName": {
+													"type": "string"
+												},
+												"oiPackageRef": {
+													"type": "string"
+												},
+												"providerName": {
+													"type": "string"
+												},
+												"providerUid": {
+													"type": "string"
+												},
+												"service": {
+													"type": "string"
+												},
+												"start": {
+													"type": "integer"
+												},
+												"statusCode": {
+													"type": "string"
+												},
+												"statusName": {
+													"type": "string"
+												},
+												"statusVuid": {
+													"type": "string"
+												},
+												"stop": {
+													"type": "integer"
+												},
+												"uid": {
+													"type": "string"
+												},
+												"uidHref": {
+													"type": "string"
+												}
+											}
+										}
+									},
+									"clinicians": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"required": [
+												"name",
+												"role",
+												"signedDateTime",
+												"uid"
+											],
+											"properties": {
+												"name": {
+													"type": "string"
+												},
+												"role": {
+													"type": "string"
+												},
+												"signedDateTime": {
+													"type": "integer"
+												},
+												"uid": {
+													"type": "string"
+												}
+											}
+										}
+									},
+									"content": {
+										"type": "string"
+									},
+									"displayGroup": {
+										"type": "string"
+									},
+									"entered": {
+										"type": "string"
+									},
+									"facilityCode": {
+										"type": "string"
+									},
+									"facilityName": {
+										"type": "string"
+									},
+									"kind": {
+										"type": "string"
+									},
+									"lastUpdateTime": {
+										"type": "string"
+									},
+									"localId": {
+										"type": "string"
+									},
+									"locationName": {
+										"type": "string"
+									},
+									"locationUid": {
+										"type": "string"
+									},
+									"name": {
+										"type": "string"
+									},
+									"oiCode": {
+										"type": "string"
+									},
+									"oiName": {
+										"type": "string"
+									},
+									"oiPackageRef": {
+										"type": "string"
+									},
+									"pid": {
+										"type": "string"
+									},
+									"predecessor": {
+										"type": "string"
+									},
+									"providerDisplayName": {
+										"type": "string"
+									},
+									"providerName": {
+										"type": "string"
+									},
+									"providerUid": {
+										"type": "string"
+									},
+									"results": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"required": [
+												"uid"
+											],
+											"properties": {
+												"uid": {
+													"type": "string"
+												},
+												"uidHref": {
+													"type": "string"
+												}
+											}
+										}
+									},
+									"service": {
+										"type": "string"
+									},
+									"stampTime": {
+										"type": "string"
+									},
+									"start": {
+										"type": "string"
+									},
+									"statusCode": {
+										"type": "string"
+									},
+									"statusName": {
+										"type": "string"
+									},
+									"statusVuid": {
+										"type": "string"
+									},
+									"stop": {
+										"type": "string"
+									},
+									"successor": {
+										"type": "string"
+									},
+									"summary": {
+										"type": "string"
+									},
+									"uid": {
+										"type": "string"
+									},
+									"uidHref": {
+										"type": "string"
+									}
+								}
+							}
+						},
+						"procedure": {
+							"type": "array",
+							"items": {
+							}
+						}
+					}
+				},
+				"problems": {
+					"type": "object",
+					"required": [
+						"problem"
+					],
+					"properties": {
+						"problem": {
+							"type": "array",
+							"items": {
+							}
+						}
+					}
+				},
+				"procedures": {
+					"type": "object",
+					"required": [
+						"procedure"
+					],
+					"properties": {
+						"procedure": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"required": [
+									"category",
+									"dateTime",
+									"facilityCode",
+									"facilityName",
+									"kind",
+									"localId",
+									"pid",
+									"stampTime",
+									"statusName",
+									"summary",
+									"uid"
+								],
+								"properties": {
+									"activity": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"required": [
+												"dateTime",
+												"entered",
+												"enteredBy",
+												"name"
+											],
+											"properties": {
+												"comment": {
+													"type": "string"
+												},
+												"dateTime": {
+													"type": "integer"
+												},
+												"entered": {
+													"type": "integer"
+												},
+												"enteredBy": {
+													"type": "string"
+												},
+												"name": {
+													"type": "string"
+												},
+												"responsible": {
+													"type": "string"
+												}
+											}
+										}
+									},
+									"attention": {
+										"type": "string"
+									},
+									"case": {
+										"type": "integer"
+									},
+									"category": {
+										"type": "string"
+									},
+									"consultProcedure": {
+										"type": "string"
+									},
+									"dateTime": {
+										"type": "string"
+									},
+									"diagnosis": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"required": [
+												"code",
+												"primary"
+											],
+											"properties": {
+												"code": {
+													"type": "string"
+												},
+												"primary": {
+													"type": "boolean"
+												}
+											}
+										}
+									},
+									"earliestDate": {
+										"type": "string"
+									},
+									"encounterUid": {
+										"type": "string"
+									},
+									"facilityCode": {
+										"type": "string"
+									},
+									"facilityName": {
+										"type": "string"
+									},
+									"fromService": {
+										"type": "string"
+									},
+									"hasImages": {
+										"type": "boolean"
+									},
+									"imageLocation": {
+										"type": "string"
+									},
+									"imagingTypeUid": {
+										"type": "string"
+									},
+									"interpretation": {
+										"type": "string"
+									},
+									"kind": {
+										"type": "string"
+									},
+									"lastAction": {
+										"type": "string"
+									},
+									"lastUpdateTime": {
+										"type": "string"
+									},
+									"localId": {
+										"type": "string"
+									},
+									"locationName": {
+										"type": "string"
+									},
+									"locationUid": {
+										"type": "string"
+									},
+									"name": {
+										"type": "string"
+									},
+									"orderName": {
+										"type": "string"
+									},
+									"orderUid": {
+										"type": "string"
+									},
+									"patientClassCode": {
+										"type": "string"
+									},
+									"patientClassName": {
+										"type": "string"
+									},
+									"pid": {
+										"type": "string"
+									},
+									"place": {
+										"type": "string"
+									},
+									"providerDisplayName": {
+										"type": "string"
+									},
+									"providerName": {
+										"type": "string"
+									},
+									"providerUid": {
+										"type": "string"
+									},
+									"providers": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"required": [
+												"providerDisplayName",
+												"providerName",
+												"summary"
+											],
+											"properties": {
+												"providerDisplayName": {
+													"type": "string"
+												},
+												"providerName": {
+													"type": "string"
+												},
+												"providerUid": {
+													"type": "string"
+												},
+												"summary": {
+													"type": "string"
+												},
+												"uid": {
+													"type": "string"
+												}
+											}
+										}
+									},
+									"provisionalDx": {
+										"type": "string"
+									},
+									"reason": {
+										"type": "string"
+									},
+									"results": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"required": [
+												"localTitle",
+												"summary"
+											],
+											"properties": {
+												"localTitle": {
+													"type": "string"
+												},
+												"summary": {
+													"type": "string"
+												},
+												"uid": {
+													"type": "string"
+												},
+												"uidHref": {
+													"type": "string"
+												}
+											}
+										}
+									},
+									"service": {
+										"type": "string"
+									},
+									"stampTime": {
+										"type": "string"
+									},
+									"status": {
+										"type": "string"
+									},
+									"statusName": {
+										"type": "string"
+									},
+									"summary": {
+										"type": "string"
+									},
+									"typeName": {
+										"type": "string"
+									},
+									"uid": {
+										"type": "string"
+									},
+									"uidHref": {
+										"type": "string"
+									},
+									"urgency": {
+										"type": "string"
+									},
+									"verified": {
+										"type": "boolean"
+									}
+								}
+							}
+						}
+					}
+				},
+				"results": {
+					"type": "object",
+					"required": [
+						"imaging",
+						"document",
+						"laboratory"
+					],
+					"properties": {
+						"document": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"required": [
+									"author",
+									"authorDisplayName",
+									"authorUid",
+									"clinicians",
+									"documentClass",
+									"documentTypeCode",
+									"documentTypeName",
+									"facilityCode",
+									"facilityName",
+									"isInterdisciplinary",
+									"kind",
+									"lastUpdateTime",
+									"localId",
+									"localTitle",
+									"nationalTitle",
+									"pid",
+									"referenceDateTime",
+									"signedDateTime",
+									"signer",
+									"signerDisplayName",
+									"signerUid",
+									"stampTime",
+									"status",
+									"statusDisplayName",
+									"summary",
+									"text",
+									"uid"
+								],
+								"properties": {
+									"author": {
+										"type": "string"
+									},
+									"authorDisplayName": {
+										"type": "string"
+									},
+									"authorUid": {
+										"type": "string"
+									},
+									"clinicians": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"required": [
+												"displayName",
+												"name",
+												"role",
+												"summary",
+												"uid"
+											],
+											"properties": {
+												"displayName": {
+													"type": "string"
+												},
+												"name": {
+													"type": "string"
+												},
+												"role": {
+													"type": "string"
+												},
+												"signature": {
+													"type": "string"
+												},
+												"signedDateTime": {
+													"type": "string"
+												},
+												"summary": {
+													"type": "string"
+												},
+												"uid": {
+													"type": "string"
+												}
+											}
+										}
+									},
+									"documentClass": {
+										"type": "string"
+									},
+									"documentTypeCode": {
+										"type": "string"
+									},
+									"documentTypeName": {
+										"type": "string"
+									},
+									"facilityCode": {
+										"type": "string"
+									},
+									"facilityName": {
+										"type": "string"
+									},
+									"isInterdisciplinary": {
+										"type": "string"
+									},
+									"kind": {
+										"type": "string"
+									},
+									"lastUpdateTime": {
+										"type": "string"
+									},
+									"localId": {
+										"type": "string"
+									},
+									"localTitle": {
+										"type": "string"
+									},
+									"nationalTitle": {
+										"type": "object",
+										"required": [
+											"name",
+											"vuid"
+										],
+										"properties": {
+											"name": {
+												"type": "string"
+											},
+											"vuid": {
+												"type": "string"
+											}
+										}
+									},
+									"pid": {
+										"type": "string"
+									},
+									"referenceDateTime": {
+										"type": "string"
+									},
+									"signedDateTime": {
+										"type": "string"
+									},
+									"signer": {
+										"type": "string"
+									},
+									"signerDisplayName": {
+										"type": "string"
+									},
+									"signerUid": {
+										"type": "string"
+									},
+									"stampTime": {
+										"type": "string"
+									},
+									"status": {
+										"type": "string"
+									},
+									"statusDisplayName": {
+										"type": "string"
+									},
+									"summary": {
+										"type": "string"
+									},
+									"text": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"required": [
+												"author",
+												"authorDisplayName",
+												"authorUid",
+												"clinicians",
+												"content",
+												"dateTime",
+												"signer",
+												"signerDisplayName",
+												"signerUid",
+												"status",
+												"summary",
+												"uid"
+											],
+											"properties": {
+												"author": {
+													"type": "string"
+												},
+												"authorDisplayName": {
+													"type": "string"
+												},
+												"authorUid": {
+													"type": "string"
+												},
+												"clinicians": {
+													"type": "array",
+													"items": {
+														"type": "object",
+														"required": [
+															"displayName",
+															"name",
+															"role",
+															"summary",
+															"uid"
+														],
+														"properties": {
+															"displayName": {
+																"type": "string"
+															},
+															"name": {
+																"type": "string"
+															},
+															"role": {
+																"type": "string"
+															},
+															"signature": {
+																"type": "string"
+															},
+															"signedDateTime": {
+																"type": "string"
+															},
+															"summary": {
+																"type": "string"
+															},
+															"uid": {
+																"type": "string"
+															}
+														}
+													}
+												},
+												"content": {
+													"type": "string"
+												},
+												"dateTime": {
+													"type": "string"
+												},
+												"signer": {
+													"type": "string"
+												},
+												"signerDisplayName": {
+													"type": "string"
+												},
+												"signerUid": {
+													"type": "string"
+												},
+												"status": {
+													"type": "string"
+												},
+												"summary": {
+													"type": "string"
+												},
+												"uid": {
+													"type": "string"
+												},
+												"uidHref": {
+													"type": "string"
+												}
+											}
+										}
+									},
+									"uid": {
+										"type": "string"
+									},
+									"uidHref": {
+										"type": "string"
+									}
+								}
+							}
+						},
+						"imaging": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"required": [
+									"category",
+									"dateTime",
+									"facilityCode",
+									"facilityName",
+									"hasImages",
+									"imageLocation",
+									"kind",
+									"localId",
+									"locationName",
+									"name",
+									"pid",
+									"providerDisplayName",
+									"providerName",
+									"providers",
+									"reason",
+									"results",
+									"stampTime",
+									"statusName",
+									"summary",
+									"typeName",
+									"uid"
+								],
+								"properties": {
+									"case": {
+										"type": "integer"
+									},
+									"category": {
+										"type": "string"
+									},
+									"dateTime": {
+										"type": "string"
+									},
+									"diagnosis": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"required": [
+												"code",
+												"primary"
+											],
+											"properties": {
+												"code": {
+													"type": "string"
+												},
+												"primary": {
+													"type": "boolean"
+												}
+											}
+										}
+									},
+									"encounterUid": {
+										"type": "string"
+									},
+									"facilityCode": {
+										"type": "string"
+									},
+									"facilityName": {
+										"type": "string"
+									},
+									"hasImages": {
+										"type": "boolean"
+									},
+									"imageLocation": {
+										"type": "string"
+									},
+									"imagingTypeUid": {
+										"type": "string"
+									},
+									"kind": {
+										"type": "string"
+									},
+									"lastUpdateTime": {
+										"type": "string"
+									},
+									"localId": {
+										"type": "string"
+									},
+									"locationName": {
+										"type": "string"
+									},
+									"locationUid": {
+										"type": "string"
+									},
+									"name": {
+										"type": "string"
+									},
+									"orderName": {
+										"type": "string"
+									},
+									"orderUid": {
+										"type": "string"
+									},
+									"pid": {
+										"type": "string"
+									},
+									"providerDisplayName": {
+										"type": "string"
+									},
+									"providerName": {
+										"type": "string"
+									},
+									"providerUid": {
+										"type": "string"
+									},
+									"providers": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"required": [
+												"providerDisplayName",
+												"providerName",
+												"summary"
+											],
+											"properties": {
+												"providerDisplayName": {
+													"type": "string"
+												},
+												"providerName": {
+													"type": "string"
+												},
+												"providerUid": {
+													"type": "string"
+												},
+												"summary": {
+													"type": "string"
+												},
+												"uid": {
+													"type": "string"
+												}
+											}
+										}
+									},
+									"reason": {
+										"type": "string"
+									},
+									"results": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"required": [
+												"localTitle",
+												"summary"
+											],
+											"properties": {
+												"localTitle": {
+													"type": "string"
+												},
+												"summary": {
+													"type": "string"
+												},
+												"uid": {
+													"type": "string"
+												},
+												"uidHref": {
+													"type": "string"
+												}
+											}
+										}
+									},
+									"stampTime": {
+										"type": "string"
+									},
+									"status": {
+										"type": "string"
+									},
+									"statusName": {
+										"type": "string"
+									},
+									"summary": {
+										"type": "string"
+									},
+									"typeName": {
+										"type": "string"
+									},
+									"uid": {
+										"type": "string"
+									},
+									"uidHref": {
+										"type": "string"
+									},
+									"verified": {
+										"type": "boolean"
+									}
+								}
+							}
+						},
+						"laboratory": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"required": [
+									"abnormal",
+									"categoryCode",
+									"categoryName",
+									"facilityCode",
+									"facilityName",
+									"kind",
+									"localId",
+									"micro",
+									"observed",
+									"pid",
+									"qualifiedName",
+									"specimen",
+									"stampTime",
+									"statusCode",
+									"statusName",
+									"summary",
+									"typeName",
+									"uid"
+								],
+								"properties": {
+									"abnormal": {
+										"type": "boolean"
+									},
+									"categoryCode": {
+										"type": "string"
+									},
+									"categoryName": {
+										"type": "string"
+									},
+									"codes": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"required": [
+												"code",
+												"system"
+											],
+											"properties": {
+												"code": {
+													"type": "string"
+												},
+												"system": {
+													"type": "string"
+												}
+											}
+										}
+									},
+									"comment": {
+										"type": [
+											"string",
+											"null"
+										]
+									},
+									"displayName": {
+										"type": "string"
+									},
+									"displayOrder": {
+										"type": "number"
+									},
+									"facilityCode": {
+										"type": "string"
+									},
+									"facilityName": {
+										"type": [
+											"string",
+											"null"
+										]
+									},
+									"groupName": {
+										"type": "string"
+									},
+									"groupUid": {
+										"type": "string"
+									},
+									"high": {
+										"type": "string"
+									},
+									"interpretationCode": {
+										"type": "string"
+									},
+									"interpretationName": {
+										"type": "string"
+									},
+									"kind": {
+										"type": "string"
+									},
+									"labOrderId": {
+										"type": "integer"
+									},
+									"labType": {
+										"type": "string"
+									},
+									"lastUpdateTime": {
+										"type": "string"
+									},
+									"lnccodes": {
+										"type": "array",
+										"items": {
+											"type": "string"
+										}
+									},
+									"localId": {
+										"type": "string"
+									},
+									"low": {
+										"type": "string"
+									},
+									"micro": {
+										"type": "boolean"
+									},
+									"observed": {
+										"type": "string"
+									},
+									"orderId": {
+										"type": [
+											"string",
+											"null"
+										]
+									},
+									"orderUid": {
+										"type": "string"
+									},
+									"organisms": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"required": [
+												"drugs",
+												"name",
+												"qty"
+											],
+											"properties": {
+												"drugs": {
+													"type": "array",
+													"items": {
+														"type": "object",
+														"required": [
+															"interp",
+															"name",
+															"result"
+														],
+														"properties": {
+															"interp": {
+																"type": "string"
+															},
+															"name": {
+																"type": "string"
+															},
+															"restrict": {
+																"type": "string"
+															},
+															"result": {
+																"type": "string"
+															}
+														}
+													}
+												},
+												"name": {
+													"type": "string"
+												},
+												"qty": {
+													"type": "string"
+												}
+											}
+										}
+									},
+									"organizerType": {
+										"type": "string"
+									},
+									"pid": {
+										"type": "string"
+									},
+									"qualifiedName": {
+										"type": "string"
+									},
+									"result": {
+										"type": "string"
+									},
+									"resultNumber": {
+										"type": [
+											"number",
+											"null"
+										]
+									},
+									"resulted": {
+										"type": "string"
+									},
+									"results": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"required": [
+												"localTitle",
+												"resultUid",
+												"uid"
+											],
+											"properties": {
+												"localTitle": {
+													"type": "string"
+												},
+												"resultUid": {
+													"type": "string"
+												},
+												"uid": {
+													"type": "string"
+												}
+											}
+										}
+									},
+									"sample": {
+										"type": "string"
+									},
+									"specimen": {
+										"type": "string"
+									},
+									"stampTime": {
+										"type": "string"
+									},
+									"statusCode": {
+										"type": "string"
+									},
+									"statusName": {
+										"type": "string"
+									},
+									"summary": {
+										"type": "string"
+									},
+									"typeCode": {
+										"type": "string"
+									},
+									"typeId": {
+										"type": "integer"
+									},
+									"typeName": {
+										"type": [
+											"string",
+											"null"
+										]
+									},
+									"uid": {
+										"type": "string"
+									},
+									"uidHref": {
+										"type": "string"
+									},
+									"units": {
+										"type": [
+											"string",
+											"null"
+										]
+									},
+									"urineScreen": {
+										"type": "string"
+									}
+								}
+							}
+						}
+					}
+				},
+				"vitalsigns": {
+					"type": "object",
+					"required": [
+						"vitalsign"
+					],
+					"properties": {
+						"vitalsign": {
+							"type": "array",
+							"items": {
+							}
+						}
+					}
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

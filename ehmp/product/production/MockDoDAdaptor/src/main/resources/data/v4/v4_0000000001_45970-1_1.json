@@ -1,0 +1,105 @@
+{
+  "queryComplete": true,
+  "statusList": [
+    {
+      "partner": {
+        "partnerIdentifier": "2.16.840.1.113883.3.42.126.100001.13",
+        "partnerName": "ahlta",
+        "partnerType": "DOD"
+      },
+      "partnerStatus": "SUCCESS",
+      "expectedCount": 1,
+      "receivedCount": 1
+    }
+  ],
+  "dataList": {
+    "demographics": [
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000061"
+        },
+        "enteredBy": null,
+        "enteredDate": null,
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "52536-0"
+          }
+        ],
+        "facility": null,
+        "addresses": [
+          {
+            "type": "Home Address",
+            "city": "Any Town",
+            "country": null,
+            "county": null,
+            "postalCode": "70131",
+            "state": "LA",
+            "street": [
+              "Any Street"
+            ]
+          }
+        ],
+        "branch": [],
+        "birthDate": {
+          "start": "1945-03-09T00:00:00",
+          "end": "1945-03-09T00:00:00"
+        },
+        "deersEligibility": [],
+        "patientId": [
+          {
+            "id": "D1029643310"
+          }
+        ],
+        "enrollmentLocation": null,
+        "name": {
+          "first": "INPATIENT",
+          "middle": null,
+          "last": "EIGHT",
+          "suffix": null
+        },
+        "fmp": null,
+        "maritalStatus": [],
+        "patientCategory": [
+          {
+            "display": "N13 - United States Navy (USN) Active Duty (AD) Recruit",
+            "primary": true
+          }
+        ],
+        "race": [],
+        "rank": [],
+        "religion": [
+          {
+            "display": "Unknown",
+            "primary": true
+          }
+        ],
+        "sex": [
+          {
+            "display": "M",
+            "primary": true
+          }
+        ],
+        "sponsor": {
+          "branch": [],
+          "rank": [],
+          "ssn": null,
+          "assignedUnit": null
+        },
+        "assignedUnit": {
+          "name": "N30646     (S CRU TRCOM GTLK)"
+        }
+      }
+    ]
+  }
+}

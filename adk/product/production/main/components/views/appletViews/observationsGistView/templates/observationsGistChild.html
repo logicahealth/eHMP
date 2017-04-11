@@ -1,0 +1,58 @@
+<div role="presentation" class="toolbar-container"/>
+<div role="row" class="table-row" {{#if userWorkspace}}draggable="true"{{/if}}>
+{{#if vitalColumns}}
+    <div role="presentation" class="selectable info-display">
+        <span class="sr-only">Press enter to open or close the toolbar menu.</span>
+        <div role="gridcell" class="table-cell problem-name border-vertical">
+            <span class="sr-only">{{fullName}}</span>
+            <span data-cell-instanceid="problem_name_{{displayName}}">{{{descriptionColumn}}}</span>
+        </div>
+    </div>
+    <div data-group-instanceid="quickDraw_{{displayName}}" role="presentation" class="selectable flex-width-2" data-toggle="popover" data-content="{{tooltip}}" tabindex="0" aria-label="Press enter to open or close the quicklook table for {{fullName}}. Button.">
+        {{#if result}}
+            {{#if isValid}}
+                <div role="gridcell" class="table-cell text-center border-vertical">
+                    <div data-cell-instanceid="time_since_{{displayName}}">
+                        {{result}}
+                    {{#if units}} {{units}}{{/if}}
+                    {{#if metricResult}}
+                        <span class="smallergreyText">{{metricResult}}{{#if metricUnits}} {{metricUnits}}{{/if}}</span>
+                    {{/if}}
+                    </div>
+                </div>
+            {{else}}
+                <div data-cell-instanceid="time_since_{{displayName}}" role="gridcell" class="table-cell text-center border-vertical">{{result}}</div>
+            {{/if}}
+            <div data-cell-instanceid="encounter_count_{{displayName}}" role="gridcell" class="table-cell flex-width-0_5 text-center">
+                <span class="sr-only">{{numericTime}}</span>
+                {{timeSince}}</div>
+            <div data-cell-instanceid="graph_{{displayName}}" role="gridcell" class="table-cell text-center">
+                {{{sparkline graphOptions result previousResult low high interpretationCode previousInterpretationCode standardDeviation}}}
+            </div>
+        {{else}}
+            <span role="gridcell" class="table-cell no-record">No record</span>
+        {{/if}}
+    </div>
+{{else}}
+    <div role="presentation" class="selectable info-display">
+        <span class="sr-only">Press enter to open or close the toolbar menu.</span>
+        <div role="gridcell" class="table-cell problem-name border-vertical">
+            <span data-cell-instanceid="problem_name_{{displayName}}">{{typeName}} {{#if specimenForTrend}} - {{/if}} {{specimenForTrend}}</span>
+        </div>
+    </div>
+    <div data-group-instanceid="quickDraw_{{displayName}}" role="presentation" class="selectable flex-width-2" data-toggle="popover" data-content="{{tooltip}}" tabindex="0" aria-label="Press enter to open or close the quicklook table for {{typeName}}. Button.">
+        {{#if result}}
+            <div data-cell-instanceid="time_since_{{displayName}}" role="gridcell" class="table-cell text-center border-vertical">{{result}} {{units}}</div>
+            <div data-cell-instanceid="encounter_count_{{displayName}}" role="gridcell" class="table-cell flex-width-0_5 text-center">
+                <span class="sr-only">{{numericTime}}</span>
+                {{timeSince}}
+            </div>
+            <div data-cell-instanceid="graph_{{displayName}}" role="gridcell" class="table-cell text-center">
+                {{{sparkline graphOptions result previousResult low high interpretationCode previousInterpretationCode standardDeviation}}}
+            </div>
+        {{else}}
+            <span role="gridcell" class="table-cell no-record">No record</span>
+        {{/if}}
+    </div>
+{{/if}}
+</div>

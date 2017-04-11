@@ -1,0 +1,649 @@
+{
+  "dataList": {
+    "problems": [
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000001440"
+        },
+        "enteredBy": {
+          "name": "USER, MULTISITE"
+        },
+        "enteredDate": {
+          "start": "20070628121805",
+          "end": "20070628121805"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "11450-4"
+          }
+        ],
+        "facility": {
+          "name": "4th Medical Group",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.10002.100001.8",
+              "id": "0090"
+            }
+          ]
+        },
+        "chronicity": [
+          {
+            "display": "Chronic",
+            "primary": true
+          }
+        ],
+        "comment": null,
+        "modifiedDate": {
+          "start": "2007-09-17T12:27:08",
+          "end": "2007-09-17T12:27:08"
+        },
+        "onsetDate": {
+          "start": "2007-06-28T12:17:11",
+          "end": "2007-06-28T12:17:11"
+        },
+        "negationInd": false,
+        "problem": [
+          {
+            "display": "RENAL DISORDERS",
+            "primary": true,
+            "code": "30627",
+            "system": "2.16.840.1.113883.6.26"
+          },
+          {
+            "display": "RENAL DISORDERS",
+            "primary": false,
+            "code": "593.9",
+            "system": "2.16.840.1.113883.6.103"
+          }
+        ],
+        "provider": {
+          "name": "USER, MULTISITE",
+          "primary": true
+        },
+        "sourceOfInfo": [
+          {
+            "display": "KEVIN, PROVIDER",
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "Active",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000001441"
+        },
+        "enteredBy": {
+          "name": "SERVER, LEGACY GATEWAY"
+        },
+        "enteredDate": {
+          "start": "20070917153546",
+          "end": "20070917153546"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "11450-4"
+          }
+        ],
+        "facility": {
+          "name": "4th Medical Group",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.10002.100001.8",
+              "id": "0090"
+            }
+          ]
+        },
+        "chronicity": [
+          {
+            "display": "Chronic",
+            "primary": true
+          }
+        ],
+        "comment": null,
+        "modifiedDate": {
+          "start": "2007-09-17T15:35:46",
+          "end": "2007-09-17T15:35:46"
+        },
+        "onsetDate": {
+          "start": "2007-09-17T14:29:05",
+          "end": "2007-09-17T14:29:05"
+        },
+        "negationInd": false,
+        "problem": [
+          {
+            "display": "LUMBAGO",
+            "primary": true,
+            "code": "34447",
+            "system": "2.16.840.1.113883.6.26"
+          },
+          {
+            "display": "LUMBAGO",
+            "primary": false,
+            "code": "724.2",
+            "system": "2.16.840.1.113883.6.103"
+          }
+        ],
+        "provider": null,
+        "sourceOfInfo": [
+          {
+            "display": "Clinical Evidence",
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "Active",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000001442"
+        },
+        "enteredBy": {
+          "name": "SERVER, LEGACY GATEWAY"
+        },
+        "enteredDate": {
+          "start": "20070926154635",
+          "end": "20070926154635"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "11450-4"
+          }
+        ],
+        "facility": {
+          "name": "4th Medical Group",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.10002.100001.8",
+              "id": "0090"
+            }
+          ]
+        },
+        "chronicity": [
+          {
+            "display": "Chronic",
+            "primary": true
+          }
+        ],
+        "comment": null,
+        "modifiedDate": {
+          "start": "2007-09-26T15:46:35",
+          "end": "2007-09-26T15:46:35"
+        },
+        "onsetDate": {
+          "start": "2007-08-24T19:00:03",
+          "end": "2007-08-24T19:00:03"
+        },
+        "negationInd": false,
+        "problem": [
+          {
+            "display": "(MALE) GENITAL CANCER",
+            "primary": true,
+            "code": "275493",
+            "system": "2.16.840.1.113883.6.26"
+          },
+          {
+            "display": "(MALE) GENITAL CANCER",
+            "primary": false,
+            "code": "187.9",
+            "system": "2.16.840.1.113883.6.103"
+          }
+        ],
+        "provider": null,
+        "sourceOfInfo": [
+          {
+            "display": "Clinical Evidence",
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "Active",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000001443"
+        },
+        "enteredBy": {
+          "name": "SERVER, LEGACY GATEWAY"
+        },
+        "enteredDate": {
+          "start": "20070926154635",
+          "end": "20070926154635"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "11450-4"
+          }
+        ],
+        "facility": {
+          "name": "4th Medical Group",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.10002.100001.8",
+              "id": "0090"
+            }
+          ]
+        },
+        "chronicity": [
+          {
+            "display": "Chronic",
+            "primary": true
+          }
+        ],
+        "comment": null,
+        "modifiedDate": {
+          "start": "2007-09-26T15:46:35",
+          "end": "2007-09-26T15:46:35"
+        },
+        "onsetDate": {
+          "start": "2007-08-24T18:59:47",
+          "end": "2007-08-24T18:59:47"
+        },
+        "negationInd": false,
+        "problem": [
+          {
+            "display": "ACUTE MYOCARDIAL INFARCTION",
+            "primary": true,
+            "code": "33317",
+            "system": "2.16.840.1.113883.6.26"
+          },
+          {
+            "display": "ACUTE MYOCARDIAL INFARCTION",
+            "primary": false,
+            "code": "410.90",
+            "system": "2.16.840.1.113883.6.103"
+          }
+        ],
+        "provider": null,
+        "sourceOfInfo": [
+          {
+            "display": "Clinical Evidence",
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "Active",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000001444"
+        },
+        "enteredBy": {
+          "name": "SERVER, LEGACY GATEWAY"
+        },
+        "enteredDate": {
+          "start": "20070926160225",
+          "end": "20070926160225"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "11450-4"
+          }
+        ],
+        "facility": {
+          "name": "4th Medical Group",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.10002.100001.8",
+              "id": "0090"
+            }
+          ]
+        },
+        "chronicity": [
+          {
+            "display": "Chronic",
+            "primary": true
+          }
+        ],
+        "comment": null,
+        "modifiedDate": {
+          "start": "2007-09-26T16:02:25",
+          "end": "2007-09-26T16:02:25"
+        },
+        "onsetDate": {
+          "start": "2007-08-20T13:42:32",
+          "end": "2007-08-20T13:42:32"
+        },
+        "negationInd": false,
+        "problem": [
+          {
+            "display": "BONE NEOPLASM - VERTEBRAL COLUMN",
+            "primary": true,
+            "code": "39019",
+            "system": "2.16.840.1.113883.6.26"
+          },
+          {
+            "display": "BONE NEOPLASM - VERTEBRAL COLUMN",
+            "primary": false,
+            "code": "239.2",
+            "system": "2.16.840.1.113883.6.103"
+          }
+        ],
+        "provider": null,
+        "sourceOfInfo": [
+          {
+            "display": "Clinical Evidence",
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "Active",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000001445"
+        },
+        "enteredBy": {
+          "name": "SERVER, LEGACY GATEWAY"
+        },
+        "enteredDate": {
+          "start": "20070926154635",
+          "end": "20070926154635"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "11450-4"
+          }
+        ],
+        "facility": {
+          "name": "4th Medical Group",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.10002.100001.8",
+              "id": "0090"
+            }
+          ]
+        },
+        "chronicity": [
+          {
+            "display": "Chronic",
+            "primary": true
+          }
+        ],
+        "comment": null,
+        "modifiedDate": {
+          "start": "2007-09-26T15:46:35",
+          "end": "2007-09-26T15:46:35"
+        },
+        "onsetDate": {
+          "start": "2007-08-24T18:58:40",
+          "end": "2007-08-24T18:58:40"
+        },
+        "negationInd": false,
+        "problem": [
+          {
+            "display": "AORTIC SINUS ANEURYSM",
+            "primary": true,
+            "code": "33222",
+            "system": "2.16.840.1.113883.6.26"
+          },
+          {
+            "display": "AORTIC SINUS ANEURYSM",
+            "primary": false,
+            "code": "747.29",
+            "system": "2.16.840.1.113883.6.103"
+          }
+        ],
+        "provider": null,
+        "sourceOfInfo": [
+          {
+            "display": "Clinical Evidence",
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "Active",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000001446"
+        },
+        "enteredBy": {
+          "name": "SERVER, LEGACY GATEWAY"
+        },
+        "enteredDate": {
+          "start": "20070926153435",
+          "end": "20070926153435"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "11450-4"
+          }
+        ],
+        "facility": {
+          "name": "4th Medical Group",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.10002.100001.8",
+              "id": "0090"
+            }
+          ]
+        },
+        "chronicity": [
+          {
+            "display": "Chronic",
+            "primary": true
+          }
+        ],
+        "comment": null,
+        "modifiedDate": {
+          "start": "2007-09-26T15:34:35",
+          "end": "2007-09-26T15:34:35"
+        },
+        "onsetDate": {
+          "start": "2007-08-30T18:16:07",
+          "end": "2007-08-30T18:16:07"
+        },
+        "negationInd": false,
+        "problem": [
+          {
+            "display": "EYE DISORDERS",
+            "primary": true,
+            "code": "30719",
+            "system": "2.16.840.1.113883.6.26"
+          },
+          {
+            "display": "EYE DISORDERS",
+            "primary": false,
+            "code": "379.90",
+            "system": "2.16.840.1.113883.6.103"
+          }
+        ],
+        "provider": null,
+        "sourceOfInfo": [
+          {
+            "display": "Clinical Evidence",
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "Active",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000001447"
+        },
+        "enteredBy": {
+          "name": "SERVER, LEGACY GATEWAY"
+        },
+        "enteredDate": {
+          "start": "20070926154635",
+          "end": "20070926154635"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "11450-4"
+          }
+        ],
+        "facility": {
+          "name": "4th Medical Group",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.10002.100001.8",
+              "id": "0090"
+            }
+          ]
+        },
+        "chronicity": [
+          {
+            "display": "Chronic",
+            "primary": true
+          }
+        ],
+        "comment": null,
+        "modifiedDate": {
+          "start": "2007-09-26T15:46:35",
+          "end": "2007-09-26T15:46:35"
+        },
+        "onsetDate": {
+          "start": "2007-08-24T18:58:16",
+          "end": "2007-08-24T18:58:16"
+        },
+        "negationInd": false,
+        "problem": [
+          {
+            "display": "ASPIRATION PNEUMONIA DUE TO VOMITUS",
+            "primary": true,
+            "code": "275940",
+            "system": "2.16.840.1.113883.6.26"
+          },
+          {
+            "display": "ASPIRATION PNEUMONIA DUE TO VOMITUS",
+            "primary": false,
+            "code": "507.0",
+            "system": "2.16.840.1.113883.6.103"
+          }
+        ],
+        "provider": null,
+        "sourceOfInfo": [
+          {
+            "display": "Clinical Evidence",
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "Active",
+            "primary": true
+          }
+        ]
+      }
+    ]
+  }
+}

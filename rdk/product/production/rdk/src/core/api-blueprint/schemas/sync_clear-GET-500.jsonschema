@@ -1,0 +1,37 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "Synchronize a patient's data",
+	"description": "",
+	"type": "object",
+	"required": [
+		"data",
+		"status"
+	],
+	"properties": {
+		"data": {
+			"type": "object",
+			"required": [
+				"error"
+			],
+			"properties": {
+				"error": {
+					"type": "object",
+					"required": [
+						"code",
+						"message"
+					],
+					"properties": {
+						"code": {
+						},
+						"message": {
+							"type": "string"
+						}
+					}
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

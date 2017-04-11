@@ -1,0 +1,43 @@
+{
+  "name": "libxml2",
+  "description": "Installs/Configures libxml2",
+  "long_description": "Installs/Configures libxml2",
+  "maintainer": "Greg Hellings",
+  "maintainer_email": "greg@thesub.net",
+  "license": "Apache V2",
+  "platforms": {
+    "amazon": ">= 0.0.0",
+    "redhat": ">= 0.0.0",
+    "ubuntu": ">= 0.0.0",
+    "centos": ">= 0.0.0"
+  },
+  "dependencies": {
+    "yum": ">= 0.0.0",
+    "apt": ">= 0.0.0"
+  },
+  "recommendations": {
+
+  },
+  "suggestions": {
+
+  },
+  "conflicting": {
+
+  },
+  "providing": {
+
+  },
+  "replacing": {
+
+  },
+  "attributes": {
+
+  },
+  "groupings": {
+
+  },
+  "recipes": {
+
+  },
+  "version": "0.1.1"
+}

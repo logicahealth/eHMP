@@ -1,0 +1,54 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"type": "object",
+	"required": [
+		"data",
+		"status"
+	],
+	"properties": {
+		"data": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"required": [
+					"source",
+					"categoryName",
+					"values"
+				],
+				"properties": {
+					"categoryName": {
+						"type": "string"
+					},
+					"source": {
+						"type": "string"
+					},
+					"values": {
+						"type": "array",
+						"items": {
+							"type": "object",
+							"required": [
+								"icdCode",
+								"name",
+								"description"
+							],
+							"properties": {
+								"description": {
+									"type": "string"
+								},
+								"icdCode": {
+									"type": "string"
+								},
+								"name": {
+									"type": "string"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

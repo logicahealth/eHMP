@@ -1,0 +1,21 @@
+{
+  "collection": "education",
+  "pid": "84F0;1",
+  "systemId": "84F0",
+  "localId": "1",
+  "seq": 1,
+  "total": 1,
+  "object": {
+    "lastUpdateTime": 20140409083902,
+    "encounterName": "PRIMARY CARE Apr 06, 2000",
+    "encounterUid": "urn:va:visit:ABCD:418:2041",
+    "entered": 200004061400,
+    "facilityCode": 561,
+    "facilityName": "New Jersey HCS",
+    "localId": 43,
+    "locationName": "PRIMARY CARE",
+    "locationUid": "urn:va:location:ABCD:32",
+    "name": "SMOKING CESSATION",
+    "uid": "urn:va:education:ABCD:418:43"
+  }
+}

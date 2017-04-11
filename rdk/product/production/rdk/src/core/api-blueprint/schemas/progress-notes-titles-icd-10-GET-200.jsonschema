@@ -1,0 +1,43 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"type": "object",
+	"required": [
+		"data",
+		"status"
+	],
+	"properties": {
+		"data": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"required": [
+					"preferredText",
+					"icdCodingSystem",
+					"icdCode",
+					"diagnosisIen",
+					"ien"
+				],
+				"properties": {
+					"diagnosisIen": {
+						"type": "string"
+					},
+					"icdCode": {
+						"type": "string"
+					},
+					"icdCodingSystem": {
+						"type": "string"
+					},
+					"ien": {
+						"type": "string"
+					},
+					"preferredText": {
+						"type": "string"
+					}
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

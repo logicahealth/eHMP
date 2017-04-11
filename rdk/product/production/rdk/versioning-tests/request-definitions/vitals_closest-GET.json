@@ -1,0 +1,52 @@
+{
+	"parameters": {
+		"fields": {
+			"name": "fields",
+			"paramType": "query",
+			"type": "string",
+			"values": [
+			]
+		},
+		"flag": {
+			"name": "flag",
+			"paramType": "query",
+			"type": "string",
+			"values": [
+				{
+					"value": "0"
+				},
+				{
+					"value": "1"
+				},
+				{
+					"value": "2"
+				}
+			]
+		},
+		"pid": {
+			"name": "pid",
+			"paramType": "query",
+			"required": true,
+			"type": "string",
+			"values": [
+			]
+		},
+		"ts": {
+			"name": "ts",
+			"paramType": "query",
+			"type": "string",
+			"values": [
+			]
+		},
+		"type": {
+			"name": "type",
+			"paramType": "query",
+			"required": true,
+			"type": "string",
+			"values": [
+			]
+		}
+	},
+	"schema": {
+	}
+}

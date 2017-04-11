@@ -1,0 +1,14 @@
+{
+	"parameters": {
+		"uid": {
+			"name": "uid",
+			"paramType": "path",
+			"required": true,
+			"value": ":uid",
+			"values": [
+			]
+		}
+	},
+	"schema": {
+	}
+}

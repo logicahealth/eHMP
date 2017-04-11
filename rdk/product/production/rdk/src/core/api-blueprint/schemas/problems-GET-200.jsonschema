@@ -1,0 +1,57 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "Returns array of problem items that match submitted search term",
+	"description": "",
+	"type": "object",
+	"required": [
+		"data",
+		"status"
+	],
+	"properties": {
+		"data": {
+			"type": "object",
+			"required": [
+				"items"
+			],
+			"properties": {
+				"items": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"required": [
+							"problemNumber",
+							"problem",
+							"icd",
+							"lexiconCode",
+							"snomed",
+							"problemText"
+						],
+						"properties": {
+							"icd": {
+								"type": "string"
+							},
+							"lexiconCode": {
+								"type": "string"
+							},
+							"problem": {
+								"type": "string"
+							},
+							"problemNumber": {
+								"type": "string"
+							},
+							"problemText": {
+								"type": "string"
+							},
+							"snomed": {
+								"type": "string"
+							}
+						}
+					}
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

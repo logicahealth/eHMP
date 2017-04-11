@@ -1,0 +1,1443 @@
+{
+  "dataList": {
+    "allergies": [
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000001122"
+        },
+        "enteredBy": {
+          "name": "AHLTADTE, ATTEND B"
+        },
+        "enteredDate": {
+          "start": "2013-12-03T20:36:28",
+          "end": "2013-12-03T20:36:28"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "48765-2"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL/0056"
+        },
+        "allergen": [
+          {
+            "code": "61021",
+            "display": "ENOXACIN (ENOXACIN)",
+            "system": "2.16.840.1.113883.3.42.127.100001.209",
+            "primary": true
+          }
+        ],
+        "comment": null,
+        "onsetDate": {
+          "start": "2013-12-03T05:00:00",
+          "end": "2013-12-03T05:00:00"
+        },
+        "reactions": [
+          {
+            "reaction": [
+              {
+                "display": "Urticaria",
+                "primary": true
+              }
+            ],
+            "comment": null
+          }
+        ],
+        "sourceOfInfo": [
+          {
+            "display": "Patient",
+            "primary": true
+          }
+        ],
+        "type": [
+          {
+            "display": "Drug Allergy",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000001123"
+        },
+        "enteredBy": {
+          "name": "AHLTADTE, ATTEND B"
+        },
+        "enteredDate": {
+          "start": "2013-12-18T20:52:55",
+          "end": "2013-12-18T20:52:55"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "48765-2"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL/0056"
+        },
+        "allergen": [
+          {
+            "code": "13022000",
+            "display": "GENTIAN VIOLET (GENTIAN VIOLET)",
+            "system": "2.16.840.1.113883.3.42.127.100001.209",
+            "primary": true
+          }
+        ],
+        "comment": null,
+        "onsetDate": {
+          "start": "2013-12-03T05:00:00",
+          "end": "2013-12-03T05:00:00"
+        },
+        "reactions": [
+          {
+            "reaction": [
+              {
+                "display": "Rash",
+                "primary": true
+              }
+            ],
+            "comment": null
+          }
+        ],
+        "sourceOfInfo": [
+          {
+            "display": "Patient",
+            "primary": true
+          }
+        ],
+        "type": [
+          {
+            "display": "Drug Allergy",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000001124"
+        },
+        "enteredBy": {
+          "name": "AHLTADTE, ATTEND B"
+        },
+        "enteredDate": {
+          "start": "2013-12-03T20:27:20",
+          "end": "2013-12-03T20:27:20"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "48765-2"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL/0056"
+        },
+        "allergen": [
+          {
+            "code": "1010311051",
+            "display": "POLOXAMER 407 (POLOXAMER)",
+            "system": "2.16.840.1.113883.3.42.127.100001.209",
+            "primary": true
+          }
+        ],
+        "comment": null,
+        "onsetDate": {
+          "start": "2013-12-03T05:00:00",
+          "end": "2013-12-03T05:00:00"
+        },
+        "reactions": [
+          {
+            "reaction": [
+              {
+                "display": "Anaphylaxis",
+                "primary": true
+              }
+            ],
+            "comment": null
+          }
+        ],
+        "sourceOfInfo": [
+          {
+            "display": "Patient",
+            "primary": true
+          }
+        ],
+        "type": [
+          {
+            "display": "Drug Allergy",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000001125"
+        },
+        "enteredBy": {
+          "name": "AHLTADTE, ATTEND B"
+        },
+        "enteredDate": {
+          "start": "2013-12-03T20:15:10",
+          "end": "2013-12-03T20:15:10"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "48765-2"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL/0056"
+        },
+        "allergen": [
+          {
+            "code": "1033712000",
+            "display": "DECITABINE (DECITABINE)",
+            "system": "2.16.840.1.113883.3.42.127.100001.209",
+            "primary": true
+          }
+        ],
+        "comment": null,
+        "onsetDate": {
+          "start": "2013-12-03T05:00:00",
+          "end": "2013-12-03T05:00:00"
+        },
+        "reactions": [
+          {
+            "reaction": [
+              {
+                "display": "Anaphylaxis",
+                "primary": true
+              }
+            ],
+            "comment": null
+          }
+        ],
+        "sourceOfInfo": [
+          {
+            "display": "Patient",
+            "primary": true
+          }
+        ],
+        "type": [
+          {
+            "display": "Drug Allergy",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000001126"
+        },
+        "enteredBy": {
+          "name": "AHLTADTE, ATTEND B"
+        },
+        "enteredDate": {
+          "start": "2013-12-18T20:10:49",
+          "end": "2013-12-18T20:10:49"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "48765-2"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL/0056"
+        },
+        "allergen": [
+          {
+            "code": "14236002",
+            "display": "BEE POLLEN (BEE POLLEN)",
+            "system": "2.16.840.1.113883.3.42.127.100001.209",
+            "primary": true
+          }
+        ],
+        "comment": null,
+        "onsetDate": {
+          "start": "2013-12-18T05:00:00",
+          "end": "2013-12-18T05:00:00"
+        },
+        "reactions": [
+          {
+            "reaction": [
+              {
+                "display": "Rash",
+                "primary": true
+              }
+            ],
+            "comment": null
+          }
+        ],
+        "sourceOfInfo": [
+          {
+            "display": "Patient",
+            "primary": true
+          }
+        ],
+        "type": [
+          {
+            "display": "Drug Allergy",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000001127"
+        },
+        "enteredBy": {
+          "name": "AHLTADTE, ATTEND B"
+        },
+        "enteredDate": {
+          "start": "2013-12-18T20:51:00",
+          "end": "2013-12-18T20:51:00"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "48765-2"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL/0056"
+        },
+        "allergen": [
+          {
+            "code": "1140",
+            "display": "CEFACLOR (CEFACLOR)",
+            "system": "2.16.840.1.113883.3.42.127.100001.209",
+            "primary": true
+          }
+        ],
+        "comment": null,
+        "onsetDate": {
+          "start": "2013-12-03T05:00:00",
+          "end": "2013-12-03T05:00:00"
+        },
+        "reactions": [
+          {
+            "reaction": [
+              {
+                "display": "Nausea",
+                "primary": true
+              }
+            ],
+            "comment": null
+          }
+        ],
+        "sourceOfInfo": [
+          {
+            "display": "Patient",
+            "primary": true
+          }
+        ],
+        "type": [
+          {
+            "display": "Drug Allergy",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000001128"
+        },
+        "enteredBy": {
+          "name": "AHLTADTE, ATTEND B"
+        },
+        "enteredDate": {
+          "start": "2013-12-03T20:11:51",
+          "end": "2013-12-03T20:11:51"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "48765-2"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL/0056"
+        },
+        "allergen": [
+          {
+            "code": "7090000",
+            "display": "SODIUM CHLORIDE {Class}",
+            "system": "2.16.840.1.113883.3.42.127.100001.209",
+            "primary": true
+          }
+        ],
+        "comment": null,
+        "onsetDate": {
+          "start": "2013-12-03T05:00:00",
+          "end": "2013-12-03T05:00:00"
+        },
+        "reactions": [
+          {
+            "reaction": [
+              {
+                "display": "Nausea",
+                "primary": true
+              }
+            ],
+            "comment": null
+          }
+        ],
+        "sourceOfInfo": [
+          {
+            "display": "Patient",
+            "primary": true
+          }
+        ],
+        "type": [
+          {
+            "display": "Drug Allergy",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000001129"
+        },
+        "enteredBy": {
+          "name": "AHLTADTE, ATTEND B"
+        },
+        "enteredDate": {
+          "start": "2013-12-18T18:56:13",
+          "end": "2013-12-18T18:56:13"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "48765-2"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL/0056"
+        },
+        "allergen": [
+          {
+            "code": "15220000",
+            "display": "PEANUT OIL (PEANUT OIL)",
+            "system": "2.16.840.1.113883.3.42.127.100001.209",
+            "primary": true
+          }
+        ],
+        "comment": null,
+        "onsetDate": {
+          "start": "2013-12-18T05:00:00",
+          "end": "2013-12-18T05:00:00"
+        },
+        "reactions": [
+          {
+            "reaction": [
+              {
+                "display": "Urticaria",
+                "primary": true
+              }
+            ],
+            "comment": null
+          }
+        ],
+        "sourceOfInfo": [
+          {
+            "display": "Patient",
+            "primary": true
+          }
+        ],
+        "type": [
+          {
+            "display": "Drug Allergy",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000001130"
+        },
+        "enteredBy": {
+          "name": "AHLTADTE, ATTEND B"
+        },
+        "enteredDate": {
+          "start": "2013-12-03T20:07:43",
+          "end": "2013-12-03T20:07:43"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "48765-2"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL/0056"
+        },
+        "allergen": [
+          {
+            "code": "7090054",
+            "display": "SODIUM CHLORIDE 0.45% (1/2 NORMAL SALINE)",
+            "system": "2.16.840.1.113883.3.42.127.100001.209",
+            "primary": true
+          }
+        ],
+        "comment": null,
+        "onsetDate": {
+          "start": "2013-12-03T05:00:00",
+          "end": "2013-12-03T05:00:00"
+        },
+        "reactions": [
+          {
+            "reaction": [
+              {
+                "display": "Urticaria",
+                "primary": true
+              }
+            ],
+            "comment": null
+          }
+        ],
+        "sourceOfInfo": [
+          {
+            "display": "Patient",
+            "primary": true
+          }
+        ],
+        "type": [
+          {
+            "display": "Drug Allergy",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000001131"
+        },
+        "enteredBy": {
+          "name": "AHLTADTE, ATTEND B"
+        },
+        "enteredDate": {
+          "start": "2013-12-03T20:07:05",
+          "end": "2013-12-03T20:07:05"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "48765-2"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL/0056"
+        },
+        "allergen": [
+          {
+            "code": "18254001",
+            "display": "SODIUM CHLORIDE 0.45% (SODIUM CL FOR INHALATION)",
+            "system": "2.16.840.1.113883.3.42.127.100001.209",
+            "primary": true
+          }
+        ],
+        "comment": null,
+        "onsetDate": {
+          "start": "2013-12-03T05:00:00",
+          "end": "2013-12-03T05:00:00"
+        },
+        "reactions": [
+          {
+            "reaction": [
+              {
+                "display": "Nausea",
+                "primary": true
+              }
+            ],
+            "comment": null
+          }
+        ],
+        "sourceOfInfo": [
+          {
+            "display": "Patient",
+            "primary": true
+          }
+        ],
+        "type": [
+          {
+            "display": "Drug Allergy",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000001132"
+        },
+        "enteredBy": {
+          "name": "MIDTIER, GLDTE ONE"
+        },
+        "enteredDate": {
+          "start": "2013-10-25T18:55:12",
+          "end": "2013-10-25T18:55:12"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "48765-2"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL/0056"
+        },
+        "allergen": [
+          {
+            "code": "13746024",
+            "display": "ALFALFA",
+            "system": "2.16.840.1.113883.3.42.127.100001.209",
+            "primary": true
+          }
+        ],
+        "comment": null,
+        "onsetDate": null,
+        "reactions": [
+          {
+            "reaction": [
+              {
+                "display": "Unknown",
+                "primary": true
+              }
+            ],
+            "comment": null
+          }
+        ],
+        "sourceOfInfo": [],
+        "type": [
+          {
+            "display": "Drug Allergy",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000001133"
+        },
+        "enteredBy": {
+          "name": "MIDTIER, GLDTE ONE"
+        },
+        "enteredDate": {
+          "start": "2013-10-25T18:55:12",
+          "end": "2013-10-25T18:55:12"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "48765-2"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL/0056"
+        },
+        "allergen": [
+          {
+            "code": "12014",
+            "display": "ALFENTANIL HCL",
+            "system": "2.16.840.1.113883.3.42.127.100001.209",
+            "primary": true
+          }
+        ],
+        "comment": null,
+        "onsetDate": null,
+        "reactions": [
+          {
+            "reaction": [
+              {
+                "display": "Unknown",
+                "primary": true
+              }
+            ],
+            "comment": null
+          }
+        ],
+        "sourceOfInfo": [],
+        "type": [
+          {
+            "display": "Drug Allergy",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000001134"
+        },
+        "enteredBy": {
+          "name": "MIDTIER, GLDTE ONE"
+        },
+        "enteredDate": {
+          "start": "2013-10-25T18:55:11",
+          "end": "2013-10-25T18:55:11"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "48765-2"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL/0056"
+        },
+        "allergen": [
+          {
+            "code": "78020",
+            "display": "ALBUTEROL",
+            "system": "2.16.840.1.113883.3.42.127.100001.209",
+            "primary": true
+          }
+        ],
+        "comment": null,
+        "onsetDate": null,
+        "reactions": [
+          {
+            "reaction": [
+              {
+                "display": "Unknown",
+                "primary": true
+              }
+            ],
+            "comment": null
+          }
+        ],
+        "sourceOfInfo": [],
+        "type": [
+          {
+            "display": "Drug Allergy",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000001135"
+        },
+        "enteredBy": {
+          "name": "MIDTIER, GLDTE ONE"
+        },
+        "enteredDate": {
+          "start": "2013-10-25T18:55:11",
+          "end": "2013-10-25T18:55:11"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "48765-2"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL/0056"
+        },
+        "allergen": [
+          {
+            "code": "78013",
+            "display": "ALBUTEROL SULFATE",
+            "system": "2.16.840.1.113883.3.42.127.100001.209",
+            "primary": true
+          }
+        ],
+        "comment": null,
+        "onsetDate": null,
+        "reactions": [
+          {
+            "reaction": [
+              {
+                "display": "Unknown",
+                "primary": true
+              }
+            ],
+            "comment": null
+          }
+        ],
+        "sourceOfInfo": [],
+        "type": [
+          {
+            "display": "Drug Allergy",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000001136"
+        },
+        "enteredBy": {
+          "name": "MIDTIER, GLDTE ONE"
+        },
+        "enteredDate": {
+          "start": "2013-10-25T18:55:11",
+          "end": "2013-10-25T18:55:11"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "48765-2"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL/0056"
+        },
+        "allergen": [
+          {
+            "code": "5556105",
+            "display": "ALBUTEROL SULFATE ER",
+            "system": "2.16.840.1.113883.3.42.127.100001.209",
+            "primary": true
+          }
+        ],
+        "comment": null,
+        "onsetDate": null,
+        "reactions": [
+          {
+            "reaction": [
+              {
+                "display": "Unknown",
+                "primary": true
+              }
+            ],
+            "comment": null
+          }
+        ],
+        "sourceOfInfo": [],
+        "type": [
+          {
+            "display": "Drug Allergy",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000001137"
+        },
+        "enteredBy": {
+          "name": "MIDTIER, GLDTE ONE"
+        },
+        "enteredDate": {
+          "start": "2013-10-25T18:55:12",
+          "end": "2013-10-25T18:55:12"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "48765-2"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL/0056"
+        },
+        "allergen": [
+          {
+            "code": "13746000",
+            "display": "ALFALFA",
+            "system": "2.16.840.1.113883.3.42.127.100001.209",
+            "primary": true
+          }
+        ],
+        "comment": null,
+        "onsetDate": null,
+        "reactions": [
+          {
+            "reaction": [
+              {
+                "display": "Unknown",
+                "primary": true
+              }
+            ],
+            "comment": null
+          }
+        ],
+        "sourceOfInfo": [],
+        "type": [
+          {
+            "display": "Drug Allergy",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000001138"
+        },
+        "enteredBy": {
+          "name": "MIDTIER, GLDTE ONE"
+        },
+        "enteredDate": {
+          "start": "2013-10-25T18:55:11",
+          "end": "2013-10-25T18:55:11"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "48765-2"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL/0056"
+        },
+        "allergen": [
+          {
+            "code": "13837289",
+            "display": "ALBUMIN",
+            "system": "2.16.840.1.113883.3.42.127.100001.209",
+            "primary": true
+          }
+        ],
+        "comment": null,
+        "onsetDate": null,
+        "reactions": [
+          {
+            "reaction": [
+              {
+                "display": "Unknown",
+                "primary": true
+              }
+            ],
+            "comment": null
+          }
+        ],
+        "sourceOfInfo": [],
+        "type": [
+          {
+            "display": "Drug Allergy",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000001139"
+        },
+        "enteredBy": {
+          "name": "MIDTIER, GLDTE ONE"
+        },
+        "enteredDate": {
+          "start": "2013-10-25T18:55:11",
+          "end": "2013-10-25T18:55:11"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "48765-2"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL/0056"
+        },
+        "allergen": [
+          {
+            "code": "12728004",
+            "display": "ALBUMIN",
+            "system": "2.16.840.1.113883.3.42.127.100001.209",
+            "primary": true
+          }
+        ],
+        "comment": null,
+        "onsetDate": null,
+        "reactions": [
+          {
+            "reaction": [
+              {
+                "display": "Unknown",
+                "primary": true
+              }
+            ],
+            "comment": null
+          }
+        ],
+        "sourceOfInfo": [],
+        "type": [
+          {
+            "display": "Drug Allergy",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000001140"
+        },
+        "enteredBy": {
+          "name": "MIDTIER, GLDTE ONE"
+        },
+        "enteredDate": {
+          "start": "2013-10-25T18:55:11",
+          "end": "2013-10-25T18:55:11"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "48765-2"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL/0056"
+        },
+        "allergen": [
+          {
+            "code": "12728000",
+            "display": "ALBUMIN HUMAN",
+            "system": "2.16.840.1.113883.3.42.127.100001.209",
+            "primary": true
+          }
+        ],
+        "comment": null,
+        "onsetDate": null,
+        "reactions": [
+          {
+            "reaction": [
+              {
+                "display": "Unknown",
+                "primary": true
+              }
+            ],
+            "comment": null
+          }
+        ],
+        "sourceOfInfo": [],
+        "type": [
+          {
+            "display": "Drug Allergy",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000001141"
+        },
+        "enteredBy": {
+          "name": "MIDTIER, GLDTE ONE"
+        },
+        "enteredDate": {
+          "start": "2013-10-25T18:55:11",
+          "end": "2013-10-25T18:55:11"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "48765-2"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL/0056"
+        },
+        "allergen": [
+          {
+            "code": "7951005",
+            "display": "ALBUMIN (HUMAN)",
+            "system": "2.16.840.1.113883.3.42.127.100001.209",
+            "primary": true
+          }
+        ],
+        "comment": null,
+        "onsetDate": null,
+        "reactions": [
+          {
+            "reaction": [
+              {
+                "display": "Unknown",
+                "primary": true
+              }
+            ],
+            "comment": null
+          }
+        ],
+        "sourceOfInfo": [],
+        "type": [
+          {
+            "display": "Drug Allergy",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000001142"
+        },
+        "enteredBy": {
+          "name": "MIDTIER, GLDTE ONE"
+        },
+        "enteredDate": {
+          "start": "2013-10-25T18:55:12",
+          "end": "2013-10-25T18:55:12"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "48765-2"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL/0056"
+        },
+        "allergen": [
+          {
+            "code": "5753005",
+            "display": "ALEMTUZUMAB",
+            "system": "2.16.840.1.113883.3.42.127.100001.209",
+            "primary": true
+          }
+        ],
+        "comment": null,
+        "onsetDate": null,
+        "reactions": [
+          {
+            "reaction": [
+              {
+                "display": "Unknown",
+                "primary": true
+              }
+            ],
+            "comment": null
+          }
+        ],
+        "sourceOfInfo": [],
+        "type": [
+          {
+            "display": "Drug Allergy",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000001143"
+        },
+        "enteredBy": {
+          "name": "MIDTIER, GLDTE ONE"
+        },
+        "enteredDate": {
+          "start": "2013-10-25T18:55:11",
+          "end": "2013-10-25T18:55:11"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "48765-2"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL/0056"
+        },
+        "allergen": [
+          {
+            "code": "1024899000",
+            "display": "ALEFACEPT",
+            "system": "2.16.840.1.113883.3.42.127.100001.209",
+            "primary": true
+          }
+        ],
+        "comment": null,
+        "onsetDate": null,
+        "reactions": [
+          {
+            "reaction": [
+              {
+                "display": "Unknown",
+                "primary": true
+              }
+            ],
+            "comment": null
+          }
+        ],
+        "sourceOfInfo": [],
+        "type": [
+          {
+            "display": "Drug Allergy",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000001144"
+        },
+        "enteredBy": {
+          "name": "MIDTIER, GLDTE ONE"
+        },
+        "enteredDate": {
+          "start": "2013-10-25T18:55:11",
+          "end": "2013-10-25T18:55:11"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "48765-2"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL/0056"
+        },
+        "allergen": [
+          {
+            "code": "11681019",
+            "display": "ALCOHOL",
+            "system": "2.16.840.1.113883.3.42.127.100001.209",
+            "primary": true
+          }
+        ],
+        "comment": null,
+        "onsetDate": null,
+        "reactions": [
+          {
+            "reaction": [
+              {
+                "display": "Unknown",
+                "primary": true
+              }
+            ],
+            "comment": null
+          }
+        ],
+        "sourceOfInfo": [],
+        "type": [
+          {
+            "display": "Drug Allergy",
+            "primary": true
+          }
+        ]
+      }
+    ]
+  }
+}

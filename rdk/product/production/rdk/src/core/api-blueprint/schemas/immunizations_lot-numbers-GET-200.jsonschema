@@ -1,0 +1,288 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "List lot numbers for an immunization type",
+	"type": "object",
+	"required": [
+		"data",
+		"status"
+	],
+	"properties": {
+		"data": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"required": [
+					"lot_number",
+					"uri",
+					"manufacturer",
+					"status",
+					"vaccine",
+					"expiration_date",
+					"starting_count",
+					"doses_unused",
+					"low_supply_alert",
+					"lot_number_for_export"
+				],
+				"properties": {
+					"doses_unused": {
+						"type": "object",
+						"required": [
+							"fmId",
+							"fmType",
+							"value",
+							"type"
+						],
+						"properties": {
+							"fmId": {
+								"type": "string"
+							},
+							"fmType": {
+								"type": "string"
+							},
+							"type": {
+								"type": "string"
+							},
+							"value": {
+								"type": "string"
+							}
+						}
+					},
+					"expiration_date": {
+						"type": "object",
+						"required": [
+							"fmId",
+							"fmType",
+							"value",
+							"type",
+							"datatype"
+						],
+						"properties": {
+							"datatype": {
+								"type": "string"
+							},
+							"fmId": {
+								"type": "string"
+							},
+							"fmType": {
+								"type": "string"
+							},
+							"type": {
+								"type": "string"
+							},
+							"value": {
+								"type": "string"
+							}
+						}
+					},
+					"lot_number": {
+						"type": "object",
+						"required": [
+							"fmId",
+							"fmType",
+							"value",
+							"type"
+						],
+						"properties": {
+							"fmId": {
+								"type": "string"
+							},
+							"fmType": {
+								"type": "string"
+							},
+							"type": {
+								"type": "string"
+							},
+							"value": {
+								"type": "string"
+							}
+						}
+					},
+					"lot_number_for_export": {
+						"type": "object",
+						"required": [
+							"fmId",
+							"fmType",
+							"value",
+							"type"
+						],
+						"properties": {
+							"fmId": {
+								"type": "string"
+							},
+							"fmType": {
+								"type": "string"
+							},
+							"type": {
+								"type": "string"
+							},
+							"value": {
+								"type": "string"
+							}
+						}
+					},
+					"low_supply_alert": {
+						"type": "object",
+						"required": [
+							"fmId",
+							"fmType",
+							"value",
+							"type"
+						],
+						"properties": {
+							"fmId": {
+								"type": "string"
+							},
+							"fmType": {
+								"type": "string"
+							},
+							"type": {
+								"type": "string"
+							},
+							"value": {
+								"type": "string"
+							}
+						}
+					},
+					"manufacturer": {
+						"type": "object",
+						"required": [
+							"fmId",
+							"fmType",
+							"value",
+							"type",
+							"label",
+							"sameAs"
+						],
+						"properties": {
+							"fmId": {
+								"type": "string"
+							},
+							"fmType": {
+								"type": "string"
+							},
+							"label": {
+								"type": "string"
+							},
+							"sameAs": {
+								"type": "string"
+							},
+							"type": {
+								"type": "string"
+							},
+							"value": {
+								"type": "string"
+							}
+						}
+					},
+					"starting_count": {
+						"type": "object",
+						"required": [
+							"fmId",
+							"fmType",
+							"value",
+							"type"
+						],
+						"properties": {
+							"fmId": {
+								"type": "string"
+							},
+							"fmType": {
+								"type": "string"
+							},
+							"type": {
+								"type": "string"
+							},
+							"value": {
+								"type": "string"
+							}
+						}
+					},
+					"status": {
+						"type": "object",
+						"required": [
+							"fmId",
+							"fmType",
+							"value",
+							"type"
+						],
+						"properties": {
+							"fmId": {
+								"type": "string"
+							},
+							"fmType": {
+								"type": "string"
+							},
+							"type": {
+								"type": "string"
+							},
+							"value": {
+								"type": "string"
+							}
+						}
+					},
+					"uri": {
+						"type": "object",
+						"required": [
+							"fmId",
+							"fmType",
+							"value",
+							"type",
+							"label"
+						],
+						"properties": {
+							"fmId": {
+								"type": "string"
+							},
+							"fmType": {
+								"type": "string"
+							},
+							"label": {
+								"type": "string"
+							},
+							"type": {
+								"type": "string"
+							},
+							"value": {
+								"type": "string"
+							}
+						}
+					},
+					"vaccine": {
+						"type": "object",
+						"required": [
+							"fmId",
+							"fmType",
+							"value",
+							"type",
+							"label",
+							"sameAs"
+						],
+						"properties": {
+							"fmId": {
+								"type": "string"
+							},
+							"fmType": {
+								"type": "string"
+							},
+							"label": {
+								"type": "string"
+							},
+							"sameAs": {
+								"type": "string"
+							},
+							"type": {
+								"type": "string"
+							},
+							"value": {
+								"type": "string"
+							}
+						}
+					}
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

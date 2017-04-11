@@ -1,0 +1,35 @@
+.control.radio-control {
+    &.radio-col-2 {
+        p,
+        .radio {
+            float: none;
+        }
+        .radio {
+            label {
+                margin-left: 0;
+                vertical-align: text-top;
+                width: calc(50% - 2px);
+            }
+        }
+    }
+}
+.well {
+    .form-group {
+        &.radio-control { /*Encoutners, line 398*/
+            margin: 0px;
+            overflow-x: hidden;
+            .faux-label {
+                /* Used in encounters, line 378 */
+                float: left;
+                margin-top: 2px;
+                width: 50%;
+            }
+            .radio {
+                float: right;
+                input[type="radio"] {
+                    margin-top: 3px;
+                }
+            }
+        }
+    }
+}

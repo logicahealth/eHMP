@@ -1,0 +1,411 @@
+{
+  "queryComplete": true,
+  "statusList": [
+    {
+      "partner": {
+        "partnerIdentifier": "2.16.840.1.113883.3.42.126.100001.13",
+        "partnerName": "ahlta",
+        "partnerType": "DOD"
+      },
+      "partnerStatus": "SUCCESS",
+      "expectedCount": 4,
+      "receivedCount": 4
+    }
+  ],
+  "dataList": {
+    "medications": [
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "2157553059"
+        },
+        "enteredBy": {
+          "name": "Interface User"
+        },
+        "enteredDate": {
+          "start": "2013-05-12T21:11:50",
+          "end": "2013-05-12T21:11:50"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "10160-0"
+          }
+        ],
+        "facility": {
+          "name": "4th Medical Group/0090"
+        },
+        "prescription": "O",
+        "active": false,
+        "comment": "^O^\nNONE",
+        "dispensingPharmacy": {
+          "name": "PROVIDER ORDER ENTER"
+        },
+        "fillCost": null,
+        "endDate": {
+          "start": "2013-06-11T21:06:00",
+          "end": "2013-06-11T21:06:00"
+        },
+        "startDate": {
+          "start": "2013-05-12T21:07:00",
+          "end": "2013-05-12T21:07:00"
+        },
+        "lastFillDate": {
+          "start": "2013-05-12T04:01:00",
+          "end": "2013-05-12T04:01:00"
+        },
+        "fillInfo": [
+          {
+            "action": [
+              {
+                "display": "Entered",
+                "primary": true
+              }
+            ],
+            "dispensingPharmacy": {
+              "name": "PROVIDER ORDER ENTER"
+            },
+            "enteredBy": {
+              "name": "Interface User"
+            },
+            "location": {
+              "name": "4th Medical Group/0090"
+            },
+            "fillCost": null,
+            "fillDate": {
+              "start": "2013-05-12T21:07:00",
+              "end": "2013-05-12T21:07:00"
+            },
+            "fillNumber": "0",
+            "quantity": "30",
+            "units": [
+              {
+                "display": "mg",
+                "primary": true
+              }
+            ]
+          }
+        ],
+        "drug": [
+          {
+            "display": "ASTEMIZOLE, 10 MG, TABLET, ORAL",
+            "code": "3000268019",
+            "system": "2.16.840.1.113883.3.42.126.100001.16",
+            "primary": true
+          }
+        ],
+        "numberOfRefills": 0,
+        "provider": {
+          "name": "SJF, FIVE",
+          "primary": true
+        },
+        "quantity": "30",
+        "refillsRemaining": 0,
+        "rxNumber": {
+          "id": "130512-00010"
+        },
+        "sig": "TAKE 1 TABLET DAILY #30 RF0",
+        "status": [
+          {
+            "display": "Expired",
+            "primary": true
+          }
+        ],
+        "daysSupply": 30,
+        "units": [
+          {
+            "display": "mg",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "2157553057"
+        },
+        "enteredBy": {
+          "name": "Interface User"
+        },
+        "enteredDate": {
+          "start": "2013-05-12T21:11:49",
+          "end": "2013-05-12T21:11:49"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "10160-0"
+          }
+        ],
+        "facility": {
+          "name": "4th Medical Group/0090"
+        },
+        "prescription": "O",
+        "active": false,
+        "comment": "^O^\nNONE",
+        "dispensingPharmacy": {
+          "name": "PROVIDER ORDER ENTER"
+        },
+        "fillCost": null,
+        "endDate": {
+          "start": "2013-06-11T21:05:00",
+          "end": "2013-06-11T21:05:00"
+        },
+        "startDate": {
+          "start": "2013-05-12T21:06:00",
+          "end": "2013-05-12T21:06:00"
+        },
+        "lastFillDate": {
+          "start": "2013-05-12T04:01:00",
+          "end": "2013-05-12T04:01:00"
+        },
+        "fillInfo": [
+          {
+            "action": [
+              {
+                "display": "Entered",
+                "primary": true
+              }
+            ],
+            "dispensingPharmacy": {
+              "name": "PROVIDER ORDER ENTER"
+            },
+            "enteredBy": {
+              "name": "Interface User"
+            },
+            "location": {
+              "name": "4th Medical Group/0090"
+            },
+            "fillCost": null,
+            "fillDate": {
+              "start": "2013-05-12T21:06:00",
+              "end": "2013-05-12T21:06:00"
+            },
+            "fillNumber": "0",
+            "quantity": "7",
+            "units": [
+              {
+                "display": "mg",
+                "primary": true
+              }
+            ]
+          }
+        ],
+        "drug": [
+          {
+            "display": "ACETAMINOPHEN, 325 MG, TABLET, ORAL",
+            "code": "3000261885",
+            "system": "2.16.840.1.113883.3.42.126.100001.16",
+            "primary": true
+          }
+        ],
+        "numberOfRefills": 0,
+        "provider": {
+          "name": "SJF, FIVE",
+          "primary": true
+        },
+        "quantity": "7",
+        "refillsRemaining": 0,
+        "rxNumber": {
+          "id": "130512-00008"
+        },
+        "sig": "#RFO10 #7 RF0",
+        "status": [
+          {
+            "display": "Expired",
+            "primary": true
+          }
+        ],
+        "daysSupply": 30,
+        "units": [
+          {
+            "display": "mg",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "2157553058"
+        },
+        "enteredBy": {
+          "name": "Interface User"
+        },
+        "enteredDate": {
+          "start": "2013-05-12T21:11:49",
+          "end": "2013-05-12T21:11:49"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "10160-0"
+          }
+        ],
+        "facility": {
+          "name": "4th Medical Group/0090"
+        },
+        "prescription": "I",
+        "active": false,
+        "comment": "^I^\nNONE",
+        "dispensingPharmacy": {
+          "name": "PROVIDER ORDER ENTER"
+        },
+        "fillCost": null,
+        "endDate": {
+          "start": "2013-06-11T21:05:00",
+          "end": "2013-06-11T21:05:00"
+        },
+        "startDate": {
+          "start": "2013-05-12T21:06:00",
+          "end": "2013-05-12T21:06:00"
+        },
+        "lastFillDate": {
+          "start": "2013-05-12T04:01:00",
+          "end": "2013-05-12T04:01:00"
+        },
+        "drug": [
+          {
+            "display": "IBUPROFEN, 800 MG, TABLET, ORAL",
+            "code": "3000265540",
+            "system": "2.16.840.1.113883.3.42.126.100001.16",
+            "primary": true
+          }
+        ],
+        "numberOfRefills": 0,
+        "provider": {
+          "name": "SJF, FIVE",
+          "primary": true
+        },
+        "quantity": "60",
+        "refillsRemaining": 0,
+        "rxNumber": {
+          "id": "130512-00009"
+        },
+        "sig": "TAKE 1 TABLET 3 TIMES DAILY WITH FOOD #60 RF0",
+        "status": [
+          {
+            "display": "Expired",
+            "primary": true
+          }
+        ],
+        "daysSupply": 30,
+        "units": [
+          {
+            "display": "mg",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "2157545513"
+        },
+        "enteredBy": {
+          "name": "Interface User"
+        },
+        "enteredDate": {
+          "start": "2013-05-12T20:58:23",
+          "end": "2013-05-12T20:58:23"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "10160-0"
+          }
+        ],
+        "facility": {
+          "name": "4th Medical Group/0090"
+        },
+        "prescription": "I",
+        "active": false,
+        "comment": "^I^\nNONE",
+        "dispensingPharmacy": {
+          "name": "PROVIDER ORDER ENTER"
+        },
+        "fillCost": null,
+        "endDate": {
+          "start": "2013-05-31T18:07:00",
+          "end": "2013-05-31T18:07:00"
+        },
+        "startDate": {
+          "start": "2013-05-01T18:08:00",
+          "end": "2013-05-01T18:08:00"
+        },
+        "lastFillDate": {
+          "start": "2013-05-01T04:01:00",
+          "end": "2013-05-01T04:01:00"
+        },
+        "drug": [
+          {
+            "display": "Acetaminophen 100mg/mL, Solution, Oral, 0.8mL",
+            "code": "15479451",
+            "system": "2.16.840.1.113883.3.42.126.100001.16",
+            "primary": true
+          }
+        ],
+        "numberOfRefills": 0,
+        "provider": {
+          "name": "SJF, FIVE",
+          "primary": true
+        },
+        "quantity": "1",
+        "refillsRemaining": 0,
+        "rxNumber": {
+          "id": "130501-00006"
+        },
+        "sig": "TAKE ONE PER DAY #1 RF0",
+        "status": [
+          {
+            "display": "Discontinued",
+            "primary": true
+          }
+        ],
+        "daysSupply": 30,
+        "units": [
+          {
+            "display": "mg/mL",
+            "primary": true
+          }
+        ]
+      }
+    ]
+  }
+}

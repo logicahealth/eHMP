@@ -1,0 +1,43 @@
+{
+	"parameters": {
+		"fields": {
+			"name": "fields",
+			"paramType": "query",
+			"type": "string",
+			"values": [
+			]
+		}
+	},
+	"schema": {
+		"$schema": "http://json-schema.org/draft-04/schema#",
+		"properties": {
+			"demographics": {
+				"properties": {
+					"dob": {
+						"type": "string"
+					},
+					"familyName": {
+						"type": "string"
+					},
+					"givenNames": {
+						"type": "string"
+					},
+					"ssn": {
+						"type": "string"
+					}
+				},
+				"type": "object"
+			},
+			"edipi": {
+				"type": "string"
+			},
+			"icn": {
+				"type": "string"
+			}
+		},
+		"required": [
+			"demographics"
+		],
+		"type": "object"
+	}
+}

@@ -1,0 +1,39 @@
+{
+    "collection": "allergy",
+    "pid": "84F0;1",
+    "systemId": "84F0",
+    "localId": "1",
+    "seq": 1,
+    "total": 1,
+    "object": {
+        "lastUpdateTime": 20150811104725,
+        "comments": [{
+            "comment": " TESTING DIETETICS",
+            "entered": 19940119082309,
+            "enteredByName": "PROGRAMMER,TWENTY",
+            "enteredByUid": "urn:va:user:ABCD:755"
+        }],
+        "entered": 199401190822,
+        "facilityCode": 561,
+        "facilityName": "New Jersey HCS",
+        "historical": true,
+        "kind": "Allergy / Adverse Reaction",
+        "localId": 106,
+        "mechanism": "ALLERGY",
+        "originatorName": "PROGRAMMER,TWENTY",
+        "products": [{
+            "name": "MILK",
+            "vuid": "urn:va:vuid:4636981"
+        }],
+        "reactions": [{
+            "name": "NAUSEA,VOMITING",
+            "vuid": "urn:va:vuid:"
+        }],
+        "reference": "29;GMRD(120.82,",
+        "summary": "MILK",
+        "typeName": "DRUG, FOOD",
+        "uid": "urn:va:allergy:84F0:1:106",
+        "verified": 19940119082339,
+        "verifierName": "PROGRAMMER,TWENTY"
+    }
+}

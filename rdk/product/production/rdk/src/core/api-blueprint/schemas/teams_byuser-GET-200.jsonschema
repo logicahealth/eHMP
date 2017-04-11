@@ -1,0 +1,105 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "Get teams and positions for logged in user",
+	"description": "",
+	"type": "object",
+	"required": [
+		"data",
+		"status"
+	],
+	"properties": {
+		"data": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"required": [
+					"active",
+					"createdByIEN",
+					"createdDateTime",
+					"modifiedByIEN",
+					"modifiedDateTime",
+					"teamDescription",
+					"teamDisplayName",
+					"teamFocus",
+					"teamId",
+					"teamType",
+					"position",
+					"facility"
+				],
+				"properties": {
+					"active": {
+						"type": "boolean"
+					},
+					"createdByIEN": {
+						"type": "string"
+					},
+					"createdDateTime": {
+						"type": "integer"
+					},
+					"facility": {
+						"type": "string"
+					},
+					"modifiedByIEN": {
+						"type": "string"
+					},
+					"modifiedDateTime": {
+						"type": "integer"
+					},
+					"position": {
+						"type": "object",
+						"required": [
+							"assignedByIEN",
+							"assignedDateTime",
+							"ien",
+							"positionId",
+							"staffName",
+							"staffRole",
+							"teamRole"
+						],
+						"properties": {
+							"assignedByIEN": {
+								"type": "string"
+							},
+							"assignedDateTime": {
+								"type": "integer"
+							},
+							"ien": {
+								"type": "string"
+							},
+							"positionId": {
+								"type": "string"
+							},
+							"staffName": {
+								"type": "string"
+							},
+							"staffRole": {
+								"type": "string"
+							},
+							"teamRole": {
+								"type": "integer"
+							}
+						}
+					},
+					"teamDescription": {
+						"type": "string"
+					},
+					"teamDisplayName": {
+						"type": "string"
+					},
+					"teamFocus": {
+						"type": "integer"
+					},
+					"teamId": {
+						"type": "integer"
+					},
+					"teamType": {
+						"type": "integer"
+					}
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

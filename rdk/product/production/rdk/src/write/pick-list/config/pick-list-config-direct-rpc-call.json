@@ -1,0 +1,92 @@
+{
+    "name": "Configuration data for cached pick-lists",
+    "pickListConfig": [{
+        "name": "allergies-match",
+        "modulePath": "allergies/allergies-match-fetch-list",
+        "vistaContext": "OR CPRS GUI CHART",
+        "requiredParams": ["searchString"]
+    }, {
+        "name": "encounters-diagnosis-lexicon-lookup",
+        "modulePath": "encounters/encounters-diagnosis-lexicon-lookup-fetch-list",
+        "vistaContext": "OR CPRS GUI CHART",
+        "requiredParams": ["searchString"]
+    }, {
+        "name": "encounters-procedures-lexicon-lookup",
+        "modulePath": "encounters/encounters-procedures-lexicon-lookup-fetch-list",
+        "vistaContext": "OR CPRS GUI CHART",
+        "requiredParams": ["searchString"]
+    }, {
+        "name": "lab-time-valid-immediate-collect-time",
+        "modulePath": "labs/lab-time-valid-immediate-collect-time-fetch-list",
+        "vistaContext": "OR CPRS GUI CHART",
+        "requiredParams": ["time"]
+    }, {
+        "name": "lab-times-available",
+        "modulePath": "labs/lab-times-available-fetch-list",
+        "vistaContext": "OR CPRS GUI CHART",
+        "requiredParams": ["date", "location"]
+    }, {
+        "name": "medication-list",
+        "modulePath": "medications/medication-list-fetch-list",
+        "vistaContext": "OR CPRS GUI CHART",
+        "requiredParams": ["searchString"]
+    }, {
+        "name": "medication-orders-calc-max-refills",
+        "modulePath": "medications/medication-orders-calc-max-refills-fetch-list",
+        "vistaContext": "OR CPRS GUI CHART",
+        "requiredParams": ["patientDFN", "drug", "days", "ordItem", "discharge"]
+    }, {
+        "name": "medication-orders-default-days",
+        "modulePath": "medications/medication-orders-default-days-fetch-list",
+        "vistaContext": "OR CPRS GUI CHART",
+        "requiredParams": ["unitStr", "schedStr", "patientDFN", "drug", "oi"]
+    }, {
+        "name": "medication-orders-quantity-for-days-supply",
+        "modulePath": "medications/medication-orders-quantity-for-days-supply-fetch-list",
+        "vistaContext": "OR CPRS GUI CHART",
+        "requiredParams": ["daysSupply", "unitsPerDose", "schedule", "duration", "patientDFN", "drug"]
+    }, {
+        "name": "new-persons-direct",
+        "modulePath": "person/new-persons-fetch-list",
+        "vistaContext": "OR CPRS GUI CHART",
+        "optionalParams": ["date"]
+    }, {
+        "name": "problems-lexicon-lookup",
+        "modulePath": "problems/problems-lexicon-lookup-fetch-list",
+        "vistaContext": "OR CPRS GUI CHART",
+        "requiredParams": ["searchString"],
+        "optionalParams": ["date","synonym", "limit","noMinimumLength"]
+    }, {
+        "name": "problems-lexicon-extended-lookup",
+        "modulePath": "problems/problems-lexicon-extended-lookup-fetch-list",
+        "vistaContext": "OR CPRS GUI CHART",
+        "requiredParams": ["searchString"],
+        "optionalParams": ["date","synonym","limit","noMinimumLength"]
+    }, {
+        "name": "radiology-dialog-default",
+        "modulePath": "radiology/radiology-dialog-default-fetch-list",
+        "vistaContext": "OR CPRS GUI CHART",
+        "requiredParams": ["patientDFN", "imagingType"],
+        "optionalParams": ["anEventDiv"]
+    }, {
+        "name": "progress-notes-titles-icd-10",
+        "modulePath": "progressnotes/progress-notes-titles-icd-10-fetch-list",
+        "vistaContext": "OR CPRS GUI CHART",
+        "requiredParams": ["searchString"]
+    }, {
+      "name": "services-fetch-list",
+      "modulePath": "services/services-fetch-list",
+      "vistaContext": "OR CPRS GUI CHART"
+    }, {
+      "name": "clinics-fetch-list",
+      "modulePath": "clinics/clinics-fetch-list",
+      "vistaContext": "OR CPRS GUI CHART",
+      "optionalParams": ["seedString","searchDirection"]
+    },{
+        "name": "encounters-visit-service-connected",
+        "modulePath": "encounters/encounters-visit-service-connected-fetch-list",
+        "vistaContext": "OR CPRS GUI CHART",
+        "requiredParams": ["dfn", "visitDate", "loc"]
+    }]
+}
+

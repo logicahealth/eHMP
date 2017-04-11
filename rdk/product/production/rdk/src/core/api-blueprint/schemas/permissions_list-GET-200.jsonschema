@@ -1,0 +1,57 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "",
+	"description": "",
+	"type": "object",
+	"required": [
+		"data",
+		"status"
+	],
+	"properties": {
+		"data": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"required": [
+					"description",
+					"example",
+					"label",
+					"note",
+					"status",
+					"uid",
+					"value",
+					"version"
+				],
+				"properties": {
+					"description": {
+						"type": "string"
+					},
+					"example": {
+						"type": "string"
+					},
+					"label": {
+						"type": "string"
+					},
+					"note": {
+						"type": "string"
+					},
+					"status": {
+						"type": "string"
+					},
+					"uid": {
+						"type": "string"
+					},
+					"value": {
+						"type": "string"
+					},
+					"version": {
+						"type": "string"
+					}
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

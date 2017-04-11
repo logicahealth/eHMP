@@ -1,0 +1,14 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "Get an ICN given a site and DFN",
+	"description": "",
+	"type": "object",
+	"properties": {
+		"message": {
+			"type": "string"
+		},
+		"msg": {
+			"type": "string"
+		}
+	}
+}

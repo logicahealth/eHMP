@@ -1,0 +1,22 @@
+{
+  "name": "generate-json-schema",
+  "version": "0.0.1",
+  "description": "Generate JSON schemas from JSON objects",
+  "main": "generate-json-schema",
+  "bin": {
+    "generate-json-schema": "cli.js"
+  },
+  "scripts": {
+    "test": "./node_modules/mocha/bin/mocha $(find . -type f -name '*-spec.js' ! -path '*/node_modules/*')"
+  },
+  "dependencies": {
+    "commander": "~2.9.0",
+    "lodash": "^3.10.0"
+  },
+  "devDependencies": {
+    "mocha": "^2.2.5",
+    "must": "~0.13.1"
+  },
+  "author": "David Gileadi",
+  "license": "BSD"
+}

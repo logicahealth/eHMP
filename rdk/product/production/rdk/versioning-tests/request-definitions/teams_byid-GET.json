@@ -1,0 +1,28 @@
+{
+	"parameters": {
+		"facility": {
+			"name": "facility",
+			"paramType": "query",
+			"type": "string",
+			"values": [
+			]
+		},
+		"fields": {
+			"name": "fields",
+			"paramType": "query",
+			"type": "string",
+			"values": [
+			]
+		},
+		"teamId": {
+			"name": "teamId",
+			"paramType": "query",
+			"required": true,
+			"type": "string",
+			"values": [
+			]
+		}
+	},
+	"schema": {
+	}
+}

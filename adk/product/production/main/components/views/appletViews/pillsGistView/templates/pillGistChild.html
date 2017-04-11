@@ -1,0 +1,22 @@
+<div data-infobutton="{{name}}" data-infobutton-class="info-button-pill" tabindex="0" role="button"
+     {{#if tooltip}}
+        data-content="{{tooltip}}" data-toggle="popover"
+     {{/if}}
+     class="gist-item selectable 
+     	{{#if severe}}
+			severe
+		{{else if moderate}}
+ 	 		moderate
+ 		{{else if mild}}
+			mild
+ 	 	{{/if}}
+ 	 ">
+    <span>{{name}}</span>
+    {{#if seriesNorm}}
+    <strong class="badge">{{seriesNorm}}</strong>
+    {{/if}}
+    {{#if age}}
+    <span class="age">{{formatTimeSince age}}</span>
+    {{/if}}
+    <span class="sr-only">Press enter to open or close the toolbar menu.</span>
+</div>

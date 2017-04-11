@@ -1,0 +1,233 @@
+'use strict';
+var rdk = require('../../core/rdk');
+var _ = require('lodash');
+var nullchecker = rdk.utils.nullchecker;
+var vitals = require('./vitals/vitals-resource.js');
+var fhirToJDSSearch = require('../common/utils/fhir-to-jds-search');
+
+function getResourceConfig() {
+    return [{
+        name: 'vitals-observation',
+        path: '',
+        get: getObservation,
+        subsystems: ['patientrecord', 'jds', 'solr', 'jdsSync', 'authorization'],
+        interceptors: {
+            fhirPid: true
+        },
+        requiredPermissions: [],
+        isPatientCentric: true,
+        permitResponseFormat: true
+    }];
+}
+
+function limitFHIRResultByCount(fhirBundle, countStr) {
+    if (nullchecker.isNotNullish(countStr)) {
+        var count = parseInt(countStr);
+        fhirBundle.entry = _.take(fhirBundle.entry, count);
+    }
+}
+
+/**
+ * @api {get} /fhir/patient/{id}/observation Get Observation
+ * @apiName getObservation
+ * @apiGroup Observation
+ * @apiParam {Number} [_count] The number of results to show.
+ * @apiParam {String} [code] a tokenized value containing a single field, or 2 pipe separated fields called 'system' and 'code'.  The system field (left side of pipe) and pipe is optional and may be omitted. If the system field is empty and the pipe is included, it is implied that the field should not exist in the results.  Multiple codes can be specified, by joining with a comma, which signifies an OR clause.  (Valid examples: [code=8310-5] [code=http://loinc.org|8310-5] [code=9279-1,8310-5] [code=http://loinc.org|9279-1,8310-5] [code=http://loinc.org|9279-1,http://loinc.org|8310-5] [code=|8310-5] [code=8310-5,|9279-1] @see http://www.hl7.org/FHIR/2015May/search.html#token
+ * @apiParam {String} [date] Obtained date/time. The prefixes >, >=, <=, < and != may be used on the parameter value (e.g. date=>2015-01-15). The following date formats are permitted: yyyy-mm-ddThh:mm:ss (exact date search), yyyy-mm-dd (within given day), yyyy-mm (within given month), yyyy (within given year). A single date parameter can be used for an exact date search (e.g. date=2015-01-26T08:30:00) or an implicit range (e.g. date=2015-01, searches all dates in January 2015). Two date parameters can be used to specify an explicitly bounded range. When using a pair of date parameters, the parameters should bind both ends of the range. One should have a less-than operator (<, <=) while the other a greater-than operator (>, >=). Consult the <a href="http://www.hl7.org/FHIR/2015May/search.html#date">FHIR DSTU2 API</a> documentation for more information.
+ * @apiParam {String} [_sort] Sort criteria. Ascending order by default, order is specified with the following variants:  _sort:asc (ascending), _sort:dsc (descending). Supported sort properties: date, identifier, patient, performer, subject, value-quantity.
+ *
+ * @apiDescription Converts a vpr \'vitals\' resource into a FHIR \'observation\' resource.
+ *
+ * @apiExample {js} Request Examples:
+ *      // Limiting results count
+ *      http://IP           /resource/fhir/patient/9E7A;253/observation?_count=1
+ *
+ *      // Exact date search
+ *      http://IP           /resource/fhir/patient/9E7A;253/observation?date=2015-01-26T13:45:00
+ *
+ *      // Observations on a day
+ *      http://IP           /resource/fhir/patient/9E7A;253/observation?date=2015-01-26
+ *
+ *      // Observations on a month
+ *      http://IP           /resource/fhir/patient/9E7A;253/observation?date=2015-01
+ *
+ *      // Observations on a year
+ *      http://IP           /resource/fhir/patient/9E7A;253/observation?date=2015
+ *
+ *      // Observations outside a date range (e.g. observations not occuring on January 2015)
+ *      http://IP           /resource/fhir/patient/9E7A;253/observation?date=!=2015-01
+ *
+ *      // Explicit date range
+ *      http://IP           /resource/fhir/patient/9E7A;253/observation?date=>=2014-06&date=<=2014-09-20
+ *
+ *      // Observations of a particular code
+ *      http://IP           /resource/fhir/patient/9E7A;253/observation?code=9279-1
+ *
+ *      // Observations of a particular code and system
+ *      http://IP           /resource/fhir/patient/9E7A;253/observation?code=http://loinc.org|9279-1
+ *
+ *      // Observations sorted by date (sorts by Observation.appliesDateTime)
+ *      http://IP           /resource/fhir/patient/9E7A;253/observation?_sort=date
+ *
+ *      // Observations sorted by identifier (sorts by Observation.identifier.value)
+ *      http://IP           /resource/fhir/patient/9E7A;253/observation?_sort=identifier
+ *
+ *      // Observations sorted by performer (sorts by Observation.performer.display)
+ *      http://IP           /resource/fhir/patient/9E7A;253/observation?_sort=performer
+ *
+ *      // Observations sorted by subject (sorts by Observation.subject.reference)
+ *      http://IP           /resource/fhir/patient/9E7A;253/observation?_sort=subject
+ *
+ *      // Observations sorted by value-quantity (sorts by Observation.valueQuantity.value)
+ *      http://IP           /resource/fhir/patient/9E7A;253/observation?_sort=value-quantity
+ *
+ *      // Observations sorted by value-quantity in descending order
+ *      http://IP           /resource/fhir/patient/9E7A;253/observation?_sort:dsc=value-quantity
+ *
+ * @apiSuccess {json} data Json object conforming to the <a href="http://www.hl7.org/FHIR/2015May/observation.html">Observation FHIR DTSU2 specification</a>.
+ * @apiSuccessExample Success-Response:
+ * HTTP/1.1 200 OK
+ * {
+ *     "resourceType": "Bundle",
+ *     "type": "collection",
+ *     "id": "urn:uuid:1e89fe8a-339c-48e3-ba5a-58ee064fb14b",
+ *     "link": [
+ *         {
+ *             "rel": "self",
+ *             "href": "http://IP      /resource/fhir/patient/9E7A;253/observation?date=%3E2015-01-26T01:20:00Z&code=http://loinc.org|8310-5&_count=1"
+ *         }
+ *     ],
+ *     "meta": {
+ *         "lastUpdated": "2015-06-18T14:38:50.000+08:00"
+ *     },
+ *     "entry": [
+ *         {
+ *             "resource": {
+ *                 "resourceType": "Observation",
+ *                 "text": {
+ *                     "status": "generated",
+ *                     "div": "<div>TEMPERATURE 98.2 F</div>"
+ *                 },
+ *                 "contained": [
+ *                     {
+ *                         "resourceType": "Organization",
+ *                         "_id": "481de831-8896-4331-ab52-c9f7cdc78348",
+ *                         "identifier": [
+ *                             {
+ *                                 "system": "urn:oid:2.16.840.1.113883.6.233",
+ *                                 "value": "998"
+ *                             }
+ *                         ],
+ *                         "name": "ABILENE (CAA)"
+ *                     }
+ *                 ],
+ *                 "code": {
+ *                     "coding": [
+ *                         {
+ *                             "system": "urn:oid:2.16.840.1.113883.6.233",
+ *                             "code": "urn:va:vuid:4500638",
+ *                             "display": "TEMPERATURE"
+ *                         },
+ *                         {
+ *                             "system": "http://loinc.org",
+ *                             "code": "8310-5",
+ *                             "display": "BODY TEMPERATURE"
+ *                         }
+ *                     ]
+ *                 },
+ *                 "valueQuantity": {
+ *                     "value": 98.2,
+ *                     "units": "F"
+ *                 },
+ *                 "appliesDateTime": "2015-02-24T22:40:00+08:00",
+ *                 "issued": "2015-02-25T15:23:27-08:00",
+ *                 "status": "final",
+ *                 "reliability": "unknown",
+ *                 "identifier": {
+ *                     "use": "official",
+ *                     "system": "http://vistacore.us/fhir/id/uid",
+ *                     "value": "urn:va:vital:9E7A:253:28425"
+ *                 },
+ *                 "subject": {
+ *                     "reference": "Patient/253"
+ *                 },
+ *                 "performer": [
+ *                     {
+ *                         "reference": "481de831-8896-4331-ab52-c9f7cdc78348",
+ *                         "display": "ABILENE (CAA)"
+ *                     }
+ *                 ],
+ *                 "referenceRange": [
+ *                     {
+ *                         "low": {
+ *                             "value": 95,
+ *                             "units": "F"
+ *                         },
+ *                         "high": {
+ *                             "value": 102,
+ *                             "units": "F"
+ *                         },
+ *                         "meaning": {
+ *                             "coding": [
+ *                                 {
+ *                                     "system": "http://snomed.info/id",
+ *                                     "code": "87273009",
+ *                                     "display": "Normal Temperature"
+ *                                 }
+ *                             ]
+ *                         }
+ *                     }
+ *                 ]
+ *             }
+ *         }
+ *     ],
+ *     "total": 2
+ * }
+ *
+ * @apiError (Error 400) Invalid parameter values.
+ * @apiErrorExample Error-Response:
+ * HTTP/1.1 400 Bad Request
+ * {
+ *      Invalid parameter values.
+ * }
+ */
+function getObservation(req, res) {
+    var pid = req.query.pid;
+    var params = req.query;
+
+    if (nullchecker.isNullish(pid)) {
+        return res.status(rdk.httpstatus.bad_format).send('Missing required parameter: pid');
+    }
+
+    validateParams(params, /*onSuccess*/ function() {
+        vitals.getVitalsData(req.app.config, req.logger, pid, params, function(err, inputJSON) {
+            if (nullchecker.isNotNullish(err)) {
+                res.status(err.code).send(err.message);
+            } else {
+                var fhirBundle = vitals.convertToFhir(inputJSON, req);
+                limitFHIRResultByCount(fhirBundle, params._count);
+                res.status(rdk.httpstatus.ok).send(fhirBundle);
+            }
+        });
+    }, /*onError*/ function(errors) {
+        return res.status(rdk.httpstatus.bad_request).send('Invalid parameters:' + fhirToJDSSearch.validationErrorsToString(errors));
+    });
+}
+
+function validateParams(params, onSuccess, onError) {
+    // check common parameters
+    fhirToJDSSearch.validateCommonParams(params, function() {
+        // validate date
+        fhirToJDSSearch.validateDateParams(params, ['date'], function() {
+            if (vitals.isSortCriteriaValid(params)) {
+                onSuccess();
+            } else {
+                onError(['Unsupported _sort criteria. Supported attributes are: date, identifier, patient, performer, subject and value-quantity']);
+            }
+        }, onError);
+        // TODO: add validation for code param
+    }, onError);
+}
+
+module.exports.getResourceConfig = getResourceConfig;
+module.exports.getObservation = getObservation;

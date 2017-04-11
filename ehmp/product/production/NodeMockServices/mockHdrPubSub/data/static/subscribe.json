@@ -1,0 +1,9 @@
+{
+	"sites": [{
+		"apiVersion": "1.0",
+		"location": "/hmp/subscription/HMPTest/patient/84F0;1",
+		"waitingPids": ["84F0;1"],
+		"processingPids": [],
+		"remainingObjects": 0
+	}]
+}

@@ -1,0 +1,109 @@
+<div class="document-detail">
+	<div class="row">
+		<div class="col-xs-2">
+			<p class="text-right all-margin-no" data-detail-label="facility">
+				<strong><span class="color-grey-darker">Facility</span></strong>
+			</p>
+		</div>
+		<div class="col-xs-8">
+			<p data-detail="facility" class="all-margin-no">
+				<strong>{{facilityName}}</strong>
+			</p>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-2">
+			<p class="text-right all-margin-no" data-detail-label="author">
+				<strong><span class="color-grey-darker">Author</span></strong>
+			</p>
+		</div>
+		<div class="col-xs-8">
+			<p data-detail="author" class="all-margin-no">
+				<strong>{{authorDisplayName}}</strong>
+			</p>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-2">
+			<p class="text-right all-margin-no" data-detail-label="status">
+				<strong><span class="color-grey-darker">Status</span></strong>
+			</p>
+		</div>
+		<div class="col-xs-8">
+			<p data-detail="status" class="{{#if radiologyBool}}{{statusClass}}{{else}}{{statusDisplayClass}}{{/if}} all-margin-no">
+				<strong>
+				{{#if radiologyBool}}
+					{{statusName}}
+				{{else}}
+					{{statusDisplayName}}
+				{{/if}}
+				</strong>
+			</p>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-2">
+			<p class="text-right all-margin-no" data-detail-label="date-time">
+				<strong><span class="color-grey-darker">Date/Time</span></strong>
+			</p>
+		</div>
+		<div class="col-xs-8">
+			<p data-detail="date-time" class="all-margin-no">
+				<strong>{{dateTimeDisplay}}</strong>
+			</p>
+		</div>
+	</div>
+	{{#if radiologyBool}}
+		{{#if providers}}
+			<div class="row">
+				<div class="col-xs-2">
+					<p class="text-right all-margin-no" data-detail-label="providers">
+						<strong><span class="color-grey-darker">Providers</span></strong>
+					</p>
+				</div>
+				<div class="col-xs-8">
+					<p data-detail="providers" class="all-margin-no">
+						<strong>
+							{{#each providers}}
+								{{providerDisplayName}}<br />
+							{{/each}}
+						</strong>
+					</p>
+				</div>
+			</div>
+		{{/if}}
+		{{#if results}}
+			<h4>Results</h4>
+			{{#each results}}
+	            {{#if report}}
+	            	<button type="button" class="detail-result-link btn btn-link bottom-margin-lg" data-doc-uid="{{../../uid}}" title="Press enter to view results">{{localTitle}}</button>
+	            {{/if}}
+	        {{/each}}
+	        {{#each results}}
+	            {{#if report}}
+	            	<pre class="result-doc font-size-12" data-doc-uid="{{../../uid}}">{{report}}</pre>
+	            {{/if}}
+	        {{/each}}
+		{{/if}}
+	{{/if}}
+	{{#if addendaText}}
+		<pre class="font-size-12 top-margin-sm">{{content}}</pre><br>
+	{{/if}}
+
+	<div class="document-detail-addenda-region"></div>
+	{{#unless addendaText}}
+	    {{#unless radiologyBool}}
+	    	{{#if dodPdfDocumentUri}}
+			    <object class="dod-content pdf" data="{{dodPdfDocumentUri}}" type="application/pdf">
+					A PDF plugin is required to display DoD documents. Please contact your system administrator for support.
+				</object>
+	   		{{else}}
+		        {{#if dodComplexNoteContent}}
+		        	<iframe class="dod-content" seamless sandbox="allow-same-origin" src="#"></iframe>
+		        {{else}}
+		        	<pre class="font-size-12 top-margin-sm">{{content}}</pre>
+		        {{/if}}
+			{{/if}}
+	    {{/unless}}
+	{{/unless}}
+</div>

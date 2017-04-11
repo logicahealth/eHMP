@@ -1,0 +1,568 @@
+{
+  "queryComplete": true,
+  "statusList": [
+    {
+      "partner": {
+        "partnerIdentifier": "2.16.840.1.113883.3.42.126.100001.13",
+        "partnerName": "ahlta",
+        "partnerType": "DOD"
+      },
+      "partnerStatus": "SUCCESS",
+      "expectedCount": 10,
+      "receivedCount": 10
+    }
+  ],
+  "dataList": {
+    "notes": [
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000435"
+        },
+        "enteredBy": {
+          "name": "Interface User"
+        },
+        "enteredDate": {
+          "start": "2013-06-04T02:13:19",
+          "end": "2013-06-04T02:13:19"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "11536-0"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL/0056"
+        },
+        "complexDataUrl": null,
+        "content": "CONSULT REPORT\n--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n                                                                       Order Request for DANIELS, PEDRO\n\nRequesting HCP:  DOCTOR, ALPHA\nRequesting Location:  ORTHOPEDIC CLINIC 200H\nOrder ID number:  130503-00011\nMCP Referral #:  20130000753\nNo. of Visits:  1\nReferral Authorized Until:  31 May 2013\nReason for Consult:\nOUTPATIENT.\ntesting exmgr\nPriority:  ROUTINE\nProvisional Diagnosis:\nCCR4429 Exmgr\nACV:\nReviewed Date/Time:  03 Jun 2013@21:00:00\nAppoint Status:  ADMIN CLOSURE - 30 DAY AUTO\nAppointment Review Comment:\nThis referral/consult order has been administratively closed. It has been\n30 days or greater since it was ordered, and has no related appointment.\nReviewer:  POSTMASTER,  \n\n--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n                                                                                    CONSULT RESULT\n\nAppointment Date:\nRequesting HCP:  DOCTOR, ALPHA\nClinic:  FHCC ADMIN\nConsulting HCP:  ,  \n\nProblem List:\nNote:\nThis referral/consult order has been administratively closed. It has been\n30 days or greater since it was ordered, and has no related appointment.\nAdministratively Closed on 03 Jun 2013",
+        "contentType": [
+          {
+            "code": "plaintext",
+            "primary": true
+          }
+        ],
+        "title": "Consultation Report",
+        "type": [
+          {
+            "code": "258",
+            "display": "Consultation Report",
+            "system": "2.16.840.1.113883.3.42.126.100001.16",
+            "primary": true
+          }
+        ],
+        "status": [],
+        "verifiedBy": null,
+        "verifiedDate": {
+          "start": "2013-06-04T02:13:19",
+          "end": "2013-06-04T02:13:19"
+        }
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000436"
+        },
+        "enteredBy": {
+          "name": "BHIE, USERONE"
+        },
+        "enteredDate": {
+          "start": "2013-10-09T17:43:29",
+          "end": "2013-10-09T17:43:29"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "34109-9"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL^Family Practice Clinic"
+        },
+        "complexDataUrl": "http://localhost:8080/MockDoDAdaptor/async/complex/note/2157580397",
+        "contentType": [
+          {
+            "code": "rtf",
+            "primary": true
+          }
+        ],
+        "title": "Progress Note",
+        "type": [
+          {
+            "code": null,
+            "display": "Progress Note",
+            "system": "2.16.840.1.113883.3.42.126.100001.16",
+            "primary": true
+          }
+        ],
+        "status": [],
+        "verifiedBy": {
+          "name": "BHIE, USERONE"
+        },
+        "verifiedDate": {
+          "start": "2013-10-09T17:40:13",
+          "end": "2013-10-09T17:40:13"
+        }
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000437"
+        },
+        "enteredBy": {
+          "name": "BHIE, USERONE"
+        },
+        "enteredDate": {
+          "start": "2013-10-09T17:54:47",
+          "end": "2013-10-09T17:54:47"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "34109-9"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL^Family Practice Clinic"
+        },
+        "complexDataUrl": "http://localhost:8080/MockDoDAdaptor/async/complex/note/2157580411",
+        "contentType": [
+          {
+            "code": "rtf",
+            "primary": true
+          }
+        ],
+        "title": "Progress Note",
+        "type": [
+          {
+            "code": null,
+            "display": "Progress Note",
+            "system": "2.16.840.1.113883.3.42.126.100001.16",
+            "primary": true
+          }
+        ],
+        "status": [],
+        "verifiedBy": {
+          "name": "BHIE, USERONE"
+        },
+        "verifiedDate": {
+          "start": "2013-10-09T17:48:05",
+          "end": "2013-10-09T17:48:05"
+        }
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000438"
+        },
+        "enteredBy": {
+          "name": "BHIE, USERONE"
+        },
+        "enteredDate": {
+          "start": "2013-10-09T18:01:08",
+          "end": "2013-10-09T18:01:08"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "34109-9"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL^Family Practice Clinic"
+        },
+        "complexDataUrl": "http://localhost:8080/MockDoDAdaptor/async/complex/note/2157580425",
+        "contentType": [
+          {
+            "code": "rtf",
+            "primary": true
+          }
+        ],
+        "title": "Progress Note",
+        "type": [
+          {
+            "code": null,
+            "display": "Progress Note",
+            "system": "2.16.840.1.113883.3.42.126.100001.16",
+            "primary": true
+          }
+        ],
+        "status": [],
+        "verifiedBy": {
+          "name": "BHIE, USERONE"
+        },
+        "verifiedDate": {
+          "start": "2013-10-09T17:59:02",
+          "end": "2013-10-09T17:59:02"
+        }
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000439"
+        },
+        "enteredBy": {
+          "name": "BHIE, USERONE"
+        },
+        "enteredDate": {
+          "start": "2013-11-15T19:45:56",
+          "end": "2013-11-15T19:45:56"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "34109-9"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL^Family Practice Clinic"
+        },
+        "complexDataUrl": "http://localhost:8080/MockDoDAdaptor/async/complex/note/2157581456",
+        "contentType": [
+          {
+            "code": "rtf",
+            "primary": true
+          }
+        ],
+        "title": "Progress Note",
+        "type": [
+          {
+            "code": null,
+            "display": "Progress Note",
+            "system": "2.16.840.1.113883.3.42.126.100001.16",
+            "primary": true
+          }
+        ],
+        "status": [],
+        "verifiedBy": {
+          "name": "BHIE, USERONE"
+        },
+        "verifiedDate": {
+          "start": "2013-11-15T19:27:20",
+          "end": "2013-11-15T19:27:20"
+        }
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000440"
+        },
+        "enteredBy": {
+          "name": "BHIE, USERONE"
+        },
+        "enteredDate": {
+          "start": "2013-11-18T15:09:01",
+          "end": "2013-11-18T15:09:01"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "34109-9"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL^Family Practice Clinic"
+        },
+        "complexDataUrl": "http://localhost:8080/MockDoDAdaptor/async/complex/note/2157581472",
+        "contentType": [
+          {
+            "code": "rtf",
+            "primary": true
+          }
+        ],
+        "title": "Progress Note",
+        "type": [
+          {
+            "code": null,
+            "display": "Progress Note",
+            "system": "2.16.840.1.113883.3.42.126.100001.16",
+            "primary": true
+          }
+        ],
+        "status": [],
+        "verifiedBy": {
+          "name": "BHIE, USERONE"
+        },
+        "verifiedDate": {
+          "start": "2013-11-18T15:03:08",
+          "end": "2013-11-18T15:03:08"
+        }
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000441"
+        },
+        "enteredBy": {
+          "name": "BHIE, USERONE"
+        },
+        "enteredDate": {
+          "start": "2013-11-19T17:10:14",
+          "end": "2013-11-19T17:10:14"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "34109-9"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL^Family Practice Clinic"
+        },
+        "complexDataUrl": "http://localhost:8080/MockDoDAdaptor/async/complex/note/2157581580",
+        "contentType": [
+          {
+            "code": "rtf",
+            "primary": true
+          }
+        ],
+        "title": "Progress Note",
+        "type": [
+          {
+            "code": null,
+            "display": "Progress Note",
+            "system": "2.16.840.1.113883.3.42.126.100001.16",
+            "primary": true
+          }
+        ],
+        "status": [],
+        "verifiedBy": {
+          "name": "BHIE, USERONE"
+        },
+        "verifiedDate": {
+          "start": "2013-11-19T16:49:25",
+          "end": "2013-11-19T16:49:25"
+        }
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000442"
+        },
+        "enteredBy": {
+          "name": "BHIE, USERONE"
+        },
+        "enteredDate": {
+          "start": "2013-11-19T21:50:32",
+          "end": "2013-11-19T21:50:32"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "34109-9"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL^Family Practice Clinic"
+        },
+        "complexDataUrl": "http://localhost:8080/MockDoDAdaptor/async/complex/note/2157581642",
+        "contentType": [
+          {
+            "code": "rtf",
+            "primary": true
+          }
+        ],
+        "title": "Progress Note",
+        "type": [
+          {
+            "code": null,
+            "display": "Progress Note",
+            "system": "2.16.840.1.113883.3.42.126.100001.16",
+            "primary": true
+          }
+        ],
+        "status": [],
+        "verifiedBy": {
+          "name": "BHIE, USERONE"
+        },
+        "verifiedDate": {
+          "start": "2013-11-18T17:07:02",
+          "end": "2013-11-18T17:07:02"
+        }
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000443"
+        },
+        "enteredBy": {
+          "name": "BHIE, USERONE"
+        },
+        "enteredDate": {
+          "start": "2013-12-06T18:00:36",
+          "end": "2013-12-06T18:00:36"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "34109-9"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL^Family Practice Clinic"
+        },
+        "complexDataUrl": "http://localhost:8080/MockDoDAdaptor/async/complex/note/2157582920",
+        "contentType": [
+          {
+            "code": "rtf",
+            "primary": true
+          }
+        ],
+        "title": "Progress Note",
+        "type": [
+          {
+            "code": null,
+            "display": "Progress Note",
+            "system": "2.16.840.1.113883.3.42.126.100001.16",
+            "primary": true
+          }
+        ],
+        "status": [],
+        "verifiedBy": {
+          "name": "BHIE, USERONE"
+        },
+        "verifiedDate": {
+          "start": "2013-12-06T15:43:19",
+          "end": "2013-12-06T15:43:19"
+        }
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000444"
+        },
+        "enteredBy": {
+          "name": "BHIE, USERONE"
+        },
+        "enteredDate": {
+          "start": "2013-12-12T21:25:08",
+          "end": "2013-12-12T21:25:08"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "34109-9"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL^Family Practice Clinic"
+        },
+        "complexDataUrl": "http://localhost:8080/MockDoDAdaptor/async/complex/note/2157583874",
+        "contentType": [
+          {
+            "code": "rtf",
+            "primary": true
+          }
+        ],
+        "title": "Progress Note",
+        "type": [
+          {
+            "code": null,
+            "display": "Progress Note",
+            "system": "2.16.840.1.113883.3.42.126.100001.16",
+            "primary": true
+          }
+        ],
+        "status": [],
+        "verifiedBy": {
+          "name": "BHIE, USERONE"
+        },
+        "verifiedDate": {
+          "start": "2013-12-12T21:07:12",
+          "end": "2013-12-12T21:07:12"
+        }
+      }
+    ]
+  }
+}

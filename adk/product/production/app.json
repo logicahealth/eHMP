@@ -1,0 +1,12 @@
+{
+  "title": "eHMP",
+  "artifact-name": "eHMP",
+  "description": "",
+  "hybrid": false,
+  "resourceDirectoryPathFetch": "/resource/resourcedirectory",
+  "resourceDirectoryPathWriteback": "/resource/write-health-data/resourcedirectory",
+  "resourceDirectoryPathPicklist": "/resource/write-pick-list/resourcedirectory",
+  "adk-version": "1.0.0",
+  "numMovesBeforeSaveUDSConfig": 6,
+  "saveUDSConfigTimeout": 10000
+}

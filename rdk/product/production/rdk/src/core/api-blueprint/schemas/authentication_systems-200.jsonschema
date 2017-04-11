@@ -1,0 +1,63 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"type": "object",
+	"required": [
+		"data",
+		"status"
+	],
+	"properties": {
+		"data": {
+			"type": "object",
+			"required": [
+				"name",
+				"permissionSets",
+				"corsTabs",
+				"rptTabs",
+				"dgSensitiveAccess",
+				"breakglass",
+				"permissions",
+				"expires"
+			],
+			"properties": {
+				"breakglass": {
+					"type": "boolean"
+				},
+				"corsTabs": {
+					"type": "boolean"
+				},
+				"dgSensitiveAccess": {
+					"type": "boolean"
+				},
+				"expires": {
+					"type": "string"
+				},
+				"name": {
+					"type": "string"
+				},
+				"permission": {
+					"type": "array",
+					"items": {
+					}
+				},
+				"permissionSets": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					}
+				},
+				"permissions": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					}
+				},
+				"rptTabs": {
+					"type": "boolean"
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

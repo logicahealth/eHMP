@@ -1,0 +1,100 @@
+.datepicker {
+    font-size: 11px;
+    > div {
+        padding-left: 5px;
+    }
+    table {
+        width: 200px;
+        thead {
+            tr {
+                display: inline-flex;
+                &:first-child th:hover {
+                    background: $pure-white;
+                    color: $primary-dark;
+                }
+                th {
+                    width: 27px;
+                }
+            }
+            .prev,
+            .next {
+                color: $primary;
+            }
+        }
+        tbody {
+            tr {
+                td {
+                    &.day {
+                        border-radius: 50%;
+                        display: inline-block;
+                        height: 23px;
+                        padding: 2px 0px 0px 0px;
+                        margin: 2px;
+                        width: 23px;
+                        &.today {
+                            background-color: $pure-white;
+                            border: 1px solid $primary;
+                            &:hover:hover {
+                                background: $primary;
+                                border: 1px solid $primary;
+                                color: $pure-white;
+                            }
+                        }
+                        &.active {
+                            background-color: $primary;
+                            border: 1px solid $primary;
+                            color: $pure-white;
+                            &:hover:hover {
+                                background-color: $primary-dark;
+                                border: 1px solid $primary-dark;
+                            }
+                        }
+                        &:hover:hover {
+                            background: $primary;
+                            border: 1px solid $primary-dark;
+                            color: $pure-white;
+                        }
+                    }
+                    span {
+                        height: 40px;
+                        line-height: 40px;
+                        &.active.active {
+                            background-color: $primary;
+                            border-radius: 50%;
+                        }
+                        &:hover {
+                            background: $primary;
+                            border-radius: 50%;
+                            color: $pure-white;
+                        }
+                    }
+                }
+            }
+        }
+        tfoot {
+            tr th {
+                color: $primary;
+                &:hover {
+                    background: $pure-white;
+                    color: $primary-dark;
+                }
+            }
+        }
+    }
+}
+form.form-container .form-group.datepicker-control .input-group .form-control:not(:first-child):not(:last-child){
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+.gdt-input {
+    height: 25px;
+    padding-left: 0px;
+    padding-right: 0px;
+    text-align: center;
+    width: 86px;
+}
+input.datepicker-input::-ms-clear {
+    display: none;
+}

@@ -1,0 +1,22 @@
+{
+	"parameters": {
+		"newId": {
+			"name": "newId",
+			"paramType": "query",
+			"required": true,
+			"type": "string",
+			"values": [
+			]
+		},
+		"oldId": {
+			"name": "oldId",
+			"paramType": "query",
+			"required": true,
+			"type": "string",
+			"values": [
+			]
+		}
+	},
+	"schema": {
+	}
+}

@@ -1,0 +1,45 @@
+{
+	"parameters": {
+		"fields": {
+			"name": "fields",
+			"paramType": "query",
+			"type": "string",
+			"values": [
+			]
+		},
+		"first": {
+			"name": "first",
+			"paramType": "query",
+			"required": true,
+			"type": "string",
+			"values": [
+			]
+		},
+		"ien": {
+			"name": "ien",
+			"paramType": "query",
+			"required": true,
+			"type": "string",
+			"values": [
+			]
+		},
+		"last": {
+			"name": "last",
+			"paramType": "query",
+			"required": true,
+			"type": "string",
+			"values": [
+			]
+		},
+		"site": {
+			"name": "site",
+			"paramType": "query",
+			"required": true,
+			"type": "string",
+			"values": [
+			]
+		}
+	},
+	"schema": {
+	}
+}

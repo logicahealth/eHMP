@@ -1,0 +1,14 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "Get patients for a particular clinic/ward",
+	"description": "",
+	"type": "object",
+	"required": [
+		"status"
+	],
+	"properties": {
+		"status": {
+			"type": "integer"
+		}
+	}
+}

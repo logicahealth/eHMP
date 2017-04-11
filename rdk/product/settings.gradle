@@ -1,0 +1,35 @@
+rootProject.name = 'parent'
+def globalTasks = ['build', 'clean', 'tasks', 'generateversionpropertiesfile', 'upload']
+def tasks = gradle.startParameter.taskNames
+
+tasks.each { taskName ->
+	
+	def formattedTaskName = taskName.toString().toLowerCase()
+
+	// Include only the test projects
+	if(globalTasks.contains(formattedTaskName) || formattedTaskName.contains("test"))
+	{
+		include ':tests:acceptance-tests'
+	}
+	if(globalTasks.contains(formattedTaskName) || formattedTaskName.contains("rdkdev") || formattedTaskName.contains("destroyrdk")
+		|| formattedTaskName.contains("install") || formattedTaskName.contains("test") || formattedTaskName.contains("npm"))
+	{
+		//rdk
+		include ':production:rdk'
+	}
+	if(globalTasks.contains(formattedTaskName) || formattedTaskName.contains("jbpmdev") || formattedTaskName.contains("destroyjbpm"))
+	{
+		//jbpm
+		include ':production:jbpm'
+		include ':production:jbpm:authentication'
+		include ':production:jbpm:event-listeners'
+		include ':production:jbpm:VistaTasks'
+		include ':production:jbpm:FITLabProject'
+		include ':production:jbpm:FOBTLabService'
+		include ':production:jbpm:CDSInvocationService'
+		include ':production:jbpm:General_Medicine'
+		include ':production:jbpm:Order'
+		include ':production:jbpm:Activity'
+		include ':production:jbpm:tasksservice'
+	}
+}

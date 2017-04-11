@@ -1,0 +1,75 @@
+{
+	"parameters": {
+		"fields": {
+			"name": "fields",
+			"paramType": "query",
+			"type": "string",
+			"values": [
+			]
+		},
+		"limit": {
+			"name": "limit",
+			"paramType": "query",
+			"type": "number",
+			"values": [
+			]
+		},
+		"pid": {
+			"name": "pid",
+			"paramType": "query",
+			"required": true,
+			"type": "string",
+			"values": [
+			]
+		},
+		"query": {
+			"name": "query",
+			"paramType": "query",
+			"required": true,
+			"type": "string",
+			"values": [
+			]
+		},
+		"start": {
+			"name": "start",
+			"paramType": "query",
+			"type": "number",
+			"values": [
+			]
+		},
+		"types": {
+			"explode": true,
+			"name": "types",
+			"paramType": "query",
+			"type": "string",
+			"values": [
+				{
+					"value": "default"
+				},
+				{
+					"value": "med"
+				},
+				{
+					"value": "order"
+				},
+				{
+					"value": "document"
+				},
+				{
+					"value": "vital"
+				},
+				{
+					"value": "result"
+				},
+				{
+					"value": "lab"
+				},
+				{
+					"value": "problem"
+				}
+			]
+		}
+	},
+	"schema": {
+	}
+}

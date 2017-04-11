@@ -1,0 +1,169 @@
+/**
+ * To add integrations tests:
+ * 1) Create folders: src/itest/{resources, java}
+ * 2) Add integration tests in classes under src/itest/java
+ * 3) Add 
+ *      apply from : "${rootDir}/../infrastructure/gradle/itest.gradle"
+ *    to project's build.gradle
+ * 4) Run tests with 'gradle itest'
+ *
+ * For info on passing system properties to tests, see http://forums.gradle.org/gradle/topics/how_should_i_be_handling_passing_system_properties_from_gradle_to_my_tests
+ */
+
+
+import com.google.common.io.Files;
+import com.jayway.jsonpath.JsonPath;
+import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.services.ec2.AmazonEC2Client;
+import com.amazonaws.services.ec2.model.*;
+import groovy.json.*;
+
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.jayway.jsonpath:json-path:0.9.1'
+        classpath "com.google.guava:guava:15.0"
+        classpath 'com.amazonaws:aws-java-sdk:1.6.10'
+    }
+}
+
+ext.PATHS = [
+    VAGRANT_AWS_ROOT:        "$rootDir/../infrastructure/vagrant/aws",
+    VAGRANT_VIRTUALBOX_ROOT: "$rootDir/../infrastructure/vagrant/virtualbox",
+    AWS_KEYS_FILE:           "${System.properties['user.home']}/.fog"
+]
+
+/**** Configure IDE Support ****/
+apply plugin: 'idea'
+idea {
+    module {
+        testSourceDirs += file('src/itest/java')
+        testSourceDirs += file('src/itest/resources')
+    }
+}
+
+/**** Create itest Configuration and SourceSet ****/
+sourceSets {
+    itest {
+        java {
+            compileClasspath += main.output
+            runtimeClasspath += main.output
+        }
+    }
+}
+
+project.configurations {
+    itestCompile.extendsFrom testCompile
+    itestRuntime.extendsFrom testRuntime
+}
+
+task config { 
+  inputs.dir file("$rootDir/../infrastructure/chef/data_bags/ehmp-fhir")
+  outputs.file file("$buildDir/config.json")
+  description "Creates a configuration file for the eHMP project at ${outputs.files.asPath}."
+  group build.group
+
+  doLast {
+    def map = [:]
+    inputs.files.each {
+      def json = new JsonSlurper().parseText(it.text)
+      map << json['config']
+    }
+    def jsonBuilder = new JsonBuilder(map)
+    outputs.files.singleFile.write(jsonBuilder.toPrettyString())
+  }
+}
+
+task itest(type: Test) {   
+    group test.group
+    description = 'Runs the integration tests. A configuration file may be passed with the -Ditest.config system property. Set environment with -DENVIRONMENT property or EXPORT ENVIRONMENT=aws'
+
+    // pass Gradle JVM properties to test JVM
+    systemProperties = System.properties
+
+    // if itest.config not set, then set to default config file
+    if (!systemProperties['itest.config']?.trim()) {
+        systemProperties['itest.config'] = config.outputs.files.singleFile.getCanonicalPath()
+    }
+
+    testClassesDir = project.sourceSets.itest.output.classesDir
+    classpath = project.sourceSets.itest.runtimeClasspath   
+
+    // Find all vagrant boxes and convert directory name "centos_bootstrap" to "CENTOS_BOOTSTRAP_IP" property
+    doFirst {
+        if (System.getenv('ENVIRONMENT')?.equalsIgnoreCase('aws') || System.properties['ENVIRONMENT']?.equalsIgnoreCase('aws')) {
+            logger.quiet("Running integration tests in AWS environment.")
+            def (accessKey, secretKey) = getAwsKeys(PATHS.AWS_KEYS_FILE)
+            def ec2 = new AmazonEC2Client(new BasicAWSCredentials(accessKey, secretKey));
+            def instances = ec2.describeInstances().collect { it.reservations.collect { it.instances } }.flatten()
+            file(PATHS.VAGRANT_AWS_ROOT).eachFile groovy.io.FileType.DIRECTORIES, {
+                def instanceId = getAwsInstanceId("${it.path}")
+                systemProperties["${it.name.tokenize('-').join('_').toUpperCase()}_IP"] = instances.find { it.instanceId == instanceId}?.privateIpAddress
+            }
+        } else {
+            file(PATHS.VAGRANT_VIRTUALBOX_ROOT).eachFile groovy.io.FileType.DIRECTORIES, {
+                systemProperties["${it.name.tokenize('-').join('_').toUpperCase()}_IP"] = getIp("${it.path}")
+            }
+        }
+    }
+}
+
+task copyResources(type:Copy) {
+   from 'src/itest/resources'
+   into 'build/classes/itest'
+}
+
+itest.dependsOn(cleanItest, config)
+compileItestJava.dependsOn(copyResources)
+
+def getIp(String dir) {
+    def vagrantFile = new File(dir, "Vagrantfile");
+    try {
+        def vagrantFileContents = Files.toString(vagrantFile, java.nio.charset.Charset.defaultCharset());
+        def matcher = vagrantFileContents =~ /config.vm.network\s+:hostonly,\s+(?:'|")(\d+(?:\.\d+){3})(?:'|")/
+        return matcher[0][1];
+    } catch (IOException ioe) {
+        logger.debug("No Vagrantfile in $dir");
+        return null;
+    } catch (java.lang.IndexOutOfBoundsException ioobe) {
+        logger.debug("No host-only IP found in Vagrantfile $vagrantFile");
+        return null;
+    }
+}
+
+/**
+ * Returns AWS access and secret access key tuple from .fog file.
+ * See expected format at http://fog.io/about/getting_started.html
+ */ 
+def getAwsKeys(filename) {
+    def awsKeysFile = new File(filename)
+    try {
+        def keysContents = Files.toString(awsKeysFile, java.nio.charset.Charset.defaultCharset());
+        def matcher = keysContents =~ /aws_.*:\s*(\S+)/
+        return [matcher[0][1], matcher[1][1]]
+    } catch (IOException ioe) {
+        logger.debug("No file found at $filename");
+        return null;
+    } catch (java.lang.IndexOutOfBoundsException ioobe) {
+        logger.debug("No aws_access_key_id or aws_secret_access_key found in $filename");
+        return null;
+    }
+}
+
+/**
+ * Return AWS id from .vagrantaws JSON file.
+ * Expected format: {"active":{"default":{"id":"i-968f65b8","region":"us-east-1"}}}
+ */
+def getAwsInstanceId(String dir) throws IOException {
+    def vagrantawsFile = new File(dir, ".vagrantaws");
+    try {
+        def json = Files.toString(vagrantawsFile, java.nio.charset.Charset.defaultCharset());
+        return com.jayway.jsonpath.JsonPath.read(json, '$.active.default.id');
+    } catch (IOException ioe) {
+        logger.debug("No .vagrantaws in $dir");
+        return null;
+    }
+}

@@ -1,0 +1,47 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"type": "object",
+	"required": [
+		"data",
+		"status"
+	],
+	"properties": {
+		"data": {
+			"type": "object",
+			"required": ["isHealthy"],
+			"properties": {
+				"isHealthy": {
+					"type": "boolean"
+				}
+			},
+			"additionalProperties": {
+				"type": "object",
+				"required": [
+					"healthy",
+					"type"
+				],
+				"properties": {
+					"healthy": {
+						"type": "boolean"
+					},
+					"check": {
+						"type": "boolean"
+					},
+					"subsystems": {
+						"type": "object",
+						"additionalProperties": {
+							"type": "boolean"
+						}
+					},
+					"type": {
+						"type": "string",
+						"enum": ["subsystem", "resource"]
+					}
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

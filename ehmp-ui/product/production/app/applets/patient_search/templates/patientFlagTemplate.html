@@ -1,0 +1,47 @@
+<div class="confirmHeader row" accesskey="k">
+    <div class="pull-right all-padding-sm">
+        {{{helpIconLink 'patient_search_restricted'}}}
+    </div>
+    <div class="patientName">
+        {{formatName displayName ',' ', '}}
+    </div>
+</div>
+<div class="fixedHeightZone" style="{{inlineStyle}}">
+    {{#each patientRecordFlag}}
+    <div class="sensitivePanel panel panel-danger">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#ackMessagePanel_{{nameUnderscored}}">{{name}}<span class="label label-warning{{#compare category 'I (NATIONAL)'}} label-danger{{/compare}} pull-right">Category {{category}}</span></a>
+            </h4>
+        </div>
+        <div id="ackMessagePanel_{{nameUnderscored}}" class="panel-collapse collapse in ackMessagePanel">
+            <div class="panel-body">
+                <h5>{{text}}</h5>
+                <div class="patientInfo row">
+                    <div class="col-md-6 infoLabelStyle">Initial Assigned Date:</div>
+                    <div class="col-md-6 no-padding-left">{{formatDate assignTS "MM/DD/YYYY HH:mm"}}</div>
+                </div>
+                <div class="patientInfo row">
+                    <div class="col-md-6 infoLabelStyle">Approved by:</div>
+                    <div class="col-md-6 no-padding-left">{{approved}}</div>
+                </div>
+                <div class="patientInfo row">
+                    <div class="col-md-6 infoLabelStyle">Assignment Status:</div>
+                    <div class="col-md-6 no-padding-left">{{assignmentStatus}}</div>
+                </div>
+                <div class="patientInfo row">
+                    <div class="col-md-6 infoLabelStyle">Owner Site:</div>
+                    <div class="col-md-6 no-padding-left">{{ownerSite}}</div>
+                </div>
+                <div class="patientInfo row">
+                    <div class="col-md-6 infoLabelStyle">Originating Site:</div>
+                    <div class="col-md-6 no-padding-left">{{originatingSite}}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{/each}}
+    <button type="button" id="confirmFlaggedPatinetButton" class="confirm btn btn-success btn-block bottom-margin-sm top-margin-sm bottom-padding-sm top-padding-sm">Confirm
+        <span class="sr-only">Confirm</span>
+    </button>
+</div>

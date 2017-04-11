@@ -1,0 +1,44 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+
+group = 'gov.va'
+version = '1.0.0'
+
+description = """CDS Invocation :: Custom Work Item Handler"""
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+
+    maven {url "http://nexus.vaftl.us:8081/nexus/content/repositories/ehmp-public"}
+
+}
+
+dependencies {
+    compile group: 'org.kie', name: 'kie-api', version:'6.2.0.Final'
+    compile group: 'org.kie', name: 'kie-internal', version:'6.2.0.Final'
+    compile group: 'org.springframework', name: 'spring-web', version:'4.2.1.RELEASE'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version:'2.6.3'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version:'2.6.3'
+    testCompile group: 'org.jbpm', name: 'jbpm-test', version:'6.2.0.Final'
+    testCompile group: 'org.slf4j', name: 'slf4j-api', version:'1.7.12'
+    testCompile group: 'org.slf4j', name: 'slf4j-simple', version:'1.7.12'
+}
+
+jar {
+    manifest {
+        attributes  'Implementation-Title': 'Gradle Jar File CDSInvocationService',
+                    'Implementation-Version': version
+    }
+
+    baseName = 'CDSInvocationService'
+    from {
+        configurations.compile.collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+        configurations.runtime.collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
+}

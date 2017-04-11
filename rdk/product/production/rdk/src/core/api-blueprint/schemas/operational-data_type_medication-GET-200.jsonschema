@@ -1,0 +1,129 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "Get a list of valid names by type",
+	"description": "Returns a list of valid names of requested type",
+	"type": "object",
+	"required": [
+		"apiVersion",
+		"data",
+		"status"
+	],
+	"properties": {
+		"apiVersion": {
+			"type": "string"
+		},
+		"data": {
+			"type": "object",
+			"required": [
+				"updated",
+				"totalItems",
+				"currentItemCount",
+				"items"
+			],
+			"properties": {
+				"currentItemCount": {
+					"type": "integer"
+				},
+				"items": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"required": [
+							"internal",
+							"link",
+							"linktype",
+							"name",
+							"stampTime",
+							"types",
+							"uid"
+						],
+						"properties": {
+							"internal": {
+								"type": "integer"
+							},
+							"link": {
+								"type": "integer"
+							},
+							"linktype": {
+								"type": "string"
+							},
+							"name": {
+								"type": "string"
+							},
+							"possibleDosages": {
+								"type": "array",
+								"items": {
+									"type": "object",
+									"required": [
+										"dose",
+										"drugInternal",
+										"drugName",
+										"drugUid"
+									],
+									"properties": {
+										"dose": {
+											"type": "string"
+										},
+										"drugInternal": {
+											"type": "integer"
+										},
+										"drugName": {
+											"type": "string"
+										},
+										"drugUid": {
+											"type": "string"
+										},
+										"size": {
+											"type": "string"
+										}
+									}
+								}
+							},
+							"stampTime": {
+								"type": "integer"
+							},
+							"types": {
+								"type": "array",
+								"items": {
+									"type": "object",
+									"required": [
+										"type"
+									],
+									"properties": {
+										"type": {
+											"type": "string"
+										}
+									}
+								}
+							},
+							"uid": {
+								"type": "string"
+							}
+						}
+					}
+				},
+				"itemsPerPage": {
+					"type": "integer"
+				},
+				"pageIndex": {
+					"type": "integer"
+				},
+				"startIndex": {
+					"type": "integer"
+				},
+				"totalItems": {
+					"type": "integer"
+				},
+				"totalPages": {
+					"type": "integer"
+				},
+				"updated": {
+					"type": "integer"
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

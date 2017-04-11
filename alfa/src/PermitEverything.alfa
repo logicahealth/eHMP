@@ -1,8 +1,0 @@
-namespace PermitEverything {
-	policy PermitAllRequests {
-		apply permitOverrides
-		rule {
-			permit
-		}
-	}
-}

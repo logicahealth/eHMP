@@ -1,0 +1,61 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "Get information about a site",
+	"description": "",
+	"type": "object",
+	"required": [
+		"Site"
+	],
+	"properties": {
+		"Site": {
+			"type": [
+				"object",
+				"string"
+			],
+			"required": [
+				"name",
+				"division",
+				"host",
+				"localIP",
+				"localAddress",
+				"port",
+				"production",
+				"accessCode",
+				"verifyCode",
+				"infoButtonOid"
+			],
+			"properties": {
+				"accessCode": {
+					"type": "string"
+				},
+				"division": {
+					"type": "string"
+				},
+				"host": {
+					"type": "string"
+				},
+				"infoButtonOid": {
+					"type": "string"
+				},
+				"localAddress": {
+					"type": "string"
+				},
+				"localIP": {
+					"type": "string"
+				},
+				"name": {
+					"type": "string"
+				},
+				"port": {
+					"type": "integer"
+				},
+				"production": {
+					"type": "boolean"
+				},
+				"verifyCode": {
+					"type": "string"
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,14 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "Refreshes the current user session",
+	"description": "Expects a session to already occur or it returns a blank object.",
+	"type": "object",
+	"required": [
+		"status"
+	],
+	"properties": {
+		"status": {
+			"type": "integer"
+		}
+	}
+}

@@ -1,0 +1,26 @@
+<VirtualHost *:443>
+  <%= "ServerName #{@params[:server_name]}" if @params.has_key?(:server_name) %>
+
+
+  ProxyRequests Off
+  ProxyPreserveHost On
+
+  <Proxy *>
+    Order Allow,Deny
+    Allow from all
+  </Proxy>
+
+  SSLProxyEngine On
+  ProxyPass / <%= @params[:proxy_target] %>
+  ProxyPassReverse / <%= @params[:proxy_target] %>
+
+
+
+
+  <IfModule mod_ssl.c>
+    SSLEngine on
+    SSLCertificateFile <%= @params[:ssl_cert_file] %>
+    SSLCertificateKeyFile <%= @params[:ssl_cert_key_file] %>
+    <%= "SSLCertificateChainFile #{@params[:ssl_cert_chain_file]}" if @params.has_key?(:ssl_cert_chain_file) %>
+  </IfModule>
+</VirtualHost>

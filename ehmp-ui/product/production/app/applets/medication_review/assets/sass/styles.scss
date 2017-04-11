@@ -1,0 +1,209 @@
+[data-appletid="medication_review"] {
+    $defaultRowHeight: 13px;
+    $defaultLineHeight: 13px; /* would prefer EM or REM, but messes up 23px tile height */
+
+    .row {
+        /* preventing hover on the rows */
+        &.equalHeights {
+            & > *[class*="col-"] {
+                display: table-cell;
+                float: none;
+                vertical-align: top;
+
+                /* remove blue hover on the cells */
+                &:hover {
+                    background: transparent;
+                }
+                /* have to inherit; otherwise padding gets dropping in double; increasing size to 33 */
+                .row.equalHeights {
+                    height: inherit;
+                    line-height: inherit;
+                    min-height: inherit;
+
+                    & > *[class*="col-"] {
+                        padding-top: 0;
+                        padding-bottom: 0;
+                    }
+                }
+            }
+        }
+        /* equalHeightsInnerTableWrapper is for a row that has sub-elements in it. */
+        &.equalHeightsInnerTableWrapper {
+            display: table;
+            line-height: $defaultLineHeight + 10px;
+            min-height: $defaultRowHeight +10px;
+            width: 100%;
+
+            & > *[class*="col-"] {
+                display: table-cell;
+                float: none;
+                line-height: $defaultLineHeight;
+                padding-top: 0;
+                padding-bottom: 0;
+                vertical-align: middle;
+            }
+        }
+
+        /* innertable is for the nested rows stacked in a single row. */
+        &.equalHeightsInnerTable {
+            padding-top: 5px;
+            padding-bottom: 5px;
+
+            /* for the nested rows */
+            & > [class*="col-"] {
+                display: table-cell;
+                float: none;
+                line-height: $defaultLineHeight;
+                vertical-align: top;
+            }
+        }
+    }
+
+
+    [data-toggle="collapse"] {
+        outline: none;
+    }
+    div .meds-review-main-region {
+        margin: 0px 0 0 0;
+        padding: 10px 15px;
+    }
+    .medsItem.item {
+        text-transform: capitalize;
+    }
+    .centerText {
+        text-align: center;
+    }
+    span.header-hover:hover {
+        cursor: pointer;
+    }
+    .header {
+        margin-top: 3px;
+        white-space: nowrap;
+    }
+    div.medsItem {
+        background-color: white;
+        color: #666;
+        .sub-elements {
+            display: none;
+        }
+    }
+    .emptyMedsList {
+        font-style: italic;
+        color: gray;
+        min-height: 23px;
+        padding: 10px;
+    }
+    .header-bar {
+        background-color: white;
+        box-shadow: 0 0 4px 0 #999;
+        height: 20px;
+        margin-bottom: 5px;
+        font-weight: bold;
+        font-size: 10px;
+    }
+    .row.equalHeightsInnerTable {
+        display: table;
+        width: 100%;
+    }
+    .row.equalHeightsHeader {
+        height: 20px;
+    }
+    /* the chart area */
+    .medsItemInner {
+        min-height: inherit;
+        /* need to not have padding on the chart section of the row */
+        .medsItemInnerList {
+            position: relative;
+            min-height: inherit;
+            border-right: solid 2px rgb(239, 239, 239);
+            border-left: solid 2px rgb(239, 239, 239);
+
+            &.fullWidth {
+                /* here resetting the row height; need to zero out the padding on that cell. */
+                padding-top: 0;
+                padding-bottom: 0;
+            }
+
+            .globeIcon {
+                float: right;
+            }
+        }
+    }
+    .ellipsisFormat {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        padding-right: 10px;
+    }
+    .panel-body {
+        padding: 0px 0px;
+    }
+    .capitalize {
+        text-transform: capitalize;
+    }
+    .labelStyleColor {
+        color: #6e6e6e;
+        font-weight: bold;
+    }
+    .orderList.col-sm-2 {
+        padding-right: 0px;
+    }
+    .oneHundredMinHeight {
+        min-height: 100px;
+    }
+    .dropShadow {
+        box-shadow: 0 0 4px 0 #999;
+        color: #6e6e6e;
+    }
+    .detailStatus {
+        text-align:right;
+    }
+    .footerBox {
+        border-top: 1px solid #E8E8E8;
+        background-color:#F0F0F0;
+        box-shadow: 0 0 4px 0 #999;
+        padding:10px;
+        text-align:right;
+    }
+    .panel-header {
+        background-color: #e7ebf0;
+        border-color: #e4e4e4;
+    }
+    .three-top-padding {
+        padding-top: 3px;
+    }
+    .floatRight {
+        float: right;
+    }
+    .panel-group .panel-group {
+        margin-bottom: 0px;
+        padding-bottom: 0px;
+    }
+    .panel-group .panel+.panel {
+        margin-top: 0px;
+        border-bottom: 0px;
+    }
+    .panel-group .panel {
+        margin-bottom: 0px;
+        border-bottom: 0px;
+    }
+    .activeRow {
+        background-color: #dbe6e4;
+        -webkit-box-shadow: 2px 7px 12px -4px rgba(0,0,0,0.75);
+        -moz-box-shadow: 2px 7px 12px -4px rgba(0,0,0,0.75);
+        box-shadow: 2px 7px 12px -4px rgba(0,0,0,0.75);
+        margin: 0px 0px 5px;
+    }
+    h3 {
+        border-bottom: 1px solid #E8E8E8;
+        padding: 0px;
+        margin-bottom: 0px;
+        color: #6E6E6E;
+    }
+    .leftPadding {
+        padding-left: 10px;
+    }
+    .selectedOrder {
+        background-color: #e7ebf0;
+    }
+}

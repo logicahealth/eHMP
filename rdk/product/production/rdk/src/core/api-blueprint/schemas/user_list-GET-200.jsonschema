@@ -1,0 +1,84 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "Get the list of users from JDS with eHMP roles",
+	"description": "",
+	"type": "object",
+	"required": [
+		"data",
+		"status"
+	],
+	"properties": {
+		"data": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"required": [
+					"uid",
+					"facility",
+					"fname",
+					"lname",
+					"site",
+					"duz",
+					"roles"
+				],
+				"properties": {
+					"duz": {
+						"type": "integer"
+					},
+					"facility": {
+						"type": "string"
+					},
+					"fname": {
+						"type": "string"
+					},
+					"lname": {
+						"type": "string"
+					},
+					"officePhone": {
+						"type": [
+							"string",
+							"integer"
+						]
+					},
+					"phone3": {
+						"type": [
+							"string",
+							"integer"
+						]
+					},
+					"phone4": {
+						"type": [
+							"string",
+							"integer"
+						]
+					},
+					"roles": {
+						"type": "object",
+						"required": [
+							"val"
+						],
+						"properties": {
+							"val": {
+								"type": "array",
+								"items": {
+								}
+							}
+						}
+					},
+					"site": {
+						"type": "string"
+					},
+					"title": {
+						"type": "string"
+					},
+					"uid": {
+						"type": "string"
+					}
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

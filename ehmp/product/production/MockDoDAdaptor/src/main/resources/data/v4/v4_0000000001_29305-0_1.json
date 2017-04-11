@@ -1,0 +1,96 @@
+{
+  "queryComplete": true,
+  "statusList": [
+    {
+      "partner": {
+        "partnerIdentifier": "2.16.840.1.113883.3.42.126.100001.13",
+        "partnerName": "ahlta",
+        "partnerType": "DOD"
+      },
+      "partnerStatus": "SUCCESS",
+      "expectedCount": 1,
+      "receivedCount": 1
+    }
+  ],
+  "dataList": {
+    "medicationOrders": [
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000037"
+        },
+        "enteredBy": null,
+        "enteredDate": null,
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "29305-0"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL"
+        },
+        "orderable": [
+          {
+            "display": "ACETAMINOPHEN 325MG TAB *OTC*--PO 325MG",
+            "code": "3000261885",
+            "system": "2.16.840.1.113883.3.42.126.100001.16",
+            "primary": true
+          }
+        ],
+        "date": {
+          "start": "2014-04-02T17:16:00",
+          "end": "2014-04-02T17:16:00"
+        },
+        "orderNumber": {
+          "id": "140402-00003"
+        },
+        "orderingProvider": {
+          "name": "BHIE, USERONE"
+        },
+        "status": [],
+        "actionCode": "DC",
+        "childResistant": true,
+        "deliveryLocation": null,
+        "dispensingLocation": null,
+        "alternateDrugText": "TYLENOL 325 MG TABLET",
+        "duration": "D3",
+        "endDate": {
+          "start": "2014-04-05T17:17:00",
+          "end": "2014-04-05T17:17:00"
+        },
+        "enteringLocation": {
+          "name": "Family Practice Clinic"
+        },
+        "giveAmount": "325",
+        "giveFormDescription": "TABLET",
+        "giveUnits": [],
+        "intervalPattern": null,
+        "interval": null,
+        "numberOfRefills": "0",
+        "comment": "Jane Testing",
+        "priorOrderNumber": null,
+        "priority": "ROUTINE",
+        "quantity": "50",
+        "requestedDispenseAmount": "50",
+        "requestedGiveTimeUnit": null,
+        "routeDescription": "PO",
+        "sig": "TAKE 1 TABLET BY MOUTH EVERY SIX HOURS AS NEEDED HEADACHE/FEVER/PAIN OR AS DIRECTED",
+        "startDate": {
+          "start": "2014-04-02T17:18:00",
+          "end": "2014-04-02T17:18:00"
+        },
+        "verifiedBy": null
+      }
+    ]
+  }
+}

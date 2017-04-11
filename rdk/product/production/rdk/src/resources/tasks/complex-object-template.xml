@@ -1,0 +1,5 @@
+<item key="{Key}">
+	<value xsi:type="{Type}" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+		{Value}
+	</value>
+</item>

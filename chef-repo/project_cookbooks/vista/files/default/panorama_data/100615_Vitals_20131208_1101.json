@@ -1,0 +1,53 @@
+{
+	"id":"100615_Vitals_20131208_1101",
+	"vitals": {
+		"patientIEN":"100615",
+		"userIEN":"10000000224",
+		"location":"23",
+		"date": "3131208",
+		"time": "1101",
+		"observations": [
+			{
+				"typeName": "BLOOD PRESSURE",
+				"result": "110/71",
+				"VITAL TYPE": "1"
+			},
+			{
+				"typeName": "TEMPERATURE",
+				"result": "100.1",
+				"VITAL TYPE": "2"
+			},
+						{
+				"typeName": "RESPIRATION",
+				"result": "24",
+				"VITAL TYPE": "3"
+			},
+						{
+				"typeName": "PULSE",
+				"result": "62",
+				"VITAL TYPE": "5"
+			},
+						{
+				"typeName": "HEIGHT",
+				"result": "70",
+				"VITAL TYPE": "8"
+			},
+						{
+				"typeName": "WEIGHT",
+				"result": "220",
+				"VITAL TYPE": "9"
+			},
+						{
+				"typeName": "PAIN",
+				"result": "5",
+				"VITAL TYPE": "22"
+			}
+			,
+						{
+				"typeName": "PULSE OXIMETRY",
+				"result": "92",
+				"VITAL TYPE": "21"
+			}
+		]
+	}
+}

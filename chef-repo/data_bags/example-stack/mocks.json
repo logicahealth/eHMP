@@ -1,0 +1,9 @@
+{
+  "id": "mocks",
+  "ip_address": "172.16.4.205",
+  "stack": "example-stack",
+  "roles": [
+    "example",
+    "mocks"
+  ]
+}

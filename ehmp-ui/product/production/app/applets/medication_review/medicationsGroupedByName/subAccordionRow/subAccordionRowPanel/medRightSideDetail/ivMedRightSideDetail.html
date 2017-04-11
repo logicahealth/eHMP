@@ -1,0 +1,126 @@
+<div class="col-sm-12 dropShadow">
+    <div class="col-sm-12 left-padding-no">
+        <div class="col-sm-9 left-padding-no right-padding-no">
+            <h3 class="capitalize">{{name}} {{strength}}</h3>
+        </div>
+        <div class="col-sm-3 left-padding-no right-padding-no">
+            <h3 class="detailStatus capitalize">{{modifiedVaStatus}}</h3>
+        </div>
+    </div>
+    <div class="col-sm-12 left-padding-no">
+        {{{detailSig}}}
+        {{#if ivDosages}}
+            <p>{{ivDosages}}</p>
+        {{/if}}
+    </div>
+    <div class="col-sm-12 left-padding-no bottom-padding-sm">
+        <div class="bottom-border-grey-light"><b>Order Details</b></div>
+    </div>
+    <div class="col-sm-12 order-info-line left-padding-no bottom-padding-sm">
+        <div class="col-sm-3 order-info left-padding-no">
+            <p class="labelStyleColor">Order Text</p>
+            <p>{{name}} {{strength}}</p>
+        </div>
+        <div class="col-sm-3 order-info">
+            <p class="labelStyleColor">Nature of Order</p>
+            <p>No Data</p>
+        </div>
+        <div class="col-sm-3 order-info">
+            <p class="labelStyleColor">Electronic Signature</p>
+            <p>No Data</p>
+        </div>
+        <div class="col-sm-3 order-info">
+            <p class="labelStyleColor">Pharmacist</p>
+            {{#each orders}}
+            <p>{{pharmacistName}}</p>
+            {{/each}}
+        </div>
+    </div>
+    <div class="col-sm-12 order-info-line left-padding-no bottom-padding-sm">
+        <div class="col-sm-3 order-info left-padding-no">
+            <p class="labelStyleColor">Start Date/Time</p>
+            <p>{{formatDate overallStart "MM/DD/YYYY HH:mm"}}</p>
+        </div>
+        <div class="col-sm-3 order-info">
+            <p class="labelStyleColor">Stop Date/Time</p>
+            {{#if isDiscontinued }}<p>{{formatDate stopped "MM/DD/YYYY HH:mm"}}</p> {{/if}}
+            {{#if showExpiredDate }}<p>({{expireText}} {{formatDate overallStop "MM/DD/YYYY HH:mm"}})</p>{{/if}}
+        </div>
+        <div class="col-sm-3 order-info">
+            <p class="labelStyleColor">Treating Specialty</p>
+            <p>No Data</p>
+        </div>
+        <div class="col-sm-3 order-info">
+            <p class="labelStyleColor">Ordering Location</p>
+            {{#each orders}}
+            <p>{{locationName}}</p>
+            {{/each}}
+        </div>
+    </div>
+    <div class="col-sm-12 order-info-line left-padding-no bottom-padding-sm">
+        <div class="col-sm-3 order-info left-padding-no">
+            <p class="labelStyleColor">Solutions</p>
+            <p>No Data</p>
+        </div>
+        <div class="col-sm-3 order-info">
+            <p class="labelStyleColor">Additives</p>
+            {{#each products}}
+                <p>{{ingredientCodeName}} {{#if volume}}{{volume}}{{/if}}</p>
+            {{/each}}
+        </div>
+        <div class="col-sm-3 order-info">
+            <p class="labelStyleColor">Route</p>
+            {{#each dosages}}
+            <p>{{routeName}}</p>
+            {{/each}}
+        </div>
+        <div class="col-sm-3 order-info">
+            <p class="labelStyleColor">Infusion Rate</p>
+            {{#each dosages}}
+            <p>{{ivRate}}</p>
+            {{/each}}
+        </div>
+    </div>
+    <div class="col-sm-12 order-info-line left-padding-no bottom-padding-sm">
+        <div class="col-sm-3 order-info left-padding-no">
+            <p class="labelStyleColor">Total Dose</p>
+            <p>No Data</p>
+        </div>
+        <div class="col-sm-3 order-info">
+            <p class="labelStyleColor">IV Print Name</p>
+            <p>No Data</p>
+        </div>
+        <div class="col-sm-3 order-info">
+            <p class="labelStyleColor">Schedule Type</p>
+            <p>{{scheduleType}}</p>
+        </div>
+        <div class="col-sm-3 order-info">
+            <p class="labelStyleColor">Order Number</p>
+            <p>#{{slicedOrderUid}}</p>
+        </div>
+    </div>
+    <div class="col-sm-12 fillHx left-padding-no bottom-padding-sm">
+        <div class="bottom-border-grey-light"><b>Order Checks</b></div>
+            {{#if orderChecks}}
+            <div class="col-sm-12 left-padding-no">
+                <table class="table">
+                    {{#each orderChecks}}
+                    <tr>
+                        <td class="fillColumn left-padding-no"></td>
+                        <td class="fillColumn"></td>
+                    </tr>
+                    {{/each}}
+                </table>
+                {{else}}
+                <p>No Order Checks</p>
+            </div>
+            {{/if}}
+        </div>
+    </div>
+</div>
+</div>
+<div class="col-sm-12 footerBox">
+    <!--  <button type="button" class="btn btn-default">Discontinue</button>
+    <button type="button" class="btn btn-default">Renew</button>
+    <button type="button" class="btn btn-default">Close</button> -->
+</div>

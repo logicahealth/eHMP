@@ -1,0 +1,61 @@
+{
+	"parameters": {
+	},
+	"schema": {
+		"$schema": "http://json-schema.org/draft-04/schema#",
+		"properties": {
+			"docDefUid": {
+				"type": "string"
+			},
+			"docStatus": {
+				"enum": [
+					"AMENDED",
+					"COMPLETED",
+					"DELETED",
+					"PURGED",
+					"RETRACTED",
+					"UNCOSIGNED",
+					"UNDICTATED",
+					"UNRELEASED",
+					"UNSIGNED",
+					"UNTRANSCRIBED",
+					"UNVERIFIED"
+				],
+				"type": "string"
+			},
+			"roleNames": {
+				"items": {
+					"enum": [
+						"ADDITIONAL SIGNER",
+						"ATTENDING PHYSICIAN",
+						"AUTHOR/DICTATOR",
+						"COMPLETER",
+						"COSIGNER",
+						"ENTERER",
+						"EXPECTED COSIGNER",
+						"EXPECTED SIGNER",
+						"INTERPRETER",
+						"SIGNER",
+						"SURROGATE",
+						"TRANSCRIBER"
+					],
+					"type": "string"
+				},
+				"type": "array"
+			},
+			"userClassUids": {
+				"items": {
+					"type": "string"
+				},
+				"type": "array"
+			}
+		},
+		"required": [
+			"userClassUids",
+			"docDefUid",
+			"docStatus",
+			"roleNames"
+		],
+		"type": "object"
+	}
+}

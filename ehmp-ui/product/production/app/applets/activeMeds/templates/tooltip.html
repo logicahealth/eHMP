@@ -1,0 +1,28 @@
+<table id="{{uid}}" data-toggle="popup" class="table-condensed">
+    <caption class="sr-only">Quicklook Table. This table represents a brief summary for the selected medication.</caption>
+    <thead>
+        <tr>
+            <th scope="col">Last Update</th>
+            <th scope="col">Medication</th>
+            <th scope="col">Sig</th>
+            <th scope="col">Since</th>
+        </tr>
+    </thead>
+    <tbody>
+    {{#if popoverMeds}} 
+        {{#each popoverMeds}}
+        <tr>
+            <td>{{attributes.overallStartFormat}}</td>
+            <td>{{attributes.normalizedName}}</td>
+            <td>{{attributes.sig}}</td>
+            <td>{{formatTimeSince attributes.age}}</td>
+        </tr>
+        {{/each}}
+        {{#if numberOfMedsNotShownInPopover}}
+        <tr>
+            <td colspan="4" align="center"><strong>{{numberOfMedsNotShownInPopover}} More<strong></td>
+        </tr>
+        {{/if}}
+    {{/if}}
+    </tbody>
+</table>

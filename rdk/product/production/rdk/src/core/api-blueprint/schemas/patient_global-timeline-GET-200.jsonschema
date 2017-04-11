@@ -1,0 +1,79 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "",
+	"description": "",
+	"type": "object",
+	"required": [
+		"data",
+		"status"
+	],
+	"properties": {
+		"data": {
+			"type": "object",
+			"required": [
+				"inpatient",
+				"outpatient",
+				"inpatientCount",
+				"outpatientCount"
+			],
+			"properties": {
+				"inpatient": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"required": [
+							"kind",
+							"dateTime"
+						],
+						"properties": {
+							"dateTime": {
+								"type": "string"
+							},
+							"kind": {
+								"type": "string"
+							},
+							"stay": {
+								"type": "object",
+								"required": [
+									"arrivalDateTime"
+								],
+								"properties": {
+									"arrivalDateTime": {
+										"type": "string"
+									}
+								}
+							}
+						}
+					}
+				},
+				"inpatientCount": {
+					"type": "integer"
+				},
+				"outpatient": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"required": [
+							"kind",
+							"dateTime"
+						],
+						"properties": {
+							"dateTime": {
+								"type": "string"
+							},
+							"kind": {
+								"type": "string"
+							}
+						}
+					}
+				},
+				"outpatientCount": {
+					"type": "integer"
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

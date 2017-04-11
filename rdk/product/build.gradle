@@ -1,0 +1,151 @@
+apply from : '../infrastructure/gradle/deploy.gradle'
+
+if( !System.getenv().keySet().contains('WORKSPACE') ){
+  throw new GradleException('WORKSPACE environment variable not set. Did you "source infrastructure/set.env.sh"?')
+}
+
+def artifactsToUpload = [
+  vistaTasks: [name: 'VistaTasks', proj: ':production:jbpm:VistaTasks', env_var: 'JBPM_VISTATASKS_VERSION'],
+  fitlabProject: [name: 'FITLabProject', proj: ':production:jbpm:FITLabProject', env_var: 'JBPM_FITLABPROJECT_VERSION'],
+  general_medicine: [name: 'General_Medicine', proj: ':production:jbpm:General_Medicine', env_var: 'JBPM_GENERAL_MEDICINE_VERSION'],
+  order: [name: 'Order', proj: ':production:jbpm:Order', env_var: 'JBPM_ORDER_VERSION'],
+  activity: [name: 'Activity', proj: ':production:jbpm:Activity', env_var: 'JBPM_ACTIVITY_VERSION'],
+  authentication: [name: 'authentication', proj: ':production:jbpm:authentication', env_var: 'JBPM_AUTH_VERSION'],
+  listeners: [name: 'event-listeners', proj: ':production:jbpm:event-listeners', env_var: 'JBPM_LISTENER_VERSION'],
+  cdsinvocationservice: [name: 'CDSInvocationService', proj: ':production:jbpm:CDSInvocationService', env_var: 'JBPM_CDSINVOCATIONSERVICE_VERSION'],
+  fobtlabservice: [name: 'FOBTLabService', proj: ':production:jbpm:FOBTLabService', env_var: 'JBPM_FOBTLABSERVICE_VERSION'],
+  tasksservice: [name: 'tasksservice', proj: ':production:jbpm:tasksservice', env_var: 'JBPM_TASKSSERVICE_VERSION'],
+  rdk: [name: 'rdk', proj: ':production:rdk', env_var: 'RDK_VERSION']
+]
+
+allprojects {
+  apply plugin: 'maven'
+
+  ext.set('repo', 'releases')
+  ext.set('repoVersion', getRepoVersion())
+  ext.set('branchName', getCurrentBranchName())
+  ext.set('currentCommitHash', getCurrentCommitHash())
+
+  repositories {
+    maven {url "http://nexus.vaftl.us:8081/nexus/content/repositories/ehmp-public"}
+  }
+}
+
+
+def getRepoVersion() {
+    def v
+    v = new File(rootDir, "../infrastructure/properties/applicationVersionPrefix").getText()
+    if (v.endsWith('.'))
+        v = v.substring(0, v.length()-1)
+    return v
+}
+
+def getCurrentBranchName() {
+    def branchName
+    if (System.properties['os.name'].toLowerCase().contains('windows')) {
+        branchName = repoVersion + '.' + 'cmd /C git rev-parse --abbrev-ref HEAD'.execute().text.trim()
+    } else {
+        branchName = ['sh', '-c', 'git rev-parse --abbrev-ref HEAD'].execute().text.trim()
+    }
+    return branchName
+}
+
+def getCurrentCommitHash() {
+    def commitHash
+    if (System.properties['os.name'].toLowerCase().contains('windows')) {
+        commitHash = repoVersion + '.' + 'cmd /C git rev-parse HEAD'.execute().text.trim()
+    } else {
+        commitHash = ['sh', '-c', 'git rev-parse HEAD'].execute().text.trim()
+    }
+    return commitHash
+}
+
+def local_provision_version() {
+  def text = new File("$rootDir/provisioner/provisionerVersion").text.trim()
+  return text
+}
+
+def getVersionByCommitCountForProject(projectString, subDir = null){
+    def commitCountDir = project("${projectString}").projectDir
+
+    if(subDir) {
+        commitCountDir = "${commitCountDir}/${subDir}"
+    }
+
+    def proc1 = ['sh', '-c', "git rev-list --full-history --all ${->commitCountDir}"].execute()
+    def proc2 = 'wc -l'.execute()
+    proc1 | proc2
+    version = "${getRepoVersion() + '.' + proc2.text.trim()}"
+    return version
+}
+
+task generateVersionPropertiesFile() {
+    doLast {
+        def commitHash = getCurrentCommitHash()
+        def provisionerVersion = local_provision_version()
+        def version_string = ""
+
+        artifactsToUpload.each { artifact ->
+
+          def version = getVersionByCommitCountForProject("${artifact.value['proj']}")
+          println "${artifact.value['env_var']}='${version}'"
+          version_string += "${artifact.value['env_var']}=${version}\n"
+        }
+
+        version_string += "COMMIT_HASH=${commitHash}\n"
+        println "COMMIT_HASH='${commitHash}'"
+        version_string += "RDK_PROVISION=${provisionerVersion}"
+        println "RDK_PROVISION='${provisionerVersion}'"
+
+        project.buildDir.mkdirs()
+        delete "${project.buildDir}/version.properties"
+        new File("${project.buildDir}/version.properties") << "${version_string}"
+
+    }
+}
+
+// Fortify stuff
+// Add a new configuration
+configurations {
+ fortify { }
+}
+
+// pull in the fortify libs for the new configuration
+dependencies {
+ fortify 'com.fortify:sourceanalyzer:4.1'
+}
+
+task fortifySetup << {
+ ant.properties['build.compiler']='com.fortify.dev.ant.SCACompiler'
+ ant.typedef(name: 'sca', classname: 'com.fortify.dev.ant.SourceanalyzerTask',
+ classpath: configurations.fortify.asPath)
+}
+
+task fortifyReport << {
+
+    Map<String, String> fortifyProjects = [
+      'rdk': 'rdk/**/*.js'
+    ]
+
+    for (e in fortifyProjects) {
+        println "Scanning: ${e.key} => ${e.value}"
+        ant.sca(jdk:"1.7",
+            debug:true ,
+            verbose:true ,
+            failonerror:true ,
+            scan:true ,
+            maxHeap:"4096M" ,
+            logFile:file("$buildDir/reports/fortify/Fortify-${e.key}.log"),
+            resultsFile:file("$buildDir/reports/fortify/${e.key}.fpr")
+        ){
+        fileset(dir:'production') {
+            include(name:"${e.value}")
+            exclude(name:'**/lib/**')
+            exclude(name:'**/test/**')
+            exclude(name:'**/*Test*')
+            exclude(name:'**/build/**')
+            }
+        }
+    }
+}
+

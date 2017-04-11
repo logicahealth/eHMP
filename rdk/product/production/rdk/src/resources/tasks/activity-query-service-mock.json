@@ -1,0 +1,28 @@
+{
+    "9E7A_1248": [{
+        "id": "FITLabProject.FITLabActivity",
+        "name": "FITLabActivity",
+        "version": "1.0",
+        "packageName": "org.jbpm",
+        "deployment": "VistaCore:FITLabProject",
+        "variables": {
+            "patientId": "String",
+            "labOrderId": "String"
+        }
+    }],
+    "note": [{
+        "id": "General_Medicine.Note",
+        "name": "Note",
+        "version": "1.0",
+        "packageName": "org.jbpm",
+        "deployment": "VistaCore:General_Medicine",
+        "variables": {
+            "noteTitle": "String",
+            "userId": "String",
+            "icn": "String",
+            "noteId": "String"
+        }
+    }],
+    "default": []
+}
+

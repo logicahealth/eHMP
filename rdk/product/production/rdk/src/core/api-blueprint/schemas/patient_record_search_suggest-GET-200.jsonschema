@@ -1,0 +1,71 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "Get text search suggestions",
+	"description": "",
+	"type": "object",
+	"required": [
+		"data",
+		"success",
+		"status"
+	],
+	"properties": {
+		"data": {
+			"type": "object",
+			"required": [
+				"currentItemCount",
+				"itemsPerPage",
+				"startIndex",
+				"totalItems",
+				"items"
+			],
+			"properties": {
+				"currentItemCount": {
+					"type": "integer"
+				},
+				"items": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"required": [
+							"query",
+							"display",
+							"textSearchTerm"
+						],
+						"properties": {
+							"category": {
+								"type": "string"
+							},
+							"display": {
+								"type": "string"
+							},
+							"query": {
+								"type": "string"
+							},
+							"textSearchTerm": {
+								"type": "string"
+							}
+						}
+					}
+				},
+				"itemsPerPage": {
+					"type": "integer"
+				},
+				"startIndex": {
+					"type": "integer"
+				},
+				"totalItems": {
+					"type": "integer"
+				}
+			}
+		},
+		"id": {
+			"type": "string"
+		},
+		"status": {
+			"type": "integer"
+		},
+		"success": {
+			"type": "boolean"
+		}
+	}
+}

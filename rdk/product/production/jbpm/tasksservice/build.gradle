@@ -1,0 +1,38 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'war'
+
+group = 'gov.va.jbpm.tasksservice'
+version = '0.0.1'
+
+description = """tasksservice Maven Webapp"""
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+
+
+repositories {
+     maven { url "http://nexus.vaftl.us:8081/nexus/content/repositories/ehmp-public" }
+}
+dependencies {
+    compile group: 'javax.servlet', name: 'javax.servlet-api', version:'3.1.0'
+    compile group: 'org.springframework', name: 'spring-core', version:'4.2.4.RELEASE'
+    compile group: 'org.springframework', name: 'spring-webmvc', version:'4.2.4.RELEASE'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version:'2.6.3'
+    compile group: 'org.kie', name: 'kie-api', version:'6.2.0.Final'
+    compile group: 'org.kie', name: 'kie-internal', version:'6.2.0.Final'
+    compile group: 'org.kie.remote', name: 'kie-remote-client', version:'6.2.0.Final'
+    compile group: 'org.kie', name: 'kie-ci', version:'6.2.0.Final'
+    compile group: 'org.jbpm', name: 'jbpm-human-task-core', version:'6.2.0.Final'
+    testCompile group: 'junit', name: 'junit', version:'3.8.1'
+}
+
+war {
+    manifest {
+        attributes  'Implementation-Title': 'Gradle War File tasksservice',
+                    'Implementation-Version': version
+    }
+
+    baseName = 'tasksservice'
+}

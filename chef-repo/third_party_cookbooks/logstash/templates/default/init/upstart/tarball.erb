@@ -1,0 +1,34 @@
+description "Logstash"
+author "Chef"
+
+start on (filesystem and net-device-up)
+stop on runlevel [!2345]
+
+respawn
+respawn limit 5 30
+limit nofile <%= @nofile_soft %> <%= @nofile_hard %>
+
+chdir <%= @home %>
+
+<% if @user_supported -%>
+setuid <%= @user %>
+  <% unless @supervisor_gid.to_s.empty? -%>
+setgid <%= @supervisor_gid %>
+  <% end -%>
+<% end -%>
+
+script
+  export LS_HEAP_SIZE="<%= @max_heap %>"
+  export LOGSTASH_HOME="<%= @home %>"
+  export HOME=$LOGSTASH_HOME
+  export LOGSTASH_OPTS="<%= @args.join(' ') %>"
+  export GC_OPTS="<%= @gc_opts %>"
+  export JAVA_OPTS="-server -Xms<%= @min_heap %> -Xmx<%= @max_heap %> -Djava.io.tmpdir=$LOGSTASH_HOME/tmp/ <%= @java_opts %> <%= '-Djava.net.preferIPv4Stack=true' if @ipv4_only %>"
+  <% if @user_supported -%>
+  exec $LOGSTASH_HOME/bin/logstash $LOGSTASH_OPTS
+  <% else -%>
+  exec sudo -u <%= @user %> $LOGSTASH_HOME/bin/logstash $LOGSTASH_OPTS
+  <% end -%>
+end script
+
+emits logstash-server-running

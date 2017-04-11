@@ -1,0 +1,6 @@
+bower_components/
+node_modules/
+dist/
+index.html
+!style-guide/index.html
+

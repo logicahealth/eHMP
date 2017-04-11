@@ -1,0 +1,180 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "Return a detailed synchronization status for the patient",
+	"description": "",
+	"type": "object",
+	"required": [
+		"data",
+		"status"
+	],
+	"properties": {
+		"data": {
+			"type": "object",
+			"required": [
+				"completedStamp"
+			],
+			"properties": {
+				"completedStamp": {
+					"type": "object",
+					"required": [
+						"icn",
+						"sourceMetaStamp"
+					],
+					"properties": {
+						"icn": {
+							"type": "string"
+						},
+						"lastAccessTime": {
+							"type": "integer"
+						},
+						"sourceMetaStamp": {
+							"type": "object",
+							"additionalProperties": {
+								"type": "object",
+								"required": [
+									"domainMetaStamp",
+									"localId",
+									"pid",
+									"stampTime",
+									"syncCompleted"
+								],
+								"properties": {
+									"domainMetaStamp": {
+										"type": "object",
+										"additionalProperties": {
+											"type": "object",
+											"required": [
+												"domain",
+												"eventMetaStamp",
+												"stampTime",
+												"syncCompleted"
+											],
+											"properties": {
+												"domain": {
+													"type": "string"
+												},
+												"eventCount": {
+													"type": "integer"
+												},
+												"eventMetaStamp": {
+													"type": "object",
+													"additionalProperties": {
+														"type": "object",
+														"required": [
+															"stampTime",
+															"stored"
+														],
+														"properties": {
+															"stampTime": {
+																"type": "integer"
+															},
+															"stored": {
+																"type": "boolean"
+															}
+														}
+													}
+												},
+												"stampTime": {
+													"type": "integer"
+												},
+												"storedCount": {
+													"type": "integer"
+												},
+												"syncCompleted": {
+													"type": "boolean"
+												}
+											}
+										}
+									},
+									"localId": {
+										"type": ["integer", "string"]
+									},
+									"pid": {
+										"type": "string"
+									},
+									"stampTime": {
+										"type": "integer"
+									},
+									"syncCompleted": {
+										"type": "boolean"
+									}
+								}
+							}
+						}
+					}
+				},
+				"inProgress": {
+					"type": "object",
+					"required": [
+						"icn",
+						"sourceMetaStamp"
+					],
+					"properties": {
+						"icn": {
+							"type": "string"
+						},
+						"sourceMetaStamp": {
+							"type": "object",
+							"additionalProperties": {
+								"type": "object",
+								"required": [
+									"domainMetaStamp",
+									"localId",
+									"pid",
+									"stampTime"
+								],
+								"properties": {
+									"domainMetaStamp": {
+										"type": "object",
+										"additionalProperties": {
+											"type": "object",
+											"required": [
+												"domain",
+												"eventMetaStamp",
+												"stampTime"
+											],
+											"properties": {
+												"domain": {
+													"type": "string"
+												},
+												"eventMetaStamp": {
+													"type": "object",
+													"additionalProperties": {
+														"type": "object",
+														"required": [
+															"stampTime"
+														],
+														"properties": {
+															"stampTime": {
+																"type": "integer"
+															}
+														}
+													}
+												},
+												"stampTime": {
+													"type": "integer"
+												}
+											}
+										}
+									},
+									"localId": {
+										"type": "string"
+									},
+									"pid": {
+										"type": "string"
+									},
+									"stampTime": {
+										"type": "integer"
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

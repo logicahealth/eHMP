@@ -1,0 +1,14 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "Destroys the current user session",
+	"description": "Expects a session to exist else it returns nothing.",
+	"type": "object",
+	"required": [
+		"status"
+	],
+	"properties": {
+		"status": {
+			"type": "integer"
+		}
+	}
+}

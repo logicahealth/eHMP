@@ -1,0 +1,28 @@
+.applet-chrome {
+	background: $pure-white;
+	.applet-toolbar {
+		overflow: hidden;
+		h4 {
+			border: none;
+			font-size: 12px;
+			margin: 0;
+			padding: 5px 0 0 5px;
+			text-align: center;
+		}
+		ul.tool-icons {
+			float: right;
+			list-style: none;
+			margin: 0;
+    		padding: 0;
+			> li {
+				float: left;
+			}
+		}
+		.popover {
+			min-width: 280px;
+			.popover-title {
+				display: none;
+			}
+		}
+	}
+}

@@ -1,0 +1,52 @@
+ServerRoot "<%= node[:vista][:cache_dir] %>/httpd"
+DocumentRoot "<%= node[:vista][:cache_dir] %>/csp"
+CSPModulePath <%= node[:vista][:cache_dir] %>/csp/bin/
+LoadModule csp_module_sa <%= node[:vista][:cache_dir] %>/csp/bin/CSPa24.so
+User <%= node[:vista][:httpd_user] %>
+Group <%= node[:vista][:cache_user] %>
+<Location />
+    CSP On
+    SetHandler csp-handler-sa
+</Location>
+
+ServerName localhost
+PidFile logs/httpd.pid
+Timeout 300
+KeepAlive Off
+
+UseCanonicalName Off
+
+<Directory />
+    Options MultiViews FollowSymLinks
+    AllowOverride None
+    Require all granted
+    <FilesMatch "\.(log|ini|pid|exe|so)$">
+        Require all denied
+    </FilesMatch>
+</Directory>
+
+TypesConfig conf/mime.types
+HostnameLookups Off
+
+ErrorLog logs/error.log
+LogLevel error
+LogFormat "%h %l %u %t \"%r\" %>s %b" common
+#CustomLog logs/access.log common
+
+StartServers 5
+MinSpareServers 2
+MaxSpareServers 20
+ServerLimit 256
+MaxClients 256
+
+ServerTokens Prod
+
+<Location "/csp/bin/Systems/">
+    SetHandler csp-handler-sa
+</Location>
+<Location "/csp/bin/RunTime/">
+    SetHandler csp-handler-sa
+</Location>
+AddHandler csp-handler-sa csp cls cxw zen
+
+TraceEnable <%= node[:vista][:trace_enable] %>

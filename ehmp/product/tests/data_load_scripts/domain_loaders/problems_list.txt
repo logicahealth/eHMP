@@ -1,0 +1,1743 @@
+25064002^Pain in head
+370532003^Head tilt
+262581006^Head - burn
+12138000^Skull enlargement
+43954004^Head banging
+432525007^Mass of head
+4969004^Sinus pain
+82271004^Injury of head region
+262528003^Superficial bruising of head
+118934005^Disorder of head
+161587009^History of head injury
+193031009^Vasomotor headache
+267096005^Frontal headache
+283049005^Abrasion of head
+4448006^Allergic headache
+128187005^Vascular headache
+128273004^Carbuncle of head
+199373000^High head at term
+230461009^Headache disorder
+314662007^Major head injury
+398126006^Muscle contraction headache
+330007^Occipital headache
+38354005^Head - open wound
+128277003^Cellulitis of head
+428088000^Laceration of head
+66551002^Stress headache
+274751001^Head and neck mass
+282749008^Head and neck injury
+430937009^Closed head wound
+445511002^Orthostatic headache
+279016001^Cervicogenic headache
+398057008^Tension headache
+54012000^Posttraumatic headache
+274755005^Head and neck swelling
+263196008^Fracture of radial head
+301871007^Lipoma of head and neck
+17771000^Burn of face AND/OR head
+37645002^Burn of face, head AND/OR neck
+43242008^Rebound headache
+400082007^Disorder of skin of head
+423812005^Sarcoma of head and neck
+212483009^Multiple injuries of head
+255055008^Tumor of head and neck
+287141007^Burn to head - full thickness
+431237007^Chronic headache disorder
+103011009^Primary exertional headache
+103012002^Analgesic overuse headache
+111270009^Acquired deformity of head
+263023008^Dislocation of radial head
+283025007^Superficial injury of head
+287140008^Burn to head - blister
+417109008^Subluxation of radial head
+432211007^Calcinosis within hematoma of head
+202967007^Long head of biceps rupture
+7329003^Abscess of head, except face
+230481005^Primary stabbing headache
+301365009^Pain of head and neck region
+7572005^Boil of head (excluding face)
+199375007^High head at term - delivered
+230471006^Chronic tension-type headache
+41191003^Open fracture of head of femur
+230465000^Migraine accompaniment
+230470007^Episodic tension-type headache
+445322004^Migraine variant with headache
+69427008^Open fracture radial head
+95657009^Chronic mixed headache syndrome
+201043003^CPMA - Callus plantar metatarsal area
+230477005^Post-traumatic headache
+284210005^Multiple burns of head and neck
+267106000^Symptom of head and neck region
+441535001^Adenocarcinoma of head and neck
+208526001^Closed fracture head of femur
+255056009^Malignant tumor of head and/or neck
+699694000^Chronic post-concussive headache
+20945009^First degree burn of face AND/OR head
+28359007^Closed fracture fibula, head
+68854005^Closed fracture radius, head
+95418008^Muscle spasms of head AND/OR neck
+428150004^Closed subluxation of radial head
+93824007^Primary malignant neoplasm of head
+200600003^Carbuncle of head (excluding face)
+398987004^Spinal headache
+83453001^Aseptic necrosis of head of humerus
+269578002^Malignant melanoma of head and neck
+363419009^Ca head of pancreas
+775008^Open wound of head with complication
+203382004^Osteochondritis of the humeral head
+54975007^Second degree burn of face AND/OR head
+86128003^Rupture long head biceps tendon
+303194003^Metastasis to head and neck lymph node
+33824005^First degree burn of face, head AND/OR neck
+40883004^Open wound of head without complication
+92391007^Benign tumor of soft tissue of head
+203476003^Avascular necrosis of the head of femur
+203694000^Nonallopathic lesion of head region
+372122006^Ca skin - head/neck
+428900007^History of postdural puncture headache
+188353002^Malignant neoplasm of head, neck and face
+211715009^Full thickness burn of face, head or neck
+85962005^Deep third degree burn of face AND/OR head
+25749005^Disproportion between fetus and pelvis
+61455009^Third degree burn of face, head AND/OR neck
+85564003^Injury of blood vessels of head AND/OR neck
+25515000^Second degree burn of face, head AND/OR neck
+93902008^Primary malignant neoplasm of muscle of head
+109922000^Benign neoplasm of peripheral nerves of head
+29281007^Aseptic necrosis of head AND/OR neck of femur
+372119009^Primary malignant neoplasm of head of pancreas
+23119003^Injury of superficial nerves of head AND/OR neck
+372123001^Primary malignant neoplasm of skin head and neck
+93699008^Primary malignant neoplasm of blood vessel of head
+94054005^Primary malignant neoplasm of soft tissues of head
+255195007^Benign tumor of soft tissue of head, face and neck
+19856004^Late effect of burn of eye, head and neck
+128217007^Disorder of skin AND/OR subcutaneous tissue of head
+188500005^Lymphosarcoma of lymph nodes of head, face and neck
+6378004^Injury of multiple blood vessels of head AND/OR neck
+38532007^Late effect of open wound of head, neck AND/OR trunk
+188489006^Reticulosarcoma of lymph nodes of head, face and neck
+302816009^Malignant tumor of soft tissue of head, face and neck
+188609000^Nodular lymphoma of lymph nodes of head, face and neck
+188630009^Sezary's disease of lymph nodes of head, face and neck
+109923005^Primary malignant neoplasm of peripheral nerves of head
+188544008^Hodgkin sarcoma of lymph nodes of head, face and neck
+92512000^Burkitt tumor of lymph nodes of head, face AND/OR neck
+188510001^Burkitt lymphoma of lymph nodes of head, face and neck
+211689002^Superficial burn of multiple sites of face, head or neck
+58565006^Injury of head of pancreas without open wound into cavity
+188534006^Hodgkin granuloma of lymph nodes of head, face and neck
+274535006^Abnormal findings on diagnostic imaging of skull and head
+95260009^Sezary disease of lymph nodes of head, face AND/OR neck
+93524003^Hodgkin disease of lymph nodes of head, face AND/OR neck
+93551000^Hodgkin sarcoma of lymph nodes of head, face AND/OR neck
+94711005^Mycosis fungoides of lymph nodes of head, face AND/OR neck
+188662007^Mast cell malignancy of lymph nodes of head, face and neck
+93195001^Malignant lymphoma of lymph nodes of head, face AND/OR neck
+211720009^Full thickness burn of multiple sites of face, head or neck
+93533001^Hodgkin granuloma of lymph nodes of head, face AND/OR neck
+188640007^Malignant histiocytosis of lymph nodes of head, face and neck
+93137007^Letterer-Siwe disease of lymph nodes of head, face AND/OR neck
+426885008^Hodgkin's disease, lymphocytic depletion of head
+93186009^Malignant histiocytosis of lymph nodes of head, face AND/OR neck
+93542008^Hodgkin paragranuloma of lymph nodes of head, face AND/OR neck
+210155009^Pancreas head injury with open wound into cavity
+20916007^Adhesion of tympanic membrane to stapes
+54896004^Deep third degree burn of face AND/OR head with loss of body part
+93204001^Malignant mast cell tumor of lymph nodes of head, face AND/OR neck
+94690004^Mixed cell type lymphosarcoma of lymph nodes of head, face, and neck
+188645002^Leukemic reticuloendotheliosis of lymph nodes of head, face and neck
+8328009^Late effect of injury to blood vessels of head, neck AND/OR extremities
+93148000^Leukemic reticuloendotheliosis of lymph nodes of head, face AND/OR neck
+109921007^Primary malignant neoplasm of peripheral nerve of head, face and/or neck
+188565002^Hodgkin disease, nodular sclerosis of lymph nodes of head, face and neck
+188575004^Hodgkin disease, mixed cellularity of lymph nodes of head, face and neck
+93506000^Hodgkin disease, mixed cellularity of lymph nodes of head, face AND/OR neck
+93515007^Hodgkin disease, nodular sclerosis of lymph nodes of head, face AND/OR neck
+188585003^Hodgkin disease, lymphocytic depletion of lymph nodes of head, face and neck
+93488004^Hodgkin disease, lymphocytic depletion of lymph nodes of head, face AND/OR neck
+188554007^Hodgkin disease, lymphocytic-histiocytic predominance of lymph nodes of head, face and neck
+93497000^Hodgkin disease, lymphocytic-histiocytic predominance of lymph nodes of head, face AND/OR neck
+82272006^Infective rhinitis
+4191007^Scephocephaly
+21850008^Lateral curvatures of skull unequal
+386705008^Lightheaded
+81000006^Pediculus capitis infestation
+33629003^Optic disc drusen
+56097005^Common migraine
+230282000^Dementia due to head trauma
+54150009^URI - Upper respiratory infection
+15739006^Juvenile osteochondritis of hip AND/OR pelvis
+111255008^Perthes disease
+161891005^Pain in back
+249921008^Back stiffness
+72998004^Burn of back
+200608005^Boil of back
+279039007^Nonspecific pain in the lumbar region
+81102000^Back injury
+211042000^Abrasion, back
+300956001^Lumbar strain
+309083007^Abscess of back
+33308003^Disorder of back
+61486003^Sacrodynia
+11437003^Superficial bruising of back
+134407002^Chronic back pain
+200586004^Carbuncle of back
+282766005^Lumbar region injury
+269169002^Open wound of back
+274171001^Laceration of back
+279038004^Thoracic back pain
+278862001^Acute back pain - lumbar
+55343006^Burn of back of hand
+274162005^Thoracic back sprain
+9063003^Superficial burn of back
+203095000^Spasm of back muscles
+278860009^CLBP - Chronic low back pain
+262965006^Strain of back muscle
+279049005^Post-surgery back pain
+284062002^Contusion of lower back
+135860001^Exacerbation of backache
+279035001^Acute thoracic back pain
+279040009^Mechanical low back pain
+262975009^Strain of tendon of back
+35510002^Third degree burn of back
+5083008^Partial thickness burn of back
+363025000^Congenital anomaly of back
+423463003^Basal cell carcinoma of back
+91146006^Superficial burn of back of hand
+45267008^Deep third degree burn of back
+428862002^Congenital flat back deformity
+439598000^Abrasion of skin of lower back
+92348002^Benign neoplasm of skin of back
+422599000^Squamous cell carcinoma of back
+71694002^Furuncle of back, except buttock
+44807006^Full thickness burn of back of hand
+72168007^Carbuncle of back, except buttock
+210416002^Open wound of back without complication
+59684006^Partial thickness burn of back of hand
+74177004^Multiple open dislocations of vertebral column
+93686005^Primary malignant neoplasm of back
+402517006^Basal cell carcinoma of upper back
+399194009^Disorder characterized by back pain
+21441000^Open wound of back with complication
+89040002^Deep third degree burn of back of hand
+94011000^Primary malignant neoplasm of skin of back
+213369001^Dislocations, sprains and strains involving thorax with lower back and pelvis
+36916008^Bone AND/OR joint disorder of back in mother complicating pregnancy, childbirth AND/OR puerperium
+209565008^Lumbar back sprain
+75803007^Postnasal drip
+27151001^Failed back syndrome
+66540002^Back strain of thoracic region
+281598004^Back sprain
+61960001^Swayback
+390834004^BDR - Background diabetic retinopathy
+30989003^Knee joint pain
+249913002^Knee stiff
+19684007^Burn of knee
+309531006^Mass of knee
+250102002^Knee gives way
+301024002^Ulcer of knee
+54888009^Sprain of ligament of knee joint
+125601008^Knee injury
+211332006^Abrasion of knee
+26883000^Abscess of knee
+111243002^Bursitis of knee region
+128136007^Disorder of knee
+22878006^Superficial bruising of knee
+45126009^Carbuncle of knee
+164517002^On examination - locked knee
+239817004^Synovitis of knee
+371081002^Arthritis of knee
+13301002^Cellulitis of knee
+81512004^Joint mice of knee
+125660006^Open wound of knee
+283386004^Laceration of knee
+428670009^Mass of knee joint
+429360005^Tendonitis of knee
+63643000^Internal derangement of knee joint
+202381003^Effusion of knee
+17136009^Tuberculosis of knee joint
+39547005^Enthesopathy of knee region
+202317007^Knee joint ankylosis
+202413005^Hemarthrosis of knee
+299647001^Amputated - transfemoral
+299652006^Amputated below knee
+62952004^Superficial burn of knee
+240008008^Ganglion of knee
+427973005^Fistula of knee joint
+239873007^Gonarthrosis
+240171001^Synovial plica of knee
+269137006^Sprain of knee and leg
+299322007^Swelling of knee joint
+38128008^Crush injury, knee
+239777004^Knee pyogenic arthritis
+299328006^Deformity of knee joint
+1544005^Open dislocation of knee
+239720000^Torn meniscus
+239721001^Discoid meniscus of knee
+30264000^Full thickness burn of knee
+239739005^Knee joint contracture
+5321004^Acquired deformity of knee
+66535005^Partial thickness burn of knee
+201952005^Traumatic arthropathy of knee
+202010000^Transient arthropathy-knee
+438479005^Injury of ligament of knee
+429420005^Crystal arthropathy of knee
+202245003^Knee - recurrent dislocation
+59068006^Congenital dislocation of knee
+63053003^Deep third degree burn of knee
+287021004^Synovitis/tenosynovitis - knee
+302932006^Torn medial meniscus
+308096001^On examination - Amputated left above knee
+308098000^On examination - Amputated left below knee
+65621006^Hyperextension deformity of knee
+302933001^Torn lateral meniscus
+308095002^On examination - Amputated right above knee
+308097005^On examination - Amputated right below knee
+239999004^Soft tissue lesion of knee region
+309767001^Pain due to knee joint prosthesis
+14949009^Old disruption of ligament of knee
+61293001^Congenital malformation of knee
+60058008^Sprain of cruciate ligament of knee
+281450006^TKR - Loosening of total knee replacement
+428019004^Open fracture of bone of knee joint
+58320001^Traumatic dislocation of knee joint
+44140000^Open wound of knee with complication
+429677001^History of knee arthroscopy
+202112005^Old disruption of capsular ligament of knee
+428151000^Closed fracture of bone of knee joint
+202190001^Pathological dislocation of knee joint
+427749007^History of knee surgery
+34777003^Open wound of knee without complication
+429669000^Viral arthritis of knee
+433084008^Infection of total knee joint prosthesis
+66722004^Open wound of knee with tendon involvement
+210682000^Open wound of knee, leg and ankle
+35106007^Closed traumatic dislocation of knee joint
+81902001^Sprain of medial collateral ligament of knee
+127292004^ACL sprain
+35726004^Sprain of lateral collateral ligament of knee
+127293009^PCL sprain
+239729004^Tear of medial collateral ligament of knee joint
+209520004^Partial tear, knee, anterior cruciate ligament
+275326005^Bucket handle tear of lateral meniscus
+433085009^Infection of unicondylar knee joint prosthesis
+209629006^Complete tear, knee, anterior cruciate ligament
+22591001^Degeneration of cartilage or meniscus of knee
+240000001^Tendinitis and tenosynovitis of the knee region
+212001000^Deep full thickness burn of knee, with loss of body part
+307945003^Current tear of medial cartilage AND/OR meniscus of knee
+269181003^Open wound of knee, leg and ankle with tendon involvement
+308849005^Current tear of lateral cartilage AND/OR meniscus of knee
+239833001^Chondrocalcinosis due to pyrophosphate crystals of the knee
+210686002^Open wound of knee, leg and ankle with complication
+428779003^Arthropathy of the knee associated with a neurological disorder
+210758003^Traumatic unilateral amputation, below knee, with complication
+210763004^Traumatic unilateral amputation, above knee, with complication
+72375002^Unilateral traumatic amputation of leg below knee with complication
+91559009^Unilateral traumatic amputation of leg below knee without complication
+46508005^Unilateral traumatic amputation of leg at OR above knee with complication
+88500006^Unilateral traumatic amputation of leg at OR above knee without complication
+46795000^Solar keratosis of lip
+201101007^Solar keratosis
+51037009^Fracture of knee-cap
+64925008^Acquired varus deformity of knee
+52012001^Knock-knees - acquired
+79168008^Congenital varus deformity of knee
+45231001^Clergyman's knee
+89689008^Congenital knock-knee
+111224002^Derangement of meniscus of knee joint
+19494006^Tear of meniscus of knee joint
+429372004^History of amputation of leg below knee
+52357004^Retinal cyst
+66485003^Retinal scar
+95690009^Retinal tear
+6141006^Retinal edema
+40024006^Retinal break
+247153005^Colloid bodies in retina
+52593001^Retinal varices
+26468004^Retinal ischemia
+29555009^Retinal disease
+79267007^Retinal migraine
+80744008^Concussion of the retina
+95689000^Retinal deposits
+314407005^Retinal dystrophy
+28998008^Retinal hemorrhages
+42059000^Sensory retinal detachment
+77628002^Retinal vasculitis
+232004004^GRT - Giant retinal tear
+417125003^Hamartoma of retina
+1079004^Macular pseudohole retinal cyst
+28157000^Senile retinoschisis
+67638006^Pseudocyst of retina
+93470007^Retinal hemangioma
+34037000^Retinal microaneurysms
+37231002^Macular edema
+247124009^Retinal macroaneurysm
+56039006^Secondary retinal cyst
+84884003^Retinal grouped capillary aneurysms
+95695004^Retinal degeneration
+231986000^BARN - Bilateral acute retinal necrosis
+28391008^Localized retinal edema
+161487006^History of retinal detachment
+38599001^Exudative retinal detachment
+57534004^Changes in retinal vascular appearance
+92321003^Benign tumor of retina
+428984001^History of retinal tear
+61267008^Vasoproliferative retinopathy
+73757007^Retinal vascular occlusion
+193379006^Retinal venous engorgement
+943003^Congenital retinal aneurysm
+404670008^Hollenhorst plaque
+9585003^Post-traumatic retinal scar
+3577000^LD - Lattice degeneration
+41799005^Hereditary retinal dystrophy
+49381001^Congenital malformation of retina
+68222009^Lauber's disease
+193326001^Old total retinal detachment
+312999006^Maculopathy
+423673009^Retinal melanoma
+34711008^TRD - Traction retinal detachment
+68478007^CRVT - Central retinal vein thrombosis
+193325002^Delimited old retinal detachment
+24596005^BVO - Branch retinal occlusion
+61536007^Peripheral retinal degeneration
+79195003^Anomalous retinal correspondence
+193323009^Recent total retinal detachment
+193327005^Old subtotal retinal detachment
+38742007^CRAO - Central retinal artery occlusion
+95697007^Generalized retinal degeneration
+776009^Partial occlusion of retinal artery
+19620000^Retinal detachment with break
+37075008^Iwanoff's cysts
+50821009^BRAO - Branch retinal artery occlusion
+69134001^Pavingstone retinal degeneration
+405721006^Peripheral degeneration of retina
+193324003^Recent subtotal retinal detachment
+193338005^Retinal defects without detachment
+14046000^Cystoid macular retinal degeneration
+87224000^Transient arterial retinal occlusion
+232023006^Diabetic traction retinal detachment
+422471006^Herpes zoster acute retinal necrosis
+54184008^Senile reticular degeneration
+193340000^Retinal round hole without detachment
+232067008^RPED - Retinal pigment epithelial detachment
+56202001^Retinal detachment with retinal defect
+51226000^Round hole of retina without detachment
+427902001^History of branch retinal vein occlusion
+35545005^Secondary pigmentary retinal degeneration
+51987004^Retinal detachment without retinal defect
+193341001^Horseshoe retinal tear without detachment
+193342008^Multiple retinal defects without detachment
+432006000^History of occlusion of central retinal vein
+66629002^Multiple defects of retina without detachment
+192788009^Retinal dystrophy in cerebroretinal lipidosis
+93987004^Primary malignant neoplasm of retina (primary)
+432160005^History of occlusion of central retinal artery
+19448008^Optic atrophy associated with retinal dystrophy
+52002008^Retinal pigment epithelium serous detachment
+424669003^Papilledema associated with retinal disorder
+425356002^Herpes zoster retinal pigment epithelial detachment
+3598000^Partial recent retinal detachment with single defect
+50165004^Retinal pigment epithelium hemorrhagic detachment
+232074003^CHRPE - Congenital hypertrophy of retinal pigment epithelium
+425062004^Herpes simplex retinal pigment epithelial detachment
+4178006^Partial recent retinal detachment with multiple defects
+38579007^Partial recent retinal detachment with retinal dialysis
+188261005^Malignant neoplasm of eyeball excluding conjunctiva, cornea, retina and choroid
+44268007^Schisis of retina
+54122009^Retinal perivasculitis
+314467007^Gyrate atrophy of choroid and retina
+360455002^Miliary aneurysms of retina
+39302008^Retinochoroidal coloboma
+46627006^Retinochoroiditis
+92828000^Ocular coloboma
+193411004^Hereditary dominant drusen retinal dystrophy
+367649002^Preretinal membrane
+4855003^Retinal abnormality - diabetes-related
+11547003^Preretinal hemorrhage
+87194000^Nerve fiber bundle defect
+46659004^von Hippel-Lindau syndrome
+42012007^Pigmentary retinal lipoid neuronal heredodegeneration
+267718000^AAMD - Age related macular degeneration
+414173003^EMD - Exudative macular degeneration
+111504002^Walker Warburg syndrome
+414875008^Nonneovascular age-related macular degeneration
+122481008^Hammer toe
+46014006^Corn of toe
+88374002^Burn of toe
+285365001^Toe pain
+277890004^Swollen toe
+301021005^Ulcer of toe
+211403009^Abrasion, toe
+282776008^Injury of toe
+299657000^Amputated toe
+111183001^Abscess of toe
+388982007^Onychia of toe
+77265008^Boil of toe
+128619003^Disorder of toe
+195302000^Gangrene of toe
+203541003^Overriding toe
+52508001^Carbuncle of toe
+58075000^Superficial bruising of toe
+250018006^Toe walking
+275461003^Wound of toenail
+308740002^Ulcer of great toe
+299989006^Infection toe
+70637004^Cellulitis of toe
+125664002^Open wound of toe
+284552004^Laceration of toe
+308684007^Amputated big toe
+388983002^Perionychia of toe
+400200009^Ingrown toenail
+32113001^Webbing of toes
+86380000^Gampsodactyly
+308660004^Abscess of big toe
+62218008^Supernumerary digit of foot
+262998001^Toe sprain
+430903001^Avulsion injury of toenail
+68628004^Superficial burn of toe
+211609000^Crush injury, toe(s)
+430935001^Chronic ulcer of toe
+4136000^Macrodactylia of toes
+85280007^Congenital hammer toe
+276496005^Open wound of toenail
+429768000^Ischemic ulcer of toe
+74682007^Crush injury of toe
+64359003^Full thickness burn of toe(s)
+308109004^On examination - Amputated left toe
+9989000^Congenital malformation of toe
+28571002^Partial thickness burn of toe
+42251007^Acquired deformity of toe
+308108007^On examination - Amputated right toe
+403059006^Onychomycosis of toenails
+428143003^Arthritis of joint of toe
+12115003^Abscess of foot, except toe
+95858001^Traumatic amputation of toe
+15290006^Blister of toe with infection
+17610001^Deep third degree burn of toe
+200638004^Cellulitis and abscess of toe
+54614003^Blister of toe without infection
+211421007^Insect bite, nonvenomous, of toe
+287002007^Cellulitis of foot excluding toe
+210743006^Traumatic amputation, greater toe
+88977003^Open wound of toe with complication
+427892008^History of amputation of toe, other than great toe
+269183000^Open wound of foot, excluding toe(s)
+208718007^Open fracture multiple phalanges, toe
+211400007^Superficial injury of foot and toe(s)
+24864009^Sprain of interphalangeal joint of toe
+54461005^Open wound of toe without complication
+38859008^Complex syndactyly of toes
+208713003^Closed fracture multiple phalanges, toe
+14158003^Superficial injury of toe with infection
+74204001^Open wound of toe with tendon involvement
+88641007^Acquired hammer toe, other than great toe
+15804003^Complication of reattached foot AND/OR toe
+267783003^Cellulitis and abscess of foot excluding toe
+86899000^Closed traumatic dislocation of joint of toe
+17384006^Insect bite, nonvenomous, of toe, infected
+209641004^Complete tear, interphalangeal (toe) ligament
+8297008^Nonvenomous insect bite of toe without infection
+30997005^Open wound of foot except toes with complication
+210746003^Traumatic amputation of toe(s) with complication
+93711001^Primary malignant neoplasm of blood vessel of toe
+91368005^Open wound of foot except toes without complication
+714002^Abrasion AND/OR friction burn of toe with infection
+59110008^Deep third degree burn of toe with loss of body part
+20252004^Traumatic amputation of toe OR toes with complication
+75759008^Open wound of foot except toes with tendon involvement
+34283004^Abrasion AND/OR friction burn of toe without infection
+60004004^Traumatic amputation of toe OR toes without complication
+269202001^Abrasion AND/OR friction burn of foot AND/OR toe, infected
+21949009^Closed traumatic dislocation of interphalangeal joint of toe
+18589000^Superficial foreign body of toe without major open wound but with infection
+88524003^Superficial foreign body of toe without major open wound AND without infection
+415692008^Swelling of first metatarsophalangeal joint of hallux
+30085007^Mortons neuroma
+45636002^HT - Hammer toe
+253966001^Congenital malformation of foot and toes
+25055007^Ingrowing toenail with infection
+428835005^History of amputation of great toe
+74395007^Open fracture of toe
+81576005^Closed fracture of toe
+83401009^Open traumatic dislocation toe, interphalangeal joint, multiple
+49218002^Hip joint pain
+249914008^Hip stiff
+11568002^Perrin-Ferraton disease
+202606004^Clicking hip
+276380006^Instability of hip
+17883008^Thigh sprain
+736004^Abscess of hip
+28061009^Boil of hip
+81498004^Bursitis of hip
+118935006^Disorder of hip region
+44801007^Superficial bruising of hip
+68449006^Inflammation of hip joint
+9557000^Cellulitis of hip
+391093004^History of hip fracture
+424010006^Tendonitis of hip
+428637004^Mass of hip joint
+298169004^Hip joint active
+14188007^Tuberculosis of hip joint
+202411007^Hip hemarthrosis
+125600009^Hip injury
+301027009^Pagets disease - hip
+361118003^Open fracture of hip
+428369002^Fistula of hip joint
+239872002^OA - Osteoarthritis of hip
+428097001^Arthropathy of hip joint
+11730002^Crush injury, hip
+299233007^Deformity of hip joint
+359817006^Closed fracture of hip
+84920009^Open traumatic dislocation of hip
+202160008^Loose body in hip joint
+52781008^Congenital acetabular dysplasia
+157265008^Dislocation of hip joint
+239738002^Hip joint contracture
+263057000^Subluxation of hip joint
+67321002^Acquired deformity of hip
+201950002^Traumatic arthropathy of hip
+30936004^Enthesopathy of hip region
+301864002^Transient synovitis of hip
+427947000^Monoarthritis of hip joint
+428027008^Crystal arthropathy of hip
+201775006^Rheumatoid arthritis of hip
+298094000^Foreign body of skin of hip
+429190007^Recurrent dislocation of hip
+36172001^Congenital subluxation of hip
+46132008^Blister of hip with infection
+48334007^Developmental displacement of the hip
+299308007^Hip joint painful on movement
+210661006^Open wound of hip and thigh
+428774008^Rupture of adductor muscle of hip
+429722003^Strain of hip flexor muscle
+102569004^Decreased range of hip movement
+445157005^Aseptic necrosis of bone of hip
+40542008^Blister of hip without infection
+211358006^Insect bite, nonvenomous, of hip
+309765009^Pain due to hip joint prosthesis
+2749000^Congenital deformity of hip
+111649009^Closed anterior dislocation of hip
+281445000^THR - Loosening of total hip replacement
+125621009^Traumatic dislocation of hip joint
+63975004^Closed posterior dislocation of hip
+90289008^Closed obturator dislocation of hip
+208892001^Closed traumatic dislocation of hip joint
+314201008^Dislocation of hip joint prosthesis
+428861009^Articular cartilage disorder of hip
+428615006^History of hip surgery
+10155006^Bilateral congenital dislocation of hip
+443910006^Infection of total hip joint prosthesis
+33543001^Unilateral congenital dislocation of hip
+205052001^Congenital subluxation of hip, bilateral
+268242003^Congenital subluxation of hip, unilateral
+93903003^Primary malignant neoplasm of muscle of hip
+109938006^Benign neoplasm of peripheral nerves of hip
+208901001^Open traumatic obturator dislocation of hip
+73602001^Open wound of hip AND thigh with complication
+76584003^Insect bite, nonvenomous, of hip, infected
+208902008^Open anterior dislocation of hip
+208900000^Open posterior dislocation of hip
+5353008^Open wound of hip AND thigh without complication
+23455003^Nonvenomous insect bite of hip without infection
+93700009^Primary malignant neoplasm of blood vessel of hip
+94055006^Primary malignant neoplasm of soft tissues of hip
+212467009^Injury of muscle and tendon at hip and thigh level
+5801006^Open wound of hip and thigh with tendon injury
+8748000^Abrasion AND/OR friction burn of hip with infection
+426962008^Closed fracture of acetabulum with dislocation of hip
+109939003^Primary malignant neoplasm of peripheral nerves of hip
+88016001^Abrasion AND/OR friction burn of hip without infection
+429716007^History of recurrent dislocation of hip joint prosthesis
+60108003^Congenital dislocation of one hip with subluxation of other
+432463002^Arthropathy of the hip associated with a neurological disorder
+187999008^Malignant neoplasm of connective and soft tissue of hip and lower limb
+39282007^Superficial foreign body of hip without major open wound but with infection
+13145006^Superficial foreign body of hip without major open wound AND without infection
+12067001^Coxa vara - acquired
+16979000^Coxa valga - acquired
+74820003^Hip joint - varus deformity
+5913000^NOF - Fracture of neck of femur
+263225007^Hip fracture
+92370004^Benign neoplasm of skin of leg
+428112005^Malunion of hip fracture
+16331000^Pyrosis
+233916004^HB - Heart block
+88610006^Observation of heart murmur
+56265001^Morbus cordis
+84114007^Cardiac insufficiency
+86175003^Injury of heart
+248650006^Palpitations - irregular
+426191007^Myxoma of heart
+425548001^Abscess of heart
+65340007^Mural aneurysm of heart
+387842002^Tumor of heart
+17414004^Myocardial contusion
+85232009^LVF - Left ventricular failure
+128404006^Right heart failure
+275544003^History of heart disorder
+368009^Valvular heart disease
+75431008^Organic heart murmur
+361137007^Irregular heart beat
+361138002^Irregular heart rate
+430901004^Foetal heart disorder
+48447003^Chronic heart failure
+123824001^Heart sounds abnormal
+46619002^Congenital heart block
+414545008^IHD - Ischemic heart disease
+417996009^Systolic heart failure
+23685000^Rheumatic pancarditis
+36222008^Carcinoid heart disease
+59935001^Functional flow murmur
+91335003^Mural thrombosis
+289439005^Foetal heart rate absent
+418304008^Diastolic heart failure
+13213009^Congenital anomaly of heart
+42343007^Congestive heart disease
+92132009^Benign tumor of heart
+10091002^High output heart failure
+312668007^Abnormal foetal heart rate
+27012009^Hyperkinetic heart disease
+46113002^Hypertensive heart failure
+64715009^Hypertensive cardiovascular disease
+9909003^Fatty degeneration of heart
+161677002^History of artificial heart valve
+45650007^Kyphoscoliotic heart disease
+160364005^Family history: Congenital heart disease
+289444003^Irregular foetal heart rhythm
+413439005^Acute ischemic heart disease
+67189007^Acute pulmonary heart disease
+312591002^Acute rheumatic fever with heart involvement
+10633002^Acute congestive heart failure
+237226002^Heart disease during pregnancy
+413838009^Chronic ischemic heart disease
+441481004^Chronic systolic heart failure
+10818008^Congenital malpositioned heart
+62067003^HLHS - Hypoplastic left heart syndrome
+87648004^Chronic rheumatic carditis
+87837008^Chronic cardiopulmonary disease
+441530006^Chronic diastolic heart failure
+44808001^Disorder of heart conduction
+88805009^Chronic congestive heart failure
+12770006^Cyanotic congenital heart disease
+70320004^Congenital heart valve abnormality
+82523003^Congestive rheumatic heart failure
+233817007^Triple vessel coronary artery disease
+233918003^Postoperative complete heart block
+93825008^Primary malignant neoplasm of heart
+315348000^Asymptomatic coronary heart disease
+86234004^Cardiorenal disease
+134439009^Family history: premature coronary heart disease
+94327000^Secondary malignant tumor of heart
+998008^Chagas' disease with heart involvement
+92506005^Biventricular failure
+57803009^Rheumatic chorea with heart involvement
+94865004^Neoplasm of uncertain behavior of heart
+430401005^Heart disease due to radiation
+297242006^FH: Ischemic heart disease
+308068007^History of treatment for ischemic heart disease
+80479009^Acute right-sided congestive heart failure
+3759007^Injury of heart with open wound into thorax
+66052004^Benign hypertensive heart AND renal disease
+66989003^Chronic right-sided congestive heart failure
+66610008^Malignant hypertensive heart AND renal disease
+426611007^Congestive heart failure due to valvular disease
+426012001^Right heart failure due to pulmonary hypertension
+44313006^Right heart failure secondary to left heart failure
+43873004^Mechanical complication due to heart valve prosthesis
+153941000119100^Chronic combined systolic and diastolic heart failure
+194780003^Hypertensive heart and renal disease with renal failure
+5148006^Hypertensive heart disease with congestive heart failure
+60899001^Hypertensive heart disease without congestive heart failure
+16253001^Dilated cardiomyopathy secondary to peripartum heart disease
+655007^Abnormal fetal heart beat noted before labor in liveborn infant
+77737007^Benign hypertensive heart disease with congestive heart failure
+109384006^Malignant neoplasm, overlapping lesion of heart, mediastinum and pleura
+194767001^Benign hypertensive heart disease with congestive cardiac failure
+77970009^Benign hypertensive heart disease without congestive heart failure
+83105008^Malignant hypertensive heart disease with congestive cardiac failure
+194766005^Benign hypertensive heart disease without congestive cardiac failure
+194779001^Hypertensive heart and renal disease with (congestive) heart failure
+36315003^Malignant hypertensive heart disease without congestive heart failure
+426263006^Congestive heart failure due to left ventricular systolic dysfunction
+78381004^Heart disease in mother complicating pregnancy, childbirth AND/OR puerperium
+194781004^Hypertensive heart and renal disease with both (congestive) heart failure and renal failure
+47535005^Coloboma, heart malformation, choanal atresia, retardation of growth and development, genital abnormalities, and ear malformations (CHARGE) association
+16567006^Midline heart
+3424008^Rapid heart beat
+48867003^Slow heart beat
+8186001^Enlarged heart
+83291003^Right heart failure due to pulmonary disease
+78250005^Extrathoracic heart
+424889004^Heart predominantly in left hemithorax
+6285003^Tachyarrhythmia
+194828000^Stenocardia
+46826000^Sydenham's chorea
+57809008^Disorder of myocardium
+698247007^Disorder of heart rhythm
+161573009^History of cardiac anomaly
+275120007^FH: heart disorder
+64077000^Muscular degeneration of heart
+1755008^Healed myocardial infarction
+53741008^Coronary sclerosis
+191962000^Cardiovascular disorder, psychogenic
+16573007^Cardiac amyloidosis
+57054005^AMI - Acute myocardial infarction
+233932001^Complication of transplanted heart
+394710008^First myocardial infarction
+89456004^Chronic rheumatic heart disease with valvulitis
+46165000^Chronic rheumatic heart disease with endocarditis
+195039008^Partial heart block
+27885002^Third degree heart block
+194856005^Reinfarction of myocardium
+314207007^Non-Q wave myocardial infarction
+399211009^Past history of myocardial infarction
+66189004^Postmyocardial infarction pericarditis
+233839009^Old anterior myocardial infarction
+270492004^Incomplete atrioventricular block, first degree
+194802003^True posterior wall infarction
+271984008^Disorder of prosthetic heart valve
+195042002^Second degree heart block
+79009004^Acute septal infarction
+194809007^Acute atrial infarction
+233838001^Acute posterior myocardial infarction
+5053004^Heart failure due to prosthesis
+62695002^Acute anteroseptal myocardial infarction
+72972005^Drug-induced specific heart muscle disorder
+233846000^Ventricular septal defect as current complication following acute myocardial infarction
+58612006^Acute lateral myocardial infarction
+109430007^Swiss cheese heart
+54329005^Acute anterior myocardial infarction
+73795002^Acute myocardial infarction of diaphragmatic wall
+12867002^Foetal distress affecting management of mother
+60856006^Heart failure following cardiac surgery
+70998009^Acute myocardial infarction of posterobasal wall
+401303003^STEMI - ST elevation myocardial infarction
+65547006^Acute inferolateral myocardial infarction
+70211005^Acute anterolateral myocardial infarction
+233847009^Cardiac rupture after acute myocardial infarction
+15990001^Acute myocardial infarction of posterolateral wall
+76593002^Acute inferoposterior infarction
+315619001^Family history of myocardial infarction in male relative of first degree, age known
+401314000^NSTEMI - Non-ST segment elevation MI
+30277009^Acute myocardial infarction with rupture of ventricle
+315620007^Family history of myocardial infarction in male relative of first degree, age unknown
+315621006^Family history of myocardial infarction in female relative of first degree, age known
+194821006^Aborted myocardial infarction
+89819002^Heart failure during AND/OR resulting from a procedure
+1345007^Hang nail
+37298006^Onychophagia
+201114008^Nail deformity
+275320004^Injury of nail
+400097005^Ingrown nail
+17790008^Nail disease
+238408000^Infection of nail
+95340003^Infected nail bed
+30654002^OX - Onychauxic
+35964007^Congenital malformation of nails
+438480008^Injury of nail bed of finger
+236527004^Nail patella-like renal disease
+75789001^Separation of nail plate
+414941008^Ringworm of nail
+52897009^Onychogryphosis
+87065009^Onychodystrophy
+88103004^Congenital hypertrophic nails
+402134005^Tinea unguium
+81680005^Painful neck
+161882006^NS - Neck stiffness
+209557005^Cervical sprain
+283407006^Cut of neck
+11731003^Webbed neck
+60713008^Burn of neck
+299703001^Lump on neck
+301777002^Neck swelling
+90460009^Neck injury
+298397000^Lesion of neck
+6284004^Cervical abscess
+47763005^Furuncle of neck
+118939000^Disorder of neck
+126635000^Tumor of neck
+283055000^Abrasion of neck
+8513005^Contusion of neck
+85782003^Carbuncle of neck
+37223007^Cellulitis of neck
+125644007^Open wound of neck
+23060008^Swan-neck deformity of finger
+202770004^Panniculitis affecting neck
+38966005^Superficial burn of neck
+360450007^Cervical strain
+39848009^Whiplash injury
+50001009^Crush injury, neck
+363489000^Malignant tumor of neck
+126504002^Neoplasm of skin of neck
+360437006^Strain of tendon of neck
+399072004^Vesicourethral orifice obstruction
+40261006^Full thickness burn of neck
+428152007^Penetrating wound of neck
+432728006^Infection of skin of neck
+3827008^Aneurysm of artery of neck
+6821004^Second degree burn of neck
+40052002^Congenital malformation of the neck
+72082009^Acquired deformity of neck
+302929008^Nuchal cord
+402509003^Basal cell carcinoma of neck
+74198004^Deep third degree burn of neck
+81244001^Blister of neck with infection
+267779003^Cellulitis and abscess of neck
+361119006^Open fracture of neck of femur
+92371000^Benign neoplasm of skin of neck
+268236002^BNS - Bladder neck stenosis
+359820003^Closed fracture of neck of femur
+35505001^Blister of neck without infection
+40026008^Acquired bladder neck stenosis
+72497001^Closed fracture radius, neck
+92736003^Carcinoma in situ of skin of neck
+211009001^Insect bite, nonvenomous, of neck
+289311005^Umbilical cord tight around baby's neck
+93642000^Malignant melanoma of skin of neck
+93922007^Primary malignant neoplasm of neck
+34102000^Acquired contracture of bladder neck
+85336009^Open wound of neck with complication
+111235007^Musculoskeletal disorder of the neck
+94962000^Neoplasm of uncertain behavior of neck
+263231005^Open fracture proximal femur, basicervical
+409666003^Pathological fracture of neck of femur
+51411000^Open wound of neck without complication
+92395003^Benign tumor of soft tissue of neck
+188044004^Malignant melanoma of scalp and/or neck
+204223000^Ear, face and neck congenital anomalies
+274747003^Localized swelling, mass and lump, neck
+423284006^Squamous cell carcinoma of skin of neck
+1705000^Closed fracture of cervicotrochanteric section of femur
+3331008^Open fracture of neck of metacarpal bone
+17194005^Late effect of fracture of neck of femur
+54567007^Open fracture of neck of humerus
+7551007^Closed fracture of neck of metacarpal bone
+94034009^Primary malignant neoplasm of skin of neck
+73244003^Closed fracture of neck of humerus
+93906006^Primary malignant neoplasm of muscle of neck
+109926002^Benign neoplasm of peripheral nerves of neck
+199874004^Umbilical cord tight around neck - delivered
+204998005^Urethra and bladder neck atresia and stenosis
+37887002^Insect bite, nonvenomous, of neck, infected
+93160004^Lipoma of neck
+21037006^Nonvenomous insect bite of neck without infection
+93704000^Primary malignant neoplasm of blood vessel of neck
+94058008^Primary malignant neoplasm of soft tissues of neck
+94124002^Primary malignant neoplasm of urinary bladder neck
+94397007^Metastasis to cervical lymph nodes
+128044005^Disorder of skin AND/OR subcutaneous tissue of neck
+269214009^Contusion face, scalp and neck, excluding eyes
+208241000^Closed fracture of anatomical neck of humerus
+84278006^Abrasion AND/OR friction burn of neck with infection
+109927006^Primary malignant neoplasm of peripheral nerves of neck
+54345007^Abrasion AND/OR friction burn of neck without infection
+56299003^Closed fracture of glenoid cavity AND/OR neck of scapula
+431031001^Pathological fracture of neck of femur associated with osteoporosis
+59212007^Superficial foreign body of neck without major open wound but with infection
+36229004^Superficial foreign body of neck without major open wound AND without infection
+70070008^Wry neck
+230314007^Sandifer's syndrome
+42643001^Disorder of urinary bladder
+268240006^Contracture of sternocleidomastoid muscle
+125606003^Fracture of neck
+127287001^Trochanteric fracture of neck of femur
+1239002^Congenital anteversion of femoral neck
+209037002^Closed dislocation of neck
+209054005^Open dislocation of neck
+11209007^Umbilical cord loose around baby's neck
+44264009^Traumatic dislocation of joint of cervical vertebra
+69488000^Congenital beaded hair
+297991008^Hair absent
+278040002^Thinning hair
+279425004^Disorder of hair
+59571007^Hair discoloration
+298000004^Balding
+12168009^Variation in hair color
+59178007^X-linked copper deficiency
+65033000^Congenital malformation of hair and hair growth
+118613001^Hairy cell leukemia
+5387003^Progressive cribriform and zosteriform hyperpigmentation
+39272006^Disorder of hair AND/OR hair follicle
+44969005^Poisoning by hair treatment drug AND/OR preparation
+360562008^Nutritional edema without dyspigmentation of skin AND/OR hair
+56317004^Hair loss disorder
+58262005^Protein malnutrition
+29966009^Polytrichosis
+68225006^Patchy loss of hair
+17155009^Trichologia
+12371008^Caterpillar-hair ophthalmia
+52832001^TFM - Testicular feminization syndrome
+249917001^Elbow stiff
+95854004^Nursemaids' elbow
+18084001^Burn of elbow
+74323005^Elbow pain
+200611006^Boil of elbow
+424548006^Elbow hygroma
+309464009^Fracture of elbow
+125596004^Elbow injury
+202480001^Arthralgia of elbow
+128133004^Disorder of elbow
+91613004^Superficial bruising of elbow
+439656005^Arthritis of elbow
+125650002^Open wound of elbow
+301710008^Cellulitis of elbow
+202373004^Effusion of elbow
+211251003^Abrasion, elbow area
+298163003^Elbow joint active
+298924009^Elbow joint instability
+429554009^Arthropathy of elbow
+299213008^Amputated above elbow
+299215001^Amputated below elbow
+302232001^Open fracture of elbow
+33826007^Superficial burn of elbow
+426407008^Fistula of joint of elbow
+239866002^OA - Osteoarthritis of elbow
+299214002^Amputated through elbow
+302222008^Closed fracture of elbow
+225559007^Pressure ulcer on elbow
+5450005^Crush injury, elbow
+239779001^Elbow pyogenic arthritis
+11920000^Open traumatic dislocation elbow joint
+202158006^Loose body in elbow joint
+87559001^Full thickness burn of elbow
+209579000^Complete tear, elbow joint
+239734000^Elbow joint contracture
+263052006^Subluxation of elbow joint
+29066007^Acquired deformity of the elbow
+33047005^Partial thickness burn of elbow
+201944007^Traumatic arthropathy of elbow
+263128001^Sprain of elbow joint
+269134004^Sprain elbow and forearm
+283032003^Superficial injury of elbow
+35185008^Enthesopathy of the elbow region
+202307002^Elbow joint ankylosis
+428768008^Crystal arthropathy of elbow
+202222009^Elbow - recurrent dislocation
+890002^Deep third degree burn of elbow
+43956002^Blister of elbow with infection
+202436001^Villonodular synovitis of elbow
+230631009^Ulnar nerve entrapment at elbow
+366519000^Finding of elbow joint stability
+371629001^Congenital dislocation of elbow
+210642007^Traumatic amputation, below elbow
+210650003^Traumatic amputation, above elbow
+81813004^Closed medial dislocation of elbow
+84208005^Blister of elbow without infection
+211272000^Insect bite, nonvenomous, of elbow
+75824002^Closed lateral dislocation of elbow
+93221005^Malignant melanoma of skin of elbow
+208782004^Dislocation or subluxation of elbow
+3019000^Closed anterior dislocation of elbow
+125617002^Traumatic dislocation of elbow joint
+4273008^Closed posterior dislocation of elbow
+61526004^Open wound of elbow with complication
+427730008^History of elbow surgery
+85218007^Open wound of elbow without complication
+12250001^Superficial injury of elbow with infection
+313259008^Localized, primary osteoarthritis of elbow
+49303001^Open wound of elbow with tendon involvement
+2651006^Closed traumatic dislocation of elbow joint
+44707000^Superficial injury of elbow without infection
+442130003^Strain of muscle and/or tendon of elbow region
+67862004^Insect bite, nonvenomous, of elbow, infected
+82244004^Nonvenomous insect bite of elbow without infection
+428130003^Bilateral traumatic amputation of arms below elbow
+208789008^Closed traumatic dislocation elbow joint, divergent
+239965002^Tendonitis AND/OR tenosynovitis of the elbow region
+111712008^Abrasion AND/OR friction burn of elbow with infection
+211249002^Superficial injury of elbow, forearm and wrist
+68058009^Abrasion AND/OR friction burn of elbow without infection
+429191006^Unilateral traumatic amputation of upper limb above elbow
+51436006^Unilateral traumatic amputation below elbow without complication
+429643006^Arthropathy of the elbow associated with a neurological disorder
+210646005^Traumatic unilateral amputation, below elbow, with complication
+20210009^Unilateral traumatic amputation at OR above elbow with complication
+56330003^Unilateral traumatic amputation at OR above elbow without complication
+84485007^Superficial foreign body of elbow without major open wound but infection
+210651004^Traumatic unilateral amputation, above elbow, with complication
+22596006^Superficial foreign body of elbow without major open wound AND without infection
+425940002^Inflammation of bursa of olecranon
+53286005^Medial epicondylitis of elbow joint
+202855006^Tennis elbow
+29087002^Gunstock deformity
+54583007^Cubitus valgus - acquired
+235771005^Mass of appendix
+47693006^Perforation of appendix
+62224002^Appendicular abscess
+18526009^Disorder of appendix
+53773002^Appendicular mucocele
+413445002^Adenocarcinoma of appendix
+253002004^Carcinoid of appendix
+363411007^Malignant tumor of appendix
+198047009^Torsion of hydatid of Morgagni - male
+427783000^Torsion of appendix epididymis
+93679002^Primary malignant neoplasm of appendix
+210159003^Appendix injury with open wound into cavity
+58997001^Grumbling appendix
+276333003^Reduced size of penis
+240598006^Penile warts
+310008^Penile boil
+253850004^Rotated penis
+285375003^Pain in penis
+198035003^Edema of penis
+110015006^Injuries of penis
+300513000^Lesion penis
+36029005^Penile abscess
+33958003^Disorder of penis
+88527005^Embolism of penis
+240708000^Penile thrush
+309090002^Infection of penis
+44902004^Thrombosis of penis
+204888000^Urethral meatus underneath penis
+210426009^Open wound of penis
+371584001^Penile irritation
+403387008^Penile lymphedema
+2910007^Discharge from penis
+3323003^Kraurosis of penis
+91936005^Penicillin allergy
+236756001^Acquired buried penis
+66413004^Penicillin poisoning
+253849004^Congenital buried penis
+1335005^Peyronies disease
+92286008^Benign tumor of penis
+363516004^Penile Ca
+398831006^Bowen disease of penis
+76598006^Penis vein thrombosis
+92679008^CIS - Carcinoma in situ of penis
+198029003^Vascular disorder of penis
+10227000^Herpetic infection of penis
+70318002^Congenital abnormality of penis
+236758000^Erection lasts too long
+292954005^Adverse reaction to penicillins
+34911001^Micropenis
+54816003^Nontraumatic hematoma of penis
+286983008^Penile cellulitis/abscess/boil
+371163003^Inflammation of penis
+88646002^Blister of penis with infection
+403468003^Penile squamous cell carcinoma
+371095004^Infection due to penicillin-resistant organism
+402895006^Recurrent herpes simplex of penis
+89604000^Blister of penis without infection
+211113006^Insect bite, nonvenomous, of penis
+372005006^Primary malignant neoplasm of penis
+52801002^Open wound of penis with complication
+110016007^Penile fracture
+428880006^History of malignant neoplasm of penis
+236731007^Disorder of penile prosthesis
+90057007^Open wound of penis without complication
+371989002^Primary malignant neoplasm of glans penis
+402889005^Primary herpes simplex infection of penis
+93716006^Primary malignant neoplasm of body of penis
+35057008^Insect bite, nonvenomous, of penis, infected
+35383007^Nonvenomous insect bite of penis without infection
+50293005^Abrasion AND/OR friction burn of penis with infection
+18823009^Abrasion AND/OR friction burn of penis without infection
+4287008^Gryposis penis
+64320007^Chordeic penis
+236755002^Bent penis
+398768004^Queyrat erythroplasia
+198033005^Lichen sclerosus of penis
+34903006^Burn of rectum
+54609002^Solitary ulcer of rectum
+125635006^Injury of rectum
+37502002^Rectal tear
+399730005^Adenoma of rectum
+5964004^Rectal disorder
+60658009^Stenosis of rectum
+126847008^Tumor of rectum
+25730006^Stricture of rectum
+77713007^Granuloma of rectum
+10825001^Rectal perforation
+70176004^Rectal foreign body
+254582000^Rectal carcinoma
+430877000^Diverticulitis of rectum
+433184006^Diverticulosis of rectum
+3815005^Crohn disease of rectum
+46495001^Stercoral rectal ulcer
+312823001^Villous adenoma of rectum
+363351006^Rectal cancer
+92696009^Carcinoma in situ of rectum
+197216007^Stenosis of rectum and anus
+276822007^Malignant melanoma of rectum
+266464001^Hemorrhage of rectum and anus
+211644003^Foreign body in anus and rectum
+448428002^Tubulovillous adenoma of rectum
+93984006^Primary malignant neoplasm of rectum
+429274001^Rectal stricture due to radiation
+94513006^Metastatic malignant neoplasm to rectum
+429084005^History of malignant neoplasm of rectum
+95024008^Neoplasm of uncertain behavior of rectum
+314966008^Local recurrence of malignant tumor of rectum
+29880001^Injury of rectum with open wound into abdominal cavity
+52087004^Injury of rectum without open wound into abdominal cavity
+109839004^Overlapping malignant neoplasm of rectum, anus and anal canal
+25110002^Injury of multiple sites in colon AND/OR rectum with open wound into abdominal cavity
+29691006^Injury of multiple sites in colon AND/OR rectum without open wound into abdominal cavity
+2901004^Tarry stools
+77880009^Rectalgia
+39772007^Polyp of rectum
+405729008^Blood in stool
+44635007^Fecal impaction in rectum
+57773001^RP - Rectal prolapse
+12063002^Rectorrhagia
+52231000^Ulcerative proctitis
+431874002^Perforating proctitis due to radiation
+52506002^Ulcerative rectosigmoiditis
+271681002^Tummy ache
+51197009^Stomach gripes
+65544004^Burn of stomach
+300297002^Lump stomach
+125626004^Gastric injury
+275108004^Family history: Stomach cancer
+29384001^Gastropathy
+126824007^Tumor of stomach
+276812001^Gastric leiomyoma
+372143007^Gastric carcinoma
+51694003^Stomach FB
+408647009^Adenocarcinoma of stomach
+92411005^Benign tumor of stomach
+276808007^Carcinoid tumor of stomach
+363349007^Gastric cancer
+254557000^Carcinoma of body of stomach
+698450007^History of gastric bypass
+60699003^Congenital malformation of the stomach
+386211005^Functional gastric disturbance
+92549006^Carcinoma in situ of body of stomach
+372014001^Primary malignant neoplasm of stomach
+92560002^Carcinoma in situ of cardia
+92598002^Carcinoma in situ of fundus of stomach
+94606003^Metastatic malignant neoplasm to stomach
+109836006^Malignant neoplasm, overlapping lesion of stomach
+399967006^Neoplasm of uncertain behavior of stomach
+269459004^Ca lesser curvature - stomach
+269460009^Ca greater curvature - stomach
+93717002^Primary malignant neoplasm of body of stomach
+93738008^Primary malignant neoplasm of cardia of stomach
+93809003^Primary malignant neoplasm of fundus of stomach
+74355005^Injury of stomach with open wound into abdominal cavity
+93867004^Primary malignant neoplasm of lesser curvature of stomach
+58935006^Injury of stomach without open wound into abdominal cavity
+93818001^Primary malignant neoplasm of greater curvature of stomach
+187734007^Malignant neoplasm of cardioesophageal junction of stomach
+444597005^Extranodal marginal zone lymphoma of mucosa-associated lymphoid tissue of stomach
+78809005^Polyp of stomach
+397825006^Stomach ulcer
+276811008^Lymphoma of stomach
+95529005^Acute ulcer of stomach
+75198005^Diverticulum of stomach
+3662000^Thoracic stomach
+95530000^Chronic ulcer of stomach
+60002000^Proliferative chronic hypertrophic gastritis
+187732006^Malignant neoplasm of cardia of stomach
+18665000^Acute erosion of stomach
+43935004^GAVE - Gastric antral vascular ectasia
+283400008^Cut of face
+95668009^Pain of face
+299704007^Mass of face
+262582004^Facial burn
+447071003^Facial scar
+248194004^Lined face
+271811009^Flushes
+300941005^Infected face
+445088006^Edema of face
+125593007^Facial injury
+200751004^Abscess of face
+423789002^Osteoma of face
+37396007^Furuncle of face
+118930001^Disorder of face
+210987008^Graze of face
+247369005^Facet joint syndrome
+309557009^Numbness of face
+86018005^Frostbite of face
+91356001^Carbuncle of face
+125668004^Superficial bruising of face
+200652002^Cellulitis of face
+210339009^Open wound of face
+432615008^Chronic facial pain
+254744006^Reactive fibrous papule
+90465004^Crush injury, face
+279063004^Lumbar zygapophysial joint pain
+95666008^Facial weakness
+442092007^Strain of muscle of face
+109269004^Melanocytic nevus of face
+298253002^Cervical facet joint pain
+298254008^Thoracic facet joint pain
+398302004^Facial malformation
+441761004^Sprain of face
+255177009^Benign neoplasm of face bone
+402519009^Basal cell carcinoma of face
+429433004^Injury of soft tissue of face
+70166002^Blister of face with infection
+200645004^Cellulitis and abscess of face
+92359006^Benign neoplasm of skin of face
+32003007^Face congenital deformities
+33701006^Blister of face without infection
+92724009^Carcinoma in situ of skin of face
+211008009^Insect bite of face
+428671008^Arthropathy of lumbar facet
+429350001^Arthropathy of facet joint
+37762002^Face OR brow presentation of foetus
+51409009^Cardiofacial syndrome
+93225001^Malignant melanoma of skin of face
+93792007^Primary malignant neoplasm of face
+428460002^Arthropathy of thoracic facet joint
+79167003^Open wound of face with complication
+431875001^Open wound of face with foreign body
+47126008^Open wound of face without complication
+92390008^Benign tumor of soft tissue of face
+403892001^Squamous cell carcinoma of skin of face
+403204001^Multiple solar keratoses involving face
+427500003^Arthropathy of cervical spine facet joint
+93721009^Primary malignant neoplasm of bone of face
+94022001^Primary malignant neoplasm of skin of face
+93901001^Primary malignant neoplasm of muscle of face
+109924004^Benign neoplasm of peripheral nerves of face
+187900002^Malignant neoplasm of bones of skull and face
+10662001^Insect bite, nonvenomous, of face, infected
+93159009^Lipoma of face
+95062006^Neoplasm of uncertain behavior of skin of face
+268239009^Skull and face bone anomalies
+71696000^Nonvenomous insect bite of face without infection
+37655003^Sequelae of fracture of skull and facial bones
+93694003^Primary malignant neoplasm of blood vessel of face
+94053004^Primary malignant neoplasm of soft tissues of face
+94393006^Metastatic malignant neoplasm to lymph nodes of face
+111703006^Abrasion AND/OR friction burn of face with infection
+25312001^Open wound of multiple sites of face with complication
+109925003^Primary malignant neoplasm of peripheral nerves of face
+66176005^Abrasion AND/OR friction burn of face without infection
+16374002^Open wound of multiple sites of face without complication
+20714001^Multiple open fractures of skull AND/OR face without intracranial injury
+82601009^Multiple closed fractures of skull AND/OR face without intracranial injury
+33628006^Superficial foreign body of face without major open wound but with infection
+60012007^Superficial foreign body of face without major open wound AND without infection
+88008005^Multiple open fractures of skull AND/OR face with cerebral laceration AND/OR contusion
+24056002^Multiple closed fractures of skull AND/OR face with subarachnoid, subdural AND/OR extradural hemorrhage
+278528006^Swollen face
+15253005^Compression facies
+238807000^Lymphedema of face
+71303008^Atypical facial pain
+52616002^Whistling face syndrome
+58961005^Malignant granuloma of face
+433096001^Deformity of bone of face
+2736005^Honeycomb atrophy of face
+10528009^Tuberculosis lupus exedens
+58588007^Systemic elastorrhexis
+283416005^Cut of hand
+283439004^Cut of foot
+403871001^Cornu cutaneum
+26825009^Cutis marmorata
+21323007^Dystrophic calcification of skin
+89105000^Xerosis cutis
+274227007^Cut - accidental
+84980006^Malignant pustule
+283409009^Cut of upper limb
+5280003^Cutis laxa senilis
+254767008^Leiomyoma cutis
+18901009^Cutaneous diphtheria
+282834007^Primary localized cutaneous amyloidosis
+30475004^Atrophia cutis senilis
+254761009^Neuroma cutis
+6365004^Cutaneous actinomycosis
+19362000^Sandworm
+35484002^Epitheliogenesis imperfecta
+61860000^UROD deficiency
+403583006^Deliberate self-cutting
+128862000^Pseudolymphoma of Spiegler-Fendt
+21626009^Skin hypersensitivity
+400001003^Primary cutaneous lymphoma
+441963008^Dermatochalasis of upper eyelid
+442009005^Dermatochalasis of lower eyelid
+240727006^San Joaquin Valley fever affecting skin
+7119001^Cutaneous lupus erythematosus
+18503002^Perinatal cutaneous hemorrhage
+239926000^Nodular livedo
+419817006^South American cutaneous blastomycosis
+400122007^Cutaneous T-cell lymphoma
+444547006^Graft versus host disease of skin
+277613000^Cutaneous/peripheral T-cell lymphoma
+239891002^SCLE - Subacute cutaneous lupus erythematosus
+240416008^Cutaneous mycobacterium marinum infection
+128875000^Primary cutaneous CD30 antigen positive large T-cell lymphoma
+77706007^Injury of cutaneous sensory nerve of lower limb
+212277008^Cutaneous sensory nerve injury of upper limb
+25626000^Cutaneous mycobacterial infections
+46742003^Cutaneous ulcer
+3014005^Sensitization dermatitis
+47306003^Lobomycosis infection
+95319004^Nodule of skin
+15845006^Searles's ulcer
+35586003^Tinea blanca
+285302001^Cutaneous cyst
+62382002^Calcinosis, Raynaud's phenomenon, sclerodactyly, and telangiectasia syndrome
+77377001^Spirochetal jaundice
+95347000^Sloughing of skin
+14560005^Fungal dermatosis
+19750001^Benign lymphoid hyperplasia
+31848007^Calcinosis, Raynaud's phenomenon, esophageal dysmotility, sclerodactyly, and telangiectasia syndrome
+427186000^Subepidermal nodular fibrosis
+126488004^Tumor of skin
+78745000^Localized cutaneous mastocytosis
+85007004^Lateral cutaneous femoral nerve of thigh syndrome
+398114001^Meekeren-Ehlers-Danlos syndrome
+197247001^Enteric cutaneous fistula
+93655004^MM - Malignant melanoma of skin
+199879009^Congenital skin anomalies
+128460000^Diffuse systemic sclerosis
+431268006^Hemorrhage of skin in newborn
+254651007^Spinous cell carcinoma
+62558006^Dyschromic cutaneous pinta
+240475000^Scrum pox
+94579000^Skin secondaries
+31928004^Skin abscess
+125666000^Burn
+31327004^Burn shock
+24087000^Burn of gum
+39065001^Burn of ear structure
+73518002^Burn of lip
+11980003^Burn of foot
+14893008^Burn of hand
+22233004^Burn of nose
+40903003^Burn of palm
+45983003^Burn of lung
+81116005^Burn of chin
+3480002^Burn of wrist
+6132001^Burn of thigh
+38978009^Burn of scalp
+40993007^Burn of ankle
+52405000^Burn of trunk
+62643005^Burn of colon
+64090007^Burn of thumb
+426284001^Chemical burn
+30715007^Burn of tongue
+80433004^Burn of breast
+84493007^Burn of axilla
+35447004^Burn of pharynx
+80827001^Burn of forearm
+57143002^Burn of shoulder
+14261008^Burn of upper arm
+37696000^Burn of lower leg
+45982008^Burn of esophagus
+90673000^Burning sensation
+284220000^Burn of genitalia
+403190006^First degree burn
+403192003^Third degree burn
+6055000^Burn of upper limb
+75984003^Burn of chest wall
+84677008^Leg burns
+274205003^Burn of eye
+403191005^Second degree burn
+21835004^Late effect of burn
+9269007^Superficial burn of ear
+78202006^First degree burn of lip
+427828004^Burn of nasal septum
+10137002^Superficial burn of chin
+14664006^Superficial burn of hand
+29418006^Superficial burn of palm of hand
+40986008^Superficial burn of foot
+58340008^Superficial burn of nose
+438786003^Chemical burn of hand
+7765006^Superficial burn of scalp
+17543009^Burn of internal organs
+27346001^Superficial burn of ankle
+48689002^Burn of male genital structure
+53106000^Burn of abdominal wall
+56710004^Superficial burn of wrist
+69025008^Superficial burn of the thumb
+81094005^Superficial burn of thigh
+111716006^First degree burn of trunk
+399165002^Stomatopyrosis
+10132008^Burns of multiple sites
+16223008^Burn of scapular region
+34554001^Superficial burn of axilla
+35501005^Superficial burn of breast
+90803001^Burn of small intestine
+2070002^Burning sensation in eye
+36520004^Full thickness burn of ear
+65467000^Superficial burn of forearm
+360068000^Deep full thickness burn
+9590000^Full thickness burn of hand
+30044002^Full thickness burn of foot
+42066004^Partial thickness burn of ear
+71157005^Burn of eye AND/OR adnexa
+72882005^Superficial burn of shoulder
+73545001^Full thickness burn of chin
+89614009^Full thickness burn of nose
+89661005^Full thickness burn of palm of hand
+212032004^Burn of mouth and pharynx
+212044001^Burn of vagina and uterus
+6280008^Full thickness burn of wrist
+11406003^Partial thickness burn of nose
+20490007^Superficial burn of lower leg
+31577002^Partial thickness burn of palm
+49862000^Full thickness burn of thigh
+54296007^Partial thickness burn of hand
+56716005^Full thickness burn of scalp
+62537000^Partial thickness burn of foot
+70432004^Superficial burn of upper arm
+74842002^Full thickness burn of trunk
+76972007^Full thickness burn of the thumb
+85052001^Full thickness burn of ankle
+88756008^Partial thickness burn of chin
+312646002^Burn of skin of eye region
+3469002^Partial thickness burn of thumb
+6500006^Partial thickness burn of trunk
+10815006^Full thickness burn of axilla
+22045003^Partial thickness burn of scalp
+35847008^Partial thickness burn wrist
+36830004^Full thickness burn of breast
+46156007^Superficial burn of chest wall
+62242007^First degree burn of upper limb
+68140000^Partial thickness burn of thigh
+70250009^Superficial burn of leg
+89266005^Partial thickness burn of ankle
+288509005^Burning of skin
+427766009^Late effect of burn of limb
+1989002^Burn of vagina AND/OR uterus
+55030004^Partial thickness burn of breast
+80271009^Full thickness burn of forearm
+86089006^Partial thickness burn of axilla
+102604002^Sensation of burning of skin
+17562007^Deep third degree burn of ear
+24379005^Burn of forehead AND/OR cheek
+70505006^Partial thickness burn of forearm
+77490007^Full thickness burn of shoulder
+211718006^Full thickness burn of lip(s)
+284205006^Partial thickness burn of lip
+400181003^Abrasion and/or friction burn
+10416004^Full thickness burn of lower leg
+13140001^Burn of gastrointestinal tract
+33056002^Deep third degree burn of chin
+34036009^Deep third degree burn of palm
+57332004^Partial thickness burn of shoulder
+57565008^Deep third degree burn of foot
+61984009^Deep third degree burn of hand
+76867002^Full thickness burn of upper arm
+211717001^Full thickness burn of the eye
+211791004^Full thickness burn of buttock
+3461004^Deep third degree burn of thumb
+11868005^Multiple burns of trunk
+26729007^Burn to arm - full thickness
+28384005^Chemical burn of internal organ
+31355000^Deep third degree burn of wrist
+42367004^Partial thickness burn of lower leg
+48260006^Deep third degree burn of scalp
+49615009^Superficial burn of abdominal wall
+55473001^Full thickness burn of leg
+61317003^Deep third degree burn of ankle
+62738008^Partial thickness burn of upper arm
+71364004^Deep third degree burn of thigh
+77830003^First degree burns of multiple specified sites
+86744003^Deep third degree burn of trunk
+111717002^Full thickness burn of chest wall
+34384008^Partial thickness burn of chest wall
+36121005^Deep third degree burn of axilla
+43635001^Superficial burn of scapular region
+52899007^Partial thickness burn of leg
+53080007^Burn to arm - blister
+82057004^Burn of finger
+89843004^Deep third degree burn of breast
+211792006^Full thickness burn of genitalia
+212014004^Burn of multiple specified sites
+212037005^Burn of larynx, trachea and lung
+4300009^Deep third degree burn of forearm
+72759002^Deep third degree burn of shoulder
+211677004^Unspecified thickness burn of nose
+28976004^Full thickness burn of scapular region
+29734005^Full thickness burn of abdominal wall
+284222008^Partial thickness burn of genitalia
+3975002^Deep third degree burn of lower limb
+15687005^Deep third degree burn of upper limb
+35507009^Deep third degree burn of chest wall
+67573002^Multiple burns of upper limb
+73948007^Partial thickness burn of abdominal wall
+80183002^Multiple burn of lower limb
+83366000^Third degree burns of multiple sites
+13212004^Second degree burns of multiple sites
+81152009^Partial thickness burn of scapular region
+4310000^Third degree burn of wrist AND/OR hand
+54674008^First degree burn of forehead AND/OR cheek
+211919009^Full thickness burn of a single finger
+43138003^Burn to wrist/hand - blister
+15271003^Late effect of burn of wrist AND/OR hand
+20311006^First degree burn of multiple sites of trunk
+60825003^Deep third degree burn of scapular region
+80821000^First degree burn of single finger, not thumb
+81327003^Deep third degree burns of multiple sites
+211789007^Full thickness burn of trunk, unspecified
+432513009^Residual deformity as late effect of burn
+70097001^Third degree burn of forehead AND/OR cheek
+41755001^Burn of two OR more fingers including thumb
+71637007^Burn of multiple sites of wrist AND/OR hand
+80027000^Second degree burn of forehead AND/OR cheek
+86351009^Deep third degree burn of finger, not thumb
+111719004^Deep third degree burn of wrist AND/OR hand
+212016002^Superficial burn of multiple specified sites
+438482000^Partial thickness burn of multiple sites of hand
+82117004^Infected abrasion
+49523001^Burn erythema of multiple sites of upper limb
+60036006^Full thickness burn of finger
+89390009^First degree burn of multiple sites of lower limb
+275450006^Blister of wrist and hand, second degree burn
+16096002^Chemical burn of eyelid AND/OR periocular area
+29673001^Partial thickness burn of finger
+211794007^Full thickness burn of multiple sites of trunk
+31946005^Burn of two OR more fingers not including thumb
+72030007^Deep third degree burn of forehead AND/OR cheek
+212020003^Full thickness burn of multiple specified sites
+449623007^Superficial burn of multiple sites of lower leg
+449625000^First degree burn of multiple sites of upper arm
+66097008^Abrasion AND/OR friction burn without infection
+211306000^Abrasion or friction burn of hand, infected
+429562001^Abrasion AND/OR friction burn of multiple sites
+211053006^Abrasion AND/OR friction burn of trunk with infection
+818005^Third degree burn of multiple sites of lower limb
+14020004^Second degree burn of multiple sites of upper arm
+211320007^Abrasion AND/OR friction burn of finger with infection
+111720005^Second degree burn of multiple sites of lower limb
+449719007^Full thickness burn of multiple sites of lower leg
+211256008^Abrasion AND/OR friction burn of forearm with infection
+53642007^Non-chemical burn of cornea AND/OR conjunctival sac
+10920005^Abrasion AND/OR friction burn of lip with infection
+60203004^Gingival abrasion with infection
+61383005^Abrasion AND/OR friction burn of ear with infection
+42879007^First degree burn of two OR more fingers including thumb
+63542002^Acid chemical burn of cornea AND/OR conjunctival sac
+111718007^First degree burn of wrist AND/OR hand
+72512006^Abrasion AND/OR friction burn of nose with infection
+37022009^Deep third degree burn of hand with loss of body part
+211661000^Alkaline chemical burn of cornea and conjunctival sac
+26652002^Abrasion AND/OR friction burn of scalp with infection
+44690000^Abrasion AND/OR friction burn of vulva with infection
+49524007^Abrasion AND/OR friction burn of groin with infection
+61341000^Abrasion AND/OR friction burn of thigh with infection
+63848007^Abrasion AND/OR friction burn of wrist with infection
+66578000^Abrasion AND/OR friction burn of cheek with infection
+78360004^Abrasion AND/OR friction burn of ankle with infection
+211336009^Abrasion or friction burn of lower limb, infected
+23252003^Deep full thickness burn of the trunk, with loss of body part
+64075008^Deep third degree burn of thumb with loss of body part
+2825006^Gingival abrasion
+6733004^Abrasion AND/OR friction burn of ear without infection
+52895001^Abrasion AND/OR friction burn of vagina with infection
+63811003^Abrasion AND/OR friction burn of lip without infection
+67077008^Abrasion AND/OR friction burn of axilla with infection
+76531002^Abrasion AND/OR friction burn of testis with infection
+5414003^Burn involving 80-89% of body surface (BS)
+14276000^Burn involving 10-19% of body surface (BS)
+22428001^Burn involving 20-29% of body surface (BS)
+40904009^Burn involving 30-39% of body surface (BS)
+46000006^Burn involving 70-79% of body surface (BS)
+51041008^Burn involving 60-69% of body surface (BS)
+64647005^Burn involving 50-59% of body surface (BS)
+86660005^Burn involving 40-49% of body surface (BS)
+211864005^Deep full thickness burn of arm, with loss of body part
+211995004^Deep full thickness burn of leg, with loss of body part
+24328004^Abrasion AND/OR friction burn of foot without infection
+30742008^Abrasion AND/OR friction burn of nose without infection
+40762003^Abrasion AND/OR friction burn of hand without infection
+84204007^Abrasion AND/OR friction burn of scrotum with infection
+59448007^Third degree burn of two OR more fingers including thumb
+69429006^First degree burn OF two OR more fingers not including thumb
+211742005^Deep full thickness burn of nose, with loss of body part
+23072002^Abrasion AND/OR friction burn of wrist without infection
+30148002^Abrasion AND/OR friction burn of groin without infection
+36821007^Abrasion AND/OR friction burn of vulva without infection
+41772008^Abrasion AND/OR friction burn of ankle without infection
+56809002^Abrasion AND/OR friction burn of thigh without infection
+62603000^Abrasion AND/OR friction burn of scalp without infection
+64831005^Abrasion AND/OR friction burn of shoulder with infection
+75767000^Abrasion AND/OR friction burn of cheek without infection
+78794000^Abrasion AND/OR friction burn of trunk without infection
+57266005^Second degree burn of two OR more fingers including thumb
+66526003^Burn with resulting rupture AND/OR destruction of eyeball
+211943007^Deep third degree burn of wrist with loss of a body part
+9090007^Abrasion AND/OR friction burn of testis without infection
+51623004^Abrasion AND/OR friction burn of vagina without infection
+65523004^Abrasion AND/OR friction burn of axilla without infection
+66371007^Abrasion AND/OR friction burn of upper arm with infection
+70098006^Abrasion AND/OR friction burn of finger without infection
+428135008^Abrasion AND/OR friction burn of multiple sites, infected
+57971009^Abrasion AND/OR friction burn of scrotum without infection
+90328000^Deep third degree burn of lower limb with loss of body part
+275451005^Deep third degree burn of hand, without loss of a body part
+90819008^Abrasion AND/OR friction burn of shoulder without infection
+78506008^Third degree burn of two OR more fingers not including thumb
+90808005^Burn involving greater than 90% of body surface (BS)
+56842001^Abrasion AND/OR friction burn of upper arm without infection
+26876007^Second degree burn of two OR more fingers not including thumb
+63420001^Deep third degree burn of two OR more fingers including thumb
+211853007^Deep full thickness burn of the arm without loss of body part
+211985006^Deep full thickness burn of the leg without loss of body part
+211999005^Deep full thickness burn of the ankle, with loss of body part
+212002007^Deep full thickness burn of the thigh, with loss of body part
+6341002^Burn any degree involving less than 10 percent of body surface
+211796009^Deep full thickness burn of the trunk without loss of body part
+211932004^Deep third degree burn of wrist, without loss of a body part
+10995009^Abrasion AND/OR friction burn of scapular region with infection
+31500004^Deep third degree burns of multiple sites with loss of body part
+62011006^Deep third degree burn of two OR more fingers not including thumb
+212000004^Deep full thickness burn of the lower leg, with loss of body part
+70038008^Deep third degree burn of finger, not thumb with loss of body part
+30072009^Abrasion AND/OR friction burn of scapular region without infection
+6772000^Deep third degree burn with loss of body part of unspecified site
+211196004^Abrasion or friction burn of shoulder and upper arm, infected
+1203008^Deep third degree burn of forehead AND/OR cheek with loss of body part
+80210002^Deep third degree burn without loss of body part of unspecified site
+27246003^Deep third degree burn of multiple sites of upper limb with loss of body part
+86051001^Deep third degree burn of multiple sites of lower limb with loss of body part
+212003002^Deep full thickness burn of multiple sites of the leg, with loss of body part
+88910009^Deep third degree burn of two OR more fingers including thumb with loss of body part
+49282005^Deep third degree burn of two OR more fingers not including thumb with loss of body part
+211933009^Deep full thickness burn of multiple sites of the wrist or hand without loss of body part
+212060002^Burn involving 20-29 percent of body surface, with 10-19 percent of body surface with full thickness burn
+212061003^Burn involving 20-29 percent of body surface, with 20-29 percent of body surface with full thickness burn
+212065007^Burn involving 30-39 percent of body surface, with 10-19 percent of body surface with full thickness burn
+212066008^Burn involving 30-39 percent of body surface, with 20-29 percent of body surface with full thickness burn
+212067004^Burn involving 30-39 percent of body surface, with 30-39 percent of body surface with full thickness burn
+212071001^Burn involving 40-49 percent of body surface, with 10-19 percent of body surface with full thickness burn
+212072008^Burn involving 40-49 percent of body surface, with 20-29 percent of body surface with full thickness burn
+212073003^Burn involving 40-49 percent of body surface, with 30-39 percent of body surface with full thickness burn
+212074009^Burn involving 40-49 percent of body surface, with 40-49 percent of body surface with full thickness burn
+212078007^Burn involving 50-59 percent of body surface, with 10-19 percent of body surface with full thickness burn
+212079004^Burn involving 50-59 percent of body surface, with 20-29 percent of body surface with full thickness burn
+212080001^Burn involving 50-59 percent of body surface, with 30-39 percent of body surface with full thickness burn
+212081002^Burn involving 50-59 percent of body surface, with 40-49 percent of body surface with full thickness burn
+212082009^Burn involving 50-59 percent of body surface, with 50-59 percent of body surface with full thickness burn
+212086007^Burn involving 60-69 percent of body surface, with 10-19 percent of body surface with full thickness burn
+212087003^Burn involving 60-69 percent of body surface, with 20-29 percent of body surface with full thickness burn
+212088008^Burn involving 60-69 percent of body surface, with 30-39 percent of body surface with full thickness burn
+212089000^Burn involving 60-69 percent of body surface, with 40-49 percent of body surface with full thickness burn
+212090009^Burn involving 60-69 percent of body surface, with 50-59 percent of body surface with full thickness burn
+212091008^Burn involving 60-69 percent of body surface, with 60-69 percent of body surface with full thickness burn
+212095004^Burn involving 70-79 percent of body surface, with 10-19 percent of body surface with full thickness burn
+212096003^Burn involving 70-79 percent of body surface, with 20-29 percent of body surface with full thickness burn
+212097007^Burn involving 70-79 percent of body surface, with 30-39 percent of body surface with full thickness burn
+212098002^Burn involving 70-79 percent of body surface, with 40-49 percent of body surface with full thickness burn
+212099005^Burn involving 70-79 percent of body surface, with 50-59 percent of body surface with full thickness burn
+212100002^Burn involving 70-79 percent of body surface, with 60-69 percent of body surface with full thickness burn
+212101003^Burn involving 70-79 percent of body surface, with 70-79 percent of body surface with full thickness burn
+212105007^Burn involving 80-89 percent of body surface, with 10-19 percent of body surface with full thickness burn
+212106008^Burn involving 80-89 percent of body surface, with 20-29 percent of body surface with full thickness burn
+212107004^Burn involving 80-89 percent of body surface, with 30-39 percent of body surface with full thickness burn
+212108009^Burn involving 80-89 percent of body surface, with 40-49 percent of body surface with full thickness burn
+212109001^Burn involving 80-89 percent of body surface, with 50-59 percent of body surface with full thickness burn
+212110006^Burn involving 80-89 percent of body surface, with 60-69 percent of body surface with full thickness burn
+212111005^Burn involving 80-89 percent of body surface, with 70-79 percent of body surface with full thickness burn
+212112003^Burn involving 80-89 percent of body surface, with 80-89 percent of body surface with full thickness burn
+212117009^Burn involving more than 90 percent of body surface, with 10-19 percent of body surface with full thickness burn
+212118004^Burn involving more than 90 percent of body surface, with 20-29 percent of body surface with full thickness burn
+212119007^Burn involving more than 90 percent of body surface, with 30-39 percent of body surface with full thickness burn
+212120001^Burn involving more than 90 percent of body surface, with 40-49 percent of body surface with full thickness burn
+212121002^Burn involving more than 90 percent of body surface, with 50-59 percent of body surface with full thickness burn
+212122009^Burn involving more than 90 percent of body surface, with 60-69 percent of body surface with full thickness burn
+212123004^Burn involving more than 90 percent of body surface, with 70-79 percent of body surface with full thickness burn
+212124005^Burn involving more than 90 percent of body surface, with 80-89 percent of body surface with full thickness burn
+212125006^Burn involving more than 90 percent of body surface, with more than 90 percent of body surface with full thickness burn
+186788009^Query fever
+238968009^Vulvodynia
+399044006^Burning tongue
+58250006^Burning pain on urination
+231869007^Chemical burn of conjunctiva

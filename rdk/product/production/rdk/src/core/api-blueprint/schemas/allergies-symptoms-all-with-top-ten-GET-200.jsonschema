@@ -1,0 +1,77 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"type": "object",
+	"required": [
+		"data",
+		"status"
+	],
+	"properties": {
+		"data": {
+			"type": "object",
+			"required": [
+				"topTen",
+				"allSymptoms"
+			],
+			"properties": {
+				"allSymptoms": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"required": [
+							"ien",
+							"synonym",
+							"name"
+						],
+						"properties": {
+							"ien": {
+								"type": "string"
+							},
+							"name": {
+								"type": "string"
+							},
+							"synonym": {
+								"type": "string"
+							}
+						}
+					}
+				},
+				"topTen": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"required": [
+							"categoryName",
+							"values"
+						],
+						"properties": {
+							"categoryName": {
+								"type": "string"
+							},
+							"values": {
+								"type": "array",
+								"items": {
+									"type": "object",
+									"required": [
+										"ien",
+										"name"
+									],
+									"properties": {
+										"ien": {
+											"type": "string"
+										},
+										"name": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

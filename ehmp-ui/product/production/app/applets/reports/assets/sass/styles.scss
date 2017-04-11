@@ -1,0 +1,14 @@
+[data-appletid="reports"] {
+    .doc-detail-container {
+        overflow-y: auto;
+        overflow-x: hidden;
+        max-height: 55vh;
+        padding-top: 15px;
+        h3:first-child {
+            text-transform: capitalize;
+            margin-top: 0;
+            line-height: normal;
+            border-bottom: none;
+        }
+    }
+}

@@ -1,0 +1,26 @@
+{
+	"parameters": {
+		"criteria": {
+			"name": "criteria",
+			"paramType": "query",
+			"type": "string",
+			"values": [
+			]
+		},
+		"domains": {
+			"name": "domains",
+			"paramType": "query",
+			"type": "string",
+			"values": [
+				{
+					"value": "lab"
+				},
+				{
+					"value": "rad"
+				}
+			]
+		}
+	},
+	"schema": {
+	}
+}

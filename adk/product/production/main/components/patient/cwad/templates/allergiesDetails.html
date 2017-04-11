@@ -1,0 +1,48 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xs-12 cwad-title bottom-padding-sm">
+            <strong class="right-padding-xs">{{#each products}}{{name}}{{/each}}</strong>
+            <span>{{#each reactions}}{{name}}{{#unless @last}},{{/unless}}{{/each}}</span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-3 text-right">Drug Classes</div>
+        <div class="col-xs-9">{{#each drugClasses}}{{name}}{{/each}}</div>
+    </div>
+    <div class="row">
+        <div class="col-xs-3 text-right">Nature of reaction</div>
+        <div class="col-xs-3">{{mechanism}}</div>        
+        <div class="col-xs-3 text-right">Severity</div>
+        {{#if severity}}
+            <div class="col-xs-3">{{severity}}</div>
+        {{else}}
+            <div class="col-xs-3 ">Severity Not Noted</div>
+        {{/if}}
+    </div>
+    <div class="row">
+        <div class="col-xs-3 text-right">Entered By:</div>
+        <div class="col-xs-3">{{formatName originatorName ',' ' '}}</div>
+        <div class="col-xs-3 text-right">Originated</div>
+        <div class="col-xs-3">{{formatDate entered "MM/DD/YYYY HH:mm"}}</div>
+    </div>
+     <div class="row">
+        <div class="col-xs-3 text-right">Verified</div>
+        <div class="col-xs-3">{{formatDate verified "MM/DD/YYYY"}}</div>
+        <div class="col-xs-3 text-right">Observed/Historical</div>
+        <div class="col-xs-3">{{#if historical}}{{#compare historical true}}Historical{{/compare}}{{#compare historical false}}Observed{{/compare}}{{else}}Observed{{/if}}</div>
+    </div>
+    <div class="row">
+        <div class="col-xs-3 text-right">Facility</div>
+        <div class="col-xs-3">{{facilityName}}</div>
+        <div class="col-xs-3 text-right">Observed Date</div>
+        <div class="col-xs-3">{{observedDate}}</div>
+    </div>
+    <br/>
+    <div class="row">
+        {{#comments}}
+        <div class="col-xs-3 text-right">Comment:</div>
+        <div class="col-xs-9">{{comment}}<br/></div>
+        &nbsp;
+        {{/comments}}
+    </div>
+</div>

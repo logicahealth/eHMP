@@ -1,0 +1,184 @@
+{
+  "queryComplete": true,
+  "statusList": [
+    {
+      "partner": {
+        "partnerIdentifier": "2.16.840.1.113883.3.42.126.100001.13",
+        "partnerName": "ahlta",
+        "partnerType": "DOD"
+      },
+      "partnerStatus": "SUCCESS",
+      "expectedCount": 3,
+      "receivedCount": 3
+    }
+  ],
+  "dataList": {
+    "notes": [
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000776"
+        },
+        "enteredBy": {
+          "name": "BHIE, USERONE"
+        },
+        "enteredDate": {
+          "start": "2013-11-19T19:56:11",
+          "end": "2013-11-19T19:56:11"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "34109-9"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL^Family Practice Clinic"
+        },
+        "complexDataUrl": "http://localhost:8080/MockDoDAdaptor/async/complex/note/2157581604",
+        "contentType": [
+          {
+            "code": "rtf",
+            "primary": true
+          }
+        ],
+        "title": "Progress Note",
+        "type": [
+          {
+            "code": null,
+            "display": "Progress Note",
+            "system": "2.16.840.1.113883.3.42.126.100001.16",
+            "primary": true
+          }
+        ],
+        "status": [],
+        "verifiedBy": {
+          "name": "BHIE, USERONE"
+        },
+        "verifiedDate": {
+          "start": "2013-11-19T19:49:01",
+          "end": "2013-11-19T19:49:01"
+        }
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000777"
+        },
+        "enteredBy": {
+          "name": "BHIE, USERONE"
+        },
+        "enteredDate": {
+          "start": "2013-11-19T20:20:18",
+          "end": "2013-11-19T20:20:18"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "34109-9"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL^Family Practice Clinic"
+        },
+        "complexDataUrl": "http://localhost:8080/MockDoDAdaptor/async/complex/note/2157581617",
+        "contentType": [
+          {
+            "code": "rtf",
+            "primary": true
+          }
+        ],
+        "title": "Progress Note",
+        "type": [
+          {
+            "code": null,
+            "display": "Progress Note",
+            "system": "2.16.840.1.113883.3.42.126.100001.16",
+            "primary": true
+          }
+        ],
+        "status": [],
+        "verifiedBy": {
+          "name": "BHIE, USERONE"
+        },
+        "verifiedDate": {
+          "start": "2013-11-19T20:17:30",
+          "end": "2013-11-19T20:17:30"
+        }
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000778"
+        },
+        "enteredBy": {
+          "name": "BHIE, USERONE"
+        },
+        "enteredDate": {
+          "start": "2013-11-21T15:44:09",
+          "end": "2013-11-21T15:44:09"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "34109-9"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL^Family Practice Clinic"
+        },
+        "complexDataUrl": "http://localhost:8080/MockDoDAdaptor/async/complex/note/2157581741",
+        "contentType": [
+          {
+            "code": "rtf",
+            "primary": true
+          }
+        ],
+        "title": "Progress Note",
+        "type": [
+          {
+            "code": null,
+            "display": "Progress Note",
+            "system": "2.16.840.1.113883.3.42.126.100001.16",
+            "primary": true
+          }
+        ],
+        "status": [],
+        "verifiedBy": {
+          "name": "BHIE, USERONE"
+        },
+        "verifiedDate": {
+          "start": "2013-11-21T15:34:34",
+          "end": "2013-11-21T15:34:34"
+        }
+      }
+    ]
+  }
+}

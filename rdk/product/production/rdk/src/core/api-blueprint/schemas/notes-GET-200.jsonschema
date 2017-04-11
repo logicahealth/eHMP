@@ -1,0 +1,163 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "Returns array of notes associated with the patient pid",
+	"description": "",
+	"type": "object",
+	"required": [
+		"data",
+		"status"
+	],
+	"properties": {
+		"data": {
+			"type": "object",
+			"required": [
+				"notes"
+			],
+			"properties": {
+				"notes": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"required": [
+							"author",
+							"authorDisplayName",
+							"authorUid",
+							"documentClass",
+							"documentDefUid",
+							"documentTypeName",
+							"encounterName",
+							"encounterUid",
+							"entered",
+							"facilityCode",
+							"facilityName",
+							"isInterdisciplinary",
+							"lastUpdateTime",
+							"localId",
+							"localTitle",
+							"patientIcn",
+							"pid",
+							"referenceDateTime",
+							"stampTime",
+							"status",
+							"statusDisplayName",
+							"summary",
+							"text",
+							"uid",
+							"facilityDisplay",
+							"facilityMoniker"
+						],
+						"properties": {
+							"author": {
+								"type": "string"
+							},
+							"authorDisplayName": {
+								"type": "string"
+							},
+							"authorUid": {
+								"type": "string"
+							},
+							"documentClass": {
+								"type": "string"
+							},
+							"documentDefUid": {
+								"type": "string"
+							},
+							"documentTypeName": {
+								"type": "string"
+							},
+							"encounterName": {
+								"type": "string"
+							},
+							"encounterUid": {
+								"type": "string"
+							},
+							"entered": {
+								"type": "string"
+							},
+							"facilityCode": {
+								"type": "string"
+							},
+							"facilityDisplay": {
+								"type": "string"
+							},
+							"facilityMoniker": {
+								"type": "string"
+							},
+							"facilityName": {
+								"type": "string"
+							},
+							"isInterdisciplinary": {
+								"type": "string"
+							},
+							"lastUpdateTime": {
+								"type": "string"
+							},
+							"localId": {
+								"type": "string"
+							},
+							"localTitle": {
+								"type": "string"
+							},
+							"patientIcn": {
+								"type": "string"
+							},
+							"pid": {
+								"type": "string"
+							},
+							"referenceDateTime": {
+								"type": "string"
+							},
+							"stampTime": {
+								"type": "string"
+							},
+							"status": {
+								"type": "string"
+							},
+							"statusDisplayName": {
+								"type": "string"
+							},
+							"summary": {
+								"type": "string"
+							},
+							"text": {
+								"type": "array",
+								"items": {
+									"type": "object",
+									"properties": {
+										"author": {
+											"type": "string"
+										},
+										"authorDisplayName": {
+											"type": "string"
+										},
+										"authorUid": {
+											"type": "string"
+										},
+										"content": {
+											"type": "string"
+										},
+										"dateTime": {
+											"type": "string"
+										},
+										"status": {
+											"type": "string"
+										},
+										"uid": {
+											"type": "string"
+										}
+									}
+								}
+							},
+							"uid": {
+								"type": "string"
+							}
+						}
+					}
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

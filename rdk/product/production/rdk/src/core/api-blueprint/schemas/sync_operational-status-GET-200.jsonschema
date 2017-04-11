@@ -1,0 +1,80 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "Return the operational status of the logged-in user's site",
+	"description": "",
+	"type": "object",
+	"required": [
+		"data",
+		"status"
+	],
+	"properties": {
+		"data": {
+			"type": "object",
+			"required": [
+				"completedStamp"
+			],
+			"properties": {
+				"completedStamp": {
+					"type": "object",
+					"required": [
+						"sourceMetaStamp"
+					],
+					"properties": {
+						"sourceMetaStamp": {
+							"type": "object",
+							"additionalProperties": {
+								"type": "object",
+								"required": [
+									"domainMetaStamp",
+									"stampTime",
+									"syncCompleted"
+								],
+								"properties": {
+									"domainMetaStamp": {
+										"type": "object",
+										"additionalProperties": {
+											"type": "object",
+											"required": [
+												"domain",
+												"itemCount",
+												"stampTime",
+												"storedCount",
+												"syncCompleted"
+											],
+											"properties": {
+												"domain": {
+													"type": "string"
+												},
+												"itemCount": {
+													"type": "integer"
+												},
+												"stampTime": {
+													"type": "integer"
+												},
+												"storedCount": {
+													"type": "integer"
+												},
+												"syncCompleted": {
+													"type": "boolean"
+												}
+											}
+										}
+									},
+									"stampTime": {
+										"type": "integer"
+									},
+									"syncCompleted": {
+										"type": "boolean"
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

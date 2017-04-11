@@ -1,0 +1,34 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "Get text search result detail where the items in a group are text documents",
+	"description": "",
+	"type": "object",
+	"required": [
+		"status"
+	],
+	"properties": {
+		"data": {
+			"type": "object",
+			"properties": {
+				"code": {
+					"type": "integer"
+				},
+                "errors": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+				"msg": {
+					"type": "string"
+				}
+			}
+		},
+        "message": {
+            "type": "string"
+        },
+		"status": {
+			"type": "integer"
+		}
+	}
+}

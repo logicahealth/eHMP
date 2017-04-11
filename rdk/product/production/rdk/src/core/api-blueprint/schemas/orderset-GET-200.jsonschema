@@ -1,0 +1,55 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"type": "object",
+	"required": [
+		"data",
+		"status"
+	],
+	"properties": {
+		"data": {
+			"type": "object",
+			"required": [
+				"items"
+			],
+			"properties": {
+				"items": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"required": [
+							"uid",
+							"name",
+							"scope",
+							"siteId",
+							"createdBy",
+							"active"
+						],
+						"properties": {
+							"active": {
+								"type": "boolean"
+							},
+							"createdBy": {
+								"type": "string"
+							},
+							"name": {
+								"type": "string"
+							},
+							"scope": {
+								"type": "string"
+							},
+							"siteId": {
+								"type": "string"
+							},
+							"uid": {
+								"type": "string"
+							}
+						}
+					}
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

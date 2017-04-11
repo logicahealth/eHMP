@@ -1,0 +1,79 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"type": "object",
+	"required": [
+		"statusCode",
+		"data",
+		"status"
+	],
+	"properties": {
+		"data": {
+			"type": "object",
+			"required": [
+				"active",
+				"createdBy",
+				"formData",
+				"name",
+				"orderable",
+				"scope",
+				"siteId",
+				"timestamp",
+				"type",
+				"uid"
+			],
+			"properties": {
+				"active": {
+					"type": "boolean"
+				},
+				"createdBy": {
+					"type": "string"
+				},
+				"formData": {
+					"type": "object",
+					"required": [
+						"button1",
+						"listBox"
+					],
+					"properties": {
+						"button1": {
+							"type": "string"
+						},
+						"listBox": {
+							"type": "array",
+							"items": {
+								"type": "string"
+							}
+						}
+					}
+				},
+				"name": {
+					"type": "string"
+				},
+				"orderable": {
+					"type": "string"
+				},
+				"scope": {
+					"type": "string"
+				},
+				"siteId": {
+					"type": "string"
+				},
+				"timestamp": {
+					"type": "string"
+				},
+				"type": {
+					"type": "string"
+				},
+				"uid": {
+					"type": "string"
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		},
+		"statusCode": {
+			"type": "integer"
+		}
+	}
+}

@@ -1,0 +1,294 @@
+{
+  "queryComplete": true,
+  "statusList": [
+    {
+      "partner": {
+        "partnerIdentifier": "2.16.840.1.113883.3.42.126.100001.13",
+        "partnerName": "ahlta",
+        "partnerType": "DOD"
+      },
+      "partnerStatus": "SUCCESS",
+      "expectedCount": 5,
+      "receivedCount": 5
+    }
+  ],
+  "dataList": {
+    "notes": [
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000003928"
+        },
+        "enteredBy": {
+          "name": "SJF, FOUR"
+        },
+        "enteredDate": {
+          "start": "2012-02-01T00:08:05",
+          "end": "2012-02-01T00:08:05"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "34109-9"
+          }
+        ],
+        "facility": {
+          "name": "4th Medical Group^Blue MTF"
+        },
+        "complexDataUrl": "http://localhost:8080/MockDoDAdaptor/async/complex/note/2155773514",
+        "contentType": [
+          {
+            "code": "rtf",
+            "primary": true
+          }
+        ],
+        "title": "Progress Note",
+        "type": [
+          {
+            "code": null,
+            "display": "Progress Note",
+            "system": "2.16.840.1.113883.3.42.126.100001.16",
+            "primary": true
+          }
+        ],
+        "status": [],
+        "verifiedBy": {
+          "name": "SJF, FOUR"
+        },
+        "verifiedDate": {
+          "start": "2012-02-01T00:06:53",
+          "end": "2012-02-01T00:06:53"
+        }
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000003929"
+        },
+        "enteredBy": {
+          "name": "HAIMSPROVIDER, QUAZI"
+        },
+        "enteredDate": {
+          "start": "2012-02-22T18:29:42",
+          "end": "2012-02-22T18:29:42"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "34109-9"
+          }
+        ],
+        "facility": {
+          "name": "4th Medical Group^Seymour         Mental Health Clinic"
+        },
+        "complexDataUrl": "http://localhost:8080/MockDoDAdaptor/async/complex/note/2155857983",
+        "contentType": [
+          {
+            "code": "rtf",
+            "primary": true
+          }
+        ],
+        "title": "Progress Note",
+        "type": [
+          {
+            "code": null,
+            "display": "Progress Note",
+            "system": "2.16.840.1.113883.3.42.126.100001.16",
+            "primary": true
+          }
+        ],
+        "status": [],
+        "verifiedBy": {
+          "name": "HAIMSPROVIDER, QUAZI"
+        },
+        "verifiedDate": {
+          "start": "2012-02-22T18:00:22",
+          "end": "2012-02-22T18:00:22"
+        }
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000003930"
+        },
+        "enteredBy": {
+          "name": "HAIMSPROVIDER, QUAZI"
+        },
+        "enteredDate": {
+          "start": "2012-03-07T13:17:48",
+          "end": "2012-03-07T13:17:48"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "34109-9"
+          }
+        ],
+        "facility": {
+          "name": "4th Medical Group^Seymour         Mental Health Clinic"
+        },
+        "complexDataUrl": "http://localhost:8080/MockDoDAdaptor/async/complex/note/2155900860",
+        "contentType": [
+          {
+            "code": "rtf",
+            "primary": true
+          }
+        ],
+        "title": "Progress Note",
+        "type": [
+          {
+            "code": null,
+            "display": "Progress Note",
+            "system": "2.16.840.1.113883.3.42.126.100001.16",
+            "primary": true
+          }
+        ],
+        "status": [],
+        "verifiedBy": {
+          "name": "HAIMSPROVIDER, QUAZI"
+        },
+        "verifiedDate": {
+          "start": "2012-03-07T13:11:47",
+          "end": "2012-03-07T13:11:47"
+        }
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000003931"
+        },
+        "enteredBy": {
+          "name": "HAIMSPROVIDER, QUAZI"
+        },
+        "enteredDate": {
+          "start": "2012-08-01T14:13:05",
+          "end": "2012-08-01T14:13:05"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "34109-9"
+          }
+        ],
+        "facility": {
+          "name": "4th Medical Group^Seymour         Mental Health Clinic"
+        },
+        "complexDataUrl": "http://localhost:8080/MockDoDAdaptor/async/complex/note/2156435123",
+        "contentType": [
+          {
+            "code": "rtf",
+            "primary": true
+          }
+        ],
+        "title": "Progress Note",
+        "type": [
+          {
+            "code": null,
+            "display": "Progress Note",
+            "system": "2.16.840.1.113883.3.42.126.100001.16",
+            "primary": true
+          }
+        ],
+        "status": [],
+        "verifiedBy": {
+          "name": "HAIMSPROVIDER, QUAZI"
+        },
+        "verifiedDate": {
+          "start": "2012-08-01T14:09:23",
+          "end": "2012-08-01T14:09:23"
+        }
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000003932"
+        },
+        "enteredBy": {
+          "name": "HAIMSPROVIDER, QUAZI"
+        },
+        "enteredDate": {
+          "start": "2012-08-01T14:19:00",
+          "end": "2012-08-01T14:19:00"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "34109-9"
+          }
+        ],
+        "facility": {
+          "name": "4th Medical Group^Seymour         Mental Health Clinic"
+        },
+        "complexDataUrl": "http://localhost:8080/MockDoDAdaptor/async/complex/note/2156435150",
+        "contentType": [
+          {
+            "code": "rtf",
+            "primary": true
+          }
+        ],
+        "title": "Progress Note",
+        "type": [
+          {
+            "code": null,
+            "display": "Progress Note",
+            "system": "2.16.840.1.113883.3.42.126.100001.16",
+            "primary": true
+          }
+        ],
+        "status": [],
+        "verifiedBy": {
+          "name": "HAIMSPROVIDER, QUAZI"
+        },
+        "verifiedDate": {
+          "start": "2012-08-01T14:12:59",
+          "end": "2012-08-01T14:12:59"
+        }
+      }
+    ]
+  }
+}

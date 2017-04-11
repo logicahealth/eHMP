@@ -1,0 +1,316 @@
+{
+    "ignore": [
+        {
+            "path": "/roles/edit",
+            "method": "PUT",
+            "includeParams": "required",
+            "justification": "TODO: this currently fails due to a bug in node-mocks-http.mockRequest which picks up the statusCode in any response and sets it to the status code. See roles/edit.js line 128."
+        },
+        {
+            "path": "/roles/edit",
+            "method": "PUT",
+            "includeParams": "all",
+            "justification": "TODO: this currently fails due to a bug in node-mocks-http.mockRequest which picks up the statusCode in any response and sets it to the status code. See roles/edit.js line 128."
+        },
+        {
+            "path": "/vitals/all",
+            "justification": "TODO: currently getting an error from VistA: VistA SECURITY error (byte 0 was '\\u0054'): The remote procedure GMV V/M ALLDATA is not registered to the option HMP UI CONTEXT."
+        },
+        {
+            "path": "/vitals/closest",
+            "justification": "TODO: currently getting an error from VistA: VistA SECURITY error (byte 0 was '\\u0054'): The remote procedure GMV V/M ALLDATA is not registered to the option HMP UI CONTEXT."
+        },
+        {
+            "path": "/vitals/vitals-rule",
+            "justification": "TODO: app.config.cdsInvocationServer is currently not present."
+        },
+
+
+        {
+            "path": "/encounter/info",
+            "simulateExternalError": 404,
+            "justification": "This path is for a VistA request, which doesn't do 404."
+        },
+        {
+            "path": "/favorites",
+            "simulateExternalError": 404,
+            "justification": "A 404 isn't returned from PJDS for this call."
+        },
+        {
+            "path": "/locations/clinics",
+            "simulateExternalError": 404,
+            "justification": "This path is for a VistA request, which doesn't do 404."
+        },
+        {
+            "path": "/locations/clinics/patients",
+            "simulateExternalError": 404,
+            "justification": "This path is for a VistA request, which doesn't do 404."
+        },
+        {
+            "path": "/locations/wards",
+            "simulateExternalError": 404,
+            "justification": "This path is for a VistA request, which doesn't do 404."
+        },
+        {
+            "path": "/locations/wards/patients",
+            "simulateExternalError": 404,
+            "justification": "This path is for a VistA request, which doesn't do 404."
+        },
+        {
+            "path": "/notes/recent-titles",
+            "simulateExternalError": "ESIMULATED",
+            "justification": "This resource is coded to never return an error status code."
+        },
+        {
+            "path": "/notes/recent-titles",
+            "simulateExternalError": 404,
+            "justification": "This resource is coded to never return an error status code."
+        },
+        {
+            "path": "/notes/recent-titles",
+            "simulateExternalError": 500,
+            "justification": "This resource is coded to never return an error status code."
+        },
+        {
+            "path": "/operational-data/type/vital",
+            "simulateExternalError": 404,
+            "justification": "A 404 should never happen with operational data."
+        },
+        {
+            "path": "/operational-data/type/laboratory",
+            "simulateExternalError": 404,
+            "justification": "A 404 should never happen with operational data."
+        },
+        {
+            "path": "/operational-data/type/medication",
+            "simulateExternalError": 404,
+            "justification": "A 404 should never happen with operational data."
+        },
+        {
+            "path": "/orderset",
+            "simulateExternalError": 404,
+            "justification": "The PJDS calls won't return a 404, so it's a general error."
+        },
+        {
+            "path": "/orderset/:uid",
+            "method": "DELETE",
+            "simulateExternalError": 404,
+            "justification": "The endpoint always returns an empty response."
+        },
+        {
+            "path": "/orderset/:uid",
+            "method": "PUT",
+            "simulateExternalError": 404,
+            "justification": "The PJDS calls won't return a 404, so it's a general error."
+        },
+        {
+            "path": "/patient/health-summaries/reports",
+            "simulateExternalError": 404,
+            "justification": "This path is for a VistA request, which doesn't do 404."
+        },
+        {
+            "path": "/patient/photo",
+            "simulateExternalError": 404,
+            "justification": "The patient photo resource sends back a neutral image on error."
+        },
+        {
+            "path": "/patient/photo",
+            "simulateExternalError": 500,
+            "justification": "The patient photo resource sends back a neutral image on error."
+        },
+        {
+            "path": "/patient/record/labs/by-order",
+            "simulateExternalError": 404,
+            "justification": "This resource handles a real 404, but not the fake 404 in versioning-tests."
+        },
+        {
+            "path": "/patient/record/metadata/",
+            "simulateExternalError": 404,
+            "method": "GET",
+            "justification": "This resource handles a 404 by returning a 202."
+        },
+        {
+            "path": "/patient/record/notes",
+            "simulateExternalError": 404,
+            "method": "GET",
+            "justification": "This resource handles a 404 via the synchronize interceptor."
+        },
+        {
+            "path": "/patient/record/search/suggest",
+            "simulateExternalError": 404,
+            "justification": "This resource handles a real 404, but not the fake 404 in versioning-tests."
+        },
+        {
+            "path": "/patient/record/search/suggest",
+            "simulateExternalError": 500
+        },
+        {
+            "path": "/patient/record/timeline",
+            "simulateExternalError": 404,
+            "justification": "This resource handles a real 404, but not the fake 404 in versioning-tests."
+        },
+        {
+            "path": "/patient-search/cprs",
+            "simulateExternalError": 404,
+            "justification": "This path is for a VistA request, which doesn't do 404."
+        },
+        {
+            "path": "/patient-search/global",
+            "includeParams": "required",
+            "justification": "At least two parameters are required, but swagger can't represent that."
+        },
+        {
+            "path": "/patient-search/last5",
+            "simulateExternalError": 404,
+            "justification": "A 404 error doesn't make sense in the context of this search resource."
+        },
+        {
+            "path": "/patient-search",
+            "method": "POST",
+            "simulateExternalError": 404,
+            "justification": "The HTTP error is for a SOAP request, and that has its own handling."
+        },
+        {
+            "path": "/patient-search",
+            "method": "POST",
+            "simulateExternalError": 500,
+            "justification": "The HTTP error is for a SOAP request, and that has its own handling."
+        },
+        {
+            "path": "/problems",
+            "simulateExternalError": 404,
+            "justification": "This path is for a VistA request, which doesn't do 404."
+        },
+        {
+            "path": "/problems-lexicon-extended-lookup",
+            "includeParams": "all",
+            "justification": "The limit parameter is treated weirdly here, where it returns a 456 error instead of limiting the results."
+        },
+        {
+            "path": "/problems-lexicon-lookup",
+            "includeParams": "all",
+            "justification": "The limit parameter is treated weirdly here, where it returns a 456 error instead of limiting the results."
+        },
+        {
+            "path": "/permissions/list",
+            "simulateExternalError": 404,
+            "justification": "A 404 doesn't make sense for this endpoint."
+        },
+        {
+            "path": "/permission-sets/edit",
+            "simulateExternalError": 404,
+            "justification": "An initial 404 means create, and the create doesn't fail with a 404."
+        },
+        {
+            "path": "/permission-sets/edit",
+            "includeParams": "all",
+            "justification": "This should really only be called with a request body instead of parameters."
+        },
+        {
+            "path": "/permission-sets/list",
+            "simulateExternalError": 404,
+            "justification": "A 404 doesn't make sense for this endpoint."
+        },
+        {
+            "path": "/quickorder",
+            "simulateExternalError": 404,
+            "justification": "The PJDS calls won't return a 404, so it's a general error."
+        },
+        {
+            "path": "/quickorder/:uid",
+            "method": "DELETE",
+            "simulateExternalError": 404,
+            "justification": "The endpoint always returns an empty response."
+        },
+        {
+            "path": "/quickorder/:uid",
+            "method": "PUT",
+            "simulateExternalError": 404,
+            "justification": "The PJDS calls won't return a 404, so it's a general error."
+        },
+        {
+            "path": "/roles/edit",
+            "simulateExternalError": 404,
+            "justification": "roles/edit is only allowed to return 200 and 400 responses."
+        },
+        {
+            "path": "/roles/edit",
+            "simulateExternalError": 500,
+            "justification": "roles/edit is only allowed to return 200 and 400 responses."
+        },
+        {
+            "path": "/roles/getUserRoles",
+            "simulateExternalError": 404,
+            "justification": "roles/getUserRoles is only allowed to return 200 and 400 responses."
+        },
+        {
+            "path": "/roles/getUserRoles",
+            "simulateExternalError": 500,
+            "justification": "roles/getUserRoles is only allowed to return 200 and 400 responses."
+        },
+        {
+            "path": "/roles/list",
+            "simulateExternalError": 404,
+            "justification": "roles/list is not designed to return a 404 response."
+        },
+        {
+            "path": "/sync/clear",
+            "justification": "Clear depends on a 404 external status response, but other calls depend on a 200 response."
+        },
+        {
+            "path": "/sync/load",
+            "simulateExternalError": 500,
+            "justification": "Load always returns 404 on error statusCode."
+        },
+        {
+            "path": "/sync/load",
+            "includeParams": "required",
+            "justification": "Load never finishes, due to 'waiting' canned response."
+        },
+        {
+            "path": "/teams/addfacilities",
+            "simulateExternalError": 404,
+            "justification": "The endpoint ignores the response from JDS."
+        },
+        {
+            "path": "/teams/addfacilities",
+            "simulateExternalError": 500,
+            "justification": "The endpoint ignores the response from JDS."
+        },
+        {
+            "path": "/vergencevaultproxy/getICNForCCOW",
+            "simulateExternalError": 404,
+            "justification": "This resource always returns success."
+        },
+        {
+            "path": "/vergencevaultproxy/getICNForCCOW",
+            "simulateExternalError": 500,
+            "justification": "This resource always returns success."
+        },
+        {
+            "path": "/visit/serviceCategory",
+            "simulateExternalError": 404,
+            "justification": "This path is for a VistA request, which doesn't do 404."
+        },
+        {
+            "path": "/visits/admissions",
+            "simulateExternalError": 404,
+            "justification": "This path is for a VistA request, which doesn't do 404."
+        },
+        {
+            "path": "/visits/appointments",
+            "simulateExternalError": 404,
+            "justification": "This path is for a VistA request, which doesn't do 404."
+        },
+        {
+            "path": "/vitals/qualifiers",
+            "simulateExternalError": 404,
+            "justification": "This path is for a VistA request, which doesn't do 404."
+        },
+        {
+            "path": "/vler/:pid/toc",
+            "simulateExternalError": 404,
+            "justification": "This resource handles a real 404, but not the fake 404 in versioning-tests."
+        }
+    ]
+}

@@ -1,0 +1,172 @@
+{
+  "queryComplete": true,
+  "statusList": [
+    {
+      "partner": {
+        "partnerIdentifier": "2.16.840.1.113883.3.42.126.100001.13",
+        "partnerName": "ahlta",
+        "partnerType": "DOD"
+      },
+      "partnerStatus": "SUCCESS",
+      "expectedCount": 2,
+      "receivedCount": 2
+    }
+  ],
+  "dataList": {
+    "medicationOrders": [
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000761"
+        },
+        "enteredBy": null,
+        "enteredDate": null,
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "29305-0"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL"
+        },
+        "orderable": [
+          {
+            "display": "SOTALOL (BETAPACE) 80MG @$0.08/TAB--PO 8",
+            "code": "3000272497",
+            "system": "2.16.840.1.113883.3.42.126.100001.16",
+            "primary": true
+          }
+        ],
+        "date": {
+          "start": "2013-04-23T11:06:00",
+          "end": "2013-04-23T11:06:00"
+        },
+        "orderNumber": {
+          "id": "130423-00008"
+        },
+        "orderingProvider": null,
+        "status": [],
+        "actionCode": "NW",
+        "childResistant": true,
+        "deliveryLocation": null,
+        "dispensingLocation": null,
+        "alternateDrugText": "SORINE 80 MG TABLET",
+        "duration": "D30",
+        "endDate": {
+          "start": "2013-05-23T11:06:00",
+          "end": "2013-05-23T11:06:00"
+        },
+        "enteringLocation": null,
+        "giveAmount": "80",
+        "giveFormDescription": "TABLET",
+        "giveUnits": [],
+        "intervalPattern": null,
+        "interval": null,
+        "numberOfRefills": "0",
+        "comment": null,
+        "priorOrderNumber": null,
+        "priority": "ROUTINE",
+        "quantity": "90",
+        "requestedDispenseAmount": "90",
+        "requestedGiveTimeUnit": null,
+        "routeDescription": "PO",
+        "sig": "T 1X",
+        "startDate": {
+          "start": "2013-04-23T11:06:00",
+          "end": "2013-04-23T11:06:00"
+        },
+        "verifiedBy": null
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000763"
+        },
+        "enteredBy": null,
+        "enteredDate": null,
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "29305-0"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL"
+        },
+        "orderable": [
+          {
+            "display": "ALBUTEROL 0.083% INH SOL PREMIXED--INH 2",
+            "code": "15451500",
+            "system": "2.16.840.1.113883.3.42.126.100001.16",
+            "primary": true
+          }
+        ],
+        "date": {
+          "start": "2013-04-19T14:24:00",
+          "end": "2013-04-19T14:24:00"
+        },
+        "orderNumber": {
+          "id": "130419-00011"
+        },
+        "orderingProvider": {
+          "name": "DOCTOR, ALPHA"
+        },
+        "status": [],
+        "actionCode": "NW",
+        "childResistant": true,
+        "deliveryLocation": null,
+        "dispensingLocation": null,
+        "alternateDrugText": "ALBUTEROL 0.083% INHAL SOLN",
+        "duration": "D90",
+        "endDate": {
+          "start": "2013-07-18T14:23:00",
+          "end": "2013-07-18T14:23:00"
+        },
+        "enteringLocation": {
+          "name": "Orthopedic Clinic FHCC"
+        },
+        "giveAmount": "3",
+        "giveFormDescription": "SOLUTION",
+        "giveUnits": [],
+        "intervalPattern": null,
+        "interval": null,
+        "numberOfRefills": "0",
+        "comment": null,
+        "priorOrderNumber": null,
+        "priority": "ROUTINE",
+        "quantity": "30",
+        "requestedDispenseAmount": "30",
+        "requestedGiveTimeUnit": null,
+        "routeDescription": "INH",
+        "sig": "U UD AND PRN IN NEBULIZER",
+        "startDate": {
+          "start": "2013-04-19T14:23:00",
+          "end": "2013-04-19T14:23:00"
+        },
+        "verifiedBy": null
+      }
+    ],
+    "consultOrders": [],
+    "labOrders": [],
+    "radiologyOrders": []
+  }
+}

@@ -1,0 +1,63 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"type": "object",
+	"required": [
+		"data",
+		"status"
+	],
+	"properties": {
+		"data": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"required": [
+					"record",
+					"ien",
+					"lotNumber",
+					"manufacturer",
+					"status",
+					"vaccine",
+					"expirationDate",
+					"dosesUnused",
+					"lowSupplyAlert",
+					"ndcCodeVa"
+				],
+				"properties": {
+					"dosesUnused": {
+						"type": "string"
+					},
+					"expirationDate": {
+						"type": "string"
+					},
+					"ien": {
+						"type": "string"
+					},
+					"lotNumber": {
+						"type": "string"
+					},
+					"lowSupplyAlert": {
+						"type": "string"
+					},
+					"manufacturer": {
+						"type": "string"
+					},
+					"ndcCodeVa": {
+						"type": "string"
+					},
+					"record": {
+						"type": "string"
+					},
+					"status": {
+						"type": "string"
+					},
+					"vaccine": {
+						"type": "string"
+					}
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

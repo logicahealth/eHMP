@@ -1,0 +1,65 @@
+<div class="confirmHeader row" accesskey="k">
+    <div class="pull-right all-padding-sm">
+        {{{helpIconLink 'patient_search_restricted'}}}
+    </div>
+    <div class="patientName">{{formatName displayName ',' ', '}}</div>
+</div>
+<div class="fixedHeightZone">
+    <div class="sensitivePanel panel panel-danger">
+        <div id="ackMsgTitleId" class="panel-heading" tabindex="0">
+            <h4 class="panel-title" tabindex="-1">
+                <a data-toggle="collapse" data-parent="#accordion" href="#ackMessagePanel" tabindex="-1">
+            {{ackTitle}}
+            <span class="acknowledged text-success pull-right hidden">Acknowledged <i class="fa fa-check-square-o"></i></span>
+        </a>
+            </h4><span class="sr-only">The selected RESTRICTED RECORD patient is acknowledged.</span>
+        </div>
+        <div id="ackMessagePanel" class="panel-collapse collapse in" tabindex="0">
+            <div class="panel-body">
+            <span class="sr-only">RESTRICTED RECORD.</span>
+                {{ackMessage}}
+            </div>
+        </div>
+    </div>
+    <div class="patientDetails hidden">
+        <div class="patientInfo row">
+            <div id="patient-image-container" class="col-md-4 patient-detail-head">
+                {{#if patientImage}}
+                    <img src='{{patientImage}}' alt="Patient Image"/>
+                {{else}}
+                    <div id="patient-image"><i class='fa fa-spinner fa-spin'></i> <span class="sr-only"> Retrieving patient image...</span></div>
+                {{/if}}
+            </div>
+            <div class="col-md-8 patient-detail-body">
+                <div class="col-xs-4 col-md-5 infoLabelStyle">DOB:</div>
+                <div class="col-xs-4 col-md-7">{{formatDate birthDate "MM/DD/YYYY"}}</div>
+                <br>
+                <div class="col-xs-4 col-md-5 infoLabelStyle">Age:</div>
+                <div class="col-xs-4 col-md-7" id='confirm_age'>{{getAge birthDate}}y</div>
+                <br>
+                <div class="col-xs-4 col-md-5 infoLabelStyle">Gender:</div>
+                <div class="col-xs-4 col-md-7">{{genderName}}</div>
+                <br>
+                <div class="ccol-xs-4 col-md-5 infoLabelStyle">SSN:</div>
+                <div class="col-xs-4 col-md-7">{{formatSSN ssn false}}</div>
+                {{#if roomBed}}
+                <br>
+                <div class="col-xs-7 col-md-7 infoLabelStyle">Room-Bed:</div>
+                <div class="col-xs-5 col-md-5">{{roomBed}}</div>
+                {{/if}}
+            </div>
+        </div>
+    </div>
+    <button type="button" id="ackButton" class="confirm btn btn-danger btn-block bottom-margin-sm top-margin-sm bottom-padding-sm top-padding-sm">Acknowledge {{ackTitle}}
+        <span class="sr-only">Press enter to acknowledge patient, {{displayName}}, is a {{ackTitle}}.</span>
+    </button>
+    <button type="button" id="confirmationButton" class="confirm btn btn-primary btn-block hidden" data-loading-text="<i class='fa fa-spinner fa-spin'></i> <span> Loading Patient Data...</span>" data-sync-text="<i class='fa fa-spinner fa-spin'></i> <span> Syncing Patient Data...</span>">Confirm Selection
+        <span class="sr-only">Confirm patient {{displayName}}, with social security number {{formatSSN ssn false}}, date of birth {{formatDate birthDate "MM/DD/YYYY"}}, age {{getAge birthDate}}, and gender {{genderName}}? Press enter to select this patient. Confirm.</span>
+    </button>
+</div>
+<div class="hidden" id="screenReaderSyncing">
+    Syncing Patient.
+</div>
+<div class="hidden" id="screenReaderLoading">
+    Loading Patient.
+</div>

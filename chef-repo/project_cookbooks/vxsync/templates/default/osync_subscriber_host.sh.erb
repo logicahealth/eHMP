@@ -1,0 +1,1 @@
+OSYNC_LOG_SUFFIX=<%= @name %> node <%= @endpoint %><% if @options.has_key?(:profile) %> --profile <%= @options[:profile] %><% end %> > <%= @process_log %>

@@ -1,0 +1,55 @@
+{
+	"parameters": {
+	},
+	"schema": {
+		"$schema": "http://json-schema.org/draft-04/schema#",
+		"properties": {
+			"demographics": {
+				"properties": {
+					"displayName": {
+						"description": "patient's full name in last,first middle order",
+						"type": "string"
+					},
+					"dob": {
+						"description": "date of birth in yyyymmdd format",
+						"type": "string"
+					},
+					"familyName": {
+						"description": "patient's last name",
+						"type": "string"
+					},
+					"fullName": {
+						"description": "patient's full name in first middle last order",
+						"type": "string"
+					},
+					"genderCode": {
+						"description": "gender code of patient",
+						"type": "string"
+					},
+					"genderName": {
+						"description": "gender of patient",
+						"type": "string"
+					},
+					"givenName": {
+						"description": "patient's first and middle names",
+						"type": "string"
+					},
+					"ssn": {
+						"description": "patient's full ssn",
+						"type": "string"
+					}
+				},
+				"type": "object"
+			},
+			"pid": {
+				"description": "patient's mvi id",
+				"type": "string"
+			}
+		},
+		"required": [
+			"pid",
+            "demographics"
+		],
+		"type": "object"
+	}
+}

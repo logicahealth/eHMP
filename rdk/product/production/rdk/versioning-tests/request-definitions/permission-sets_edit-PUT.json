@@ -1,0 +1,59 @@
+{
+	"parameters": {
+		"additionalPermissions": {
+			"name": "additionalPermissions",
+			"paramType": "query",
+			"type": "string",
+			"values": [
+			]
+		},
+		"permissionSets": {
+			"name": "permissionSets",
+			"paramType": "query",
+			"type": "string",
+			"values": [
+			]
+		},
+		"user": {
+			"name": "user",
+			"paramType": "query",
+			"type": "string",
+			"values": [
+			]
+		}
+	},
+	"schema": {
+		"$schema": "http://json-schema.org/draft-04/schema#",
+		"properties": {
+			"permissionSets": {
+				"items": {
+					"type": "string"
+				},
+				"type": "array",
+				"uniqueItems": true
+			},
+			"user": {
+				"properties": {
+					"fname": {
+						"type": "string"
+					},
+					"lname": {
+						"type": "string"
+					},
+					"uid": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"uid"
+				],
+				"type": "object"
+			}
+		},
+		"required": [
+			"user",
+			"permissionSets"
+		],
+		"type": "object"
+	}
+}

@@ -1,0 +1,37 @@
+[data-appletid="todo_list"] {
+	.table>tbody>tr {
+		border-color: $grey-light;
+		border-bottom-width: 2px;
+		border-top-width: 2px;
+		border-bottom-style: solid;
+		&.urgent  {
+			background-color: $red;
+			color: $pure-white;
+			.dueText {
+				font-weight: bold;
+				color: $pure-white;
+			}
+		}
+		&.low  {
+			background-color: $tertiary;
+			color: $grey-darkest;
+			.dueText {
+				font-weight: bold;
+				color: $grey-darkest;
+			}
+		}
+		&>td {
+			vertical-align: middle;
+			border-right:1px solid $grey-light;
+		}
+	}
+	.table-hover>tbody>tr {
+		&.urgent:hover>td {
+			background: $red-dark;
+		}
+		&.low:hover>td {
+			background: $tertiary-dark;
+		}
+	}
+
+}

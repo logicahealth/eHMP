@@ -1,0 +1,62 @@
+.control.checklist-control {
+    /*This is for a list of checkboxes, an example can be found in Encounters view starting at line 84*/
+    //margin-left: 5px;
+    //padding-top: 5px; //need becuase the -5px margin-top on "form.form-container .checklist-control .form-group, form .form-container .checklist-control .form-group"
+    // creates class definitions for "items-shown-sm", "items-shown-md", and "items-shown-lg" to set height of the checklist container
+    // sm: 5 items, md: 10 items, and lg: 15 items
+    $sm: 5;
+    $md: 10;
+    $lg: 15;
+    &.items-shown-sm > .childView-container {
+        height: calc((#{$sm} * (19px - 5px)));
+    }
+    &.items-shown-md > .childView-container {
+        height: calc((#{$md} * (19px - 5px)));
+    }
+    &.items-shown-lg > .childView-container {
+        height: calc((#{$lg} * (19px - 5px)));
+    }
+    > .childView-container {
+        overflow-y: auto;
+    }
+    .form-group {
+        margin: -13px 0px 0px 5px;;
+    }
+    &.bordered-checklist > .childView-container {
+        //This is used in e-signature
+        .form-group {
+            background-color: $pure-white;
+            border: 1px solid $grey;
+            margin: 2px 0;
+            padding: 0 3px;
+            .checkbox {
+                margin-left: 5px;
+            }
+        }
+    }
+    &.split-checklist > .childView-container {
+        //This is used in Vitals EIE
+        label {
+            display: flex;
+            input {
+                width: 23px;
+            }
+            >:not(input) {
+                flex: 1;
+                margin-top: 3px;
+            }
+        }
+    }
+    /* Begining of Drilldown */
+    // &.drilldownChecklist-control {
+    //     > .drilldown-checklist-region,
+    //     > .drilldown-select-region {
+    //         .form-group {
+    //             &.checklist-control,
+    //             &.select-control {
+    //                 margin-bottom: 0px;
+    //             }
+    //         }
+    //     }
+    // }
+}

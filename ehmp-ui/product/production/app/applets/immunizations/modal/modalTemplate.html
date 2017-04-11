@@ -1,0 +1,48 @@
+<table class="table bottom-margin-xs">
+    <caption class="sr-only">This table represents selected immunization categorized by name, reaction, series, repeat contraindicated, date, facility, and site.</caption>
+    <thead>
+        <tr>
+            <th scope="col" data-detail-label="name">Name</th>
+            <th scope="col" data-detail-label="series">Reaction</th>
+            <th scope="col" data-detail-label="result">Series</th>
+            <th scope="col" data-detail-label="contraDisplay">Repeat Contraindicated</th>
+            <th scope="col" data-detail-label="administeredDate">Date</th>
+            <th scope="col" data-detail-label="facilityCode">Facility</th>
+            <th scope="col" data-detail-label="siteCode">Site</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>{{name}}</td>
+            <td>{{reactionName}}</td>
+            <td>{{seriesName}}</td>
+            <td>{{contraindicatedDisplay}}</td>
+            <td>{{formatDate administeredDateTime}}</td>
+            <td class="color-grey-dark">{{facilityName}}</td>
+            <td>{{facilityMoniker}}</td>
+        </tr>
+    </tbody>
+</table>
+<br>
+<form class="form-inline">
+    <div id="dateRangeFilter"></div>
+</form>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12" id="lrDataTableView">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h5 class="panel-title">{{name}}</h5>
+                    <div class="row">
+                        <p class="col-md-12 small">Immunizations:<span class="left-padding-xs" id="totalTests"></span></p>
+                    </div>
+                </div>
+                <div class="js-backgrid"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <h6 class="col-md-12">Comment:</h6>
+    <div class="col-md-12">{{comment}}</div>
+</div>

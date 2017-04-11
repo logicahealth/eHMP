@@ -1,0 +1,28 @@
+.nav-list {
+    height:100%;
+    margin:1px; // it's convenient to have so the outline is visible when focused.
+    ul {
+        border-right: 1px solid $grey;
+        width: 150px;
+        li{
+            &.nav-list-action {
+                cursor: pointer;
+                &.has-children {
+                    &::after {
+                        color: $grey-darkest;
+                        content: "\f0da";
+                        float: right;
+                        font-family: FontAwesome;
+                    }
+                }
+            }
+            &.nav-list-heading{
+                font-weight: 700;
+                border-bottom:1px solid $grey;
+                &:hover{
+                    background-color: transparent;
+                }
+            }
+        }
+    }
+}

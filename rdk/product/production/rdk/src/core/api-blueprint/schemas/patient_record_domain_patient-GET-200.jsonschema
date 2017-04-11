@@ -1,0 +1,541 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "Get record data of one domain for a patient",
+	"description": "",
+	"type": "object",
+	"required": [
+		"apiVersion",
+		"data",
+		"status"
+	],
+	"properties": {
+		"apiVersion": {
+			"type": "string"
+		},
+		"data": {
+			"type": "object",
+			"required": [
+				"updated",
+				"totalItems",
+				"currentItemCount",
+				"items"
+			],
+			"properties": {
+				"currentItemCount": {
+					"type": "integer"
+				},
+				"items": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"required": [
+							"birthDate",
+							"cwadf",
+							"displayName",
+							"genderCode",
+							"genderName",
+							"icn",
+							"pid",
+							"ssn",
+							"stampTime",
+							"uid"
+						],
+						"properties": {
+							"address": {
+								"type": "array",
+								"items": {
+									"type": "object",
+									"required": [
+										"city",
+										"line1",
+										"state",
+										"summary",
+										"use",
+										"zip"
+									],
+									"properties": {
+										"city": {
+											"type": [
+												"string",
+												"null"
+											]
+										},
+										"line1": {
+											"type": "string"
+										},
+										"state": {
+											"type": [
+												"string",
+												"null"
+											]
+										},
+										"summary": {
+											"type": "string"
+										},
+										"use": {
+											"type": "string"
+										},
+										"zip": {
+											"type": [
+												"string",
+												"null"
+											]
+										}
+									}
+								}
+							},
+							"admissionUid": {
+								"type": "string"
+							},
+							"alias": {
+								"type": "array",
+								"items": {
+									"type": "object",
+									"required": [
+										"fullName",
+										"summary"
+									],
+									"properties": {
+										"fullName": {
+											"type": "string"
+										},
+										"summary": {
+											"type": "string"
+										}
+									}
+								}
+							},
+							"birthDate": {
+								"type": "string"
+							},
+							"briefId": {
+								"type": "string"
+							},
+							"contact": {
+								"type": "array",
+								"items": {
+									"type": "object",
+									"required": [
+										"name",
+										"summary",
+										"typeCode",
+										"typeName"
+									],
+									"properties": {
+										"name": {
+											"type": "string"
+										},
+										"summary": {
+											"type": "string"
+										},
+										"typeCode": {
+											"type": "string"
+										},
+										"typeName": {
+											"type": "string"
+										}
+									}
+								}
+							},
+							"cwadf": {
+								"type": "string"
+							},
+							"displayName": {
+								"type": "string"
+							},
+							"exposure": {
+								"type": "array",
+								"items": {
+									"type": "object",
+									"required": [
+										"name",
+										"summary",
+										"uid"
+									],
+									"properties": {
+										"name": {
+											"type": "string"
+										},
+										"summary": {
+											"type": "string"
+										},
+										"uid": {
+											"type": "string"
+										}
+									}
+								}
+							},
+							"facility": {
+								"type": "array",
+								"items": {
+									"type": "object",
+									"required": [
+										"code",
+										"homeSite",
+										"name",
+										"summary"
+									],
+									"properties": {
+										"code": {
+											"type": "string"
+										},
+										"homeSite": {
+											"type": "boolean"
+										},
+										"latestDate": {
+											"type": "string"
+										},
+										"localPatientId": {
+											"type": "string"
+										},
+										"name": {
+											"type": "string"
+										},
+										"summary": {
+											"type": "string"
+										},
+										"systemId": {
+											"type": "string"
+										}
+									}
+								}
+							},
+							"familyName": {
+								"type": "string"
+							},
+							"fullName": {
+								"type": "string"
+							},
+							"fullname": {
+								"type": "string"
+							},
+							"genderCode": {
+								"type": "string"
+							},
+							"genderName": {
+								"type": "string"
+							},
+							"givenNames": {
+								"type": "string"
+							},
+							"homeFacility": {
+								"type": "object",
+								"required": [
+									"code",
+									"homeSite",
+									"latestDate",
+									"name",
+									"summary"
+								],
+								"properties": {
+									"code": {
+										"type": "string"
+									},
+									"homeSite": {
+										"type": "boolean"
+									},
+									"latestDate": {
+										"type": "string"
+									},
+									"name": {
+										"type": "string"
+									},
+									"summary": {
+										"type": "string"
+									}
+								}
+							},
+							"icn": {
+								"type": "string"
+							},
+							"inpatientLocation": {
+								"type": "string"
+							},
+							"last4": {
+								"type": "string"
+							},
+							"last5": {
+								"type": "string"
+							},
+							"lastUpdateTime": {
+								"type": "integer"
+							},
+							"localId": {
+								"type": "string"
+							},
+							"lrdfn": {
+								"type": "string"
+							},
+							"maritalStatusCode": {
+								"type": "string"
+							},
+							"maritalStatusName": {
+								"type": "string"
+							},
+							"patientRecordFlag": {
+								"type": "array",
+								"items": {
+									"type": "object",
+									"required": [
+										"approved",
+										"assignTS",
+										"assignmentStatus",
+										"category",
+										"name",
+										"nextReviewDT",
+										"originatingSite",
+										"ownerSite",
+										"summary",
+										"text",
+										"type"
+									],
+									"properties": {
+										"approved": {
+											"type": "string"
+										},
+										"assignTS": {
+											"type": "string"
+										},
+										"assignmentStatus": {
+											"type": "string"
+										},
+										"category": {
+											"type": "string"
+										},
+										"name": {
+											"type": "string"
+										},
+										"nextReviewDT": {
+											"type": "string"
+										},
+										"originatingSite": {
+											"type": "string"
+										},
+										"ownerSite": {
+											"type": "string"
+										},
+										"summary": {
+											"type": "string"
+										},
+										"text": {
+											"type": "string"
+										},
+										"type": {
+											"type": "string"
+										}
+									}
+								}
+							},
+							"pid": {
+								"type": "string"
+							},
+							"religionCode": {
+								"type": "string"
+							},
+							"religionName": {
+								"type": "string"
+							},
+							"roomBed": {
+								"type": "string"
+							},
+							"scPercent": {
+								"type": "string"
+							},
+							"sensitive": {
+								"type": "boolean"
+							},
+							"serviceConnected": {
+								"type": "boolean"
+							},
+							"shortInpatientLocation": {
+								"type": "string"
+							},
+							"specialty": {
+								"type": "string"
+							},
+							"specialtyService": {
+								"type": "string"
+							},
+							"ssn": {
+								"type": "string"
+							},
+							"stampTime": {
+								"type": "string"
+							},
+							"teamInfo": {
+								"type": "object",
+								"required": [
+									"associateProvider",
+									"attendingProvider",
+									"inpatientProvider",
+									"mhCoordinator",
+									"primaryProvider",
+									"team",
+									"text"
+								],
+								"properties": {
+									"associateProvider": {
+										"type": "object",
+										"required": [
+											"name"
+										],
+										"properties": {
+											"name": {
+												"type": "string"
+											}
+										}
+									},
+									"attendingProvider": {
+										"type": "object",
+										"required": [
+											"name"
+										],
+										"properties": {
+											"analogPager": {
+												"type": "string"
+											},
+											"digitalPager": {
+												"type": "string"
+											},
+											"name": {
+												"type": "string"
+											},
+											"officePhone": {
+												"type": "string"
+											},
+											"uid": {
+												"type": "string"
+											}
+										}
+									},
+									"inpatientProvider": {
+										"type": "object",
+										"required": [
+											"name"
+										],
+										"properties": {
+											"analogPager": {
+												"type": "string"
+											},
+											"digitalPager": {
+												"type": "string"
+											},
+											"name": {
+												"type": "string"
+											},
+											"officePhone": {
+												"type": "string"
+											},
+											"uid": {
+												"type": "string"
+											}
+										}
+									},
+									"mhCoordinator": {
+										"type": "object",
+										"required": [
+											"mhPosition",
+											"mhTeam",
+											"name"
+										],
+										"properties": {
+											"mhPosition": {
+												"type": "string"
+											},
+											"mhTeam": {
+												"type": "string"
+											},
+											"name": {
+												"type": "string"
+											}
+										}
+									},
+									"primaryProvider": {
+										"type": "object",
+										"required": [
+											"name"
+										],
+										"properties": {
+											"name": {
+												"type": "string"
+											}
+										}
+									},
+									"team": {
+										"type": "object",
+										"required": [
+											"name"
+										],
+										"properties": {
+											"name": {
+												"type": "string"
+											},
+											"phone": {
+												"type": "string"
+											},
+											"uid": {
+												"type": "string"
+											}
+										}
+									},
+									"text": {
+										"type": "string"
+									}
+								}
+							},
+							"telecom": {
+								"type": "array",
+								"items": {
+									"type": "object",
+									"required": [
+										"summary",
+										"use",
+										"value"
+									],
+									"properties": {
+										"summary": {
+											"type": "string"
+										},
+										"use": {
+											"type": "string"
+										},
+										"value": {
+											"type": "string"
+										}
+									}
+								}
+							},
+							"uid": {
+								"type": "string"
+							},
+							"veteran": {
+								"type": "boolean"
+							}
+						}
+					}
+				},
+				"itemsPerPage": {
+					"type": "integer"
+				},
+				"pageIndex": {
+					"type": "integer"
+				},
+				"startIndex": {
+					"type": "integer"
+				},
+				"totalItems": {
+					"type": "integer"
+				},
+				"totalPages": {
+					"type": "integer"
+				},
+				"updated": {
+					"type": "integer"
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

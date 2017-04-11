@@ -1,0 +1,979 @@
+{
+  "dataList": {
+    "labChemResults": [
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000730"
+        },
+        "enteredBy": {
+          "name": "42998 QQQTESTGREAT, DOC A"
+        },
+        "enteredDate": {
+          "start": "2013-04-11T08:23:00",
+          "end": "2013-04-11T08:23:00"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "11502-2"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL/0056"
+        },
+        "order": {
+          "accession": {
+            "id": "130411 BCH 1602"
+          },
+          "collectionDate": {
+            "start": "2013-04-11T11:24:00",
+            "end": "2013-04-11T11:24:00"
+          },
+          "collectionSample": "BLOOD",
+          "date": {
+            "start": "2013-04-11T08:23:00",
+            "end": "2013-04-11T08:23:00"
+          },
+          "id": {
+            "id": "2157176269"
+          },
+          "orderNumber": {
+            "id": "130411-00001"
+          },
+          "priority": [
+            {
+              "display": "ROUTINE",
+              "primary": true
+            }
+          ],
+          "provider": {
+            "name": "42998 QQQTESTGREAT, DOC A"
+          },
+          "requestingLocation": {
+            "name": "NH Great Lakes IL"
+          },
+          "specimen": [
+            {
+              "code": null,
+              "display": "PLASMA",
+              "primary": true
+            }
+          ],
+          "status": [],
+          "test": [
+            {
+              "code": "14607975",
+              "display": "Calcium",
+              "primary": true
+            }
+          ]
+        },
+        "results": [
+          {
+            "codeInterpretation": [
+              {
+                "display": "Higher Than Normal",
+                "primary": true
+              }
+            ],
+            "certifiedBy": null,
+            "certifiedDate": {
+              "start": "2013-04-11T08:25:23",
+              "end": "2013-04-11T08:25:23"
+            },
+            "comment": "3001 GREENBAY ROAD ATTENTION LABORATORY SERVICES NORTH CHICAGO, IL  60064 556 = NORTH CHICAGO VETERAN'S ADMINISTRATION HOSP Test performed at:",
+            "performingLabLocation": {
+              "name": "NH Great Lakes IL/0056"
+            },
+            "status": [
+              {
+                "code": "Final",
+                "display": "Final",
+                "primary": true
+              }
+            ],
+            "test": [
+              {
+                "code": "42525",
+                "display": "Calcium, Serum or Plasma Quantitative",
+                "system": "2.16.840.1.113883.3.42.126.100001.16",
+                "primary": true
+              }
+            ],
+            "codedInterpretation": [
+              {
+                "display": "Higher Than Normal"
+              }
+            ],
+            "referenceRange": "8.5-10.1",
+            "result": "10.5",
+            "units": [
+              {
+                "display": "mg/dL",
+                "primary": true
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000732"
+        },
+        "enteredBy": {
+          "name": "42998 QQQTESTGREAT, DOC A"
+        },
+        "enteredDate": {
+          "start": "2013-05-03T12:28:00",
+          "end": "2013-05-03T12:28:00"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "11502-2"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL/0056"
+        },
+        "order": {
+          "accession": {
+            "id": "130503 BCH 1654"
+          },
+          "collectionDate": {
+            "start": "2013-05-03T15:29:00",
+            "end": "2013-05-03T15:29:00"
+          },
+          "collectionSample": "BLOOD",
+          "date": {
+            "start": "2013-05-03T12:28:00",
+            "end": "2013-05-03T12:28:00"
+          },
+          "id": {
+            "id": "2157546341"
+          },
+          "orderNumber": {
+            "id": "130503-00009"
+          },
+          "priority": [
+            {
+              "display": "ROUTINE",
+              "primary": true
+            }
+          ],
+          "provider": {
+            "name": "42998 QQQTESTGREAT, DOC A"
+          },
+          "requestingLocation": {
+            "name": "NH Great Lakes IL"
+          },
+          "specimen": [
+            {
+              "code": null,
+              "display": "PLASMA",
+              "primary": true
+            }
+          ],
+          "status": [],
+          "test": [
+            {
+              "code": "14607798",
+              "display": "Potassium",
+              "primary": true
+            }
+          ]
+        },
+        "results": [
+          {
+            "codeInterpretation": [
+              {
+                "display": "Critical Low",
+                "primary": true
+              }
+            ],
+            "certifiedBy": null,
+            "certifiedDate": {
+              "start": "2013-05-03T12:31:32",
+              "end": "2013-05-03T12:31:32"
+            },
+            "comment": "3001 GREENBAY ROAD ATTENTION LABORATORY SERVICES NORTH CHICAGO, IL  60064 556 = NORTH CHICAGO VETERAN'S ADMINISTRATION HOSP Test performed at:",
+            "performingLabLocation": {
+              "name": "NH Great Lakes IL/0056"
+            },
+            "status": [
+              {
+                "code": "Final",
+                "display": "Final",
+                "primary": true
+              }
+            ],
+            "test": [
+              {
+                "code": "6827",
+                "display": "Potassium, Serum or Plasma Quantitative",
+                "system": "2.16.840.1.113883.3.42.126.100001.16",
+                "primary": true
+              }
+            ],
+            "codedInterpretation": [
+              {
+                "display": "Critical Low"
+              }
+            ],
+            "referenceRange": "3.5-4.7",
+            "result": "2.2",
+            "units": [
+              {
+                "display": "mmol/L",
+                "primary": true
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000734"
+        },
+        "enteredBy": {
+          "name": "42998 QQQTESTGREAT, DOC A"
+        },
+        "enteredDate": {
+          "start": "2013-05-04T08:25:00",
+          "end": "2013-05-04T08:25:00"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "11502-2"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL/0056"
+        },
+        "order": {
+          "accession": {
+            "id": "130504 BCH 1656"
+          },
+          "collectionDate": {
+            "start": "2013-05-03T19:19:00",
+            "end": "2013-05-03T19:19:00"
+          },
+          "collectionSample": "BLOOD",
+          "date": {
+            "start": "2013-05-04T08:25:00",
+            "end": "2013-05-04T08:25:00"
+          },
+          "id": {
+            "id": "2157546457"
+          },
+          "orderNumber": {
+            "id": "130504-00001"
+          },
+          "priority": [
+            {
+              "display": "ROUTINE",
+              "primary": true
+            }
+          ],
+          "provider": {
+            "name": "42998 QQQTESTGREAT, DOC A"
+          },
+          "requestingLocation": {
+            "name": "NH Great Lakes IL"
+          },
+          "specimen": [
+            {
+              "code": null,
+              "display": "PLASMA",
+              "primary": true
+            }
+          ],
+          "status": [],
+          "test": [
+            {
+              "code": "14607919",
+              "display": "Glucose",
+              "primary": true
+            }
+          ]
+        },
+        "results": [
+          {
+            "codeInterpretation": [
+              {
+                "display": "Higher Than Normal",
+                "primary": true
+              }
+            ],
+            "certifiedBy": null,
+            "certifiedDate": {
+              "start": "2013-05-04T08:25:55",
+              "end": "2013-05-04T08:25:55"
+            },
+            "comment": "3001 GREENBAY ROAD ATTENTION LABORATORY SERVICES NORTH CHICAGO, IL  60064 556 = NORTH CHICAGO VETERAN'S ADMINISTRATION HOSP Test performed at:",
+            "performingLabLocation": {
+              "name": "NH Great Lakes IL/0056"
+            },
+            "status": [
+              {
+                "code": "Final",
+                "display": "Final",
+                "primary": true
+              }
+            ],
+            "test": [
+              {
+                "code": "22585",
+                "display": "Glucose, Serum or Plasma Quantitative",
+                "system": "2.16.840.1.113883.3.42.126.100001.16",
+                "primary": true
+              }
+            ],
+            "codedInterpretation": [
+              {
+                "display": "Higher Than Normal"
+              }
+            ],
+            "referenceRange": "70-99",
+            "result": "100",
+            "units": [
+              {
+                "display": "mg/dL",
+                "primary": true
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000736"
+        },
+        "enteredBy": {
+          "name": "42998 QQQTESTGREAT, DOC A"
+        },
+        "enteredDate": {
+          "start": "2013-05-04T08:25:00",
+          "end": "2013-05-04T08:25:00"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "11502-2"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL/0056"
+        },
+        "order": {
+          "accession": {
+            "id": "130504 BCH 1657"
+          },
+          "collectionDate": {
+            "start": "2013-05-03T19:26:00",
+            "end": "2013-05-03T19:26:00"
+          },
+          "collectionSample": "BLOOD",
+          "date": {
+            "start": "2013-05-04T08:25:00",
+            "end": "2013-05-04T08:25:00"
+          },
+          "id": {
+            "id": "2157546458"
+          },
+          "orderNumber": {
+            "id": "130504-00002"
+          },
+          "priority": [
+            {
+              "display": "ROUTINE",
+              "primary": true
+            }
+          ],
+          "provider": {
+            "name": "42998 QQQTESTGREAT, DOC A"
+          },
+          "requestingLocation": {
+            "name": "NH Great Lakes IL"
+          },
+          "specimen": [
+            {
+              "code": null,
+              "display": "PLASMA",
+              "primary": true
+            }
+          ],
+          "status": [],
+          "test": [
+            {
+              "code": "14607798",
+              "display": "Potassium",
+              "primary": true
+            }
+          ]
+        },
+        "results": [
+          {
+            "codeInterpretation": [
+              {
+                "display": "Higher Than Normal",
+                "primary": true
+              }
+            ],
+            "certifiedBy": null,
+            "certifiedDate": {
+              "start": "2013-05-04T08:26:05",
+              "end": "2013-05-04T08:26:05"
+            },
+            "comment": "3001 GREENBAY ROAD ATTENTION LABORATORY SERVICES NORTH CHICAGO, IL  60064 556 = NORTH CHICAGO VETERAN'S ADMINISTRATION HOSP Test performed at:",
+            "performingLabLocation": {
+              "name": "NH Great Lakes IL/0056"
+            },
+            "status": [
+              {
+                "code": "Final",
+                "display": "Final",
+                "primary": true
+              }
+            ],
+            "test": [
+              {
+                "code": "6827",
+                "display": "Potassium, Serum or Plasma Quantitative",
+                "system": "2.16.840.1.113883.3.42.126.100001.16",
+                "primary": true
+              }
+            ],
+            "codedInterpretation": [
+              {
+                "display": "Higher Than Normal"
+              }
+            ],
+            "referenceRange": "3.5-4.7",
+            "result": "5.1",
+            "units": [
+              {
+                "display": "mmol/L",
+                "primary": true
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000738"
+        },
+        "enteredBy": {
+          "name": "42998 QQQTESTGREAT, DOC A"
+        },
+        "enteredDate": {
+          "start": "2013-05-07T10:43:00",
+          "end": "2013-05-07T10:43:00"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "11502-2"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL/0056"
+        },
+        "order": {
+          "accession": {
+            "id": "130507 BCH 1662"
+          },
+          "collectionDate": {
+            "start": "2013-05-07T13:43:00",
+            "end": "2013-05-07T13:43:00"
+          },
+          "collectionSample": "BLOOD",
+          "date": {
+            "start": "2013-05-07T10:43:00",
+            "end": "2013-05-07T10:43:00"
+          },
+          "id": {
+            "id": "2157547706"
+          },
+          "orderNumber": {
+            "id": "130507-00006"
+          },
+          "priority": [
+            {
+              "display": "ROUTINE",
+              "primary": true
+            }
+          ],
+          "provider": {
+            "name": "42998 QQQTESTGREAT, DOC A"
+          },
+          "requestingLocation": {
+            "name": "NH Great Lakes IL"
+          },
+          "specimen": [
+            {
+              "code": null,
+              "display": "PLASMA",
+              "primary": true
+            }
+          ],
+          "status": [],
+          "test": [
+            {
+              "code": "14607797",
+              "display": "Sodium",
+              "primary": true
+            }
+          ]
+        },
+        "results": [
+          {
+            "codeInterpretation": [],
+            "certifiedBy": null,
+            "certifiedDate": {
+              "start": "2013-05-07T10:44:50",
+              "end": "2013-05-07T10:44:50"
+            },
+            "comment": "3001 GREENBAY ROAD ATTENTION LABORATORY SERVICES NORTH CHICAGO, IL  60064 556 = NORTH CHICAGO VETERAN'S ADMINISTRATION HOSP Test performed at:",
+            "performingLabLocation": {
+              "name": "NH Great Lakes IL/0056"
+            },
+            "status": [
+              {
+                "code": "Final",
+                "display": "Final",
+                "primary": true
+              }
+            ],
+            "test": [
+              {
+                "code": "6951",
+                "display": "Sodium, Blood Quantitative",
+                "system": "2.16.840.1.113883.3.42.126.100001.16",
+                "primary": true
+              }
+            ],
+            "codedInterpretation": null,
+            "referenceRange": "134-146",
+            "result": "139",
+            "units": [
+              {
+                "display": "mmol/L",
+                "primary": true
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000740"
+        },
+        "enteredBy": {
+          "name": "42998 QQQTESTGREAT, DOC A"
+        },
+        "enteredDate": {
+          "start": "2013-05-05T14:10:00",
+          "end": "2013-05-05T14:10:00"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "11502-2"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL/0056"
+        },
+        "order": {
+          "accession": {
+            "id": "130505 BCH 1658"
+          },
+          "collectionDate": {
+            "start": "2013-05-05T11:56:00",
+            "end": "2013-05-05T11:56:00"
+          },
+          "collectionSample": "BLOOD",
+          "date": {
+            "start": "2013-05-05T14:10:00",
+            "end": "2013-05-05T14:10:00"
+          },
+          "id": {
+            "id": "2157546464"
+          },
+          "orderNumber": {
+            "id": "130505-00002"
+          },
+          "priority": [
+            {
+              "display": "ROUTINE",
+              "primary": true
+            }
+          ],
+          "provider": {
+            "name": "42998 QQQTESTGREAT, DOC A"
+          },
+          "requestingLocation": {
+            "name": "NH Great Lakes IL"
+          },
+          "specimen": [
+            {
+              "code": null,
+              "display": "PLASMA",
+              "primary": true
+            }
+          ],
+          "status": [],
+          "test": [
+            {
+              "code": "14607922",
+              "display": "Chloride",
+              "primary": true
+            }
+          ]
+        },
+        "results": [
+          {
+            "codeInterpretation": [],
+            "certifiedBy": null,
+            "certifiedDate": {
+              "start": "2013-05-05T14:10:17",
+              "end": "2013-05-05T14:10:17"
+            },
+            "comment": "3001 GREENBAY ROAD ATTENTION LABORATORY SERVICES NORTH CHICAGO, IL  60064 556 = NORTH CHICAGO VETERAN'S ADMINISTRATION HOSP Test performed at:",
+            "performingLabLocation": {
+              "name": "NH Great Lakes IL/0056"
+            },
+            "status": [
+              {
+                "code": "Final",
+                "display": "Final",
+                "primary": true
+              }
+            ],
+            "test": [
+              {
+                "code": "6079",
+                "display": "Chloride, Serum or Plasma Quantitative",
+                "system": "2.16.840.1.113883.3.42.126.100001.16",
+                "primary": true
+              }
+            ],
+            "codedInterpretation": null,
+            "referenceRange": "98-107",
+            "result": "101",
+            "units": [
+              {
+                "display": "mmol/L",
+                "primary": true
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000742"
+        },
+        "enteredBy": {
+          "name": "42998 QQQTESTGREAT, DOC A"
+        },
+        "enteredDate": {
+          "start": "2013-05-05T14:10:00",
+          "end": "2013-05-05T14:10:00"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "11502-2"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL/0056"
+        },
+        "order": {
+          "accession": {
+            "id": "130505 BCH 1659"
+          },
+          "collectionDate": {
+            "start": "2013-05-05T12:06:00",
+            "end": "2013-05-05T12:06:00"
+          },
+          "collectionSample": "BLOOD",
+          "date": {
+            "start": "2013-05-05T14:10:00",
+            "end": "2013-05-05T14:10:00"
+          },
+          "id": {
+            "id": "2157546463"
+          },
+          "orderNumber": {
+            "id": "130505-00003"
+          },
+          "priority": [
+            {
+              "display": "ROUTINE",
+              "primary": true
+            }
+          ],
+          "provider": {
+            "name": "42998 QQQTESTGREAT, DOC A"
+          },
+          "requestingLocation": {
+            "name": "NH Great Lakes IL"
+          },
+          "specimen": [
+            {
+              "code": null,
+              "display": "PLASMA",
+              "primary": true
+            }
+          ],
+          "status": [],
+          "test": [
+            {
+              "code": "14607798",
+              "display": "Potassium",
+              "primary": true
+            }
+          ]
+        },
+        "results": [
+          {
+            "codeInterpretation": [
+              {
+                "display": "Higher Than Normal",
+                "primary": true
+              }
+            ],
+            "certifiedBy": null,
+            "certifiedDate": {
+              "start": "2013-05-05T14:10:17",
+              "end": "2013-05-05T14:10:17"
+            },
+            "comment": "3001 GREENBAY ROAD ATTENTION LABORATORY SERVICES NORTH CHICAGO, IL  60064 556 = NORTH CHICAGO VETERAN'S ADMINISTRATION HOSP Test performed at:",
+            "performingLabLocation": {
+              "name": "NH Great Lakes IL/0056"
+            },
+            "status": [
+              {
+                "code": "Final",
+                "display": "Final",
+                "primary": true
+              }
+            ],
+            "test": [
+              {
+                "code": "6827",
+                "display": "Potassium, Serum or Plasma Quantitative",
+                "system": "2.16.840.1.113883.3.42.126.100001.16",
+                "primary": true
+              }
+            ],
+            "codedInterpretation": [
+              {
+                "display": "Higher Than Normal"
+              }
+            ],
+            "referenceRange": "3.5-4.7",
+            "result": "5.4",
+            "units": [
+              {
+                "display": "mmol/L",
+                "primary": true
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000744"
+        },
+        "enteredBy": {
+          "name": "42998 QQQTESTGREAT, DOC A"
+        },
+        "enteredDate": {
+          "start": "2013-04-03T17:41:00",
+          "end": "2013-04-03T17:41:00"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "11502-2"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL/0056"
+        },
+        "order": {
+          "accession": {
+            "id": "130403 BCH 1584"
+          },
+          "collectionDate": {
+            "start": "2013-04-03T21:41:00",
+            "end": "2013-04-03T21:41:00"
+          },
+          "collectionSample": "BLOOD",
+          "date": {
+            "start": "2013-04-03T17:41:00",
+            "end": "2013-04-03T17:41:00"
+          },
+          "id": {
+            "id": "2157169940"
+          },
+          "orderNumber": {
+            "id": "130403-00012"
+          },
+          "priority": [
+            {
+              "display": "ROUTINE",
+              "primary": true
+            }
+          ],
+          "provider": {
+            "name": "42998 QQQTESTGREAT, DOC A"
+          },
+          "requestingLocation": {
+            "name": "NH Great Lakes IL"
+          },
+          "specimen": [
+            {
+              "code": null,
+              "display": "PLASMA",
+              "primary": true
+            }
+          ],
+          "status": [],
+          "test": [
+            {
+              "code": "14607797",
+              "display": "Sodium",
+              "primary": true
+            }
+          ]
+        },
+        "results": [
+          {
+            "codeInterpretation": [],
+            "certifiedBy": null,
+            "certifiedDate": {
+              "start": "2013-04-03T17:44:16",
+              "end": "2013-04-03T17:44:16"
+            },
+            "comment": "3001 GREENBAY ROAD ATTENTION LABORATORY SERVICES NORTH CHICAGO, IL  60064 556 = NORTH CHICAGO VETERAN'S ADMINISTRATION HOSP Test performed at:",
+            "performingLabLocation": {
+              "name": "NH Great Lakes IL/0056"
+            },
+            "status": [
+              {
+                "code": "Final",
+                "display": "Final",
+                "primary": true
+              }
+            ],
+            "test": [
+              {
+                "code": "6951",
+                "display": "Sodium, Blood Quantitative",
+                "system": "2.16.840.1.113883.3.42.126.100001.16",
+                "primary": true
+              }
+            ],
+            "codedInterpretation": null,
+            "referenceRange": "134-146",
+            "result": "140",
+            "units": [
+              {
+                "display": "mmol/L",
+                "primary": true
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

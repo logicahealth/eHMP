@@ -1,0 +1,5 @@
+{
+  "id": "yum",
+  "fqdn": "http://nexus.vaftl.us:8081/nexus/content/repositories/ehmp/yum-repo",
+  "ip": "52.21.133.61"
+}

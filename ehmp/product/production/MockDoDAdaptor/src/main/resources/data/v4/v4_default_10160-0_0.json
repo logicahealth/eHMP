@@ -1,0 +1,1271 @@
+{
+  "queryComplete": true,
+  "statusList": [
+    {
+      "partner": {
+        "partnerIdentifier": "2.16.840.1.113883.3.42.126.100001.13",
+        "partnerName": "ahlta",
+        "partnerType": "DOD"
+      },
+      "partnerStatus": "SUCCESS"
+    }
+  ],
+  "dataList": {
+    "medications": [
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "2165347221"
+        },
+        "enteredBy": {
+          "name": "Interface User"
+        },
+        "enteredDate": {
+          "start": "2013-10-25T14:46:34",
+          "end": "2013-10-25T14:46:34"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "10160-0"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL/0056"
+        },
+        "prescription": "O",
+        "active": false,
+        "comment": "^O^\nNONE",
+        "dispensingPharmacy": {
+          "name": "MAIN PHARMACY"
+        },
+        "fillCost": null,
+        "endDate": {
+          "start": "2013-11-24T15:44:00",
+          "end": "2013-11-24T15:44:00"
+        },
+        "startDate": {
+          "start": "2013-10-25T14:44:00",
+          "end": "2013-10-25T14:44:00"
+        },
+        "lastFillDate": {
+          "start": "2013-10-25T04:01:00",
+          "end": "2013-10-25T04:01:00"
+        },
+        "fillInfo": [
+          {
+            "action": [
+              {
+                "display": "Entered",
+                "primary": true
+              }
+            ],
+            "dispensingPharmacy": {
+              "name": "MAIN PHARMACY"
+            },
+            "enteredBy": {
+              "name": "Interface User"
+            },
+            "location": {
+              "name": "NH Great Lakes IL/0056"
+            },
+            "fillCost": null,
+            "fillDate": {
+              "start": "2013-10-25T14:44:00",
+              "end": "2013-10-25T14:44:00"
+            },
+            "fillNumber": "0",
+            "quantity": "1",
+            "units": [
+              {
+                "display": "mg",
+                "primary": true
+              }
+            ]
+          }
+        ],
+        "drug": [
+          {
+            "display": "HYDRALAZINE HCL, 25 MG, TABLET, ORAL",
+            "code": "3000257828",
+            "system": "2.16.840.1.113883.3.42.126.100001.16",
+            "primary": true
+          }
+        ],
+        "numberOfRefills": 0,
+        "provider": {
+          "name": "AHLTADTE, ATTEND B",
+          "primary": true
+        },
+        "quantity": "1",
+        "refillsRemaining": 0,
+        "rxNumber": {
+          "id": "131025-00076"
+        },
+        "sig": "",
+        "status": [
+          {
+            "display": "Active",
+            "primary": true
+          }
+        ],
+        "daysSupply": 30,
+        "units": [
+          {
+            "display": "mg",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "2165347220"
+        },
+        "enteredBy": {
+          "name": "Interface User"
+        },
+        "enteredDate": {
+          "start": "2013-10-25T14:42:58",
+          "end": "2013-10-25T14:42:58"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "10160-0"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL/0056"
+        },
+        "prescription": "O",
+        "active": false,
+        "comment": "^O^\nNONE",
+        "dispensingPharmacy": {
+          "name": "MAIN PHARMACY"
+        },
+        "fillCost": null,
+        "endDate": {
+          "start": "2013-11-24T15:41:00",
+          "end": "2013-11-24T15:41:00"
+        },
+        "startDate": {
+          "start": "2013-10-25T14:41:00",
+          "end": "2013-10-25T14:41:00"
+        },
+        "lastFillDate": {
+          "start": "2013-10-25T04:01:00",
+          "end": "2013-10-25T04:01:00"
+        },
+        "fillInfo": [
+          {
+            "action": [
+              {
+                "display": "Entered",
+                "primary": true
+              }
+            ],
+            "dispensingPharmacy": {
+              "name": "MAIN PHARMACY"
+            },
+            "enteredBy": {
+              "name": "Interface User"
+            },
+            "location": {
+              "name": "NH Great Lakes IL/0056"
+            },
+            "fillCost": null,
+            "fillDate": {
+              "start": "2013-10-25T14:41:00",
+              "end": "2013-10-25T14:41:00"
+            },
+            "fillNumber": "0",
+            "quantity": "1",
+            "units": [
+              {
+                "display": "mg/mL",
+                "primary": true
+              }
+            ]
+          }
+        ],
+        "drug": [
+          {
+            "display": "Hydralazine Hydrochloride 20mg/mL, Solution, Injection",
+            "code": "15155310",
+            "system": "2.16.840.1.113883.3.42.126.100001.16",
+            "primary": true
+          }
+        ],
+        "numberOfRefills": 0,
+        "provider": {
+          "name": "AHLTADTE, ATTEND B",
+          "primary": true
+        },
+        "quantity": "1",
+        "refillsRemaining": 0,
+        "rxNumber": {
+          "id": "131025-00075"
+        },
+        "sig": "",
+        "status": [
+          {
+            "display": "Active",
+            "primary": true
+          }
+        ],
+        "daysSupply": 30,
+        "units": [
+          {
+            "display": "mg/mL",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "2165347219"
+        },
+        "enteredBy": {
+          "name": "Interface User"
+        },
+        "enteredDate": {
+          "start": "2013-10-25T14:42:58",
+          "end": "2013-10-25T14:42:58"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "10160-0"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL/0056"
+        },
+        "prescription": "O",
+        "active": false,
+        "comment": "^O^\nNONE",
+        "dispensingPharmacy": {
+          "name": "MAIN PHARMACY"
+        },
+        "fillCost": null,
+        "endDate": {
+          "start": "2013-11-24T15:40:00",
+          "end": "2013-11-24T15:40:00"
+        },
+        "startDate": {
+          "start": "2013-10-25T14:40:00",
+          "end": "2013-10-25T14:40:00"
+        },
+        "lastFillDate": {
+          "start": "2013-10-25T04:01:00",
+          "end": "2013-10-25T04:01:00"
+        },
+        "fillInfo": [
+          {
+            "action": [
+              {
+                "display": "Entered",
+                "primary": true
+              }
+            ],
+            "dispensingPharmacy": {
+              "name": "MAIN PHARMACY"
+            },
+            "enteredBy": {
+              "name": "Interface User"
+            },
+            "location": {
+              "name": "NH Great Lakes IL/0056"
+            },
+            "fillCost": null,
+            "fillDate": {
+              "start": "2013-10-25T14:40:00",
+              "end": "2013-10-25T14:40:00"
+            },
+            "fillNumber": "0",
+            "quantity": "148",
+            "units": [
+              {
+                "display": "%",
+                "primary": true
+              }
+            ]
+          }
+        ],
+        "drug": [
+          {
+            "display": "Hexachlorophene 3%, Soap, Topical",
+            "code": "15172714",
+            "system": "2.16.840.1.113883.3.42.126.100001.16",
+            "primary": true
+          }
+        ],
+        "numberOfRefills": 0,
+        "provider": {
+          "name": "AHLTADTE, ATTEND B",
+          "primary": true
+        },
+        "quantity": "148",
+        "refillsRemaining": 0,
+        "rxNumber": {
+          "id": "131025-00074"
+        },
+        "sig": "",
+        "status": [
+          {
+            "display": "Active",
+            "primary": true
+          }
+        ],
+        "daysSupply": 30,
+        "units": [
+          {
+            "display": "%",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "2165347218"
+        },
+        "enteredBy": {
+          "name": "Interface User"
+        },
+        "enteredDate": {
+          "start": "2013-10-25T14:42:57",
+          "end": "2013-10-25T14:42:57"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "10160-0"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL/0056"
+        },
+        "prescription": "O",
+        "active": false,
+        "comment": "^O^\nNONE",
+        "dispensingPharmacy": {
+          "name": "MAIN PHARMACY"
+        },
+        "fillCost": null,
+        "endDate": {
+          "start": "2013-11-24T15:39:00",
+          "end": "2013-11-24T15:39:00"
+        },
+        "startDate": {
+          "start": "2013-10-25T14:39:00",
+          "end": "2013-10-25T14:39:00"
+        },
+        "lastFillDate": {
+          "start": "2013-10-25T04:01:00",
+          "end": "2013-10-25T04:01:00"
+        },
+        "fillInfo": [
+          {
+            "action": [
+              {
+                "display": "Entered",
+                "primary": true
+              }
+            ],
+            "dispensingPharmacy": {
+              "name": "MAIN PHARMACY"
+            },
+            "enteredBy": {
+              "name": "Interface User"
+            },
+            "location": {
+              "name": "NH Great Lakes IL/0056"
+            },
+            "fillCost": null,
+            "fillDate": {
+              "start": "2013-10-25T14:39:00",
+              "end": "2013-10-25T14:39:00"
+            },
+            "fillNumber": "0",
+            "quantity": "1",
+            "units": [
+              {
+                "display": "unknown",
+                "primary": true
+              }
+            ]
+          }
+        ],
+        "drug": [
+          {
+            "display": "Hepatitis B Immune Globulin, Injection",
+            "code": "15168266",
+            "system": "2.16.840.1.113883.3.42.126.100001.16",
+            "primary": true
+          }
+        ],
+        "numberOfRefills": 0,
+        "provider": {
+          "name": "AHLTADTE, ATTEND B",
+          "primary": true
+        },
+        "quantity": "1",
+        "refillsRemaining": 0,
+        "rxNumber": {
+          "id": "131025-00073"
+        },
+        "sig": "",
+        "status": [
+          {
+            "display": "Active",
+            "primary": true
+          }
+        ],
+        "daysSupply": 30,
+        "units": [
+          {
+            "display": "unknown",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "2165347217"
+        },
+        "enteredBy": {
+          "name": "Interface User"
+        },
+        "enteredDate": {
+          "start": "2013-10-25T14:42:56",
+          "end": "2013-10-25T14:42:56"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "10160-0"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL/0056"
+        },
+        "prescription": "O",
+        "active": false,
+        "comment": "^O^\nNONE",
+        "dispensingPharmacy": {
+          "name": "MAIN PHARMACY"
+        },
+        "fillCost": null,
+        "endDate": {
+          "start": "2013-11-24T15:37:00",
+          "end": "2013-11-24T15:37:00"
+        },
+        "startDate": {
+          "start": "2013-10-25T14:37:00",
+          "end": "2013-10-25T14:37:00"
+        },
+        "lastFillDate": {
+          "start": "2013-10-25T04:01:00",
+          "end": "2013-10-25T04:01:00"
+        },
+        "fillInfo": [
+          {
+            "action": [
+              {
+                "display": "Entered",
+                "primary": true
+              }
+            ],
+            "dispensingPharmacy": {
+              "name": "MAIN PHARMACY"
+            },
+            "enteredBy": {
+              "name": "Interface User"
+            },
+            "location": {
+              "name": "NH Great Lakes IL/0056"
+            },
+            "fillCost": null,
+            "fillDate": {
+              "start": "2013-10-25T14:37:00",
+              "end": "2013-10-25T14:37:00"
+            },
+            "fillNumber": "0",
+            "quantity": "1",
+            "units": [
+              {
+                "display": "U/mL",
+                "primary": true
+              }
+            ]
+          }
+        ],
+        "drug": [
+          {
+            "display": "Heparin Sodium 1000U/mL, Solution, Injection",
+            "code": "15165601",
+            "system": "2.16.840.1.113883.3.42.126.100001.16",
+            "primary": true
+          }
+        ],
+        "numberOfRefills": 0,
+        "provider": {
+          "name": "AHLTADTE, ATTEND B",
+          "primary": true
+        },
+        "quantity": "1",
+        "refillsRemaining": 0,
+        "rxNumber": {
+          "id": "131025-00072"
+        },
+        "sig": "",
+        "status": [
+          {
+            "display": "Active",
+            "primary": true
+          }
+        ],
+        "daysSupply": 30,
+        "units": [
+          {
+            "display": "U/mL",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "2165347166"
+        },
+        "enteredBy": {
+          "name": "Interface User"
+        },
+        "enteredDate": {
+          "start": "2013-10-25T14:38:47",
+          "end": "2013-10-25T14:38:47"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "10160-0"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL/0056"
+        },
+        "prescription": "O",
+        "active": false,
+        "comment": "^O^\nNONE",
+        "dispensingPharmacy": {
+          "name": "MAIN PHARMACY"
+        },
+        "fillCost": null,
+        "endDate": {
+          "start": "2013-11-24T15:36:00",
+          "end": "2013-11-24T15:36:00"
+        },
+        "startDate": {
+          "start": "2013-10-25T14:36:00",
+          "end": "2013-10-25T14:36:00"
+        },
+        "lastFillDate": {
+          "start": "2013-10-25T04:01:00",
+          "end": "2013-10-25T04:01:00"
+        },
+        "fillInfo": [
+          {
+            "action": [
+              {
+                "display": "Entered",
+                "primary": true
+              }
+            ],
+            "dispensingPharmacy": {
+              "name": "MAIN PHARMACY"
+            },
+            "enteredBy": {
+              "name": "Interface User"
+            },
+            "location": {
+              "name": "NH Great Lakes IL/0056"
+            },
+            "fillCost": null,
+            "fillDate": {
+              "start": "2013-10-25T14:36:00",
+              "end": "2013-10-25T14:36:00"
+            },
+            "fillNumber": "0",
+            "quantity": "1",
+            "units": [
+              {
+                "display": "Units",
+                "primary": true
+              }
+            ]
+          }
+        ],
+        "drug": [
+          {
+            "display": "Heparin Sodium 100U/mL, Solution, Injection",
+            "code": "15167468",
+            "system": "2.16.840.1.113883.3.42.126.100001.16",
+            "primary": true
+          }
+        ],
+        "numberOfRefills": 0,
+        "provider": {
+          "name": "AHLTADTE, ATTEND B",
+          "primary": true
+        },
+        "quantity": "1",
+        "refillsRemaining": 0,
+        "rxNumber": {
+          "id": "131025-00070"
+        },
+        "sig": "FOR BLOOD THINNING",
+        "status": [
+          {
+            "display": "Active",
+            "primary": true
+          }
+        ],
+        "daysSupply": 30,
+        "units": [
+          {
+            "display": "Units",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "2165347164"
+        },
+        "enteredBy": {
+          "name": "Interface User"
+        },
+        "enteredDate": {
+          "start": "2013-10-25T14:38:47",
+          "end": "2013-10-25T14:38:47"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "10160-0"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL/0056"
+        },
+        "prescription": "O",
+        "active": false,
+        "comment": "^O^\nNONE",
+        "dispensingPharmacy": {
+          "name": "MAIN PHARMACY"
+        },
+        "fillCost": null,
+        "endDate": {
+          "start": "2013-11-24T15:34:00",
+          "end": "2013-11-24T15:34:00"
+        },
+        "startDate": {
+          "start": "2013-10-25T14:34:00",
+          "end": "2013-10-25T14:34:00"
+        },
+        "lastFillDate": {
+          "start": "2013-10-25T04:01:00",
+          "end": "2013-10-25T04:01:00"
+        },
+        "fillInfo": [
+          {
+            "action": [
+              {
+                "display": "Entered",
+                "primary": true
+              }
+            ],
+            "dispensingPharmacy": {
+              "name": "MAIN PHARMACY"
+            },
+            "enteredBy": {
+              "name": "Interface User"
+            },
+            "location": {
+              "name": "NH Great Lakes IL/0056"
+            },
+            "fillCost": null,
+            "fillDate": {
+              "start": "2013-10-25T14:34:00",
+              "end": "2013-10-25T14:34:00"
+            },
+            "fillNumber": "0",
+            "quantity": "1",
+            "units": [
+              {
+                "display": "mg",
+                "primary": true
+              }
+            ]
+          }
+        ],
+        "drug": [
+          {
+            "display": "HALOPERIDOL, 2 MG, TABLET, ORAL",
+            "code": "3000261401",
+            "system": "2.16.840.1.113883.3.42.126.100001.16",
+            "primary": true
+          }
+        ],
+        "numberOfRefills": 0,
+        "provider": {
+          "name": "AHLTADTE, ATTEND B",
+          "primary": true
+        },
+        "quantity": "1",
+        "refillsRemaining": 0,
+        "rxNumber": {
+          "id": "131025-00067"
+        },
+        "sig": "FOR",
+        "status": [
+          {
+            "display": "Active",
+            "primary": true
+          }
+        ],
+        "daysSupply": 30,
+        "units": [
+          {
+            "display": "mg",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "2165347165"
+        },
+        "enteredBy": {
+          "name": "Interface User"
+        },
+        "enteredDate": {
+          "start": "2013-10-25T14:38:47",
+          "end": "2013-10-25T14:38:47"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "10160-0"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL/0056"
+        },
+        "prescription": "O",
+        "active": false,
+        "comment": "^O^\nNONE",
+        "dispensingPharmacy": {
+          "name": "MAIN PHARMACY"
+        },
+        "fillCost": null,
+        "endDate": {
+          "start": "2013-11-24T15:34:00",
+          "end": "2013-11-24T15:34:00"
+        },
+        "startDate": {
+          "start": "2013-10-25T14:34:00",
+          "end": "2013-10-25T14:34:00"
+        },
+        "lastFillDate": {
+          "start": "2013-10-25T04:01:00",
+          "end": "2013-10-25T04:01:00"
+        },
+        "fillInfo": [
+          {
+            "action": [
+              {
+                "display": "Entered",
+                "primary": true
+              }
+            ],
+            "dispensingPharmacy": {
+              "name": "MAIN PHARMACY"
+            },
+            "enteredBy": {
+              "name": "Interface User"
+            },
+            "location": {
+              "name": "NH Great Lakes IL/0056"
+            },
+            "fillCost": null,
+            "fillDate": {
+              "start": "2013-10-25T14:34:00",
+              "end": "2013-10-25T14:34:00"
+            },
+            "fillNumber": "0",
+            "quantity": "1",
+            "units": [
+              {
+                "display": "mg",
+                "primary": true
+              }
+            ]
+          }
+        ],
+        "drug": [
+          {
+            "display": "HALOPERIDOL, 5 MG, TABLET, ORAL",
+            "code": "3000261403",
+            "system": "2.16.840.1.113883.3.42.126.100001.16",
+            "primary": true
+          }
+        ],
+        "numberOfRefills": 0,
+        "provider": {
+          "name": "AHLTADTE, ATTEND B",
+          "primary": true
+        },
+        "quantity": "1",
+        "refillsRemaining": 0,
+        "rxNumber": {
+          "id": "131025-00068"
+        },
+        "sig": "DROP",
+        "status": [
+          {
+            "display": "Active",
+            "primary": true
+          }
+        ],
+        "daysSupply": 30,
+        "units": [
+          {
+            "display": "mg",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "2165347163"
+        },
+        "enteredBy": {
+          "name": "Interface User"
+        },
+        "enteredDate": {
+          "start": "2013-10-25T14:38:47",
+          "end": "2013-10-25T14:38:47"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "10160-0"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL/0056"
+        },
+        "prescription": "O",
+        "active": false,
+        "comment": "^O^\nNONE",
+        "dispensingPharmacy": {
+          "name": "MAIN PHARMACY"
+        },
+        "fillCost": null,
+        "endDate": {
+          "start": "2013-11-24T15:31:00",
+          "end": "2013-11-24T15:31:00"
+        },
+        "startDate": {
+          "start": "2013-10-25T14:31:00",
+          "end": "2013-10-25T14:31:00"
+        },
+        "lastFillDate": {
+          "start": "2013-10-25T04:01:00",
+          "end": "2013-10-25T04:01:00"
+        },
+        "fillInfo": [
+          {
+            "action": [
+              {
+                "display": "Entered",
+                "primary": true
+              }
+            ],
+            "dispensingPharmacy": {
+              "name": "MAIN PHARMACY"
+            },
+            "enteredBy": {
+              "name": "Interface User"
+            },
+            "location": {
+              "name": "NH Great Lakes IL/0056"
+            },
+            "fillCost": null,
+            "fillDate": {
+              "start": "2013-10-25T14:31:00",
+              "end": "2013-10-25T14:31:00"
+            },
+            "fillNumber": "0",
+            "quantity": "120",
+            "units": [
+              {
+                "display": "mg/5mL",
+                "primary": true
+              }
+            ]
+          }
+        ],
+        "drug": [
+          {
+            "display": "GUAIFENESIN, 100 MG/5ML, SYRUP, ORAL",
+            "code": "3000258290",
+            "system": "2.16.840.1.113883.3.42.126.100001.16",
+            "primary": true
+          }
+        ],
+        "numberOfRefills": 0,
+        "provider": {
+          "name": "AHLTADTE, ATTEND B",
+          "primary": true
+        },
+        "quantity": "120",
+        "refillsRemaining": 0,
+        "rxNumber": {
+          "id": "131025-00065"
+        },
+        "sig": "USE AS DIRECTED",
+        "status": [
+          {
+            "display": "Active",
+            "primary": true
+          }
+        ],
+        "daysSupply": 30,
+        "units": [
+          {
+            "display": "mg/5mL",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "2165347162"
+        },
+        "enteredBy": {
+          "name": "Interface User"
+        },
+        "enteredDate": {
+          "start": "2013-10-25T14:38:46",
+          "end": "2013-10-25T14:38:46"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "10160-0"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL/0056"
+        },
+        "prescription": "O",
+        "active": false,
+        "comment": "^O^\nNONE",
+        "dispensingPharmacy": {
+          "name": "MAIN PHARMACY"
+        },
+        "fillCost": null,
+        "endDate": {
+          "start": "2013-11-24T15:29:00",
+          "end": "2013-11-24T15:29:00"
+        },
+        "startDate": {
+          "start": "2013-10-25T14:29:00",
+          "end": "2013-10-25T14:29:00"
+        },
+        "lastFillDate": {
+          "start": "2013-10-25T04:01:00",
+          "end": "2013-10-25T04:01:00"
+        },
+        "fillInfo": [
+          {
+            "action": [
+              {
+                "display": "Entered",
+                "primary": true
+              }
+            ],
+            "dispensingPharmacy": {
+              "name": "MAIN PHARMACY"
+            },
+            "enteredBy": {
+              "name": "Interface User"
+            },
+            "location": {
+              "name": "NH Great Lakes IL/0056"
+            },
+            "fillCost": null,
+            "fillDate": {
+              "start": "2013-10-25T14:29:00",
+              "end": "2013-10-25T14:29:00"
+            },
+            "fillNumber": "0",
+            "quantity": "1",
+            "units": [
+              {
+                "display": "mg/mL",
+                "primary": true
+              }
+            ]
+          }
+        ],
+        "drug": [
+          {
+            "display": "GLYCOPYRROLATE, 0.2 MG/ML, VIAL, INJECTION",
+            "code": "3000262265",
+            "system": "2.16.840.1.113883.3.42.126.100001.16",
+            "primary": true
+          }
+        ],
+        "numberOfRefills": 0,
+        "provider": {
+          "name": "AHLTADTE, ATTEND B",
+          "primary": true
+        },
+        "quantity": "1",
+        "refillsRemaining": 0,
+        "rxNumber": {
+          "id": "131025-00061"
+        },
+        "sig": "USE IN CLINIC",
+        "status": [
+          {
+            "display": "Active",
+            "primary": true
+          }
+        ],
+        "daysSupply": 30,
+        "units": [
+          {
+            "display": "mg/mL",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "2165346524"
+        },
+        "enteredBy": {
+          "name": "Interface User"
+        },
+        "enteredDate": {
+          "start": "2013-10-25T12:00:09",
+          "end": "2013-10-25T12:00:09"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "10160-0"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL/0056"
+        },
+        "prescription": "O",
+        "active": false,
+        "comment": "^O^\nNONE",
+        "dispensingPharmacy": {
+          "name": "MAIN PHARMACY"
+        },
+        "fillCost": null,
+        "endDate": {
+          "start": "2013-11-23T19:29:00",
+          "end": "2013-11-23T19:29:00"
+        },
+        "startDate": {
+          "start": "2013-10-24T18:29:00",
+          "end": "2013-10-24T18:29:00"
+        },
+        "lastFillDate": {
+          "start": "2013-10-24T04:01:00",
+          "end": "2013-10-24T04:01:00"
+        },
+        "fillInfo": [
+          {
+            "action": [
+              {
+                "display": "Modified",
+                "primary": true
+              }
+            ],
+            "dispensingPharmacy": {
+              "name": "MAIN PHARMACY"
+            },
+            "enteredBy": {
+              "name": "Interface User"
+            },
+            "location": {
+              "name": "NH Great Lakes IL/0056"
+            },
+            "fillCost": null,
+            "fillDate": {
+              "start": "2013-10-24T18:29:00",
+              "end": "2013-10-24T18:29:00"
+            },
+            "fillNumber": "0",
+            "quantity": "1",
+            "units": [
+              {
+                "display": "mg/5mL",
+                "primary": true
+              }
+            ]
+          }
+        ],
+        "drug": [
+          {
+            "display": "Gabapentin 50mg/mL, (Neurontin), Solution, Oral, 5mL",
+            "code": "15518112",
+            "system": "2.16.840.1.113883.3.42.126.100001.16",
+            "primary": true
+          }
+        ],
+        "numberOfRefills": 0,
+        "provider": {
+          "name": "AHLTADTE, ATTEND B",
+          "primary": true
+        },
+        "quantity": "1",
+        "refillsRemaining": 0,
+        "rxNumber": {
+          "id": "131024-00029"
+        },
+        "sig": "TEASPOONFUL",
+        "status": [
+          {
+            "display": "Active",
+            "primary": true
+          }
+        ],
+        "daysSupply": 30,
+        "units": [
+          {
+            "display": "mg/5mL",
+            "primary": true
+          }
+        ]
+      }
+    ]
+  }
+}

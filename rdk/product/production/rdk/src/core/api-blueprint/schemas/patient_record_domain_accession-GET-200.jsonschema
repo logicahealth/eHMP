@@ -1,0 +1,168 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "Get record data of one domain for a patient",
+	"description": "",
+	"type": "object",
+	"required": [
+		"apiVersion",
+		"data",
+		"status"
+	],
+	"properties": {
+		"apiVersion": {
+			"type": "string"
+		},
+		"data": {
+			"type": "object",
+			"required": [
+				"updated",
+				"totalItems",
+				"currentItemCount",
+				"items"
+			],
+			"properties": {
+				"currentItemCount": {
+					"type": "integer"
+				},
+				"items": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"required": [
+							"abnormal",
+							"categoryCode",
+							"categoryName",
+							"facilityCode",
+							"facilityName",
+							"groupName",
+							"kind",
+							"lastUpdateTime",
+							"localId",
+							"micro",
+							"observed",
+							"organizerType",
+							"pid",
+							"qualifiedName",
+							"resulted",
+							"results",
+							"specimen",
+							"stampTime",
+							"statusCode",
+							"statusName",
+							"summary",
+							"uid"
+						],
+						"properties": {
+							"abnormal": {
+								"type": "boolean"
+							},
+							"categoryCode": {
+								"type": "string"
+							},
+							"categoryName": {
+								"type": "string"
+							},
+							"facilityCode": {
+								"type": "string"
+							},
+							"facilityName": {
+								"type": "string"
+							},
+							"groupName": {
+								"type": "string"
+							},
+							"kind": {
+								"type": "string"
+							},
+							"lastUpdateTime": {
+								"type": "string"
+							},
+							"localId": {
+								"type": "string"
+							},
+							"micro": {
+								"type": "boolean"
+							},
+							"observed": {
+								"type": "string"
+							},
+							"organizerType": {
+								"type": "string"
+							},
+							"pid": {
+								"type": "string"
+							},
+							"qualifiedName": {
+								"type": "string"
+							},
+							"resulted": {
+								"type": "string"
+							},
+							"results": {
+								"type": "array",
+								"items": {
+									"type": "object",
+									"required": [
+										"localTitle",
+										"resultUid",
+										"uid"
+									],
+									"properties": {
+										"localTitle": {
+											"type": "string"
+										},
+										"resultUid": {
+											"type": "string"
+										},
+										"uid": {
+											"type": "string"
+										}
+									}
+								}
+							},
+							"specimen": {
+								"type": "string"
+							},
+							"stampTime": {
+								"type": "string"
+							},
+							"statusCode": {
+								"type": "string"
+							},
+							"statusName": {
+								"type": "string"
+							},
+							"summary": {
+								"type": "string"
+							},
+							"uid": {
+								"type": "string"
+							}
+						}
+					}
+				},
+				"itemsPerPage": {
+					"type": "integer"
+				},
+				"pageIndex": {
+					"type": "integer"
+				},
+				"startIndex": {
+					"type": "integer"
+				},
+				"totalItems": {
+					"type": "integer"
+				},
+				"totalPages": {
+					"type": "integer"
+				},
+				"updated": {
+					"type": "integer"
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

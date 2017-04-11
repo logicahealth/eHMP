@@ -1,0 +1,95 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "Get patients for a particular clinic/ward",
+	"description": "",
+	"type": "object",
+	"required": [
+		"status"
+	],
+	"properties": {
+		"data": {
+			"type": "object",
+			"required": [
+				"items"
+			],
+			"properties": {
+				"items": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"required": [
+							"birthDate",
+							"familyName",
+							"fullName",
+							"genderCode",
+							"genderName",
+							"givenNames",
+							"localId",
+							"pid",
+							"sensitive",
+							"ssn",
+							"displayName",
+							"summary"
+						],
+						"properties": {
+							"appointmentTime": {
+								"type": "string"
+							},
+							"birthDate": {
+								"type": "string"
+							},
+							"displayName": {
+								"type": "string"
+							},
+							"familyName": {
+								"type": "string"
+							},
+							"fullName": {
+								"type": "string"
+							},
+							"genderCode": {
+								"type": "string"
+							},
+							"genderName": {
+								"type": "string"
+							},
+							"givenNames": {
+								"type": "string"
+							},
+							"icn": {
+								"type": "string"
+							},
+							"localId": {
+								"type": "string"
+							},
+							"pid": {
+								"type": "string"
+							},
+							"sensitive": {
+								"type": "boolean"
+							},
+							"ssn": {
+								"type": "string"
+							},
+							"stampTime": {
+								"type": "string"
+							},
+							"summary": {
+								"type": "string"
+							},
+							"uid": {
+								"type": "string"
+							}
+						}
+					}
+				}
+			}
+		},
+		"message": {
+			"type": "string"
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

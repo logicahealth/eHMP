@@ -1,0 +1,7 @@
+# Notes:
+# Change {INSERT-USER-NAME} to correctly reflect path
+
+# Added by Security Team
+# Details for below issues tracked in DE624
+$HOME/Projects/vistacore/ehmp/product/production/osync/admin/lib/beanstalkd_view/resources/js/beanstalkd_view.js
+$HOME/Projects/vistacore/ehmp/product/production/osync/admin/lib/beanstalkd_view/resources/js/beanstalkd_view.min.js

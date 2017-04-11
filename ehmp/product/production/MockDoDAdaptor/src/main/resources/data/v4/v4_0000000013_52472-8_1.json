@@ -1,0 +1,76 @@
+{
+  "queryComplete": true,
+  "statusList": [
+    {
+      "partner": {
+        "partnerIdentifier": "2.16.840.1.113883.3.42.126.100001.13",
+        "partnerName": "ahlta",
+        "partnerType": "DOD"
+      },
+      "partnerStatus": "SUCCESS",
+      "expectedCount": 1,
+      "receivedCount": 1
+    }
+  ],
+  "dataList": {
+    "allergies": [
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000939"
+        },
+        "enteredBy": {
+          "name": "NURSE, ALMA"
+        },
+        "enteredDate": {
+          "start": "2012-02-09T19:24:09",
+          "end": "2012-02-09T19:24:09"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "48765-2"
+          }
+        ],
+        "facility": null,
+        "allergen": [
+          {
+            "code": "999001",
+            "display": "NKA",
+            "system": "2.16.840.1.113883.3.42.127.100001.209",
+            "primary": true
+          }
+        ],
+        "comment": null,
+        "onsetDate": null,
+        "reactions": [
+          {
+            "reaction": [
+              {
+                "display": "Unknown",
+                "primary": true
+              }
+            ],
+            "comment": null
+          }
+        ],
+        "sourceOfInfo": [],
+        "type": [
+          {
+            "display": "No known allergies",
+            "primary": true
+          }
+        ]
+      }
+    ]
+  }
+}

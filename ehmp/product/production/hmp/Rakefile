@@ -1,0 +1,94 @@
+require 'greenletters'
+require 'json'
+
+DEFAULT_SERVER = 'vista-panorama'
+
+task default: [:export]
+
+desc 'Export HMP routines'
+task :export, [:server] => [:info, :ro_export, :unpack, :success] do |t, args|
+end
+
+task :info, :server do |t, args|
+  server = args[:server] || DEFAULT_SERVER
+  puts '=========================================================================='
+  puts "             Exporting HMP Routines from #{server}."
+  puts '           See _____________________________________________              '
+  puts '=========================================================================='
+end
+
+task :success, :server do |t, args|
+  server = args[:server] || DEFAULT_SERVER
+  puts '=========================================================================='
+  puts "                HMP Routines Exported from #{server}."
+  puts '=========================================================================='
+end
+
+task :unpack do
+  sh "python ~/projects/vistacore/ehmp/product/production/hmp/unpackRO.py ~/projects/vistacore/.chef/vms/hmp.ro ~/projects/vistacore/ehmp/product/production/hmp/src/hmp"
+  sh "rm ~/projects/vistacore/.chef/vms/hmp.ro"
+end
+
+def knife_search_for_ip(machine_name)
+  release = File.read(File.dirname(__FILE__) + "/../../../infrastructure/properties/releaseVersion")
+  stack = ENV['JOB_NAME'] || "#{ENV['USER']}-#{release}"
+  if ENV.key?('BUNDLE_BIN_PATH')
+    raw_search = Bundler.with_clean_env { `/opt/chefdk/bin/knife search node \'role:#{machine_name} AND stack:#{stack}\' -Fj --config ~/Projects/vistacore/.chef/knife.rb` }
+  else
+    raw_search = `/opt/chefdk/bin/knife search node \'role:#{machine_name} AND stack:#{stack}\' -Fj --config ~/Projects/vistacore/.chef/knife.rb`
+  end
+  parsed_search = JSON.parse(raw_search)
+  fail "More than one node with that name found" if parsed_search["results"] > 1
+  fail "No node with that name found" if parsed_search["results"] == 0
+  ip = parsed_search["rows"][0]['automatic']['ipaddress']
+end
+
+desc 'create hmp.ro file in shared folder'
+task :ro_export, :server do |t, args|
+  server = args[:server] || DEFAULT_SERVER
+  IP = knife_search_for_ip(server)
+  NAMESPACE = "VISTA"
+  USER = "vagrant"
+
+  shell = Greenletters::Process.new("ssh #{USER}@#{IP} -i ~/projects/vistacore/.vagrant.d/insecure_private_key", :transcript => $stdout, :timeout => 15)
+  prompt = /#{NAMESPACE}>/
+
+  shell.on(:output, /already exists, do you want to overwrite it\? (Yes|No) =>/) do | process, match |
+    process.write("Yes\r")
+  end
+
+  # start the shell, and cache session
+  shell.start!
+  shell.wait_for(:output, /.*$/) do | process, match |
+    process.write("sudo csession cache -U #{NAMESPACE}\n")
+  end
+
+  shell.wait_for(:output, prompt) do | process, match |
+    process.write("D ^%RO\r")
+  end
+  shell.wait_for(:output, /Routine\(s\): /) do | process, match |
+    process.write("HMP*\r")
+  end
+  shell.wait_for(:output, /Routine\(s\):/) do | process, match |
+    process.write("\r")
+  end
+  shell.wait_for(:output, /Description:/) do | process, match |
+    process.write("HMP RO\r")
+  end
+  shell.wait_for(:output, /Device:/) do | process, match |
+    process.write("/vagrant/hmp.ro\r")
+  end
+  shell.wait_for(:output, /Parameters\? ".+" =>/) do | process, match |
+    process.write("\r")
+  end
+  shell.wait_for(:output, /Printer Format\? (Yes|No) => /) do | process, match |
+    process.write("No\r")
+  end
+  shell.wait_for(:output, prompt) do | process, match |
+    process.write("h\n")
+  end
+  shell.wait_for(:output, /.*$/) do | process, match |
+    process.write("exit\n")
+  end
+  puts
+end

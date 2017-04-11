@@ -1,0 +1,45 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "properties": {
+        "data": {
+            "description": "Standard RDK data response",
+            "type": "object",
+            "properties": {
+                "items": {
+                    "description": "Standard array wrapper for RDK list responses.",
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "uid": {
+                                "description": "Unique identifier for the order set",
+                                "type": "string"
+                            },
+                            "name": {
+                                "description": "Name of the Order Set",
+                                "type": "string"
+                            },
+                            "scope": {
+                                "description": "Visibility scope of the order set",
+                                "enum": ["individual", "site", "enterprise"]
+                            },
+                            "siteId": {
+                                "description": "Id of the site this Order Set belongs to. This is null for 'enterprise' scope.",
+                                "type": "string"
+                            },
+                            "createdBy": {
+                                "description": "User id of creator of the Order Set (e.g., urn:va:user:9E7A:10000000238)",
+                                "type": "string"
+                            },
+                            "active": {
+                                "description": "Whether the Order Set is active. Inactive Order Sets will not show up in Orderable service queries.",
+                                "type": "boolean"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

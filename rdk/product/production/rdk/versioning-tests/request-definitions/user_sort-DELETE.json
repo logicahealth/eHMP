@@ -1,0 +1,22 @@
+{
+	"parameters": {
+		"id": {
+			"name": "id",
+			"paramType": "query",
+			"required": true,
+			"type": "string",
+			"values": [
+			]
+		},
+		"instanceId": {
+			"name": "instanceId",
+			"paramType": "query",
+			"required": true,
+			"type": "string",
+			"values": [
+			]
+		}
+	},
+	"schema": {
+	}
+}

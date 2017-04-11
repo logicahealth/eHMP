@@ -1,0 +1,595 @@
+{
+  "queryComplete": true,
+  "statusList": [
+    {
+      "partner": {
+        "partnerIdentifier": "2.16.840.1.113883.3.42.126.100001.13",
+        "partnerName": "ahlta",
+        "partnerType": "DOD"
+      },
+      "partnerStatus": "SUCCESS",
+      "expectedCount": 12,
+      "receivedCount": 12
+    }
+  ],
+  "dataList": {
+    "procedures": [
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000541"
+        },
+        "enteredBy": {
+          "name": "MIDTIER, CGL TWO"
+        },
+        "enteredDate": {
+          "start": "2013-12-05T17:26:14",
+          "end": "2013-12-05T17:26:14"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "47519-4"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL/0056"
+        },
+        "date": {
+          "start": "2013-12-05T17:25:50",
+          "end": "2013-12-05T17:25:50"
+        },
+        "procedure": [
+          {
+            "code": "15277",
+            "display": null,
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "Active",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000543"
+        },
+        "enteredBy": {
+          "name": "MIDTIER, CGL TWO"
+        },
+        "enteredDate": {
+          "start": "2013-12-03T16:49:21",
+          "end": "2013-12-03T16:49:21"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "47519-4"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL/0056"
+        },
+        "date": {
+          "start": "2013-12-03T16:16:54",
+          "end": "2013-12-03T16:16:54"
+        },
+        "procedure": [
+          {
+            "code": "90746",
+            "display": "Hepatitis B Vaccine (Active); 20 Years and Above",
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "Active",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000545"
+        },
+        "enteredBy": {
+          "name": "MIDTIER, CGL TWO"
+        },
+        "enteredDate": {
+          "start": "2013-12-03T16:49:21",
+          "end": "2013-12-03T16:49:21"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "47519-4"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL/0056"
+        },
+        "date": {
+          "start": "2013-12-03T16:16:54",
+          "end": "2013-12-03T16:16:54"
+        },
+        "procedure": [
+          {
+            "code": "90471",
+            "display": "Immunization Administration One Vaccine",
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "Active",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000547"
+        },
+        "enteredBy": {
+          "name": "MIDTIER, CGL TWO"
+        },
+        "enteredDate": {
+          "start": "2013-12-02T21:39:33",
+          "end": "2013-12-02T21:39:33"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "47519-4"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL/0056"
+        },
+        "date": {
+          "start": "2013-12-02T21:39:08",
+          "end": "2013-12-02T21:39:08"
+        },
+        "procedure": [
+          {
+            "code": "00300",
+            "display": "Anesthesia Neck For Procedures On Skin / Subcutaneous Tissue",
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "Active",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000010549"
+        },
+        "enteredBy": {
+          "name": "MIDTIER, CGL TWO"
+        },
+        "enteredDate": {
+          "start": "2013-12-02T21:39:33",
+          "end": "2013-12-02T21:39:33"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "47519-4"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL/0056"
+        },
+        "date": {
+          "start": "2013-12-02T21:21:27",
+          "end": "2013-12-02T21:21:27"
+        },
+        "procedure": [
+          {
+            "code": "90471",
+            "display": "Immunization Administration One Vaccine",
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "Active",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000010551"
+        },
+        "enteredBy": {
+          "name": "MIDTIER, CGL TWO"
+        },
+        "enteredDate": {
+          "start": "2013-12-02T21:39:33",
+          "end": "2013-12-02T21:39:33"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "47519-4"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL/0056"
+        },
+        "date": {
+          "start": "2013-12-02T21:21:26",
+          "end": "2013-12-02T21:21:26"
+        },
+        "procedure": [
+          {
+            "code": "90746",
+            "display": "Hepatitis B Vaccine (Active); 20 Years and Above",
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "Active",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000010553"
+        },
+        "enteredBy": {
+          "name": "MIDTIER, CGL TWO"
+        },
+        "enteredDate": {
+          "start": "2013-11-18T17:34:29",
+          "end": "2013-11-18T17:34:29"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "47519-4"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL/0056"
+        },
+        "date": {
+          "start": "2013-11-18T17:32:57",
+          "end": "2013-11-18T17:32:57"
+        },
+        "procedure": [
+          {
+            "code": "82930",
+            "display": "Gastric Acid, Free",
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "Active",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000010555"
+        },
+        "enteredBy": {
+          "name": "MIDTIER, CGL TWO"
+        },
+        "enteredDate": {
+          "start": "2013-11-18T17:34:29",
+          "end": "2013-11-18T17:34:29"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "47519-4"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL/0056"
+        },
+        "date": {
+          "start": "2013-11-18T17:32:32",
+          "end": "2013-11-18T17:32:32"
+        },
+        "procedure": [
+          {
+            "code": "74235",
+            "display": "Balloon Cath Removal Esoph Foreign Body Supervis & Interpret",
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "Active",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000010557"
+        },
+        "enteredBy": {
+          "name": "MIDTIER, CGL TWO"
+        },
+        "enteredDate": {
+          "start": "2013-11-18T17:34:29",
+          "end": "2013-11-18T17:34:29"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "47519-4"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL/0056"
+        },
+        "date": {
+          "start": "2013-11-18T17:30:55",
+          "end": "2013-11-18T17:30:55"
+        },
+        "procedure": [
+          {
+            "code": "74150",
+            "display": "CT Scan Of The Abdomen",
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "Active",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000559"
+        },
+        "enteredBy": {
+          "name": "MIDTIER, CGL TWO"
+        },
+        "enteredDate": {
+          "start": "2013-11-18T17:34:29",
+          "end": "2013-11-18T17:34:29"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "47519-4"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL/0056"
+        },
+        "date": {
+          "start": "2013-11-18T17:22:35",
+          "end": "2013-11-18T17:22:35"
+        },
+        "procedure": [
+          {
+            "code": "82930",
+            "display": "Gastric Acid, Free AND Total",
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "Deleted due to an entry made in error",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000561"
+        },
+        "enteredBy": {
+          "name": "MIDTIER, CGL TWO"
+        },
+        "enteredDate": {
+          "start": "2013-10-09T17:20:42",
+          "end": "2013-10-09T17:20:42"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "47519-4"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL/0056"
+        },
+        "date": {
+          "start": "2013-10-09T17:10:45",
+          "end": "2013-10-09T17:10:45"
+        },
+        "procedure": [
+          {
+            "code": "99601",
+            "display": "Home Care Visit Administration Of Aerosolized Pentamidine",
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "Active",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000563"
+        },
+        "enteredBy": {
+          "name": "MIDTIER, CGL TWO"
+        },
+        "enteredDate": {
+          "start": "2013-10-09T16:54:32",
+          "end": "2013-10-09T16:54:32"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "47519-4"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL/0056"
+        },
+        "date": {
+          "start": "2013-10-09T16:53:39",
+          "end": "2013-10-09T16:53:39"
+        },
+        "procedure": [
+          {
+            "code": "86003",
+            "display": "Allergy Testing Chestnut Specific IgE (___ IU/ml)",
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "Active",
+            "primary": true
+          }
+        ]
+      }
+    ]
+  }
+}

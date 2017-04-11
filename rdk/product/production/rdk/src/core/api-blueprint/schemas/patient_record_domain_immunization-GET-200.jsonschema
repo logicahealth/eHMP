@@ -1,0 +1,148 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "Get record data of one domain for a patient",
+	"description": "",
+	"type": "object",
+	"required": [
+		"data",
+		"status"
+	],
+	"properties": {
+		"data": {
+			"type": "object",
+			"required": [
+				"items"
+			],
+			"properties": {
+				"currentItemCount": {
+					"type": "integer"
+				},
+				"items": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"required": [
+							"administeredDateTime",
+							"codes",
+							"facilityCode",
+							"facilityName",
+							"kind",
+							"name",
+							"pid",
+							"stampTime",
+							"summary",
+							"uid"
+						],
+						"properties": {
+							"administeredDate": {
+								"type": "string"
+							},
+							"administeredDateTime": {
+								"type": "string"
+							},
+							"codes": {
+								"type": "array",
+								"items": {
+									"type": "object",
+									"required": [
+										"code",
+										"system"
+									],
+									"properties": {
+										"code": {
+											"type": "string"
+										},
+										"display": {
+											"type": "string"
+										},
+										"system": {
+											"type": "string"
+										}
+									}
+								}
+							},
+							"contraindicated": {
+								"type": "boolean"
+							},
+							"cptCode": {
+								"type": "string"
+							},
+							"cptName": {
+								"type": "string"
+							},
+							"encounterName": {
+								"type": "string"
+							},
+							"encounterUid": {
+								"type": "string"
+							},
+							"facilityCode": {
+								"type": "string"
+							},
+							"facilityName": {
+								"type": "string"
+							},
+							"kind": {
+								"type": "string"
+							},
+							"localId": {
+								"type": "string"
+							},
+							"locationName": {
+								"type": "string"
+							},
+							"locationUid": {
+								"type": "string"
+							},
+							"name": {
+								"type": "string"
+							},
+							"performerName": {
+								"type": "string"
+							},
+							"performerUid": {
+								"type": "string"
+							},
+							"pid": {
+								"type": "string"
+							},
+							"seriesName": {
+								"type": "string"
+							},
+							"stampTime": {
+								"type": "string"
+							},
+							"summary": {
+								"type": "string"
+							},
+							"uid": {
+								"type": "string"
+							}
+						}
+					}
+				},
+				"itemsPerPage": {
+					"type": "integer"
+				},
+				"pageIndex": {
+					"type": "integer"
+				},
+				"startIndex": {
+					"type": "integer"
+				},
+				"totalItems": {
+					"type": "integer"
+				},
+				"totalPages": {
+					"type": "integer"
+				},
+				"updated": {
+					"type": "integer"
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

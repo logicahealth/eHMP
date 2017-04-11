@@ -1,0 +1,69 @@
+{
+	"parameters": {
+		"daysSupply": {
+			"name": "daysSupply",
+			"paramType": "query",
+			"required": true,
+			"type": "number",
+			"values": [
+			]
+		},
+		"drug": {
+			"name": "drug",
+			"paramType": "query",
+			"required": true,
+			"type": "string",
+			"values": [
+			]
+		},
+		"duration": {
+			"name": "duration",
+			"paramType": "query",
+			"required": true,
+			"type": "string",
+			"values": [
+			]
+		},
+		"fields": {
+			"name": "fields",
+			"paramType": "query",
+			"type": "string",
+			"values": [
+			]
+		},
+		"patientDFN": {
+			"name": "patientDFN",
+			"paramType": "query",
+			"required": true,
+			"type": "number",
+			"values": [
+			]
+		},
+		"schedule": {
+			"name": "schedule",
+			"paramType": "query",
+			"required": true,
+			"type": "string",
+			"values": [
+			]
+		},
+		"site": {
+			"name": "site",
+			"paramType": "query",
+			"required": true,
+			"type": "string",
+			"values": [
+			]
+		},
+		"unitsPerDose": {
+			"name": "unitsPerDose",
+			"paramType": "query",
+			"required": true,
+			"type": "string",
+			"values": [
+			]
+		}
+	},
+	"schema": {
+	}
+}

@@ -1,0 +1,11 @@
+<div>
+<i class="fa fa-map-marker text-muted" aria-hidden="true"></i>
+<h4>Current Encounter</h4>
+<div>
+    <span>{{ifnull visit.locationDisplayName 'No visit set'}} {{ifnull visit.formatteddateTime ''}}</span>
+</div>
+<div>
+    <span>Provider:</span>
+    <span class="visit-info left-padding-xs">{{ifnull visit.selectedProvider.name 'unassigned'}}</span>
+</div>
+</div>

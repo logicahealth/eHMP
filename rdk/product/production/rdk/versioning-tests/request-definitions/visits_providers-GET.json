@@ -1,0 +1,35 @@
+{
+	"parameters": {
+		"facility.code": {
+			"name": "facility.code",
+			"paramType": "query",
+			"required": true,
+			"type": "string",
+			"values": [
+			]
+		},
+		"facility.name": {
+			"name": "facility.name",
+			"paramType": "query",
+			"type": "string",
+			"values": [
+			]
+		},
+		"fields": {
+			"name": "fields",
+			"paramType": "query",
+			"type": "string",
+			"values": [
+			]
+		},
+		"order": {
+			"name": "order",
+			"paramType": "query",
+			"type": "string",
+			"values": [
+			]
+		}
+	},
+	"schema": {
+	}
+}

@@ -1,0 +1,41 @@
+{
+	"parameters": {
+	},
+	"schema": {
+		"$schema": "http://json-schema.org/draft-04/schema#",
+		"properties": {
+			"roles": {
+				"items": {
+					"type": "string"
+				},
+				"type": [
+					"array",
+					"string"
+				],
+				"uniqueItems": true
+			},
+			"user": {
+				"properties": {
+					"fname": {
+						"type": "string"
+					},
+					"lname": {
+						"type": "string"
+					},
+					"uid": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"uid"
+				],
+				"type": "object"
+			}
+		},
+		"required": [
+			"user",
+			"roles"
+		],
+		"type": "object"
+	}
+}

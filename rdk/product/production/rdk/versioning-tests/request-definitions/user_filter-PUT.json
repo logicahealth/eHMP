@@ -1,0 +1,27 @@
+{
+	"parameters": {
+	},
+	"schema": {
+		"$schema": "http://json-schema.org/draft-04/schema#",
+		"id": "Filter",
+		"properties": {
+			"fromId": {
+				"description": "source workspace name",
+				"type": "string"
+			},
+			"predefined": {
+				"description": "predefined screen flag (true or false)",
+				"type": "string"
+			},
+			"toId": {
+				"description": "destination workspace name",
+				"type": "string"
+			}
+		},
+		"required": [
+			"fromId",
+			"toId"
+		],
+		"type": "object"
+	}
+}

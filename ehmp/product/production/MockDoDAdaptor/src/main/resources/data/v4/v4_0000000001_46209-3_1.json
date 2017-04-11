@@ -1,0 +1,184 @@
+{
+  "queryComplete": true,
+  "statusList": [
+    {
+      "partner": {
+        "partnerIdentifier": "2.16.840.1.113883.3.42.126.100001.13",
+        "partnerName": "ahlta",
+        "partnerType": "DOD"
+      },
+      "partnerStatus": "SUCCESS",
+      "expectedCount": 2,
+      "receivedCount": 2
+    }
+  ],
+  "dataList": {
+    "medicationOrders": [
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000010065"
+        },
+        "enteredBy": null,
+        "enteredDate": null,
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "29305-0"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL"
+        },
+        "orderable": [
+          {
+            "display": "ACETAMINOPHEN 325MG TAB *OTC*--PO 325MG",
+            "code": "3000261885",
+            "system": "2.16.840.1.113883.3.42.126.100001.16",
+            "primary": true
+          }
+        ],
+        "date": {
+          "start": "2014-04-02T17:16:00",
+          "end": "2014-04-02T17:16:00"
+        },
+        "orderNumber": {
+          "id": "140402-00003"
+        },
+        "orderingProvider": {
+          "name": "BHIE, USERONE"
+        },
+        "status": [],
+        "actionCode": "DC",
+        "childResistant": true,
+        "deliveryLocation": null,
+        "dispensingLocation": null,
+        "alternateDrugText": "TYLENOL 325 MG TABLET",
+        "duration": "D3",
+        "endDate": {
+          "start": "2014-04-05T17:17:00",
+          "end": "2014-04-05T17:17:00"
+        },
+        "enteringLocation": {
+          "name": "Family Practice Clinic"
+        },
+        "giveAmount": "325",
+        "giveFormDescription": "TABLET",
+        "giveUnits": [],
+        "intervalPattern": null,
+        "interval": null,
+        "numberOfRefills": "0",
+        "comment": "Jane Testing",
+        "priorOrderNumber": null,
+        "priority": "ROUTINE",
+        "quantity": "50",
+        "requestedDispenseAmount": "50",
+        "requestedGiveTimeUnit": null,
+        "routeDescription": "PO",
+        "sig": "TAKE 1 TABLET BY MOUTH EVERY SIX HOURS AS NEEDED HEADACHE/FEVER/PAIN OR AS DIRECTED",
+        "startDate": {
+          "start": "2014-04-02T17:18:00",
+          "end": "2014-04-02T17:18:00"
+        },
+        "verifiedBy": null
+      }
+    ],
+    "consultOrders": [],
+    "labOrders": [
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000010063"
+        },
+        "enteredBy": null,
+        "enteredDate": null,
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "26436-6"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL"
+        },
+        "orderable": [
+          {
+            "display": "CBC PROFILE",
+            "code": "14674837",
+            "system": "2.16.840.1.113883.3.42.126.100001.16",
+            "primary": true
+          }
+        ],
+        "date": {
+          "start": "2014-04-02T17:14:00",
+          "end": "2014-04-02T17:14:00"
+        },
+        "orderNumber": {
+          "id": "140402-00001"
+        },
+        "orderingProvider": {
+          "name": "BHIE, USERONE"
+        },
+        "status": [
+          {
+            "display": "Ordered",
+            "primary": true
+          }
+        ],
+        "adminTimes": null,
+        "alternateSpecimenText": "BLOOD",
+        "collectionMethod": null,
+        "duration": "D1",
+        "endDate": {
+          "start": "2015-04-01T17:16:00",
+          "end": "2015-04-01T17:16:00"
+        },
+        "enteringLocation": {
+          "name": "Family Practice Clinic"
+        },
+        "frequency": null,
+        "groupNumber": null,
+        "signedDate": null,
+        "signedBy": null,
+        "intervalPattern": null,
+        "interval": null,
+        "comment": "Jane testing",
+        "priorOrderNumber": null,
+        "priority": "ROUTINE",
+        "processingPriority": "R",
+        "scheduleType": [
+          {
+            "display": "One Time",
+            "primary": true
+          }
+        ],
+        "specimenText": "PLASMA",
+        "startDate": {
+          "start": "2014-04-02T17:16:00",
+          "end": "2014-04-02T17:16:00"
+        },
+        "statusComment": null,
+        "verifiedBy": null
+      }
+    ],
+    "radiologyOrders": []
+  }
+}

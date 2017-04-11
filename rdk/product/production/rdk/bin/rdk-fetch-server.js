@@ -1,0 +1,138 @@
+#!/usr/bin/env node
+
+'use strict';
+
+var path = require('path');
+var rdk = require('../src/core/rdk');
+
+var ROOT = path.resolve(__dirname, '..');
+
+var app = rdk.appfactory().defaultConfigFilename('../../config/rdk-fetch-server-config.json').argv(process.argv).build();
+// app.register
+// app.start
+
+app.register('/authentication', ROOT + '/src/resources/authentication/auth-resource');
+app.register('/user', ROOT + '/src/resources/user/user-resource');
+
+app.register('/sync', ROOT + '/src/resources/patient-record/patient-sync-resource');
+
+app.register('/asu', ROOT + '/src/resources/asu-resource');
+
+app.register('/patient-search', ROOT + '/src/resources/patient-search/patient-search-resource');
+app.register('/patient-search', ROOT + '/src/resources/patient-search/search-resource');
+
+app.register('/patient/record/uid', ROOT + '/src/resources/patient-record/patient-uid-resource');
+app.register('/patient/record/search', ROOT + '/src/resources/patient-record/search/patient-record-search-resource');
+app.register('/patient/record', ROOT + '/src/resources/patient-record/patient-record-resource');
+app.register('/patient/record/complex-note', ROOT + '/src/resources/patient-record/patient-complex-note-resource');
+app.register('/patient/record/cwad', ROOT + '/src/resources/patient-record/patient-cwad-resource');
+app.register('/patient/record/labs/by-order', ROOT + '/src/resources/lab-search-by-order-resource');
+app.register('/patient/record/labs/by-panel', ROOT + '/src/resources/lab-panels/lab-panels-resource');
+app.register('/patient/record/labs/by-type', ROOT + '/src/resources/lab-search-by-type-resource');
+app.register('/patient/record/labs/by-type', ROOT + '/src/resources/search-by-type/search-by-type-resource');
+app.register('/patient/record/timeline', ROOT + '/src/resources/patient-record/patient-timeline-resource');
+app.register('/patient/record/notes', ROOT + '/src/resources/patient-record/patient-notes-resource');
+app.register('/patient/record/patient-entered-goals', ROOT + '/src/resources/patient-record/patient-generated-data/patient-goals-resource');
+app.register('/patient/record/patient-self-assessment', ROOT + '/src/resources/patient-record/patient-generated-data/patient-assessment-resource');
+app.register('/patient/record/service-connected', ROOT + '/src/resources/service-connected/service-connected-resource');
+app.register('/patient/record/metadata', ROOT + '/src/resources/patient-meta/patientmeta-resource');
+
+app.register('/patient/health-summaries', ROOT + '/src/resources/health-summaries-resource');
+app.register('/patient/global-timeline', ROOT + '/src/resources/global-timeline-resource');
+app.register('/patient/photo', ROOT + '/src/resources/patient-photo/patient-photo-resource');
+
+
+// CDS
+app.register('/cds/advice', ROOT + '/src/resources/cds-advice/cds-advice-resource');
+app.register('/cds/work-product', ROOT + '/src/resources/cds-work-product/cds-work-product-resource');
+//cds patient criteria, definitions, list
+app.register('/cds/patient', ROOT + '/src/resources/cds-patient-list/patient-list-resource');
+//cds job scheduler
+app.register('/cds/schedule', ROOT + '/src/resources/cds-schedule/cds-schedule-resource');
+app.register('/cds/execute', ROOT + '/src/resources/cds-schedule/cds-execute-resource');
+app.register('/cds/engine', ROOT + '/src/resources/cds-engine/cds-engine-resource');
+app.register('/cds/intent', ROOT + '/src/resources/cds-intent/cds-intent-resource');
+app.register('/cds/metrics', ROOT + '/src/resources/cds-metrics/metrics-resource');
+
+app.register('/immunizations', ROOT + '/src/resources/immunizations/immunization-resource');
+app.register('/locations', ROOT + '/src/resources/locations-resource');
+app.register('/locations/facility-monikers', ROOT + '/src/resources/facility-moniker/facility-moniker-resource');
+
+// Order Details resource using RPC call
+app.register('/order', ROOT + '/src/resources/order-detail-resource');
+app.register('/problems', ROOT + '/src/resources/problems-resource');
+app.register('/visits', ROOT + '/src/resources/visits/visits-resource');
+app.register('/visit', ROOT + '/src/resources/visits/visit-service-category-resource');
+app.register('/vitals', ROOT + '/src/resources/vitals/vitals-resource');
+app.register('/tasks', ROOT + '/src/resources/tasks/tasks-resource');
+app.register('/notes/recent-titles', ROOT + '/src/resources/notes-title-resource');
+
+
+app.register('/user/screens', ROOT + '/src/resources/user-defined-screens/user-defined-screens-resource');
+app.register('/user/screens', ROOT + '/src/resources/user-defined-screens/write-user-defined-screens-resource');
+app.register('/user/filter', ROOT + '/src/resources/user-defined-screens/user-defined-filter-resource');
+app.register('/user/sort', ROOT + '/src/resources/user-defined-screens/user-defined-sort-resource');
+app.register('/user/stack', ROOT + '/src/resources/user-defined-screens/user-defined-stack-resource');
+
+//fhir
+app.register('/fhir/patient/:id', ROOT + '/src/fhir/patient-demographics/patient-demographics-resource');
+app.register('/fhir/adverseReaction', ROOT + '/src/fhir/adverse-reaction/adverse-reaction-resource');
+app.register('/fhir/allergyintolerance', ROOT + '/src/fhir/allergy-intolerance/allergy-intolerance-resource');
+app.register('/fhir/patient/:id/observation', ROOT + '/src/fhir/observation/observation-resource'); // TODO: missing docs  //TODO: need to refactor to separate vitals resource
+app.register('/fhir/healthFactors', ROOT + '/src/fhir/health-factors/health-factors-resource');
+app.register('/fhir/educations', ROOT + '/src/fhir/educations/educations-resource');
+app.register('/fhir/patient/:id/diagnosticreport', ROOT + '/src/fhir/diagnostic-report/diagnostic-report-resource');
+app.register('/fhir/order', ROOT + '/src/fhir/order/order-resource');
+app.register('/fhir/patient/:id/diagnosticorder', ROOT + '/src/fhir/order/diagnostic-order/diagnostic-order-resource');
+app.register('/fhir/patient/:id/procedure', ROOT + '/src/fhir/procedure/procedure-resource');
+// TODO: Uncomment Procedure Request, Device Use Request and Nutrition Order once the FHIR mapping has been completed.
+// app.register('/fhir/patient/:id/procedurerequest', ROOT + '/src/fhir/order/procedure-request/procedure-request-resource');
+// app.register('/fhir/patient/:id/deviceuserequest', ROOT + '/src/fhir/order/device-use-request/device-use-request-resource');
+// app.register('/fhir/patient/:id/nutritionorder', ROOT + '/src/fhir/order/nutrition-order/nutrition-order-resource');
+app.register('/fhir/patient/:id/condition', ROOT + '/src/fhir/condition/condition-list-resource');
+app.register('/fhir/immunization', ROOT + '/src/fhir/immunization/immunization-resource');
+app.register('/fhir/composition', ROOT + '/src/fhir/composition/composition-resource');
+app.register('/fhir/referralrequest', ROOT + '/src/fhir/referral-request/referral-request-resource');
+app.register('/fhir/medicationdispense', ROOT + '/src/fhir/medication-dispense/medication-dispense-resource');
+app.register('/fhir/medicationadministration', ROOT + '/src/fhir/medication-administration/medication-administration-resource');
+app.register('/fhir/medicationstatement', ROOT + '/src/fhir/medication-statement/medication-statement-resource');
+app.register('/fhir/patient/:id/medicationprescription', ROOT + '/src/fhir/medication-prescription/medication-prescription-resource');
+app.register('/fhir/communicationrequest', ROOT + '/src/fhir/communication-request/communication-request-resource');
+
+// Orderables
+app.register('/orderables', ROOT + '/src/resources/orderables/orderables-resource');
+app.register('/favorites', ROOT + '/src/resources/orderables/favorites/favorites-resource');
+app.register('/orderset', ROOT + '/src/resources/orderables/order-set/order-set-resource');
+app.register('/quickorder', ROOT + '/src/resources/orderables/quick-order/quick-order-resource');
+
+//Authentication
+//TODO this will be moved to its own resource server prior to delivery
+app.register('/authorize', ROOT + '/src/resources/authorization-check-resource');
+
+app.register('/operational-data/type', ROOT + '/src/resources/jds-operational-data/op-data-resource');
+
+//vler
+app.register('/vler/:pid/toc', ROOT + '/src/resources/vler/toc/toc-resource');
+
+//ccow
+app.register('/vergencevaultproxy', ROOT + '/src/resources/vergence-vault-proxy-resource');
+
+// Vista Roles Resource and eHMP Permission Sets
+app.register('/permission-sets', ROOT + '/src/resources/permission-sets/permission-sets-resource');
+app.register('/permissions', ROOT + '/src/resources/permissions/permissions-resource');
+app.register('/teams', ROOT + '/src/resources/teams/teams-resource');
+
+// Vista Encounter Resource
+app.register('/encounter', ROOT + '/src/resources/encounter/encounter-resource');
+
+// TEST RESOURCE for Generic RPC Calls
+// DO NOT ENABLE IN PRODUCTION; IT IS A SECURITY RISK!
+// app.register('/test', '../src/resources/vista-resource');
+
+app.logger.info('app created with ' + app.resourceRegistry.getResources().length + ' mounted endpoints');
+
+// todo: move listen to start
+var port = app.config.appServer.port;
+app.listen(port, function() {
+    app.logger.info('application now listening on %s', port);
+});

@@ -1,0 +1,11 @@
+{
+    "query": {
+        "facility": "9E7A"
+    },
+    "body": {
+        "team": {
+            "teamDisplayName": "Test team",
+            "teamId": 123
+        }
+    }
+}

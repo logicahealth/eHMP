@@ -1,0 +1,69 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"type": "object",
+	"required": [
+		"data",
+		"status"
+	],
+	"properties": {
+		"data": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"required": [
+					"source",
+					"categoryName",
+					"top",
+					"plus"
+				],
+				"properties": {
+					"allergens": {
+						"type": "array",
+						"items": {
+							"type": "object",
+							"required": [
+								"ien",
+								"name",
+								"file",
+								"foodDrugOther",
+								"source"
+							],
+							"properties": {
+								"file": {
+									"type": "string"
+								},
+								"foodDrugOther": {
+									"type": "string"
+								},
+								"ien": {
+									"type": "string"
+								},
+								"name": {
+									"type": "string"
+								},
+								"source": {
+									"type": "string"
+								}
+							}
+						}
+					},
+					"categoryName": {
+						"type": "string"
+					},
+					"plus": {
+						"type": "string"
+					},
+					"source": {
+						"type": "string"
+					},
+					"top": {
+						"type": "string"
+					}
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

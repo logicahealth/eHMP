@@ -1,0 +1,28 @@
+{
+	"parameters": {
+		"fields": {
+			"name": "fields",
+			"paramType": "query",
+			"type": "string",
+			"values": [
+			]
+		},
+		"id": {
+			"name": "id",
+			"paramType": "query",
+			"required": true,
+			"type": "string",
+			"values": [
+			]
+		},
+		"predefined": {
+			"name": "predefined",
+			"paramType": "query",
+			"type": "boolean",
+			"values": [
+			]
+		}
+	},
+	"schema": {
+	}
+}

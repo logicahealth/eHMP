@@ -1,0 +1,43 @@
+<div class="row logon-section">
+    <h1 class="sr-only">Enterprise Health Management Platform</h1>
+    <div class="security-statement">
+        <p><strong class="warning-break">** WARNING ** <span aria-hidden="true">WARNING ** WARNING ** WARNING ** WARNING ** WARNING ** WARNING ** WARNING ** WARNING ** WARNING ** WARNING **</span></strong></p>
+        <p>This site is intended to be used by authorized VA network users for viewing and retrieving information only except as otherwise explicitly authorized. VA information resides on and transmits through computer systems and networks funded by VA; all use is considered to be understanding and acceptance that there is no reasonable expectation of privacy for any data or transmissions on Government Intranet or Extranet (non-public) networks or systems. All transactions that occur on this system other than the viewing and downloading of Web site information and all data transmitted through this system are subject to review and action including (but not limited to) monitoring, recording, retrieving, copying, auditing, inspecting, investigating, restricting access, blocking, tracking, disclosing to authorized personnel, or any other authorized actions by all authorized VA and law enforcement personnel. All use of this system constitutes understanding and unconditional acceptance of these terms.</p>
+        <p>Unauthorized attempts or acts to either (1) access, upload, change, or delete information on this system, (2) modify this system, (3) deny access to this system, or (4) accrue resources for unauthorized use on this system are strictly prohibited. Such attempts or acts are subject to action that may result in criminal, civil, or administrative penalties.</p>
+        <p><strong class="warning-break">** WARNING ** <span aria-hidden="true">WARNING ** WARNING ** WARNING ** WARNING ** WARNING ** WARNING ** WARNING ** WARNING ** WARNING ** WARNING **</span></strong></p>
+        <hr / aria-hidden="true">
+        <p><strong>* Browser support: Internet Explorer 11</strong></p>
+        <p><strong>* Recommended window size: 1280 x 800px</strong></p>
+    </div>
+    <form role="form">
+        <div class="login-container">
+            <div class="logo text-center" aria-hidden="true">Enterprise Health Management Platform</div>
+            <span id="errorMessage" class="text-danger text-center"></span>
+            <div class="form-group" id="facilityForm">
+                <label for="facility">Select Facility</label>
+                <div id="authenication-facility-list"></div>
+            </div>
+            <div class="form-group" id="accessForm">
+                <label for="accessCode">Access code</label>
+                <input type="password" class="form-control" id="accessCode" name="accessCode" title="Please enter in access code" required />
+            </div>
+            <div class="form-group" id="verifyForm">
+                <label for="verifyCode">Verify code</label>
+                <input type="password" class="form-control" id="verifyCode" name="verifyCode" title="Please enter in verfication code" required />
+            </div>
+            <button type="submit" data-loading-text="<i class='fa fa-spinner fa-spin'></i> Authenticating" class="btn btn-primary percent-width-100" id="login" title="Press enter to sign in">Sign In</button>
+            <div class="hidden" id="screenReaderAuthenticating">
+                Authenticating
+            </div>
+
+            <div class="all-padding-sm top-padding-sm text-center">
+                <a id="linkHelp-logon" class="help-icon-link" href="{{helpUrl}}" target="helpIconUniqueWindow" title="Press enter to access the help content. You will be redirected to a new browser window.">
+                    Need Help Logging In?
+                </a>
+            </div>
+            <div class="text-center">
+                EHMP {{softwareVersion}}
+            </div>
+        </div>
+    </form>
+</div>

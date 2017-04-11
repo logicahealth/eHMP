@@ -1,0 +1,123 @@
+#bottom-region {
+   footer {
+        background-color: $primary-dark;
+        bottom: 0;
+        color: $pure-white;
+        position: fixed;
+        width: 100%;
+        z-index: 10;
+        p {
+            margin: 7px 0px 6px 0px;
+        }
+    }
+
+    #patientSyncStatusRegion {
+        ul {
+            list-style: none;
+            margin: 5px 0 0 0;
+            float: right;
+            li {
+                display: inline;
+                padding-right: 10px;
+                &.loading-muted {
+                    color: rgba(255, 255, 255, 0.5);
+                }
+                    button {
+                        color: $pure-white;
+                    }
+                    a {
+                        color: $pure-white;
+                        text-decoration: none;
+                    }
+                .fa-iconBig {
+                    font-size: 16px;
+                    &.success {
+                        color: #A4CDB0;
+                    }
+                    &.fail {
+                        color: #FFD2CB;
+                    }
+                    &.fa-spinner {
+                        font-size: 14px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+// ----- Jonathan's 2.0 Edits -------- //
+
+#bottom-region {
+   footer {
+        background-color: #132F50;
+        bottom: 0;
+        color: #fff;
+        position: fixed;
+        width: 100%;
+        z-index: 10;
+        max-height: 20px;
+        p {
+            margin: 2px 0px 3px 0px;
+        }
+    }
+    #patientSyncStatusRegion {
+        ul {
+            list-style: none;
+            margin: 1px 0 0 0;
+            li {
+                vertical-align: middle;
+                .fa {
+                    &.success {
+                        color: #A4CDB0;
+                    }
+                    &.fail {
+                        color: #FFD2CB;
+                    }
+                    &.fa-spinner {
+                        font-size: 14px;
+                    }
+                }
+                a {
+                    &.help-icon-link {
+                        margin-top: -1px;
+                        border-left: 1px solid $pure-black;
+                        padding-left: 15px;
+                        .fa-lg {
+                            vertical-align: -4%;
+                        }
+                        i {
+                            color: $pure-white;
+                            &:hover {
+                            color: #DCE4EF;
+                            }
+                        }
+                    }
+                    &:hover {
+                        color: #DCE4EF;
+                    }
+                }
+                button {
+                    padding-left: 5px;
+                    &:hover {
+                        color: #DCE4EF;
+                    }
+                }
+                &.footer-divider-right {
+                    &:after {
+                    content: '\2022';
+                    padding-left: 5px;
+                    }
+                }
+                &.footer-divider-left {
+                    &:before {
+                    content: '\2022';
+                    padding-right: 5px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+

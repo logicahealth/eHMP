@@ -1,0 +1,8 @@
+//style checkboxes that are inside another form control
+.control[class*="-control"] {
+    .checkbox-control {
+        .checkbox {
+            margin: 0 auto;
+        }
+    }
+}

@@ -1,0 +1,136 @@
+// select the base accordion for base styling
+.accordion-container.panel-group {
+	// with .ftar also added to the .accordion-container element
+	// apply styling overrides to the accordion to make ftar (faux-table-accordion-row) styling
+	&.ftar { 
+		.panel {
+			border-bottom: 1px solid $grey-light;
+			border-left: 1px solid $grey-light;
+			border-right: 1px solid $grey-light;
+			border-top: none;
+			box-shadow: none;
+			margin: 0;
+			&.panel-default {
+				&.odd {
+				    background-color: $primary-lightest;
+				}
+			}
+			.panel-heading {
+				background: none;
+				border-radius: 0;
+				padding:0;
+				&.active {
+					background: $primary-lighter;
+            		color: $grey-darkest;
+				}
+				> * {
+					padding: 2px 0 2px 10px;
+				}
+				.panel-title {
+				    cursor: default;
+				    font-size: 11px;
+				    font-weight: normal;
+				    padding: 0 10px;
+				    text-transform: capitalize;
+				    display: flex;
+				    &:hover {
+				        background: none;
+				    }
+				    .table-cell {
+			    	    vertical-align: middle;
+			    	    justify-content: center;
+				    }
+				    > a {
+				    	color: $grey-darkest;
+				    	box-sizing: border-box;
+				    	display: flex;
+				    	flex-direction: row;
+				    	font-weight: normal;
+				    	text-transform: none;
+				    	width: 100%;
+				    	> div {
+				    		display: block;
+				    		flex: 1;
+				    		flex-direction: column;
+				    		.applet-badges {
+				    			margin-left: 10px;
+				    		}
+				    	}
+				    }
+				    > a + span {
+				    	display: inline-block;
+				    }
+				    p {
+				    	margin: 0px;
+				    }
+				    .form-group, .checkbox  {
+				        margin: 0;
+				    }
+					> * {
+						display: flex;
+						flex: 1;
+						flex-direction: column;
+						> a, a {
+							cursor: pointer;
+							display: inline-block;
+						    padding: 1px;
+						}
+					}
+					.control.form-group {
+					    margin: 0px;
+					    input[type="text"], select {
+					        padding: 0px 2px;
+					        margin-bottom: 2px;
+					        text-align: right;
+					        &.input-sm {
+					        	height: 20px;
+					        }
+					    }
+					}
+				}
+				a.panel-title {
+					cursor: pointer;
+				}
+			}
+			.panel-collapse {
+				background: $pure-white;
+			}
+			.panel-body {
+				border: none;
+				padding: 6px;
+			}
+		}
+		&.applet-scrolling-data {
+			border: 1px solid $grey;
+		    height: 150px;
+		    overflow-y: scroll;
+		}
+	}
+}
+
+
+// .ftar-container and main-header styles, ONLY!
+// not all ftar will have a main header. those that do should use a
+// div with a class of .ftar-container as a wrapper element that will
+// contain .main-header element (styled below) and .ftar element (styled above)
+.ftar-container {
+    margin-bottom: 10px;
+    .main-header {
+        background-color: $pure-white;
+        border: 1px solid $grey;
+        border-radius: 4px 4px 0px 0px;
+        color: $primary;
+        font-weight: 500;
+        padding: 5px 10px;
+        white-space: nowrap;
+        display: flex;
+        > div {
+            display: block;
+			flex: 1;
+			flex-direction: column;
+        }
+    }
+    .table-cell {
+    	padding: 3px 6px;
+    }
+}

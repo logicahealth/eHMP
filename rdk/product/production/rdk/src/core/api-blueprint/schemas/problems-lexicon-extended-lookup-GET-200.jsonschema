@@ -1,0 +1,46 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"type": "object",
+	"required": [
+		"data",
+		"status"
+	],
+	"properties": {
+		"data": {
+			"type": "array",
+			"items": {
+				"type": ["object", "string"],
+				"required": ["lexIen", "prefText", "code", "codeIen", "codeSys", "conceptId", "desigId", "version"],
+				"properties": {
+					"lexIen": {
+						"type": "string"
+					},
+					"prefText": {
+						"type": "string"
+					},
+					"code": {
+						"type": "string"
+					},
+					"codeIen": {
+						"type": "string"
+					},
+					"codeSys": {
+						"type": "string"
+					},
+					"conceptId": {
+						"type": "string"
+					},
+					"desigId": {
+						"type": "string"
+					},
+					"version": {
+						"type": "string"
+					}
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

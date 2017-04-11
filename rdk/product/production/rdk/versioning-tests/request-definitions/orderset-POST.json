@@ -1,0 +1,84 @@
+{
+	"parameters": {
+	},
+	"schema": {
+		"$schema": "http://json-schema.org/draft-04/schema#",
+		"properties": {
+			"active": {
+				"description": "Whether the Order Set is active. Inactive Order Sets will not show up in Orderable service queries.",
+				"type": "boolean"
+			},
+			"name": {
+				"description": "Name of the Order Set",
+				"type": "string"
+			},
+			"orderList": {
+				"items": {
+					"properties": {
+						"active": {
+							"description": "Whether the orderable is active. A site can stop support of a particular orderable, rendering it inactive",
+							"type": "boolean"
+						},
+						"createdBy": {
+							"description": "User associated with the conceptual orderable (applies to non-vista orderables, e.g. quick orders)"
+						},
+						"domain": {
+							"description": "Clinical domain (for orderable type)",
+							"enum": [
+								"lab",
+								"rad",
+								"med",
+								"consult"
+							]
+						},
+						"name": {
+							"description": "Name of the QuickOrder or Orderable",
+							"type": "string"
+						},
+						"scope": {
+							"enum": [
+								"individual",
+								"site",
+								"enterprise"
+							]
+						},
+						"siteId": {
+							"description": "Id of the site associated with the orderable",
+							"type": "string"
+						},
+						"type": {
+							"enum": [
+								"quickorder",
+								"orderable"
+							]
+						},
+						"uid": {
+							"description": "Unique identifier of the item (quick order or orderable)",
+							"type": "string"
+						}
+					},
+					"required": [
+						"uid",
+						"type"
+					],
+					"type": "object"
+				},
+				"minItems": 1,
+				"type": "array"
+			},
+			"scope": {
+				"description": "Visibility scope of the order set",
+				"enum": [
+					"individual",
+					"site",
+					"enterprise"
+				]
+			}
+		},
+		"required": [
+			"name",
+			"orderList"
+		],
+		"type": "object"
+	}
+}

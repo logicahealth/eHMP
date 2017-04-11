@@ -1,0 +1,13 @@
+<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:car="http://cardpictureservice.vic.va.insigniatechnology.com/">
+   <soap:Header/>
+   <soap:Body>
+      <car:getVeteranPictures>
+         <!--Optional:-->
+         <arg0>
+            <!--1 or more repetitions:-->
+            <cardIds>%(cardid)s</cardIds>
+            <siteId>508</siteId>
+         </arg0>
+      </car:getVeteranPictures>
+   </soap:Body>
+</soap:Envelope>

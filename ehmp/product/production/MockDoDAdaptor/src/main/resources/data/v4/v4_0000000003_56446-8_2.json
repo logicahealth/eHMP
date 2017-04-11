@@ -1,0 +1,689 @@
+{
+  "queryComplete": true,
+  "statusList": [
+    {
+      "partner": {
+        "partnerIdentifier": "2.16.840.1.113883.3.42.126.100001.13",
+        "partnerName": "ahlta",
+        "partnerType": "DOD"
+      },
+      "partnerStatus": "SUCCESS",
+      "expectedCount": 10,
+      "receivedCount": 10
+    }
+  ],
+  "dataList": {
+    "appointments": [
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000010343"
+        },
+        "enteredBy": {
+          "name": "BHIE, USERONE"
+        },
+        "enteredDate": {
+          "start": "2014-01-10T12:07:36",
+          "end": "2014-01-10T12:07:36"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "56446-8"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL"
+        },
+        "arrivalDate": {
+          "start": "2014-01-10T12:08:53",
+          "end": "2014-01-10T12:08:53"
+        },
+        "departureDate": null,
+        "classification": "0",
+        "comment": "Notes Entered by: BHIE,USERONE 10 Jan 2014 1208\r\n------------------------------\r\nthis is a new test",
+        "date": {
+          "start": "2014-01-10T12:08:00",
+          "end": "2014-01-10T12:08:00"
+        },
+        "disposition": [
+          {
+            "display": "Released w/o Limitations",
+            "primary": true
+          }
+        ],
+        "location": {
+          "name": "Family Practice Clinic"
+        },
+        "provider": {
+          "name": "BHIE, USERONE"
+        },
+        "reason": [],
+        "status": [
+          {
+            "display": "KEPT",
+            "primary": true
+          }
+        ],
+        "type": [
+          {
+            "display": "ACUT",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000010344"
+        },
+        "enteredBy": {
+          "name": "BHIE, USERONE"
+        },
+        "enteredDate": {
+          "start": "2014-01-09T15:01:32",
+          "end": "2014-01-09T15:01:32"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "56446-8"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL"
+        },
+        "arrivalDate": {
+          "start": "2014-01-09T15:03:03",
+          "end": "2014-01-09T15:03:03"
+        },
+        "departureDate": null,
+        "classification": "0",
+        "comment": "Notes Entered by: BHIE,USERONE 09 Jan 2014 1500\r\n------------------------------\r\ntest",
+        "date": {
+          "start": "2014-01-09T15:00:00",
+          "end": "2014-01-09T15:00:00"
+        },
+        "disposition": [
+          {
+            "display": "Released with Work/Duty Limitations",
+            "primary": true
+          }
+        ],
+        "location": {
+          "name": "Family Practice Clinic"
+        },
+        "provider": {
+          "name": "BHIE, USERONE"
+        },
+        "reason": [],
+        "status": [
+          {
+            "display": "KEPT",
+            "primary": true
+          }
+        ],
+        "type": [
+          {
+            "display": "ACUT",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000010345"
+        },
+        "enteredBy": {
+          "name": "BHIE, USERONE"
+        },
+        "enteredDate": {
+          "start": "2013-12-05T12:13:58",
+          "end": "2013-12-05T12:13:58"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "56446-8"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL"
+        },
+        "arrivalDate": {
+          "start": "2013-12-05T12:15:23",
+          "end": "2013-12-05T12:15:23"
+        },
+        "departureDate": null,
+        "classification": "0",
+        "comment": "Notes Entered by: BHIE,USERONE 05 Dec 2013 1214\r\n------------------------------\r\ntesttest",
+        "date": {
+          "start": "2013-12-05T12:14:00",
+          "end": "2013-12-05T12:14:00"
+        },
+        "disposition": [
+          {
+            "display": "Released w/o Limitations, Sick at Home/Quarters",
+            "primary": true
+          }
+        ],
+        "location": {
+          "name": "Family Practice Clinic"
+        },
+        "provider": {
+          "name": "BHIE, USERONE"
+        },
+        "reason": [],
+        "status": [
+          {
+            "display": "KEPT",
+            "primary": true
+          }
+        ],
+        "type": [
+          {
+            "display": "ACUT",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000010346"
+        },
+        "enteredBy": {
+          "name": "BHIE, USERONE"
+        },
+        "enteredDate": {
+          "start": "2013-12-03T11:03:02",
+          "end": "2013-12-03T11:03:02"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "56446-8"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL"
+        },
+        "arrivalDate": {
+          "start": "2013-12-03T11:04:27",
+          "end": "2013-12-03T11:04:27"
+        },
+        "departureDate": null,
+        "classification": "0",
+        "comment": "Notes Entered by: BHIE,USERONE 03 Dec 2013 1103\r\n------------------------------\r\ntest123",
+        "date": {
+          "start": "2013-12-03T11:03:00",
+          "end": "2013-12-03T11:03:00"
+        },
+        "disposition": [
+          {
+            "display": "Sick at Home/Quarters",
+            "primary": true
+          }
+        ],
+        "location": {
+          "name": "Family Practice Clinic"
+        },
+        "provider": {
+          "name": "BHIE, USERONE"
+        },
+        "reason": [],
+        "status": [
+          {
+            "display": "KEPT",
+            "primary": true
+          }
+        ],
+        "type": [
+          {
+            "display": "ACUT",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000010347"
+        },
+        "enteredBy": {
+          "name": "BHIE, USERONE"
+        },
+        "enteredDate": {
+          "start": "2013-12-02T15:59:30",
+          "end": "2013-12-02T15:59:30"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "56446-8"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL"
+        },
+        "arrivalDate": {
+          "start": "2013-12-02T16:00:34",
+          "end": "2013-12-02T16:00:34"
+        },
+        "departureDate": null,
+        "classification": "0",
+        "comment": "Notes Entered by: BHIE,USERONE 02 Dec 2013 1600\r\n------------------------------\r\ntest",
+        "date": {
+          "start": "2013-12-02T16:00:00",
+          "end": "2013-12-02T16:00:00"
+        },
+        "disposition": [
+          {
+            "display": "Released with Work/Duty Limitations",
+            "primary": true
+          }
+        ],
+        "location": {
+          "name": "Family Practice Clinic"
+        },
+        "provider": {
+          "name": "BHIE, USERONE"
+        },
+        "reason": [],
+        "status": [
+          {
+            "display": "KEPT",
+            "primary": true
+          }
+        ],
+        "type": [
+          {
+            "display": "ACUT",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000010348"
+        },
+        "enteredBy": {
+          "name": "BHIE, USERONE"
+        },
+        "enteredDate": {
+          "start": "2013-11-20T15:22:52",
+          "end": "2013-11-20T15:22:52"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "56446-8"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL"
+        },
+        "arrivalDate": {
+          "start": "2013-11-20T15:24:00",
+          "end": "2013-11-20T15:24:00"
+        },
+        "departureDate": null,
+        "classification": "0",
+        "comment": "Notes Entered by: BHIE,USERONE 20 Nov 2013 1523\r\n------------------------------\r\ntest visit",
+        "date": {
+          "start": "2013-11-20T15:23:00",
+          "end": "2013-11-20T15:23:00"
+        },
+        "disposition": [],
+        "location": {
+          "name": "Family Practice Clinic"
+        },
+        "provider": {
+          "name": "BHIE, USERONE"
+        },
+        "reason": [],
+        "status": [
+          {
+            "display": "KEPT",
+            "primary": true
+          }
+        ],
+        "type": [
+          {
+            "display": "ACUT",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000010349"
+        },
+        "enteredBy": {
+          "name": "BHIE, USERONE"
+        },
+        "enteredDate": {
+          "start": "2013-11-19T15:24:47",
+          "end": "2013-11-19T15:24:47"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "56446-8"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL"
+        },
+        "arrivalDate": {
+          "start": "2013-11-19T15:25:40",
+          "end": "2013-11-19T15:25:40"
+        },
+        "departureDate": null,
+        "classification": "0",
+        "comment": "Notes Entered by: BHIE,USERONE 19 Nov 2013 1525\r\n------------------------------\r\ntest",
+        "date": {
+          "start": "2013-11-19T15:25:00",
+          "end": "2013-11-19T15:25:00"
+        },
+        "disposition": [
+          {
+            "display": "Released with Work/Duty Limitations",
+            "primary": true
+          }
+        ],
+        "location": {
+          "name": "Family Practice Clinic"
+        },
+        "provider": {
+          "name": "BHIE, USERONE"
+        },
+        "reason": [],
+        "status": [
+          {
+            "display": "KEPT",
+            "primary": true
+          }
+        ],
+        "type": [
+          {
+            "display": "ACUT",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000010350"
+        },
+        "enteredBy": {
+          "name": "BHIE, USERONE"
+        },
+        "enteredDate": {
+          "start": "2013-11-18T12:08:21",
+          "end": "2013-11-18T12:08:21"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "56446-8"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL"
+        },
+        "arrivalDate": {
+          "start": "2013-11-18T12:09:14",
+          "end": "2013-11-18T12:09:14"
+        },
+        "departureDate": null,
+        "classification": "0",
+        "comment": "Notes Entered by: BHIE,USERONE 18 Nov 2013 1209\r\n------------------------------\r\ntest",
+        "date": {
+          "start": "2013-11-18T12:09:00",
+          "end": "2013-11-18T12:09:00"
+        },
+        "disposition": [
+          {
+            "display": "Sick at Home/Quarters",
+            "primary": true
+          }
+        ],
+        "location": {
+          "name": "Family Practice Clinic"
+        },
+        "provider": {
+          "name": "BHIE, USERONE"
+        },
+        "reason": [],
+        "status": [
+          {
+            "display": "KEPT",
+            "primary": true
+          }
+        ],
+        "type": [
+          {
+            "display": "ACUT",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000010351"
+        },
+        "enteredBy": {
+          "name": "BHIE, USERONE"
+        },
+        "enteredDate": {
+          "start": "2013-10-09T13:10:01",
+          "end": "2013-10-09T13:10:01"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "56446-8"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL"
+        },
+        "arrivalDate": {
+          "start": "2013-10-09T13:10:09",
+          "end": "2013-10-09T13:10:09"
+        },
+        "departureDate": null,
+        "classification": "0",
+        "comment": null,
+        "date": {
+          "start": "2013-10-09T13:09:00",
+          "end": "2013-10-09T13:09:00"
+        },
+        "disposition": [
+          {
+            "display": "Released w/o Limitations",
+            "primary": true
+          }
+        ],
+        "location": {
+          "name": "Family Practice Clinic"
+        },
+        "provider": {
+          "name": "BHIE, USERONE"
+        },
+        "reason": [
+          {
+            "display": "Notes Entered by: BHIE,USERONE 09 Oct 2013 1309\r\n------------------------------\r\ntesting drawing module",
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "KEPT",
+            "primary": true
+          }
+        ],
+        "type": [
+          {
+            "display": "SPEC$",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000010352"
+        },
+        "enteredBy": {
+          "name": "BHIE, USERONE"
+        },
+        "enteredDate": {
+          "start": "2013-10-07T12:09:42",
+          "end": "2013-10-07T12:09:42"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "56446-8"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL"
+        },
+        "arrivalDate": {
+          "start": "2013-10-07T12:17:02",
+          "end": "2013-10-07T12:17:02"
+        },
+        "departureDate": null,
+        "classification": "0",
+        "comment": null,
+        "date": {
+          "start": "2013-10-07T12:16:00",
+          "end": "2013-10-07T12:16:00"
+        },
+        "disposition": [
+          {
+            "display": "Released w/o Limitations",
+            "primary": true
+          }
+        ],
+        "location": {
+          "name": "Family Practice Clinic"
+        },
+        "provider": {
+          "name": "BHIE, USERONE"
+        },
+        "reason": [],
+        "status": [
+          {
+            "display": "KEPT",
+            "primary": true
+          }
+        ],
+        "type": [
+          {
+            "display": "SPEC$",
+            "primary": true
+          }
+        ]
+      }
+    ]
+  }
+}

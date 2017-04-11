@@ -1,0 +1,18 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xs-9">
+            <h4 class="modal-title" id="mainModalLabel">{{#if lab_detail_title}} {{lab_detail_title}} {{else}} {{typeName}} - {{specimen}} {{/if}}</h4>
+        </div>
+        <div class="col-xs-3 text-right top-margin-sm">
+            <button type="button" class="btn btn-default btn-xs right-margin-xs" id="labssPrevious" title="Press enter to load the previous lab result.">
+                <i class="fa fa-angle-left right-padding-xs"></i>Previous
+            </button>
+            <button type="button" class="btn btn-default btn-xs" id="labssNext" title="Press enter to load the next lab result.">
+                Next<i class="fa fa-angle-right left-padding-xs"></i>
+            </button>
+            <button type="button" class="close btn btn-icon btn-xs left-margin-sm" data-dismiss="modal" title="Press enter to close.">
+                <i class="fa fa-times fa-lg"></i>
+            </button>
+        </div>
+    </div>
+</div>

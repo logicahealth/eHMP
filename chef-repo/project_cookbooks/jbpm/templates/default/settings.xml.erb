@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/xsd/settings-1.0.0.xsd">
+  <localRepository><%= node[:jbpm][:m2_home]%>/repository</localRepository>
+  <mirrors>
+    <mirror>
+      <id>local-mirror</id>
+      <name>Prevent Maven from downloading artifacts from repo1.maven.org</name>
+      <url>file://<%= node[:jbpm][:m2_home]%>/repository</url>
+      <mirrorOf>external:*,!internal</mirrorOf>
+      <layout>default</layout>
+    </mirror>
+  </mirrors>
+  <profiles>
+    <profile>
+      <id>jboss-brms-bpmsuite-repository</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <repositories>
+        <repository>
+          <id>internal</id>
+          <name>internal</name>
+           <url><%= node['nexus_url']%>/nexus/content/repositories/ehmp-public</url>
+          <releases>
+            <enabled>true</enabled>
+            <updatePolicy>always</updatePolicy>
+          </releases>
+          <snapshots>
+            <enabled>true</enabled>
+            <updatePolicy>always</updatePolicy>
+          </snapshots>
+        </repository>
+      </repositories>
+      <pluginRepositories>
+        <pluginRepository>
+          <id>jboss-brms-bpmsuite-plugin-repository</id>
+          <url><%= node['nexus_url']%>/nexus/content/repositories/ehmp-public</url>
+          <releases>
+            <enabled>true</enabled>
+          </releases>
+          <snapshots>
+            <enabled>false</enabled>
+          </snapshots>
+        </pluginRepository>
+      </pluginRepositories>
+    </profile>
+  </profiles>
+</settings>

@@ -1,0 +1,147 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "Synchronize a patient's data",
+	"description": "",
+	"type": "object",
+	"required": [
+		"data",
+		"status"
+	],
+	"properties": {
+		"data": {
+			"type": "object",
+			"required": [
+				"jpid",
+				"syncStatus",
+				"jobStatus"
+			],
+			"properties": {
+				"jobStatus": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"required": [
+							"jobId",
+							"jpid",
+							"patientIdentifier",
+							"rootJobId",
+							"status",
+							"timestamp",
+							"type"
+						],
+						"properties": {
+							"jobId": {
+								"type": "string"
+							},
+							"jpid": {
+								"type": "string"
+							},
+							"patientIdentifier": {
+								"type": "object",
+								"required": [
+									"type",
+									"value"
+								],
+								"properties": {
+									"type": {
+										"type": "string"
+									},
+									"value": {
+										"type": "string"
+									}
+								}
+							},
+							"rootJobId": {
+								"type": "string"
+							},
+							"status": {
+								"type": "string"
+							},
+							"timestamp": {
+								"type": "string"
+							},
+							"type": {
+								"type": "string"
+							}
+						}
+					}
+				},
+				"jpid": {
+					"type": "string"
+				},
+				"syncStatus": {
+					"type": "object",
+					"required": [
+						"completedStamp"
+					],
+					"properties": {
+						"completedStamp": {
+							"type": "object",
+							"required": [
+								"icn",
+								"sourceMetaStamp"
+							],
+							"properties": {
+								"icn": {
+									"type": "string"
+								},
+								"sourceMetaStamp": {
+									"type": "object",
+									"additionalProperties": {
+										"type": "object",
+										"required": [
+											"domainMetaStamp",
+											"localId",
+											"pid",
+											"stampTime",
+											"syncCompleted"
+										],
+										"properties": {
+											"domainMetaStamp": {
+												"type": "object",
+												"additionalProperties": {
+													"type": "object",
+													"required": [
+														"domain",
+														"stampTime",
+														"syncCompleted"
+													],
+													"properties": {
+														"domain": {
+															"type": "string"
+														},
+														"stampTime": {
+															"type": "integer"
+														},
+														"syncCompleted": {
+															"type": "boolean"
+														}
+													}
+												}
+											},
+											"localId": {
+												"type": ["integer", "string"]
+											},
+											"pid": {
+												"type": "string"
+											},
+											"stampTime": {
+												"type": "integer"
+											},
+											"syncCompleted": {
+												"type": "boolean"
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

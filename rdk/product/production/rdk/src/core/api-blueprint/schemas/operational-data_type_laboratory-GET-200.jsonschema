@@ -1,0 +1,182 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "Get a list of valid names by type",
+	"description": "Returns a list of valid names of requested type",
+	"type": "object",
+	"required": [
+		"apiVersion",
+		"data",
+		"status"
+	],
+	"properties": {
+		"apiVersion": {
+			"type": "string"
+		},
+		"data": {
+			"type": "object",
+			"required": [
+				"updated",
+				"totalItems",
+				"currentItemCount",
+				"items"
+			],
+			"properties": {
+				"currentItemCount": {
+					"type": "integer"
+				},
+				"items": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"required": [
+							"internal",
+							"link",
+							"linktype",
+							"name",
+							"stampTime",
+							"types",
+							"uid"
+						],
+						"properties": {
+							"dialogAdditionalInformation": {
+								"type": "object",
+								"required": [
+									"sendPatientTimes"
+								],
+								"properties": {
+									"sendPatientTimes": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"required": [
+												"internal",
+												"name"
+											],
+											"properties": {
+												"internal": {
+													"type": "string"
+												},
+												"name": {
+													"type": "string"
+												}
+											}
+										}
+									}
+								}
+							},
+							"internal": {
+								"type": "integer"
+							},
+							"labDetails": {
+								"type": "object",
+								"required": [
+									"dailyOrderMax",
+									"labCollect",
+									"maxOrderFrequency",
+									"sequence",
+									"speciman"
+								],
+								"properties": {
+									"dailyOrderMax": {
+										"type": "string"
+									},
+									"labCollect": {
+										"type": "boolean"
+									},
+									"labTypeInternal": {
+										"type": "string"
+									},
+									"labTypeName": {
+										"type": "string"
+									},
+									"maxOrderFrequency": {
+										"type": "string"
+									},
+									"sequence": {
+										"type": "string"
+									},
+									"speciman": {
+										"type": "string"
+									}
+								}
+							},
+							"link": {
+								"type": "integer"
+							},
+							"linktype": {
+								"type": "string"
+							},
+							"name": {
+								"type": "string"
+							},
+							"stampTime": {
+								"type": "integer"
+							},
+							"synonym": {
+								"type": "array",
+								"items": {
+									"type": "object",
+									"required": [
+										"name"
+									],
+									"properties": {
+										"name": {
+											"type": "string"
+										}
+									}
+								}
+							},
+							"types": {
+								"type": "array",
+								"items": {
+									"type": "object",
+									"required": [
+										"type"
+									],
+									"properties": {
+										"abb": {
+											"type": "string"
+										},
+										"internal": {
+											"type": "string"
+										},
+										"type": {
+											"type": "string"
+										},
+										"uid": {
+											"type": "string"
+										}
+									}
+								}
+							},
+							"uid": {
+								"type": "string"
+							}
+						}
+					}
+				},
+				"itemsPerPage": {
+					"type": "integer"
+				},
+				"pageIndex": {
+					"type": "integer"
+				},
+				"startIndex": {
+					"type": "integer"
+				},
+				"totalItems": {
+					"type": "integer"
+				},
+				"totalPages": {
+					"type": "integer"
+				},
+				"updated": {
+					"type": "integer"
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

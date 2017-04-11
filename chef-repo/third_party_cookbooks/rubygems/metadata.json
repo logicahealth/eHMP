@@ -1,0 +1,29 @@
+{
+  "name": "rubygems",
+  "description": "Installs/Configures rubygems",
+  "long_description": "Description\n===========\n\nThis cookbook configured \"system\" and Omnibus Chef gem sources.\n\nRequirements\n============\nOmnibus Chef 11 or above\n\nUsage\n=====\n\nFrom a Vagrantfile, role, or environment definition, set something\nlike this, to point at a privately hosted rubygems mirror:\n\n    :rubygems => {\n      :gem_disable_default => true,\n      :gem_sources => [],\n      :chef_gem_disable_default => true,\n      :chef_gem_sources => [ 'http://33.33.33.51/rubygems/' ]\n    },\n\nAttributes\n==========\n\n    # From attributes/default.rb\n    default['rubygems']['gem_disable_default'] = false\n    default['rubygems']['gem_sources'] = [ 'https://rubygems.org' ]\n    default['rubygems']['chef_gem_disable_default'] = false\n    default['rubygems']['chef_gem_sources'] = [ 'https://rubygems.org' ]\n\nRecipes\n=======\n\ndefault\n\nAuthor:: Apache v2 (<Sean OMeara <someara@opscode.com>>)\n",
+  "maintainer": "Apache v2",
+  "maintainer_email": "Sean OMeara <someara@opscode.com>",
+  "license": "Apache2",
+  "platforms": {
+  },
+  "dependencies": {
+  },
+  "recommendations": {
+  },
+  "suggestions": {
+  },
+  "conflicting": {
+  },
+  "providing": {
+  },
+  "replacing": {
+  },
+  "attributes": {
+  },
+  "groupings": {
+  },
+  "recipes": {
+  },
+  "version": "0.3.0"
+}

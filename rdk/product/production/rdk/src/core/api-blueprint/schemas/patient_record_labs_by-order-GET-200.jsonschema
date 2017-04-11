@@ -1,0 +1,205 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "Get patient labs for an order",
+	"description": "",
+	"type": "object",
+	"required": [
+		"totalItems",
+		"currentItemCount",
+		"data",
+		"status"
+	],
+	"properties": {
+		"currentItemCount": {
+			"type": "integer"
+		},
+		"data": {
+			"type": "object",
+			"required": [
+				"items"
+			],
+			"properties": {
+				"items": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"required": [
+							"abnormal",
+							"categoryCode",
+							"categoryName",
+							"comment",
+							"displayName",
+							"displayOrder",
+							"facilityCode",
+							"facilityName",
+							"groupName",
+							"groupUid",
+							"high",
+							"kind",
+							"labOrderId",
+							"lastUpdateTime",
+							"lnccodes",
+							"localId",
+							"low",
+							"micro",
+							"observed",
+							"pid",
+							"qualifiedName",
+							"result",
+							"resultNumber",
+							"resulted",
+							"sample",
+							"specimen",
+							"stampTime",
+							"statusCode",
+							"statusName",
+							"summary",
+							"typeCode",
+							"typeId",
+							"typeName",
+							"uid",
+							"units"
+						],
+						"properties": {
+							"abnormal": {
+								"type": "boolean"
+							},
+							"categoryCode": {
+								"type": "string"
+							},
+							"categoryName": {
+								"type": "string"
+							},
+							"comment": {
+								"type": "string"
+							},
+							"displayName": {
+								"type": "string"
+							},
+							"displayOrder": {
+								"type": "number"
+							},
+							"facilityCode": {
+								"type": "string"
+							},
+							"facilityName": {
+								"type": "string"
+							},
+							"groupName": {
+								"type": "string"
+							},
+							"groupUid": {
+								"type": "string"
+							},
+							"high": {
+								"type": "string"
+							},
+							"interpretationCode": {
+								"type": "string"
+							},
+							"interpretationName": {
+								"type": "string"
+							},
+							"kind": {
+								"type": "string"
+							},
+							"labOrderId": {
+								"type": "integer"
+							},
+							"lastUpdateTime": {
+								"type": "string"
+							},
+							"lnccodes": {
+								"type": "array",
+								"items": {
+									"type": "string"
+								}
+							},
+							"localId": {
+								"type": "string"
+							},
+							"low": {
+								"type": "string"
+							},
+							"micro": {
+								"type": "boolean"
+							},
+							"observed": {
+								"type": "string"
+							},
+							"pid": {
+								"type": "string"
+							},
+							"qualifiedName": {
+								"type": "string"
+							},
+							"result": {
+								"type": "string"
+							},
+							"resultNumber": {
+								"type": "integer"
+							},
+							"resulted": {
+								"type": "string"
+							},
+							"sample": {
+								"type": "string"
+							},
+							"specimen": {
+								"type": "string"
+							},
+							"stampTime": {
+								"type": "string"
+							},
+							"statusCode": {
+								"type": "string"
+							},
+							"statusName": {
+								"type": "string"
+							},
+							"summary": {
+								"type": "string"
+							},
+							"typeCode": {
+								"type": "string"
+							},
+							"typeId": {
+								"type": "integer"
+							},
+							"typeName": {
+								"type": "string"
+							},
+							"uid": {
+								"type": "string"
+							},
+							"uidHref": {
+								"type": "string"
+							},
+							"units": {
+								"type": "string"
+							}
+						}
+					}
+				}
+			}
+		},
+		"itemsPerPage": {
+			"type": "integer"
+		},
+		"pageIndex": {
+			"type": "integer"
+		},
+		"startIndex": {
+			"type": "integer"
+		},
+		"status": {
+			"type": "integer"
+		},
+		"totalItems": {
+			"type": "integer"
+		},
+		"totalPages": {
+			"type": "integer"
+		}
+	}
+}

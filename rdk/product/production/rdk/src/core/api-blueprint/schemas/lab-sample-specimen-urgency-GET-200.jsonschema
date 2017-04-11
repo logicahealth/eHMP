@@ -1,0 +1,62 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"type": "object",
+	"required": [
+		"data",
+		"status"
+	],
+	"properties": {
+		"data": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"required": [
+					"categoryName"
+				],
+				"properties": {
+					"categoryName": {
+						"type": "string"
+					},
+					"default": {
+						"type": "object",
+						"required": [
+							"name"
+						],
+						"properties": {
+							"ien": {
+								"type": "string"
+							},
+							"name": {
+								"type": "string"
+							}
+						}
+					},
+					"values": {
+						"type": "array",
+						"items": {
+							"type": "object",
+							"required": [
+								"ien",
+								"name"
+							],
+							"properties": {
+								"ien": {
+									"type": "string"
+								},
+								"name": {
+									"type": "string"
+								},
+								"parent": {
+									"type": "string"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

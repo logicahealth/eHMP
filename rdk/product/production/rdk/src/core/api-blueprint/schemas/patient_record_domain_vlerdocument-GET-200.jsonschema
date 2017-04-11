@@ -1,0 +1,135 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "Get record data of one domain for a patient",
+	"description": "",
+	"type": "object",
+	"required": [
+		"apiVersion",
+		"data",
+		"status"
+	],
+	"properties": {
+		"apiVersion": {
+			"type": "string"
+		},
+		"data": {
+			"type": "object",
+			"required": [
+				"updated",
+				"totalItems",
+				"currentItemCount",
+				"items"
+			],
+			"properties": {
+				"currentItemCount": {
+					"type": "integer"
+				},
+				"items": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"required": [
+							"authorList",
+							"creationTime",
+							"documentUniqueId",
+							"fullHtml",
+							"homeCommunityId",
+							"kind",
+							"mimeType",
+							"name",
+							"pid",
+							"repositoryUniqueId",
+							"sourcePatientId",
+							"stampTime",
+							"summary",
+							"uid"
+						],
+						"properties": {
+							"authorList": {
+								"type": "array",
+								"items": {
+									"type": "object",
+									"required": [
+										"institution",
+										"name"
+									],
+									"properties": {
+										"institution": {
+											"type": "string"
+										},
+										"name": {
+											"type": "string"
+										}
+									}
+								}
+							},
+							"compressed": {
+								"type": "boolean"
+							},
+							"creationTime": {
+								"type": "string"
+							},
+							"documentUniqueId": {
+								"type": "string"
+							},
+							"fullHtml": {
+								"type": "string"
+							},
+							"homeCommunityId": {
+								"type": "string"
+							},
+							"kind": {
+								"type": "string"
+							},
+							"mimeType": {
+								"type": "null"
+							},
+							"name": {
+								"type": "string"
+							},
+							"pid": {
+								"type": "string"
+							},
+							"repositoryUniqueId": {
+								"type": "string"
+							},
+							"sourcePatientId": {
+								"type": "string"
+							},
+							"stampTime": {
+								"type": "string"
+							},
+							"summary": {
+								"type": "string"
+							},
+							"uid": {
+								"type": "string"
+							}
+						}
+					}
+				},
+				"itemsPerPage": {
+					"type": "integer"
+				},
+				"pageIndex": {
+					"type": "integer"
+				},
+				"startIndex": {
+					"type": "integer"
+				},
+				"totalItems": {
+					"type": "integer"
+				},
+				"totalPages": {
+					"type": "integer"
+				},
+				"updated": {
+					"type": "integer"
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

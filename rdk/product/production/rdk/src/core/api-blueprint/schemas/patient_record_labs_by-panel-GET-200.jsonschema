@@ -1,0 +1,308 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"definitions": {
+		"panel": {
+			"additionalProperties": {
+				"type": ["array", "string"],
+				"items": {
+					"$ref": "#/definitions/panel"
+				}
+			},
+			"type": "object",
+			"properties": {
+				"abnormal": {
+					"type": "boolean"
+				},
+				"categoryCode": {
+					"type": "string"
+				},
+				"categoryName": {
+					"type": "string"
+				},
+				"codes": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"required": [
+							"code",
+							"system"
+						],
+						"properties": {
+							"code": {
+								"type": "string"
+							},
+							"display": {
+								"type": "string"
+							},
+							"system": {
+								"type": "string"
+							}
+						}
+					}
+				},
+				"comment": {
+					"type": [
+						"string",
+						"null"
+					]
+				},
+				"displayName": {
+					"type": "string"
+				},
+				"displayOrder": {
+					"type": "number"
+				},
+				"facilityCode": {
+					"type": "string"
+				},
+				"facilityName": {
+					"type": "string"
+				},
+				"gramStain": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"required": [
+							"result"
+						],
+						"properties": {
+							"result": {
+								"type": "string"
+							}
+						}
+					}
+				},
+				"groupName": {
+					"type": "string"
+				},
+				"groupUid": {
+					"type": "string"
+				},
+				"high": {
+					"type": "string"
+				},
+				"interpretationCode": {
+					"type": "string"
+				},
+				"interpretationName": {
+					"type": "string"
+				},
+				"kind": {
+					"type": "string"
+				},
+				"labOrderId": {
+					"type": "integer"
+				},
+				"labType": {
+					"type": "string"
+				},
+				"lastUpdateTime": {
+					"type": "string"
+				},
+				"lnccodes": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					}
+				},
+				"localId": {
+					"type": "string"
+				},
+				"low": {
+					"type": "string"
+				},
+				"micro": {
+					"type": "boolean"
+				},
+				"observed": {
+					"type": "string"
+				},
+				"orderId": {
+					"type": "string"
+				},
+				"orderUid": {
+					"type": "string"
+				},
+				"organisms": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"required": [
+							"name",
+							"qty"
+						],
+						"properties": {
+							"drugs": {
+								"type": "array",
+								"items": {
+									"type": "object",
+									"required": [
+										"interp",
+										"name",
+										"result"
+									],
+									"properties": {
+										"interp": {
+											"type": "string"
+										},
+										"name": {
+											"type": "string"
+										},
+										"restrict": {
+											"type": "string"
+										},
+										"result": {
+											"type": "string"
+										}
+									}
+								}
+							},
+							"name": {
+								"type": "string"
+							},
+							"qty": {
+								"type": "string"
+							}
+						}
+					}
+				},
+				"organizerType": {
+					"type": "string"
+				},
+				"pid": {
+					"type": "string"
+				},
+				"qualifiedName": {
+					"type": "string"
+				},
+				"result": {
+					"type": "string"
+				},
+				"resultNumber": {
+					"type": [
+						"number",
+						"null"
+					]
+				},
+				"resulted": {
+					"type": "string"
+				},
+				"results": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"required": [
+							"localTitle",
+							"resultUid",
+							"uid"
+						],
+						"properties": {
+							"localTitle": {
+								"type": "string"
+							},
+							"resultUid": {
+								"type": "string"
+							},
+							"uid": {
+								"type": "string"
+							}
+						}
+					}
+				},
+				"sample": {
+					"type": "string"
+				},
+				"sensitive": {
+					"type": "boolean"
+				},
+				"specimen": {
+					"type": "string"
+				},
+				"stampTime": {
+					"type": "string"
+				},
+				"statusCode": {
+					"type": "string"
+				},
+				"statusName": {
+					"type": "string"
+				},
+				"summary": {
+					"type": "string"
+				},
+				"typeCode": {
+					"type": "string"
+				},
+				"typeId": {
+					"type": "integer"
+				},
+				"typeName": {
+					"type": "string"
+				},
+				"uid": {
+					"type": "string"
+				},
+				"units": {
+					"type": "string"
+				},
+				"vuid": {
+					"type": "string"
+				}
+			}
+		}
+	},
+	"title": "Get lab orders for a panel",
+	"description": "",
+	"type": "object",
+	"required": [
+		"apiVersion",
+		"data",
+		"status"
+	],
+	"properties": {
+		"apiVersion": {
+			"type": "string"
+		},
+		"data": {
+			"type": "object",
+			"required": [
+				"updated",
+				"totalItems",
+				"currentItemCount",
+				"items"
+			],
+			"properties": {
+				"currentItemCount": {
+					"type": "integer"
+				},
+				"items": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/panel"
+					}
+				},
+				"itemsPerPage": {
+					"type": "integer"
+				},
+				"pageIndex": {
+					"type": "integer"
+				},
+				"startIndex": {
+					"type": "integer"
+				},
+				"totalItems": {
+					"type": "integer"
+				},
+				"totalPages": {
+					"type": "integer"
+				},
+				"updated": {
+					"type": "integer"
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

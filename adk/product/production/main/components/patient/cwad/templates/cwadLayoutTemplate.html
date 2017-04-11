@@ -1,0 +1,37 @@
+<h4 tooltip-data-key='postings'>Postings</h4>
+<span class="cwadfToolTip" data-toggle="tooltip" data-html="true" data-placement="left" title="Crisis Notes">
+    {{#if hasCrisisNotes}}
+    <span class="label label-danger cwadLabel" data-cwadIdentifier="C" aria-expanded="false" aria-label="Crisis Notes button, 1 of 5, press enter for details," role="button" tabindex="0">C</span>
+    {{else}}
+    <span class="label label-default cwadLabel" data-cwadIdentifier="disabled">C</span>
+    {{/if}}
+</span>
+<span class="cwadfToolTip" data-toggle="tooltip" data-html="true" data-placement="bottom" title="Warnings">
+    {{#if hasFlags}}
+    <span class="label label-danger cwadLabel" data-cwadIdentifier="W" aria-expanded="false" aria-label="Warnings button, 2 of 5, press enter for details," role="button" tabindex="0">W</span>
+    {{else}}
+    <span class="label label-default cwadLabel" data-cwadIdentifier="disabled">W</span>
+    {{/if}}
+</span>
+<span class="cwadfToolTip" data-toggle="tooltip" data-html="true" data-placement="top" title="Allergies">
+    {{#if hasAllergies}}
+    <span class="label label-danger cwadLabel" data-cwadIdentifier="A" aria-expanded="false" aria-label="Allergies button, 3 of 5, press enter for details," role="button" tabindex="0">A</span>
+    {{else}}
+    <span class="label label-default cwadLabel" data-cwadIdentifier="disabled">A</span>
+    {{/if}}
+</span>
+<span class="cwadfToolTip" data-toggle="tooltip" data-html="true" data-placement="bottom" title="Directives">
+    {{#if hasDirectives}}
+    <span class="label label-danger cwadLabel" data-cwadIdentifier="D" aria-expanded="false" aria-label="Directives button, 4 of 5, press enter for details," role="button" tabindex="0">D</span>
+    {{else}}
+    <span class="label label-default cwadLabel" data-cwadIdentifier="disabled">D</span>
+    {{/if}}
+</span>
+<span class="cwadfToolTip" data-toggle="tooltip" data-html="true" data-placement="right" title="Patient Flags">
+    {{#if hasPatientFlags}}
+    <span class="label label-danger cwadLabel" data-cwadIdentifier="F" aria-expanded="false" aria-label="Patient Flags button, 5 of 5, press enter for details," role="button" tabindex="0">F</span>
+    {{else}}
+    <span class="label label-default cwadLabel" data-cwadIdentifier="disabled">F</span>
+    {{/if}}
+</span>
+<div id="cwad-details" class="well well-sm hidden all-padding-md" data-current-cwad="none"></div>

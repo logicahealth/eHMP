@@ -1,0 +1,9 @@
+{
+  "id": "license",
+  "content": {
+    "encrypted_data": "1OOs2/0FPX20UP9rV2j0CJP24uSmbTI+bUuCfvkum933ymeY/VBX4qPV/tMk\nY3RchWYxVgh3YkFv+LyLnUOkl8/5ieg0ZrnOm5X43UVfJlFhxJlL8scoCJ0q\n0MN/JMzzhB2I5K8FWI3jGtQxIEOOXJ4IdRjLrouVS19b+60gaDAwVpao1JCh\nyUKDF4+N0TD8dA7qo3oMRNmYNWDrILxd0u5B+1bS7MktiRp0Ca7gRlR3PDJ3\n94BpwGLSx6D73KEw9J5RlnWQQpKn7b5xD7z/l1BOm2TXZrjm5EWWMUt8T/B4\nPV5zkgGatY+RsycDgf4olQ/9mpcsATCEMp+huE0VQNgs6faRwrD4s6i+k4I+\nTvb7+NWhX5y4QgdPTG9BHK3i+cA/Z9pFDQ4n7yOkI8D78WfXFDoqzjqPXJsI\nGUDm5Q38P6oZWN5bd2gcSumI8UYB\n",
+    "iv": "WySBX7o97xfyPX+Cqo9MYg==\n",
+    "version": 1,
+    "cipher": "aes-256-cbc"
+  }
+}

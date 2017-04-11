@@ -1,0 +1,33 @@
+{
+  "name": "gradle",
+  "description": "Installs/Configures Gradle",
+  "long_description": "# gradle cookbook\n\nRequirements\n============\n\nPlatform\n--------\n\n* Ubuntu, Debian\n\nDependencies\n------------\n\nThe following cookbooks are dependencies:\n\n* Java - gradle requires the JVM to work.\n* ark - Used to unpack and install the Gradle tarball.\n\nUsage\n=====\n\nSimply include the recipe where you want Gradle to be installed.\n\nAttributes\n==========\n\n* default[:gradle][:version] defaults to 1.5\n* default[:gradle][:home] defaults to /usr/local/gradle\n* default[:gradle][:url] the download url for the gradle binary zip\n* default[:gradle][:checksum] the checksum for the gradle binary zip downloaded in the url\n\nRecipes\n=======\n\n* default Will install Gradle into the proper location, modify PATH and define GRADLE_HOME.\n\nAuthor\n======\n\nOlle Hallin (olle.hallin@crisp.se)\n\n",
+  "maintainer": "Olle Hallin",
+  "maintainer_email": "olle.hallin@crisp.se",
+  "license": "Apache 2.0",
+  "platforms": {
+    "ubuntu": ">= 0.0.0",
+    "debian": ">= 0.0.0"
+  },
+  "dependencies": {
+    "java": ">= 0.0.0",
+    "ark": ">= 0.0.0"
+  },
+  "recommendations": {
+  },
+  "suggestions": {
+  },
+  "conflicting": {
+  },
+  "providing": {
+  },
+  "replacing": {
+  },
+  "attributes": {
+  },
+  "groupings": {
+  },
+  "recipes": {
+  },
+  "version": "1.5.1"
+}

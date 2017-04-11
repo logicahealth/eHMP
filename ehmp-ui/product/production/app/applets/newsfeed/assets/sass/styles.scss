@@ -1,0 +1,38 @@
+[data-appletid="newsfeed"] {
+    &[data-instanceid="newsfeed-gdt"] {
+        .data-grid {
+            table, thead, tbody {
+                display: block;
+            }
+            table.backgrid {
+                height: calc(100% - 2px);
+                thead {
+                    border-bottom: 1px solid $grey-light;
+                    padding-right: 15px;
+                    th {
+                        border-bottom: none;
+                        text-align: left;
+                    }
+                }
+                tbody {
+                    height: calc(100% - 20px);
+                    overflow-y: scroll;
+                }
+                tr {
+                    border-bottom: 1px solid $grey-lighter;
+                    display: flex;
+                    td, th {
+                        flex: 1;
+                        height: auto;
+                        max-width: none;
+                        word-break: break-word;
+                        &.flex-width-date {
+                            flex: none;
+                            width: 115px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

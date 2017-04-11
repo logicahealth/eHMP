@@ -1,0 +1,101 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"type": "object",
+	"required": [
+		"data",
+		"status"
+	],
+	"properties": {
+		"data": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"required": [
+					"ien",
+					"name",
+					"abbreviation",
+					"pceAbbreviation"
+				],
+				"properties": {
+					"abbreviation": {
+						"type": "string"
+					},
+					"abnormalDiastolicHigh": {
+						"type": "string"
+					},
+					"abnormalDiastolicLow": {
+						"type": "string"
+					},
+					"abnormalHigh": {
+						"type": "string"
+					},
+					"abnormalLow": {
+						"type": "string"
+					},
+					"abnormalO2Saturation": {
+						"type": "string"
+					},
+					"abnormalSystolicHigh": {
+						"type": "string"
+					},
+					"abnormalSystolicLow": {
+						"type": "string"
+					},
+					"categories": {
+						"type": "array",
+						"items": {
+							"type": "object",
+							"required": [
+								"ien",
+								"categoryName",
+								"qualifiers"
+							],
+							"properties": {
+								"categoryName": {
+									"type": "string"
+								},
+								"ien": {
+									"type": "string"
+								},
+								"qualifiers": {
+									"type": "array",
+									"items": {
+										"type": "object",
+										"required": [
+											"ien",
+											"name",
+											"synonym"
+										],
+										"properties": {
+											"ien": {
+												"type": "string"
+											},
+											"name": {
+												"type": "string"
+											},
+											"synonym": {
+												"type": "string"
+											}
+										}
+									}
+								}
+							}
+						}
+					},
+					"ien": {
+						"type": "string"
+					},
+					"name": {
+						"type": "string"
+					},
+					"pceAbbreviation": {
+						"type": "string"
+					}
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

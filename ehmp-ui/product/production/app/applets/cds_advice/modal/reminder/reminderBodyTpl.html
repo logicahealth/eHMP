@@ -1,0 +1,23 @@
+<div class="row">
+    <div class="col-xs-12">
+    	<h5 class="bottom-border-grey-light">{{title}}</h5>
+    </div>
+</div>
+{{#if dueDateFormatted}}
+<div class="row top-margin-sm">
+	<div class="col-xs-12"><strong>Due Date:</strong><span class="left-padding-sm">{{dueDateFormatted}}</span></div>
+</div>
+{{/if}}
+{{#if doneDateFormatted}}
+<div class="row top-margin-sm">
+    <div class="col-xs-12"><strong>Done Date:</strong><span class="left-padding-sm">{{doneDateFormatted}}</span></div>
+</div>
+{{/if}}
+<div class="row top-margin-sm">
+	<div class="col-xs-12 left-padding-sm"><strong>Detail</strong></div>
+	{{#if details.detail}}
+	<div class="col-xs-12 pre-wrap">{{details.detail}}</div>
+	{{else}}
+	<div class="col-xs-12">[This reminder has no details.]</div>
+	{{/if}}
+</div>

@@ -1,0 +1,230 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "Get timeline data for a patient",
+	"description": "",
+	"type": "object",
+	"required": [
+		"data",
+		"status"
+	],
+	"properties": {
+		"data": {
+			"type": "object",
+			"required": [
+				"totalItems",
+				"currentItemCount",
+				"items"
+			],
+			"properties": {
+				"currentItemCount": {
+					"type": "integer"
+				},
+				"items": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"required": [
+							"facilityCode",
+							"facilityName",
+							"kind",
+							"pid",
+							"stampTime",
+							"uid",
+							"activityDateTime"
+						],
+						"properties": {
+							"activityDateTime": {
+								"type": "string"
+							},
+							"categoryCode": {
+								"type": "string"
+							},
+							"categoryName": {
+								"type": "string"
+							},
+							"current": {
+								"type": "boolean"
+							},
+							"dateTime": {
+								"type": "string"
+							},
+							"encounterType": {
+								"type": "string"
+							},
+							"facilityCode": {
+								"type": "string"
+							},
+							"facilityName": {
+								"type": "string"
+							},
+							"kind": {
+								"type": "string"
+							},
+							"lastUpdateTime": {
+								"type": "string"
+							},
+							"localId": {
+								"type": "string"
+							},
+							"locationDisplayName": {
+								"type": "string"
+							},
+							"locationName": {
+								"type": "string"
+							},
+							"locationUid": {
+								"type": "string"
+							},
+							"movements": {
+								"type": "array",
+								"items": {
+									"type": "object",
+									"required": [
+										"dateTime",
+										"localId",
+										"movementType",
+										"summary"
+									],
+									"properties": {
+										"dateTime": {
+											"type": "string"
+										},
+										"localId": {
+											"type": "string"
+										},
+										"movementType": {
+											"type": "string"
+										},
+										"summary": {
+											"type": "string"
+										}
+									}
+								}
+							},
+							"patientClassCode": {
+								"type": "string"
+							},
+							"patientClassName": {
+								"type": "string"
+							},
+							"pid": {
+								"type": "string"
+							},
+							"primaryProvider": {
+								"type": "object",
+								"required": [
+									"primary",
+									"providerDisplayName",
+									"providerName",
+									"role",
+									"summary"
+								],
+								"properties": {
+									"primary": {
+										"type": "boolean"
+									},
+									"providerDisplayName": {
+										"type": "string"
+									},
+									"providerName": {
+										"type": "string"
+									},
+									"providerUid": {
+										"type": "string"
+									},
+									"role": {
+										"type": "string"
+									},
+									"summary": {
+										"type": "string"
+									}
+								}
+							},
+							"providers": {
+								"type": "array",
+								"items": {
+									"type": "object",
+									"required": [
+										"providerDisplayName",
+										"providerName",
+										"summary"
+									],
+									"properties": {
+										"primary": {
+											"type": "boolean"
+										},
+										"providerDisplayName": {
+											"type": "string"
+										},
+										"providerName": {
+											"type": "string"
+										},
+										"providerUid": {
+											"type": "string"
+										},
+										"role": {
+											"type": "string"
+										},
+										"summary": {
+											"type": "string"
+										}
+									}
+								}
+							},
+							"reasonName": {
+								"type": [
+									"string",
+									"null"
+								]
+							},
+							"roomBed": {
+								"type": "string"
+							},
+							"service": {
+								"type": "string"
+							},
+							"shortLocationName": {
+								"type": "string"
+							},
+							"specialty": {
+								"type": "string"
+							},
+							"stampTime": {
+								"type": "string"
+							},
+							"stay": {
+								"type": "object",
+								"required": [
+									"arrivalDateTime"
+								],
+								"properties": {
+									"arrivalDateTime": {
+										"type": "string"
+									},
+									"dischargeDateTime": {
+										"type": "string"
+									}
+								}
+							},
+							"typeDisplayName": {
+								"type": "string"
+							},
+							"typeName": {
+								"type": "string"
+							},
+							"uid": {
+								"type": "string"
+							}
+						}
+					}
+				},
+				"totalItems": {
+					"type": "integer"
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

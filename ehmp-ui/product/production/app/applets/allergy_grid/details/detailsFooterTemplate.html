@@ -1,0 +1,12 @@
+<div class="pull-left">
+{{#hasPermission 'eie-allergy'}}
+	{{#if data}}
+	<button type="button" class="btn btn-danger btn-sm" id="error" title="Press enter to mark the allergy as Entered In Error.">Entered in Error</button>
+	{{else}}
+	<p><strong>Only data originating in your facility may be edited.</strong></p>
+	{{/if}}
+{{/hasPermission}}
+</div>
+<div class="pull-right">
+	<button type="button" class="btn btn-default btn-sm" data-dismiss="modal" title="Press enter to close.">Close</button>
+</div>

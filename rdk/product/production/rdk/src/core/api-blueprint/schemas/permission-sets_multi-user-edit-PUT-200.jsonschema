@@ -1,0 +1,32 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"type": "object",
+	"required": [
+		"data",
+		"status"
+	],
+	"properties": {
+		"data": {
+			"type": "object",
+			"required": [
+				"editedUsers",
+				"failedOnEditUsers"
+			],
+			"properties": {
+				"editedUsers": {
+					"type": "array",
+					"items": {
+					}
+				},
+				"failedOnEditUsers": {
+					"type": "array",
+					"items": {
+					}
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

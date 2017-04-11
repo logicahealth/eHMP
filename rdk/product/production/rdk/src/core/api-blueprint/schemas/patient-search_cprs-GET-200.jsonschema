@@ -1,0 +1,112 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "",
+	"description": "",
+	"type": "object",
+	"required": [
+		"data",
+		"status"
+	],
+	"properties": {
+		"data": {
+			"type": "object",
+			"required": [
+				"items"
+			],
+			"properties": {
+				"items": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"required": [
+							"birthDate",
+							"familyName",
+							"fullName",
+							"genderCode",
+							"genderName",
+							"givenNames",
+							"localId",
+							"pid",
+							"sensitive",
+							"ssn",
+							"stampTime",
+							"uid",
+							"displayName",
+							"summary",
+							"age",
+							"ssn4"
+						],
+						"properties": {
+							"age": {
+								"type": "integer"
+							},
+							"birthDate": {
+								"type": "string"
+							},
+							"displayName": {
+								"type": "string"
+							},
+							"familyName": {
+								"type": "string"
+							},
+							"fullName": {
+								"type": "string"
+							},
+							"genderCode": {
+								"type": "string"
+							},
+							"genderName": {
+								"type": "string"
+							},
+							"givenNames": {
+								"type": "string"
+							},
+							"icn": {
+								"type": "string"
+							},
+							"last4": {
+								"type": "string"
+							},
+							"last5": {
+								"type": "string"
+							},
+							"localId": {
+								"type": "string"
+							},
+							"locationName": {
+								"type": "string"
+							},
+							"pid": {
+								"type": "string"
+							},
+							"roomBed": {
+								"type": "string"
+							},
+							"sensitive": {
+								"type": "boolean"
+							},
+							"ssn": {
+								"type": "string"
+							},
+							"ssn4": {
+								"type": "string"
+							},
+							"stampTime": {
+								"type": "string"
+							},
+							"summary": {
+								"type": "string"
+							},
+							"uid": {
+								"type": "string"
+							}
+						}
+					}
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

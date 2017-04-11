@@ -1,0 +1,37 @@
+<div class="list-group-item-text row cursor-hand">
+		<div class="col-md-4 no-padding-right patientDisplayName">
+		<span class="sr-only">. Patient record, name</span>
+		{{formatName fullName ',' ', '}}
+	</div>
+	<div class="col-md-2 no-padding-left ssn">
+		<span class="sr-only">. Social security number</span>
+		{{#if sensitive}}
+			{{ssn}}
+		{{else}}
+			{{formatSSN ssn}}
+		{{/if}}
+	</div>
+	<div class="col-md-2 no-padding dob">
+		<span class="sr-only">. Date of birth</span>
+		{{#if sensitive}}
+			{{birthDate}}
+		{{else}}
+			{{formatDate birthDate "MM/DD/YYYY"}}
+			<span class="sr-only">. Age</span>
+			({{getAge birthDate}}y)
+		{{/if}}
+	</div>
+	<div class="col-md-2">
+		<span class="sr-only">. Gender</span>
+		{{genderName}}
+	</div>
+	<div class="col-md-2">
+		{{#if roomBed}}
+		<span class="sr-only">. Bed/Room</span>
+		{{roomBed}}
+		{{else}}
+		&nbsp;
+		{{/if}}
+	</div>
+	<span class="sr-only">Press enter to select this patient.</span>
+</div>

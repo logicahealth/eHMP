@@ -1,0 +1,110 @@
+{
+  "queryComplete": true,
+  "statusList": [
+    {
+      "partner": {
+        "partnerIdentifier": "2.16.840.1.113883.3.42.126.100001.13",
+        "partnerName": "ahlta",
+        "partnerType": "DOD"
+      },
+      "partnerStatus": "SUCCESS",
+      "expectedCount": 1,
+      "receivedCount": 1
+    }
+  ],
+  "dataList": {
+    "demographics": [
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000001047"
+        },
+        "enteredBy": null,
+        "enteredDate": null,
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "52536-0"
+          }
+        ],
+        "facility": null,
+        "addresses": [
+          {
+            "type": "Home Address",
+            "city": null,
+            "country": null,
+            "county": null,
+            "postalCode": null,
+            "state": null,
+            "street": [
+              ""
+            ]
+          }
+        ],
+        "branch": [],
+        "birthDate": {
+          "start": "1975-11-13T00:00:00",
+          "end": "1975-11-13T00:00:00"
+        },
+        "deersEligibility": [],
+        "patientId": [
+          {
+            "id": "D5010119501"
+          }
+        ],
+        "enrollmentLocation": null,
+        "name": {
+          "first": "DAWN",
+          "middle": "MARIE",
+          "last": "ROLF",
+          "suffix": null
+        },
+        "fmp": null,
+        "maritalStatus": [],
+        "patientCategory": [
+          {
+            "display": "A11 - United States Army (USA) Active Duty (AD) Enlisted",
+            "primary": true
+          }
+        ],
+        "race": [],
+        "rank": [
+          {
+            "display": "Captain O3-A",
+            "primary": true
+          }
+        ],
+        "religion": [
+          {
+            "display": "Not Given/No Preference",
+            "primary": true
+          }
+        ],
+        "sex": [
+          {
+            "display": "F",
+            "primary": true
+          }
+        ],
+        "sponsor": {
+          "branch": [],
+          "rank": [],
+          "ssn": null,
+          "assignedUnit": null
+        },
+        "assignedUnit": {
+          "name": "SM1CFD74     (00 0004 LOGISTICS SQ)"
+        }
+      }
+    ]
+  }
+}

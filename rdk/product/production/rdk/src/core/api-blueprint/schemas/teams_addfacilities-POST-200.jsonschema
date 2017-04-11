@@ -1,0 +1,42 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"type": "object",
+	"required": [
+		"data",
+		"status"
+	],
+	"properties": {
+		"data": {
+			"type": "object",
+			"additionalProperties": {
+                "type": "object",
+                "required": [
+                    "teams"
+                ],
+                "properties": {
+                    "teams": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "required": [
+                                "teamId",
+                                "teamDisplayName"
+                            ],
+                            "properties": {
+                                "teamDisplayName": {
+                                    "type": "string"
+                                },
+                                "teamId": {
+                                    "type": "integer"
+                                }
+                            }
+                        }
+                    }
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

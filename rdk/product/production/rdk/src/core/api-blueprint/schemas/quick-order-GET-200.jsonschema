@@ -1,0 +1,46 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "properties": {
+        "data": {
+            "type": "object",
+            "properties": {
+                "uid": {
+                    "description": "Unique identifier for the Quick Order",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "Name of the Quick Order",
+                    "type": "string"
+                },
+   				"type": {
+      				"description": "The type of this object, order set, quick order, favorite; always 'quickorder'",
+      				"enum": ["favorite", "quickorder", "orderable"]
+    			},
+                "scope": {
+                    "description": "Visibility scope of the Quick Order",
+                    "enum": ["individual", "site", "enterprise"]
+                },
+                "siteId": {
+                    "description": "Id of the site this Quick Order belongs to. This is null for 'enterprise' scope."
+                },
+                "createdBy": {
+                    "description": "User id of creator of the Quick Order (e.g., urn:va:user:9E7A:10000000238)",
+                    "type": "string"
+                },
+                "active": {
+                    "description": "Whether the Quick Order is active. Inactive Quick Order will not show up in Orderable service queries.",
+                    "type": "boolean"
+			    },
+    			"orderable": {
+      				"description": "The uid of the Orderable",
+      				"type": "string"
+    			},
+    			"formData": {
+      				"description": "Name value pairs for form objects",
+      				"type": "object"
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,59 @@
+<table id="{{uid}}" class="table table-condensed">
+    <caption class="sr-only">This table represents a brief summary for the selected vital.</caption>
+    <thead>
+        <tr>
+            <th scope="col">Date</th>
+            <th scope="col">Result</th>
+            <th scope="col">Ref. Range</th>
+            <th scope="col">Facility</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            {{#if observedFormatted}}
+                <td>{{observedFormatted}}</td>
+            {{else}}
+                <td>N/A</td>
+            {{/if}}
+            {{#if result}}
+                <td>{{result}}{{#if units}} {{units}}{{/if}}{{#if metricResult}} ({{metricResult}}{{#if metricUnits}} {{metricUnits}}{{/if}}){{/if}}</td>
+            {{else}}
+                <td>N/A</td>
+            {{/if}}
+            {{#ifExp low '===' 0}}
+                <td>{{low}} {{units}} {{#if high}} - {{high}} {{units}} {{/if}}</td>
+            {{else}}
+                {{#if low}}
+                    <td>{{low}}{{units}} {{#if high}} - {{high}}{{units}} {{/if}}</td>
+                    {{else}}
+                    <td>N/A</td>
+                {{/if}}
+            {{/ifExp}}
+            <td>{{facilityMoniker}}</td>
+        </tr>
+    {{#each limitedoldValues}}
+        <tr>
+            {{#if attributes.observedFormatted}}
+                <td>{{attributes.observedFormatted}}</td>
+            {{else}}
+                <td>N/A</td>
+            {{/if}}
+            {{#if attributes.result}}
+                <td>{{attributes.result}}{{#if attributes.units}} {{attributes.units}}{{/if}}{{#if attributes.metricResult}} ({{attributes.metricResult}}{{#if attributes.metricUnits}} {{attributes.metricUnits}}{{/if}}){{/if}}</td>
+            {{else}}
+                <td>N/A</td>
+            {{/if}}
+            {{#ifExp attributes.low '===' 0}}
+                <td>{{attributes.low}} {{attributes.units}} {{#if attributes.high}} - {{attributes.high}} {{attributes.units}} {{/if}}</td>
+            {{else}}
+                {{#if attributes.low}}
+                    <td>{{attributes.low}}{{attributes.units}} {{#if attributes.high}} - {{attributes.high}}{{attributes.units}} {{/if}}</td>
+                    {{else}}
+                    <td>N/A</td>
+                {{/if}}
+            {{/ifExp}}
+            <td>{{attributes.facilityMoniker}}</td>
+        </tr>
+    {{/each}}
+    </tbody>
+</table>

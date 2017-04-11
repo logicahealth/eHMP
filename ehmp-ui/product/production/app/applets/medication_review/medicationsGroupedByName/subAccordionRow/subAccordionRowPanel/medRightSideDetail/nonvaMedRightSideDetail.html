@@ -1,0 +1,57 @@
+<div class="col-sm-12 dropShadow">
+    <div class="col-sm-12 left-padding-no">
+        <div class="col-sm-9 left-padding-no right-padding-no">
+            <h3 class="capitalize">{{name}} {{strength}} </h3>
+        </div>
+        <div class="col-sm-3 left-padding-no right-padding-no">
+            <h3 class="detailStatus capitalize">{{modifiedVaStatus}}</h3>
+            <p class="detailStatus">(Non-VA)</p>
+        </div>
+    </div>
+    <div class="col-sm-12 left-padding-no">
+       <p>{{computedSig}}</p>
+    </div>
+    <div class="col-sm-12 left-padding-no bottom-padding-sm">
+        <div class="bottom-border-grey-light"><b>Order Details</b></div>
+    </div>
+    <div class="col-sm-12 order-info-line left-padding-no bottom-padding-sm">
+        <div class="col-sm-3 order-info left-padding-no">
+            <p class="labelStyleColor">Ordering Provider</p>
+            {{#each orders}}
+            <p>{{providerName}} on</p>
+            <p>{{formatDate ordered "MM/DD/YYYY HH:mm"}}</p>
+            {{/each}}
+        </div>
+        <div class="col-sm-3 order-info">
+            <p class="labelStyleColor">Ordering Location</p>
+            {{#each orders}}
+            <p>{{locationName}}</p>
+            {{/each}}
+        </div>
+        <div class="col-sm-3 order-info">
+            <p class="labelStyleColor">Order Text</p>
+            <p class="capitalize">{{name}} {{strength}}</p>
+        </div>
+    </div>
+    <div class="col-sm-12 order-info-line left-padding-no bottom-padding-sm">
+        <div class="col-sm-3 order-info left-padding-no">
+            <p class="labelStyleColor">Start Date/Time</p>
+            <p>{{formatDate overallStart "MM/DD/YYYY HH:mm"}}</p>
+        </div>
+        <div class="col-sm-3 order-info">
+            <p class="labelStyleColor">Order Number</p>
+            <p>#{{slicedOrderUid}}</p>
+        </div>
+    </div>
+    <div class="col-sm-12 left-padding-no bottom-padding-sm">
+        <div class="col-sm-12 left-padding-no">
+            <div class="bottom-border-grey-light"><b>Statement/Explanation</b></div>
+        </div>
+    </div>
+</div>
+</div>
+<div class="col-sm-12 footerBox">
+    <!--    <button type="button" class="btn btn-default">Discontinue</button>
+    <button type="button" class="btn btn-default">Renew</button>
+    <button type="button" class="btn btn-default">Close</button> -->
+</div>

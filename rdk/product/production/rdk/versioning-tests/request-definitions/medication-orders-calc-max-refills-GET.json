@@ -1,0 +1,61 @@
+{
+	"parameters": {
+		"days": {
+			"name": "days",
+			"paramType": "query",
+			"required": true,
+			"type": "string",
+			"values": [
+			]
+		},
+		"discharge": {
+			"name": "discharge",
+			"paramType": "query",
+			"required": true,
+			"type": "boolean",
+			"values": [
+			]
+		},
+		"drug": {
+			"name": "drug",
+			"paramType": "query",
+			"required": true,
+			"type": "string",
+			"values": [
+			]
+		},
+		"fields": {
+			"name": "fields",
+			"paramType": "query",
+			"type": "string",
+			"values": [
+			]
+		},
+		"ordItem": {
+			"name": "ordItem",
+			"paramType": "query",
+			"required": true,
+			"type": "string",
+			"values": [
+			]
+		},
+		"patientDFN": {
+			"name": "patientDFN",
+			"paramType": "query",
+			"required": true,
+			"type": "string",
+			"values": [
+			]
+		},
+		"site": {
+			"name": "site",
+			"paramType": "query",
+			"required": true,
+			"type": "string",
+			"values": [
+			]
+		}
+	},
+	"schema": {
+	}
+}

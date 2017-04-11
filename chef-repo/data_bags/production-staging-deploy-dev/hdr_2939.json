@@ -1,0 +1,18 @@
+{
+  "id": "hdr_2939",
+  "normal": {
+    "ipaddress": "172.16.16.242",
+    "stack": "production-staging-deploy-dev",
+    "hdr": {
+      "hdr_sites": [
+        {
+          "site_id": "2939",
+          "station_number": 536
+        }
+      ]
+    },
+    "roles": [
+      "hdr"
+    ]
+  }
+}

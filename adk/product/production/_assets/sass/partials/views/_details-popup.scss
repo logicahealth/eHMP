@@ -1,0 +1,35 @@
+.details-modal {
+    $navColumnWidth: 150px;
+    $navToggleWidth: 10px;
+    .details-nav {
+        transition: all 500ms ease;
+        width: $navColumnWidth;
+        .nav-list ul:last-child {
+            border-right: none;
+        }
+    }
+    .details-content {
+        transition: all 500ms ease;
+        /* set a fallback width for phantom */
+        width: 100%;
+        width: calc(100% - #{$navColumnWidth} - #{$navToggleWidth});
+        .action-buttons {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+        }
+    }
+    .details-nav-button {
+        background-color: $grey-lighter;
+        border: none;
+        border-left: 1px solid $grey;
+        border-right: 1px solid $grey;
+        color: $primary;
+        float: left;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        text-align: center;
+        width: $navToggleWidth;
+    }
+}

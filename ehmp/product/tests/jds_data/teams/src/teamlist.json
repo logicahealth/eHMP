@@ -1,0 +1,88 @@
+[{
+    "facility": "C877",
+    "teams": [{
+        "active": true,
+        "createdByIEN": "C877;10008673",
+        "createdDateTime": 20150101000000,
+        "modifiedByIEN": "C877;10008833",
+        "modifiedDateTime": 20150101000000,
+        "patients": [{
+            "assignedByIEN": "C877;1000897",
+            "assignedDateTime": 20150101000000,
+            "assignedToPosition": "00001",
+            "icn": "10108V429807"
+        }, {
+            "assignedByIEN": "C877;10008833",
+            "assignedDateTime": 20150101000000,
+            "assignedToPosition": null,
+            "icn": "10108V420871"
+        }],
+        "position": [{
+            "assignedByIEN": "C877;1000897",
+            "assignedDateTime": 20150101000000,
+            "ien": "C877;10000000270",
+            "positionId": "00001",
+            "staffName": "USER,PANORAMA",
+            "teamRole": 410,
+            "staffRole": "Registered Nurse"
+        }],
+        "teamDescription": "Primary Care Team #1",
+        "teamDisplayName": "The Kodak Patient Pushers 1",
+        "teamFocus": 201,
+        "teamId": 501,
+        "teamType": 302
+    }]
+}, {
+    "facility": "9E7A",
+    "teams": [{
+        "active": true,
+        "createdByIEN": "9E7A;10008673",
+        "createdDateTime": 20150101000000,
+        "modifiedByIEN": "9E7A;10008833",
+        "modifiedDateTime": 20150101000000,
+        "patients": [{
+            "assignedByIEN": "9E7A;1000897",
+            "assignedDateTime": 20150101000000,
+            "assignedToPosition": "00001",
+            "icn": "10108V429807"
+        }, {
+            "assignedByIEN": "9E7A;10008833",
+            "assignedDateTime": 20150101000000,
+            "assignedToPosition": null,
+            "icn": "10108V420871"
+        }],
+        "position": [{
+            "assignedByIEN": "9E7A;1000897",
+            "assignedDateTime": 20150101000000,
+            "ien": "9E7A;10000000270",
+            "positionId": "00001",
+            "staffName": "USER,PANORAMA",
+            "teamRole": 403,
+            "staffRole": "Child Psychologist"
+        }, {
+            "assignedByIEN": "9E7A;1000897",
+            "assignedDateTime": 20150101000000,
+            "ien": "9E7A;20112",
+            "positionId": "00002",
+            "staffName": "NURSE,ONE",
+            "teamRole": 410,
+            "staffRole": "Nurse Practitioner"
+        }, {
+            "assignedByIEN": "9E7A;1000897",
+            "assignedDateTime": 20150101000000,
+            "ien": "9E7A;10000000016",
+            "positionId": "00003",
+            "staffName": "TDNURSE,ONE",
+            "teamRole": 412,
+            "staffRole": "Licensed Practical Nurse"
+        }, {
+            "positionId": "00004",
+            "teamRole": 403
+        }],
+        "teamDescription": "Primary Care Team #3",
+        "teamDisplayName": "The Panorama Patient Pushers",
+        "teamFocus": 201,
+        "teamId": 501,
+        "teamType": 301
+    }]
+}]

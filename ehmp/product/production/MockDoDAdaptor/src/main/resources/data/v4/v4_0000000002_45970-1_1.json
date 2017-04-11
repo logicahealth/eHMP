@@ -1,0 +1,120 @@
+{
+  "queryComplete": true,
+  "statusList": [
+    {
+      "partner": {
+        "partnerIdentifier": "2.16.840.1.113883.3.42.126.100001.13",
+        "partnerName": "ahlta",
+        "partnerType": "DOD"
+      },
+      "partnerStatus": "SUCCESS",
+      "expectedCount": 1,
+      "receivedCount": 1
+    }
+  ],
+  "dataList": {
+    "demographics": [
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000010260"
+        },
+        "enteredBy": null,
+        "enteredDate": null,
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "52536-0"
+          }
+        ],
+        "facility": null,
+        "addresses": [
+          {
+            "type": "Home Address",
+            "city": "WARMINSTER",
+            "country": null,
+            "county": null,
+            "postalCode": "18974",
+            "state": "Any Town",
+            "street": [
+              "Any Street"
+            ]
+          }
+        ],
+        "branch": [],
+        "birthDate": {
+          "start": "1945-03-09T00:00:00",
+          "end": "1945-03-09T00:00:00"
+        },
+        "deersEligibility": [],
+        "patientId": [
+          {
+            "id": "D1032993229"
+          }
+        ],
+        "enrollmentLocation": null,
+        "name": {
+          "first": "OUTPATIENT",
+          "middle": "ROBERT",
+          "last": "EIGHT",
+          "suffix": null
+        },
+        "fmp": null,
+        "maritalStatus": [
+          {
+            "display": "Married",
+            "primary": true
+          }
+        ],
+        "patientCategory": [
+          {
+            "display": "N11 - United States Navy (USN) Active Duty (AD)",
+            "primary": true
+          }
+        ],
+        "race": [
+          {
+            "display": "White",
+            "primary": true
+          }
+        ],
+        "rank": [
+          {
+            "display": "Lieutenant Commander O4-N",
+            "primary": true
+          }
+        ],
+        "religion": [
+          {
+            "display": "Unknown",
+            "primary": true
+          }
+        ],
+        "sex": [
+          {
+            "display": "M",
+            "primary": true
+          }
+        ],
+        "sponsor": {
+          "branch": [],
+          "rank": [],
+          "ssn": null,
+          "assignedUnit": null
+        },
+        "assignedUnit": {
+          "name": "N4060A     (ECRC FWD SD IRQ)"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,65 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "",
+	"description": "",
+	"type": "object",
+	"required": [
+		"data",
+		"status"
+	],
+	"properties": {
+		"data": {
+			"type": "object",
+			"required": [
+				"items"
+			],
+			"properties": {
+				"items": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"required": [
+							"id",
+							"priority",
+							"title",
+							"details",
+							"type",
+							"dueDate",
+							"doneDate",
+							"interactive"
+						],
+						"properties": {
+							"details": {
+								"type": "null"
+							},
+							"doneDate": {
+								"type": "string"
+							},
+							"dueDate": {
+								"type": "string"
+							},
+							"id": {
+								"type": "string"
+							},
+							"interactive": {
+								"type": "boolean"
+							},
+							"priority": {
+								"type": "integer"
+							},
+							"title": {
+								"type": "string"
+							},
+							"type": {
+								"type": "string"
+							}
+						}
+					}
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

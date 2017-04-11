@@ -1,0 +1,78 @@
+TIU data~Format=5.S~
+28 Aug 2015  12:07 PM   Cache
+^TIU(8925,11532,0)
+823^100295^11540^821^7^^{today-1}.14123^^^^^^A
+^TIU(8925,11532,12)
+{today-1}.1534^991^^991^426^^^^^^426^500
+^TIU(8925,11532,13)
+{today-1}.1533^991^R
+^TIU(8925,11532,14)
+^^^2
+^TIU(8925,11532,15)
+{today-1}.153647^991^1r{!H]Yo`@P&nF^;~^E^0
+^TIU(8925,11532,17)
+
+^TIU(8925,11532,150)
+1J94-ALN
+^TIU(8925,11532,"TEXT",0)
+^^22^22^{today-1}^^
+^TIU(8925,11532,"TEXT",1,0)
+PROBLEM: ANXIETY
+^TIU(8925,11532,"TEXT",2,0)
+
+^TIU(8925,11532,"TEXT",3,0)
+I have read the Initial Physician Assessment and propose the following :
+^TIU(8925,11532,"TEXT",4,0)
+
+^TIU(8925,11532,"TEXT",5,0)
+Select target date for review of problem : 2002
+^TIU(8925,11532,"TEXT",6,0)
+PROBLEM: CHEST PAIN/ANGINA 
+^TIU(8925,11532,"TEXT",7,0)
+
+^TIU(8925,11532,"TEXT",8,0)
+I have read the Initial Physician Assessment and propose the following : 
+^TIU(8925,11532,"TEXT",9,0)
+
+^TIU(8925,11532,"TEXT",10,0)
+Select target date for review of problem: 2002
+^TIU(8925,11532,"TEXT",11,0)
+ 
+^TIU(8925,11532,"TEXT",12,0)
+PROBLEM: DECREASED CARDIAC OUTPUT 
+^TIU(8925,11532,"TEXT",13,0)
+
+^TIU(8925,11532,"TEXT",14,0)
+I have read the Initial Physician Assessment and propose the following :
+^TIU(8925,11532,"TEXT",15,0)
+
+^TIU(8925,11532,"TEXT",16,0)
+Select target date for review of problem: 2002
+^TIU(8925,11532,"TEXT",17,0)
+ 
+^TIU(8925,11532,"TEXT",18,0)
+PROBLEM: SKIN INTEGRITY
+^TIU(8925,11532,"TEXT",19,0)
+
+^TIU(8925,11532,"TEXT",20,0)
+I have read the Initial Physician Assessment and propose the following :
+^TIU(8925,11532,"TEXT",21,0)
+
+^TIU(8925,11532,"TEXT",22,0)
+Select target date for review of problem:Jan, 2010
+^AUPNVSIT(11540,0)
+{today-1}.14123^{today-1}.141619^V^^100295^500^A^542^5^^^^{today-1}.153401^^^^^^^^^426^991^10989
+^AUPNVSIT(11540,150)
+1J94-ALN^0^P
+^AUPNVSIT(11540,800)
+^^^^^^^^^^0^0^0^0^0^0^0^0
+^AUPNVSIT(11540,812)
+^507^19
+^SCE(12565,0)
+{today-1}.14123^100295^542^426^11540^^^2^^10^1^14^^^^^^^^1J94-ALN
+^SCE(12565,"CG")
+1^1
+^SCE(12565,"USER")
+991^{today-1}.153401^991^{today-1}.141619
+
+

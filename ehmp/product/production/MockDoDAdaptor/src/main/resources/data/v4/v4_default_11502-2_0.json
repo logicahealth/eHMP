@@ -1,0 +1,872 @@
+{
+  "queryComplete": true,
+  "statusList": [
+    {
+      "partner": {
+        "partnerIdentifier": "2.16.840.1.113883.3.42.126.100001.13",
+        "partnerName": "ahlta",
+        "partnerType": "DOD"
+      },
+      "partnerStatus": "SUCCESS",
+      "expectedCount": 2,
+      "receivedCount": 2
+    }
+  ],
+  "dataList": {
+    "labChemResults": [
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000001223"
+        },
+        "enteredBy": {
+          "name": "100000059 LARRY, PROVIDER"
+        },
+        "enteredDate": {
+          "start": "2007-06-21T10:26:00",
+          "end": "2007-06-21T10:26:00"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "11502-2"
+          }
+        ],
+        "facility": {
+          "name": "4th Medical Group/0090"
+        },
+        "order": {
+          "accession": {
+            "id": "070621 HE 177"
+          },
+          "collectionDate": {
+            "start": "2007-06-21T14:26:00",
+            "end": "2007-06-21T14:26:00"
+          },
+          "collectionSample": "BLOOD",
+          "date": {
+            "start": "2007-06-21T10:26:00",
+            "end": "2007-06-21T10:26:00"
+          },
+          "id": {
+            "id": "23564645"
+          },
+          "orderNumber": {
+            "id": "070621-00055"
+          },
+          "priority": [
+            {
+              "display": "ROUTINE",
+              "primary": true
+            }
+          ],
+          "provider": {
+            "name": "100000059 LARRY, PROVIDER"
+          },
+          "requestingLocation": {
+            "name": "4th Medical Group"
+          },
+          "specimen": [
+            {
+              "code": null,
+              "display": "BLOOD",
+              "primary": true
+            }
+          ],
+          "status": [],
+          "test": [
+            {
+              "code": "14501560",
+              "display": "CBC with Differential",
+              "primary": true
+            }
+          ]
+        },
+        "results": [
+          {
+            "codeInterpretation": [
+              {
+                "display": "Higher Than Normal",
+                "primary": true
+              }
+            ],
+            "certifiedBy": null,
+            "certifiedDate": {
+              "start": "2007-06-21T10:27:33",
+              "end": "2007-06-21T10:27:33"
+            },
+            "comment": null,
+            "performingLabLocation": {
+              "name": "4th Medical Group/0090"
+            },
+            "status": [
+              {
+                "code": "Final",
+                "display": "Final",
+                "primary": true
+              }
+            ],
+            "test": [
+              {
+                "code": "20215",
+                "display": "Leukocytes, Blood Quantitative",
+                "system": "2.16.840.1.113883.3.42.126.100001.16",
+                "primary": true
+              }
+            ],
+            "codedInterpretation": [
+              {
+                "display": "Higher Than Normal"
+              }
+            ],
+            "referenceRange": "(3.4-9.0)",
+            "result": "25.0",
+            "units": [
+              {
+                "display": "x10(3)/mcL",
+                "primary": true
+              }
+            ]
+          },
+          {
+            "codeInterpretation": [
+              {
+                "display": "Higher Than Normal",
+                "primary": true
+              }
+            ],
+            "certifiedBy": null,
+            "certifiedDate": {
+              "start": "2007-06-21T10:27:33",
+              "end": "2007-06-21T10:27:33"
+            },
+            "comment": null,
+            "performingLabLocation": {
+              "name": "4th Medical Group/0090"
+            },
+            "status": [
+              {
+                "code": "Final",
+                "display": "Final",
+                "primary": true
+              }
+            ],
+            "test": [
+              {
+                "code": "4793",
+                "display": "Erythrocytes, Blood Quantitative Automated Count",
+                "system": "2.16.840.1.113883.3.42.126.100001.16",
+                "primary": true
+              }
+            ],
+            "codedInterpretation": [
+              {
+                "display": "Higher Than Normal"
+              }
+            ],
+            "referenceRange": "(3.91-5.55)",
+            "result": "25.00",
+            "units": [
+              {
+                "display": "x10(6)/mcL",
+                "primary": true
+              }
+            ]
+          },
+          {
+            "codeInterpretation": [],
+            "certifiedBy": null,
+            "certifiedDate": {
+              "start": "2007-06-21T10:27:33",
+              "end": "2007-06-21T10:27:33"
+            },
+            "comment": null,
+            "performingLabLocation": {
+              "name": "4th Medical Group/0090"
+            },
+            "status": [
+              {
+                "code": "Final",
+                "display": "Final",
+                "primary": true
+              }
+            ],
+            "test": [
+              {
+                "code": "4718",
+                "display": "Hemoglobin, Blood Quantitative",
+                "system": "2.16.840.1.113883.3.42.126.100001.16",
+                "primary": true
+              }
+            ],
+            "codedInterpretation": null,
+            "referenceRange": "(12.2-17.0)",
+            "result": "17.0",
+            "units": [
+              {
+                "display": "g/dL",
+                "primary": true
+              }
+            ]
+          },
+          {
+            "codeInterpretation": [
+              {
+                "display": "Lower Than Normal",
+                "primary": true
+              }
+            ],
+            "certifiedBy": null,
+            "certifiedDate": {
+              "start": "2007-06-21T10:27:33",
+              "end": "2007-06-21T10:27:33"
+            },
+            "comment": null,
+            "performingLabLocation": {
+              "name": "4th Medical Group/0090"
+            },
+            "status": [
+              {
+                "code": "Final",
+                "display": "Final",
+                "primary": true
+              }
+            ],
+            "test": [
+              {
+                "code": "8566",
+                "display": "Hematocrit, Blood Quantitative Automated Count",
+                "system": "2.16.840.1.113883.3.42.126.100001.16",
+                "primary": true
+              }
+            ],
+            "codedInterpretation": [
+              {
+                "display": "Lower Than Normal"
+              }
+            ],
+            "referenceRange": "(35.5-49.1)",
+            "result": "30.0",
+            "units": [
+              {
+                "display": "%",
+                "primary": true
+              }
+            ]
+          },
+          {
+            "codeInterpretation": [
+              {
+                "display": "Lower Than Normal",
+                "primary": true
+              }
+            ],
+            "certifiedBy": null,
+            "certifiedDate": {
+              "start": "2007-06-21T10:27:33",
+              "end": "2007-06-21T10:27:33"
+            },
+            "comment": null,
+            "performingLabLocation": {
+              "name": "4th Medical Group/0090"
+            },
+            "status": [
+              {
+                "code": "Final",
+                "display": "Final",
+                "primary": true
+              }
+            ],
+            "test": [
+              {
+                "code": "4791",
+                "display": "Mean Corpuscular Volume, RBC Quantitative Automated Count",
+                "system": "2.16.840.1.113883.3.42.126.100001.16",
+                "primary": true
+              }
+            ],
+            "codedInterpretation": [
+              {
+                "display": "Lower Than Normal"
+              }
+            ],
+            "referenceRange": "(81.7-97.3)",
+            "result": "25.0",
+            "units": [
+              {
+                "display": "fL",
+                "primary": true
+              }
+            ]
+          },
+          {
+            "codeInterpretation": [
+              {
+                "display": "Lower Than Normal",
+                "primary": true
+              }
+            ],
+            "certifiedBy": null,
+            "certifiedDate": {
+              "start": "2007-06-21T10:27:33",
+              "end": "2007-06-21T10:27:33"
+            },
+            "comment": null,
+            "performingLabLocation": {
+              "name": "4th Medical Group/0090"
+            },
+            "status": [
+              {
+                "code": "Final",
+                "display": "Final",
+                "primary": true
+              }
+            ],
+            "test": [
+              {
+                "code": "4789",
+                "display": "Erythrocyte Mean Corpuscular Hemoglobin, RBC Quantitative Automated Count",
+                "system": "2.16.840.1.113883.3.42.126.100001.16",
+                "primary": true
+              }
+            ],
+            "codedInterpretation": [
+              {
+                "display": "Lower Than Normal"
+              }
+            ],
+            "referenceRange": "(27.9-34.3)",
+            "result": "26.0",
+            "units": [
+              {
+                "display": "pg",
+                "primary": true
+              }
+            ]
+          },
+          {
+            "codeInterpretation": [
+              {
+                "display": "Lower Than Normal",
+                "primary": true
+              }
+            ],
+            "certifiedBy": null,
+            "certifiedDate": {
+              "start": "2007-06-21T10:27:33",
+              "end": "2007-06-21T10:27:33"
+            },
+            "comment": null,
+            "performingLabLocation": {
+              "name": "4th Medical Group/0090"
+            },
+            "status": [
+              {
+                "code": "Final",
+                "display": "Final",
+                "primary": true
+              }
+            ],
+            "test": [
+              {
+                "code": "4790",
+                "display": "Erythrocyte Mean Corpuscular Hemoglobin Concentration, RBC Quantitative Automated Count",
+                "system": "2.16.840.1.113883.3.42.126.100001.16",
+                "primary": true
+              }
+            ],
+            "codedInterpretation": [
+              {
+                "display": "Lower Than Normal"
+              }
+            ],
+            "referenceRange": "(33.4-35.8)",
+            "result": "27.0",
+            "units": [
+              {
+                "display": "g/dL",
+                "primary": true
+              }
+            ]
+          },
+          {
+            "codeInterpretation": [
+              {
+                "display": "Higher Than Normal",
+                "primary": true
+              }
+            ],
+            "certifiedBy": null,
+            "certifiedDate": {
+              "start": "2007-06-21T10:27:33",
+              "end": "2007-06-21T10:27:33"
+            },
+            "comment": null,
+            "performingLabLocation": {
+              "name": "4th Medical Group/0090"
+            },
+            "status": [
+              {
+                "code": "Final",
+                "display": "Final",
+                "primary": true
+              }
+            ],
+            "test": [
+              {
+                "code": "4792",
+                "display": "Erythrocyte Distribution Width CV, RBC Quantitative Automated Count",
+                "system": "2.16.840.1.113883.3.42.126.100001.16",
+                "primary": true
+              }
+            ],
+            "codedInterpretation": [
+              {
+                "display": "Higher Than Normal"
+              }
+            ],
+            "referenceRange": "(10.8-13.6)",
+            "result": "29.0",
+            "units": [
+              {
+                "display": "%",
+                "primary": true
+              }
+            ]
+          },
+          {
+            "codeInterpretation": [],
+            "certifiedBy": null,
+            "certifiedDate": {
+              "start": "2007-06-21T10:27:33",
+              "end": "2007-06-21T10:27:33"
+            },
+            "comment": null,
+            "performingLabLocation": {
+              "name": "4th Medical Group/0090"
+            },
+            "status": [
+              {
+                "code": "Final",
+                "display": "Final",
+                "primary": true
+              }
+            ],
+            "test": [
+              {
+                "code": "21061",
+                "display": "Granulocytes/100 Leukocytes, Blood Quantitative Automated Count",
+                "system": "2.16.840.1.113883.3.42.126.100001.16",
+                "primary": true
+              }
+            ],
+            "codedInterpretation": null,
+            "referenceRange": "(40.9-74.9)",
+            "result": "55.0",
+            "units": [
+              {
+                "display": "%",
+                "primary": true
+              }
+            ]
+          },
+          {
+            "codeInterpretation": [
+              {
+                "display": "Higher Than Normal",
+                "primary": true
+              }
+            ],
+            "certifiedBy": null,
+            "certifiedDate": {
+              "start": "2007-06-21T10:27:33",
+              "end": "2007-06-21T10:27:33"
+            },
+            "comment": null,
+            "performingLabLocation": {
+              "name": "4th Medical Group/0090"
+            },
+            "status": [
+              {
+                "code": "Final",
+                "display": "Final",
+                "primary": true
+              }
+            ],
+            "test": [
+              {
+                "code": "4736",
+                "display": "Lymphocytes/100 Leukocytes, Blood Quantitative Automated Count",
+                "system": "2.16.840.1.113883.3.42.126.100001.16",
+                "primary": true
+              }
+            ],
+            "codedInterpretation": [
+              {
+                "display": "Higher Than Normal"
+              }
+            ],
+            "referenceRange": "(16.1-44.7)",
+            "result": "52.0",
+            "units": [
+              {
+                "display": "%",
+                "primary": true
+              }
+            ]
+          },
+          {
+            "codeInterpretation": [
+              {
+                "display": "Higher Than Normal",
+                "primary": true
+              }
+            ],
+            "certifiedBy": null,
+            "certifiedDate": {
+              "start": "2007-06-21T10:27:33",
+              "end": "2007-06-21T10:27:33"
+            },
+            "comment": null,
+            "performingLabLocation": {
+              "name": "4th Medical Group/0090"
+            },
+            "status": [
+              {
+                "code": "Final",
+                "display": "Final",
+                "primary": true
+              }
+            ],
+            "test": [
+              {
+                "code": "4744",
+                "display": "Monocytes/100 Leukocytes, Blood Quantitative Automated Count",
+                "system": "2.16.840.1.113883.3.42.126.100001.16",
+                "primary": true
+              }
+            ],
+            "codedInterpretation": [
+              {
+                "display": "Higher Than Normal"
+              }
+            ],
+            "referenceRange": "(4.3-11.9)",
+            "result": "45.0",
+            "units": [
+              {
+                "display": "%",
+                "primary": true
+              }
+            ]
+          },
+          {
+            "codeInterpretation": [],
+            "certifiedBy": null,
+            "certifiedDate": {
+              "start": "2007-06-21T10:27:33",
+              "end": "2007-06-21T10:27:33"
+            },
+            "comment": null,
+            "performingLabLocation": {
+              "name": "4th Medical Group/0090"
+            },
+            "status": [
+              {
+                "code": "Final",
+                "display": "Final",
+                "primary": true
+              }
+            ],
+            "test": [
+              {
+                "code": "4713",
+                "display": "Eosinophils/100 Leukocytes, Blood Quantitative Automated Count",
+                "system": "2.16.840.1.113883.3.42.126.100001.16",
+                "primary": true
+              }
+            ],
+            "codedInterpretation": null,
+            "referenceRange": "(0.0-6.6)",
+            "result": "2.0",
+            "units": [
+              {
+                "display": "%",
+                "primary": true
+              }
+            ]
+          },
+          {
+            "codeInterpretation": [
+              {
+                "display": "Higher Than Normal",
+                "primary": true
+              }
+            ],
+            "certifiedBy": null,
+            "certifiedDate": {
+              "start": "2007-06-21T10:27:33",
+              "end": "2007-06-21T10:27:33"
+            },
+            "comment": null,
+            "performingLabLocation": {
+              "name": "4th Medical Group/0090"
+            },
+            "status": [
+              {
+                "code": "Final",
+                "display": "Final",
+                "primary": true
+              }
+            ],
+            "test": [
+              {
+                "code": "4705",
+                "display": "Basophils/100 Leukocytes, Blood Quantitative Automated Count",
+                "system": "2.16.840.1.113883.3.42.126.100001.16",
+                "primary": true
+              }
+            ],
+            "codedInterpretation": [
+              {
+                "display": "Higher Than Normal"
+              }
+            ],
+            "referenceRange": "(0.4-1.2)",
+            "result": "2.0",
+            "units": [
+              {
+                "display": "%",
+                "primary": true
+              }
+            ]
+          },
+          {
+            "codeInterpretation": [
+              {
+                "display": "Lower Than Normal",
+                "primary": true
+              }
+            ],
+            "certifiedBy": null,
+            "certifiedDate": {
+              "start": "2007-06-21T10:27:33",
+              "end": "2007-06-21T10:27:33"
+            },
+            "comment": null,
+            "performingLabLocation": {
+              "name": "4th Medical Group/0090"
+            },
+            "status": [
+              {
+                "code": "Final",
+                "display": "Final",
+                "primary": true
+              }
+            ],
+            "test": [
+              {
+                "code": "4779",
+                "display": "Platelets, Blood Quantitative Automated Count",
+                "system": "2.16.840.1.113883.3.42.126.100001.16",
+                "primary": true
+              }
+            ],
+            "codedInterpretation": [
+              {
+                "display": "Lower Than Normal"
+              }
+            ],
+            "referenceRange": "(128-368)",
+            "result": "55",
+            "units": [
+              {
+                "display": "x10(3)/mcL",
+                "primary": true
+              }
+            ]
+          },
+          {
+            "codeInterpretation": [
+              {
+                "display": "Higher Than Normal",
+                "primary": true
+              }
+            ],
+            "certifiedBy": null,
+            "certifiedDate": {
+              "start": "2007-06-21T10:27:33",
+              "end": "2007-06-21T10:27:33"
+            },
+            "comment": null,
+            "performingLabLocation": {
+              "name": "4th Medical Group/0090"
+            },
+            "status": [
+              {
+                "code": "Final",
+                "display": "Final",
+                "primary": true
+              }
+            ],
+            "test": [
+              {
+                "code": "21376",
+                "display": "Platelet Mean Volume, Blood Quantitative Automated",
+                "system": "2.16.840.1.113883.3.42.126.100001.16",
+                "primary": true
+              }
+            ],
+            "codedInterpretation": [
+              {
+                "display": "Higher Than Normal"
+              }
+            ],
+            "referenceRange": "(6.9-10.2)",
+            "result": "55.0",
+            "units": [
+              {
+                "display": "fL",
+                "primary": true
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000001225"
+        },
+        "enteredBy": {
+          "name": "100000059 LARRY, PROVIDER"
+        },
+        "enteredDate": {
+          "start": "2007-06-21T10:25:00",
+          "end": "2007-06-21T10:25:00"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "11502-2"
+          }
+        ],
+        "facility": {
+          "name": "4th Medical Group/0090"
+        },
+        "order": {
+          "accession": {
+            "id": "070621 LC 326"
+          },
+          "collectionDate": {
+            "start": "2007-06-21T14:26:01",
+            "end": "2007-06-21T14:26:01"
+          },
+          "collectionSample": "BLOOD",
+          "date": {
+            "start": "2007-06-21T10:25:00",
+            "end": "2007-06-21T10:25:00"
+          },
+          "id": {
+            "id": "23564646"
+          },
+          "orderNumber": {
+            "id": "070621-00054"
+          },
+          "priority": [
+            {
+              "display": "ROUTINE",
+              "primary": true
+            }
+          ],
+          "provider": {
+            "name": "100000059 LARRY, PROVIDER"
+          },
+          "requestingLocation": {
+            "name": "4th Medical Group"
+          },
+          "specimen": [
+            {
+              "code": null,
+              "display": "PLASMA",
+              "primary": true
+            }
+          ],
+          "status": [],
+          "test": [
+            {
+              "code": "93504",
+              "display": "Ammonia Plasma",
+              "primary": true
+            }
+          ]
+        },
+        "results": [
+          {
+            "codeInterpretation": [
+              {
+                "display": "Lower Than Normal",
+                "primary": true
+              }
+            ],
+            "certifiedBy": null,
+            "certifiedDate": {
+              "start": "2007-06-21T10:27:48",
+              "end": "2007-06-21T10:27:48"
+            },
+            "comment": null,
+            "performingLabLocation": {
+              "name": "4th Medical Group/0090"
+            },
+            "status": [
+              {
+                "code": "Final",
+                "display": "Final",
+                "primary": true
+              }
+            ],
+            "test": [
+              {
+                "code": "44829",
+                "display": "Ammonia, Plasma Quantitative",
+                "system": "2.16.840.1.113883.3.42.126.100001.16",
+                "primary": true
+              }
+            ],
+            "codedInterpretation": [
+              {
+                "display": "Lower Than Normal"
+              }
+            ],
+            "referenceRange": "(19-60)",
+            "result": "5",
+            "units": [
+              {
+                "display": "mcg/dL",
+                "primary": true
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,40 @@
+<div class="row bottom-margin-lg">
+    <div class="col-xs-12 col-sm-6 col-md-7 font-size-18 left-padding-md"><b>{{ taskVariables.specialty }}</b></div>
+        <div class="col-xs-6 col-md-5 text-right font-size-18 right-padding-md">
+            <i class="fa fa-info-circle"></i> {{ taskVariables.orderState }}
+            <br>
+            <div class="text-right font-size-12 right-padding-md">{{ taskVariables.subOrderState }}</div>
+        </div>
+</div>
+
+<div id="task-specific-section"></div>
+
+<div class="bottom-padding-lg">
+    <b>Current Tasks</b>
+    <hr>
+    {{#each currentTasks}}
+    <div class="bottom-padding-sm clearfix">
+        <span class="col-md-1">{{ priority }}</span>
+        <span class="col-md-2">{{ dueDate }}</span>
+        <span class="col-md-8">{{ type }}</span>
+        <i class="col-md-1 fa fa-arrow-circle-right font-size-18 text-right"></i>
+    </div>
+    {{/each}}
+</div>
+
+<div>
+    <b>History of {{ PROCESSNAME }}</b>
+    <hr>
+    {{#each taskHistory}}
+    <div class="row left-padding-xs bottom-margin-sm clearfix">
+        <div class="col-md-2 text-right">
+            <span class="bold-font block-display">{{ providerName }}</span>
+            <span>{{ actionDate }}</span>
+        </div>
+        <div class="col-md-10">
+            <span class="bold-font block-display">{{ actionTitle }}</span>
+            <span>{{ actionComment }}</span>
+        </div>
+    </div>
+    {{/each}}
+</div>

@@ -1,0 +1,48 @@
+{
+  "name": "logstash-forwarder",
+  "description": "Installs and configures logstash-forwarder",
+  "long_description": "# logstash-forwarder\n\n## Description\nCookbook with LWRPs for install and managing [logstash-forwarder](https://github.com/elastic/logstash-forwarder)\n\n## Requirements\n\n### Platforms\n- amazon 2014\n- redhat 6\n- centos 6\n- scientific 6\n- fedora 18, 19\n- debian 7\n- ubuntu >= 12.04\n\n## Attributes\n\n|Attribute|Description|Type|Default|\n|---------|-----------|----|-------|\n|node['logstash-forwarder']['package_name']|logstash-forwarder package name|String|logstash-forwarder|\n|node['logstash-forwarder']['service_name']|logstash-forwarder service name|String|logstash-forwarder|\n|node['logstash-forwarder']['logstash_servers']|List of servers, which will be used as downstream.|Array|['localhost:5043']|\n|node['logstash-forwarder']['timeout']|Network timeout in seconds. This parameter will be passed to config file.|Integer|15|\n|node['logstash-forwarder']['config_path']|The path to the config file|String|/etc/logstash-forwarder.conf|\n|node['logstash-forwarder']['version']|logstash-forwarder package version|String|0.4.0|\n|node['logstash-forwarder']['ssl_ca']|The path to trusted ssl ca certificate. Downstream servers must be signed by this cetificate.|String|platform dependent|\n|node['logstash-forwarder']['enable_ssl']|Whether to enable SSL or not.|Boolean|false|\n|node['logstash-forwarder']['ssl_cert']|The path to ssl certificate. Required when enable_ssl is `true`.|String|''|\n|node['logstash-forwarder']['ssl_key']|The path to ssl key. Valid when enable_ssl is `true`.|String|''|\n|node['logstash-forwarder']['package_url']|Url from which to load the logstash-forwarder package.|String|platform dependent|\n\n## Resources/Providers\n\n### log_forward\nAdds information about wich files must be forwarded to remote logstash server to config file.\n\n#### Attributes\n\n|Attribute|Description|Type|\n|---------|-----------|----|\n|paths|List of files, which will be forwarded to remote logstash server|Array|\n|fields|A dictionary of fields to annotate on each event.|Hash|\n\n## Examples\nYou may see examples in fixture cookbook: [test/fixtures/lwrp_test/recipes/default.rb](test/fixtures/lwrp_test/recipes/default.rb)\n\n## Authors\n- Author:: Pavel Yudin (pyudin@parallels.com)\n",
+  "maintainer": "Pavel Yudin",
+  "maintainer_email": "pyudin@parallels.com",
+  "license": "Apache 2.0",
+  "platforms": {
+    "amazon": ">= 0.0.0",
+    "redhat": ">= 0.0.0",
+    "centos": ">= 0.0.0",
+    "scientific": ">= 0.0.0",
+    "fedora": ">= 0.0.0",
+    "debian": ">= 0.0.0",
+    "ubuntu": ">= 0.0.0"
+  },
+  "dependencies": {
+    "apt": ">= 0.0.0",
+    "yum": ">= 0.0.0"
+  },
+  "recommendations": {
+
+  },
+  "suggestions": {
+
+  },
+  "conflicting": {
+
+  },
+  "providing": {
+
+  },
+  "replacing": {
+
+  },
+  "attributes": {
+
+  },
+  "groupings": {
+
+  },
+  "recipes": {
+
+  },
+  "version": "0.2.4",
+  "source_url": "",
+  "issues_url": ""
+}

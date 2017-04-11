@@ -1,0 +1,29 @@
+<div class="list-group-item-text row cursor-hand">
+	<div class="col-md-6 no-padding-right patientDisplayName">
+		<span class="sr-only">. Patient record, name</span>
+		{{formatName fullName ',' ', '}}
+	</div>
+	<div class="col-md-2 no-padding-left ssn">
+		<span class="sr-only">. Social security number</span>
+		{{#if sensitive}}
+			{{ssn}}
+		{{else}}
+			{{formatSSN ssn}}
+		{{/if}}
+	</div>
+	<div class="col-md-2 no-padding dob">
+		<span class="sr-only">. Date of birth</span>
+		{{#if sensitive}}
+			{{birthDate}}
+		{{else}}
+			{{formatDate birthDate "MM/DD/YYYY"}}
+			<span class="sr-only">. Age</span>
+			({{getAge birthDate}}y)
+		{{/if}}
+	</div>
+	<div class="col-md-2">
+		<span class="sr-only">. Gender</span>
+		{{genderName}}
+	</div>
+	<span class="sr-only">Press enter to select this patient and then press ALT + K to view patient detail. To search for a new patient press ALT + E. To filter by My CPRS, Clinics, and Wards press ALT + M</span>
+</div>

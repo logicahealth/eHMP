@@ -1,0 +1,22 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "Get the current user session",
+	"description": "",
+	"type": "object",
+	"required": [
+		"error",
+		"message",
+		"status"
+	],
+	"properties": {
+		"error": {
+			"type": "string"
+		},
+		"message": {
+			"type": "string"
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

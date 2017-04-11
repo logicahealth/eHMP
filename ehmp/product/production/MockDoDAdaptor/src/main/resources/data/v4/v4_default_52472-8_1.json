@@ -1,0 +1,243 @@
+{
+  "queryComplete": true,
+  "statusList": [
+    {
+      "partner": {
+        "partnerIdentifier": "2.16.840.1.113883.3.42.126.100001.13",
+        "partnerName": "ahlta",
+        "partnerType": "DOD"
+      },
+      "partnerStatus": "SUCCESS",
+      "expectedCount": 1,
+      "receivedCount": 1
+    }
+  ],
+  "dataList": {
+    "allergies": [
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000001145"
+        },
+        "enteredBy": {
+          "name": "MIDTIER, GLDTE ONE"
+        },
+        "enteredDate": {
+          "start": "2013-10-25T18:55:11",
+          "end": "2013-10-25T18:55:11"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "48765-2"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL/0056"
+        },
+        "allergen": [
+          {
+            "code": "11681018",
+            "display": "ALCOHOL",
+            "system": "2.16.840.1.113883.3.42.127.100001.209",
+            "primary": true
+          }
+        ],
+        "comment": null,
+        "onsetDate": null,
+        "reactions": [
+          {
+            "reaction": [
+              {
+                "display": "Unknown",
+                "primary": true
+              }
+            ],
+            "comment": null
+          }
+        ],
+        "sourceOfInfo": [],
+        "type": [
+          {
+            "display": "Drug Allergy",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000001146"
+        },
+        "enteredBy": {
+          "name": "MIDTIER, GLDTE ONE"
+        },
+        "enteredDate": {
+          "start": "2013-10-25T18:55:11",
+          "end": "2013-10-25T18:55:11"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "48765-2"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL/0056"
+        },
+        "allergen": [
+          {
+            "code": "2475",
+            "display": "ALCLOMETASONE DIPROPIONATE",
+            "system": "2.16.840.1.113883.3.42.127.100001.209",
+            "primary": true
+          }
+        ],
+        "comment": null,
+        "onsetDate": null,
+        "reactions": [
+          {
+            "reaction": [
+              {
+                "display": "Unknown",
+                "primary": true
+              }
+            ],
+            "comment": null
+          }
+        ],
+        "sourceOfInfo": [],
+        "type": [
+          {
+            "display": "Drug Allergy",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000001147"
+        },
+        "enteredBy": {
+          "name": "MIDTIER, GLDTE ONE"
+        },
+        "enteredDate": {
+          "start": "2013-10-25T18:55:11",
+          "end": "2013-10-25T18:55:11"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "48765-2"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL/0056"
+        },
+        "allergen": [
+          {
+            "code": "1037330000",
+            "display": "ALCAFTADINE",
+            "system": "2.16.840.1.113883.3.42.127.100001.209",
+            "primary": true
+          }
+        ],
+        "comment": null,
+        "onsetDate": null,
+        "reactions": [
+          {
+            "reaction": [
+              {
+                "display": "Unknown",
+                "primary": true
+              }
+            ],
+            "comment": null
+          }
+        ],
+        "sourceOfInfo": [],
+        "type": [
+          {
+            "display": "Drug Allergy",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "va",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.10002.100001.8.22200"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000001148"
+        },
+        "enteredBy": null,
+        "enteredDate": null,
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "48765-2"
+          }
+        ],
+        "facility": {
+          "name": "EL PASO VA HCS"
+        },
+        "allergen": [
+          {
+            "display": "Not Assessed",
+            "primary": true
+          }
+        ],
+        "comment": null,
+        "onsetDate": null,
+        "reactions": [
+          {
+            "reaction": [
+              {
+                "display": null,
+                "primary": true
+              }
+            ],
+            "comment": null
+          }
+        ],
+        "sourceOfInfo": [],
+        "type": []
+      }
+    ]
+  }
+}

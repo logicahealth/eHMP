@@ -1,0 +1,292 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "",
+	"description": "",
+	"type": "object",
+	"required": [
+		"data",
+		"status"
+	],
+	"properties": {
+		"data": {
+			"type": "object",
+			"required": [
+				"_id",
+				"userDefinedScreens",
+				"userScreensConfig",
+				"userDefinedFilters",
+				"userDefinedGraphs"
+			],
+			"properties": {
+				"_id": {
+					"type": "string"
+				},
+				"userDefinedFilters": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"required": [
+							"applets",
+							"id"
+						],
+						"properties": {
+							"applets": {
+								"type": "array",
+								"items": {
+									"type": "object",
+									"required": [
+										"filters",
+										"instanceId"
+									],
+									"properties": {
+										"filters": {
+											"type": "array",
+											"items": {
+												"type": "string"
+											}
+										},
+										"instanceId": {
+											"type": "string"
+										}
+									}
+								}
+							},
+							"id": {
+								"type": "string"
+							}
+						}
+					}
+				},
+				"userDefinedGraphs": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"required": [
+							"applets",
+							"id"
+						],
+						"properties": {
+							"applets": {
+								"type": "array",
+								"items": {
+									"type": "object",
+									"required": [
+										"graphs",
+										"instanceId"
+									],
+									"properties": {
+										"graphs": {
+											"type": "array",
+											"items": {
+												"type": "object",
+												"required": [
+													"graphType",
+													"typeName"
+												],
+												"properties": {
+													"graphType": {
+														"type": "string"
+													},
+													"typeName": {
+														"type": "string"
+													}
+												}
+											}
+										},
+										"instanceId": {
+											"type": "string"
+										}
+									}
+								}
+							},
+							"id": {
+								"type": "string"
+							}
+						}
+					}
+				},
+				"userDefinedScreens": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"required": [
+							"appLeft",
+							"appletHeader",
+							"applets",
+							"contentRegionLayout",
+							"id",
+							"userDefinedScreen"
+						],
+						"properties": {
+							"appLeft": {
+								"type": "string"
+							},
+							"appletHeader": {
+								"type": "string"
+							},
+							"applets": {
+								"type": "array",
+								"items": {
+									"type": "object",
+									"required": [
+										"dataCol",
+										"dataMaxSizeX",
+										"dataMaxSizeY",
+										"dataMinSizeX",
+										"dataMinSizeY",
+										"dataRow",
+										"dataSizeX",
+										"dataSizeY",
+										"filterName",
+										"id",
+										"instanceId",
+										"region",
+										"showInUDWSelection",
+										"title",
+										"viewType"
+									],
+									"properties": {
+										"dataCol": {
+											"type": "string"
+										},
+										"dataMaxSizeX": {
+											"type": "string"
+										},
+										"dataMaxSizeY": {
+											"type": "string"
+										},
+										"dataMinSizeX": {
+											"type": "string"
+										},
+										"dataMinSizeY": {
+											"type": "string"
+										},
+										"dataRow": {
+											"type": "string"
+										},
+										"dataSizeX": {
+											"type": "string"
+										},
+										"dataSizeY": {
+											"type": "string"
+										},
+										"filterName": {
+											"type": "string"
+										},
+										"id": {
+											"type": "string"
+										},
+										"instanceId": {
+											"type": "string"
+										},
+										"maximizeScreen": {
+											"type": "string"
+										},
+										"region": {
+											"type": "string"
+										},
+										"requiredPermissions": {
+											"type": "array",
+											"items": {
+												"type": "string"
+											}
+										},
+										"showInUDWSelection": {
+											"type": "boolean"
+										},
+										"title": {
+											"type": "string"
+										},
+										"viewType": {
+											"type": "string"
+										}
+									}
+								}
+							},
+							"contentRegionLayout": {
+								"type": "string"
+							},
+							"id": {
+								"type": "string"
+							},
+							"userDefinedScreen": {
+								"type": "boolean"
+							}
+						}
+					}
+				},
+				"userScreensConfig": {
+					"type": "object",
+					"required": [
+						"screens"
+					],
+					"properties": {
+						"screens": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"required": [
+									"id",
+									"predefined",
+									"routeName",
+									"screenId",
+									"title"
+								],
+								"properties": {
+									"addNavigationTab": {
+										"type": "boolean"
+									},
+									"author": {
+										"type": "string"
+									},
+									"defaultScreen": {
+										"type": "boolean"
+									},
+									"description": {
+										"type": "string"
+									},
+									"fileName": {
+										"type": "string"
+									},
+									"finalID": {
+										"type": "string"
+									},
+									"finalTitle": {
+										"type": "string"
+									},
+									"hasCustomize": {
+										"type": "boolean"
+									},
+									"id": {
+										"type": "string"
+									},
+									"predefined": {
+										"type": "boolean"
+									},
+									"requiredPermissions": {
+										"type": "array",
+										"items": {
+											"type": "string"
+										}
+									},
+									"routeName": {
+										"type": "string"
+									},
+									"screenId": {
+										"type": "integer"
+									},
+									"title": {
+										"type": "string"
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

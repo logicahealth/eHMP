@@ -1,0 +1,49 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "",
+	"description": "",
+	"type": "object",
+	"required": [
+		"data",
+		"status"
+	],
+	"properties": {
+		"data": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"required": [
+					"siteKey",
+					"facilityCode",
+					"isPrimary",
+					"facilityName",
+					"hsReport",
+					"reportID"
+				],
+				"properties": {
+					"facilityCode": {
+						"type": "string"
+					},
+					"facilityName": {
+						"type": "string"
+					},
+					"hsReport": {
+						"type": "string"
+					},
+					"isPrimary": {
+						"type": "boolean"
+					},
+					"reportID": {
+						"type": "string"
+					},
+					"siteKey": {
+						"type": "string"
+					}
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

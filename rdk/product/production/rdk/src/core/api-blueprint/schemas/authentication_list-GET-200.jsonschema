@@ -1,0 +1,45 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "Return the list of vistas available",
+	"description": "Is a readonly resource that returns an array.",
+	"type": "object",
+	"required": [
+		"data",
+		"status"
+	],
+	"properties": {
+		"data": {
+			"type": "object",
+			"required": [
+				"items"
+			],
+			"properties": {
+				"items": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"required": [
+							"name",
+							"division",
+							"siteCode"
+						],
+						"properties": {
+							"division": {
+								"type": "string"
+							},
+							"name": {
+								"type": "string"
+							},
+							"siteCode": {
+								"type": "string"
+							}
+						}
+					}
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

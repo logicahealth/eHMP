@@ -1,0 +1,287 @@
+{
+  "queryComplete": true,
+  "statusList": [
+    {
+      "partner": {
+        "partnerIdentifier": "2.16.840.1.113883.3.42.126.100001.13",
+        "partnerName": "ahlta",
+        "partnerType": "DOD"
+      },
+      "partnerStatus": "SUCCESS",
+      "expectedCount": 4,
+      "receivedCount": 4
+    }
+  ],
+  "dataList": {
+    "allergies": [
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000001"
+        },
+        "enteredBy": {
+          "name": "BHIE, USERONE"
+        },
+        "enteredDate": {
+          "start": "2013-10-07T15:44:46",
+          "end": "2013-10-07T15:44:46"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "48765-2"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL/0056"
+        },
+        "allergen": [
+          {
+            "code": "33608000",
+            "display": "NUT TX IMP.DIG.FXN,SOY LACFREE {Ingredient}",
+            "system": "2.16.840.1.113883.3.42.127.100001.209",
+            "primary": true
+          }
+        ],
+        "comment": "testing by BHIEONE",
+        "onsetDate": {
+          "start": "2013-10-07T04:00:00",
+          "end": "2013-10-07T04:00:00"
+        },
+        "reactions": [
+          {
+            "reaction": [
+              {
+                "display": "Skin irritation\nSkin Lesion",
+                "primary": true
+              }
+            ],
+            "comment": null
+          }
+        ],
+        "sourceOfInfo": [
+          {
+            "display": "Patient",
+            "primary": true
+          }
+        ],
+        "type": [
+          {
+            "display": "Drug Allergy",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000002"
+        },
+        "enteredBy": {
+          "name": "BHIE, USERONE"
+        },
+        "enteredDate": {
+          "start": "2013-10-07T15:44:11",
+          "end": "2013-10-07T15:44:11"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "48765-2"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL/0056"
+        },
+        "allergen": [
+          {
+            "code": "14665636",
+            "display": "PEANUT BUTTER FLAVOR (FLAVORING AGENT)",
+            "system": "2.16.840.1.113883.3.42.127.100001.209",
+            "primary": true
+          }
+        ],
+        "comment": "testing by Provider BHIEONE",
+        "onsetDate": {
+          "start": "2013-10-07T04:00:00",
+          "end": "2013-10-07T04:00:00"
+        },
+        "reactions": [
+          {
+            "reaction": [
+              {
+                "display": "Nausea",
+                "primary": true
+              }
+            ],
+            "comment": null
+          }
+        ],
+        "sourceOfInfo": [
+          {
+            "display": "Patient",
+            "primary": true
+          }
+        ],
+        "type": [
+          {
+            "display": "Drug Allergy",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000003"
+        },
+        "enteredBy": {
+          "name": "BHIE, USERONE"
+        },
+        "enteredDate": {
+          "start": "2014-01-14T21:00:17",
+          "end": "2014-01-14T21:00:17"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "48765-2"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL/0056"
+        },
+        "allergen": [
+          {
+            "code": "29000",
+            "display": "Iodine Containing Agents",
+            "system": "2.16.840.1.113883.3.42.127.100001.209",
+            "primary": true
+          }
+        ],
+        "comment": "This is a allergy comment test",
+        "onsetDate": {
+          "start": "2014-01-14T05:00:00",
+          "end": "2014-01-14T05:00:00"
+        },
+        "reactions": [
+          {
+            "reaction": [
+              {
+                "display": "Rash",
+                "primary": true
+              }
+            ],
+            "comment": null
+          }
+        ],
+        "sourceOfInfo": [
+          {
+            "display": "Patient",
+            "primary": true
+          }
+        ],
+        "type": [
+          {
+            "display": "Drug Allergy",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000004"
+        },
+        "enteredBy": {
+          "name": "BHIE, USERONE"
+        },
+        "enteredDate": {
+          "start": "2013-10-07T15:43:32",
+          "end": "2013-10-07T15:43:32"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "48765-2"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL/0056"
+        },
+        "allergen": [
+          {
+            "code": "3008",
+            "display": "Aspirin",
+            "system": "2.16.840.1.113883.3.42.127.100001.209",
+            "primary": true
+          }
+        ],
+        "comment": null,
+        "onsetDate": {
+          "start": "2013-10-07T04:00:00",
+          "end": "2013-10-07T04:00:00"
+        },
+        "reactions": [
+          {
+            "reaction": [
+              {
+                "display": "Cough after exercise\nCough\nCough at rest",
+                "primary": true
+              }
+            ],
+            "comment": null
+          }
+        ],
+        "sourceOfInfo": [
+          {
+            "display": "Relative",
+            "primary": true
+          }
+        ],
+        "type": [
+          {
+            "display": "Drug Allergy",
+            "primary": true
+          }
+        ]
+      }
+    ]
+  }
+}

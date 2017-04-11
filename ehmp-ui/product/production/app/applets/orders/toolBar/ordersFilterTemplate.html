@@ -1,0 +1,9 @@
+<form>
+    <label for="{{instanceId}}-type-options" class="color-grey-darkest bottom-margin-no">Order Type:</label>
+    <select id="{{instanceId}}-type-options" title="Use up and down arrows to view options and then press enter to select.">
+        {{#each item}} {{#if show}}
+        <option value="{{displayGroup}}">{{mixedName}}</option>
+        {{/if}} {{/each}}
+    </select>
+    <button type="submit" class="sr-only" disabled="">Submit</button>
+</form>

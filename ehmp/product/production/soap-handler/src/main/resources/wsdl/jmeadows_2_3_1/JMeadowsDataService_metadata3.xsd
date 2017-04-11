@@ -1,0 +1,82 @@
+<!-- Published by JAX-WS RI (http://jax-ws.java.net). RI's version is Metro/2.3.1-b419 (branches/2.3.1.x-7937; 2014-08-04T08:11:03+0000) JAXWS-RI/2.2.10-b140803.1500 JAXWS-API/2.2.11 JAXB-RI/2.2.10-b140802.1033 JAXB-API/2.2.12-b140109.1041 svn-revision#unknown. --><xs:schema xmlns:tns="http://webservice.bhie.domain.ext/" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://webservice.bhie.domain.ext/" version="1.0">
+  <xs:complexType name="siteStatusV4">
+    <xs:sequence>
+      <xs:element name="expectedCount" type="xs:int"/>
+      <xs:element minOccurs="0" name="partner" type="tns:partnerV4"/>
+      <xs:element minOccurs="0" name="partnerStatus" type="xs:string"/>
+      <xs:element name="receivedCount" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="partnerV4">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="partnerIdentifier" type="xs:string"/>
+      <xs:element minOccurs="0" name="partnerName" type="xs:string"/>
+      <xs:element minOccurs="0" name="partnerSubIdentifier" type="xs:string"/>
+      <xs:element minOccurs="0" name="partnerSubIdentifierName" type="xs:string"/>
+      <xs:element minOccurs="0" name="partnerType" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="narrativeV4">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="narrativeAssigningAuthorityIdentifier" type="xs:string"/>
+      <xs:element minOccurs="0" name="narrativeHomeCommunityIdentifier" type="xs:string"/>
+      <xs:element minOccurs="0" name="narrativeIdentifier" type="xs:string"/>
+      <xs:element minOccurs="0" name="narrativeText" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="documentInfoV4">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="documentPatient" type="tns:patientV4"/>
+      <xs:element minOccurs="0" name="documentPatientEmergencyContact" type="xs:string"/>
+      <xs:element minOccurs="0" name="documentPatientNok" type="xs:string"/>
+      <xs:element minOccurs="0" name="documentPerformer" type="tns:performerV4"/>
+      <xs:element maxOccurs="99999" minOccurs="0" name="documentSource" nillable="true" type="tns:sourceV4"/>
+      <xs:element minOccurs="0" name="documentTitle" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="patientV4">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="address" type="xs:string"/>
+      <xs:element minOccurs="0" name="dob" type="xs:string"/>
+      <xs:element minOccurs="0" name="gender" type="xs:string"/>
+      <xs:element minOccurs="0" name="genderCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="language" type="xs:string"/>
+      <xs:element minOccurs="0" name="languageCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="maritalStatus" type="xs:string"/>
+      <xs:element minOccurs="0" name="maritalStatusCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="name" type="xs:string"/>
+      <xs:element minOccurs="0" name="patientId" type="xs:string"/>
+      <xs:element minOccurs="0" name="phone" type="xs:string"/>
+      <xs:element minOccurs="0" name="providerOrg" type="xs:string"/>
+      <xs:element minOccurs="0" name="race" type="xs:string"/>
+      <xs:element minOccurs="0" name="religion" type="xs:string"/>
+      <xs:element minOccurs="0" name="religionCode" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="performerV4">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="date" type="xs:string"/>
+      <xs:element minOccurs="0" name="providerName" type="xs:string"/>
+      <xs:element minOccurs="0" name="providerOrgName" type="xs:string"/>
+      <xs:element minOccurs="0" name="providerRole" type="xs:string"/>
+      <xs:element minOccurs="0" name="providerTaxonomy" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="sourceV4">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="custodianOrgAddress" type="xs:string"/>
+      <xs:element minOccurs="0" name="custodianOrgName" type="xs:string"/>
+      <xs:element minOccurs="0" name="custodianOrgPhone" type="xs:string"/>
+      <xs:element minOccurs="0" name="representedOrgAddress" type="xs:string"/>
+      <xs:element minOccurs="0" name="representedOrgName" type="xs:string"/>
+      <xs:element minOccurs="0" name="representedOrgPhone" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="noteImage">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="contentDisposition" type="xs:string"/>
+      <xs:element minOccurs="0" name="contentType" type="xs:string"/>
+      <xs:element minOccurs="0" name="noteBytes" type="xs:base64Binary"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

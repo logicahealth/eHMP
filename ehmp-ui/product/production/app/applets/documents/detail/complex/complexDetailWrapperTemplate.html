@@ -1,0 +1,251 @@
+<div class="document-detail">
+	<div class="row">
+		<div class="col-xs-2">
+			<p class="text-right all-margin-no" data-detail-label="facility">
+				<strong><span class="color-grey-darker">Facility</span></strong>
+			</p>
+		</div>
+		<div class="col-xs-8">
+			<p data-detail="facility" class="all-margin-no">
+				<strong>{{facilityName}}</strong>
+			</p>
+		</div>
+	</div>
+	<div class="row">
+	{{#if interdisciplinaryBool}}
+		<div class="col-xs-2">
+			<p class="text-right all-margin-no" data-detail-label="author">
+				<strong><span class="color-grey-darker">Author</span></strong>
+			</p>
+		</div>
+		<div class="col-xs-8">
+			<p data-detail="author" class="all-margin-no">
+				<strong>{{authorDisplayName}}</strong>
+			</p>
+		</div>
+	{{else}}
+		<div class="col-xs-2">
+			<p class="text-right all-margin-no" data-detail-label="type">
+				<strong><span class="color-grey-darker">Type</span></strong>
+			</p>
+		</div>
+		<div class="col-xs-8">
+			<p data-detail="type" class="all-margin-no">
+				<strong>{{kind}}</strong>
+			</p>
+		</div>
+	{{/if}}
+	</div>
+	<div class="row">
+		<div class="col-xs-2">
+			<p class="text-right all-margin-no" data-detail-label="status">
+				<strong><span class="color-grey-darker">Status</span></strong>
+			</p>
+		</div>
+		<div class="col-xs-8">
+			<p data-detail="status" class="{{statusClass}} all-margin-no">
+				<strong>{{statusName}}</strong>
+			</p>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-2">
+			<p class="text-right all-margin-no" data-detail-label="date-time">
+				<strong><span class="color-grey-darker">Date/Time</span></strong>
+			</p>
+		</div>
+		<div class="col-xs-8">
+			<p data-detail="date-time" class="all-margin-no">
+				<strong>{{dateTimeDisplay}}</strong>
+			</p>
+		</div>
+	</div>
+	{{#if surgeryBool}}
+	<div class="row">
+		<div class="col-xs-2">
+			<p class="text-right all-margin-no" data-detail-label="providers">
+				<strong><span class="color-grey-darker">Providers</span></strong>
+			</p>
+		</div>
+		<div class="col-xs-8">
+			<p data-detail="providers" class="all-margin-no">
+				<strong>
+					{{#each providers}}
+						{{providerDisplayName}}<br />
+					{{/each}}
+				</strong>
+			</p>
+		</div>
+	</div>
+	{{/if}}
+	{{#if imagingBool}}
+		{{#if providers}}
+		<div class="row">
+			<div class="col-xs-2">
+				<p class="text-right all-margin-no" data-detail-label="providers">
+					<strong><span class="color-grey-darker">Providers</span></strong>
+				</p>
+			</div>
+			<div class="col-xs-8">
+				<p data-detail="providers" class="all-margin-no">
+					<strong>
+						{{#each providers}}
+							{{providerDisplayName}}<br />
+						{{/each}}
+					</strong>
+				</p>
+			</div>
+		</div>
+		{{/if}}
+	{{/if}}
+	{{#if orderUid}}
+		<h4 class="left-padding-sm">Order Information</h4>
+		{{#if service}}
+			<div class="row">
+				<div class="col-xs-8">
+					<div class="col-xs-4">
+						<p class="text-right all-margin-no">
+							<span class="color-grey-darker">To Service</span>
+						</p>
+					</div>
+					<div class="col-xs-8">
+						<p class="all-margin-no">{{service}}</p>
+					</div>
+				</div>
+			</div>
+		{{/if}}
+		{{#if fromService}}
+			<div class="row">
+				<div class="col-xs-8">
+					<div class="col-xs-4">
+						<p class="text-right all-margin-no">
+							<span class="color-grey-darker">From Service</span>
+						</p>
+					</div>
+					<div class="col-xs-8">
+						<p class="all-margin-no">{{fromService}}</p>
+					</div>
+				</div>
+			</div>
+		{{/if}}
+		{{#if providerName}}
+			<div class="row">
+				<div class="col-xs-8">
+					<div class="col-xs-4">
+						<p class="text-right all-margin-no">
+							<span class="color-grey-darker">Requesting Provider</span>
+						</p>
+					</div>
+					<div class="col-xs-8">
+						<p class="all-margin-no">{{providerName}}</p>
+					</div>
+				</div>
+			</div>
+		{{/if}}
+		{{#if place}}
+			<div class="row">
+				<div class="col-xs-8">
+					<div class="col-xs-4">
+						<p class="text-right all-margin-no">
+							<span class="color-grey-darker">Place</span>
+						</p>
+					</div>
+					<div class="col-xs-8">
+						<p class="all-margin-no">{{place}}</p>
+					</div>
+				</div>
+			</div>
+		{{/if}}
+		{{#if urgency}}
+			<div class="row">
+				<div class="col-xs-8">
+					<div class="col-xs-4">
+						<p class="text-right all-margin-no">
+							<span class="color-grey-darker">Urgency</span>
+						</p>
+					</div>
+					<div class="col-xs-8">
+						<p class="all-margin-no">{{urgency}}</p>
+					</div>
+				</div>
+			</div>
+		{{/if}}
+		{{#if orderName}}
+			<div class="row">
+				<div class="col-xs-8">
+					<div class="col-xs-4">
+						<p class="text-right all-margin-no">
+							<span class="color-grey-darker">Orderable Item</span>
+						</p>
+					</div>
+					<div class="col-xs-8">
+						<p class="all-margin-no">{{orderName}}</p>
+					</div>
+				</div>
+			</div>
+		{{/if}}
+		{{#if consultProcedure}}
+			<div class="row">
+				<div class="col-xs-8">
+					<div class="col-xs-4">
+						<p class="text-right color-grey-darker all-margin-no">Procedure</p>
+					</div>
+					<div class="col-xs-8">
+						<p class="all-margin-no">{{consultProcedure}}</p>
+					</div>
+				</div>
+			</div>
+		{{/if}}
+		{{#if reason}}
+			<div class="row">
+				<div class="col-xs-8">
+					<div class="col-xs-4">
+						<p class="text-right color-grey-darker all-margin-no">Reason</p>
+					</div>
+					<div class="col-xs-8">
+						<p class="all-margin-no">{{reason}}</p>
+					</div>
+				</div>
+			</div>
+		{{/if}}
+		{{#if resultsTitle}}
+			<div class="row">
+				<div class="col-xs-8">
+					<div class="col-xs-4">
+						<p class="text-right color-grey-darker all-margin-no">Local Title</p>
+					</div>
+					<div class="col-xs-8">
+						<p class="all-margin-no">{{resultsTitle}}</p>
+					</div>
+				</div>
+			</div>
+		{{/if}}
+	{{/if}}
+	{{#if content}}
+		<pre class="font-size-12 top-margin-sm">{{content}}</pre>
+	{{/if}}
+
+
+	<div class="document-detail-addenda-region"></div>
+
+	<div class="results-region"></div>
+
+	<div class="children-region"></div>
+
+	{{#if activity}}
+	<h5>Activity</h5>
+	{{#each activity}}
+		<ul>
+		    <li>{{name}}</li>
+		    <li class="list-unstyled left-margin-sm">
+		    	<span>Date/Time</span>
+		    	{{formatDate dateTime "MM/DD/YYYY - HH:mm"}}
+		    </li>
+		    <li class="list-unstyled left-margin-sm">
+		    	<span>Responsible</span>
+		    	{{responsible}}
+		    </li>
+		</ul>
+	{{/each}}
+	{{/if}}
+</div>

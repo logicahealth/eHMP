@@ -1,0 +1,18 @@
+appconfig.thread.timeout.ms = 90000
+appconfig.thread.maxPoolSize = 10
+appconfig.agency.va = VA
+appconfig.log4j.props = log4j-debug.xml
+
+# General service request timeout setting in milliseconds
+appconfig.request.timeout.ms = 470000
+
+# General service connection timeout setting in milliseconds
+appconfig.connection.timeout.ms = 30000
+
+appconfig.vler.dq.url = <%= node[:mocks][:vler_doc_query_url]%>
+appconfig.vler.dr.url = <%= node[:mocks][:vler_doc_retrieve_url]%>
+#vler.pd.url & vler.pa.url configs should be ignored
+#appconfig.vler.pd.url = http://nhiapp-sqa1.domain/NHINAdapterGatewayPatientDiscovery/EntityPatientDiscovery?wsdl
+#appconfig.vler.pa.url = http://nhiapp-sqa1.domain/NHINAdapterGatewayPatientAnnounce/AnnouncePatientService
+appconfig.datasource = text//var/tmp/vds-sql.txt
+

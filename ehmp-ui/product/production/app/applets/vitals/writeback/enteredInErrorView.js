@@ -1,0 +1,347 @@
+define([
+    'backbone',
+    'marionette',
+    'jquery',
+    'handlebars',
+    'app/applets/vitals/writeback/writebackUtils'
+    ], function (Backbone, Marionette, $, Handlebars, WritebackUtils) {
+    "use strict";
+
+    var EnteredInErrorView = {
+        createAndShowEieView: function (vitalsCollection, title, checkedVital) {
+            var formModel = new Backbone.Model();
+            var site = ADK.UserService.getUserSession().get('site');
+            formModel.set('listOfVitals', WritebackUtils.buildEnteredInErrorVitalCollection(vitalsCollection, checkedVital, site));
+            var disableReasonField = EnteredInErrorView.shouldDisableReasonField(formModel.get('listOfVitals'));
+            var workflowOptions = {
+                title: 'Vitals - Entered in Error ' + title,
+                showProgress: false,
+                steps: [{
+                    view: EnteredInErrorView.buildFormView(disableReasonField),
+                    viewModel: formModel,
+                    stepTitle: 'Step 1'
+                }],
+                keyboard: false,
+                size: 'small'
+            };
+
+            var workflowController = new ADK.UI.Workflow(workflowOptions);
+            workflowController.show();
+            ADK.utils.writebackUtils.applyModalCloseHandler(workflowController);
+        },
+        shouldDisableReasonField: function(vitalsCollection){
+            return _.isUndefined(vitalsCollection.findWhere({itemValue: true}));
+        },
+        buildFormView: function (disableReasonField) {
+             var vitalsChecklistCollection = {
+                control: 'checklist',
+                name: 'listOfVitals',
+                label: 'Vital',
+                title: 'Press tab to view options for the checkboxes',
+                itemTemplate: "<strong>{{label}}</strong>{{#if itemEIEValue}}<span>{{itemEIEValue}}</span>{{/if}}",
+                extraClasses: ["split-checklist bottom-margin-no all-padding-no"],
+                attributeMapping: {
+                    unique: 'itemName',
+                    value: 'itemValue',
+                    eIEValue: 'itemEIEValue',
+                    label: 'itemLabel'
+                },
+                selectedCountName: "checklistCount",
+                srOnlyLabel: true
+            };
+
+            var vitalsChecklistRegion = {
+                control: "container",
+                extraClasses: "div",
+                items: [{
+                    control: "container",
+                    extraClasses: ["col-xs-12"],
+                    items: [{
+                        control: "button",
+                        extraClasses: ["btn-default btn-sm"],
+                        label: "Check All",
+                        name: "checkAll",
+                        title: "Press enter to select all vitals",
+                        type: "button"
+                    }]
+                }, {
+                    control: "container",
+                    extraClasses: "col-xs-12",
+                    template: Handlebars.compile([
+                        '<hr class="bottom-margin-xs top-margin-xs" aria-hidden="true">',
+                        '<p class="flex-display left-margin-lg bottom-margin-no"><strong aria-hidden=true class="flex-width-1 left-padding-xs">Name</strong><strong aria-hidden=true class="flex-width-1">Result</strong></p>',
+                        '<hr class="bottom-margin-xs top-margin-xs" aria-hidden="true">'
+                    ].join("\n")),
+                }, {
+                    control: "container",
+                    extraClasses: "col-xs-12",
+                    items: [vitalsChecklistCollection]
+                }]
+            };
+            var clioNoteContainer = {
+                control: "container",
+                extraClasses: "bottom-margin-no",
+                tagName: "p",
+                template: Handlebars.compile('NOTE: To mark CLIO records as "Enter in Error" use the Flowsheet application.')
+            };
+
+            var reasonContainer = {
+                control: 'container',
+                extraClasses: "row",
+                items: [{
+                    control: 'container',
+                    extraClasses: ['col-xs-12'],
+                    items: [{
+                        control: 'radio',
+                        name: 'reason',
+                        required: true,
+                        extraClasses: ["radio-col-2 all-padding-no"],
+                        label: 'Reason',
+                        disabled: disableReasonField,
+                        options: [{
+                                label: 'Incorrect date/time',
+                                value: '1',
+                                title: 'Incorrect date/time'
+                            },
+                            {
+                                label: 'Incorrect patient',
+                                value: '2',
+                                title: 'Incorrect patient'
+                            },
+                            {
+                                label: 'Incorrect reading',
+                                value: '3',
+                                title: 'Incorrect reading'
+                            },
+                            {
+                                label: 'Invalid record',
+                                value: '4',
+                                title: 'Invalid record'
+                            }]
+                        }]
+                    }]
+            };
+
+            var EieFields = [{
+                control: 'container',
+                extraClasses: ['modal-body'],
+                items: [{
+                    control: 'container',
+                    extraClasses: ['container-fluid'],
+                    items: [{
+                                control: "container",
+                                extraClasses: "row",
+                                items: [vitalsChecklistRegion]
+                            },
+                            {
+                                control: "container",
+                                extraClasses: "row",
+                                items: [{
+                                    control: "container",
+                                    extraClasses: "col-xs-12",
+                                    items: [{
+                                        control: 'spacer'
+                                    },clioNoteContainer,{
+                                        control: 'spacer'
+                                    }]
+                                }]
+                            },
+                            reasonContainer]
+                    }]
+
+                }, {
+                control: 'container',
+                extraClasses: ['modal-footer'],
+                items: [{
+                    control: 'container',
+                    extraClasses: ['row'],
+                    items: [{
+                        control: 'container',
+                        extraClasses: ['col-xs-12'],
+                        items: [{
+                            control: 'button',
+                            id: 'form-cancel-btn',
+                            extraClasses: ['btn-default', 'btn-sm'],
+                            type: 'button',
+                            label: 'Cancel',
+                            title: 'Press enter to leave the form without making any changes'
+                            }, {
+                            control: 'button',
+                            disabled: true,
+                            extraClasses: ['btn-primary', 'btn-sm'],
+                            label: 'Enter in Error',
+                            name: 'submit-entered-in-error',
+                            id: 'submit-entered-in-error',
+                            title: 'Press enter to submit entered in error form'
+                            }]
+                        }]
+                    }]
+                }];
+
+                var CancelMessageView = Backbone.Marionette.ItemView.extend({
+                    template: Handlebars.compile('You will lose your progress if you cancel. Would you like to proceed with ending this observation?'),
+                    tagName: 'p'
+                });
+
+                var CancelFooterView = Backbone.Marionette.ItemView.extend({
+                    template: Handlebars.compile('{{ui-button "Cancel" classes="btn-default btn-sm" title="Press enter to cancel."}}{{ui-button "Continue" classes="btn-primary btn-sm" title="Press enter to continue."}}'),
+                    events: {
+                        'click .btn-primary': function() {
+                            ADK.UI.Alert.hide();
+                            ADK.UI.Workflow.hide();
+                        },
+                        'click .btn-default': function() {
+                            ADK.UI.Alert.hide();
+                        }
+                    },
+                    tagName: 'span'
+                });
+
+                var ErrorMessageView = Backbone.Marionette.ItemView.extend({
+                    template: Handlebars.compile('Unable to remove this item at this time due to a system error. Please try again later.'),
+                    tagName: 'p'
+                });
+
+                var ErrorFooterView = Backbone.Marionette.ItemView.extend({
+                    template: Handlebars.compile('{{ui-button "OK" classes="btn-primary" title="Click button to close modal"}}'),
+                    events: {
+                        'click .btn-primary': function() {
+                            ADK.UI.Alert.hide();
+                            var form = this.getOption('form');
+                            if (!_.isUndefined(form)) {
+                                form.ui.submitButton.trigger('control:disabled', false);
+                            }
+                        }
+                    },
+                    tagName: 'span'
+                });
+
+            var FormView = ADK.UI.Form.extend({
+                fields: EieFields,
+                ui: {
+                    'reason': '.reason',
+                    'submitButton': '.submit-entered-in-error',
+                    'checkAllBtn': '.button-control.checkAll button',
+                    'checkAllControl': '.button-control.checkAll',
+                    'vitalsChecklist': '.listOfVitals'
+                },
+                hasBeenClicked: false,
+                onRender: function () {
+                    var allChecked = true;
+                    _.each(this.model.get('listOfVitals').models, function(vital){
+                        if(!vital.get('itemValue')){
+                            allChecked = false;
+                        }
+                    });
+
+                    if(allChecked){
+                        this.handleChangeCheckAllButton();
+                    }
+                },
+                modelEvents: {
+                    'change:reason': function () {
+                        if (this.model.get('reason')) {
+                            this.ui.submitButton.trigger('control:disabled', false);
+                        }else {
+                            this.ui.submitButton.trigger('control:disabled', true);
+                        }
+                    },
+                    'change:checklistCount': function(model) {
+                        if (model.get('checklistCount') === 0) {
+                            this.model.unset('reason');
+                            this.ui.reason.trigger('control:disabled', true);
+                        } else {
+                            this.ui.reason.trigger('control:disabled', false);
+                        }
+                    }
+                },
+                handleChangeCheckAllButton: function(){
+                    var btnText;
+                    var btnTitle;
+                    if (!this.hasBeenClicked) {
+                        this.hasBeenClicked = !this.hasBeenClicked;
+                        btnText = 'Deselect All';
+                        btnTitle = 'Press enter to deselect all vitals.';
+                    } else {
+                        this.hasBeenClicked = !this.hasBeenClicked;
+                        btnText = 'Check All';
+                        btnTitle = 'Press enter to select all vitals.';
+                    }
+
+                    this.ui.vitalsChecklist.trigger('control:item:value', {
+                        booleanValue: this.hasBeenClicked
+                    });
+                    this.ui.checkAllControl.trigger('control:label', btnText);
+                    this.ui.checkAllControl.trigger('control:title', btnTitle);
+                },
+                events: {
+                    'click @ui.checkAllBtn': function(e) {
+                        e.preventDefault();
+                        this.handleChangeCheckAllButton();
+                        this.ui.checkAllControl.find('button').focus();
+                    },
+                    'click #form-cancel-btn': function (e) {
+                        e.preventDefault();
+                        var cancelAlertView = new ADK.UI.Alert({
+                            title: 'Are you sure you want to cancel?',
+                            icon: 'fa-exclamation-triangle font-size-18 color-red',
+                            messageView: CancelMessageView,
+                            footerView: CancelFooterView
+                        });
+                        cancelAlertView.show();
+                    },
+                    'click #submit-entered-in-error': function (e) {
+                        e.preventDefault();
+                        var self = this;
+
+                        this.ui.submitButton.trigger('control:disabled', true);
+
+                        var eieModel = new ADK.UIResources.Writeback.Vitals.Model();
+                        
+                        var ienList = [];
+                        _.each(this.model.get('listOfVitals').models, function (vital) {
+                            if (vital.get('itemValue')) {
+                                ienList.push(vital.get('itemName'));
+                            }
+                        });
+
+                        eieModel.set({
+                            'ien': ienList.join(','),
+                            'reason': this.model.get('reason'),
+                            'localId': ienList[0]
+                       });
+
+                        eieModel.enteredInError({
+                            success: function() {
+                                var saveSuccessAlertView = new ADK.UI.Notification({
+                                    title: 'Vitals Entered in Error Submitted',
+                                    icon: 'fa-check',
+                                    message: 'Vitals successfully marked entered in error.'
+                                });
+                                saveSuccessAlertView.show();
+                                ADK.UI.Workflow.hide();
+
+                                ADK.ResourceService.clearAllCache('vital');
+                                ADK.Messaging.getChannel('vitals').trigger('refreshGridView');
+                            },
+                            error: function(model, error) {
+                                var errorAlertView = new ADK.UI.Alert({
+                                    title: 'Save Failed (System Error)',
+                                    icon: 'fa-exclamation-circle font-size-18 color-red',
+                                    messageView: ErrorMessageView,
+                                    footerView: ErrorFooterView,
+                                    form: self
+                                });
+                                errorAlertView.show();
+                            }
+                        });
+                    }
+                }
+            });
+
+            return FormView;
+        }
+    };
+
+    return EnteredInErrorView;
+});

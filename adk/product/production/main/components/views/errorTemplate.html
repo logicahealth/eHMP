@@ -1,0 +1,18 @@
+<h5><span class="fa fa-exclamation-circle"></span>
+{{#if message}}
+	{{message}}
+{{else}}
+	{{status}} - {{statusText}}
+{{/if}}
+</h5>
+{{#if logId}}
+<h5>
+<p>
+For defect reporting:
+</p>
+<p>
+{{logId}}
+</p>
+</h5>
+{{/if}}
+

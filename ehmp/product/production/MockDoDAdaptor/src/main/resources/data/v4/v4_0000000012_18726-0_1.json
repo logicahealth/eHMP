@@ -1,0 +1,1237 @@
+{
+  "queryComplete": true,
+  "statusList": [
+    {
+      "partner": {
+        "partnerIdentifier": "2.16.840.1.113883.3.42.126.100001.13",
+        "partnerName": "ahlta",
+        "partnerType": "DOD"
+      },
+      "partnerStatus": "SUCCESS",
+      "expectedCount": 10,
+      "receivedCount": 10
+    }
+  ],
+  "dataList": {
+    "radiologyReports": [
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000918"
+        },
+        "enteredBy": {
+          "name": "Interface User"
+        },
+        "enteredDate": {
+          "start": "2013-04-03T20:14:00",
+          "end": "2013-04-03T20:14:00"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "30954-2"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL"
+        },
+        "approvedBy": {
+          "name": "42834 DOCTOR, ALPHA"
+        },
+        "content": "Procedure:*ANKLE, LT\n20130403155900\nOrder Comment: NO BRIEF COMMENT\nReason for Order: broken bone\nPregnant at time of order: NO\nExam #:13000203\nExam Date/Time:20130403160500\nTranscription Date/Time:20130403161300\nProvider:42834 DOCTOR, ALPHA\nRequesting Location:ORTHOPEDIC CLINIC 200H     NH GREAT LAKES, 200H\nStatus:COMPLETE\nResult Code: 9 SEE RADIOLOGIST'S REPORT\nInterpreted By:42834 DOCTOR, ALPHA\nApproved By: 42834 DOCTOR, ALPHA\nApproved Date:20130403161300\nReport Text: None Entered \n\nImpresssion: entering comment for testing",
+        "exam": {
+          "date": {
+            "start": "2013-04-03T16:05:00",
+            "end": "2013-04-03T16:05:00"
+          },
+          "examNumber": {
+            "id": "13000203"
+          },
+          "status": [
+            {
+              "display": "Complete"
+            }
+          ],
+          "type": [
+            {
+              "code": null,
+              "display": "*ANKLE, LT",
+              "primary": true
+            }
+          ]
+        },
+        "interpretedBy": {
+          "name": "42834 DOCTOR, ALPHA"
+        },
+        "location": {
+          "name": "NH Great Lakes IL"
+        },
+        "order": {
+          "date": {
+            "start": "2013-04-03T16:13:00",
+            "end": "2013-04-03T16:13:00"
+          },
+          "id": {
+            "id": "2157169813"
+          },
+          "orderNumber": null
+        },
+        "priority": null,
+        "procedures": [
+          [
+            {
+              "code": null,
+              "display": "*ANKLE, LT",
+              "primary": true
+            }
+          ]
+        ],
+        "radiologyLocation": {
+          "name": "ORTHOPEDIC CLINIC 200H     NH GREAT LAKES, 200H"
+        },
+        "reason": "broken bone",
+        "requestingLocation": {
+          "name": "ORTHOPEDIC CLINIC 200H     NH GREAT LAKES, 200H"
+        },
+        "requestingProvider": {
+          "name": "42834 DOCTOR, ALPHA"
+        },
+        "result": [
+          {
+            "code": "9",
+            "display": "SEE",
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "Complete"
+          }
+        ],
+        "supervisedBy": null,
+        "supervisedDate": null,
+        "technologist": null,
+        "transcriptionDate": {
+          "start": "2013-04-03T16:13:00",
+          "end": "2013-04-03T16:13:00"
+        },
+        "verifiedBy": {
+          "name": "42834 DOCTOR, ALPHA"
+        },
+        "verifiedDate": {
+          "start": "2013-04-03T16:13:00",
+          "end": "2013-04-03T16:13:00"
+        }
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000920"
+        },
+        "enteredBy": {
+          "name": "Interface User"
+        },
+        "enteredDate": {
+          "start": "2013-04-03T19:21:59",
+          "end": "2013-04-03T19:21:59"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "30954-2"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL"
+        },
+        "approvedBy": {
+          "name": "42834 DOCTOR, ALPHA"
+        },
+        "content": "Procedure:*ANKLE, LT\n20130403134400\nOrder Comment: NO BRIEF COMMENT\nReason for Order: broken bone possible\nPregnant at time of order: NO\nExam #:13000201\nExam Date/Time:20130403150100\nTranscription Date/Time:20130403152100\nProvider:42834 DOCTOR, ALPHA\nRequesting Location:ORTHOPEDIC CLINIC 200H     NH GREAT LAKES, 200H\nStatus:COMPLETE\nResult Code: 1 NORMAL\nInterpreted By:42834 DOCTOR, ALPHA\nApproved By: 42834 DOCTOR, ALPHA\nApproved Date:20130403152100\nReport Text: this is 1st comment \n\nImpresssion: this is impression text",
+        "exam": {
+          "date": {
+            "start": "2013-04-03T15:01:00",
+            "end": "2013-04-03T15:01:00"
+          },
+          "examNumber": {
+            "id": "13000201"
+          },
+          "status": [
+            {
+              "display": "Complete"
+            }
+          ],
+          "type": [
+            {
+              "code": null,
+              "display": "*ANKLE, LT",
+              "primary": true
+            }
+          ]
+        },
+        "interpretedBy": {
+          "name": "42834 DOCTOR, ALPHA"
+        },
+        "location": {
+          "name": "NH Great Lakes IL"
+        },
+        "order": {
+          "date": {
+            "start": "2013-04-03T15:21:00",
+            "end": "2013-04-03T15:21:00"
+          },
+          "id": {
+            "id": "2157169774"
+          },
+          "orderNumber": null
+        },
+        "priority": null,
+        "procedures": [
+          [
+            {
+              "code": null,
+              "display": "*ANKLE, LT",
+              "primary": true
+            }
+          ]
+        ],
+        "radiologyLocation": {
+          "name": "ORTHOPEDIC CLINIC 200H     NH GREAT LAKES, 200H"
+        },
+        "reason": "broken bone possible",
+        "requestingLocation": {
+          "name": "ORTHOPEDIC CLINIC 200H     NH GREAT LAKES, 200H"
+        },
+        "requestingProvider": {
+          "name": "42834 DOCTOR, ALPHA"
+        },
+        "result": [
+          {
+            "code": "1",
+            "display": "NORMAL",
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "Complete"
+          }
+        ],
+        "supervisedBy": null,
+        "supervisedDate": null,
+        "technologist": null,
+        "transcriptionDate": {
+          "start": "2013-04-03T15:21:00",
+          "end": "2013-04-03T15:21:00"
+        },
+        "verifiedBy": {
+          "name": "42834 DOCTOR, ALPHA"
+        },
+        "verifiedDate": {
+          "start": "2013-04-03T15:21:00",
+          "end": "2013-04-03T15:21:00"
+        }
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000922"
+        },
+        "enteredBy": {
+          "name": "Interface User"
+        },
+        "enteredDate": {
+          "start": "2013-04-02T19:29:11",
+          "end": "2013-04-02T19:29:11"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "30954-2"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL"
+        },
+        "approvedBy": {
+          "name": "42834 DOCTOR, ALPHA"
+        },
+        "content": "Procedure:NUC BONE IMAGE WHOLE BODY\n20130402152100\nOrder Comment: this is dod's comment for said test case\nReason for Order: this is dod impression of rad0128j\nExam #:13000199\nExam Date/Time:20130402152300\nTranscription Date/Time:20130402152800\nProvider:42834 DOCTOR, ALPHA\nRequesting Location:DERMATOLOGY CLINIC 200H     NH GREAT LAKES, 200H\nStatus:COMPLETE\nResult Code: 1 NORMAL\nInterpreted By:42834 DOCTOR, ALPHA\nApproved By: 42834 DOCTOR, ALPHA\nApproved Date:20130402152900\nReport Text: dod's report text for 0128j line 2 line 3",
+        "exam": {
+          "date": {
+            "start": "2013-04-02T15:23:00",
+            "end": "2013-04-02T15:23:00"
+          },
+          "examNumber": {
+            "id": "13000199"
+          },
+          "status": [
+            {
+              "display": "Complete"
+            }
+          ],
+          "type": [
+            {
+              "code": null,
+              "display": "NUC BONE IMAGE WHOLE BODY",
+              "primary": true
+            }
+          ]
+        },
+        "interpretedBy": {
+          "name": "42834 DOCTOR, ALPHA"
+        },
+        "location": {
+          "name": "NH Great Lakes IL"
+        },
+        "order": {
+          "date": {
+            "start": "2013-04-02T15:29:00",
+            "end": "2013-04-02T15:29:00"
+          },
+          "id": {
+            "id": "2157166804"
+          },
+          "orderNumber": null
+        },
+        "priority": null,
+        "procedures": [
+          [
+            {
+              "code": null,
+              "display": "NUC BONE IMAGE WHOLE BODY",
+              "primary": true
+            }
+          ]
+        ],
+        "radiologyLocation": {
+          "name": "DERMATOLOGY CLINIC 200H     NH GREAT LAKES, 200H"
+        },
+        "reason": "this is dod impression of rad0128j",
+        "requestingLocation": {
+          "name": "DERMATOLOGY CLINIC 200H     NH GREAT LAKES, 200H"
+        },
+        "requestingProvider": {
+          "name": "42834 DOCTOR, ALPHA"
+        },
+        "result": [
+          {
+            "code": "1",
+            "display": "NORMAL",
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "Complete"
+          }
+        ],
+        "supervisedBy": null,
+        "supervisedDate": null,
+        "technologist": null,
+        "transcriptionDate": {
+          "start": "2013-04-02T15:28:00",
+          "end": "2013-04-02T15:28:00"
+        },
+        "verifiedBy": {
+          "name": "42834 DOCTOR, ALPHA"
+        },
+        "verifiedDate": {
+          "start": "2013-04-02T15:29:00",
+          "end": "2013-04-02T15:29:00"
+        }
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000924"
+        },
+        "enteredBy": {
+          "name": "Interface User"
+        },
+        "enteredDate": {
+          "start": "2013-04-02T19:16:13",
+          "end": "2013-04-02T19:16:13"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "30954-2"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL"
+        },
+        "approvedBy": {
+          "name": "42834 DOCTOR, ALPHA"
+        },
+        "content": "Procedure:US, ABDOMEN (COMPLETE)\n20130402150800\nOrder Comment: NO BRIEF COMMENT\nReason for Order: r/o stomach pain\nTest\nPregnant at time of order: NO\nExam #:13000198\nExam Date/Time:20130402151100\nTranscription Date/Time:20130402151600\nProvider:42834 DOCTOR, ALPHA\nRequesting Location:ORTHOPEDIC CLINIC 200H     NH GREAT LAKES, 200H\nStatus:COMPLETE\nResult Code: 1 NORMAL\nInterpreted By:42834 DOCTOR, ALPHA\nApproved By: 42834 DOCTOR, ALPHA\nApproved Date:20130402151500\nReport Text: this is the report area \n\nImpresssion: this is my impression",
+        "exam": {
+          "date": {
+            "start": "2013-04-02T15:11:00",
+            "end": "2013-04-02T15:11:00"
+          },
+          "examNumber": {
+            "id": "13000198"
+          },
+          "status": [
+            {
+              "display": "Complete"
+            }
+          ],
+          "type": [
+            {
+              "code": null,
+              "display": "US, ABDOMEN (COMPLETE)",
+              "primary": true
+            }
+          ]
+        },
+        "interpretedBy": {
+          "name": "42834 DOCTOR, ALPHA"
+        },
+        "location": {
+          "name": "NH Great Lakes IL"
+        },
+        "order": {
+          "date": {
+            "start": "2013-04-02T15:15:00",
+            "end": "2013-04-02T15:15:00"
+          },
+          "id": {
+            "id": "2157166788"
+          },
+          "orderNumber": null
+        },
+        "priority": null,
+        "procedures": [
+          [
+            {
+              "code": null,
+              "display": "US, ABDOMEN (COMPLETE)",
+              "primary": true
+            }
+          ]
+        ],
+        "radiologyLocation": {
+          "name": "ORTHOPEDIC CLINIC 200H     NH GREAT LAKES, 200H"
+        },
+        "reason": "r/o stomach pain",
+        "requestingLocation": {
+          "name": "ORTHOPEDIC CLINIC 200H     NH GREAT LAKES, 200H"
+        },
+        "requestingProvider": {
+          "name": "42834 DOCTOR, ALPHA"
+        },
+        "result": [
+          {
+            "code": "1",
+            "display": "NORMAL",
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "Complete"
+          }
+        ],
+        "supervisedBy": null,
+        "supervisedDate": null,
+        "technologist": null,
+        "transcriptionDate": {
+          "start": "2013-04-02T15:16:00",
+          "end": "2013-04-02T15:16:00"
+        },
+        "verifiedBy": {
+          "name": "42834 DOCTOR, ALPHA"
+        },
+        "verifiedDate": {
+          "start": "2013-04-02T15:15:00",
+          "end": "2013-04-02T15:15:00"
+        }
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000926"
+        },
+        "enteredBy": {
+          "name": "Interface User"
+        },
+        "enteredDate": {
+          "start": "2013-04-02T19:03:53",
+          "end": "2013-04-02T19:03:53"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "30954-2"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL"
+        },
+        "approvedBy": {
+          "name": "42834 DOCTOR, ALPHA"
+        },
+        "content": "Procedure:NUC THREE PHASE BONE SCAN\n20130402144900\nOrder Comment: NO BRIEF COMMENT\nReason for Order: R/O Bone CA\nRAD-0115E\nPregnant at time of order: NO\nExam #:13000197\nExam Date/Time:20130402145500\nTranscription Date/Time:20130402150300\nProvider:42834 DOCTOR, ALPHA\nRequesting Location:ORTHOPEDIC CLINIC 200H     NH GREAT LAKES, 200H\nStatus:COMPLETE\nResult Code: 1 NORMAL\nInterpreted By:42834 DOCTOR, ALPHA\nApproved By: 42834 DOCTOR, ALPHA\nApproved Date:20130402150300\nReport Text: comment 2 \n\nImpresssion: comment 3",
+        "exam": {
+          "date": {
+            "start": "2013-04-02T14:55:00",
+            "end": "2013-04-02T14:55:00"
+          },
+          "examNumber": {
+            "id": "13000197"
+          },
+          "status": [
+            {
+              "display": "Complete"
+            }
+          ],
+          "type": [
+            {
+              "code": null,
+              "display": "NUC THREE PHASE BONE SCAN",
+              "primary": true
+            }
+          ]
+        },
+        "interpretedBy": {
+          "name": "42834 DOCTOR, ALPHA"
+        },
+        "location": {
+          "name": "NH Great Lakes IL"
+        },
+        "order": {
+          "date": {
+            "start": "2013-04-02T15:03:00",
+            "end": "2013-04-02T15:03:00"
+          },
+          "id": {
+            "id": "2157166787"
+          },
+          "orderNumber": null
+        },
+        "priority": null,
+        "procedures": [
+          [
+            {
+              "code": null,
+              "display": "NUC THREE PHASE BONE SCAN",
+              "primary": true
+            }
+          ]
+        ],
+        "radiologyLocation": {
+          "name": "ORTHOPEDIC CLINIC 200H     NH GREAT LAKES, 200H"
+        },
+        "reason": "R/O Bone CA",
+        "requestingLocation": {
+          "name": "ORTHOPEDIC CLINIC 200H     NH GREAT LAKES, 200H"
+        },
+        "requestingProvider": {
+          "name": "42834 DOCTOR, ALPHA"
+        },
+        "result": [
+          {
+            "code": "1",
+            "display": "NORMAL",
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "Complete"
+          }
+        ],
+        "supervisedBy": null,
+        "supervisedDate": null,
+        "technologist": null,
+        "transcriptionDate": {
+          "start": "2013-04-02T15:03:00",
+          "end": "2013-04-02T15:03:00"
+        },
+        "verifiedBy": {
+          "name": "42834 DOCTOR, ALPHA"
+        },
+        "verifiedDate": {
+          "start": "2013-04-02T15:03:00",
+          "end": "2013-04-02T15:03:00"
+        }
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000928"
+        },
+        "enteredBy": {
+          "name": "Interface User"
+        },
+        "enteredDate": {
+          "start": "2013-04-02T18:42:45",
+          "end": "2013-04-02T18:42:45"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "30954-2"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL"
+        },
+        "approvedBy": {
+          "name": "42834 DOCTOR, ALPHA"
+        },
+        "content": "Procedure:MAMMOGRAM, BILAT (SCREENING)\n20130402143500\nOrder Comment: dod comment goes here\nReason for Order: dod impression rad0127j\nExam #:13000196\nExam Date/Time:20130402143800\nTranscription Date/Time:20130402144100\nProvider:42834 DOCTOR, ALPHA\nRequesting Location:DERMATOLOGY CLINIC 200H     NH GREAT LAKES, 200H\nStatus:COMPLETE\nResult Code: 1 NORMAL\nInterpreted By:42834 DOCTOR, ALPHA\nApproved By: 42834 DOCTOR, ALPHA\nApproved Date:20130402144200\nReport Text: dod text of report for rad0127j line 2 line 3",
+        "exam": {
+          "date": {
+            "start": "2013-04-02T14:38:00",
+            "end": "2013-04-02T14:38:00"
+          },
+          "examNumber": {
+            "id": "13000196"
+          },
+          "status": [
+            {
+              "display": "Complete"
+            }
+          ],
+          "type": [
+            {
+              "code": null,
+              "display": "MAMMOGRAM, BILAT (SCREENING)",
+              "primary": true
+            }
+          ]
+        },
+        "interpretedBy": {
+          "name": "42834 DOCTOR, ALPHA"
+        },
+        "location": {
+          "name": "NH Great Lakes IL"
+        },
+        "order": {
+          "date": {
+            "start": "2013-04-02T14:42:00",
+            "end": "2013-04-02T14:42:00"
+          },
+          "id": {
+            "id": "2157166785"
+          },
+          "orderNumber": null
+        },
+        "priority": null,
+        "procedures": [
+          [
+            {
+              "code": null,
+              "display": "MAMMOGRAM, BILAT (SCREENING)",
+              "primary": true
+            }
+          ]
+        ],
+        "radiologyLocation": {
+          "name": "DERMATOLOGY CLINIC 200H     NH GREAT LAKES, 200H"
+        },
+        "reason": "dod impression rad0127j",
+        "requestingLocation": {
+          "name": "DERMATOLOGY CLINIC 200H     NH GREAT LAKES, 200H"
+        },
+        "requestingProvider": {
+          "name": "42834 DOCTOR, ALPHA"
+        },
+        "result": [
+          {
+            "code": "1",
+            "display": "NORMAL",
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "Complete"
+          }
+        ],
+        "supervisedBy": null,
+        "supervisedDate": null,
+        "technologist": null,
+        "transcriptionDate": {
+          "start": "2013-04-02T14:41:00",
+          "end": "2013-04-02T14:41:00"
+        },
+        "verifiedBy": {
+          "name": "42834 DOCTOR, ALPHA"
+        },
+        "verifiedDate": {
+          "start": "2013-04-02T14:42:00",
+          "end": "2013-04-02T14:42:00"
+        }
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000930"
+        },
+        "enteredBy": {
+          "name": "Interface User"
+        },
+        "enteredDate": {
+          "start": "2013-03-28T17:48:49",
+          "end": "2013-03-28T17:48:49"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "30954-2"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL"
+        },
+        "approvedBy": {
+          "name": "42834 DOCTOR, ALPHA"
+        },
+        "content": "Procedure:US, ABDOMEN (COMPLETE)\n20130328134400\nOrder Comment: testing 13.2\nReason for Order: stomach pain\nExam #:13000186\nExam Date/Time:20130328134600\nTranscription Date/Time:20130328134800\nProvider:42834 DOCTOR, ALPHA\nRequesting Location:CARDIOLOGY CLINIC 200H     NH GREAT LAKES, 200H\nStatus:COMPLETE\nResult Code: 1 NORMAL\nInterpreted By:42834 DOCTOR, ALPHA\nApproved By: 42834 DOCTOR, ALPHA\nApproved Date:20130328134800\nReport Text: stomach flu",
+        "exam": {
+          "date": {
+            "start": "2013-03-28T13:46:00",
+            "end": "2013-03-28T13:46:00"
+          },
+          "examNumber": {
+            "id": "13000186"
+          },
+          "status": [
+            {
+              "display": "Complete"
+            }
+          ],
+          "type": [
+            {
+              "code": null,
+              "display": "US, ABDOMEN (COMPLETE)",
+              "primary": true
+            }
+          ]
+        },
+        "interpretedBy": {
+          "name": "42834 DOCTOR, ALPHA"
+        },
+        "location": {
+          "name": "NH Great Lakes IL"
+        },
+        "order": {
+          "date": {
+            "start": "2013-03-28T13:48:00",
+            "end": "2013-03-28T13:48:00"
+          },
+          "id": {
+            "id": "2157157538"
+          },
+          "orderNumber": null
+        },
+        "priority": null,
+        "procedures": [
+          [
+            {
+              "code": null,
+              "display": "US, ABDOMEN (COMPLETE)",
+              "primary": true
+            }
+          ]
+        ],
+        "radiologyLocation": {
+          "name": "CARDIOLOGY CLINIC 200H     NH GREAT LAKES, 200H"
+        },
+        "reason": "stomach pain",
+        "requestingLocation": {
+          "name": "CARDIOLOGY CLINIC 200H     NH GREAT LAKES, 200H"
+        },
+        "requestingProvider": {
+          "name": "42834 DOCTOR, ALPHA"
+        },
+        "result": [
+          {
+            "code": "1",
+            "display": "NORMAL",
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "Complete"
+          }
+        ],
+        "supervisedBy": null,
+        "supervisedDate": null,
+        "technologist": null,
+        "transcriptionDate": {
+          "start": "2013-03-28T13:48:00",
+          "end": "2013-03-28T13:48:00"
+        },
+        "verifiedBy": {
+          "name": "42834 DOCTOR, ALPHA"
+        },
+        "verifiedDate": {
+          "start": "2013-03-28T13:48:00",
+          "end": "2013-03-28T13:48:00"
+        }
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000933"
+        },
+        "enteredBy": {
+          "name": "Interface User"
+        },
+        "enteredDate": {
+          "start": "2013-03-28T17:41:14",
+          "end": "2013-03-28T17:41:14"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "30954-2"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL"
+        },
+        "amendments": [
+          {
+            "content": "film reports area\n\nImpresssion: impression area",
+            "date": null,
+            "location": null,
+            "provider": null,
+            "result": [
+              {
+                "code": null,
+                "display": null,
+                "primary": true
+              }
+            ],
+            "supervisedBy": null,
+            "supervisedDate": null,
+            "verifiedBy": null,
+            "verifiedDate": null
+          }
+        ],
+        "approvedBy": {
+          "name": "42834 DOCTOR, ALPHA"
+        },
+        "content": "Procedure:US, ABDOMINAL AORTA\n20130328133400\nExam #:13000185\nExam Date/Time:20130328133600\nTranscription Date/Time:20130328134100\nProvider:42834 DOCTOR, ALPHA\nRequesting Location:ORTHOPEDIC CLINIC 200H     NH GREAT LAKES, 200H\nStatus:COMPLETE\n<E>\nAmended Result Cod: 1 NORMAL\nInterpreted By:42834 DOCTOR, ALPHA\nSupervised By:42834 Alpha Stumpxxx\nApproved By: 42834 DOCTOR, ALPHA\nApproved Date:20130328134000\nSupervised By: 42834 Alpha Stumpxxx\nSupervised By Date:20130328134000\nReport Text: film reports area \n\nImpresssion: impression area",
+        "exam": {
+          "date": {
+            "start": "2013-03-28T13:36:00",
+            "end": "2013-03-28T13:36:00"
+          },
+          "examNumber": {
+            "id": "13000185"
+          },
+          "status": [
+            {
+              "display": "Complete"
+            }
+          ],
+          "type": [
+            {
+              "code": null,
+              "display": "US, ABDOMINAL AORTA",
+              "primary": true
+            }
+          ]
+        },
+        "interpretedBy": {
+          "name": "42834 DOCTOR, ALPHA"
+        },
+        "location": {
+          "name": "NH Great Lakes IL"
+        },
+        "order": {
+          "date": {
+            "start": "2013-03-28T13:40:00",
+            "end": "2013-03-28T13:40:00"
+          },
+          "id": {
+            "id": "2157157537"
+          },
+          "orderNumber": null
+        },
+        "priority": null,
+        "procedures": [
+          [
+            {
+              "code": null,
+              "display": "US, ABDOMINAL AORTA",
+              "primary": true
+            }
+          ]
+        ],
+        "radiologyLocation": {
+          "name": "ORTHOPEDIC CLINIC 200H     NH GREAT LAKES, 200H"
+        },
+        "reason": null,
+        "requestingLocation": {
+          "name": "ORTHOPEDIC CLINIC 200H     NH GREAT LAKES, 200H"
+        },
+        "requestingProvider": {
+          "name": "42834 DOCTOR, ALPHA"
+        },
+        "result": [
+          {
+            "code": null,
+            "display": null,
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "Complete"
+          }
+        ],
+        "supervisedBy": null,
+        "supervisedDate": null,
+        "technologist": null,
+        "transcriptionDate": {
+          "start": "2013-03-28T13:41:00",
+          "end": "2013-03-28T13:41:00"
+        },
+        "verifiedBy": {
+          "name": "42834 DOCTOR, ALPHA"
+        },
+        "verifiedDate": {
+          "start": "2013-03-28T13:40:00",
+          "end": "2013-03-28T13:40:00"
+        }
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000935"
+        },
+        "enteredBy": {
+          "name": "Interface User"
+        },
+        "enteredDate": {
+          "start": "2013-03-28T17:30:25",
+          "end": "2013-03-28T17:30:25"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "30954-2"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL"
+        },
+        "approvedBy": {
+          "name": "42834 DOCTOR, ALPHA"
+        },
+        "content": "Procedure:NUC BONE IMAGE WHOLE BODY\n20130328132400\nOrder Comment: RAD 0128J\nReason for Order: broken bone\nExam #:13000184\nExam Date/Time:20130328132600\nTranscription Date/Time:20130328132900\nProvider:42834 DOCTOR, ALPHA\nRequesting Location:CARDIOLOGY CLINIC 200H     NH GREAT LAKES, 200H\nStatus:COMPLETE\nResult Code: 1 NORMAL\nInterpreted By:42834 DOCTOR, ALPHA\nApproved By: 42834 DOCTOR, ALPHA\nApproved Date:20130328133000\nReport Text: Patient is fine",
+        "exam": {
+          "date": {
+            "start": "2013-03-28T13:26:00",
+            "end": "2013-03-28T13:26:00"
+          },
+          "examNumber": {
+            "id": "13000184"
+          },
+          "status": [
+            {
+              "display": "Complete"
+            }
+          ],
+          "type": [
+            {
+              "code": null,
+              "display": "NUC BONE IMAGE WHOLE BODY",
+              "primary": true
+            }
+          ]
+        },
+        "interpretedBy": {
+          "name": "42834 DOCTOR, ALPHA"
+        },
+        "location": {
+          "name": "NH Great Lakes IL"
+        },
+        "order": {
+          "date": {
+            "start": "2013-03-28T13:30:00",
+            "end": "2013-03-28T13:30:00"
+          },
+          "id": {
+            "id": "2157157536"
+          },
+          "orderNumber": null
+        },
+        "priority": null,
+        "procedures": [
+          [
+            {
+              "code": null,
+              "display": "NUC BONE IMAGE WHOLE BODY",
+              "primary": true
+            }
+          ]
+        ],
+        "radiologyLocation": {
+          "name": "CARDIOLOGY CLINIC 200H     NH GREAT LAKES, 200H"
+        },
+        "reason": "broken bone",
+        "requestingLocation": {
+          "name": "CARDIOLOGY CLINIC 200H     NH GREAT LAKES, 200H"
+        },
+        "requestingProvider": {
+          "name": "42834 DOCTOR, ALPHA"
+        },
+        "result": [
+          {
+            "code": "1",
+            "display": "NORMAL",
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "Complete"
+          }
+        ],
+        "supervisedBy": null,
+        "supervisedDate": null,
+        "technologist": null,
+        "transcriptionDate": {
+          "start": "2013-03-28T13:29:00",
+          "end": "2013-03-28T13:29:00"
+        },
+        "verifiedBy": {
+          "name": "42834 DOCTOR, ALPHA"
+        },
+        "verifiedDate": {
+          "start": "2013-03-28T13:30:00",
+          "end": "2013-03-28T13:30:00"
+        }
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000938"
+        },
+        "enteredBy": {
+          "name": "Interface User"
+        },
+        "enteredDate": {
+          "start": "2013-03-28T17:13:58",
+          "end": "2013-03-28T17:13:58"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "30954-2"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL"
+        },
+        "amendments": [
+          {
+            "content": "this is the are that reports on the film quality\n\nImpresssion: the is where the doc puts the impression",
+            "date": null,
+            "location": null,
+            "provider": null,
+            "result": [
+              {
+                "code": null,
+                "display": null,
+                "primary": true
+              }
+            ],
+            "supervisedBy": null,
+            "supervisedDate": null,
+            "verifiedBy": null,
+            "verifiedDate": null
+          }
+        ],
+        "approvedBy": {
+          "name": "42834 DOCTOR, ALPHA"
+        },
+        "content": "Procedure:NUC THREE PHASE BONE SCAN\n20130328130600\nExam #:13000183\nExam Date/Time:20130328130800\nTranscription Date/Time:20130328131300\nProvider:42834 DOCTOR, ALPHA\nRequesting Location:ORTHOPEDIC CLINIC 200H     NH GREAT LAKES, 200H\nStatus:COMPLETE\n<E>\nAmended Result Cod: 3 ABNORMAL, ATTENTION NEEDED\nInterpreted By:42834 DOCTOR, ALPHA\nSupervised By:42834 Alpha Stumpxxx\nApproved By: 42834 DOCTOR, ALPHA\nApproved Date:20130328131300\nSupervised By: 42834 Alpha Stumpxxx\nSupervised By Date:20130328131300\nReport Text: this is the are that reports on the film quality \n\nImpresssion: the is where the doc puts the impression",
+        "exam": {
+          "date": {
+            "start": "2013-03-28T13:08:00",
+            "end": "2013-03-28T13:08:00"
+          },
+          "examNumber": {
+            "id": "13000183"
+          },
+          "status": [
+            {
+              "display": "Complete"
+            }
+          ],
+          "type": [
+            {
+              "code": null,
+              "display": "NUC THREE PHASE BONE SCAN",
+              "primary": true
+            }
+          ]
+        },
+        "interpretedBy": {
+          "name": "42834 DOCTOR, ALPHA"
+        },
+        "location": {
+          "name": "NH Great Lakes IL"
+        },
+        "order": {
+          "date": {
+            "start": "2013-03-28T13:13:00",
+            "end": "2013-03-28T13:13:00"
+          },
+          "id": {
+            "id": "2157157535"
+          },
+          "orderNumber": null
+        },
+        "priority": null,
+        "procedures": [
+          [
+            {
+              "code": null,
+              "display": "NUC THREE PHASE BONE SCAN",
+              "primary": true
+            }
+          ]
+        ],
+        "radiologyLocation": {
+          "name": "ORTHOPEDIC CLINIC 200H     NH GREAT LAKES, 200H"
+        },
+        "reason": null,
+        "requestingLocation": {
+          "name": "ORTHOPEDIC CLINIC 200H     NH GREAT LAKES, 200H"
+        },
+        "requestingProvider": {
+          "name": "42834 DOCTOR, ALPHA"
+        },
+        "result": [
+          {
+            "code": null,
+            "display": null,
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "Complete"
+          }
+        ],
+        "supervisedBy": null,
+        "supervisedDate": null,
+        "technologist": null,
+        "transcriptionDate": {
+          "start": "2013-03-28T13:13:00",
+          "end": "2013-03-28T13:13:00"
+        },
+        "verifiedBy": {
+          "name": "42834 DOCTOR, ALPHA"
+        },
+        "verifiedDate": {
+          "start": "2013-03-28T13:13:00",
+          "end": "2013-03-28T13:13:00"
+        }
+      }
+    ]
+  }
+}

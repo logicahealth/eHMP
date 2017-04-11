@@ -1,0 +1,126 @@
+# Encoding: utf-8
+require 'rubygems'
+require 'rubocop'
+require 'rubocop-rspec'
+require 'rubocop/rake_task'
+require 'rspec/core/rake_task'
+
+# Check environment sanity and fail fast if not correct
+FAIL_MSG = 'Please first source infrastructure/set.env.sh.'
+fail FAIL_MSG unless ENV.keys.include?('WORKSPACE') || ENV.keys.include?('GEM_HOME')
+fileLocation = "#{File.expand_path(File.dirname(__FILE__))}"
+BASE = nil
+namespace :ui do
+  task default: [:acceptance]
+  task :acceptance, [:env] => [:environment_setup]
+  task :broken, [:env] => [:environment_setup]
+  task :regression, [:env] => [:environment_setup]
+  task :smoke, [:env] => [:environment_setup]
+  task :smokeplusacceptance, [:env] => [:environment_setup]
+  task :spec, [:env] => [:environment_setup]
+  RuboCop::RakeTask.new(:rubocop) do |rubocop|
+    puts '=========================================================================='
+    puts '#     Validating code quality.                                           #'
+    puts '#     For details, see https://github.com/bbatsov/ruby-style-guide       #'
+    puts '=========================================================================='
+    rubocop.requires << 'rubocop-rspec'
+
+    # Specify config file in non-standard location.
+    rubocop.options = ["-c#{fileLocation}/.rubocop.yml"]
+
+    # Specify Ruby file locations
+    rubocop.patterns = ["#{fileLocation}/**/*.rb"]
+
+    # Show emacs style output, and offense counts
+    # See https://github.com/bbatsov/rubocop#formatters for other output options
+    rubocop.formatters = %w(emacs o)
+
+    # Abort rake on failure
+    rubocop.fail_on_error = ENV['RUBOCOPBYPASS'].nil? ? true : false
+  end
+
+  task :environment_setup, :env do |_task, args|
+    env = args[:env] || 'virtualbox'
+    case env
+    when 'virtualbox'
+      ip = knife_search_for_ip('ehmp-ui')
+      ENV['EHMPUI_IP'] = 'https://' + "#{ip}"
+    when 'aws'
+      ip = knife_search_for_ip('ehmp-balancer')
+      ENV['EHMPUI_IP'] = 'https://' + "#{ip}"
+    else
+      fail "Unrecognized environment type: #{env}. Allowable types are: 'virtualbox' and 'aws'"
+    end
+    ENV['BASE'] = ENV['EHMPUI_IP']
+    puts "\n The local url of the EHMPUI_IP is => #{ENV['BASE']} \n \n"
+    puts "\n The BROWSER is set to => #{ENV['BROWSER']} \n \n"
+  end
+
+  class RSpec::Core::RakeTaskCustom < RSpec::Core::RakeTask
+    def run_task(verbose)
+      # Will run task in-front of other listed tasks (acceptance, broken, etc.) in namespace.
+      # Rake::Task['ui:rubocop'].invoke
+      super
+    end
+  end
+
+  common = "--color #{fileLocation}/spec/. --require rspec/legacy_formatters -r ./junit.rb -f JUnit -o #{fileLocation}/results.xml --format documentation --format html --out #{fileLocation}/results.html"
+  # Rake tasks for spec under here:
+
+  desc 'Custom test for ui-team development'
+  RSpec::Core::RakeTaskCustom.new(:spec) do |task|
+    task.pattern = "#{fileLocation}/spec/ehmpui_patient_search_spec.rb"
+    task.rspec_opts = "--tag acceptance #{common}"
+  end
+
+  desc 'runs: --tag acceptance --tag regression --tag smoketest'
+  RSpec::Core::RakeTaskCustom.new(:regression) do |task|
+    task.rspec_opts = "--tag acceptance --tag regression --tag smoketest #{common}"
+  end
+
+  desc 'runs: --tag acceptance'
+  RSpec::Core::RakeTaskCustom.new(:acceptance) do |task|
+    task.rspec_opts = "--tag acceptance #{common}"
+  end
+
+  desc 'runs: --tag broken'
+  RSpec::Core::RakeTaskCustom.new(:broken) do |task|
+    task.rspec_opts = "--tag broken #{common}"
+  end
+
+  desc 'runs: --tag acceptance --tag smoketest'
+  RSpec::Core::RakeTaskCustom.new(:smokeplusacceptance) do |task|
+    task.rspec_opts = "--tag acceptance --tag smoketest #{common}"
+  end
+
+  desc 'runs: --tag smoketest'
+  RSpec::Core::RakeTaskCustom.new(:smoke) do |task|
+    task.rspec_opts = "--tag smoketest #{common}"
+  end
+
+  desc 'requires a file and tag, ui:rspec["filename","tag"]'
+  RSpec::Core::RakeTaskCustom.new(:rspec, :file, :tag) do |task, args|
+    fail "File does not exists: #{fileLocation}/spec/#{args[:file]}" unless File.exist? "#{fileLocation}/spec/#{args[:file]}"
+    task.pattern = "#{fileLocation}/spec/#{args[:file]}"
+    task.rspec_opts = "--tag #{args[:tag]}"
+  end
+
+  desc 'requires a tag, ui:rspecTag["tag"]'
+  RSpec::Core::RakeTaskCustom.new(:rspecTag, :tag) do |task, args|
+    task.rspec_opts = "--tag #{args[:tag]}"
+  end
+end
+
+def knife_search_for_ip(machine_name)
+  release = File.read(File.dirname(__FILE__) + "/../../../../infrastructure/properties/releaseVersion")
+  stack = ENV['JOB_NAME'] || "#{ENV['USER']}-#{release}"
+  if ENV.key?('BUNDLE_BIN_PATH')
+    raw_search = Bundler.with_clean_env { `/opt/chefdk/bin/knife search node \'role:#{machine_name} AND stack:#{stack}\' -Fj --config ~/Projects/vistacore/.chef/knife.rb` }
+  else
+    raw_search = `/opt/chefdk/bin/knife search node \'role:#{machine_name} AND stack:#{stack}\' -Fj --config ~/Projects/vistacore/.chef/knife.rb`
+  end
+  parsed_search = JSON.parse(raw_search)
+  fail "More than one node with that name found" if parsed_search["results"] > 1
+  fail "No node with that name found: \'role:#{machine_name} AND stack:#{stack}\'" if parsed_search["results"] == 0
+  ip = parsed_search["rows"][0]['automatic']['ipaddress']
+end

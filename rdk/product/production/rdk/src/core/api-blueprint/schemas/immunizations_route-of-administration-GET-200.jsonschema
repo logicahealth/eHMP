@@ -1,0 +1,149 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "List administration routes for immunizations",
+	"type": "object",
+	"required": [
+		"data",
+		"status"
+	],
+	"properties": {
+		"data": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"required": [
+					"route",
+					"uri"
+				],
+				"properties": {
+					"definition": {
+						"type": "object",
+						"required": [
+							"fmId",
+							"fmType",
+							"value",
+							"type"
+						],
+						"properties": {
+							"fmId": {
+								"type": "string"
+							},
+							"fmType": {
+								"type": "string"
+							},
+							"type": {
+								"type": "string"
+							},
+							"value": {
+								"type": "string"
+							}
+						}
+					},
+					"fda_ncit": {
+						"type": "object",
+						"required": [
+							"fmId",
+							"fmType",
+							"value",
+							"type"
+						],
+						"properties": {
+							"fmId": {
+								"type": "string"
+							},
+							"fmType": {
+								"type": "string"
+							},
+							"type": {
+								"type": "string"
+							},
+							"value": {
+								"type": "string"
+							}
+						}
+					},
+					"hl7_code": {
+						"type": "object",
+						"required": [
+							"fmId",
+							"fmType",
+							"value",
+							"type"
+						],
+						"properties": {
+							"fmId": {
+								"type": "string"
+							},
+							"fmType": {
+								"type": "string"
+							},
+							"type": {
+								"type": "string"
+							},
+							"value": {
+								"type": "string"
+							}
+						}
+					},
+					"route": {
+						"type": "object",
+						"required": [
+							"fmId",
+							"fmType",
+							"value",
+							"type"
+						],
+						"properties": {
+							"fmId": {
+								"type": "string"
+							},
+							"fmType": {
+								"type": "string"
+							},
+							"type": {
+								"type": "string"
+							},
+							"value": {
+								"type": "string"
+							}
+						}
+					},
+					"uri": {
+						"type": "object",
+						"required": [
+							"fmId",
+							"fmType",
+							"value",
+							"type",
+							"label",
+							"sameAs"
+						],
+						"properties": {
+							"fmId": {
+								"type": "string"
+							},
+							"fmType": {
+								"type": "string"
+							},
+							"label": {
+								"type": "string"
+							},
+							"sameAs": {
+								"type": "string"
+							},
+							"type": {
+								"type": "string"
+							},
+							"value": {
+								"type": "string"
+							}
+						}
+					}
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

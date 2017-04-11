@@ -1,0 +1,35 @@
+<div class="row">
+    <div class="col-xs-12">
+        <h5 class="bottom-border-grey-light">{{title}}</h5>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-4 text-right">Priority:</div>
+    <div class="col-xs-8 {{priorityCSS}}">{{priorityText}}</div>
+</div>
+<div class="row">
+    <div class="col-xs-4 text-right">Type:</div>
+    <div class="col-xs-8">{{typeText}}</div>
+</div>
+<div class="row">
+    <div class="col-xs-4 text-right">Detail:</div>
+    <div class="col-xs-8">{{details.detail}}</div>
+</div>
+{{#if details.provenance}}
+    <div class="row">
+        <div class="col-xs-4 text-right">Provenance:</div>
+        <div class="col-xs-8 provenance">{{details.provenance}}</div>
+    </div>
+{{/if}}
+{{#if dueDate}}
+    <div class="row">
+        <div class="col-xs-4 text-right">Due Date:</div>
+        <div class="col-xs-8">{{dueDate}}</div>
+    </div>
+{{/if}}
+{{#if doneDate}}
+    <div class="row">
+        <div class="col-xs-4 text-right">Done Date:</div>
+        <div class="col-xs-8">{{doneDate}}</div>
+    </div>
+{{/if}}

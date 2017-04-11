@@ -1,0 +1,113 @@
+{
+  "queryComplete": true,
+  "statusList": [
+    {
+      "partner": {
+        "partnerIdentifier": "2.16.840.1.113883.3.42.126.100001.13",
+        "partnerName": "ahlta",
+        "partnerType": "DOD"
+      },
+      "partnerStatus": "SUCCESS",
+      "expectedCount": 1,
+      "receivedCount": 1
+    }
+  ],
+  "dataList": {
+    "demographics": [
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000916"
+        },
+        "enteredBy": null,
+        "enteredDate": null,
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "52536-0"
+          }
+        ],
+        "facility": null,
+        "addresses": [
+          {
+            "type": "Home Address",
+            "city": "CITRUS HTS",
+            "country": null,
+            "county": null,
+            "postalCode": "95621",
+            "state": "CA",
+            "street": [
+              "8008 ROSSWOOD DRIVE"
+            ]
+          }
+        ],
+        "branch": [],
+        "birthDate": {
+          "start": "1988-11-20T00:00:00",
+          "end": "1988-11-20T00:00:00"
+        },
+        "deersEligibility": [],
+        "patientId": [
+          {
+            "id": "D1606466796"
+          }
+        ],
+        "enrollmentLocation": null,
+        "name": {
+          "first": "CHERYL",
+          "middle": null,
+          "last": "SAPATIENT",
+          "suffix": null
+        },
+        "fmp": null,
+        "maritalStatus": [
+          {
+            "display": "Divorced",
+            "primary": true
+          }
+        ],
+        "patientCategory": [
+          {
+            "display": "K61 - Department of Defense (DoD)/Veterans Administration (VA) Sharing Agreement",
+            "primary": true
+          }
+        ],
+        "race": [
+          {
+            "display": "White",
+            "primary": true
+          }
+        ],
+        "rank": [],
+        "religion": [
+          {
+            "display": "Methodism",
+            "primary": true
+          }
+        ],
+        "sex": [
+          {
+            "display": "F",
+            "primary": true
+          }
+        ],
+        "sponsor": {
+          "branch": [],
+          "rank": [],
+          "ssn": null,
+          "assignedUnit": null
+        },
+        "assignedUnit": null
+      }
+    ]
+  }
+}

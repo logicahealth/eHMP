@@ -1,0 +1,45 @@
+{
+	"parameters": {
+		"activeOnly": {
+			"name": "activeOnly",
+			"paramType": "query",
+			"required": true,
+			"type": "boolean",
+			"values": [
+			]
+		},
+		"brief": {
+			"name": "brief",
+			"paramType": "query",
+			"required": true,
+			"type": "boolean",
+			"values": [
+			]
+		},
+		"fields": {
+			"name": "fields",
+			"paramType": "query",
+			"type": "string",
+			"values": [
+			]
+		},
+		"selectableForHistoric": {
+			"name": "selectableForHistoric",
+			"paramType": "query",
+			"required": true,
+			"type": "boolean",
+			"values": [
+			]
+		},
+		"site": {
+			"name": "site",
+			"paramType": "query",
+			"required": true,
+			"type": "string",
+			"values": [
+			]
+		}
+	},
+	"schema": {
+	}
+}

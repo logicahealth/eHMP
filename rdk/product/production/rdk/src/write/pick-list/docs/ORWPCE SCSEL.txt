@@ -1,0 +1,11 @@
+ORWPCE SCSEL
+
+Input:
+DFN
+VisitDate.Time
+LocIEN
+
+Output:
+0^;0^;0^;0^;0^;0^;0^;0
+SC^;CV^;AO^;IR^;SAC^;SHD^;MST^;HNC
+1 = Allowed, 0 = No

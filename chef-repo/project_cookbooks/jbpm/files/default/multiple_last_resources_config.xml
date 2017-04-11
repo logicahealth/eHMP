@@ -1,0 +1,1 @@
+        <property name="com.arjuna.ats.arjuna.allowMultipleLastResources" value="true"/>

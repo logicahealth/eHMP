@@ -1,0 +1,33 @@
+
+import org.gradle.logging.internal.*
+
+def createGruntSassLogFile (name) {
+    def sassLogFile = new File(name)
+    sassLogFile.delete()
+    sassLogFile.createNewFile()
+    return sassLogFile   
+}
+
+def logGruntSassToFile (logging, file) {
+    logging.addStandardOutputListener(new StandardOutputListener () {
+        void onOutput(CharSequence output) {
+            file << output
+        }
+    })
+}
+
+def errorsInGruntSass (file) {
+    if ( (file.text != null) && 
+         (file.text.toLowerCase().contains("compilation failed")) )
+      return true 
+    return false 
+}
+
+
+ext{
+    createGruntSassLogFile = this.&createGruntSassLogFile
+    logGruntSassToFile = this.&logGruntSassToFile
+    errorsInGruntSass = this.&errorsInGruntSass
+}
+
+

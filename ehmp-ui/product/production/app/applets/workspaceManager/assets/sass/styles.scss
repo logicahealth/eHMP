@@ -1,0 +1,247 @@
+.workspaceManager-applet {
+    height: 100%;
+    margin: 0px 45px;
+    #doneEditing {
+        color: white;
+        font-size: 3em;
+        margin-right: -40px;
+        &:hover, &:focus {
+            color: #E4EEF8;
+        }
+    }
+    .panel-primary {
+        height: calc(100% - 60px);
+        min-height: 150px;
+        min-width: 965px;
+        .panel-heading h1{
+            font-size: 14px;
+            font-weight: 700;
+            margin: 10px;
+        }
+        .grid-filter .btn.btn-icon{
+            color: inherit;
+        }
+        .workspaceTable {
+            border: none;
+            height: 100%;
+            overflow-y: hidden;
+            .btn-icon:not(.default-workspace-btn) {
+                color: $grey-darkest
+            }
+        }
+        .header {
+            background-color: $pure-white;
+            border-bottom: 1px solid $grey-light;
+            color: $primary;
+            margin: 0;
+        }
+        #list-group {
+            background-color: $pure-white;
+            height: calc(100% - 150px);
+            min-height: 6vh;
+            overflow-y: scroll;
+            .table-cell, .table-cell>button {
+                height: 100%;
+            }
+            .tableRow {
+                height: 3.5em;
+                background-color: $pure-white;
+                border-bottom: 1px solid $grey-light;
+                border-top: 1px solid $grey-light;
+                &:hover {
+                    cursor: move;
+                }
+                &.predefined-screen-row {
+                    background-color: $grey-lighter;
+                }
+                &.rearrange-row {
+                    border: 2px solid $primary-light;
+                    cursor: move;
+                }
+                .form-group {
+                    margin-bottom:0;
+                    .has-error .form-control, .has-error .form-control:focus {
+                        outline-offset: -2px;
+                        outline: #843534 auto 5px;
+                        border: solid 1px #843534;
+                        -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 6px #ce8483;
+                        box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 6px #ce8483;
+                    }
+                    .form-control {
+                        &::-ms-clear {
+                            display: none;
+                            width:0;
+                            height:0;
+                        }
+                        &:focus {
+                            border: solid 1px #66afe9;
+                            -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, .6);
+                            box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, .6);
+                        }
+                    }
+                    .editor-input-element {
+                        background-color: transparent;
+                        border: none;
+                        -webkit-box-shadow: none;
+                        box-shadow: none;
+                        font-size:11px;
+                        padding: 0px;
+                        text-overflow: ellipsis;
+                        height: 25px;
+                    }
+                    .editor-title-element {
+                        width: calc(100% - 20px);
+                    }
+                }
+                .editor-title {
+                    font-weight: bold;
+                }
+                .show-associations{
+                    &.active{
+                        background-color: $primary-lighter;
+                        border: solid 2px $primary-light;
+                    }
+                    .fa-tags {
+                        margin-top: 3px;
+                        margin-left: 10px;
+                    }
+                }
+                .association-manager-popover {
+                    box-shadow: 1px 1px 10px 0px $grey-darker;
+                    cursor: default;
+                    height: 220px;
+                    max-width: 350px;
+                    // position: fixed;
+                    width: 350px;
+                    .association-manager {
+                        .typeahead-wrapper {
+                            padding-bottom: 10px;
+                            .twitter-typeahead {
+                                width: 100%;
+                                input {
+                                    font-size: 12px;
+                                    height: 30px;
+                                }
+                            }
+                            .clear-search-problem{
+                                display: none;
+                                position: absolute;
+                                right: 15px;
+                                top: 13px;
+                            }
+                            .tt-dropdown-menu {
+                                max-height: 17em;
+                                overflow-y: auto;
+                                width: 100%;
+                                display: none;
+                                padding: 0 5px;
+                                z-index: 200;
+                                max-height: 17em;
+                                .tt-suggestion {
+                                    padding: 0;
+                                    &.tt-cursor {
+                                        background-color: $primary-lightest;
+                                        color: $pure-black;
+                                    }
+                                    .problem-result {
+                                        display: block;
+                                        padding: 0 10px;
+                                        &.disabled {
+                                           font-style: italic;
+                                            color: $grey-dark;
+                                        }
+                                    }
+                                }
+                            }
+                            .problem-loading-container {
+                                position: absolute;
+                                width: 93%;
+                                z-index: 10;
+                            }
+                        }
+                        #problem-list-region {
+                            height: 112px;
+                            overflow-y: auto;
+                            overflow-x: hidden;
+                            border-top-style: solid;
+                            border-width: 1px;
+                            ul {
+                                list-style: none;
+                                padding: 0;
+                                li {
+                                    background-color: $grey-lighter;
+                                    display: inline-block;
+                                    margin: 3px 0;
+                                    width: 100%;
+                                    div, button {
+                                        display: inline;
+                                        padding: 1px 6px;
+                                        vertical-align: middle;
+                                    }
+                                }
+                            }
+                        }
+                        .ellipsis-text {
+                            overflow-x: hidden;
+                            white-space: nowrap !important; //using !important to override inline style applied by twitter-typeahead plugin
+                            text-overflow: ellipsis;
+                        }
+                    }
+                    #association-manager-footer {
+                        height: 45px;
+                        button {
+                            position: absolute;
+                            right: 15px;
+                            &.user-defined-template {
+                                bottom: 5px;
+                            }
+                            &.predefined-template {
+                                top: 5px;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .border-right{
+        border-right: 1px solid $grey-light;
+    }
+    .border-left{
+        border-left: 1px solid $grey-light;
+    }
+}
+.workspace-preview {
+    height: 260px;
+    .gridsterContainer {
+        height: 100%;
+        .gridsterPreview {
+            height: 100%;
+        }
+        ul {
+            list-style: none;
+            li {
+                background-color: $primary-lightest;
+                box-shadow: 2px 2px 1px rgba(0,0,0,0.35), 2px 2px 1px rgba(0,0,0,0.15);
+                padding: 0px 5px;
+                text-align: center;
+                h4 {
+                    color: $grey-darkest;
+                    margin: 0;
+                    padding-bottom: 5px;
+                }
+                p {
+                    font-size: 1.1em;
+                    font-weight: bold;
+                    text-transform: capitalize;
+                }
+            }
+        }
+    }
+}
+.work-manager-header {
+    float: left;
+    right: -43%;
+    position: relative;
+}

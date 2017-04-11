@@ -1,0 +1,21 @@
+{
+  "collection": "procedure",
+  "pid": "84F0;1",
+  "systemId": "84F0",
+  "localId": "1",
+  "seq": 1,
+  "total": 1,
+  "object": {
+    "lastUpdateTime": 20140409083725,
+    "category": "CP",
+    "dateTime": 199811190800,
+    "facilityCode": 561,
+    "facilityName": "New Jersey HCS",
+    "interpretation": "NORMAL",
+    "kind": "Procedure",
+    "localId": "50;MCAR(699,",
+    "name": "LAPARASCOPY",
+    "statusName": "COMPLETE",
+    "uid": "urn:va:procedure:ABCD:226:50;MCAR(699,"
+  }
+}

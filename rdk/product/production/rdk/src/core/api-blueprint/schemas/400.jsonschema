@@ -1,0 +1,26 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "400 (Bad Request) response schema",
+	"type": "object",
+	"required": ["status"],
+	"properties": {
+		"data": {
+			"type": "object",
+			"required": ["errors"],
+			"properties": {
+				"errors": {
+					"type": "array",
+					"items": {}
+				}
+			}
+		},
+		"message": {
+			"type": "string"
+		},
+		"status": {
+			"type": "integer",
+			"minimum": 400,
+			"maximum": 400
+		}
+	}
+}

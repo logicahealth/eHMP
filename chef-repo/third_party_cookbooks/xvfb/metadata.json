@@ -1,0 +1,46 @@
+{
+  "name": "xvfb",
+  "description": "Installs/Configures Xvfb as a Service",
+  "long_description": "# Xvfb Cookbook\n\n[![Cookbook Version](http://img.shields.io/cookbook/v/xvfb.svg?style=flat-square)][cookbook]\n[![Build Status](http://img.shields.io/travis/dhoer/chef-xvfb.svg?style=flat-square)][travis]\n[![GitHub Issues](http://img.shields.io/github/issues/dhoer/chef-xvfb.svg?style=flat-square)][github]\n\n[cookbook]: https://supermarket.chef.io/cookbooks/xvfb\n[travis]: https://travis-ci.org/dhoer/chef-xvfb\n[github]: https://github.com/dhoer/chef-xvfb/issues\n\nThis cookbook installs Xvfb and configures it as a service. Xvfb is an X server that can run on machines with no\ndisplay hardware and no physical input devices.  It emulates a dumb framebuffer using virtual memory.\n\n## Requirements\n\n- Chef 11 and Ruby 1.9.3 or higher.\n\n## Platforms\n\n- CentOS, RedHat, Fedora\n- Debian, Ubuntu\n\n## Cookbooks\n\nThese cookbooks are referenced with suggests, so be sure to depend on the cookbooks that apply:\n\n- apt - Debian, Ubuntu platforms\n- yum - CentOS, RedHat, Fedora platforms\n\n## Usage\n\nJust include `recipe[xvfb]` in your run_list.\n\n## Attributes\n\n- `node['xvfb']['display']` - Display number to listen for connections. Default is `:0`.\n- `node['xvfb']['screennum']` - Screen number. Default is `0`.\n- `node['xvfb']['dimensions']` - Screen width, height, and depth.  Default is `1280x1024x24`.\n- `node['xvfb']['args']` - Additional arguments.  Default is `nil`.  Set to `-ac`  to disable access control\nrestrictions.\n\nSee [attributes/default.rb](https://github.com/dhoer/chef-xvfb/blob/master/attributes/default.rb) for complete list\nof attributes.\n\n## Getting Help\n\n- Ask specific questions on [Stack Overflow](http://stackoverflow.com/questions/tagged/chef-xvfb).\n- Report bugs and discuss potential features in [Github issues](https://github.com/dhoer/chef-xvfb/issues).\n\n## Contributing\n\nPlease refer to [CONTRIBUTING](https://github.com/dhoer/chef-xvfb/blob/master/CONTRIBUTING.md).\n\n## License\n\nMIT - see the accompanying [LICENSE](https://github.com/dhoer/chef-xvfb/blob/master/LICENSE.md) file for details.\n\n",
+  "maintainer": "Dennis Hoer",
+  "maintainer_email": "dennis.hoer@gmail.com",
+  "license": "MIT",
+  "platforms": {
+    "debian": ">= 0.0.0",
+    "centos": ">= 0.0.0",
+    "fedora": ">= 0.0.0",
+    "redhat": ">= 0.0.0",
+    "ubuntu": ">= 0.0.0"
+  },
+  "dependencies": {
+
+  },
+  "recommendations": {
+
+  },
+  "suggestions": {
+    "apt": ">= 0.0.0",
+    "yum": ">= 0.0.0"
+  },
+  "conflicting": {
+
+  },
+  "providing": {
+
+  },
+  "replacing": {
+
+  },
+  "attributes": {
+
+  },
+  "groupings": {
+
+  },
+  "recipes": {
+
+  },
+  "version": "2.0.0",
+  "source_url": "",
+  "issues_url": ""
+}

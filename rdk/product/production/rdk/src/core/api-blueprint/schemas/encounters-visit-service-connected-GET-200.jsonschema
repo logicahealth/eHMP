@@ -1,0 +1,148 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"type": "object",
+	"required": [
+		"data",
+		"status"
+	],
+	"properties": {
+		"data": {
+			"type": "object",
+			"required": [
+				"SC",
+				"AO",
+				"IR",
+				"SAC",
+				"MST",
+				"HNC",
+				"CV",
+				"SHD"
+			],
+			"properties": {
+				"AO": {
+					"type": "object",
+					"required": [
+						"enabled",
+						"value"
+					],
+					"properties": {
+						"enabled": {
+							"type": "boolean"
+						},
+						"value": {
+							"type": "string"
+						}
+					}
+				},
+				"CV": {
+					"type": "object",
+					"required": [
+						"enabled",
+						"value"
+					],
+					"properties": {
+						"enabled": {
+							"type": "boolean"
+						},
+						"value": {
+							"type": "string"
+						}
+					}
+				},
+				"HNC": {
+					"type": "object",
+					"required": [
+						"enabled",
+						"value"
+					],
+					"properties": {
+						"enabled": {
+							"type": "boolean"
+						},
+						"value": {
+							"type": "string"
+						}
+					}
+				},
+				"IR": {
+					"type": "object",
+					"required": [
+						"enabled",
+						"value"
+					],
+					"properties": {
+						"enabled": {
+							"type": "boolean"
+						},
+						"value": {
+							"type": "string"
+						}
+					}
+				},
+				"MST": {
+					"type": "object",
+					"required": [
+						"enabled",
+						"value"
+					],
+					"properties": {
+						"enabled": {
+							"type": "boolean"
+						},
+						"value": {
+							"type": "string"
+						}
+					}
+				},
+				"SAC": {
+					"type": "object",
+					"required": [
+						"enabled",
+						"value"
+					],
+					"properties": {
+						"enabled": {
+							"type": "boolean"
+						},
+						"value": {
+							"type": "string"
+						}
+					}
+				},
+				"SC": {
+					"type": "object",
+					"required": [
+						"enabled",
+						"value"
+					],
+					"properties": {
+						"enabled": {
+							"type": "boolean"
+						},
+						"value": {
+							"type": "string"
+						}
+					}
+				},
+				"SHD": {
+					"type": "object",
+					"required": [
+						"enabled",
+						"value"
+					],
+					"properties": {
+						"enabled": {
+							"type": "boolean"
+						},
+						"value": {
+							"type": "string"
+						}
+					}
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

@@ -1,0 +1,111 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "Get qualifier information for selected vital types",
+	"description": "Returns all qualifier information for the vital types selected. If no types are selected, then all qualifiers are returned.",
+	"type": "object",
+	"required": [
+		"data",
+		"status"
+	],
+	"properties": {
+		"data": {
+			"type": "object",
+			"required": [
+				"items"
+			],
+			"properties": {
+				"items": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"required": [
+							"type",
+							"fileIEN",
+							"abbreviation",
+							"pceAbbreviation"
+						],
+						"properties": {
+							"abbreviation": {
+								"type": "string"
+							},
+							"abnormalDiastolicHighValue": {
+								"type": "string"
+							},
+							"abnormalDiastolicLowValue": {
+								"type": "string"
+							},
+							"abnormalHighValue": {
+								"type": "string"
+							},
+							"abnormalLowValue": {
+								"type": "string"
+							},
+							"abnormalO2Saturation": {
+								"type": "string"
+							},
+							"abnormalSystolicHighValue": {
+								"type": "string"
+							},
+							"abnormalSystolicLowValue": {
+								"type": "string"
+							},
+							"categories": {
+								"type": "array",
+								"items": {
+									"type": "object",
+									"required": [
+										"fileIEN",
+										"name",
+										"qualifiers"
+									],
+									"properties": {
+										"fileIEN": {
+											"type": "string"
+										},
+										"name": {
+											"type": "string"
+										},
+										"qualifiers": {
+											"type": "array",
+											"items": {
+												"type": "object",
+												"required": [
+													"fileIEN",
+													"name",
+													"synonym"
+												],
+												"properties": {
+													"fileIEN": {
+														"type": "string"
+													},
+													"name": {
+														"type": "string"
+													},
+													"synonym": {
+														"type": "string"
+													}
+												}
+											}
+										}
+									}
+								}
+							},
+							"fileIEN": {
+								"type": "string"
+							},
+							"pceAbbreviation": {
+								"type": "string"
+							},
+							"type": {
+								"type": "string"
+							}
+						}
+					}
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

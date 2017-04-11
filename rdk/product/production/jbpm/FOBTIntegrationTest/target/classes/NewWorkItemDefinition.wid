@@ -1,0 +1,30 @@
+import org.drools.core.process.core.datatype.impl.type.StringDataType;
+import org.drools.core.process.core.datatype.impl.type.ObjectDataType;
+
+[
+	[
+		"name": "CDSInvocationService",
+		"parameters": [
+			"labFHIRResult": new StringDataType()
+		],
+		"results": [
+			"ServiceResponse": new StringDataType()
+		],
+		"displayName": "CDS Invocation Service",
+		"icon" : "defaultservicenodeicon.png",
+		"category" : "Vistacore"
+	],
+	[
+		"name": "FOBTLabService",
+		"parameters": [
+			"pid": new StringDataType(),
+			"site": new StringDataType()
+		],
+		"results": [
+			"ServiceResponse": new StringDataType()
+		],
+		"displayName": "FOBT Lab Service",
+		"icon" : "defaultservicenodeicon.png",
+		"category": "Vistacore"
+	]
+]

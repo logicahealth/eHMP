@@ -1,0 +1,63 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"type": "object",
+	"required": [
+		"data",
+		"status"
+	],
+	"properties": {
+		"data": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"required": [
+					"record",
+					"ien",
+					"name",
+					"editionDate",
+					"editionStatus",
+					"language",
+					"visText",
+					"twoDBarCode",
+					"visUrl",
+					"status"
+				],
+				"properties": {
+					"editionDate": {
+						"type": "string"
+					},
+					"editionStatus": {
+						"type": "string"
+					},
+					"ien": {
+						"type": "string"
+					},
+					"language": {
+						"type": "string"
+					},
+					"name": {
+						"type": "string"
+					},
+					"record": {
+						"type": "string"
+					},
+					"status": {
+						"type": "string"
+					},
+					"twoDBarCode": {
+						"type": "string"
+					},
+					"visText": {
+						"type": "string"
+					},
+					"visUrl": {
+						"type": "string"
+					}
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

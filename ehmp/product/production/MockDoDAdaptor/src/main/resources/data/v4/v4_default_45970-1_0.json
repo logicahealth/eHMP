@@ -1,0 +1,129 @@
+{
+  "queryComplete": true,
+  "statusList": [
+    {
+      "partner": {
+        "partnerIdentifier": "2.16.840.1.113883.3.42.126.100001.13",
+        "partnerName": "ahlta",
+        "partnerType": "DOD"
+      },
+      "partnerStatus": "SUCCESS",
+      "expectedCount": 1,
+      "receivedCount": 1
+    }
+  ],
+  "dataList": {
+    "demographics": [
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000001439"
+        },
+        "enteredBy": null,
+        "enteredDate": null,
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "52536-0"
+          }
+        ],
+        "facility": null,
+        "addresses": [
+          {
+            "type": "Home Address",
+            "city": null,
+            "country": null,
+            "county": null,
+            "postalCode": null,
+            "state": null,
+            "street": [
+              "Any Street"
+            ]
+          }
+        ],
+        "branch": [],
+        "birthDate": {
+          "start": "1935-04-07T00:00:00",
+          "end": "1935-04-07T00:00:00"
+        },
+        "deersEligibility": [
+          {
+            "display": "Ineligible",
+            "primary": true
+          }
+        ],
+        "patientId": [
+          {
+            "id": "D101050002"
+          }
+        ],
+        "enrollmentLocation": {
+          "name": "1st Medical Group"
+        },
+        "name": {
+          "first": "PATIENT",
+          "middle": "Q",
+          "last": "TEN",
+          "suffix": null
+        },
+        "fmp": null,
+        "maritalStatus": [
+          {
+            "display": "Single, Never Married",
+            "primary": true
+          }
+        ],
+        "patientCategory": [
+          {
+            "display": "F11 - United States Air Force (USAF) Active Duty (AD)",
+            "primary": true
+          }
+        ],
+        "race": [
+          {
+            "display": "White",
+            "primary": true
+          }
+        ],
+        "rank": [
+          {
+            "display": "Captain O3-F",
+            "primary": true
+          }
+        ],
+        "religion": [],
+        "sex": [
+          {
+            "display": "F",
+            "primary": true
+          }
+        ],
+        "sponsor": {
+          "branch": [],
+          "rank": [
+            {
+              "display": "Captain O3-F",
+              "primary": true
+            }
+          ],
+          "ssn": "551315004",
+          "assignedUnit": {
+            "name": "NO LONGER ELIGIBLE     (NOELIG)"
+          }
+        },
+        "assignedUnit": {
+          "name": "NO LONGER ELIGIBLE     (NOELIG)"
+        }
+      }
+    ]
+  }
+}

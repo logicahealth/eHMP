@@ -1,0 +1,101 @@
+// button drop down
+.btn-group {
+    > .btn {
+        border-left: 1px solid $grey;
+        border-right: 1px solid $grey;
+        text-transform: capitalize;
+        &:hover,
+        &:focus,
+        &:active,
+        &.active-range {
+            border-left: 1px solid $grey;
+            border-right: 1px solid $grey;
+        }
+        &:focus {
+            outline: 1px dotted;
+        }
+        &.active-range {
+            background-color: $primary-dark;
+            color: $pure-white;
+        }
+        &:first-child {
+            border-left: none;
+        }
+        &:last-child {
+            border-right: none;
+        }
+        &.dropdown-toggle {
+            background-color: $primary;
+            color: $pure-white;
+            &:focus {
+                outline: 1px dotted;
+            }
+        }
+        &.btn-divider {
+            border-right: 1px solid $pure-white;
+            margin-right: 1px;
+        }
+    }
+    .dropdown-menu li a {
+        background-color: $pure-white;
+        background-image: none;
+        font-size: 11px;
+        &:hover {
+            background-color: $primary;
+            color: $pure-white;
+        }
+    }
+}
+.btn-group.btn-group-xs > .btn {
+    padding: 3px 5px;
+}
+
+//I don't know where to put this, this is an icon button that is a drop down
+.dropdown-menu li {
+    font-size: 11px;
+    a {
+        &:hover, &:focus {
+            background-color: $primary;
+            color: $pure-white;
+        }
+    }
+}
+
+// labels, could be moved out into a component?
+.posting {
+    .label {
+        border: none;
+        border-radius: 4px;
+        box-shadow: none;
+        color: $pure-white;
+        cursor: pointer;
+        display: inline-block;
+        font-weight: 400;
+        font-size: 14px;
+        margin: 1px 0px;
+        padding: 4px 6px;
+        width: 25px;
+    }
+}
+
+// I want to move these over to the form sass file - CSS
+.btn-form-control {
+    border-left: 0;
+    border-radius: 0;
+    min-width: 100px;
+}
+
+.form-group {
+    .input-group-btn {
+        vertical-align: bottom;
+    }
+}
+// Button styling from workspace dropdown button
+.open>.dropdown-toggle.btn-success {
+    background-color: $primary;
+    border-color: $primary;
+    &:hover {
+        background-color: $primary-dark;
+        border-color: $primary-dark;
+    }
+}

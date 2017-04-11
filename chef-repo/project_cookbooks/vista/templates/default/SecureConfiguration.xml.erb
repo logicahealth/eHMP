@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SecurityExport>
+<UsersExport>
+  <Users>
+    <FullName>CSP Gateway user</FullName>
+    <Name>CSPSystem</Name>
+    <Password>4ZnVB/hVPYRUYxhWOTpGE3Ar28c=</Password>
+    <Roles>
+      <RolesItem>%All</RolesItem>
+    </Roles>
+  </Users>
+</UsersExport>
+<ServicesExport>
+  <Services>
+    <Description>Controls Cache Direct</Description>
+    <Enabled>false</Enabled>
+    <Name>%Service_CacheDirect</Name>
+  </Services>
+  <Services>
+    <Description>Controls the Call-In Interface</Description>
+    <Enabled>false</Enabled>
+    <Name>%Service_CallIn</Name>
+  </Services>
+  <Services>
+    <Description>Controls Enterprise Cache Protocol (ECP)</Description>
+    <Enabled>true</Enabled>
+    <Name>%Service_ECP</Name>
+  </Services>
+</ServicesExport>
+<EventsExport>
+  <Events>
+    <Description>Audit unsuccessful login events</Description>
+    <Enabled>true</Enabled>
+    <Name>LoginFailure</Name>
+    <Source>%System</Source>
+    <Type>%Login</Type>
+  </Events>
+</EventsExport>
+</SecurityExport>
+
+ 

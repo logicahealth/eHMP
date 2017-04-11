@@ -1,0 +1,163 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "Perform a text search on records for a patient",
+	"description": "",
+	"type": "object",
+	"required": [
+		"data",
+		"params",
+		"success",
+		"method",
+		"status"
+	],
+	"properties": {
+		"data": {
+			"type": "object",
+			"required": [
+				"query",
+				"original",
+				"altQuery",
+				"elapsed",
+				"foundItemsTotal",
+				"unfilteredTotal",
+				"facets",
+				"corrections",
+				"mode",
+				"items",
+				"filters"
+			],
+			"properties": {
+				"altQuery": {
+					"type": "string"
+				},
+				"corrections": {
+					"type": "array",
+					"items": {
+					}
+				},
+				"elapsed": {
+					"type": "integer"
+				},
+				"facets": {
+					"type": "object",
+					"required": [
+						"all",
+						"T-24h",
+						"T-72h",
+						"T-7d",
+						"T-1m",
+						"T-3m",
+						"T-1y",
+						"T-2y"
+					],
+					"properties": {
+						"T-1m": {
+							"type": "integer"
+						},
+						"T-1y": {
+							"type": "integer"
+						},
+						"T-24h": {
+							"type": "integer"
+						},
+						"T-2y": {
+							"type": "integer"
+						},
+						"T-3m": {
+							"type": "integer"
+						},
+						"T-72h": {
+							"type": "integer"
+						},
+						"T-7d": {
+							"type": "integer"
+						},
+						"all": {
+							"type": "integer"
+						},
+						"domain:document": {
+							"type": "integer"
+						},
+						"domain:order": {
+							"type": "integer"
+						},
+						"domain:procedure": {
+							"type": "integer"
+						},
+						"domain:result": {
+							"type": "integer"
+						},
+						"domain:vital": {
+							"type": "integer"
+						}
+					}
+				},
+				"filters": {
+					"type": "object",
+					"properties": {
+					}
+				},
+				"foundItemsTotal": {
+					"type": "integer"
+				},
+				"items": {
+					"type": "array",
+					"items": {
+					}
+				},
+				"mode": {
+					"type": "string"
+				},
+				"original": {
+					"type": "string"
+				},
+				"query": {
+					"type": "string"
+				},
+				"unfilteredTotal": {
+					"type": "integer"
+				}
+			}
+		},
+		"method": {
+			"type": "string"
+		},
+		"params": {
+			"type": "object",
+			"required": [
+				"pid",
+				"query",
+				"pidJoinedList"
+			],
+			"properties": {
+				"fields": {
+					"type": "string"
+				},
+				"limit": {
+					"type": ["integer", "string"]
+				},
+				"pid": {
+					"type": "string"
+				},
+				"pidJoinedList": {
+					"type": "string"
+				},
+				"query": {
+					"type": "string"
+				},
+				"start": {
+					"type": ["integer", "string"]
+				},
+				"types": {
+					"type": "string"
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		},
+		"success": {
+			"type": "boolean"
+		}
+	}
+}

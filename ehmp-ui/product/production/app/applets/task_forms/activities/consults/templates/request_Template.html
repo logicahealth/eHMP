@@ -1,0 +1,60 @@
+<div class="form-top-section"></div>
+<hr>
+<div>
+    <div class="row bottom-margin-xl">
+        <div class="col-xs-12 col-sm-6 col-md-7 font-size-18 left-padding-md"><b>{{ taskVariables.specialty}}</b></div>
+        <div class="col-xs-6 col-md-5 text-right font-size-18 right-padding-md">
+            <i class="fa fa-info-circle"></i> {{ taskVariables.orderState }}
+            <br>
+            <div class="text-right font-size-16 right-padding-md"><span class="label label-warning">{{ taskVariables.subOrderState }}</span></div>
+        </div>
+    </div>
+
+    <div class="task-specific">
+        <b>Consult Details</b><span id="consult-urgency" class="left-padding-sm font-size-18">
+        {{#if showUrgency}}
+        <span class="label {{ urgencyTag }}">{{ taskVariables.urgency }}</span>
+        {{/if}}
+        </span>
+
+        <hr>
+        <div class="row block-display left-padding-xs">
+            <div class="col-xs-6 font-size-12">
+                <span class="color-grey-darker bold-font block-display">Ordering Provider</span>
+                <span>{{ CREATEDBYNAME }}</span>
+            </div>
+            <div class="col-xs-6 font-size-12">
+                <span class="color-grey-darker bold-font block-display">Location Requested</span>
+                <span>{{ taskVariables.location }}</span>
+            </div>
+        </div>
+        <div class="row block-display left-padding-xs top-margin-md">
+            <div class="col-xs-6 font-size-12">
+                <span class="color-grey-darker bold-font block-display">Earliest Date</span>
+                <span>{{ taskVariables.earliestDate }}</span>
+            </div>
+            <div class="col-xs-6 font-size-12">
+                <span class="color-grey-darker bold-font block-display">Latest Date</span>
+                <span> {{ taskVariables.latestDate }}</span>
+            </div>
+        </div>
+
+        {{#if isRequestReason}}
+        <div class="bottom-padding-md">
+            <b>Reason for request</b>
+            <hr>
+            <div class="bottom-padding-md left-padding-xs right-padding-xs">
+                <span class="block-display bold-font">Comment</span>
+                <span class="block-display">{{ taskVariables.requestComment }}</span>
+            </div>
+            <div class="bottom-padding-md left-padding-xs right-padding-xs">
+                <span class="block-display bold-font">Question</span>
+                <span class="block-display">{{taskVariables.requestQuestion}}</span>
+            </div>
+        </div>
+        {{/if}}
+    </div>
+
+    <hr>
+    <div class="form-elements"></div>
+</div>

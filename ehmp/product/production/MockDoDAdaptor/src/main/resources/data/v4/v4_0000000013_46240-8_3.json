@@ -1,0 +1,1146 @@
+{
+  "queryComplete": true,
+  "statusList": [
+    {
+      "partner": {
+        "partnerIdentifier": "2.16.840.1.113883.3.42.126.100001.13",
+        "partnerName": "ahlta",
+        "partnerType": "DOD"
+      },
+      "partnerStatus": "SUCCESS",
+      "expectedCount": 10,
+      "receivedCount": 10
+    }
+  ],
+  "dataList": {
+    "encounters": [
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000966"
+        },
+        "enteredBy": null,
+        "enteredDate": {
+          "start": "2010-06-22T11:29:45",
+          "end": "2010-06-22T11:29:45"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "46240-8"
+          }
+        ],
+        "facility": {
+          "name": "TMDS Facility"
+        },
+        "arrivalDate": {
+          "start": "2008-10-06T19:58:40",
+          "end": "2008-10-06T19:58:40"
+        },
+        "type": [
+          {
+            "display": "INPATIENT",
+            "primary": true
+          }
+        ],
+        "encounterLocations": [
+          {
+            "name": "TMDS Clinic"
+          }
+        ],
+        "diagnoses": [],
+        "procedures": [],
+        "emCode": [
+          []
+        ],
+        "encounterNumber": {
+          "id": "61637"
+        },
+        "provider": null,
+        "status": [
+          {
+            "display": "Complete",
+            "primary": true
+          }
+        ],
+        "reason": [],
+        "disposition": null
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000969"
+        },
+        "enteredBy": null,
+        "enteredDate": {
+          "start": "2010-06-22T16:09:51",
+          "end": "2010-06-22T16:09:51"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "46240-8"
+          }
+        ],
+        "facility": {
+          "name": "TMDS Facility"
+        },
+        "arrivalDate": {
+          "start": "2008-09-16T04:00:00",
+          "end": "2008-09-16T04:00:00"
+        },
+        "type": [
+          {
+            "display": "OUTPATIENT",
+            "primary": true
+          }
+        ],
+        "encounterLocations": [
+          {
+            "name": "TMDS Clinic"
+          }
+        ],
+        "diagnoses": [
+          {
+            "enteredBy": null,
+            "enteredDate": null,
+            "location": null,
+            "status": [],
+            "diagnosis": [
+              {
+                "code": "050.9",
+                "display": "Smallpox, unspecified",
+                "primary": true
+              }
+            ]
+          }
+        ],
+        "procedures": [
+          {
+            "enteredBy": {
+              "name": "MIDTIER, SJFONE"
+            },
+            "enteredDate": {
+              "start": "2010-06-22T16:09:59",
+              "end": "2010-06-22T16:09:59"
+            },
+            "status": [
+              {
+                "display": "Active",
+                "primary": true
+              }
+            ],
+            "procedure": [
+              {
+                "code": "00162",
+                "display": "Anesthesia For Radical Surgery On Nose And Sinuses",
+                "primary": true
+              }
+            ],
+            "date": {
+              "start": "2008-09-16T04:00:00",
+              "end": "2008-09-16T04:00:00"
+            },
+            "recordId": {
+              "id": "2151773278"
+            }
+          }
+        ],
+        "emCode": [
+          []
+        ],
+        "encounterNumber": {
+          "id": "61640"
+        },
+        "provider": null,
+        "status": [
+          {
+            "display": "Complete",
+            "primary": true
+          }
+        ],
+        "reason": [],
+        "disposition": null
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000972"
+        },
+        "enteredBy": {
+          "name": "LANF, THREE"
+        },
+        "enteredDate": {
+          "start": "2011-05-19T12:19:27",
+          "end": "2011-05-19T12:19:27"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "46240-8"
+          }
+        ],
+        "facility": {
+          "name": "Landstuhl RMC"
+        },
+        "arrivalDate": {
+          "start": "2011-05-19T11:36:00",
+          "end": "2011-05-19T11:36:00"
+        },
+        "type": [
+          {
+            "display": "OUTPATIENT",
+            "primary": true
+          }
+        ],
+        "encounterLocations": [
+          {
+            "name": "LSL Cardiology"
+          }
+        ],
+        "diagnoses": [
+          {
+            "enteredBy": null,
+            "enteredDate": null,
+            "location": null,
+            "status": [],
+            "diagnosis": [
+              {
+                "code": "346.90",
+                "display": "Migraine, unspecified, without mention of intractable migraine without mention of status migrainosus",
+                "primary": true
+              }
+            ]
+          }
+        ],
+        "procedures": [
+          {
+            "enteredBy": {
+              "name": "MIDT, LANDFONE"
+            },
+            "enteredDate": {
+              "start": "2011-05-19T12:19:32",
+              "end": "2011-05-19T12:19:32"
+            },
+            "status": [
+              {
+                "display": "Active",
+                "primary": true
+              }
+            ],
+            "procedure": [
+              {
+                "code": null,
+                "display": "Hot water bottle, ice cap or collar, heat and/or cold wrap, any type",
+                "primary": true
+              }
+            ],
+            "date": {
+              "start": "2011-05-19T11:43:56",
+              "end": "2011-05-19T11:43:56"
+            },
+            "recordId": {
+              "id": "2155379723"
+            }
+          }
+        ],
+        "emCode": [
+          [
+            {
+              "code": "99201",
+              "primary": true
+            }
+          ]
+        ],
+        "encounterNumber": {
+          "id": "LAND-7484"
+        },
+        "provider": {
+          "name": "LANF, THREE"
+        },
+        "status": [
+          {
+            "display": "Complete",
+            "primary": true
+          }
+        ],
+        "reason": [
+          {
+            "display": "Notes Entered by: LANF,FIVE 19 May 2011 0735\r\n------------------------------\r\nLTM - RIP Test",
+            "primary": true
+          }
+        ],
+        "disposition": [
+          {
+            "display": "Released w/o Limitations"
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000974"
+        },
+        "enteredBy": {
+          "name": "LANF, FIVE"
+        },
+        "enteredDate": {
+          "start": "2011-12-15T22:04:08",
+          "end": "2011-12-15T22:04:08"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "46240-8"
+          }
+        ],
+        "facility": {
+          "name": "Landstuhl RMC"
+        },
+        "arrivalDate": {
+          "start": "2011-10-20T21:37:20",
+          "end": "2011-10-20T21:37:20"
+        },
+        "type": [
+          {
+            "display": "OUTPATIENT",
+            "primary": true
+          }
+        ],
+        "encounterLocations": [
+          {
+            "name": "LSL Cardiology"
+          }
+        ],
+        "diagnoses": [
+          {
+            "enteredBy": null,
+            "enteredDate": null,
+            "location": null,
+            "status": [],
+            "diagnosis": [
+              {
+                "code": "346.90",
+                "display": "Migraine, unspecified, without mention of intractable migraine without mention of status migrainosus",
+                "primary": true
+              }
+            ]
+          }
+        ],
+        "procedures": [],
+        "emCode": [
+          [
+            {
+              "code": "99211",
+              "primary": true
+            }
+          ]
+        ],
+        "encounterNumber": {
+          "id": "LAND-11107"
+        },
+        "provider": {
+          "name": "LANF, FIVE"
+        },
+        "status": [
+          {
+            "display": "Complete",
+            "primary": true
+          }
+        ],
+        "reason": [
+          {
+            "display": "Notes Entered by: LANF,FIVE 20 Oct 2011 1736\r\n------------------------------\r\nLTM - Test",
+            "primary": true
+          }
+        ],
+        "disposition": [
+          {
+            "display": "Released w/o Limitations"
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000977"
+        },
+        "enteredBy": {
+          "name": "SJF, TEN"
+        },
+        "enteredDate": {
+          "start": "2012-11-15T20:55:08",
+          "end": "2012-11-15T20:55:08"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "46240-8"
+          }
+        ],
+        "facility": {
+          "name": "4th Medical Group"
+        },
+        "arrivalDate": {
+          "start": "2012-11-15T15:44:24",
+          "end": "2012-11-15T15:44:24"
+        },
+        "type": [
+          {
+            "display": "OUTPATIENT",
+            "primary": true
+          }
+        ],
+        "encounterLocations": [
+          {
+            "name": "Blue MTF"
+          }
+        ],
+        "diagnoses": [
+          {
+            "enteredBy": null,
+            "enteredDate": null,
+            "location": null,
+            "status": [],
+            "diagnosis": [
+              {
+                "code": "346.90",
+                "display": "Migraine, unspecified, without mention of intractable migraine without mention of status migrainosus",
+                "primary": true
+              }
+            ]
+          }
+        ],
+        "procedures": [
+          {
+            "enteredBy": {
+              "name": "MIDTIER, SJFONE"
+            },
+            "enteredDate": {
+              "start": "2012-11-15T20:55:09",
+              "end": "2012-11-15T20:55:09"
+            },
+            "status": [
+              {
+                "display": "Active",
+                "primary": true
+              }
+            ],
+            "procedure": [
+              {
+                "code": "94150",
+                "display": "Pulmonary Function Tests Peak Expiratory Flow",
+                "primary": true
+              }
+            ],
+            "date": {
+              "start": "2012-11-15T15:44:24",
+              "end": "2012-11-15T15:44:24"
+            },
+            "recordId": {
+              "id": "2156791160"
+            }
+          }
+        ],
+        "emCode": [
+          [
+            {
+              "code": "99212",
+              "primary": true
+            }
+          ]
+        ],
+        "encounterNumber": {
+          "id": "SEYJ-53053"
+        },
+        "provider": {
+          "name": "SJF, TEN"
+        },
+        "status": [
+          {
+            "display": "Complete",
+            "primary": true
+          }
+        ],
+        "reason": [
+          {
+            "display": "Notes Entered by: SJF,TEN 15 Nov 2012 1044\r\n------------------------------\r\nLTM Test",
+            "primary": true
+          }
+        ],
+        "disposition": [
+          {
+            "display": "Released w/o Limitations"
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000981"
+        },
+        "enteredBy": {
+          "name": "LANF, FOUR"
+        },
+        "enteredDate": {
+          "start": "2012-11-26T17:37:21",
+          "end": "2012-11-26T17:37:21"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "46240-8"
+          }
+        ],
+        "facility": {
+          "name": "Landstuhl RMC"
+        },
+        "arrivalDate": {
+          "start": "2011-11-02T21:36:26",
+          "end": "2011-11-02T21:36:26"
+        },
+        "type": [
+          {
+            "display": "OUTPATIENT",
+            "primary": true
+          }
+        ],
+        "encounterLocations": [
+          {
+            "name": "LSL Cardiology"
+          }
+        ],
+        "diagnoses": [
+          {
+            "enteredBy": null,
+            "enteredDate": null,
+            "location": null,
+            "status": [],
+            "diagnosis": [
+              {
+                "code": "757.39",
+                "display": "Other specified anomalies of skin",
+                "primary": true
+              }
+            ]
+          }
+        ],
+        "procedures": [
+          {
+            "enteredBy": {
+              "name": "MIDT, LANDFONE"
+            },
+            "enteredDate": {
+              "start": "2012-11-26T17:37:21",
+              "end": "2012-11-26T17:37:21"
+            },
+            "status": [
+              {
+                "display": "Active",
+                "primary": true
+              }
+            ],
+            "procedure": [
+              {
+                "code": "22634",
+                "display": null,
+                "primary": true
+              }
+            ],
+            "date": {
+              "start": "2012-04-10T19:50:04",
+              "end": "2012-04-10T19:50:04"
+            },
+            "recordId": {
+              "id": "2156824287"
+            }
+          },
+          {
+            "enteredBy": {
+              "name": "MIDT, LANDFONE"
+            },
+            "enteredDate": {
+              "start": "2012-11-26T17:37:20",
+              "end": "2012-11-26T17:37:20"
+            },
+            "status": [
+              {
+                "display": "Active",
+                "primary": true
+              }
+            ],
+            "procedure": [
+              {
+                "code": "22634",
+                "display": null,
+                "primary": true
+              }
+            ],
+            "date": {
+              "start": "2012-04-10T19:49:59",
+              "end": "2012-04-10T19:49:59"
+            },
+            "recordId": {
+              "id": "2156824286"
+            }
+          }
+        ],
+        "emCode": [
+          [
+            {
+              "code": "99212",
+              "primary": true
+            }
+          ]
+        ],
+        "encounterNumber": {
+          "id": "LAND-11898"
+        },
+        "provider": {
+          "name": "LANF, FOUR"
+        },
+        "status": [
+          {
+            "display": "Complete",
+            "primary": true
+          }
+        ],
+        "reason": [
+          {
+            "display": "Notes Entered by: LANF,ONE 02 Nov 2011 1736\r\n------------------------------\r\nLTM - Test of thinapp",
+            "primary": true
+          }
+        ],
+        "disposition": [
+          {
+            "display": "Released w/o Limitations"
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000984"
+        },
+        "enteredBy": {
+          "name": "LANF, FOUR"
+        },
+        "enteredDate": {
+          "start": "2012-11-26T17:42:48",
+          "end": "2012-11-26T17:42:48"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "46240-8"
+          }
+        ],
+        "facility": {
+          "name": "Landstuhl RMC"
+        },
+        "arrivalDate": {
+          "start": "2012-11-26T17:40:07",
+          "end": "2012-11-26T17:40:07"
+        },
+        "type": [
+          {
+            "display": "OUTPATIENT",
+            "primary": true
+          }
+        ],
+        "encounterLocations": [
+          {
+            "name": "LSL Cardiology"
+          }
+        ],
+        "diagnoses": [
+          {
+            "enteredBy": null,
+            "enteredDate": null,
+            "location": null,
+            "status": [],
+            "diagnosis": [
+              {
+                "code": "346.90",
+                "display": "Migraine, unspecified, without mention of intractable migraine without mention of status migrainosus",
+                "primary": true
+              }
+            ]
+          },
+          {
+            "enteredBy": null,
+            "enteredDate": null,
+            "location": null,
+            "status": [],
+            "diagnosis": [
+              {
+                "code": "339.00",
+                "display": "Cluster headache syndrome, unspecified",
+                "primary": true
+              }
+            ]
+          }
+        ],
+        "procedures": [],
+        "emCode": [
+          [
+            {
+              "code": "99211",
+              "primary": true
+            }
+          ]
+        ],
+        "encounterNumber": {
+          "id": "LAND-59705"
+        },
+        "provider": {
+          "name": "LANF, FOUR"
+        },
+        "status": [
+          {
+            "display": "Updated",
+            "primary": true
+          }
+        ],
+        "reason": [
+          {
+            "display": "LTM - TFS 7780 test",
+            "primary": true
+          }
+        ],
+        "disposition": [
+          {
+            "display": "Released w/o Limitations"
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000987"
+        },
+        "enteredBy": {
+          "name": "LANF, FOURTY"
+        },
+        "enteredDate": {
+          "start": "2013-04-24T18:53:44",
+          "end": "2013-04-24T18:53:44"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "46240-8"
+          }
+        ],
+        "facility": {
+          "name": "Landstuhl RMC"
+        },
+        "arrivalDate": {
+          "start": "2013-04-22T11:52:23",
+          "end": "2013-04-22T11:52:23"
+        },
+        "type": [
+          {
+            "display": "OUTPATIENT",
+            "primary": true
+          }
+        ],
+        "encounterLocations": [
+          {
+            "name": "LSL Cardiology"
+          }
+        ],
+        "diagnoses": [
+          {
+            "enteredBy": null,
+            "enteredDate": null,
+            "location": null,
+            "status": [],
+            "diagnosis": [
+              {
+                "code": "692.3",
+                "display": "Contact dermatitis and other eczema due to drugs and medicines in contact with skin",
+                "primary": true
+              }
+            ]
+          }
+        ],
+        "procedures": [
+          {
+            "enteredBy": {
+              "name": "MIDT, LANDFONE"
+            },
+            "enteredDate": {
+              "start": "2013-04-24T18:53:43",
+              "end": "2013-04-24T18:53:43"
+            },
+            "status": [
+              {
+                "display": "Active",
+                "primary": true
+              }
+            ],
+            "procedure": [
+              {
+                "code": "C9255",
+                "display": "Injection, paliperidone palmitate, 1 mg",
+                "primary": true
+              }
+            ],
+            "date": {
+              "start": "2013-04-24T18:47:48",
+              "end": "2013-04-24T18:47:48"
+            },
+            "recordId": {
+              "id": "2157538360"
+            }
+          }
+        ],
+        "emCode": [
+          [
+            {
+              "code": "99211",
+              "primary": true
+            }
+          ]
+        ],
+        "encounterNumber": {
+          "id": "LAND-98026"
+        },
+        "provider": {
+          "name": "LANF, FOURTY"
+        },
+        "status": [
+          {
+            "display": "Complete",
+            "primary": true
+          }
+        ],
+        "reason": [
+          {
+            "display": "Notes Entered by: LANF,FIVE 22 Apr 2013 0752\r\n------------------------------\r\nLTM - Test",
+            "primary": true
+          }
+        ],
+        "disposition": [
+          {
+            "display": "Released w/o Limitations"
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000990"
+        },
+        "enteredBy": {
+          "name": "SJF, FIVE"
+        },
+        "enteredDate": {
+          "start": "2013-05-09T20:17:04",
+          "end": "2013-05-09T20:17:04"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "46240-8"
+          }
+        ],
+        "facility": {
+          "name": "4th Medical Group"
+        },
+        "arrivalDate": {
+          "start": "2013-05-09T15:30:39",
+          "end": "2013-05-09T15:30:39"
+        },
+        "type": [
+          {
+            "display": "OUTPATIENT",
+            "primary": true
+          }
+        ],
+        "encounterLocations": [
+          {
+            "name": "Blue MTF"
+          }
+        ],
+        "diagnoses": [
+          {
+            "enteredBy": null,
+            "enteredDate": null,
+            "location": null,
+            "status": [],
+            "diagnosis": [
+              {
+                "code": "293.84",
+                "display": "Anxiety disorder in conditions classified elsewhere",
+                "primary": true
+              }
+            ]
+          }
+        ],
+        "procedures": [
+          {
+            "enteredBy": {
+              "name": "MIDTIER, SJFONE"
+            },
+            "enteredDate": {
+              "start": "2013-05-09T20:17:04",
+              "end": "2013-05-09T20:17:04"
+            },
+            "status": [
+              {
+                "display": "Active",
+                "primary": true
+              }
+            ],
+            "procedure": [
+              {
+                "code": "90834",
+                "display": "Social Work Individual Inpatient Counseling 45-50 Minutes",
+                "primary": true
+              }
+            ],
+            "date": {
+              "start": "2013-05-09T20:15:18",
+              "end": "2013-05-09T20:15:18"
+            },
+            "recordId": {
+              "id": "2157551842"
+            }
+          }
+        ],
+        "emCode": [
+          [
+            {
+              "code": "99211",
+              "primary": true
+            }
+          ]
+        ],
+        "encounterNumber": {
+          "id": "SEYJ-16648"
+        },
+        "provider": {
+          "name": "SJF, FIVE"
+        },
+        "status": [
+          {
+            "display": "Complete",
+            "primary": true
+          }
+        ],
+        "reason": [],
+        "disposition": [
+          {
+            "display": "Released w/o Limitations"
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000993"
+        },
+        "enteredBy": {
+          "name": "LANF, ELEVEN"
+        },
+        "enteredDate": {
+          "start": "2013-06-03T22:21:15",
+          "end": "2013-06-03T22:21:15"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "46240-8"
+          }
+        ],
+        "facility": {
+          "name": "Landstuhl RMC"
+        },
+        "arrivalDate": {
+          "start": "2013-06-03T22:19:22",
+          "end": "2013-06-03T22:19:22"
+        },
+        "type": [
+          {
+            "display": "OUTPATIENT",
+            "primary": true
+          }
+        ],
+        "encounterLocations": [
+          {
+            "name": "LSL Cardiology"
+          }
+        ],
+        "diagnoses": [
+          {
+            "enteredBy": null,
+            "enteredDate": null,
+            "location": null,
+            "status": [],
+            "diagnosis": [
+              {
+                "code": "346.90",
+                "display": "Migraine, unspecified, without mention of intractable migraine without mention of status migrainosus",
+                "primary": true
+              }
+            ]
+          }
+        ],
+        "procedures": [
+          {
+            "enteredBy": {
+              "name": "MIDT, LANDFONE"
+            },
+            "enteredDate": {
+              "start": "2013-06-03T22:21:14",
+              "end": "2013-06-03T22:21:14"
+            },
+            "status": [
+              {
+                "display": "Active",
+                "primary": true
+              }
+            ],
+            "procedure": [
+              {
+                "code": "C9255",
+                "display": "Injection, paliperidone palmitate, 1 mg",
+                "primary": true
+              }
+            ],
+            "date": {
+              "start": "2013-06-03T22:20:32",
+              "end": "2013-06-03T22:20:32"
+            },
+            "recordId": {
+              "id": "2157562872"
+            }
+          }
+        ],
+        "emCode": [
+          [
+            {
+              "code": "99211",
+              "primary": true
+            }
+          ]
+        ],
+        "encounterNumber": {
+          "id": "LAND-108625"
+        },
+        "provider": {
+          "name": "LANF, ELEVEN"
+        },
+        "status": [
+          {
+            "display": "Complete",
+            "primary": true
+          }
+        ],
+        "reason": [
+          {
+            "display": "Notes Entered by: LANF,ELEVEN 03 Jun 2013 1818\r\n------------------------------\r\nLTM - HCPCS Test",
+            "primary": true
+          }
+        ],
+        "disposition": [
+          {
+            "display": "Released w/o Limitations"
+          }
+        ]
+      }
+    ]
+  }
+}

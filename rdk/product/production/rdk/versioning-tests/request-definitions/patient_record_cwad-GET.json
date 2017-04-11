@@ -1,0 +1,49 @@
+{
+	"parameters": {
+		"fields": {
+			"name": "fields",
+			"paramType": "query",
+			"type": "string",
+			"values": [
+			]
+		},
+		"filter": {
+			"name": "filter",
+			"paramType": "query",
+			"type": "string",
+			"values": [
+			]
+		},
+		"limit": {
+			"name": "limit",
+			"paramType": "query",
+			"type": "number",
+			"values": [
+			]
+		},
+		"order": {
+			"name": "order",
+			"paramType": "query",
+			"type": "string",
+			"values": [
+			]
+		},
+		"pid": {
+			"name": "pid",
+			"paramType": "query",
+			"required": true,
+			"type": "string",
+			"values": [
+			]
+		},
+		"start": {
+			"name": "start",
+			"paramType": "query",
+			"type": "number",
+			"values": [
+			]
+		}
+	},
+	"schema": {
+	}
+}

@@ -1,0 +1,38 @@
+{
+	"parameters": {
+		"fields": {
+			"name": "fields",
+			"paramType": "query",
+			"type": "string",
+			"values": [
+			]
+		},
+		"limit": {
+			"name": "limit",
+			"paramType": "query",
+			"type": "number",
+			"values": [
+			]
+		},
+		"type": {
+			"name": "type",
+			"paramType": "path",
+			"required": true,
+			"type": "string",
+			"value": "laboratory",
+			"values": [
+				{
+					"value": "vital"
+				},
+				{
+					"value": "laboratory"
+				},
+				{
+					"value": "medication"
+				}
+			]
+		}
+	},
+	"schema": {
+	}
+}

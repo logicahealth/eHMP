@@ -1,0 +1,90 @@
+// backgrid faux-table
+// for sticky headers
+.appletDiv_ChromeContainer .gridContainer {
+    // for meds review applet *** could be moved to applet
+    > .gridster {
+        .panel-body {
+            padding: 0;
+        }
+        .grid-container {
+            padding: 5px 0;
+            .panel-group {
+                height: 100%;
+                margin: 0 !important;
+                overflow-y: auto;
+            }
+        }
+    }
+    // for applets using backgrid
+    .grid-container {
+        height: 100%;
+        > div {
+            height: 100%;
+            .data-grid {
+                table, thead, tbody {
+                    display: block;
+                }
+                table.backgrid {
+                    height: calc(100% - 2px);
+                    // for orders applet *** could be moved to applet
+                    &#data-grid-orders {
+                        height: calc(100% - 30px);
+                    }
+                    tr {
+                        display: flex;
+                        margin: 0;
+                        width: 100%;
+                        border-bottom: 1px solid $grey-lighter;
+                        td, th {
+                            align-items: center;
+                            display: block;
+                            flex: 1;
+                            height: auto;
+                            max-width: none;
+                            padding: 2px 5px;
+                            word-wrap: break-word;
+                            &.flex-width-date {
+                                flex: none;
+                                width: 70px;
+                            }
+                            &.flex-width-date-time {
+                                flex: none;
+                                width: 115px;
+                            }
+                            &.flex-width-comment {
+                                flex: none;
+                                width: 30px;
+                            }
+                        }
+                        td:only-child {
+                            border-right: none;
+                            width: 100%;
+                        }
+                    }
+                    thead {
+                        border-bottom: 2px solid $grey-light;
+                        padding-right: 15px;
+                        th {
+                            border-bottom: none;
+                            text-align: left;
+                            text-transform: uppercase;
+                        }
+                        tr {
+                            border-bottom: none;
+                            &:hover {
+                                background: none;
+                            }
+                        }
+                    }
+                    tbody {
+                        height: calc(100% - 20px);
+                        overflow-y: auto;
+                        tr {
+                            cursor: pointer;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

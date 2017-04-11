@@ -1,0 +1,71 @@
+{
+	"parameters": {
+		"date.end": {
+			"name": "date.end",
+			"paramType": "query",
+			"type": "string",
+			"values": [
+			]
+		},
+		"date.start": {
+			"name": "date.start",
+			"paramType": "query",
+			"type": "string",
+			"values": [
+			]
+		},
+		"fields": {
+			"name": "fields",
+			"paramType": "query",
+			"type": "string",
+			"values": [
+			]
+		},
+		"filter": {
+			"name": "filter",
+			"paramType": "query",
+			"type": "string",
+			"values": [
+			]
+		},
+		"order": {
+			"name": "order",
+			"paramType": "query",
+			"type": "string",
+			"values": [
+			]
+		},
+		"ref.id": {
+			"name": "ref.id",
+			"paramType": "query",
+			"type": "string",
+			"values": [
+			]
+		},
+		"type": {
+			"name": "type",
+			"paramType": "path",
+			"required": true,
+			"type": "string",
+			"value": "wards",
+			"values": [
+				{
+					"value": "wards"
+				},
+				{
+					"value": "clinics"
+				}
+			]
+		},
+		"uid": {
+			"name": "uid",
+			"paramType": "query",
+			"required": true,
+			"type": "string",
+			"values": [
+			]
+		}
+	},
+	"schema": {
+	}
+}

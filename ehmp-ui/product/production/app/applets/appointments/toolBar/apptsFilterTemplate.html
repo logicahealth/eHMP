@@ -1,0 +1,10 @@
+<form role="form">
+    <label for="select-source-{{instanceId}}">Source:</label>
+    <select class="appts-type-menu" id="select-source-{{instanceId}}" name="source" title="Use up and down arrows to view options and then press enter to select.">
+        {{#each siteitems}}
+        {{#if show}}
+        <option value="{{site}}">{{siteLabel}}</option>
+        {{/if}}
+        {{/each}}
+    </select>
+</form>

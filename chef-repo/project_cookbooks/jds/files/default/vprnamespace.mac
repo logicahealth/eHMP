@@ -1,0 +1,24 @@
+VPRNAMESPACE ; create Volume, Database and Namespace
+CREATE(Name, Directory) PUBLIC
+  {
+  ; Create Volume
+  ; see http://docs.intersystems.com/cache20122/csp/documatic/%25CSP.Documatic.cls?PAGE=CLASS&LIBRARY=%25SYS&CLASSNAME=SYS.Database
+  set db=##Class(SYS.Database).%New()
+  set db.Directory=Directory
+  set db.Size=40
+  set db.EncryptedDB=1
+  set db.EncryptionKeyID="FB925728-1114-11E4-956B-00274DB37D00"
+  set Status=db.%Save()
+  if Status'=1 write !, "Error="_$SYSTEM.Status.GetErrorText(Status)
+  ; Create Database
+  kill Properties
+  set Properties("Directory")=Directory
+  set Status=##Class(Config.Databases).Create(Name,.Properties)
+  if Status'=1 write !, "Error="_$SYSTEM.Status.GetErrorText(Status)
+  ; Create Namespace
+  kill Properties
+  set Properties("Globals")=Name
+  set status=##Class(Config.Namespaces).Create(Name,.Properties)
+  if Status'=1 write !, "Error="_$SYSTEM.Status.GetErrorText(Status)
+  }
+

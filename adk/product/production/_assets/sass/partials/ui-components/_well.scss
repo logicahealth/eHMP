@@ -1,0 +1,43 @@
+.well {
+	background-color: $pure-white;
+	background-image: none;
+	&.read-only-well {
+        min-height: 148px;
+        padding: 5px 10px;
+        margin-bottom: 5px 7px;
+	}
+	&.well-collapse {
+        margin: 0px 10px 0px;
+        overflow: hidden;
+        padding: 5px;
+	}
+	> p {
+		margin-top: 4px;
+	}
+    &.well-flex {/*This allows 2 boxes next to each other to be the height of the box with the longer content, this can be seen in encounters line 395*/
+        &:nth-child(1) {
+            margin: 0px 10px 10px 15px;
+            padding: 0px 0px 0px 5px;
+        }
+        &:nth-child(2) {
+            margin: 0px 16px 10px 0px;
+        }
+        p { /*Encoutners, line 387*/
+            margin-bottom: 1px;
+        }
+        ul {
+            list-style: none;
+            padding-left: 10px;
+        }
+        .radio-control:last-child {
+            border-bottom: 0px;
+        }
+    }
+}
+
+.modifier-well {
+    .well.read-only-well {
+        height: 148px;
+        overflow-y: auto;
+    }
+}

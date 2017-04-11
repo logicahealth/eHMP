@@ -1,0 +1,108 @@
+{
+  "queryComplete": true,
+  "statusList": [
+    {
+      "partner": {
+        "partnerIdentifier": "2.16.840.1.113883.3.42.126.100001.13",
+        "partnerName": "ahlta",
+        "partnerType": "DOD"
+      },
+      "partnerStatus": "SUCCESS",
+      "expectedCount": 1,
+      "receivedCount": 1
+    }
+  ],
+  "dataList": {
+    "demographics": [
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000522"
+        },
+        "enteredBy": null,
+        "enteredDate": null,
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "52536-0"
+          }
+        ],
+        "facility": null,
+        "addresses": [
+          {
+            "type": "Home Address",
+            "city": null,
+            "country": null,
+            "county": null,
+            "postalCode": null,
+            "state": null,
+            "street": [
+              "Any Street"
+            ]
+          }
+        ],
+        "branch": [],
+        "birthDate": {
+          "start": "1935-04-07T00:00:00",
+          "end": "1935-04-07T00:00:00"
+        },
+        "deersEligibility": [],
+        "patientId": [
+          {
+            "id": "D1037807420"
+          }
+        ],
+        "enrollmentLocation": null,
+        "name": {
+          "first": "PATIENT",
+          "middle": null,
+          "last": "EIGHT",
+          "suffix": null
+        },
+        "fmp": null,
+        "maritalStatus": [
+          {
+            "display": "Married",
+            "primary": true
+          }
+        ],
+        "patientCategory": [
+          {
+            "display": "A11 - United States Army (USA) Active Duty (AD) Enlisted",
+            "primary": true
+          }
+        ],
+        "race": [],
+        "rank": [],
+        "religion": [
+          {
+            "display": "Not Given/No Preference",
+            "primary": true
+          }
+        ],
+        "sex": [
+          {
+            "display": "M",
+            "primary": true
+          }
+        ],
+        "sponsor": {
+          "branch": [],
+          "rank": [],
+          "ssn": null,
+          "assignedUnit": null
+        },
+        "assignedUnit": null
+      }
+    ]
+  }
+}

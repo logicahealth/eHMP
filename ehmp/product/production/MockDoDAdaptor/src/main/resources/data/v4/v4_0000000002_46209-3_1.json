@@ -1,0 +1,2021 @@
+{
+  "queryComplete": true,
+  "statusList": [
+    {
+      "partner": {
+        "partnerIdentifier": "2.16.840.1.113883.3.42.126.100001.13",
+        "partnerName": "ahlta",
+        "partnerType": "DOD"
+      },
+      "partnerStatus": "SUCCESS",
+      "expectedCount": 24,
+      "receivedCount": 24
+    }
+  ],
+  "dataList": {
+    "medicationOrders": [
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000372"
+        },
+        "enteredBy": null,
+        "enteredDate": null,
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "29305-0"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL"
+        },
+        "orderable": [
+          {
+            "display": "IBUPROFEN 100MG/5ML SUSP ($.30/120ML)--P",
+            "code": "3000268424",
+            "system": "2.16.840.1.113883.3.42.126.100001.16",
+            "primary": true
+          }
+        ],
+        "date": {
+          "start": "2013-11-18T10:08:00",
+          "end": "2013-11-18T10:08:00"
+        },
+        "orderNumber": {
+          "id": "131118-00002"
+        },
+        "orderingProvider": {
+          "name": "BHIE, USERONE"
+        },
+        "status": [],
+        "actionCode": "DC",
+        "childResistant": true,
+        "deliveryLocation": null,
+        "dispensingLocation": null,
+        "alternateDrugText": "CHILDREN'S MOTRIN 100 MG/5 ML",
+        "duration": "D6",
+        "endDate": {
+          "start": "2013-11-24T10:07:00",
+          "end": "2013-11-24T10:07:00"
+        },
+        "enteringLocation": {
+          "name": "Family Practice Clinic"
+        },
+        "giveAmount": "100",
+        "giveFormDescription": "SUSPENSION",
+        "giveUnits": [],
+        "intervalPattern": null,
+        "interval": null,
+        "numberOfRefills": "0",
+        "comment": null,
+        "priorOrderNumber": null,
+        "priority": "ROUTINE",
+        "quantity": "120",
+        "requestedDispenseAmount": "120",
+        "requestedGiveTimeUnit": null,
+        "routeDescription": "PO",
+        "sig": "TAKE ONE TEASPOONFUL BY MOUTH EVERY 6-8 HOURS WITH FOOD AS NEEDED FOR HIGH FEVER OR PAIN",
+        "startDate": {
+          "start": "2013-11-18T10:08:00",
+          "end": "2013-11-18T10:08:00"
+        },
+        "verifiedBy": null
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000374"
+        },
+        "enteredBy": null,
+        "enteredDate": null,
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "29305-0"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL"
+        },
+        "orderable": [
+          {
+            "display": "ACETAMINOPHEN 325MG TAB--PO 325MG TAB",
+            "code": "3000261885",
+            "system": "2.16.840.1.113883.3.42.126.100001.16",
+            "primary": true
+          }
+        ],
+        "date": {
+          "start": "2013-11-18T10:07:00",
+          "end": "2013-11-18T10:07:00"
+        },
+        "orderNumber": {
+          "id": "131118-00001"
+        },
+        "orderingProvider": {
+          "name": "BHIE, USERONE"
+        },
+        "status": [],
+        "actionCode": "DC",
+        "childResistant": true,
+        "deliveryLocation": null,
+        "dispensingLocation": null,
+        "alternateDrugText": "MAPAP 325 MG TABLET",
+        "duration": "D3",
+        "endDate": {
+          "start": "2013-11-21T10:07:00",
+          "end": "2013-11-21T10:07:00"
+        },
+        "enteringLocation": {
+          "name": "Family Practice Clinic"
+        },
+        "giveAmount": "325",
+        "giveFormDescription": "TABLET",
+        "giveUnits": [],
+        "intervalPattern": null,
+        "interval": null,
+        "numberOfRefills": "0",
+        "comment": null,
+        "priorOrderNumber": null,
+        "priority": "ROUTINE",
+        "quantity": "24",
+        "requestedDispenseAmount": "24",
+        "requestedGiveTimeUnit": null,
+        "routeDescription": "PO",
+        "sig": "TAKE 1 TABLET BY MOUTH EVERY 6 HOURS AS NEEDED FOR HEADACHE/FEVER/PAIN OR AS DIRECTED",
+        "startDate": {
+          "start": "2013-11-18T10:08:00",
+          "end": "2013-11-18T10:08:00"
+        },
+        "verifiedBy": null
+      }
+    ],
+    "consultOrders": [],
+    "labOrders": [
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000010330"
+        },
+        "enteredBy": null,
+        "enteredDate": null,
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "26436-6"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL"
+        },
+        "orderable": [
+          {
+            "display": "CALCIUM",
+            "code": "14607975",
+            "system": "2.16.840.1.113883.3.42.126.100001.16",
+            "primary": true
+          }
+        ],
+        "date": {
+          "start": "2013-05-03T14:29:00",
+          "end": "2013-05-03T14:29:00"
+        },
+        "orderNumber": {
+          "id": "130503-00018"
+        },
+        "orderingProvider": {
+          "name": "DOCTOR, ALPHA"
+        },
+        "status": [
+          {
+            "display": "Ordered",
+            "primary": true
+          }
+        ],
+        "adminTimes": null,
+        "alternateSpecimenText": "BLOOD",
+        "collectionMethod": null,
+        "duration": "D1",
+        "endDate": {
+          "start": "2014-05-03T14:28:00",
+          "end": "2014-05-03T14:28:00"
+        },
+        "enteringLocation": {
+          "name": "Dermatology Clinic FHCC"
+        },
+        "frequency": null,
+        "groupNumber": null,
+        "signedDate": null,
+        "signedBy": null,
+        "intervalPattern": null,
+        "interval": null,
+        "comment": "DoD order- LAB 0704",
+        "priorOrderNumber": null,
+        "priority": "ROUTINE",
+        "processingPriority": "R",
+        "scheduleType": [
+          {
+            "display": "Now",
+            "primary": true
+          }
+        ],
+        "specimenText": "PLASMA",
+        "startDate": {
+          "start": "2013-05-03T14:29:00",
+          "end": "2013-05-03T14:29:00"
+        },
+        "statusComment": null,
+        "verifiedBy": null
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000010332"
+        },
+        "enteredBy": null,
+        "enteredDate": null,
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "26436-6"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL"
+        },
+        "orderable": [
+          {
+            "display": "LYTES",
+            "code": "14621975",
+            "system": "2.16.840.1.113883.3.42.126.100001.16",
+            "primary": true
+          }
+        ],
+        "date": {
+          "start": "2013-05-03T14:17:00",
+          "end": "2013-05-03T14:17:00"
+        },
+        "orderNumber": {
+          "id": "130503-00017"
+        },
+        "orderingProvider": {
+          "name": "DOCTOR, ALPHA"
+        },
+        "status": [
+          {
+            "display": "Ordered",
+            "primary": true
+          }
+        ],
+        "adminTimes": null,
+        "alternateSpecimenText": "BLOOD",
+        "collectionMethod": null,
+        "duration": "D1",
+        "endDate": {
+          "start": "2014-05-03T00:01:00",
+          "end": "2014-05-03T00:01:00"
+        },
+        "enteringLocation": {
+          "name": "Orthopedic Clinic FHCC"
+        },
+        "frequency": null,
+        "groupNumber": null,
+        "signedDate": null,
+        "signedBy": null,
+        "intervalPattern": null,
+        "interval": null,
+        "comment": null,
+        "priorOrderNumber": null,
+        "priority": "ROUTINE",
+        "processingPriority": "R",
+        "scheduleType": [
+          {
+            "display": "One Time",
+            "primary": true
+          }
+        ],
+        "specimenText": "PLASMA",
+        "startDate": {
+          "start": "2013-05-03T00:01:00",
+          "end": "2013-05-03T00:01:00"
+        },
+        "statusComment": null,
+        "verifiedBy": null
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000010334"
+        },
+        "enteredBy": null,
+        "enteredDate": null,
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "26436-6"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL"
+        },
+        "orderable": [
+          {
+            "display": "LYTES",
+            "code": "14621975",
+            "system": "2.16.840.1.113883.3.42.126.100001.16",
+            "primary": true
+          }
+        ],
+        "date": {
+          "start": "2013-05-03T14:13:00",
+          "end": "2013-05-03T14:13:00"
+        },
+        "orderNumber": {
+          "id": "130503-00016"
+        },
+        "orderingProvider": {
+          "name": "DOCTOR, ALPHA"
+        },
+        "status": [
+          {
+            "display": "Canceled",
+            "primary": true
+          }
+        ],
+        "adminTimes": null,
+        "alternateSpecimenText": "BLOOD",
+        "collectionMethod": null,
+        "duration": "D1",
+        "endDate": {
+          "start": "2014-05-03T00:01:00",
+          "end": "2014-05-03T00:01:00"
+        },
+        "enteringLocation": {
+          "name": "Orthopedic Clinic FHCC"
+        },
+        "frequency": null,
+        "groupNumber": null,
+        "signedDate": null,
+        "signedBy": null,
+        "intervalPattern": null,
+        "interval": null,
+        "comment": null,
+        "priorOrderNumber": null,
+        "priority": "ROUTINE",
+        "processingPriority": "R",
+        "scheduleType": [
+          {
+            "display": "One Time",
+            "primary": true
+          }
+        ],
+        "specimenText": "PLASMA",
+        "startDate": {
+          "start": "2013-05-03T00:01:00",
+          "end": "2013-05-03T00:01:00"
+        },
+        "statusComment": null,
+        "verifiedBy": null
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000010336"
+        },
+        "enteredBy": null,
+        "enteredDate": null,
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "26436-6"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL"
+        },
+        "orderable": [
+          {
+            "display": "URINALYSIS",
+            "code": "14607816",
+            "system": "2.16.840.1.113883.3.42.126.100001.16",
+            "primary": true
+          }
+        ],
+        "date": {
+          "start": "2013-05-03T14:07:00",
+          "end": "2013-05-03T14:07:00"
+        },
+        "orderNumber": {
+          "id": "130503-00015"
+        },
+        "orderingProvider": {
+          "name": "DOCTOR, ALPHA"
+        },
+        "status": [
+          {
+            "display": "Canceled",
+            "primary": true
+          }
+        ],
+        "adminTimes": null,
+        "alternateSpecimenText": "URINE/RANDOM",
+        "collectionMethod": null,
+        "duration": "D1",
+        "endDate": {
+          "start": "2014-05-03T00:01:00",
+          "end": "2014-05-03T00:01:00"
+        },
+        "enteringLocation": {
+          "name": "Orthopedic Clinic FHCC"
+        },
+        "frequency": null,
+        "groupNumber": null,
+        "signedDate": null,
+        "signedBy": null,
+        "intervalPattern": null,
+        "interval": null,
+        "comment": null,
+        "priorOrderNumber": null,
+        "priority": "ROUTINE",
+        "processingPriority": "R",
+        "scheduleType": [
+          {
+            "display": "One Time",
+            "primary": true
+          }
+        ],
+        "specimenText": "VOIDED URINE",
+        "startDate": {
+          "start": "2013-05-03T00:01:00",
+          "end": "2013-05-03T00:01:00"
+        },
+        "statusComment": null,
+        "verifiedBy": null
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000010338"
+        },
+        "enteredBy": null,
+        "enteredDate": null,
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "26436-6"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL"
+        },
+        "orderable": [
+          {
+            "display": "GLUCOSE",
+            "code": "14607919",
+            "system": "2.16.840.1.113883.3.42.126.100001.16",
+            "primary": true
+          }
+        ],
+        "date": {
+          "start": "2013-05-03T13:56:00",
+          "end": "2013-05-03T13:56:00"
+        },
+        "orderNumber": {
+          "id": "130503-00014"
+        },
+        "orderingProvider": {
+          "name": "DOCTOR, ALPHA"
+        },
+        "status": [
+          {
+            "display": "Final",
+            "primary": true
+          }
+        ],
+        "adminTimes": null,
+        "alternateSpecimenText": "BLOOD",
+        "collectionMethod": null,
+        "duration": "D1",
+        "endDate": {
+          "start": "2014-05-03T00:01:00",
+          "end": "2014-05-03T00:01:00"
+        },
+        "enteringLocation": {
+          "name": "Orthopedic Clinic FHCC"
+        },
+        "frequency": null,
+        "groupNumber": null,
+        "signedDate": null,
+        "signedBy": null,
+        "intervalPattern": null,
+        "interval": null,
+        "comment": null,
+        "priorOrderNumber": null,
+        "priority": "ROUTINE",
+        "processingPriority": null,
+        "scheduleType": [
+          {
+            "display": "One Time",
+            "primary": true
+          }
+        ],
+        "specimenText": "PLASMA",
+        "startDate": {
+          "start": "2013-05-03T00:01:00",
+          "end": "2013-05-03T00:01:00"
+        },
+        "statusComment": null,
+        "verifiedBy": null
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000340"
+        },
+        "enteredBy": null,
+        "enteredDate": null,
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "26436-6"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL"
+        },
+        "orderable": [
+          {
+            "display": "CALCIUM",
+            "code": "14607975",
+            "system": "2.16.840.1.113883.3.42.126.100001.16",
+            "primary": true
+          }
+        ],
+        "date": {
+          "start": "2013-05-03T13:46:00",
+          "end": "2013-05-03T13:46:00"
+        },
+        "orderNumber": {
+          "id": "130503-00013"
+        },
+        "orderingProvider": {
+          "name": "DOCTOR, ALPHA"
+        },
+        "status": [
+          {
+            "display": "Canceled",
+            "primary": true
+          }
+        ],
+        "adminTimes": null,
+        "alternateSpecimenText": "BLOOD",
+        "collectionMethod": null,
+        "duration": "D1",
+        "endDate": {
+          "start": "2014-05-03T00:01:00",
+          "end": "2014-05-03T00:01:00"
+        },
+        "enteringLocation": {
+          "name": "Orthopedic Clinic FHCC"
+        },
+        "frequency": null,
+        "groupNumber": null,
+        "signedDate": null,
+        "signedBy": null,
+        "intervalPattern": null,
+        "interval": null,
+        "comment": null,
+        "priorOrderNumber": null,
+        "priority": "ROUTINE",
+        "processingPriority": "R",
+        "scheduleType": [
+          {
+            "display": "One Time",
+            "primary": true
+          }
+        ],
+        "specimenText": "PLASMA",
+        "startDate": {
+          "start": "2013-05-03T00:01:00",
+          "end": "2013-05-03T00:01:00"
+        },
+        "statusComment": null,
+        "verifiedBy": null
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000342"
+        },
+        "enteredBy": null,
+        "enteredDate": null,
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "26436-6"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL"
+        },
+        "orderable": [
+          {
+            "display": "CHLORIDE",
+            "code": "14607922",
+            "system": "2.16.840.1.113883.3.42.126.100001.16",
+            "primary": true
+          }
+        ],
+        "date": {
+          "start": "2013-05-03T13:20:00",
+          "end": "2013-05-03T13:20:00"
+        },
+        "orderNumber": {
+          "id": "130503-00012"
+        },
+        "orderingProvider": {
+          "name": "DOCTOR, ALPHA"
+        },
+        "status": [
+          {
+            "display": "Canceled",
+            "primary": true
+          }
+        ],
+        "adminTimes": null,
+        "alternateSpecimenText": "BLOOD",
+        "collectionMethod": null,
+        "duration": "D1",
+        "endDate": {
+          "start": "2014-05-03T00:01:00",
+          "end": "2014-05-03T00:01:00"
+        },
+        "enteringLocation": {
+          "name": "Orthopedic Clinic FHCC"
+        },
+        "frequency": null,
+        "groupNumber": null,
+        "signedDate": null,
+        "signedBy": null,
+        "intervalPattern": null,
+        "interval": null,
+        "comment": null,
+        "priorOrderNumber": null,
+        "priority": "ROUTINE",
+        "processingPriority": "R",
+        "scheduleType": [
+          {
+            "display": "One Time",
+            "primary": true
+          }
+        ],
+        "specimenText": "PLASMA",
+        "startDate": {
+          "start": "2013-05-03T00:01:00",
+          "end": "2013-05-03T00:01:00"
+        },
+        "statusComment": null,
+        "verifiedBy": null
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000344"
+        },
+        "enteredBy": null,
+        "enteredDate": null,
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "26436-6"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL"
+        },
+        "orderable": [
+          {
+            "display": "GLUCOSE",
+            "code": "14607919",
+            "system": "2.16.840.1.113883.3.42.126.100001.16",
+            "primary": true
+          }
+        ],
+        "date": {
+          "start": "2013-05-03T11:47:00",
+          "end": "2013-05-03T11:47:00"
+        },
+        "orderNumber": {
+          "id": "130503-00008"
+        },
+        "orderingProvider": {
+          "name": "DOCTOR, ALPHA"
+        },
+        "status": [
+          {
+            "display": "Final",
+            "primary": true
+          }
+        ],
+        "adminTimes": null,
+        "alternateSpecimenText": "BLOOD",
+        "collectionMethod": null,
+        "duration": "D1",
+        "endDate": {
+          "start": "2014-05-03T00:01:00",
+          "end": "2014-05-03T00:01:00"
+        },
+        "enteringLocation": {
+          "name": "Orthopedic Clinic FHCC"
+        },
+        "frequency": null,
+        "groupNumber": null,
+        "signedDate": null,
+        "signedBy": null,
+        "intervalPattern": null,
+        "interval": null,
+        "comment": null,
+        "priorOrderNumber": null,
+        "priority": "ROUTINE",
+        "processingPriority": null,
+        "scheduleType": [
+          {
+            "display": "One Time",
+            "primary": true
+          }
+        ],
+        "specimenText": "PLASMA",
+        "startDate": {
+          "start": "2013-05-03T00:01:00",
+          "end": "2013-05-03T00:01:00"
+        },
+        "statusComment": null,
+        "verifiedBy": null
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000346"
+        },
+        "enteredBy": null,
+        "enteredDate": null,
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "26436-6"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL"
+        },
+        "orderable": [
+          {
+            "display": "CHOLESTEROL",
+            "code": "14621855",
+            "system": "2.16.840.1.113883.3.42.126.100001.16",
+            "primary": true
+          }
+        ],
+        "date": {
+          "start": "2013-05-03T11:37:00",
+          "end": "2013-05-03T11:37:00"
+        },
+        "orderNumber": {
+          "id": "130503-00007"
+        },
+        "orderingProvider": {
+          "name": "DOCTOR, ALPHA"
+        },
+        "status": [
+          {
+            "display": "Final",
+            "primary": true
+          }
+        ],
+        "adminTimes": null,
+        "alternateSpecimenText": "BLOOD",
+        "collectionMethod": null,
+        "duration": "D1",
+        "endDate": {
+          "start": "2014-05-03T00:01:00",
+          "end": "2014-05-03T00:01:00"
+        },
+        "enteringLocation": {
+          "name": "Orthopedic Clinic FHCC"
+        },
+        "frequency": null,
+        "groupNumber": null,
+        "signedDate": null,
+        "signedBy": null,
+        "intervalPattern": null,
+        "interval": null,
+        "comment": null,
+        "priorOrderNumber": null,
+        "priority": "ROUTINE",
+        "processingPriority": null,
+        "scheduleType": [
+          {
+            "display": "One Time",
+            "primary": true
+          }
+        ],
+        "specimenText": "PLASMA",
+        "startDate": {
+          "start": "2013-05-03T00:01:00",
+          "end": "2013-05-03T00:01:00"
+        },
+        "statusComment": null,
+        "verifiedBy": null
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000348"
+        },
+        "enteredBy": null,
+        "enteredDate": null,
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "26436-6"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL"
+        },
+        "orderable": [
+          {
+            "display": "SODIUM",
+            "code": "14607797",
+            "system": "2.16.840.1.113883.3.42.126.100001.16",
+            "primary": true
+          }
+        ],
+        "date": {
+          "start": "2013-05-03T11:28:00",
+          "end": "2013-05-03T11:28:00"
+        },
+        "orderNumber": {
+          "id": "130503-00006"
+        },
+        "orderingProvider": {
+          "name": "DOCTOR, ALPHA"
+        },
+        "status": [
+          {
+            "display": "Canceled",
+            "primary": true
+          }
+        ],
+        "adminTimes": null,
+        "alternateSpecimenText": "BLOOD",
+        "collectionMethod": null,
+        "duration": "D1",
+        "endDate": {
+          "start": "2014-05-03T11:27:00",
+          "end": "2014-05-03T11:27:00"
+        },
+        "enteringLocation": {
+          "name": "Dermatology Clinic FHCC"
+        },
+        "frequency": null,
+        "groupNumber": null,
+        "signedDate": null,
+        "signedBy": null,
+        "intervalPattern": null,
+        "interval": null,
+        "comment": "lab 0501",
+        "priorOrderNumber": null,
+        "priority": "ROUTINE",
+        "processingPriority": "R",
+        "scheduleType": [
+          {
+            "display": "Now",
+            "primary": true
+          }
+        ],
+        "specimenText": "PLASMA",
+        "startDate": {
+          "start": "2013-05-03T11:28:00",
+          "end": "2013-05-03T11:28:00"
+        },
+        "statusComment": null,
+        "verifiedBy": null
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000350"
+        },
+        "enteredBy": null,
+        "enteredDate": null,
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "26436-6"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL"
+        },
+        "orderable": [
+          {
+            "display": "ETHANOL",
+            "code": "14607804",
+            "system": "2.16.840.1.113883.3.42.126.100001.16",
+            "primary": true
+          }
+        ],
+        "date": {
+          "start": "2013-05-03T11:17:00",
+          "end": "2013-05-03T11:17:00"
+        },
+        "orderNumber": {
+          "id": "130503-00005"
+        },
+        "orderingProvider": {
+          "name": "DOCTOR, ALPHA"
+        },
+        "status": [
+          {
+            "display": "Final",
+            "primary": true
+          }
+        ],
+        "adminTimes": null,
+        "alternateSpecimenText": "BLOOD",
+        "collectionMethod": null,
+        "duration": "D1",
+        "endDate": {
+          "start": "2014-05-03T11:16:00",
+          "end": "2014-05-03T11:16:00"
+        },
+        "enteringLocation": {
+          "name": "Dermatology Clinic FHCC"
+        },
+        "frequency": null,
+        "groupNumber": null,
+        "signedDate": null,
+        "signedBy": null,
+        "intervalPattern": null,
+        "interval": null,
+        "comment": "lab 0607",
+        "priorOrderNumber": null,
+        "priority": "ROUTINE",
+        "processingPriority": null,
+        "scheduleType": [
+          {
+            "display": "Now",
+            "primary": true
+          }
+        ],
+        "specimenText": "PLASMA",
+        "startDate": {
+          "start": "2013-05-03T11:17:00",
+          "end": "2013-05-03T11:17:00"
+        },
+        "statusComment": null,
+        "verifiedBy": null
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000352"
+        },
+        "enteredBy": null,
+        "enteredDate": null,
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "26436-6"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL"
+        },
+        "orderable": [
+          {
+            "display": "CHLORIDE",
+            "code": "14607922",
+            "system": "2.16.840.1.113883.3.42.126.100001.16",
+            "primary": true
+          }
+        ],
+        "date": {
+          "start": "2013-05-03T11:08:00",
+          "end": "2013-05-03T11:08:00"
+        },
+        "orderNumber": {
+          "id": "130503-00004"
+        },
+        "orderingProvider": {
+          "name": "DOCTOR, ALPHA"
+        },
+        "status": [
+          {
+            "display": "Final",
+            "primary": true
+          }
+        ],
+        "adminTimes": null,
+        "alternateSpecimenText": "BLOOD",
+        "collectionMethod": null,
+        "duration": "D1",
+        "endDate": {
+          "start": "2014-05-03T00:01:00",
+          "end": "2014-05-03T00:01:00"
+        },
+        "enteringLocation": {
+          "name": "Orthopedic Clinic FHCC"
+        },
+        "frequency": null,
+        "groupNumber": null,
+        "signedDate": null,
+        "signedBy": null,
+        "intervalPattern": null,
+        "interval": null,
+        "comment": null,
+        "priorOrderNumber": null,
+        "priority": "ROUTINE",
+        "processingPriority": null,
+        "scheduleType": [
+          {
+            "display": "One Time",
+            "primary": true
+          }
+        ],
+        "specimenText": "PLASMA",
+        "startDate": {
+          "start": "2013-05-03T00:01:00",
+          "end": "2013-05-03T00:01:00"
+        },
+        "statusComment": null,
+        "verifiedBy": null
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000354"
+        },
+        "enteredBy": null,
+        "enteredDate": null,
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "26436-6"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL"
+        },
+        "orderable": [
+          {
+            "display": "POTASSIUM",
+            "code": "14607798",
+            "system": "2.16.840.1.113883.3.42.126.100001.16",
+            "primary": true
+          }
+        ],
+        "date": {
+          "start": "2013-05-02T15:10:00",
+          "end": "2013-05-02T15:10:00"
+        },
+        "orderNumber": {
+          "id": "130502-00013"
+        },
+        "orderingProvider": {
+          "name": "DOCTOR, ALPHA"
+        },
+        "status": [
+          {
+            "display": "Ordered",
+            "primary": true
+          }
+        ],
+        "adminTimes": null,
+        "alternateSpecimenText": "BLOOD",
+        "collectionMethod": null,
+        "duration": "D1",
+        "endDate": {
+          "start": "2014-05-02T14:52:00",
+          "end": "2014-05-02T14:52:00"
+        },
+        "enteringLocation": {
+          "name": "Orthopedic Clinic FHCC"
+        },
+        "frequency": null,
+        "groupNumber": null,
+        "signedDate": null,
+        "signedBy": null,
+        "intervalPattern": null,
+        "interval": null,
+        "comment": "DoD Modified times for ccr 3695",
+        "priorOrderNumber": null,
+        "priority": "ROUTINE",
+        "processingPriority": "R",
+        "scheduleType": [
+          {
+            "display": "One Time",
+            "primary": true
+          }
+        ],
+        "specimenText": "PLASMA",
+        "startDate": {
+          "start": "2013-05-02T14:53:00",
+          "end": "2013-05-02T14:53:00"
+        },
+        "statusComment": null,
+        "verifiedBy": null
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000356"
+        },
+        "enteredBy": null,
+        "enteredDate": null,
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "26436-6"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL"
+        },
+        "orderable": [
+          {
+            "display": "POTASSIUM",
+            "code": "14607798",
+            "system": "2.16.840.1.113883.3.42.126.100001.16",
+            "primary": true
+          }
+        ],
+        "date": {
+          "start": "2013-05-02T14:55:00",
+          "end": "2013-05-02T14:55:00"
+        },
+        "orderNumber": {
+          "id": "130502-00011"
+        },
+        "orderingProvider": {
+          "name": "DOCTOR, ALPHA"
+        },
+        "status": [
+          {
+            "display": "Discontinued",
+            "primary": true
+          }
+        ],
+        "adminTimes": null,
+        "alternateSpecimenText": "BLOOD",
+        "collectionMethod": null,
+        "duration": "D1",
+        "endDate": {
+          "start": "2014-05-02T00:01:00",
+          "end": "2014-05-02T00:01:00"
+        },
+        "enteringLocation": {
+          "name": "Orthopedic Clinic FHCC"
+        },
+        "frequency": null,
+        "groupNumber": null,
+        "signedDate": null,
+        "signedBy": null,
+        "intervalPattern": null,
+        "interval": null,
+        "comment": null,
+        "priorOrderNumber": null,
+        "priority": "ROUTINE",
+        "processingPriority": "R",
+        "scheduleType": [
+          {
+            "display": "One Time",
+            "primary": true
+          }
+        ],
+        "specimenText": "PLASMA",
+        "startDate": {
+          "start": "2013-05-02T00:01:00",
+          "end": "2013-05-02T00:01:00"
+        },
+        "statusComment": null,
+        "verifiedBy": null
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000358"
+        },
+        "enteredBy": null,
+        "enteredDate": null,
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "26436-6"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL"
+        },
+        "orderable": [
+          {
+            "display": "POTASSIUM",
+            "code": "14607798",
+            "system": "2.16.840.1.113883.3.42.126.100001.16",
+            "primary": true
+          }
+        ],
+        "date": {
+          "start": "2013-05-02T14:49:00",
+          "end": "2013-05-02T14:49:00"
+        },
+        "orderNumber": {
+          "id": "130502-00010"
+        },
+        "orderingProvider": {
+          "name": "DOCTOR, ALPHA"
+        },
+        "status": [
+          {
+            "display": "Ordered",
+            "primary": true
+          }
+        ],
+        "adminTimes": null,
+        "alternateSpecimenText": "BLOOD",
+        "collectionMethod": null,
+        "duration": "D1",
+        "endDate": {
+          "start": "2014-05-02T00:01:00",
+          "end": "2014-05-02T00:01:00"
+        },
+        "enteringLocation": {
+          "name": "Orthopedic Clinic FHCC"
+        },
+        "frequency": null,
+        "groupNumber": null,
+        "signedDate": null,
+        "signedBy": null,
+        "intervalPattern": null,
+        "interval": null,
+        "comment": null,
+        "priorOrderNumber": null,
+        "priority": "ROUTINE",
+        "processingPriority": "R",
+        "scheduleType": [
+          {
+            "display": "One Time",
+            "primary": true
+          }
+        ],
+        "specimenText": "PLASMA",
+        "startDate": {
+          "start": "2013-05-02T00:01:00",
+          "end": "2013-05-02T00:01:00"
+        },
+        "statusComment": null,
+        "verifiedBy": null
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000360"
+        },
+        "enteredBy": null,
+        "enteredDate": null,
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "26436-6"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL"
+        },
+        "orderable": [
+          {
+            "display": "GLUCOSE",
+            "code": "14607919",
+            "system": "2.16.840.1.113883.3.42.126.100001.16",
+            "primary": true
+          }
+        ],
+        "date": {
+          "start": "2013-05-02T14:19:00",
+          "end": "2013-05-02T14:19:00"
+        },
+        "orderNumber": {
+          "id": "130502-00009"
+        },
+        "orderingProvider": {
+          "name": "DOCTOR, ALPHA"
+        },
+        "status": [
+          {
+            "display": "Final",
+            "primary": true
+          }
+        ],
+        "adminTimes": null,
+        "alternateSpecimenText": "BLOOD",
+        "collectionMethod": null,
+        "duration": "D1",
+        "endDate": {
+          "start": "2014-05-02T14:19:00",
+          "end": "2014-05-02T14:19:00"
+        },
+        "enteringLocation": {
+          "name": "Orthopedic Clinic FHCC"
+        },
+        "frequency": null,
+        "groupNumber": null,
+        "signedDate": null,
+        "signedBy": null,
+        "intervalPattern": null,
+        "interval": null,
+        "comment": null,
+        "priorOrderNumber": null,
+        "priority": "ROUTINE",
+        "processingPriority": null,
+        "scheduleType": [
+          {
+            "display": "Now",
+            "primary": true
+          }
+        ],
+        "specimenText": "PLASMA",
+        "startDate": {
+          "start": "2013-05-02T14:20:00",
+          "end": "2013-05-02T14:20:00"
+        },
+        "statusComment": null,
+        "verifiedBy": null
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000362"
+        },
+        "enteredBy": null,
+        "enteredDate": null,
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "26436-6"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL"
+        },
+        "orderable": [
+          {
+            "display": "LYTES",
+            "code": "14621975",
+            "system": "2.16.840.1.113883.3.42.126.100001.16",
+            "primary": true
+          }
+        ],
+        "date": {
+          "start": "2013-05-02T14:10:00",
+          "end": "2013-05-02T14:10:00"
+        },
+        "orderNumber": {
+          "id": "130502-00008"
+        },
+        "orderingProvider": {
+          "name": "DOCTOR, ALPHA"
+        },
+        "status": [
+          {
+            "display": "Final",
+            "primary": true
+          }
+        ],
+        "adminTimes": null,
+        "alternateSpecimenText": "BLOOD",
+        "collectionMethod": null,
+        "duration": "D1",
+        "endDate": {
+          "start": "2014-05-02T00:01:00",
+          "end": "2014-05-02T00:01:00"
+        },
+        "enteringLocation": {
+          "name": "Orthopedic Clinic FHCC"
+        },
+        "frequency": null,
+        "groupNumber": null,
+        "signedDate": null,
+        "signedBy": null,
+        "intervalPattern": null,
+        "interval": null,
+        "comment": null,
+        "priorOrderNumber": null,
+        "priority": "ROUTINE",
+        "processingPriority": null,
+        "scheduleType": [
+          {
+            "display": "One Time",
+            "primary": true
+          }
+        ],
+        "specimenText": "PLASMA",
+        "startDate": {
+          "start": "2013-05-02T00:01:00",
+          "end": "2013-05-02T00:01:00"
+        },
+        "statusComment": null,
+        "verifiedBy": null
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000364"
+        },
+        "enteredBy": null,
+        "enteredDate": null,
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "26436-6"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL"
+        },
+        "orderable": [
+          {
+            "display": "SODIUM",
+            "code": "14607797",
+            "system": "2.16.840.1.113883.3.42.126.100001.16",
+            "primary": true
+          }
+        ],
+        "date": {
+          "start": "2013-05-02T11:03:00",
+          "end": "2013-05-02T11:03:00"
+        },
+        "orderNumber": {
+          "id": "130502-00004"
+        },
+        "orderingProvider": {
+          "name": "DOCTOR, ALPHA"
+        },
+        "status": [
+          {
+            "display": "Final",
+            "primary": true
+          }
+        ],
+        "adminTimes": null,
+        "alternateSpecimenText": "BLOOD",
+        "collectionMethod": null,
+        "duration": "D1",
+        "endDate": {
+          "start": "2014-05-02T11:01:00",
+          "end": "2014-05-02T11:01:00"
+        },
+        "enteringLocation": {
+          "name": "Dermatology Clinic FHCC"
+        },
+        "frequency": null,
+        "groupNumber": null,
+        "signedDate": null,
+        "signedBy": null,
+        "intervalPattern": null,
+        "interval": null,
+        "comment": "lab 2573 - CCR 3242 (rerun)",
+        "priorOrderNumber": null,
+        "priority": "ROUTINE",
+        "processingPriority": null,
+        "scheduleType": [
+          {
+            "display": "Now",
+            "primary": true
+          }
+        ],
+        "specimenText": "PLASMA",
+        "startDate": {
+          "start": "2013-05-02T11:02:00",
+          "end": "2013-05-02T11:02:00"
+        },
+        "statusComment": null,
+        "verifiedBy": null
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000366"
+        },
+        "enteredBy": null,
+        "enteredDate": null,
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "26436-6"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL"
+        },
+        "orderable": [
+          {
+            "display": "SODIUM",
+            "code": "14607797",
+            "system": "2.16.840.1.113883.3.42.126.100001.16",
+            "primary": true
+          }
+        ],
+        "date": {
+          "start": "2013-05-02T10:50:00",
+          "end": "2013-05-02T10:50:00"
+        },
+        "orderNumber": {
+          "id": "130502-00003"
+        },
+        "orderingProvider": {
+          "name": "DOCTOR, ALPHA"
+        },
+        "status": [
+          {
+            "display": "Final",
+            "primary": true
+          }
+        ],
+        "adminTimes": null,
+        "alternateSpecimenText": "BLOOD",
+        "collectionMethod": null,
+        "duration": "D1",
+        "endDate": {
+          "start": "2014-05-02T10:49:00",
+          "end": "2014-05-02T10:49:00"
+        },
+        "enteringLocation": {
+          "name": "Dermatology Clinic FHCC"
+        },
+        "frequency": null,
+        "groupNumber": null,
+        "signedDate": null,
+        "signedBy": null,
+        "intervalPattern": null,
+        "interval": null,
+        "comment": "lab 2573 - ccr 3242",
+        "priorOrderNumber": null,
+        "priority": "ROUTINE",
+        "processingPriority": null,
+        "scheduleType": [
+          {
+            "display": "Now",
+            "primary": true
+          }
+        ],
+        "specimenText": "PLASMA",
+        "startDate": {
+          "start": "2013-05-02T10:50:00",
+          "end": "2013-05-02T10:50:00"
+        },
+        "statusComment": null,
+        "verifiedBy": null
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000368"
+        },
+        "enteredBy": null,
+        "enteredDate": null,
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "26436-6"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL"
+        },
+        "orderable": [
+          {
+            "display": "CALCIUM",
+            "code": "14607975",
+            "system": "2.16.840.1.113883.3.42.126.100001.16",
+            "primary": true
+          }
+        ],
+        "date": {
+          "start": "2013-05-02T10:33:00",
+          "end": "2013-05-02T10:33:00"
+        },
+        "orderNumber": {
+          "id": "130502-00002"
+        },
+        "orderingProvider": {
+          "name": "DOCTOR, ALPHA"
+        },
+        "status": [
+          {
+            "display": "Final",
+            "primary": true
+          }
+        ],
+        "adminTimes": null,
+        "alternateSpecimenText": "BLOOD",
+        "collectionMethod": null,
+        "duration": "D1",
+        "endDate": {
+          "start": "2014-05-02T10:32:00",
+          "end": "2014-05-02T10:32:00"
+        },
+        "enteringLocation": {
+          "name": "Dermatology Clinic FHCC"
+        },
+        "frequency": null,
+        "groupNumber": null,
+        "signedDate": null,
+        "signedBy": null,
+        "intervalPattern": null,
+        "interval": null,
+        "comment": "lab 0613",
+        "priorOrderNumber": null,
+        "priority": "ROUTINE",
+        "processingPriority": null,
+        "scheduleType": [
+          {
+            "display": "Now",
+            "primary": true
+          }
+        ],
+        "specimenText": "PLASMA",
+        "startDate": {
+          "start": "2013-05-02T10:33:00",
+          "end": "2013-05-02T10:33:00"
+        },
+        "statusComment": null,
+        "verifiedBy": null
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000370"
+        },
+        "enteredBy": null,
+        "enteredDate": null,
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "26436-6"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL"
+        },
+        "orderable": [
+          {
+            "display": "GLUCOSE",
+            "code": "14607919",
+            "system": "2.16.840.1.113883.3.42.126.100001.16",
+            "primary": true
+          }
+        ],
+        "date": {
+          "start": "2013-05-02T10:10:00",
+          "end": "2013-05-02T10:10:00"
+        },
+        "orderNumber": {
+          "id": "130502-00001"
+        },
+        "orderingProvider": {
+          "name": "DOCTOR, ALPHA"
+        },
+        "status": [
+          {
+            "display": "Final",
+            "primary": true
+          }
+        ],
+        "adminTimes": null,
+        "alternateSpecimenText": "BLOOD",
+        "collectionMethod": null,
+        "duration": "D1",
+        "endDate": {
+          "start": "2014-05-02T00:01:00",
+          "end": "2014-05-02T00:01:00"
+        },
+        "enteringLocation": {
+          "name": "Orthopedic Clinic FHCC"
+        },
+        "frequency": null,
+        "groupNumber": null,
+        "signedDate": null,
+        "signedBy": null,
+        "intervalPattern": null,
+        "interval": null,
+        "comment": null,
+        "priorOrderNumber": null,
+        "priority": "ROUTINE",
+        "processingPriority": null,
+        "scheduleType": [
+          {
+            "display": "One Time",
+            "primary": true
+          }
+        ],
+        "specimenText": "PLASMA",
+        "startDate": {
+          "start": "2013-05-02T00:01:00",
+          "end": "2013-05-02T00:01:00"
+        },
+        "statusComment": null,
+        "verifiedBy": null
+      }
+    ],
+    "radiologyOrders": [
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000010328"
+        },
+        "enteredBy": null,
+        "enteredDate": null,
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "18726-0"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL"
+        },
+        "orderable": [
+          {
+            "display": "ANKLE & STRESS VIEWS RT",
+            "code": "126754",
+            "system": "2.16.840.1.113883.3.42.126.100001.16",
+            "primary": true
+          }
+        ],
+        "date": {
+          "start": "2013-05-02T13:31:00",
+          "end": "2013-05-02T13:31:00"
+        },
+        "orderNumber": {
+          "id": "130502-00007"
+        },
+        "orderingProvider": {
+          "name": "DOCTOR, ALPHA"
+        },
+        "status": null,
+        "adminTimes": null,
+        "alternateSpecimenText": null,
+        "collectionMethod": null,
+        "duration": "D1",
+        "endDate": {
+          "start": "2014-05-02T13:30:00",
+          "end": "2014-05-02T13:30:00"
+        },
+        "enteringLocation": {
+          "name": "Dermatology Clinic FHCC"
+        },
+        "frequency": null,
+        "groupNumber": null,
+        "signedDate": null,
+        "signedBy": null,
+        "intervalPattern": null,
+        "interval": null,
+        "comment": "testing ccr 4427",
+        "priorOrderNumber": null,
+        "priority": "ROUTINE",
+        "processingPriority": null,
+        "scheduleType": [
+          {
+            "display": "One Time",
+            "primary": true
+          }
+        ],
+        "specimenText": null,
+        "startDate": {
+          "start": "2013-05-02T00:00:00",
+          "end": "2013-05-02T00:00:00"
+        },
+        "statusComment": null,
+        "verifiedBy": null
+      }
+    ]
+  }
+}

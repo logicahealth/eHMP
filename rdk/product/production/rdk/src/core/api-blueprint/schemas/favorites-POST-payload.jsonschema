@@ -1,0 +1,26 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "properties": {
+        "id": {
+            "description": "Unique identifier of the item (quick order, orderable, order set)",
+            "type": "string"
+        },
+        "type": {
+            "enum": ["quickorder", "orderable", "orderset"]
+        },
+        "domain": {
+            "description": "Clinical domain (for orderable type)",
+            "enum": ["lab", "rad", "med", "consult"]
+        },
+        "siteId": {
+            "description": "Id of the site associated with the referenced conceptual orderable",
+            "type": "string"
+        },
+        "userid": {
+            "description": "Owner of this favorite (e.g., urn:va:user:9E7A:10000000238)",
+            "type": "string"
+        }
+    },
+    "required": ["id", "type"]
+}

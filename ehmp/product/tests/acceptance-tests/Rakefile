@@ -1,0 +1,217 @@
+# Encoding: utf-8
+
+require 'rubygems'
+require 'cucumber'
+require 'cucumber/rake/task'
+require 'rubocop/rake_task'
+require File.dirname(__FILE__) + '/Parallel.rb'
+require File.dirname(__FILE__) + '/../PatientSynchronizer.rb'
+require File.expand_path('../knife-helper.rb', File.dirname(__FILE__))
+
+$LOAD_PATH.push(File.expand_path(File.dirname(__FILE__) + '/features/lib'))
+
+# Check environment sanity and fail fast if not correct
+fail 'WORKSPACE environment variable not set. Did you "source infrastructure/set.env.sh"?' unless ENV.keys.include?('WORKSPACE')
+fail 'GEM_HOME environment variable not set. Did you "source infrastructure/set.env.sh"?' unless ENV.keys.include?('GEM_HOME')
+
+task default: [:endToEndTests]
+
+task endToEndTests: [:codequality]
+
+task codequality: [
+  :info,
+  :rubocop
+]
+
+task :endToEndTests, [:env] => [:environment_setup]
+task :syncCache, [:env] => [:environment_setup]
+
+desc 'Syncs and subscribes eHMP to a list of patients used for automated testing'
+task :syncCache do
+  patient_sync_list = [
+    "9E7A;18",
+    "9E7A;229",
+    "9E7A;100599",
+    "9E7A;100817",
+    "9E7A;711",
+    "9E7A;253",
+    "9E7A;3",
+    "9E7A;8",
+    "9E7A;428",
+    "9E7A;149",
+    "9E7A;301",
+    "9E7A;775",
+    "9E7A;227",
+    "9E7A;100125",
+    "9E7A;100615",
+    "9E7A;100023",
+    "9E7A;100716",
+    "9E7A;237",
+    "9E7A;100816",
+    "9E7A;1",
+    "9E7A;100022",
+    "9E7A;100184",
+    "9E7A;164",
+    "9E7A;167",
+    "9E7A;20",
+    "9E7A;230",
+    "9E7A;287",
+    "9E7A;71",
+    "9E7A;737",
+    "9E7A;100001",
+    "9E7A;100840",
+    "9E7A;631",
+    "9E7A;100826",
+    "9E7A;231",
+    "9E7A;228",
+    "9E7A;271",
+    "9E7A;100012",
+    "9E7A;204",
+    "9E7A;239",
+    "9E7A;9",
+    "9E7A;722",
+    "9E7A;65",
+    "9E7A;100013",
+    "9E7A;236",
+    "9E7A;140",
+    "9E7A;205",
+    "9E7A;100731",
+    "9E7A;100470",
+    "9E7A;100472",
+    "9E7A;100033",
+    "9E7A;17",
+    "9E7A;420",
+    "C877;100184",
+    "C877;1"
+  ]
+
+  # To synchronize all patients, use the assignment:
+  # patient_sync_list = PatientSynchronizer.get_all_pids("http://#{ENV["JDS_IP"]}:9080")
+
+  PatientSynchronizer.wait_until_operational_data_loaded "http://#{ENV["JDS_IP"]}:9080", 600, ["9E7A", "C877"]
+  PatientSynchronizer.synchronize_patient_list "http://#{ENV["VX_SYNC_IP"]}:8080", 3600, patient_sync_list
+end
+
+desc 'Runs end-to-end acceptance tests'
+task :endToEndTests, :env do |t, args|
+  # TODO: add first phase single-process test (selected by tag) followed by second-phase parallel tests
+  Cucumber::Rake::Task.new(:endToEndTestsRun) do |x|
+    case args[:env]
+    when "aws"
+      p "Using aws cucumber parallel options"
+      x.cucumber_opts = 'features --format pretty --tags ~@single --tags ~@future --tags ~@debug --tags ~@UI --profile parallel'
+    when "ede"
+      p "Using ede cucumber parallel options"
+      x.cucumber_opts = 'features --format pretty --tags ~@single --tags ~@future --tags ~@debug --tags ~@UI --profile parallel'
+    else
+      p "Using virtualbox cucumber parallel options"
+      x.cucumber_opts = 'features --format pretty --tags ~@single --tags ~@future --tags ~@debug --tags ~@UI --tags ~@multiple_server'
+    end
+    # NB: Force use of single process if ENV["PARALLEL_TEST_PROCESSORS"] is not set to some valid value
+    #if ENV["PARALLEL_TEST_PROCESSORS"].nil?
+    #  x.cucumber_opts += ' -n 1'
+    #end
+  end
+
+  start_time = Time.now
+  Rake::Task[:endToEndTestsRun].invoke
+  complete_time = Time.now
+  puts "/*TIMELINE*/ ['acceptance tests', new Date(#{start_time.strftime "%Y,%m,%d,%H,%M,%S,0"}) , new Date(#{complete_time.strftime "%Y,%m,%d,%H,%M,%S,0"})]"
+end
+
+task :compileJson do
+  p "Compiling Json Report"
+  result="[\n"
+  Dir.glob("cucumber{,?}.json").each do |x|
+    file = File.open(x, "r")
+    data = file.read
+    file.close
+    File.delete(x)
+    unless data==""
+      result+=data[2, data.length-4] + ",\n"
+    end
+  end
+  File.open("cucumber.json", 'w') do |f|
+    f.write(result[0, result.length-2]+"\n]")
+  end
+end
+
+## Placeholder task for executing all Acceptance Tests for all Mobile Applications
+Cucumber::Rake::Task.new(:allAcceptanceTests) do |t|
+  t.cucumber_opts = 'features --format pretty --tags ~@future'
+end
+
+task :info do
+  puts '=========================================================================='
+  puts '#     Running codequality checks.                                        #'
+  puts '#     For details, see https://wiki.vistacore.us/display/VACORE/Ruby     #'
+  puts '=========================================================================='
+end
+
+desc 'Rubocop code quality checks configured in .rubocop.yml file'
+Rubocop::RakeTask.new(:rubocop) do |rubocop|
+  # Specify config file in non-standard location.
+  rubocop.options = ['-c.rubocop.yml']
+
+  # Specify Ruby file locations
+  rubocop.patterns = ['**/*.rb', 'Rakefile']
+
+  # Show emacs style output, and offense counts
+  # See https://github.com/bbatsov/rubocop#formatters for other output options
+  rubocop.formatters = ['emacs', 'o']
+
+  # Abort rake on failure
+  rubocop.fail_on_error = true
+end
+
+task :environment_setup, :env do |task, args|
+  env = args[:env] || 'virtualbox'
+
+  environment_endpoints(env)
+end
+
+task :test_search do
+
+  puts knife_search_for_ip("jds")
+end
+
+def environment_endpoints(env)
+  case env
+  when "virtualbox"
+    p "Running with virtualbox environments"
+    ENV["VX_SYNC_IP"] = knife_search_for_ip("vxsync")
+    ENV["VE_API_IP"] = knife_search_for_ip("mocks")
+    ENV["JDS_IP"] = knife_search_for_ip("jds")
+    ENV["PANORAMA_IP"] = knife_search_for_ip("vista-panorama")
+    ENV["KODAK_IP"] = knife_search_for_ip("vista-kodak")
+    ENV['WB_VX_SYNC_PORT'] = '9090' 
+  when "aws"
+    p "Running with aws environments"
+    ENV["VX_SYNC_IP"] = knife_search_for_ip("vxsync")
+    ENV["VE_API_IP"] = knife_search_for_ip("mocks")
+    ENV["JDS_IP"] = knife_search_for_ip("jds")
+    ENV["SOLR_IP"] = knife_search_for_ip("solr")
+    ENV["PANORAMA_IP"] = knife_search_for_ip("vista-panorama")
+    ENV["KODAK_IP"] = knife_search_for_ip("vista-kodak")
+    ENV['WB_VX_SYNC_PORT'] = '9090' 
+  when "ede"
+    p "Running with ede environments"
+    # TODO: Update these when we decide on a permanent location for EDE IP addresses
+    ENV["EHMP_IP"] = Servers::EHMP.localIP
+    ENV["VE_API_IP"] = Servers::VE_API.localIP
+    ENV["JDS_IP"] = Servers::JDS.localIP
+    ENV["VE2_EHMP_IP"] = Servers::VE2_EHMP.localIP
+    ENV["VE2_VE_API_IP"] = Servers::VE2_VE_API.localIP
+    ENV["VE2_JDS_IP"] = Servers::VE2_JDS.localIP
+  when "ede-lxc"
+    p "Running with ede-lxc environments"
+    ENV["EHMP_IP"] = Containers::EHMP.localIP
+    ENV["VE_API_IP"] = Containers::VE_API.localIP
+    ENV["JDS_IP"] = Containers::JDS.localIP
+    ENV["VE2_EHMP_IP"] = Containers::VE2_EHMP.localIP
+    ENV["VE2_VE_API_IP"] = Containers::VE2_VE_API.localIP
+    ENV["VE2_JDS_IP"] = Containers::VE2_JDS.localIP
+  else
+    fail "Unrecognized environment type: #{env}. Allowable types are: 'virtualbox', 'aws', and 'ede'"
+  end
+end

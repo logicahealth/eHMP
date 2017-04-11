@@ -1,0 +1,23 @@
+{
+	"parameters": {
+	},
+	"schema": {
+		"$schema": "http://json-schema.org/draft-04/schema#",
+		"id": "Filter",
+		"properties": {
+			"id": {
+				"description": "workspace name",
+				"type": "string"
+			},
+			"instanceId": {
+				"description": "Applet instance ID for which the filter applies",
+				"type": "string"
+			}
+		},
+		"required": [
+			"id",
+			"instanceId"
+		],
+		"type": "object"
+	}
+}

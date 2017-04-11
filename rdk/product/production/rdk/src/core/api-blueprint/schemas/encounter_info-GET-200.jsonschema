@@ -1,0 +1,87 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "Get encounter info for specific location and datetime",
+	"description": "",
+	"type": "object",
+	"required": [
+		"data",
+		"status"
+	],
+	"properties": {
+		"data": {
+			"type": "object",
+			"required": [
+				"providers",
+				"diagnoses"
+			],
+			"properties": {
+				"comment": {
+					"type": "string"
+				},
+				"diagnoses": {
+					"type": "array",
+					"items": {
+					}
+				},
+				"encounterType": {
+					"type": "string"
+				},
+				"kind": {
+					"type": "string"
+				},
+				"problems": {
+					"type": "array",
+					"items": {
+					}
+				},
+				"procedures": {
+					"type": "array",
+					"items": {
+					}
+				},
+				"providers": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
+							"primary": {
+								"type": "boolean"
+							},
+							"providerDisplayName": {
+								"type": "string"
+							},
+							"providerName": {
+								"type": "string"
+							},
+							"role": {
+								"type": "string"
+							}
+						}
+					}
+				},
+				"service": {
+					"type": "string"
+				},
+				"typeDisplayName": {
+					"type": "string"
+				},
+				"uid": {
+					"type": "string"
+				},
+				"visitRelated": {
+					"type": "array",
+					"items": {
+					}
+				},
+				"visitType": {
+					"type": "object",
+					"properties": {
+					}
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

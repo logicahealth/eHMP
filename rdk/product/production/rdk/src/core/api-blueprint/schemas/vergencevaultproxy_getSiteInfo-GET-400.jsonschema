@@ -1,0 +1,14 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "Get information about a site",
+	"description": "",
+	"type": "object",
+	"properties": {
+		"message": {
+			"type": "string"
+		},
+		"msg": {
+			"type": "string"
+		}
+	}
+}

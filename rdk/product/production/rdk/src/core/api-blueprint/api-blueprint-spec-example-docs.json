@@ -1,0 +1,163 @@
+{
+	"ast": {
+		"resourceGroups": [{
+			"name": "Example",
+			"description": "",
+			"resources": [{
+				"element": "resource",
+				"name": "Example",
+				"description": "See [our docs](https://ehmp.vistacore.us/documentation/#/rdk/documenting) for how to write [API Blueprint](https://github.com/apiaryio/api-blueprint/blob/master/API%20Blueprint%20Specification.md) documentation for the RDK.\n\n",
+				"uriTemplate": "/test/example",
+				"model": {},
+				"parameters": [],
+				"actions": [{
+					"name": "Test",
+					"description": "Example resource\n\n",
+					"method": "GET",
+					"parameters": [{
+						"name": "myQueryParam",
+						"description": "Example query parameter",
+						"type": "string",
+						"required": true,
+						"default": "",
+						"example": "",
+						"values": []
+					}],
+					"attributes": {
+						"relation": "",
+						"uriTemplate": "/test/example{?myQueryParam}"
+					},
+					"content": [],
+					"examples": [{
+						"name": "",
+						"description": "",
+						"requests": [],
+						"responses": [{
+							"name": "200",
+							"description": "",
+							"headers": [{
+								"name": "Content-Type",
+								"value": "application/json"
+							}],
+							"body": "{\n    \"message\": \"GET successful\",\n    \"status\": 200\n}\n",
+							"schema": "{\n    \"$schema\": \"http://json-schema.org/draft-04/schema#\",\n    \"title\": \"Default schema for message response\",\n    \"description\": \"\",\n    \"type\": \"object\",\n    \"required\": [\n        \"message\",\n        \"status\"\n    ],\n    \"properties\": {\n        \"message\": {\n            \"type\": \"string\"\n        },\n        \"status\": {\n            \"type\": \"integer\",\n            \"minimum\": 400\n        }\n    }\n}\n",
+							"content": [{
+								"element": "asset",
+								"attributes": {
+									"role": "bodyExample"
+								},
+								"content": "{\n    \"message\": \"GET successful\",\n    \"status\": 200\n}\n"
+							}, {
+								"element": "asset",
+								"attributes": {
+									"role": "bodySchema"
+								},
+								"content": "{\n    \"$schema\": \"http://json-schema.org/draft-04/schema#\",\n    \"title\": \"Default schema for message response\",\n    \"description\": \"\",\n    \"type\": \"object\",\n    \"required\": [\n        \"message\",\n        \"status\"\n    ],\n    \"properties\": {\n        \"message\": {\n            \"type\": \"string\"\n        },\n        \"status\": {\n            \"type\": \"integer\",\n            \"minimum\": 400\n        }\n    }\n}\n"
+							}]
+						}, {
+							"name": "400",
+							"description": "",
+							"headers": [{
+								"name": "Content-Type",
+								"value": "application/json"
+							}],
+							"body": "{\n    \"data\": [\n        \"The required parameter \\\"myQueryParam\\\" is missing.\"\n    ],\n    \"status\": 400\n}\n",
+							"schema": "{\n    \"$schema\": \"http://json-schema.org/draft-04/schema#\",\n    \"title\": \"400 (Bad Request) response schema\",\n    \"type\": \"object\",\n    \"required\": [\"status\"],\n    \"properties\": {\n        \"data\": {\n            \"type\": \"object\",\n            \"required\": [\"errors\"],\n            \"properties\": {\n                \"errors\": {\n                    \"type\": \"array\",\n                    \"items\": {}\n                }\n            }\n        },\n        \"message\": {\n            \"type\": \"string\"\n        },\n        \"status\": {\n            \"type\": \"integer\",\n            \"minimum\": 400,\n            \"maximum\": 400\n        }\n    }\n}\n",
+							"content": [{
+								"element": "asset",
+								"attributes": {
+									"role": "bodyExample"
+								},
+								"content": "{\n    \"data\": [\n        \"The required parameter \\\"myQueryParam\\\" is missing.\"\n    ],\n    \"status\": 400\n}\n"
+							}, {
+								"element": "asset",
+								"attributes": {
+									"role": "bodySchema"
+								},
+								"content": "{\n    \"$schema\": \"http://json-schema.org/draft-04/schema#\",\n    \"title\": \"400 (Bad Request) response schema\",\n    \"type\": \"object\",\n    \"required\": [\"status\"],\n    \"properties\": {\n        \"data\": {\n            \"type\": \"object\",\n            \"required\": [\"errors\"],\n            \"properties\": {\n                \"errors\": {\n                    \"type\": \"array\",\n                    \"items\": {}\n                }\n            }\n        },\n        \"message\": {\n            \"type\": \"string\"\n        },\n        \"status\": {\n            \"type\": \"integer\",\n            \"minimum\": 400,\n            \"maximum\": 400\n        }\n    }\n}\n"
+							}]
+						}]
+					}]
+				}, {
+					"name": "Test",
+					"description": "Example resource\n\n",
+					"method": "POST",
+					"parameters": [],
+					"attributes": {
+						"relation": "",
+						"uriTemplate": ""
+					},
+					"content": [],
+					"examples": [{
+						"name": "",
+						"description": "",
+						"requests": [{
+							"name": "",
+							"description": "",
+							"headers": [{
+								"name": "Content-Type",
+								"value": "applicaton/json"
+							}],
+							"body": "\"My message\"\n",
+							"schema": "",
+							"content": [{
+								"element": "asset",
+								"attributes": {
+									"role": "bodyExample"
+								},
+								"content": "\"My message\"\n"
+							}]
+						}],
+						"responses": [{
+							"name": "200",
+							"description": "",
+							"headers": [{
+								"name": "Content-Type",
+								"value": "application/json"
+							}],
+							"body": "{\n    \"message\": \"My message\",\n    \"status\": 200\n}\n",
+							"schema": "{\n    \"$schema\": \"http://json-schema.org/draft-04/schema#\",\n    \"title\": \"Default schema for message response\",\n    \"description\": \"\",\n    \"type\": \"object\",\n    \"required\": [\n        \"message\",\n        \"status\"\n    ],\n    \"properties\": {\n        \"message\": {\n            \"type\": \"string\"\n        },\n        \"status\": {\n            \"type\": \"integer\",\n            \"minimum\": 400\n        }\n    }\n}\n",
+							"content": [{
+								"element": "asset",
+								"attributes": {
+									"role": "bodyExample"
+								},
+								"content": "{\n    \"message\": \"My message\",\n    \"status\": 200\n}\n"
+							}, {
+								"element": "asset",
+								"attributes": {
+									"role": "bodySchema"
+								},
+								"content": "{\n    \"$schema\": \"http://json-schema.org/draft-04/schema#\",\n    \"title\": \"Default schema for message response\",\n    \"description\": \"\",\n    \"type\": \"object\",\n    \"required\": [\n        \"message\",\n        \"status\"\n    ],\n    \"properties\": {\n        \"message\": {\n            \"type\": \"string\"\n        },\n        \"status\": {\n            \"type\": \"integer\",\n            \"minimum\": 400\n        }\n    }\n}\n"
+							}]
+						}, {
+							"name": "418",
+							"description": "",
+							"headers": [{
+								"name": "Content-Type",
+								"value": "application/json"
+							}],
+							"body": "{\n    \"message\": \"Example\",\n    \"status\": 418\n}\n",
+							"schema": "{\n    \"$schema\": \"http://json-schema.org/draft-04/schema#\",\n    \"title\": \"Default schema for message response\",\n    \"description\": \"\",\n    \"type\": \"object\",\n    \"required\": [\n        \"message\",\n        \"status\"\n    ],\n    \"properties\": {\n        \"message\": {\n            \"type\": \"string\"\n        },\n        \"status\": {\n            \"type\": \"integer\",\n            \"minimum\": 400\n        }\n    }\n}\n",
+							"content": [{
+								"element": "asset",
+								"attributes": {
+									"role": "bodyExample"
+								},
+								"content": "{\n    \"message\": \"Example\",\n    \"status\": 418\n}\n"
+							}, {
+								"element": "asset",
+								"attributes": {
+									"role": "bodySchema"
+								},
+								"content": "{\n    \"$schema\": \"http://json-schema.org/draft-04/schema#\",\n    \"title\": \"Default schema for message response\",\n    \"description\": \"\",\n    \"type\": \"object\",\n    \"required\": [\n        \"message\",\n        \"status\"\n    ],\n    \"properties\": {\n        \"message\": {\n            \"type\": \"string\"\n        },\n        \"status\": {\n            \"type\": \"integer\",\n            \"minimum\": 400\n        }\n    }\n}\n"
+							}]
+						}]
+					}]
+				}],
+				"content": []
+			}]
+		}]
+	},
+	"warnings": []
+}

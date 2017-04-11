@@ -1,0 +1,49 @@
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+    <div class="logo"><img src="../../../_assets/img/ehmp-logo.png"></div>
+        <ul class="nav navbar-nav navbar-right">
+            <li class="navbar-text">
+            <i class="fa fa-user" aria-hidden="true"></i><i class="fa fa-search" aria-hidden="true"></i> Patient Selection</li>
+            <!-- <li class="top-margin-xs">
+                <div>{{{helpIconLink 'patient_search_button' 'color-pure-white'}}}</div>
+            </li> -->
+            {{#each navTabs}}
+            <li>
+                <a href="#" id="{{toLowerCase finalID}}" route-id="{{routeName}}" class="navigation-tab" title="Press enter to navigate to the {{toTitleCase finalTitle}}">
+                    <i class="fa fa-user-md"></i> {{toTitleCase title}}
+                </a>
+            </li>
+            {{/each}}
+            <li>
+                <a href="#" id="myNotificationsButton" title="Press to see notifications.">
+                    <i class="fa fa-bell"></i> My Notifications
+                </a>
+            </li>
+            <!-- <li class="top-margin-xs">
+                <div>{{{helpIconLink 'user_info' 'color-pure-white'}}}</div>
+            </li> -->
+            <li class="dropdown">
+                <a href="#" id="eHMP-CurrentUser" class="dropdown-toggle" data-toggle="dropdown" data-target="#" aria-expanded="false" title="Press enter to open user menu">
+                    <i class="fa fa-user"></i> {{lastname}}, {{firstname}} <i class="fa fa-caret-down"></i>
+                </a>
+                <ul class="dropdown-menu right-padding-sm">
+                    <li class="color-grey-darkest">{{facility}}</li>
+                    <li>{{title}}</li>
+                    <li role="separator" class="divider"></li>
+                    {{#each pages}}
+                    <li role="presentation">
+                        <a href="#{{pageName}}">{{pageName}}</a>
+                    </li>
+                    {{/each}}
+                    <li>
+                        <a href="#" id="logoutButton" title="Press enter to sign out and return to sign in page.">
+                        <i class="fa fa-power-off"></i> Sign Out
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li class="divider-left">
+                <div>{{{helpIconLink 'ehmp_header' 'color-primary'}}}</div>
+            </li>
+        </ul>
+    </div>

@@ -1,0 +1,42 @@
+{
+	"title": "Get a list of objects correlating facilityCodes to facilityMonikers",
+	"type": "object",
+	"required": [
+		"data"
+	],
+	"properties": {
+		"data": {
+			"type": "object",
+			"required": [
+				"items"
+			],
+			"properties": {
+				"items": {
+					"type": "array",
+					"required": [
+						"149"
+					],
+					"items": {
+						"type": "object",
+						"required": [
+							"facilityCode",
+							"facilityMoniker",
+							"facilityName"
+						],
+						"properties": {
+							"facilityCode": {
+								"type": "string"
+							},
+							"facilityMoniker": {
+								"type": "string"
+							},
+							"facilityName": {
+								"type": "string"
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}

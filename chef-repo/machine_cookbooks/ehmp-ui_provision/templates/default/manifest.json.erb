@@ -1,0 +1,8 @@
+{
+  "overall_version": <%= @overall_version.to_s.inspect %>,
+  "artifacts": {
+  <% @versions.each_with_index do |(name,version),index| %>
+    <%= name.to_s.inspect %>: <%= version.to_s.inspect %><%= ',' unless index == @versions.size - 1 %>
+  <% end %>
+  }
+}

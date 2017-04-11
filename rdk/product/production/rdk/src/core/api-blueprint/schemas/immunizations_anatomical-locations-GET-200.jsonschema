@@ -1,0 +1,104 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "List anatomical locations for immunizations",
+	"type": "object",
+	"required": [
+		"data",
+		"status"
+	],
+	"properties": {
+		"data": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"required": [
+					"site",
+					"uri",
+					"hl7_code"
+				],
+				"properties": {
+					"hl7_code": {
+						"type": "object",
+						"required": [
+							"fmId",
+							"fmType",
+							"value",
+							"type"
+						],
+						"properties": {
+							"fmId": {
+								"type": "string"
+							},
+							"fmType": {
+								"type": "string"
+							},
+							"type": {
+								"type": "string"
+							},
+							"value": {
+								"type": "string"
+							}
+						}
+					},
+					"site": {
+						"type": "object",
+						"required": [
+							"fmId",
+							"fmType",
+							"value",
+							"type"
+						],
+						"properties": {
+							"fmId": {
+								"type": "string"
+							},
+							"fmType": {
+								"type": "string"
+							},
+							"type": {
+								"type": "string"
+							},
+							"value": {
+								"type": "string"
+							}
+						}
+					},
+					"uri": {
+						"type": "object",
+						"required": [
+							"fmId",
+							"fmType",
+							"value",
+							"type",
+							"label",
+							"sameAs"
+						],
+						"properties": {
+							"fmId": {
+								"type": "string"
+							},
+							"fmType": {
+								"type": "string"
+							},
+							"label": {
+								"type": "string"
+							},
+							"sameAs": {
+								"type": "string"
+							},
+							"type": {
+								"type": "string"
+							},
+							"value": {
+								"type": "string"
+							}
+						}
+					}
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

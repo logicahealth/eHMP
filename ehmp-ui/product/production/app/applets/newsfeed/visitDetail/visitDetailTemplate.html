@@ -1,0 +1,147 @@
+<div class="container-fluid">
+{{#if fError}}
+    <div class="row" id="errorMsg">
+      <p>{{errorMsg}}</p>
+    </div>
+{{else}}
+    <div class="row">
+        <strong class="col-xs-4 color-grey-darker text-right">Date</strong>
+        <span class="col-xs-8" data-detail="dateTime">{{formatDate dateTime "MM/DD/YYYY - HH:mm"}}</span>
+    </div>
+
+    <div class="row">
+        <strong class="col-xs-4 color-grey-darker text-right">Type</strong>
+        <span class="col-xs-8" data-detail="typeDisplayName">{{typeDisplayName}}</span>
+    </div>
+    <div class="row">
+        <strong class="col-xs-4 color-grey-darker text-right">Category</strong>
+        <span class="col-xs-8" data-detail="categoryName">
+            {{#if categoryName}}
+                {{categoryName}}
+            {{else}}
+                <span class="sr-only">Blank</span>
+            {{/if}}
+        </span>
+    </div>
+
+    <div class="row">
+        <strong class="col-xs-4 color-grey-darker text-right">Patient Class</strong>
+        <span class="col-xs-8" data-detail="patientClassName">
+            {{#if patientClassName}}
+                {{patientClassName}}
+            {{else}}
+                <span class="sr-only">Blank</span>
+            {{/if}}
+        </span>
+    </div>
+    {{#if appointmentStatus}}
+        <div class="row">
+            <strong class="col-xs-4 color-grey-darker text-right">Appointment Status</strong>
+            <span class="col-xs-8" data-detail="appointmentStatus">{{appointmentStatus}}</span>
+        </div>
+    {{/if}}
+
+    <div class="row">
+        <strong class="col-xs-4 color-grey-darker text-right">Location</strong>
+        <span class="col-xs-8" data-detail="locationDisplayName">
+            {{#if locationDisplayName}}
+                {{locationDisplayName}}
+            {{else}}
+                <span class="sr-only">Blank</span>
+            {{/if}}
+        </span>
+    </div>
+
+    <div class="row">
+        <strong class="col-xs-4 color-grey-darker text-right">Stop Code</strong>
+        <span class="col-xs-8" data-detail="stopCodeName">
+            {{#if stopCodeName}}
+                {{stopCodeName}}
+            {{else}}
+                <span class="sr-only">Blank</span>
+            {{/if}}
+        </span>
+    </div>
+
+    <div class="row">
+        <strong class="col-xs-4 color-grey-darker text-right">Facility</strong>
+        <span class="col-xs-8" data-detail="facilityName">{{facilityName}}</strong>
+    </div>
+
+    {{#if providers}}
+        <h5 class="row bottom-border-grey-light top-margin-no bottom-margin-xs bottom-padding-no" data-group-instanceid="providerSection">Providers</h5>
+        {{#each providers}}
+            <div class="row">
+                {{#if primary}}
+                <strong class="col-xs-4 color-grey-darker text-right">Primary:</strong>
+                {{else}}
+                <strong class="col-xs-4 color-grey-darker text-right">Additional Provider:</strong>
+                {{/if}}
+                <span class="col-xs-8">{{providerDisplayName}}</span>
+            </div>
+        {{/each}}
+    {{/if}}
+
+    {{#if dischargeDiagnoses}}
+        <h5 class="row bottom-border-grey-light top-margin-no bottom-margin-xs bottom-padding-no" data-group-instanceid="diagnosisSection">Discharge Diagnoses</h5>
+        {{#each dischargeDiagnoses}}
+            <div class="row">
+                <strong class="col-xs-offset-4 col-xs-8">
+                    {{#if icdName}}
+                        {{icdName}}
+                    {{else}}
+                        Unknown
+                    {{/if}}
+                </strong>
+            </div>
+        {{/each}}
+    {{/if}}
+
+    {{#if movements}}
+        <h5 class="row bottom-border-grey-light top-margin-no bottom-margin-xs bottom-padding-no" data-group-instanceid="movementSection">Movements</h5>
+        {{#each movements}}
+            <div class="row">
+                <span class="col-xs-offset-4 col-xs-2">{{formatDate dateTime}}</span>
+                <span class="col-xs-3">
+                    {{#if locationName}}
+                        {{locationName}}
+                    {{else}}
+                        <span class="sr-only">Blank</span>
+                    {{/if}}
+                </span>
+                <span class="col-xs-3">{{movementType}}</span>
+            </div>
+        {{/each}}
+    {{/if}}
+
+    {{#if reasonName }}
+        <h5 class="row bottom-border-grey-light top-margin-no bottom-margin-xs bottom-padding-no" data-group-instanceid="reasonSection">Reason</h5>
+        <div class="row">
+            <strong class="col-xs-offset-3 col-xs-9" data-detail="reasonName">{{reasonName}}</strong>
+        </div>
+    {{/if}}
+
+    {{#if cptInfo}}
+        <h5 class="row bottom-border-grey-light top-margin-no bottom-margin-xs bottom-padding-no" data-group-instanceid="cptSection">Procedures</h5>
+        <div class="row">
+            <span class="col-xs-offset-1 col-xs-2">Date</span>
+            <span class="col-xs-4">Name</span>
+            <span class="col-xs-2">Quantity</span>
+            <span class="col-xs-3">Comment</span>
+        </div>
+        {{#each cptInfo}}
+            <div class="row">
+                <span class="col-xs-offset-1 col-xs-2">{{formatDate entered}}</span>
+                <span class="col-xs-4">{{name}}</span>
+                <span class="col-xs-2">{{quantity}}</span>
+                {{#if comment}}
+                    <span class="col-xs-3">{{comment}}</span>
+                {{else}}
+                    <span class="sr-only">Blank</span>
+               {{/if}}
+            </div>
+        {{/each}}
+    {{/if}}
+{{/if}}
+</div>
+

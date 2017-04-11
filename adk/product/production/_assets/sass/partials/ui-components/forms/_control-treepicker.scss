@@ -1,0 +1,60 @@
+.tree-region {
+  min-height: 200px;
+  max-height: 300px;
+  overflow: auto;
+  margin-bottom: 10px;
+  ul.tree {
+    list-style-type: none;
+    li {
+      cursor: pointer;
+      padding-top: 1px;
+      padding-bottom: 1px;
+      span {
+        padding-top: 4px;
+        padding-bottom: 4px;
+      }
+      &.tree-node {
+        margin-bottom: 1px;
+        &:before {
+          font-family: "FontAwesome";
+          padding-right: 5px;
+          color: $primary;
+          font-size: medium;
+          position: relative;
+          top: 2px;
+          content: "\f0da";  // fa-caret-right
+        }
+        &.expanded:before {
+          content: "\f0d7";  // fa-caret-down
+        }
+        &.selectable {
+          &:before {
+            pointer-events: auto;  // targets bullet pseudo-element for click event
+            content:"\f0fe";  // fa-plus-square
+          }
+          &.expanded:before {
+            content: "\f147";  // fa-minus-square-o
+          }
+          > span {
+            &:hover {
+              background: $primary-light;
+            }
+          }
+          &.selected > span {
+            background: $primary-light;
+          }
+        }
+      }
+      &.tree-leaf {
+          > span {
+            &:hover {
+              background: $primary-light;
+            }
+          }
+        &.selected > span {
+          background: $primary-light;
+        }
+      }
+    }
+  }
+}

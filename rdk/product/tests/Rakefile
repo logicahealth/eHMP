@@ -1,0 +1,152 @@
+
+require File.dirname(__FILE__) + '/PatientSynchronizer.rb'
+require File.dirname(__FILE__) + '/knife-helper.rb'
+require 'rubygems'
+require 'json'
+
+task :inttest, [:env] => [:environment_setup]
+
+task :environment_setup, :env do |task, args|
+  env = args[:env] || 'virtualbox'
+  environment_endpoints(env)
+  get_rdk_config_files(env)
+end
+
+def environment_endpoints(env)
+  case env
+  when "virtualbox"
+    ENV["RDK_IP"] = knife_search_for_ip("resource_server")
+    ENV["RDK_PORT"] = knife_search_for_attribute("resource_server", ["rdk", "fetch_server", "port"], "default")
+    ENV["RDK_WRITEBACK_PORT"] = knife_search_for_attribute("resource_server", ["rdk", "write_back", "port"], "default")
+    ENV["RDK_PICKLIST_PORT"] = knife_search_for_attribute("resource_server", ["rdk", "pick_list", "port"], "default")
+  when "aws"
+    ENV["RDK_IP"] = knife_search_for_ip("resource_server")
+    ENV["RDK_PORT"] = knife_search_for_attribute("resource_server", ["rdk", "fetch_server", "port"], "default")
+    ENV["RDK_WRITEBACK_PORT"] = knife_search_for_attribute("resource_server", ["rdk", "write_back", "port"], "default")
+    ENV["RDK_WRITEBACK_HOST"] = knife_search_for_ip("resource_server")
+    ENV["RDK_PICKLIST_PORT"] = knife_search_for_attribute("resource_server", ["rdk", "pick_list", "port"], "default")
+    ENV["RDK_PICKLIST_HOST"] = knife_search_for_ip("resource_server")
+  else
+    fail "Unrecognized environment type: #{env}. Allowable types are: 'virtualbox' and 'aws'"
+  end
+end
+
+def get_rdk_config_files(driver)
+  configDir = "./rdk_config_files"
+  configs = ["rdk-fetch-server-config.json", "rdk-pick-list-server-config.json", "rdk-write-server-config.json"]
+  key = knife_search_for_key_name("rdk", driver)
+  user = driver == "aws" ? "PW      " : "vagrant"
+  ip = knife_search_for_ip("resource_server")
+  Dir.mkdir("#{configDir}") unless File.exists?("#{configDir}")
+  puts "copy rdk configs from rdk machine to #{configDir}"
+  configs.each do |configname|
+    sh('scp', '-o', 'StrictHostKeyChecking=no', '-i', "#{key}", "#{user}@#{ip}:/opt/rdk/config/#{configname}", "#{configDir}")
+  end
+end
+
+desc "Run integration tests against the fetch, write-back and pick-list processes"
+task :inttest do |t, args|
+  Dir.chdir("#{File.dirname(__FILE__)}/../production/rdk"){
+    # initial npm install to ensure the node_modules are there
+    puts "start npm install"
+    sh "npm install --registry http://nexus.vaftl.us:8081/nexus/content/repositories/npm-all/"
+    puts "completed npm install"
+    # fetch server integration tests using the copied fetch-server-config file
+    puts "start fetch integration tests using --config #{File.dirname(__FILE__)}/rdk_config_files/rdk-fetch-server-config.json"
+    sh "TEST_CONFIG=#{File.dirname(__FILE__)}/rdk_config_files/rdk-fetch-server-config.json npm --loglevel verbose run test:integration:fetch"
+    puts "completed fetch integration tests"
+    # write-back server integration tests using the copied write-back-server-config file
+    puts "start write-back integration tests using --config #{File.dirname(__FILE__)}/rdk_config_files/rdk-write-server-config.json"
+    sh "TEST_CONFIG=#{File.dirname(__FILE__)}/rdk_config_files/rdk-write-server-config.json npm --loglevel verbose run test:integration:write-back"
+    puts "completed write-back integration tests"
+    # pick-list server integration tests using the copied pick-list-server-config file
+    puts "start pick-list integration tests using --config #{File.dirname(__FILE__)}/rdk_config_files/rdk-pick-list-server-config.json"
+    sh "TEST_CONFIG=#{File.dirname(__FILE__)}/rdk_config_files/rdk-pick-list-server-config.json npm --loglevel verbose run test:integration:pick-list"
+    puts "completed pick-list integration tests"
+  }
+end
+
+desc "Copy rdk logs from the guest to the host"
+task :scpRdkLogs, :driver do |t, args|
+  logDir = "./rdk_logs"
+  logs = ["*_stdout.log", "*_stderr.log"]
+  key = knife_search_for_key_name("rdk", args[:driver])
+  user = args[:driver] == "aws" ? "PW      " : "vagrant"
+  ip = knife_search_for_ip("resource_server")
+  Dir.mkdir("#{logDir}") unless File.exists?("#{logDir}")
+  logs.each do |logname|
+    sh('scp', '-o', 'StrictHostKeyChecking=no', '-i', "#{key}", "#{user}@#{ip}:/var/rdk/logs/#{logname}", "#{logDir}")
+  end
+end
+
+desc "Copy vxsync logs from the guest to the host"
+task :scpVxsyncLogs, :driver do |t, args|
+  logDir = "vxsync_error_logs"
+  key = knife_search_for_key_name("vxsync", args[:driver])
+  user = args[:driver] == "aws" ? "PW      " : "vagrant"
+  ip = knife_search_for_ip("vxsync")
+  Dir.mkdir("#{logDir}") unless File.exists?("#{logDir}")
+  sh('scp', '-o', 'StrictHostKeyChecking=no', '-i', "#{key}", "#{user}@#{ip}:/tmp/*_stderr.log", "#{logDir}")
+end
+
+desc "Presync the cache with the patient_sync_list prior to int/acc test runs"
+task :syncCache do
+  patient_sync_list = [
+    "9E7A;18",
+    "9E7A;229",
+    "9E7A;231",
+    "9E7A;253",
+    "9E7A;3",
+    "9E7A;8",
+    "9E7A;428",
+    "9E7A;149",
+    "9E7A;301",
+    "9E7A;775",
+    "9E7A;227",
+    "9E7A;100125",
+    "9E7A;100615",
+    "9E7A;100023",
+    "9E7A;100716",
+    "9E7A;100816",
+    "9E7A;1",
+    "9E7A;100022",
+    "9E7A;164",
+    "9E7A;167",
+    "9E7A;20",
+    "9E7A;230",
+    "9E7A;287",
+    "9E7A;71",
+    "9E7A;100840",
+    "9E7A;737",
+    "C877;100184",
+    "C877;100319",
+    "9E7A;100033",
+    "9E7A;100841",
+    "9E7A;433",
+    "9E7A;100817",
+    "9E7A;100033",
+    "9E7A;271",
+    "9E7A;228",
+    "9E7A;204",
+    "9E7A;100013",
+    "9E7A;236",
+    "9E7A;140",
+    "9E7A;205",
+    "9E7A;239",
+    "9E7A;9",
+    "C877;1",
+    "9E7A;17",
+    "9E7A;100001",
+    "9E7A;65",
+    "9E7A;100012",
+    "9E7A;100599",
+    "9E7A;420",
+    "9E7A;100731",
+    "9E7A;722"
+  ]
+
+  ENV["JDS_IP"] = knife_search_for_ip("jds")
+  ENV["VX_SYNC_IP"] = knife_search_for_ip("vxsync")
+  PatientSynchronizer.wait_until_operational_data_loaded "http://#{ENV["JDS_IP"]}:9080", 600, ["9E7A", "C877"]
+  PatientSynchronizer.synchronize_patient_list "http://#{ENV["VX_SYNC_IP"]}:8080", 3600, patient_sync_list
+end

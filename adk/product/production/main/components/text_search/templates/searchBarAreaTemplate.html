@@ -1,0 +1,21 @@
+<li id="suggestPanel" class="dropdown">
+    <div id="search-text-group" class="input-group">
+        <input type="text" id="searchtext" class="form-control" placeholder="Search Record" list="suggestList" autocomplete="off" focus="true" title="Enter text to search." />
+        <div class="input-group-btn">
+            <button id="submit" class="text-search-accessible btn btn-primary" title="Press enter to submit search.">
+                <i class="fa fa-search"></i>
+            </button>
+        </div>
+    </div>
+    <div id="suggestListDiv" class="dropdown-menu" role="menu">
+        <span>
+            <div id="suggestSpinner">
+                <i class="fa fa-spinner fa-spin"></i> 
+            </div>
+        </span>
+        <span id="suggestArea">
+            <ul id="suggestList"></ul>
+        </span>
+        <span id="noResults" class="left-padding-sm" style="display:none;">No results</span>
+    </div>
+</li>

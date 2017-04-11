@@ -1,0 +1,238 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "Get patient uid",
+	"description": "",
+	"type": "object",
+	"required": [
+		"apiVersion",
+		"data",
+		"status"
+	],
+	"properties": {
+		"apiVersion": {
+			"type": "string"
+		},
+		"data": {
+			"type": "object",
+			"required": [
+				"updated",
+				"totalItems",
+				"currentItemCount",
+				"items"
+			],
+			"properties": {
+				"currentItemCount": {
+					"type": "integer"
+				},
+				"items": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"required": [
+							"facilityCode",
+							"facilityName",
+							"kind",
+							"pid",
+							"stampTime",
+							"statusDisplayName",
+							"summary",
+							"uid"
+						],
+						"properties": {
+							"acuityCode": {
+								"type": "string"
+							},
+							"acuityName": {
+								"type": "string"
+							},
+							"agentOrangeExposure": {
+								"type": "string"
+							},
+							"codes": {
+								"type": "array",
+								"items": {
+									"type": "object",
+									"required": [
+										"code",
+										"display",
+										"system"
+									],
+									"properties": {
+										"code": {
+											"type": "number"
+										},
+										"display": {
+											"type": "string"
+										},
+										"system": {
+											"type": "string"
+										}
+									}
+								}
+							},
+							"documentClass": {
+								"type": "string"
+							},
+							"documentTypeCode": {
+								"type": "string"
+							},
+							"documentTypeName": {
+								"type": "string"
+							},
+							"encounterName": {
+								"type": "string"
+							},
+							"encounterUid": {
+								"type": "string"
+							},
+							"entered": {
+								"type": "string"
+							},
+							"facilityCode": {
+								"type": "string"
+							},
+							"facilityName": {
+								"type": "string"
+							},
+							"icdCode": {
+								"type": "string"
+							},
+							"icdGroup": {
+								"type": "string"
+							},
+							"icdName": {
+								"type": "string"
+							},
+							"isInterdisciplinary": {
+								"type": "string"
+							},
+							"kind": {
+								"type": "string"
+							},
+							"lastUpdateTime": {
+								"type": "string"
+							},
+							"localId": {
+								"type": "string"
+							},
+							"localTitle": {
+								"type": "string"
+							},
+							"nationalTitle": {
+								"type": "object",
+								"required": [
+									"name",
+									"vuid"
+								],
+								"properties": {
+									"name": {
+										"type": "string"
+									},
+									"vuid": {
+										"type": "string"
+									}
+								}
+							},
+							"onset": {
+								"type": "string"
+							},
+							"persianGulfExposure": {
+								"type": "string"
+							},
+							"pid": {
+								"type": "string"
+							},
+							"problemText": {
+								"type": "string"
+							},
+							"providerDisplayName": {
+								"type": "string"
+							},
+							"providerName": {
+								"type": "string"
+							},
+							"providerUid": {
+								"type": "string"
+							},
+							"radiationExposure": {
+								"type": "string"
+							},
+							"referenceDateTime": {
+								"type": "string"
+							},
+							"service": {
+								"type": "string"
+							},
+							"serviceConnected": {
+								"type": "boolean"
+							},
+							"stampTime": {
+								"type": "string"
+							},
+							"status": {
+								"type": "string"
+							},
+							"statusCode": {
+								"type": "string"
+							},
+							"statusDisplayName": {
+								"type": "string"
+							},
+							"statusName": {
+								"type": "string"
+							},
+							"summary": {
+								"type": "string"
+							},
+							"text": {
+								"type": "array",
+								"items": {
+									"type": "object",
+									"required": [
+										"content",
+										"dateTime",
+										"status",
+										"summary",
+										"uid"
+									],
+									"properties": {
+										"content": {
+											"type": "string"
+										},
+										"dateTime": {
+											"type": "string"
+										},
+										"status": {
+											"type": "string"
+										},
+										"summary": {
+											"type": "string"
+										},
+										"uid": {
+											"type": "string"
+										}
+									}
+								}
+							},
+							"uid": {
+								"type": "string"
+							},
+							"updated": {
+								"type": "string"
+							}
+						}
+					}
+				},
+				"totalItems": {
+					"type": "integer"
+				},
+				"updated": {
+					"type": "integer"
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

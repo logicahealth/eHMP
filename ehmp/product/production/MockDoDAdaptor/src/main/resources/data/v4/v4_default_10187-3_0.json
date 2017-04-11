@@ -1,0 +1,226 @@
+{
+  "queryComplete": true,
+  "statusList": [
+    {
+      "partner": {
+        "partnerIdentifier": "2.16.840.1.113883.3.42.126.100001.13",
+        "partnerName": "ahlta",
+        "partnerType": "DOD"
+      },
+      "partnerStatus": "SUCCESS",
+      "expectedCount": 1,
+      "receivedCount": 1
+    }
+  ],
+  "dataList": {
+    "questionnaires": [
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000001511"
+        },
+        "enteredBy": {
+          "name": "LARRY, PROVIDER"
+        },
+        "enteredDate": {
+          "start": "2007-09-17T11:03:48",
+          "end": "2007-09-17T11:03:48"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "10187-3"
+          }
+        ],
+        "facility": {
+          "name": "Internal Medicine"
+        },
+        "responseDate": {
+          "start": "2007-09-17T11:05:50",
+          "end": "2007-09-17T11:05:50"
+        },
+        "responses": [
+          {
+            "answers": [
+              {
+                "answer": "Yes",
+                "answerType": "Yes/No",
+                "choice": 1,
+                "correctAnswer": "0"
+              }
+            ],
+            "choices": [
+              {
+                "choice": 2,
+                "answerType": null,
+                "text": "No",
+                "correctAnswer": null,
+                "selected": false
+              },
+              {
+                "choice": 1,
+                "answerType": "Yes/No",
+                "text": "Yes",
+                "correctAnswer": "0",
+                "selected": true
+              }
+            ],
+            "comments": [],
+            "question": "Do you feel inferior to your peers?",
+            "sequenceNumber": 1
+          },
+          {
+            "answers": [
+              {
+                "answer": "Yes",
+                "answerType": "Yes/No",
+                "choice": 1,
+                "correctAnswer": "0"
+              }
+            ],
+            "choices": [
+              {
+                "choice": 2,
+                "answerType": null,
+                "text": "No",
+                "correctAnswer": null,
+                "selected": false
+              },
+              {
+                "choice": 1,
+                "answerType": "Yes/No",
+                "text": "Yes",
+                "correctAnswer": "0",
+                "selected": true
+              }
+            ],
+            "comments": [],
+            "question": "Have you lived in more than one home since birth?",
+            "sequenceNumber": 2
+          },
+          {
+            "answers": [
+              {
+                "answer": "Yes",
+                "answerType": "Yes/No",
+                "choice": 1,
+                "correctAnswer": "0"
+              }
+            ],
+            "choices": [
+              {
+                "choice": 2,
+                "answerType": null,
+                "text": "No",
+                "correctAnswer": null,
+                "selected": false
+              },
+              {
+                "choice": 1,
+                "answerType": "Yes/No",
+                "text": "Yes",
+                "correctAnswer": "0",
+                "selected": true
+              }
+            ],
+            "comments": [],
+            "question": "Do you look around a room before you enter?",
+            "sequenceNumber": 3
+          },
+          {
+            "answers": [
+              {
+                "answer": "Yes",
+                "answerType": "Yes/No",
+                "choice": 1,
+                "correctAnswer": "0"
+              }
+            ],
+            "choices": [
+              {
+                "choice": 2,
+                "answerType": null,
+                "text": "No",
+                "correctAnswer": null,
+                "selected": false
+              },
+              {
+                "choice": 1,
+                "answerType": "Yes/No",
+                "text": "Yes",
+                "correctAnswer": "0",
+                "selected": true
+              }
+            ],
+            "comments": [],
+            "question": "Do you cower in the closet all day?",
+            "sequenceNumber": 4
+          },
+          {
+            "answers": [
+              {
+                "answer": "Yes",
+                "answerType": "Yes/No",
+                "choice": 1,
+                "correctAnswer": "0"
+              }
+            ],
+            "choices": [
+              {
+                "choice": 2,
+                "answerType": null,
+                "text": "No",
+                "correctAnswer": null,
+                "selected": false
+              },
+              {
+                "choice": 1,
+                "answerType": "Yes/No",
+                "text": "Yes",
+                "correctAnswer": "0",
+                "selected": true
+              }
+            ],
+            "comments": [
+              {
+                "enteredDate": {
+                  "start": "2007-09-17T11:04:45",
+                  "end": "2007-09-17T11:04:45"
+                },
+                "commentNumber": 1,
+                "comment": "YADAYADAYDA",
+                "sequenceNumber": 5,
+                "enteredBy": {
+                  "name": "LARRY, PROVIDER"
+                }
+              },
+              {
+                "enteredDate": {
+                  "start": "2007-09-17T11:05:39",
+                  "end": "2007-09-17T11:05:39"
+                },
+                "commentNumber": 2,
+                "comment": "OHOHOOHOHOHOH",
+                "sequenceNumber": 5,
+                "enteredBy": {
+                  "name": "LARRY, PROVIDER"
+                }
+              }
+            ],
+            "question": "Do you make squeaky noises when picked up?",
+            "sequenceNumber": 5
+          }
+        ]
+      }
+    ]
+  }
+}

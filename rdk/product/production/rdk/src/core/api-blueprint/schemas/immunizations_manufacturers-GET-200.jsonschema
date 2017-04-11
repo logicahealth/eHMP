@@ -1,0 +1,151 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "List manufacturers for immunizations",
+	"type": "object",
+	"required": [
+		"data",
+		"status"
+	],
+	"properties": {
+		"data": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"required": [
+					"name",
+					"uri",
+					"mvx_code",
+					"status"
+				],
+				"properties": {
+					"cdc_notes": {
+						"type": "object",
+						"required": [
+							"fmId",
+							"fmType",
+							"value",
+							"type"
+						],
+						"properties": {
+							"fmId": {
+								"type": "string"
+							},
+							"fmType": {
+								"type": "string"
+							},
+							"type": {
+								"type": "string"
+							},
+							"value": {
+								"type": "string"
+							}
+						}
+					},
+					"mvx_code": {
+						"type": "object",
+						"required": [
+							"fmId",
+							"fmType",
+							"value",
+							"type"
+						],
+						"properties": {
+							"fmId": {
+								"type": "string"
+							},
+							"fmType": {
+								"type": "string"
+							},
+							"type": {
+								"type": "string"
+							},
+							"value": {
+								"type": "string"
+							}
+						}
+					},
+					"name": {
+						"type": "object",
+						"required": [
+							"fmId",
+							"fmType",
+							"value",
+							"type"
+						],
+						"properties": {
+							"fmId": {
+								"type": "string"
+							},
+							"fmType": {
+								"type": "string"
+							},
+							"type": {
+								"type": "string"
+							},
+							"value": {
+								"type": "string"
+							}
+						}
+					},
+					"status": {
+						"type": "object",
+						"required": [
+							"fmId",
+							"fmType",
+							"value",
+							"type"
+						],
+						"properties": {
+							"fmId": {
+								"type": "string"
+							},
+							"fmType": {
+								"type": "string"
+							},
+							"type": {
+								"type": "string"
+							},
+							"value": {
+								"type": "string"
+							}
+						}
+					},
+					"uri": {
+						"type": "object",
+						"required": [
+							"fmId",
+							"fmType",
+							"value",
+							"type",
+							"label",
+							"sameAs"
+						],
+						"properties": {
+							"fmId": {
+								"type": "string"
+							},
+							"fmType": {
+								"type": "string"
+							},
+							"label": {
+								"type": "string"
+							},
+							"sameAs": {
+								"type": "string"
+							},
+							"type": {
+								"type": "string"
+							},
+							"value": {
+								"type": "string"
+							}
+						}
+					}
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

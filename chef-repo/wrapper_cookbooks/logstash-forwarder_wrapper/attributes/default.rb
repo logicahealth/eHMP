@@ -1,0 +1,2 @@
+## nil didnt work. failed with the error below so using a dummy one
+## STDERR: Repository 'logstashforwarder': Error parsing config: Error parsing "baseurl = 'nil'": URL must be http, ftp, file or https not ""

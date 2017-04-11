@@ -1,0 +1,594 @@
+{
+  "queryComplete": true,
+  "statusList": [
+    {
+      "partner": {
+        "partnerIdentifier": "2.16.840.1.113883.3.42.126.100001.13",
+        "partnerName": "ahlta",
+        "partnerType": "DOD"
+      },
+      "partnerStatus": "SUCCESS",
+      "expectedCount": 15,
+      "receivedCount": 15
+    }
+  ],
+  "dataList": {
+    "problems": [
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000001448"
+        },
+        "enteredBy": {
+          "name": "SERVER, LEGACY GATEWAY"
+        },
+        "enteredDate": {
+          "start": "20070926154635",
+          "end": "20070926154635"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "11450-4"
+          }
+        ],
+        "facility": {
+          "name": "4th Medical Group",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.10002.100001.8",
+              "id": "0090"
+            }
+          ]
+        },
+        "chronicity": [
+          {
+            "display": "Chronic",
+            "primary": true
+          }
+        ],
+        "comment": null,
+        "modifiedDate": {
+          "start": "2007-09-26T15:46:35",
+          "end": "2007-09-26T15:46:35"
+        },
+        "onsetDate": {
+          "start": "2007-08-24T18:58:06",
+          "end": "2007-08-24T18:58:06"
+        },
+        "negationInd": false,
+        "problem": [
+          {
+            "display": "nausea",
+            "primary": true,
+            "code": "411",
+            "system": "2.16.840.1.113883.6.26"
+          },
+          {
+            "display": "nausea",
+            "primary": false,
+            "code": "787.02",
+            "system": "2.16.840.1.113883.6.103"
+          }
+        ],
+        "provider": null,
+        "sourceOfInfo": [
+          {
+            "display": "Clinical Evidence",
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "Active",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000001449"
+        },
+        "enteredBy": {
+          "name": "PATIENT, BERT"
+        },
+        "enteredDate": {
+          "start": "20070711181537",
+          "end": "20070711181537"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "11450-4"
+          }
+        ],
+        "facility": {
+          "name": "4th Medical Group",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.10002.100001.8",
+              "id": "0090"
+            }
+          ]
+        },
+        "chronicity": [
+          {
+            "display": "Chronic",
+            "primary": true
+          }
+        ],
+        "comment": null,
+        "modifiedDate": {
+          "start": "2007-09-17T12:27:09",
+          "end": "2007-09-17T12:27:09"
+        },
+        "onsetDate": {
+          "start": "2007-07-11T18:19:30",
+          "end": "2007-07-11T18:19:30"
+        },
+        "negationInd": false,
+        "problem": [
+          {
+            "display": "HEMATOLOGIC DISORDERS",
+            "primary": true,
+            "code": "38675",
+            "system": "2.16.840.1.113883.6.26"
+          },
+          {
+            "display": "HEMATOLOGIC DISORDERS",
+            "primary": false,
+            "code": "790.99",
+            "system": "2.16.840.1.113883.6.103"
+          }
+        ],
+        "provider": {
+          "name": "PATIENT, BERT",
+          "primary": true
+        },
+        "sourceOfInfo": [
+          {
+            "display": "LARRY, PROVIDER",
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "Active",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000001450"
+        },
+        "enteredBy": {
+          "name": "SERVER, LEGACY GATEWAY"
+        },
+        "enteredDate": {
+          "start": "20070629172916",
+          "end": "20070629172916"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "11450-4"
+          }
+        ],
+        "facility": {
+          "name": "4th Medical Group",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.10002.100001.8",
+              "id": "0090"
+            }
+          ]
+        },
+        "chronicity": [
+          {
+            "display": "Acute",
+            "primary": true
+          }
+        ],
+        "comment": null,
+        "modifiedDate": {
+          "start": "2008-04-09T21:49:39",
+          "end": "2008-04-09T21:49:39"
+        },
+        "onsetDate": {
+          "start": "2007-06-29T17:29:47",
+          "end": "2007-06-29T17:29:47"
+        },
+        "negationInd": false,
+        "problem": [
+          {
+            "display": "COMMON COLD",
+            "primary": true,
+            "code": "31071",
+            "system": "2.16.840.1.113883.6.26"
+          },
+          {
+            "display": "COMMON COLD",
+            "primary": false,
+            "code": "460",
+            "system": "2.16.840.1.113883.6.103"
+          }
+        ],
+        "provider": null,
+        "sourceOfInfo": [
+          {
+            "display": "Clinical Evidence",
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "Active",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000001451"
+        },
+        "enteredBy": {
+          "name": "PATIENT, BERT"
+        },
+        "enteredDate": {
+          "start": "20070711181535",
+          "end": "20070711181535"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "11450-4"
+          }
+        ],
+        "facility": {
+          "name": "4th Medical Group",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.10002.100001.8",
+              "id": "0090"
+            }
+          ]
+        },
+        "chronicity": [
+          {
+            "display": "Chronic",
+            "primary": true
+          }
+        ],
+        "comment": null,
+        "modifiedDate": {
+          "start": "2007-09-17T12:27:09",
+          "end": "2007-09-17T12:27:09"
+        },
+        "onsetDate": {
+          "start": "2007-07-11T18:19:25",
+          "end": "2007-07-11T18:19:25"
+        },
+        "negationInd": false,
+        "problem": [
+          {
+            "display": "HEPATIC DISORDER",
+            "primary": true,
+            "code": "90247",
+            "system": "2.16.840.1.113883.6.26"
+          },
+          {
+            "display": "HEPATIC DISORDER",
+            "primary": false,
+            "code": "573.9",
+            "system": "2.16.840.1.113883.6.103"
+          }
+        ],
+        "provider": {
+          "name": "PATIENT, BERT",
+          "primary": true
+        },
+        "sourceOfInfo": [
+          {
+            "display": "LARRY, PROVIDER",
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "Active",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000001452"
+        },
+        "enteredBy": {
+          "name": "USER, MULTISITE"
+        },
+        "enteredDate": {
+          "start": "20070702171056",
+          "end": "20070702171056"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "11450-4"
+          }
+        ],
+        "facility": {
+          "name": "4th Medical Group",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.10002.100001.8",
+              "id": "0090"
+            }
+          ]
+        },
+        "chronicity": [
+          {
+            "display": "Chronic",
+            "primary": true
+          }
+        ],
+        "comment": null,
+        "modifiedDate": {
+          "start": "2007-09-17T12:27:05",
+          "end": "2007-09-17T12:27:05"
+        },
+        "onsetDate": {
+          "start": "2007-07-02T17:11:27",
+          "end": "2007-07-02T17:11:27"
+        },
+        "negationInd": false,
+        "problem": [
+          {
+            "display": "MALIGNANT NEOPLASM",
+            "primary": true,
+            "code": "99725",
+            "system": "2.16.840.1.113883.6.26"
+          },
+          {
+            "display": "MALIGNANT NEOPLASM",
+            "primary": false,
+            "code": "199.1",
+            "system": "2.16.840.1.113883.6.103"
+          }
+        ],
+        "provider": {
+          "name": "USER, MULTISITE",
+          "primary": true
+        },
+        "sourceOfInfo": [
+          {
+            "display": "KEVIN, PROVIDER",
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "Active",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000001453"
+        },
+        "enteredBy": {
+          "name": "PATIENT, BERT"
+        },
+        "enteredDate": {
+          "start": "20070711181534",
+          "end": "20070711181534"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "11450-4"
+          }
+        ],
+        "facility": {
+          "name": "4th Medical Group",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.10002.100001.8",
+              "id": "0090"
+            }
+          ]
+        },
+        "chronicity": [
+          {
+            "display": "Chronic",
+            "primary": true
+          }
+        ],
+        "comment": null,
+        "modifiedDate": {
+          "start": "2007-09-17T12:27:06",
+          "end": "2007-09-17T12:27:06"
+        },
+        "onsetDate": {
+          "start": "2007-07-11T18:19:23",
+          "end": "2007-07-11T18:19:23"
+        },
+        "negationInd": false,
+        "problem": [
+          {
+            "display": "DIABETES MELLITUS",
+            "primary": true,
+            "code": "30479",
+            "system": "2.16.840.1.113883.6.26"
+          },
+          {
+            "display": "DIABETES MELLITUS",
+            "primary": false,
+            "code": "250.00",
+            "system": "2.16.840.1.113883.6.103"
+          }
+        ],
+        "provider": {
+          "name": "PATIENT, BERT",
+          "primary": true
+        },
+        "sourceOfInfo": [
+          {
+            "display": "KEVIN, PROVIDER",
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "Active",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000001454"
+        },
+        "enteredBy": {
+          "name": "PATIENT, BERT"
+        },
+        "enteredDate": {
+          "start": "20070711181534",
+          "end": "20070711181534"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "11450-4"
+          }
+        ],
+        "facility": {
+          "name": "4th Medical Group",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.10002.100001.8",
+              "id": "0090"
+            }
+          ]
+        },
+        "chronicity": [
+          {
+            "display": "Chronic",
+            "primary": true
+          }
+        ],
+        "comment": null,
+        "modifiedDate": {
+          "start": "2007-09-17T12:27:04",
+          "end": "2007-09-17T12:27:04"
+        },
+        "onsetDate": {
+          "start": "2007-07-11T18:19:24",
+          "end": "2007-07-11T18:19:24"
+        },
+        "negationInd": false,
+        "problem": [
+          {
+            "display": "PULMONARY DISEASE",
+            "primary": true,
+            "code": "236576",
+            "system": "2.16.840.1.113883.6.26"
+          },
+          {
+            "display": "PULMONARY DISEASE",
+            "primary": false,
+            "code": "519.9",
+            "system": "2.16.840.1.113883.6.103"
+          }
+        ],
+        "provider": {
+          "name": "PATIENT, BERT",
+          "primary": true
+        },
+        "sourceOfInfo": [
+          {
+            "display": "KEVIN, PROVIDER",
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "Active",
+            "primary": true
+          }
+        ]
+      }
+    ]
+  }
+}

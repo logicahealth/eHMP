@@ -1,0 +1,40 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"type": "object",
+	"required": [
+		"data",
+		"status"
+	],
+	"properties": {
+		"data": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"required": ["lexIen", "prefText", "codeSys", "conceptId", "version", "code"],
+				"properties": {
+					"lexIen": {
+						"type": "string"
+					},
+					"prefText": {
+						"type": "string"
+					},
+					"codeSys": {
+						"type": "string"
+					},
+					"conceptId": {
+						"type": "string"
+					},
+					"version": {
+						"type": "string"
+					},
+					"code": {
+						"type": "string"
+					}
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

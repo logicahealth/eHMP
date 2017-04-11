@@ -1,0 +1,22 @@
+
+<form id="1605894225">
+<property name="name" value="TrainingTask-taskform.form"/>
+<property name="displayMode" value="default"/>
+<property name="status" value="0"/>
+<field position="0" name=":decorator_0" type="HTMLLabel" id="502101829">
+<property name="fieldRequired" value="false"/>
+<property name="readonly" value="false"/>
+<property name="htmlContent" value="quot;caquot;,quot;&lt;h2&gt;Confirm &amp;nbsp;Completion of Training&lt;/h2&gt; quot;quot;dequot;,quot;&lt;h2&gt;Confirm &amp;nbsp;Completion of Training&lt;/h2&gt; quot;quot;enquot;,quot;&lt;h2&gt;Confirm &amp;nbsp;Completion of Training&lt;/h2&gt; quot;quot;esquot;,quot;&lt;h2&gt;Confirm &amp;nbsp;Completion of Training&lt;/h2&gt; quot;quot;frquot;,quot;&lt;h2&gt;Confirm &amp;nbsp;Completion of Training&lt;/h2&gt; quot;quot;jaquot;,quot;&lt;h2&gt;Confirm &amp;nbsp;Completion of Training&lt;/h2&gt; quot;quot;ptquot;,quot;&lt;h2&gt;Confirm &amp;nbsp;Completion of Training&lt;/h2&gt; quot;quot;zhquot;,quot;&lt;h2&gt;Confirm &amp;nbsp;Completion of Training&lt;/h2&gt; quot;"/>
+<property name="fieldClass" value="HTMLlabel"/>
+</field>
+<field position="1" name="trainingCompleted" type="CheckBox" id="871811726">
+<property name="fieldRequired" value="false"/>
+<property name="label" value="quot;caquot;,quot;quot;quot;dequot;,quot;quot;quot;enquot;,quot;Ttraining Completedquot;quot;esquot;,quot;quot;quot;frquot;,quot;quot;quot;jaquot;,quot;quot;quot;ptquot;,quot;quot;quot;zhquot;,quot;quot;"/>
+<property name="errorMessage" value="quot;caquot;,quot;quot;quot;dequot;,quot;quot;quot;enquot;,quot;quot;quot;esquot;,quot;quot;quot;frquot;,quot;quot;quot;jaquot;,quot;quot;quot;ptquot;,quot;quot;quot;zhquot;,quot;quot;"/>
+<property name="title" value="quot;caquot;,quot;quot;quot;dequot;,quot;quot;quot;enquot;,quot;quot;quot;esquot;,quot;quot;quot;frquot;,quot;quot;quot;jaquot;,quot;quot;quot;ptquot;,quot;quot;quot;zhquot;,quot;quot;"/>
+<property name="readonly" value="false"/>
+<property name="outputBinding" value="out_training_completed"/>
+<property name="fieldClass" value="java.lang.Boolean"/>
+</field>
+<dataHolder inputId="" name="#E9E371" type="basicType" outId="out_training_completed" value="java.lang.Boolean" id="trainingCompleted"/>
+</form>

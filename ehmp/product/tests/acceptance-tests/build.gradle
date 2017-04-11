@@ -1,0 +1,38 @@
+defaultTasks 'acceptanceTest'
+
+task bundleInstall{
+  doLast{
+    exec {
+      //executable = "bundle"
+      executable = "sh"
+      //args = ['install']
+      args = ['-c', "bundle install"]
+    }
+  }
+}
+
+task acceptanceTest(dependsOn: bundleInstall){
+  group test.group
+  description "Runs the acceptance tests for eHMP"
+  doLast{
+    exec {
+      //executable = "bundle"
+      executable = "sh"
+      //args = ['exec', 'rake']
+      args = ['-c', "bundle exec rake"]
+    }
+  }
+}
+
+task syncCache(dependsOn: bundleInstall){
+  group test.group
+  description "Runs the acceptance tests for eHMP"
+  doLast{
+    exec {
+      //executable = "bundle"
+      //args = ['exec', 'rake', 'syncCache']
+      executable = "sh"
+      args = ['-c', "bundle exec rake syncCache"]
+    }
+  }
+}

@@ -1,0 +1,28 @@
+
+<VirtualHost *:<%= @params[:port] %>>
+  DocumentRoot <%= @params[:document_root] %>
+  Options None
+
+  ProxyPass       /infobutton-service/   http://infobutton.vainnovations.us:8080/infobutton-service/
+  ProxyPassReverse       /infobutton-service/   http://infobutton.vainnovations.us:8080/infobutton-service/
+
+  <Location />
+    Order deny,allow
+    Allow from all
+  </Location>
+
+  # must prevent the AppCache manifest from being cached with no-cache, no-store, and expires
+  # must set MIME type, else AppCache breaks in IE
+  <Files "cache.appcache">
+    FileETag None
+    <IfModule mod_headers.c>
+       Header unset ETag
+       Header set Cache-Control "max-age=0, no-cache, no-store, must-revalidate"
+       Header set Pragma "no-cache"
+       Header set Expires "Wed, 11 Jan 1984 05:00:00 GMT"
+    </IfModule>
+  </Files>
+  AddType text/cache-manifest .appcache
+
+  EnableSendfile Off
+</VirtualHost>

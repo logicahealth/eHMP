@@ -1,0 +1,84 @@
+<div id="note-preview-body" class="container-fluid">
+	<div class="row">
+		<div class="col-xs-10"></div>
+		<div class="col-xs-2">
+		    {{#if hideEditButtonOnPreview}}
+		    	&nbsp;
+		    {{else}}
+		    	<button id="note-preview-edit-btn" type="button" title="Press enter to edit" class="btn btn-default btn-sm">
+					<span class="sr-only">Edit</span>
+					<i class="fa fa-pencil"></i>
+				</button>
+			{{/if}}
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12" id="note-preview-title">
+			{{#if localTitle}}
+				{{localTitle}}
+			{{else}}
+				&lt;No Title&gt;
+			{{/if}}
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12" id="note-preview-datetime">
+			{{#if referenceDateTime}}
+				{{formatDateTime referenceDateTime "YYYYMMDDHHmmssSSS" "datetime"}}
+			{{else}}
+				&lt;No Date&gt;
+			{{/if}}
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12" id="note-preview-encounter">{{encounterDisplayName}}</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-9" id="note-preview-author">{{author}}</div>
+		<div class="col-xs-3" id="note-preview-status">{{statusDisplayName}}</div>
+	</div>
+
+	<hr>
+
+	{{#compare app "vista"}}
+	<div class="row">
+		{{#compare displayGroup "unsigned"}}
+		<div class="col-xs-12 label-danger">This Unsigned note was created outside of eHMP. Please edit the note in CPRS.</div>
+		{{/compare}}
+		{{#compare displayGroup "uncosigned"}}
+		<div class="col-xs-12 label-danger">This Uncosigned note was created outside of eHMP. Please complete the note in CPRS.</div>
+		{{/compare}}
+		{{#compare displayGroup "signed"}}
+			{{#compare status "UNCOSIGNED"}}
+				<div class="col-xs-12 label-danger">This Uncosigned note was created outside of eHMP. Please complete the note in CPRS.</div>
+			{{/compare}}
+		{{/compare}}
+	</div>
+	{{/compare}}
+
+	{{#if text}}
+
+        <div class='row'>
+
+                <pre class='col-sm-12 note-preview-content'>{{contentPreview}}</pre>
+
+        </div>
+
+        {{/if}}
+
+<!-- Removing for now until we have a better way to re-render the template after a model changes.
+     This is added to the modelUtil.js
+
+	{{#if signedDateTime}}
+	<hr>
+	<div class="row">
+		<div class="col-xs-12" id="note-preview-signature-date">
+			Signed: {{formatDateTime signedDateTime "YYYYMMDDHHmmssSSS" "datetime"}}
+		</div>
+		<div class="col-xs-12" id="note-preview-signer">
+			By: {{signerDisplayName}}
+		</div>
+	</div>
+	-->
+	{{/if}}
+</div>

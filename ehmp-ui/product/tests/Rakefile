@@ -1,0 +1,112 @@
+
+require File.dirname(__FILE__) + '/PatientSynchronizer.rb'
+
+task :syncCache, [:testType] do |t, args|
+  testType = args[:testType]
+  if testType == "Acc"
+    patient_sync_list = [
+      "9E7A;100022",
+      "9E7A;3"
+    ]
+  else
+    patient_sync_list = [
+      "9E7A;237",
+      "9E7A;100599",
+      "9E7A;100840",
+      "9E7A;271",
+      "9E7A;301",
+      "9E7A;8",
+      "9E7A;164",
+      "9E7A;231",
+      "9E7A;100001",
+      "9E7A;100022",
+      "9E7A;711",
+      "9E7A;100023",
+      "4325678V4325679",
+      "9E7A;100726",
+      "9E7A;65",
+      "9E7A;227",
+      "C877;100319",
+      "9E7A;253",
+      "9E7A;3",
+      "9E7A;631",
+      "9E7A;229",
+      "C877;100599",
+      "9E7A;1",
+      "C877;287",
+      "9E7A;287",
+      "9E7A;239",
+      "9E7A;100716",
+      "9E7A;9",
+      "9E7A;722",
+      "9E7A;100731",
+      "9E7A;100012",
+      "9E7A;149",
+      "9E7A;100608",
+      "9E7A;100826",
+      "9E7A;100470",
+      "9E7A;100472",
+      "9E7A;100861"  
+    ]
+  end
+  ENV["JDS_IP"] = knife_search_for_ip("jds")
+  ENV["VX_SYNC_IP"] = knife_search_for_ip("vxsync")
+  PatientSynchronizer.wait_until_operational_data_loaded "http://#{ENV["JDS_IP"]}:9080", 1200, ["9E7A", "C877"]
+  PatientSynchronizer.synchronize_patient_list "http://#{ENV["VX_SYNC_IP"]}:8080", 3600, patient_sync_list
+end
+
+task :scpRdkLogs, :driver do |t, args|
+  logDir = "./rdk_logs"
+  logs = ["*_stderr.log", "*_stdout.log"]
+  key = knife_search_for_key_name("rdk", args[:driver])
+  user = "PW      "
+  ip = knife_search_for_ip("resource_server")
+  Dir.mkdir("#{logDir}") unless File.exists?("#{logDir}")
+  logs.each do |logname|
+    sh('scp', '-o', 'StrictHostKeyChecking=no', '-i', "#{key}", "#{user}@#{ip}:/var/rdk/logs/#{logname}", "#{logDir}")
+  end
+end
+
+task :scpVxsyncLogs, :driver do |t,args|
+  logDir = "./vxsync_error_logs"
+  key = knife_search_for_key_name("vxsync", args[:driver])
+  user = "PW      "
+  ip = knife_search_for_ip("vxsync")
+  Dir.mkdir("#{logDir}") unless File.exists?("#{logDir}")
+  sh('scp', '-o', 'StrictHostKeyChecking=no', '-i', "#{key}", "#{user}@#{ip}:/tmp/*_stderr.log", "#{logDir}")
+end
+
+def knife_search_for_ip(machine_name)
+  stack = ENV['JOB_NAME'] || ENV['USER']
+  if ENV.key?('BUNDLE_BIN_PATH')
+    raw_search = Bundler.with_clean_env { `/opt/chefdk/bin/knife search node \'role:#{machine_name} AND stack:#{stack}\' -Fj --config ~/Projects/vistacore/.chef/knife.rb` }
+  else
+    raw_search = `/opt/chefdk/bin/knife search node \'role:#{machine_name} AND stack:#{stack}\' -Fj --config ~/Projects/vistacore/.chef/knife.rb`
+  end
+  parsed_search = JSON.parse(raw_search)
+  fail "More than one node with that name found" if parsed_search["results"] > 1
+  fail "No node with that name found" if parsed_search["results"] == 0
+  ip = parsed_search["rows"][0]['automatic']['ipaddress']
+end
+
+def knife_search_for_key_name(machine_name, driver)
+  stack = ENV['JOB_NAME'] || ENV['USER']
+  driver == "aws" ? key_box = "#{machine_name}-#{stack}-noint" : key_box = "#{machine_name}-#{stack}"
+  raw_search = `/opt/chefdk/bin/knife search node \'name:#{key_box}\' -Fj --config ~/Projects/vistacore/.chef/knife.rb`
+  parsed_search = JSON.parse(raw_search)
+  fail "More than one key was found for: #{machine_name}" if parsed_search["results"] > 1
+  fail "No key was found for: #{machine_name}" if parsed_search["results"] == 0
+  begin
+    key = parsed_search["rows"][0]['normal']["chef_provisioning"]["reference"]["key_name"]
+  rescue NoMethodError
+    begin
+      key = parsed_search["rows"][0]['normal']["chef_provisioning"]["location"]["key_name"] 
+    rescue 
+      raise %/
+      No attribute found for #{machine_name}-#{stack} at: ['rows'][0]['normal']['chef_provisioning']['location']['key_name'] 
+      or ['rows'][0]['normal']['chef_provisioning']['reference']['key_name']
+      /
+    end
+  end
+  key_name = File.expand_path(key, "#{ENV['HOME']}/Projects/vistacore/.chef/keys")
+end

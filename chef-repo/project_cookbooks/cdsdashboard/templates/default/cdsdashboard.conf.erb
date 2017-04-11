@@ -1,0 +1,27 @@
+<VirtualHost *:<%= @params[:port] %>>
+  ServerName <%= @params[:server_name] %>
+  DocumentRoot <%= @params[:document_root] %>
+
+  ProxyRequests Off
+  ProxyPreserveHost On
+
+  <Proxy *>
+    Order Allow,Deny
+    Allow from all
+  </Proxy>
+
+  ProxyPass /openidserver ajp://localhost:8009/openidserver
+  ProxyPassReverse /openidserver ajp://localhost:8009/openidserver
+
+  ProxyPass /cdsdashboard http://localhost:8080/cdsdashboard
+  ProxyPassReverse /cdsdashboard http://localhost:8080/cdsdashboard
+
+  Header edit Location ^http:// https://
+
+  <IfModule mod_ssl.c>
+    SSLEngine on
+    SSLCertificateFile <%= @params[:ssl_cert_file] %>
+    SSLCertificateKeyFile <%= @params[:ssl_cert_key_file] %>
+    <%= "SSLCertificateChainFile #{@params[:ssl_cert_chain_file]}" if @params.has_key?(:ssl_cert_chain_file) %>
+  </IfModule>
+</VirtualHost>

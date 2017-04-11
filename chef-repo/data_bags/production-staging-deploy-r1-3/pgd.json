@@ -1,0 +1,10 @@
+{
+  "id": "pgd",
+  "normal": {
+    "ipaddress": "IPADDRESS  ",
+    "stack": "production-staging-deploy-r1-3",
+    "roles": [
+      "pgd"
+    ]
+  }
+}

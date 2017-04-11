@@ -1,0 +1,238 @@
+{
+    "name": "Configuration data for cached pick-lists",
+    "percentTotalHeapBeforeMemoryNotification": 75,
+    "pickListConfig": [{
+        "name": "allergies-symptoms",
+        "modulePath": "allergies/allergies-symptoms-fetch-list",
+        "vistaContext": "OR CPRS GUI CHART",
+        "dataNeedsRefreshAfterMinutes": 3000,
+        "largePickListRetry": 65,
+        "filterForEntireRecursiveCollection": {
+            "fieldToCheckAgainst": "synonym",
+            "paramNameForStringToSearchFor": "searchString"
+        }
+    }, {
+        "name": "allergies-symptoms-top-ten",
+        "modulePath": "allergies/allergies-symptoms-top-ten-fetch-list",
+        "vistaContext": "OR CPRS GUI CHART",
+        "dataNeedsRefreshAfterMinutes": 3000
+    }, {
+        "name": "allergies-symptoms-all-with-top-ten",
+        "modulePath": "allergies/allergies-symptoms-all-with-top-ten-fetch-list",
+        "vistaContext": "OR CPRS GUI CHART",
+        "dataNeedsRefreshAfterMinutes": 3000,
+        "largePickListRetry": 65,
+        "filterForEntireRecursiveCollection": {
+            "fieldToCheckAgainst": "synonym",
+            "paramNameForStringToSearchFor": "searchString"
+        }
+    }, {
+        "name": "encounters-diagnosis-codes-for-clinic",
+        "modulePath": "encounters/encounters-diagnosis-codes-for-clinic-fetch-list",
+        "vistaContext": "OR CPRS GUI CHART",
+        "dataNeedsRefreshAfterMinutes": 3000,
+        "requiredParams": ["clinic"]
+    }, {
+        "name": "encounters-procedure-types",
+        "modulePath": "encounters/encounters-procedure-types-fetch-list",
+        "vistaContext": "OR CPRS GUI CHART",
+        "dataNeedsRefreshAfterMinutes": 3000,
+        "requiredParams": ["ien"],
+        "optionalParams": ["visitDate"]
+    }, {
+        "name": "encounters-procedures-cpt-modifier",
+        "modulePath": "encounters/encounters-procedures-cpt-modifier-fetch-list",
+        "vistaContext": "OR CPRS GUI CHART",
+        "dataNeedsRefreshAfterMinutes": 3000,
+        "requiredParams": ["cpt"],
+        "optionalParams": ["visitDate"]
+    }, {
+        "name": "encounters-visit-categories",
+        "modulePath": "encounters/encounters-visit-categories-fetch-list",
+        "vistaContext": "OR CPRS GUI CHART",
+        "dataNeedsRefreshAfterMinutes": 3000,
+        "requiredParams": ["ien"],
+        "optionalParams": ["visitDate"]
+    }, {
+        "name": "encounters-visit-disabilities",
+        "modulePath": "encounters/encounters-visit-disabilities-fetch-list",
+        "vistaContext": "OR CPRS GUI CHART",
+        "dataNeedsRefreshAfterMinutes": 3000,
+        "requiredParams": ["dfn"]
+    }, {
+        "name": "immunization-admin-route",
+        "modulePath": "immunizations/immunization-admin-route-fetch-list",
+        "vistaContext": "OR CPRS GUI CHART",
+        "dataNeedsRefreshAfterMinutes": 3000,
+        "vistaContext": "HMP UI CONTEXT",
+        "optionalParams": ["filter", "date"]
+    }, {
+        "name": "immunization-admin-site",
+        "modulePath": "immunizations/immunization-admin-site-fetch-list",
+        "vistaContext": "OR CPRS GUI CHART",
+        "dataNeedsRefreshAfterMinutes": 3000,
+        "vistaContext": "HMP UI CONTEXT",
+        "optionalParams": ["filter", "date"]
+    }, {
+        "name": "immunization-data",
+        "modulePath": "immunizations/immunization-data-fetch-list",
+        "vistaContext": "HMP UI CONTEXT",
+        "dataNeedsRefreshAfterMinutes": 3000,
+        "optionalParams": ["pxvfilter", "subfiles"]
+    }, {
+        "name": "immunization-info-source",
+        "modulePath": "immunizations/immunization-info-source-fetch-list",
+        "vistaContext": "HMP UI CONTEXT",
+        "dataNeedsRefreshAfterMinutes": 3000,
+        "optionalParams": ["filter", "date"]
+    }, {
+        "name": "immunization-lot",
+        "modulePath": "immunizations/immunization-lot-fetch-list",
+        "vistaContext": "HMP UI CONTEXT",
+        "dataNeedsRefreshAfterMinutes": 3000,
+        "optionalParams": ["filter", "date"]
+    }, {
+        "name": "immunization-manufacturer",
+        "modulePath": "immunizations/immunization-manufacturer-fetch-list",
+        "vistaContext": "HMP UI CONTEXT",
+        "dataNeedsRefreshAfterMinutes": 3000,
+        "optionalParams": ["filter", "date"]
+    }, {
+        "name": "immunization-types",
+        "modulePath": "immunizations/immunization-types-fetch-list",
+        "vistaContext": "OR CPRS GUI CHART",
+        "dataNeedsRefreshAfterMinutes": 3000
+    }, {
+        "name": "immunization-vaccine-info-statement",
+        "modulePath": "immunizations/immunization-vaccine-info-statement-fetch-list",
+        "vistaContext": "HMP UI CONTEXT",
+        "dataNeedsRefreshAfterMinutes": 3000,
+        "optionalParams": ["filter", "date"]
+    }, {
+        "name": "lab-all-samples",
+        "modulePath": "labs/lab-all-samples-fetch-list",
+        "vistaContext": "OR CPRS GUI CHART",
+        "dataNeedsRefreshAfterMinutes": 3000
+    }, {
+        "name": "lab-collect-times",
+        "modulePath": "labs/lab-collect-times-fetch-list",
+        "vistaContext": "OR CPRS GUI CHART",
+        "dataNeedsRefreshAfterMinutes": 3000
+    }, {
+        "name": "lab-order-dialog-def",
+        "modulePath": "labs/lab-order-dialog-def-fetch-list",
+        "vistaContext": "OR CPRS GUI CHART",
+        "dataNeedsRefreshAfterMinutes": 3000,
+        "optionalParams": ["location", "division"]
+    }, {
+        "name": "lab-order-max-days-continuous",
+        "modulePath": "labs/lab-order-max-days-continuous-fetch-list",
+        "vistaContext": "OR CPRS GUI CHART",
+        "dataNeedsRefreshAfterMinutes": 3000,
+        "requiredParams": ["location", "schedule"]
+    }, {
+        "name": "lab-order-orderable-items",
+        "modulePath": "labs/lab-order-orderable-items-fetch-list",
+        "vistaContext": "OR CPRS GUI CHART",
+        "dataNeedsRefreshAfterMinutes": 3000,
+        "requiredParams": ["labType"],
+        "largePickListRetry": 65,
+        "initialLoadDefaultParams" : [
+            { "labType": "S.LAB" },
+            { "labType": "S.IVA RX" },
+            { "labType": "S.IVB RX" }
+        ],
+        "filterForEntireRecursiveCollection": {
+            "fieldToCheckAgainst": "synonym",
+            "paramNameForStringToSearchFor": "searchString"
+        }
+    }, {
+        "name": "lab-order-specimens",
+        "modulePath": "labs/lab-order-specimens-fetch-list",
+        "vistaContext": "OR CPRS GUI CHART",
+        "dataNeedsRefreshAfterMinutes": 3000,
+        "largePickListRetry": 65
+    }, {
+        "name": "lab-sample-specimen-urgency",
+        "modulePath": "labs/lab-sample-specimen-urgency-fetch-list",
+        "vistaContext": "OR CPRS GUI CHART",
+        "dataNeedsRefreshAfterMinutes": 3000,
+        "requiredParams": ["labTestIEN"]
+    }, {
+        "name": "medication-defaults",
+        "modulePath": "medications/medication-defaults-fetch-list",
+        "vistaContext": "OR CPRS GUI CHART",
+        "dataNeedsRefreshAfterMinutes": 3000,
+        "requiredParams": ["pharmacyType"],
+        "optionalParams": ["outpatientDfn", "locationIen"]
+    }, {
+        "name": "medication-index",
+        "modulePath": "medications/medication-index-fetch-list",
+        "vistaContext": "OR CPRS GUI CHART",
+        "dataNeedsRefreshAfterMinutes": 3000,
+        "requiredParams": ["ien", "searchString"]
+    }, {
+        "name": "medication-order-defaults",
+        "modulePath": "medications/medication-order-defaults-fetch-list",
+        "vistaContext": "OR CPRS GUI CHART",
+        "dataNeedsRefreshAfterMinutes": 3000,
+        "requiredParams": ["pharmacyType"],
+        "optionalParams": ["ien", "outpatientDfn", "needPatientInstructions", "pkiEnabled"]
+    }, {
+        "name": "medication-orders",
+        "modulePath": "medications/medication-orders-fetch-list",
+        "vistaContext": "OR CPRS GUI CHART",
+        "dataNeedsRefreshAfterMinutes": 3000,
+        "requiredParams": ["ien", "first", "last"]
+    }, {
+        "name": "medication-orders-dispense-drug-message",
+        "modulePath": "medications/medication-orders-dispense-drug-message-fetch-list",
+        "vistaContext": "OR CPRS GUI CHART",
+        "dataNeedsRefreshAfterMinutes": 3000,
+        "requiredParams": ["ien"]
+    }, {
+        "name": "medication-schedules",
+        "modulePath": "medications/medication-schedules-fetch-list",
+        "vistaContext": "OR CPRS GUI CHART",
+        "dataNeedsRefreshAfterMinutes": 3000
+    }, {
+        "name": "new-persons",
+        "modulePath": "person/new-persons-fetch-list",
+        "vistaContext": "OR CPRS GUI CHART",
+        "dataNeedsRefreshAfterMinutes": 3000,
+        "largePickListRetry": 65
+    }, {
+        "name": "pki-enabled",
+        "modulePath": "site/pki-enabled-fetch-list",
+        "vistaContext": "OR CPRS GUI CHART",
+        "dataNeedsRefreshAfterMinutes": 3000
+    }, {
+        "name": "printer-devices",
+        "modulePath": "printers/printer-devices-fetch-list",
+        "vistaContext": "OR CPRS GUI CHART",
+        "dataNeedsRefreshAfterMinutes": 3000
+    }, {
+        "name": "progress-notes-titles-flags",
+        "modulePath": "progressnotes/progress-notes-titles-fetch-flags",
+        "vistaContext": "OR CPRS GUI CHART",
+        "dataNeedsRefreshAfterMinutes": 3000,
+        "requiredParams": ["ien"]
+    }, {
+        "name": "progress-notes-titles",
+        "modulePath": "progressnotes/progress-notes-titles-fetch-list",
+        "vistaContext": "HMP UI CONTEXT",
+        "dataNeedsRefreshAfterMinutes": 3000,
+        "asuDataNeedsRefreshAfterMinutes": 3000,
+        "asuLargePickListRetry": 65
+    }, {
+        "name": "radiology-imaging-types",
+        "modulePath": "radiology/radiology-imaging-types-fetch-list",
+        "vistaContext": "OR CPRS GUI CHART",
+        "dataNeedsRefreshAfterMinutes": 3000
+    }, {
+        "name": "vitals",
+        "modulePath": "vitals/vitals-fetch-list",
+        "vistaContext": "OR CPRS GUI CHART",
+        "dataNeedsRefreshAfterMinutes": 3000
+    }]
+}

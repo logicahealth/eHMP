@@ -1,0 +1,89 @@
+
+task runRetire (type: Exec ) {
+    description 'Run Retire.js - checks for known vulnerable JS libraries'
+    group = 'security'
+    ignoreExitValue = true
+    workingDir './production/vx-sync'
+    commandLine 'retire'
+}
+
+task runRequireSafeVxSync (type: Exec ) {
+    description 'Run requireSafe on EHMP/Vx-Sync - checks for known vulnerable Node libraries'
+    group = 'security'
+    ignoreExitValue = true
+    workingDir './production/vx-sync'
+    commandLine 'requiresafe', 'check', 'package.json'
+}
+
+task runRequireSafeOsync (type: Exec ) {
+    description 'Run requireSafe on EHMP/Osync - checks for known vulnerable Node libraries'
+    group = 'security'
+    ignoreExitValue = true
+    workingDir './production/osync'
+    commandLine 'requiresafe', 'check', 'package.json'
+}
+
+task runRequireSafeOsyncAdmin (type: Exec ) {
+    description 'Run requireSafe on EHMP/Osync/Admin - checks for known vulnerable Node libraries'
+    group = 'security'
+    ignoreExitValue = true
+    workingDir './production/osync/admin'
+    commandLine 'requiresafe', 'check', 'package.json'
+}
+
+task runRequireSafeNodeMockServices (type: Exec ) {
+    description 'Run requireSafe on EHMP/NodeMockServices - checks for known vulnerable Node libraries'
+    group = 'security'
+    ignoreExitValue = true
+    workingDir './production/NodeMockServices'
+    commandLine 'requiresafe', 'check', 'package.json'
+}
+
+task runEsLintScanJS (type: Exec ) {
+    description 'Run EsLint with ScanJS rules'
+    group = 'security'
+    ignoreExitValue = true
+    workingDir './production/'
+    // location of config -> ~/.scanjs-eslintrc
+    commandLine 'eslint',
+        '-c', '../../../../../.scanjs-eslintrc', '.'
+}
+
+task installRequireSafe(type: Exec ){
+    description 'Installs requiresafe npm module'
+    group='security'
+    ignoreExitValue=true
+    commandLine 'npm','-g','requiresafe'
+}
+
+
+task runRequireSafe (
+    dependsOn: ['runRequireSafeVxSync', 'runRequireSafeOsync', 'runRequireSafeOsyncAdmin', 'runRequireSafeNodeMockServices'] ) {
+        description 'Executes requireSafe on VxSynn, Osync, OsyncAdmin, and NodeMockServices'
+        group = 'security'
+}
+
+task installEsLintDependencies (type: Exec ) {
+    description 'Installs required dependencies for custom eslint rules'
+    group = 'security'
+    ignoreExitValue = true
+    workingDir '../infrastructure/eslint'
+    commandLine 'npm', 'i', 'safe-regex'
+}
+
+task runEsLintCustom (type: Exec ) {
+    description 'Run EsLint with custom security rules'
+    group = 'security'
+    ignoreExitValue = true
+    workingDir './production'
+    commandLine 'eslint',
+        '--no-eslintrc', '-c', '../../infrastructure/eslint/.security-eslintrc',
+        '--ignore-pattern', '**/node_modules/**',
+        '--rulesdir', '../../infrastructure/eslint/',
+        '.'
+}
+
+task runSecurityTasks ( dependsOn: ['runRetire', 'runRequireSafe'] ) {
+    description 'Executes runRetire & runRequireSafe'
+    group = 'security'
+}

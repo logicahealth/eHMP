@@ -1,0 +1,38 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "Return the synchronization status for the patient as returned by JDS",
+	"description": "",
+	"type": "object",
+	"required": [
+		"data",
+		"status"
+	],
+	"properties": {
+		"data": {
+			"type": "object",
+			"required": [
+				"error"
+			],
+			"properties": {
+				"error": {
+					"type": "object",
+					"required": [
+						"code",
+						"message"
+					],
+					"properties": {
+						"code": {
+							"type": "integer"
+						},
+						"message": {
+							"type": "string"
+						}
+					}
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

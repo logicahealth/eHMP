@@ -1,0 +1,100 @@
+{
+	"parameters": {
+		"additionalPermissions": {
+			"name": "additionalPermissions",
+			"paramType": "query",
+			"required": true,
+			"type": "string",
+			"values": [
+			]
+		},
+		"mode": {
+			"name": "mode",
+			"paramType": "query",
+			"required": true,
+			"type": "string",
+			"values": [
+				{
+					"value": "add"
+				},
+				{
+					"value": "remove"
+				},
+				{
+					"value": "clone"
+				}
+			]
+		},
+		"permissionSets": {
+			"name": "permissionSets",
+			"paramType": "query",
+			"required": true,
+			"type": "string",
+			"values": [
+			]
+		},
+		"users": {
+			"name": "users",
+			"paramType": "query",
+			"required": true,
+			"type": "string",
+			"values": [
+			]
+		}
+	},
+	"schema": {
+		"$schema": "http://json-schema.org/draft-04/schema#",
+		"properties": {
+			"additionalPermissions": {
+				"items": {
+					"type": "string"
+				},
+				"type": "array",
+				"uniqueItems": true
+			},
+			"mode": {
+				"enum": [
+					"add",
+					"remove",
+					"clone"
+				],
+				"type": "string"
+			},
+			"permissionSets": {
+				"items": {
+					"type": "string"
+				},
+				"type": "array",
+				"uniqueItems": true
+			},
+			"users": {
+				"items": {
+					"properties": {
+						"fname": {
+							"type": "string"
+						},
+						"lname": {
+							"type": "string"
+						},
+						"uid": {
+							"type": "string"
+						}
+					},
+					"required": [
+						"uid"
+					],
+					"type": "object"
+				},
+				"type": "array",
+				"uniqueItems": true
+			}
+		},
+		"required": [
+			"users",
+			"permissionSets",
+			"additionalPermissions",
+			"mode"
+		],
+		"type": "object"
+	}
+}

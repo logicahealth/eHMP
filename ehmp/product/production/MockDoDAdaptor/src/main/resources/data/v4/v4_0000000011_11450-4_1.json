@@ -1,0 +1,330 @@
+{
+  "queryComplete": true,
+  "statusList": [
+    {
+      "partner": {
+        "partnerIdentifier": "2.16.840.1.113883.3.42.126.100001.13",
+        "partnerName": "ahlta",
+        "partnerType": "DOD"
+      },
+      "partnerStatus": "SUCCESS",
+      "expectedCount": 4,
+      "receivedCount": 4
+    }
+  ],
+  "dataList": {
+    "problems": [
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000851"
+        },
+        "enteredBy": {
+          "name": "MIDTIER, CGL TWO"
+        },
+        "enteredDate": {
+          "start": "20131025193416",
+          "end": "20131025193416"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "11450-4"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.10002.100001.8",
+              "id": "0056"
+            }
+          ]
+        },
+        "chronicity": [
+          {
+            "display": "Chronic",
+            "primary": true
+          }
+        ],
+        "comment": null,
+        "modifiedDate": {
+          "start": "2013-10-25T19:34:16",
+          "end": "2013-10-25T19:34:16"
+        },
+        "onsetDate": {
+          "start": "2013-10-25T19:34:01",
+          "end": "2013-10-25T19:34:01"
+        },
+        "negationInd": true,
+        "problem": [
+          {
+            "display": "Visit For:",
+            "primary": true,
+            "code": "112176",
+            "system": "2.16.840.1.113883.6.26"
+          }
+        ],
+        "provider": {
+          "name": "BHIE, USERONE",
+          "primary": true
+        },
+        "sourceOfInfo": [
+          {
+            "display": "BHIE, USERONE",
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "Active",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000852"
+        },
+        "enteredBy": {
+          "name": "MIDTIER, CGL TWO"
+        },
+        "enteredDate": {
+          "start": "20131025193413",
+          "end": "20131025193413"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "11450-4"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.10002.100001.8",
+              "id": "0056"
+            }
+          ]
+        },
+        "chronicity": [
+          {
+            "display": "Chronic",
+            "primary": true
+          }
+        ],
+        "comment": null,
+        "modifiedDate": {
+          "start": "2013-10-25T19:34:13",
+          "end": "2013-10-25T19:34:13"
+        },
+        "onsetDate": {
+          "start": "2013-10-25T19:34:01",
+          "end": "2013-10-25T19:34:01"
+        },
+        "negationInd": false,
+        "problem": [
+          {
+            "display": "encounter background information",
+            "primary": true,
+            "code": "2900",
+            "system": "2.16.840.1.113883.6.26"
+          }
+        ],
+        "provider": {
+          "name": "BHIE, USERONE",
+          "primary": true
+        },
+        "sourceOfInfo": [
+          {
+            "display": "BHIE, USERONE",
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "Active",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000853"
+        },
+        "enteredBy": {
+          "name": "MIDTIER, CGL TWO"
+        },
+        "enteredDate": {
+          "start": "20131025193416",
+          "end": "20131025193416"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "11450-4"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.10002.100001.8",
+              "id": "0056"
+            }
+          ]
+        },
+        "chronicity": [
+          {
+            "display": "Chronic",
+            "primary": true
+          }
+        ],
+        "comment": null,
+        "modifiedDate": {
+          "start": "2013-10-25T19:34:16",
+          "end": "2013-10-25T19:34:16"
+        },
+        "onsetDate": {
+          "start": "2013-10-25T19:34:01",
+          "end": "2013-10-25T19:34:01"
+        },
+        "negationInd": false,
+        "problem": [
+          {
+            "display": "cough causing vomiting",
+            "primary": true,
+            "code": "2462",
+            "system": "2.16.840.1.113883.6.26"
+          }
+        ],
+        "provider": {
+          "name": "BHIE, USERONE",
+          "primary": true
+        },
+        "sourceOfInfo": [
+          {
+            "display": "BHIE, USERONE",
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "Active",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000854"
+        },
+        "enteredBy": {
+          "name": "MIDTIER, GRTLK ONE"
+        },
+        "enteredDate": {
+          "start": "20120910142614",
+          "end": "20120910142614"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "11450-4"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.10002.100001.8",
+              "id": "0056"
+            }
+          ]
+        },
+        "chronicity": [
+          {
+            "display": "Acute",
+            "primary": true
+          }
+        ],
+        "comment": null,
+        "modifiedDate": {
+          "start": "2012-09-10T14:26:14",
+          "end": "2012-09-10T14:26:14"
+        },
+        "onsetDate": {
+          "start": "2012-09-10T14:22:44",
+          "end": "2012-09-10T14:22:44"
+        },
+        "negationInd": false,
+        "problem": [
+          {
+            "display": "DERMATOLOGY - BACTERIAL",
+            "primary": true,
+            "code": "90181",
+            "system": "2.16.840.1.113883.6.26"
+          },
+          {
+            "display": "DERMATOLOGY - BACTERIAL",
+            "primary": false,
+            "code": "686.9",
+            "system": "2.16.840.1.113883.6.103"
+          }
+        ],
+        "provider": null,
+        "sourceOfInfo": [
+          {
+            "display": "Clinical Evidence",
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "Active",
+            "primary": true
+          }
+        ]
+      }
+    ]
+  }
+}

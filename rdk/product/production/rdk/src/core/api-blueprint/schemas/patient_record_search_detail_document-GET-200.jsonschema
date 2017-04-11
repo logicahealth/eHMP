@@ -1,0 +1,122 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "Get text search result detail where the items in a group are text documents",
+	"description": "",
+	"type": "object",
+	"required": [
+		"data",
+		"status"
+	],
+	"properties": {
+		"data": {
+			"type": "object",
+			"required": [
+				"items"
+			],
+			"properties": {
+				"items": {
+					"type": "object",
+					"required": [
+						"results"
+					],
+					"properties": {
+						"highlights": {
+							"type": "object",
+                            "additionalProperties": {
+                                "type": "object",
+                                "properties": {
+                                    "body": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+							}
+						},
+						"results": {
+							"type": "array",
+							"items": {
+                                "type": "object",
+                                "properties": {
+                                    "uid": {
+                                        "type": "string"
+                                    },
+                                    "pid": {
+                                        "type": "string"
+                                    },
+                                    "facility_name": {
+                                        "type": "string"
+                                    },
+                                    "phrase": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "kind": {
+                                        "type": "string"
+                                    },
+                                    "summary": {
+                                        "type": "string"
+                                    },
+                                    "reference_date_time": {
+                                        "type": "string"
+                                    },
+                                    "datetime": {
+                                        "type": "string"
+                                    },
+                                    "domain": {
+                                        "type": "string"
+                                    },
+                                    "body": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "author_uid": {
+                                        "type": "string"
+                                    },
+                                    "signer_uid": {
+                                        "type": "string"
+                                    },
+                                    "document_type_code": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "document_type_name": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "document_status": {
+                                        "type": "string"
+                                    },
+                                    "document_entered": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "local_title": {
+                                        "type": "string"
+                                    },
+                                    "document_def_uid": {
+                                        "type": "string"
+                                    }
+                                }
+							}
+						}
+					}
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

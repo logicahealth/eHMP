@@ -1,0 +1,23 @@
+<div id="navigationPanel" class="panel all-margin-no bg-info">
+    <div class="panel-heading container-fluid">
+        <div id="navigation-date">
+            <div class="hidden well well-sm globalDatePicker-popupRegion" id="hiddenDiv">
+                <div id="globalDate-region"></div>
+            </div>
+            <div id="globalDatePicker-compact">
+                <button type="button" class="pull-left globalDatePickerButton btn btn-primary" id="date-region-minimized" aria-label="Press enter to activate global date timeline to set date range" data-toggle="tooltip" data-placement="bottom" title="Press enter to activate global date timeline to set date range">
+                </button>
+                <div id="gdr-spikeline"></div>
+            </div>
+        </div>
+        <div id="navigation-navbar" class="applet-nav-bar pull-right">
+            <div class="nav nav-pills {{#if isNonPatientCentricView}} navbar-center {{else}} navbar-right {{/if}}">
+                <div class="btn-group" id="nav-workspaceSelect"></div>
+                <div class="btn-group" id="text-search-input"></div>
+                <div class="left-padding-xs pull-right">
+                    {{{helpIconLink 'coversheet'}}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

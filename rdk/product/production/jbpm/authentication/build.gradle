@@ -1,0 +1,8 @@
+dependencies {
+  compile 'jboss:jbosssx:3.2.3'
+  compile 'jboss:jboss-jaas:3.2.3'
+}
+
+jar {
+    baseName "jboss-custom-login-jar-with-dependencies"
+}

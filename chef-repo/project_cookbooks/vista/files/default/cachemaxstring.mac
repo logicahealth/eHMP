@@ -1,0 +1,11 @@
+CACHEMAXSTRING ; change Cache's max string size from 32,767 characters to 3,641,144 characters
+CREATE() PUBLIC
+  {
+  ; see http://docs.intersystems.com/cache20131/csp/docbook/DocBook.UI.Page.cls?KEY=GORIENT_appx_limits_long_string
+  ; see http://docs.intersystems.com/cache20131/csp/documatic/%25CSP.Documatic.cls?APP=1&LIBRARY=%25SYS&CLASSNAME=Config.Miscellaneous
+  set db=##Class(Config.Miscellaneous).Open()
+  set db.EnableLongStrings=1
+  set Status=db.%Save()
+  if Status'=1 write !, "Error="_$SYSTEM.Status.GetErrorText(Status)
+  }
+

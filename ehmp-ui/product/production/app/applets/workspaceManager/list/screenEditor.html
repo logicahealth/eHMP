@@ -1,0 +1,58 @@
+<div class="container-fluid full-height" aria-labelledby="workspaceManagerHeading">
+    <div class="row">
+        {{ui-button "Close Workspace Manager" srOnlyLabel=true classes="btn-icon pull-right" title="Press enter to close the Workspace Manager and return to your previous screen" icon="fa-times-circle-o" id="doneEditing"}}
+    </div>
+    <div class="panel-primary">
+        <div class="panel-heading row">
+            <h1 id="workspaceManagerHeading" class="work-manager-header">WORKSPACE MANAGER</h1>
+            <div class="pull-right">
+                {{ui-button "Add a new workspace." srOnlyLabel=true classes="btn-icon addScreen" title="Press enter to add a new workspace." icon="fa-plus"}}
+                <button id="grid-filter-button-workspace-manager" type="button" data-toggle="collapse" data-target="#workspace-filter" aria-expanded="false" aria-controls="workspace-filter" class="btn btn-icon collapsed" title="Press enter to activate search, then press tab to enter filter edit.">
+                    <span class="sr-only">Filter Workspaces</span>
+                    <i class="fa fa-filter"></i>
+                </button>
+            </div>
+        </div>
+        <div id="workspace-filter" class="grid-filter row all-padding-no panel-collapse collapse">
+            <div class="pull-right right-margin-sm filterRegion all-padding-sm">
+                <form class="backgrid-filter form-search all-margin-no">
+                    <label class="sr-only" for="searchScreens">Filter Workspaces.</label>
+                    <span class="search">&nbsp;</span>
+                    <input id="searchScreens" type="search" title="Enter in text to begin searching. The content will filter below, and then press tab to view results." placeholder="Filter by title or description" name="searchScreens">
+                    {{ui-button "Remove filter text." srOnlyLabel=true classes="btn-icon clear all-padding-no" title="Press enter to clear the workspace filter textbox." icon="fa-times" class="clearSearch"}}
+                </form>
+            </div>
+        </div>
+            <div class="workspaceTable faux-table" role="grid">
+                <p class="sr-only">This table represents the available workspaces that are categorized by default workspace, title of the workspace, associated conditions, description of the workspace, the author of the workspace, and workspace options.</p>
+                <div class="header table-row" role="row">
+                    <div class="table-cell pixel-width-22">
+                       <span class="sr-only" role="columnheader">Default Workspace Selector</span>
+                    </div>
+                    <div class="table-cell" role="columnheader">Title</div>
+                    <div class="table-cell pixel-width-58">
+                        <span class="sr-only" role="columnheader">Association Conditions Manager</span>
+                    </div>
+                    <div class="table-cell" role="columnheader">Description</div>
+                    <div class="table-cell" role="columnheader">Author</div>
+                    <div class="table-cell pixel-width-30">
+                        <span class="sr-only" role="columnheader">Duplicate Workspace</span>
+                    </div>
+                    <div class="table-cell pixel-width-30">
+                        <span class="sr-only" role="columnheader">Rearrange Workspace</span>
+                    </div>
+                    <div class="table-cell pixel-width-30">
+                        <span class="sr-only" role="columnheader">Delete Workspace</span>
+                    </div>
+                    <div class="table-cell pixel-width-55">
+                        <span class="sr-only" role="columnheader">Preview</span>
+                    </div>
+                    <div class="table-cell pixel-width-70">
+                        <span class="sr-only" role="columnheader">Launch or Customize</span>
+                    </div>
+                </div>
+                <span class="sr-only">Grid Body.</span>
+                <div id="list-group" class="body" role="rowgroup"></div>
+            </div>
+    </div>
+</div>

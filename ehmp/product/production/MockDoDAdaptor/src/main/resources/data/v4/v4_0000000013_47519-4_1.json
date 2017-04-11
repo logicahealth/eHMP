@@ -1,0 +1,401 @@
+{
+  "queryComplete": true,
+  "statusList": [
+    {
+      "partner": {
+        "partnerIdentifier": "2.16.840.1.113883.3.42.126.100001.13",
+        "partnerName": "ahlta",
+        "partnerType": "DOD"
+      },
+      "partnerStatus": "SUCCESS",
+      "expectedCount": 8,
+      "receivedCount": 8
+    }
+  ],
+  "dataList": {
+    "procedures": [
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000001052"
+        },
+        "enteredBy": {
+          "name": "MIDT, LANDFONE"
+        },
+        "enteredDate": {
+          "start": "2013-06-03T22:21:14",
+          "end": "2013-06-03T22:21:14"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "47519-4"
+          }
+        ],
+        "facility": {
+          "name": "Landstuhl RMC/0607"
+        },
+        "date": {
+          "start": "2013-06-03T22:20:32",
+          "end": "2013-06-03T22:20:32"
+        },
+        "procedure": [
+          {
+            "code": "C9255",
+            "display": "Injection, paliperidone palmitate, 1 mg",
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "Active",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000001054"
+        },
+        "enteredBy": {
+          "name": "MIDTIER, SJFONE"
+        },
+        "enteredDate": {
+          "start": "2013-05-09T20:17:04",
+          "end": "2013-05-09T20:17:04"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "47519-4"
+          }
+        ],
+        "facility": {
+          "name": "4th Medical Group/0090"
+        },
+        "date": {
+          "start": "2013-05-09T20:15:18",
+          "end": "2013-05-09T20:15:18"
+        },
+        "procedure": [
+          {
+            "code": "90834",
+            "display": "Social Work Individual Inpatient Counseling 45-50 Minutes",
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "Active",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000001056"
+        },
+        "enteredBy": {
+          "name": "MIDT, LANDFONE"
+        },
+        "enteredDate": {
+          "start": "2013-04-24T18:53:43",
+          "end": "2013-04-24T18:53:43"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "47519-4"
+          }
+        ],
+        "facility": {
+          "name": "Landstuhl RMC/0607"
+        },
+        "date": {
+          "start": "2013-04-24T18:47:48",
+          "end": "2013-04-24T18:47:48"
+        },
+        "procedure": [
+          {
+            "code": "C9255",
+            "display": "Injection, paliperidone palmitate, 1 mg",
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "Active",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000001058"
+        },
+        "enteredBy": {
+          "name": "MIDTIER, SJFONE"
+        },
+        "enteredDate": {
+          "start": "2012-11-15T20:55:09",
+          "end": "2012-11-15T20:55:09"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "47519-4"
+          }
+        ],
+        "facility": null,
+        "date": {
+          "start": "2012-11-15T15:44:24",
+          "end": "2012-11-15T15:44:24"
+        },
+        "procedure": [
+          {
+            "code": "94150",
+            "display": "Pulmonary Function Tests Peak Expiratory Flow",
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "Active",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000001060"
+        },
+        "enteredBy": {
+          "name": "MIDT, LANDFONE"
+        },
+        "enteredDate": {
+          "start": "2012-11-26T17:37:21",
+          "end": "2012-11-26T17:37:21"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "47519-4"
+          }
+        ],
+        "facility": {
+          "name": "Landstuhl RMC/0607"
+        },
+        "date": {
+          "start": "2012-04-10T19:50:04",
+          "end": "2012-04-10T19:50:04"
+        },
+        "procedure": [
+          {
+            "code": "22634",
+            "display": null,
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "Active",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000001062"
+        },
+        "enteredBy": {
+          "name": "MIDT, LANDFONE"
+        },
+        "enteredDate": {
+          "start": "2012-11-26T17:37:20",
+          "end": "2012-11-26T17:37:20"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "47519-4"
+          }
+        ],
+        "facility": {
+          "name": "Landstuhl RMC/0607"
+        },
+        "date": {
+          "start": "2012-04-10T19:49:59",
+          "end": "2012-04-10T19:49:59"
+        },
+        "procedure": [
+          {
+            "code": "22634",
+            "display": null,
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "Active",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000001064"
+        },
+        "enteredBy": {
+          "name": "MIDT, LANDFONE"
+        },
+        "enteredDate": {
+          "start": "2011-05-19T12:19:32",
+          "end": "2011-05-19T12:19:32"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "47519-4"
+          }
+        ],
+        "facility": {
+          "name": "Landstuhl RMC/0607"
+        },
+        "date": {
+          "start": "2011-05-19T11:43:56",
+          "end": "2011-05-19T11:43:56"
+        },
+        "procedure": [
+          {
+            "code": null,
+            "display": "Hot water bottle, ice cap or collar, heat and/or cold wrap, any type",
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "Active",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000001066"
+        },
+        "enteredBy": {
+          "name": "MIDTIER, SJFONE"
+        },
+        "enteredDate": {
+          "start": "2010-06-22T16:09:59",
+          "end": "2010-06-22T16:09:59"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "47519-4"
+          }
+        ],
+        "facility": {
+          "name": "TMDS Facility"
+        },
+        "date": {
+          "start": "2008-09-16T04:00:00",
+          "end": "2008-09-16T04:00:00"
+        },
+        "procedure": [
+          {
+            "code": "00162",
+            "display": "Anesthesia For Radical Surgery On Nose And Sinuses",
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "Active",
+            "primary": true
+          }
+        ]
+      }
+    ]
+  }
+}

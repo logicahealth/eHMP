@@ -1,0 +1,19 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "Default schema for message response",
+	"description": "",
+	"type": "object",
+	"required": [
+		"message",
+		"status"
+	],
+	"properties": {
+		"message": {
+			"type": "string"
+		},
+		"status": {
+			"type": "integer",
+			"minimum": 400
+		}
+	}
+}

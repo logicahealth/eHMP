@@ -1,0 +1,784 @@
+[{
+    "uid": "add-active-medication",
+    "value": "add-active-medication",
+    "label": "Add Active Medication",
+    "description": "Ability to add a new active medication to a patient record outside the medication ordering process",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "active"
+}, {
+    "uid": "discontinue-active-medication",
+    "value": "discontinue-active-medication",
+    "label": "Discontinue Active Medication",
+    "description": "Ability to mark an active medication as discontinued as the patient no longer takes it",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "active"
+}, {
+    "uid": "edit-active-medication",
+    "value": "edit-active-medication",
+    "label": "Edit Active Medication",
+    "description": "Ability to change an attribute of a medication",
+    "example": "Dosage or Frequency taken",
+    "note": "This change might be implemented by discontinuing the current medication and adding a new one",
+    "version": "1.3.1",
+    "status": "active"
+}, {
+    "uid": "read-active-medication",
+    "value": "read-active-medication",
+    "label": "Read Active Medication",
+    "description": "Read access to patient medication list",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "active"
+}, {
+    "uid": "read-admin-screen",
+    "value": "read-admin-screen",
+    "label": "Read Admin Screen",
+    "description": "Read only access to view user administration applet",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "active"
+}, {
+    "uid": "add-allergy",
+    "value": "add-allergy",
+    "label": "Add Allergy",
+    "description": "Ability to add a new allergy to the patients list of allergies",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "active"
+}, {
+    "uid": "edit-allergy",
+    "value": "edit-allergy",
+    "label": "Edit Allergy",
+    "description": "Ability to edit an existing entry (e.g.: changing the severity of the reaction)",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "active"
+}, {
+    "uid": "eie-allergy",
+    "value": "eie-allergy",
+    "label": "Mark Allergy Entered in Error",
+    "description": "Ability to mark an entry as entered in error if the entry was incorrectly entered in the patient record",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "active"
+}, {
+    "uid": "read-allergy",
+    "value": "read-allergy",
+    "label": "Read Allergy",
+    "description": "Read access to operations on allergies",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "active"
+}, {
+    "uid": "read-clinical-reminder",
+    "value": "read-clinical-reminder",
+    "label": "Read Clinical Reminder",
+    "description": "Read only access to view clinical reminders created in CPRS",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "active"
+}, {
+    "uid": "read-community-health-summary",
+    "value": "read-community-health-summary",
+    "label": "Read Community Health Summary",
+    "description": "Read only access to view community health summaries. Community health summaries are documents such as Continuity of Care Documents (CCDs) coming from external providers.",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "active"
+}, {
+    "uid": "read-document",
+    "value": "read-document",
+    "label": "Read Document",
+    "description": "Ability to view a variety of documents such as lab reports, radiology reports and progress notes all in one applet",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "active"
+}, {
+    "uid": "add-encounter",
+    "value": "add-encounter",
+    "label": "Add Encounter Context",
+    "description": "Ability to establish an encounter context (provider, location, date, and time)",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "active"
+}, {
+    "uid": "edit-encounter",
+    "value": "edit-encounter",
+    "label": "Edit Encounter",
+    "description": "",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "depricated"
+}, {
+    "uid": "eie-encounter",
+    "value": "eie-encounter",
+    "label": "EIE Encounter",
+    "description": "",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "depricated"
+}, {
+    "uid": "read-encounter",
+    "value": "read-encounter",
+    "label": "Read Encounter Context",
+    "description": "Ability to view the current encounter context",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "active"
+}, {
+    "uid": "add-encounter-form",
+    "value": "add-encounter-form",
+    "label": "Add Encounter",
+    "description": "Ability to create an encounter form and add items such as diagnosis, procedures performed and visit type to support 3rd party billing and workload credit documentation",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "active"
+}, {
+    "uid": "edit-encounter-form",
+    "value": "edit-encounter-form",
+    "label": "Edit Encounter",
+    "description": "Ability to edit a previously created encounter form",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "active"
+}, {
+    "uid": "add-consult-order",
+    "value": "add-consult-order",
+    "label": "Add Consult Order",
+    "description": "Ability to create a new consult order, which could include creating an order to be signed by an authorized user",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "active"
+}, {
+    "uid": "discontinue-consult-order",
+    "value": "discontinue-consult-order",
+    "label": "Discontinue Order",
+    "description": "Ability to discontinue a signed consult order that has not been acted upon by the fullfillment activity (Note: a user can only discontinue their own orders)",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "active"
+}, {
+    "uid": "edit-consult-order",
+    "value": "edit-consult-order",
+    "label": "Edit Consult Order",
+    "description": "Ability to edit an unsigned consult order, which could include creating an order to be signed by an authorized user",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "active"
+}, {
+    "uid": "sign-consult-order",
+    "value": "sign-consult-order",
+    "label": "Sign Consult Order",
+    "description": "Ability to sign an order for transmission to the fulfillment activity",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "active"
+}, {
+    "uid": "add-immunization",
+    "value": "add-immunization",
+    "label": "Add Immunization",
+    "description": "Ability to add a new immunization, both administered or historical to a patient record",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "active"
+}, {
+    "uid": "edit-immunization",
+    "value": "edit-immunization",
+    "label": "Edit Immunization",
+    "description": "",
+    "example": "",
+    "note": "No replacement",
+    "version": "1.3.1",
+    "status": "depricated"
+}, {
+    "uid": "eie-immunization",
+    "value": "eie-immunization",
+    "label": "Eie Immunization",
+    "description": "",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "active"
+}, {
+    "uid": "read-immunization",
+    "value": "read-immunization",
+    "label": "Read Immunization",
+    "description": "Read access to a patients immunizations list",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "active"
+}, {
+    "uid": "add-lab-order",
+    "value": "add-lab-order",
+    "label": "Add Lab Order",
+    "description": "Ability to create a new lab order, which could include creating an order to be signed by an authorized user",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "active"
+}, {
+    "uid": "cosign-lab-order",
+    "value": "cosign-lab-order",
+    "label": "Cosign Lab Order",
+    "description": "",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "depricated"
+}, {
+    "uid": "discontinue-lab-order",
+    "value": "discontinue-lab-order",
+    "label": "Discontinue Lab Order",
+    "description": "Ability to discontinue a signed lab order that has not been acted upon by the fullfillment activity (Note: a user can only discontinue their own orders)",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "active"
+}, {
+    "uid": "edit-lab-order",
+    "value": "edit-lab-order",
+    "label": "Edit Lab Order",
+    "description": "Ability to edit an unsigned lab order, which could include creating an order to be signed by an authorized user",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "active"
+}, {
+    "uid": "enable-lab-order-collect-option",
+    "value": "enable-lab-order-collect-option",
+    "label": "Enable Lab Order Collect Option Other",
+    "description": "Ability to have an \"other\" option on the lab collection picklist",
+    "example": "",
+    "note": "",
+    "version": "2.0.1",
+    "status": "active"
+}, {
+    "uid": "release-lab-order",
+    "value": "release-lab-order",
+    "label": "Release Lab Order",
+    "description": "",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "depricated"
+}, {
+    "uid": "sign-lab-order",
+    "value": "sign-lab-order",
+    "label": "Sign Lab Order",
+    "description": "Ability to sign an order for transmission to the fulfillment activity",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "active"
+}, {
+    "uid": "add-med-order",
+    "value": "add-med-order",
+    "label": "Add Med Order",
+    "description": "Ability to create a new med order, which could include creating an order to be signed by an authorized user",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "active"
+}, {
+    "uid": "cosign-med-order",
+    "value": "cosign-med-order",
+    "label": "Cosign Med Order",
+    "description": "",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "depricated"
+}, {
+    "uid": "discontinue-med-order",
+    "value": "discontinue-med-order",
+    "label": "Discontinue Med Order",
+    "description": "Ability to discontinue a signed med order that has not been acted upon by the fullfillment activity (Note: a user can only discontinue their own orders)",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "active"
+}, {
+    "uid": "edit-med-order",
+    "value": "edit-med-order",
+    "label": "Edit Med Order",
+    "description": "Ability to edit an unsigned med order, which could include creating an order to be signed by an authorized user",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "active"
+}, {
+    "uid": "release-med-order",
+    "value": "release-med-order",
+    "label": "Release Med Order",
+    "description": "",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "depricated"
+}, {
+    "uid": "sign-med-order",
+    "value": "sign-med-order",
+    "label": "Sign Med Order",
+    "description": "Ability to sign an order for transmission to the fulfillment activity",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "active"
+}, {
+    "uid": "read-medication-review",
+    "value": "read-medication-review",
+    "label": "Read Medication Review",
+    "description": "Ability to see a patients medications including inpatient, outpatient, and clinic order medications in a timeline view",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "active"
+}, {
+    "uid": "add-non-va-medication",
+    "value": "add-non-va-medication",
+    "label": "Add Non Va Medication",
+    "description": "Ability to add a new active non VA medication to a patient record outside the medication ordering process",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "active"
+}, {
+    "uid": "edit-non-va-medication",
+    "value": "edit-non-va-medication",
+    "label": "Edit Non Va Medication",
+    "description": "Ability to change an attribute of a non VA medication (e.g.: dosage or frequency taken: Note: this change might be implemented by discontinuing the current medication and adding a new one",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "active"
+}, {
+    "uid": "add-note",
+    "value": "add-note",
+    "label": "Add Note",
+    "description": "Ability to create a new progress note to document a patient encounter, which could include creating a note to be signed by an authorized user",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "active"
+}, {
+    "uid": "add-note-addendum",
+    "value": "add-note-addendum",
+    "label": "Add Note Addendum",
+    "description": "Ability to create a new progress note addendum to document a patient encounter, which could include creating a note addendum to be signed by an authorized user",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "active"
+}, {
+    "uid": "cosign-note",
+    "value": "cosign-note",
+    "label": "Cosign Note",
+    "description": "Ability to be a cosigner on a note such as an atttending physician cosigning a residents note",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "active"
+}, {
+    "uid": "delete-note",
+    "value": "delete-note",
+    "label": "Delete Note",
+    "description": "Ability to delete an unsigned note that the originating user drafted",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "active"
+}, {
+    "uid": "edit-note",
+    "value": "edit-note",
+    "label": "Edit Note",
+    "description": "Ability to edit an unsigned progress note, which could include editing a note to be signed by an authorized user",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "active"
+}, {
+    "uid": "edit-note-addendum",
+    "value": "edit-note-addendum",
+    "label": "Edit Note Addendum",
+    "description": "Ability to edit an unsigned progress note addendum, which could include editing a note addendum to be signed by an authorized user",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "active"
+}, {
+    "uid": "retract-note",
+    "value": "retract-note",
+    "label": "Retract Note",
+    "description": "Ability to mark a signed note as to reflect a status of retracted",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "active"
+}, {
+    "uid": "sign-note",
+    "value": "sign-note",
+    "label": "Sign Note",
+    "description": "Ability to sign a progress note making it an official part of the patient record",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "active"
+}, {
+    "uid": "sign-note-addendum",
+    "value": "sign-note-addendum",
+    "label": "Sign Note Addendum",
+    "description": "Ability to sign a progress note addendum making it an official part of the patient record",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "active"
+}, {
+    "uid": "read-order",
+    "value": "read-order",
+    "label": "Read Order",
+    "description": "Ability to view a patients order history",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "active"
+}, {
+    "uid": "add-patient-history",
+    "value": "add-patient-history",
+    "label": "Add Patient History",
+    "description": "Ability to record a patients histories such as family or social history",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "active"
+}, {
+    "uid": "edit-patient-history",
+    "value": "edit-patient-history",
+    "label": "Edit Patient History",
+    "description": "Ability to edit a patients histories such as family or social history",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "active"
+}, {
+    "uid": "eie-patient-history",
+    "value": "eie-patient-history",
+    "label": "Mark Patient History Entered in Error",
+    "description": "Ability to mark an entry in a patients history as entered in error",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "active"
+}, {
+    "uid": "read-patient-history",
+    "value": "read-patient-history",
+    "label": "Read Patient History",
+    "description": "Read access to a patients problem list",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "active"
+}, {
+    "uid": "clear-patient-sync",
+    "value": "clear-patient-sync",
+    "label": "Clear Patient Sync",
+    "description": "Ability to clear a patient's sync status",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "active"
+}, {
+    "uid": "load-patient-sync",
+    "value": "load-patient-sync",
+    "label": "Load Patient Sync",
+    "description": "Ability to start a patient sync to occur",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "active"
+}, {
+    "uid": "add-condition-problem",
+    "value": "add-condition-problem",
+    "label": "Add Condition Problem",
+    "description": "Ability to add a new problem to the patients problem list",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "active"
+}, {
+    "uid": "edit-condition-problem",
+    "value": "edit-condition-problem",
+    "label": "Edit Condition Problem",
+    "description": "Ability to edit a problem on the patients problem list such as changing the severity of the problem",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "active"
+}, {
+    "uid": "read-condition-problem",
+    "value": "read-condition-problem",
+    "label": "Read Condition Problem",
+    "description": "Read access to a patients problem list",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "active"
+}, {
+    "uid": "remove-condition-problem",
+    "value": "remove-condition-problem",
+    "label": "Remove Condition Problem",
+    "description": "Ability to mark a patients problem list entry as removed",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "active"
+}, {
+    "uid": "read-patient-record",
+    "value": "read-patient-record",
+    "label": "Read Patient Record",
+    "description": "Ability to search for and select an individual patient record",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "active"
+}, {
+    "uid": "add-radiology-order",
+    "value": "add-radiology-order",
+    "label": "Add Radiology Order",
+    "description": "Ability to create a new rad order, which could include creating an order to be signed by an authorized user",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "active"
+}, {
+    "uid": "cosign-radiology-order",
+    "value": "cosign-radiology-order",
+    "label": "Cosign Radiology Order",
+    "description": "DEPRICATING",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "depricated"
+}, {
+    "uid": "discontinue-radiology-order",
+    "value": "discontinue-radiology-order",
+    "label": "Discontinue Radiology Order",
+    "description": "Ability to discontinue a signed rad order that has not been acted upon by the fullfillment activity (Note: a user can only discontinue their own orders)",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "active"
+}, {
+    "uid": "edit-radiology-order",
+    "value": "edit-radiology-order",
+    "label": "Edit Radiology Order",
+    "description": "Ability to edit an unsigned rad order, which could include creating an order to be signed by an authorized user",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "active"
+}, {
+    "uid": "release-radiology-order",
+    "value": "release-radiology-order",
+    "label": "Release Radiology Order",
+    "description": "",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "depricated"
+}, {
+    "uid": "sign-radiology-order",
+    "value": "sign-radiology-order",
+    "label": "Sign Radiology Order",
+    "description": "Ability to sign an order for transmission to the fulfillment activity",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "active"
+}, {
+    "uid": "read-stack-graph",
+    "value": "read-stack-graph",
+    "label": "Read Stack Graph",
+    "description": "",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "depricated"
+}, {
+    "uid": "access-stack-graph",
+    "value": "access-stack-graph",
+    "label": "Access Stack Graph",
+    "description": "Ability to utilize the stacked graph applet to view patient information over time",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "active"
+}, {
+    "uid": "abort-task",
+    "value": "abort-task",
+    "label": "Abort Task",
+    "description": "",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "depricated"
+}, {
+    "uid": "add-task",
+    "value": "add-task",
+    "label": "Add Task",
+    "description": "Ability to create a new task and assign it to yourself or another user",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "active"
+}, {
+    "uid": "cancel-task",
+    "value": "cancel-task",
+    "label": "Cancel Task",
+    "description": "Ability to cancel own task",
+    "example": "A user can only cancel their own tasks",
+    "note": "",
+    "version": "1.3.1",
+    "status": "active"
+}, {
+    "uid": "edit-task",
+    "value": "edit-task",
+    "label": "Edit Task",
+    "description": "Ability to edit own task",
+    "example": "A user can only edit their own tasks",
+    "note": "",
+    "version": "1.3.1",
+    "status": "active"
+}, {
+    "uid": "read-task",
+    "value": "read-task",
+    "label": "Read Task",
+    "description": "Ability to view a tasks related to a patient",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "active"
+}, {
+    "uid": "add-user-permission-set",
+    "value": "add-user-permission-set",
+    "label": "Add User Permission Set",
+    "description": "Ability to add to user's permissions",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "active"
+}, {
+    "uid": "edit-own-permissions",
+    "value": "edit-own-permissions",
+    "label": "Edit Own Permissions",
+    "description": "Ability to edit permissions related to one self",
+    "example": "",
+    "note": "Allows a user to change permissions without fear of being able to edit them back. A user can't add or remove this from themself",
+    "version": "1.3.1",
+    "status": "active"
+}, {
+    "uid": "edit-user-permission-set",
+    "value": "edit-user-permission-set",
+    "label": "Edit User Permission Set",
+    "description": "Ability to edit a user's permissions",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "active"
+}, {
+    "uid": "read-user-permission-set",
+    "value": "read-user-permission-set",
+    "label": "Read User Permission Set",
+    "description": "Ability to read user's permissions",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "active"
+}, {
+    "uid": "remove-user-permission-set",
+    "value": "remove-user-permission-set",
+    "label": "Remove User Permission Set",
+    "description": "Ability to remove a user's permissions",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "active"
+}, {
+    "uid": "add-vital",
+    "value": "add-vital",
+    "label": "Add Vital",
+    "description": "Ability to add a new vital signs",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "active"
+}, {
+    "uid": "edit-vital",
+    "value": "edit-vital",
+    "label": "Edit Vital",
+    "description": "",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "depricated"
+}, {
+    "uid": "eie-vital",
+    "value": "eie-vital",
+    "label": "Mark Vital Entered in Error",
+    "description": "Ability to mark one or more vital signs recorded at the same time that were entered in error",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "active"
+}, {
+    "uid": "read-vital",
+    "value": "read-vital",
+    "label": "Read Vital",
+    "description": "Read access to a patients vital signs",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "active"
+}, {
+    "uid": "read-vista-health-summary",
+    "value": "read-vista-health-summary",
+    "label": "Read Vista Health Summary",
+    "description": "Ability to view health summaries created in CPRS",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "active"
+}, {
+    "uid": "read-timeline",
+    "value": "read-timeline",
+    "label": "Read Timeline",
+    "description": "",
+    "example": "",
+    "note": "",
+    "version": "1.3.1",
+    "status": "depricated"
+}]

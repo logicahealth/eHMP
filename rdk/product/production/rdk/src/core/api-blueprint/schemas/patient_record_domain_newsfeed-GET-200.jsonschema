@@ -1,0 +1,432 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "Get record data of one domain for a patient",
+	"description": "",
+	"type": "object",
+	"required": [
+		"apiVersion",
+		"data",
+		"status"
+	],
+	"properties": {
+		"apiVersion": {
+			"type": "string"
+		},
+		"data": {
+			"type": "object",
+			"required": [
+				"updated",
+				"totalItems",
+				"currentItemCount",
+				"items"
+			],
+			"properties": {
+				"currentItemCount": {
+					"type": "integer"
+				},
+				"items": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"required": [
+							"facilityCode",
+							"facilityName",
+							"kind",
+							"pid",
+							"stampTime",
+							"uid"
+						],
+						"properties": {
+							"activity": {
+								"type": "array",
+								"items": {
+									"type": "object",
+									"required": [
+										"dateTime",
+										"entered",
+										"enteredBy",
+										"name",
+										"responsible"
+									],
+									"properties": {
+										"comment": {
+											"type": "string"
+										},
+										"dateTime": {
+											"type": "integer"
+										},
+										"entered": {
+											"type": "integer"
+										},
+										"enteredBy": {
+											"type": "string"
+										},
+										"name": {
+											"type": "string"
+										},
+										"responsible": {
+											"type": "string"
+										}
+									}
+								}
+							},
+							"administeredDateTime": {
+								"type": "string"
+							},
+							"appoinmentStatus": {
+								"type": "string"
+							},
+							"category": {
+								"type": "string"
+							},
+							"categoryCode": {
+								"type": "string"
+							},
+							"categoryName": {
+								"type": "string"
+							},
+							"clinicalProcedure": {
+								"type": "string"
+							},
+							"codes": {
+								"type": "array",
+								"items": {
+									"type": "object",
+									"required": [
+										"code",
+										"system"
+									],
+									"properties": {
+										"code": {
+											"type": "string"
+										},
+										"display": {
+											"type": "string"
+										},
+										"system": {
+											"type": "string"
+										}
+									}
+								}
+							},
+							"consultProcedure": {
+								"type": "string"
+							},
+							"contraindicated": {
+								"type": "boolean"
+							},
+							"cptCode": {
+								"type": "string"
+							},
+							"cptName": {
+								"type": "string"
+							},
+							"current": {
+								"type": "boolean"
+							},
+							"dateTime": {
+								"type": "string"
+							},
+							"dispositionName": {
+								"type": "null"
+							},
+							"earliestDate": {
+								"type": "string"
+							},
+							"encounterName": {
+								"type": "string"
+							},
+							"encounterType": {
+								"type": "string"
+							},
+							"encounterUid": {
+								"type": "string"
+							},
+							"facilityCode": {
+								"type": "string"
+							},
+							"facilityName": {
+								"type": "string"
+							},
+							"fromService": {
+								"type": "string"
+							},
+							"interpretation": {
+								"type": "string"
+							},
+							"kind": {
+								"type": "string"
+							},
+							"lastAction": {
+								"type": "string"
+							},
+							"lastUpdateTime": {
+								"type": "string"
+							},
+							"localId": {
+								"type": "string"
+							},
+							"locationDisplayName": {
+								"type": "string"
+							},
+							"locationName": {
+								"type": "string"
+							},
+							"locationOos": {
+								"type": "boolean"
+							},
+							"locationUid": {
+								"type": "string"
+							},
+							"movements": {
+								"type": "array",
+								"items": {
+									"type": "object",
+									"required": [
+										"dateTime",
+										"localId",
+										"movementType",
+										"summary"
+									],
+									"properties": {
+										"dateTime": {
+											"type": "string"
+										},
+										"localId": {
+											"type": "string"
+										},
+										"locationName": {
+											"type": "string"
+										},
+										"locationUid": {
+											"type": "string"
+										},
+										"movementType": {
+											"type": "string"
+										},
+										"summary": {
+											"type": "string"
+										}
+									}
+								}
+							},
+							"name": {
+								"type": "string"
+							},
+							"orderName": {
+								"type": "string"
+							},
+							"orderUid": {
+								"type": "string"
+							},
+							"parentUid": {
+								"type": "string"
+							},
+							"patientClassCode": {
+								"type": "string"
+							},
+							"patientClassName": {
+								"type": "string"
+							},
+							"performerName": {
+								"type": "string"
+							},
+							"performerUid": {
+								"type": "string"
+							},
+							"pid": {
+								"type": "string"
+							},
+							"place": {
+								"type": "string"
+							},
+							"primaryProvider": {
+								"type": "object",
+								"required": [
+									"primary",
+									"providerDisplayName",
+									"providerName",
+									"summary"
+								],
+								"properties": {
+									"primary": {
+										"type": "boolean"
+									},
+									"providerDisplayName": {
+										"type": "string"
+									},
+									"providerName": {
+										"type": "string"
+									},
+									"providerUid": {
+										"type": "string"
+									},
+									"role": {
+										"type": "string"
+									},
+									"summary": {
+										"type": "string"
+									}
+								}
+							},
+							"providerDisplayName": {
+								"type": "string"
+							},
+							"providerName": {
+								"type": "string"
+							},
+							"providerUid": {
+								"type": "string"
+							},
+							"providers": {
+								"type": "array",
+								"items": {
+									"type": "object",
+									"required": [
+										"providerDisplayName",
+										"providerName",
+										"summary"
+									],
+									"properties": {
+										"primary": {
+											"type": "boolean"
+										},
+										"providerDisplayName": {
+											"type": "string"
+										},
+										"providerName": {
+											"type": "string"
+										},
+										"providerUid": {
+											"type": "string"
+										},
+										"role": {
+											"type": "string"
+										},
+										"summary": {
+											"type": "string"
+										}
+									}
+								}
+							},
+							"provisionalDx": {
+								"type": "string"
+							},
+							"reason": {
+								"type": "string"
+							},
+							"reasonName": {
+								"type": [
+									"string",
+									"null"
+								]
+							},
+							"reasonUid": {
+								"type": "string"
+							},
+							"results": {
+								"type": "array",
+								"items": {
+									"type": "object",
+									"required": [
+										"localTitle",
+										"summary",
+										"uid"
+									],
+									"properties": {
+										"localTitle": {
+											"type": "string"
+										},
+										"summary": {
+											"type": "string"
+										},
+										"uid": {
+											"type": "string"
+										}
+									}
+								}
+							},
+							"roomBed": {
+								"type": "string"
+							},
+							"seriesName": {
+								"type": "string"
+							},
+							"service": {
+								"type": "string"
+							},
+							"shortLocationName": {
+								"type": "string"
+							},
+							"specialty": {
+								"type": "string"
+							},
+							"stampTime": {
+								"type": "string"
+							},
+							"statusName": {
+								"type": "string"
+							},
+							"stay": {
+								"type": "object",
+								"required": [
+									"arrivalDateTime"
+								],
+								"properties": {
+									"arrivalDateTime": {
+										"type": "string"
+									},
+									"dischargeDateTime": {
+										"type": "string"
+									}
+								}
+							},
+							"stopCodeName": {
+								"type": "string"
+							},
+							"stopCodeUid": {
+								"type": "string"
+							},
+							"summary": {
+								"type": "string"
+							},
+							"typeDisplayName": {
+								"type": "string"
+							},
+							"typeName": {
+								"type": "string"
+							},
+							"uid": {
+								"type": "string"
+							},
+							"urgency": {
+								"type": "string"
+							}
+						}
+					}
+				},
+				"itemsPerPage": {
+					"type": "integer"
+				},
+				"pageIndex": {
+					"type": "integer"
+				},
+				"startIndex": {
+					"type": "integer"
+				},
+				"totalItems": {
+					"type": "integer"
+				},
+				"totalPages": {
+					"type": "integer"
+				},
+				"updated": {
+					"type": "integer"
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

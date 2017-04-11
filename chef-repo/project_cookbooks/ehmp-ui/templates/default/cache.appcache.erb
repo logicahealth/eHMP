@@ -1,0 +1,15 @@
+CACHE MANIFEST
+# Timestamp: <%= @timestamp %>
+# Browsers only update the application cache when this manifest file changes.
+
+# Explicitly cached
+CACHE:
+<%= node[:ehmp_ui][:appcache_list] %>
+
+# Online whitelisted resources requiring a connection to the server. All requests to such resources bypass the cache.
+# "*" sets all arbitrary URLs not explicitly cached.
+NETWORK:
+*
+
+# Specifies resources the browser should use if a resource is inaccessible.
+FALLBACK:

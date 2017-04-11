@@ -1,0 +1,78 @@
+{{#if navHeader}}
+    <p class="text-right">
+        <button type="button" class="btn btn-default vitals-prev" title="Press enter to load previous vitals."><i class="fa fa-arrow-up"></i> Previous</button>
+        <button type="button" class="btn btn-default vitals-next" title="Press enter to load next vitals."><i class="fa fa-arrow-down"></i> Next</button>
+    </p>
+{{/if}}
+<div class="table-responsive">
+    <table class="table">
+        <caption class="sr-only">This table represents data for vitals categorized by result, date observed, facility, type and date entered.</caption>
+        <thead>
+            <tr>
+                <th scope="col">Vital</th>
+                <th scope="col">Result</th>
+                <th scope="col">Date Observed</th>
+                <th scope="col">Facility</th>
+                <th scope="col">Type</th>
+                <th scope="col">Date Entered</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td id="vitalsModalDisplayName">
+                    {{#if tooltipName}}
+                        {{tooltipName}}
+                    {{else}}
+                        {{normalizedName}}
+                    {{/if}}
+                </td>
+                <td id="vitalsModalResult">
+                    {{#if formattedHeight}}
+                        {{formattedHeight}}
+                    {{else}}
+                        {{result}} {{units}}
+                    {{/if}}
+                    {{#if metricResult}}
+                        <span class="color-grey-dark">({{metricResult}} {{metricUnits}})</span>
+                    {{/if}}
+                </td>
+                <td id="vitalsModalObservedFormatted">
+                    {{#if observed}}
+                        {{observedFormatted}}<span class="color-grey-dark">{{observedTimeFormatted}}</span>
+                    {{/if}}
+                </td>
+                <td id="vitalsModalFacility"><span class="color-grey-dark">{{facilityMoniker}}</span></td>
+                <td id="vitalsModalType">{{typeName}}</td>
+                <td id="vitalsModalDateEntered">{{resultedFormatted}}<span class="color-grey-dark">{{resultedTimeFormatted}}</span></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<form class="form-inline" role="form">
+    <div id="dateRangeFilter"></div>
+</form>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-5" id="lrDataTableView">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <p class="pull-right">Vitals Tests: <span id="totalTests"></span></p>
+                    <h5 class="panel-title">{{#if tooltipName}}{{tooltipName}}{{else}}{{normalizedName}}{{/if}}</h5>
+                </div>
+                <div class="table-responsive">
+                    <div class="js-backgrid"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-7" id="lrGraph">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h5 class="panel-title">{{#if tooltipName}}{{tooltipName}}{{else}}{{normalizedName}}{{/if}}</h5>
+                </div>
+                <div class="panel-body">
+                    <div id="jsChart"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

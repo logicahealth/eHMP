@@ -1,0 +1,222 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "Get record data of one domain for a patient",
+	"description": "",
+	"type": "object",
+	"required": [
+		"apiVersion",
+		"data",
+		"status"
+	],
+	"properties": {
+		"apiVersion": {
+			"type": "string"
+		},
+		"data": {
+			"type": "object",
+			"required": [
+				"updated",
+				"totalItems",
+				"currentItemCount",
+				"items"
+			],
+			"properties": {
+				"currentItemCount": {
+					"type": "integer"
+				},
+				"items": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"required": [
+							"category",
+							"consultProcedure",
+							"dateTime",
+							"facilityCode",
+							"facilityName",
+							"kind",
+							"localId",
+							"orderName",
+							"orderUid",
+							"pid",
+							"service",
+							"stampTime",
+							"statusName",
+							"summary",
+							"typeName",
+							"uid"
+						],
+						"properties": {
+							"activity": {
+								"type": "array",
+								"items": {
+									"type": "object",
+									"required": [
+										"dateTime",
+										"entered",
+										"enteredBy",
+										"name",
+										"responsible"
+									],
+									"properties": {
+										"comment": {
+											"type": "string"
+										},
+										"dateTime": {
+											"type": "integer"
+										},
+										"entered": {
+											"type": "integer"
+										},
+										"enteredBy": {
+											"type": "string"
+										},
+										"name": {
+											"type": "string"
+										},
+										"responsible": {
+											"type": "string"
+										}
+									}
+								}
+							},
+							"category": {
+								"type": "string"
+							},
+							"clinicalProcedure": {
+								"type": "string"
+							},
+							"consultProcedure": {
+								"type": "string"
+							},
+							"dateTime": {
+								"type": "string"
+							},
+							"earliestDate": {
+								"type": "string"
+							},
+							"facilityCode": {
+								"type": "string"
+							},
+							"facilityName": {
+								"type": "string"
+							},
+							"fromService": {
+								"type": "string"
+							},
+							"kind": {
+								"type": "string"
+							},
+							"lastAction": {
+								"type": "string"
+							},
+							"lastUpdateTime": {
+								"type": "string"
+							},
+							"localId": {
+								"type": "string"
+							},
+							"orderName": {
+								"type": "string"
+							},
+							"orderUid": {
+								"type": "string"
+							},
+							"patientClassCode": {
+								"type": "string"
+							},
+							"patientClassName": {
+								"type": "string"
+							},
+							"pid": {
+								"type": "string"
+							},
+							"place": {
+								"type": "string"
+							},
+							"providerDisplayName": {
+								"type": "string"
+							},
+							"providerName": {
+								"type": "string"
+							},
+							"providerUid": {
+								"type": "string"
+							},
+							"provisionalDx": {
+								"type": "string"
+							},
+							"reason": {
+								"type": "string"
+							},
+							"results": {
+								"type": "array",
+								"items": {
+									"type": "object",
+									"required": [
+										"localTitle",
+										"summary",
+										"uid"
+									],
+									"properties": {
+										"localTitle": {
+											"type": "string"
+										},
+										"summary": {
+											"type": "string"
+										},
+										"uid": {
+											"type": "string"
+										}
+									}
+								}
+							},
+							"service": {
+								"type": "string"
+							},
+							"stampTime": {
+								"type": "string"
+							},
+							"statusName": {
+								"type": "string"
+							},
+							"summary": {
+								"type": "string"
+							},
+							"typeName": {
+								"type": "string"
+							},
+							"uid": {
+								"type": "string"
+							},
+							"urgency": {
+								"type": "string"
+							}
+						}
+					}
+				},
+				"itemsPerPage": {
+					"type": "integer"
+				},
+				"pageIndex": {
+					"type": "integer"
+				},
+				"startIndex": {
+					"type": "integer"
+				},
+				"totalItems": {
+					"type": "integer"
+				},
+				"totalPages": {
+					"type": "integer"
+				},
+				"updated": {
+					"type": "integer"
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

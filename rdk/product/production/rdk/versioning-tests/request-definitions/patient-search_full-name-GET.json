@@ -1,0 +1,49 @@
+{
+	"parameters": {
+		"fields": {
+			"name": "fields",
+			"paramType": "query",
+			"type": "string",
+			"values": [
+			]
+		},
+		"limit": {
+			"name": "limit",
+			"paramType": "query",
+			"type": "number",
+			"values": [
+			]
+		},
+		"name.full": {
+			"name": "name.full",
+			"paramType": "query",
+			"required": true,
+			"type": "string",
+			"values": [
+			]
+		},
+		"order": {
+			"name": "order",
+			"paramType": "query",
+			"type": "string",
+			"values": [
+			]
+		},
+		"rows.max": {
+			"name": "rows.max",
+			"paramType": "query",
+			"type": "number",
+			"values": [
+			]
+		},
+		"start": {
+			"name": "start",
+			"paramType": "query",
+			"type": "number",
+			"values": [
+			]
+		}
+	},
+	"schema": {
+	}
+}

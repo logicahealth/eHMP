@@ -1,0 +1,60 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"type": "object",
+	"required": [
+		"data",
+		"status"
+	],
+	"properties": {
+		"data": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"required": [
+					"categoryName"
+				],
+				"properties": {
+					"categoryName": {
+						"type": "string"
+					},
+					"default": {
+						"type": "object"
+					},
+					"values": {
+						"type": "array",
+						"items": {
+							"type": "object",
+							"required": [
+								"routeIen",
+								"routeName",
+								"routeAbbrev",
+								"outpatientExpansion",
+								"IV"
+							],
+							"properties": {
+								"IV": {
+									"type": "boolean"
+								},
+								"outpatientExpansion": {
+									"type": "string"
+								},
+								"routeAbbrev": {
+									"type": "string"
+								},
+								"routeIen": {
+									"type": "string"
+								},
+								"routeName": {
+									"type": "string"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

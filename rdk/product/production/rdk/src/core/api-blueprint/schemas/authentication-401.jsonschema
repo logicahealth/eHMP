@@ -1,0 +1,22 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "Login to create a user session",
+	"description": "Requires the authentication interceptor to run in order to add the user to the session for returning that data.",
+	"type": "object",
+	"required": [
+		"error",
+		"message",
+		"status"
+	],
+	"properties": {
+		"error": {
+			"type": "string"
+		},
+		"message": {
+			"type": "string"
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

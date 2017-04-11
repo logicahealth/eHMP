@@ -1,0 +1,58 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>event-listeners</groupId>
+  <artifactId>event-listeners</artifactId>
+  <version>0.0.1</version>
+  <packaging>jar</packaging>
+
+  <name>event-listeners</name>
+  <url>http://maven.apache.org</url>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <version.jboss.as>7.5.0.Final-redhat-21</version.jboss.as>
+    <version.jboss.maven.plugin>7.4.Final</version.jboss.maven.plugin>
+    
+    <!-- other plugin versions -->
+    <version.jar.plugin>2.2</version.jar.plugin>
+    <version.exec.plugin>1.2.1</version.exec.plugin>
+
+    <!-- maven-compiler-plugin -->
+    <maven.compiler.target>1.6</maven.compiler.target>
+    <maven.compiler.source>1.6</maven.compiler.source>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+    	<groupId>org.kie</groupId>
+    	<artifactId>kie-api</artifactId>
+    	<version>6.2.0.Final</version>
+    </dependency>
+    <dependency>
+    	<groupId>org.kie</groupId>
+    	<artifactId>kie-internal</artifactId>
+    	<version>6.2.0.Final</version>
+    </dependency>
+    <dependency>
+    	<groupId>org.jbpm</groupId>
+    	<artifactId>jbpm-flow</artifactId>
+    	<version>6.2.0.Final</version>
+    </dependency>
+    <dependency>
+    	<groupId>joda-time</groupId>
+    	<artifactId>joda-time</artifactId>
+    	<version>2.9</version>
+    </dependency>
+  </dependencies>
+  <build>
+    <finalName>jbpm-custom-event-listeners</finalName>
+  </build>
+</project>

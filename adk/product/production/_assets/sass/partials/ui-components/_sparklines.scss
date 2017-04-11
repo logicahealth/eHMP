@@ -1,0 +1,86 @@
+.graph-container {
+	height: 21px;
+	.normalValue {
+		stroke: $secondary;
+		fill: $secondary;
+	}
+	.abnormalValue {
+		stroke: $red;
+		fill: $red;
+	}
+	.previousValue {
+		stroke: $pure-white;
+		fill: $pure-black;
+	}
+	.criticalValue {
+		stroke: $red;
+		fill: $red;
+	}
+	.abnormalRange, .textureHashed rect{
+		stroke: $grey-lighter;
+		fill: $grey-lighter;
+	}
+	.criticalRange.lowRange{
+		stroke: $grey-light;
+		fill: $grey-light;
+	}
+}
+
+.gist-trend-graph {
+    background-color: transparent;
+    overflow: visible;
+    display: inline;
+    margin-left: -2px;
+    height: 21px;
+    .outterBorder {
+        stroke: none;
+        fill: transparent;
+    }
+    .criticalRange {
+        stroke: $grey-light;
+        fill: $grey-light;
+    }
+    .abnormalRange {
+        stroke: #f2f2f2;
+        fill: #f2f2f2;
+    }
+    .normalRange {
+        stroke: #ffffff;
+        fill: #ffffff;
+    }
+    .trendLine {
+        stroke: #000000;
+    }
+    .previousValue {
+        stroke: #000000;
+        fill: #000000;
+    }
+    .criticalValue {
+        stroke: #cc0000;
+        fill: #cc0000;
+    }
+    .abnormalValue {
+        stroke: #ff9900;
+        fill: #ff9900;
+    }
+    .normalValue {
+        stroke: #0099ff;
+        fill: #0099ff;
+    }
+    .textureHashed {
+        path {
+            stroke: $grey-dark;
+            stroke-width: 1;
+            fill: none;
+        }
+        rect {
+            @extend .abnormalRange;
+        }
+    }
+    .hashedRange {
+        fill: url(#textureHashed);
+    }
+    .valueMarker {
+        overflow: visible;
+    }
+}

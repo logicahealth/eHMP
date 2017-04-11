@@ -1,0 +1,60 @@
+defaultTasks 'acceptanceTest'
+
+task bundleInstall{
+  doLast{
+    exec {
+      executable = "bundle"
+      args = ['install']
+    }
+  }
+}
+
+task acceptanceTest(dependsOn: bundleInstall){
+  description "Runs the acceptance tests for RDK"
+  doLast{
+    exec {
+      executable = "bundle"
+      args = ['exec', 'rake']
+    }
+  }
+}
+
+task acceptanceTestStable(dependsOn: bundleInstall){
+  description "Runs the stable acceptance tests for RDK"
+  doLast{
+    exec {
+      executable = "bundle"
+      args = ['exec', 'rake', 'endToEndStableTests']
+    }
+  }
+}
+
+task acceptanceTestUnstable(dependsOn: bundleInstall){
+  description "Runs the unstable acceptance tests for RDK"
+  doLast{
+    exec {
+      executable = "bundle"
+      args = ['exec', 'rake', 'endToEndUnstableTests']
+    }
+  }
+}
+
+task acceptanceTestOnc(dependsOn: bundleInstall){
+  description "Runs the ONC (writeback) acceptance tests for RDK"
+  doLast{
+    exec {
+      executable = "bundle"
+      args = ['exec', 'rake', 'endToEndOncTests']
+    }
+  }
+}
+
+task acceptanceTestCDS(dependsOn: bundleInstall){
+  description "Runs the CDS acceptance tests for RDK"
+  doLast{
+    exec {
+      executable = "bundle"
+      args = ['exec', 'rake', 'cdsTests']
+    }
+  }
+}

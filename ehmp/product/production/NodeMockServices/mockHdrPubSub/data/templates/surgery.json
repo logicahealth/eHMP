@@ -1,0 +1,35 @@
+{
+  "collection": "surgery",
+  "pid": "84F0;1",
+  "systemId": "84F0",
+  "localId": "1",
+  "seq": 1,
+  "total": 1,
+  "object": {
+    "lastUpdateTime": 20140409083810,
+    "category": "SR",
+    "dateTime": 200612080730,
+    "facilityCode": 561,
+    "facilityName": "New Jersey HCS",
+    "kind": "Surgery",
+    "localId": 10016,
+    "providers": [{
+      "providerName": "PROVIDER,ONE",
+      "providerUid": "urn:va:user:ABCD:983"
+    }],
+    "results": [{
+      "localTitle": "OPERATION REPORT",
+      "uid": "urn:va:document:ABCD:8:3563"
+    }, {
+      "localTitle": "NURSE INTRAOPERATIVE REPORT",
+      "uid": "urn:va:document:ABCD:8:3532"
+    }, {
+      "localTitle": "ANESTHESIA REPORT",
+      "uid": "urn:va:document:ABCD:8:3531"
+    }],
+    "statusName": "COMPLETED",
+    "summary": "LEFT INGUINAL HERNIA REPAIR WITH MESH",
+    "typeName": "LEFT INGUINAL HERNIA REPAIR WITH MESH",
+    "uid": "urn:va:surgery:ABCD:8:10016"
+  }
+}

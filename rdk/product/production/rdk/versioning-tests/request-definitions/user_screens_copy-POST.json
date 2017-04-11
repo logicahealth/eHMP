@@ -1,0 +1,29 @@
+{
+	"parameters": {
+		"fromId": {
+			"name": "fromId",
+			"paramType": "query",
+			"required": true,
+			"type": "string",
+			"values": [
+			]
+		},
+		"predefined": {
+			"name": "predefined",
+			"paramType": "query",
+			"type": "string",
+			"values": [
+			]
+		},
+		"toId": {
+			"name": "toId",
+			"paramType": "query",
+			"required": true,
+			"type": "string",
+			"values": [
+			]
+		}
+	},
+	"schema": {
+	}
+}

@@ -1,0 +1,184 @@
+{
+	"parameters": {
+		"callType": {
+			"name": "callType",
+			"paramType": "query",
+			"type": "string",
+			"values": [
+				{
+					"value": "coversheet"
+				},
+				{
+					"value": "modal"
+				},
+				{
+					"value": "vler_list"
+				},
+				{
+					"value": "vler_modal"
+				}
+			]
+		},
+		"domain": {
+			"name": "domain",
+			"paramType": "path",
+			"required": true,
+			"type": "string",
+			"value": "skin",
+			"values": [
+				{
+					"value": "accession"
+				},
+				{
+					"value": "allergy"
+				},
+				{
+					"value": "appointment"
+				},
+				{
+					"value": "consult"
+				},
+				{
+					"value": "cpt"
+				},
+				{
+					"value": "document"
+				},
+				{
+					"value": "document-view"
+				},
+				{
+					"value": "education"
+				},
+				{
+					"value": "exam"
+				},
+				{
+					"value": "factor"
+				},
+				{
+					"value": "image"
+				},
+				{
+					"value": "immunization"
+				},
+				{
+					"value": "lab"
+				},
+				{
+					"value": "med"
+				},
+				{
+					"value": "mh"
+				},
+				{
+					"value": "newsfeed"
+				},
+				{
+					"value": "obs"
+				},
+				{
+					"value": "order"
+				},
+				{
+					"value": "parent-documents"
+				},
+				{
+					"value": "patient"
+				},
+				{
+					"value": "pov"
+				},
+				{
+					"value": "problem"
+				},
+				{
+					"value": "procedure"
+				},
+				{
+					"value": "ptf"
+				},
+				{
+					"value": "rad"
+				},
+				{
+					"value": "skin"
+				},
+				{
+					"value": "surgery"
+				},
+				{
+					"value": "treatment"
+				},
+				{
+					"value": "visit"
+				},
+				{
+					"value": "vital"
+				},
+				{
+					"value": "vlerdocument"
+				}
+			]
+		},
+		"fields": {
+			"name": "fields",
+			"paramType": "query",
+			"type": "string",
+			"values": [
+			]
+		},
+		"filter": {
+			"name": "filter",
+			"paramType": "query",
+			"type": "string",
+			"values": [
+			]
+		},
+		"limit": {
+			"name": "limit",
+			"paramType": "query",
+			"type": "number",
+			"values": [
+			]
+		},
+		"order": {
+			"name": "order",
+			"paramType": "query",
+			"type": "string",
+			"values": [
+			]
+		},
+		"pid": {
+			"name": "pid",
+			"paramType": "query",
+			"required": true,
+			"type": "string",
+			"values": [
+			]
+		},
+		"start": {
+			"name": "start",
+			"paramType": "query",
+			"type": "number",
+			"values": [
+			]
+		},
+		"uid": {
+			"name": "uid",
+			"paramType": "query",
+			"type": "string",
+			"values": [
+			]
+		},
+		"vler_uid": {
+			"name": "vler_uid",
+			"paramType": "query",
+			"type": "string",
+			"values": [
+			]
+		}
+	},
+	"schema": {
+	}
+}

@@ -1,0 +1,10 @@
+                <security-domain name="ehmp" cache-type="default">
+                    <authentication>
+                        <login-module code="gov.va.CustomLogin" flag="sufficient">
+                            <module-option name="password-stacking" value="useFirstPass"/>
+                        </login-module>
+                        <login-module code="RealmDirect" flag="sufficient">
+                            <module-option name="password-stacking" value="useFirstPass"/>
+                        </login-module>
+                    </authentication>
+                </security-domain>

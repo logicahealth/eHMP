@@ -1,0 +1,10 @@
+{
+  "id": "vler",
+  "normal": {
+    "ipaddress": "172.16.16.242",
+    "stack": "production-staging-deploy-dev",
+    "roles": [
+      "vler"
+    ]
+  }
+}

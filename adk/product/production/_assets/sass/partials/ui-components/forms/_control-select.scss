@@ -1,0 +1,18 @@
+form {
+    .control.select-control {
+        // creates class definitions for "items-shown-sm", "items-shown-md", and "items-shown-lg" to set height of the select dropdown
+        // sm: 6 items, md: 11 items, and lg: 16 items
+        $sm: 6;
+        $md: 11;
+        $lg: 16;
+        &.items-shown-sm select {
+            height: calc((#{$sm} * 15px) + 12px);
+        }
+        &.items-shown-md select {
+            height: calc((#{$md} * 15px) + 12px);
+        }
+        &.items-shown-lg select {
+            height: calc((#{$lg} * 15px) + 12px);
+        }
+    }
+}

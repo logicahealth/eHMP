@@ -1,0 +1,38 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "",
+	"description": "",
+	"type": "object",
+	"required": [
+		"data",
+		"status"
+	],
+	"properties": {
+		"data": {
+			"type": "object",
+			"required": [
+				"reportID",
+				"hsReport",
+				"totalLength",
+				"detail"
+			],
+			"properties": {
+				"detail": {
+					"type": "string"
+				},
+				"hsReport": {
+					"type": "string"
+				},
+				"reportID": {
+					"type": "string"
+				},
+				"totalLength": {
+					"type": "integer"
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

@@ -1,0 +1,38 @@
+{
+    "2939": {
+        "stationNumber": 536,
+        "siteId": "2939",
+        "domain": "TAMPA.VISTACORE.US",
+        "lastUpdate": 0,
+        "updated": 0,
+        "waitingPids": [],
+        "processingPids": [],
+        "waitingIcns": [],
+        "waitingPollData": [],
+        "patientsSubscribed": {}
+    },
+    "FFC7": {
+        "stationNumber": 551,
+        "siteId": "FFC7",
+        "domain": "CHANTILLY.VISTACORE.US",
+        "lastUpdate": 0,
+        "updated": 0,
+        "waitingPids": [],
+        "processingPids": [],
+        "waitingIcns": [],
+        "waitingPollData": [],
+        "patientsSubscribed": {}
+    },
+    "76C6": {
+        "stationNumber": 547,
+        "siteId": "76C6",
+        "domain": "SANDIEGO.VISTACORE.US",
+        "lastUpdate": 0,
+        "updated": 0,
+        "waitingPids": [],
+        "processingPids": [],
+        "waitingIcns": [],
+        "waitingPollData": [],
+        "patientsSubscribed": {}
+    }
+}

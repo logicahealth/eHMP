@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SecurityExport>
+<SystemExport>
+  <System>
+    <AuditEnabled>true</AuditEnabled>
+    <AuditEncrypt>true</AuditEncrypt>
+    <AuditFlags>0</AuditFlags>
+    <AutheEnabled>1136</AutheEnabled>
+    <ConfigurationSecurityEnabled>false</ConfigurationSecurityEnabled>
+    <DBEncAlgorithm>1</DBEncAlgorithm>
+    <DBEncCacheTemp>true</DBEncCacheTemp>
+    <DBEncJournal>true</DBEncJournal>
+    <DBEncKeyLength>16</DBEncKeyLength>
+    <DBEncStartKeyFile><%= node[:vista][:cache_mgr_dir] %>/<%= node[:vista][:cache_key_file] %></DBEncStartKeyFile>
+    <DBEncStartMode>2</DBEncStartMode>
+    <DBEncStartPassphrase>LPMPCyOrCgpDMdO73ZeTwuLvBDb29FbC/5N+WDMavdc=</DBEncStartPassphrase>
+    <DBEncStartRequired>true</DBEncStartRequired>
+    <DBEncStartUsername><%= node[:vista][:cache_key_identifier] %></DBEncStartUsername>
+    <DefaultSecurityDomain>localdomain</DefaultSecurityDomain>
+    <Description>System security parameters</Description>
+    <InactiveLimit>0</InactiveLimit>
+    <InvalidLoginLimit>5</InvalidLoginLimit>
+    <InvalidLoginAction>0</InvalidLoginAction>
+    <KeyEncKeyIterations>65536</KeyEncKeyIterations>
+    <KeyEncKeyLength>16</KeyEncKeyLength>
+    <KeyEncKeySaltLength>64</KeyEncKeySaltLength>
+  </System>
+</SystemExport>
+</SecurityExport>

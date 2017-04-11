@@ -1,0 +1,58 @@
+[data-appletid="encounters"] {
+    .faux-table {
+        .header {
+            background-color: $pure-white;
+        }
+    }
+    [data-group-instanceid] {
+        a {
+            color: inherit;
+            line-height: 20px;
+            text-decoration: none;
+            .caret-placer {
+                display: inline-block;
+                margin-right: 3px;
+                opacity: 0.3;
+                &.caret {
+                    border-left: 4px solid transparent;
+                    border-right: 4px solid transparent;
+                    border-top: 4px solid $pure-black;
+                }
+                &.right-caret {
+                    border-bottom: 4px solid transparent;
+                    border-top: 4px solid transparent;
+                    border-left: 4px solid $pure-black;
+                }
+                &.empty-caret {
+                    border-bottom: 4px solid transparent;
+                    border-top: 4px solid transparent;
+                    border-left: 4px solid $pure-black;
+                    opacity: 0;
+                }
+            }
+        }
+        .panel-collapse {
+            background-color: #cfd8dc;
+            padding: 0 6px 6px;
+            [gistviewtype] {
+                box-shadow: 0 -0px 3px 0 rgba(0,0,0,.4);
+                -webkit-box-shadow: 0 -0px 3px 0 rgba(0,0,0,.4);
+                -moz-box-shadow: 0 -0px 3px 0 rgba(0,0,0,.4);
+            }
+        }
+    }
+}
+.modal-body {
+
+    .drilldown-invisible {
+        select option,
+        .checklist-control {
+            visibility: hidden;
+        }
+    }
+    .fieldset-invisible {
+        fieldset {
+            visibility: hidden;
+        }
+    }
+}

@@ -1,0 +1,85 @@
+<div class="row">
+	<div class="col-md-6">
+		<table class="table table-striped table-hover table-bordered">
+			<caption class="sr-only">This table represents the results relating to this specific lab.</caption>
+			<thead>
+				<tr>
+					<th class="renderable" scope="col" col-name="observed">Date</th>
+					<th class="renderable" scope="col" col-name="typeName">Lab Test</th>
+					<th class="renderable" scope="col" col-name="flag">Flag</th>
+					<th class="renderable" scope="col" col-name="result">Result</th>
+					<th class="renderable" scope="col" col-name="unit">Unit</th>
+					<th class="renderable" scope="col" col-name="referenceRange">Ref Range</th>
+					<th class="renderable" scope="col" col-name="facilityCode">Site</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td class="renderable">{{formatDate observed}}</td>
+					<td class="renderable">{{typeName}}</td>
+					<td class="renderable"><span class="label label-danger">{{interpretationCode}}</span></td>
+					<td class="renderable">{{result}}</td>
+					<td class="renderable">{{units}}</td>
+					<td class="renderable">
+						{{#if referenceRange}}
+							{{referenceRange}}
+						{{/if}}
+						{{#if high}}
+							{{low}}-{{high}}
+						{{/if}}
+					</td>
+					<td class="renderable">{{facilityMoniker}}</td>
+				</tr>
+			</tbody>
+		</table>
+		<div class="panel-heading">
+			<h5>{{typeName}}</h5>
+			<span>Ref Range:&nbsp;
+				{{#if referenceRange}}
+					{{referenceRange}}
+				{{/if}}
+				{{#if high}}
+					{{low}}-{{high}}
+				{{/if}}
+			</span>
+		</div>
+		<table class="table table-striped table-hover table-bordered">
+			<caption class="sr-only">This table represents data for lab results.</caption>
+			<thead>
+				<tr>
+					<th class="renderable" scope="col" col-name="observed">Date</th>
+					<th class="renderable" scope="col" col-name="result">Result</th>
+					<th class="renderable" scope="col" col-name="facilityCode">Site</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+	<div class="col-md-6">
+		<table class="table table-hover table-border">
+			<caption class="sr-only">This table represents the trend for lab results.</caption>
+			<thead>
+				<tr>
+					<th class="renderable" scope="col">Graph</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td class="renderable"><img src ="" width="100%" height="150" class="pull-right"></td>
+				</tr>
+			</tbody>
+		</table>
+		<table class="table table-hover table-border">
+			<caption class="sr-only">This table represents comments relating to lab results.</caption>
+			<thead>
+				<tr>
+					<th class="renderable" scope="col">Comments</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td class="renderable">{{comment}}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>

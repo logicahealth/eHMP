@@ -1,0 +1,86 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"type": "object",
+	"required": [
+		"data",
+		"status"
+	],
+	"properties": {
+		"data": {
+			"type": "object",
+			"required": [
+				"name",
+				"scope",
+				"uid",
+				"orderList",
+				"active",
+				"siteId",
+				"createdBy"
+			],
+			"properties": {
+				"active": {
+					"type": "boolean"
+				},
+				"createdBy": {
+					"type": "string"
+				},
+				"name": {
+					"type": "string"
+				},
+				"orderList": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"required": [
+							"uid",
+							"type",
+							"siteId",
+							"createdBy",
+							"name",
+							"scope",
+							"active"
+						],
+						"properties": {
+							"active": {
+								"type": "boolean"
+							},
+							"createdBy": {
+								"type": "string"
+							},
+							"domain": {
+								"type": "string"
+							},
+							"name": {
+								"type": "string"
+							},
+							"scope": {
+								"type": "string"
+							},
+							"siteId": {
+								"type": "string"
+							},
+							"type": {
+								"type": "string"
+							},
+							"uid": {
+								"type": "string"
+							}
+						}
+					}
+				},
+				"scope": {
+					"type": "string"
+				},
+				"siteId": {
+					"type": "string"
+				},
+				"uid": {
+					"type": "string"
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

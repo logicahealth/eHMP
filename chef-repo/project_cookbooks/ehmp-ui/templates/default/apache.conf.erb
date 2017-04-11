@@ -1,0 +1,26 @@
+
+<VirtualHost *:80>
+  DocumentRoot <%= @params[:document_root] %>
+  ServerName <%= @params[:server_name] %>  
+
+  <% unless @params[:local] %>
+    <IfModule mod_autoindex.c>
+      Options -Indexes
+    </IfModule>
+    # must prevent the AppCache manifest from being cached with no-cache, no-store, and expires
+    # must set MIME type, else AppCache breaks in IE
+    <Files "cache.appcache">
+      FileETag None
+      <IfModule mod_headers.c>
+         Header unset ETag
+         Header set Cache-Control "max-age=0, no-cache, no-store, must-revalidate"
+         Header set Pragma "no-cache"
+         Header set Expires "Wed, 11 Jan 1984 05:00:00 GMT"
+      </IfModule>
+    </Files>
+  EnableSendfile Off
+  AddType text/cache-manifest .appcache
+  <% end %>
+</VirtualHost>
+
+

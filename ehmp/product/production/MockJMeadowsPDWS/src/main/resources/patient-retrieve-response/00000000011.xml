@@ -1,0 +1,198 @@
+<S:Envelope xmlns:S="http://schemas.xmlsoap.org/soap/envelope/">
+    <S:Body>
+        <PRPA_IN201306UV02 ITSVersion="XML_1.0" xmlns="urn:hl7-org:v3">
+            <id root="2.16.840.1.113883.3.2017.11.100.3" extension="df2178f1-277a-45a0-b3c0-9980c1049edb"/>
+            <creationTime value="20150326130528"/>
+            <versionCode code="V3PR1"/>
+            <interactionId root="2.16.840.1.113883.1.6" extension="PRPA_IN201306UV02"/>
+            <profileId root="2.16.840.1.113883.3.2017.11.100.3" extension="df2178f1-277a-45a0-b3c0-9980c1049edb"/>
+            <processingCode code="T"/>
+            <processingModeCode code="T"/>
+            <acceptAckCode code="NE"/>
+            <receiver typeCode="RCV">
+                <device classCode="DEV" determinerCode="INSTANCE">
+                    <id root="2.16.840.1.113883.3.2017.11.7" extension="402861"/>
+                    <asAgent classCode="AGNT">
+                        <representedOrganization classCode="ORG" determinerCode="INSTANCE">
+                            <id root="2.16.840.1.113883.4.349" extension="451"/>
+                        </representedOrganization>
+                    </asAgent>
+                </device>
+            </receiver>
+            <sender typeCode="SND">
+                <device classCode="DEV" determinerCode="INSTANCE">
+                    <id root="2.16.840.1.113883.3.2017.11.7"/>
+                    <telecom value="https://pkict.dmdc.osd.mil/pdws/EntityPatientDiscovery"/>
+                    <asAgent classCode="AGNT">
+                        <representedOrganization classCode="ORG" determinerCode="INSTANCE">
+                            <id root="2.16.840.1.113883.3.2017.11.4"/>
+                        </representedOrganization>
+                    </asAgent>
+                </device>
+            </sender>
+            <acknowledgement>
+                <typeCode code="AA"/>
+                <targetMessage>
+                    <id root="2.16.840.1.113883.3.2017" extension="DMDC"/>
+                </targetMessage>
+                <acknowledgementDetail typeCode="W">
+                    <code code="PNRETRIEVE000002" codeSystem="2.16.840.1.113883.3.2017.11.6.2" displayName="Improper affiliation"/>
+                    <text>Based on the person found VA/DoD affiliation, your System/organization is not authorized to update this patient's identity traits. See authorized entity(s) where this patient's identity traits may be updated. [VA Administration]</text>
+                    <location>//controlActProcess/subject[0]/registrationEvent/subject1/patient/id</location>
+                </acknowledgementDetail>
+            </acknowledgement>
+            <controlActProcess classCode="CACT" moodCode="EVN">
+                <code code="PRPA_TE201306UV02" codeSystem="2.16.840.1.113883.1.6"/>
+                <effectiveTime>
+                    <low inclusive="true" value="20150326"/>
+                    <high inclusive="true" value="20150326"/>
+                </effectiveTime>
+                <subject typeCode="SUBJ">
+                    <registrationEvent classCode="REG" moodCode="EVN">
+                        <id nullFlavor="NA"/>
+                        <statusCode code="active"/>
+                        <subject1 typeCode="SBJ">
+                            <patient classCode="PAT">
+                                <id root="2.16.840.1.113883.3.42.10001.100001.12" extension="0000000001"/>
+                                <statusCode code="active"/>
+                                <confidentialityCode code="N"/>
+                                <patientPerson classCode="PSN" determinerCode="INSTANCE">
+                                    <!-- name -->
+                                    <name use="L">
+                                        <given>PATIENT</given>
+                                        <family>ONEHUNDREDSIXTEEN</family>
+                                    </name>
+
+                                    <!-- phone -->
+
+                                    <telecom use="HP" value=""/>
+
+                                    <!-- gender -->
+
+                                    <administrativeGenderCode code="M"/>
+
+                                    <!-- birthdate -->
+
+                                    <birthTime value="19350407"/>
+
+                                    <multipleBirthInd value="false"/>
+                                    <organDonorInd value="false"/>
+                                    <addr use="HP">
+
+                                        <!-- Address -->
+
+                                        <streetAddressLine>Any Street</streetAddressLine>
+                                        <city>SAN DIEGO</city>
+                                        <state>CA</state>
+                                        <postalCode>92131</postalCode>
+                                        <country>USA</country>
+                                        <useablePeriod xsi:type="IVL_TS" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                                            <low inclusive="true" value="20131119"/>
+                                        </useablePeriod>
+                                    </addr>
+                                    <asEmployee classCode="EMP">
+                                        <occupationCode>
+                                            <originalText>Added as a Veteran</originalText>
+                                        </occupationCode>
+                                        <employerOrganization classCode="ORG" determinerCode="INSTANCE">
+                                            <contactParty classCode="CON"/>
+                                        </employerOrganization>
+                                    </asEmployee>
+                                    <asEmployee classCode="EMP">
+                                        <effectiveTime>
+                                            <low inclusive="true" value="0"/>
+                                        </effectiveTime>
+                                        <jobTitleName code="SPC" displayName="Specialist"/>
+                                        <jobClassCode code="ME-04" codeSystem="2.16.840.1.113883.3.2017.11.6.4.9" codeSystemName="DMDC Pay Code" displayName="Enlisted (uniformed service only)-Civil Service, Warrant Officer, Enlisted or Officer pay plan"/>
+                                        <employerOrganization classCode="ORG" determinerCode="INSTANCE">
+                                            <id extension="W8ACM4"/>
+                                            <code code="AR00" codeSystem="2.16.840.1.113883.3.2017.11.6.4.8" codeSystemName="DMDC US Government Agency Code" displayName="Department of the Army"/>
+                                            <contactParty classCode="CON"/>
+                                        </employerOrganization>
+                                    </asEmployee>
+                                    <asOtherIDs classCode="CIT">
+
+                                        <!-- SSN -->
+
+                                        <id root="2.16.840.1.113883.4.1" extension=""/>
+                                        <statusCode code="active"/>
+                                        <scopingOrganization classCode="ORG" determinerCode="INSTANCE">
+                                            <id root="2.16.840.1.113883.4.1"/>
+                                        </scopingOrganization>
+                                    </asOtherIDs>
+                                </patientPerson>
+                                <subjectOf1 xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                <subjectOf2 typeCode="SBJ">
+                                    <administrativeObservation classCode="OBS" moodCode="EVN">
+                                        <code code="2.16.840.1.113883.3.2017.11.6.2.10" codeSystem="2.16.840.1.113883.3.2017.11.6.2" codeSystemName="DMDC Administrative Observation Extensions" displayName="Command Security Code">
+                                            <originalText>The code that indicates the command security for this patient.</originalText>
+                                        </code>
+                                        <value xsi:type="CD" code="Z   " codeSystem="2.16.840.1.113883.3.2017.11.6.4.6" codeSystemName="DMDC Command Security Code" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    </administrativeObservation>
+                                </subjectOf2>
+                                <subjectOf2 typeCode="SBJ">
+                                    <administrativeObservation classCode="OBS" moodCode="EVN">
+                                        <code code="2.16.840.1.113883.3.2017.11.6.2.1" codeSystem="2.16.840.1.113883.3.2017.11.6.2" codeSystemName="DMDC Administrative Observation Extensions" displayName="DNA Code">
+                                            <originalText>The code that indicates whether the sponsor has had a DNA sample taken.</originalText>
+                                        </code>
+                                        <value xsi:type="CD" code="N" codeSystem="2.16.840.1.113883.3.2017.11.6.4.1" codeSystemName="DMDC DNA Code" displayName="No" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    </administrativeObservation>
+                                </subjectOf2>
+                                <subjectOf2 typeCode="SBJ">
+                                    <administrativeObservation classCode="OBS" moodCode="EVN">
+                                        <code code="2.16.840.1.113883.3.2017.11.6.2.2" codeSystem="2.16.840.1.113883.3.2017.11.6.2" codeSystemName="DMDC Administrative Observation Extensions" displayName="Organ Donor Date">
+                                            <originalText>The date when the person indicated whether he or she will become an organ donor (if applicable).</originalText>
+                                        </code>
+                                        <effectiveTime xsi:type="IVL_TS" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                                            <low inclusive="true" value="20140506"/>
+                                        </effectiveTime>
+                                        <value xsi:type="CD" code="B159" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    </administrativeObservation>
+                                </subjectOf2>
+                                <subjectOf2 typeCode="SBJ">
+                                    <administrativeObservation classCode="OBS" moodCode="EVN">
+                                        <code code="2.16.840.1.113883.3.2017.11.6.2.3" codeSystem="2.16.840.1.113883.3.2017.11.6.2" codeSystemName="DMDC Administrative Observation Extensions" displayName="Blood Type Code">
+                                            <originalText>The code that represents a classification of the red blood cells circulated by the heart.</originalText>
+                                        </code>
+                                        <value xsi:type="CD" code="9" codeSystem="2.16.840.1.113883.3.2017.11.6.4.2" codeSystemName="DMDC Blood Type Code" displayName="Unknown" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    </administrativeObservation>
+                                </subjectOf2>
+                                <subjectOf2 typeCode="SBJ">
+                                    <administrativeObservation classCode="OBS" moodCode="EVN">
+                                        <code code="2.16.840.1.113883.3.2017.11.6.2.4" codeSystem="2.16.840.1.113883.3.2017.11.6.2" codeSystemName="DMDC Administrative Observation Extensions" displayName="Blood Type Verification Code">
+                                            <originalText>The code that either represents the source that verified a blood type or indicates that a blood type has not yet been verified.</originalText>
+                                        </code>
+                                        <value xsi:type="CD" code="U" codeSystem="2.16.840.1.113883.3.2017.11.6.4.3" codeSystemName="DMDC Blood Type Verification Code" displayName="Unverified" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                    </administrativeObservation>
+                                </subjectOf2>
+                            </patient>
+                        </subject1>
+                        <custodian typeCode="CST" contextControlCode="AP">
+                            <assignedEntity classCode="ASSIGNED">
+                                <id root="2.16.840.1.113883.3.2017" extension="DMDC"/>
+                            </assignedEntity>
+                        </custodian>
+                    </registrationEvent>
+                </subject>
+                <queryAck>
+                    <queryId root="2.16.840.1.113883.3.2017" extension="333334433"/>
+                    <queryResponseCode code="OK"/>
+                    <resultTotalQuantity value="1"/>
+                    <resultCurrentQuantity value="1"/>
+                    <resultRemainingQuantity value="0"/>
+                </queryAck>
+                <queryByParameter>
+                    <queryId root="2.16.840.1.113883.3.2017" extension="333334433"/>
+                    <statusCode code="new"/>
+                    <initialQuantity value="10"/>
+                    <parameterList>
+                        <livingSubjectId>
+                            <value root="2.16.840.1.113883.3.42.10001.100001.12" extension="1606681182"/>
+                            <semanticsText>LivingSubject.id</semanticsText>
+                        </livingSubjectId>
+                    </parameterList>
+                </queryByParameter>
+            </controlActProcess>
+        </PRPA_IN201306UV02>
+    </S:Body>
+</S:Envelope>

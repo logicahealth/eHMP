@@ -1,0 +1,26 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "Get the DoD complex note for a given document on a patient",
+	"description": "",
+	"type": "object",
+	"required": [
+		"data",
+		"status"
+	],
+	"properties": {
+		"data": {
+			"type": "object",
+			"required": [
+				"complexNote"
+			],
+			"properties": {
+				"complexNote": {
+					"type": "string"
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

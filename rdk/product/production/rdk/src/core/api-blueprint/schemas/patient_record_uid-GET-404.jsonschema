@@ -1,0 +1,68 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "Get patient uid",
+	"description": "",
+	"type": "object",
+	"required": [
+		"status"
+	],
+	"properties": {
+		"data": {
+			"type": "object",
+			"required": [
+				"apiVersion",
+				"error"
+			],
+			"properties": {
+				"apiVersion": {
+					"type": "string"
+				},
+				"error": {
+					"type": "object",
+					"required": [
+						"code",
+						"errors",
+						"message",
+						"request"
+					],
+					"properties": {
+						"code": {
+							"type": "integer"
+						},
+						"errors": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"required": [
+									"domain",
+									"message",
+									"reason"
+								],
+								"properties": {
+									"domain": {
+										"type": "string"
+									},
+									"message": {
+										"type": "string"
+									},
+									"reason": {
+										"type": "integer"
+									}
+								}
+							}
+						},
+						"message": {
+							"type": "string"
+						},
+						"request": {
+							"type": "string"
+						}
+					}
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

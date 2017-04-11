@@ -1,0 +1,59 @@
+{
+	"parameters": {
+	},
+	"schema": {
+		"$schema": "http://json-schema.org/draft-04/schema#",
+		"properties": {
+			"active": {
+				"description": "Whether the QuickOrder is active. Inactive QuickOrder will not show up in Orderable service queries.",
+				"type": "boolean"
+			},
+			"createdBy": {
+				"description": "User id of creator of the QuickOrder",
+				"type": "string"
+			},
+			"formData": {
+				"description": "Name value pairs for form objects",
+				"type": "object"
+			},
+			"name": {
+				"description": "Name of the Quick Order",
+				"type": "string"
+			},
+			"orderable": {
+				"description": "The uuid of the Orderable",
+				"type": "string"
+			},
+			"scope": {
+				"description": "Visibility scope of the quick order",
+				"enum": [
+					"individual",
+					"site",
+					"enterprise"
+				]
+			},
+			"site": {
+				"description": "Site this QuickOrder belongs to. This is null for 'enterprise' scope.",
+				"type": "string"
+			},
+			"timestamp": {
+				"description": "a time stamp of when last updated",
+				"type": "integer"
+			},
+			"type": {
+				"description": "The type of this object, orderset, quickorder, favorite; always 'quickorder'",
+				"enum": [
+					"favorite",
+					"quickorder",
+					"orderable"
+				]
+			}
+		},
+		"required": [
+			"name",
+			"orderable",
+			"formData"
+		],
+		"type": "object"
+	}
+}

@@ -1,0 +1,1779 @@
+{
+  "queryComplete": true,
+  "statusList": [
+    {
+      "partner": {
+        "partnerIdentifier": "2.16.840.1.113883.3.42.126.100001.13",
+        "partnerName": "ahlta",
+        "partnerType": "DOD"
+      },
+      "partnerStatus": "SUCCESS",
+      "expectedCount": 26,
+      "receivedCount": 26
+    }
+  ],
+  "dataList": {
+    "appointments": [
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000940"
+        },
+        "enteredBy": {
+          "name": "LANF, ONE"
+        },
+        "enteredDate": {
+          "start": "2013-06-06T13:53:58",
+          "end": "2013-06-06T13:53:58"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "56446-8"
+          }
+        ],
+        "facility": {
+          "name": "Landstuhl RMC"
+        },
+        "arrivalDate": {
+          "start": "2013-06-06T13:54:22",
+          "end": "2013-06-06T13:54:22"
+        },
+        "departureDate": null,
+        "classification": "0",
+        "comment": null,
+        "date": {
+          "start": "2013-06-06T13:54:00",
+          "end": "2013-06-06T13:54:00"
+        },
+        "disposition": [],
+        "location": {
+          "name": "LSL Cardiology"
+        },
+        "provider": {
+          "name": "LANF, ONE"
+        },
+        "reason": [],
+        "status": [
+          {
+            "display": "KEPT",
+            "primary": true
+          }
+        ],
+        "type": [
+          {
+            "display": "ROUT",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000941"
+        },
+        "enteredBy": {
+          "name": "LANF, ELEVEN"
+        },
+        "enteredDate": {
+          "start": "2013-06-03T18:19:23",
+          "end": "2013-06-03T18:19:23"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "56446-8"
+          }
+        ],
+        "facility": {
+          "name": "Landstuhl RMC"
+        },
+        "arrivalDate": {
+          "start": "2013-06-03T18:19:26",
+          "end": "2013-06-03T18:19:26"
+        },
+        "departureDate": null,
+        "classification": "0",
+        "comment": null,
+        "date": {
+          "start": "2013-06-03T18:18:00",
+          "end": "2013-06-03T18:18:00"
+        },
+        "disposition": [
+          {
+            "display": "Released w/o Limitations",
+            "primary": true
+          }
+        ],
+        "location": {
+          "name": "LSL Cardiology"
+        },
+        "provider": {
+          "name": "LANF, ELEVEN"
+        },
+        "reason": [
+          {
+            "display": "Notes Entered by: LANF,ELEVEN 03 Jun 2013 1818\r\n------------------------------\r\nLTM - HCPCS Test",
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "KEPT",
+            "primary": true
+          }
+        ],
+        "type": [
+          {
+            "display": "EST",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000942"
+        },
+        "enteredBy": {
+          "name": "SJF, FIVE"
+        },
+        "enteredDate": {
+          "start": "2013-05-09T11:30:38",
+          "end": "2013-05-09T11:30:38"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "56446-8"
+          }
+        ],
+        "facility": {
+          "name": "4th Medical Group"
+        },
+        "arrivalDate": {
+          "start": "2013-05-09T11:30:41",
+          "end": "2013-05-09T11:30:41"
+        },
+        "departureDate": null,
+        "classification": "0",
+        "comment": null,
+        "date": {
+          "start": "2013-05-09T11:30:00",
+          "end": "2013-05-09T11:30:00"
+        },
+        "disposition": [
+          {
+            "display": "Released w/o Limitations",
+            "primary": true
+          }
+        ],
+        "location": {
+          "name": "Blue MTF"
+        },
+        "provider": {
+          "name": "SJF, FIVE"
+        },
+        "reason": [],
+        "status": [
+          {
+            "display": "KEPT",
+            "primary": true
+          }
+        ],
+        "type": [
+          {
+            "display": "ROUT$",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000943"
+        },
+        "enteredBy": {
+          "name": "SJF, FIVE"
+        },
+        "enteredDate": {
+          "start": "2013-05-01T12:41:09",
+          "end": "2013-05-01T12:41:09"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "56446-8"
+          }
+        ],
+        "facility": {
+          "name": "4th Medical Group"
+        },
+        "arrivalDate": {
+          "start": "2013-05-01T12:41:14",
+          "end": "2013-05-01T12:41:14"
+        },
+        "departureDate": {
+          "start": "2013-05-01T13:51:45",
+          "end": "2013-05-01T13:51:45"
+        },
+        "classification": "0",
+        "comment": null,
+        "date": {
+          "start": "2013-05-01T12:41:00",
+          "end": "2013-05-01T12:41:00"
+        },
+        "disposition": [],
+        "location": {
+          "name": "Blue MTF"
+        },
+        "provider": {
+          "name": "SJF, FIVE"
+        },
+        "reason": [],
+        "status": [
+          {
+            "display": "KEPT",
+            "primary": true
+          }
+        ],
+        "type": [
+          {
+            "display": "ROUT$",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000944"
+        },
+        "enteredBy": {
+          "name": "LANF, FIVE"
+        },
+        "enteredDate": {
+          "start": "2013-05-01T12:16:53",
+          "end": "2013-05-01T12:16:53"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "56446-8"
+          }
+        ],
+        "facility": {
+          "name": "Landstuhl RMC"
+        },
+        "arrivalDate": {
+          "start": "2013-05-01T12:16:55",
+          "end": "2013-05-01T12:16:55"
+        },
+        "departureDate": null,
+        "classification": "0",
+        "comment": null,
+        "date": {
+          "start": "2013-05-01T12:16:00",
+          "end": "2013-05-01T12:16:00"
+        },
+        "disposition": [],
+        "location": {
+          "name": "LSL Cardiology"
+        },
+        "provider": {
+          "name": "LANF, FIVE"
+        },
+        "reason": [],
+        "status": [
+          {
+            "display": "KEPT",
+            "primary": true
+          }
+        ],
+        "type": [
+          {
+            "display": "ROUT",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000945"
+        },
+        "enteredBy": {
+          "name": "SJF, FIVE"
+        },
+        "enteredDate": {
+          "start": "2013-04-22T08:47:50",
+          "end": "2013-04-22T08:47:50"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "56446-8"
+          }
+        ],
+        "facility": {
+          "name": "4th Medical Group"
+        },
+        "arrivalDate": {
+          "start": "2013-04-22T08:47:56",
+          "end": "2013-04-22T08:47:56"
+        },
+        "departureDate": null,
+        "classification": "0",
+        "comment": null,
+        "date": {
+          "start": "2013-04-22T08:47:00",
+          "end": "2013-04-22T08:47:00"
+        },
+        "disposition": [],
+        "location": {
+          "name": "Blue MTF"
+        },
+        "provider": {
+          "name": "SJF, FIVE"
+        },
+        "reason": [
+          {
+            "display": "Notes Entered by: SJF,FIVE 22 Apr 2013 0847\r\n------------------------------\r\nLTM - Test",
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "CANCEL",
+            "primary": true
+          }
+        ],
+        "type": [
+          {
+            "display": "ROUT$",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000946"
+        },
+        "enteredBy": {
+          "name": "LANF, FOURTY"
+        },
+        "enteredDate": {
+          "start": "2013-04-22T07:52:25",
+          "end": "2013-04-22T07:52:25"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "56446-8"
+          }
+        ],
+        "facility": {
+          "name": "Landstuhl RMC"
+        },
+        "arrivalDate": {
+          "start": "2013-04-22T07:52:23",
+          "end": "2013-04-22T07:52:23"
+        },
+        "departureDate": null,
+        "classification": "0",
+        "comment": null,
+        "date": {
+          "start": "2013-04-22T07:52:00",
+          "end": "2013-04-22T07:52:00"
+        },
+        "disposition": [
+          {
+            "display": "Released w/o Limitations",
+            "primary": true
+          }
+        ],
+        "location": {
+          "name": "LSL Cardiology"
+        },
+        "provider": {
+          "name": "LANF, FOURTY"
+        },
+        "reason": [
+          {
+            "display": "Notes Entered by: LANF,FIVE 22 Apr 2013 0752\r\n------------------------------\r\nLTM - Test",
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "KEPT",
+            "primary": true
+          }
+        ],
+        "type": [
+          {
+            "display": "EST",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000947"
+        },
+        "enteredBy": {
+          "name": "SJF, TEN"
+        },
+        "enteredDate": {
+          "start": "2013-03-27T10:45:17",
+          "end": "2013-03-27T10:45:17"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "56446-8"
+          }
+        ],
+        "facility": {
+          "name": "4th Medical Group"
+        },
+        "arrivalDate": {
+          "start": "2013-03-27T10:45:20",
+          "end": "2013-03-27T10:45:20"
+        },
+        "departureDate": null,
+        "classification": "0",
+        "comment": null,
+        "date": {
+          "start": "2013-03-27T10:45:00",
+          "end": "2013-03-27T10:45:00"
+        },
+        "disposition": [],
+        "location": {
+          "name": "Blue MTF"
+        },
+        "provider": {
+          "name": "SJF, TEN"
+        },
+        "reason": [],
+        "status": [
+          {
+            "display": "KEPT",
+            "primary": true
+          }
+        ],
+        "type": [
+          {
+            "display": "ROUT$",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000948"
+        },
+        "enteredBy": {
+          "name": "SJF, FOUR"
+        },
+        "enteredDate": {
+          "start": "2013-01-23T08:47:01",
+          "end": "2013-01-23T08:47:01"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "56446-8"
+          }
+        ],
+        "facility": {
+          "name": "4th Medical Group"
+        },
+        "arrivalDate": {
+          "start": "2013-01-23T08:47:09",
+          "end": "2013-01-23T08:47:09"
+        },
+        "departureDate": null,
+        "classification": "0",
+        "comment": null,
+        "date": {
+          "start": "2013-01-23T08:46:00",
+          "end": "2013-01-23T08:46:00"
+        },
+        "disposition": [],
+        "location": {
+          "name": "Blue MTF"
+        },
+        "provider": {
+          "name": "SJF, FOUR"
+        },
+        "reason": [
+          {
+            "display": "Notes Entered by: SJF,FOUR 23 Jan 2013 0846\r\n------------------------------\r\nLTM - Test",
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "KEPT",
+            "primary": true
+          }
+        ],
+        "type": [
+          {
+            "display": "ACUT",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000949"
+        },
+        "enteredBy": {
+          "name": "LANF, FOUR"
+        },
+        "enteredDate": {
+          "start": "2012-11-26T12:40:07",
+          "end": "2012-11-26T12:40:07"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "56446-8"
+          }
+        ],
+        "facility": {
+          "name": "Landstuhl RMC"
+        },
+        "arrivalDate": {
+          "start": "2012-11-26T12:40:09",
+          "end": "2012-11-26T12:40:09"
+        },
+        "departureDate": null,
+        "classification": "0",
+        "comment": null,
+        "date": {
+          "start": "2012-11-26T12:39:00",
+          "end": "2012-11-26T12:39:00"
+        },
+        "disposition": [
+          {
+            "display": "Released w/o Limitations",
+            "primary": true
+          }
+        ],
+        "location": {
+          "name": "LSL Cardiology"
+        },
+        "provider": {
+          "name": "LANF, FOUR"
+        },
+        "reason": [
+          {
+            "display": "LTM - TFS 7780 test",
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "KEPT",
+            "primary": true
+          }
+        ],
+        "type": [
+          {
+            "display": "SPEC",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000950"
+        },
+        "enteredBy": {
+          "name": "SJF, TEN"
+        },
+        "enteredDate": {
+          "start": "2012-11-15T10:44:23",
+          "end": "2012-11-15T10:44:23"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "56446-8"
+          }
+        ],
+        "facility": {
+          "name": "4th Medical Group"
+        },
+        "arrivalDate": {
+          "start": "2012-11-15T10:44:25",
+          "end": "2012-11-15T10:44:25"
+        },
+        "departureDate": null,
+        "classification": "0",
+        "comment": null,
+        "date": {
+          "start": "2012-11-15T10:44:00",
+          "end": "2012-11-15T10:44:00"
+        },
+        "disposition": [
+          {
+            "display": "Released w/o Limitations",
+            "primary": true
+          }
+        ],
+        "location": {
+          "name": "Blue MTF"
+        },
+        "provider": {
+          "name": "SJF, TEN"
+        },
+        "reason": [
+          {
+            "display": "Notes Entered by: SJF,TEN 15 Nov 2012 1044\r\n------------------------------\r\nLTM Test",
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "KEPT",
+            "primary": true
+          }
+        ],
+        "type": [
+          {
+            "display": "ACUT",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000951"
+        },
+        "enteredBy": {
+          "name": "SJF, TEN"
+        },
+        "enteredDate": {
+          "start": "2012-11-15T10:28:21",
+          "end": "2012-11-15T10:28:21"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "56446-8"
+          }
+        ],
+        "facility": {
+          "name": "4th Medical Group"
+        },
+        "arrivalDate": {
+          "start": "2012-11-15T10:28:24",
+          "end": "2012-11-15T10:28:24"
+        },
+        "departureDate": null,
+        "classification": "0",
+        "comment": null,
+        "date": {
+          "start": "2012-11-15T10:28:00",
+          "end": "2012-11-15T10:28:00"
+        },
+        "disposition": [],
+        "location": {
+          "name": "Blue MTF"
+        },
+        "provider": {
+          "name": "SJF, TEN"
+        },
+        "reason": [
+          {
+            "display": "Notes Entered by: SJF,TEN 15 Nov 2012 1028\r\n------------------------------\r\nLTM - TFS #8058",
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "KEPT",
+            "primary": true
+          }
+        ],
+        "type": [
+          {
+            "display": "ACUT",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000952"
+        },
+        "enteredBy": {
+          "name": "SJF, FOUR"
+        },
+        "enteredDate": {
+          "start": "2012-10-26T13:08:30",
+          "end": "2012-10-26T13:08:30"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "56446-8"
+          }
+        ],
+        "facility": {
+          "name": "4th Medical Group"
+        },
+        "arrivalDate": {
+          "start": "2012-10-26T13:08:36",
+          "end": "2012-10-26T13:08:36"
+        },
+        "departureDate": null,
+        "classification": "0",
+        "comment": null,
+        "date": {
+          "start": "2012-10-26T13:08:00",
+          "end": "2012-10-26T13:08:00"
+        },
+        "disposition": [],
+        "location": {
+          "name": "Blue MTF"
+        },
+        "provider": {
+          "name": "SJF, FOUR"
+        },
+        "reason": [
+          {
+            "display": "Notes Entered by: SJF,FOUR 26 Oct 2012 1308\r\n------------------------------\r\nasdasd",
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "KEPT",
+            "primary": true
+          }
+        ],
+        "type": [
+          {
+            "display": "ACUT",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000953"
+        },
+        "enteredBy": {
+          "name": "SJF, FIVE"
+        },
+        "enteredDate": {
+          "start": "2012-07-21T20:27:10",
+          "end": "2012-07-21T20:27:10"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "56446-8"
+          }
+        ],
+        "facility": {
+          "name": "4th Medical Group"
+        },
+        "arrivalDate": {
+          "start": "2012-07-21T20:26:31",
+          "end": "2012-07-21T20:26:31"
+        },
+        "departureDate": null,
+        "classification": "0",
+        "comment": null,
+        "date": {
+          "start": "2012-07-21T20:23:00",
+          "end": "2012-07-21T20:23:00"
+        },
+        "disposition": [],
+        "location": {
+          "name": "Blue MTF"
+        },
+        "provider": {
+          "name": "SJF, FIVE"
+        },
+        "reason": [
+          {
+            "display": "Notes Entered by: SJF,FIVE 21 Jul 2012 2023\r\n------------------------------\r\nLTM - Sat Test",
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "KEPT",
+            "primary": true
+          }
+        ],
+        "type": [
+          {
+            "display": "EST",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000954"
+        },
+        "enteredBy": {
+          "name": "ALL, USER"
+        },
+        "enteredDate": {
+          "start": "2012-06-05T15:30:24",
+          "end": "2012-06-05T15:30:24"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "56446-8"
+          }
+        ],
+        "facility": {
+          "name": "4th Medical Group"
+        },
+        "arrivalDate": {
+          "start": "2012-06-05T15:30:05",
+          "end": "2012-06-05T15:30:05"
+        },
+        "departureDate": null,
+        "classification": "0",
+        "comment": null,
+        "date": {
+          "start": "2012-06-05T15:29:00",
+          "end": "2012-06-05T15:29:00"
+        },
+        "disposition": [],
+        "location": {
+          "name": "Blue MTF"
+        },
+        "provider": {
+          "name": "ALL, USER"
+        },
+        "reason": [
+          {
+            "display": "Notes Entered by: SJD,THIRTY FOUR 05 Jun 2012 1529\r\n------------------------------\r\ntest",
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "KEPT",
+            "primary": true
+          }
+        ],
+        "type": [
+          {
+            "display": "ACUT",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000955"
+        },
+        "enteredBy": {
+          "name": "ALL, USER"
+        },
+        "enteredDate": {
+          "start": "2012-06-05T15:24:47",
+          "end": "2012-06-05T15:24:47"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "56446-8"
+          }
+        ],
+        "facility": {
+          "name": "4th Medical Group"
+        },
+        "arrivalDate": {
+          "start": "2012-06-05T15:24:30",
+          "end": "2012-06-05T15:24:30"
+        },
+        "departureDate": null,
+        "classification": "0",
+        "comment": null,
+        "date": {
+          "start": "2012-06-05T15:24:00",
+          "end": "2012-06-05T15:24:00"
+        },
+        "disposition": [],
+        "location": {
+          "name": "Blue MTF"
+        },
+        "provider": {
+          "name": "ALL, USER"
+        },
+        "reason": [
+          {
+            "display": "Notes Entered by: SJD,THIRTY FOUR 05 Jun 2012 1524\r\n------------------------------\r\ntest",
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "KEPT",
+            "primary": true
+          }
+        ],
+        "type": [
+          {
+            "display": "ACUT",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000956"
+        },
+        "enteredBy": {
+          "name": "SJF, FIVE"
+        },
+        "enteredDate": {
+          "start": "2012-03-28T10:11:07",
+          "end": "2012-03-28T10:11:07"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "56446-8"
+          }
+        ],
+        "facility": {
+          "name": "4th Medical Group"
+        },
+        "arrivalDate": {
+          "start": "2012-03-28T10:11:10",
+          "end": "2012-03-28T10:11:10"
+        },
+        "departureDate": null,
+        "classification": "0",
+        "comment": null,
+        "date": {
+          "start": "2012-03-28T10:11:00",
+          "end": "2012-03-28T10:11:00"
+        },
+        "disposition": [],
+        "location": {
+          "name": "BFFAZZZGF"
+        },
+        "provider": {
+          "name": "SJF, FIVE"
+        },
+        "reason": [
+          {
+            "display": "Notes Entered by: SJF,FIVE 28 Mar 2012 1011\r\n------------------------------\r\nLTM - Test",
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "CANCEL",
+            "primary": true
+          }
+        ],
+        "type": [
+          {
+            "display": "EST",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000957"
+        },
+        "enteredBy": {
+          "name": "SJF, FIVE"
+        },
+        "enteredDate": {
+          "start": "2012-03-28T09:55:08",
+          "end": "2012-03-28T09:55:08"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "56446-8"
+          }
+        ],
+        "facility": {
+          "name": "4th Medical Group"
+        },
+        "arrivalDate": {
+          "start": "2012-03-28T09:55:12",
+          "end": "2012-03-28T09:55:12"
+        },
+        "departureDate": null,
+        "classification": "0",
+        "comment": null,
+        "date": {
+          "start": "2012-03-28T09:55:00",
+          "end": "2012-03-28T09:55:00"
+        },
+        "disposition": [],
+        "location": {
+          "name": "BFFAZZZGF"
+        },
+        "provider": {
+          "name": "SJF, FIVE"
+        },
+        "reason": [
+          {
+            "display": "Notes Entered by: SJF,FIVE 28 Mar 2012 0955\r\n------------------------------\r\nLTM - Test",
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "CANCEL",
+            "primary": true
+          }
+        ],
+        "type": [
+          {
+            "display": "EST",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000958"
+        },
+        "enteredBy": {
+          "name": "SJF, FIVE"
+        },
+        "enteredDate": {
+          "start": "2012-03-28T09:09:33",
+          "end": "2012-03-28T09:09:33"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "56446-8"
+          }
+        ],
+        "facility": {
+          "name": "4th Medical Group"
+        },
+        "arrivalDate": {
+          "start": "2012-03-28T09:09:39",
+          "end": "2012-03-28T09:09:39"
+        },
+        "departureDate": null,
+        "classification": "0",
+        "comment": null,
+        "date": {
+          "start": "2012-03-28T09:09:00",
+          "end": "2012-03-28T09:09:00"
+        },
+        "disposition": [],
+        "location": {
+          "name": "BFFAZZZGF"
+        },
+        "provider": {
+          "name": "SJF, FIVE"
+        },
+        "reason": [
+          {
+            "display": "Notes Entered by: SJF,FIVE 28 Mar 2012 0909\r\n------------------------------\r\nLTM - Test",
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "CANCEL",
+            "primary": true
+          }
+        ],
+        "type": [
+          {
+            "display": "ACUT",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000959"
+        },
+        "enteredBy": {
+          "name": "SJF, FIVE"
+        },
+        "enteredDate": {
+          "start": "2011-12-05T14:20:59",
+          "end": "2011-12-05T14:20:59"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "56446-8"
+          }
+        ],
+        "facility": {
+          "name": "4th Medical Group"
+        },
+        "arrivalDate": {
+          "start": "2011-12-05T14:21:05",
+          "end": "2011-12-05T14:21:05"
+        },
+        "departureDate": null,
+        "classification": "0",
+        "comment": null,
+        "date": {
+          "start": "2011-12-05T14:20:00",
+          "end": "2011-12-05T14:20:00"
+        },
+        "disposition": [],
+        "location": {
+          "name": "GOLD MTF CHCS GF"
+        },
+        "provider": {
+          "name": "SJF, FIVE"
+        },
+        "reason": [
+          {
+            "display": "Notes Entered by: SJF,FIVE 05 Dec 2011 1420\r\n------------------------------\r\nLTM - STIG Test",
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "KEPT",
+            "primary": true
+          }
+        ],
+        "type": [
+          {
+            "display": "SPEC",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000960"
+        },
+        "enteredBy": {
+          "name": "LANF, ONE"
+        },
+        "enteredDate": {
+          "start": "2011-11-15T07:01:21",
+          "end": "2011-11-15T07:01:21"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "56446-8"
+          }
+        ],
+        "facility": {
+          "name": "Landstuhl RMC"
+        },
+        "arrivalDate": {
+          "start": "2011-11-15T07:01:30",
+          "end": "2011-11-15T07:01:30"
+        },
+        "departureDate": null,
+        "classification": "0",
+        "comment": null,
+        "date": {
+          "start": "2011-11-15T07:01:00",
+          "end": "2011-11-15T07:01:00"
+        },
+        "disposition": [],
+        "location": {
+          "name": "LSL Cardiology"
+        },
+        "provider": {
+          "name": "LANF, ONE"
+        },
+        "reason": [
+          {
+            "display": "Notes Entered by: LANF,ONE 15 Nov 2011 0701\r\n------------------------------\r\nLTM - Thin App Test",
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "CANCEL",
+            "primary": true
+          }
+        ],
+        "type": [
+          {
+            "display": "EST",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000961"
+        },
+        "enteredBy": {
+          "name": "LANF, FOUR"
+        },
+        "enteredDate": {
+          "start": "2011-11-02T17:36:24",
+          "end": "2011-11-02T17:36:24"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "56446-8"
+          }
+        ],
+        "facility": {
+          "name": "Landstuhl RMC"
+        },
+        "arrivalDate": {
+          "start": "2011-11-02T17:36:29",
+          "end": "2011-11-02T17:36:29"
+        },
+        "departureDate": null,
+        "classification": "0",
+        "comment": null,
+        "date": {
+          "start": "2011-11-02T17:36:00",
+          "end": "2011-11-02T17:36:00"
+        },
+        "disposition": [
+          {
+            "display": "Released w/o Limitations",
+            "primary": true
+          }
+        ],
+        "location": {
+          "name": "LSL Cardiology"
+        },
+        "provider": {
+          "name": "LANF, FOUR"
+        },
+        "reason": [
+          {
+            "display": "Notes Entered by: LANF,ONE 02 Nov 2011 1736\r\n------------------------------\r\nLTM - Test of thinapp",
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "KEPT",
+            "primary": true
+          }
+        ],
+        "type": [
+          {
+            "display": "EST",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000962"
+        },
+        "enteredBy": {
+          "name": "LANF, FIVE"
+        },
+        "enteredDate": {
+          "start": "2011-10-20T17:37:17",
+          "end": "2011-10-20T17:37:17"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "56446-8"
+          }
+        ],
+        "facility": {
+          "name": "Landstuhl RMC"
+        },
+        "arrivalDate": {
+          "start": "2011-10-20T17:37:24",
+          "end": "2011-10-20T17:37:24"
+        },
+        "departureDate": null,
+        "classification": "0",
+        "comment": null,
+        "date": {
+          "start": "2011-10-20T17:36:00",
+          "end": "2011-10-20T17:36:00"
+        },
+        "disposition": [
+          {
+            "display": "Released w/o Limitations",
+            "primary": true
+          }
+        ],
+        "location": {
+          "name": "LSL Cardiology"
+        },
+        "provider": {
+          "name": "LANF, FIVE"
+        },
+        "reason": [
+          {
+            "display": "Notes Entered by: LANF,FIVE 20 Oct 2011 1736\r\n------------------------------\r\nLTM - Test",
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "KEPT",
+            "primary": true
+          }
+        ],
+        "type": [
+          {
+            "display": "EST",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000963"
+        },
+        "enteredBy": {
+          "name": "DTE, ATTEND E"
+        },
+        "enteredDate": {
+          "start": "2011-09-19T13:58:13",
+          "end": "2011-09-19T13:58:13"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "56446-8"
+          }
+        ],
+        "facility": {
+          "name": "4th Medical Group"
+        },
+        "arrivalDate": {
+          "start": "2011-09-19T13:58:16",
+          "end": "2011-09-19T13:58:16"
+        },
+        "departureDate": null,
+        "classification": "0",
+        "comment": null,
+        "date": {
+          "start": "2011-09-19T13:57:00",
+          "end": "2011-09-19T13:57:00"
+        },
+        "disposition": [],
+        "location": {
+          "name": "Health Promotions"
+        },
+        "provider": {
+          "name": "DTE, ATTEND E"
+        },
+        "reason": [
+          {
+            "display": "Notes Entered by: DTE,ATTEND E 19 Sep 2011 1357\r\n------------------------------\r\nLTM - Test",
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "KEPT",
+            "primary": true
+          }
+        ],
+        "type": [
+          {
+            "display": "ACUT$",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000964"
+        },
+        "enteredBy": {
+          "name": "SJF, TWENTY EIGHT"
+        },
+        "enteredDate": {
+          "start": "2011-08-23T09:51:51",
+          "end": "2011-08-23T09:51:51"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "56446-8"
+          }
+        ],
+        "facility": {
+          "name": "4th Medical Group"
+        },
+        "arrivalDate": {
+          "start": "2011-08-23T09:51:55",
+          "end": "2011-08-23T09:51:55"
+        },
+        "departureDate": null,
+        "classification": "0",
+        "comment": null,
+        "date": {
+          "start": "2011-08-23T09:51:00",
+          "end": "2011-08-23T09:51:00"
+        },
+        "disposition": [],
+        "location": {
+          "name": "Blue MTF"
+        },
+        "provider": {
+          "name": "SJF, TWENTY EIGHT"
+        },
+        "reason": [
+          {
+            "display": "Notes Entered by: SJF,TWENTY EIGHT 23 Aug 2011 0951\r\n------------------------------\r\nLTM - Test",
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "KEPT",
+            "primary": true
+          }
+        ],
+        "type": [
+          {
+            "display": "ACUT",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000965"
+        },
+        "enteredBy": {
+          "name": "LANF, THREE"
+        },
+        "enteredDate": {
+          "start": "2011-05-19T07:36:03",
+          "end": "2011-05-19T07:36:03"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "56446-8"
+          }
+        ],
+        "facility": {
+          "name": "Landstuhl RMC"
+        },
+        "arrivalDate": {
+          "start": "2011-05-19T07:36:03",
+          "end": "2011-05-19T07:36:03"
+        },
+        "departureDate": null,
+        "classification": "0",
+        "comment": null,
+        "date": {
+          "start": "2011-05-19T07:35:00",
+          "end": "2011-05-19T07:35:00"
+        },
+        "disposition": [
+          {
+            "display": "Released w/o Limitations",
+            "primary": true
+          }
+        ],
+        "location": {
+          "name": "LSL Cardiology"
+        },
+        "provider": {
+          "name": "LANF, THREE"
+        },
+        "reason": [
+          {
+            "display": "Notes Entered by: LANF,FIVE 19 May 2011 0735\r\n------------------------------\r\nLTM - RIP Test",
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "KEPT",
+            "primary": true
+          }
+        ],
+        "type": [
+          {
+            "display": "SPEC",
+            "primary": true
+          }
+        ]
+      }
+    ]
+  }
+}

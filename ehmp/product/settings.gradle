@@ -1,0 +1,48 @@
+rootProject.name = 'parent'
+def globalTasks = ['build', 'clean', 'tasks', 'generateversionpropertiesfile', 'upload', 'deployalldev', 'destroyall']
+def tasks = gradle.startParameter.taskNames
+
+tasks.each { taskName ->
+	
+	def formattedTaskName = taskName.toString().toLowerCase()
+
+	// Include only the test projects
+	if(formattedTaskName.contains("test") || formattedTaskName.contains("synccache"))
+	{
+		include ':tests:acceptance-tests'
+		include ':tests:integration-tests'
+		include ':production:vx-sync'
+	}
+	if(globalTasks.contains(formattedTaskName) || formattedTaskName.contains("vxsyncdev") || formattedTaskName.contains("destroyvxsync"))
+	{
+		//vx-sync
+		include ':production:asu'
+		include ':production:vx-sync'
+		include ':production:soap-handler'
+	}
+	if(globalTasks.contains(formattedTaskName) || formattedTaskName.contains("mocksdev") || formattedTaskName.contains("destroymocks")
+	    || formattedTaskName.contains("solrdev") || formattedTaskName.contains("destroysolr"))
+	{
+		//Mocks
+		include ':production:health-time:health-time-core'
+		include ':production:health-time:health-time-solr'
+		include ':production:health-time:health-time-jackson'
+		include ':production:MockMVI'
+		include ':production:NodeMockServices'
+		include ':production:vpr'
+		include ':production:correlated_ids'
+	}
+	if(globalTasks.contains(formattedTaskName) || formattedTaskName.contains("kodakdev") || formattedTaskName.contains("panoramadev")
+	    || formattedTaskName.contains("destroykodak") || formattedTaskName.contains("destroypanorama"))
+	{
+		//Vistas
+		include ':production:hmp'
+		include ':production:correlated_ids'
+	}
+	if(globalTasks.contains(formattedTaskName) || formattedTaskName.contains("jdsdev") || formattedTaskName.contains("destroyjds"))
+	{
+		//Jds
+		include ':production:jds'
+		include ':tests:jds_data'
+	}
+}

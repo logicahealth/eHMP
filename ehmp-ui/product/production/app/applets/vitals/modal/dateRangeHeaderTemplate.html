@@ -1,0 +1,17 @@
+<span class="bold-font left-padding-sm">Viewing
+	{{#compare selectedId "customRangeApply" }}
+		{{#if fromDate}}
+			{{customFromDate}}
+			to
+			{{customToDate}}
+		{{/if}}
+	{{else}}
+		{{#if fromDate}}
+			{{fromDate}}
+			to
+			{{toDate}}
+		{{/if}}
+	{{/compare}}
+
+{{#unless fromDate}}All{{/unless}}
+</span>

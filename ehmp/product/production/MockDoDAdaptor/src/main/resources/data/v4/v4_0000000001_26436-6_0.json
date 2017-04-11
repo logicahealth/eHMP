@@ -1,0 +1,103 @@
+{
+  "queryComplete": true,
+  "statusList": [
+    {
+      "partner": {
+        "partnerIdentifier": "2.16.840.1.113883.3.42.126.100001.13",
+        "partnerName": "ahlta",
+        "partnerType": "DOD"
+      },
+      "partnerStatus": "SUCCESS",
+      "expectedCount": 1,
+      "receivedCount": 1
+    }
+  ],
+  "dataList": {
+    "labOrders": [
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000034"
+        },
+        "enteredBy": null,
+        "enteredDate": null,
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "26436-6"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL"
+        },
+        "orderable": [
+          {
+            "display": "CBC PROFILE",
+            "code": "14674837",
+            "system": "2.16.840.1.113883.3.42.126.100001.16",
+            "primary": true
+          }
+        ],
+        "date": {
+          "start": "2014-04-02T17:14:00",
+          "end": "2014-04-02T17:14:00"
+        },
+        "orderNumber": {
+          "id": "140402-00001"
+        },
+        "orderingProvider": {
+          "name": "BHIE, USERONE"
+        },
+        "status": [
+          {
+            "display": "Ordered",
+            "primary": true
+          }
+        ],
+        "adminTimes": null,
+        "alternateSpecimenText": "BLOOD",
+        "collectionMethod": null,
+        "duration": "D1",
+        "endDate": {
+          "start": "2015-04-01T17:16:00",
+          "end": "2015-04-01T17:16:00"
+        },
+        "enteringLocation": {
+          "name": "Family Practice Clinic"
+        },
+        "frequency": null,
+        "groupNumber": null,
+        "signedDate": null,
+        "signedBy": null,
+        "intervalPattern": null,
+        "interval": null,
+        "comment": "Jane testing",
+        "priorOrderNumber": null,
+        "priority": "ROUTINE",
+        "processingPriority": "R",
+        "scheduleType": [
+          {
+            "display": "One Time",
+            "primary": true
+          }
+        ],
+        "specimenText": "PLASMA",
+        "startDate": {
+          "start": "2014-04-02T17:16:00",
+          "end": "2014-04-02T17:16:00"
+        },
+        "statusComment": null,
+        "verifiedBy": null
+      }
+    ]
+  }
+}

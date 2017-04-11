@@ -1,0 +1,99 @@
+<div class="document-detail">
+    <div class="row">
+        <div class="col-xs-2">
+            <p class="text-right all-margin-no"><strong>
+                <span class="color-grey-darker" data-detail-label="facility">
+                 Facility:</span>
+            </strong></p>
+        </div>
+        <div class="col-xs-8" data-detail="facility">
+            <p class="all-margin-no">
+                {{#if summaryFacilityName}}
+                    {{summaryFacilityName}}
+                {{else}}
+                    N/A
+                {{/if}}
+            </p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-2">
+            <p class="text-right all-margin-no"><strong>
+                <span class="color-grey-darker" data-detail-label="author">Author:</span>
+            </strong></p>
+        </div>
+        <div class="col-xs-4" data-detail="author">
+            <p class="all-margin-no">
+                {{#if summaryAuthorDisplayName}}
+                    {{summaryAuthorDisplayName}}
+                {{else}}
+                    N/A
+                {{/if}}
+            </p>
+        </div>
+        <div class="col-xs-2">
+            <p><strong>
+                <span class="text-right color-grey-darker" data-detail-label="cosigner">Expected Cosigner:</span>
+            </strong></p>
+        </div>
+        <div class="col-xs-4" data-detail="cosigner">
+            <p class="all-margin-no">
+            {{#if summaryCosignerDisplayName}}
+                {{summaryCosignerDisplayName}}
+            {{else}}
+                N/A
+            {{/if}}
+            </p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-2">
+             <p class="text-right all-margin-no"><strong>
+                    <span class="color-grey-darker" data-detail-label="status">Status:</span>
+            </strong></p>
+        </div>
+        <div class="col-xs-8 {{summaryStatusClass}}" data-detail="status">
+            <p class="all-margin-no">
+                {{#if summaryStatusDisplayName}}
+                    {{summaryStatusDisplayName}}
+                {{else}}
+                    N/A
+                {{/if}}
+            </p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-2">
+            <p class="text-right all-margin-no"><strong>
+                <span class="color-grey-darker" data-detail-label="attending">
+                Attending:</span>
+            </strong></p>
+        </div>
+        <div class="col-xs-8 {{statusClass}}" data-detail="attending">
+            <p class="all-margin-no">
+            {{#if summaryAttendingDisplayName}}
+                {{summaryAttendingDisplayName}}
+            {{else}}
+                N/A
+            {{/if}}
+            </p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-2">
+            <p class="text-right all-margin-no"><strong>
+                <span class="color-grey-darker" data-detail-label="date-time">Date/Time:</span>
+            </strong></p>
+        </div>
+        <div class="col-xs-8" data-detail="date-time">
+            <p class="all-margin-no">
+                {{#if summaryDateTime}}
+                    {{formatDate summaryDateTime "MM/DD/YYYY - HH:mm"}}
+                {{else}}
+                    N/A
+                {{/if}}
+            </p>
+        </div>
+    </div>
+</div>
+<pre class="font-size-12 top-margin-sm">{{summaryText}}</pre>

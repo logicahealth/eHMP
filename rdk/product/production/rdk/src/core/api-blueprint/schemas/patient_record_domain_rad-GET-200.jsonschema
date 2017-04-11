@@ -1,0 +1,244 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "Get record data of one domain for a patient",
+	"description": "",
+	"type": "object",
+	"required": [
+		"apiVersion",
+		"data",
+		"status"
+	],
+	"properties": {
+		"apiVersion": {
+			"type": "string"
+		},
+		"data": {
+			"type": "object",
+			"required": [
+				"updated",
+				"totalItems",
+				"currentItemCount",
+				"items"
+			],
+			"properties": {
+				"currentItemCount": {
+					"type": "integer"
+				},
+				"items": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"required": [
+							"case",
+							"category",
+							"dateTime",
+							"diagnosis",
+							"facilityCode",
+							"facilityName",
+							"hasImages",
+							"imageLocation",
+							"imagingTypeUid",
+							"kind",
+							"localId",
+							"locationName",
+							"locationUid",
+							"name",
+							"pid",
+							"providerDisplayName",
+							"providerName",
+							"providerUid",
+							"providers",
+							"results",
+							"stampTime",
+							"statusName",
+							"summary",
+							"typeName",
+							"uid",
+							"verified"
+						],
+						"properties": {
+							"case": {
+								"type": "integer"
+							},
+							"category": {
+								"type": "string"
+							},
+							"dateTime": {
+								"type": "string"
+							},
+							"diagnosis": {
+								"type": "array",
+								"items": {
+									"type": "object",
+									"required": [
+										"code",
+										"primary"
+									],
+									"properties": {
+										"code": {
+											"type": "string"
+										},
+										"primary": {
+											"type": "boolean"
+										}
+									}
+								}
+							},
+							"encounterName": {
+								"type": "string"
+							},
+							"encounterUid": {
+								"type": "string"
+							},
+							"facilityCode": {
+								"type": "string"
+							},
+							"facilityName": {
+								"type": "string"
+							},
+							"hasImages": {
+								"type": "boolean"
+							},
+							"imageLocation": {
+								"type": "string"
+							},
+							"imagingTypeUid": {
+								"type": "string"
+							},
+							"kind": {
+								"type": "string"
+							},
+							"lastUpdateTime": {
+								"type": "string"
+							},
+							"localId": {
+								"type": "string"
+							},
+							"locationName": {
+								"type": "string"
+							},
+							"locationUid": {
+								"type": "string"
+							},
+							"name": {
+								"type": "string"
+							},
+							"orderName": {
+								"type": "string"
+							},
+							"orderUid": {
+								"type": "string"
+							},
+							"pid": {
+								"type": "string"
+							},
+							"providerDisplayName": {
+								"type": "string"
+							},
+							"providerName": {
+								"type": "string"
+							},
+							"providerUid": {
+								"type": "string"
+							},
+							"providers": {
+								"type": "array",
+								"items": {
+									"type": "object",
+									"required": [
+										"providerDisplayName",
+										"providerName",
+										"providerUid",
+										"summary",
+										"uid"
+									],
+									"properties": {
+										"providerDisplayName": {
+											"type": "string"
+										},
+										"providerName": {
+											"type": "string"
+										},
+										"providerUid": {
+											"type": "string"
+										},
+										"summary": {
+											"type": "string"
+										},
+										"uid": {
+											"type": "string"
+										}
+									}
+								}
+							},
+							"reason": {
+								"type": "string"
+							},
+							"results": {
+								"type": "array",
+								"items": {
+									"type": "object",
+									"required": [
+										"localTitle",
+										"summary",
+										"uid"
+									],
+									"properties": {
+										"localTitle": {
+											"type": "string"
+										},
+										"summary": {
+											"type": "string"
+										},
+										"uid": {
+											"type": "string"
+										}
+									}
+								}
+							},
+							"stampTime": {
+								"type": "string"
+							},
+							"statusName": {
+								"type": "string"
+							},
+							"summary": {
+								"type": "string"
+							},
+							"typeName": {
+								"type": "string"
+							},
+							"uid": {
+								"type": "string"
+							},
+							"verified": {
+								"type": "boolean"
+							}
+						}
+					}
+				},
+				"itemsPerPage": {
+					"type": "integer"
+				},
+				"pageIndex": {
+					"type": "integer"
+				},
+				"startIndex": {
+					"type": "integer"
+				},
+				"totalItems": {
+					"type": "integer"
+				},
+				"totalPages": {
+					"type": "integer"
+				},
+				"updated": {
+					"type": "integer"
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

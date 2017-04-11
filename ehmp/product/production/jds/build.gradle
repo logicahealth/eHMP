@@ -1,0 +1,30 @@
+
+defaultTasks 'clean', 'build'
+description = 'JDS'
+
+task packRO (type:Exec) {
+    description = 'Builds the distribution (*.ro) file.'
+    group = 'build'
+    inputs.source fileTree('src/vpr') {
+        include '*.m'
+    }
+    buildDir.mkdirs()
+    outputs.file new File(buildDir, "jds-${version}.ro")
+
+    // workingDir projectDir
+    executable 'python'
+    args 'packRO.py'
+    args inputs.sourceFiles
+    standardOutput = new ByteArrayOutputStream()
+
+    doLast {
+        outputs.files.singleFile.text = standardOutput.toString()
+    }
+}
+
+build.dependsOn packRO
+uploadArchives.dependsOn packRO
+
+artifacts {
+  archives file: packRO.outputs.files.singleFile, name: 'jds', type: 'ro', builtBy: packRO
+}

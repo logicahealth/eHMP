@@ -1,0 +1,128 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "",
+	"description": "",
+	"type": "object",
+	"required": [
+		"apiVersion",
+		"data",
+		"status"
+	],
+	"properties": {
+		"apiVersion": {
+			"type": "string"
+		},
+		"data": {
+			"type": "object",
+			"required": [
+				"updated",
+				"totalItems",
+				"currentItemCount",
+				"items"
+			],
+			"properties": {
+				"currentItemCount": {
+					"type": "integer"
+				},
+				"items": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"required": [
+							"localId",
+							"name",
+							"stampTime",
+							"uid",
+							"vistaKeys"
+						],
+						"properties": {
+							"dateOfBirth": {
+								"type": "integer"
+							},
+							"delegateCode": {
+								"type": "string"
+							},
+							"delegateName": {
+								"type": "string"
+							},
+							"digitalPager": {
+								"type": [
+									"string",
+									"integer"
+								]
+							},
+							"disuser": {
+								"type": "boolean"
+							},
+							"genderCode": {
+								"type": "string"
+							},
+							"genderName": {
+								"type": "string"
+							},
+							"localId": {
+								"type": "integer"
+							},
+							"name": {
+								"type": "string"
+							},
+							"officePhone": {
+								"type": [
+									"string",
+									"integer"
+								]
+							},
+							"providerClass": {
+								"type": "string"
+							},
+							"providerType": {
+								"type": "string"
+							},
+							"service": {
+								"type": "string"
+							},
+							"stampTime": {
+								"type": "integer"
+							},
+							"title": {
+								"type": "string"
+							},
+							"uid": {
+								"type": "string"
+							},
+							"vistaKeys": {
+								"type": "array",
+								"items": {
+									"type": "object",
+									"required": [
+										"name"
+									],
+									"properties": {
+										"name": {
+											"type": "string"
+										}
+									}
+								}
+							},
+							"voicePager": {
+								"type": [
+									"string",
+									"integer"
+								]
+							}
+						}
+					}
+				},
+				"totalItems": {
+					"type": "integer"
+				},
+				"updated": {
+					"type": "integer"
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

@@ -1,0 +1,10 @@
+{
+  "id": "jmeadows",
+  "normal": {
+    "ipaddress": "IPADDRESS  ",
+    "stack": "production-staging-deploy-r1-3",
+    "roles": [
+      "jmeadows"
+    ]
+  }
+}

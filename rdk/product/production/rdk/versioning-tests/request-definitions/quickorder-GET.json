@@ -1,0 +1,13 @@
+{
+	"parameters": {
+		"name": {
+			"name": "name",
+			"paramType": "query",
+			"type": "string",
+			"values": [
+			]
+		}
+	},
+	"schema": {
+	}
+}

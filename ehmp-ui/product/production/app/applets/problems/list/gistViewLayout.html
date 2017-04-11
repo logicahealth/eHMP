@@ -1,0 +1,68 @@
+<div gistviewtype="events" role="presentation" class="faux-table">
+    <div class="header table-row right-padding-md" role="row">
+        <div class="flex-width-2_5 noPadding" role="presentation">
+            <div aria-sort="none" role="gridcell" class="table-cell flex-width-3">
+                <div>
+                    <a href="#" data-header-instanceid="name-header"
+                         role="button"
+                         class="{{#if gistHeaders.name.sortable}}selectable{{/if}}"
+                         sortable="{{gistHeaders.name.sortable}}"
+                         sortType="{{gistHeaders.name.sortType}}"
+                         sortDirection="none"
+                         sortKey="{{gistHeaders.name.key}}"
+                         tooltip-data-key="{{gistHeaders.name.hoverTip}}">
+                        {{gistHeaders.name.title}}
+                        <i sortArrow="headerDirectionalIndicator" class="sort-caret fa"></i>
+                        <span class="sr-only">Press enter to sort.</span>
+                    </a>
+                </div>
+            </div>
+            <div aria-sort="none" role="gridcell" class="table-cell flex-width-1 text-center">
+                <a href="#" data-header-instanceid="comment-header"
+                     role="button"
+                     class="{{#if gistHeaders.acuityName.sortable}}selectable{{/if}}"
+                     sortable="{{gistHeaders.acuityName.sortable}}"
+                     sortType="{{gistHeaders.acuityName.sortType}}"
+                     sortDirection="none"
+                     sortKey="{{gistHeaders.acuityName.key}}"
+                     tooltip-data-key="{{gistHeaders.acuityName.hoverTip}}">
+                    {{gistHeaders.acuityName.title}}
+                    <i sortArrow="headerDirectionalIndicator" class="sort-caret fa"></i>
+                    <span class="sr-only">Press enter to sort.</span>
+                </a>
+            </div>
+        </div>
+        <div class="flex-width-1 noPadding" role="presentation">
+            <div aria-sort="none" role="gridcell" class="table-cell text-center flex-width-1">
+                <a href="#" data-header-instanceid="status-name-header"
+                     role="button"
+                     class="{{#if gistHeaders.statusName.sortable}}selectable{{/if}}"
+                     sortable="{{gistHeaders.statusName.sortable}}"
+                     sortType="{{gistHeaders.statusName.sortType}}"
+                     sortDirection="none"
+                     sortShowReverse="true"
+                     sortKey="{{gistHeaders.statusName.key}}"
+                     tooltip-data-key="{{gistHeaders.statusName.hoverTip}}">
+                    {{gistHeaders.statusName.title}}
+                    <i sortArrow="headerDirectionalIndicator" class="sort-caret fa"></i>
+                    <span class="sr-only">Press enter to sort.</span>
+                </a>
+            </div>
+            <div aria-sort="none" role="gridcell" class="table-cell flex-width-1 text-center">
+                <a href="#" data-header-instanceid="facility-name-header"
+                     role="button"
+                     class="{{#if gistHeaders.facilityMoniker.sortable}}selectable{{/if}}"
+                     sortable="{{gistHeaders.facilityMoniker.sortable}}"
+                     sortType="{{gistHeaders.facilityMoniker.sortType}}"
+                     sortDirection="none"
+                     sortKey="{{gistHeaders.facilityMoniker.key}}"
+                     tooltip-data-key="{{gistHeaders.facilityMoniker.hoverTip}}">
+                    {{gistHeaders.facilityMoniker.title}}
+                    <i sortArrow="headerDirectionalIndicator" class="sort-caret fa"></i>
+                    <span class="sr-only">Press enter to sort.</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="gist-item-list body scrolling-content" role="rowgroup"></div>
+</div>

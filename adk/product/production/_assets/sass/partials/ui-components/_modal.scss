@@ -1,0 +1,197 @@
+.modal-header {
+    background-color: $pure-white;
+    padding: 0px;
+    margin-bottom: 0px;
+    border-radius: 6px 6px 0px 0px;
+    .close {
+        color: inherit;
+        opacity: 1;
+        &:hover {
+            color: $primary;
+            outline: none;
+        }
+    }
+}
+
+.modal-dialog {
+    &.modal-sm {
+        width: 365px;
+    }
+    &.modal-liquid {
+        /*we set a fallback height and width for phantom unawerness of calc*/
+        height: 90%;
+        height: calc(100vh - 60px);
+        width: 90%;
+        width: calc(100vw - 60px);
+        &.modal-lg {
+            width: 900px;
+        }
+        &.modal-md {
+            width: 600px;
+        }
+        &.modal-sm {
+            width: 300px;
+        }
+        .modal-content {
+            .modal-header {
+                border-radius: 6px 6px 0px 0px;
+            }
+            .modal-body {
+                height: 100%;
+                max-height: calc(100vh - 270px);
+                margin-bottom: 0;
+            }
+            /* if the modal-body is the first-child or the last-child it must mean there is either no .modal-header or .modal-footer */
+            .modal-body:first-child,
+            .modal-body:last-child {
+                height: 90%;
+                height: calc(100% - 55px);
+            }
+            /* if the modal-body is the only-child there is no .modal-header AND no .modal-footer */
+            .modal-body:only-child {
+                height: 100%;
+            }
+        }
+    }
+}
+
+.modal-title {
+    color: $grey-darkest;
+    font-weight: 600;
+}
+
+.modal-body {
+    padding-bottom: 20px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    #lr-data-table-view {
+        .data-grid {
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+    }
+}
+
+.modal-footer {
+    padding: 7px 14px;
+    .btn-default {
+        background: none;
+        color: $primary;
+        &:hover,
+        &:focus,
+        &:active {
+            background-color: $primary-lighter;
+            color: $primary-dark;
+        }
+    }
+    .btn-danger {
+        background: none;
+        color: $red;
+        &:hover,
+        &:focus,
+        &:active {
+            background-color: $red-lightest;
+            color: $red;
+        }
+    }
+    .btn-muted {
+        background: none;
+        color: $grey-darker;
+        &:hover,
+        &:focus,
+        &:active {
+            background-color: $primary-lighter;
+            color: $grey-darkest;
+        }
+    }
+    p {
+        text-align: left;
+        margin: 0px;
+    }
+}
+
+.modal {
+    &.ui-draggable {
+        bottom: inherit;
+        .draggable-handle {
+            cursor: move;
+        }
+    }
+    outline: none;
+    top: 43px;
+}
+
+/*----------These styles pertain only to the sync status modal, and need to be cleaned up --------*/
+
+#sync-status-modal {
+    margin: -15px;
+    height: 350px;
+    background-color: $pure-white;
+    #sync-site-detail-header {
+        background-color: #e7ebf0;
+    }
+    .fa-exclamation-circle,
+    .sync-failed-text {
+        color: #CC0000;
+    }
+    #source-list-panel {
+        p {
+            padding: 5px;
+        }
+        #sync-source-sites {
+            list-style-type: none;
+            padding-left: 0;
+            .fa-check-circle {
+                color: green;
+            }
+            li {
+                cursor: pointer;
+                padding: 5px 5px 5px 5px;
+                .source-sync-details {
+                    padding-left: 20px;
+                }
+            }
+            li:hover,
+            li.selected {
+                color: $primary;
+                background-color: $primary-lighter;
+            }
+        }
+    }
+    #sync-site-detail {
+        height: auto;
+        padding: 0px 0 10px 0;
+        border-left: 1px solid #e5e5e5;
+        background-color: $pure-white;
+        .row {
+            margin: 0;
+        }
+        #force-site-sync-status p {
+            margin: 5px;
+            padding: 5px
+        }
+        table {
+            width: 100%;
+            thead {
+                border-top: 2px solid #e5e5e5;
+                border-bottom: 2px solid #e5e5e5;
+            }
+            th {
+                cursor: pointer;
+            }
+            th,
+            td {
+                width: 25%;
+                padding-left: 15px;
+            }
+        }
+        #force-source-sync {
+            float: right;
+            margin: 3px 5px 0 0;
+            p {
+                margin: 0 15px 15px 15px;
+                padding: 5px;
+            }
+        }
+    }
+}

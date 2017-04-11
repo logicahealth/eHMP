@@ -1,0 +1,150 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "",
+	"description": "",
+	"type": "object",
+	"required": [
+		"data",
+		"msg",
+		"status"
+	],
+	"properties": {
+		"data": {
+			"type": "object",
+			"required": [
+				"items"
+			],
+			"properties": {
+				"items": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"required": [
+							"givenNames",
+							"familyName",
+							"genderCode",
+							"ssn",
+							"birthDate",
+							"address",
+							"telecom",
+							"id",
+							"facility",
+							"dataSource",
+							"pid",
+							"idType",
+							"idClass",
+							"fullName",
+							"displayName",
+							"age",
+							"genderName"
+						],
+						"properties": {
+							"address": {
+								"type": "array",
+								"items": {
+									"type": "object",
+									"required": [
+										"city",
+										"line1",
+										"state",
+										"use",
+										"zip"
+									],
+									"properties": {
+										"city": {
+											"type": "string"
+										},
+										"line1": {
+											"type": "string"
+										},
+										"state": {
+											"type": "string"
+										},
+										"use": {
+											"type": "string"
+										},
+										"zip": {
+											"type": "string"
+										}
+									}
+								}
+							},
+							"age": {
+								"type": "integer"
+							},
+							"birthDate": {
+								"type": "string"
+							},
+							"dataSource": {
+								"type": "string"
+							},
+							"displayName": {
+								"type": "string"
+							},
+							"facility": {
+								"type": "string"
+							},
+							"familyName": {
+								"type": "string"
+							},
+							"fullName": {
+								"type": "string"
+							},
+							"genderCode": {
+								"type": "string"
+							},
+							"genderName": {
+								"type": "string"
+							},
+							"givenNames": {
+								"type": "string"
+							},
+							"id": {
+								"type": "string"
+							},
+							"idClass": {
+								"type": "string"
+							},
+							"idType": {
+								"type": "string"
+							},
+							"pid": {
+								"type": "string"
+							},
+							"ssn": {
+								"type": "string"
+							},
+							"ssn4": {
+								"type": "string"
+							},
+							"telecom": {
+								"type": "array",
+								"items": {
+									"type": "object",
+									"required": [
+										"use",
+										"value"
+									],
+									"properties": {
+										"use": {
+											"type": "string"
+										},
+										"value": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"msg": {
+			"type": "string"
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

@@ -1,0 +1,14 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "",
+	"description": "",
+	"type": "object",
+	"required": [
+		"isAuthorized"
+	],
+	"properties": {
+		"isAuthorized": {
+			"type": "string"
+		}
+	}
+}

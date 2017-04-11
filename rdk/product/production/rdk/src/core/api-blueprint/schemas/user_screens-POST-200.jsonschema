@@ -1,0 +1,18 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "User defined screens JDS writeback resource",
+	"description": "Posting an empty object will cause a delete operation",
+	"type": "object",
+	"required": [
+		"message",
+		"status"
+	],
+	"properties": {
+		"message": {
+			"type": "string"
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

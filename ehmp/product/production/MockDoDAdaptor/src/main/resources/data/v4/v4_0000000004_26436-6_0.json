@@ -1,0 +1,18 @@
+{
+  "queryComplete": true,
+  "statusList": [
+    {
+      "partner": {
+        "partnerIdentifier": "2.16.840.1.113883.3.42.126.100001.13",
+        "partnerName": "ahlta",
+        "partnerType": "DOD"
+      },
+      "partnerStatus": "SUCCESS",
+      "expectedCount": 0,
+      "receivedCount": 0
+    }
+  ],
+  "dataList": {
+    "labOrders": []
+  }
+}

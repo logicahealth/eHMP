@@ -1,0 +1,25 @@
+{
+    "globals": {
+        "console": false,
+        "expect": false,
+        "sinon": false,
+        "xdescribe": false
+    },
+    "mocha": true,
+    "nonew": true,
+    "curly": true,
+    "noarg": true,
+    "trailing": true,
+    "forin": true,
+    "noempty": true,
+    "node": true,
+    "eqeqeq": true,
+    "strict": true,
+    "undef": true,
+    "bitwise": true,
+    "nonbsp": true,
+    "freeze": true,
+    "newcap": true,
+    "quotmark": "single",
+    "unused": false
+}

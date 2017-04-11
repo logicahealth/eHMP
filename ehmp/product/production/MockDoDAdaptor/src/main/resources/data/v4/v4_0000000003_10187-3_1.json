@@ -1,0 +1,91 @@
+{
+  "queryComplete": true,
+  "statusList": [
+    {
+      "partner": {
+        "partnerIdentifier": "2.16.840.1.113883.3.42.126.100001.13",
+        "partnerName": "ahlta",
+        "partnerType": "DOD"
+      },
+      "partnerStatus": "SUCCESS",
+      "expectedCount": 1,
+      "receivedCount": 1
+    }
+  ],
+  "dataList": {
+    "questionnaires": [
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000568"
+        },
+        "enteredBy": {
+          "name": "BHIE, USERONE"
+        },
+        "enteredDate": {
+          "start": "2014-01-10T12:24:09",
+          "end": "2014-01-10T12:24:09"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "10187-3"
+          }
+        ],
+        "facility": {
+          "name": "Family Practice Clinic"
+        },
+        "responseDate": {
+          "start": "2014-01-10T12:24:59",
+          "end": "2014-01-10T12:24:59"
+        },
+        "responses": [
+          {
+            "answers": [
+              {
+                "answer": "01 Oct 2014",
+                "answerType": "Date",
+                "choice": 1,
+                "correctAnswer": "1"
+              }
+            ],
+            "choices": [
+              {
+                "choice": 1,
+                "answerType": "Date",
+                "text": "01 Oct 2014",
+                "correctAnswer": "1",
+                "selected": true
+              }
+            ],
+            "comments": [
+              {
+                "enteredDate": {
+                  "start": "2014-01-10T12:24:25",
+                  "end": "2014-01-10T12:24:25"
+                },
+                "commentNumber": 1,
+                "comment": "test questionnaire",
+                "sequenceNumber": 1,
+                "enteredBy": {
+                  "name": "BHIE, USERONE"
+                }
+              }
+            ],
+            "question": "Today's Date",
+            "sequenceNumber": 1
+          }
+        ]
+      }
+    ]
+  }
+}

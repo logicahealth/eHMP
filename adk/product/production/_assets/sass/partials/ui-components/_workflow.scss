@@ -1,0 +1,63 @@
+// Applies to both workflows inside and outside the tray
+.workflow-controller {
+    position: static;
+    .modal-body {
+        background-color: $pure-white;
+        margin-bottom: 0px;
+        padding: 5px 0px;
+        h5 {
+            padding: 5px 0px;
+            margin: 0px;
+        }
+        .col-xs-6 {
+            .col-xs-6 {
+                .control.form-group {
+                    margin-left: -10px;
+                }
+            }
+        }
+        .input-group {
+            .input-group-addon {
+                &.border-top-left-radius {
+                    border-radius: 4px 0px 0px 4px;
+                }
+            }
+        }
+    }
+    .modal-footer {
+        background-color: $pure-white;
+        border-radius: 0px 0px 6px 6px;
+        min-height: 45px;
+    }
+}
+
+// Applies to only workflows outside the tray
+.workflow-container {
+    .modal-body {
+        max-height: 470px;
+        min-height: 200px;
+    }
+    .modal-header {
+        background-color: $pure-white;
+        border-radius: 6px 6px 0px 0px;
+        .header-btns {
+            .btn.btn-icon {
+                color: inherit;
+                &:hover {
+                    color: $primary;
+                }
+            }
+        }
+    }
+}
+
+///////////*These styles are for Mercury specific*///////
+.tray-region {
+    width: 450px;
+    > .workflow-container > .modal-dialog {
+        margin: 0;
+        width: 100%;
+    }
+}
+
+///////////*These styles are for Mercury specific*///////

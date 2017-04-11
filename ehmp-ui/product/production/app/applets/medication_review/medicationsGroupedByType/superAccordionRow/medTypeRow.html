@@ -1,0 +1,28 @@
+<div class="panel-heading mainAccordion bottom-margin-xs" role="tab" tabindex="0">
+    <div class="superAccordion all-padding-xs" data-toggle="collapse" data-parent="#accordion-{{appletInstanceId}}" href="#{{medicationType}}-{{appletInstanceId}}">
+        <span class="right-padding-xs" data-type-row="{{medicationType}}"></span><b>{{medicationDisplayType}}</b>
+    </div>
+</div>
+<div id="{{medicationType}}-{{appletInstanceId}}" class="panel-body collapse top-padding-no bottom-padding-no" role="tabpanel">
+{{#if hasMeds}}
+    <div class="row header-bar equalHeightsHeader left-margin-no right-margin-no" tabindex="0">
+        <div class="equalHeightsInnerTable">
+            <div class="col-sm-3 left-padding-no right-padding-no">
+                <div class="col-sm-12 selectable header" sortable="true" tooltip-data-key="{{tooltipMedicationName}}" sortDirection="none" sortType="alphabetical" sortKey="medicationName">Name
+                    <span class="sort-caret fa floatRight"></span>
+                </div>
+            </div>
+            <div class="col-sm-9">
+                <div class="col-sm-4 selectable header" sortable="true" tooltip-data-key="{{tooltipSig}}" sortDirection="none" sortType="alphabetical" sortKey="sig">Sig
+                    <span class="sort-caret fa floatRight"></span>
+                </div>
+                <div class="col-sm-3 selectable header centerText" sortKey="" sortable="true" tooltip-data-key="{{tooltipFillable}}" sortDirection="none" sortType="custom">{{fillableHeader}}
+                    <span class="sort-caret fa floatRight"></span>
+                </div>
+                <div class="col-sm-5 graph-header"></div>
+            </div>
+        </div>
+    </div>
+{{/if}}
+    <div class="medicationItemList med-name-row-view-region panel-group" role="tablist" id="{{medicationType}}-accordion-{{appletInstanceId}}" tabindex="0"></div>
+</div>

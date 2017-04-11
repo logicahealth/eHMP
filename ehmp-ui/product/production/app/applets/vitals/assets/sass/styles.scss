@@ -1,0 +1,24 @@
+[data-appletid="vitals"] {
+    .a-table table {
+        float: left;
+        width: 49%;
+        margin: 2px;
+        margin-left: 5px;
+        border-right: 1px solid $grey-dark;
+    }
+    .b-table table {
+        float: left;
+        width: 48%;
+        margin-top: 2px;
+    }
+    .a-table td,
+    .b-table td {
+        padding: 2px 5px
+    }
+    tr.clickable {
+        cursor: pointer;
+    }
+    tr.clickable:hover {
+        background-color: $primary-lightest;
+    }
+}

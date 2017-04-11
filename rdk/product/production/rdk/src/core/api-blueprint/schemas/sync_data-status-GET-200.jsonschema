@@ -1,0 +1,61 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "Return the synchronization status for the patient, processed to be simpler to digest",
+	"description": "",
+	"type": "object",
+	"required": [
+		"data",
+		"status"
+	],
+	"properties": {
+		"data": {
+			"type": "object",
+			"required": [
+				"VISTA",
+				"DOD",
+				"VLER",
+				"allSites"
+			],
+			"properties": {
+				"VISTA": {
+					"type": "object",
+					"additionalProperties": {
+						"type": "object",
+						"required": [
+							"isSyncCompleted",
+							"completedStamp"
+						],
+						"properties": {
+							"completedStamp": {
+								"type": "integer"
+							},
+							"isSyncCompleted": {
+								"type": "boolean"
+							}
+						}
+					}
+				},
+				"allSites": {
+					"type": "boolean"
+				}
+			},
+            "additionalProperties": {
+                "type": "object",
+                "required": [
+                    "isSyncCompleted"
+                ],
+                "properties": {
+                    "completedStamp": {
+                        "type": "integer"
+                    },
+                    "isSyncCompleted": {
+                        "type": "boolean"
+                    }
+                }
+            }
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

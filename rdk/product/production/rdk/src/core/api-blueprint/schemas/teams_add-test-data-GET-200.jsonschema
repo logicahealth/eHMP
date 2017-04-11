@@ -1,0 +1,285 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "Temporary endpoint to add test JSON data to the team storage area in JDS from the testdata.json file",
+	"description": "This should be removed once team addition workflow is finalized. For testing/dev purposes only.",
+	"type": "object",
+	"required": [
+		"data",
+		"status"
+	],
+	"properties": {
+		"data": {
+			"type": "object",
+			"required": [
+				"0",
+				"1"
+			],
+			"properties": {
+				"0": {
+					"type": "object",
+					"required": [
+						"facility",
+						"teams"
+					],
+					"properties": {
+						"facility": {
+							"type": "string"
+						},
+						"teams": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"required": [
+									"active",
+									"createdByIEN",
+									"createdDateTime",
+									"modifiedByIEN",
+									"modifiedDateTime",
+									"patients",
+									"position",
+									"teamDescription",
+									"teamDisplayName",
+									"teamFocus",
+									"teamId",
+									"teamType"
+								],
+								"properties": {
+									"active": {
+										"type": "boolean"
+									},
+									"createdByIEN": {
+										"type": "string"
+									},
+									"createdDateTime": {
+										"type": "integer"
+									},
+									"modifiedByIEN": {
+										"type": "string"
+									},
+									"modifiedDateTime": {
+										"type": "integer"
+									},
+									"patients": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"required": [
+												"assignedByIEN",
+												"assignedDateTime",
+												"assignedToPosition",
+												"icn"
+											],
+											"properties": {
+												"assignedByIEN": {
+													"type": "string"
+												},
+												"assignedDateTime": {
+													"type": "integer"
+												},
+												"assignedToPosition": {
+													"type": [
+														"string",
+														"null"
+													]
+												},
+												"icn": {
+													"type": "string"
+												}
+											}
+										}
+									},
+									"position": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"required": [
+												"assignedByIEN",
+												"assignedDateTime",
+												"ien",
+												"positionId",
+												"staffName",
+												"teamRole",
+												"staffRole"
+											],
+											"properties": {
+												"assignedByIEN": {
+													"type": "string"
+												},
+												"assignedDateTime": {
+													"type": "integer"
+												},
+												"ien": {
+													"type": "string"
+												},
+												"positionId": {
+													"type": "string"
+												},
+												"staffName": {
+													"type": "string"
+												},
+												"staffRole": {
+													"type": "string"
+												},
+												"teamRole": {
+													"type": "integer"
+												}
+											}
+										}
+									},
+									"teamDescription": {
+										"type": "string"
+									},
+									"teamDisplayName": {
+										"type": "string"
+									},
+									"teamFocus": {
+										"type": "integer"
+									},
+									"teamId": {
+										"type": "integer"
+									},
+									"teamType": {
+										"type": "integer"
+									}
+								}
+							}
+						}
+					}
+				},
+				"1": {
+					"type": "object",
+					"required": [
+						"facility",
+						"teams",
+						"uid"
+					],
+					"properties": {
+						"facility": {
+							"type": "string"
+						},
+						"teams": {
+							"type": "array",
+							"items": {
+								"type": "object",
+								"required": [
+									"active",
+									"createdByIEN",
+									"createdDateTime",
+									"modifiedByIEN",
+									"modifiedDateTime",
+									"patients",
+									"position",
+									"teamDescription",
+									"teamDisplayName",
+									"teamFocus",
+									"teamId",
+									"teamType"
+								],
+								"properties": {
+									"active": {
+										"type": "boolean"
+									},
+									"createdByIEN": {
+										"type": "string"
+									},
+									"createdDateTime": {
+										"type": "integer"
+									},
+									"modifiedByIEN": {
+										"type": "string"
+									},
+									"modifiedDateTime": {
+										"type": "integer"
+									},
+									"patients": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"required": [
+												"assignedByIEN",
+												"assignedDateTime",
+												"assignedToPosition",
+												"icn"
+											],
+											"properties": {
+												"assignedByIEN": {
+													"type": "string"
+												},
+												"assignedDateTime": {
+													"type": "integer"
+												},
+												"assignedToPosition": {
+													"type": [
+														"string",
+														"null"
+													]
+												},
+												"icn": {
+													"type": "string"
+												}
+											}
+										}
+									},
+									"position": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"required": [
+												"positionId",
+												"teamRole"
+											],
+											"properties": {
+												"assignedByIEN": {
+													"type": "string"
+												},
+												"assignedDateTime": {
+													"type": "integer"
+												},
+												"ien": {
+													"type": "string"
+												},
+												"positionId": {
+													"type": "string"
+												},
+												"staffName": {
+													"type": "string"
+												},
+												"staffRole": {
+													"type": "string"
+												},
+												"teamRole": {
+													"type": "integer"
+												}
+											}
+										}
+									},
+									"teamDescription": {
+										"type": "string"
+									},
+									"teamDisplayName": {
+										"type": "string"
+									},
+									"teamFocus": {
+										"type": "integer"
+									},
+									"teamId": {
+										"type": "integer"
+									},
+									"teamType": {
+										"type": "integer"
+									}
+								}
+							}
+						},
+						"uid": {
+							"type": "string"
+						}
+					}
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

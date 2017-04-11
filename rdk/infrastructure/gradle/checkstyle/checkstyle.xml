@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!DOCTYPE module PUBLIC
+    "-//Puppy Crawl//DTD Check Configuration 1.2//EN"
+    "http://www.puppycrawl.com/dtds/configuration_1_2.dtd">
+
+<module name="Checker">
+
+    <!-- Checks whether files end with a new line.                        -->
+    <!-- See http://checkstyle.sf.net/config_misc.html#NewlineAtEndOfFile -->
+    <module name="NewlineAtEndOfFile"/>
+
+    <!-- Miscellaneous other checks.                   -->
+    <!-- See http://checkstyle.sf.net/config_misc.html -->
+    <module name="TreeWalker">
+      <!-- Ensures only spaces are used for Java code indentation -->
+      <module name="RegexpSinglelineJava">
+        <metadata name="net.sf.eclipsecs.core.comment" value="MAZ"/>
+        <property name="format" value="^\s*\t+\s*\S"/>
+        <property name="message" value="Line has tab indentation; indentation should be performed with spaces only."/>
+        <property name="ignoreComments" value="true"/>
+      </module>
+      <!-- http://checkstyle.sourceforge.net/config_coding.html#PackageDeclaration -->
+      <!-- Ensures that every class has a package and that the package name matches the folder structure -->
+      <module name="PackageDeclaration"/>
+    </module>
+</module>

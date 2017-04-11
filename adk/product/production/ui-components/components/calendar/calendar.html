@@ -1,0 +1,335 @@
+<h3>Calendar</h3>
+<div class="description">
+    <p><strong><i class="fa fa-leanpub"></i> Description:</strong> The calendar allows the user to quickly enter or select a date. The user can enter in a date through the text field by using the keyboard, or the user can select a date by using the popup calendar.</p>
+    <p><strong><i class="fa fa-wheelchair"></i> 508 Guidelines:</strong> A calendar uses the input field, which will follow the same guidelines as in the form elements section. To pass 508 compliance, the input field is considered the alternative view, which will allow a keyboard user to type in a date. The title attribute explains what date format must be used, for example, MM/DD/YYYY. </p>
+    <p><strong><i class="fa fa-lightbulb-o"></i> TIP:</strong> If the calendar is wthin an existing form, remove the form attributes below and change the action attribute to "get" or "post". To allow only numeric inputs, add in validation for the input field.</p>
+</div>
+<div class="row">
+    <div class="col-xs-12">
+        <div id="calendar-copy">
+            <div class="form-group">
+                <label for="calendar">Calendar</label>
+                <div class="input-group date">
+                    <span class="input-group-addon"><i class="fa fa-calendar color-primary"></i></span>
+                    <input type="text" id="calendar" class="form-control" title="Please enter in a date in the following format, MM/DD/YYYY" placeholder="MM/DD/YYYY" />
+                </div>
+            </div>
+        </div>
+        <hr />
+    </div>
+</div>
+    <div class="row">
+    <div class="col-xs-12">
+        <div id="calendardatejs">
+            <div class="form-group">
+                <label for="calendartooltip">Calendar With Tooltip</label>
+                <p class="help-block">Date format examples: "Today", "T+1month", "01/01/2015".</p>
+                <div class="input-group date">
+                    <input type="text" id="calendartooltip" class="form-control" data-toggle="tooltip" data-placement="top" data-trigger="focus" title="Please enter date in text or numerical format" />
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                </div>
+            </div>
+        </div>
+        <hr />
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12">
+        <div id="calendardropdown">
+            <div class="form-group">
+                <label for="calendar2">Calendar With Dropdown</label>
+                <div class="input-group">
+                    <div class="input-group-btn">
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false" title="Press enter to view menu then press tab to select date format">
+                            <span class="caret"></span>
+                            <span class="sr-only">Press enter to view menu then press tab to select date format</span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a href="javascript:dateFormat('MM/DD/YYYY')" title="Press enter to select.">MM/DD/YYYY</a></li>
+                            <li><a href="javascript:dateFormat('MM/YYYY')" title="Press enter to select.">MM/YYYY</a></li>
+                            <li><a href="javascript:dateFormat('YYYY')" title="Press enter to select.">YYYY</a></li>
+                        </ul>
+                    </div>
+                    <span class="input-group-addon date-format" aria-hidden="true"><i class="fa fa-calendar color-primary"></i></span>
+                    <input type="text" id="calendar2" class="form-control" title="Please enter in a date in the following format, MM/DD/YYYY" placeholder="MM/DD/YYYY" />
+                </div>
+            </div>
+        </div>
+        <hr />
+    </div>
+</div>
+<div role="tabpanel" class="tabpanel">
+    <ul role="tablist" class="nav nav-tabs">
+        <li role="presentation" class="active"><a href="#markup-calendar" aria-controls="markup-calendar" role="tab" data-toggle="tab">Calendar</a></li>
+        <li role="presentation"><a href="#calendar-js" aria-controls="calendar-js" role="tab" data-toggle="tab">JavaScript Code</a></li>
+        <li role="presentation"><a href="#markup-calendardropdown" aria-controls="markup-calendardropdown" role="tab" data-toggle="tab">Calendar with dropdown</a></li>
+        <li role="presentation"><a href="#calendardropdown-js" aria-controls="calendardropdown-js" role="tab" data-toggle="tab">JavaScript Code</a></li>
+    </ul>
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane active" id="markup-calendar">
+            <pre>
+&lt;div class=&quot;form-group&quot;&gt;
+    &lt;label for=&quot;calendar&quot;&gt;Calendar&lt;/label&gt;
+    &lt;div class=&quot;input-group date&quot;&gt;
+        &lt;span class=&quot;input-group-addon&quot;&gt;&lt;i class=&quot;fa fa-calendar color-primary&quot;&gt;&lt;/i&gt;&lt;/span&gt;
+        &lt;input type=&quot;text&quot; id=&quot;calendar&quot; class=&quot;form-control&quot; title=&quot;Please enter in a date in the following format, MM/DD/YYYY&quot; placeholder=&quot;MM/DD/YYYY&quot; /&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+            </pre>
+            <a onclick="copyToClipboard('calendar-copy')" role="button" tabindex="0" class="btn btn-default" data-trigger="focus" data-toggle="popover" data-placement="top" data-content="Copied" data-template='<div class="popover popover-sm" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>'>Copy</a>
+        </div>
+        <div role="tabpanel" class="tab-pane" id="calendar-js">
+            <pre>
+&lt;script&gt;
+$(function() {
+    $('.input-group.date').datepicker({
+        todayBtn: &quot;linked&quot;,
+        orientation: &quot;top left&quot;,
+        autoclose: true,
+        todayHighlight: true
+    });
+});
+&lt;/script&gt;
+            </pre>
+            <a onclick="copyToClipboard('calendar-js-copy')" role="button" tabindex="0" class="btn btn-default" data-trigger="focus" data-toggle="popover" data-placement="top" data-content="Copied" data-template='<div class="popover popover-sm" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>'>Copy</a>
+        </div>
+        <div role="tabpanel" class="tab-pane" id="markup-calendardropdown">
+            <pre>
+&lt;div class="row"&gt;
+    &lt;div class="col-xs-12"&gt;
+        &lt;div id="calendardropdown"&gt;
+            &lt;div class="form-group"&gt;
+                &lt;label for="calendar2"&gt;Calendar With Dropdown&lt;/label&gt;
+                &lt;div class="input-group"&gt;
+                    &lt;div class="input-group-btn"&gt;
+                        &lt;button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"&gt;
+                            &lt;span class="caret"&gt;&lt;/span&gt;
+                            &lt;span class="sr-only"&gt;Press enter to view and select date format&lt;/span&gt;
+                        &lt;/button&gt;
+                        &lt;ul class="dropdown-menu"&gt;
+                            &lt;li&gt;&lt;a href="javascript:void(0)" title="Press enter to select."&gt;MM/DD/YYYY&lt;/a&gt;&lt;/li&gt;
+                            &lt;li&gt;&lt;a href="javascript:void(0)" title="Press enter to select."&gt;MM/YYYY&lt;/a&gt;&lt;/li&gt;
+                            &lt;li&gt;&lt;a href="javascript:void(0)" title="Press enter to select."&gt;YYYY&lt;/a&gt;&lt;/li&gt;
+                        &lt;/ul&gt;
+                    &lt;/div&gt;
+                    &lt;span class="input-group-addon date-format" aria-hidden="true"&gt;&lt;i class="fa fa-calendar color-primary"&gt;&lt;/i&gt;&lt;/span&gt;
+                    &lt;input type="text" id="calendar2" class="form-control" title="Please enter in a date in the following format, MM/DD/YYYY" placeholder="MM/DD/YYYY" /&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;hr /&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+            </pre>
+            <a onclick="copyToClipboard('calendardropdown-js-copy')" role="button" tabindex="0" class="btn btn-default" data-trigger="focus" data-toggle="popover" data-placement="top" data-content="Copied" data-template='<div class="popover popover-sm" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>'>Copy</a>
+        </div>
+        <div role="tabpanel" class="tab-pane" id="calendardropdown-js">
+            <pre>
+&lt;script&gt;
+$(function() {
+    $('.input-group-addon.date-format').datepicker({
+        todayBtn: &quot;linked&quot;,
+        orientation: &quot;top left&quot;,
+        autoclose: true,
+        todayHighlight: true
+    });
+});
+&lt;/script&gt;
+            </pre>
+            <a onclick="copyToClipboard('calendardropdown-js-copy')" role="button" tabindex="0" class="btn btn-default" data-trigger="focus" data-toggle="popover" data-placement="top" data-content="Copied" data-template='<div class="popover popover-sm" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>'>Copy</a>
+        </div>
+    </div>
+</div>
+<script src="js/bootstrap-datepicker.js"></script>
+<div id="calendar-js-copy">
+    <script>
+    $(function() {
+        $('#calendar-copy .input-group.date').datepicker({
+                todayBtn: "linked",
+                orientation: "top left",
+                autoclose: true,
+                todayHighlight: true,
+                showOnFocus: false
+            }).children('input[type="text"]').on('focus', function() {
+                $(this).parent().datepicker('hide');
+            });
+    });
+    </script>
+</div>
+<div id="calendardropdown-js-copy">
+    <script src="../../../../_assets/libs/custom/datejs/date.js"></script>
+    <script>
+    $(function() {
+        $('.input-group-addon.date-format').datepicker({
+                todayBtn: "linked",
+                orientation: "top left",
+                autoclose: true,
+                todayHighlight: true,
+                showOnFocus: false
+            }).children('input[type="text"]').on('focus', function() {
+                $(this).parent().datepicker('hide');
+            });
+    });
+
+    var dateFormat = function(f) {
+        if (f == "MM/YYYY") {
+            $("#calendar2").attr("placeholder", "MM/YYYY");
+            $("#calendar2").attr("title", "Please enter in a date in the following format, MM/YYYY");
+        } else if (f == "YYYY") {
+            $("#calendar2").attr("placeholder", "YYYY");
+            $("#calendar2").attr("title", "Please enter in a date in the following format, YYYY");
+        } else {
+            $("#calendar2").attr("placeholder", "MM/DD/YYYY");
+            $("#calendar2").attr("title", "Please enter in a date in the following format, MM/DD/YYYY");
+        }
+        $("#calendar2").focus();
+    }
+    </script>
+</div>
+<div id="datepickerjs-js-copy">
+    <script>
+    var calinval = true;
+    $('#calendardatejs .input-group.date').datepicker({
+        //  datepicker constructor
+        forceParse: false,
+        showOnFocus: false,
+        keyboardNavigation: false,
+        orientation: "top right"
+    }).on('show', function(e) {
+        //  reposition datepicker gui to show below datepicker button
+        var calbtnpos = $('#calendardatejs .input-group-addon').offset();
+        $('.datepicker').css({'left': calbtnpos.left - 363});
+    }).on('changeDate', function(e) {
+        //  note: all date changes are valid entries
+        if (!calinval) {
+            calinval = false;
+            $('#calendardatejs .input-group.date').removeClass('has-error');
+
+            //  update tooltip on datepicker date change
+            var t = $('#calendartooltip').val();
+            var d3 = new Date.parse(t);
+            d3 = d3.toString("dddd, MMMM d, yyyy");
+            $('#calendartooltip').attr('title', d3).tooltip().tooltip('fixTitle').tooltip('show');
+        }
+    }).children('input[type="text"]').on('click', function() {
+        $(this).parent().datepicker('hide');
+    }).on('blur', function(e) {
+        //  convert date to one of the 3 date formats when input is out of focus
+        //  MM/DD/YYYY, MM/YYYY, YYYY
+        var t = $('#calendartooltip').val();
+        if (!calinval) {
+            var t = $('#calendartooltip').val();
+            var d3 = new Date.parse(t);
+            var tconv = convertDate(t);
+            switch (tconv) {
+                case 3:
+                    d3 = d3.toString("MM/dd/yyyy");
+                    break;
+                case 2:
+                    d3 = d3.toString("MM/yyyy");
+                    break;
+                case 1:
+                    d3 = d3.toString("yyyy");
+                    break;
+                default:
+                    console.log("Error! Could not properly convert calendar input");
+            }
+            $('#calendartooltip').val(d3);
+        } else if (t.length == 0) {
+            //  special case: if input is empty, clear datejspicker
+            calinval = true;
+            $('#calendardatejs .input-group.date').datepicker('clearDates');
+            $('#calendardatejs .input-group.date').removeClass('has-error');
+        }
+    });
+
+    $('#calendartooltip').keyup(function(e) {
+        //  update tooltip to reflect valid date input
+        var t = $('#calendartooltip').val();
+        var d = new Date.parse(t);
+        if ($.isEmptyObject(d)) {
+            calinval = true;
+            $('#calendardatejs .input-group.date').addClass('has-error');
+            $('#calendartooltip').tooltip('destroy');
+        } else {
+            calinval = false;
+            var tconv = convertDate(t);
+            var d2;
+            switch (tconv) {
+                case 3:
+                    d2 = d.toString('dddd, MMMM d, yyyy');
+                    break;
+                case 2:
+                    d2 = d.toString('MMMM yyyy');
+                    break;
+                case 1:
+                    d2 = d.toString('yyyy');
+                    break;
+                default:
+                    console.log("Error! Could not properly convert calendar input");
+            }
+            $('#calendardatejs .input-group.date').removeClass('has-error');
+            $('#calendartooltip').attr('title', d2).tooltip().tooltip('fixTitle').tooltip('show');
+        }
+    });
+
+    var convertDate = function (c) {
+        //  Converts the input naively as such
+        //  3 terms present is mm/dd/yyyy
+        //  2 terms present is mm/yyyy
+        //  1 term present is yyyy
+        //  Currently supports today, tomorrow, yesterday, next, last, now, n, t, and +-
+        c = c.toLowerCase();
+        var s = c.split("/");
+        var regex;
+        if (s.length == 1) {
+            s = c.split(" ");
+        }
+        if (s.length == 1) {
+            s = c.split(".");
+        }
+        if (s.length == 1) {
+            s = c.split("-");
+        }
+        if (s.length == 1) {
+            s = c.split(",");
+        }
+        if (s.length == 1) {
+            s = c.split("+");
+            if (s.length > 1) {
+                return 3;
+            }
+        }
+        if (s.length == 1) {
+            s = c.split("-");
+            if (s.length > 1) {
+                return 3;
+            }
+        }
+
+        regex = new RegExp("^t(?:oday)?$|^tomorrow$|^yesterday$|^next$|^last$|^n(?:ow)?$|^y(?:ear)?$|^m(?:onth)?$|^d(?:ay)?$|^w(?:eek)?$|"+
+            "^s(?:u)?(?:n)?(?:d)?(?:ay)?$|^mo(?:n)?(?:d)?(?:ay)?$|^t(?:u)?(?:e)?(?:s)?(?:d)?(?:ay)?$|^w(?:e)?(?:d)?(?:n)?(?:esday)?$|"+
+            "^t(?:h)?(?:u)?(?:r)?(?:s)?(?:d)?(?:ay)?$|^f(?:r)?(?:i)?(?:d)?(?:ay)?$|^s(?:a)?(?:t)?(?:urday)?$", "i");
+        if (regex.test(s[0])) {
+            return 3;
+        }
+
+        regex = new RegExp("^jan(?:uary)?$|^feb(?:ruary)?$|^mar(?:ch)?$|^apr(?:il)?$|^may$|^jun(?:e)?$|"+
+            "^jul(?:y)?$|^aug(?:ust)?$|^sep(?:tember)?$|^oct(?:ober)?$|^nov(?:ember)?$|^dec(?:ember)?$", "i");
+        if (regex.test(s[0]) && s.length == 1) {
+            return 2;
+        }
+
+        if (s.length == 3) {
+            return 3;   //  mm/dd/yyyy
+        } else if (s.length == 2) {
+            return 2;   //  mm/yyyy
+        } else if (s.length == 1) {
+            return 1;   //  yyyy
+        } else {
+            return -1;  //  error
+        }
+
+    }
+    </script>
+</div>

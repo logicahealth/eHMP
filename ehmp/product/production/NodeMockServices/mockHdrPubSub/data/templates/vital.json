@@ -1,0 +1,26 @@
+{
+  "collection": "vital",
+  "pid": "84F0;1",
+  "systemId": "84F0",
+  "localId": "1",
+  "seq": 1,
+  "total": 1,
+  "object": {
+    "lastUpdateTime": 20140409083514,
+    "displayName": "PN",
+    "facilityCode": 561,
+    "facilityName": "New Jersey HCS",
+    "kind": "Vital Sign",
+    "localId": 333,
+    "locationName": "GEN MED",
+    "locationUid": "urn:va:location:ABCD:9",
+    "observed": 199903091300,
+    "result": 7,
+    "resulted": 19990309154917,
+    "summary": "PAIN 7 ",
+    "typeCode": "urn:va:vuid:4500635",
+    "typeName": "PAIN",
+    "uid": "urn:va:vital:ABCD:105:333",
+    "units": ""
+  }
+}

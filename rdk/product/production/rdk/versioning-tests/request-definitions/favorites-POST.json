@@ -1,0 +1,76 @@
+{
+	"parameters": {
+		"domain": {
+			"name": "domain",
+			"paramType": "query",
+			"type": "string",
+			"values": [
+				{
+					"value": "lab"
+				},
+				{
+					"value": "rad"
+				}
+			]
+		},
+		"id": {
+			"name": "id",
+			"paramType": "query",
+			"type": "string",
+			"values": [
+			]
+		},
+		"siteId": {
+			"name": "siteId",
+			"paramType": "query",
+			"type": "string",
+			"values": [
+			]
+		},
+		"type": {
+			"name": "type",
+			"paramType": "query",
+			"type": "string",
+			"values": [
+			]
+		}
+	},
+	"schema": {
+		"$schema": "http://json-schema.org/draft-04/schema#",
+		"properties": {
+			"domain": {
+				"description": "Clinical domain (for orderable type)",
+				"enum": [
+					"lab",
+					"rad",
+					"med",
+					"consult"
+				]
+			},
+			"id": {
+				"description": "Unique identifier of the item (quick order, orderable, order set)",
+				"type": "string"
+			},
+			"siteId": {
+				"description": "Id of the site associated with the referenced conceptual orderable",
+				"type": "string"
+			},
+			"type": {
+				"enum": [
+					"quickorder",
+					"orderable",
+					"orderset"
+				]
+			},
+			"userid": {
+				"description": "Owner of this favorite (e.g., urn:va:user:9E7A:10000000238)",
+				"type": "string"
+			}
+		},
+		"required": [
+			"id",
+			"type"
+		],
+		"type": "object"
+	}
+}

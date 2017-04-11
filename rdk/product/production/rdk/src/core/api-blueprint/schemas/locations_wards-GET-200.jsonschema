@@ -1,0 +1,83 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "Get list of clinics or wards",
+	"description": "",
+	"type": "object",
+	"required": [
+		"data",
+		"status"
+	],
+	"properties": {
+		"data": {
+			"type": "object",
+			"required": [
+				"items",
+				"totalItems"
+			],
+			"properties": {
+				"items": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"required": [
+							"localId",
+							"name",
+							"oos",
+							"refId",
+							"stampTime",
+							"type",
+							"uid",
+							"displayName",
+							"summary",
+							"typeName"
+						],
+						"properties": {
+							"displayName": {
+								"type": "string"
+							},
+							"facilityCode": {
+								"type": "string"
+							},
+							"facilityName": {
+								"type": "string"
+							},
+							"localId": {
+								"type": "string"
+							},
+							"name": {
+								"type": "string"
+							},
+							"oos": {
+								"type": "boolean"
+							},
+							"refId": {
+								"type": "string"
+							},
+							"stampTime": {
+								"type": "string"
+							},
+							"summary": {
+								"type": "string"
+							},
+							"type": {
+								"type": "string"
+							},
+							"typeName": {
+								"type": "string"
+							},
+							"uid": {
+								"type": "string"
+							}
+						}
+					}
+				},
+				"totalItems": {
+					"type": "integer"
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

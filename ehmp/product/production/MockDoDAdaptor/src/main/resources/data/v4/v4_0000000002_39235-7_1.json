@@ -1,0 +1,910 @@
+{
+  "queryComplete": true,
+  "statusList": [
+    {
+      "partner": {
+        "partnerIdentifier": "2.16.840.1.113883.3.42.126.100001.13",
+        "partnerName": "ahlta",
+        "partnerType": "DOD"
+      },
+      "partnerStatus": "SUCCESS",
+      "expectedCount": 15,
+      "receivedCount": 15
+    }
+  ],
+  "dataList": {
+    "immunizations": [
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000325"
+        },
+        "enteredBy": null,
+        "enteredDate": null,
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "39235-7"
+          }
+        ],
+        "facility": null,
+        "manufacturer": [
+          {
+            "display": "Transcribed",
+            "code": "TRS",
+            "primary": true
+          }
+        ],
+        "dosage": {
+          "quantity": null,
+          "raw": null
+        },
+        "lotNumber": "TRANSCRIBED",
+        "vaccine": [
+          {
+            "code": "19",
+            "display": "BCG",
+            "primary": true
+          }
+        ],
+        "nextDueDate": {
+          "start": "1899-12-30T00:00:00",
+          "end": "1899-12-30T00:00:00"
+        },
+        "provider": {
+          "name": "Unknown, Provider"
+        },
+        "date": {
+          "start": "2013-11-19T00:00:00",
+          "end": "2013-11-19T00:00:00"
+        },
+        "negationReason": "None",
+        "seriesInfo": "0"
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000326"
+        },
+        "enteredBy": null,
+        "enteredDate": null,
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "39235-7"
+          }
+        ],
+        "facility": null,
+        "manufacturer": [
+          {
+            "display": "Greer",
+            "code": "GRE",
+            "primary": true
+          }
+        ],
+        "dosage": {
+          "quantity": ".5",
+          "raw": ".5 mL",
+          "units": [
+            {
+              "display": "mL",
+              "primary": true
+            }
+          ]
+        },
+        "lotNumber": "abc123",
+        "vaccine": [
+          {
+            "code": "3",
+            "display": "MMR",
+            "primary": true
+          }
+        ],
+        "nextDueDate": {
+          "start": "2014-11-15T00:00:00",
+          "end": "2014-11-15T00:00:00"
+        },
+        "provider": {
+          "name": "BHIE, USERONE"
+        },
+        "date": {
+          "start": "2013-11-15T00:00:00",
+          "end": "2013-11-15T00:00:00"
+        },
+        "negationReason": "None",
+        "seriesInfo": "1"
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000327"
+        },
+        "enteredBy": null,
+        "enteredDate": null,
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "39235-7"
+          }
+        ],
+        "facility": null,
+        "manufacturer": [
+          {
+            "display": "United States Army Medical Research and Materiel",
+            "code": "USA",
+            "primary": true
+          }
+        ],
+        "dosage": {
+          "quantity": ".5",
+          "raw": ".5 mL",
+          "units": [
+            {
+              "display": "mL",
+              "primary": true
+            }
+          ]
+        },
+        "lotNumber": "htl0987",
+        "vaccine": [
+          {
+            "code": "9",
+            "display": "Td",
+            "primary": true
+          }
+        ],
+        "nextDueDate": {
+          "start": "2023-11-15T00:00:00",
+          "end": "2023-11-15T00:00:00"
+        },
+        "provider": {
+          "name": "BHIE, USERONE"
+        },
+        "date": {
+          "start": "2013-11-15T00:00:00",
+          "end": "2013-11-15T00:00:00"
+        },
+        "negationReason": "None",
+        "seriesInfo": "1"
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000328"
+        },
+        "enteredBy": null,
+        "enteredDate": null,
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "39235-7"
+          }
+        ],
+        "facility": null,
+        "manufacturer": [
+          {
+            "display": "Adams",
+            "code": "AD",
+            "primary": true
+          }
+        ],
+        "dosage": {
+          "quantity": "1.0",
+          "raw": "1.0 mL",
+          "units": [
+            {
+              "display": "mL",
+              "primary": true
+            }
+          ]
+        },
+        "lotNumber": "htl123",
+        "vaccine": [
+          {
+            "code": "10",
+            "display": "IPV",
+            "primary": true
+          }
+        ],
+        "nextDueDate": {
+          "start": "2013-12-27T00:00:00",
+          "end": "2013-12-27T00:00:00"
+        },
+        "provider": {
+          "name": "BHIE, USERONE"
+        },
+        "date": {
+          "start": "2013-11-15T00:00:00",
+          "end": "2013-11-15T00:00:00"
+        },
+        "negationReason": "None",
+        "seriesInfo": "1"
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000329"
+        },
+        "enteredBy": null,
+        "enteredDate": null,
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "39235-7"
+          }
+        ],
+        "facility": null,
+        "manufacturer": [
+          {
+            "display": "Merck",
+            "code": "MSD",
+            "primary": true
+          }
+        ],
+        "dosage": {
+          "quantity": ".5",
+          "raw": ".5 mL",
+          "units": [
+            {
+              "display": "mL",
+              "primary": true
+            }
+          ]
+        },
+        "lotNumber": "htl221122",
+        "vaccine": [
+          {
+            "code": "16",
+            "display": "Influenza",
+            "primary": true
+          }
+        ],
+        "nextDueDate": null,
+        "provider": {
+          "name": "BHIE, USERONE"
+        },
+        "date": {
+          "start": "2013-11-15T00:00:00",
+          "end": "2013-11-15T00:00:00"
+        },
+        "negationReason": "None",
+        "seriesInfo": "1"
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000330"
+        },
+        "enteredBy": null,
+        "enteredDate": null,
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "39235-7"
+          }
+        ],
+        "facility": null,
+        "manufacturer": [
+          {
+            "display": "Emergent BioDefense Operations Lansing",
+            "code": "MIP",
+            "primary": true
+          }
+        ],
+        "dosage": {
+          "quantity": ".2",
+          "raw": ".2 mL",
+          "units": [
+            {
+              "display": "mL",
+              "primary": true
+            }
+          ]
+        },
+        "lotNumber": "TRANSCRIBED",
+        "vaccine": [
+          {
+            "code": "24",
+            "display": "Anthrax",
+            "primary": true
+          }
+        ],
+        "nextDueDate": {
+          "start": "2013-11-15T00:00:00",
+          "end": "2013-11-15T00:00:00"
+        },
+        "provider": {
+          "name": "Unknown, Provider"
+        },
+        "date": {
+          "start": "2013-11-15T00:00:00",
+          "end": "2013-11-15T00:00:00"
+        },
+        "negationReason": "None",
+        "seriesInfo": "1"
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000331"
+        },
+        "enteredBy": null,
+        "enteredDate": null,
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "39235-7"
+          }
+        ],
+        "facility": null,
+        "manufacturer": [
+          {
+            "display": "Transcribed",
+            "code": "TRS",
+            "primary": true
+          }
+        ],
+        "dosage": {
+          "quantity": ".2",
+          "raw": ".2 mL",
+          "units": [
+            {
+              "display": "mL",
+              "primary": true
+            }
+          ]
+        },
+        "lotNumber": "TRANSCRIBED",
+        "vaccine": [
+          {
+            "code": "37",
+            "display": "Yellow Fever",
+            "primary": true
+          }
+        ],
+        "nextDueDate": {
+          "start": "1899-12-30T00:00:00",
+          "end": "1899-12-30T00:00:00"
+        },
+        "provider": {
+          "name": "BHIE, USERONE"
+        },
+        "date": {
+          "start": "2013-11-15T00:00:00",
+          "end": "2013-11-15T00:00:00"
+        },
+        "negationReason": "None",
+        "seriesInfo": "0"
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000332"
+        },
+        "enteredBy": null,
+        "enteredDate": null,
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "39235-7"
+          }
+        ],
+        "facility": null,
+        "manufacturer": [
+          {
+            "display": "Abbott",
+            "code": "AB",
+            "primary": true
+          }
+        ],
+        "dosage": {
+          "quantity": ".1",
+          "raw": ".1 mL",
+          "units": [
+            {
+              "display": "mL",
+              "primary": true
+            }
+          ]
+        },
+        "lotNumber": "15b",
+        "vaccine": [
+          {
+            "code": "43",
+            "display": "Hep B - Adult",
+            "primary": true
+          }
+        ],
+        "nextDueDate": {
+          "start": "2014-04-14T00:00:00",
+          "end": "2014-04-14T00:00:00"
+        },
+        "provider": {
+          "name": "BHIE, USERONE"
+        },
+        "date": {
+          "start": "2013-11-15T00:00:00",
+          "end": "2013-11-15T00:00:00"
+        },
+        "negationReason": "None",
+        "seriesInfo": "2"
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000333"
+        },
+        "enteredBy": null,
+        "enteredDate": null,
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "39235-7"
+          }
+        ],
+        "facility": null,
+        "manufacturer": [
+          {
+            "display": "Transcribed",
+            "code": "TRS",
+            "primary": true
+          }
+        ],
+        "dosage": {
+          "quantity": ".25",
+          "raw": ".25 mL",
+          "units": [
+            {
+              "display": "mL",
+              "primary": true
+            }
+          ]
+        },
+        "lotNumber": "TRANSCRIBED",
+        "vaccine": [
+          {
+            "code": "43",
+            "display": "Hep B - Adult",
+            "primary": true
+          }
+        ],
+        "nextDueDate": {
+          "start": "1899-12-30T00:00:00",
+          "end": "1899-12-30T00:00:00"
+        },
+        "provider": {
+          "name": "Unknown, Provider"
+        },
+        "date": {
+          "start": "2013-11-13T00:00:00",
+          "end": "2013-11-13T00:00:00"
+        },
+        "negationReason": "None",
+        "seriesInfo": "1"
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000334"
+        },
+        "enteredBy": null,
+        "enteredDate": null,
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "39235-7"
+          }
+        ],
+        "facility": null,
+        "manufacturer": [
+          {
+            "display": "Transcribed",
+            "code": "TRS",
+            "primary": true
+          }
+        ],
+        "dosage": {
+          "quantity": null,
+          "raw": null
+        },
+        "lotNumber": "TRANSCRIBED",
+        "vaccine": [
+          {
+            "code": "12",
+            "display": "Diphtheria antitoxin",
+            "primary": true
+          }
+        ],
+        "nextDueDate": {
+          "start": "1899-12-30T00:00:00",
+          "end": "1899-12-30T00:00:00"
+        },
+        "provider": {
+          "name": "Unknown, Provider"
+        },
+        "date": {
+          "start": "2013-11-12T00:00:00",
+          "end": "2013-11-12T00:00:00"
+        },
+        "negationReason": "None",
+        "seriesInfo": "1"
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000335"
+        },
+        "enteredBy": null,
+        "enteredDate": null,
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "39235-7"
+          }
+        ],
+        "facility": null,
+        "manufacturer": [
+          {
+            "display": "Transcribed",
+            "code": "TRS",
+            "primary": true
+          }
+        ],
+        "dosage": {
+          "quantity": null,
+          "raw": null
+        },
+        "lotNumber": "TRANSCRIBED",
+        "vaccine": [
+          {
+            "code": "56",
+            "display": "Dengue Fever",
+            "primary": true
+          }
+        ],
+        "nextDueDate": {
+          "start": "1899-12-30T00:00:00",
+          "end": "1899-12-30T00:00:00"
+        },
+        "provider": {
+          "name": "Unknown, Provider"
+        },
+        "date": {
+          "start": "2013-11-11T00:00:00",
+          "end": "2013-11-11T00:00:00"
+        },
+        "negationReason": "None",
+        "seriesInfo": "1"
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000336"
+        },
+        "enteredBy": null,
+        "enteredDate": null,
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "39235-7"
+          }
+        ],
+        "facility": null,
+        "manufacturer": [
+          {
+            "display": "Transcribed",
+            "code": "TRS",
+            "primary": true
+          }
+        ],
+        "dosage": {
+          "quantity": null,
+          "raw": null
+        },
+        "lotNumber": "TRANSCRIBED",
+        "vaccine": [
+          {
+            "code": "96",
+            "display": "IPPD",
+            "primary": true
+          }
+        ],
+        "nextDueDate": {
+          "start": "1899-12-30T00:00:00",
+          "end": "1899-12-30T00:00:00"
+        },
+        "provider": {
+          "name": "Unknown, Provider"
+        },
+        "date": {
+          "start": "2013-10-28T00:00:00",
+          "end": "2013-10-28T00:00:00"
+        },
+        "negationReason": "None",
+        "seriesInfo": "0"
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000337"
+        },
+        "enteredBy": null,
+        "enteredDate": null,
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "39235-7"
+          }
+        ],
+        "facility": null,
+        "manufacturer": [
+          {
+            "display": "Transcribed",
+            "code": "TRS",
+            "primary": true
+          }
+        ],
+        "dosage": {
+          "quantity": ".2",
+          "raw": ".2 mL",
+          "units": [
+            {
+              "display": "mL",
+              "primary": true
+            }
+          ]
+        },
+        "lotNumber": "TRANSCRIBED",
+        "vaccine": [
+          {
+            "code": "37",
+            "display": "Yellow Fever",
+            "primary": true
+          }
+        ],
+        "nextDueDate": {
+          "start": "1899-12-30T00:00:00",
+          "end": "1899-12-30T00:00:00"
+        },
+        "provider": {
+          "name": "Unknown, Provider"
+        },
+        "date": {
+          "start": "2010-11-19T00:00:00",
+          "end": "2010-11-19T00:00:00"
+        },
+        "negationReason": "None",
+        "seriesInfo": "0"
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000338"
+        },
+        "enteredBy": null,
+        "enteredDate": null,
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "39235-7"
+          }
+        ],
+        "facility": null,
+        "manufacturer": [
+          {
+            "display": "Transcribed",
+            "code": "TRS",
+            "primary": true
+          }
+        ],
+        "dosage": {
+          "quantity": null,
+          "raw": null
+        },
+        "lotNumber": "TRANSCRIBED",
+        "vaccine": [
+          {
+            "code": "43",
+            "display": "Hep B - Adult",
+            "primary": true
+          }
+        ],
+        "nextDueDate": {
+          "start": "1899-12-30T00:00:00",
+          "end": "1899-12-30T00:00:00"
+        },
+        "provider": {
+          "name": "Unknown, Provider"
+        },
+        "date": {
+          "start": "2007-11-19T00:00:00",
+          "end": "2007-11-19T00:00:00"
+        },
+        "negationReason": "None",
+        "seriesInfo": "3"
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000339"
+        },
+        "enteredBy": null,
+        "enteredDate": null,
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "39235-7"
+          }
+        ],
+        "facility": null,
+        "manufacturer": [
+          {
+            "display": "Transcribed",
+            "code": "TRS",
+            "primary": true
+          }
+        ],
+        "dosage": {
+          "quantity": null,
+          "raw": null
+        },
+        "lotNumber": "TRANSCRIBED",
+        "vaccine": [
+          {
+            "code": "43",
+            "display": "Hep B - Adult",
+            "primary": true
+          }
+        ],
+        "nextDueDate": {
+          "start": "1899-12-30T00:00:00",
+          "end": "1899-12-30T00:00:00"
+        },
+        "provider": {
+          "name": "Unknown, Provider"
+        },
+        "date": {
+          "start": "2007-11-15T00:00:00",
+          "end": "2007-11-15T00:00:00"
+        },
+        "negationReason": "None",
+        "seriesInfo": "3"
+      }
+    ]
+  }
+}

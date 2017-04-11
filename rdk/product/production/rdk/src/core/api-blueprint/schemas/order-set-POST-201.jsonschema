@@ -1,0 +1,69 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "properties": {
+        "uid": {
+            "description": "Unique identifier for the order set",
+            "type": "string"
+        },
+        "name": {
+            "description": "Name of the Order Set",
+            "type": "string"
+        },
+        "scope": {
+            "description": "Visibility scope of the order set",
+            "enum": ["individual", "site", "enterprise"]
+        },
+        "orderList": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+                "type": "object",
+                "properties": {
+                    "uid": {
+                        "description": "Unique identifier of the item (quick order or orderable)",
+                        "type": "string"
+                    },
+                    "type": {
+                        "enum": ["quickorder", "orderable"]
+                    },
+                    "domain": {
+                        "description": "Clinical domain (for orderable type)",
+                        "enum": ["lab", "rad", "med", "consult"]
+                    },
+                    "siteId": {
+                        "description": "Id of the site associated with the orderable",
+                        "type": "string"
+                    },
+                    "createdBy": {
+                        "description": "User associated with the conceptual orderable (applies to non-vista orderables, e.g. quick orders)"
+                    },
+                    "name": {
+                        "description": "Name of the QuickOrder or Orderable",
+                        "type": "string"
+                    },
+                    "scope": {
+                            "enum": ["individual", "site", "enterprise"]
+                    },
+                    "active": {
+                        "description": "Whether the orderable is active. A site can stop support of a particular orderable, rendering it inactive",
+                        "type": "boolean"
+                    }
+                },
+                "required": [ "uid", "type" ]
+            }
+        },
+        "siteId": {
+            "description": "Id of the site this Order Set belongs to. This is null for 'enterprise' scope.",
+            "type": "string"
+        },
+        "createdBy": {
+            "description": "User id of creator of the Order Set (e.g., urn:va:user:9E7A:10000000238)",
+            "type": "string"
+        },
+        "active": {
+            "description": "Whether the Order Set is active. Inactive Order Sets will not show up in Orderable service queries.",
+            "type": "boolean"
+        }
+    }
+}

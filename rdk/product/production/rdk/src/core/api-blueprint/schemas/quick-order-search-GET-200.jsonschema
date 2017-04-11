@@ -1,0 +1,53 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "properties": {
+        "data": {
+            "description": "Standard RDK data response",
+            "type": "object",
+            "properties": {
+                "items": {
+                    "description": "Standard array wrapper for RDK list responses.",
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "uid": {
+                                "description": "Unique identifier for the Quick Order",
+                                "type": "string"
+                            },
+                            "name": {
+                                "description": "Name of the Quick Order",
+                                "type": "string"
+                            },
+    						"type": {
+      							"description": "The type of this object, order set, quick order, favorite; always 'quickorder'.",
+      							"enum": ["favorite","quickorder","orderable"]
+    						},
+                            "scope": {
+                                "description": "Visibility scope of the Quick Order",
+                                "enum": ["individual", "site", "enterprise"]
+                            },
+                            "siteId": {
+                                "description": "Id of the site this Quick Order belongs to. This is null for 'enterprise' scope.",
+                                "type": "string"
+                            },
+                            "createdBy": {
+                                "description": "User id of creator of the Quick Order (e.g., urn:va:user:9E7A:10000000238)",
+                                "type": "string"
+                            },
+                            "timestamp": {
+                                "description": "Date when the Quick Order was created or last updated.",
+                                "type": "boolean"
+                            },
+                            "active": {
+                                "description": "Whether the Quick Order is active. Inactive Quick Orders will not show up in Orderable service queries.",
+                                "type": "boolean"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,8 @@
+"jds-filter-build-%branch%" {
+  template = 'templates/jds-filter-build.tpl'
+  description = "jds-filter build for the branch %branch%"
+	
+  gitUrl = 'https://code.vistacore.us/scm/app/jds-filter.git'
+  gitBranch = '%branch%'
+
+}

@@ -1,0 +1,52 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "",
+	"description": "",
+	"type": "object",
+	"required": [
+		"data",
+		"status"
+	],
+	"properties": {
+		"data": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"required": [
+					"goal",
+					"currentProgress",
+					"enteredDate",
+					"endDate",
+					"steps",
+					"type"
+				],
+				"properties": {
+					"currentProgress": {
+						"type": "string"
+					},
+					"endDate": {
+						"type": "string"
+					},
+					"enteredDate": {
+						"type": "string"
+					},
+					"goal": {
+						"type": "string"
+					},
+					"nextDue": {
+						"type": "string"
+					},
+					"steps": {
+						"type": "string"
+					},
+					"type": {
+						"type": "string"
+					}
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

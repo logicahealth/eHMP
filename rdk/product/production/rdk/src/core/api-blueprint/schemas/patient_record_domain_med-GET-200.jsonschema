@@ -1,0 +1,475 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "Get record data of one domain for a patient",
+	"description": "",
+	"type": "object",
+	"required": [
+		"apiVersion",
+		"data",
+		"status"
+	],
+	"properties": {
+		"apiVersion": {
+			"type": "string"
+		},
+		"data": {
+			"type": "object",
+			"required": [
+				"updated",
+				"totalItems",
+				"currentItemCount",
+				"items"
+			],
+			"properties": {
+				"currentItemCount": {
+					"type": "integer"
+				},
+				"items": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"required": [
+							"IMO",
+							"facilityCode",
+							"facilityName",
+							"fills",
+							"kind",
+							"medStatus",
+							"medType",
+							"name",
+							"orders",
+							"overallStop",
+							"pid",
+							"productFormName",
+							"products",
+							"sig",
+							"stampTime",
+							"summary",
+							"supply",
+							"uid",
+							"vaStatus",
+							"vaType",
+							"calculatedStatus",
+							"lastAction",
+							"expirationDate",
+							"recent",
+							"normalizedName"
+						],
+						"properties": {
+							"IMO": {
+								"type": "boolean"
+							},
+							"administrations": {
+								"type": "array",
+								"items": {
+									"type": "object",
+									"required": [
+										"administeredByName",
+										"administeredByUid",
+										"dateTime",
+										"given",
+										"medication",
+										"status",
+										"summary"
+									],
+									"properties": {
+										"administeredByName": {
+											"type": "string"
+										},
+										"administeredByUid": {
+											"type": "string"
+										},
+										"dateTime": {
+											"type": "string"
+										},
+										"given": {
+											"type": "boolean"
+										},
+										"medication": {
+											"type": "array",
+											"items": {
+												"type": "object",
+												"required": [
+													"amount",
+													"name",
+													"units"
+												],
+												"properties": {
+													"amount": {
+														"type": "integer"
+													},
+													"name": {
+														"type": "string"
+													},
+													"units": {
+														"type": "string"
+													}
+												}
+											}
+										},
+										"status": {
+											"type": "string"
+										},
+										"summary": {
+											"type": "string"
+										}
+									}
+								}
+							},
+							"calculatedStatus": {
+								"type": "string"
+							},
+							"codes": {
+								"type": "array",
+								"items": {
+									"type": "object",
+									"required": [
+										"code",
+										"system"
+									],
+									"properties": {
+										"code": {
+											"type": "string"
+										},
+										"display": {
+											"type": "string"
+										},
+										"system": {
+											"type": "string"
+										}
+									}
+								}
+							},
+							"dosages": {
+								"type": "array",
+								"items": {
+									"type": "object",
+									"required": [
+										"instructions",
+										"relativeStart",
+										"relativeStop",
+										"routeName",
+										"scheduleName",
+										"summary"
+									],
+									"properties": {
+										"amount": {
+											"type": "string"
+										},
+										"dose": {
+											"type": "string"
+										},
+										"instructions": {
+											"type": "string"
+										},
+										"noun": {
+											"type": "string"
+										},
+										"relativeStart": {
+											"type": "integer"
+										},
+										"relativeStop": {
+											"type": "integer"
+										},
+										"routeName": {
+											"type": "string"
+										},
+										"scheduleFreq": {
+											"type": "integer"
+										},
+										"scheduleName": {
+											"type": [
+												"string",
+												"number"
+											]
+										},
+										"scheduleType": {
+											"type": "string"
+										},
+										"start": {
+											"type": "string"
+										},
+										"stop": {
+											"type": "string"
+										},
+										"summary": {
+											"type": "string"
+										},
+										"units": {
+											"type": "string"
+										}
+									}
+								}
+							},
+							"expirationDate": {
+								"type": "string"
+							},
+							"facilityCode": {
+								"type": "string"
+							},
+							"facilityName": {
+								"type": "string"
+							},
+							"fills": {
+								"type": "array",
+								"items": {
+									"type": "object",
+									"required": [
+										"dispenseDate",
+										"quantityDispensed",
+										"summary"
+									],
+									"properties": {
+										"daysSupplyDispensed": {
+											"type": "integer"
+										},
+										"dispenseDate": {
+											"type": "string"
+										},
+										"quantityDispensed": {
+											"type": "string"
+										},
+										"releaseDate": {
+											"type": "string"
+										},
+										"routing": {
+											"type": "string"
+										},
+										"summary": {
+											"type": "string"
+										}
+									}
+								}
+							},
+							"kind": {
+								"type": "string"
+							},
+							"lastAction": {
+								"type": "string"
+							},
+							"lastAdmin": {
+								"type": "string"
+							},
+							"lastFilled": {
+								"type": "string"
+							},
+							"lastUpdateTime": {
+								"type": "string"
+							},
+							"localId": {
+								"type": "string"
+							},
+							"medStatus": {
+								"type": "string"
+							},
+							"medStatusName": {
+								"type": "string"
+							},
+							"medType": {
+								"type": "string"
+							},
+							"name": {
+								"type": "string"
+							},
+							"normalizedName": {
+								"type": "string"
+							},
+							"orders": {
+								"type": "array",
+								"items": {
+									"type": "object",
+									"required": [
+										"providerName",
+										"summary"
+									],
+									"properties": {
+										"daysSupply": {
+											"type": [
+												"number",
+												"string"
+											]
+										},
+										"fillCost": {
+											"type": "string"
+										},
+										"fillsAllowed": {
+											"type": [
+												"number",
+												"string"
+											]
+										},
+										"fillsRemaining": {
+											"type": [
+												"number",
+												"string"
+											]
+										},
+										"orderUid": {
+											"type": "string"
+										},
+										"ordered": {
+											"type": "string"
+										},
+										"pharmacistName": {
+											"type": "string"
+										},
+										"pharmacistUid": {
+											"type": "string"
+										},
+										"prescriptionId": {
+											"type": [
+												"number",
+												"string"
+											]
+										},
+										"providerName": {
+											"type": "string"
+										},
+										"providerUid": {
+											"type": "string"
+										},
+										"quantityOrdered": {
+											"type": "string"
+										},
+										"summary": {
+											"type": "string"
+										},
+										"vaRouting": {
+											"type": "string"
+										}
+									}
+								}
+							},
+							"overallStart": {
+								"type": "string"
+							},
+							"overallStop": {
+								"type": "string"
+							},
+							"patientInstruction": {
+								"type": "string"
+							},
+							"pid": {
+								"type": "string"
+							},
+							"productFormCode": {
+								"type": "string"
+							},
+							"productFormName": {
+								"type": "string"
+							},
+							"products": {
+								"type": "array",
+								"items": {
+									"type": "object",
+									"required": [
+										"summary",
+										"suppliedName"
+									],
+									"properties": {
+										"drugClassCode": {
+											"type": "string"
+										},
+										"drugClassName": {
+											"type": "string"
+										},
+										"ingredientCode": {
+											"type": "string"
+										},
+										"ingredientCodeName": {
+											"type": "string"
+										},
+										"ingredientName": {
+											"type": "string"
+										},
+										"ingredientRXNCode": {
+											"type": "string"
+										},
+										"ingredientRole": {
+											"type": "string"
+										},
+										"strength": {
+											"type": "string"
+										},
+										"summary": {
+											"type": "string"
+										},
+										"suppliedCode": {
+											"type": "string"
+										},
+										"suppliedName": {
+											"type": "string"
+										}
+									}
+								}
+							},
+							"qualifiedName": {
+								"type": "string"
+							},
+							"recent": {
+								"type": "boolean"
+							},
+							"rxncodes": {
+								"type": "array",
+								"items": {
+									"type": "string"
+								}
+							},
+							"sig": {
+								"type": "string"
+							},
+							"stampTime": {
+								"type": "string"
+							},
+							"stopped": {
+								"type": "string"
+							},
+							"summary": {
+								"type": "string"
+							},
+							"supply": {
+								"type": "boolean"
+							},
+							"type": {
+								"type": "string"
+							},
+							"uid": {
+								"type": "string"
+							},
+							"units": {
+								"type": "string"
+							},
+							"vaStatus": {
+								"type": "string"
+							},
+							"vaType": {
+								"type": "string"
+							}
+						}
+					}
+				},
+				"itemsPerPage": {
+					"type": "integer"
+				},
+				"pageIndex": {
+					"type": "integer"
+				},
+				"startIndex": {
+					"type": "integer"
+				},
+				"totalItems": {
+					"type": "integer"
+				},
+				"totalPages": {
+					"type": "integer"
+				},
+				"updated": {
+					"type": "integer"
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

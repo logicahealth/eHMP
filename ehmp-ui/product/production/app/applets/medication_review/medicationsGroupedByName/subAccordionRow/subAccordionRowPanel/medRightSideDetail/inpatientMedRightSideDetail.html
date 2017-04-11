@@ -1,0 +1,86 @@
+<div class="col-sm-12 dropShadow">
+    <div class="col-sm-12 left-padding-no">
+        <div class="col-sm-9 left-padding-no right-padding-no">
+            <h3 class="capitalize">{{name}} {{strength}}</h3>
+        </div>
+        <div class="col-sm-3 left-padding-no right-padding-no">
+            <h3 class="detailStatus capitalize">{{modifiedVaStatus}}</h3>
+        </div>
+    </div>
+    <div class="col-sm-12 left-padding-no">
+        <p>{{computedSig}}</p>
+    </div>
+    <div class="col-sm-12 left-padding-no bottom-padding-sm">
+        <div class="bottom-border-grey-light"><b>Order Details</b></div>
+    </div>
+    <div class="col-sm-12 order-info-line left-padding-no bottom-padding-sm">
+        <div class="col-sm-3 order-info left-padding-no">
+            <p class="labelStyleColor">Ordering Provider</p>
+            {{#each orders}}
+            <p>{{providerName}} on</p>
+            <p>{{formatDate ordered "MM/DD/YYYY HH:mm"}}</p>
+            {{/each}}
+        </div>
+        <div class="col-sm-3 order-info">
+            <p class="labelStyleColor">Ordering Location</p>
+            {{#each orders}}
+            <p>{{locationName}}</p>
+            {{/each}}
+        </div>
+        <div class="col-sm-3 order-info">
+            <p class="labelStyleColor">Pharmacist</p>
+            {{#each orders}}
+            <p>{{pharmacistName}}</p>
+            {{/each}}
+        </div>
+        <div class="col-sm-3 order-info">
+            <p class="labelStyleColor">Order Text</p>
+            <p class="capitalize">{{name}} {{strength}}</p>
+        </div>
+    </div>
+    <div class="col-sm-12 order-info-line left-padding-no bottom-padding-sm">
+        <div class="col-sm-3 order-info left-padding-no">
+            <p class="labelStyleColor">Start Date/Time</p>
+            <p>{{formatDate overallStart "MM/DD/YYYY HH:mm"}}</p>
+        </div>
+        <div class="col-sm-3 order-info">
+            <p class="labelStyleColor">Stop Date/Time</p>
+            {{#if isDiscontinued }}<p>{{formatDate stopped "MM/DD/YYYY HH:mm"}}</p> {{/if}}
+            {{#if showExpiredDate }}<p>({{expireText}} {{formatDate overallStop "MM/DD/YYYY HH:mm"}})</p>{{/if}}
+        </div>
+        <div class="col-sm-3 order-info">
+            <p class="labelStyleColor">Order Number</p>
+            <p>#{{slicedOrderUid}}</p>
+        </div>
+    </div>
+    <div class="col-sm-12 fillHx left-padding-no bottom-padding-sm">
+        <div class="col-sm-12 bottom-border-grey-light left-padding-no"><b>Administration History</b></div>
+        <div class="col-sm-6 left-padding-no">
+            <div>Scheduled Times</div>
+            {{#each dosages}}
+            <p>{{adminTimes}}</p>
+            {{/each}}
+        </div>
+        <div class="col-sm-6">
+            <p>Administration Event Times</p>
+            {{#if administrations}}
+            <table class="table">
+                {{#each administrations}}
+                <tr>
+                    <td class="fillColumn">{{formatDate dateTime "MM/DD/YYYY HH:mm"}}</td>
+                    <td class="fillColumn">{{status}}</td>
+                </tr>
+                {{/each}}
+            </table>
+            {{else}}
+            <p>No Administration Events</p>
+            {{/if}}
+        </div>
+    </div>
+</div>
+</div>
+<div class="col-sm-12 footerBox">
+    <!--  <button type="button" class="btn btn-default">Discontinue</button>
+    <button type="button" class="btn btn-default">Renew</button>
+    <button type="button" class="btn btn-default">Close</button> -->
+</div>

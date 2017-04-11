@@ -1,0 +1,17 @@
+{
+  "name": "MockDODAdaptorMapper",
+  "version": "0.0.0",
+  "description": "Maps BDA payloads from v2 to v3 and v4 for the MockDoDAdaptor",
+  "main": "v2Tov3NodeJSMapper/Mapper.js",
+  "dependencies": {
+    "jsonfile": "^2.2.1",
+    "moment": "^2.10.6"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "private": true
+}

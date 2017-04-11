@@ -1,0 +1,42 @@
+{
+	"parameters": {
+		"fields": {
+			"name": "fields",
+			"paramType": "query",
+			"type": "string",
+			"values": [
+			]
+		},
+		"forcedSite": {
+			"name": "forcedSite",
+			"paramType": "query",
+			"type": "string",
+			"values": [
+			]
+		},
+		"immediate": {
+			"name": "immediate",
+			"paramType": "query",
+			"type": "boolean",
+			"values": [
+			]
+		},
+		"pid": {
+			"name": "pid",
+			"paramType": "query",
+			"required": true,
+			"type": "string",
+			"values": [
+			]
+		},
+		"prioritySite": {
+			"name": "prioritySite",
+			"paramType": "query",
+			"type": "string",
+			"values": [
+			]
+		}
+	},
+	"schema": {
+	}
+}

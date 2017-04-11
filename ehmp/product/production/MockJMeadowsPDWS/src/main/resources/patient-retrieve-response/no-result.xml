@@ -1,0 +1,69 @@
+<S:Envelope xmlns:S="http://schemas.xmlsoap.org/soap/envelope/">
+    <S:Body>
+        <PRPA_IN201306UV02 ITSVersion="XML_1.0" xmlns="urn:hl7-org:v3">
+            <id root="2.16.840.1.113883.3.2017.11.100.3" extension="4a8c93a7-371b-45c7-bc42-da656dc580d3"/>
+            <creationTime value="20150326132633"/>
+            <versionCode code="V3PR1"/>
+            <interactionId root="2.16.840.1.113883.1.6" extension="PRPA_IN201306UV02"/>
+            <processingCode code="T"/>
+            <processingModeCode code="T"/>
+            <acceptAckCode code="NE"/>
+            <receiver typeCode="RCV">
+                <device classCode="DEV" determinerCode="INSTANCE">
+                    <id root="2.16.840.1.113883.3.2017.11.7" extension="402861"/>
+                    <asAgent classCode="AGNT">
+                        <representedOrganization classCode="ORG" determinerCode="INSTANCE">
+                            <id root="2.16.840.1.113883.4.349" extension="451"/>
+                        </representedOrganization>
+                    </asAgent>
+                </device>
+            </receiver>
+            <sender typeCode="SND">
+                <device classCode="DEV" determinerCode="INSTANCE">
+                    <id root="2.16.840.1.113883.3.2017.11.7"/>
+                    <telecom value="https://pkict.dmdc.osd.mil/pdws/EntityPatientDiscovery"/>
+                    <asAgent classCode="AGNT">
+                        <representedOrganization classCode="ORG" determinerCode="INSTANCE">
+                            <id root="2.16.840.1.113883.3.2017.11.4"/>
+                        </representedOrganization>
+                    </asAgent>
+                </device>
+            </sender>
+            <acknowledgement>
+                <typeCode code="AE"/>
+                <targetMessage>
+                    <id root="2.16.840.1.113883.3.2017" extension="DMDC"/>
+                </targetMessage>
+                <acknowledgementDetail typeCode="E">
+                    <code code="PNRETRIEVE200001" codeSystem="2.16.840.1.113883.3.2017.11.6.3" displayName="Person Retrieve not found"/>
+                    <text>Person Not Found based on the identifier used (EDI_PI, DBN) for this retrieve person operation. The assigning authority indicates a typo in this Id entry. Verify the id entered and try again.</text>
+                </acknowledgementDetail>
+            </acknowledgement>
+            <controlActProcess classCode="CACT" moodCode="EVN">
+                <code code="PRPA_TE201306UV02" codeSystem="2.16.840.1.113883.1.6"/>
+                <effectiveTime>
+                    <low inclusive="true" value="20150326"/>
+                    <high inclusive="true" value="20150326"/>
+                </effectiveTime>
+                <queryAck>
+                    <queryId root="2.16.840.1.113883.3.2017" extension="333334433"/>
+                    <queryResponseCode code="QE"/>
+                    <resultTotalQuantity value="0"/>
+                    <resultCurrentQuantity value="0"/>
+                    <resultRemainingQuantity value="0"/>
+                </queryAck>
+                <queryByParameter>
+                    <queryId root="2.16.840.1.113883.3.2017" extension="333334433"/>
+                    <statusCode code="new"/>
+                    <initialQuantity value="10"/>
+                    <parameterList>
+                        <livingSubjectId>
+                            <value root="2.16.840.1.113883.3.42.10001.100001.12" extension="1606123456"/>
+                            <semanticsText>LivingSubject.id</semanticsText>
+                        </livingSubjectId>
+                    </parameterList>
+                </queryByParameter>
+            </controlActProcess>
+        </PRPA_IN201306UV02>
+    </S:Body>
+</S:Envelope>

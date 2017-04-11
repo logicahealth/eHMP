@@ -1,0 +1,173 @@
+{
+  "queryComplete": true,
+  "statusList": [
+    {
+      "partner": {
+        "partnerIdentifier": "2.16.840.1.113883.3.42.126.100001.13",
+        "partnerName": "ahlta",
+        "partnerType": "DOD"
+      },
+      "partnerStatus": "SUCCESS",
+      "expectedCount": 2,
+      "receivedCount": 2
+    }
+  ],
+  "dataList": {
+    "medicationOrders": [
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000294"
+        },
+        "enteredBy": null,
+        "enteredDate": null,
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "29305-0"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL"
+        },
+        "orderable": [
+          {
+            "display": "IBUPROFEN 100MG/5ML SUSP ($.30/120ML)--P",
+            "code": "3000268424",
+            "system": "2.16.840.1.113883.3.42.126.100001.16",
+            "primary": true
+          }
+        ],
+        "date": {
+          "start": "2013-11-18T10:08:00",
+          "end": "2013-11-18T10:08:00"
+        },
+        "orderNumber": {
+          "id": "131118-00002"
+        },
+        "orderingProvider": {
+          "name": "BHIE, USERONE"
+        },
+        "status": [],
+        "actionCode": "DC",
+        "childResistant": true,
+        "deliveryLocation": null,
+        "dispensingLocation": null,
+        "alternateDrugText": "CHILDREN'S MOTRIN 100 MG/5 ML",
+        "duration": "D6",
+        "endDate": {
+          "start": "2013-11-24T10:07:00",
+          "end": "2013-11-24T10:07:00"
+        },
+        "enteringLocation": {
+          "name": "Family Practice Clinic"
+        },
+        "giveAmount": "100",
+        "giveFormDescription": "SUSPENSION",
+        "giveUnits": [],
+        "intervalPattern": null,
+        "interval": null,
+        "numberOfRefills": "0",
+        "comment": null,
+        "priorOrderNumber": null,
+        "priority": "ROUTINE",
+        "quantity": "120",
+        "requestedDispenseAmount": "120",
+        "requestedGiveTimeUnit": null,
+        "routeDescription": "PO",
+        "sig": "TAKE ONE TEASPOONFUL BY MOUTH EVERY 6-8 HOURS WITH FOOD AS NEEDED FOR HIGH FEVER OR PAIN",
+        "startDate": {
+          "start": "2013-11-18T10:08:00",
+          "end": "2013-11-18T10:08:00"
+        },
+        "verifiedBy": null
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000296"
+        },
+        "enteredBy": null,
+        "enteredDate": null,
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "29305-0"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL"
+        },
+        "orderable": [
+          {
+            "display": "ACETAMINOPHEN 325MG TAB--PO 325MG TAB",
+            "code": "3000261885",
+            "system": "2.16.840.1.113883.3.42.126.100001.16",
+            "primary": true
+          }
+        ],
+        "date": {
+          "start": "2013-11-18T10:07:00",
+          "end": "2013-11-18T10:07:00"
+        },
+        "orderNumber": {
+          "id": "131118-00001"
+        },
+        "orderingProvider": {
+          "name": "BHIE, USERONE"
+        },
+        "status": [],
+        "actionCode": "DC",
+        "childResistant": true,
+        "deliveryLocation": null,
+        "dispensingLocation": null,
+        "alternateDrugText": "MAPAP 325 MG TABLET",
+        "duration": "D3",
+        "endDate": {
+          "start": "2013-11-21T10:07:00",
+          "end": "2013-11-21T10:07:00"
+        },
+        "enteringLocation": {
+          "name": "Family Practice Clinic"
+        },
+        "giveAmount": "325",
+        "giveFormDescription": "TABLET",
+        "giveUnits": [],
+        "intervalPattern": null,
+        "interval": null,
+        "numberOfRefills": "0",
+        "comment": null,
+        "priorOrderNumber": null,
+        "priority": "ROUTINE",
+        "quantity": "24",
+        "requestedDispenseAmount": "24",
+        "requestedGiveTimeUnit": null,
+        "routeDescription": "PO",
+        "sig": "TAKE 1 TABLET BY MOUTH EVERY 6 HOURS AS NEEDED FOR HEADACHE/FEVER/PAIN OR AS DIRECTED",
+        "startDate": {
+          "start": "2013-11-18T10:08:00",
+          "end": "2013-11-18T10:08:00"
+        },
+        "verifiedBy": null
+      }
+    ]
+  }
+}

@@ -1,0 +1,34 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "Populates service connection & rated disabilities for a patient",
+	"description": "",
+	"type": "object",
+	"required": [
+		"status",
+		"data"
+	],
+	"properties": {
+		"data": {
+			"type": "object",
+			"required": [
+				"scPercent",
+				"serviceConnected",
+				"disability"
+			],
+			"properties": {
+				"disability": {
+					"type": "string"
+				},
+				"scPercent": {
+					"type": "string"
+				},
+				"serviceConnected": {
+					"type": "string"
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

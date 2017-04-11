@@ -1,0 +1,615 @@
+{
+  "queryComplete": true,
+  "statusList": [
+    {
+      "partner": {
+        "partnerIdentifier": "2.16.840.1.113883.3.42.126.100001.13",
+        "partnerName": "ahlta",
+        "partnerType": "DOD"
+      },
+      "partnerStatus": "SUCCESS",
+      "expectedCount": 10,
+      "receivedCount": 10
+    }
+  ],
+  "dataList": {
+    "immunizations": [
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000001602"
+        },
+        "enteredBy": null,
+        "enteredDate": null,
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "39235-7"
+          }
+        ],
+        "facility": null,
+        "manufacturer": [
+          {
+            "display": "Aviron",
+            "code": "AVI",
+            "primary": true
+          }
+        ],
+        "dosage": {
+          "quantity": ".25",
+          "raw": ".25 mL",
+          "units": [
+            {
+              "display": "mL",
+              "primary": true
+            }
+          ]
+        },
+        "lotNumber": "A995632",
+        "vaccine": [
+          {
+            "code": "16",
+            "display": "Influenza",
+            "primary": true
+          }
+        ],
+        "nextDueDate": null,
+        "provider": {
+          "name": "AHLTADTE, ATTEND"
+        },
+        "date": {
+          "start": "2013-10-24T00:00:00",
+          "end": "2013-10-24T00:00:00"
+        },
+        "negationReason": "None",
+        "seriesInfo": "1"
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000001603"
+        },
+        "enteredBy": null,
+        "enteredDate": null,
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "39235-7"
+          }
+        ],
+        "facility": null,
+        "manufacturer": [
+          {
+            "display": "Chiron",
+            "code": "CHI",
+            "primary": true
+          }
+        ],
+        "dosage": {
+          "quantity": ".25",
+          "raw": ".25 mL",
+          "units": [
+            {
+              "display": "mL",
+              "primary": true
+            }
+          ]
+        },
+        "lotNumber": "2233",
+        "vaccine": [
+          {
+            "code": "03",
+            "display": "MMR",
+            "primary": true
+          }
+        ],
+        "nextDueDate": {
+          "start": "2013-11-21T00:00:00",
+          "end": "2013-11-21T00:00:00"
+        },
+        "provider": {
+          "name": "AHLTADTE, ATTEND"
+        },
+        "date": {
+          "start": "2013-10-24T00:00:00",
+          "end": "2013-10-24T00:00:00"
+        },
+        "negationReason": "None",
+        "seriesInfo": "1"
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000001604"
+        },
+        "enteredBy": null,
+        "enteredDate": null,
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "39235-7"
+          }
+        ],
+        "facility": null,
+        "manufacturer": [
+          {
+            "display": "Bayer",
+            "code": "BAY",
+            "primary": true
+          }
+        ],
+        "dosage": {
+          "quantity": ".5",
+          "raw": ".5 mL",
+          "units": [
+            {
+              "display": "mL",
+              "primary": true
+            }
+          ]
+        },
+        "lotNumber": "afsf",
+        "vaccine": [
+          {
+            "code": "74",
+            "display": "Rotavirus",
+            "primary": true
+          }
+        ],
+        "nextDueDate": null,
+        "provider": {
+          "name": "AHLTADTE, ATTEND"
+        },
+        "date": {
+          "start": "2013-10-24T00:00:00",
+          "end": "2013-10-24T00:00:00"
+        },
+        "negationReason": "None",
+        "seriesInfo": "1"
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000001605"
+        },
+        "enteredBy": null,
+        "enteredDate": null,
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "39235-7"
+          }
+        ],
+        "facility": null,
+        "manufacturer": [
+          {
+            "display": "Abbott",
+            "code": "AB",
+            "primary": true
+          }
+        ],
+        "dosage": {
+          "quantity": ".25",
+          "raw": ".25 mL",
+          "units": [
+            {
+              "display": "mL",
+              "primary": true
+            }
+          ]
+        },
+        "lotNumber": "123abc",
+        "vaccine": [
+          {
+            "code": "09",
+            "display": "Td",
+            "primary": true
+          }
+        ],
+        "nextDueDate": null,
+        "provider": {
+          "name": "AHLTADTE, ATTEND"
+        },
+        "date": {
+          "start": "2013-10-24T00:00:00",
+          "end": "2013-10-24T00:00:00"
+        },
+        "negationReason": "None",
+        "seriesInfo": "1"
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000001606"
+        },
+        "enteredBy": null,
+        "enteredDate": null,
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "39235-7"
+          }
+        ],
+        "facility": null,
+        "manufacturer": [
+          {
+            "display": "Abbott",
+            "code": "AB",
+            "primary": true
+          }
+        ],
+        "dosage": {
+          "quantity": "2.0",
+          "raw": "2.0 mL",
+          "units": [
+            {
+              "display": "mL",
+              "primary": true
+            }
+          ]
+        },
+        "lotNumber": "12345",
+        "vaccine": [
+          {
+            "code": "37",
+            "display": "Yellow Fever",
+            "primary": true
+          }
+        ],
+        "nextDueDate": null,
+        "provider": {
+          "name": "AHLTADTE, ATTEND"
+        },
+        "date": {
+          "start": "2013-10-24T00:00:00",
+          "end": "2013-10-24T00:00:00"
+        },
+        "negationReason": "None",
+        "seriesInfo": "1"
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000001607"
+        },
+        "enteredBy": null,
+        "enteredDate": null,
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "39235-7"
+          }
+        ],
+        "facility": null,
+        "manufacturer": [
+          {
+            "display": "CSL Biotherapies, Inc.",
+            "code": "CSL",
+            "primary": true
+          }
+        ],
+        "dosage": {
+          "quantity": ".25",
+          "raw": ".25 mL",
+          "units": [
+            {
+              "display": "mL",
+              "primary": true
+            }
+          ]
+        },
+        "lotNumber": "fasf",
+        "vaccine": [
+          {
+            "code": "35",
+            "display": "Tetanus toxoid",
+            "primary": true
+          }
+        ],
+        "nextDueDate": null,
+        "provider": {
+          "name": "AHLTADTE, ATTEND"
+        },
+        "date": {
+          "start": "2013-10-24T00:00:00",
+          "end": "2013-10-24T00:00:00"
+        },
+        "negationReason": "None",
+        "seriesInfo": "1"
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000001608"
+        },
+        "enteredBy": null,
+        "enteredDate": null,
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "39235-7"
+          }
+        ],
+        "facility": null,
+        "manufacturer": [
+          {
+            "display": "Berna Products Corp",
+            "code": "BPC",
+            "primary": true
+          }
+        ],
+        "dosage": {
+          "quantity": ".25",
+          "raw": ".25 mL",
+          "units": [
+            {
+              "display": "mL",
+              "primary": true
+            }
+          ]
+        },
+        "lotNumber": "asafa",
+        "vaccine": [
+          {
+            "code": "25",
+            "display": "Typhoid - Oral",
+            "primary": true
+          }
+        ],
+        "nextDueDate": null,
+        "provider": {
+          "name": "AHLTADTE, ATTEND"
+        },
+        "date": {
+          "start": "2013-10-24T00:00:00",
+          "end": "2013-10-24T00:00:00"
+        },
+        "negationReason": "None",
+        "seriesInfo": "1"
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000001609"
+        },
+        "enteredBy": null,
+        "enteredDate": null,
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "39235-7"
+          }
+        ],
+        "facility": null,
+        "manufacturer": [
+          {
+            "display": "Greer",
+            "code": "GRE",
+            "primary": true
+          }
+        ],
+        "dosage": {
+          "quantity": ".5",
+          "raw": ".5 mL",
+          "units": [
+            {
+              "display": "mL",
+              "primary": true
+            }
+          ]
+        },
+        "lotNumber": "35235",
+        "vaccine": [
+          {
+            "code": "79",
+            "display": "Vaccinia Immune Globulin",
+            "primary": true
+          }
+        ],
+        "nextDueDate": null,
+        "provider": {
+          "name": "AHLTADTE, ATTEND"
+        },
+        "date": {
+          "start": "2013-10-24T00:00:00",
+          "end": "2013-10-24T00:00:00"
+        },
+        "negationReason": "None",
+        "seriesInfo": "1"
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000001610"
+        },
+        "enteredBy": null,
+        "enteredDate": null,
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "39235-7"
+          }
+        ],
+        "facility": null,
+        "manufacturer": [
+          {
+            "display": "Chiron",
+            "code": "CHI",
+            "primary": true
+          }
+        ],
+        "dosage": {
+          "quantity": ".5",
+          "raw": ".5 mL",
+          "units": [
+            {
+              "display": "mL",
+              "primary": true
+            }
+          ]
+        },
+        "lotNumber": "123",
+        "vaccine": [
+          {
+            "code": "21",
+            "display": "Varicella",
+            "primary": true
+          }
+        ],
+        "nextDueDate": {
+          "start": "2014-10-24T00:00:00",
+          "end": "2014-10-24T00:00:00"
+        },
+        "provider": {
+          "name": "AHLTADTE, ATTEND"
+        },
+        "date": {
+          "start": "2013-10-24T00:00:00",
+          "end": "2013-10-24T00:00:00"
+        },
+        "negationReason": "None",
+        "seriesInfo": "1"
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000001611"
+        },
+        "enteredBy": null,
+        "enteredDate": null,
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "39235-7"
+          }
+        ],
+        "facility": null,
+        "manufacturer": [
+          {
+            "display": "Barr Laboratories",
+            "code": "BRR",
+            "primary": true
+          }
+        ],
+        "dosage": {
+          "quantity": "2.0",
+          "raw": "2.0 mL",
+          "units": [
+            {
+              "display": "mL",
+              "primary": true
+            }
+          ]
+        },
+        "lotNumber": "sd",
+        "vaccine": [
+          {
+            "code": "115",
+            "display": "Tdap",
+            "primary": true
+          }
+        ],
+        "nextDueDate": null,
+        "provider": {
+          "name": "AHLTADTE, ATTEND"
+        },
+        "date": {
+          "start": "2013-10-24T00:00:00",
+          "end": "2013-10-24T00:00:00"
+        },
+        "negationReason": "None",
+        "seriesInfo": "1"
+      }
+    ]
+  }
+}

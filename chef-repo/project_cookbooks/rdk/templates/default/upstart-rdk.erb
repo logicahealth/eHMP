@@ -1,0 +1,15 @@
+description "<%= @name %> process"
+
+start on runlevel [<%= @run_level %>]
+
+respawn
+respawn limit 5 30
+
+script
+  cd <%= node[:rdk][:home_dir] %>
+<% if @dev_deploy %>
+  exec sh ./dev-run.sh > <%= @log_directory %>/<%= @name %>_stdout.log 2> <%= @log_directory %>/<%= @name %>_stderr.log
+<% else %>
+  exec /usr/local/bin/node <%= node[:rdk][:fetch][:deploy_path] %> > <%= @log_directory %>/<%= @name %>_stdout.log 2> <%= @log_directory %>/<%= @name %>_stderr.log
+<% end %>
+end script

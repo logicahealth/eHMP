@@ -1,0 +1,9 @@
+#!/bin/sh
+exec 2>&1
+cd /var/lib/jenkins
+exec chpst -u jenkins \
+env HOME=/var/lib/jenkins \
+JENKINS_HOME=/var/lib/jenkins \
+java \
+-jar /var/lib/jenkins/slave.jar \
+-auth <%= @jenkins_username %>:<%= @jenkins_password %> -jnlpCredentials <%= @jenkins_username %>:<%= @jenkins_password %> -jnlpUrl https://build.vistacore.us/computer/<%= @slave_name %>/slave-agent.jnlp

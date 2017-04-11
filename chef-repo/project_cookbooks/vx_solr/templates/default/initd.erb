@@ -1,0 +1,51 @@
+#!/bin/bash
+
+### BEGIN INIT INFO
+# Provides:          solr
+# Required-Start:
+# Required-Stop:
+# Default-Start:     3 5
+# Default-Stop:      0 1 2 6
+# Short-Description: init script for solr search
+# Description:       init script for solr search
+### END INIT INFO
+
+# source function library
+. /etc/rc.d/init.d/functions
+
+LOG_FILE=<%= @log_file %>
+
+NAME="Solr"
+
+DESC="start/stop Solr Server"
+
+start() {
+  action "Starting ${NAME}: " <%= node[:vx_solr][:bin_solr][:script] %> start \
+  <% unless node[:vx_solr][:bin_solr][:jvm_params].nil? then %> -a "<%= node[:vx_solr][:bin_solr][:jvm_params] %>" <% end %> \
+  <% unless node[:vx_solr][:bin_solr][:memory].nil? then %> -m "<%= node[:vx_solr][:bin_solr][:memory] %>" <% end %>
+}
+
+stop() {
+  action "Stopping ${NAME}: " <%= node[:vx_solr][:bin_solr][:script] %> stop
+}
+
+case $1 in
+  start)
+    start
+    ;;
+  stop)
+    stop
+    ;;
+  restart)
+    stop
+    sleep 2
+    start
+    ;;
+  status)
+    <%= node[:vx_solr][:bin_solr][:script] %> status | grep Found
+    ;;
+  *)
+    echo "Usage: $0 {start|stop|restart}"
+    exit 3
+    ;;
+esac

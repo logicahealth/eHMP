@@ -1,0 +1,76 @@
+.control.multiselectSideBySide-control {
+    $error-color: #a94442;
+    &.has-error {
+        .available-region .faux-table {
+            border-left: 1px solid $error-color;
+        }
+        .selected-region .faux-table {
+            border-right: 1px solid $error-color;
+            .form-control {
+                border-color: #ccc;
+            }
+        }
+        .header {
+            border-top-color: $error-color;
+        }
+        .body {
+            border-bottom-color: $error-color;
+        }
+    }
+    .table-cell {
+        min-height: 23px;
+        &.text-right {
+            button {
+                text-align: right;
+            }
+        }
+    }
+    .available-region {
+        .msbs-input {
+            background-color: $pure-white;
+            .control {
+                position: relative;
+                .filter {
+                    padding-right: 20px;
+                }
+                .loading {
+                    position: absolute;
+                    top: 4px;
+                    right: 4px;
+                }
+            }
+        }
+        .body.scrolling-content {
+            height: 156px;
+        }
+    }
+    .selected-region {
+        .body.scrolling-content {
+            height: calc(156px + 32px);
+        }
+    }
+    .total-selected-input {
+        height: 20px;
+        width: 0px;
+        opacity: 0;
+        margin-left: -20px;
+    }
+}
+
+
+/* Medium devices (desktops, 992px and up) */
+
+@media (min-width: 992px) {
+    .control.multiselectSideBySide-control {
+        .available-region {
+            &[class*="col-"] {
+                padding-right: 0;
+            }
+        }
+        .selected-region {
+            &[class*="col-"] {
+                padding-left: 0;
+            }
+        }
+    }
+}

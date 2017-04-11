@@ -1,0 +1,25 @@
+<form action="#" class="form-container">
+	<div title="Global Search Input">
+		<h4 class="title">Nationwide Search</h4>
+		<p class="font-size-12">Enter the patient's last name and at least one other field to enable search.</p>
+		<div class="form-inline" id="globalSearchInputGroup">
+			<div class="control form-group">
+				<label for="globalSearchLastName" class="sr-only">Last Name</label>
+			    <input type="text" autocomplete="off" class="form-control" id="globalSearchLastName" placeholder="Last Name (required)" title="Please enter in patient's last name" value="{{globalSearchParameters.name.last}}" aria-required="true" />
+			</div>
+			<div class="control form-group">
+				<label for="globalSearchFirstName" class="sr-only">First Name</label>
+		    	<input type="text" autocomplete="off" class="form-control" id="globalSearchFirstName" onfocus="this.value = this.value;" placeholder="First Name" title="Please enter in patient's first name" value="{{globalSearchParameters.name.first}}" />
+		    </div>
+		    <div class="control form-group">
+				<label for="globalSearchDob" class="sr-only">Date of Birth</label>
+		    	<input type="text" autocomplete="off" class="form-control" id="globalSearchDob" placeholder="DOB: MM/DD/YYYY" value="{{globalSearchParameters.date.birth}}" title="Please enter in patient's date of birth in the format of MM/DD/YYYY" />
+		    </div>
+		    <div class="control form-group">
+				<label for="globalSearchSsn" class="sr-only">SSN</label>
+		    	<input type="text" autocomplete="off" class="form-control" id="globalSearchSsn" placeholder="SSN: ###-##-####" value="{{globalSearchParameters.ssn}}" title="Please enter in patient's 9 digit social security number without dashes" />
+		    </div>
+		    <button type="button" id="globalSearchButton" class="btn btn-primary" title="Press enter to search and then press ALT + U to view results" disabled="disabled">Search</button>
+		</div>
+	</div>
+</form>

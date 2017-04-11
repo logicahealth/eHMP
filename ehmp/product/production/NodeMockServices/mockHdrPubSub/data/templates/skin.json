@@ -1,0 +1,21 @@
+{
+  "collection": "skin",
+  "pid": "84F0;1",
+  "systemId": "84F0",
+  "localId": "1",
+  "seq": 1,
+  "total": 1,
+  "object": {
+    "lastUpdateTime": 20140409083856,
+    "encounterName": "0May 19, 1997",
+    "encounterUid": "urn:va:visit:ABCD:262:386",
+    "entered": 199705190800,
+    "facilityCode": 561,
+    "facilityName": "New Jersey HCS",
+    "localId": 1,
+    "name": "PPD",
+    "reading": 10,
+    "result": "NEGATIVE",
+    "uid": "urn:va:skin:ABCD:262:1"
+  }
+}

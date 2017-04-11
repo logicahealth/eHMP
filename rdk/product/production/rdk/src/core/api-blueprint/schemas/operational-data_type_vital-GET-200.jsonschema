@@ -1,0 +1,108 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "Get a list of valid names by type",
+	"description": "Returns a list of valid names of requested type",
+	"type": "object",
+	"required": [
+		"apiVersion",
+		"data",
+		"status"
+	],
+	"properties": {
+		"apiVersion": {
+			"type": "string"
+		},
+		"data": {
+			"type": "object",
+			"required": [
+				"updated",
+				"totalItems",
+				"currentItemCount",
+				"items"
+			],
+			"properties": {
+				"currentItemCount": {
+					"type": "integer"
+				},
+				"items": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"required": [
+							"abbreviation",
+							"effective",
+							"localId",
+							"masterVuid",
+							"name",
+							"pce",
+							"rate",
+							"stampTime",
+							"status",
+							"uid",
+							"vuid"
+						],
+						"properties": {
+							"abbreviation": {
+								"type": "string"
+							},
+							"effective": {
+								"type": [
+									"integer",
+									"string"
+								]
+							},
+							"localId": {
+								"type": "integer"
+							},
+							"masterVuid": {
+								"type": "string"
+							},
+							"name": {
+								"type": "string"
+							},
+							"pce": {
+								"type": "string"
+							},
+							"rate": {
+								"type": "string"
+							},
+							"stampTime": {
+								"type": "integer"
+							},
+							"status": {
+								"type": "string"
+							},
+							"uid": {
+								"type": "string"
+							},
+							"vuid": {
+								"type": "string"
+							}
+						}
+					}
+				},
+				"itemsPerPage": {
+					"type": "integer"
+				},
+				"pageIndex": {
+					"type": "integer"
+				},
+				"startIndex": {
+					"type": "integer"
+				},
+				"totalItems": {
+					"type": "integer"
+				},
+				"totalPages": {
+					"type": "integer"
+				},
+				"updated": {
+					"type": "integer"
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

@@ -1,0 +1,24 @@
+{
+	"parameters": {
+	},
+	"schema": {
+		"$schema": "http://json-schema.org/draft-04/schema#",
+		"properties": {
+			"accessCode": {
+				"type": "string"
+			},
+			"site": {
+				"type": "string"
+			},
+			"verifyCode": {
+				"type": "string"
+			}
+		},
+		"required": [
+			"accessCode",
+			"verifyCode",
+			"site"
+		],
+		"type": "object"
+	}
+}

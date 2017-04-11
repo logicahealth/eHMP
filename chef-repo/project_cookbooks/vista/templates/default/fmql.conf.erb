@@ -1,0 +1,49 @@
+
+
+<VirtualHost *:80 *:443>
+
+	ServerName <%= @params[:server_name] %>
+	ServerAlias <%= @params[:server_name] %>
+
+	# IMPORTANT: these settings must match your VistA/RPMS 
+	# - reload in Apache with every change
+	# - the user (access/verify) MUST have permission to use the FMQL RPC.
+	# - for VistA, set rpcBroker to "VistA"; RPMS, use "CIA"
+	# - rpcport is the port your VistA's broker listens on: 9201 for OpenVistA
+	SetEnv fmql.rpcbroker "<%= @params[:rpc_broker] %>"
+	SetEnv fmql.rpchost <%= @params[:rpc_host] %>
+	SetEnv fmql.rpcport <%= @params[:rpc_port] %>
+	SetEnv fmql.rpcaccess "<%= @params[:access_code] %>"
+	SetEnv fmql.rpcverify "<%= @params[:verify_code] %>"
+
+	# Trace problems in FMQL in this error log
+	LogLevel warn
+	ErrorLog <%= @params[:error_log] %>
+
+<ifmodule mod_rewrite.c>
+	RewriteEngine On
+	DocumentRoot <%= @params[:document_root] %>
+	RewriteRule ^/$ /rambler [R]
+	RewriteRule ^/rambler.* /fmRambler.html [L]
+	RewriteRule ^/schema.* /fmSchema.html [L]
+	RewriteRule ^/query.* /fmQuery.html [L]
+</IfModule>
+
+# in default CentOS apache, this section is replaced with 'WSGISocketPrefix /var/run/wsgi' in httpd.conf
+<IfModule mod_wsgi.c>
+	# Default setup:
+	# - Daemon mode isolates FMQL from the rest of Apache so it won't effect other apps. 
+	# - The following suits the default Apache Unix setup, prefork MPM
+	WSGIDaemonProcess fmql processes=5 threads=1 display-name=%{GROUP}.
+	WSGIProcessGroup fmql
+	WSGIScriptAlias /fmqlEP /usr/local/fmql/fmqlEP.wsgi
+	# Fedora also needs WSGISocketPrefix run/wsgi. See: http://code.google.com/p/modwsgi/wiki/ConfigurationIssues#Location_Of_UNIX_Sockets
+</IfModule>
+
+<IfModule mod_ssl.c>
+	SSLEngine on
+	SSLCertificateFile <%= @params[:ssl_cert_file] %>
+	SSLCertificateKeyFile <%= @params[:ssl_cert_key_file] %>
+</IfModule>
+
+</VirtualHost>

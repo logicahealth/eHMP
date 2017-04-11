@@ -1,0 +1,71 @@
+import templates.*
+
+buildscript {	
+    repositories {
+		ivy {
+			// 2013/03/20: The gradle apply script no longer adds classes to buildScript, this workaround ignores 
+			// the documented gradle-templates install guide and is necessary for creating custom gradle templates.
+			// see https://github.com/townsfolk/gradle-templates/issues/2
+			name = 'gradle_templates'
+			artifactPattern 'http://tellurianring.com/projects/gradle-plugins/[module]/[revision]/[artifact]-[revision].[ext]'
+			ivyPattern 'http://tellurianring.com/projects/gradle-plugins/[module]/[revision]/[artifact]-[revision].[ext]'
+		}
+    }
+	
+    dependencies {
+        classpath 'gradle-templates:gradle-templates:1.3'	
+    }			
+}
+
+task 'createOSGiProject' << {
+	group = 'gov.va.iehr'
+	description = 'Creates a new Gradle Java OSGi bundle project in a new directory named after your project.'
+
+	def props = project.properties
+	def projectName = props['newProjectName'] ?: templates.TemplatesPlugin.prompt('Project Name:')
+	if (projectName) {
+		def projectGroup = props['projectGroup'] ?: TemplatesPlugin.prompt('Group:', props['group'])
+		def projectVersion = props['projectVersion'] ?: TemplatesPlugin.prompt('Version:', '1.0')
+		createBaseProject(projectName)
+		ProjectTemplate.fromRoot(projectName) {
+			'build.gradle' template: '../infrastructure/gradle/templates/osgi/build.gradle.tmpl', projectGroup:projectGroup, projectVersion:projectVersion, projectName:projectName
+		}
+	} else {
+		println 'No project name provided.'
+	}
+}
+
+def createBaseProject(String path) {
+	ProjectTemplate.fromRoot(path) {
+		'src' {
+			'main' {
+				'java' {
+					'gov' {
+						'va' {
+							'iehr' {}
+						}
+					}
+				}
+				'resources' {}
+			}
+		}
+		'.gitignore' content: '''\
+				/bin/
+				/build/
+				/generated/
+				.project
+				.classpath
+			'''//, append: true
+
+	}
+	ProjectTemplate.fromRoot(path + '/src/test/') {
+		'java' {
+			'gov' {
+				'va' {
+					'iehr' {}
+				}
+			}
+		}
+		'resources' {}
+	}
+}

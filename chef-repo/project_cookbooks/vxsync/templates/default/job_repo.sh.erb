@@ -1,0 +1,1 @@
+beanstalkd -p <%= @options[:port] %> -V -z <%= @options[:max_file_size] %> > <%= @process_log %>

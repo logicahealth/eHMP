@@ -1,0 +1,39 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"type": "object",
+	"required": [
+		"data",
+		"status"
+	],
+	"properties": {
+		"data": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"required": [
+					"ien",
+					"typeOfImaging",
+					"abbreviation",
+					"ienDisplayGroup"
+				],
+				"properties": {
+					"abbreviation": {
+						"type": "string"
+					},
+					"ien": {
+						"type": "string"
+					},
+					"ienDisplayGroup": {
+						"type": "string"
+					},
+					"typeOfImaging": {
+						"type": "string"
+					}
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

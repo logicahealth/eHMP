@@ -1,0 +1,757 @@
+{
+    "data": {
+        "items": [
+            {
+                "facilityCode": "500",
+                "facilityMoniker": "TST1",
+                "facilityName": "Camp Master"
+            },
+            {
+                "facilityCode": "507",
+                "facilityMoniker": "TST2",
+                "facilityName": "Camp Bee"
+            },
+            {
+                "facilityCode": "DOD",
+                "facilityMoniker": "DOD",
+                "facilityName": "DoD"
+            },
+            {
+                "facilityCode": "CDS",
+                "facilityMoniker": "*VA",
+                "facilityName": "Remote VA"
+            },
+            {
+                "facilityCode": "400",
+                "facilityMoniker": "*VA",
+                "facilityName": "Remote VA"
+            },
+            {
+                "facilityCode": "PGD",
+                "facilityMoniker": "PGD",
+                "facilityName": "Patient Generated Data"
+            },
+            {
+                "facilityCode": "402",
+                "facilityMoniker": "TOG",
+                "facilityName": "Togus, ME"
+            },
+            {
+                "facilityCode": "405",
+                "facilityMoniker": "WRJ",
+                "facilityName": "White River Junction, VT"
+            },
+            {
+                "facilityCode": "518",
+                "facilityMoniker": "BED",
+                "facilityName": "Bedford, MA"
+            },
+            {
+                "facilityCode": "523",
+                "facilityMoniker": "BHS",
+                "facilityName": "Boston HCS"
+            },
+            {
+                "facilityCode": "608",
+                "facilityMoniker": "MAN",
+                "facilityName": "Manchester, NH"
+            },
+            {
+                "facilityCode": "631",
+                "facilityMoniker": "NHM",
+                "facilityName": "North Hampton, MA"
+            },
+            {
+                "facilityCode": "650",
+                "facilityMoniker": "PRO",
+                "facilityName": "Providence, RI"
+            },
+            {
+                "facilityCode": "689",
+                "facilityMoniker": "CON",
+                "facilityName": "Connecticut HCS"
+            },
+            {
+                "facilityCode": "528",
+                "facilityMoniker": "UNY",
+                "facilityName": "Upstate NY HCS"
+            },
+            {
+                "facilityCode": "526",
+                "facilityMoniker": "BRX",
+                "facilityName": "Bronx, NY"
+            },
+            {
+                "facilityCode": "561",
+                "facilityMoniker": "NJS",
+                "facilityName": "New Jersey HCS"
+            },
+            {
+                "facilityCode": "620",
+                "facilityMoniker": "HUV",
+                "facilityName": "Hudson Valley HCS"
+            },
+            {
+                "facilityCode": "630",
+                "facilityMoniker": "NYH",
+                "facilityName": "NY HCS"
+            },
+            {
+                "facilityCode": "632",
+                "facilityMoniker": "NOP",
+                "facilityName": "Northport, NY"
+            },
+            {
+                "facilityCode": "460",
+                "facilityMoniker": "WIM",
+                "facilityName": "Wilmington, DE"
+            },
+            {
+                "facilityCode": "503",
+                "facilityMoniker": "ALT",
+                "facilityName": "Altoona, PA"
+            },
+            {
+                "facilityCode": "529",
+                "facilityMoniker": "BUT",
+                "facilityName": "Butler, PA"
+            },
+            {
+                "facilityCode": "540",
+                "facilityMoniker": "CLA",
+                "facilityName": "Clarksburg, WV"
+            },
+            {
+                "facilityCode": "542",
+                "facilityMoniker": "COA",
+                "facilityName": "Coatesville, PA"
+            },
+            {
+                "facilityCode": "562",
+                "facilityMoniker": "ERI",
+                "facilityName": "Erie, PA"
+            },
+            {
+                "facilityCode": "595",
+                "facilityMoniker": "LEB",
+                "facilityName": "Lebanon, PA"
+            },
+            {
+                "facilityCode": "642",
+                "facilityMoniker": "PHI",
+                "facilityName": "Philadelphia, PA"
+            },
+            {
+                "facilityCode": "646",
+                "facilityMoniker": "PTB",
+                "facilityName": "Pittsburgh HCS"
+            },
+            {
+                "facilityCode": "693",
+                "facilityMoniker": "WBP",
+                "facilityName": "Wilkes Barre, PA"
+            },
+            {
+                "facilityCode": "512",
+                "facilityMoniker": "BAL",
+                "facilityName": "Maryland HCS"
+            },
+            {
+                "facilityCode": "613",
+                "facilityMoniker": "MWV",
+                "facilityName": "Martinsburg, WV"
+            },
+            {
+                "facilityCode": "688",
+                "facilityMoniker": "WAS",
+                "facilityName": "Washington, DC"
+            },
+            {
+                "facilityCode": "517",
+                "facilityMoniker": "BEC",
+                "facilityName": "Beckley, WV"
+            },
+            {
+                "facilityCode": "558",
+                "facilityMoniker": "DUR",
+                "facilityName": "Durham, NC"
+            },
+            {
+                "facilityCode": "565",
+                "facilityMoniker": "FNC",
+                "facilityName": "Fayetteville, NC"
+            },
+            {
+                "facilityCode": "590",
+                "facilityMoniker": "HAM",
+                "facilityName": "Hampton, VA"
+            },
+            {
+                "facilityCode": "637",
+                "facilityMoniker": "ASH",
+                "facilityName": "Asheville, NC"
+            },
+            {
+                "facilityCode": "652",
+                "facilityMoniker": "RIC",
+                "facilityName": "Richmond, VA"
+            },
+            {
+                "facilityCode": "658",
+                "facilityMoniker": "SAM",
+                "facilityName": "Salem, VA"
+            },
+            {
+                "facilityCode": "659",
+                "facilityMoniker": "SBY",
+                "facilityName": "Salisbury, NC"
+            },
+            {
+                "facilityCode": "508",
+                "facilityMoniker": "ATG",
+                "facilityName": "Atlanta, GA"
+            },
+            {
+                "facilityCode": "509",
+                "facilityMoniker": "AUG",
+                "facilityName": "Augusta, GA"
+            },
+            {
+                "facilityCode": "521",
+                "facilityMoniker": "BIR",
+                "facilityName": "Birmingham, AL"
+            },
+            {
+                "facilityCode": "534",
+                "facilityMoniker": "CHA",
+                "facilityName": "Charleston, SC"
+            },
+            {
+                "facilityCode": "544",
+                "facilityMoniker": "CMS",
+                "facilityName": "Columbia, SC"
+            },
+            {
+                "facilityCode": "557",
+                "facilityMoniker": "DUB",
+                "facilityName": "Dublin, GA"
+            },
+            {
+                "facilityCode": "619",
+                "facilityMoniker": "ALA",
+                "facilityName": "Central Alabama HCS"
+            },
+            {
+                "facilityCode": "679",
+                "facilityMoniker": "TUA",
+                "facilityName": "Tuscaloosa, AL"
+            },
+            {
+                "facilityCode": "998",
+                "facilityMoniker": "BAY",
+                "facilityName": "Bay Pines CIO Test"
+            },
+            {
+                "facilityCode": "516",
+                "facilityMoniker": "BAY",
+                "facilityName": "Bay Pines, FL"
+            },
+            {
+                "facilityCode": "546",
+                "facilityMoniker": "MIA",
+                "facilityName": "Miami, FL"
+            },
+            {
+                "facilityCode": "548",
+                "facilityMoniker": "WPB",
+                "facilityName": "West Palm Beach, FL"
+            },
+            {
+                "facilityCode": "573",
+                "facilityMoniker": "NFL",
+                "facilityName": "N. Florida/S. Georgia HCS"
+            },
+            {
+                "facilityCode": "672",
+                "facilityMoniker": "SAJ",
+                "facilityName": "San Juan, PR"
+            },
+            {
+                "facilityCode": "675",
+                "facilityMoniker": "ORL",
+                "facilityName": "Orlando, FL"
+            },
+            {
+                "facilityCode": "673",
+                "facilityMoniker": "TAM",
+                "facilityName": "Tampa, FL"
+            },
+            {
+                "facilityCode": "581",
+                "facilityMoniker": "HUN",
+                "facilityName": "Huntington, WV"
+            },
+            {
+                "facilityCode": "596",
+                "facilityMoniker": "LEX",
+                "facilityName": "Lexington, KY"
+            },
+            {
+                "facilityCode": "603",
+                "facilityMoniker": "LOU",
+                "facilityName": "Louisville, KY"
+            },
+            {
+                "facilityCode": "621",
+                "facilityMoniker": "MOU",
+                "facilityName": "Mountain Home, TN"
+            },
+            {
+                "facilityCode": "626",
+                "facilityMoniker": "TVH",
+                "facilityName": "Tennessee Valley HCS"
+            },
+            {
+                "facilityCode": "614",
+                "facilityMoniker": "MEM",
+                "facilityName": "Memphis, TN"
+            },
+            {
+                "facilityCode": "538",
+                "facilityMoniker": "CLL",
+                "facilityName": "Chillicothe, OH"
+            },
+            {
+                "facilityCode": "539",
+                "facilityMoniker": "CIN",
+                "facilityName": "Cincinnati, OH"
+            },
+            {
+                "facilityCode": "552",
+                "facilityMoniker": "DAY",
+                "facilityName": "Dayton, OH"
+            },
+            {
+                "facilityCode": "541",
+                "facilityMoniker": "CLE",
+                "facilityName": "Cleveland, OH"
+            },
+            {
+                "facilityCode": "757",
+                "facilityMoniker": "COS",
+                "facilityName": "Columbus, OH"
+            },
+            {
+                "facilityCode": "655",
+                "facilityMoniker": "SAG",
+                "facilityName": "Saginaw, MI"
+            },
+            {
+                "facilityCode": "515",
+                "facilityMoniker": "BAC",
+                "facilityName": "Battle Creek, MI"
+            },
+            {
+                "facilityCode": "553",
+                "facilityMoniker": "DET",
+                "facilityName": "Detroit, MI"
+            },
+            {
+                "facilityCode": "583",
+                "facilityMoniker": "IND",
+                "facilityName": "Indianapolis, IN"
+            },
+            {
+                "facilityCode": "506",
+                "facilityMoniker": "ANN",
+                "facilityName": "Ann Arbor, MI"
+            },
+            {
+                "facilityCode": "566",
+                "facilityMoniker": "ANT",
+                "facilityName": "Ann Arbor Test"
+            },
+            {
+                "facilityCode": "550",
+                "facilityMoniker": "DAN",
+                "facilityName": "Danville, IL"
+            },
+            {
+                "facilityCode": "610",
+                "facilityMoniker": "NIN",
+                "facilityName": "Northern Indiana HCS"
+            },
+            {
+                "facilityCode": "695",
+                "facilityMoniker": "MIW",
+                "facilityName": "Milwaukee, WI"
+            },
+            {
+                "facilityCode": "578",
+                "facilityMoniker": "HIN",
+                "facilityName": "Hines, IL"
+            },
+            {
+                "facilityCode": "585",
+                "facilityMoniker": "IRO",
+                "facilityName": "Iron Mountain, MI"
+            },
+            {
+                "facilityCode": "556",
+                "facilityMoniker": "NCH",
+                "facilityName": "North Chicago, IL"
+            },
+            {
+                "facilityCode": "676",
+                "facilityMoniker": "TOM",
+                "facilityName": "Tomah, WI"
+            },
+            {
+                "facilityCode": "537",
+                "facilityMoniker": "CHW",
+                "facilityName": "Jesse Brown VAMC"
+            },
+            {
+                "facilityCode": "607",
+                "facilityMoniker": "MAD",
+                "facilityName": "Madison, WI"
+            },
+            {
+                "facilityCode": "543",
+                "facilityMoniker": "CMO",
+                "facilityName": "Columbia, MO"
+            },
+            {
+                "facilityCode": "589",
+                "facilityMoniker": "KAN",
+                "facilityName": "Heartland West"
+            },
+            {
+                "facilityCode": "657",
+                "facilityMoniker": "STL",
+                "facilityName": "Heartland East"
+            },
+            {
+                "facilityCode": "677",
+                "facilityMoniker": "TOP",
+                "facilityName": "Topeka, KS"
+            },
+            {
+                "facilityCode": "686",
+                "facilityMoniker": "LEA",
+                "facilityName": "Leavenworth, KS"
+            },
+            {
+                "facilityCode": "502",
+                "facilityMoniker": "ALX",
+                "facilityName": "Alexandria, LA"
+            },
+            {
+                "facilityCode": "598",
+                "facilityMoniker": "LIT",
+                "facilityName": "Little Rock, AR"
+            },
+            {
+                "facilityCode": "564",
+                "facilityMoniker": "FAV",
+                "facilityName": "Fayetteville, AR"
+            },
+            {
+                "facilityCode": "586",
+                "facilityMoniker": "JAC",
+                "facilityName": "Jackson, MS"
+            },
+            {
+                "facilityCode": "580",
+                "facilityMoniker": "HOU",
+                "facilityName": "Houston, TX"
+            },
+            {
+                "facilityCode": "623",
+                "facilityMoniker": "MUS",
+                "facilityName": "Muskogee, OK"
+            },
+            {
+                "facilityCode": "635",
+                "facilityMoniker": "OKL",
+                "facilityName": "Oklahoma City, OK"
+            },
+            {
+                "facilityCode": "667",
+                "facilityMoniker": "SHR",
+                "facilityName": "Shreveport, LA"
+            },
+            {
+                "facilityCode": "520",
+                "facilityMoniker": "BIL",
+                "facilityName": "Biloxi, MS"
+            },
+            {
+                "facilityCode": "629",
+                "facilityMoniker": "NOL",
+                "facilityName": "New Orleans, LA"
+            },
+            {
+                "facilityCode": "740",
+                "facilityMoniker": "VCB",
+                "facilityName": "Texas Valley Coastal Bend HCS"
+            },
+            {
+                "facilityCode": "674",
+                "facilityMoniker": "CTX",
+                "facilityName": "Central Texas HCS"
+            },
+            {
+                "facilityCode": "671",
+                "facilityMoniker": "STX",
+                "facilityName": "South Texas HCS"
+            },
+            {
+                "facilityCode": "549",
+                "facilityMoniker": "NTX",
+                "facilityName": "North Texas HCS"
+            },
+            {
+                "facilityCode": "504",
+                "facilityMoniker": "AMA",
+                "facilityName": "Amarillo, TX"
+            },
+            {
+                "facilityCode": "501",
+                "facilityMoniker": "ABQ",
+                "facilityName": "Albuquerque, NM"
+            },
+            {
+                "facilityCode": "649",
+                "facilityMoniker": "PRE",
+                "facilityName": "Prescott, AZ"
+            },
+            {
+                "facilityCode": "678",
+                "facilityMoniker": "TUC",
+                "facilityName": "Tucson, AZ"
+            },
+            {
+                "facilityCode": "519",
+                "facilityMoniker": "BIG",
+                "facilityName": "Big Spring, TX"
+            },
+            {
+                "facilityCode": "644",
+                "facilityMoniker": "PHO",
+                "facilityName": "Phoenix, AZ"
+            },
+            {
+                "facilityCode": "378",
+                "facilityMoniker": "BLO",
+                "facilityName": "Billings, MT CBOC"
+            },
+            {
+                "facilityCode": "741",
+                "facilityMoniker": "DEN",
+                "facilityName": "Denver, CO (HAC)"
+            },
+            {
+                "facilityCode": "554",
+                "facilityMoniker": "ECH",
+                "facilityName": "Eastern Colorado HCS"
+            },
+            {
+                "facilityCode": "436",
+                "facilityMoniker": "FHM",
+                "facilityName": "Montana HCS"
+            },
+            {
+                "facilityCode": "442",
+                "facilityMoniker": "CHY",
+                "facilityName": "Cheyenne, WY"
+            },
+            {
+                "facilityCode": "575",
+                "facilityMoniker": "GRJ",
+                "facilityName": "Grand Junction, CO"
+            },
+            {
+                "facilityCode": "666",
+                "facilityMoniker": "SHE",
+                "facilityName": "Sheridan, WY"
+            },
+            {
+                "facilityCode": "660",
+                "facilityMoniker": "SLC",
+                "facilityName": "Salt Lake City, UT"
+            },
+            {
+                "facilityCode": "960",
+                "facilityMoniker": "SLD",
+                "facilityName": "SLC-FO DEV, UT"
+            },
+            {
+                "facilityCode": "962",
+                "facilityMoniker": "SLD",
+                "facilityName": "SLC-FO ADEM, UT"
+            },
+            {
+                "facilityCode": "463",
+                "facilityMoniker": "ANC",
+                "facilityName": "Anchorage, AK"
+            },
+            {
+                "facilityCode": "531",
+                "facilityMoniker": "BOI",
+                "facilityName": "Boise, ID"
+            },
+            {
+                "facilityCode": "687",
+                "facilityMoniker": "WWW",
+                "facilityName": "Walla Walla, WA"
+            },
+            {
+                "facilityCode": "648",
+                "facilityMoniker": "POR",
+                "facilityName": "Portland, OR"
+            },
+            {
+                "facilityCode": "668",
+                "facilityMoniker": "SPO",
+                "facilityName": "Spokane, WA"
+            },
+            {
+                "facilityCode": "663",
+                "facilityMoniker": "PUG",
+                "facilityName": "Puget Sound HCS"
+            },
+            {
+                "facilityCode": "653",
+                "facilityMoniker": "ROS",
+                "facilityName": "Roseburg, OR"
+            },
+            {
+                "facilityCode": "692",
+                "facilityMoniker": "WCO",
+                "facilityName": "White City OR"
+            },
+            {
+                "facilityCode": "612",
+                "facilityMoniker": "MAC",
+                "facilityName": "Northern California HCS"
+            },
+            {
+                "facilityCode": "662",
+                "facilityMoniker": "SFC",
+                "facilityName": "San Francisco, CA"
+            },
+            {
+                "facilityCode": "570",
+                "facilityMoniker": "FRE",
+                "facilityName": "Fresno, CA"
+            },
+            {
+                "facilityCode": "459",
+                "facilityMoniker": "HON",
+                "facilityName": "Honolulu, HI"
+            },
+            {
+                "facilityCode": "640",
+                "facilityMoniker": "PAL",
+                "facilityName": "Palo Alto HCS"
+            },
+            {
+                "facilityCode": "654",
+                "facilityMoniker": "REN",
+                "facilityName": "Reno, NV"
+            },
+            {
+                "facilityCode": "358",
+                "facilityMoniker": "MLA",
+                "facilityName": "Manila, PI"
+            },
+            {
+                "facilityCode": "691",
+                "facilityMoniker": "WLA",
+                "facilityName": "West Los Angeles, CA"
+            },
+            {
+                "facilityCode": "605",
+                "facilityMoniker": "LOM",
+                "facilityName": "Loma Linda, CA"
+            },
+            {
+                "facilityCode": "600",
+                "facilityMoniker": "LON",
+                "facilityName": "Long Beach, CA"
+            },
+            {
+                "facilityCode": "664",
+                "facilityMoniker": "SDC",
+                "facilityName": "San Diego, CA"
+            },
+            {
+                "facilityCode": "593",
+                "facilityMoniker": "LAS",
+                "facilityName": "Las Vegas, NV"
+            },
+            {
+                "facilityCode": "437",
+                "facilityMoniker": "FAR",
+                "facilityName": "Fargo, ND"
+            },
+            {
+                "facilityCode": "555",
+                "facilityMoniker": "DES",
+                "facilityName": "Des Moines, IA"
+            },
+            {
+                "facilityCode": "584",
+                "facilityMoniker": "IOW",
+                "facilityName": "Iowa City, IA"
+            },
+            {
+                "facilityCode": "618",
+                "facilityMoniker": "MIN",
+                "facilityName": "Minneapolis, MN"
+            },
+            {
+                "facilityCode": "636",
+                "facilityMoniker": "OMA",
+                "facilityName": "Central Plains HCS"
+            },
+            {
+                "facilityCode": "438",
+                "facilityMoniker": "SUX",
+                "facilityName": "Sioux Falls, SD"
+            },
+            {
+                "facilityCode": "656",
+                "facilityMoniker": "STC",
+                "facilityName": "St. Cloud, MN"
+            },
+            {
+                "facilityCode": "568",
+                "facilityMoniker": "FTM",
+                "facilityName": "Black Hills HCS"
+            },
+            {
+                "facilityCode": "200",
+                "facilityMoniker": "DOD",
+                "facilityName": "DoD"
+            },
+            {
+                "facilityCode": "100",
+                "facilityMoniker": "CLM",
+                "facilityName": "Claims System"
+            },
+            {
+                "facilityCode": "VBA",
+                "facilityMoniker": "VBA",
+                "facilityName": "Veterans Benefits Administration"
+            },
+            {
+                "facilityCode": "515.6",
+                "facilityMoniker": "TRY",
+                "facilityName": "Troy, NY"
+            }
+        ]
+    }
+}
+

@@ -1,0 +1,156 @@
+{
+  "queryComplete": true,
+  "statusList": [
+    {
+      "partner": {
+        "partnerIdentifier": "2.16.840.1.113883.3.42.126.100001.13",
+        "partnerName": "ahlta",
+        "partnerType": "DOD"
+      },
+      "partnerStatus": "SUCCESS",
+      "expectedCount": 1,
+      "receivedCount": 1
+    }
+  ],
+  "dataList": {
+    "labMicroResults": [
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000913"
+        },
+        "enteredBy": null,
+        "enteredDate": null,
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "18725-2"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL/0056"
+        },
+        "order": {
+          "accession": {
+            "id": "130402 MI 322"
+          },
+          "collectionDate": {
+            "start": "2013-04-02T17:38:00",
+            "end": "2013-04-02T17:38:00"
+          },
+          "collectionSample": "WOUND",
+          "comment": "For Test: CULTURE & SUSCEPTIBILITY LAB-2517",
+          "date": {
+            "start": "2013-04-02T13:35:00",
+            "end": "2013-04-02T13:35:00"
+          },
+          "id": {
+            "id": "2157166573"
+          },
+          "orderNumber": {
+            "id": "130402-00006"
+          },
+          "priority": [
+            {
+              "display": "ROUTINE",
+              "primary": true
+            }
+          ],
+          "provider": {
+            "name": "42834 DOCTOR, ALPHA"
+          },
+          "requestingLocation": {
+            "name": "NH Great Lakes IL"
+          },
+          "specimen": [
+            {
+              "code": null,
+              "display": "Foot",
+              "primary": true
+            }
+          ],
+          "status": [],
+          "test": [
+            {
+              "code": "110997",
+              "display": "Routine Culture",
+              "primary": true
+            }
+          ]
+        },
+        "tests": [
+          {
+            "results": [
+              {
+                "certifiedBy": null,
+                "certifiedDate": {
+                  "start": "2013-04-02T13:46:18",
+                  "end": "2013-04-02T13:46:18"
+                },
+                "content": "Routine Culture\n                Order #               130402-00006 (NH Great Lakes Lab Interface Context)\n                Filler #              130402 MI 322 (NH Great Lakes Lab Interface Context)\n                Status:               Final\n                Ordering Provider:    DOCTOR, ALPHA\n                Priority:             ROUTINE\n                Date Ordered:         02 Apr 2013 1335\n                Date Resulted:        02 Apr 2013 1346\n                COLLECT_SAMPLE:       WOUND\n                Order Comment:        For Test: CULTURE & SUSCEPTIBILITY LAB-2517\n                                      \n                GRAM STAIN            GRAM NEGATIVE COCCI\n                                      \n                Specimen:             Foot\n                Collected:            02 Apr 2013 1738\n\n                Results:              \n                Quantity: 10000       Pseudomonas aeruginosa\n                MIC Sensitivity:      \n                                      ampicillin Susceptib* Susceptible\n                                      Amoxicillin/Clavulanic Acid Susceptib* Susceptible\n                                      Ampicillin/Sulbactam Resistant",
+                "organisms": [
+                  {
+                    "organism": "Pseudomonas aeruginosa",
+                    "quantity": "10000",
+                    "sensitivities": [
+                      {
+                        "interpretation": "Susceptible",
+                        "result": "Susceptib*",
+                        "sensitivity": "ampicillin"
+                      },
+                      {
+                        "interpretation": "Susceptible",
+                        "result": "Susceptib*",
+                        "sensitivity": "Amoxicillin/Clavulanic Acid"
+                      },
+                      {
+                        "interpretation": "Resistant",
+                        "result": "Resistant",
+                        "sensitivity": "Ampicillin/Sulbactam"
+                      }
+                    ]
+                  }
+                ],
+                "performingLabLocation": {
+                  "name": "NH Great Lakes IL/0056"
+                },
+                "status": [
+                  {
+                    "code": "Final",
+                    "display": "Final",
+                    "primary": true
+                  }
+                ],
+                "result": "GRAM STAIN: GRAM NEGATIVE COCCI",
+                "resultIndependent": null,
+                "type": [
+                  {
+                    "display": "Routine Culture",
+                    "primary": true
+                  }
+                ]
+              }
+            ],
+            "type": [
+              {
+                "display": "Routine Culture",
+                "primary": true
+              }
+            ]
+          }
+        ],
+        "panel": "false",
+        "display": "Final"
+      }
+    ]
+  }
+}

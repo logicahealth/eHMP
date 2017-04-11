@@ -1,0 +1,29 @@
+{{#unless predefined}}
+<div class="association-manager">
+    <div class="typeahead-wrapper">
+        <div class="form-group form-group-custom">
+            <label for="screen-problem-search" class="sr-only">Search for problems</label>
+            <input type="text" class="form-control" id="screen-problem-search" placeholder="Search Problems" title="Enter text to begin searching, the results will appear below after at least three letters. Tab to view results and then press enter to select one or more. The Escape key will close the results panel and return to the Search Input Box.">
+            <button class="clear-search-problem btn btn-md btn-icon" id="clear-search-problem-btn" title="Press enter to clear text">
+                <i class="fa fa-times-circle"></i>
+            </button>
+            <div class="problem-loading-container">
+                <div id="problem-query-status-region" class="tt-dropdown-menu form-control"></div>
+            </div>
+        </div>
+    </div>
+    <span class="sr-only">Conditions associated with this workspace</span>
+    <div id="problem-list-region"></div>
+</div>
+<div id="association-manager-footer" class="row">
+    <button class="user-defined-template btn btn-default navbar-btn" id="association-manager-close-btn" title="Press enter to close">Close</button>
+</div>
+{{else}}
+<div id="association-manager-footer" class="row">
+    <button class="predefined-template btn btn-default navbar-btn" id="association-manager-close-btn" title="Press enter to close">Close</button>
+</div>
+<div class="association-manager">
+    <span class="sr-only">Associations cannot be added to this workspace.</span>
+    <div id="problem-list-region"></div>
+</div>
+{{/unless}}

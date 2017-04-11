@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>eHMP Bootstrap UI Library - Sign In</title>
+    <link rel="stylesheet" href="../../../_assets/css/vendor.css" />
+    <link rel="stylesheet" href="../../../_assets/css/adk.css" />
+    <link rel="stylesheet" href="../../../app/css/applets.css">
+    <link rel="stylesheet" href="../../css/main-styles.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,400,300,600,700" />
+    <script src="../../js/jquery-1.11.2.min.js"></script>
+</head>
+
+<body class="logon-screen">
+    <div class="disclaimer">
+        <div>
+            <div class="va-logo">
+                <img src="../../../_assets/img/VA_logo.png" class="right-margin-xl top-margin-xs" alt="U.S. Department of Veterans Affairs logo" />
+            </div>
+            <div class="warning-text">
+                <div class="top-fade"></div>
+                <div class="content">
+                    <p><strong>WARNING:</strong> 
+                     This site is intended to be used by authorized VA network users for viewing and retrieving information only except as otherwise explicitly authorized. VA information resides on and transmits through computer systems and networks funded by VA; all use is considered to be understanding and acceptance that there is no reasonable expectation of privacy for any data or transmissions on Government Intranet or Extranet (non-public) networks or systems. All transactions that occur on this system other than the viewing and downloading of Web site information and all data transmitted through this system are subject to review and action including (but not limited to) monitoring, recording, retrieving, copying, auditing, inspecting, investigating, restricting access, blocking, tracking, disclosing to authorized personnel, or any other authorized actions by all authorized VA and law enforcement personnel. All use of this system constitutes understanding and unconditional acceptance of these terms. Unauthorized attempts or acts to either (1) access, upload, change, or delete information on this system, (2) modify this system, (3) deny access to this system, or (4) accrue resources for unauthorized use on this system are strictly prohibited. Such attempts or acts are subject to action that may result in criminal, civil, or administrative penalties. </p>
+                     <p><strong>Browser support:</strong> Internet Explorer 11 | <strong>Recommended window size</strong>: 1280px x 800px</p>
+                </div>
+                <div class="bottom-fade"></div>
+            </div>
+        </div>
+    </div>
+    <div class="viewable-area">
+        <div class="sign-in-form-container">
+            <h1 class="text-center">Enterprise Health Management Platform</h1>
+            <form role="form">
+                <div class="sign-in-container">
+                    <div class="sign-in-form">
+                        <img src="../../../_assets/img/logo-cross-gray.png" class="center-block bottom-margin-lg" width="81" height="80" alt="Enterprise Health Management Platform logo" />
+                        <span id="errorMessage" class="text-danger text-center"></span>
+                        <div class="form-group" id="facilityForm">
+                            <label for="facility">Select Facility</label>
+                            <div id="authenication-facility-list">
+                                <select name="facility" id="facility" title="Use the up and down arrows keys to select a facility" required="required" class="form-control">
+                                    <option class="" selected="selected" value="">Select a facility</option>
+                                    <option class="list-group-item row-layout simple" value="C877">KODAK</option>
+                                    <option class="list-group-item row-layout simple" value="9E7A">PANORAMA</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group" id="accessForm">
+                            <label for="accessCode">Access code</label>
+                            <input type="password" class="form-control" id="accessCode" name="accessCode" placeholder="Access Code" title="Please enter in access code" required="">
+                        </div>
+                        <div class="form-group" id="verifyForm">
+                            <label for="verifyCode">Verify code</label>
+                            <input type="password" class="form-control" id="verifyCode" name="verifyCode" placeholder="Verify Code" title="Please enter in verfication code" required="">
+                        </div>
+                        <button type="submit" data-loading-text="<i class='fa fa-spinner fa-spin'></i> Authenticating" class="btn btn-primary percent-width-100" id="login" title="Press enter to sign in">Sign In</button>
+                        <a class="block-display text-center top-margin-sm" href="help/eHMP_User Guide for Release 1 2_v1 3_09112015 logon.htm" target="_blank" title="Press enter to access the help content. You will be redirected to a new tab window.">Need Help Signing In?
+                        </a>
+                        <div class="hidden" id="screenReaderAuthenticating">
+                            Authenticating
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script  type="text/javascript">
+        var array = [
+            "../../../_assets/img/photo-1.jpg", 
+            "../../../_assets/img/photo-2.jpg", 
+            "../../../_assets/img/photo-3.jpg", 
+            "../../../_assets/img/photo-4.jpg", 
+            "../../../_assets/img/photo-5.jpg" 
+        ];
+        var randomElement = array[Math.floor(Math.random()*array.length)];
+        $('.logon-screen').css('background-image', 'url("' + randomElement + '")');
+    </script>
+</body>
+
+</html>

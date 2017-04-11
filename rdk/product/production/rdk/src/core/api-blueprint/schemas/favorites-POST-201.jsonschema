@@ -1,0 +1,37 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"type": "object",
+	"required": [
+		"data",
+		"status"
+	],
+	"properties": {
+		"data": {
+			"type": "object",
+			"required": [
+				"id",
+				"type",
+				"uid"
+			],
+			"properties": {
+				"domain": {
+				},
+				"id": {
+					"type": "string"
+				},
+				"type": {
+					"type": "string"
+				},
+				"uid": {
+					"type": "string"
+				},
+				"userId": {
+					"type": "string"
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

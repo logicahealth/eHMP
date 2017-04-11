@@ -1,0 +1,23 @@
+ext.set('repo', 'releases')
+ext.set('groupId', 'us.vistacore.ehmp')
+ext.set('artifactId', 'roles')
+
+task zipData(type: Zip) {
+  extension = 'zip'
+  baseName = 'jds_data'
+  version = getVersionByCommitCountForProject(":tests:jds_data")
+  destinationDir buildDir
+  from "${projectDir}/ehmpusers/src"
+  from "${projectDir}/permissionSets/src"
+  from "${projectDir}/permissions/src"
+  from "${projectDir}/teams/src"
+  from "${projectDir}/trustsys/src"
+  exclude 'build'
+}
+
+build.dependsOn zipData
+uploadArchives.dependsOn zipData
+
+artifacts {
+  archives zipData.archivePath
+}

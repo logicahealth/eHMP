@@ -1,0 +1,2899 @@
+[{
+    "uid": "urn:va:user:9E7A:10000000270",
+    "permissionSet": {
+        "val": ["read-access", "standard-doctor"],
+        "modifiedBy": "urn:va:user:9E7A:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "PANORAMA",
+    "lastname": "USER",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:9E7A:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:C877:10000000270",
+    "permissionSet": {
+        "val": ["read-access", "standard-doctor"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "PANORAMA",
+    "lastname": "USER",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:FC2A:10000000270",
+    "permissionSet": {
+        "val": ["read-access", "standard-doctor"],
+        "modifiedBy": "urn:va:user:FC2A:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "PANORAMA",
+    "lastname": "USER",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:FC2A:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:9E7A:10000000271",
+    "permissionSet": {
+        "val": ["read-access", "psychologist"],
+        "modifiedBy": "urn:va:user:9E7A:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "MARGARET",
+    "lastname": "XIU",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:9E7A:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:C877:10000000271",
+    "permissionSet": {
+        "val": ["read-access", "psychologist"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "MARGARET",
+    "lastname": "XIU",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:9E7A:10000000272",
+    "permissionSet": {
+        "val": ["read-access", "standard-doctor", "acc"],
+        "modifiedBy": "urn:va:user:9E7A:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "VIHAAN",
+    "lastname": "KHAN",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:9E7A:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:C877:10000000272",
+    "permissionSet": {
+        "val": ["read-access", "standard-doctor", "acc"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "VIHAAN",
+    "lastname": "KHAN",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:9E7A:10000000273",
+    "permissionSet": {
+        "val": ["read-access", "pharmacist"],
+        "modifiedBy": "urn:va:user:9E7A:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "TRACY",
+    "lastname": "KEELEY",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:9E7A:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:C877:10000000273",
+    "permissionSet": {
+        "val": ["read-access", "pharmacist"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "TRACY",
+    "lastname": "KEELEY",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:9E7A:10000000274",
+    "permissionSet": {
+        "val": ["read-access", "lab-tech"],
+        "modifiedBy": "urn:va:user:9E7A:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "MICHAEL",
+    "lastname": "DAY",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:9E7A:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:C877:10000000274",
+    "permissionSet": {
+        "val": ["read-access", "lab-tech"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "MICHAEL",
+    "lastname": "DAY",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:9E7A:10000000275",
+    "permissionSet": {
+        "val": ["read-access", "registered-nurse"],
+        "modifiedBy": "urn:va:user:9E7A:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "SUE",
+    "lastname": "CHAPMAN",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:9E7A:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:C877:10000000275",
+    "permissionSet": {
+        "val": ["read-access", "registered-nurse"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "SUE",
+    "lastname": "CHAPMAN",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:9E7A:10000000276",
+    "permissionSet": {
+        "val": ["read-access", "medical-technician", "iso", "system-administrator"],
+        "modifiedBy": "urn:va:user:9E7A:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "EDMUND",
+    "lastname": "HILLARY",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:9E7A:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:C877:10000000276",
+    "permissionSet": {
+        "val": ["read-access", "medical-technician", "iso", "system-administrator"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "EDMUND",
+    "lastname": "HILLARY",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:9E7A:11617",
+    "permissionSet": {
+        "val": ["read-access", "student"],
+        "modifiedBy": "urn:va:user:9E7A:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "ONE",
+    "lastname": "STUDENT",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:9E7A:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:C877:11617",
+    "permissionSet": {
+        "val": ["read-access", "student"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "ONE",
+    "lastname": "STUDENT",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:9E7A:991",
+    "permissionSet": {
+        "val": ["read-access", "standard-doctor"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "EIGHT",
+    "lastname": "PROVIDER",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:C877:991",
+    "permissionSet": {
+        "val": ["read-access", "standard-doctor"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "EIGHT",
+    "lastname": "PROVIDER",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:9E7A:20112",
+    "permissionSet": {
+        "val": ["read-access", "nurse-manager"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "ONE",
+    "lastname": "NURSE",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:C877:20112",
+    "permissionSet": {
+        "val": ["read-access", "nurse-manager"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "ONE",
+    "lastname": "NURSE",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:9E7A:11716",
+    "permissionSet": {
+        "val": ["read-access", "radiologist"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "ONE",
+    "lastname": "RADIOLOGIST",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:C877:11716",
+    "permissionSet": {
+        "val": ["read-access", "radiologist"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "ONE",
+    "lastname": "RADIOLOGIST",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:9E7A:10000000016",
+    "permissionSet": {
+        "val": ["read-access", "licensed-practicing-nurse"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "ONE",
+    "lastname": "TDNURSE",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:C877:10000000016",
+    "permissionSet": {
+        "val": ["read-access", "licensed-practicing-nurse"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "ONE",
+    "lastname": "TDNURSE",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:9E7A:10000000016",
+    "permissionSet": {
+        "val": ["read-access", "licensed-practicing-nurse"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "ONE",
+    "lastname": "TDNURSE",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:C877:10000000016",
+    "permissionSet": {
+        "val": ["read-access", "licensed-practicing-nurse"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "ONE",
+    "lastname": "TDNURSE",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:9E7A:10000000228",
+    "permissionSet": {
+        "val": ["read-access", "surgeon"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "ONE",
+    "lastname": "SURGEON",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:C877:10000000228",
+    "permissionSet": {
+        "val": ["read-access", "surgeon"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "ONE",
+    "lastname": "SURGEON",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:9E7A:10000000229",
+    "permissionSet": {
+        "val": ["read-access", "anesthesiologist"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "ONE",
+    "lastname": "ANESTHESIOLOGIST",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:C877:10000000229",
+    "permissionSet": {
+        "val": ["read-access", "anesthesiologist"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "ONE",
+    "lastname": "ANESTHESIOLOGIST",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:9E7A:10000000203",
+    "permissionSet": {
+        "val": ["acc"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": ["edit-own-permissions"]
+    },
+    "firstname": "ONE",
+    "lastname": "PCMM",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:C877:10000000203",
+    "permissionSet": {
+        "val": ["acc"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": ["edit-own-permissions"]
+    },
+    "firstname": "ONE",
+    "lastname": "PCMM",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:FC2A:10000000203",
+    "permissionSet": {
+        "val": ["acc"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": ["edit-own-permissions"]
+    },
+    "firstname": "ONE",
+    "lastname": "PCMM",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:9E7A:11666",
+    "permissionSet": {
+        "val": ["read-access"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "EIGHT",
+    "lastname": "STUDENT",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:C877:11666",
+    "permissionSet": {
+        "val": ["read-access"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "EIGHT",
+    "lastname": "STUDENT",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:9E7A:1002",
+    "permissionSet": {
+        "val": ["read-access", "standard-doctor"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "EIGHTEEN",
+    "lastname": "PROVIDER",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:C877:1002",
+    "permissionSet": {
+        "val": ["read-access", "standard-doctor"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "EIGHTEEN",
+    "lastname": "PROVIDER",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:9E7A:1597",
+    "permissionSet": {
+        "val": ["read-access", "standard-doctor"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "FIFTYTWO",
+    "lastname": "PROVIDER",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:C877:1597",
+    "permissionSet": {
+        "val": ["read-access", "standard-doctor"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "FIFTYTWO",
+    "lastname": "PROVIDER",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:FC2A:1597",
+    "permissionSet": {
+        "val": ["read-access", "standard-doctor"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "FIFTYTWO",
+    "lastname": "PROVIDER",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:9E7A:9009",
+    "permissionSet": {
+        "val": ["read-access", "standard-doctor"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "EIGHTYFOUR",
+    "lastname": "PROVIDER",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:C877:9009",
+    "permissionSet": {
+        "val": ["read-access", "standard-doctor"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "EIGHTYFOUR",
+    "lastname": "PROVIDER",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:9E7A:988",
+    "permissionSet": {
+        "val": ["read-access", "standard-doctor"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "FIVE",
+    "lastname": "PROVIDER",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:C877:988",
+    "permissionSet": {
+        "val": ["read-access", "standard-doctor"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "FIVE",
+    "lastname": "PROVIDER",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:9E7A:11541",
+    "permissionSet": {
+        "val": ["read-access", "standard-doctor"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "FIVEHUNDREDONE",
+    "lastname": "PROVIDER",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:C877:11541",
+    "permissionSet": {
+        "val": ["read-access", "standard-doctor"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "FIVEHUNDREDONE",
+    "lastname": "PROVIDER",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:FC2A:11541",
+    "permissionSet": {
+        "val": ["read-access", "standard-doctor"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "FIVEHUNDREDONE",
+    "lastname": "PROVIDER",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:9E7A:11660",
+    "permissionSet": {
+        "val": ["read-access", "standard-doctor"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "FIVEHUNDREDEIGHT",
+    "lastname": "PROVIDER",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:C877:11660",
+    "permissionSet": {
+        "val": ["read-access", "standard-doctor"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "FIVEHUNDREDEIGHT",
+    "lastname": "PROVIDER",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:FC2A:11660",
+    "permissionSet": {
+        "val": ["read-access", "standard-doctor"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "FIVEHUNDREDEIGHT",
+    "lastname": "PROVIDER",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:9E7A:11662",
+    "permissionSet": {
+        "val": ["read-access", "standard-doctor"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "FIVEHUNDREDTEN",
+    "lastname": "PROVIDER",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:C877:11662",
+    "permissionSet": {
+        "val": ["read-access", "standard-doctor"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "FIVEHUNDREDTEN",
+    "lastname": "PROVIDER",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:FC2A:11662",
+    "permissionSet": {
+        "val": ["read-access", "standard-doctor"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "FIVEHUNDREDTEN",
+    "lastname": "PROVIDER",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:9E7A:20365",
+    "permissionSet": {
+        "val": ["read-access", "lab-tech"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "EIGHT",
+    "lastname": "LABTECH",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:C877:20365",
+    "permissionSet": {
+        "val": ["read-access", "lab-tech"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "EIGHT",
+    "lastname": "LABTECH",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:9E7A:20122",
+    "permissionSet": {
+        "val": ["read-access", "pharmacist"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "EIGHT",
+    "lastname": "PHARMACIST",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:C877:20122",
+    "permissionSet": {
+        "val": ["read-access", "pharmacist"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "EIGHT",
+    "lastname": "PHARMACIST",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:9E7A:9033",
+    "permissionSet": {
+        "val": ["read-access", "ward-clerk"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "EIGHT",
+    "lastname": "WARDCLERK",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:C877:9033",
+    "permissionSet": {
+        "val": ["read-access", "ward-clerk"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "EIGHT",
+    "lastname": "WARDCLERK",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:9E7A:10000000091",
+    "permissionSet": {
+        "val": ["read-access", "mis"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "ONE",
+    "lastname": "HIMS",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:C877:10000000091",
+    "permissionSet": {
+        "val": ["read-access", "mis"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "ONE",
+    "lastname": "HIMS",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:FC2A:10000000091",
+    "permissionSet": {
+        "val": ["read-access", "mis"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "ONE",
+    "lastname": "HIMS",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:9E7A:10000000092",
+    "permissionSet": {
+        "val": ["read-access", "mis"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "TWO",
+    "lastname": "HIMS",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:C877:10000000092",
+    "permissionSet": {
+        "val": ["read-access", "mis"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "TWO",
+    "lastname": "HIMS",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:FC2A:10000000092",
+    "permissionSet": {
+        "val": ["read-access", "mis"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "TWO",
+    "lastname": "HIMS",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:9E7A:10000000093",
+    "permissionSet": {
+        "val": ["read-access", "mis"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "THREE",
+    "lastname": "HIMS",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:C877:10000000093",
+    "permissionSet": {
+        "val": ["read-access", "mis"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "THREE",
+    "lastname": "HIMS",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:FC2A:10000000093",
+    "permissionSet": {
+        "val": ["read-access", "mis"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "THREE",
+    "lastname": "HIMS",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:9E7A:10000000094",
+    "permissionSet": {
+        "val": ["read-access", "mis"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "FOUR",
+    "lastname": "HIMS",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:C877:10000000094",
+    "permissionSet": {
+        "val": ["read-access", "mis"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "FOUR",
+    "lastname": "HIMS",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:FC2A:10000000094",
+    "permissionSet": {
+        "val": ["read-access", "mis"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "FOUR",
+    "lastname": "HIMS",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:9E7A:10000000095",
+    "permissionSet": {
+        "val": ["read-access", "mis"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "FIVE",
+    "lastname": "HIMS",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:C877:10000000095",
+    "permissionSet": {
+        "val": ["read-access", "mis"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "FIVE",
+    "lastname": "HIMS",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:FC2A:10000000095",
+    "permissionSet": {
+        "val": ["read-access", "mis"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "FIVE",
+    "lastname": "HIMS",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:9E7A:20010",
+    "permissionSet": {
+        "val": ["read-access", "standard-doctor"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "EIGHT",
+    "lastname": "VEHU",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:C877:20010",
+    "permissionSet": {
+        "val": ["read-access", "standard-doctor"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "EIGHT",
+    "lastname": "VEHU",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:FC2A:20010",
+    "permissionSet": {
+        "val": ["read-access", "standard-doctor"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "EIGHT",
+    "lastname": "VEHU",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:9E7A:10000000206",
+    "permissionSet": {
+        "val": ["read-access"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "FOUR",
+    "lastname": "PCMM",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:C877:10000000206",
+    "permissionSet": {
+        "val": ["read-access"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "FOUR",
+    "lastname": "PCMM",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:FC2A:10000000206",
+    "permissionSet": {
+        "val": ["read-access"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "FOUR",
+    "lastname": "PCMM",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:9E7A:11736",
+    "permissionSet": {
+        "val": ["read-access", "rad-tech"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "TWENTY",
+    "lastname": "RADTECH",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:C877:11736",
+    "permissionSet": {
+        "val": ["read-access", "rad-tech"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "TWENTY",
+    "lastname": "RADTECH",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:9E7A:11822",
+    "permissionSet": {
+        "val": ["read-access", "service-chief"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "MEDICAL",
+    "lastname": "CHIEF",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:C877:11822",
+    "permissionSet": {
+        "val": ["read-access", "service-chief"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "MEDICAL",
+    "lastname": "CHIEF",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:FC2A:11822",
+    "permissionSet": {
+        "val": ["read-access", "service-chief"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "MEDICAL",
+    "lastname": "CHIEF",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:9E7A:20171",
+    "permissionSet": {
+        "val": ["read-access", "registered-nurse"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "EIGHT",
+    "lastname": "NURSE",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:C877:20171",
+    "permissionSet": {
+        "val": ["read-access", "registered-nurse"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "EIGHT",
+    "lastname": "NURSE",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:9E7A:11581",
+    "permissionSet": {
+        "val": ["read-access", "transcriptionist"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "MRT",
+    "lastname": "TRANSCRIPTION",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:C877:11581",
+    "permissionSet": {
+        "val": ["read-access", "transcriptionist"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "MRT",
+    "lastname": "TRANSCRIPTION",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:9E7A:10000000235",
+    "permissionSet": {
+        "val": ["read-access", "standard-doctor"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "UATONE",
+    "lastname": "EHMP",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:C877:10000000235",
+    "permissionSet": {
+        "val": ["read-access", "standard-doctor"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "UATONE",
+    "lastname": "EHMP",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:FC2A:10000000235",
+    "permissionSet": {
+        "val": ["read-access", "standard-doctor"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "UATONE",
+    "lastname": "EHMP",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:9E7A:10000000236",
+    "permissionSet": {
+        "val": ["read-access", "standard-doctor"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "UATTWO",
+    "lastname": "EHMP",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:C877:10000000236",
+    "permissionSet": {
+        "val": ["read-access", "standard-doctor"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "UATTWO",
+    "lastname": "EHMP",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:FC2A:10000000236",
+    "permissionSet": {
+        "val": ["read-access", "standard-doctor"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "UATTWO",
+    "lastname": "EHMP",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:9E7A:10000000237",
+    "permissionSet": {
+        "val": ["read-access", "standard-doctor"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "UATTHREE",
+    "lastname": "EHMP",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:C877:10000000237",
+    "permissionSet": {
+        "val": ["read-access", "standard-doctor"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "UATTHREE",
+    "lastname": "EHMP",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:FC2A:10000000237",
+    "permissionSet": {
+        "val": ["read-access", "standard-doctor"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "UATTHREE",
+    "lastname": "EHMP",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:9E7A:10000000238",
+    "permissionSet": {
+        "val": ["read-access", "standard-doctor"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "UATFOUR",
+    "lastname": "EHMP",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:C877:10000000238",
+    "permissionSet": {
+        "val": ["read-access", "standard-doctor"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "UATFOUR",
+    "lastname": "EHMP",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:FC2A:10000000238",
+    "permissionSet": {
+        "val": ["read-access", "standard-doctor"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "UATFOUR",
+    "lastname": "EHMP",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:9E7A:10000000239",
+    "permissionSet": {
+        "val": ["read-access", "standard-doctor"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "UATFIVE",
+    "lastname": "EHMP",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:C877:10000000239",
+    "permissionSet": {
+        "val": ["read-access", "standard-doctor"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "UATFIVE",
+    "lastname": "EHMP",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:FC2A:10000000239",
+    "permissionSet": {
+        "val": ["read-access", "standard-doctor"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "UATFIVE",
+    "lastname": "EHMP",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:9E7A:10000000240",
+    "permissionSet": {
+        "val": ["read-access", "standard-doctor"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "UATSIX",
+    "lastname": "EHMP",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:C877:10000000240",
+    "permissionSet": {
+        "val": ["read-access", "standard-doctor"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "UATSIX",
+    "lastname": "EHMP",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:FC2A:10000000240",
+    "permissionSet": {
+        "val": ["read-access", "standard-doctor"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "UATSIX",
+    "lastname": "EHMP",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:9E7A:10000000241",
+    "permissionSet": {
+        "val": ["read-access", "standard-doctor"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "UATSEVEN",
+    "lastname": "EHMP",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:C877:10000000241",
+    "permissionSet": {
+        "val": ["read-access", "standard-doctor"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "UATSEVEN",
+    "lastname": "EHMP",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:FC2A:10000000241",
+    "permissionSet": {
+        "val": ["read-access", "standard-doctor"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "UATSEVEN",
+    "lastname": "EHMP",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:9E7A:10000000242",
+    "permissionSet": {
+        "val": ["read-access", "standard-doctor"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "UATEIGHT",
+    "lastname": "EHMP",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:C877:10000000242",
+    "permissionSet": {
+        "val": ["read-access", "standard-doctor"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "UATEIGHT",
+    "lastname": "EHMP",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:FC2A:10000000242",
+    "permissionSet": {
+        "val": ["read-access", "standard-doctor"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "UATEIGHT",
+    "lastname": "EHMP",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:9E7A:10000000243",
+    "permissionSet": {
+        "val": ["read-access", "standard-doctor", "acc"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "UATNINE",
+    "lastname": "EHMP",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:C877:10000000243",
+    "permissionSet": {
+        "val": ["read-access", "standard-doctor", "acc"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "UATNINE",
+    "lastname": "EHMP",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:FC2A:10000000243",
+    "permissionSet": {
+        "val": ["read-access", "standard-doctor", "acc"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "UATNINE",
+    "lastname": "EHMP",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:9E7A:10000000244",
+    "permissionSet": {
+        "val": ["read-access", "standard-doctor"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "UATTEN",
+    "lastname": "EHMP",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:C877:10000000244",
+    "permissionSet": {
+        "val": ["read-access", "standard-doctor"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "UATTEN",
+    "lastname": "EHMP",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:FC2A:10000000244",
+    "permissionSet": {
+        "val": ["read-access", "standard-doctor"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "UATTEN",
+    "lastname": "EHMP",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:9E7A:10000000245",
+    "permissionSet": {
+        "val": ["read-access", "standard-doctor"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "JONATHAN",
+    "lastname": "NEBEKER",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:C877:10000000245",
+    "permissionSet": {
+        "val": ["read-access", "standard-doctor"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "JONATHAN",
+    "lastname": "NEBEKER",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:FC2A:10000000245",
+    "permissionSet": {
+        "val": ["read-access", "standard-doctor"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "JONATHAN",
+    "lastname": "NEBEKER",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:9E7A:10000000252",
+    "permissionSet": {
+        "val": ["read-access", "standard-doctor"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "SHANE",
+    "lastname": "ZEBRA",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:C877:10000000252",
+    "permissionSet": {
+        "val": ["read-access", "standard-doctor"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "SHANE",
+    "lastname": "ZEBRA",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:FC2A:10000000252",
+    "permissionSet": {
+        "val": ["read-access", "standard-doctor"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "SHANE",
+    "lastname": "ZEBRA",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:9E7A:10000000253",
+    "permissionSet": {
+        "val": ["read-access", "standard-doctor"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "DAVID",
+    "lastname": "ZEBRA",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:C877:10000000253",
+    "permissionSet": {
+        "val": ["read-access", "standard-doctor"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "DAVID",
+    "lastname": "ZEBRA",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:FC2A:10000000253",
+    "permissionSet": {
+        "val": ["read-access", "standard-doctor"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "DAVID",
+    "lastname": "ZEBRA",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:9E7A:10000000254",
+    "permissionSet": {
+        "val": ["read-access", "standard-doctor"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "RICK",
+    "lastname": "ZEBRA",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:C877:10000000254",
+    "permissionSet": {
+        "val": ["read-access", "standard-doctor"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "RICK",
+    "lastname": "ZEBRA",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:FC2A:10000000254",
+    "permissionSet": {
+        "val": ["read-access", "standard-doctor"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "RICK",
+    "lastname": "ZEBRA",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "unsucessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z",
+    "firstname": "ANDY",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "lastname": "ZEBRA",
+    "permissionSet": {
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": [],
+        "val": [
+            "read-access",
+            "standard-doctor"
+        ]
+    },
+    "uid": "urn:va:user:9E7A:10000000278",
+    "unsucessfulLoginAttemptCount": 0
+}, {
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z",
+    "firstname": "ANDY",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "lastname": "ZEBRA",
+    "permissionSet": {
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": [],
+        "val": [
+            "read-access",
+            "standard-doctor"
+        ]
+    },
+    "uid": "urn:va:user:C877:10000000278",
+    "unsucessfulLoginAttemptCount": 0
+}, {
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z",
+    "firstname": "ANDY",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "lastname": "ZEBRA",
+    "permissionSet": {
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": [],
+        "val": [
+            "read-access",
+            "standard-doctor"
+        ]
+    },
+    "uid": "urn:va:user:FC2A:10000000278",
+    "unsucessfulLoginAttemptCount": 0
+}, {
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z",
+    "firstname": "POONAM",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "lastname": "GUPTA",
+    "permissionSet": {
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": [],
+        "val": [
+            "read-access",
+            "standard-doctor"
+        ]
+    },
+    "uid": "urn:va:user:9E7A:10000000277",
+    "unsucessfulLoginAttemptCount": 0
+}, {
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z",
+    "firstname": "POONAM",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "lastname": "GUPTA",
+    "permissionSet": {
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": [],
+        "val": [
+            "read-access",
+            "standard-doctor"
+        ]
+    },
+    "uid": "urn:va:user:C877:10000000277",
+    "unsucessfulLoginAttemptCount": 0
+}, {
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z",
+    "firstname": "POONAM",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "lastname": "GUPTA",
+    "permissionSet": {
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": [],
+        "val": [
+            "read-access",
+            "standard-doctor"
+        ]
+    },
+    "uid": "urn:va:user:FC2A:10000000277",
+    "unsucessfulLoginAttemptCount": 0
+}, {
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z",
+    "firstname": "MAGNUS",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "lastname": "ZEBRA",
+    "permissionSet": {
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": [],
+        "val": [
+            "read-access",
+            "standard-doctor"
+        ]
+    },
+    "uid": "urn:va:user:9E7A:10000000279",
+    "unsucessfulLoginAttemptCount": 0
+}, {
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z",
+    "firstname": "MAGNUS",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "lastname": "ZEBRA",
+    "permissionSet": {
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": [],
+        "val": [
+            "read-access",
+            "standard-doctor"
+        ]
+    },
+    "uid": "urn:va:user:C877:10000000279",
+    "unsucessfulLoginAttemptCount": 0
+}, {
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z",
+    "firstname": "MAGNUS",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "lastname": "ZEBRA",
+    "permissionSet": {
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": [],
+        "val": [
+            "read-access",
+            "standard-doctor"
+        ]
+    },
+    "uid": "urn:va:user:FC2A:10000000279",
+    "unsucessfulLoginAttemptCount": 0
+}, {
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z",
+    "firstname": "TEST EIGHT",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "lastname": "HFE",
+    "permissionSet": {
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": [],
+        "val": [
+            "read-access",
+            "standard-doctor"
+        ]
+    },
+    "uid": "urn:va:user:FC2A:10000000263",
+    "unsucessfulLoginAttemptCount": 0
+}, {
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z",
+    "firstname": "TEST EIGHT",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "lastname": "HFE",
+    "permissionSet": {
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": [],
+        "val": [
+            "read-access",
+            "standard-doctor"
+        ]
+    },
+    "uid": "urn:va:user:C877:10000000263",
+    "unsucessfulLoginAttemptCount": 0
+}, {
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z",
+    "firstname": "TEST EIGHT",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "lastname": "HFE",
+    "permissionSet": {
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": [],
+        "val": [
+            "read-access",
+            "standard-doctor"
+        ]
+    },
+    "uid": "urn:va:user:9E7A:10000000263",
+    "unsucessfulLoginAttemptCount": 0
+}, {
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z",
+    "firstname": "TEST FIVE",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "lastname": "HFE",
+    "permissionSet": {
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": [],
+        "val": [
+            "read-access",
+            "standard-doctor"
+        ]
+    },
+    "uid": "urn:va:user:FC2A:10000000260",
+    "unsucessfulLoginAttemptCount": 0
+}, {
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z",
+    "firstname": "TEST FIVE",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "lastname": "HFE",
+    "permissionSet": {
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": [],
+        "val": [
+            "read-access",
+            "standard-doctor"
+        ]
+    },
+    "uid": "urn:va:user:C877:10000000260",
+    "unsucessfulLoginAttemptCount": 0
+}, {
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z",
+    "firstname": "TEST FIVE",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "lastname": "HFE",
+    "permissionSet": {
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": [],
+        "val": [
+            "read-access",
+            "standard-doctor"
+        ]
+    },
+    "uid": "urn:va:user:9E7A:10000000260",
+    "unsucessfulLoginAttemptCount": 0
+}, {
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z",
+    "firstname": "TEST FOUR",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "lastname": "HFE",
+    "permissionSet": {
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": [],
+        "val": [
+            "read-access",
+            "standard-doctor"
+        ]
+    },
+    "uid": "urn:va:user:FC2A:10000000259",
+    "unsucessfulLoginAttemptCount": 0
+}, {
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z",
+    "firstname": "TEST FOUR",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "lastname": "HFE",
+    "permissionSet": {
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": [],
+        "val": [
+            "read-access",
+            "standard-doctor"
+        ]
+    },
+    "uid": "urn:va:user:C877:10000000259",
+    "unsucessfulLoginAttemptCount": 0
+}, {
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z",
+    "firstname": "TEST FOUR",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "lastname": "HFE",
+    "permissionSet": {
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": [],
+        "val": [
+            "read-access",
+            "standard-doctor"
+        ]
+    },
+    "uid": "urn:va:user:9E7A:10000000259",
+    "unsucessfulLoginAttemptCount": 0
+}, {
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z",
+    "firstname": "TEST ONE",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "lastname": "HFE",
+    "permissionSet": {
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": [],
+        "val": [
+            "read-access",
+            "standard-doctor"
+        ]
+    },
+    "uid": "urn:va:user:FC2A:10000000256",
+    "unsucessfulLoginAttemptCount": 0
+}, {
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z",
+    "firstname": "TEST ONE",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "lastname": "HFE",
+    "permissionSet": {
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": [],
+        "val": [
+            "read-access",
+            "standard-doctor"
+        ]
+    },
+    "uid": "urn:va:user:C877:10000000256",
+    "unsucessfulLoginAttemptCount": 0
+}, {
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z",
+    "firstname": "TEST ONE",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "lastname": "HFE",
+    "permissionSet": {
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": [],
+        "val": [
+            "read-access",
+            "standard-doctor"
+        ]
+    },
+    "uid": "urn:va:user:9E7A:10000000256",
+    "unsucessfulLoginAttemptCount": 0
+}, {
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z",
+    "firstname": "TEST SEVEN",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "lastname": "HFE",
+    "permissionSet": {
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": [],
+        "val": [
+            "read-access",
+            "standard-doctor"
+        ]
+    },
+    "uid": "urn:va:user:FC2A:10000000262",
+    "unsucessfulLoginAttemptCount": 0
+}, {
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z",
+    "firstname": "TEST SEVEN",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "lastname": "HFE",
+    "permissionSet": {
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": [],
+        "val": [
+            "read-access",
+            "standard-doctor"
+        ]
+    },
+    "uid": "urn:va:user:C877:10000000262",
+    "unsucessfulLoginAttemptCount": 0
+}, {
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z",
+    "firstname": "TEST SEVEN",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "lastname": "HFE",
+    "permissionSet": {
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": [],
+        "val": [
+            "read-access",
+            "standard-doctor"
+        ]
+    },
+    "uid": "urn:va:user:9E7A:10000000262",
+    "unsucessfulLoginAttemptCount": 0
+}, {
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z",
+    "firstname": "TEST SIX",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "lastname": "HFE",
+    "permissionSet": {
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": [],
+        "val": [
+            "read-access",
+            "standard-doctor"
+        ]
+    },
+    "uid": "urn:va:user:FC2A:10000000261",
+    "unsucessfulLoginAttemptCount": 0
+}, {
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z",
+    "firstname": "TEST SIX",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "lastname": "HFE",
+    "permissionSet": {
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": [],
+        "val": [
+            "read-access",
+            "standard-doctor"
+        ]
+    },
+    "uid": "urn:va:user:C877:10000000261",
+    "unsucessfulLoginAttemptCount": 0
+}, {
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z",
+    "firstname": "TEST SIX",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "lastname": "HFE",
+    "permissionSet": {
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": [],
+        "val": [
+            "read-access",
+            "standard-doctor"
+        ]
+    },
+    "uid": "urn:va:user:9E7A:10000000261",
+    "unsucessfulLoginAttemptCount": 0
+}, {
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z",
+    "firstname": "TEST THREE",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "lastname": "HFE",
+    "permissionSet": {
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": [],
+        "val": [
+            "read-access",
+            "standard-doctor"
+        ]
+    },
+    "uid": "urn:va:user:FC2A:10000000258",
+    "unsucessfulLoginAttemptCount": 0
+}, {
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z",
+    "firstname": "TEST THREE",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "lastname": "HFE",
+    "permissionSet": {
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": [],
+        "val": [
+            "read-access",
+            "standard-doctor"
+        ]
+    },
+    "uid": "urn:va:user:C877:10000000258",
+    "unsucessfulLoginAttemptCount": 0
+}, {
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z",
+    "firstname": "TEST THREE",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "lastname": "HFE",
+    "permissionSet": {
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": [],
+        "val": [
+            "read-access",
+            "standard-doctor"
+        ]
+    },
+    "uid": "urn:va:user:9E7A:10000000258",
+    "unsucessfulLoginAttemptCount": 0
+}, {
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z",
+    "firstname": "TEST TWO",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "lastname": "HFE",
+    "permissionSet": {
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": [],
+        "val": [
+            "read-access",
+            "standard-doctor"
+        ]
+    },
+    "uid": "urn:va:user:FC2A:10000000257",
+    "unsucessfulLoginAttemptCount": 0
+}, {
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z",
+    "firstname": "TEST TWO",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "lastname": "HFE",
+    "permissionSet": {
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": [],
+        "val": [
+            "read-access",
+            "standard-doctor"
+        ]
+    },
+    "uid": "urn:va:user:C877:10000000257",
+    "unsucessfulLoginAttemptCount": 0
+}, {
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z",
+    "firstname": "TEST TWO",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "lastname": "HFE",
+    "permissionSet": {
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": [],
+        "val": [
+            "read-access",
+            "standard-doctor"
+        ]
+    },
+    "uid": "urn:va:user:9E7A:10000000257",
+    "unsucessfulLoginAttemptCount": 0
+}, {
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z",
+    "firstname": "EIGHTEEN",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "lastname": "NURSE",
+    "permissionSet": {
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": [],
+        "val": [
+            "read-access",
+            "registered-nurse"
+        ]
+    },
+    "uid": "urn:va:user:FC2A:20181",
+    "unsucessfulLoginAttemptCount": 0
+}, {
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z",
+    "firstname": "EIGHTEEN",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "lastname": "NURSE",
+    "permissionSet": {
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": [],
+        "val": [
+            "read-access",
+            "registered-nurse"
+        ]
+    },
+    "uid": "urn:va:user:C877:20181",
+    "unsucessfulLoginAttemptCount": 0
+}, {
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z",
+    "firstname": "EIGHTEEN",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "lastname": "NURSE",
+    "permissionSet": {
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": [],
+        "val": [
+            "read-access",
+            "registered-nurse"
+        ]
+    },
+    "uid": "urn:va:user:9E7A:20181",
+    "unsucessfulLoginAttemptCount": 0
+}, {
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z",
+    "firstname": "ELEVEN",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "lastname": "NURSE",
+    "permissionSet": {
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": [],
+        "val": [
+            "read-access",
+            "registered-nurse"
+        ]
+    },
+    "uid": "urn:va:user:FC2A:20174",
+    "unsucessfulLoginAttemptCount": 0
+}, {
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z",
+    "firstname": "ELEVEN",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "lastname": "NURSE",
+    "permissionSet": {
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": [],
+        "val": [
+            "read-access",
+            "registered-nurse"
+        ]
+    },
+    "uid": "urn:va:user:C877:20174",
+    "unsucessfulLoginAttemptCount": 0
+}, {
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z",
+    "firstname": "ELEVEN",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "lastname": "NURSE",
+    "permissionSet": {
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": [],
+        "val": [
+            "read-access",
+            "registered-nurse"
+        ]
+    },
+    "uid": "urn:va:user:9E7A:20174",
+    "unsucessfulLoginAttemptCount": 0
+}, {
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z",
+    "firstname": "FIFTEEN",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "lastname": "NURSE",
+    "permissionSet": {
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": [],
+        "val": [
+            "read-access",
+            "registered-nurse"
+        ]
+    },
+    "uid": "urn:va:user:FC2A:20178",
+    "unsucessfulLoginAttemptCount": 0
+}, {
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z",
+    "firstname": "FIFTEEN",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "lastname": "NURSE",
+    "permissionSet": {
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": [],
+        "val": [
+            "read-access",
+            "registered-nurse"
+        ]
+    },
+    "uid": "urn:va:user:C877:20178",
+    "unsucessfulLoginAttemptCount": 0
+}, {
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z",
+    "firstname": "FIFTEEN",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "lastname": "NURSE",
+    "permissionSet": {
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": [],
+        "val": [
+            "read-access",
+            "registered-nurse"
+        ]
+    },
+    "uid": "urn:va:user:9E7A:20178",
+    "unsucessfulLoginAttemptCount": 0
+}, {
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z",
+    "firstname": "FIFTY",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "lastname": "NURSE",
+    "permissionSet": {
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": [],
+        "val": [
+            "read-access",
+            "registered-nurse"
+        ]
+    },
+    "uid": "urn:va:user:FC2A:20213",
+    "unsucessfulLoginAttemptCount": 0
+}, {
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z",
+    "firstname": "FIFTY",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "lastname": "NURSE",
+    "permissionSet": {
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": [],
+        "val": [
+            "read-access",
+            "registered-nurse"
+        ]
+    },
+    "uid": "urn:va:user:C877:20213",
+    "unsucessfulLoginAttemptCount": 0
+}, {
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z",
+    "firstname": "FIFTY",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "lastname": "NURSE",
+    "permissionSet": {
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": [],
+        "val": [
+            "read-access",
+            "registered-nurse"
+        ]
+    },
+    "uid": "urn:va:user:9E7A:20213",
+    "unsucessfulLoginAttemptCount": 0
+}, {
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z",
+    "firstname": "FIFTY-ONE",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "lastname": "NURSE",
+    "permissionSet": {
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": [],
+        "val": [
+            "read-access",
+            "registered-nurse"
+        ]
+    },
+    "uid": "urn:va:user:FC2A:20214",
+    "unsucessfulLoginAttemptCount": 0
+}, {
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z",
+    "firstname": "FIFTY-ONE",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "lastname": "NURSE",
+    "permissionSet": {
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": [],
+        "val": [
+            "read-access",
+            "registered-nurse"
+        ]
+    },
+    "uid": "urn:va:user:C877:20214",
+    "unsucessfulLoginAttemptCount": 0
+}, {
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z",
+    "firstname": "FIFTY-ONE",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "lastname": "NURSE",
+    "permissionSet": {
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": [],
+        "val": [
+            "read-access",
+            "registered-nurse"
+        ]
+    },
+    "uid": "urn:va:user:9E7A:20214",
+    "unsucessfulLoginAttemptCount": 0
+}, {
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z",
+    "firstname": "FIVE",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "lastname": "NURSE",
+    "permissionSet": {
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": [],
+        "val": [
+            "read-access",
+            "registered-nurse"
+        ]
+    },
+    "uid": "urn:va:user:FC2A:20168",
+    "unsucessfulLoginAttemptCount": 0
+}, {
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z",
+    "firstname": "FIVE",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "lastname": "NURSE",
+    "permissionSet": {
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": [],
+        "val": [
+            "read-access",
+            "registered-nurse"
+        ]
+    },
+    "uid": "urn:va:user:C877:20168",
+    "unsucessfulLoginAttemptCount": 0
+}, {
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z",
+    "firstname": "FIVE",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsucessfulLogin": "2015-08-19T19:31:41Z",
+    "lastname": "NURSE",
+    "permissionSet": {
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": [],
+        "val": [
+            "read-access",
+            "registered-nurse"
+        ]
+    },
+    "uid": "urn:va:user:9E7A:20168",
+    "unsucessfulLoginAttemptCount": 0
+}]

@@ -1,0 +1,45 @@
+.bootstrap-timepicker {
+    span.input-group-addon {
+        cursor: pointer;
+    }
+    .bootstrap-timepicker-widget {
+        &.dropdown-menu {
+            min-width: 10px;
+        }
+        .form-control {
+            min-width: 25px;
+        }
+        table {
+            min-width: 10px;
+            tbody tr:nth-child(even) {
+                background-color: inherit;
+            }
+            td:not(.separator) {
+                padding: 0px;
+                width: 55px;
+            }
+            td {
+                a {
+                    color: $primary;
+                    padding: 4px 0;
+                    &:hover {
+                        border: none;
+                        background: none;
+                        color: $primary-dark;
+                    }
+                }
+            }
+        }
+        input.bootstrap-timepicker-minute.form-control,
+        input.bootstrap-timepicker-hour.form-control,
+        input.bootstrap-timepicker-second.form-control,
+        input.bootstrap-timepicker-meridian.form-control {
+            border: none;
+            box-shadow: none;
+            min-width: 55px;
+        }
+    }
+    input[type=text]::-ms-clear {
+        display: none;
+    }
+}

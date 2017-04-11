@@ -1,0 +1,187 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "Get record data of one domain for a patient",
+	"description": "",
+	"type": "object",
+	"required": [
+		"apiVersion",
+		"data",
+		"status"
+	],
+	"properties": {
+		"apiVersion": {
+			"type": "string"
+		},
+		"data": {
+			"type": "object",
+			"required": [
+				"updated",
+				"totalItems",
+				"currentItemCount",
+				"items"
+			],
+			"properties": {
+				"currentItemCount": {
+					"type": "integer"
+				},
+				"items": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"required": [
+							"facilityCode",
+							"facilityName",
+							"observed",
+							"result",
+							"summary",
+							"typeName"
+						],
+						"properties": {
+							"codes": {
+								"type": "array",
+								"items": {
+									"type": "object",
+									"required": [
+										"code",
+										"system"
+									],
+									"properties": {
+										"code": {
+											"type": "string"
+										},
+										"display": {
+											"type": "string"
+										},
+										"system": {
+											"type": "string"
+										}
+									}
+								}
+							},
+							"displayName": {
+								"type": "string"
+							},
+							"enteredByName": {
+								"type": "string"
+							},
+							"enteredByUid": {
+								"type": "string"
+							},
+							"facilityCode": {
+								"type": "string"
+							},
+							"facilityName": {
+								"type": "string"
+							},
+							"high": {
+								"type": "string"
+							},
+							"kind": {
+								"type": "string"
+							},
+							"lastUpdateTime": {
+								"type": "string"
+							},
+							"localId": {
+								"type": "string"
+							},
+							"locationName": {
+								"type": "string"
+							},
+							"locationUid": {
+								"type": "string"
+							},
+							"low": {
+								"type": "string"
+							},
+							"metricResult": {
+								"type": "string"
+							},
+							"metricUnits": {
+								"type": "string"
+							},
+							"observed": {
+								"type": "string"
+							},
+							"patientGeneratedDataFlag": {
+								"type": "boolean"
+							},
+							"pid": {
+								"type": "string"
+							},
+							"qualifiedName": {
+								"type": "string"
+							},
+							"qualifiers": {
+								"type": "array",
+								"items": {
+									"type": "object",
+									"required": [
+										"name",
+										"vuid"
+									],
+									"properties": {
+										"name": {
+											"type": "string"
+										},
+										"vuid": {
+											"type": "integer"
+										}
+									}
+								}
+							},
+							"result": {
+								"type": "string"
+							},
+							"resultNumber": {
+								"type": "number"
+							},
+							"resulted": {
+								"type": "string"
+							},
+							"stampTime": {
+								"type": "string"
+							},
+							"summary": {
+								"type": "string"
+							},
+							"typeCode": {
+								"type": "string"
+							},
+							"typeName": {
+								"type": "string"
+							},
+							"uid": {
+								"type": "string"
+							},
+							"units": {
+								"type": "string"
+							}
+						}
+					}
+				},
+				"itemsPerPage": {
+					"type": "integer"
+				},
+				"pageIndex": {
+					"type": "integer"
+				},
+				"startIndex": {
+					"type": "integer"
+				},
+				"totalItems": {
+					"type": "integer"
+				},
+				"totalPages": {
+					"type": "integer"
+				},
+				"updated": {
+					"type": "integer"
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

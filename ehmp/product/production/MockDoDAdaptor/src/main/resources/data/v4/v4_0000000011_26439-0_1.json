@@ -1,0 +1,123 @@
+{
+  "queryComplete": true,
+  "statusList": [
+    {
+      "partner": {
+        "partnerIdentifier": "2.16.840.1.113883.3.42.126.100001.13",
+        "partnerName": "ahlta",
+        "partnerType": "DOD"
+      },
+      "partnerStatus": "SUCCESS",
+      "expectedCount": 1,
+      "receivedCount": 1
+    }
+  ],
+  "dataList": {
+    "labApResults": [
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000000728"
+        },
+        "enteredBy": {
+          "name": "DOCTOR, ALPHA"
+        },
+        "enteredDate": {
+          "start": "2013-06-10T04:01:00",
+          "end": "2013-06-10T04:01:00"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "26439-0"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL/0056"
+        },
+        "order": {
+          "accession": {
+            "id": "130610 P 33"
+          },
+          "collectionDate": {
+            "start": "2013-06-10T04:01:00",
+            "end": "2013-06-10T04:01:00"
+          },
+          "collectionSample": null,
+          "date": {
+            "start": "2013-06-10T09:17:00",
+            "end": "2013-06-10T09:17:00"
+          },
+          "id": {
+            "id": "2157567069"
+          },
+          "orderNumber": {
+            "id": "130610-00003"
+          },
+          "priority": [
+            {
+              "display": "ROUTINE",
+              "primary": true
+            }
+          ],
+          "provider": {
+            "name": "DOCTOR, ALPHA"
+          },
+          "requestingLocation": {
+            "name": "NH Great Lakes IL"
+          },
+          "specimen": [
+            {
+              "code": null,
+              "display": null,
+              "primary": true
+            }
+          ],
+          "status": [],
+          "test": [
+            {
+              "code": null,
+              "display": "Gynecology Cytology Report",
+              "primary": true
+            }
+          ]
+        },
+        "results": [
+          {
+            "certifiedBy": null,
+            "certifiedDate": null,
+            "comment": null,
+            "content": "Procedure:CYTOLOGIC GYN\nOrder #:130610-00003\nProvider:42834 DOCTOR, ALPHA\nOrdered Date:20130610091700\nPriority:ROUTINE\nSpecimen:UNKNOWN\nResulted Date:20130610091728.1-0400\n130610 P 33                     Col: 10Jun13                 CYTOLOGY(UNKNOWN)\n                             Hcp: DOCTOR,ALPHA               Req Loc: ORTHOPED\n                                  CYTO GYN                    C:AD10Jun13@0917\nCoPath Report\nPatient: SMITH,JIM                           Specimen #:  CG13-33\n                                             Accessioned: 06/10/13\nPathologist: Doctor Alpha\n\n\n\n\n\n\nSOURCE OF SPECIMEN:\n  VAGINAL CYTOLOGIC MATERIAL\n    Smears Received:          1\n\n\n\nCLINICAL DIAGNOSIS AND HISTORY:\n  Post-Menopausal: No\n  Hysterectomy: No\n  Birth Control Pills: No\n  I.U.D.: No\n  Hormone Therapy: No\n  Cytology Comment: SMOKE TEST\n\n\n\n\n\n\nGROSS DESCRIPTION:\n  GROSS DESCRIPTION - SMOKE TEST\n\n\n\nFINAL DIAGNOSIS:\n  CYTOTECH COMMENTS - SMOKE TEST\n\n\n\n\n\n\n                                        ** Report Electronically Signed **\n  doca/06/10/13                            Doctor Alpha",
+            "location": {
+              "name": "NH Great Lakes IL/0056"
+            },
+            "specimens": [
+              "UNKNOWN"
+            ],
+            "status": [
+              {
+                "display": "Certify",
+                "primary": true
+              }
+            ],
+            "test": [
+              {
+                "display": "Gynecology Cytology Report",
+                "primary": true
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

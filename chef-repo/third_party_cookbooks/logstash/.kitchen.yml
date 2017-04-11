@@ -1,0 +1,46 @@
+---
+driver:
+  name: vagrant
+driver_config:
+  require_chef_omnibus: true
+  use_vagrant_berkshelf_plugin: true
+  customize:
+    memory: 512
+    cpus: 1
+
+provisioner:
+  name: chef_solo
+
+platforms:
+  - name: ubuntu-12.04
+  - name: centos-5.10
+  - name: centos-6.5
+  - name: centos-7.0
+  - name: fedora-20
+  - name: debian-7.6
+
+suites:
+  - name: server
+    run_list:
+      - recipe[apt::default]
+      - recipe[java::default]
+      - recipe[logstash::server]
+    attributes:
+      java:
+        install_flavor: "oracle"
+        jdk_version: "7"
+        oracle:
+          accept_oracle_download_terms: true
+      logstash:
+        instance:
+          server:
+            xms: '256M'
+            xmx: '256M'
+            config_templates:
+              input_syslog: 'config/input_syslog.conf.erb'
+              output_stdout: 'config/output_stdout.conf.erb'
+              output_elasticsearch: 'config/output_elasticsearch.conf.erb'
+            pattern_templates:
+              default: 'patterns/custom_patterns.erb'
+            elasticsearch_ip: '127.0.0.1'
+            enable_embedded_es: true

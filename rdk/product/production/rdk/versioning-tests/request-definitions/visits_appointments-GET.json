@@ -1,0 +1,28 @@
+{
+	"parameters": {
+		"date.end": {
+			"name": "date.end",
+			"paramType": "query",
+			"type": "string",
+			"values": [
+			]
+		},
+		"date.start": {
+			"name": "date.start",
+			"paramType": "query",
+			"type": "string",
+			"values": [
+			]
+		},
+		"pid": {
+			"name": "pid",
+			"paramType": "query",
+			"required": true,
+			"type": "string",
+			"values": [
+			]
+		}
+	},
+	"schema": {
+	}
+}

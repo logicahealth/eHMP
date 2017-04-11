@@ -1,0 +1,51 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"type": "object",
+	"required": [
+		"data",
+		"status"
+	],
+	"properties": {
+		"data": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"required": [
+					"ienName",
+					"displayName",
+					"location",
+					"rMar",
+					"pLen",
+					"ien",
+					"name"
+				],
+				"properties": {
+					"displayName": {
+						"type": "string"
+					},
+					"ien": {
+						"type": "string"
+					},
+					"ienName": {
+						"type": "string"
+					},
+					"location": {
+						"type": "string"
+					},
+					"name": {
+						"type": "string"
+					},
+					"pLen": {
+						"type": "string"
+					},
+					"rMar": {
+						"type": "string"
+					}
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

@@ -1,0 +1,43 @@
+{{#if addendaText}}
+<p><strong>Addenda</strong></p>
+{{#each addendaText}}
+<div class="row">
+	<div class="col-xs-8">
+		<div class="col-xs-4">
+			<p class=" text-right all-margin-no">
+				<span class="color-grey-darker">Date of Addendum:</span>
+			</p>
+		</div>
+		<div class="col-xs-8">
+			<p class="all-margin-no">{{addendaDateTime}}</p>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-xs-8">
+		<div class="col-xs-4">
+			<p class="text-right all-margin-no">
+				<span class="color-grey-darker">Author:</span>
+			</p>
+		</div>
+		<div class="col-xs-8">
+			<p class="all-margin-no">{{authorDisplayName}}</p>
+		</div>
+	</div>
+</div>
+<div class="row bottom-margin-lg">
+	<div class="col-xs-8">
+		<div class="col-xs-4">
+			<p class="text-right all-margin-no">
+				<span class="color-grey-darker">Status:</span>
+			</p>
+		</div>
+		<div class="col-xs-8">
+			<p class="all-margin-no">{{status}}</p>
+		</div>
+	</div>
+</div>
+<pre class="font-size-12 top-margin-sm">{{content}}</pre>
+{{/each}}
+{{/if}}
+

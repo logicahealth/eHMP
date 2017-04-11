@@ -1,0 +1,620 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>eHMP Bootstrap UI Library - Patient Information Bar</title>
+    <link rel="stylesheet" href="../../../_assets/css/vendor.css" />
+    <link rel="stylesheet" href="../../../_assets/css/adk.css" />
+    <!-- we should not be loading root level styles here 
+         these root level shouldn't be different than what is being used in the application -->
+    <!-- <link rel="stylesheet" href="../../css/main-styles.css" /> -->
+    <script src="../../js/jquery-1.11.2.min.js"></script>
+    <script src="../../../_assets/libs/bower/bootstrap/bootstrap.min.js"></script>
+</head>
+<body class="library">
+    <!-- Begin Navigation -->
+    <div id="navigation" class="navbar-fixed-top"></div>
+    <!-- End Navigation -->
+    <div class="container">
+        <ol class="breadcrumb">
+            <li><a href="../../index.html">eHMP UI Bootstrap Library</a></li>
+            <li><a href="../../views.html">Views</a></li>
+            <li class="active">Patient Information Bar MarkUp</li>
+        </ol>
+        <h1>Patient Information Bar MarkUp</h1>
+        <div class="description">
+            <p><strong><i class="fa fa-leanpub"></i> Description:</strong> This is the 508 compliant static HTML/CSS mock up of the Patient Information Bar.</p>
+            <p><strong><i class="fa fa-file-text-o"></i> Documents:</strong> Please also view below for full details on implementation:</p>
+            <ul>
+                <li><a href="http://h352jh.axshare.com/#p=patient_chart">Wireframe</a></li>
+                <li>Workflow Diagram <small>[PDF,]</small></li>
+                <li>Use Scenario Case Documentation <small>[PDF,]</small></li>
+                <li><a href="../../docs/508-test-cases/508-test-case-application-2.0.xls">508 Test Case Documentation</a> <small>[PDF, 57KB]</small></li>
+            </ul>
+        </div>
+        <hr />
+    </div>
+
+    <aside class="patient-info-bar">
+        <section class="patient-demographic">
+            <div class="profile-img">
+                <img src="../../img/photo.jpg" width="120" height="120" alt="Patient, Eight">
+            </div>
+            <div class="patient-info">
+                <h2>
+                    <span class="sr-only">Patient's Name:</span>Patient, Eight<br />
+                    <span class="sr-only">Type of care:</span><span class="small">Inpatient</span>
+                </h2>
+                <p><strong aria-hidden="true">DOB:</strong> <span class="sr-only">Patient's date of birth</span>04/07/1935 (80<span aria-hidden="true">y</span><span class="sr-only">years old</span>)</p>
+                <p><strong aria-hidden="true">SSN:</strong> <span class="sr-only">Social Security Number</span>XXX-XX-0008</p>
+                <p><strong>Gender:</strong> Male</p>
+                <button type="button" class="btn btn-xs more-patient-info btn-popover" title="Press enter to view more demographic information" data-popover="more-patient-info"><i class="fa fa-ellipsis-h"></i></button>
+            </div>
+        </section><!--end demographic-->
+        <!-- patient info popover-->
+        <div class="more-patient-info-popover hidden popover-info">
+            <h3>
+                Patient Information 
+                <span>
+                    <button type="button" class="close btn-popover" title="Press enter to close."><span aria-hidden="true">×</span></button>
+                </span>
+            </h3>
+            <div class="content">
+                <div class="row">
+                    <div class="col-xs-4 left-padding-no">
+                        <h4>Phone</h4>
+                        <hr aria-hidden="true" />
+                        <div class="col-xs-12 left-padding-sm data-content">
+                            <p><strong>Home</strong> <span>(222) 555-1111</span></p>  
+                            <p><strong>Mobile</strong> <span>No Record Found</span></p>
+                            <p><strong>Work</strong> <span>(222) 555-2222</span></p>
+                        </div>
+                    </div>
+                    <div class="col-xs-4 left-padding-no">
+                        <h4>Address</h4>
+                        <hr aria-hidden="true" />
+                        <div class="col-xs-12 left-padding-sm data-content">
+                            <p>Home</p>
+                            <p>1111 Main Street</p>
+                            <p>Chantilly, VA 55555-1111</p>
+                        </div>
+                    </div>
+                    <div class="col-xs-4 left-padding-no right-padding-no">
+                        <h4>Email</h4>
+                        <hr aria-hidden="true" />
+                        <div class="col-xs-12 left-padding-sm data-content">
+                            <p>No Record Found</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-6 left-padding-no">
+                        <h4>Emergency Contact</h4>
+                        <hr aria-hidden="true" />
+                        <div class="col-xs-12 left-padding-sm data-content">
+                            <p><strong>Name</strong> <span>No Record Found</span></p>
+                            <p><strong>Home</strong> <span>No Record Found</span></p>
+                            <p><strong>Work</strong> <span>No Record Found</span></p>
+                            <p><strong>Address</strong> <span>Any Street<br />Any Town, WV 99995</span></p>
+                        </div>
+                    </div>
+                    <div class="col-xs-6 left-padding-no right-padding-no">
+                        <h4>Health Benefits and Insurance</h4>
+                        <hr aria-hidden="true" />
+                        <div class="col-xs-12 left-padding-sm data-content">
+                            <p><strong>Relationship</strong><span>Veteran, Brother</span></p>
+                            <p><strong>Home</strong><span>No Record Found</span></p>
+                            <p><strong>Work</strong><span>No Record Found</span></p>
+                            <p><strong>Address</strong><span>Any Street<br />Any Town, WV 99995</span></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-6 left-padding-no">
+                        <h4>Health Benefits and Insurance</h4>
+                        <hr aria-hidden="true" />
+                        <div class="col-xs-12 left-padding-sm data-content">
+                            <p><strong>Relationship</strong><span>Veteran, Brother</span></p>
+                            <p><strong>Home</strong><span>No Record Found</span></p>
+                            <p><strong>Work</strong><span>No Record Found</span></p>
+                            <p><strong>Address</strong><span>Any Street<br />Any Town, WV 99995</span></p>
+                        </div>
+                    </div>
+                    <div class="col-xs-6 left-padding-no right-padding-no">
+                        <h4>Service and Social History</h4>
+                        <hr aria-hidden="true" />
+                        <div class="col-xs-12 left-padding-sm data-content">
+                            <p><strong>Veteran Status</strong><span>Yes</span></p>
+                            <p><strong>Martial Status</strong><span>Married</span></p>
+                            <p><strong>Religion</strong><span>Roman Catholic Church</span></p>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="sr-only close btn-popover" title="Press enter to close."><span aria-hidden="true">×</span></button>
+            </div>
+        </div>
+
+        <section>
+            <div class="section-content">
+                <h2>Postings</h2>
+                <ul class="postings">
+                    <li>
+                        <button type="button" class="btn btn-sm crisis btn-popover" title="Press enter to view this patient's crisis notes" data-popover="crisis">Crisis <i class="fa fa-circle fa-lg warning"></i></button>
+                        <!-- postings: crisis info popover-->
+                        <div class="crisis-popover hidden popover-info">
+                            <h3>Crisis Note
+                                <span>
+                                    <button type="button" class="close btn-popover" title="Press enter to close."><span aria-hidden="true">×</span></button>
+                                </span>
+                            </h3>
+                            <div class="content">
+                                <div class="row">
+                                    <h4>Crisis Note 05/21/2015</h4>
+                                    <hr aria-hidden="true" />
+                                    <div class="col-xs-6 all-padding-no">
+                                        <div class="col-xs-12 data-content">
+                                            <p><strong>Local Title</strong> <span>CRISIS NOTE</span></p>  
+                                            <p><strong>Date of Note</strong> <span>05/21/2015 12:01</span></p>
+                                            <p><strong>Author</strong> <span>Exp. Cosigner</span></p>
+                                            <p><strong>Urgency</strong> <span>N/A</span></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6 all-padding-no">
+                                        <div class="col-xs-12 data-content">
+                                            <p><strong>Standard Title</strong> <span>N/A</span></p>  
+                                            <p><strong>Entry Date</strong> <span>05/21/2015 12:01</span></p>
+                                            <p><strong>Exp. Cosigner</strong> <span>N/A</span></p>
+                                            <p><strong>Status</strong> <span>Completed</span></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 all-padding-no top-margin-sm bottom-margin-md">
+                                        <span class="label applet-badges label-abnormal percent-width-100" aria-label="H - Abnormal High" title="Patient is armed and dangerous">Patient is armed and dangerous </span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <h4>Crisis Note 04/21/2014</h4>
+                                    <hr aria-hidden="true" />
+                                    <div class="col-xs-6 all-padding-no">
+                                        <div class="col-xs-12 data-content">
+                                            <p><strong>Local Title</strong> <span>CRISIS NOTE</span></p>
+                                            <p><strong>Date of Note</strong> <span>04/21/2014 17:00</span></p>
+                                            <p><strong>Author</strong> <span>Exp. Cosigner</span></p>
+                                            <p><strong>Urgency</strong> <span>N/A</span></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6 all-padding-no">
+                                        <div class="col-xs-12 data-content">
+                                            <p><strong>Standard Title</strong> <span>N/A</span></p>
+                                            <p><strong>Entry Date</strong> <span>04/21/2014 17:01</span></p>
+                                            <p><strong>Exp. Cosigner</strong> <span>N/A</span></p>
+                                            <p><strong>Status</strong> <span>Completed</span></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 all-padding-no top-margin-sm bottom-margin-md">
+                                        <span class="label applet-badges label-abnormal percent-width-100" aria-label="H - Abnormal High" title="Patient is armed and dangerous">Patient is armed and dangerous </span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <h4>Crisis Note 03/21/2013</h4>
+                                    <hr aria-hidden="true" />
+                                    <div class="col-xs-6 all-padding-no">
+                                        <div class="col-xs-12 data-content">
+                                            <p><strong>Local Title</strong> <span>CRISIS NOTE</span></p>
+                                            <p><strong>Date of Note</strong> <span>03/21/2013 16:00</span></p>
+                                            <p><strong>Author</strong> <span>Exp. Cosigner</span></p>
+                                            <p><strong>Urgency</strong> <span>N/A</span></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6 all-padding-no">
+                                        <div class="col-xs-12 data-content">
+                                            <p><strong>Standard Title</strong> <span>N/A</span></p>
+                                            <p><strong>Entry Date</strong> <span>03/21/2013 16:00</span></p>
+                                            <p><strong>Exp. Cosigner</strong> <span>N/A</span></p>
+                                            <p><strong>Status</strong> <span>Completed</span></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 all-padding-no top-margin-sm bottom-margin-md">
+                                        <span class="label applet-badges label-abnormal percent-width-100" aria-label="H - Abnormal High" title="Patient is armed and dangerous">Patient is armed and dangerous </span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <h4>Crisis Note 02/21/2012</h4>
+                                    <hr aria-hidden="true" />
+                                    <div class="col-xs-6 all-padding-no">
+                                        <div class="col-xs-12 data-content">
+                                            <p><strong>Local Title</strong> <span>CRISIS NOTE</span></p>  
+                                            <p><strong>Date of Note</strong> <span>02/21/2012 09:00</span></p>
+                                            <p><strong>Author</strong> <span>Exp. Cosigner</span></p>
+                                            <p><strong>Urgency</strong> <span>N/A</span></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6 all-padding-no">
+                                        <div class="col-xs-12 data-content">
+                                            <p><strong>Standard Title</strong> <span>N/A</span></p>  
+                                            <p><strong>Entry Date</strong> <span>02/21/2012 09:00</span></p>
+                                            <p><strong>Exp. Cosigner</strong> <span>N/A</span></p>
+                                            <p><strong>Status</strong> <span>Completed</span></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 all-padding-no top-margin-sm bottom-margin-md">
+                                        <span class="label applet-badges label-abnormal percent-width-100" aria-label="H - Abnormal High" title="Patient is armed and dangerous">Patient is armed and dangerous </span>
+                                    </div>
+                                </div>
+                                <button type="button" class="sr-only close btn-popover" title="Press enter to close."><span aria-hidden="true">×</span></button>
+                            </div>
+                        </div><!-- END postings: crisis info popover-->
+                    </li>
+                    <li>
+                        <button type="button" class="btn btn-sm warning inactive btn-popover disabled" disabled title="This patient does not have warning notes" data-popover="warnings">Warnings <i class="fa fa-circle fa-lg inactive"></i></button>
+                        <!-- postings: warning info popover-->
+                        <div class="warning-popover hidden popover-info">
+                            <h3>Patient Information
+                                <span>
+                                    <button type="button" class="close btn-popover" title="Press enter to close."><span aria-hidden="true">×</span></button>
+                                </span>
+                            </h3>
+                            <div class="content">
+                                <div class="row">
+                                    <!-- place content here -->
+                                    <button type="button" class="sr-only close btn-popover" title="Press enter to close."><span aria-hidden="true">×</span></button>
+                                </div>
+                            </div>
+                        </div><!-- END postings: warning info popover-->
+                    </li>
+                    <li>
+                        <button type="button" class="btn btn-sm allergies btn-popover" title="Press enter to view this patient's allergies notes" data-popover="allergies">Allergies <i class="fa fa-circle fa-lg warning"></i></button>
+                        <!-- postings: allergies info popover-->
+                        <div class="allergies-popover hidden popover-info">
+                            <h3>Allergies
+                                <span>
+                                    <button type="button" class="close btn-popover" title="Press enter to close."><span aria-hidden="true">×</span></button>
+                                </span>
+                            </h3>
+                            <div class="content">
+                                <div class="row">
+                                    <h4>SOY MILK <span class="small">HIVES</span></h4>
+                                    <hr aria-hidden="true" />
+                                    <div class="col-xs-6 all-padding-no">
+                                        <div class="col-xs-12 data-content">
+                                            <p><strong>Drug Classes</strong> <span>N/A</span></p>
+                                            <p><strong>Nature of reaction</strong> <span>ALLERGY</span></p>
+                                            <p><strong>Entered By</strong> <span>USER PANORAMA</span></p>
+                                            <p><strong>Verified</strong> <span>12/16/2015</span></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6 all-padding-no">
+                                        <div class="col-xs-12 data-content">
+                                            <p><strong>Severity</strong> <span>Severity Not Noted</span></p>
+                                            <p><strong>Originated</strong> <span>12/16/2015 10:07</span></p>
+                                            <p><strong>Observed/Historical</strong> <span>Historical</span></p>
+                                            <p><strong>Observed Date</strong> <span>N/A</span></p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <h4>CHOCOLATE <span class="small">DIARRHEA</span></h4>
+                                    <hr aria-hidden="true" />
+                                    <div class="col-xs-6 all-padding-no">
+                                        <div class="col-xs-12 data-content">
+                                            <p><strong>Drug Classes</strong> <span>N/A</span></p>
+                                            <p><strong>Nature of reaction</strong> <span>ALLERGY</span></p>
+                                            <p><strong>Entered By</strong> <span>USER PANORAMA</span></p>
+                                            <p><strong>Verified</strong> <span>12/16/2015</span></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6 all-padding-no">
+                                        <div class="col-xs-12 data-content">
+                                            <p><strong>Severity</strong> <span>Severity Not Noted</span></p>  
+                                            <p><strong>Originated</strong> <span>12/16/2015 10:07</span></p>
+                                            <p><strong>Observed/Historical</strong> <span>Historical</span></p>
+                                            <p><strong>Observed Date</strong> <span>N/A</span></p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <h4>PENICILLIN <span class="small">ITCHING,WATERING EYES</span></h4>
+                                    <hr aria-hidden="true" />
+                                    <div class="col-xs-6 all-padding-no">
+                                        <div class="col-xs-12 data-content">
+                                            <p><strong>Drug Classes</strong> <span>N/A</span></p>  
+                                            <p><strong>Nature of reaction</strong> <span>ALLERGY</span></p>
+                                            <p><strong>Entered By</strong> <span>USER PANORAMA</span></p>
+                                            <p><strong>Verified</strong> <span>12/16/2015</span></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6 all-padding-no">
+                                        <div class="col-xs-12 data-content">
+                                            <p><strong>Severity</strong> <span>Severity Not Noted</span></p>  
+                                            <p><strong>Originated</strong> <span>12/16/2015 10:07</span></p>
+                                            <p><strong>Observed/Historical</strong> <span>Historical</span></p>
+                                            <p><strong>Observed Date</strong> <span>N/A</span></p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="button" class="sr-only close btn-popover" title="Press enter to close."><span aria-hidden="true">×</span></button>
+                            </div>
+                        </div><!-- END postings: allergies info popover-->
+                    </li>
+                    <li>
+                        <button type="button" class="btn btn-sm directives btn-popover" title="Press enter to view this patient's directives notes" data-popover="directives">Directives <i class="fa fa-circle fa-lg warning"></i></button>
+                       <!-- postings: directives info popover-->
+                       <div class="directives-popover hidden popover-info">
+                           <h3>Directives
+                            <span>
+                                <button type="button" class="close btn-popover" title="Press enter to close."><span aria-hidden="true">×</span></button>
+                            </span>
+                           </h3>
+                           <p class="left-padding-md top-padding-sm bottom-padding-sm bottom-margin-no">Scanned images of Advance Directives are unavailable in this version of eHMP; please reference CPRS/VistA Imaging for Advance Directives.</p>
+                           <div class="content">
+                               <div class="row">
+                                   <h4>Advance Directive 08/14/2015</h4>
+                                   <hr aria-hidden="true" />
+                                   <div class="col-xs-6 all-padding-no">
+                                       <div class="col-xs-12 data-content">
+                                           <p><strong>Local Title</strong> <span>ADVANCE DIRECTIVE</span></p>
+                                           <p><strong>Date of Note</strong> <span>08/14/2015 13:17</span></p>
+                                           <p><strong>Author</strong> <span>VEHU ONE</span></p>
+                                           <p><strong>Urgency</strong> <span>N/A</span></p>
+                                       </div>
+                                   </div>
+                                   <div class="col-xs-6 all-padding-no">
+                                       <div class="col-xs-12 data-content">
+                                           <p><strong>Standard Title</strong> <span>N/A</span></p>
+                                           <p><strong>Entry Date</strong> <span>08/14/2015 13:16</span></p>
+                                           <p><strong>Exp. Cosigner</strong> <span>N/A</span></p>
+                                           <p><strong>Status</strong> <span>Completed</span></p>
+                                       </div>
+                                   </div>
+                                   <div class="col-xs-12 left-padding-no top-margin-md">
+                                       <p><strong>Note originating from Panorama</strong><br />
+                                       Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestiae sint sit harum alias quasi placeat impedit hic doloribus, sed illo repudiandae maiores perferendis, amet soluta consectetur a totam tempore facere.</p>
+                                   </div>
+                               </div>
+                               <div class="row">
+                                   <h4>Advance Directive 08/14/2015</h4>
+                                   <hr aria-hidden="true" />
+                                   <div class="col-xs-6 all-padding-no">
+                                       <div class="col-xs-12 data-content">
+                                           <p><strong>Local Title</strong> <span>ADVANCE DIRECTIVE</span></p>
+                                           <p><strong>Date of Note</strong> <span>08/14/2015 13:17</span></p>
+                                           <p><strong>Author</strong> <span>VEHU ONE</span></p>
+                                           <p><strong>Urgency</strong> <span>N/A</span></p>
+                                       </div>
+                                   </div>
+                                   <div class="col-xs-6 all-padding-no">
+                                       <div class="col-xs-12 data-content">
+                                           <p><strong>Standard Title</strong> <span>N/A</span></p>
+                                           <p><strong>Entry Date</strong> <span>08/14/2015 13:16</span></p>
+                                           <p><strong>Exp. Cosigner</strong> <span>N/A</span></p>
+                                           <p><strong>Status</strong> <span>Completed</span></p>
+                                       </div>
+                                   </div>
+                                   <div class="col-xs-12 left-padding-no top-margin-md">
+                                       <p><strong>Note originating from Panorama</strong><br />
+                                       Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestiae sint sit harum alias quasi placeat impedit hic doloribus, sed illo repudiandae maiores perferendis, amet soluta consectetur a totam tempore facere.</p>
+                                   </div>
+                               </div>
+                               <div class="row">
+                                   <h4>Advance Directive 08/14/2015</h4>
+                                   <hr aria-hidden="true" />
+                                   <div class="col-xs-6 all-padding-no">
+                                       <div class="col-xs-12 data-content">
+                                           <p><strong>Local Title</strong> <span>ADVANCE DIRECTIVE</span></p>
+                                           <p><strong>Date of Note</strong> <span>08/14/2015 13:17</span></p>
+                                           <p><strong>Author</strong> <span>VEHU ONE</span></p>
+                                           <p><strong>Urgency</strong> <span>N/A</span></p>
+                                       </div>
+                                   </div>
+                                   <div class="col-xs-6 all-padding-no">
+                                       <div class="col-xs-12 data-content">
+                                           <p><strong>Standard Title</strong> <span>N/A</span></p>
+                                           <p><strong>Entry Date</strong> <span>08/14/2015 13:16</span></p>
+                                           <p><strong>Exp. Cosigner</strong> <span>N/A</span></p>
+                                           <p><strong>Status</strong> <span>Completed</span></p>
+                                       </div>
+                                   </div>
+                                   <div class="col-xs-12 left-padding-no top-margin-md">
+                                       <p><strong>Note originating from Panorama</strong><br />
+                                       Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestiae sint sit harum alias quasi placeat impedit hic doloribus, sed illo repudiandae maiores perferendis, amet soluta consectetur a totam tempore facere.</p>
+                                   </div>
+                               </div>
+                               <button type="button" class="sr-only close btn-popover" title="Press enter to close."><span aria-hidden="true">×</span></button>
+                           </div>
+                       </div> <!-- END postings: directives info popover-->
+                    </li>
+                    <li>
+                        <button type="button" class="btn btn-sm flags btn-popover" title="Press enter to view this patient's flags notes" data-popover="flags">Flags <i class="fa fa-circle fa-lg flagged"></i></button>
+                       <!-- postings: flags info popover-->
+                       <div class="flags-popover hidden popover-info">
+                           <h3>Patient Flags
+                            <span>
+                                <button type="button" class="close btn-popover" title="Press enter to close."><span aria-hidden="true">×</span></button>
+                            </span>
+                           </h3>
+                           <div class="content">
+                               <div class="row">
+                                    <div class="col-xs-12 all-padding-no">
+                                        <h4 class="inline-block-display right-padding-sm">WANDERER</h4> <span class="label applet-badges label-abnormal inline-block-display" title="Category II (LOCAL)">Category II (LOCAL)</span>
+                                        <hr aria-hidden="true" />
+                                        <p>This Patient Likes To Wander Around The Hospital. Please Notify The Security Office</p>
+                                    </div>
+                                   <div class="col-xs-6 all-padding-no">
+                                       <div class="col-xs-12 data-content">
+                                           <p><strong>Initial Assigned Date</strong> <span>12/23/2014 16:00</span></p>
+                                           <p><strong>Approved by</strong> <span>PROGRAMMER, EIGHT</span></p>
+                                           <p><strong>Next Review Date</strong> <span>N/A</span></p>
+                                       </div>
+                                   </div>
+                                   <div class="col-xs-6 all-padding-no">
+                                       <div class="col-xs-12 data-content">
+                                           <p><strong>Assignment Status</strong> <span>Active</span></p>
+                                           <p><strong>Owner Site</strong> <span>CAMP MASTER</span></p>
+                                           <p><strong>Originating Site</strong> <span>CAMP MASTER</span></p>
+                                       </div>
+                                   </div>
+                               </div>
+                               <div class="row">
+                                    <div class="col-xs-12 all-padding-no">
+                                        <h4 class="inline-block-display right-padding-sm">WANDERER</h4> <span class="label applet-badges label-abnormal inline-block-display" title="Category II (LOCAL)">Category II (LOCAL)</span>
+                                        <hr aria-hidden="true" />
+                                        <p>This Patient Likes To Wander Around The Hospital. Please Notify The Security Office</p>
+                                    </div>
+                                   <div class="col-xs-6 all-padding-no">
+                                       <div class="col-xs-12 data-content">
+                                           <p><strong>Initial Assigned Date</strong> <span>12/23/2014 16:00</span></p>
+                                           <p><strong>Approved by</strong> <span>PROGRAMMER, EIGHT</span></p>
+                                           <p><strong>Next Review Date</strong> <span>N/A</span></p>
+                                       </div>
+                                   </div>
+                                   <div class="col-xs-6 all-padding-no">
+                                       <div class="col-xs-12 data-content">
+                                           <p><strong>Assignment Status</strong> <span>Active</span></p>
+                                           <p><strong>Owner Site</strong> <span>CAMP MASTER</span></p>
+                                           <p><strong>Originating Site</strong> <span>CAMP MASTER</span></p>
+                                       </div>
+                                   </div>
+                               </div>
+                               <button type="button" class="sr-only close btn-popover" title="Press enter to close."><span aria-hidden="true">×</span></button>
+                           </div>
+                       </div><!-- END postings: flags info popover-->
+                    </li>
+                </ul>
+            </div>
+        </section><!--end postings-->
+        <hr aria-hidden="true" />
+        <section>
+            <div class="section-content">
+                <h2>Provider Info</h2>
+                <div class="info">
+                    <p><strong>Primary Care:</strong></p>
+                    <p>Red</p>
+                    <p>Unassigned/Assigned</p>
+                    <p>(555) 555-5551</p>
+                </div>
+                <div class="info">
+                    <p><strong>Inpatient Attending:</strong></p>
+                    <p>Provider, Thirty</p>
+                </div>
+                <div class="info">
+                    <p><strong>Provider:</strong></p>
+                    <p>Provider, Twenty</p>
+                </div>
+            </div>
+            <div class="more">
+                <button type="button" class="btn btn-xs more-provider-info btn-popover" title="Press enter to view more provider information" data-popover="more-provider-info"><i class="fa fa-ellipsis-h"></i></button>
+            </div>
+        </section><!--end provider info-->
+        <!-- provider info popover-->
+        <div class="more-provider-info-popover hidden popover-info">
+            <div class="content all-padding-no">
+                <div class="faux-table-container">
+                    <div class="faux-table">
+                        <div class="header table-row right-padding-md">
+                            <span class="sr-only">This is a summary of the provider's information categorized by facility, name, analog pager, digital pager, and office phone.
+                            <button type="button" class="close btn-popover" title="Press enter to close."><span aria-hidden="true">×</span></button>
+                            </span>
+                            <div class="table-cell">
+                                <div><h3>Facility</h3></div>
+                            </div>
+                            <div class="table-cell">
+                                <div><h3>Name</h3></div>
+                            </div>
+                            <div class="table-cell">
+                                <div><h3>Analog Pager</h3></div>
+                            </div>
+                            <div class="table-cell">
+                                <div><h3>Digital Pager</h3></div>
+                            </div>
+                            <div class="table-cell">
+                                <div><h3>Office Phone</h3></div>
+                            </div>
+                        </div>
+                        <div class="body scrolling-content">
+                            <div class="table-row">
+                                <div class="table-cell">
+                                    <span>TEST1</span>
+                                </div>
+                                <div class="table-cell">
+                                    <span>Patient One</span>
+                                </div>
+                                <div class="table-cell">
+                                    <span>(777) 456-7890</span>
+                                </div>
+                                <div class="table-cell">
+                                    <span>(666) 987-8866</span>
+                                </div>
+                                <div class="table-cell">
+                                    <span>(555) 462-1726</span>
+                                </div>
+                            </div>
+                            <div class="table-row">
+                                <div class="table-cell">
+                                    <span>TEST2</span>
+                                </div>
+                                <div class="table-cell">
+                                    <span>Patient Two</span>
+                                </div>
+                                <div class="table-cell">
+                                    <span>(666) 771-4800</span>
+                                </div>
+                                <div class="table-cell">
+                                    <span>(555) 637-8881</span>
+                                </div>
+                                <div class="table-cell">
+                                    <span>(444) 730-1228</span>
+                                </div>
+                            </div>
+                            <div class="table-row">
+                                <div class="table-cell">
+                                    <span>TEST3</span>
+                                </div>
+                                <div class="table-cell">
+                                    <span>Patient Three</span>
+                                </div>
+                                <div class="table-cell">
+                                    <span>(555) 123-4567</span>
+                                </div>
+                                <div class="table-cell">
+                                    <span>(444) 798-7814</span>
+                                </div>
+                                <div class="table-cell">
+                                    <span>(333) 114-4470</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="sr-only close btn-popover" title="Press enter to close."><span aria-hidden="true">×</span></button>
+            </div>
+        </div>
+    </aside>
+    <script>
+        $("#navigation").load("../../navigation.html");
+    </script>
+    <script>
+        $(document).ready(function(){
+            var btnPopOver = $('.btn-popover');
+            var contentPopOver = $('.popover-info');
+            btnPopOver.each(function(){
+                $(this).click(function(){
+                    var dataClass = $(this).attr('data-popover');
+                    var popOver = "." + dataClass + "-popover";
+                    if ($(this).hasClass('active')) {
+                        $(this).toggleClass('active');
+                        $(popOver).toggleClass('hidden');
+                    } else {
+                        contentPopOver.each(function(){
+                            $(this).addClass('hidden');
+                        });
+                        btnPopOver.each(function(){ 
+                            $(this).removeClass('active');
+                        });
+                        $(this).toggleClass('active');
+                        $(popOver).toggleClass('hidden');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

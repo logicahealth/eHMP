@@ -1,0 +1,6 @@
+     	    <logger category="org.hibernate.loader">
+         	     <level name="ERROR"/>
+      	    </logger>
+      	    <logger category="com.arjuna.ats.arjuna">
+                <level name="ERROR"/>
+            </logger>

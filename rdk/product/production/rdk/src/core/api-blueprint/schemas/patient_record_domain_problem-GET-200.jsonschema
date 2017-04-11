@@ -1,0 +1,265 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "Get record data of one domain for a patient",
+	"description": "",
+	"type": "object",
+	"required": [
+		"apiVersion",
+		"data",
+		"status"
+	],
+	"properties": {
+		"apiVersion": {
+			"type": "string"
+		},
+		"data": {
+			"type": "object",
+			"required": [
+				"updated",
+				"totalItems",
+				"currentItemCount",
+				"items"
+			],
+			"properties": {
+				"currentItemCount": {
+					"type": "integer"
+				},
+				"items": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"required": [
+							"codes",
+							"entered",
+							"facilityCode",
+							"facilityName",
+							"icdCode",
+							"kind",
+							"pid",
+							"problemText",
+							"providerDisplayName",
+							"providerName",
+							"serviceConnected",
+							"stampTime",
+							"statusDisplayName",
+							"statusName",
+							"summary",
+							"uid",
+							"updated"
+						],
+						"properties": {
+							"acuityCode": {
+								"type": "string"
+							},
+							"acuityName": {
+								"type": "string"
+							},
+							"codes": {
+								"type": "array",
+								"items": {
+									"type": "object",
+									"required": [
+										"code",
+										"system"
+									],
+									"properties": {
+										"code": {
+											"type": [
+												"string",
+												"number"
+											]
+										},
+										"display": {
+											"type": "string"
+										},
+										"system": {
+											"type": "string"
+										}
+									}
+								}
+							},
+							"comments": {
+								"type": "array",
+								"items": {
+									"type": "object",
+									"required": [
+										"comment",
+										"entered",
+										"enteredByCode",
+										"enteredByName",
+										"summary"
+									],
+									"properties": {
+										"comment": {
+											"type": "string"
+										},
+										"entered": {
+											"type": "integer"
+										},
+										"enteredByCode": {
+											"type": "string"
+										},
+										"enteredByName": {
+											"type": "string"
+										},
+										"summary": {
+											"type": "string"
+										}
+									}
+								}
+							},
+							"encounters": {
+								"type": "array",
+								"items": {
+									"type": "object",
+									"required": [
+										"dateTime",
+										"facilityCode",
+										"facilityName",
+										"stopCodeName",
+										"stopCodeUid",
+										"visitUid"
+									],
+									"properties": {
+										"dateTime": {
+											"type": "integer"
+										},
+										"facilityCode": {
+											"type": "integer"
+										},
+										"facilityName": {
+											"type": "string"
+										},
+										"stopCodeName": {
+											"type": "string"
+										},
+										"stopCodeUid": {
+											"type": "string"
+										},
+										"visitUid": {
+											"type": "string"
+										}
+									}
+								}
+							},
+							"entered": {
+								"type": "string"
+							},
+							"facilityCode": {
+								"type": "string"
+							},
+							"facilityName": {
+								"type": "string"
+							},
+							"icdCode": {
+								"type": "string"
+							},
+							"icdGroup": {
+								"type": "string"
+							},
+							"icdName": {
+								"type": "string"
+							},
+							"kind": {
+								"type": "string"
+							},
+							"lastUpdateTime": {
+								"type": "string"
+							},
+							"localId": {
+								"type": "string"
+							},
+							"locationDisplayName": {
+								"type": "string"
+							},
+							"locationName": {
+								"type": "string"
+							},
+							"locationUid": {
+								"type": "string"
+							},
+							"onset": {
+								"type": "string"
+							},
+							"pid": {
+								"type": "string"
+							},
+							"problemText": {
+								"type": "string"
+							},
+							"providerDisplayName": {
+								"type": "string"
+							},
+							"providerName": {
+								"type": "string"
+							},
+							"providerUid": {
+								"type": "string"
+							},
+							"removed": {
+								"type": "boolean"
+							},
+							"service": {
+								"type": "string"
+							},
+							"serviceConnected": {
+								"type": "boolean"
+							},
+							"snomedCode": {
+								"type": "string"
+							},
+							"stampTime": {
+								"type": "string"
+							},
+							"standardizedDescription": {
+								"type": "string"
+							},
+							"statusCode": {
+								"type": "string"
+							},
+							"statusDisplayName": {
+								"type": "string"
+							},
+							"statusName": {
+								"type": "string"
+							},
+							"summary": {
+								"type": "string"
+							},
+							"uid": {
+								"type": "string"
+							},
+							"unverified": {
+								"type": "boolean"
+							},
+							"updated": {
+								"type": "string"
+							}
+						}
+					}
+				},
+				"itemsPerPage": {
+					"type": "integer"
+				},
+				"pageIndex": {
+					"type": "integer"
+				},
+				"startIndex": {
+					"type": "integer"
+				},
+				"totalItems": {
+					"type": "integer"
+				},
+				"totalPages": {
+					"type": "integer"
+				},
+				"updated": {
+					"type": "integer"
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

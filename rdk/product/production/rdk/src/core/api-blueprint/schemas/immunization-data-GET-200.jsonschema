@@ -1,0 +1,87 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"type": "object",
+	"required": [
+		"data",
+		"status"
+	],
+	"properties": {
+		"data": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"required": [
+					"ien",
+					"name",
+					"shortName",
+					"cvxCode",
+					"maxInSeries",
+					"inactiveFlag",
+					"vaccineGroup",
+					"acronym",
+					"selectableHistoric",
+					"cdcFullVaccineName",
+					"codingSystem",
+					"vaccineInfoStmt",
+					"cdcProductName",
+					"vaccineGroupName",
+					"synonym",
+					"effectiveDate"
+				],
+				"properties": {
+					"acronym": {
+						"type": "string"
+					},
+					"cdcFullVaccineName": {
+						"type": "string"
+					},
+					"cdcProductName": {
+						"type": "string"
+					},
+					"codingSystem": {
+						"type": "string"
+					},
+					"cvxCode": {
+						"type": "string"
+					},
+					"effectiveDate": {
+						"type": "string"
+					},
+					"ien": {
+						"type": "string"
+					},
+					"inactiveFlag": {
+						"type": "string"
+					},
+					"maxInSeries": {
+						"type": "string"
+					},
+					"name": {
+						"type": "string"
+					},
+					"selectableHistoric": {
+						"type": "string"
+					},
+					"shortName": {
+						"type": "string"
+					},
+					"synonym": {
+						"type": "string"
+					},
+					"vaccineGroup": {
+						"type": "string"
+					},
+					"vaccineGroupName": {
+						"type": "string"
+					},
+					"vaccineInfoStmt": {
+						"type": "string"
+					}
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

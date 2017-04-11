@@ -1,0 +1,44 @@
+{
+	"parameters": {
+		"anEventDiv": {
+			"name": "anEventDiv",
+			"paramType": "query",
+			"type": "string",
+			"values": [
+			]
+		},
+		"fields": {
+			"name": "fields",
+			"paramType": "query",
+			"type": "string",
+			"values": [
+			]
+		},
+		"imagingType": {
+			"name": "imagingType",
+			"paramType": "query",
+			"required": true,
+			"type": "number",
+			"values": [
+			]
+		},
+		"patientDFN": {
+			"name": "patientDFN",
+			"paramType": "query",
+			"required": true,
+			"type": "number",
+			"values": [
+			]
+		},
+		"site": {
+			"name": "site",
+			"paramType": "query",
+			"required": true,
+			"type": "string",
+			"values": [
+			]
+		}
+	},
+	"schema": {
+	}
+}

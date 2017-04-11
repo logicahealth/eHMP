@@ -1,0 +1,220 @@
+{
+  "queryComplete": true,
+  "statusList": [
+    {
+      "partner": {
+        "partnerIdentifier": "2.16.840.1.113883.3.42.126.100001.13",
+        "partnerName": "ahlta",
+        "partnerType": "DOD"
+      },
+      "partnerStatus": "SUCCESS",
+      "expectedCount": 3,
+      "receivedCount": 3
+    }
+  ],
+  "dataList": {
+    "allergies": [
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000010340"
+        },
+        "enteredBy": {
+          "name": "BHIE, USERONE"
+        },
+        "enteredDate": {
+          "start": "2014-01-09T20:16:59",
+          "end": "2014-01-09T20:16:59"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "48765-2"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL/0056"
+        },
+        "allergen": [
+          {
+            "code": "1000",
+            "display": "Penicillins",
+            "system": "2.16.840.1.113883.3.42.127.100001.209",
+            "primary": true
+          }
+        ],
+        "comment": "This Patient is allergic to Pencillin",
+        "onsetDate": {
+          "start": "2014-01-09T05:00:00",
+          "end": "2014-01-09T05:00:00"
+        },
+        "reactions": [
+          {
+            "reaction": [
+              {
+                "display": "Vomiting",
+                "primary": true
+              }
+            ],
+            "comment": null
+          }
+        ],
+        "sourceOfInfo": [
+          {
+            "display": "Patient",
+            "primary": true
+          }
+        ],
+        "type": [
+          {
+            "display": "Drug Allergy",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000010341"
+        },
+        "enteredBy": {
+          "name": "BHIE, USERONE"
+        },
+        "enteredDate": {
+          "start": "2013-12-02T21:36:22",
+          "end": "2013-12-02T21:36:22"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "48765-2"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL/0056"
+        },
+        "allergen": [
+          {
+            "code": "7000",
+            "display": "Tetracyclines",
+            "system": "2.16.840.1.113883.3.42.127.100001.209",
+            "primary": true
+          }
+        ],
+        "comment": null,
+        "onsetDate": {
+          "start": "2013-12-02T05:00:00",
+          "end": "2013-12-02T05:00:00"
+        },
+        "reactions": [
+          {
+            "reaction": [
+              {
+                "display": "Rash",
+                "primary": true
+              }
+            ],
+            "comment": null
+          }
+        ],
+        "sourceOfInfo": [
+          {
+            "display": "Patient",
+            "primary": true
+          }
+        ],
+        "type": [
+          {
+            "display": "Drug Allergy",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000010342"
+        },
+        "enteredBy": {
+          "name": "BHIE, USERONE"
+        },
+        "enteredDate": {
+          "start": "2013-11-18T17:11:19",
+          "end": "2013-11-18T17:11:19"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "48765-2"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL/0056"
+        },
+        "allergen": [
+          {
+            "code": "29000",
+            "display": "Iodine Containing Agents",
+            "system": "2.16.840.1.113883.3.42.127.100001.209",
+            "primary": true
+          }
+        ],
+        "comment": "test",
+        "onsetDate": {
+          "start": "2013-11-18T05:00:00",
+          "end": "2013-11-18T05:00:00"
+        },
+        "reactions": [
+          {
+            "reaction": [
+              {
+                "display": "Nausea",
+                "primary": true
+              }
+            ],
+            "comment": null
+          }
+        ],
+        "sourceOfInfo": [
+          {
+            "display": "Patient",
+            "primary": true
+          }
+        ],
+        "type": [
+          {
+            "display": "Drug Allergy",
+            "primary": true
+          }
+        ]
+      }
+    ]
+  }
+}

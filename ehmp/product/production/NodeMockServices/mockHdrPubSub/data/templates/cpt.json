@@ -1,0 +1,24 @@
+{
+  "collection": "cpt",
+  "pid": "84F0;1",
+  "systemId": "84F0",
+  "localId": "1",
+  "seq": 1,
+  "total": 1,
+  "object": {
+    "lastUpdateTime": 20140409083901,
+    "cptCode": "urn:cpt:80061",
+    "encounterName": "LAB DIV 500 OOS ID 108 Oct 07, 1998",
+    "encounterUid": "urn:va:visit:ABCD:477:1316",
+    "entered": 19981007090230,
+    "facilityCode": 561,
+    "facilityName": "New Jersey HCS",
+    "localId": 881,
+    "locationName": "LAB DIV 500 OOS ID 108",
+    "locationUid": "urn:va:location:ABCD:252",
+    "name": "LIPID PANEL",
+    "quantity": 1,
+    "type": "U",
+    "uid": "urn:va:cpt:ABCD:477:881"
+  }
+}

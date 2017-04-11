@@ -1,0 +1,23 @@
+.control {
+    [class*=offset-btn] {
+        position: relative;
+        right: 10px;
+    }
+
+    // creates class definitions for "offset-btn-sm", "offset-btn-md", "offset-btn-lg" to set offset from top
+    // sm: 5 items, md: 10 items, and lg: 15 items
+    $sm: 5;
+    $md: 10;
+    $lg: 15;
+    .offset-btn-sm {
+        top: calc((#{$sm} * 15px) + 2px);
+    }
+
+    .offset-btn-md {
+        top: calc((#{$md} * 15px) + 2px);
+    }
+
+    .offset-btn-lg {
+        top: calc((#{$lg} * 15px) + 2px);
+    }
+}

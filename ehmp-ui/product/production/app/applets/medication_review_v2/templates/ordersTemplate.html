@@ -1,0 +1,99 @@
+<div class="col-sm-9 order-detail">
+    <h3 id="qualifiedName-{{detailId}}-{{instanceid}}" class="col-sm-9 capitalize detailTitle">{{name}} {{strength}} </h3>
+    <h3 class="col-sm-3 pull-right detailStatus">{{standardizedVaStatus}}</h3>
+    <br>
+    <p class="labelStyleColor">
+        <span class="med-summary-{{detailId}}">{{sig}}</span>
+    </p>
+    <div class="col-sm-12"><hr class="horizLine"></div>
+
+    <div class="col-sm-12 order-info-line">
+        <div class="col-sm-3 order-info">
+            <p>
+                <span class="prescription-label-{{detailId}} labelStyleColor">Prescription No.</span>
+            </p>
+            <p>
+                {{#each orders}}
+                <span>{{prescriptionId}}</span>
+                {{/each}}
+            </p>
+        </div>
+        <div class="col-sm-6 order-info">
+            <p>
+                <span class="supply-label-{{detailId}} labelStyleColor">Supply</span>
+            </p>{{#each orders}}{{#if quantityOrdered}}
+            <p>
+                <span>{{quantityOrdered}} for {{daysSupply}} days ({{fillsRemaining}} of {{fillsAllowed}} remaining)</span>
+            </p>{{/if}}{{/each}}</div>
+        <div class="col-sm-3 order-info">
+            <p>
+                <span class="dose-label-{{detailId}} labelStyleColor">Dose/Schedule</span>
+            </p>
+            <p>{{#each dosages}}
+                <span>{{dose}} {{dosagesUnits}} {{routeName}} {{scheduleName}} {{duration}} {{complexDuration}} {{complexConjunction}}</span>{{/each}}</p>
+        </div>
+    </div>
+    <p>&nbsp;</p>
+    <div class="col-sm-12 order-info-line">
+        <div class="col-sm-3 order-info">
+            <p>
+                <span class="provider-label-{{detailId}} labelStyleColor">Provider</span>
+            </p>
+            <p>
+                <span>{{#each orders}}
+                    <span>{{providerName}}</span>{{/each}}</span>
+            </p>
+        </div>
+        <div class="col-sm-3 order-info">
+            <p>
+                <span class="pharmacist-label-{{detailId}} labelStyleColor">Pharmacist</span>
+            </p>
+            <p>
+                <span>{{#each orders}}
+                    <span>{{pharmacistName}}</span>{{/each}}</span>
+            </p>
+        </div>
+        <div class="col-sm-3 order-info">
+            <p>
+                <span class="location-label-{{detailId}} labelStyleColor">Location</span>
+            </p>
+            <p>
+                <span>{{#each orders}}
+                    <span>{{locationName}}</span>{{/each}}</span>
+            </p>
+        </div>
+        <div class="col-sm-3 order-info">
+            <p>
+                <span class="facility-label-{{detailId}} labelStyleColor">Facility</span>
+            </p>
+            <p>
+                <span>
+                    <span>{{facilityName}}</span>
+                </span>
+            </p>
+        </div>
+    </div>
+    <p>&nbsp;</p>
+    <div class="col-sm-12 fillHx">
+        <h5>
+            <span class="fills-label-{{detailId}}">Fill History</span>
+        </h5>
+        {{#if fills}}
+        <table class="table history-table-{{detailId}}">
+            {{#each fills}}
+            <tr>
+                <td class="fillColumn">{{formatDate dispenseDate}}</td>
+                <td class="fillColumn">
+                    {{#if daysSupplyDispensed}} {{quantityDispensed}} for {{daysSupplyDispensed}} days {{else}} {{quantityDispensed}} dispensed</span>{{/if}}
+                </td>
+                <td class="fillColumn">
+                    {{../pickUpType}}
+                </td>
+                <td class="fillColumn"></td>
+            </tr>
+            {{/each}}
+        </table>
+        {{else}}
+        <hr class="horizLine">No Fill History {{/if}}
+    </div>
+</div>

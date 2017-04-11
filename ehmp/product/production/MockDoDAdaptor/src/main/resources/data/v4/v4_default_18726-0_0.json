@@ -1,0 +1,235 @@
+{
+  "queryComplete": true,
+  "statusList": [
+    {
+      "partner": {
+        "partnerIdentifier": "2.16.840.1.113883.3.42.126.100001.13",
+        "partnerName": "ahlta",
+        "partnerType": "DOD"
+      },
+      "partnerStatus": "SUCCESS",
+      "expectedCount": 2,
+      "receivedCount": 2
+    }
+  ],
+  "dataList": {
+    "radiologyReports": [
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000001513"
+        },
+        "enteredBy": {
+          "name": "Interface User"
+        },
+        "enteredDate": {
+          "start": "2007-11-30T13:30:22",
+          "end": "2007-11-30T13:30:22"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "30954-2"
+          }
+        ],
+        "facility": {
+          "name": "4th Medical Group"
+        },
+        "approvedBy": null,
+        "content": "Procedure:WRIST,RT\n20070621103000\nOrder Comment: test\nReason for Order: test\nExam #:07000074\nExam Date/Time:20070621103400\nTranscription Date/Time:20070621103400\nProvider:100000059 LARRY, PROVIDER\nRequesting Location:INTERNAL MEDICINE     SEYMOUR JOHNSON AFB, NC\nStatus:TRANSCRIBED\nResult Code: 4 ABNORMALITY, ATTN. NEEDED\nInterpreted By:100000059 LARRY, PROVIDER\nReport Text: test",
+        "exam": {
+          "date": {
+            "start": "2007-06-21T10:34:00",
+            "end": "2007-06-21T10:34:00"
+          },
+          "examNumber": {
+            "id": "07000074"
+          },
+          "status": [
+            {
+              "display": "Transcribed"
+            }
+          ],
+          "type": [
+            {
+              "code": null,
+              "display": "WRIST,RT",
+              "primary": true
+            }
+          ]
+        },
+        "interpretedBy": {
+          "name": "100000059 LARRY, PROVIDER"
+        },
+        "location": {
+          "name": "4th Medical Group"
+        },
+        "order": {
+          "date": null,
+          "id": {
+            "id": "23564658"
+          },
+          "orderNumber": null
+        },
+        "priority": null,
+        "procedures": [
+          [
+            {
+              "code": null,
+              "display": "WRIST,RT",
+              "primary": true
+            }
+          ]
+        ],
+        "radiologyLocation": {
+          "name": "INTERNAL MEDICINE     SEYMOUR JOHNSON AFB, NC"
+        },
+        "reason": "test",
+        "requestingLocation": {
+          "name": "INTERNAL MEDICINE     SEYMOUR JOHNSON AFB, NC"
+        },
+        "requestingProvider": {
+          "name": "100000059 LARRY, PROVIDER"
+        },
+        "result": [
+          {
+            "code": "4",
+            "display": "ABNORMALITY,",
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "Transcribed"
+          }
+        ],
+        "supervisedBy": null,
+        "supervisedDate": null,
+        "technologist": null,
+        "transcriptionDate": {
+          "start": "2007-06-21T10:34:00",
+          "end": "2007-06-21T10:34:00"
+        },
+        "verifiedBy": null,
+        "verifiedDate": null
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000001515"
+        },
+        "enteredBy": {
+          "name": "Interface User"
+        },
+        "enteredDate": {
+          "start": "2007-11-30T13:30:23",
+          "end": "2007-11-30T13:30:23"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "30954-2"
+          }
+        ],
+        "facility": {
+          "name": "4th Medical Group"
+        },
+        "approvedBy": null,
+        "content": "Procedure:CHEST,AP\n20070621103000\nOrder Comment: test\nReason for Order: test\nExam #:07000073\nExam Date/Time:20070621103700\nTranscription Date/Time:20070621103700\nProvider:100000059 LARRY, PROVIDER\nRequesting Location:INTERNAL MEDICINE     SEYMOUR JOHNSON AFB, NC\nStatus:TRANSCRIBED\nResult Code: 3 MAJOR ABNORMALITY, NO ATTN. NEEDED\nInterpreted By:100000059 LARRY, PROVIDER\nReport Text: test",
+        "exam": {
+          "date": {
+            "start": "2007-06-21T10:37:00",
+            "end": "2007-06-21T10:37:00"
+          },
+          "examNumber": {
+            "id": "07000073"
+          },
+          "status": [
+            {
+              "display": "Transcribed"
+            }
+          ],
+          "type": [
+            {
+              "code": null,
+              "display": "CHEST,AP",
+              "primary": true
+            }
+          ]
+        },
+        "interpretedBy": {
+          "name": "100000059 LARRY, PROVIDER"
+        },
+        "location": {
+          "name": "4th Medical Group"
+        },
+        "order": {
+          "date": null,
+          "id": {
+            "id": "23564659"
+          },
+          "orderNumber": null
+        },
+        "priority": null,
+        "procedures": [
+          [
+            {
+              "code": null,
+              "display": "CHEST,AP",
+              "primary": true
+            }
+          ]
+        ],
+        "radiologyLocation": {
+          "name": "INTERNAL MEDICINE     SEYMOUR JOHNSON AFB, NC"
+        },
+        "reason": "test",
+        "requestingLocation": {
+          "name": "INTERNAL MEDICINE     SEYMOUR JOHNSON AFB, NC"
+        },
+        "requestingProvider": {
+          "name": "100000059 LARRY, PROVIDER"
+        },
+        "result": [
+          {
+            "code": "3",
+            "display": "MAJOR",
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "Transcribed"
+          }
+        ],
+        "supervisedBy": null,
+        "supervisedDate": null,
+        "technologist": null,
+        "transcriptionDate": {
+          "start": "2007-06-21T10:37:00",
+          "end": "2007-06-21T10:37:00"
+        },
+        "verifiedBy": null,
+        "verifiedDate": null
+      }
+    ]
+  }
+}

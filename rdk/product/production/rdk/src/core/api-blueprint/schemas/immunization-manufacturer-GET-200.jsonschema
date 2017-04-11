@@ -1,0 +1,51 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"type": "object",
+	"required": [
+		"data",
+		"status"
+	],
+	"properties": {
+		"data": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"required": [
+					"record",
+					"ien",
+					"name",
+					"mvx",
+					"inactiveFlag",
+					"cdcNotes",
+					"status"
+				],
+				"properties": {
+					"cdcNotes": {
+						"type": "string"
+					},
+					"ien": {
+						"type": "string"
+					},
+					"inactiveFlag": {
+						"type": "string"
+					},
+					"mvx": {
+						"type": "string"
+					},
+					"name": {
+						"type": "string"
+					},
+					"record": {
+						"type": "string"
+					},
+					"status": {
+						"type": "string"
+					}
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

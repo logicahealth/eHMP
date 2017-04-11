@@ -1,0 +1,20 @@
+{
+	"parameters": {
+	},
+	"schema": {
+		"$schema": "http://json-schema.org/draft-04/schema#",
+		"properties": {
+			"param": {
+				"type": "object"
+			},
+			"screenType": {
+				"type": "string"
+			}
+		},
+		"required": [
+			"screenType",
+			"param"
+		],
+		"type": "object"
+	}
+}

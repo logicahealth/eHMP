@@ -1,0 +1,42 @@
+{
+	"parameters": {
+		"date.birth": {
+			"name": "date.birth",
+			"paramType": "query",
+			"type": "string",
+			"values": [
+			]
+		},
+		"name.first": {
+			"name": "name.first",
+			"paramType": "query",
+			"type": "string",
+			"values": [
+			]
+		},
+		"name.last": {
+			"name": "name.last",
+			"paramType": "query",
+			"type": "string",
+			"values": [
+			]
+		},
+		"ssn": {
+			"name": "ssn",
+			"paramType": "query",
+			"type": "string",
+			"values": [
+			]
+		}
+	},
+	"schema": {
+		"$schema": "http://json-schema.org/draft-04/schema#",
+		"allowAdditionalProperties": false,
+		"properties": {
+		},
+		"type": [
+			"object",
+			"string"
+		]
+	}
+}

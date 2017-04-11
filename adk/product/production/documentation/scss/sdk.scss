@@ -1,0 +1,133 @@
+.sdk, .code-a-thon-specific {
+    .jumbotron {
+        margin-top: -22px;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+        padding: 25px 45px;
+    }
+    a.btn .fa-chevron-right {
+        padding-left: 0.2em;
+        padding-right: 0.3em;
+        display: inline-block;
+        vertical-align: middle;
+        position: relative;
+        -webkit-transition-duration: 0.1s;
+        transition-duration: 0.1s;
+    }
+    a.btn:hover .fa-chevron-right {
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
+        box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+        -moz-osx-font-smoothing: grayscale;
+        padding-left: 0.5em;
+        padding-right: 0;
+    }
+
+    $border-width: 4px;
+
+    .tree ul {
+        position: relative;
+        padding: 1em 0;
+        white-space: nowrap;
+        margin: 0 auto;
+        text-align: center;
+        &::after {
+            content: '';
+            display: table;
+            clear: both;
+        }
+    }
+
+    .tree li {
+        display: inline-block; // need white-space fix
+        vertical-align: top;
+        text-align: center;
+        list-style-type: none;
+        position: relative;
+        padding: 1em .5em 0 .5em;
+        margin-left: -$border-width;
+        &::before,
+        &::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 50%;
+            border-top: $border-width solid #ccc;
+            width: 50%;
+            height: 1em;
+        }
+        &::after {
+            right: auto;
+            left: 50%;
+            border-left: $border-width solid #ccc;
+        }
+        &:only-child::after,
+        &:only-child::before {
+            display: none;
+        }
+        &:only-child {
+            padding-top: 0;
+        }
+        &:first-child::before,
+        &:last-child::after {
+            border: 0 none;
+        }
+        &:last-child::before {
+            border-right: $border-width solid #ccc;
+            border-radius: 0 5px 0 0;
+        }
+        &:first-child::after {
+            border-radius: 5px 0 0 0;
+        }
+    }
+
+    .tree ul ul::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 50%;
+        border-left: $border-width solid #ccc;
+        width: 0;
+        height: 1em;
+    }
+
+    .tree li .component {
+        border: 4px solid #ccc;
+        padding: 5px 10px;
+        text-decoration: none;
+        color: $sdk_color;
+        background-color: $sdk_background_color;
+        display: inline-block;
+
+        border-radius: 5px;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+
+        &.adk {
+            border-color: $adk_color;
+            background-color: $adk_background_color;
+        }
+        &.rdk {
+            border-color: $rdk_color;
+            background-color: $rdk_background_color;
+        }
+        &.vxapi {
+            border-color: $vxapi_color;
+            background-color: $vxapi_background_color;
+        }
+        h2, h3 {
+            border-bottom: 0;
+            padding-top: 0;
+            margin: 0;
+        }
+        h2:before, h3:before {
+            height: auto;
+            margin-top: 0;
+        }
+    }
+    .tree li .component.wrap {
+        float: left;
+    }
+}

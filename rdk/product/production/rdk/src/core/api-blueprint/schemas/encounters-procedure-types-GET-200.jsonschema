@@ -1,0 +1,45 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"type": "object",
+	"required": [
+		"data",
+		"status"
+	],
+	"properties": {
+		"data": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"required": [
+					"categoryName"
+				],
+				"properties": {
+					"categoryName": {
+						"type": "string"
+					},
+					"cptCodes": {
+						"type": "array",
+						"items": {
+							"type": "object",
+							"required": [
+								"ien",
+								"name"
+							],
+							"properties": {
+								"ien": {
+									"type": "string"
+								},
+								"name": {
+									"type": "string"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

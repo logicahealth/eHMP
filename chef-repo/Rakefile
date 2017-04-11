@@ -1,0 +1,337 @@
+#
+# Rakefile for Chef Server Repository
+#
+# Author:: Adam Jacob (<adam@opscode.com>)
+# Copyright:: Copyright (c) 2008 Opscode, Inc.
+# License:: Apache License, Version 2.0
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+require 'rubygems'
+require 'json'
+require 'open-uri'
+
+JSON.create_id = nil
+
+# Load constants from rake config file.
+require File.join(File.dirname(__FILE__), 'config', 'rake')
+
+require File.dirname(__FILE__) + "/no_internet/no_internet.rb"
+
+# Detect the version control system and assign to $vcs. Used by the update
+# task in chef_repo.rake (below). The install task calls update, so this
+# is run whenever the repo is installed.
+#
+# Comment out these lines to skip the update.
+
+if File.directory?(File.join(TOPDIR, ".svn"))
+  $vcs = :svn
+elsif File.directory?(File.join(TOPDIR, ".git"))
+  $vcs = :git
+end
+
+$knife_rb = "#{ENV["HOME"]}/Projects/vistacore/.chef/knife.rb"
+
+
+desc "Bundle a single cookbook for distribution"
+task :bundle_cookbook => [ :metadata ]
+task :bundle_cookbook, :cookbook do |t, args|
+  tarball_name = "#{args[:cookbook]}.tar.gz"
+  temp_dir = File.join(Dir.tmpdir, "chef-upload-cookbooks")
+  temp_cookbook_dir = File.join(temp_dir, args[:cookbook])
+  tarball_dir = File.join(TOPDIR, "pkgs")
+  FileUtils.mkdir_p(tarball_dir)
+  FileUtils.mkdir(temp_dir)
+  FileUtils.mkdir(temp_cookbook_dir)
+
+  child_folders = [ "cookbooks/#{args[:cookbook]}", "site-cookbooks/#{args[:cookbook]}" ]
+  child_folders.each do |folder|
+    file_path = File.join(TOPDIR, folder, ".")
+    FileUtils.cp_r(file_path, temp_cookbook_dir) if File.directory?(file_path)
+  end
+
+  system("tar", "-C", temp_dir, "-cvzf", File.join(tarball_dir, tarball_name), "#{args[:cookbook]}")
+
+  FileUtils.rm_rf temp_dir
+end
+
+task :tasks do |t, args|
+  exec("/usr/bin/rake -T")
+end
+
+desc "Deploy a machine using chef-repo for cookbook/environments/roles/etc"
+task :test_deploy, [:machine, :driver, :log_level, :environment] => :upload_node
+
+desc "Deploy a machine using chef-repo for cookbook/environments/roles/etc"
+task :test_setup, [:machine, :driver, :log_level, :environment] => :upload_node_setup
+
+task :zero_deploy => :download_nodes do |t, args|
+  execute_chef("converge", args[:driver], args[:environment], args[:log_level], machine_name: args[:machine], zero: true)
+end
+
+task :zero_setup => :download_nodes do |t, args|
+  execute_chef("setup", args.driver, args.environment, args.log_level, machine_name: args.machine, zero: true)
+end
+
+desc "Deploy a machine using chef-server for cookbook/environments/roles/etc"
+task :deploy, [:machine, :driver, :log_level, :environment, :project_params] do |t, args|
+  execute_chef("converge", args[:driver], args[:environment], args[:log_level], machine_name: args[:machine], project_params: args[:project_params])
+end
+
+desc "Deploy a colon-delimited list of machines in parallel; example: rake multi_deploy[jds:mocks:solr]"
+task :multi_deploy, [:machines, :driver, :log_level, :environment] do |t, args|
+  execute_chef("converge", args[:driver], args[:environment], args[:log_level], machines: args[:machines], recipe: "multi_deploy")
+end
+
+desc "Deploy the full ehmp backend in parallel [jds, mocks, solr, vista-kodak, vista-panorama] => vxsync"
+task :deploy_backend, [:driver, :log_level, :environment] do |t, args|
+  execute_chef("converge", args[:driver], args[:environment], args[:log_level], recipe: "full_backend")
+end
+
+desc "Bring up a machine without provisioning"
+task :setup, [:machine, :driver, :log_level, :environment] do |t, args|
+  execute_chef("setup", args.driver, args.environment, args.log_level, machine_name: args.machine)
+end
+
+desc "Destroy a machine against chef-repo and delete the node from chef server"
+task :test_destroy, [:machine, :driver, :log_level, :environment] => :delete_node
+
+task :zero_destroy do |t, args|
+  execute_chef("destroy", args[:driver], args[:environment], args[:log_level], machine_name: args[:machine], zero: true)
+end
+
+desc "Destroy a machine against chef server"
+task :destroy, [:machine, :driver, :log_level, :environment] do |t, args|
+  execute_chef("destroy", args[:driver], args[:environment], args[:log_level], machine_name: args[:machine])
+end
+
+desc "Stop all virtualbox machines using the vagrant directory"
+task :stop_all do |t, args|
+  Dir.chdir("#{ENV['HOME']}/Projects/vistacore/.chef/vms"){
+    exec("vagrant halt")
+  }
+end
+
+desc "Stop a single virtualbox machine using the vagrant directory"
+task :stop, :machine do |t, args|
+  Dir.chdir("#{ENV['HOME']}/Projects/vistacore/.chef/vms"){
+     exec("vagrant halt #{args[:machine]}-#{ENV['USER']}")
+  }
+end
+
+desc "Start all virtualbox machines using the vagrant directory"
+task :start_all do |t, args|
+  Dir.chdir("#{ENV['HOME']}/Projects/vistacore/.chef/vms"){
+    exec("vagrant up --no-provision")
+  }
+end
+
+desc "Start a single virtualbox machine using the vagrant directory"
+task :start, :machine do |t, args|
+  Dir.chdir("#{ENV['HOME']}/Projects/vistacore/.chef/vms"){
+    exec("vagrant up --no-provision #{args[:machine]}-#{ENV['USER']}")
+  }
+end
+
+desc "Download all the current user's nodes from chef server"
+task :download_nodes do |t, args|
+  system(
+    "/opt/chefdk/bin/knife download /nodes/*-#{ENV['USER']}.json --config #{$knife_rb}"
+  )
+end
+
+task :upload_node => :zero_deploy do |t, args|
+  upload_node(args.machine)
+end
+
+task :upload_node_setup => :zero_setup do |t, args|
+  upload_node(args.machine)
+end
+
+task :delete_node => :zero_destroy do |t, args|
+  stack = ENV['JOB_NAME'] || ENV['USER']
+  system(
+    "/opt/chefdk/bin/knife node delete #{args[:machine]}-#{stack} --config #{$knife_rb}"
+  )
+end
+
+desc "SSH into a machine by specifying the machine name, driver and stack (driver and stack are optional)"
+task :ssh, [:machine, :driver, :stack] do |t, args|
+  machine = args[:machine]
+  stack = args[:stack] || ENV["JOB_NAME"] || ENV["USER"]
+  driver = args[:driver] || "local"
+  ip = knife_search_for_ip(machine, stack, driver)
+  key = knife_search_for_key_name(machine, stack, driver)
+  case driver
+  when "aws"
+    user = "PW      "
+  when "local"
+    user = "vagrant"
+  end
+  exec('ssh', '-o', 'StrictHostKeyChecking=no', '-i', "#{key}", "#{user}@#{ip}")
+end
+
+desc "Upload a data bag item"
+task :upload_databag_item, [:databag,:item] do |t, args|
+  upload_databag_item(args[:databag],args[:item])
+end
+
+desc "Create data bag"
+task :create_databag, [:databag] do |t, args|
+  create_databag(args[:databag])
+end
+
+desc "Upload all databags"
+task :upload_databags do
+  #Create the databag for databags not currently in server
+  new_bags = get_new_databags
+  new_bags.each do |bag|
+    create_databag(bag)
+  end
+
+  #Upload every databag item
+  Dir.glob("data_bags/**/*.json") do |item|
+    bag = File.basename(File.dirname(item)) #Gets the data bag name from the filepath
+    upload_databag_item(bag,item)
+  end
+end
+
+# requiring other files
+Dir.glob("rake/**/*.rb") do |rb_file|
+  require_relative rb_file
+end
+
+
+###################################################
+###################################################
+############### METHOD DEFINITIONS ################
+###################################################
+###################################################
+
+def upload_node(machine)
+  stack = ENV['JOB_NAME'] || ENV['USER']
+  system(
+    "/opt/chefdk/bin/knife node from file #{ENV['HOME']}/Projects/vistacore/chef-repo/nodes/#{machine}-#{stack}.json --config #{$knife_rb}"
+  )
+end
+
+def knife_search_for_ip(machine_name, stack, driver)
+  raw_search = `/opt/chefdk/bin/knife search node \'name:#{machine_name}-#{stack}\' -Fj --config ~/Projects/vistacore/.chef/knife.rb`
+  parsed_search = JSON.parse(raw_search)
+  fail "More than one node with that name found" if parsed_search["results"] > 1
+  fail "No node found with the name:  #{machine_name}-#{stack}" if parsed_search["results"] == 0
+  case driver
+  when "aws"
+  ip = parsed_search["rows"][0]['automatic']['ec2']['public_ipv4']
+  when "local"
+    ip = parsed_search["rows"][0]['automatic']['ipaddress']
+  end
+  return ip
+end
+
+def knife_search_for_key_name(machine_name, stack, driver)
+  case driver
+  when "aws"
+    raw_search = `/opt/chefdk/bin/knife search node \'name:#{machine_name}-#{stack}\' -Fj --config #{$knife_rb}`
+    parsed_search = JSON.parse(raw_search)
+    fail "More than one key was found for: #{machine_name}" if parsed_search["results"] > 1
+    fail "No key was found for: #{machine_name}" if parsed_search["results"] == 0
+    begin
+      key = parsed_search["rows"][0]['normal']["chef_provisioning"]["reference"]["key_name"]
+    rescue NoMethodError
+      begin
+        key = parsed_search["rows"][0]['normal']["chef_provisioning"]["location"]["key_name"] 
+      rescue 
+        raise %/
+        No attribute found for #{machine_name}-#{stack} at: ['rows'][0]['normal']['chef_provisioning']['location']['key_name'] 
+        or ['rows'][0]['normal']['chef_provisioning']['reference']['key_name']
+        /
+      end
+    end
+    key_path = File.expand_path(key, "#{ENV['HOME']}/.vagrant.d/aws/keys")
+    unless File.exists?(key_path)
+      key_path = File.expand_path(File.basename(key_path), "#{ENV['HOME']}/Projects/vistacore/.vagrant.d/aws/keys")
+    end
+  when "local"
+    key_path = File.expand_path("insecure_private_key", "#{ENV['HOME']}/Projects/vistacore/.vagrant.d/")
+  end
+  unless File.exists?(key_path)
+    raise %/
+    *************************************************************
+    Could not find the ssh key for: machine_name
+    Most likely this means you do not have the proper credentials
+    to access this machine.
+    *************************************************************
+    /
+  end
+  return key_path
+end
+
+def execute_chef(action, driver, environment, log_level, options = {})
+  env_vars = {
+    "ACTION" => action,
+    "MACHINE_NAME" => options[:machine_name],
+    "MACHINES" => options[:machines],
+    "DRIVER" => driver || "local",
+    "PROJECT_PARAMS" => options[:project_params],
+    "BRANCH" => options[:branch] || "dev",
+    "DRIVER" => driver || "local"
+  }
+  environment = environment || "dev"
+  log_level = log_level || "warn"
+  recipe = options[:recipe] || "default"
+  if options[:zero]
+    system(env_vars, "chef-client -z -o machine::#{recipe} --force-formatter --environment #{environment} --config #{$knife_rb} --log_level #{log_level}")
+  else  
+    system(env_vars, "chef-client -o machine::#{recipe} --force-formatter --environment #{environment} --config #{$knife_rb} --log_level #{log_level}")
+  end
+end
+
+def get_new_databags()
+  local = get_databags(true)
+  server = get_databags(false)
+  diff = local - server
+  return diff
+end
+
+def get_databags(local=true)
+  zero = local ? '-z' : ''
+  databag_array = []
+  `knife data bag list --config #{$knife_rb} #{zero} > databag_list`
+  File.open("databag_list", "r") do |fi|
+    fi.each_line do |line|
+      databag = line.strip
+      next if databag.start_with?('WARN:')  #To remove the 'WARN: found in multiple directories' message
+      databag_array.push(databag)
+    end
+  end
+  File.delete("databag_list")
+  return databag_array
+end
+
+def create_databag(data_bag)
+  puts "Creating data bag #{data_bag}..."
+  cmd = "knife data bag create #{data_bag} --config #{$knife_rb}"
+  `#{cmd}`
+  raise "Failed to create databag #{data_bag}" unless $?.exitstatus==0
+end
+
+def upload_databag_item(data_bag, item)
+  puts "Uploading #{item} in bag: #{data_bag}"
+  item_path = File.expand_path(item, File.dirname(__FILE__))
+  cmd = "knife data bag from file #{data_bag} #{item_path} --config #{$knife_rb}"
+  `#{cmd}`
+  raise "Failed to upload databag item #{item} in databag #{data_bag}" unless $?.exitstatus==0
+end
+

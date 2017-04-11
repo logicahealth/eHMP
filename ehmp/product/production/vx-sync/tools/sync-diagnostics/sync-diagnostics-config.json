@@ -1,0 +1,40 @@
+{
+	"logOutputLevel":"info",
+        "vxsyncLogDir": "/var/log/vxsync/",
+	"errorMessages": {
+        "enterprise-sync-request": [
+            "ptdemographics-utils.retrieveDemographicsFromVistAandStoreInJds: VistA failed to return demographics data.",
+            "got the kind of error that we shouldn't get from MVI",
+            "operational-data-sync-rule.operationalDataSyncRule: Patient sync rejected because operational data has not been synced for any of the primary site(s) associated with this patient"
+        ],
+        "jmeadows-document-retrieval": [
+        	"unable to write JMeadows file",
+        	"unable to retrieve JMeadows file"
+        ],
+        "jmeadows-cda-document-conversion":[
+        	"Error encountered when creating publish directory"
+        ],
+        "jmeadows-sync-domain-request": [
+            "jmeadows-sync-domain-request-handler.handle: Unable to retrieve JMeadows sync for"
+        ],
+        "hdr-sync-domain-request": [
+            "hdr-sync-domain-request-handler.handle: Unable to retrieve HDR sync for"
+        ],
+        "vler-sync-request": [
+            "vler-sync-request-handler.handle: Unable to retrieve VLER document"
+        ],
+        "record-enrichment": [
+            "Failed to run record enrichment transform"
+        ],
+        "store-record": [
+            "store-record-request-handler.handle: Unable to store record"
+        ],
+        "poller-host": [
+            "Received error while attempting to store metaStamp for pid:",
+            "Failed to store metaStamp for pid:"
+        ],
+        "vista-subsribe-request": [
+            "Failed to subscribe patient for pid:"
+        ]
+    }
+}

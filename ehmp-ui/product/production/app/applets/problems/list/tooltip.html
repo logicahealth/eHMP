@@ -1,0 +1,21 @@
+<table id="{{id}}" class="table table-condensed">
+    <caption class="sr-only">Quicklook Table. This table represents a brief summary for the selected condition.</caption>
+    <thead>
+        <tr>
+            <th scope="col">Date</th>
+            <th scope="col">Description</th>
+            <th scope="col">Facility</th>
+        </tr>
+    </thead>
+    <tbody>
+    {{#if attributes.allGroupedEncounters}}
+        {{#each attributes.allGroupedEncounters}}
+        <tr>
+            <td>{{dateTime}}</td>
+            <td>{{problemText}}</td>
+            <td>{{stopCodeName}}</td>
+        </tr>
+        {{/each}}
+    {{/if}}
+    </tbody>
+</table>

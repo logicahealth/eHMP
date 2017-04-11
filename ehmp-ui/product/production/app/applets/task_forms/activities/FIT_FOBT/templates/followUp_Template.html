@@ -1,0 +1,32 @@
+<table class="table">
+	<tbody>
+		<tr>
+			<th>Service</th>
+			<td>{{ SERVICE }}</td>
+		</tr>
+		<tr>
+			<th>Task</th>
+			<td>{{ TASKNAME }}</td>
+		</tr>
+		<tr>
+			<th>Created By</th>
+			<td>{{ CREATEDBYNAME }}</td>
+		</tr>
+		<tr>
+			<th>Due date</th>
+			<td>{{ dueDateTime }} <b>{{ dueText }}</b></td>
+		</tr>
+	</tbody>
+</table>
+<br>
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<h4 class="panel-title">Instructions</h4>
+	</div>
+	<div class="panel-body">
+		<p>
+			{{ DESCRIPTION }}
+		</p>
+	</div>
+</div>
+<div class="form-elements"></div>
