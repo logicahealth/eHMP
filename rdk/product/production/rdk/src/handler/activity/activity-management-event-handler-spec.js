@@ -19,25 +19,25 @@ var env = {};
 var config = {
     'rdk': {
         protocol: 'http',
-        host: 'IP        ',
+        host: '10.4.4.105',
         activityPort: 8888,
         writePort: 9999,
         timeout: 60000,
-        accessCode: 'PW    ',
-        verifyCode: 'PW    !!',
+        accessCode: 'pu1234',
+        verifyCode: 'pu1234!!',
         activityURI: '/resource/activities/startactivityevent',
         writeURI: '/resource/write-health-data/patient'
     },
     'jdsServer': {
-        'baseUrl': 'http://IP             ',
+        'baseUrl': 'http://10.2.2.110:9080',
         'timeout': 120000
     },
     'generalPurposeJdsServer': {
-        'baseUrl': 'http://IP             ',
+        'baseUrl': 'http://10.2.2.110:9080',
         'urlLengthLimit': 120
     },
     'jbpm': {
-        'baseUrl': 'http://IP             ',
+        'baseUrl': 'http://10.4.4.208:8080',
         'apiPath': '/business-central/rest',
         'adminUser': {
             'username': 'bpmsAdmin',
@@ -51,18 +51,16 @@ var config = {
         'activityDatabase': {
             'user': 'activitydbuser',
             'password': 'activitydb$11',
-            'connectString': 'IP             /xe'
+            'connectString': '10.4.4.208:1521/xe'
         },
         'notifsDatabase': {
             'user': 'notifdb',
             'password': 'notifdb',
-            'connectString': 'IP             /xe'
+            'connectString': '10.4.4.208:1521/xe'
         }
     },
     'activityManagementJobRetryLimit': 5,
 };
-
-var activityRequestType = 'activity-management-event';
 
 var activityEventProcessResourceRepsonse = {
     'name': 'host-logger',
@@ -307,132 +305,6 @@ var mockResponse = [{
     }
 }];
 
-var mockAEPVprObject = {
-    'patientUid': 'urn:va:patient:C877:3:3',
-    'authorUid': 'urn:va:user:C877:10000000270',
-    'subDomain': 'Laboratory',
-    'domain': 'ehmp-activity',
-    'referenceId': 'urn:va:order:C877:3:44296',
-    'pid': 'C877;3',
-    'ehmpState': 'active',
-    'visit': {
-        'location': null,
-        'serviceCategory': null,
-        'dateTime': '20160812093900'
-    },
-    'createdDateTime': '20160812093948',
-    'data': {
-        'content': 'HEMOGLOBIN A1C BLOOD   SP *UNSIGNED*\r\n',
-        'displayGroup': 'CH',
-        'entered': '20160812093900',
-        'facilityCode': '998',
-        'facilityName': 'ABILENE (CAA)',
-        'lastUpdateTime': '20160812093948',
-        'localId': '44296',
-        'locationName': '7A GEN MED',
-        'locationUid': 'urn:va:location:C877:158',
-        'name': 'HEMOGLOBIN A1C',
-        'oiCode': 'urn:va:oi:213',
-        'oiName': 'HEMOGLOBIN A1C',
-        'oiPackageRef': '97;99LRT',
-        'providerName': 'USER,PANORAMA',
-        'providerUid': 'urn:va:user:C877:10000000270',
-        'service': 'LR',
-        'stampTime': '20160812093948',
-        'start': '',
-        'statusCode': 'urn:va:order-status:unr',
-        'statusName': 'UNRELEASED',
-        'statusVuid': 'urn:va:vuid:4501124',
-        'stop': '',
-        'uid': 'urn:va:order:C877:3:44296',
-        'pid': 'C877;3',
-        'kind': 'Laboratory',
-        'providerDisplayName': 'User,Panorama',
-        'summary': 'HEMOGLOBIN A1C BLOOD   SP *UNSIGNED*\r\n',
-        'activityRetry': 0
-    }
-};
-
-var mockAEPNonVprObject = {
-    'authorUid': 'urn:va:user:C877:10000000270',
-    'creationDateTime': '20160812134152+0000',
-    'data': {
-        'content': 'HEMOGLOBIN A1C BLOOD   SP *UNSIGNED*\r\n',
-        'displayGroup': 'CH',
-        'entered': '20160812093900',
-        'facilityCode': '998',
-        'facilityName': 'ABILENE (CAA)',
-        'kind': 'Laboratory',
-        'lastUpdateTime': '20160812093948',
-        'localId': '44296',
-        'locationName': '7A GEN MED',
-        'locationUid': 'urn:va:location:C877:158',
-        'name': 'HEMOGLOBIN A1C',
-        'oiCode': 'urn:va:oi:213',
-        'oiName': 'HEMOGLOBIN A1C',
-        'oiPackageRef': '97;99LRT',
-        'pid': 'C877;3',
-        'providerDisplayName': 'User,Panorama',
-        'providerName': 'USER,PANORAMA',
-        'providerUid': 'urn:va:user:C877:10000000270',
-        'service': 'LR',
-        'stampTime': '20160812093948',
-        'start': '',
-        'statusCode': 'urn:va:order-status:unr',
-        'statusName': 'UNRELEASED',
-        'statusVuid': 'urn:va:vuid:4501124',
-        'stop': '',
-        'summary': 'HEMOGLOBIN A1C BLOOD   SP *UNSIGNED*\r\n',
-        'uid': 'urn:va:order:C877:3:44296'
-    },
-    'displayName': 'HEMOGLOBIN A1C - ROUTINE',
-    'domain': 'ehmp-order',
-    'ehmpState': 'active',
-    'patientUid': 'urn:va:patient:C877:3:3',
-    'referenceId': 'urn:va:order:C877:3:44296',
-    'subDomain': 'laboratory',
-    'uid': 'urn:va:ehmp-order:C877:3:67aa414e-82a2-47f4-84f3-a0d2fb76c50e',
-    'visit': {
-        'dateTime': '20140814130730',
-        'location': 'urn:va:location:C877:158',
-        'serviceCategory': 'I'
-    },
-    'ehmpData': {
-        'activity': '',
-        'additionalComments': '',
-        'annotation': '',
-        'anticoagulant': '',
-        'availableLabTests': '213',
-        'collectionDate': '08/12/2016',
-        'collectionDateTimePicklist': '',
-        'collectionSample': '3',
-        'collectionTime': '',
-        'collectionType': 'SP',
-        'doseDate': '',
-        'doseTime': '',
-        'drawDate': '',
-        'drawTime': '',
-        'forTest': '',
-        'howLong': '',
-        'howOften': '',
-        'immediateCollectionDate': '',
-        'immediateCollectionTime': '',
-        'isActivityEnabled': '',
-        'labTestText': 'HEMOGLOBIN A1C',
-        'notificationDate': '',
-        'orderComment': '',
-        'otherCollectionSample': '',
-        'otherSpecimen': '',
-        'pastDueDate': '',
-        'problemRelationship': '',
-        'sampleDrawnAt': '',
-        'specimen': '70',
-        'urgency': '9',
-        'urgencyText': 'ROUTINE',
-        'urineVolume': ''
-    }
-};
-
 function validateJobObject(key, job) {
     describe('validateJobObject for ' + key, function() {
         var isVpr = _.isUndefined(job.record);
@@ -663,21 +535,19 @@ describe('activity-management-event-handler-spec.js', function() {
         });
 
         it('Should only return one object with domain of ehmp-order; multiple response only one ehmp-order', function() {
-            var multiResponse = [clonedResponse, mockResponse[0]];
             var response = activityHelper.cleanClinicalObjectResponseArray(mockResponse, logger, {});
             expect(response).to.eql(mockResponse[0]);
         });
 
         it('Should error out because no ehmp-order domain found in responses; single responses', function() {
-            var response = activityHelper.cleanClinicalObjectResponseArray(clonedResponse, logger, function(error, response) {
+            activityHelper.cleanClinicalObjectResponseArray(clonedResponse, logger, function(error, response) {
                 expect(response).to.eql(null);
                 expect(response).to.eql(null);
             });
         });
 
         it('Should error out because no ehmp-order domain found in responses; multiple responses', function() {
-            var multiResponseBad = [clonedResponse, clonedResponse];
-            var response = activityHelper.cleanClinicalObjectResponseArray(mockResponse, logger, function(error, response) {
+            activityHelper.cleanClinicalObjectResponseArray(mockResponse, logger, function(error, response) {
                 expect(response).to.eql(null);
                 expect(response).to.eql(null);
             });

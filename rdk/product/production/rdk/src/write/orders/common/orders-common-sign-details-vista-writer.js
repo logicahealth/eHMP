@@ -7,6 +7,7 @@ var orderDetail = require('./orders-common-detail-vista-writer');
 var orderCheckSession = require('./orders-common-check-session-vista-writer');
 var crypto = require('crypto');
 var async = require('async');
+var _ = require('lodash');
 
 module.exports = function(writebackContext, callback) {
     rpcClientFactory.getRpcClient(writebackContext, 'OR CPRS GUI CHART', function(error, rpcClient) {
@@ -19,7 +20,6 @@ module.exports = function(writebackContext, callback) {
 
         async.series([
             function(asyncCallback) { //is order still signable
-                var resourceId;
                 var actionValidFunctions = [];
                 var getActionValidFunc = function(orderId) {
                     return function(parallelCallback) {
@@ -31,11 +31,10 @@ module.exports = function(writebackContext, callback) {
                         });
                     };
                 };
-                var i;
                 // http://stackoverflow.com/questions/19696015/javascript-creating-functions-in-a-for-loop
-                for (i in writebackContext.model.orderIds) {
-                    actionValidFunctions.push(getActionValidFunc(writebackContext.model.orderIds[i]));
-                }
+                _.each(writebackContext.model.orderIds, function(id) {
+                    actionValidFunctions.push(getActionValidFunc(id));
+                });
 
                 async.parallel(
                     actionValidFunctions,
@@ -58,11 +57,10 @@ module.exports = function(writebackContext, callback) {
                         });
                     };
                 };
-                var i;
-                for (i in writebackContext.model.orderIds) {
-                    var orderId = '' + writebackContext.model.orderIds[i];
+                _.each(writebackContext.model.orderIds, function(id) {
+                    var orderId = '' + id;
                     getDetailFunctions[orderId] = getDetailFunc(orderId);
-                }
+                });
                 async.parallel(
                     getDetailFunctions,
                     function(err, results) {
@@ -84,11 +82,10 @@ module.exports = function(writebackContext, callback) {
                         });
                     };
                 };
-                var i;
-                for (i in writebackContext.model.orderIds) {
-                    var orderId = '' + writebackContext.model.orderIds[i];
+                _.each(writebackContext.model.orderIds, function(id) {
+                    var orderId = '' + id;
                     getCheckFunctions[orderId] = getCheckFunc(orderId);
-                }
+                });
                 async.parallel(
                     getCheckFunctions,
                     function(err, results) {
@@ -103,11 +100,10 @@ module.exports = function(writebackContext, callback) {
                 return callback(err, null);
             }
             var orderList = [];
-            var j;
-            for (j in writebackContext.model.orderIds) {
-                var key = '' + writebackContext.model.orderIds[j];
+            _.each(writebackContext.model.orderIds, function(id) {
+                var key = '' + id;
                 orderList.push(getSignDetails(key, results[1][key], results[2][key]));
-            }
+            });
             writebackContext.vprResponse = orderList;
             return callback(null);
         });
@@ -120,15 +116,16 @@ function getSignDetails(orderId, detailData, orderChecks) {
     signDetails.detail = detailData;
     if (orderChecks) {
         var orderCheckList = [];
+        var check;
         if (orderChecks.indexOf('\r\n') === -1) {
-            var check = {};
+            check = {};
             check.orderCheck = orderChecks;
             orderCheckList.push(check);
         } else {
             var dataList = orderChecks.split('\r\n');
             var i = 0;
             for (; i < dataList.length - 1; i++) {
-                var check = {};
+                check = {};
                 check.orderCheck = dataList[i];
                 orderCheckList.push(check);
             }

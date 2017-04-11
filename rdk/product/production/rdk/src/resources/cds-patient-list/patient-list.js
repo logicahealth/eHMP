@@ -7,11 +7,9 @@
 var rdk = require('../../core/rdk');
 var _ = require('lodash');
 var utils = require('./utils.js');
-var mongo = require('mongoskin');
 var ObjectId = require('mongoskin').ObjectID;
 var http = rdk.utils.http;
 var nullchecker = rdk.utils.nullchecker;
-var pidValidator = rdk.utils.pidValidator;
 
 var dbName = 'patientlist';
 var patCollection = 'patientlist';
@@ -57,7 +55,7 @@ function init(app) {
  *                         "2015-02-27T20:33:41.308Z",
  *                 "scope": "private",
  *                 "owner":
- *                         "9E7A;PW    "
+ *                         "9E7A;pu1234"
  *             },
  *             "pidhistory": [{
  *                     "timestamp": "2015-03-10T00:53:55.934Z",
@@ -67,7 +65,7 @@ function init(app) {
  *             "patients": [
  *                 "12345V123"],
  *             "scope": "private",
- *             "owner": "9E7A;PW    ",
+ *             "owner": "9E7A;pu1234",
  *             "_id": "54fe407fc9f41fad0fff5dc4"
  *         }]
  * }
@@ -161,7 +159,7 @@ module.exports.getPatientList = getPatientList;
  *                         "2015-02-27T20:33:41.308Z",
  *                 "scope": "private",
  *                 "owner":
- *                         "9E7A;PW    "
+ *                         "9E7A;pu1234"
  *             },
  *             "pidhistory": [{
  *                     "timestamp": "2015-03-10T00:53:55.934Z",
@@ -171,7 +169,7 @@ module.exports.getPatientList = getPatientList;
  *             "patients": [
  *                 "12345V123"],
  *             "scope": "private",
- *             "owner": "9E7A;PW    ",
+ *             "owner": "9E7A;pu1234",
  *             "_id": "54fe407fc9f41fad0fff5dc4"
  *         }]
  * }
@@ -565,9 +563,6 @@ var checkPatientMembershipStatus = function(req, res) {
         }
 
         var jdsResource = '/vpr/jpid';
-        if (pidValidator.isDfn(pid)) {
-            pid = req.session.user.site + ';' + pid;
-        }
         req.logger.info('jpid search using pid [%s]', pid);
 
         var jdsPath = jdsResource + '/' + pid;
@@ -636,7 +631,7 @@ module.exports.checkPatientMembershipStatus = checkPatientMembershipStatus;
  *                         "2015-02-27T20:33:41.308Z",
  *                 "scope": "private",
  *                 "owner":
- *                         "9E7A;PW    "
+ *                         "9E7A;pu1234"
  *             },
  *             "pidhistory": [{
  *                     "timestamp": "2015-03-10T00:53:55.934Z",
@@ -646,7 +641,7 @@ module.exports.checkPatientMembershipStatus = checkPatientMembershipStatus;
  *             "patients": [
  *                 "12345V123"],
  *             "scope": "private",
- *             "owner": "9E7A;PW    ",
+ *             "owner": "9E7A;pu1234",
  *             "_id": "54fe407fc9f41fad0fff5dc4"
  *         }]
  * }

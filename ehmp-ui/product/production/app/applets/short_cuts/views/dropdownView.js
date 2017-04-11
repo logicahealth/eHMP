@@ -30,7 +30,7 @@ define([
 
     ADK.Messaging.trigger('register:component', {
         type: 'applicationHeaderItem',
-        title: 'Short cuts button. Press enter to access short cuts. Use the up and down arrows to select an item',
+        title: 'Short cuts. Press enter to access and then use the up and down arrows to view options.',
         orderIndex: 1,
         key: 'short-cuts',
         group: 'user-nav-alerts',

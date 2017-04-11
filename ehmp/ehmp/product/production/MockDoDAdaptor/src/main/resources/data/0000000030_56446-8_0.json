@@ -1,0 +1,168 @@
+{
+  "queryComplete": "true",
+  "dataList": [
+    {
+      "dataRecord": {
+        "AppointmentDateTime": "20140615080000",
+        "EnteredBy": "BHIE, USERONE",
+        "EventId": "1000000030",
+        "CustodianId": "2.16.840.1.113883.3.42.126.100001.13",
+        "RepositoryId": "2.16.840.1.113883.3.42.126.100001.13",
+        "Disposition": "",
+        "OtherIdentifier": "",
+        "EnteredByDate": "20140615080000",
+        "CheckoutTime": "",
+        "AppointmentReason": "",
+        "PatientFullName": "Nora Patient",
+        "Status": "KEPT",
+        "DateOfBirth": "",
+        "CustodianName": "ahlta",
+        "CheckinTime": "20140615080000",
+        "AppointmentClassification": "0",
+        "EventStartTime": "",
+        "LoincCode": "56446-8",
+        "Facility": "NH Great Lakes IL",
+        "AppointmentComment": "",
+        "AppointmentType": "Primary Care Visit (DoD)",
+        "Provider": "BHIE, USERONE",
+        "Clinic": "Family Practice Clinic"
+      },
+      "dataType": 6
+    },
+    {
+      "dataRecord": {
+        "AppointmentDateTime": "20140915080000",
+        "EnteredBy": "BHIE, USERONE",
+        "EventId": "1000000031",
+        "CustodianId": "2.16.840.1.113883.3.42.126.100001.13",
+        "RepositoryId": "2.16.840.1.113883.3.42.126.100001.13",
+        "Disposition": "",
+        "OtherIdentifier": "",
+        "EnteredByDate": "20140915080000",
+        "CheckoutTime": "",
+        "AppointmentReason": "",
+        "PatientFullName": "Nora Patient",
+        "Status": "KEPT",
+        "DateOfBirth": "",
+        "CustodianName": "ahlta",
+        "CheckinTime": "20140915080000",
+        "AppointmentClassification": "0",
+        "EventStartTime": "",
+        "LoincCode": "56446-8",
+        "Facility": "NH Great Lakes IL",
+        "AppointmentComment": "",
+        "AppointmentType": "Primary Care Visit (DoD)",
+        "Provider": "BHIE, USERONE",
+        "Clinic": "Family Practice Clinic"
+      },
+      "dataType": 6
+    },
+    {
+      "dataRecord": {
+        "AppointmentDateTime": "20150620080000",
+        "EnteredBy": "BHIE, USERONE",
+        "EventId": "1000000032",
+        "CustodianId": "2.16.840.1.113883.3.42.126.100001.13",
+        "RepositoryId": "2.16.840.1.113883.3.42.126.100001.13",
+        "Disposition": "",
+        "OtherIdentifier": "",
+        "EnteredByDate": "20150620080000",
+        "CheckoutTime": "",
+        "AppointmentReason": "",
+        "PatientFullName": "Nora Patient",
+        "Status": "KEPT",
+        "DateOfBirth": "",
+        "CustodianName": "ahlta",
+        "CheckinTime": "20150620080000",
+        "AppointmentClassification": "0",
+        "EventStartTime": "",
+        "LoincCode": "56446-8",
+        "Facility": "NH Great Lakes IL",
+        "AppointmentComment": "",
+        "AppointmentType": "Primary Care Visit (DoD)",
+        "Provider": "BHIE, USERONE",
+        "Clinic": "Family Practice Clinic"
+      },
+      "dataType": 6
+    },
+    {
+      "dataRecord": {
+        "AppointmentDateTime": "20151201080000",
+        "EnteredBy": "BHIE, USERONE",
+        "EventId": "1000000033",
+        "CustodianId": "2.16.840.1.113883.3.42.126.100001.13",
+        "RepositoryId": "2.16.840.1.113883.3.42.126.100001.13",
+        "Disposition": "",
+        "OtherIdentifier": "",
+        "EnteredByDate": "20151201080000",
+        "CheckoutTime": "",
+        "AppointmentReason": "",
+        "PatientFullName": "Nora Patient",
+        "Status": "KEPT",
+        "DateOfBirth": "",
+        "CustodianName": "ahlta",
+        "CheckinTime": "20151201080000",
+        "AppointmentClassification": "0",
+        "EventStartTime": "",
+        "LoincCode": "56446-8",
+        "Facility": "NH Great Lakes IL",
+        "AppointmentComment": "",
+        "AppointmentType": "Primary Care Visit (DoD)",
+        "Provider": "BHIE, USERONE",
+        "Clinic": "Family Practice Clinic"
+      },
+      "dataType": 6
+    },
+    {
+      "dataRecord": {
+        "AppointmentDateTime": "20160417080000",
+        "EnteredBy": "BHIE, USERONE",
+        "EventId": "1000000034",
+        "CustodianId": "2.16.840.1.113883.3.42.126.100001.13",
+        "RepositoryId": "2.16.840.1.113883.3.42.126.100001.13",
+        "Disposition": "",
+        "OtherIdentifier": "",
+        "EnteredByDate": "20160417080000",
+        "CheckoutTime": "",
+        "AppointmentReason": "",
+        "PatientFullName": "Nora Patient",
+        "Status": "KEPT",
+        "DateOfBirth": "",
+        "CustodianName": "ahlta",
+        "CheckinTime": "20160417080000",
+        "AppointmentClassification": "0",
+        "EventStartTime": "",
+        "LoincCode": "56446-8",
+        "Facility": "NH Great Lakes IL",
+        "AppointmentComment": "",
+        "AppointmentType": "Primary Care Visit (DoD)",
+        "Provider": "BHIE, USERONE",
+        "Clinic": "Family Practice Clinic"
+      },
+      "dataType": 6
+    }
+  ],
+  "statusList": [
+    {
+      "ExpectedCount": "",
+      "RetrievedCount": "",
+      "SiteStatus": "UNKNOWN",
+      "SiteName": "ahlta",
+      "SiteId": "2.16.840.1.113883.3.42.126.100001.13"
+    },
+    {
+      "ExpectedCount": "10",
+      "RetrievedCount": "0",
+      "SiteStatus": "IN_PROGRESS",
+      "SiteName": "ahlta",
+      "SiteId": "2.16.840.1.113883.3.42.126.100001.13"
+    },
+    {
+      "ExpectedCount": "10",
+      "RetrievedCount": "10",
+      "SiteStatus": "COMPLETE",
+      "SiteName": "ahlta",
+      "SiteId": "2.16.840.1.113883.3.42.126.100001.13"
+    }
+  ]
+}

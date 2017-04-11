@@ -55,17 +55,17 @@ function getImmunizationMadlib(immunization) {
         _.forEach(vis, function (input) {
             var visName = input.visName;
 
-            if (!_.isEmpty(toString(visName))) {
+            if (!_.isEmpty(visName)) {
                 retVal += 'VIS Name: ' + visName + ', ';
             }
 
             var editionDate = input.editionDate;
-            if (!_.isEmpty(toString(editionDate))) {
+            if (!_.isEmpty(editionDate)) {
                 retVal += 'Edition Date: ' + normalizeDate(editionDate) + ', ';
             }
 
             var language = input.language;
-            if (!_.isEmpty(toString(language))) {
+            if (!_.isEmpty(language)) {
                 retVal += 'Language: ' + language;
             }
 

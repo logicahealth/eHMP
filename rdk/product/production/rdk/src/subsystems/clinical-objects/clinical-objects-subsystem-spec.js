@@ -10,7 +10,7 @@ var sample1 = {
     patientUid: 'urn:va:patient:9E7A:3:3',
     model: {
         patientUid: 'urn:va:patient:9E7A:3:3',
-        authorUid: 'PW    ',
+        authorUid: 'mx1234',
         domain: 'ehmp-order',
         subDomain: 'laboratory',
         ehmpState: 'active',
@@ -55,7 +55,7 @@ var buildSampleObject = function(sample) {
         authorUid: sample.model.authorUid,
         items: [{
             addendum: 'my note',
-            authorUid: 'PW    ',
+            authorUid: 'mx1234',
             data: {
                 labTestText: 'Lab Text',
                 currentItemCount: 1,
@@ -85,7 +85,7 @@ var buildOrderObject = function(ehmpState, referenceId, domain, subDomain){
         pid: '9E7A;3',
         model: {
             patientUid: 'urn:va:patient:9E7A:3:3',
-            authorUid: 'PW    ',
+            authorUid: 'mx1234',
             domain: domain,
             subDomain: subDomain,
             ehmpState: ehmpState,
@@ -111,7 +111,7 @@ var buildOrderObject = function(ehmpState, referenceId, domain, subDomain){
 var updatedClinincalObject  = {
     uid: 'urn:va:ehmp-order:9E7A:3:de305d54-75b4-431b-adb2-eb6b9e546014',
     patientUid: 'urn:va:patient:9E7A:3:3',
-    authorUid: 'PW    ',
+    authorUid: 'mx1234',
     domain: 'ehmp-order',
     subDomain: 'laboratory',
     ehmpState: 'active',
@@ -135,15 +135,15 @@ var updatedClinincalObject  = {
 //THIS SHOULD CHANGE ONCE WE SET THE CORRECT ENDPOINT!!
 var endpoint = 'clinicobj';
 var activityManagementEndpoint = 'activity-management-event';
-var testEndpoint = 'http://IP             ';
-var testVxsyncEndpoint = 'http://IP           ';
+var testEndpoint = 'http://10.2.2.110:9080';
+var testVxsyncEndpoint = 'http://10.3.3.6:8080';
 
 var appConfig = {
     generalPurposeJdsServer: {
-        baseUrl: 'http://IP             '
+        baseUrl: 'http://10.2.2.110:9080'
     },
     vxSyncServer: {
-        baseUrl: 'http://IP           '
+        baseUrl: 'http://10.3.3.6:8080'
     }
 };
 
@@ -168,8 +168,8 @@ describe('Clinical object subsystem resource task tests', function() {
         it('should fail validation and handle errors if domain is incorrect', function(done) {
             var orderModel = buildOrderObject('active', 'testReferenceID', 'ehmp-123', 'wrong');
             clinicalObjects.create(logger, appConfig, orderModel.model, function(err, response) {
-                expect(response).to.be.undefined;
-                expect(err).not.to.be.undefined;
+                expect(response).to.be.undefined();
+                expect(err).not.to.be.undefined();
                 expect(err.pop()).to.be('invalid domain');
                 done();
             });
@@ -178,8 +178,8 @@ describe('Clinical object subsystem resource task tests', function() {
         it('should fail validation and handle errors if called with an invalid model', function(done) {
 
             clinicalObjects.create(logger, appConfig, sample1.patientUid, function(err, response) {
-                expect(response).not.to.be.undefined;
-                expect(err).not.to.be.undefined;
+                expect(response).to.be.undefined();
+                expect(err).not.to.be.undefined();
                 expect(err.pop()).to.be('model is not an object');
                 done();
             });
@@ -190,9 +190,9 @@ describe('Clinical object subsystem resource task tests', function() {
             nock(testEndpoint).post('/' + endpoint).replyWithError('Test Failure');
 
             clinicalObjects.create(logger, appConfig, sample1.model, function(err, response) {
-                expect(response).not.to.be.undefined;
-                expect(err).not.to.be.undefined;
-                expect(logger.error.called).to.be.true;
+                expect(response).to.be.undefined();
+                expect(err).not.to.be.undefined();
+                expect(logger.error.called).to.be.true();
                 expect(err.message).not.to.be.undefined();
                 expect(err.message).to.be('Test Failure');
                 done();
@@ -203,7 +203,6 @@ describe('Clinical object subsystem resource task tests', function() {
     describe('Read clinical object', function() {
 
         it('should retrieve a clinical object when called with the correct parameters', function(done) {
-            var items = [buildSampleObject(sample1)];
             nock(testEndpoint)
                 .filteringPath(function(path) {
                     return ('/' + endpoint);
@@ -212,7 +211,7 @@ describe('Clinical object subsystem resource task tests', function() {
                 .reply(200, buildSampleObject(sample1));
 
             clinicalObjects.read(logger, appConfig, sample1.uid, false, function(err, response) {
-                expect(response.body).not.to.be.undefined;
+                expect(response).not.to.be.undefined();
                 expect(response.uid).to.be(sample1.uid);
                 expect(response.patientUid).to.be(sample1.patientUid);
                 expect(response.authorUid).to.be(sample1.model.authorUid);
@@ -307,12 +306,11 @@ describe('Clinical object subsystem resource task tests', function() {
                 .put('/' + endpoint)
                 .replyWithError('Test Failure');
 
-            var model = buildSampleObject(sample1);
             clinicalObjects.update(logger, appConfig, sample1.uid, updatedClinincalObject, function(err, response) {
                 expect(response).to.be.undefined();
                 expect(err).not.to.be.undefined();
                 expect(logger.error.called).to.be.true();
-                expect(err.message).not.to.be.undefined;
+                expect(err.message).not.to.be.undefined();
                 expect(err.message).to.be('Test Failure');
                 done();
             });

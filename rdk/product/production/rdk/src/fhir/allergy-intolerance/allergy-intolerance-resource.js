@@ -1,7 +1,6 @@
 'use strict';
 //var ao = require('../common/entities/allergy-objects.js');
 var errors = require('../common/errors');
-var helpers = require('../common/utils/helpers');
 var rdk = require('../../core/rdk');
 var nullchecker = rdk.utils.nullchecker;
 var _ = require('lodash');

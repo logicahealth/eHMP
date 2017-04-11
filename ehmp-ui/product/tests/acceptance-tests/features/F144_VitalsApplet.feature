@@ -1,10 +1,8 @@
-@US2800 @regression  @triage
+@US2800    @DE6991 @DE6976 @reg2
 Feature:F144 - eHMP viewer GUI - Vitals
 #Team Neptune, inherited by Team venus
 
-
-
-@US2800g @debug @DE6976
+@US2800g @DE6976
 Scenario: Expanding Vitals applet from coversheet returns to coversheet
   # Given user is logged into eHMP-UI
   And user searches for and selects "Eight,PATIENT"
@@ -44,13 +42,13 @@ Scenario: User views vitals expanded applet
   Then the user expands the vitals applet
   Then the expanded vitals applet is displayed
   Then the Vitals expanded headers are
-    | Headers |
-    | Date Observed|
-    | Type |
-    | Result |
-    | Date Entered |
-    | Qualifiers |
-    | Facility |
+      | Headers       |
+      | Date Observed |
+      | Type          |
+      | Result        |
+      | Date Entered  |
+      | Qualifiers    |
+      | Facility      |
 
 
 @US2800b @DE306 @DE416 @DE1264 @US2800d @US4321

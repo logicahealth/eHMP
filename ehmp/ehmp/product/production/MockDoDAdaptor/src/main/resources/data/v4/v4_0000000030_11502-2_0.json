@@ -1,0 +1,349 @@
+{
+  "queryComplete": true,
+  "statusList": [
+    {
+      "partner": {
+        "partnerIdentifier": "2.16.840.1.113883.3.42.126.100001.13",
+        "partnerName": "ahlta",
+        "partnerType": "DOD"
+      },
+      "partnerStatus": "SUCCESS"
+    }
+  ],
+  "dataList": {
+    "labChemResults": [
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000008249"
+        },
+        "enteredBy": {
+          "name": "42834 DOCTOR, ALPHA"
+        },
+        "enteredDate": {
+          "start": "2014-06-15T08:00:00",
+          "end": "2014-06-15T08:00:00"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "11502-2"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL/0056"
+        },
+        "order": {
+          "accession": {
+            "id": "130502 BCH 1647"
+          },
+          "collectionDate": {
+            "start": "2014-06-15T08:00:00",
+            "end": "2014-06-15T08:00:00"
+          },
+          "collectionSample": "BLOOD",
+          "date": {
+            "start": "2014-06-15T08:00:00",
+            "end": "2014-06-15T08:00:00"
+          },
+          "id": {
+            "id": "2157546009"
+          },
+          "orderNumber": {
+            "id": "130502-00008"
+          },
+          "priority": [
+            {
+              "display": "ROUTINE",
+              "primary": true
+            }
+          ],
+          "provider": {
+            "name": "42834 DOCTOR, ALPHA"
+          },
+          "requestingLocation": {
+            "name": "NH Great Lakes IL"
+          },
+          "specimen": [
+            {
+              "code": null,
+              "display": "PLASMA",
+              "primary": true
+            }
+          ],
+          "status": [],
+          "test": [
+            {
+              "code": "14621975",
+              "display": "Electrolytes",
+              "primary": true
+            }
+          ]
+        },
+        "results": [
+          {
+            "codeInterpretation": [],
+            "certifiedBy": null,
+            "certifiedDate": {
+              "start": "2014-06-15T08:00:00",
+              "end": "2014-06-15T08:00:00"
+            },
+            "comment": "3001 GREENBAY ROAD ATTENTION LABORATORY SERVICES NORTH CHICAGO, IL  60064 556 = NORTH CHICAGO VETERAN'S ADMINISTRATION HOSP Test performed at:",
+            "performingLabLocation": {
+              "name": "NH Great Lakes IL/0056"
+            },
+            "status": [
+              {
+                "code": "Final",
+                "display": "Final",
+                "primary": true
+              }
+            ],
+            "test": [
+              {
+                "code": "6951",
+                "display": "Sodium, Blood Quantitative",
+                "system": "2.16.840.1.113883.3.42.126.100001.16",
+                "primary": true
+              }
+            ],
+            "codedInterpretation": null,
+            "referenceRange": "134-146",
+            "result": "138",
+            "units": [
+              {
+                "display": "mmol/L",
+                "primary": true
+              }
+            ]
+          },
+          {
+            "codeInterpretation": [],
+            "certifiedBy": null,
+            "certifiedDate": {
+              "start": "2014-06-15T08:00:00",
+              "end": "2014-06-15T08:00:00"
+            },
+            "comment": "3001 GREENBAY ROAD ATTENTION LABORATORY SERVICES NORTH CHICAGO, IL  60064 556 = NORTH CHICAGO VETERAN'S ADMINISTRATION HOSP Test performed at:",
+            "performingLabLocation": {
+              "name": "NH Great Lakes IL/0056"
+            },
+            "status": [
+              {
+                "code": "Final",
+                "display": "Final",
+                "primary": true
+              }
+            ],
+            "test": [
+              {
+                "code": "6827",
+                "display": "Potassium, Serum or Plasma Quantitative",
+                "system": "2.16.840.1.113883.3.42.126.100001.16",
+                "primary": true
+              }
+            ],
+            "codedInterpretation": null,
+            "referenceRange": "3.5-4.7",
+            "result": "4.7",
+            "units": [
+              {
+                "display": "mmol/L",
+                "primary": true
+              }
+            ]
+          },
+          {
+            "codeInterpretation": [],
+            "certifiedBy": null,
+            "certifiedDate": {
+              "start": "2014-06-15T08:00:00",
+              "end": "2014-06-15T08:00:00"
+            },
+            "comment": "3001 GREENBAY ROAD ATTENTION LABORATORY SERVICES NORTH CHICAGO, IL  60064 556 = NORTH CHICAGO VETERAN'S ADMINISTRATION HOSP Test performed at:",
+            "performingLabLocation": {
+              "name": "NH Great Lakes IL/0056"
+            },
+            "status": [
+              {
+                "code": "Final",
+                "display": "Final",
+                "primary": true
+              }
+            ],
+            "test": [
+              {
+                "code": "6079",
+                "display": "Chloride, Serum or Plasma Quantitative",
+                "system": "2.16.840.1.113883.3.42.126.100001.16",
+                "primary": true
+              }
+            ],
+            "codedInterpretation": null,
+            "referenceRange": "98-107",
+            "result": "104",
+            "units": [
+              {
+                "display": "mmol/L",
+                "primary": true
+              }
+            ]
+          },
+          {
+            "codeInterpretation": [],
+            "certifiedBy": null,
+            "certifiedDate": {
+              "start": "2014-06-15T08:00:00",
+              "end": "2014-06-15T08:00:00"
+            },
+            "comment": "3001 GREENBAY ROAD ATTENTION LABORATORY SERVICES NORTH CHICAGO, IL  60064 556 = NORTH CHICAGO VETERAN'S ADMINISTRATION HOSP Test performed at:",
+            "performingLabLocation": {
+              "name": "NH Great Lakes IL/0056"
+            },
+            "status": [
+              {
+                "code": "Final",
+                "display": "Final",
+                "primary": true
+              }
+            ],
+            "test": [
+              {
+                "code": "20771",
+                "display": "Carbon Dioxide, Serum or Plasma Quantitative",
+                "system": "2.16.840.1.113883.3.42.126.100001.16",
+                "primary": true
+              }
+            ],
+            "codedInterpretation": null,
+            "referenceRange": "22-29",
+            "result": "24",
+            "units": [
+              {
+                "display": "mmol/L",
+                "primary": true
+              }
+            ]
+          },
+          {
+            "codeInterpretation": [],
+            "certifiedBy": null,
+            "certifiedDate": {
+              "start": "2014-06-15T08:00:00",
+              "end": "2014-06-15T08:00:00"
+            },
+            "comment": "3001 GREENBAY ROAD ATTENTION LABORATORY SERVICES NORTH CHICAGO, IL  60064 556 = NORTH CHICAGO VETERAN'S ADMINISTRATION HOSP Test performed at:",
+            "performingLabLocation": {
+              "name": "NH Great Lakes IL/0056"
+            },
+            "status": [
+              {
+                "code": "Final",
+                "display": "Final",
+                "primary": true
+              }
+            ],
+            "test": [
+              {
+                "code": "20772",
+                "display": "Urea Nitrogen, Blood Quantitative",
+                "system": "2.16.840.1.113883.3.42.126.100001.16",
+                "primary": true
+              }
+            ],
+            "codedInterpretation": null,
+            "referenceRange": "10-20",
+            "result": "14",
+            "units": [
+              {
+                "display": "mg/dL",
+                "primary": true
+              }
+            ]
+          },
+          {
+            "codeInterpretation": [],
+            "certifiedBy": null,
+            "certifiedDate": {
+              "start": "2014-06-15T08:00:00",
+              "end": "2014-06-15T08:00:00"
+            },
+            "comment": "3001 GREENBAY ROAD ATTENTION LABORATORY SERVICES NORTH CHICAGO, IL  60064 556 = NORTH CHICAGO VETERAN'S ADMINISTRATION HOSP Test performed at:",
+            "performingLabLocation": {
+              "name": "NH Great Lakes IL/0056"
+            },
+            "status": [
+              {
+                "code": "Final",
+                "display": "Final",
+                "primary": true
+              }
+            ],
+            "test": [
+              {
+                "code": "20773",
+                "display": "Creatinine, Serum or Plasma Quantitative",
+                "system": "2.16.840.1.113883.3.42.126.100001.16",
+                "primary": true
+              }
+            ],
+            "codedInterpretation": null,
+            "referenceRange": "0.5-1.2",
+            "result": "0.9",
+            "units": [
+              {
+                "display": "mg/dL",
+                "primary": true
+              }
+            ]
+          },
+          {
+            "codeInterpretation": [],
+            "certifiedBy": null,
+            "certifiedDate": {
+              "start": "2014-06-15T08:00:00",
+              "end": "2014-06-15T08:00:00"
+            },
+            "comment": "3001 GREENBAY ROAD ATTENTION LABORATORY SERVICES NORTH CHICAGO, IL  60064 556 = NORTH CHICAGO VETERAN'S ADMINISTRATION HOSP Test performed at:",
+            "performingLabLocation": {
+              "name": "NH Great Lakes IL/0056"
+            },
+            "status": [
+              {
+                "code": "Final",
+                "display": "Final",
+                "primary": true
+              }
+            ],
+            "test": [
+              {
+                "code": "20774",
+                "display": "Glucose, Serum or Plasma Quantitative",
+                "system": "2.16.840.1.113883.3.42.126.100001.16",
+                "primary": true
+              }
+            ],
+            "codedInterpretation": null,
+            "referenceRange": "70-99",
+            "result": "104",
+            "units": [
+              {
+                "display": "mg/dL",
+                "primary": true
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -5,7 +5,7 @@ class WorkspaceManager < AccessBrowserV2
     add_verify(CucumberLabel.new('Alert title'), VerifyText.new, AccessHtmlElement.new(:css, '#alert-region .modal-title'))
     add_action(CucumberLabel.new('Alert Confirm Delete'), ClickAction.new, AccessHtmlElement.new(:css, '#alert-region .btn-danger'))
     add_action(CucumberLabel.new('Alert Confirm Cancel'), ClickAction.new, AccessHtmlElement.new(:css, '#alert-region .btn-default'))
-    add_action(CucumberLabel.new('Close Workspace Manager'), ClickAction.new, AccessHtmlElement.new(:css, '.panel-heading .done-editing'))
+    # add_action(CucumberLabel.new('Close Workspace Manager'), ClickAction.new, AccessHtmlElement.new(:css, '.panel-heading .done-editing'))
 
     workspaces = AccessHtmlElement.new(:css, 'div.workspace-table div.table-row')
     add_verify(CucumberLabel.new('workspace count'), VerifyXpathCount.new(workspaces), workspaces)
@@ -81,6 +81,8 @@ Then(/^the "([^"]*)" preview option is enabled$/) do |workspace_id|
 end
 
 When(/^user closes the Workspace Manager$/) do
-  workspace_manager = WorkspaceManager.instance
-  expect(workspace_manager.perform_action("Close Workspace Manager")).to eq(true)
+  ehmp = PobWorkspaceManager.new
+  ehmp.wait_for_btn_close_manager
+  expect(ehmp).to have_btn_close_manager
+  ehmp.btn_close_manager.click
 end

@@ -2,7 +2,6 @@
 var rdk = require('../../core/rdk');
 var pjds = rdk.utils.pjdsStore;
 var _ = require('lodash');
-var jdsFilter = require('jds-filter');
 
 module.exports = getMetaData;
 

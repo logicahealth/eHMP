@@ -1,6 +1,6 @@
 # Group Pick List
 
-## Teams for User—Patient Related [/teams-for-user-patient-related{?site}{&staffIEN}{&patientID}]
+## Teams for User—Patient Related [/teams-for-user-patient-related{?site}{&staffIEN}{&pid}]
 
 Searches for teams for a user, related to a single patient -- note that this involves a call to pcmm instead of an RPC.
 
@@ -10,7 +10,9 @@ Searches for teams for a user, related to a single patient -- note that this inv
 
     + staffIEN (string, required) - IEN of user to find teams for.
 
-    + patientID (string, required) - ICN of patient to find teams for.
+    + pid (string, required) - ICN of patient to find teams for.
+
+        Pattern: `^([0-9]+)V([0-9]+)$`
 
 ### GET
 

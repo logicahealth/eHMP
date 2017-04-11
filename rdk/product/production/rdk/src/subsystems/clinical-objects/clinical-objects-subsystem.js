@@ -26,29 +26,6 @@ var PJDS_CONNECTION_ERROR = module.exports.PJDS_CONNECTION_ERROR = 'Unable to re
 var JDS_CONNECTION_ERROR = module.exports.JDS_CONNECTION_ERROR = 'Unable to reach JDS';
 var UTC_STANDARD = module.exports.UTC_STANDARD = 'YYYYMMDDHHmmss+0000';
 
-function getSubsystemConfig(app, logger) {
-    return {
-        healthcheck: {
-            name: 'pjds',
-            interval: 100000,
-            check: function(callback) {
-                var jdsOptions = _.extend({}, app.config.generalPurposeJdsServer, {
-                    url: '/ping',
-                    timeout: 5000,
-                    logger: logger
-                });
-
-                httpUtil.get(jdsOptions, function(err) {
-                    if (err) {
-                        return callback(false);
-                    }
-                    callback(true);
-                });
-            }
-        }
-    };
-}
-
 function createClinicalObject(logger, appConfig, model, callback) {
     logger.info('createClinicalObject');
     clinicalObjectsValidator.validateCreate([], model, appConfig, function(errorMessages) {

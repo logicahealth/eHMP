@@ -1,9 +1,11 @@
 define([
     'backbone',
     'marionette',
+    'underscore',
     'app/applets/ccd_grid/modal/modalView',
     'app/applets/ccd_grid/modal/modalHeaderView',
-], function(Backbone, Marionette, ModalView, ModalHeader) {
+    'app/applets/ccd_grid/util'
+], function(Backbone, Marionette, _, ModalView, ModalHeader, Util) {
 
     'use strict';
     //Data Grid Columns
@@ -11,11 +13,11 @@ define([
         name: 'referenceDateTimeDisplay',
         label: 'Date',
         flexWidth: 'flex-width-date-time',
-        cell: Backgrid.StringCell.extend ({
+        cell: Backgrid.StringCell.extend({
             className: 'string-cell flex-width-date-time'
         }),
-        sortValue: function(model, sortKey) {
-            return model.get("referenceDateTime");
+        sortValue: function(model) {
+            return model.get('ccdDateTime');
         },
         hoverTip: 'chs_date'
     };
@@ -23,11 +25,11 @@ define([
         name: 'referenceDateDisplay',
         label: 'Date',
         flexWidth: 'flex-width-date',
-        cell: Backgrid.StringCell.extend ({
+        cell: Backgrid.StringCell.extend({
             className: 'string-cell flex-width-date'
         }),
-        sortValue: function(model, sortKey) {
-            return model.get("referenceDateTime");
+        sortValue: function(model) {
+            return model.get('ccdDateTime');
         },
         hoverTip: 'chs_date'
     };
@@ -50,73 +52,32 @@ define([
     var AppletID = 'ccd_grid',
         channel = ADK.Messaging.getChannel(AppletID);
 
-    var viewParseModel = {
-        parse: function(response) {
-            if (response.name) {
-                response.localTitle = response.name;
-            }
-            if (response.creationTime) {
-                response.referenceDateTime = response.creationTime;
-            } else if (response.dateTime) {
-                response.referenceDateTime = response.dateTime;
-            }
-            response.referenceDateDisplay = ADK.utils.formatDate(response.referenceDateTime);
-            if (response.referenceDateDisplay === '') {
-                response.referenceDateDisplay = 'N/A';
-            }
-
-            response.referenceDateTimeDisplay = ADK.utils.formatDate(response.referenceDateTime, 'MM/DD/YYYY - HH:mm');
-            if (response.referenceDateTimeDisplay === '') {
-                response.referenceDateTimeDisplay = 'N/A';
-            }
-
-            if (response.authorList) {
-                if (response.authorList.length > 0) {
-                    if (response.authorList[0].institution) {
-                        response.authorDisplayName = response.authorList[0].institution;
-                    }
-                } else {
-                    response.authorDisplayName = "N/A";
-                }
-            }
-            response.facilityName = "VLER";
-            return response;
-        }
-    };
-
-    //Collection fetchOptions
-    var fetchOptions = {
-        resourceTitle: 'patient-record-vlerdocument',
-        pageable: true,
-        viewModel: viewParseModel,
-        cache: true,
-        criteria: {
-            callType: 'vler_list'
-        }
-    };
-
-    var _super;
     var GridApplet = ADK.Applets.BaseGridApplet;
 
     var AppletLayoutView = GridApplet.extend({
         initialize: function(options) {
-            _super = GridApplet.prototype;
+            this._super = ADK.Applets.BaseGridApplet.prototype;
+            var fetchOptionsConfig = { 
+                criteria: {
+                    callType: 'vler_list'
+                }
+            };
             var dataGridOptions = {};
             dataGridOptions.filterEnabled = true; //Defaults to true
             dataGridOptions.filterFields = _.pluck(fullScreenColumns, 'name'); //Defaults to all columns
-            if (this.columnsViewType === "summary") {
+            if (this.columnsViewType === 'summary') {
                 dataGridOptions.columns = summaryColumns;
-            } else if (this.columnsViewType === "expanded") {
+            } else if (this.columnsViewType === 'expanded') {
                 dataGridOptions.columns = fullScreenColumns;
             } else {
                 dataGridOptions.summaryColumns = summaryColumns;
                 dataGridOptions.fullScreenColumns = fullScreenColumns;
             }
             dataGridOptions.enableModal = true;
+            dataGridOptions.collection = new ADK.UIResources.Fetch.CommunityHealthSummaries.Collection();
+            dataGridOptions.collection.fetchCollection(fetchOptionsConfig);
 
-            var self = this;
-
-            dataGridOptions.onClickRow = function(model, event, gridView) {
+            dataGridOptions.onClickRow = function(model, event) {
                 event.preventDefault();
                 var view = new ModalView({
                     model: model,
@@ -141,29 +102,24 @@ define([
                 modal.show();
             };
 
-            dataGridOptions.collection = ADK.PatientRecordService.createEmptyCollection(fetchOptions);
-
-            dataGridOptions.collection.fetchOptions = fetchOptions;
             this.dataGridOptions = dataGridOptions;
-            _super.initialize.apply(this, arguments);
-
-            this.fetchData();
-
-            //Memory leak--fix added in onDestroy
-            channel.reply('gridCollection', function() {
-                return self.gridCollection;
-            });
-
-
+            this._super.initialize.call(this, arguments);
         },
         onBeforeDestroy: function() {
-            channel.stopReplying('gridCollection');
             this.dataGridOptions.onClickRow = null;
         },
-        onRender: function() {
-            _super.onRender.apply(this, arguments);
-
-        }
+        DataGrid: ADK.Applets.BaseGridApplet.DataGrid.extend({
+            DataGridRow: ADK.Applets.BaseGridApplet.DataGrid.DataGridRow.extend({
+                serializeModel: function() {
+                    if (!this.model) {
+                        return {};
+                    }
+                    var modelJSON = _.cloneDeep(this.model.attributes);
+                    modelJSON = Util.serializeObject(modelJSON);
+                    return modelJSON;
+                }
+            })
+        })
     });
 
     var applet = {
@@ -171,13 +127,13 @@ define([
         viewTypes: [{
             type: 'summary',
             view: AppletLayoutView.extend({
-                columnsViewType: "summary"
+                columnsViewType: 'summary'
             }),
             chromeEnabled: true
         }, {
             type: 'expanded',
             view: AppletLayoutView.extend({
-                columnsViewType: "expanded"
+                columnsViewType: 'expanded'
             }),
             chromeEnabled: true
         }],
@@ -187,31 +143,28 @@ define([
     // expose detail view through messaging
     channel.reply('detailView', function(params) {
 
-        var fetchOptions = {
+        var fetchOptionsConfig = {
             criteria: {
-                "uid": params.uid
+                'uid': params.uid
             },
-            patient: ADK.PatientRecordService.getCurrentPatient(),
-            resourceTitle: 'patient-record-vlerdocument',
-            viewModel: viewParseModel
+            patient: ADK.PatientRecordService.getCurrentPatient()
         };
 
-
-        var data = ADK.PatientRecordService.createEmptyCollection(fetchOptions);
-        var detailModel = new Backbone.Model();
+        var data = new ADK.UIResources.Fetch.CommunityHealthSummaries.Collection();
         return {
             view: ModalView.extend({
                 collection: data,
                 collectionEvents: {
                     'sync': function(collection, resp) {
                         var model = collection.first();
-                        if(model) this.model.set(model.toJSON());
+                        if (model) this.model.set(model.toJSON());
                     }
                 },
                 onBeforeShow: function() {
+                    dataGridOptions.collection.fetchCollection(fetchOptionsConfig);
                     ADK.PatientRecordService.fetchCollection(fetchOptions, this.collection);
                 },
-                model: detailModel
+                model: params.model
             })
         };
 

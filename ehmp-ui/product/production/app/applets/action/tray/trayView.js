@@ -277,7 +277,8 @@ define([
         options: {
             key: "actions",
             headerLabel: "Actions",
-            listView: traySummaryList
+            listView: traySummaryList,
+            helpMapping: 'actions_tray'
         }
     });
 

@@ -1,5 +1,4 @@
 define([], function() {
-
     var OrderDef = ADK.Resources.Picklist.Model.extend({
         idAttribute: 'ien', //primary key--can't have duplicates
         label: 'name',
@@ -29,6 +28,7 @@ define([], function() {
         params: function(method, options) {
             return { //allergies.fetch({'searchString': 'ABC'})
                 site: ADK.UserService.getUserSession().get('site'),
+                division: ADK.UserService.getUserSession().get('division'),
                 location: options.location
             };
         }

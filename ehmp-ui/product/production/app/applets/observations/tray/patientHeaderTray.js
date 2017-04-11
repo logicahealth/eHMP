@@ -10,7 +10,8 @@ define([
         options: {
             key: "observations",
             headerLabel: "Observations",
-            dropdownLabel: "New Observation"
+            dropdownLabel: "New Observation",
+            helpMapping: 'observations_tray' // subject to change based on new mappings
         }
     });
 

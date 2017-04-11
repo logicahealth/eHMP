@@ -3,7 +3,6 @@
 var async = require('async');
 var _ = require('lodash');
 var moment = require('moment');
-var VistaArray = require('../core/VistaArray').VistaArray;
 var rpcClientFactory = require('../core/rpc-client-factory');
 var rdk = require('../../core/rdk');
 var locationUtil = rdk.utils.locationUtil;
@@ -24,9 +23,8 @@ module.exports.createNotes = function(writebackContext, callback) {
         error: 'Failed to create these notes in VistA.',
         notes: []
     };
-    var pid = writebackContext.interceptorResults.patientIdentifiers.dfn;
-
-    if(nullchecker.isNullish(pid)){
+    var dfn = writebackContext.interceptorResults.patientIdentifiers.dfn;
+    if (nullchecker.isNullish(dfn)) {
         return callback('Missing required patient identifiers');
     }
 
@@ -38,7 +36,7 @@ module.exports.createNotes = function(writebackContext, callback) {
         async.each(writebackContext.model.signItems, function(note, cb) {
             rpcClient.execute(
                 rpcName,
-                getNoteParams(pid, note),
+                getNoteParams(dfn, note),
                 function(err, response) {
                     if (err || response.indexOf('^') > -1) {
                         errorObject.notes.push({
@@ -51,7 +49,7 @@ module.exports.createNotes = function(writebackContext, callback) {
                         var vprModel = _.clone(note);
                         vprModel.localId = response;
                         vprModel.oldUid = note.uid;
-                        vprModel.uid = 'urn:va:document:' + writebackContext.siteHash + ':' + pid + ':' + response;
+                        vprModel.uid = 'urn:va:document:' + writebackContext.interceptorResults.patientIdentifiers.site + ':' + dfn + ':' + response;
                         writebackContext.notes.push(vprModel);
                         return cb();
                     }
@@ -82,9 +80,9 @@ module.exports.createAddendum = function(writebackContext, callback) {
         error: 'Failed to create note addendum in VistA.',
         addendum: []
     };
-    var pid = writebackContext.interceptorResults.patientIdentifiers.dfn;
+    var dfn = writebackContext.interceptorResults.patientIdentifiers.dfn;
 
-    if(nullchecker.isNullish(pid)){
+    if (nullchecker.isNullish(dfn)) {
         return callback('Missing required patient identifiers');
     }
     rpcClientFactory.getRpcClient(writebackContext, null, function(err, rpcClient) {
@@ -108,7 +106,7 @@ module.exports.createAddendum = function(writebackContext, callback) {
                         var vprModel = _.clone(addendum);
                         vprModel.localId = response;
                         vprModel.oldUid = addendum.uid;
-                        vprModel.uid = 'urn:va:document:' + writebackContext.siteHash + ':' + pid + ':' + response;
+                        vprModel.uid = 'urn:va:document:' + writebackContext.interceptorResults.patientIdentifiers.site + ':' + dfn + ':' + response;
                         writebackContext.addendum.push(vprModel);
                         return cb();
                     }
@@ -175,7 +173,7 @@ function deleteVprAddendum(writebackContext, callback) {
 
     var rpcName = 'HMP GET PATIENT DATA JSON';
 
-    if(nullchecker.isNullish(writebackContext.interceptorResults.patientIdentifiers.dfn)){
+    if (nullchecker.isNullish(writebackContext.interceptorResults.patientIdentifiers.dfn)) {
         return callback('Missing required patient identifiers');
     }
 
@@ -220,7 +218,7 @@ module.exports.setVpr = function(writebackContext, callback) {
 
     var rpcName = 'HMP GET PATIENT DATA JSON';
 
-    if(nullchecker.isNullish(writebackContext.interceptorResults.patientIdentifiers.dfn)){
+    if (nullchecker.isNullish(writebackContext.interceptorResults.patientIdentifiers.dfn)) {
         return callback('Missing required patient identifiers');
     }
 
@@ -266,7 +264,7 @@ module.exports.setVprAddendum = function(writebackContext, callback) {
 
     var rpcName = 'HMP GET PATIENT DATA JSON';
 
-    if(nullchecker.isNullish(writebackContext.interceptorResults.patientIdentifiers.dfn)){
+    if (nullchecker.isNullish(writebackContext.interceptorResults.patientIdentifiers.dfn)) {
         return callback('Missing required patient identifiers');
     }
 
@@ -318,10 +316,6 @@ module.exports.signNotes = function(writebackContext, callback) {
         logger.debug('note: %o', note);
         signNote(writebackContext, note, function(err, response) {
             var comment = 'Failed to sign.';
-            var logger = writebackContext.logger;
-            var appConfig = writebackContext.appConfig;
-            var requestConfig = {};
-            var options;
             if (err) {
                 writebackContext.failedSigns.push(note);
                 errorObject.notes.push({
@@ -396,10 +390,6 @@ module.exports.signAddendum = function(writebackContext, callback) {
         logger.debug('note: %o', addendum);
         signAddendum(writebackContext, addendum, function(err, response) {
             var comment = 'Failed to sign.';
-            var logger = writebackContext.logger;
-            var appConfig = writebackContext.appConfig;
-            var requestConfig = {};
-            var options;
             if (err) {
                 writebackContext.failedSignAddendums.push(addendum);
                 errorObject.addendum.push({
@@ -425,22 +415,22 @@ module.exports.signAddendum = function(writebackContext, callback) {
         if (errorObject.addendum.length > 0) {
             var resp = writebackContext.vprResponse.failures = errorObject;
             // if (writebackContext.signedAddendums.length === 0) {
-                writebackContext.vprResponseStatus = 500;
-                resp.error = 'Failed to sign the addendum in VistA. They remain UNSIGNED.';
+            writebackContext.vprResponseStatus = 500;
+            resp.error = 'Failed to sign the addendum in VistA. They remain UNSIGNED.';
 
-                deleteAddendum(writebackContext, function(error) {
+            deleteAddendum(writebackContext, function(error) {
+                if (error) {
+                    return callback(error);
+                }
+
+                deleteVprAddendum(writebackContext, function(error) {
                     if (error) {
                         return callback(error);
                     }
 
-                    deleteVprAddendum(writebackContext, function(error) {
-                        if (error) {
-                            return callback(error);
-                        }
-
-                        return callback('Failed to sign the addendum. Successfully cleaned up the addendum in VistA.');
-                    });
+                    return callback('Failed to sign the addendum. Successfully cleaned up the addendum in VistA.');
                 });
+            });
             // }
             // writebackContext.vprResponseStatus = 207;
         } else {
@@ -627,12 +617,12 @@ function signAddendum(writebackContext, addendum, cb) {
     });
 }
 
-function getNoteParams(pid, model) {
+function getNoteParams(dfn, model) {
     var vistaNote = [];
     var noteObj = {};
     var encounter = encounterObj(model);
 
-    vistaNote.push(pid); // Patient dfn
+    vistaNote.push(dfn); // Patient dfn
     var split = model.documentDefUid.split(':');
     vistaNote.push(_.last(split)); // Document Type (title)
     vistaNote.push('', '', ''); // unused (VDT - visit DT/ VLOC - vistit location/ VSIT - pointer to visit file.

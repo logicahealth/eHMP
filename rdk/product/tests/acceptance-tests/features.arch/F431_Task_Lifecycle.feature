@@ -25,8 +25,8 @@ Scenario: Create a fitlab process, then claim and complete that process
       | data.items.PRIORITY                 | 0                                                      |
       | data.items.ACTUALOWNERID            |                                                        |
       | data.items.ACTUALOWNERNAME          |                                                        |
-      | data.items.CREATEDBYID              | 9E7A;PW                                                |
-      | data.items.CREATEDBYNAME            | 9E7A;PW                                                |
+      | data.items.CREATEDBYID              | 9E7A;pu1234                                            |
+      | data.items.CREATEDBYNAME            | 9E7A;pu1234                                            |
       | data.items.TASKCREATEDON            | IS_SET                                                 |
       | data.items.EXPIRATIONTIME           |                                                        |
       | data.items.PROCESSINSTANCEID        | IS_SET                                                 |

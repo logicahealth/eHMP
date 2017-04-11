@@ -5,7 +5,6 @@ var httpUtil = require('../../core/rdk').utils.http;
 var req;
 var sampleNote;
 var sampleNoteWithAddendum;
-var sampleParentWithAddendum;
 var sampleCPRSAddendum;
 
 describe('The patient-notes-resource', function() {
@@ -21,6 +20,13 @@ describe('The patient-notes-resource', function() {
                         '9E7A': '10000000270',
                         'C77A': 'duz2'
                     },
+                }
+            },
+            interceptorResults: {
+                patientIdentifiers: {
+                    site: '9E7A',
+                    dfn: '3',
+                    uids: ['urn:va:patient:9E7A:3:3', 'urn:va:patient:icn:321V123:321V123']
                 }
             },
             app: {

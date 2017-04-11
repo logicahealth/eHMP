@@ -1,9 +1,12 @@
-/* jshint -W069 */ /* added exemption for uses of object['field'] over dot-notation, as this is consistent for the order object */
+/* jslint node: true */
+/* jshint -W069 */
+/* added exemption for uses of object['field'] over dot-notation, as this is consistent for the order object */
 'use strict';
 
 var rdk = require('../core/rdk');
+var _ = require('lodash');
 var RpcClient = require('vista-js').RpcClient;
-var getVistaRpcConfiguration = require('../utils/rpc-config').getVistaRpcConfiguration;
+var vistaRpcConfiguration = require('../utils/rpc-config');
 var nullchecker = rdk.utils.nullchecker;
 var errorMessage = 'There was an error processing your request. The error has been logged.';
 var errorVistaJSCallback = 'VistaJS RPC callback error: ';
@@ -17,7 +20,7 @@ function getResourceConfig(app) {
             convertPid: true
         },
         get: getOrderDetail,
-        subsystems: ['patientrecord','jdsSync','authorization'],
+        subsystems: ['patientrecord', 'jdsSync', 'authorization'],
         requiredPermissions: ['read-order'],
         isPatientCentric: true
     }];
@@ -25,7 +28,7 @@ function getResourceConfig(app) {
 
 /**
 * Retrieves details about an order given a patient id, DFN and order
-* id. Uses the site id that is stored in the user session.
+* id. Uses the site id that is stored in the request patient identifier interceptor object.
 *
 * @param {Object} req - The default Express request that contains the
                         URL parameters needed to retrieve order details.
@@ -38,23 +41,31 @@ function getOrderDetail(req, res) {
 
     var orderId = req.param('id');
     var pid = req.param('pid');
-    var dfn = req.interceptorResults.patientIdentifiers.dfn;
+    var patientIdentifiers = _.get(req, 'interceptorResults.patientIdentifiers', {});
+    var dfn = _.get(patientIdentifiers, 'dfn');
+
+    if (_.isUndefined(patientIdentifiers.site)) {
+        req.logger.debug('getOrderDetail - missing patient site from interceptor patient identifier results');
+        return res.status(rdk.httpstatus.precondition_failed).rdkSend('Missing patient site parameter.');
+    }
 
     if (nullchecker.isNullish(orderId)) {
-        return res.status(rdk.httpstatus.bad_request).rdkSend('Missing id parameter');
+        return res.status(rdk.httpstatus.precondition_failed).rdkSend('Missing id parameter');
     } else if (nullchecker.isNullish(dfn)) {
-        return res.status(rdk.httpstatus.bad_request).rdkSend('Missing required patient identifiers');
+        return res.status(rdk.httpstatus.precondition_failed).rdkSend('Missing dfn parameter');
     } else if (nullchecker.isNullish(pid)) {
-        return res.status(rdk.httpstatus.bad_request).rdkSend('Missing required patient identifiers');
+        return res.status(rdk.httpstatus.precondition_failed).rdkSend('Missing pid parameter');
     } else {
         req.logger.info('single order detail resource GET called for orderId:' + orderId + ' and patient DFN:' + dfn);
     }
-
-    var vistaConfig = getVistaRpcConfiguration(req.app.config, req.session.user);
+    var vistaRpcConfigParams = vistaRpcConfiguration.getPatientCentricVistaRpcConfigurationParams(req.session.user, patientIdentifiers.site);
+    var vistaConfig = vistaRpcConfiguration.getVistaRpcConfiguration(req.app.config, vistaRpcConfigParams);
 
     RpcClient.callRpc(req.logger, vistaConfig, 'ORQOR DETAIL', [orderId, dfn], function(error, result) {
         if (error) {
-            req.logger.error({error: error}, errorVistaJSCallback);
+            req.logger.error({
+                error: error
+            }, errorVistaJSCallback);
             res.status(rdk.httpstatus.internal_server_error).rdkSend(errorMessage);
         } else {
             if (result) {
@@ -68,7 +79,9 @@ function getOrderDetail(req, res) {
                 });
 
             } else {
-                req.logger.error({result: result}, errorVistaJSCallback + ' no result');
+                req.logger.error({
+                    result: result
+                }, errorVistaJSCallback + ' no result');
                 res.status(rdk.httpstatus.internal_server_error).rdkSend(errorMessage);
             }
         }

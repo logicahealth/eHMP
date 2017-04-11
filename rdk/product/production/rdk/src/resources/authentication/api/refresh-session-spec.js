@@ -1,7 +1,6 @@
 'use strict';
 var bunyan = require('bunyan');
 var moment = require('moment');
-var httpStatus = require('../../../core/httpstatus.js');
 var refreshSession = require('./refresh-session.js');
 
 describe('User Session', function() {

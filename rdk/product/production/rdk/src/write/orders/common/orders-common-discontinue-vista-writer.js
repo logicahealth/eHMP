@@ -1,9 +1,6 @@
 'use strict';
 
-var fhirUtils = require('../../../fhir/common/utils/fhir-converter');
-var filemanDateUtil = require('../../../utils/fileman-date-converter');
 var rpcClientFactory = require('./../../core/rpc-client-factory');
-var ordersUtils = require('./orders-utils');
 var async = require('async');
 var patientLock = require('./orders-common-patient-lock');
 var orderLock = require('./orders-common-order-lock');
@@ -162,8 +159,8 @@ module.exports = function(writebackContext, callback) {
                     resultsCallback(null);
                 }
             ], function(error) {
-                if (err) {
-                    return callback(err);
+                if (error) {
+                    return callback(error);
                 }
                 writebackContext.vprResponse = results[3];
 

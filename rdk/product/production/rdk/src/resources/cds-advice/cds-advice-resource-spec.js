@@ -67,9 +67,10 @@ var mockReqResUtil = (function() {
             },
             interceptorResults: {
                 patientIdentifiers: {
-                    dfn: 'someDFN',
-                    icn: 'someICN',
-                    siteDfn: 'someSiteDfn'
+                    dfn: '3',
+                    icn: '1000V1065',
+                    siteDfn: '9E7A;3',
+                    site: '9E7A'
                 }
             }
         };
@@ -129,7 +130,7 @@ describe('CDS Advice Resource', function() {
             expect(res.status.calledWith(rdk.httpstatus.bad_request)).to.be.true();
 
             cdsAdviceList.getCDSAdviceList(mockReqResUtil.createRequestWithParam({
-                pid: 'somepid'
+                pid: '9E7A;3'
             }), res);
             expect(res.status.calledWith(rdk.httpstatus.bad_request)).to.be.true();
 
@@ -139,21 +140,66 @@ describe('CDS Advice Resource', function() {
             expect(res.status.calledWith(rdk.httpstatus.bad_request)).to.be.true();
 
             cdsAdviceList.getCDSAdviceList(mockReqResUtil.createRequestWithParam({
-                pid: 'somepid',
+                pid: '9E7A;3',
                 use: 'someUse'
             }), res);
             expect(res.status.calledWith(rdk.httpstatus.ok)).to.be.true();
         });
     });
 
+    describe('Clinical Reminders List response handling', function() {
+
+        it('responds with empty array to callback when required patient site parameter is missing', function() {
+            var callback = function(error, result) {
+                expect(error).to.be.null();
+                expect(result).to.be.empty();
+            };
+            var req = mockReqResUtil.createRequestWithParam({});
+            req.interceptorResults.patientIdentifiers.site = undefined;
+            cdsAdviceList._getClinicalRemindersList(req, res, callback);
+        });
+
+        it('responds with empty array to callback when required patient dfn parameter is missing', function() {
+            var callback = function(error, result) {
+                expect(error).to.be.null();
+                expect(result).to.be.empty();
+            };
+            var req = mockReqResUtil.createRequestWithParam({});
+            req.interceptorResults.patientIdentifiers.dfn = undefined;
+            cdsAdviceList._getClinicalRemindersList(req, res, callback);
+        });
+    });
+
     describe('Detail endpoint HTTP response codes', function() {
         it('responds HTTP Not Found if DFN is empty', function() {
             var req = mockReqResUtil.createRequestWithParam({
-                pid: 'somepid',
+                pid: '9E7A;3',
                 use: 'someUse',
                 id: 'someAdviceId'
             });
             req.interceptorResults.patientIdentifiers.dfn = undefined;
+            cdsAdviceDetail.getCDSAdviceDetail(req, res);
+            expect(res.status.calledWith(rdk.httpstatus.not_found)).to.be.true();
+        });
+
+        it('responds HTTP Not Found if Patient Site is empty', function() {
+            var req = mockReqResUtil.createRequestWithParam({
+                pid: '9E7A;3',
+                use: 'someUse',
+                id: 'someAdviceId'
+            });
+            req.interceptorResults.patientIdentifiers.site = undefined;
+            cdsAdviceDetail.getCDSAdviceDetail(req, res);
+            expect(res.status.calledWith(rdk.httpstatus.not_found)).to.be.true();
+        });
+
+        it('responds HTTP Not Found if Patient Identifiers is empty', function() {
+            var req = mockReqResUtil.createRequestWithParam({
+                pid: '9E7A;3',
+                use: 'someUse',
+                id: 'someAdviceId'
+            });
+            req.interceptorResults.patientIdentifiers = undefined;
             cdsAdviceDetail.getCDSAdviceDetail(req, res);
             expect(res.status.calledWith(rdk.httpstatus.not_found)).to.be.true();
         });
@@ -164,7 +210,7 @@ describe('CDS Advice Resource', function() {
             });
 
             cdsAdviceDetail.getCDSAdviceDetail(mockReqResUtil.createRequestWithParam({
-                pid: 'somepid',
+                pid: '9E7A;3',
                 use: 'someUse',
                 id: 'someAdviceId'
             }), res);
@@ -177,7 +223,7 @@ describe('CDS Advice Resource', function() {
             });
 
             cdsAdviceDetail.getCDSAdviceDetail(mockReqResUtil.createRequestWithParam({
-                pid: 'somepid',
+                pid: '9E7A;3',
                 use: 'someUse',
                 id: 'someAdviceId'
             }), res);
@@ -190,20 +236,20 @@ describe('CDS Advice Resource', function() {
             });
 
             cdsAdviceDetail.getCDSAdviceDetail(mockReqResUtil.createRequestWithParam({
-                pid: 'somepid',
+                pid: '9E7A;3',
                 use: 'someUse',
                 id: 'someAdviceId'
             }), res);
             expect(res.status.calledWith(rdk.httpstatus.ok)).to.be.true();
 
             cdsAdviceDetail.getCDSAdviceDetail(mockReqResUtil.createRequestWithParam({
-                pid: 'somepid',
+                pid: '9E7A;3',
                 use: 'someUse'
             }), res);
             expect(res.status.calledWith(rdk.httpstatus.bad_request)).to.be.true();
 
             cdsAdviceDetail.getCDSAdviceDetail(mockReqResUtil.createRequestWithParam({
-                pid: 'somepid',
+                pid: '9E7A;3',
                 id: 'someAdviceId'
             }), res);
             expect(res.status.calledWith(rdk.httpstatus.bad_request)).to.be.true();

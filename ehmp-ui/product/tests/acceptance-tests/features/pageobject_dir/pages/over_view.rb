@@ -27,7 +27,7 @@ class PobOverView < SitePrism::Page
   element :fld_search_box, "#searchText"
   element :fld_inactivity_warning_modal, ".modal-dialog #footercontent"
   element :fld_panel_title, "h4.panel-title"
-  element :fld_link_help_ehmp_header, "#linkHelp-ehmp_header i"
+  element :fld_link_help_ehmp_header, "#top-region .help-button-container .help-icon-link"
 
   elements :fld_data_grid_table_newsfeed_row, "#data-grid-newsfeed tr"
   elements :fld_all_applets, "#overview .panel-title-label"

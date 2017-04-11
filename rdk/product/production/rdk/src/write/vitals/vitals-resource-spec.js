@@ -3,11 +3,6 @@
 var _ = require('lodash');
 
 var getResourceConfig = require('./vitals-resources').getResourceConfig;
-var add = require('./vitals-resources')._add;
-var writebackWorkflow = require('../core/writeback-workflow');
-var validateVitals = require('./vitals-validator');
-var writeVitalToVista = require('./vitals-vista-writer');
-var writeVprToJds = require('../core/jds-direct-writer');
 
 describe('write-back vitals Resources', function() {
 

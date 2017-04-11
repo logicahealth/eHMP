@@ -1,7 +1,5 @@
 'use strict';
 
-var moment = require('moment');
-
 var transformModel = require('./problems-add-vista-writer')._transformModel;
 var constructRpcArgs = require('./problems-add-vista-writer')._constructRpcArgs;
 var problemMatch = require('./problems-add-vista-writer')._problemMatch;
@@ -162,7 +160,7 @@ describe('Add new patient problem to Vista', function () {
                 'serviceConnected': '64^AUDIOLOGY',
                 'status': 'A^ACTIVE',
                 'radiation': '1^YES',
-                "comments": [ "test comment one", "test comment two"]
+                'comments': [ 'test comment one', 'test comment two']
             };
 
             transformModel(logger, model, '229');

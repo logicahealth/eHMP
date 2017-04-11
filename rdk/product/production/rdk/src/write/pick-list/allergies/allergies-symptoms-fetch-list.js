@@ -1,6 +1,5 @@
 'use strict';
 
-var rpcClientFactory = require('../utils/rpc-client-factory');
 var parse = require('./allergies-symptoms-parser').parse;
 var rpcUtil = require('./../utils/rpc-util');
 var validate = require('./../utils/validation-util');

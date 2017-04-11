@@ -148,7 +148,7 @@ define([
                 id: 'newsfeed',
                 instanceId: instanceId
             },
-            filterFields: ['activityDateTimeByIso', 'activityDateTimeByIsoWithSlashes', 'activity', 'summary', 'typeDisplayName', 'stopCodeName', 'locationDisplayName', 'displayType', 'primaryProviderDisplay', 'facilityName', 'displayName'],
+            filterFields: ['activityDateTimeByIso', 'activityDateTimeByIsoWithSlashes', 'activity', 'summary', 'typeDisplayName', 'stopCodeName', 'locationDisplayName', 'displayType', 'primaryProviderDisplay', 'facilityName', 'displayName', 'ext_filter_field'],
             summaryColumns: summaryColumns,
             fullScreenColumns: fullScreenColumns,
             enableModal: true,

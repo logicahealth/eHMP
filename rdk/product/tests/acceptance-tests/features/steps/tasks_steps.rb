@@ -43,7 +43,7 @@ def request_task_instances(user, context, subcontext, patientid)
 
   today = TaskHelper.formated_today
   enddate = TaskHelper.formated_future
-  payload_json = JSON.parse(%Q[{"context":"#{context}","patientICN":"#{patientid}","subContext":"#{subcontext}","status":"Created,Ready,Reserved,InProgress","getNotifications":true,"startDate":"#{today}","endDate":"#{enddate}"}]).to_json
+  payload_json = JSON.parse(%Q[{"context":"#{context}","pid":"#{patientid}","subContext":"#{subcontext}","status":"Created,Ready,Reserved,InProgress","getNotifications":true,"startDate":"#{today}","endDate":"#{enddate}"}]).to_json
 
   path = request.path
 
@@ -51,7 +51,7 @@ def request_task_instances(user, context, subcontext, patientid)
 end
 
 When(/^the client requests tasks instances for "([^"]*)" and "([^"]*)" for patient "([^"]*)"$/) do |context, subcontext, patientid|
-  request_task_instances("9E7A;PW    ", context, subcontext, patientid)
+  request_task_instances("9E7A;pu1234", context, subcontext, patientid)
 end
 
 When(/^the "([^"]*)" client requests tasks instances for "([^"]*)" and "([^"]*)" for patient "([^"]*)"$/) do |user, context, subcontext, patientid|
@@ -72,7 +72,7 @@ def request_all_tasks
 
   today = TaskHelper.formated_today
   enddate = TaskHelper.formated_future
-  payload_json = JSON.parse(%Q[{"context":"#{context}","patientICN":"#{patientid}","subContext":"#{subcontext}","status":"Created,Ready,Reserved,InProgress","getNotifications":true,"startDate":"#{today}","endDate":"#{enddate}"}]).to_json
+  payload_json = JSON.parse(%Q[{"context":"#{context}","pid":"#{patientid}","subContext":"#{subcontext}","status":"Created,Ready,Reserved,InProgress","getNotifications":true,"startDate":"#{today}","endDate":"#{enddate}"}]).to_json
 
   path = request.path
   p path
@@ -119,7 +119,7 @@ end
 
 When(/^the client requests open consults for pid "([^"]*)"$/) do | patientid|
   request = RDKQuery.new('tasks-openconsults')
-  request.add_parameter('icn', patientid)
+  request.add_parameter('pid', patientid)
   path = request.path
 
   @response = HTTPartyRDK.get(path)

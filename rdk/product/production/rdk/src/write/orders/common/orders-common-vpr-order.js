@@ -1,6 +1,6 @@
 'use strict';
 
-var getVistaRpcConfiguration = require('../../../utils/rpc-config').getVistaRpcConfiguration;
+var vistaRpcConfiguration = require('../../../utils/rpc-config');
 var RpcClient = require('vista-js').RpcClient;
 var async = require('async');
 var _ = require('lodash');
@@ -13,7 +13,7 @@ var nullchecker = require('../../../core/rdk').utils.nullchecker;
  * @param callback The callback
  */
 var getVprOrder = function(writebackContext, orderUid, callback) {
-    if(nullchecker.isNullish(writebackContext.interceptorResults.patientIdentifiers.dfn)){
+    if (nullchecker.isNullish(writebackContext.interceptorResults.patientIdentifiers.dfn) || nullchecker.isNullish(writebackContext.interceptorResults.patientIdentifiers.site)) {
         return callback(new Error('Missing required patient identifiers'));
     }
 
@@ -24,10 +24,8 @@ var getVprOrder = function(writebackContext, orderUid, callback) {
         '"domain"': 'order',
         '"uid"': orderUid
     };
-
-    var rpcConfig = getVistaRpcConfiguration(writebackContext.appConfig, writebackContext.vistaConfig);
-
-    rpcConfig.context = 'HMP SYNCHRONIZATION CONTEXT';
+    var vistaRpcConfigParams = vistaRpcConfiguration.getPatientCentricVistaRpcConfigurationParams(writebackContext.vistaConfig, writebackContext.interceptorResults.patientIdentifiers.site);
+    var rpcConfig = vistaRpcConfiguration.getVistaRpcConfiguration(writebackContext.appConfig, vistaRpcConfigParams);
 
     RpcClient.callRpc(writebackContext.logger, rpcConfig, rpcName, rpcParams, function(err, resp) {
         if (err) {
@@ -38,9 +36,8 @@ var getVprOrder = function(writebackContext, orderUid, callback) {
 
         if (vprModel && vprModel.uid === orderUid) {
             return callback(null, vprModel);
-        }
-        else {
-            return callback(new Error("Failed to parse order VPR result."));
+        } else {
+            return callback(new Error('Failed to parse order VPR result.'));
         }
     });
 };
@@ -99,14 +96,10 @@ var toUidFromLegacyOrderData = function(writebackContext, orderData) {
  * @returns uid
  */
 var toUid = function(writebackContext, orderId) {
-    return 'urn:va:order:' + writebackContext.siteHash + ':' + writebackContext.interceptorResults.patientIdentifiers.dfn + ':' + orderId;
+    return 'urn:va:order:' + writebackContext.interceptorResults.patientIdentifiers.site + ':' + writebackContext.interceptorResults.patientIdentifiers.dfn + ':' + orderId;
 };
 
 module.exports.getVprOrder = getVprOrder;
 module.exports.getVprOrders = getVprOrders;
 module.exports.toUid = toUid;
 module.exports.toUidFromLegacyOrderData = toUidFromLegacyOrderData;
-
-
-
-

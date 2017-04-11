@@ -3,7 +3,6 @@ var textSearch = require('./text-search');
 var suggestSearch = require('./suggest-search');
 var trendDetail = require('./trend-detail');
 var documentDetail = require('./document-detail');
-var rdk = require('../../../core/rdk');
 
 module.exports.getResourceConfig = function () {
     return [

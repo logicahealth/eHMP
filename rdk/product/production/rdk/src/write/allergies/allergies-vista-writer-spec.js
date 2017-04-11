@@ -1,7 +1,5 @@
 'use strict';
 
-var _ = require('lodash');
-
 var vistaWriter = require('./allergies-vista-writer');
 var RpcClient = require('vista-js').RpcClient;
 
@@ -18,14 +16,14 @@ describe('Allergies write-back writer', function() {
                 logger: logger
             };
 
-            var result = {'Message': 'RPC wrapper error'};
+            var result = '{"Message": "RPC wrapper error"}';
 
             vistaWriter._handleRPCResponse(writebackContext, undefined, result);
 
-            expect(writebackContext.vprModel).to.be.null;
-            expect(writebackContext.vprResponse['error']).not.to.be.null;
-            expect(logger.debug.called).to.be.true;
-            expect(logger.error.called).not.to.be.true;
+            expect(writebackContext.vprModel).to.be.null();
+            expect(writebackContext.vprResponse.error).not.to.be.null();
+            expect(logger.debug.called).to.be.true();
+            expect(logger.error.called).not.to.be.true();
         });
 
         it('handle duplicate allery message', function(){
@@ -37,11 +35,11 @@ describe('Allergies write-back writer', function() {
 
             vistaWriter._handleRPCResponse(writebackContext, undefined, result);
 
-            expect(writebackContext.vprModel).to.be.null;
-            expect(writebackContext.vprResponse['error']).not.to.be.null;
+            expect(writebackContext.vprModel).to.be.null();
+            expect(writebackContext.vprResponse.error).not.to.be.null();
             expect(writebackContext.vprResponseStatus).to.equal(409);
-            expect(logger.debug.called).to.be.true;
-            expect(logger.error.called).not.to.be.true;
+            expect(logger.debug.called).to.be.true();
+            expect(logger.error.called).not.to.be.true();
         });
 
         it('success writing the allergy', function () {
@@ -49,15 +47,15 @@ describe('Allergies write-back writer', function() {
                 logger: logger
             };
 
-            var result = {'object': {'fakeField': 'fake Value'}};
+            var result = '{"object": {"fakeField": "fake Value"}}';
 
             vistaWriter._handleRPCResponse(writebackContext, undefined, result);
 
-            expect(writebackContext.vprModel).not.to.be.null;
-            expect(writebackContext.vprResponse['object']).not.to.be.null;
-            expect(writebackContext.vprResponse['error']).to.be.null;
-            expect(logger.debug.called).to.be.true;
-            expect(logger.error.called).to.be.true;
+            expect(writebackContext.vprModel).not.to.be.null();
+            expect(writebackContext.vprResponse.object).not.to.be.null();
+            expect(writebackContext.vprResponse.error).to.be.undefined();
+            expect(logger.debug.called).to.be.true();
+            expect(logger.error.called).not.to.be.true();
         });
     });
 
@@ -70,23 +68,23 @@ describe('Allergies write-back writer', function() {
         it('should create an observed allergy with one symptom', function (done) {
 
             var payload = {
-                "allergyName": "AMPICILLIN^79;PSNDF(50.6,",
-                "natureOfReaction": "A^ALLERGY",
-                "comment": "This is a test comment",
-                "severity": "1",
-                "eventDateTime": "20150120114900",
-                "name": "CHEESE",
-                "IEN": "20",
-                "location": "GMRD(120.82,",
-                "historicalOrObserved": "o^OBSERVED",
-                "observedDate": "201501200100",
-                "symptoms": [
+                'allergyName': 'AMPICILLIN^79;PSNDF(50.6,',
+                'natureOfReaction': 'A^ALLERGY',
+                'comment': 'This is a test comment',
+                'severity': '1',
+                'eventDateTime': '20150120114900',
+                'name': 'CHEESE',
+                'IEN': '20',
+                'location': 'GMRD(120.82,',
+                'historicalOrObserved': 'o^OBSERVED',
+                'observedDate': '201501200100',
+                'symptoms': [
                     {
-                        "IEN": "173",
-                        "name": "STROKE",
-                        "dateTime": "201501200200",
-                        "symptomDate": "01/20/2015",
-                        "symptomTime": "02:00 a"
+                        'IEN': '173',
+                        'name': 'STROKE',
+                        'dateTime': '201501200200',
+                        'symptomDate': '01/20/2015',
+                        'symptomTime': '02:00 a'
                     }
                 ]
             };
@@ -103,18 +101,18 @@ describe('Allergies write-back writer', function() {
             };
 
             var expectedResult = {};
-            expectedResult['items'] = 'item';
+            expectedResult.items = 'item';
 
-            var vistaJSStub = sinon.stub(RpcClient, 'callRpc',
+            sinon.stub(RpcClient, 'callRpc',
                 function(logger, vistaConfig, rpc, params, callback) {
                     return callback(null, '{"object": {"items":"item"}}');
                 }
             );
 
             vistaWriter.create(writebackContext, function(err, result) {
-                expect(err).to.be.null;
-                expect(logger.error.called).not.to.be.true;
-                expect(logger.debug.called).to.be.true;
+                expect(err).to.be.null();
+                expect(logger.error.called).not.to.be.true();
+                expect(logger.debug.called).to.be.true();
                 expect(result).eql(expectedResult);
                 done();
             });
@@ -124,24 +122,24 @@ describe('Allergies write-back writer', function() {
         it('should create a historical allergy with one symptom', function (done) {
 
             var payload = {
-                "allergyName": "AMPICILLIN^79;PSNDF(50.6,",
-                "enteredBy": "3",
-                "natureOfReaction": "A^ALLERGY",
-                "comment": "This is a test comment",
-                "severity": "1",
-                "eventDateTime": "20150120114900",
-                "name": "CHEESE",
-                "IEN": "20",
-                "location": "GMRD(120.82,",
-                "historicalOrObserved": "H^HISTORICAL",
-                "observedDate": "201501200100",
-                "symptoms": [
+                'allergyName': 'AMPICILLIN^79;PSNDF(50.6,',
+                'enteredBy': '3',
+                'natureOfReaction': 'A^ALLERGY',
+                'comment': 'This is a test comment',
+                'severity': '1',
+                'eventDateTime': '20150120114900',
+                'name': 'CHEESE',
+                'IEN': '20',
+                'location': 'GMRD(120.82,',
+                'historicalOrObserved': 'H^HISTORICAL',
+                'observedDate': '201501200100',
+                'symptoms': [
                     {
-                        "IEN": "173",
-                        "name": "STROKE",
-                        "dateTime": "201501200200",
-                        "symptomDate": "01/20/2015",
-                        "symptomTime": "02:00 a"
+                        'IEN': '173',
+                        'name': 'STROKE',
+                        'dateTime': '201501200200',
+                        'symptomDate': '01/20/2015',
+                        'symptomTime': '02:00 a'
                     }
                 ]
             };
@@ -158,18 +156,17 @@ describe('Allergies write-back writer', function() {
             };
 
             var expectedResult = {};
-            expectedResult['items'] = 'item';
-
-            var vistaJSStub = sinon.stub(RpcClient, 'callRpc',
+            sinon.stub(RpcClient, 'callRpc',
                 function(logger, vistaConfig, rpc, params, callback) {
                     return callback(null, '{"object": {"items":"item"}}');
                 }
             );
+            expectedResult.items = 'item';
 
             vistaWriter.create(writebackContext, function(err, result) {
-                expect(err).to.be.null;
-                expect(logger.error.called).not.to.be.true;
-                expect(logger.debug.called).to.be.true;
+                expect(err).to.be.null();
+                expect(logger.error.called).not.to.be.true();
+                expect(logger.debug.called).to.be.true();
                 expect(result).eql(expectedResult);
                 done();
             });
@@ -178,32 +175,32 @@ describe('Allergies write-back writer', function() {
 
         it('should create an allergy with two symptom', function(done) {
             var payload = {
-                "allergyName": "PEANUT OIL^106;GMRD(120.82,",
-                "enteredBy":"3",
-                "natureOfReaction": "A^ALLERGY",
-                "comment": "This is a test comment",
-                "severity": "1",
-                "eventDateTime": "20150120114900",
-                "name": "CHEESE",
-                "IEN": "20",
-                "location": "GMRD(120.82,",
-                "historicalOrObserved": "o^OBSERVED",
-                "observedDate": "201501200100",
-                "symptoms": [
+                'allergyName': 'PEANUT OIL^106;GMRD(120.82,',
+                'enteredBy':'3',
+                'natureOfReaction': 'A^ALLERGY',
+                'comment': 'This is a test comment',
+                'severity': '1',
+                'eventDateTime': '20150120114900',
+                'name': 'CHEESE',
+                'IEN': '20',
+                'location': 'GMRD(120.82,',
+                'historicalOrObserved': 'o^OBSERVED',
+                'observedDate': '201501200100',
+                'symptoms': [
                     {
-                        "IEN": "173",
-                        "name": "STROKE",
-                        "dateTime": "201501200200",
-                        "symptomDate": "01/20/2015",
-                        "symptomTime": "02:00 a"
+                        'IEN': '173',
+                        'name': 'STROKE',
+                        'dateTime': '201501200200',
+                        'symptomDate': '01/20/2015',
+                        'symptomTime': '02:00 a'
                     },
                     {
-                        "IEN": "204",
-                        "name": "heartAttack",
-                        "count": 1,
-                        "dateTime": "201001200200",
-                        "symptomDate": "01/20/2005",
-                        "symptomTime": "02:00 a"
+                        'IEN': '204',
+                        'name': 'heartAttack',
+                        'count': 1,
+                        'dateTime': '201001200200',
+                        'symptomDate': '01/20/2005',
+                        'symptomTime': '02:00 a'
                     }
                 ]
             };
@@ -221,18 +218,17 @@ describe('Allergies write-back writer', function() {
 
 
             var expectedResult = {};
-            expectedResult['items'] = 'item';
-
-            var vistaJSStub = sinon.stub(RpcClient, 'callRpc',
+            sinon.stub(RpcClient, 'callRpc',
                 function(logger, vistaConfig, rpc, params, callback) {
                     return callback(null, '{"object": {"items":"item"}}');
                 }
             );
+            expectedResult.items = 'item';
 
             vistaWriter.create(writebackContext, function(err, result) {
-                expect(err).to.be.null;
-                expect(logger.error.called).not.to.be.true;
-                expect(logger.debug.called).to.be.true;
+                expect(err).to.be.null();
+                expect(logger.error.called).not.to.be.true();
+                expect(logger.debug.called).to.be.true();
                 expect(result).eql(expectedResult);
                 done();
             });
@@ -241,24 +237,24 @@ describe('Allergies write-back writer', function() {
         it('should create an allergy with one symptom -- exception', function (done) {
 
             var payload = {
-                "allergyName": "AMPICILLIN^79;PSNDF(50.6,",
-                "enteredBy":"3",
-                "natureOfReaction": "A^ALLERGY",
-                "comment": "This is a test comment",
-                "severity": "1",
-                "eventDateTime": "20150120114900",
-                "name": "CHEESE",
-                "IEN": "20",
-                "location": "GMRD(120.82,",
-                "historicalOrObserved": "o^OBSERVED",
-                "observedDate": "201501200100",
-                "symptoms": [
+                'allergyName': 'AMPICILLIN^79;PSNDF(50.6,',
+                'enteredBy':'3',
+                'natureOfReaction': 'A^ALLERGY',
+                'comment': 'This is a test comment',
+                'severity': '1',
+                'eventDateTime': '20150120114900',
+                'name': 'CHEESE',
+                'IEN': '20',
+                'location': 'GMRD(120.82,',
+                'historicalOrObserved': 'o^OBSERVED',
+                'observedDate': '201501200100',
+                'symptoms': [
                     {
-                        "IEN": "173",
-                        "name": "STROKE",
-                        "dateTime": "201501200200",
-                        "symptomDate": "01/20/2015",
-                        "symptomTime": "02:00 a"
+                        'IEN': '173',
+                        'name': 'STROKE',
+                        'dateTime': '201501200200',
+                        'symptomDate': '01/20/2015',
+                        'symptomTime': '02:00 a'
                     }
                 ]
             };
@@ -275,17 +271,16 @@ describe('Allergies write-back writer', function() {
             };
 
             var expectedResult = {};
-            expectedResult['items'] = 'item';
-
-            var vistaJSStub = sinon.stub(RpcClient, 'callRpc',
+            sinon.stub(RpcClient, 'callRpc',
                 function(logger, vistaConfig, rpc, params, callback) {
                     return callback(new Error('bad result'));
                 }
             );
+            expectedResult.items = 'item';
 
             vistaWriter.create(writebackContext, function(err, result) {
-                expect(logger.error.called).to.be.true;
-                expect(err).not.to.be.null;
+                expect(logger.error.called).to.be.true();
+                expect(err).to.be.null();
                 done();
             });
 
@@ -297,43 +292,43 @@ describe('Allergies write-back writer', function() {
         it ('RPC parameter for observed allergy', function (){
 
             var model = {
-                "allergyName": "AMPICILLIN^79;PSNDF(50.6,",
-                "natureOfReaction": "A^ALLERGY",
-                "comment": "This is a test comment",
-                "enteredBy":"3",
-                "severity": "1",
-                "eventDateTime": "20150120114900",
-                "name": "CHEESE",
-                "IEN": "20",
-                "location": "GMRD(120.82,",
-                "historicalOrObserved": "o^OBSERVED",
-                "observedDate": "201501200100",
-                "symptoms": [
+                'allergyName': 'AMPICILLIN^79;PSNDF(50.6,',
+                'natureOfReaction': 'A^ALLERGY',
+                'comment': 'This is a test comment',
+                'enteredBy':'3',
+                'severity': '1',
+                'eventDateTime': '20150120114900',
+                'name': 'CHEESE',
+                'IEN': '20',
+                'location': 'GMRD(120.82,',
+                'historicalOrObserved': 'o^OBSERVED',
+                'observedDate': '201501200100',
+                'symptoms': [
                     {
-                        "IEN": "173",
-                        "name": "STROKE",
-                        "dateTime": "201501200200",
-                        "symptomDate": "01/20/2015",
-                        "symptomTime": "02:00 a"
+                        'IEN': '173',
+                        'name': 'STROKE',
+                        'dateTime': '201501200200',
+                        'symptomDate': '01/20/2015',
+                        'symptomTime': '02:00 a'
                     }
                 ]
             };
 
             var expectedResult = {};
-            expectedResult['"GMRACHT",0'] = "1";
-            expectedResult['"GMRACHT",1'] = "3150120.114900";
-            expectedResult['"GMRACMTS",0'] = "1";
-            expectedResult['"GMRACMTS",1'] = "This is a test comment";
-            expectedResult['"GMRAGNT"'] = "AMPICILLIN^79;PSNDF(50.6,";
-            expectedResult['"GMRANATR"'] = "A^ALLERGY";
-            expectedResult['"GMRAOBHX"'] = "o^OBSERVED";
-            expectedResult['"GMRAORDT"'] = "3151008.1106";
-            expectedResult['"GMRAORIG"'] = "3";
-            expectedResult['"GMRARDT"'] = "3150120.010000";
-            expectedResult['"GMRASEVR"'] = "1";
-            expectedResult['"GMRASYMP",0'] = "1";
-            expectedResult['"GMRASYMP",1'] = "173^STROKE^3150120.0200^Jan 20,2015@02:00^";
-            expectedResult['"GMRATYPE"'] = "O^OTHER";
+            expectedResult['"GMRACHT",0'] = '1';
+            expectedResult['"GMRACHT",1'] = '3150120.114900';
+            expectedResult['"GMRACMTS",0'] = '1';
+            expectedResult['"GMRACMTS",1'] = 'This is a test comment';
+            expectedResult['"GMRAGNT"'] = 'AMPICILLIN^79;PSNDF(50.6,';
+            expectedResult['"GMRANATR"'] = 'A^ALLERGY';
+            expectedResult['"GMRAOBHX"'] = 'o^OBSERVED';
+            expectedResult['"GMRAORDT"'] = '3151008.1106';
+            expectedResult['"GMRAORIG"'] = '3';
+            expectedResult['"GMRARDT"'] = '3150120.010000';
+            expectedResult['"GMRASEVR"'] = '1';
+            expectedResult['"GMRASYMP",0'] = '1';
+            expectedResult['"GMRASYMP",1'] = '173^STROKE^3150120.0200^Jan 20,2015@02:00^';
+            expectedResult['"GMRATYPE"'] = 'O^OTHER';
 
             var allergies = vistaWriter._getAllergyRPCString(model, logger);
 
@@ -356,43 +351,43 @@ describe('Allergies write-back writer', function() {
         it ('RPC parameter for observed allergy', function (){
 
             var model = {
-                "allergyName": "AMPICILLIN^79;PSNDF(50.6,",
-                "natureOfReaction": "A^ALLERGY",
-                "comment": "This is a test comment",
-                "enteredBy":"3",
-                "severity": "1",
-                "eventDateTime": "20150120114900",
-                "name": "CHEESE",
-                "IEN": "20",
-                "location": "GMRD(120.82,",
-                "historicalOrObserved": "h^HISTORICAL",
-                "observedDate": "201501200100",
-                "symptoms": [
+                'allergyName': 'AMPICILLIN^79;PSNDF(50.6,',
+                'natureOfReaction': 'A^ALLERGY',
+                'comment': 'This is a test comment',
+                'enteredBy':'3',
+                'severity': '1',
+                'eventDateTime': '20150120114900',
+                'name': 'CHEESE',
+                'IEN': '20',
+                'location': 'GMRD(120.82,',
+                'historicalOrObserved': 'h^HISTORICAL',
+                'observedDate': '201501200100',
+                'symptoms': [
                     {
-                        "IEN": "173",
-                        "name": "STROKE",
-                        "dateTime": "201501200200",
-                        "symptomDate": "01/20/2015",
-                        "symptomTime": "02:00 a"
+                        'IEN': '173',
+                        'name': 'STROKE',
+                        'dateTime': '201501200200',
+                        'symptomDate': '01/20/2015',
+                        'symptomTime': '02:00 a'
                     }
                 ]
             };
 
             var expectedResult = {};
-            expectedResult['"GMRACHT",0'] = "1";
-            expectedResult['"GMRACHT",1'] = "3150120.114900";
-            expectedResult['"GMRACMTS",0'] = "1";
-            expectedResult['"GMRACMTS",1'] = "This is a test comment";
-            expectedResult['"GMRAGNT"'] = "AMPICILLIN^79;PSNDF(50.6,";
-            expectedResult['"GMRANATR"'] = "A^ALLERGY";
-            expectedResult['"GMRAOBHX"'] = "h^HISTORICAL";
-            expectedResult['"GMRAORDT"'] = "3151008.1106";
-            expectedResult['"GMRAORIG"'] = "3";
-            expectedResult['"GMRARDT"'] = "3150120.010000";
-            expectedResult['"GMRASEVR"'] = "1";
-            expectedResult['"GMRASYMP",0'] = "1";
-            expectedResult['"GMRASYMP",1'] = "173^STROKE^3150120.0200^Jan 20,2015@02:00^";
-            expectedResult['"GMRATYPE"'] = "O^OTHER";
+            expectedResult['"GMRACHT",0'] = '1';
+            expectedResult['"GMRACHT",1'] = '3150120.114900';
+            expectedResult['"GMRACMTS",0'] = '1';
+            expectedResult['"GMRACMTS",1'] = 'This is a test comment';
+            expectedResult['"GMRAGNT"'] = 'AMPICILLIN^79;PSNDF(50.6,';
+            expectedResult['"GMRANATR"'] = 'A^ALLERGY';
+            expectedResult['"GMRAOBHX"'] = 'h^HISTORICAL';
+            expectedResult['"GMRAORDT"'] = '3151008.1106';
+            expectedResult['"GMRAORIG"'] = '3';
+            expectedResult['"GMRARDT"'] = '3150120.010000';
+            expectedResult['"GMRASEVR"'] = '1';
+            expectedResult['"GMRASYMP",0'] = '1';
+            expectedResult['"GMRASYMP",1'] = '173^STROKE^3150120.0200^Jan 20,2015@02:00^';
+            expectedResult['"GMRATYPE"'] = 'O^OTHER';
 
             var allergies = vistaWriter._getAllergyRPCString(model, logger);
 

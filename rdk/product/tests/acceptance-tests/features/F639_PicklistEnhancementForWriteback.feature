@@ -4,7 +4,7 @@ Feature:F639 - Picklist Enhancement for Writeback
 
 @F639_2_Radiology_Endpoint_For_Radiology_type @US9322
 Scenario: Create Endpoint for ORWDRA32 IMTYPSEL (RADIOLOGY)
-  When the client requests picklist with the parameters for "radiology-imaging-types" with the user "9E7A;PW    "
+  When the client requests picklist with the parameters for "radiology-imaging-types" with the user "9E7A;vk1234"
       | paramter name | value                                   |
 
   Then a successful response is returned
@@ -54,9 +54,10 @@ Scenario: Create Endpoint for ORWDRA32 IMTYPSEL (RADIOLOGY)
 
 @F639_3_Radiology_Endpoint_For_Radiology_Dialog_Default @US9323
 Scenario: Create Endpoint for ORWDRA32 DEF (RADIOLOGY)
-  When the client requests picklist with the parameters for "radiology-dialog-default" with the user "9E7A;PW    "
+  When the client requests picklist with the parameters for "radiology-dialog-default" with the user "9E7A;vk1234"
       | paramter name | value                    |
-      | patientDFN    | 100623                   |
+      | type          | radiology-dialog-default |
+      | pid           | 9E7A;100623              |
       | imagingType   | 40                       |
 
   Then a successful response is returned
@@ -155,7 +156,7 @@ Scenario: Create Endpoint for ORWDRA32 DEF (RADIOLOGY)
 
 @F639_4_Lab_Orders_all_collection_samples
 Scenario: Returns all collection samples (ORWDLR32 ALLSAMP)
-When the client requests picklist with the parameters for "lab-all-samples" with the user "9E7A;PW    "
+When the client requests picklist with the parameters for "lab-all-samples" with the user "9E7A;vk1234"
       | paramter name | value                                 |
 Then a successful response is returned
 And the picklist result contains
@@ -170,7 +171,7 @@ And the picklist result contains
 
 @F639_5_Lab_Orders_list_of_specimens
 Scenario: Returns a list of specimens from the TOPOGRAPHY FIELD file (#61) (ORWDLR32 ALLSPEC)
-When the client requests picklist with the parameters for "lab-order-specimens" with the user "9E7A;PW    "
+When the client requests picklist with the parameters for "lab-order-specimens" with the user "9E7A;vk1234"
       | paramter name | value               |
   Then a successful response is returned
   And the picklist result contains
@@ -192,7 +193,7 @@ When the client requests picklist with the parameters for "lab-order-specimens" 
 
 @F639_6_Lab_Orders_dialog_definition
 Scenario: Returns a list of specimens from the TOPOGRAPHY FIELD file (#61) (ORWDLR32 DEF)
-When the client requests picklist with the parameters for "lab-order-dialog-def" with the user "9E7A;PW    "
+When the client requests picklist with the parameters for "lab-order-dialog-def" with the user "9E7A;vk1234"
       | paramter name | value                |
       | location  | 240           |
   Then a successful response is returned
@@ -218,7 +219,7 @@ When the client requests picklist with the parameters for "lab-order-dialog-def"
 
 @F639_7_Lab_Orders_For_LAB_Times @US9956
 Scenario: Create Endpoint for ORWDLR32 GET LAB TIMES (a list of date/time available from the lab schedule)
-When the client requests picklist with the parameters for "lab-times-available" with the user "9E7A;PW    "
+When the client requests picklist with the parameters for "lab-times-available" with the user "9E7A;vk1234"
       | paramter name | value               |
       | date          | 20312015            |
       | locationUid      | urn:va:location:9E7A:1 |
@@ -252,14 +253,14 @@ When the client requests picklist with the parameters for "lab-times-available" 
 
 @F639_8_Lab_Orders_valid_lab_immediate_collect_time @US9957
 Scenario: Create Endpoint for ORWDLR32 IC VALID (Determines whether the supplied time is a valid lab immediate collect time.)
-When the client requests picklist with the parameters for "lab-time-valid-immediate-collect-time" with the user "9E7A;PW    "
+When the client requests picklist with the parameters for "lab-time-valid-immediate-collect-time" with the user "9E7A;vk1234"
       | paramter name | value                                 |
       | time          | 3151127.151                           |
 Then a successful response is returned
 
 @F639_9_Lab_Orders_valid_lab_collect_time @US9025
 Scenario: Returns help text showing lab immediate collect times for the user's division. (ORWDLR32 IMMED COLLECT)
-When the client requests picklist with the parameters for "lab-collect-times" with the user "9E7A;PW    "
+When the client requests picklist with the parameters for "lab-collect-times" with the user "9E7A;vk1234"
       | paramter name | value             |
   Then a successful response is returned
   And the picklist result contains
@@ -286,7 +287,7 @@ When the client requests picklist with the parameters for "lab-collect-times" wi
 
 @F639_10_Lab_Orders_valid_lab_collect_time @US9025
 Scenario: Returns help text showing lab immediate collect times for the user's division. (ORWDLR32 IMMED COLLECT)
-When the client requests picklist with the parameters for "lab-collect-times" with the user "C877;PW    "
+When the client requests picklist with the parameters for "lab-collect-times" with the user "C877;vk1234"
       | paramter name | value             |
   Then a successful response is returned
       And the picklist result contains
@@ -295,14 +296,15 @@ When the client requests picklist with the parameters for "lab-collect-times" wi
 
 @F639_11_Endpoint_for_New_Persons @US9972
 Scenario: Update the new-persons endpoint to retrieve the entire list of persons.
-When the client requests picklist with the parameters for "new-persons" with the user "9E7A;PW    "
+When the client requests a picklist with the parameters for "new-persons" with the user "9E7A;vk1234"
       | paramter name | value       |
+      | site          | 9E7A        |
   Then a successful response is returned
 
 
 @F639_12_Allergies_match
 Scenario: Create Endpoint for allergies match (ORWDAL32 ALLERGY MATCH)
-  When the client requests picklist with the parameters for "allergies-match" with the user "9E7A;PW    "
+  When the client requests picklist with the parameters for "allergies-match" with the user "9E7A;vk1234"
       | paramter name | value                          |
       | searchString  | DIALYSIS MEMBRANE              |
   Then a successful response is returned
@@ -319,7 +321,7 @@ Scenario: Create Endpoint for allergies match (ORWDAL32 ALLERGY MATCH)
 
 @F639_13_Allergies_symptioms_top_ten
 Scenario: Create Endpoint for allergies-symptoms-top-ten (ORWDAL32 DEF)
-  When the client requests picklist with the parameters for "allergies-symptoms-top-ten" with the user "9E7A;PW    "
+  When the client requests picklist with the parameters for "allergies-symptoms-top-ten" with the user "9E7A;vk1234"
       | paramter name | value                          |
   Then a successful response is returned
   And the picklist result contains
@@ -366,7 +368,7 @@ Scenario: Create Endpoint for allergies-symptoms-top-ten (ORWDAL32 DEF)
 
 @F639_14_Allergies_symptoms
 Scenario: Create Endpoint for allergies symptoms (ORWDAL32 SYMPTOMS)
-  When the client requests picklist with the parameters for "allergies-symptoms" with the user "9E7A;PW    "
+  When the client requests picklist with the parameters for "allergies-symptoms" with the user "9E7A;vk1234"
       | paramter name | value              |
       | searchString  | hives              |
   Then a successful response is returned
@@ -384,7 +386,7 @@ Scenario: Create Endpoint for allergies symptoms (ORWDAL32 SYMPTOMS)
 
 @F639_15_Allergies_symptoms_all_with_top_ten
 Scenario: Create Endpoint for allergies symptoms all with top ten (ORWDAL32 DEF and ORWDAL32 SYMPTOMS )
-  When the client requests picklist with the parameters for "allergies-symptoms-all-with-top-ten" with the user "9E7A;PW    "
+  When the client requests picklist with the parameters for "allergies-symptoms-all-with-top-ten" with the user "9E7A;vk1234"
       | paramter name | value                               |
   Then a successful response is returned
   And the picklist result contains
@@ -413,7 +415,7 @@ Scenario: Create Endpoint for allergies symptoms all with top ten (ORWDAL32 DEF 
 
 @F639_17_Problems-lexicon-lookup
 Scenario: Create Endpoint for problems-lexicon-lookup (ORQQPL4 LEX)
-  When the client requests picklist with the parameters for "problems-lexicon-lookup" with the user "9E7A;PW    "
+  When the client requests picklist with the parameters for "problems-lexicon-lookup" with the user "9E7A;vk1234"
       | paramter name | value                   |
       | searchString  | ABC                     |
   Then a successful response is returned
@@ -430,7 +432,7 @@ Scenario: Create Endpoint for problems-lexicon-lookup (ORQQPL4 LEX)
 
 @F639_20_Vitals_List
 Scenario: Get list of vitals qualifiers/categories
-  When the client requests picklist with the parameters for "vitals" with the user "9E7A;PW    "
+  When the client requests picklist with the parameters for "vitals" with the user "9E7A;vk1234"
       | paramter name | value |
 
   Then a successful response is returned
@@ -448,7 +450,7 @@ Scenario: Get list of vitals qualifiers/categories
 
 @F639_21_Printer_Devices_List
 Scenario: Get List of printer devices
-  When the client requests picklist with the parameters for "printer-devices" with the user "9E7A;PW    "
+  When the client requests picklist with the parameters for "printer-devices" with the user "9E7A;vk1234"
       | paramter name | value |
 
   Then a successful response is returned
@@ -465,7 +467,7 @@ Scenario: Get List of printer devices
 
 @F639_22_List_Of_Notes_Titles
 Scenario: Returns a list of Note Titles
-  When the client requests picklist with the parameters for "progress-notes-titles" with the user "9E7A;PW    "
+  When the client requests picklist with the parameters for "progress-notes-titles" with the user "9E7A;vk1234"
       | paramter name | value |
       | class         | 3 |
       | searchString | ACROMEGALY |
@@ -487,7 +489,7 @@ Scenario: Returns a list of Note Titles
 
 @F639_23_Flag_For_Notes_Title
 Scenario: Returns the flags for a Progress Note Title
-  When the client requests picklist with the parameters for "progress-notes-titles-flags" with the user "9E7A;PW    "
+  When the client requests picklist with the parameters for "progress-notes-titles-flags" with the user "9E7A;vk1234"
       | paramter name | value                       |
       | ien           | 1354                       |
       | searchString  | ACROMEGALY                  |
@@ -503,7 +505,7 @@ Scenario: Returns the flags for a Progress Note Title
 
 @F639_24_Lab_Order_Types @DE5107 @DE5196
 Scenario: Create endpoint for ORWDX ORDITM (lab order types)
-  When the client requests picklist with the parameters for "lab-order-orderable-items" with the user "9E7A;PW    "
+  When the client requests picklist with the parameters for "lab-order-orderable-items" with the user "9E7A;vk1234"
       | parameter name | value                     |
       | labType        | S.LAB                     |
 

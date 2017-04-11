@@ -15,13 +15,7 @@ var req = {
     logger: logger
 };
 
-var mockPool = {'simulated': 'connectionPool'};
-
 var mockKey = 'dXNlcnBhc3N3b3JkY29ubmVjdFN0cmluZw==';
-
-var mockCachedPool = {
-    'dXNlcnBhc3N3b3JkY29ubmVjdFN0cmluZw==': mockPool
- };
 
 describe('oracle-connection-pool-spec.js', function() {
     'use strict';
@@ -218,7 +212,6 @@ describe('oracle-connection-pool-spec.js', function() {
     });
 
     describe('_getPool', function() {
-        var mockCreatePool;
         beforeEach(function() {
 
         });
@@ -227,7 +220,7 @@ describe('oracle-connection-pool-spec.js', function() {
 
         });
 
-        xit('Should return an empty object because _onShutdown is called', function() {
+        it.skip('Should return an empty object because _onShutdown is called', function() {
             var pool;
             sinon.stub(oracleConnectionPool, '_onShutdown', function() {
                 pool = _.cloneDeep(oracleConnectionPool._cachedPool);
@@ -309,7 +302,7 @@ describe('oracle-connection-pool-spec.js', function() {
         });
     });
 
-    xdescribe('_onShutdown', function() { //moved out of this file
+    describe.skip('_onShutdown', function() { //moved out of this file
         it('Should have a listener on SIGQUIT pointing to closePool()', function() {
             var listeners = process.listeners('SIGQUIT');
             var foundClosePool = false;

@@ -1,4 +1,4 @@
-@F172 @F339 @regression @triage
+@F172 @F339  
 Feature: Worksheet Editor's space - Applet Carousel
 
 Background:

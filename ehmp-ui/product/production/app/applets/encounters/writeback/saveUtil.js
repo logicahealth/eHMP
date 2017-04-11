@@ -5,7 +5,7 @@ define([
     'handlebars'
 ], function(Backbone, Marionette, _, Handlebars) {
     'use strict';
-    
+
     var ENCOUNTER_FORM_ERROR_MSG = '<h3>There was an error submitting the form.  Your changes cannot be saved at this time.</h3>';
     var ENCOUNTER_FORM_ERROR_TITLE = 'Error';
     var ENCOUNTER_FORM_ERROR_ICON = 'icon-circle-exclamation';
@@ -19,7 +19,6 @@ define([
     var SaveVisitModel = Backbone.Model.extend({
         url: '',
         defaults: {
-            'patientDFN': '',
             'isInpatient': '',
             'locationUid': '',
             'encounterDateTime': '',
@@ -30,7 +29,7 @@ define([
     });
     var getSaveVisitModel = function(visitModel) {
         var save = new SaveVisitModel();
-        save.set('patientDFN', visitModel.patientDFN);
+        save.set('pid', visitModel.patientPID);
         save.set('isInpatient', visitModel.isInpatient);
         save.set('locationUid', visitModel.locationUid);
         save.set('encounterDateTime', visitModel.encounterDateTime);

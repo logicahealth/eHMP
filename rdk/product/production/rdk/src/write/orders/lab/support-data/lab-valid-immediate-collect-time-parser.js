@@ -16,10 +16,10 @@ module.exports.parseValidImmediateCollectTime = function(logger, rpcData) {
         var validation = {
             isValid: fields[0],
             validationMessage: fields[1]
-        }
+        };
         retValue.push(validation);
     } else {
-        throw new Error("The RPC returned data but we couldn't understand it: " + rpcData);
+        throw new Error('The RPC returned data but we couldn\'t understand it: ' + rpcData);
     }
     logger.info({
         retValue: retValue

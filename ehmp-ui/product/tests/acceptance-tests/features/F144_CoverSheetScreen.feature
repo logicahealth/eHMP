@@ -1,4 +1,4 @@
-@F144 @regression @triage
+@F144  
 Feature: F144-eHMP Viewer GUI - Coversheet View
 
 #POC: Team Mercury
@@ -8,9 +8,7 @@ Scenario: User views the cover sheet
 #	Given user is logged into eHMP-UI
 	And user searches for and selects "BCMA,Eight"
 	Then Cover Sheet is active
-	Then the "patient identifying traits" is displayed with information
-		| field			| value 				|
-		| patient name	| Bcma,Eight 			|
+	And the Global Header displays the user name "BCMA,Eight(B0008)"
 	And the applets are displayed on the coversheet
 		| applet 					|
 		| PROBLEMS	 			|

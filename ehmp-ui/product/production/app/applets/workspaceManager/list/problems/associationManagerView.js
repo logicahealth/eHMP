@@ -64,8 +64,6 @@ define([
                     event.preventDefault();
                     event.stopImmediatePropagation();
                 } else if (event.keyCode === 27) { // escape
-                    event.preventDefault();
-                    event.stopImmediatePropagation();
                     this.closeSearchResultDropdown(event);
                 }
             },
@@ -146,7 +144,8 @@ define([
             if ($dropdown.is(':visible')) {
                 $dropdown.hide();
                 this.$('#screenProblemSearch').focus();
-                event.stopPropagation(); // stop propagation so the parent view won't take any 'close' action
+                event.preventDefault();
+                event.stopImmediatePropagation(); // stop propagation so the parent view won't take any 'close' action
             }
         },
         onDomRefresh: function() {

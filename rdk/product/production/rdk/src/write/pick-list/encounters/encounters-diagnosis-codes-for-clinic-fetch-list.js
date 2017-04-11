@@ -1,7 +1,6 @@
 'use strict';
 var parse = require('./encounters-diagnosis-codes-for-clinic-parser').parse;
 var rpcUtil = require('./../utils/rpc-util');
-var validate = require('./../utils/validation-util');
 var rdk = require('../../../core/rdk');
 var locationUtil = rdk.utils.locationUtil;
 var _ = require('lodash');

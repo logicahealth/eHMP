@@ -117,6 +117,7 @@ define([
                 stepTitle: 'Step 2',
                 showHeader: false,
                 subTrayGroup: 'note-edit-subtray',
+                helpMapping: 'notes_form',
                 onBeforeShow: function() {
                     if (isEdit) {
                         workflow.changeHeaderTitle('Edit Note');
@@ -287,6 +288,7 @@ define([
                 stepTitle: 'Step 1',
                 showHeader: false,
                 subTrayGroup: 'note-addendum-subtray',
+                helpMapping: 'notes_addendum_form',
                 onBeforeShow: function() {
                     workflow.changeHeaderActionItems(addendumFormHeaderOptions.actionItems);
                     workflow.changeHeaderCloseButtonOptions(addendumFormHeaderOptions.closeButtonOptions);

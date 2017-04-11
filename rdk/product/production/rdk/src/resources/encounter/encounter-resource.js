@@ -2,14 +2,8 @@
 
 var rdk = require('../../core/rdk');
 var _ = require('lodash');
-var jdsFilter = require('jds-filter');
-var querystring = require('querystring');
 var nullchecker = rdk.utils.nullchecker;
-var httpUtil = rdk.utils.http;
-var domains = require('../../fhir/common/domain-map.js');
-var encounterFields = require('./encounter-data-obj');
 var filemanDateUtil = require('../../utils/fileman-date-converter');
-var async = require('async');
 var vistaJs = require('vista-js');
 var paramUtil = require('../../utils/param-converter');
 var RpcClient = vistaJs.RpcClient;
@@ -51,22 +45,26 @@ function getResourceConfig() {
 function getEncounterData(req, res, next) {
     //the encounter object that will be added to as the RPC response is parse
     var encounter = {};
-    var config = req.app.config;
-    var pid = req.param('pid');
     var dateTime = req.param('dateTime');
     var locationUid = req.param('locationUid');
     var serviceCategory = req.param('serviceCategory');
-    var site = req.session.user.site;
+    var patientIdentifiers = _.get(req, 'interceptorResults.patientIdentifiers', {});
+    var site = _.get(patientIdentifiers, 'site');
+    if (_.isUndefined(site)) {
+        req.logger.debug('getEncounterData - missing patient site from interceptor patient identifier results');
+        return res.status(rdk.httpstatus.bad_request).rdkSend('Missing patient site parameter.');
+    }
+
     var HMP_UI_CONTEXT = 'HMP UI CONTEXT';
     var RPC_NAME = 'ORWPCE PCE4NOTE';
     //NOTE_IEN is an optional parameter for the PCE4NOTE
     var NOTE_IEN = '-2';
-    var dfn = req.interceptorResults.patientIdentifiers.dfn;
+    var dfn = _.get(patientIdentifiers, 'dfn');
     var locationIEN = locationUtil.getLocationIEN(locationUid);
     var dateTimeMoment = paramUtil.convertWriteBackInputDate(dateTime);
     var filemanDate = filemanDateUtil.getFilemanDateTimeWithSeconds(dateTimeMoment.toDate());
 
-    if(nullchecker.isNullish(dfn)){
+    if (nullchecker.isNullish(dfn)) {
         return res.status(500).rdkSend('Missing required patient identifiers.');
     }
     //this will be replaced with an RPC call ORWCV VST
@@ -86,7 +84,7 @@ function getEncounterData(req, res, next) {
     parameters.push(RpcParameter.literal(dfn));
     parameters.push(RpcParameter.literal(visitString));
 
-    var rpc = RpcClient.callRpc(req.logger, vistaConfig, RPC_NAME, parameters, function(err, result) {
+    RpcClient.callRpc(req.logger, vistaConfig, RPC_NAME, parameters, function(err, result) {
         if (err) {
             req.logger.error(err, 'ORWPCE PCE4NOTE: response error');
             return res.status(500).rdkSend(err);
@@ -117,7 +115,9 @@ function getEncounterData(req, res, next) {
             var visitFound = false;
 
             if (err) {
-                req.logger.error({error: err}, 'An error occurred while retrieving the visit categories pick list');
+                req.logger.error({
+                    error: err
+                }, 'An error occurred while retrieving the visit categories pick list');
             } else if (!_.isUndefined(fetchResult)) {
                 _.each(fetchResult, function(pickListObj) {
                     categoryArray.push(pickListObj.categoryName);
@@ -302,7 +302,6 @@ function getEncounterData(req, res, next) {
         //extract details for each provider
         _.each(allProviders, function(element) {
             var provider = {};
-            var providerArray = [];
             if (element) {
                 var splitElement = lineChopper(element);
                 provider.ien = '';
@@ -329,13 +328,13 @@ function getEncounterData(req, res, next) {
     };
 
     var getServiceRelatedItems = function(splitResult, encounter) {
-        var SERVICE_CONNECTED        = 'SC',
-            AGENT_ORANGE             = 'AO',
-            IONIZING_RADIATION       = 'IR',
-            SW_ASIA                  = 'EC',
-            MILITARY_SEXUAL_TRAUMA   = 'MST',
-            HEAD_NECK_CANCER         = 'HNC',
-            COMBAT_VETERAN           = 'CV',
+        var SERVICE_CONNECTED = 'SC',
+            AGENT_ORANGE = 'AO',
+            IONIZING_RADIATION = 'IR',
+            SW_ASIA = 'EC',
+            MILITARY_SEXUAL_TRAUMA = 'MST',
+            HEAD_NECK_CANCER = 'HNC',
+            COMBAT_VETERAN = 'CV',
             SHIPBOARD_HAZARD_DEFENSE = 'SHD';
         var visitRelatedArray = [];
         var allServiceRelatedItems = [];
@@ -357,50 +356,74 @@ function getEncounterData(req, res, next) {
                 if (element.indexOf(SERVICE_CONNECTED) !== -1) {
                     splitElement = lineChopper(element);
                     if (!_.isEmpty(splitElement[2])) {
-                        visitRelatedArray.push({visitRelated: SERVICE_CONNECTED, value: convertVisitRelatedValueToYesNo(splitElement[2])});
+                        visitRelatedArray.push({
+                            visitRelated: SERVICE_CONNECTED,
+                            value: convertVisitRelatedValueToYesNo(splitElement[2])
+                        });
                     }
                 }
                 if (element.indexOf(COMBAT_VETERAN) !== -1) {
                     splitElement = lineChopper(element);
                     if (!_.isEmpty(splitElement[2])) {
-                        visitRelatedArray.push({visitRelated: COMBAT_VETERAN, value: convertVisitRelatedValueToYesNo(splitElement[2])});
+                        visitRelatedArray.push({
+                            visitRelated: COMBAT_VETERAN,
+                            value: convertVisitRelatedValueToYesNo(splitElement[2])
+                        });
                         COMBAT_VETERAN = splitElement[2];
                     }
                 }
                 if (element.indexOf(AGENT_ORANGE) !== -1) {
                     splitElement = lineChopper(element);
                     if (!_.isEmpty(splitElement[2])) {
-                       visitRelatedArray.push({visitRelated: AGENT_ORANGE, value: convertVisitRelatedValueToYesNo(splitElement[2])});
+                        visitRelatedArray.push({
+                            visitRelated: AGENT_ORANGE,
+                            value: convertVisitRelatedValueToYesNo(splitElement[2])
+                        });
                     }
                 }
                 if (element.indexOf(IONIZING_RADIATION) !== -1) {
                     splitElement = lineChopper(element);
                     if (!_.isEmpty(splitElement[2])) {
-                        visitRelatedArray.push({visitRelated: IONIZING_RADIATION, value: convertVisitRelatedValueToYesNo(splitElement[2])});
+                        visitRelatedArray.push({
+                            visitRelated: IONIZING_RADIATION,
+                            value: convertVisitRelatedValueToYesNo(splitElement[2])
+                        });
                     }
                 }
                 if (element.indexOf(SW_ASIA) !== -1) {
                     splitElement = lineChopper(element);
                     if (!_.isEmpty(splitElement[2])) {
-                        visitRelatedArray.push({visitRelated: SW_ASIA, value: convertVisitRelatedValueToYesNo(splitElement[2])});
+                        visitRelatedArray.push({
+                            visitRelated: SW_ASIA,
+                            value: convertVisitRelatedValueToYesNo(splitElement[2])
+                        });
                     }
                 }
                 if (element.indexOf(SHIPBOARD_HAZARD_DEFENSE) !== -1) {
                     splitElement = lineChopper(element);
                     if (!_.isEmpty(splitElement[2])) {
-                        visitRelatedArray.push({visitRelated: SHIPBOARD_HAZARD_DEFENSE, value: convertVisitRelatedValueToYesNo(splitElement[2])});
+                        visitRelatedArray.push({
+                            visitRelated: SHIPBOARD_HAZARD_DEFENSE,
+                            value: convertVisitRelatedValueToYesNo(splitElement[2])
+                        });
                     }
                 }
                 if (element.indexOf(MILITARY_SEXUAL_TRAUMA) !== -1) {
                     splitElement = lineChopper(element);
                     if (!_.isEmpty(splitElement[2])) {
-                        visitRelatedArray.push({visitRelated: MILITARY_SEXUAL_TRAUMA, value: convertVisitRelatedValueToYesNo(splitElement[2])});
+                        visitRelatedArray.push({
+                            visitRelated: MILITARY_SEXUAL_TRAUMA,
+                            value: convertVisitRelatedValueToYesNo(splitElement[2])
+                        });
                     }
                 }
                 if (element.indexOf(HEAD_NECK_CANCER) !== -1) {
                     splitElement = lineChopper(element);
                     if (!_.isEmpty(splitElement[2])) {
-                        visitRelatedArray.push({visitRelated: HEAD_NECK_CANCER, value: convertVisitRelatedValueToYesNo(splitElement[2])});
+                        visitRelatedArray.push({
+                            visitRelated: HEAD_NECK_CANCER,
+                            value: convertVisitRelatedValueToYesNo(splitElement[2])
+                        });
                     }
                 }
             }

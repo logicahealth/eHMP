@@ -1,4 +1,4 @@
-@F144_Lab_Results_Base_Applet_Filter @Lab_Results @regression
+@F144_Lab_Results_Base_Applet_Filter @Lab_Results  @reg1
 Feature: F144 - eHMP Viewer GUI - Numeric Lab Results - Filtering
 
 # Team: Andromeda
@@ -17,7 +17,7 @@ Scenario: Numeric Lab Results Applet - Filter numeric lab results outside of the
  # Then the "Numeric Lab Results Applet" table contains 22 rows
   Then the Lab Test column in the Numeric Lab Results Applet contains "LDL"
 
-@f144_numeric_lab_results_text_filtering_lab_type @US2552 @TA7994a @triage @DE1226
+@f144_numeric_lab_results_text_filtering_lab_type @US2552 @TA7994a  @DE1226
 Scenario: Numeric Lab Results Applet - Filtering by Lab Type inside the panel and view VistA results
   Given the user is viewing the expanded "Numeric Lab Results" applet
   When the user clicks the date control "All" on the "Numeric Lab Results applet"
@@ -25,7 +25,7 @@ Scenario: Numeric Lab Results Applet - Filtering by Lab Type inside the panel an
   When the user inputs "inr" in the "Text Filter" control in the "Numeric Lab Results applet"
   Then the Lab Test column in the Numeric Lab Results Applet contains "inr"
 
-@f144_numeric_lab_results_text_filtering_lab_type @US2552 @TA7994b @triage @DE1226
+@f144_numeric_lab_results_text_filtering_lab_type @US2552 @TA7994b  @DE1226
 Scenario: User can filter by Lab Type inside the panel and view DoD results
   Given the user is viewing the expanded "Numeric Lab Results" applet
   And the user clicks the date control "All" in the "Numeric Lab Results applet"
@@ -33,7 +33,7 @@ Scenario: User can filter by Lab Type inside the panel and view DoD results
   When the user inputs "hematocrit" in the "Text Filter" control in the "Numeric Lab Results applet"
   Then the Lab Test column in the Numeric Lab Results Applet contains "hematocrit"
 
-@f144_numeric_lab_results_text_filtering_result @US2552 @TA7994c @triage @DE1226 
+@f144_numeric_lab_results_text_filtering_result @US2552 @TA7994c  @DE1226 
 Scenario: Numeric Lab Results Applet - Filtering by Result.
   Given the user is viewing the expanded "Numeric Lab Results" applet
   And the user clicks the date control "All" in the "Numeric Lab Results applet"

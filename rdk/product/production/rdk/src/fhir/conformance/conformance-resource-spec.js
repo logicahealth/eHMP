@@ -1,6 +1,5 @@
 'use strict';
 var conformance = require('./conformance-resource');
-var inputValue = require('./conformance-resource-spec-data').inputValue;
 function noop() {}
 
 describe('Conformance FHIR Resource', function() {

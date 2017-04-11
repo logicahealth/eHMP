@@ -18,11 +18,18 @@ describe('writeback workflow', function() {
         req.app.config = {};
         req.session = {};
         req.session.user = {};
+        req.session.user.site = '9E7A';
         req.headers = {};
         req.session.cookie = {};
         req.body = {};
         req.param = _.identity;
-
+        req.interceptorResults = {
+            patientIdentifiers: {
+                site: '9E7A',
+                siteDfn: '9E7A;100',
+                dfn: '100'
+            }
+        };
         done();
     });
     describe('getVistaConfig', function() {
@@ -99,7 +106,9 @@ describe('writeback workflow', function() {
                 expect(taskCount).to.equal(2);
                 expect(body).to.eql({
                     status: 200,
-                    data: {test: true}
+                    data: {
+                        test: true
+                    }
                 });
                 done();
             };
@@ -110,7 +119,9 @@ describe('writeback workflow', function() {
                 },
                 function(writebackContext, callback) {
                     taskCount++;
-                    writebackContext.vprResponse = {test: true};
+                    writebackContext.vprResponse = {
+                        test: true
+                    };
                     callback(null);
                 }
             ];
@@ -146,7 +157,9 @@ describe('writeback workflow', function() {
                 done();
             };
             var tasks = [function(writebackContext, callback) {
-                callback({error: 'An error happened'});
+                callback({
+                    error: 'An error happened'
+                });
             }];
             writebackWorkflow(req, res, tasks);
         });
@@ -164,8 +177,12 @@ describe('writeback workflow', function() {
             };
             var tasks = [
                 function(writebackContext, callback) {
-                    writebackContext.vprModel = {test: true};
-                    writebackContext.vprResponse = {test: true};
+                    writebackContext.vprModel = {
+                        test: true
+                    };
+                    writebackContext.vprResponse = {
+                        test: true
+                    };
                     callback();
                 },
                 jdsDirectWriter
@@ -182,7 +199,9 @@ describe('writeback workflow', function() {
                 done();
             };
             var tasks = [function(writebackContext, callback) {
-                writebackContext.vprResponse = {test: true};
+                writebackContext.vprResponse = {
+                    test: true
+                };
                 writebackContext.vprResponseStatus = 234;
                 callback(null);
             }];

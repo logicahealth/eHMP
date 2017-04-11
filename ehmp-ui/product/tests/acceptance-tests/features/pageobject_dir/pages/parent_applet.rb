@@ -19,7 +19,7 @@ class PobParentApplet < SitePrism::Page
     self.class.element(:btn_applet_filter_toggle, "#{appletid_css} .applet-filter-button")
     self.class.element(:btn_applet_expand_view, "#{appletid_css} .applet-maximize-button")
     self.class.element(:btn_applet_refresh, "#{appletid_css} .applet-refresh-button")
-    self.class.element(:btn_applet_help, "#{appletid_css} .applet-help-button")
+    self.class.element(:btn_applet_help, "#{appletid_css} .grid-help-button .help-icon-link")
     self.class.element(:btn_applet_minimize, "#{appletid_css} .applet-minimize-button")  
     self.class.element(:btn_applet_add, "#{appletid_css} .applet-add-button")
   end

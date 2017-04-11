@@ -5,13 +5,6 @@ var medDispense = require('./medication-dispense-resource');
 var medDispObj = require('./medication-dispense-objects');
 var medDispenseIn = require('./medication-dispense-resource-spec-data');
 
-var allMedsStatusCode = {
-    'historical': 'completed',
-    'not active': 'stopped',
-    'hold': 'on hold',
-    'active': 'active'
-};
-
 var outpatientStatus = {
     'DISCONTINUED': 'stopped',
     'COMPLETE': 'completed',
@@ -27,13 +20,6 @@ var outpatientStatus = {
     'LAPSED': 'stopped',
     'RENEWED': 'in progress',
     'NO STATUS': 'on hold'
-};
-
-var vaTypeMap = {
-    'I': 'Inpatient',
-    'N': 'Non-Va',
-    'O': 'Outpatient',
-    'V': 'IV'
 };
 
 describe('Medication Dispense Conformance Statement', function() {
@@ -204,11 +190,6 @@ describe('Document FHIR Resource', function() {
                         if (medPrescription.dosageInstruction && medPrescription.dosageInstruction[0]) {
                             expect(medPrescription.dosageInstruction[0].text).to.eql(vprDoc.sig);
                         }
-                    });
-
-                    //Substance
-                    var resSubstance = _.find(fhirDoc.contained, function(res) {
-                        return res.resourceType === 'Substance';
                     });
 
                     //Medication

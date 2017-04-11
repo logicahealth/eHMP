@@ -26,7 +26,6 @@ var userClassRPC = function(req, res, userClassCB, params) {
     var rpcClient = params.rpcClient;
     var site = params.site;
     var data = params.data;
-    var vistaSites = _.get(req, 'app.config.vistaSites', {});
     //call to get User Classes
     var timer = new RdkTimer({
         'name': 'userClassRPCCallTimer',

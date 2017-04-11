@@ -1,6 +1,6 @@
 # Group Pick List
 
-## Medication orders calc max refills [/medication-orders-calc-max-refills{?site}{&patientDFN}{&drug}{&days}{&ordItem}{&discharge}]
+## Medication orders calc max refills [/medication-orders-calc-max-refills{?site}{&pid}{&drug}{&days}{&ordItem}{&discharge}]
 
 DIRECT RPC CALL - Returns maximum refills allowed
 
@@ -12,7 +12,7 @@ ORWDPS2 MAXREF
 
     :[site]({{{common}}}/parameters/site.md)
 
-    + patientDFN (string, required) - The patient DFN
+    :[pid]({{{common}}}/parameters/pid.md)
 
     + drug (string, required) - The drug
 

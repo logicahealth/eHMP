@@ -1,9 +1,5 @@
 'use strict';
 var async = require('async');
-var _ = require('lodash');
-var addCommunicationRequest = require('./communication-request-add');
-var deleteCommunicationRequest = require('./communication-request-delete');
-var getCommunicationRequest = require('./communication-request-get');
 var pjdsHandler = require('./persistence/pjds-handler.js');
 
 

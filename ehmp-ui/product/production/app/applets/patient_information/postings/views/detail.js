@@ -43,6 +43,30 @@ define([
         tagName: "p"
     });
 
+    var HeaderView = Backbone.Marionette.ItemView.extend({
+        template: Handlebars.compile([
+            '<div data-flex-width="1" class="header-title-container">',
+            '<h4 class="panel-title">{{title}}</h4>',
+            '</div>',
+            '<div class="header-help-button-container top-padding-xs"></div>'
+        ].join('\n')),
+        behaviors: function() {
+            return {
+                FlexContainer: {
+                    direction: 'row'
+                },
+                HelpLink: {
+                    container: '.header-help-button-container',
+                    mapping: this.getOption('model').get('helpMapping'),
+                    buttonOptions: {
+                        colorClass: 'bgc-primary-dark'
+                    }
+                }
+            };
+        },
+        className: 'left-padding-sm right-padding-sm panel-heading'
+    });
+
     var TitleModel = Backbone.Model.extend({
         defaults: {
             'title': '',
@@ -220,10 +244,16 @@ define([
         }
     });
     var PostingsContainerView = Backbone.Marionette.LayoutView.extend({
+        behaviors: {
+            FlexContainer: {
+                direction: 'column'
+            }
+        },
         template: DetailTemplate,
-        className: 'container-fluid panel panel-default flex-display flex-direction-column inherit-height',
+        className: 'container-fluid panel panel-default',
         regions: {
-            cwadDetails: '.cwad-detail-list'
+            cwadDetails: '.cwad-detail-list',
+            headerRegion: '.header-content-container'
         },
         events: {
             'click .close': 'closeDetail'
@@ -231,7 +261,8 @@ define([
         initialize: function(options) {
             this.model = new TitleModel({
                 title: options.cwadIdentifier,
-                description: options.cwadDescription
+                description: options.cwadDescription,
+                helpMapping: this.getOption('helpMapping')
             });
         },
         modelEvents: {
@@ -239,6 +270,9 @@ define([
         },
         onRender: function() {
             this.cwadDetails.show(new CwadDetailsView(this.options));
+            this.showChildView('headerRegion', new HeaderView({
+                model: this.model
+            }));
         }
     });
 

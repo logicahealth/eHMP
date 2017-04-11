@@ -1,9 +1,3 @@
-#require 'singleton'
-#path = File.expand_path '..', __FILE__
-#$LOAD_PATH.unshift path unless $LOAD_PATH.include?(path)
-#path = File.expand_path '../../../../shared-test-ruby', __FILE__
-#$LOAD_PATH.unshift path unless $LOAD_PATH.include?(path)
-
 # All the HTML Elements the tests need to access in order to conduct text search
 class TextSearchContainer < AccessBrowserV2
   include Singleton
@@ -124,13 +118,6 @@ class TextSearchSpecificSubgroups < AccessBrowserV2
   end
 end
 
-Then(/^text search result contains subgroups$/) do |table|
-  expected_subgroups = TextSearchSpecificSubgroups.instance
-  table.rows.each do | row|
-    expect(expected_subgroups.perform_verification(row[0], row[0])).to eq(true)
-  end
-end
-
 def group_search_results(grouped_list, table)
   matched = false
   table.rows.each do |item, _k|
@@ -165,22 +152,9 @@ def search_text_and_clicking(search_value)
   con.wait_until_action_element_visible("Search Results", 70)
 end
 
-def search_result_message(_search_value, count)
-  con = TextSearchContainer.instance
-  driver = TestSupport.driver
-  expected_msg = "#{count} results"
-  expect(con.perform_verification("SearchResultMsg", expected_msg)).to be_true
-end
-
 def search_text(search_value)
   con = TextSearchContainer.instance
   con.perform_action("Text Search Suggestion", search_value)
-end
-
-def search_text_click_submit(search_value)
-  con = TextSearchContainer.instance
-  expect(con.perform_action("Text Search Suggestion", search_value)).to be_true, "Not able to enter text in the search field"
-  expect(con.perform_action("submit", "")).to be_true, "was not able to click on the submit button"
 end
 
 def search_suggetions_count(_search_value, expected_num)
@@ -193,13 +167,6 @@ def search_suggetions_count(_search_value, expected_num)
   con.wait_until_xpath_count("suggestion count", expected_num, num_seconds)
   p "wait completed"
   expect(con.perform_verification("suggestion count", expected_num, 10)).to be_true, ""
-end
-
-Given(/^user type text term and the page contains total items and search results$/) do |table|
-  table.rows.each do |text, total_items|
-    search_text_and_clicking(text)
-    search_result_message(text, total_items)
-  end
 end
 
 Given(/^user searches for "(.*?)"$/) do |text_term|
@@ -314,19 +281,6 @@ Then(/^sub grouped search result for "(.*?)" contains$/) do |sub_group_category,
   matched = con.verify_name_value(browser_elements_list, table)
   expect(matched).to be_true, "could not match"
 end
-  
-When(/^from the coversheet the user clicks on "([^"]*)"$/) do |element|
-  aa = TextSearchContainer.instance
-  driver = TestSupport.driver
-  aa.wait_until_action_element_visible(element, 60)
-  expect(aa.static_dom_element_exists?(element)).to be_true, "Record Search Button did not display"
-  expect(aa.perform_action(element, "")).to be_true, "was not able to click on the button"
-end 
-
-Given(/^user type text term "(.*?)" in the search text box$/) do |search_value|
-  con = TextSearchContainer.instance
-  con.perform_action("Text Search Field", search_value)
-end
 
 Then(/^search result displays "(.*?)" search results$/) do |total_no_search_results|
   con = TextSearchContainer.instance
@@ -348,24 +302,6 @@ When(/^the user enters "(.*?)" in the "(.*?)" control$/) do |input_text, control
   p "control is #{control}"
   expect(aa.perform_action(control, input_text)).to be_true, "element did not display"
 end
-
-Then(/^user type <text> term and the page displays total no of suggestions "(.*?)"$/) do |_arg1, table|
-  table.rows.each do |text, total_items|
-    p "search #{text}"
-    search_text(text)
-    search_suggetions_count(text, total_items)
-  end
-end
-
-Then(/^the following date time filter option should be displayed$/) do |table|
-  driver = TestSupport.driver
-  matched =false
-  browser_elements = driver.find_elements(:xpath, "//*[@id='globalDate-region']/descendant::button")
-  p browser_elements.length
-  #p browser_elements.text.strip
-  matched =  group_search_results(browser_elements, table)
-  expect(matched).to be_true   
-end
    
 Then(/^the "(.*?)" contains$/) do |_name, table|
   driver = TestSupport.driver
@@ -379,37 +315,6 @@ Then(/^the "(.*?)" contains$/) do |_name, table|
   con = VerifyTableValue.new
   matched = con.verify_name_value(browser_elements_list, table)
   expect(matched).to be_true 
-end
-
-def wait_until_numberofresults(number_of_results)
-  web_driver = TestSupport.driver
-  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultLogin.wait_time)
-  p "numberOfResults #{web_driver.execute_script("return window.document.getElementById('numberOfResults').innerHTML")}"
-  wait.until { web_driver.execute_script("return window.document.getElementById('numberOfResults').innerHTML") == number_of_results }
-  p "not hanging here"
-end
-
-Then(/^search result header displays (\d+) number of results$/) do |arg1|
-  wait_until_numberofresults arg1
-end
-
-Then(/^the user sees the search text "(.*?)" in yellow$/) do |_search_text|
-  driver = TestSupport.driver
-  matched = false
-  text_color = ""
-  browser_elements_list = driver.find_elements(:css, ".cpe-search-term-match")
-  p browser_elements_list.length
-  browser_elements_list.each do |element|
-    text_color = element.css_value("background-color")
-
-    #check only rgb value in string since alpha value is inconsistent across build environments
-    if text_color[0, 20] == "rgba(255, 255, 0, 0."
-      matched = true
-    else
-      matched = false
-    end
-  end
-  expect(matched).to be_true, "color in browser: #{text_color} found in feature file yellow" 
 end
 
 Then(/^Current Status for Lab is ACTIVE$/) do
@@ -430,39 +335,33 @@ Then(/^Current Status for "(.*?)" is "(.*?)"$/) do |order_type, order_status|
   expect(aa.perform_verification(order_type_status, order_status)).to be_true, "Order status is #{order_type_status}"
 end
 
-Then(/^the following subgroups data are not loaded$/) do |table|
-  driver = TestSupport.driver
-  
-  table.rows.each do |rows_value|
-    element_id = "result-subGroup-" + rows_value[0] + "-1"
-    #element_id = "result-subGroup"
-    matched = driver.find_element(:id, element_id).displayed?
-    expect(!matched).to be_true, "#{element_id} is loaded"
-  end
-end
-
 Then(/^user searches for "(.*?)" with no suggestion$/) do |text|
-  aa = TextSearchContainer.instance
-  search_text(text)
-  aa.add_verify(CucumberLabel.new("Text Search Suggestion No Results"), VerifyText.new, AccessHtmlElement.new(:css, '#suggestListDiv #noResults'))
-  expect(aa.perform_verification('Text Search Suggestion No Results', 'No results', 30)).to eq(true), "There should be no text search suggestions"
+#  aa = TextSearchContainer.instance
+#  search_text(text)
+#  aa.add_verify(CucumberLabel.new("Text Search Suggestion No Results"), VerifyText.new, AccessHtmlElement.new(:css, '#suggestListDiv #noResults'))
+#  expect(aa.perform_verification('Text Search Suggestion No Results', 'No results', 30)).to eq(true), "There should be no text search suggestions"
+  search = PobRecordSearch.new
+  search.wait_until_txt_search_text_visible(60)
+  wait = Selenium::WebDriver::Wait.new(:timeout => 20)
+  wait.until { search.txt_search_text.disabled? != true } 
+  expect(search).to have_txt_search_text
+  search.txt_search_text.set text
+  search.wait_until_fld_no_results_message_visible(30)
+  expect(search.fld_no_results_message.text.upcase).to have_text("No results".upcase)
 end
 
 Then(/^user searches for "(.*?)" with no duplicates in the results dropdown$/) do |text|
-  driver = TestSupport.driver
-  wait = Selenium::WebDriver::Wait.new(:timeout => 60)
-  suggest = Array.new(16)
-  search_text(text)
-  wait.until { driver.find_element(:id, "suggestList") }
-  #Problems with <span> elements (ex: <span id>, <span id=""">). NOT FINNISHED!
-  for i in 0..15
-    #p "#{i}"
-    word = ""
-    driver.find_elements(:xpath, "//li[@id='SuggestItem#{i}']/a").each { |td| word += td.text }
-    #p word
-    suggest[i] = word
+  search = PobRecordSearch.new
+  suggest = []
+
+  perform_text_search(text)
+  for i in 1..search.fld_suggestion_list_items.length
+    search.define_element_suggestion_text(i)
+    search.wait_until_fld_text_search_suggestion_visible
+    suggest[i] = search.fld_text_search_suggestion.text
   end
-  #p "#{suggest}"
+  
+  p "#{suggest}"
   expect(suggest.uniq! == nil).to be_true
 end
 
@@ -480,27 +379,23 @@ Then(/^user searches for "([^"]*)" and verifies spelling suggestions are display
   expect(@ehmp.fld_spelling_suggestions.length).to be > 0
 end
 
+def perform_text_search(search_text)
+  search = PobRecordSearch.new
+  search.wait_until_txt_search_text_visible(60)
+  wait = Selenium::WebDriver::Wait.new(:timeout => 20)
+  wait.until { search.txt_search_text.disabled? != true } 
+  expect(search).to have_txt_search_text
+  search.txt_search_text.set search_text
+  search.wait_until_fld_suggestion_list_items_visible(30)
+end
+
 Then(/^user searches for "(.*?)" and verifies suggestions$/) do |text, table|
-  driver = TestSupport.driver
-  wait = Selenium::WebDriver::Wait.new(:timeout => 60)
+  search = PobRecordSearch.new
   suggest = []
 
-  search_text(text)
-
-  wait.until { driver.find_element(:id, "suggestList") }
-  suggestions = driver.find_elements(:xpath, "//ul[@id='suggestList']/li")
-
-  for i in 0..suggestions.length-1
-    word = ""
-    driver.find_elements(:xpath, "//li[@id='SuggestItem#{i}']/a/span[1]").each { |td| word += td.text }
-    suggest[i] = word
-  end
-  j = 1
+  perform_text_search(text)
   table.rows.each do |rows_value|
-    p rows_value[0]
-    p suggest[j]
-    expect(rows_value[0].upcase == suggest[j].upcase).to be_true, "looking for #{rows_value[0]} but found #{suggest[j]}"
-    j += 1
+    expect(object_exists_in_list(search.fld_suggestion_list_items, "#{rows_value[0]}")).to eq(true), "#{rows_value[0]} was not found in the suggestion list"  
   end
 end
 
@@ -680,14 +575,6 @@ Then(/^the text search results contain document sub groups$/) do
   expect(@ehmp.fld_document_sub_group_badges.length).to be > 0
   expect(@ehmp.fld_document_sub_group_badges.length).to eq(@ehmp.fld_document_sub_groups.length)
 end
-
-# Then(/^the text search results contain sub groups$/) do
-#   @ehmp = PobRecordSearch.new 
-#   @ehmp.wait_until_fld_first_subgroup_visible
-#   expect(@ehmp.fld_sub_groups.length).to be > 0
-#   expect(@ehmp.fld_sub_group_badges.length).to be > 0
-#   expect(@ehmp.fld_sub_group_badges.length).to eq(@ehmp.fld_sub_groups.length)
-# end
 
 Then(/^the text search subgroup "([^"]*)" results display$/) do |groupontext, table|
   @ehmp = PobRecordSearch.new

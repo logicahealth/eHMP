@@ -2,10 +2,7 @@
 
 var moment = require('moment');
 var async = require('async');
-var httpUtil = require('../../core/rdk').utils.http;
 var _ = require('lodash');
-var querystring = require('querystring');
-var auditUtil = require('../../utils/audit');
 var clinicalObjUtil = require('../../subsystems/clinical-objects/clinical-objects-wrapper-note');
 var clinicalObjSubsystem = require('../../subsystems/clinical-objects/clinical-objects-subsystem');
 

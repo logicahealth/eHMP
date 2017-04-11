@@ -140,10 +140,10 @@ module.exports.addFavorites = function(req, res) {
     favorite.type = type;
     if(!_.isEmpty(domain)) {
         favorite.domain = domain;
-    };
+    }
     if(!_.isEmpty(siteId)) {
         favorite.siteId = siteId;
-    };
+    }
     favorite.userId = req.session.user.uid;
 
     var pjdsOptions = {

@@ -13,7 +13,7 @@ function getResourceConfig() {
             operationalDataCheck: false,
             synchronize: false
         },
-        requiredPermissions: ["read-task"],
+        requiredPermissions: ['read-task'],
         isPatientCentric: false,
         description: 'get available activity definitions',
         subsystems: ['jbpm']
@@ -25,7 +25,7 @@ function getResourceConfig() {
             operationalDataCheck: false,
             synchronize: false
         },
-        requiredPermissions: ["read-task"],
+        requiredPermissions: ['read-task'],
         isPatientCentric: false,
         description: 'get available activity instances',
         subsystems: ['jbpm']
@@ -37,7 +37,7 @@ function getResourceConfig() {
             operationalDataCheck: false,
             synchronize: false
         },
-        requiredPermissions: ["read-task"],
+        requiredPermissions: ['read-task'],
         isPatientCentric: false,
         description: 'get single activity instances',
         subsystems: ['jbpm']
@@ -49,7 +49,7 @@ function getResourceConfig() {
             operationalDataCheck: false,
             synchronize: false
         },
-        requiredPermissions: ["add-task"],
+        requiredPermissions: ['add-task'],
         isPatientCentric: false,
         description: 'Start a process instance',
         subsystems: ['jbpm']
@@ -61,7 +61,7 @@ function getResourceConfig() {
             operationalDataCheck: false,
             synchronize: false
         },
-        requiredPermissions: ["edit-task"],
+        requiredPermissions: ['edit-task'],
         isPatientCentric: false,
         description: 'Aborts a process instance',
         subsystems: ['jbpm']
@@ -73,7 +73,7 @@ function getResourceConfig() {
             operationalDataCheck: false,
             synchronize: false
         },
-        requiredPermissions: ["read-task"],
+        requiredPermissions: ['read-task'],
         isPatientCentric: false,
         description: 'created the activity instance',
         subsystems: ['jbpm']
@@ -85,7 +85,7 @@ function getResourceConfig() {
             operationalDataCheck: false,
             synchronize: false
         },
-        requiredPermissions: ["edit-task"],
+        requiredPermissions: ['edit-task'],
         isPatientCentric: false,
         description: 'Sends signal to activity instance/deployment',
         subsystems: ['jbpm']
@@ -97,7 +97,7 @@ function getResourceConfig() {
             operationalDataCheck: false,
             synchronize: false
         },
-        requiredPermissions: ["read-task"],
+        requiredPermissions: ['read-task'],
         isPatientCentric: false,
         description: 'Get results from CDS Results Service',
         subsystems: []
@@ -109,7 +109,7 @@ function getResourceConfig() {
             operationalDataCheck: false,
             synchronize: false
         },
-        requiredPermissions: ["read-task"],
+        requiredPermissions: ['read-task'],
         isPatientCentric: false,
         description: 'Get jbpm instance by instance Id',
         subsystems: []

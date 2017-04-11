@@ -1,0 +1,11 @@
+nav .application-header-items-left ul.nav.navbar-nav li.patient-selection--recent-patients--dropdown {
+    button.btn-icon {
+        &, &:hover {
+            border-radius: 0;
+            margin-top: -4px;
+            padding: 3px 8px 6px;
+            background-color: $pure-white;
+            height: 26px;
+        }
+    }
+}

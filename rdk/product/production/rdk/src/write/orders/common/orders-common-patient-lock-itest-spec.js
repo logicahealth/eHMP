@@ -6,11 +6,11 @@ var rpcClientFactory = require('./../../core/rpc-client-factory');
 var writebackContext = {
     pid: '9E7A;100615',
     vistaConfig: {
-        host: 'IP        ',
+        host: '10.2.2.101',
         port: 9210,
-        accessCode: 'PW    ',
-        verifyCode: 'PW    !!',
-        localIP: 'IP      ',
+        accessCode: 'mx1234',
+        verifyCode: 'mx1234!!',
+        localIP: '10.2.2.1',
         localAddress: 'localhost'
     },
     interceptorResults: {
@@ -59,11 +59,11 @@ var writebackContext = {
 var writebackContext2 = {
     pid: '9E7A;100615',
     vistaConfig: {
-        host: 'IP        ',
+        host: '10.2.2.101',
         port: 9210,
-        accessCode: 'PW    ',
-        verifyCode: 'PW    !!',
-        localIP: 'IP      ',
+        accessCode: 'pu1234',
+        verifyCode: 'pu1234!!',
+        localIP: '10.2.2.1',
         localAddress: 'localhost'
     },
     interceptorResults: {
@@ -117,19 +117,19 @@ describe('Checks the patient lock functionality', function() {
     it('returns 1 if lock is sucessful', function(done) {
         this.timeout(5000);
         lockPatient.lockPatient(writebackContext, function(err, result) {
-            expect(result).to.match("1");
+            expect(result).to.match('1');
             expect(err).to.be.null();
             lockPatient.unlockPatient(writebackContext);
             done();
         });
     });
 
-    xit('returns 0 and an error message if lock is unsucessful', function(done) {
+    it.skip('returns 0 and an error message if lock is unsucessful', function(done) {
         this.timeout(7000);
         lockPatient.lockPatient(writebackContext, function(err, result) {
             //console.log('THIS IS THE ERROR MESSAGE: ' + err);
             //console.log('THIS IS THE RESULT MESSAGE: ' + result);
-            expect(result).to.match("1");
+            expect(result).to.match('1');
             expect(err).to.be.null();
             lockPatient.lockPatient(writebackContext2, function(err2, result2) {
                 //console.log('THIS IS THE ERROR MESSAGE: ' + err2);

@@ -1,4 +1,4 @@
-@F321 @US6172 @TC301 @regression @US7259 @test_no_logout @future @US146753
+@F321 @US6172 @TC301  @US7259 @test_no_logout @future @US146753
 Feature: Condition-based Analysis Workspaces - Immutable Depression Workspace
 
 Background:

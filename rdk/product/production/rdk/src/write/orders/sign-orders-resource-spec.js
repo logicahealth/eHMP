@@ -6,8 +6,8 @@ var RpcClient = require('vista-js').RpcClient;
 
 var mock_session = {
     user: {
-        username: '9E7A;PW    ',
-        password: 'PW    !!',
+        username: '9E7A;vk1234',
+        password: 'vk1234!!',
         duz: {
             '9E7A': '10000000257'
         },
@@ -38,6 +38,11 @@ describe('writebackorder_signOrder:', function() {
                 param: function(param) {
                     return param;
                 },
+                interceptorResults: {
+                    patientIdentifiers: {
+                        site: '9E7A'
+                    }
+                },
                 body: {
                     param: {
                         signatureCode: '$+9-7i/ll ',
@@ -60,20 +65,20 @@ describe('writebackorder_signOrder:', function() {
                             '9E7A': {
                                 name: 'PANORAMA',
                                 division: '500',
-                                host: 'IP        ',
+                                host: '10.2.2.101',
                                 port: 9210,
                                 production: false,
-                                accessCode: 'PW    ',
-                                verifyCode: 'PW    !!'
+                                accessCode: 'vk1234',
+                                verifyCode: 'vk1234!!'
                             },
                             'C877': {
                                 name: 'KODAK',
                                 division: '500',
-                                host: 'IP        ',
+                                host: '10.2.2.102',
                                 port: 9210,
                                 production: false,
-                                accessCode: 'PW    ',
-                                verifyCode: 'PW    !!'
+                                accessCode: 'vk1234',
+                                verifyCode: 'vk1234!!'
                             }
                         }
                     }

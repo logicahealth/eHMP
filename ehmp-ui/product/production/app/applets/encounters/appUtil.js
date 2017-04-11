@@ -1,39 +1,14 @@
 define([
     "underscore",
-    "moment",
-    "crossfilter",
-    "app/applets/encounters/appConfig"
-], function(_, moment, Crossfilter, CONFIG) {
+    "moment"
+], function (_, moment) {
     'use strict';
-    // Switch ON/OFF debug info
-    var DEBUG = CONFIG.debug;
-    // Top tile ordering & injection
-    var EVENT_LIST = CONFIG.eventOrder;
-    // var EMPTY_MODEL = CONFIG.getEmpty;
-    var appHelper = {
-        parseDate: function(datetime,aggregation){
-            var result;
-            if(typeof aggregation !== 'undefined' ){
-                if(DEBUG) console.log("Chart data aggregation ---->>" + aggregation);
-               switch (aggregation.toLowerCase()) {
-                case "y":
-                    result = datetime.substr(0,4);
-                    break;
-                case "ym":
-                    result = datetime.substr(0,6);
-                    break;
-                case "ymd":
-                    result = datetime.substr(0,8);
-                    break;
-               }
-            }else{
-                result = datetime.substr(0,8);
-            }
-            return result;
-        },
-        stringSplitter: function(str) {
+    /* global ADK, Backbone */
+
+    return {
+        stringSplitter: function (str) {
             if (_.isUndefined(str)) {
-                str = "";
+                return "";
             }
             var arrSubstr = str.split(',');
             if (arrSubstr.length > 1) {
@@ -41,17 +16,7 @@ define([
             }
             return str;
         },
-        slashSplitter: function(str) {
-            if (_.isUndefined(str)) {
-                str = "";
-            }
-            var arrSubstr = str.split('/');
-            if (arrSubstr.length > 1) {
-                return arrSubstr.join("/ ");
-            }
-            return str;
-        },
-        encounterProvider: function(obj) {
+        encounterProvider: function (obj) {
             var provider = [];
             var primary = [];
             var arrResult = [];
@@ -83,14 +48,14 @@ define([
             }
             return result;
         },
-        admissionDiagnosis: function(obj) {
+        admissionDiagnosis: function (obj) {
             var result;
             var Unknown = "Unknown";
             var diagnosis = [];
             if (_.isUndefined(obj.dischargeDiagnoses)) {
                 result = obj.reasonName || Unknown;
             } else {
-                _.each(obj.dischargeDiagnoses, function(val) {
+                _.each(obj.dischargeDiagnoses, function (val) {
                     if (!_.isUndefined(val.icdName)) {
                         if (val.icdName === "") {
                             diagnosis.push(Unknown);
@@ -107,7 +72,7 @@ define([
             }
             return result;
         },
-        getTimeSinceForFuture: function(array) {
+        getTimeSinceForFuture: function (array) {
             var dateTime;
             for (var m = array.length - 1; m > 0; m--) {
                 dateTime = moment(array[m].dateTime, 'YYYYMMDDHHmm');
@@ -117,156 +82,109 @@ define([
             }
             return array[m].dateTime;
         },
-        getRecentForFuture: function(array) {
+        getRecentForFuture: function (array) {
             var dateTime;
             var arrRecent = [];
             var index = 0;
             var future = false;
-            var k = 0;
             for (var m = array.length - 1; m > 0; m--) {
                 dateTime = moment(array[m].dateTime, 'YYYYMMDDHHmm');
                 if (dateTime.isAfter()) {
                     future = true;
                     index = m;
-                    m = 0;
+                    break;
                 }
             }
             if (!future) { // no events in a future
                 arrRecent = array.slice(0, 5);
-            } else {
-                if ((array.length - (index + 1)) > 0) { //more than 1 event in a future
-                    for (var n = index; n >= 0; n--) {
-                        arrRecent.push(array[n]);
-                        k++;
-                        if (k >= 5) n = -1; // 5 next events
-                    }
-                } else { // 1 event in a future
-                    arrRecent = array.slice(0, 5);
-                    future = false;
+            } else if ((array.length - (index + 1)) > 0) { //more than 1 event in a future
+                for (var n = index, k = 0; n >= 0, k < 5; n--, k++) {
+                    arrRecent.push(array[n]);
                 }
+            } else { // 1 event in a future
+                arrRecent = array.slice(0, 5);
+                future = false;
             }
+
             return {
                 aResult: arrRecent,
                 bFutureTime: future
             };
         },
-        setAggregationScale: function(selector) {
-            var result = "ymd";
-            /*  if(selector == "allRangeGlobal") {
-                  result = "y";
-              } else if(selector == "1yrRangeGlobal"){
-                  result = "ymd";
-              } else if (selector == "2yrRangeGlobal"){
-                  result = "ym";
-              }else if (selector == "customRangeApplyGlobal"){
-                  result = "ym";
-              }*/
+        displayDate: function (datetime) {
+            return [(datetime.substring(0, 4)), '-', (datetime.substring(4, 6)), '-', (datetime.substring(6, 8))].join('');
+        },
+        isAppointment: function (model) {
+            return !!((model.uid.indexOf('appointment') !== -1) && (this.isVisit(model)));
+
+        },
+        isProcedure: function (model) {
+            return model.kind.indexOf('Procedure') !== -1;
+        },
+        isAdmission: function (model) {
+            return model.kind.indexOf('Admission') !== -1;
+        },
+        isDoDAppointment: function (model) {
+            return model.kind.indexOf('DoD Appointment') !== -1;
+        },
+        isDoDAppointmentFuture: function (model) {
+            if (model.kind.indexOf('DoD Appointment') !== -1) {
+                return !!moment(model.dateTime, 'YYYYMMDDHHmm').isAfter(moment());
+            } else {
+                return false;
+            }
+        },
+        isDoDEncounter: function (model) {
+            return model.kind.indexOf('DoD Encounter') !== -1;
+        },
+        getCPTprocedureDetailViewModel: function (context, uid) {
+            var result;
+            var model;
+            if (!_.isUndefined(context.dataGridOptions.shadowCollection)) {
+                model = context.dataGridOptions.shadowCollection.findWhere({kind: "Visit", uid: uid});
+                if (!_.isUndefined(model)) {
+                    result = model.toJSON();
+                } else {
+                    result = {
+                        fError: true,
+                        summary: "Error",
+                        errorMsg: "Sorry, there is no detailed information about this event!"
+                    };
+                }
+            }
             return result;
         },
-        displayDate: function(datetime){
-            return [(datetime.substring(0,4)),'-',(datetime.substring(4,6)),'-',(datetime.substring(6,8))].join('');
-        },
-        isAppointment: function(model) {
-            if ((model.uid.indexOf('appointment') !== -1) && (this.isVisit(model))) {
-                return true;
-                /*if(moment(model.dateTime,'YYYYMMDDHHmm').isBefore(moment())){ 
-                    return false;
-                }else{
-                    return true;
-                }*/
-            }/*else{  //DE3050
-              if((model.uid.indexOf('visit') !== -1)&&(this.isVisit(model))){ // in the future
-                if(moment(model.dateTime,'YYYYMMDDHHmm').isAfter(moment())){
-                   return true;
-                }
-              }      
-            }*/
-         return false;
-        },
-        isProcedure: function(model) {
-            if (model.kind.indexOf('Procedure') !== -1) {
-                return true;
-            } else {
-                return false;
-            }
-        },
-        isAdmission: function(model) {
-            if (model.kind.indexOf('Admission') !== -1) {
-                return true;
-            } else {
-                return false;
-            }
-        },
-        isDoDAppointment: function(model) {
-            if (model.kind.indexOf('DoD Appointment') !== -1) {
-                return true;
-            } else {
-                return false;
-            }
-        },
-        isDoDAppointmentFuture: function(model) {
-            if (model.kind.indexOf('DoD Appointment') !== -1) {
-                if (moment(model.dateTime, 'YYYYMMDDHHmm').isAfter(moment())) {
-                    return true;
-                } else {
-                    return false;
-                }
-            } else {
-                return false;
-            }
-        },
-        isDoDEncounter: function(model) {
-            if (model.kind.indexOf('DoD Encounter') !== -1) {
-                return true;
-            } else {
-                return false;
-            }
-        },
-        getCPTprocedureDetailViewModel: function(context, uid){
-          var result;
-          var model;
-          if(!_.isUndefined(context.dataGridOptions.shadowCollection)){
-            model = context.dataGridOptions.shadowCollection.findWhere({kind: "Visit",uid: uid});
-             if(!_.isUndefined(model)){
-                result = model.toJSON();
-             }else{
-                result = {fError: true, summary: "Error", errorMsg: "Sorry, there is no detailed information about this event!"};
-             }
-          }
-          return result;
-        },
-        showDetailView: function(paramObj, channelName) {
+        showDetailView: function (paramObj, channelName) {
             var model = new Backbone.Model(paramObj.model.get('recent_model'));
             var channelObject = _.extend({}, paramObj, {model: model});
             var channel = ADK.Messaging.getChannel(channelName);
             var response = channel.request('detailView', channelObject);
             var viewDetail = new response.view();
             var modal = new ADK.UI.Modal({
-                    view: viewDetail,
-                    options: {
-                        size: "large",
-                        showLoading: true,
-                        title: function() {
-                            return _.result(response, 'title') || _.result(viewDetail, 'title');
-                        }
+                view: viewDetail,
+                options: {
+                    size: "large",
+                    showLoading: true,
+                    title: function () {
+                        return _.result(response, 'title') || _.result(viewDetail, 'title');
                     }
-                });
+                }
+            });
             modal.show();
 
         },
         // Clean up kind/subkind
-        clanUpItem: function(item) {
+        clanUpItem: function (item) {
             return item.replace(/[\s\\\/()!?*&:;,.^'"<>%]/g, '');
         },
         // sets first event, depends on GDF and first event for patient
-        selectStartStopPoint: function(firstEvent) { //YYYYMMDD
-            //var filterMode = ADK.SessionStorage.getModel_SessionStoragePreference('globalDate').get("selectedId");
-            var filterMode = ADK.SessionStorage.getModel_SessionStoragePreference('globalDate').get("selectedId");
-            var fromDate = moment(ADK.SessionStorage.getModel_SessionStoragePreference('globalDate').get("fromDate"), "MM/DD/YYYY").format("YYYYMMDD"); //MM/DD/YYYY
-            var toDate = moment(ADK.SessionStorage.getModel_SessionStoragePreference('globalDate').get("toDate"), "MM/DD/YYYY").format("YYYYMMDD");
-            //var maxDate = +new Date + (6 * 24 * 3600 * 1000 * 30); // 6 monthes ahead
-            var maxDate = moment().add(6, 'M'); // 6 monthes ahead
-            var aDate = moment().add(1, 'd'); // 6 monthes ahead
+        selectStartStopPoint: function (firstEvent) {
+            var globalDate = ADK.SessionStorage.getModel_SessionStoragePreference('globalDate');
+            var filterMode = globalDate.get("selectedId");
+            var fromDate = moment(globalDate.get("fromDate"), "MM/DD/YYYY").format("YYYYMMDD");
+            var toDate = moment(globalDate.get("toDate"), "MM/DD/YYYY").format("YYYYMMDD");
+            var maxDate = moment().add(6, 'M');
+            var aDate = moment().add(1, 'd');
 
             if (filterMode === "allRangeGlobal") {
                 return {
@@ -284,95 +202,17 @@ define([
                 stop: moment(aDate).format("YYYYMMDD")
             };
         },
-        // empty model for top tile
-        getEmpty: function(start) {
-            return {
-                kind: "",
-                elKind: "",
-                count: 0,
-                firstEvent: this.selectStartStopPoint(start).start,
-                lastEvent: "",
-                timeSinceLast: "None",
-                chartData: [],
-                firstEventDisplay: "",
-                lastEventDisplay: "",
-                maxChart: this.selectStartStopPoint(start).stop,
-                processed: true,
-                empty: true,
-                order: 0
-            };
-        },
-        // Adds empty data if top categories not exist
-        addEmptyTiles: function(collection, start) {
-            var arrTiles = [];
-            var arrKind = [];
-            //var model = this.getEmpty();
-            for (var tile in EVENT_LIST) {
-                arrTiles.push(EVENT_LIST[tile].title);
-                arrKind.push(tile);
-            }
-            for (var i = 0; i < arrTiles.length; i++) {
-                if (collection.where({
-                        kind: arrTiles[i]
-                    }).length === 0) {
-                    var model = this.getEmpty(start);
-                    // Prepare empty model
-                    if (EVENT_LIST[arrKind[i]]) {
-                        model.kind = arrTiles[i];
-                        model.elKind = this.clanUpItem(model.kind);
-                        model.order = EVENT_LIST[arrKind[i]].order;
-                    }
-                    // Add empty model
-                    collection.add(model);
-
-                }
-            }
-
-        },
-        // Needs to check data source (probally filtering already done) added by VR 2015-02-02
-        filterAppointments: function(collection) {
-            var i, k;
-            var arrToRemove = [];
-            var dataset = new Crossfilter(collection.toJSON());
-            var dimByKind = dataset.dimension(this.crossfilterStuff.dimKind); //this.crossfilterStuff.dimKind
-            var arrVisits = dimByKind.filterExact("Visit").top(Infinity);
-            dimByKind.filterAll();
-            var arrAppointment = dimByKind.filterExact("Appointment").top(Infinity);
-            dimByKind.filterAll();
-            for (i = 0; i < arrAppointment.length; i++) {
-                for (k = 0; k < arrVisits.length; k++) {
-                    if ((arrAppointment[i].dateTime.toLowerCase() == arrVisits[k].dateTime.toLowerCase()) && (arrAppointment[i].stopCodeName.toLowerCase() == arrVisits[k].stopCodeName.toLowerCase()) && (arrAppointment[i].facilityName.toLowerCase() == arrVisits[k].facilityName.toLowerCase())) {
-                        if (DEBUG) console.log("Appointment duplication ----->>>" + arrVisits[k].dateTime.toLowerCase() + " | " + arrAppointment[i].facilityName + " | " + arrVisits[k].facilityName);
-                        arrToRemove.push(collection.findWhere({
-                            uid: arrAppointment[i].uid
-                        }));
-                    }
-                }
-            }
-            dimByKind.dispose();
-            dataset = null;
-            // remove duplicated Appointments
-            collection.remove(arrToRemove);
-            return arrToRemove.length; // number of duplications
-        },
-        crossfilterStuff: {
-            dimKind: function(d) {
-                return d.kind;
-            }
-        },
-        isHospitalization: function(model) {
+        isHospitalization: function (model) {
             return model.categoryCode === 'urn:va:encounter-category:AD';
         },
         //returns true if discharged, false if admitted
-        isDischargedOrAdmitted: function(model) {
-            if (model.stay === undefined)
-                throw "stay is required for this method!";
-            return model.stay.dischargeDateTime !== undefined;
+        isDischargedOrAdmitted: function (model) {
+            return !!_.get(model, 'stay.dischargeDateTime');
         },
-        isVisit: function(model) {
+        isVisit: function (model) {
             return this.isKindTypeHelper(model, "visit");
         },
-        isKindTypeHelper: function(model, kindType) {
+        isKindTypeHelper: function (model, kindType) {
             if (model === undefined) return false;
             var kind = model.kind;
             if (model instanceof Backbone.Model)
@@ -381,55 +221,44 @@ define([
             kind = kind.toLowerCase();
             return (kind === kindType);
         },
-        getActivityDateTime: function(model) {
-            if (this.isVisit(model)) {
-                if (this.isHospitalization(model) && this.isDischargedOrAdmitted(model)) {
-                    return model.stay.dischargeDateTime;
-                }
-                return model.dateTime;
-            } else
-                return model.dateTime;
-
+        getActivityDateTime: function (model) {
+            if (this.isVisit(model) && this.isHospitalization(model) && this.isDischargedOrAdmitted(model)) {
+                return model.stay.dischargeDateTime;
+            }
+            return model.dateTime;
         },
-        convertChartDate: function(time){
+        convertChartDate: function (time) {
             if (time.length < 8) {
-                var repears = 8 - time.length;
-                for (var ind = 0; ind < repears; ind++) {
+                var repairs = 8 - time.length;
+                for (var ind = 0; ind < repairs; ind++) {
                     time = time + "0";
                 }
             }
             var utcdatetime = moment.utc(time, "YYYYMMDD");
-            if (!utcdatetime.isValid()){
-                //console.log("Encounters: Invalid date time :", time);
-                var year = time.substr(0,4);
-                var month = time.substr(4,2);
-                var day = time.substr(6,2);
+            if (!utcdatetime.isValid()) {
+                var year = time.substr(0, 4);
+                var month = time.substr(4, 2);
+                var day = time.substr(6, 2);
                 var newutcdatetime;
                 if (utcdatetime.invalidAt() === 1) { // incorrect month
                     month = "01";
-                    newutcdatetime = moment.utc([year,month,day], "YYYYMMDD"); // set month to January
-                    if (newutcdatetime.isValid()){
-                         //console.log("Date time month corrected: ", newutcdatetime.format("YYYYMMDD"));
-                         return newutcdatetime.valueOf();
+                    newutcdatetime = moment.utc([year, month, day], "YYYYMMDD"); // set month to January
+                    if (newutcdatetime.isValid()) {
+                        return newutcdatetime.valueOf();
                     } else {
                         if (newutcdatetime.invalidAt() === 2) { // incorrect day
-                           day = "01";
-                           newutcdatetime = moment.utc([year,month,day], "YYYYMMDD"); // set day to 01
-                           //console.log("Date time corrected: ", newutcdatetime.format("YYYYMMDD"));
-                           return newutcdatetime.valueOf();
+                            day = "01";
+                            newutcdatetime = moment.utc([year, month, day], "YYYYMMDD"); // set day to 01
+                            return newutcdatetime.valueOf();
                         }
-                      //console.log("Date time is not corrected!!!");
                     }
                 }
             }
             return utcdatetime.valueOf();
         },
-        nowChart: function() {
+        nowChart: function () {
             var tm = moment().format("YYYYMMDDHHmmssSSS");
             return this.convertChartDate(tm);
         }
-
-        // end of appHelpers
     };
-    return appHelper;
 });

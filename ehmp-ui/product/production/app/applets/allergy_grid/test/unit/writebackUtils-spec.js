@@ -433,7 +433,7 @@ define([
             var allergyModel = WritebackUtils.buildSaveAllergyModel(model, getUser(), getCurrentPatient(), saveAllergyModel);
 
             expect(allergyModel.get('observedDate')).toEqual('201210171000');
-            expect(allergyModel.get('dfn')).toEqual('1234');
+            expect(allergyModel.get('pid')).toEqual('9E7A;1234');
             expect(allergyModel.get('enteredBy')).toEqual('1234');
             expect(allergyModel.get('IEN')).toEqual('123');
             expect(allergyModel.get('allergyName')).toEqual('APPLES^123;TEST');

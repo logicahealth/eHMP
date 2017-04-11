@@ -52,10 +52,6 @@ describe('vitals write-back writer', function() {
         });
 
         it('adjustContextForFailure', function () {
-            var expectedWritebackContext = {
-                vprModel : null
-            };
-
             var context = {};
             adjustContextForFailure(context, 'results');
             expect(context.vprModel).to.equal(null);
@@ -107,7 +103,7 @@ describe('vitals write-back writer', function() {
 
         it ('vital RPC array 2 items', function () {
             var model = {
-                "dateTime": '20150620',
+                'dateTime': '20150620',
                 'dfn': '3',
                 'locationUid': 'urn:va:location:9E7A:67',
                 'enterdByIEN' : '87',

@@ -123,7 +123,7 @@ define([
             'role': "tablist",
             'aria-multiselectable': "true"
         },
-        className: "accordion-container panel-group small ftar"
+        className: "accordion-container panel-group ftar"
     });
 
     var FormControlChildView = Backbone.Marionette.ItemView.extend({

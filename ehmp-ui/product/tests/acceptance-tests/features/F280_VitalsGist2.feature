@@ -1,4 +1,4 @@
-@F280_VitalsGist @regression @triage
+@F280_VitalsGist   @reg2
 Feature: F280 - Vitals Applet
 
 #"As an eHMP  user, I need to view a complete operation gist view to include the Vitals domain that displays all defined panels and data; so that I can access Vitals information for a given patient."
@@ -21,11 +21,7 @@ Scenario: Verify vitals for patient using Overview Sheet
 @F280_VitalsGist_buttons @US4005
 Scenario: Verify Vitals Gist View has expected applet buttons
   Then the "Vitals" applet is finished loading
-  Then the Vitals Gist Applet contains buttons
-    | buttons  |
-    | Refresh  |
-    | Help     |
-    | Expand View |
+  Then the Vitals Gist Applet contains buttons Refresh, Help and Expand
   And the Vitals Gist Applet does not contain buttons
     | buttons |
     | Filter Toggle |

@@ -66,7 +66,11 @@ function adjustTreatmentFactor(input) {
 }
 
 function adjustTreatmentFactors(model) {
-    model.serviceConnected = adjustTreatmentFactor(model.serviceConnected);
+    if(_.isEmpty(model.serviceConnected)){
+        model.serviceConnected = '^Unknown';
+    } else {
+        model.serviceConnected = adjustTreatmentFactor(model.serviceConnected);
+    }
     model.agentOrange = adjustTreatmentFactor(model.agentOrange);
     model.radiation = adjustTreatmentFactor(model.radiation);
     model.shipboard = adjustTreatmentFactor(model.shipboard);
@@ -204,9 +208,9 @@ function retrieveSettings(input, field1, field2) {
 
 function getOriginalCommentIndeces(originalComments, result) {
     var originalCommentIndeces = [];
-    var originalCommentCount = _.isUndefined(originalComments) ? 0 : originalComments.length;
+    var originalCommentCount = _.isArray(originalComments) || _.isString(originalComments) ? originalComments.length : 0;
 
-    if (_.isUndefined(result) || originalCommentCount == 0) {
+    if (_.isUndefined(result) || originalCommentCount === 0) {
         return originalCommentIndeces;
     }
 

@@ -19,7 +19,6 @@ class PobOrdersApplet < PobParentApplet
   element :fld_signature_code, "#signature-code"
   element :fld_discontinue_reason, "#reason"
   element :fld_sign_order_screen_loaded, ".order_summary"
-  element :fld_tray_loader_message, ".tray-loader-message"
       
   elements :fld_order_preview_labels, ".col-xs-12 div"    
   elements :fld_order_modal_labels, ".form-group label"

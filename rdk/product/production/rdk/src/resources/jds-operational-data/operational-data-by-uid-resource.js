@@ -22,7 +22,6 @@ module.exports.getResourceConfig = function() {
 
 function getData(req, res) {
     var logger = req.logger;
-    var appConfig = req.app.config;
     var Uid = req.param('uid');
     var jdsResource = '/data';
 

@@ -48,31 +48,34 @@ var _ = require('lodash');
  * @param params object which can contain optional and/or required parameters as described above.
  */
 module.exports.fetch = function(logger, configuration, callback, params) {
-    var patientDFN = _.get(params, 'patientDFN');
     var drug = _.get(params, 'drug');
     var days = _.get(params, 'days');
     var ordItem = _.get(params, 'ordItem');
     var discharge = Boolean(_.get(params, 'discharge')); //Wrap with Boolean to force a default value instead of undefined.
+    var options = {
+        requiresDfn: true
+    };
+    validate.getPatientDFN(params, options, function(err, patientDFN) {
+        if (err) {
+            return callback(err);
+        }
+        if (validate.isStringNullish(drug)) {
+            return callback('drug cannot be empty');
+        }
+        if (validate.isStringNullish(days)) {
+            return callback('days cannot be empty');
+        }
+        if (validate.isStringNullish(ordItem)) {
+            return callback('ordItem cannot be empty');
+        }
 
-    if (validate.isStringNullish(patientDFN)) {
-        return callback('patientDFN cannot be empty');
-    }
-    if (validate.isStringNullish(drug)) {
-        return callback('drug cannot be empty');
-    }
-    if (validate.isStringNullish(days)) {
-        return callback('days cannot be empty');
-    }
-    if (validate.isStringNullish(ordItem)) {
-        return callback('ordItem cannot be empty');
-    }
+        patientDFN = patientDFN.toUpperCase();
+        drug = drug.toUpperCase();
+        days = days.toUpperCase();
+        ordItem = ordItem.toUpperCase();
 
-    patientDFN = patientDFN.toUpperCase();
-    drug = drug.toUpperCase();
-    days = days.toUpperCase();
-    ordItem = ordItem.toUpperCase();
+        discharge = rpcUtil.convertBooleanToYN(discharge);
 
-    discharge = rpcUtil.convertBooleanToYN(discharge);
-
-	return rpcUtil.standardRPCCall(logger, configuration, 'ORWDPS2 MAXREF', patientDFN, drug, days, ordItem, discharge, parse, callback);
+        return rpcUtil.standardRPCCall(logger, configuration, 'ORWDPS2 MAXREF', patientDFN, drug, days, ordItem, discharge, parse, callback);
+    });
 };

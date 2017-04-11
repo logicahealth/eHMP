@@ -9,7 +9,7 @@ define([
         params: function(method, options) {
             return {
                 staffIEN: options.staffIEN || '',
-                patientID: options.patientID || ''
+                pid: options.patientID || ''
             };
         }
     });

@@ -443,7 +443,7 @@ describe('http', function() {
 
     });
 
-    xdescribe('caching', function() {
+    describe.skip('caching', function() {
         var config, start, finish;
 
         beforeEach(function() {

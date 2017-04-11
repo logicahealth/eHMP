@@ -21,7 +21,7 @@ define([
         },
 
         template: toolbarTemplate,
-        className: 'toolbar-item bottom-border-grey-light',
+        className: 'toolbar-item',
         events: {
             'change select': 'filterChange'
         },

@@ -2,7 +2,6 @@
 
 var rdk = require('../core/rdk');
 var _ = require('lodash');
-var fs = require('fs');
 var http = rdk.utils.http;
 
 function getSubsystemConfig(app, logger) {

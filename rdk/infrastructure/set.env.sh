@@ -11,7 +11,7 @@ project_name=rdk
 echo -n -e "\033]0;Vistacore-$project_name\007"
 
 vagrant_version="1.4.3"
-export VAGRANT_BIN=/usr/bin/vagrant
+export VAGRANT_BIN=/usr/local/bin/vagrant
 
 export TEMP=/tmp
 export GRADLE_HOME=/usr/local/gradle/gradle-2.4

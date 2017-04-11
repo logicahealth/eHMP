@@ -50,37 +50,38 @@ var _ = require('lodash');
  * @param params object which can contain optional and/or required parameters as described above.
  */
 module.exports.fetch = function(logger, configuration, callback, params) {
-	var daysSupply = _.get(params, 'daysSupply');
-	var unitsPerDose = _.get(params, 'unitsPerDose');
-	var schedule = _.get(params, 'schedule');
-	var duration = _.get(params, 'duration');
-	var patientDFN = _.get(params, 'patientDFN');
-	var drug = _.get(params, 'drug');
+    var daysSupply = _.get(params, 'daysSupply');
+    var unitsPerDose = _.get(params, 'unitsPerDose');
+    var schedule = _.get(params, 'schedule');
+    var duration = _.get(params, 'duration');
+    var options = {
+        requiresDfn: true
+    };
+    validate.getPatientDFN(params, options, function(err, patientDFN) {
+        if (err) {
+            return callback(err);
+        }
 
-    if (!validate.isWholeNumber(daysSupply)) {
-        return callback('daysSupply cannot be empty and must be a whole number');
-    }
-    if (validate.isStringNullish(unitsPerDose)) {
-        return callback('unitsPerDose cannot be empty');
-    }
-    if (validate.isStringNullish(schedule)) {
-        return callback('schedule cannot be empty');
-    }
-    if (validate.isStringNullish(duration)) {
-        return callback('duration cannot be empty');
-    }
-    if (validate.isStringNullish(patientDFN)) {
-        return callback('patientDFN cannot be empty');
-    }
-    if (validate.isStringNullish(drug)) {
-        return callback('drug cannot be empty');
-    }
+        var drug = _.get(params, 'drug');
+        if (validate.isStringNullish(unitsPerDose)) {
+            return callback('unitsPerDose cannot be empty');
+        }
+        if (validate.isStringNullish(schedule)) {
+            return callback('schedule cannot be empty');
+        }
+        if (validate.isStringNullish(duration)) {
+            return callback('duration cannot be empty');
+        }
+        if (validate.isStringNullish(drug)) {
+            return callback('drug cannot be empty');
+        }
 
-	unitsPerDose = unitsPerDose.toUpperCase();
-	schedule = schedule.toUpperCase();
-	duration = duration.toUpperCase();
-	patientDFN = patientDFN.toUpperCase();
-	drug = drug.toUpperCase();
+        unitsPerDose = unitsPerDose.toUpperCase();
+        schedule = schedule.toUpperCase();
+        duration = duration.toUpperCase();
+        patientDFN = patientDFN.toUpperCase();
+        drug = drug.toUpperCase();
 
-	return rpcUtil.standardRPCCall(logger, configuration, 'ORWDPS2 DAY2QTY', daysSupply, unitsPerDose, schedule, duration, patientDFN, drug, parse, callback);
+        return rpcUtil.standardRPCCall(logger, configuration, 'ORWDPS2 DAY2QTY', daysSupply, unitsPerDose, schedule, duration, patientDFN, drug, parse, callback);
+    });
 };

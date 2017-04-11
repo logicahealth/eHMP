@@ -4,7 +4,6 @@ var writebackWorkflow = require('../core/writeback-workflow');
 var validateAllergies = require('./allergies-validator');
 var writeAllergyToVista = require('./allergies-vista-writer');
 var writeVprToJds = require('../core/jds-direct-writer');
-var rdk = require('../../core/rdk');
 
 function getResourceConfig() {
     return [{

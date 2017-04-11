@@ -11,15 +11,22 @@ var fetchStudyQuery = require('./vix-fetch-study-query');
 module.exports.addImagesToDocument = addImagesToDocument;
 
 function addImagesToDocument(req, jdsResponse, callback) {
+    var bseToken;
+    if (arguments.length === 4) {
+        bseToken = arguments[2];
+        callback = arguments[3];
+    }
     var logger = req.logger;
-    var pid = req.query.pid;  // TODO pid is not guaranteed to be site;dfn. Get the site;dfn correctly.
+    var pid = req.body.pid || req.query.pid; // TODO pid is not guaranteed to be site;dfn. Get the site;dfn correctly.
     if (!rdk.utils.pidValidator.isSiteDfn(pid)) {
-        req.logger.info({pid: pid}, 'pid is not valid site;dfn - skipping vix image document enrichment');
+        req.logger.info({
+            pid: pid
+        }, 'pid is not valid site;dfn - skipping vix image document enrichment');
         return callback(null, jdsResponse);
     }
     // all patient records
     var patientRecords = jdsResponse.data.items;
-    var icn = req.audit.patientIdentifiers.icn;  // TODO this is not a safe way to get the ICN. Get the ICN from MVI or from the convertPid interceptor.
+    var icn = req.audit.patientIdentifiers.icn; // TODO this is not a safe way to get the ICN. Get the ICN from MVI or from the convertPid interceptor.
     var queryRecords = {
         patientICN: icn,
         studies: []
@@ -37,7 +44,7 @@ function addImagesToDocument(req, jdsResponse, callback) {
         rec.patientICN = icn;
 
         // build the CPRS style  contextID which is used to by vix to search for images
-        var splitIdx = pid.indexOf(';') + 1;  // TODO get the dfn safely - you shouldn't rely on manipulating the pid yourself.
+        var splitIdx = pid.indexOf(';') + 1; // TODO get the dfn safely - you shouldn't rely on manipulating the pid yourself.
         var dfn = pid.substring(splitIdx);
         var category = nullchecker.isNullish(record.category) ? '' : record.category;
         var localId = nullchecker.isNullish(record.localId) ? '' : record.localId;
@@ -51,29 +58,36 @@ function addImagesToDocument(req, jdsResponse, callback) {
         queryRecords.studies.push(rec);
     });
 
-    logger.trace({patientRecords: patientRecords});
+    logger.trace({
+        patientRecords: patientRecords
+    });
 
     async.waterfall(
         [
             // get the security token required by VIX
             function(callback) {
+                if (bseToken) {
+                    return callback(null, bseToken);
+                }
                 return fetchBseToken.fetch(req, callback);
             },
             // query vix with our list of records
             function(token, callback) {
-                logger.debug({bseToken: token});
+                logger.debug({
+                    bseToken: token
+                });
                 return fetchStudyQuery.fetch(req, token, queryRecords, callback);
             },
             // process the returned data
             function(vixBody, callback) {
-                logger.debug({vixBody: vixBody});
+                logger.debug({
+                    vixBody: vixBody
+                });
                 if (_.isEmpty(vixBody)) {
                     logger.error('Empty response from VIX');
                     return callback(null, 'done');
                 }
                 _.each(patientRecords, function(patientRecord) {
-                    var splitIdx = pid.indexOf(';') + 1;
-                    var dfn = pid.substring(splitIdx);  // TODO delete unused variable
                     var updated = _.find(vixBody.studies, function(o) {
                         return _.startsWith(o.contextId, patientRecord.contextId);
                     });

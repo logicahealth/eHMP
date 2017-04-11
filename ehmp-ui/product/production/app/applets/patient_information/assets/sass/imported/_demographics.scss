@@ -70,13 +70,9 @@
         color: $pure-white;
         padding: 12px 20px 0;
         z-index: 1;
+        font-size: 12px;
         strong {
             font-weight: 600;
-        }
-        .small {
-            color: $pure-white;
-            margin: 5px 0 10px 0;
-            display: block;
         }
         .sensitive-patient {
             border-radius: 3px;

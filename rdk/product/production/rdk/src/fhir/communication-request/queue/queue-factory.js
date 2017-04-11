@@ -1,6 +1,5 @@
 'use strict';
 
-var _ = require('lodash');
 var memoryQueue = require('./queue-memory-unbounded');
 
 

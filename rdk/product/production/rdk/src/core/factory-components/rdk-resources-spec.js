@@ -1,6 +1,5 @@
 'use strict';
 
-var _ = require('lodash');
 var rdkResources = require('./rdk-resources');
 
 describe('processResourceConfigItem', function() {

@@ -1,0 +1,144 @@
+{
+  "template": "%s",
+  "defaultName": "VX Sync",
+  
+  "logging": {
+    "level": "INFO",
+      "appenders": [
+      {
+        "type": "file",
+         "currentLogFilename": "/tmp/soap_handler_stdout.log",
+         "archive": "true",
+         "archivedLogFilenamePattern": "/tmp/soap_handler_stdout-%d.log.gz",
+         "archivedFileCount": 5,
+         "timeZone": "CST"
+      }
+    ]
+  },    
+  "server": {
+    "applicationConnectors": [
+      {
+        "type": "http",
+        "port": "<%= @soap_handler['server_port'] %>"
+      }
+    ],
+    "adminConnectors": [
+      {
+        "type": "http",
+        "port": "<%= @soap_handler['admin_port'] %>"
+      }
+    ]
+  },
+  "service": {
+    "all": true,
+    "hdr": true,
+    "vler": true,
+    "pgd": true,
+    "dod": {
+      "allergy": true,
+      "appointment": true,
+      "consultnote": true,
+      "demographics": true,
+      "encounter": true,
+      "immunization": true,
+      "lab": true,
+      "medication": true,
+      "note": true,
+      "order": true,
+      "patient": true,
+      "problem": true,
+      "radiology": true,
+      "vital": true
+    }
+  },
+  "hdr" :
+  {
+    "uri" : "<%= @hdr_sites[0]['ipaddress'] %>:<%= @hdr_sites[0]['hdr']['req_res']['port'] %>",
+    "path": "/repositories.med.va.gov/fpds/",
+    "protocol": "<%= @hdr_sites[0]['hdr']['req_res']['protocol'] %>"
+  },
+  "pgd" : {
+    "uri" : "<%= @pgd['ipaddress'] %>",
+    "retry" : 3,
+    "protocol": "<%= @pgd['pgd']['protocol'] %>"
+  },
+  "vler" : {
+    "host" : "<%= @vler['ipaddress'] %>",
+    "port": <%= @vler['vler']['port'] %>,
+    "protocol": "<%= @vler['vler']['protocol'] %>",
+    "docquerypath": "<%= @vler['vler']['doc_query']['path'] %>",
+    "docquerypathquery":"<%= @vler['vler']['doc_query']['path_query'] %>",
+    "docquerytimeoutms": <%= @vler['vler']['doc_query']['timeout'] %>,
+    "docretrievepath": "<%= @vler['vler']['doc_retrieve']['path'] %>",
+    "docretrievepathquery": "<%= @vler['vler']['doc_retrieve']['path_query'] %>",
+    "docretrievetimeoutms": <%= @vler['vler']['doc_retrieve']['timeout'] %>,
+    "systemusername" :"<%= @vler['vler']['system_user_name'] %>",
+    "systemsitecode": "<%= @vler['vler']['system_site_code'] %>"
+  },
+  "jmeadows-version": "<%= @jmeadows['jmeadows']['version']%>",
+  "jmeadows-v2.3.0" : {
+    "host" : "<%= @jmeadows['ipaddress'] %>",
+    "port": <%= @jmeadows['jmeadows']['application']['port'] %>,
+    "protocol": "<%= @jmeadows['jmeadows']['application']['protocol'] %>",
+    "retry" : 3,
+    "path" : "<%= @jmeadows['jmeadows']['application']['path'] %>",
+    "query": "<%= @jmeadows['jmeadows']['application']['path_query'] %>",
+    "timeoutms" : 45000,
+    "userien" : "<%= @jmeadows['jmeadows']['application']['user']['ien'] %>",
+    "username" : "<%= @jmeadows['jmeadows']['application']['user']['name'] %>",
+    "usersitecode" : <%= @jmeadows['jmeadows']['application']['user']['site_code'] %>,
+    "usersitename" : "<%= @jmeadows['jmeadows']['application']['user']['site_name'] %>",
+    "parallelismmin" : 4
+  },
+  "jmeadows-v2.3.1" : {
+    "host" : "<%= @jmeadows['ipaddress'] %>",
+    "port": <%= @jmeadows['jmeadows']['application']['port'] %>,
+    "protocol": "<%= @jmeadows['jmeadows']['application']['protocol'] %>",
+    "retry" : 3,
+    "path" : "<%= @jmeadows['jmeadows']['application']['path'] %>",
+    "query": "<%= @jmeadows['jmeadows']['application']['path_query'] %>",
+    "timeoutms" : 45000,
+    "userien" : "<%= @jmeadows['jmeadows']['application']['user']['ien'] %>",
+    "username" : "<%= @jmeadows['jmeadows']['application']['user']['name'] %>",
+    "usersitecode" : <%= @jmeadows['jmeadows']['application']['user']['site_code'] %>,
+    "usersitename" : "<%= @jmeadows['jmeadows']['application']['user']['site_name'] %>",
+    "parallelismmin" : 4
+  },
+  "jmeadows-v2.3.3.0.2" : {
+    "host" : "<%= @jmeadows['ipaddress'] %>",
+    "port": <%= @jmeadows['jmeadows']['application']['port'] %>,
+    "protocol": "<%= @jmeadows['jmeadows']['application']['protocol'] %>",
+    "retry" : 3,
+    "path" : "<%= @jmeadows['jmeadows']['application']['path'] %>",
+    "query": "<%= @jmeadows['jmeadows']['application']['path_query'] %>",
+    "timeoutms" : 45000,
+    "userien" : "<%= @jmeadows['jmeadows']['application']['user']['ien'] %>",
+    "username" : "<%= @jmeadows['jmeadows']['application']['user']['name'] %>",
+    "usersitecode" : <%= @jmeadows['jmeadows']['application']['user']['site_code'] %>,
+    "usersitename" : "<%= @jmeadows['jmeadows']['application']['user']['site_name'] %>",
+    "parallelismmin" : 4
+  },
+  "mvi" : {
+    "host" : "<%= @mvi['ipaddress'] %>",
+    "path" : "<%= @mvi['mvi']['sync_path'] %>",
+    "port" : <%= @mvi['mvi']['port'] %>,
+    "protocol" : "<%= @mvi['mvi']['protocol'] %>",
+    "method" : "POST",
+    "senderCode" : "<%= @mvi['mvi']['sender_code'] %>",
+    "wsdl" : "<%= @mvi['mvi']['wsdl_path'] %>",
+    "processingCode" : "<%= @mvi['mvi']['processing_code'] %>"
+  },
+  "h2" : {
+    "jlvJdbc": "jdbc:h2:../terminology/jlv/termdb;ACCESS_MODE_DATA=r",
+    "lncJdbc": "jdbc:h2:../terminology/lncdb/termdb;ACCESS_MODE_DATA=r",
+    "drugJdbc": "jdbc:h2:../terminology/drug/termdb;ACCESS_MODE_DATA=r",
+    "lncLucene": "../terminology/src/lncdb/lucene",
+    "drugLucene": "../terminology/src/drug/lucene"
+  },
+  "security" : {
+    "truststore":"<%= @vxsync['soap_handler']['security']['trust_store'] %>",
+    "keystore":"<%= @vxsync['soap_handler']['security']['key_store'] %>",
+    "ksPassword":"<%= @vxsync['soap_handler']['security']['key_store_pw'] %>",
+    "tsPassword":"<%= @vxsync['soap_handler']['security']['trust_store_pw'] %>"
+  }
+}

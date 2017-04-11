@@ -5,17 +5,6 @@ var querystring = require('querystring');
 //var _ = require('lodash');
 //var moment = require('moment');
 
-var semanticFilters = {
-    product: 'product',
-    disorder: 'disorder',
-    procedure: 'procedure',
-    situation: 'situation',
-    substance: 'substance',
-    finding: 'finding',
-    qualif_value: 'qulifier value',
-    regime_therapy: 'regime/therapy'
-};
-
 var searchModes = {
     FullText: 'fullText',
     PartialMatching: 'partialMatching',
@@ -55,7 +44,7 @@ function executeTermQuery(queryString, req, callback) {
             //eat the error
             return callback(null, createUnavailbleResults());
         }
-        else if (response.statusCode != 200){
+        else if (response.statusCode !== 200){
             req.logger.error('Error performing search, http status: %j Body: %j', response.statusCode, response.body);
             //eat the error
             return callback(null, createUnavailbleResults());
@@ -87,14 +76,14 @@ function executeTermQuery(queryString, req, callback) {
 }
 
 function createUnavailbleResults(){
-    var result = new Object();
-    result.details = new Object();
+    var result = {};
+    result.details = {};
     result.details.total = 1;
 
-    result.matches = new Array();
+    result.matches = [];
 
-    var item = new Object();
-    item.term = "Ontology Suggestions unavailable";
+    var item = {};
+    item.term = 'Ontology Suggestions unavailable';
 
     result.matches[0] = item;
     return result;

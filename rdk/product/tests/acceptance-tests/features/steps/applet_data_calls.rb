@@ -336,7 +336,7 @@ end
 When(/^the client requests lab results for Lab Results Gist applet for the patient "([^"]*)"$/) do |pid|
   request = QueryRDKDomain.new('lab', pid)
   today = convert_cucumber_date('TODAY')
-  filter_string = "between(observed,\"19941130\",\"#{today}\"),eq(categoryCode , \"urn:va:lab-category:CH\”)"
+  filter_string = "between(observed,\"19941130\",\"#{today}\"),eq(categoryCode , \"urn:va:lab-category:CH\")"
   request.add_parameter('filter', filter_string)
   p request.path
   path = request.path

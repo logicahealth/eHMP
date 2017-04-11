@@ -2,11 +2,9 @@
 
 var rdk = require('../../../../core/rdk');
 var activitiesResource = require('../activities-operations-resource');
-var httpUtil = rdk.utils.http;
 var _ = require('lodash');
 var getGenericJbpmConfig = require('../../activity-utils').getGenericJbpmConfig;
 var nullchecker = rdk.utils.nullchecker;
-var parseString = require('xml2js').parseString;
 var async = require('async');
 var moment = require('moment');
 var activityDb = require('../../../../subsystems/jbpm/jbpm-subsystem');
@@ -596,3 +594,4 @@ function checkIfInstantiated(listenerId, eventRequest, logger, dbConfig, cb) {
 module.exports.startActivityEvent = startActivityEvent;
 module.exports._applyTemplate = applyTemplate;
 module.exports.versionCompare = versionCompare;
+module.exports.getFormattedPastDate = getFormattedPastDate;

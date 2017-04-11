@@ -9,11 +9,11 @@ var log = sinon.stub(require('bunyan').createLogger({
 var configuration = {
     environment: 'development',
     context: 'OR CPRS GUI CHART',
-    host: 'IP        ',
+    host: '10.2.2.101',
     port: 9210,
-    accessCode: 'PW    ',
-    verifyCode: 'PW    !!',
-    localIP: 'IP      ',
+    accessCode: 'pu1234',
+    verifyCode: 'pu1234!!',
+    localIP: '10.2.2.1',
     localAddress: 'localhost'
 };
 
@@ -24,6 +24,6 @@ describe('encounters-visit-disabilities resource integration test', function() {
             expect(err).to.be.null();
             expect(result).not.to.be.falsy();
             done();
-        }, {dfn: '230'});
+        });
     });
 });

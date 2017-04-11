@@ -257,12 +257,12 @@ define(['backbone', 'jasminejquery', 'app/applets/problems/writeback/parseUtils'
             ];
             existingModel.set('comments', comments);
             ParseUtils.copyModelPropertiesForEdit(existingModel, formModel);
-            expect(formModel.get('annotations').at(0).get('commentString')).toEqual('test comment 1');
-            expect(formModel.get('annotations').at(1).get('commentString')).toEqual('test comment 2');
-            expect(formModel.get('annotations').at(0).get('author')).toEqual({name: 'TEST,USERONE', duz: {'9E7A': '123456789'}});
-            expect(formModel.get('annotations').at(1).get('author')).toEqual({name: 'TEST,USERTWO', duz: {'9E7A': '987654321'}});
-            expect(formModel.get('annotations').at(0).get('timeStamp')).toEqual('12/28/2015');
-            expect(formModel.get('annotations').at(1).get('timeStamp')).toEqual('12/30/2015');
+            expect(formModel.get('annotations').at(0).get('commentString')).toEqual('test comment 2');
+            expect(formModel.get('annotations').at(1).get('commentString')).toEqual('test comment 1');
+            expect(formModel.get('annotations').at(0).get('author')).toEqual({name: 'TEST,USERTWO', duz: {'9E7A': '987654321'}});
+            expect(formModel.get('annotations').at(1).get('author')).toEqual({name: 'TEST,USERONE', duz: {'9E7A': '123456789'}});
+            expect(formModel.get('annotations').at(0).get('timeStamp')).toEqual('12/30/2015');
+            expect(formModel.get('annotations').at(1).get('timeStamp')).toEqual('12/28/2015');
         });
 
         it('Test copying ien property', function(){

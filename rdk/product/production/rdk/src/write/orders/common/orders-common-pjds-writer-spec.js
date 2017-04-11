@@ -11,11 +11,11 @@ var writebackContext = {
         }
     },
     vistaConfig: {
-        host: 'IP        ',
+        host: '10.2.2.101',
         port: 9210,
-        accessCode: 'PW    ',
-        verifyCode: 'PW    !!',
-        localIP: 'IP      ',
+        accessCode: 'mx1234',
+        verifyCode: 'mx1234!!',
+        localIP: '10.2.2.1',
         localAddress: 'localhost',
         noReconnect: true
     },
@@ -56,7 +56,7 @@ var writebackContext = {
             'subDomain': 'laboratory',
             'visit': {
                 'location': 'urn:va:location:9E7A:285',
-                'serviceCategory': "PSB",
+                'serviceCategory': 'PSB',
                 'dateTime': '20160102123040'
             },
             'data': {
@@ -100,8 +100,6 @@ describe('orders-common-pjds-writer', function() {
     });
 
     it('tests that pjds writer returns no error', function() {
-        var response = 'response';
-
         sinon.stub(pjds, 'create', function(logger, appConfig, model, callback) {
             callback();
         });

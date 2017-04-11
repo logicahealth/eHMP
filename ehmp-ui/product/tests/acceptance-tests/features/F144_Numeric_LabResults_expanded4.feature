@@ -1,4 +1,4 @@
-@F144 @F144_numericlabresults @regression @triage @DE4084
+@F144 @F144_numericlabresults   @DE4084 @reg2
 Feature: F144 - eHMP Viewer GUI - Numeric Lab Results
 
 Background:
@@ -57,22 +57,3 @@ Scenario: User can filter Expanded Numeric Lab results applet by different colum
   When the user filters the Expanded Numeric Lab results by text "134-146"
   And the user scrolls to the bottom of the Numeric Lab Results Applet
   Then the Expanded Numeric Lab results table only diplays rows including text "134-146"
-
-#  @F144_numericlabresults_8
-# Scenario Outline: User can filter Expanded Numeric Lab results applet by different columns
-#   Given the user is viewing the expanded Numeric Lab Results Applet
-#   And the user scrolls to the bottom of the Numeric Lab Results Applet
-#   When the user filters the Expanded Numeric Lab results by text "<filter_text>"
-#   And the user scrolls to the bottom of the Numeric Lab Results Applet
-#   Then the Expanded Numeric Lab results table only diplays rows including text "<row_text>"
-
-
-
-# Examples:
-#   | filter_type       | filter_text | row_text   |
-# #  | lab type          | hematocrit  | hematocrit |
-# #  | lab type with num | a1c         | a1c|
-# #  | facility dod      | DOD         | DOD |
-#   | facility vista    | tst1        | tst1|
-#   | results           | 185         | 185 |
-#   | ref range         | 134-146     | 134-146 |

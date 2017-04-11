@@ -10,26 +10,26 @@ var appConfig = {
         '9E7A': {
             'name': 'PANORAMA',
             'division': '500',
-            'host': 'IP        ',
-            'localIP': 'IP      ',
+            'host': '10.2.2.101',
+            'localIP': '10.2.2.1',
             'localAddress': 'localhost',
             'port': 9210,
             'production': false,
-            'accessCode': 'PW    ',
-            'verifyCode': 'PW    !!',
+            'accessCode': 'ep1234',
+            'verifyCode': 'ep1234!!',
             'infoButtonOid': '1.3.6.1.4.1.3768',
             'abbreviation': 'PAN'
         },
         'C877': {
             'name': 'KODAK',
             'division': '507',
-            'host': 'IP        ',
-            'localIP': 'IP      ',
+            'host': '10.2.2.102',
+            'localIP': '10.2.2.1',
             'localAddress': 'localhost',
             'port': 9210,
             'production': false,
-            'accessCode': 'PW    ',
-            'verifyCode': 'PW    !!',
+            'accessCode': 'ep1234',
+            'verifyCode': 'ep1234!!',
             'infoButtonOid': '1.3.6.1.4.1.3768',
             'abbreviation': 'KDK'
         }
@@ -42,14 +42,13 @@ describe('Calling note-objects-madlib-generator-request-activity-spec test for',
 
     describe('generateMadlibString()', function() {
 
-        it('activity-request parses the correct Active content', function() {
-
+        it.skip('activity-request parses the correct Active content', function() {
             var ra = requestActivityActive;
             var retVal = madlibGenerator(errorMessage, ra, appConfig);
 
-            // expect(retVal.indexOf('04/20/2016')).to.equal(0) ;
-            // expect(retVal.indexOf('Urgent')).to.equal(40) ;
-            // expect(retVal.indexOf('Reassigned to: Patients Primary Care team.  Roles: Physician, Nurse Practitioner.')).to.above(0) ;
+            expect(retVal.indexOf('04/20/2016')).to.equal(0) ;
+            expect(retVal.indexOf('Urgent')).to.equal(40) ;
+            expect(retVal.indexOf('Reassigned to: Patients Primary Care team.  Roles: Physician, Nurse Practitioner.')).to.above(0) ;
         });
     });
 

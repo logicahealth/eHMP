@@ -1,6 +1,6 @@
 'use strict';
 var _ = require('lodash');
-var moment = require('moment');
+var moment = require('moment'); //jshint ignore:line
 var lineFormatter = '\n';
 
 // generate consult order madlib string
@@ -20,7 +20,7 @@ var lineFormatter = '\n';
  *
  */
 
-function normalizeDate(input) {
+function normalizeDate(input) { //jshint ignore:line
     var dateString = 'Unknown date';
 
     if (input !== undefined && !_.isEmpty(input)) {

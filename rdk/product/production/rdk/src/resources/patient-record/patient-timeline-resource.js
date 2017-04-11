@@ -8,7 +8,6 @@ var nullchecker = rdk.utils.nullchecker;
 var async = require('async');
 var paramUtil = require('../../utils/param-converter');
 var moment = require('moment');
-var array = require('lodash');
 var resultUtils = rdk.utils.results;
 
 var excludeEMcodeRules = rdk.patienttimelineResourceConfig.excludeEMcodeList || [];
@@ -31,8 +30,7 @@ var jdsIndexConfig = [{
         // filter out all appointments before today (except DoD appointments -- those are treated as visits)
         return [
             [
-                'or',
-                ['eq', 'kind', 'DoD Appointment'],
+                'or', ['eq', 'kind', 'DoD Appointment'],
                 ['gte', 'dateTime', moment().format('YYYYMMDD')],
                 ['lte', 'dateTime', moment().format('YYYYMMDD')]
             ]
@@ -40,12 +38,12 @@ var jdsIndexConfig = [{
     }
 }, {
     name: 'laboratory'
-},{
-    name: 'visittreatment'   // ptf domain
-},{
-    name: 'visitcptcode'     // cpt domain
-},{
-    name: 'encounter'        // visit domain
+}, {
+    name: 'visittreatment' // ptf domain
+}, {
+    name: 'visitcptcode' // cpt domain
+}, {
+    name: 'encounter' // visit domain
 }];
 
 var getResourceConfig = function() {
@@ -57,9 +55,9 @@ var getResourceConfig = function() {
         subsystems: ['patientrecord', 'jds', 'solr', 'jdsSync', 'authorization'],
         interceptors: {
             jdsFilter: true,
-            pep: {
-              handlers: ['permission']
-           }
+            pep: { //TODO: Ensure this pep object is still required
+                handlers: ['permission']
+            }
         },
         requiredPermissions: ['read-encounter'],
         isPatientCentric: true,
@@ -107,7 +105,7 @@ function getPatientTimeline(req, res) {
 
         var filterString = jdsFilter.build(domainFilter);
         if (filterString) {
-            if((jdsIndex.name != "visittreatment")&&(jdsIndex.name != "visitcptcode")){ // &&(jdsIndex.name != "encounter") no filters for PTF, CPT domains
+            if ((jdsIndex.name !== 'visittreatment') && (jdsIndex.name !== 'visitcptcode')) { // &&(jdsIndex.name != "encounter") no filters for PTF, CPT domains
                 jdsQuery.filter = filterString;
             }
         }
@@ -147,7 +145,7 @@ function getPatientTimeline(req, res) {
             var mergedResults = mergeResults(results, order);
             var query = req.interceptorResults.jdsFilter.filter || [];
             //console.time("jdsFilter.applyFilters");
-            var filteredResults = jdsFilter.applyFilters(query,mergedResults);
+            var filteredResults = jdsFilter.applyFilters(query, mergedResults);
             //console.timeEnd("jdsFilter.applyFilters");
             var totalItems = filteredResults.length;
 
@@ -158,7 +156,7 @@ function getPatientTimeline(req, res) {
             }
 
             var responseData = {
-               // filter: query, //!!!!!!!!!!!! debug
+                // filter: query, TODO: this needs to be debugged
                 totalItems: totalItems,
                 currentItemCount: totalItems,
                 items: filteredResults
@@ -185,11 +183,11 @@ function fetchData(httpConfig, req, index, callback) {
                 return callback(null, obj);
             } else if (obj && obj.error) {
                 if (isNotFound(obj)) {
-                    req.logger.error('PatienttimelineResource.fetchData: Object not found %j',obj);
+                    req.logger.error('PatienttimelineResource.fetchData: Object not found %j', obj);
                     return callback(new NotFoundError('Object not found', obj));
                 }
             }
-            req.logger.error('PatienttimelineResource.fetchData: There was an error processing your request. The error has been logged.')
+            req.logger.error('PatienttimelineResource.fetchData: There was an error processing your request. The error has been logged.');
             return callback(new Error('There was an error processing your request. The error has been logged.'));
         }
     });
@@ -255,7 +253,7 @@ function addMicrobiologyProvider(req, res, responseData) {
                         }
                     } else if ('error' in obj) {
                         if (isNotFound(obj)) {
-                            req.logger.warn('PatienttimelineResource.addMicrobiologyProvider: Object not found %j',obj);
+                            req.logger.warn('PatienttimelineResource.addMicrobiologyProvider: Object not found %j', obj);
                             //return callbackasync(new NotFoundError('Object not found', obj));
                         }
                     }
@@ -277,29 +275,35 @@ function addMicrobiologyProvider(req, res, responseData) {
 }
 
 // Copy Visit properties
-function cpVisitProp(from, to){
-  if(!_.isUndefined(to)){
-    if(!_.isUndefined(from.service)) {to.service = from.service;}
-    if(!_.isUndefined(from.providerDisplayName)) {to.providerDisplayName = from.providerDisplayName;}
-    if(!_.isUndefined(from.providers)) {to.providers = from.providers;}
-    to.visitInfo = from;
-  }
+function cpVisitProp(from, to) {
+    if (!_.isUndefined(to)) {
+        if (!_.isUndefined(from.service)) {
+            to.service = from.service;
+        }
+        if (!_.isUndefined(from.providerDisplayName)) {
+            to.providerDisplayName = from.providerDisplayName;
+        }
+        if (!_.isUndefined(from.providers)) {
+            to.providers = from.providers;
+        }
+        to.visitInfo = from;
+    }
 }
 
 
 function cptToProcedure(to, from) {
     var visitsMap = {};
-    _.each(to, function (item) {
+    _.each(to, function(item) {
         if (item.kind === 'Visit') {
             visitsMap[item.uid] = item;
         }
     });
-    from.forEach(function (cptRecord) {
+    from.forEach(function(cptRecord) {
         var fError = false;
         var fLaborotry = true;
         var visit;
         // Filter out Labs from procedures
-        if (_.isUndefined(cptRecord.encounterName) || !(cptRecord.encounterName.indexOf('LAB') === 0)) {
+        if (_.isUndefined(cptRecord.encounterName) || (cptRecord.encounterName.indexOf('LAB') !== 0)) {
             if (!_.isUndefined(cptRecord.entered)) {
                 cptRecord.dateTime = cptRecord.entered;
                 cptRecord.activityDateTime = cptRecord.entered;
@@ -317,10 +321,10 @@ function cptToProcedure(to, from) {
             } else {
                 fError = true;
             }
-            cptRecord.kind = "Procedure";
+            cptRecord.kind = 'Procedure';
             if (!fError) {
                 visit = visitsMap[cptRecord.encounterUid];
-                if (_.get(visit, 'stopCodeName') && visit.stopCodeName !== "LABORATORY") {
+                if (_.get(visit, 'stopCodeName') && visit.stopCodeName !== 'LABORATORY') {
                     fLaborotry = false;
                 }
                 if (fLaborotry && (!isInExcludeList(cptRecord.cptCode)) && (!_.isUndefined(visit))) {
@@ -336,59 +340,57 @@ function cptToProcedure(to, from) {
 
 
 
-function excludeListBuilder(arrRules){
-  var result = [];
-  if((_.isUndefined(arrRules))||(!_.isArray(arrRules))){
-    return [];
-  }
-  arrRules.forEach(function(item){
-    if(_.isArray(item)){
-      if(item.length === 1){
-        if(_.isString(item[0])){
-          if(item[0].indexOf("*") != -1){ // check if it range of codes  991** -> 99100-99199
-            // generate range of codes
-            var startRange = "";
-            var stopRange = "";
-            for(var cind=0; cind < item[0].length; cind++){
-              if(item[0].charAt(cind) === "*"){
-                startRange = startRange + "0";
-                stopRange = stopRange + "9";
-              }else{
-                startRange = startRange + item[0].charAt(cind);
-                stopRange = stopRange + item[0].charAt(cind);
-              }
-            }
-           result =_.union(result,_.range(Number(startRange),Number(stopRange)),[Number(stopRange)]);
-          }
-        }else{
-          result.push(item[0]);
-        }
-      }else{ // 99120-99200
-        if(item[0]<=item[1]){
-          result =_.union(result,_.range(item[0],item[1]),[item[1]]);
-        }else{
-          // wrong code range
-        }
-      }
+function excludeListBuilder(arrRules) {
+    var result = [];
+    if ((_.isUndefined(arrRules)) || (!_.isArray(arrRules))) {
+        return [];
     }
-  });
-  return (_.uniq(result)).sort();
+    arrRules.forEach(function(item) {
+        if (_.isArray(item)) {
+            if (item.length === 1) {
+                if (_.isString(item[0])) {
+                    if (item[0].indexOf('*') !== -1) { // check if it range of codes  991** -> 99100-99199
+                        // generate range of codes
+                        var startRange = '';
+                        var stopRange = '';
+                        for (var cind = 0; cind < item[0].length; cind++) {
+                            if (item[0].charAt(cind) === '*') {
+                                startRange = startRange + '0';
+                                stopRange = stopRange + '9';
+                            } else {
+                                startRange = startRange + item[0].charAt(cind);
+                                stopRange = stopRange + item[0].charAt(cind);
+                            }
+                        }
+                        result = _.union(result, _.range(Number(startRange), Number(stopRange)), [Number(stopRange)]);
+                    }
+                } else {
+                    result.push(item[0]);
+                }
+            } else { // 99120-99200
+                if (item[0] <= item[1]) {
+                    result = _.union(result, _.range(item[0], item[1]), [item[1]]);
+                }
+            }
+        }
+    });
+    return (_.uniq(result)).sort();
 }
 
-function isInExcludeList(cptcode){
-  var clearCptCode;
-  if(_.isString(cptcode)){
-    var arrCpt = cptcode.split(":");
-    if(arrCpt.length === 3){
-      clearCptCode = Number(arrCpt[2]);
+function isInExcludeList(cptcode) {
+    var clearCptCode;
+    if (_.isString(cptcode)) {
+        var arrCpt = cptcode.split(':');
+        if (arrCpt.length === 3) {
+            clearCptCode = Number(arrCpt[2]);
+        }
+    } else {
+        clearCptCode = cptcode;
     }
-  }else{
-    clearCptCode = cptcode;
-  }
-  if(_.indexOf(excludeEMcodeList, clearCptCode) != -1){
-    return true;
-  }
-  return false;
+    if (_.indexOf(excludeEMcodeList, clearCptCode) !== -1) {
+        return true;
+    }
+    return false;
 }
 
 
@@ -401,9 +403,9 @@ function mergeResults(allResults, order) {
     var mergedResults = [];
 
     _.each(allResults, function(val) {
-        if (val.domain === "visittreatment") {
+        if (val.domain === 'visittreatment') {
             arrPTF.push(val.data.items);
-        } else if (val.domain === "visitcptcode") {
+        } else if (val.domain === 'visitcptcode') {
             arrCPT.push(val.data.items);
         } else {
             preMergedResults.push(val.data.items);
@@ -415,7 +417,7 @@ function mergeResults(allResults, order) {
     arrCPT = _.flatten(arrCPT, true);
 
     _.each(preMergedResults, function(item) {
-        if(!mergedMap.hasOwnProperty(item.uid)) {
+        if (!mergedMap.hasOwnProperty(item.uid)) {
             mergedMap[item.uid] = index;
             mergedResults.push(item);
             index++;
@@ -425,8 +427,8 @@ function mergeResults(allResults, order) {
     for (var i = 0; i < arrPTF.length; i++) {
         if (!_.isUndefined(arrPTF[i].admissionUid)) {
             index = mergedMap[arrPTF[i].admissionUid];
-            if (!_.isUndefined(index)){
-                if(_.isUndefined(mergedResults[index].dischargeDiagnoses)) {
+            if (!_.isUndefined(index)) {
+                if (_.isUndefined(mergedResults[index].dischargeDiagnoses)) {
                     mergedResults[index].dischargeDiagnoses = [];
                 }
                 mergedResults[index].dischargeDiagnoses.push(arrPTF[i]);
@@ -446,7 +448,7 @@ function mergeResults(allResults, order) {
         }
     }
 
-    cptToProcedure(mergedResults,JSON.parse(JSON.stringify(arrCPT)));
+    cptToProcedure(mergedResults, JSON.parse(JSON.stringify(arrCPT)));
     mergedResults = resultUtils.sortResults(mergedResults, order);
 
     return mergedResults;
@@ -530,10 +532,14 @@ function NotFoundError(message, error) {
 }
 
 exports.getResourceConfig = getResourceConfig;
-exports.mergeResults = mergeResults; // for testing only
-exports.getActivityDateTime = getActivityDateTime; // for testing only
-exports.isVisit = isVisit; // for testing only
-exports.isHospitalization = isHospitalization; // for testing only
-exports.isDischargedOrAdmitted = isDischargedOrAdmitted; // for testing only
-exports.isImmunization = isImmunization; // for testing only
-exports.isLaboratory = isLaboratory; // for testing only
+
+module.exports._mergeResults = mergeResults; // for testing only
+module.exports._getActivityDateTime = getActivityDateTime; // for testing only
+module.exports._isVisit = isVisit; // for testing only
+module.exports._isHospitalization = isHospitalization; // for testing only
+module.exports._isDischargedOrAdmitted = isDischargedOrAdmitted; // for testing only
+module.exports._isImmunization = isImmunization; // for testing only
+module.exports._isLaboratory = isLaboratory; // for testing only
+module.exports._isMicrobiology = isMicrobiology; // for testing only
+module.exports._cpVisitProp = cpVisitProp; // for testing only
+

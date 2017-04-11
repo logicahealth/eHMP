@@ -1,7 +1,5 @@
 'use strict';
 
-var rdk = require('../core/rdk');
-
 function getResourceConfig(app) {
     var config = [ evaluate(app),
                 evaluateWithActionNames(app)];

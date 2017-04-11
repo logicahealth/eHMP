@@ -16,7 +16,6 @@ var pjds = require('../../../subsystems/pjds/pjds-store');
  */
 var getEhmpUserData = function(req, res, pjdsCallback, params) {
     var logger = req.logger;
-    var site = params.site;
     var data = _.get(params, 'data', {});
     var uid = data.uid;
     //get user PJDS data
@@ -115,7 +114,8 @@ var getTrustedSystemData = function(req, res, authenticationCB, params) {
         }
         if (_.result(response, 'data.name', '') !== name) {
             errorObj = new RdkError({
-                code: 'pjds.401.1003'
+                code: 'pjds.401.1003',
+                error: 'response name did not match the request name'
             });
             return callback(errorObj, null);
         }
@@ -221,6 +221,12 @@ var setLoginAttempt = function(req, res, loginAttemptCallback, params) {
         _.set(pjdsOptions, 'data.lastUnsuccessfulLogin', moment(_.get(req, 'session.expires')).utc().format());
         _.set(pjdsOptions, 'data.unsuccessfulLoginAttemptCount', _.get(user, 'unsuccessfulLoginAttemptCount', 0) + 1);
         _.set(user, 'unsuccessfulLoginAttemptCount', data.unsuccessfulLoginAttemptCount);
+        if (!_.has(user, 'permissionSets')) {
+            _.set(pjdsOptions, 'data.permissionSet.val', []);
+            if (!_.has(user, 'permissions')) {
+                _.set(pjdsOptions, 'data.permissionSet.additionalPermissions', []);
+            }
+        }
     } else {
         _.set(pjdsOptions, 'data.lastSuccessfulLogin', moment(_.get(req, 'session.expires')).utc().format());
         _.set(pjdsOptions, 'data.unsuccessfulLoginAttemptCount', 0);

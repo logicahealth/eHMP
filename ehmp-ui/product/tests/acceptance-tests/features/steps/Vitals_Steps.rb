@@ -1,19 +1,6 @@
 #Team Neptune
 #F144_VitalsApplet.feature
 
-class VitalsExpandedHeader < AccessBrowserV2
-  include Singleton
-  def initialize
-    super
-    add_verify(CucumberLabel.new("Date Observed"), VerifyText.new, AccessHtmlElement.new(:css, "[data-header-instanceid='vitals-observed']"))
-    add_verify(CucumberLabel.new("Type"), VerifyText.new, AccessHtmlElement.new(:css, "[data-header-instanceid='vitals-typeName']"))
-    add_verify(CucumberLabel.new("Result"), VerifyText.new, AccessHtmlElement.new(:css, "[data-header-instanceid='vitals-resultUnitsMetricResultUnits']"))
-    add_verify(CucumberLabel.new("Qualifiers"), VerifyText.new, AccessHtmlElement.new(:css, "[data-header-instanceid='vitals-qualifiersNames']"))
-    add_verify(CucumberLabel.new("Date Entered"), VerifyText.new, AccessHtmlElement.new(:css, "[data-header-instanceid='vitals-resulted']"))
-    add_verify(CucumberLabel.new("Facility"), VerifyText.new, AccessHtmlElement.new(:css, "[data-header-instanceid='vitals-facilityName']"))
-  end
-end #VitalsExpandedHeader
-
 class Vitals < AllApplets
   include Singleton
   attr_reader :appletid
@@ -57,17 +44,11 @@ When(/^the user clears any existing filters$/) do
 end
 
 Then(/^the Vitals expanded headers are$/) do |table|
-  driver = TestSupport.driver
-  elements = VitalsExpandedHeader.instance
-  expect(elements.wait_until_action_element_visible("Date Observed", DefaultLogin.wait_time)).to be_true
-  headers = driver.find_elements(:css, "#data-grid-vitals th") 
-  expect(headers.length).to_not eq(0)
-  expect(headers.length).to eq(table.rows.length)
-  table.rows.each do |header_text|
-    does_exist = elements.static_dom_element_exists? header_text[0]
-    p "#{header_text[0]} was not found. Text found was  " unless does_exist
-    expect(does_exist).to be_true
-  end #table
+  ehmp = PobVitalsApplet.new
+  existing_headers = ehmp.expanded_headers_text_only
+  table.rows.each do | temp_header |
+    expect(existing_headers).to include(temp_header[0].upcase)
+  end  
 end #Vitals Headers
 
 #Validate the Problems rows in the coversheet view
@@ -122,40 +103,35 @@ Then(/^the vitals table only diplays rows including text "([^"]*)"$/) do |input_
 end
 
 When(/^the user clicks the all\-range\-vitals$/) do
-  html_action_element = 'all-range-vitals'
-  driver = TestSupport.driver
-  navigation = Navigation.instance
-  vitals_applet = Vitals.instance
-  navigation.wait_until_action_element_visible(html_action_element, 40)
-  expect(navigation.perform_action(html_action_element)).to be_true, "Error when attempting to excercise #{html_action_element}"
-  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
-  wait.until { vitals_applet.applet_loaded? }
-end
-
-When(/^the user views all the vitals rows$/) do
-  vitals_applet = Vitals.instance
-  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
-  wait.until { vitals_applet.applet_loaded? && infiniate_scroll('#data-grid-vitals tbody') }
+  ehmp = PobVitalsApplet.new
+  expect(ehmp).to have_btn_expanded_all_range
+  ehmp.btn_expanded_all_range.click
+  ehmp.wait_for_btn_expanded_all_range_active
+  expect(ehmp).to have_btn_expanded_all_range_active
+  wait_until { ehmp.applet_loaded? }  
 end
 
 When(/^the user expands the vitals applet$/) do
-  
-  aa = Vitals.instance
   expected_screen = 'Vitals'
-  expect(aa.perform_action('Control - Applet - Expand View')).to be_true
-  expect(aa.perform_verification('Screenname', "#{expected_screen}")).to eq(true), "Expected screenname to be #{expected_screen}"
-  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultLogin.wait_time)
-  wait.until {  aa.applet_loaded? }
+
+  ehmp = PobVitalsApplet.new
+  expect(ehmp).to have_btn_applet_expand_view
+  ehmp.btn_applet_expand_view.click
+  ehmp.wait_until_btn_applet_expand_view_invisible
+  wait_until { ehmp.applet_loaded? }
+  expect(ehmp.menu.fld_screen_name.text.upcase).to eq(expected_screen.upcase)
 end
 
 Then(/^the expanded vitals applet is displayed$/) do
-  aa = Vitals.instance
   expected_screen = 'Vitals'
-  expect(aa.perform_verification('Screenname', "#{expected_screen}")).to eq(true), "Expected screenname to be #{expected_screen}"
-  expect(aa.wait_until_action_element_visible("Title", DefaultLogin.wait_time)).to be_true
-  expect(aa.perform_verification("Title", 'VITALS')).to be_true
-  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultLogin.wait_time)
-  wait.until {  aa.applet_loaded? }
+
+  ehmp = PobVitalsApplet.new
+  ehmp.wait_until_btn_applet_expand_view_invisible
+  ehmp.wait_for_fld_applet_title
+  expect(ehmp).to have_fld_applet_title
+  expect(ehmp.fld_applet_title.text.upcase).to eq(expected_screen.upcase)
+  wait_until { ehmp.applet_loaded? }
+  expect(ehmp.menu.fld_screen_name.text.upcase).to eq(expected_screen.upcase)
 end
 
 Then(/^the Vitals Applet contains data rows$/) do
@@ -191,8 +167,11 @@ Then(/^the Vitals Applet does not contain buttons$/) do |table|
 end
 
 When(/^the user minimizes the vitals applet$/) do
-  vitals = Vitals.instance
-  expect(vitals.perform_action('Control - applet - Minimize View')).to eq(true)
+  ehmp = PobVitalsApplet.new
+  ehmp.wait_for_btn_applet_minimize
+  expect(ehmp).to have_btn_applet_minimize
+  ehmp.btn_applet_minimize.click
+  ehmp.wait_until_btn_applet_minimize_invisible
 end
 
 When(/^the user views the first Vital detail view$/) do
@@ -207,10 +186,6 @@ Then(/^the Vital Detail modal displays$/) do |table|
   table.rows.each do | row |
     expect(modal.am_i_visible? row[0]).to eq(true), "#{row[0]} was not visible"
   end
-end
-
-When(/^the user views the first Vitals detail view$/) do
-  pending # Write code here that turns the phrase above into concrete actions
 end
 
 def count_rows_that_contain_qualifier_text_in_qualifier_column(qualifier_text)
@@ -229,7 +204,7 @@ end
 def check_for_any_qualifiers(qualifiers)
   qualifiers.each do | qualifier |
     count = count_rows_that_contain_qualifier_text_in_qualifier_column(qualifier)
-    p "using #{qualifier} found #{count}"
+    #p "using #{qualifier} found #{count}"
     return true if count > 0
   end
   false
@@ -253,6 +228,7 @@ Then(/^some vitals display qualifiers$/) do
     p "scroll row #{count1} into view"
     element = driver.find_element(:css, "#{table_id} tr:nth-child(#{count1})")
     element.location_once_scrolled_into_view
+    TestSupport.driver.execute_script("$('#{table_id}').scroll();")
     count2 = driver.find_elements(:css, "#{table_id} tr").length
     found_bottom = (count1 == count2)
     number_of_attempts = found_bottom ? number_of_attempts + 1 : 0

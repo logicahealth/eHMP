@@ -7,7 +7,7 @@ Feature: F711 - Integrate dynamic picklists for Immunizations forms
 
 @F711_1_immunization_statment @US9003
 Scenario: Endpoint for Vaccine Information Statement File (PXVIMM VIS)
-  When the client requests picklist with the parameters for "immunization-vaccine-info-statement" with the user "9E7A;PW    "
+  When the client requests picklist with the parameters for "immunization-vaccine-info-statement" with the user "9E7A;vk1234"
       | paramter name | value                               |
 
   Then a successful response is returned
@@ -28,7 +28,7 @@ Scenario: Endpoint for Vaccine Information Statement File (PXVIMM VIS)
 
 @F711_2_immunization_info_source_file @US9004
 Scenario: Endpoint for Immunization Info Source File (PXVIMM INFO SOURCE)
-  When the client requests picklist with the parameters for "immunization-info-source" with the user "9E7A;PW    "
+  When the client requests picklist with the parameters for "immunization-info-source" with the user "9E7A;vk1234"
       | paramter name | value                    |
 
   Then a successful response is returned
@@ -42,7 +42,7 @@ Scenario: Endpoint for Immunization Info Source File (PXVIMM INFO SOURCE)
 
 @F711_3_immunization_admin_route @US9005
 Scenario: Endpoint for Immunization Administration Route File (PXVIMM ADMIN ROUTE)
-  When the client requests picklist with the parameters for "immunization-admin-route" with the user "9E7A;PW    "
+  When the client requests picklist with the parameters for "immunization-admin-route" with the user "9E7A;vk1234"
       | paramter name | value                    |
 
   Then a successful response is returned
@@ -55,7 +55,7 @@ Scenario: Endpoint for Immunization Administration Route File (PXVIMM ADMIN ROUT
 
 @F711_4_immunization_admin_site @US9006
 Scenario: Endpoint for Immunization Administration Site File (PXVIMM ADMIN SITE)
-  When the client requests picklist with the parameters for "immunization-admin-site" with the user "9E7A;PW    "
+  When the client requests picklist with the parameters for "immunization-admin-site" with the user "9E7A;vk1234"
       | paramter name | value                    |
 
   Then a successful response is returned
@@ -69,7 +69,7 @@ Scenario: Endpoint for Immunization Administration Site File (PXVIMM ADMIN SITE)
 
 @F711_5_immunization_manufacturer @US9007
 Scenario: Endpoint for Immunization Manufacturers File (PXVIMM IMM MAN)
-  When the client requests picklist with the parameters for "immunization-manufacturer" with the user "9E7A;PW    "
+  When the client requests picklist with the parameters for "immunization-manufacturer" with the user "9E7A;vk1234"
       | paramter name | value                     |
 
   Then a successful response is returned
@@ -86,7 +86,7 @@ Scenario: Endpoint for Immunization Manufacturers File (PXVIMM IMM MAN)
 
 @F711_6_immunization_lot @US9008
 Scenario: | Endpoint for Immunization Lot File (PXVIMM IMM LOT)
-  When the client requests picklist with the parameters for "immunization-lot" with the user "9E7A;PW    "
+  When the client requests picklist with the parameters for "immunization-lot" with the user "9E7A;vk1234"
       | paramter name | value            |
 
   Then a successful response is returned
@@ -106,7 +106,7 @@ Scenario: | Endpoint for Immunization Lot File (PXVIMM IMM LOT)
 
 @F711_7_immunization_data @US10263
 Scenario: | Endpoint for Immunization Data (PXVIMM IMMDATA)
-  When the client requests picklist with the parameters for "immunization-data" with the user "9E7A;PW    "
+  When the client requests picklist with the parameters for "immunization-data" with the user "9E7A;vk1234"
       | paramter name | value             |
 
   Then a successful response is returned

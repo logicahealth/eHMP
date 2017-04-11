@@ -1,11 +1,5 @@
 'use strict';
-var _ = require('lodash');
-var httpMocks = require('node-mocks-http');
-var bunyan = require('bunyan');
 var errorConstants = require('./error-constants');
-var logger = bunyan.createLogger({
-    name: 'error-constants'
-});
 
 describe('Error Constants', function() {
     var keys = ['200', '201', '202', '204', '301', '303', '304', '307', '308', '400', '401', '403', '404', '406', '409', '410', '412', '415', '500', '502', '503'];

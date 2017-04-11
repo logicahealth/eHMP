@@ -1,0 +1,22 @@
+.alertBanner-control {
+    .alert {
+        float: left;
+        padding: 10px;
+        width: 100%;
+        .alert-content {
+            p:last-child {
+                margin-bottom: 0;
+            }
+        }
+        button.close {
+            right: 0px;
+        }
+    }
+    .alert-danger {
+        color: $red-dark;
+    }
+    .alert-info {
+        background-color: $pure-white;
+        border-color: $grey-darker;
+    }
+}

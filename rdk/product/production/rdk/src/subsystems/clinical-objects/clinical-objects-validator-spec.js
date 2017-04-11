@@ -34,21 +34,6 @@ var clinicalObjectCleanPass = {
     data: {labTestText: 'test'}
 };
 
-var clinicalObjectCleanPassNoUiD = {
-    patientUid: 'urn:va:patient:9E7A:3:3',
-    authorUid: 'urn:va:user:9E7A:123',
-    domain: 'ehmp-order',
-    subDomain: 'laboratory',
-    visit: {
-       location: '1',
-       serviceCategory: 'PSB',
-       dateTime: '20160101120000'
-    },
-    referenceId: '',
-    ehmpState: 'draft',
-    data: {labTestText: 'test'}
-};
-
 var clinicalObjectMissingState = {
     uid: 'urn:va:ehmp-order:9E7A:3:de305d54-75b4-431b-adb2-eb6b9e546014',
     patientUid: 'urn:va:patient:9E7A:3:3',
@@ -78,22 +63,6 @@ var clinicalObjectMissingDomain = {
     referenceId: '',
     ehmpState: 'draft',
     data: {labTestText: 'test'}
-};
-
-var clinicalObjectMissingPiD = {
-    uid: 'urn:va:ehmp-order:9E7A:3:de305d54-75b4-431b-adb2-eb6b9e546014',
-    patientUid: '',
-    authorUid: 'urn:va:user:9E7A:123',
-    domain: 'ehmp-order',
-    subDomain: 'laboratory',
-    visit: {
-       location: '1',
-       serviceCategory: 'PSB',
-       dateTime: '20160101120000'
-    },
-    referenceId: '',
-    ehmpState: 'draft',
-    data: {labTestText: 'test', items: 'ok'}
 };
 
 var clinicalObjectMissingPiDNoUID = {
@@ -126,43 +95,11 @@ var clinicalObjectMissingUID = {
     data: {labTestText: 'test'}
 };
 
-var clinicalObjectMissingAuthorID = {
-    uid: 'urn:va:ehmp-order:9E7A:3:de305d54-75b4-431b-adb2-eb6b9e546014',
-    patientUid: 'urn:va:patient:9E7A:3:3',
-    authorUid: '',
-    domain: 'ehmp-order',
-    subDomain: 'laboratory',
-    visit: {
-       location: '1',
-       serviceCategory: 'PSB',
-       dateTime: '20160101120000'
-    },
-    referenceId: '',
-    ehmpState: 'draft',
-    data: {labTestText: 'test'}
-};
-
 var clinicalObjectMissingAuthorIDNoUID = {
     patientUid: 'urn:va:patient:9E7A:3:3',
     domain: 'ehmp-order',
     subDomain: 'laboratory',
     authorUid: '',
-    visit: {
-       location: '1',
-       serviceCategory: 'PSB',
-       dateTime: '20160101120000'
-    },
-    referenceId: '',
-    ehmpState: 'draft',
-    data: {labTestText: 'test'}
-};
-
-var clinicalObjectMissingSubDomain = {
-    uid: 'urn:va:ehmp-order:9E7A:3:de305d54-75b4-431b-adb2-eb6b9e546014',
-    patientUid: 'urn:va:patient:9E7A:3:3',
-    authorUid: 'urn:va:user:9E7A:123',
-    domain: 'ehmp-order',
-    subDomain: '',
     visit: {
        location: '1',
        serviceCategory: 'PSB',
@@ -356,10 +293,10 @@ describe('Clinical object validation tests', function() {
         beforeEach(function() {
             errorMessages = [];
         });
-        xit('should get a list of valid clinical objects', function(){
+        it.skip('should get a list of valid clinical objects', function(){
             expect(validator.validateGetClinicalObjectList(errorMessages, clinicalObjectCleanPass.uid)).to.be.undefined();
         });
-        xit('should reject missing required uid for clinical objects', function(){
+        it.skip('should reject missing required uid for clinical objects', function(){
             validator.validateGetClinicalObjectList(errorMessages, clinicalObjectMissingUID.uid);
             expect(errorMessages.pop()).to.be('uid not found');
         });
@@ -369,10 +306,10 @@ describe('Clinical object validation tests', function() {
         beforeEach(function() {
             errorMessages = [];
         });
-        xit('should get a list of valid clinical objects', function(){
+        it.skip('should get a list of valid clinical objects', function(){
             expect(validator.validateFind(errorMessages, clinicalObjectCleanPass.uid)).to.be.undefined();
         });
-        xit('should reject missing required fields for clinical objects', function(){
+        it.skip('should reject missing required fields for clinical objects', function(){
             validator.validateFind(errorMessages, clinicalObjectMissingUID.uid);
             expect(errorMessages.pop()).to.be('uid not found');
         });

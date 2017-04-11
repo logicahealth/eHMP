@@ -35,7 +35,8 @@
                                 "type": "string"
                             },
                             "patientId": {
-                                "type": "string"
+                                "type": "string",
+                                "pattern": "^([a-zA-Z0-9]+);([a-zA-Z0-9]+)$|^([0-9]+)V([0-9]+)$"
                             },
                             "patientAssignment": {
                                 "type": "number",
@@ -83,7 +84,8 @@
             "type": "string"
         },
         "patientId": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^([a-zA-Z0-9]+);([a-zA-Z0-9]+)$|^([0-9]+)V([0-9]+)$"
         },
         "message": {
             "type": "object",

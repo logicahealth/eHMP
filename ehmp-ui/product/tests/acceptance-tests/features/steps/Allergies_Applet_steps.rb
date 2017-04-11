@@ -101,9 +101,11 @@ class AllergiesDetails < AccessBrowserV2
   end
 end 
 
-When(/^user sorts by the Standardized Allergen$/) do
-  aa = AllergiesApplet.instance
-  expect(aa.perform_action("Standardized Allergen", "")).to be_true
+When(/^user sorts the Expanded Allergies Applet by the Standardized Allergen$/) do
+  ehmp = PobAllergiesApplet.new
+  ehmp.wait_for_expanded_header_standardized_allergen
+  expect(ehmp).to have_expanded_header_standardized_allergen
+  ehmp.expanded_header_standardized_allergen.click
 end
 
 Then(/^the Allergies Applet is sorted in alphabetic order based on Standardized Allergen$/) do
@@ -115,9 +117,11 @@ Then(/^the Allergies Applet is sorted in alphabetic order based on Standardized 
   expect(is_ascending).to be(true), "Values are not in Alphabetical Order #{print_all_value_from_list_elements(column_values) if is_ascending == false}"
 end
 
-When(/^user sorts by the Allergen Name$/) do
-  aa = AllergiesApplet.instance
-  expect(aa.perform_action("Allergen Name", "")).to be_true
+When(/^user sorts the Expanded Allergies Applet by the Allergen Name$/) do
+  ehmp = PobAllergiesApplet.new
+  ehmp.wait_for_expanded_header_allergen_name
+  expect(ehmp).to have_expanded_header_allergen_name
+  ehmp.expanded_header_allergen_name.click
 end
 
 Then(/^the Allergies Applet is sorted in alphabetic order based on Allergen Name$/) do
@@ -201,20 +205,6 @@ Then(/^the Allergies Applet does not contain buttons$/) do |table|
   end
 end
 
-Then(/^the Allergies expand Applet contains buttons$/) do |table|
-  table.rows.each do | button|
-    cucumber_label = "Control - applet - #{button[0]}"
-    expect(@ag.am_i_visible? cucumber_label).to eq(true), "Could not find button #{button[0]}"
-  end
-end
-
-Then(/^the Allergies expand Applet does not contain buttons$/) do |table|
-  table.rows.each do | button|
-    cucumber_label = "Control - applet - #{button[0]}"
-    expect(@ag.am_i_visible? cucumber_label).to eq(false), "Applet should not have button #{button[0]}"
-  end
-end
-
 Then(/^user notes number of reported allergies$/) do
   @num_allergy_pills = AllergiesGist.instance.pills.length
 end
@@ -230,3 +220,20 @@ When(/^the user views the first Allergies detail view$/) do
   expect(aa.perform_action('Detail View Button')).to eq(true), "Could not select toolbar detail icon"
 end
 
+Then(/^the Allergies expand Applet contains buttons Refresh, Help and Minimize$/) do
+  ehmp = PobAllergiesApplet.new
+  ehmp.wait_for_btn_applet_refresh
+  ehmp.wait_for_btn_applet_help
+  ehmp.wait_for_btn_applet_minimize
+
+  expect(ehmp).to have_btn_applet_refresh
+  expect(ehmp).to have_btn_applet_help
+  expect(ehmp).to have_btn_applet_minimize
+end
+
+Then(/^the Allergies expand Applet does not contain buttons Filter Toggle or Expand$/) do
+  ehmp = PobAllergiesApplet.new
+  ehmp.wait_for_btn_applet_filter_toggle
+  expect(ehmp).to_not have_btn_applet_filter_toggle
+  expect(ehmp).to_not have_btn_applet_expand_view
+end

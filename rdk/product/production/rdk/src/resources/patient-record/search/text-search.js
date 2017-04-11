@@ -140,7 +140,7 @@ function executeAndTransformSolrQuerys(specializedSolrQueryStrings, res, req, re
             if (nullchecker.isNullish(hmpEmulatedResponseObject.data.items) || !hmpEmulatedResponseObject.data.items.length) {
                 res.rdkSend(hmpEmulatedResponseObject);
             } else {
-                var matches = _.where(hmpEmulatedResponseObject.data.items, {type: "document"});
+                var matches = _.where(hmpEmulatedResponseObject.data.items, {type: 'document'});
                 if (!nullchecker.isNullish(matches) && matches.length > 0) {
                     asuUtils.applyAsuRules(req, hmpEmulatedResponseObject, function (error, response) {
                         if (error) {
@@ -169,7 +169,7 @@ function groupByTitle(response, logger) {
     //iterate and get a list with localTitle
     var docList = [], itemArray = [];
     _.each(response, function(item) {
-        if(_.has(item, "localTitle")) {
+        if(_.has(item, 'localTitle')) {
             docList = docList.concat(item);
         } else {
             itemArray = itemArray.concat(item);
@@ -177,7 +177,7 @@ function groupByTitle(response, logger) {
     });
 
 
-    var itemMap = _.groupBy(docList, "localTitle");
+    var itemMap = _.groupBy(docList, 'localTitle');
     _.each(itemMap, function(val, key) {
         val[0].count = val.length;
         itemArray = itemArray.concat(val[0]);

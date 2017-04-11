@@ -1,4 +1,4 @@
-@f723_pob_lab_order_write_back @regression @future @DE4560
+@f723_pob_lab_order_write_back  @future @DE4560
 
 Feature: F723 : Outpatient Labs Write Back Orders to VistA with File Locking and Order Checks
 
@@ -30,7 +30,7 @@ Scenario: Validate Add Lab Order form.
   And POB add order detail modal has buttons Delete, Draft and Cancel
   And POB add order detail modal has button "Accept & Add Another"
 
-@f723_pob_lab_order_create_new @F844 @F1044 @US15136 @F844
+@f723_pob_lab_order_create_new @F844 @F1044 @US15136 @F844 @debug @DE7024
 Scenario: Create a Lab Order and accept it.
 
   When user searches for and selects "twenty,patient"
@@ -46,10 +46,10 @@ Scenario: Create a Lab Order and accept it.
   And POB user opens note objects button
   Then POB new order "24 hr urine protein" is added to the note objects
 
-@f723_pob_lab_order_sign @F844 @DE5618
+@f723_pob_lab_order_sign @F844 @DE5618 @DE7012 @debug @DE7080
 Scenario: Create a Lab Order and Sign it.
 
-  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "PW    " verifycode as  "PW    !!"
+  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "vk1234" verifycode as  "vk1234!!"
   Then staff view screen is displayed
   When user searches for and selects "twenty,patient"
   Then Overview is active
@@ -57,13 +57,13 @@ Scenario: Create a Lab Order and Sign it.
   And POB user navigates to orders expanded view
   And user verifies that the first row contains the order "24 hr urine protein" with status "UNRELEASED"
   And POB user opens the detail view of the order "24 hr urine protein"
-  Then POB user signs the order as "PW    !!"
+  Then POB user signs the order as "vk1234!!"
   And POB user verifies order status changes to "PENDING"
     
-@f723_pob_lab_order_discontinue @F844 @DE5618
+@f723_pob_lab_order_discontinue @F844 @DE5618 @DE7012 @debug @DE7080
 Scenario: Create a Lab order and discontinue it.
 
-  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "PW    " verifycode as  "PW    !!"
+  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "vk1234" verifycode as  "vk1234!!"
   Then staff view screen is displayed
   When user searches for and selects "twenty,patient"
   Then Overview is active
@@ -74,10 +74,10 @@ Scenario: Create a Lab order and discontinue it.
   And POB user discontinues the order
   And user verifies that the first row contains the order "24 hr urine protein" with status "UNRELEASED"
   And POB user opens the detail view of the order "24 hr urine protein"
-  Then POB user signs the order as "PW    !!"
+  Then POB user signs the order as "vk1234!!"
   Then POB user verifies order status changes to "DISCONTINUED"
   
-@f723_pob_lab_order_cancel @F844 @DE5618
+@f723_pob_lab_order_cancel @F844 @DE5618 @debug @DE7012
 Scenario: Create a Lab Order and cancel it.
 
   When user searches for and selects "twenty,patient"

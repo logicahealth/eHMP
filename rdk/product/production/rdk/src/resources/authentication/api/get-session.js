@@ -1,12 +1,9 @@
 'use strict';
 
 var _ = require('lodash');
-var _s = require('underscore.string');
 var async = require('async');
-var moment = require('moment');
 var rdk = require('../../../core/rdk');
 var RpcClient = require('vista-js').RpcClient;
-var httpUtil = rdk.utils.http;
 var RdkTimer = rdk.utils.RdkTimer;
 var RdkError = rdk.utils.RdkError;
 var userUtil = require('../../user/user-whitelist');
@@ -257,7 +254,6 @@ var authenticationCallback = function(err, result, params) {
     var rpcClient = _.get(params, 'rpcClient');
     var timer = _.get(params, 'timer');
     var req = _.get(params, 'req');
-    var logger = req.logger;
     var res = _.get(params, 'res');
     var accessCode = _.get(params, 'userCredentials.accessCode');
     var verifyCode = _.get(params, 'userCredentials.verifyCode');

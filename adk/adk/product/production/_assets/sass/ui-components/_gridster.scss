@@ -1,0 +1,271 @@
+/*--- gridster ---*/
+.ready .gridster {
+    .gs-w:not(.preview-holder), .resize-preview-holder {
+        -webkit-transition: opacity .3s,left .3s,top .3s,width .3s,height 0s;
+    }
+}
+.gridster {
+    [data-appletid] {
+        height: 100%;
+    }
+    .panel-primary {
+        height: inherit;
+    }
+    .grid-applet-panel {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        .grid-container {
+            flex-grow: 1;
+            flex-shrink: 1;
+            position: relative;
+            min-height: 200px;
+            min-height: calc(2vh - 2vh);
+            & > div {
+                position: absolute;
+                height: 100%;
+                width: 100%;
+            }
+        }
+    }
+    span.center-block.text-center.panel-title {
+        cursor: move;
+        .panel-title-textbox {
+            text-align: center;
+            height: 23px;
+            padding-top: 0;
+            padding-bottom: 0;
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+    }
+    .text-align-center {
+        text-align: center;
+    }
+}
+.editable-title {
+    /*-- applet regular display i.e. not in settings mode --*/
+    .panel-heading {
+        .panel-title-label {
+            padding: 2px 4px 2px 4px;
+            cursor: pointer;
+        }
+        .panel-title-label:hover {
+            border: 1px solid #B9D0D5;
+            padding: 1px 3px 1px 3px;
+        }
+    }
+}
+.panel-primary {
+    height: 100%;
+    overflow: hidden;
+}
+.cover-sheet-gridster #content-region .panel-body {
+    height: 100%;
+    overflow-y: scroll;
+}
+.cover-sheet-gridster #center-region {
+    overflow-x: scroll !important;
+    overflow-y: hidden;
+    width: auto;
+}
+.cover-sheet-gridster .gridster {
+    width: 3000px !important;
+}
+.gridster [data-appletid] {
+    height: 100%;
+}
+.gridster .app-size,
+.app-size-2 {
+    height: 100%
+}
+.gridster span.center-block.text-center.panel-title {
+    cursor: move;
+}
+.freeze-applets span.center-block.text-center.panel-title {
+    cursor: default !important;
+}
+.freeze-applets .grid-footer span {
+    cursor: default !important;
+}
+.freeze-applets .gs-resize-handle {
+    display: none !important;
+}
+.gridster .gridContainer {
+    height: 100%;
+}
+.gridster .gridContainer > div:first-child {
+    height: 100%;
+}
+.gridster .panel-primary {
+    height: 110%;
+}
+.switchboard-container {
+    height: 100%;
+    background-color: white;
+}
+/*--- gridster ---*/
+.gridster {
+    [data-appletid] {
+        height: 100%;
+    }
+    .panel-primary {
+        height: 100%;
+    }
+    span.center-block.text-center.panel-title {
+        cursor: move;
+    }
+}
+
+
+
+
+/*--- Data Grid Styling ---*/
+.data-grid {
+    height: 63vh;
+    table tr, .table-hover tr {
+        &:nth-child(2n) {
+            background: none;
+        }
+        &:hover, &:focus {
+            background: $primary-lightest;
+        }
+        &.group-by-header, &.group-by-header:hover {
+            background: $primary-lightest;
+        }
+    }
+    //toolbar shift
+    tbody {
+        td.toolbar-cell {
+            overflow: visible;
+        }
+        > tr:first-child {
+            padding-top: 0;
+            &.toolbar-active > td {
+                padding-top: 27px !important;
+            }
+        }
+    }
+}
+
+.gridster .data-grid {
+    height: 100%;
+}
+.table-responsive {
+    .data-grid {
+        height: auto;
+    }
+}
+
+
+.panel-body {
+    [id^="grid-filter-"] {
+        background-color: $pure-white;
+    }
+    .grid-filter {
+        padding: 6px;
+        margin-bottom: 0px;
+        overflow-x: auto;
+        background-color: $primary-lightest;
+        .backgrid-filter {
+            .filter-add {
+                height: 22px;
+                padding-top: 3px;
+            }
+            .fa.fa-filter {
+                left: 6px;
+                position: absolute;
+                top: 6px;
+                z-index: 1;
+            }
+            .block-display {
+                .filter-container {
+                    position: relative;
+                    .fa.fa-pencil {
+                        left: 16px;
+                        position: absolute;
+                        top: 6px;
+                    }
+                    .filter-title-input {
+                        padding: 0 10px 0 17px;
+                        height: 27px;
+                    }
+                }
+            }
+            .input-group {
+                // .form-control is being overwritten by backgrid styles (so we need to add styles over it)
+                &.not-udws,
+                &.input-group-sm {
+                    max-width: 284px;
+                }
+                .form-control {
+                    width: calc(100% - 41px);
+                    height: 25px;
+                    padding: 0 48px 0 20px;
+                    border-radius: 4px;
+                    &:focus {
+                        -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
+                        border-color: #66afe9;
+                        box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
+                        outline: 0;
+                    }
+                }
+            }
+            .filter-container {
+                .udaf {
+                    overflow-y: auto;
+                    max-height: 70px;
+                }
+                .btn-label {
+                    line-height: 1;
+                    padding: 3px 6px;
+                    text-transform: capitalize;
+                }
+                .remove-all {
+                    background-color: white;
+                    box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.15), 0px 1px 2px 0px rgba(0, 0, 0, 0.25);
+                    color: $red;
+                    font-size: 11px !important; //Added by TT until we clean up this whole file//
+                    &:hover {
+                        background-color: $red-lightest;
+                        color: $red-dark;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.grid-applet-panel {
+    padding: 0;
+    background-color: white;
+}
+
+.grid-applet-container-1 {
+    height: 5px;
+    position: relative;
+    top: -5px;
+    background: none;
+    z-index: 9999;
+}
+.grid-applet-container-2 {                                     
+    position: absolute;
+    height: 5px;
+    width: 100%;
+    top: 17px;     
+    background: none;
+    z-index: 9999;
+}
+.grid-footer {
+    padding: 0px;
+}
+
+.grid-container {
+    h5 {
+        padding: 5px 10px;
+    }
+}
+.grid-applet-panel .header-bar {
+    background: $pure-white;
+    color: $primary;
+}

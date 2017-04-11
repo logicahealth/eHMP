@@ -171,6 +171,19 @@ Given(/^a patient with pid "(.*?)" has been synced through the RDK API$/) do |pi
   end
 end
 
+Given(/^solrSyncStatus is true$/) do
+  is_solr_sync_complete = false
+
+  status = JSON.parse(@response.body)
+  status = status["data"]
+
+  meta_stamps = status["syncStatus"]["completedStamp"]["sourceMetaStamp"]
+  meta_stamp_statuses = meta_stamps.map { |site| puts site[1].key?("solrSyncCompleted") && site[1]["solrSyncCompleted"] }
+
+  is_solr_sync_complete = meta_stamp_statuses.reduce { |a, e| a && e }
+  expect(is_solr_sync_complete).to be_true
+end
+
 Given(/^a visit patient with pid "(.*?)" has been synced through the RDK API$/) do |pid|
   # statuspath = QueryRDKSync.new("status", pid).path
   temp = RDKQuery.new('synchronization-status')

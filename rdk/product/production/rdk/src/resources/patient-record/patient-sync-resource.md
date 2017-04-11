@@ -101,10 +101,12 @@ Synchronize a patient's data by demographics
                         }
                     },
                     "edipi": {
-                        "type": "string"
+                        "type": "string",
+                        "pattern": "^\\d+$"
                     },
                     "icn": {
-                        "type": "string"
+                        "type": "string",
+                        "pattern": "^([0-9]+)V([0-9]+)$"
                     }
                 }
             }

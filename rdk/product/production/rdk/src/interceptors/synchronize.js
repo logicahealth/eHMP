@@ -1,6 +1,5 @@
 'use strict';
 
-var format = require('util').format;
 var _ = require('lodash');
 var moment = require('moment');
 
@@ -54,7 +53,7 @@ function intercept(req, res, next) {
 
     // Note: Strictly speaking, this is not a 'pid' the way VxSync defines that term.
     // It is just a general 'patient-identifier'.
-    var pid = req.param('pid');
+    var pid = req.params.pid || req.query.pid || req.body.pid;
 
     if (!pid) {
         logger.debug('synchronize.intercept() no "pid" query parameter, skip sync');

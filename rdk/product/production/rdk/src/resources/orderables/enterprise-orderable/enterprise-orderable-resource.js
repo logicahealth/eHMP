@@ -51,7 +51,7 @@ function callSearch(req, res) {
     req.app.subsystems.enterpriseOrderable.search(req, res);
 }
 
-function callDelete(req, res) {
+function callDelete(req, res) { //jshint ignore:line
     req.app.subsystems.enterpriseOrderable.delete(req, res);
 }
 

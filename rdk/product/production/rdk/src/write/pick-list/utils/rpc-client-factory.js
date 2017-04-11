@@ -2,6 +2,7 @@
 
 var RpcClient = require('vista-js').RpcClient;
 var cache = require('memory-cache');
+var _ = require('lodash');
 
 var CACHE_TIME_OUT_FIVE_MIN = 300000;
 /**
@@ -22,6 +23,10 @@ var CACHE_TIME_OUT_FIVE_MIN = 300000;
  */
 module.exports.getClient = function(logger, config) {
     var cacheKey = config.host + ' ' + config.context;
+    if (_.isString(config.division)) {
+        // if division is specified in the configuration we cache at the division level
+        cacheKey += ' ' + config.division;
+    }
 
     var cachedResponse = cache.get(cacheKey);
     if (cachedResponse) {

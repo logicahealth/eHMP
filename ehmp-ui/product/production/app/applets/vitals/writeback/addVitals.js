@@ -385,7 +385,7 @@ define([
             disabled: true,
             units: "(liters/minute)",
             title: "Enter in a numeric value",
-            extraClasses: ["col-xs-12"],
+            extraClasses: ["col-xs-12"]
         }, {
             control: "select",
             label: "Method",
@@ -985,11 +985,13 @@ define([
                 var self = this;
                 e.preventDefault();
 
-                if (!this.model.isValid())
+                if (!this.model.isValid()){
                     this.model.set("formStatus", {
                         status: "error",
                         message: self.model.validationError
                     });
+                    this.transferFocusToFirstError();
+                }
                 else {
                     this.model.unset("formStatus");
                     this.$(this.ui.submitButton.selector).trigger('control:disabled', true);

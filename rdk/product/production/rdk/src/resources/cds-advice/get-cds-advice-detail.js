@@ -3,7 +3,7 @@
 var rdk = require('../../core/rdk');
 var _ = require('lodash');
 var RpcClient = require('vista-js').RpcClient;
-var getVistaRpcConfiguration = require('../../utils/rpc-config').getVistaRpcConfiguration;
+var vistaRpcConfiguration = require('../../utils/rpc-config');
 var nullchecker = rdk.utils.nullchecker;
 var adviceCache = require('./advice-cache');
 var auditUtil = require('../../utils/audit');
@@ -39,7 +39,7 @@ function createResponse(details) {
 }
 
 /**
- * Retrieve the advice/reminder detail. Uses the site id that is stored in the user session.
+ * Retrieve the advice/reminder detail. Uses the site id that is stored in the request patient identifier interceptor object.
  *
  * @api {get} /resource/cds/advice/detail?pid=123VQWE&use=test&id=4567 Request CDS Advice Detail
  *
@@ -99,17 +99,18 @@ module.exports = {
             return res.rdkSend(createResponse(cached.details));
         }
 
-        if (_.isUndefined(_.get(req, 'interceptorResults.patientIdentifiers.dfn'))) {
-            req.logger.error('CDS Advice - Error retrieving clinical reminder details, DFN is nullish.');
+        var patientIdentifiers = _.get(req, 'interceptorResults.patientIdentifiers', {});
+        if (_.isUndefined(patientIdentifiers.dfn) || _.isUndefined(patientIdentifiers.site)) {
+            req.logger.debug('CDS Advice - getCDSAdviceDetail - interceptor results patient identifiers missing');
             return res.status(rdk.httpstatus.not_found).rdkSend(errorDetailNotFound);
         }
-
-        var dfn = req.interceptorResults.patientIdentifiers.dfn;
         req.logger.info('retrieve cds advice detail');
-        req.logger.debug('dfn: ' + dfn);
+        req.logger.debug('dfn: ' + patientIdentifiers.dfn);
+
+        var vistaRpcConfigParams = vistaRpcConfiguration.getPatientCentricVistaRpcConfigurationParams(req.session.user, patientIdentifiers.site);
 
         // Make the RPC call and cache the result
-        RpcClient.callRpc(req.logger, getVistaRpcConfiguration(req.app.config, req.session.user), 'ORQQPX REMINDER DETAIL', [dfn, adviceId], function(error, result) {
+        RpcClient.callRpc(req.logger, vistaRpcConfiguration.getVistaRpcConfiguration(req.app.config, vistaRpcConfigParams), 'ORQQPX REMINDER DETAIL', [patientIdentifiers.dfn, adviceId], function(error, result) {
             if (error) {
                 req.logger.error(errorVistaJSCallback + error);
                 return res.status(rdk.httpstatus.not_found).rdkSend(errorDetailNotFound);

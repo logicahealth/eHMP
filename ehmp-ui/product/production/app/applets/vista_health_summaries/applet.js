@@ -25,8 +25,7 @@ define([
     channel.on('detailView', function(params) {
         var modal = new ADK.UI.Modal({
             view: new ModalView({
-                model: params.model,
-                navHeader: false
+                model: params.model
             }),
             options: {
                 size: "large",

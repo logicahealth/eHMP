@@ -7,18 +7,12 @@ $LOAD_PATH.unshift path unless $LOAD_PATH.include?(path)
 
 require 'AccessBrowserV2.rb'
 
-# Then(/^the main page displays$/) do
-#   con= PatientDetailsHTMLElements.instance
-#   TestSupport.wait_for_page_loaded
-#   con.add_verify(CucumberLabel.new("Panel Title"), VerifyContainsText.new, AccessHtmlElement.new(:class, "navbar"))
-#   #sleep 10
-#   expect(con.static_dom_element_exists?("Panel Title")).to eq(true)
-#   TestSupport.successfully_loggedin=true
-# end
-
 Then(/^the patient search screen is displayed$/) do
+  expect(true).to eq(false), 'PATIENT SEARCH SCREEN REMOVED, DO NOT USE THIS STEP'
   elements = PatientSearch.instance
   patient_search = PatientSearch2.instance
+
+  refresh_zombie_tooltips(elements)
 
   need_refresh_de2106(elements)
   
@@ -32,7 +26,20 @@ Then(/^the patient search screen is displayed$/) do
 end
 
 Then(/^staff view screen is displayed$/) do
-  wait_for_staff_view_loaded
+  @ehmp = PobPatientSearch.new
+  max_attempt = 2
+  begin
+    @ehmp.wait_for_fld_nav_bar(30)
+    expect(@ehmp).to have_fld_nav_bar
+
+    DefaultLogin.logged_in = true
+  rescue => e
+    p "Still in login step: #{e}"
+    max_attempt -= 1
+    retry if max_attempt > 0
+    raise e if max_attempt <= 0
+  end
+  wait_for_staff_view_loaded_ignore_errors
 
   DefaultLogin.logged_in = true
 end

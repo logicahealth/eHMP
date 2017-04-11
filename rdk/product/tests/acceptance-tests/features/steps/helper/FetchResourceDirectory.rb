@@ -1,14 +1,14 @@
 class FetchResourceDirectory
-  @@urls = {}
   def initialize(json, base_url)
+    @urls = {}
     links = json['data']['link']
     links.each do |paths|
-      @@urls[paths['title']] = base_url + paths['href']
+      @urls[paths['title']] = base_url + paths['href']
     end # links
   end #initialize
 
   def get_url(title)
-    return @@urls[title]
+    return @urls[title]
   end #get_url
 end # FetchResourceDirectory
 

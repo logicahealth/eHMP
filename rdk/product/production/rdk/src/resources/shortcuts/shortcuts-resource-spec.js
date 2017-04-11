@@ -9,10 +9,10 @@ describe('Shortcuts Resource', function() {
         var res = {};
         res.status = function(status) {
             return this;
-        }
+        };
         res.rdkSend = function(body) {
             expect(body).not.to.be.undefined();
-        }
-        var shortcutsList = shortcuts.getShortcuts(req, res);
+        };
+        shortcuts.getShortcuts(req, res);
     });
 });

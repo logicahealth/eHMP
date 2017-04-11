@@ -147,7 +147,6 @@ define([
             var siteCode = this.user.get('site');
             this.set({
                 pid: this.patient.get('pid'),
-                dfn: this.patient.get('localId'),
                 location: location,
                 siteCode: siteCode,
                 provider: _.get(this.user.get('duz'), siteCode || '')
@@ -210,7 +209,7 @@ define([
             }
 
             // Compile the data object that will be passed into the body of the sign request
-            var data = this.pick(['dfn', 'kind', 'location', 'provider']);
+            var data = this.pick(['pid', 'kind', 'location', 'provider']);
             data.orderList = getOrderList.apply(this);
 
             var orderCheckList = getOrderCheckList.apply(this);

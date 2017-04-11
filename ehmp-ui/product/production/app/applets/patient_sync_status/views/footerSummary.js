@@ -26,7 +26,15 @@ define([
             }
         },
         behaviors: {
-            Tooltip: {}
+            Tooltip: {},
+            HelpLink: {
+                container: '.help-button-container',
+                mapping: 'status_bar',
+                buttonOptions: {
+                    icon: 'fa-question-circle',
+                    paddingClass: 'all-padding-no'
+                }
+            }
         },
         ui: {
             'refreshButton': '#refresh-patient-data',
@@ -122,6 +130,21 @@ define([
         },
         onDestroy: function() {
             this.stopAutoPolling();
+
+            var dataStatusCollectionXhr = _.get(this.dataStatusCollection, 'xhr');
+            if (dataStatusCollectionXhr) {
+                dataStatusCollectionXhr.abort();
+            }
+
+            var syncLoadCollectionXhr = _.get(this.syncLoadCollection, 'xhr');
+            if (syncLoadCollectionXhr) {
+                syncLoadCollectionXhr.abort();
+            }
+
+            var syncDetailCollectionXhr = _.get(this.syncDetailCollection, 'xhr');
+            if (syncDetailCollectionXhr) {
+                syncDetailCollectionXhr.abort();
+            }
         },
         startAutoPolling: function() {
             this.resetTimeInterval();
@@ -174,7 +197,6 @@ define([
             modal.show();
         },
         syncAllData: function(refresh) {
-            // console.log('syncAllData is called!');
             ADK.Messaging.trigger('refresh:allData', {});
 
             var self = this;
@@ -193,7 +215,7 @@ define([
                     return;
                 }
             };
-            ADK.PatientRecordService.fetchCollection(fetchOptions);
+            this.syncLoadCollection = ADK.PatientRecordService.fetchCollection(fetchOptions);
         },
         updatePatientSyncStatus: function(refresh) {
             var patient = ADK.PatientRecordService.getCurrentPatient();
@@ -361,20 +383,31 @@ define([
                     }
                 }
 
-                if (statusObject.allSites != self.syncCompleted) {
-                    var newInterval = statusObject.allSites ? self.syncCompInterval : self.initInterval;
+                var areAllVistasSolrSynced = _.every(statusObject.VISTA, 'isSolrSyncCompleted');
+                if (statusObject.allSites !== self.syncCompleted || areAllVistasSolrSynced !== self.areAllVistasSolrSynced) {
+                    var newInterval = (statusObject.allSites && areAllVistasSolrSynced) ? self.syncCompInterval : self.initInterval;
                     if (!_.isEqual(newInterval, self.timeInterval)) {
                         self.resetTimeInterval(newInterval);
                     }
                 }
                 self.syncCompleted = statusObject.allSites;
+                self.areAllVistasSolrSynced = areAllVistasSolrSynced;
                 if (statusObject.allSites) {
                     self.fetchSyncStatusDetail(refresh, stats);
                 } else {
                     self.updateSyncStats(stats);
                 }
+
+                self.setSolrSyncCompletedFlag(areAllVistasSolrSynced);
             };
-            ADK.PatientRecordService.fetchCollection(fetchOptions);
+            this.dataStatusCollection = ADK.PatientRecordService.fetchCollection(fetchOptions);
+        },
+        setSolrSyncCompletedFlag: function(areAllVistasSolrSynced) {
+            if (areAllVistasSolrSynced) {
+                ADK.PatientRecordService.getCurrentPatient().set('solrSyncCompleted', true);
+            } else {
+                ADK.PatientRecordService.getCurrentPatient().set('solrSyncCompleted', false);
+            }
         },
         /**
             This function will set the correct last update timestamp for all secondary sites.
@@ -402,7 +435,6 @@ define([
             }, 500);
         },
         fetchSyncStatusDetail: function(refresh, stats) {
-            // console.log('fetchSyncStatusDetail called');
             var fetchOptions = {
                 resourceTitle: 'synchronization-status',
                 cache: false
@@ -429,7 +461,6 @@ define([
                 self.model.set('syncStatus', stats);
             };
             fetchOptions.onSuccess = function(collection, resp) {
-                // console.log('fetchSyncStatusDetail: Success!');
                 var newSyncStatus = resp.data.syncStatus;
                 if (_.isUndefined(self.syncStatusDetail)) {
                     self.syncStatusDetail = newSyncStatus;
@@ -442,7 +473,7 @@ define([
                     self.resetTimeInterval(self.syncCompInterval);
                 }
             };
-            ADK.PatientRecordService.fetchCollection(fetchOptions);
+            this.syncDetailCollection = ADK.PatientRecordService.fetchCollection(fetchOptions);
         },
         generateSyncDetailDiff: function(newSyncStatus) {
             // assumption, all status is sync completed
@@ -478,11 +509,9 @@ define([
             self.updateDiffDetails();
         },
         compareIndividualDomain: function(oldDomainData, newDomainData, site, domain) {
-            // console.log('Old domain data: ', oldDomainData, 'new Domain Data:', newDomainData);
             var self = this;
             if ((newDomainData.stampTime !== oldDomainData.stampTime) ||
                 (newDomainData.storedCount !== oldDomainData.storedCount)) {
-                // console.log('key ' + key + " changed");
                 self.diffDetail[site] = self.diffDetail[site] || {};
                 self.diffDetail[site].domain = self.diffDetail[site].domain || {};
                 if (_.isUndefined(self.diffDetail[site].domain[domain])) {
@@ -494,7 +523,6 @@ define([
             }
         },
         updateDiffDetails: function() { // update the diffDetail information.
-            // console.log(this.diffDetail);
             if (this.diffDetail) {
                 var self = this;
                 _.each(self.diffDetail, function(siteVal, site) {
@@ -516,11 +544,9 @@ define([
             if (stats[0].title !== 'My Site' && stats[0].title !== 'All VA') { //return if no VistA sites
                 return;
             }
-            // console.log(stats);
+
             var vistASitesDiff = _.omit(this.diffDetail, ['DOD', 'VLER', 'HDR']);
-            // console.log(vistASitesDiff);
             var currentSiteCode = ADK.UserService.getUserSession().get('site');
-            // console.log('Current Site is:', currentSiteCode);
             var allVATimeSince = _.min(_.map(vistASitesDiff, function(val, key) {
                 return val.newDataSince;
             }));
@@ -530,7 +556,6 @@ define([
             } else {
                 stats[1].newDataSince = ADK.utils.getTimeSince(allVATimeSince).timeSince;
             }
-            // console.log(stats);
         }
     });
 

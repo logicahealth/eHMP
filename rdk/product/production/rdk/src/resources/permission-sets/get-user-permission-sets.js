@@ -23,7 +23,12 @@ function getUserPermissionSets(req, res, next) {
         } else {
             var data = response.data;
             var resultObj = {};
-            resultObj.data = data.permissionSet;
+            var permissionSetValues = _.defaults(data.permissionSet, {
+                modifiedBy: null,
+                modifiedOn: null,
+                val: []
+            });
+            resultObj.data = permissionSetValues;
             resultObj.statusCode = _.get(response, 'statusCode');
             res.status(rdk.httpstatus.ok).rdkSend(resultObj);
         }

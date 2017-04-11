@@ -4,7 +4,6 @@ var _ = require('lodash');
 var async = require('async');
 var rdk = require('../../core/rdk');
 var httpUtil = rdk.utils.http;
-var moment = require('moment');
 
 module.exports.maskPtSelectSsn = maskPtSelectSsn;
 module.exports.maskSsn = maskSsn;
@@ -67,7 +66,7 @@ function maskSsn(ssn) {
     var last4 = /(.*)(.{4})/;
     var validSsn = ssn.match(last4);
     if (!validSsn) {
-        return;
+        return '';
     }
     var maskedSsn = validSsn[1].replace(/[^-]/g, '*') + validSsn[2];
     return maskedSsn;

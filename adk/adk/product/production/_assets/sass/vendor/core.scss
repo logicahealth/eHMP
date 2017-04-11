@@ -1,0 +1,21 @@
+// CSS FILES NOW BEING LOADED INTO <root>/vendor-files.js
+//
+//  fonts
+//  --------------------------------------------------
+$icon-font-path: '../../../bower_components/bootstrap-sass/vendor/assets/fonts/bootstrap';
+//
+//  bootstrap
+//  --------------------------------------------------
+@import '../../libs/custom/bootstrap/bootstrap-timepicker/timepicker.scss';
+//
+//  type-ahead-select
+//  --------------------------------------------------
+@import "type-ahead-select/core";
+//
+//  type-ahead-select
+//  --------------------------------------------------
+@import "animate";
+//
+//  type-ahead-select
+//  --------------------------------------------------
+@import "calendar";

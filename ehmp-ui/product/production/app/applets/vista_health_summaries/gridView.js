@@ -7,23 +7,6 @@ define([
 ], function(Backbone, Marionette, _, Handlebars, AppletUiHelper) {
     "use strict";
 
-    // custom sorting
-    function customReportNameSort(model, sortKey) {
-        var reportName = model.get('hsReport');
-
-        if (!reportName) {
-            return -4;
-        }
-
-        if (reportName.toLowerCase().indexOf('remote') === 0) {
-            return  -1;
-        } else {
-            return -2;
-        }
-
-        return 0;
-    }
-
     var ascSortComparator = function(left, right) {
         if(left == right) return 0;
         else if(left < right) return -1;
@@ -117,20 +100,6 @@ define([
 
 	var summaryColumns = [facilityCol, hsReportCol];
 
-	// site/report list fetch options
-	var fetchOptions = {
-        resourceTitle: 'healthsummaries-getSitesInfoFromPatientData',
-        pageable: false,
-        cache: true,
-        viewModel: {
-            parse: function(response) {
-                response.uid = response.facilityMoniker + "-" + response.reportID;
-                return response;
-            }
-        }
-	};
-
-    // define grid view applet
     var GridView = ADK.AppletViews.GridView.extend({
         initialize: function(options) {
 
@@ -138,15 +107,14 @@ define([
             var appletOptions = {
                 columns : summaryColumns,
                 groupable : true,
-                //DetailsView: DetailsView,
-                onClickRow: function(model, event, gridView) {
+                onClickRow: function(model, event) {
                     event.preventDefault();
-                    AppletUiHelper.getDetailView(model, event.currentTarget, appletOptions.collection, true, AppletUiHelper.showModal);
+                    AppletUiHelper.getDetailView(model, appletOptions.collection);
                 }
             };
 
-            this.gridCollection = ADK.PatientRecordService.fetchCollection(fetchOptions);
-            appletOptions.collection = this.gridCollection;
+            this.gridCollection = new ADK.UIResources.Fetch.VistaHealthSummaries.Reports();
+            appletOptions.collection = this.gridCollection.fetchCollection();
 
             this.appletOptions = appletOptions;
             this._super.initialize.apply(this, arguments);

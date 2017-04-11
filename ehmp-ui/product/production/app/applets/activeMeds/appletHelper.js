@@ -221,9 +221,9 @@ define([
 		},
 
 		getStandardizedVaStatus: function(medDomainData) {
-			var standardizedStatus;
-			if (medDomainData.vaStatus) {
-				standardizedStatus = medDomainData.vaStatus.toUpperCase();
+			var standardizedStatus = medDomainData.calculatedStatus || medDomainData.vaStatus;
+			if (standardizedStatus) {
+				standardizedStatus = standardizedStatus.toUpperCase();
 				if (standardizedStatus == "DISCONTINUED/EDIT") {
 					standardizedStatus = "DISCONTINUED";
 				}
@@ -540,8 +540,13 @@ define([
 				result.hasLabel = true;
 			}
 			if (fillableTimeDays <= 0) {
-				result.description = "This medication is active but expiration date has passed.";
-				result.display = medDomainData.fillableStatus = "Not Refillable";
+				if (fillsRemaining === 1) {
+					result.description = "This medication is active and expiration date has not passed, but supply should be exhausted and the last refill has not been picked up.";
+					result.display = medDomainData.fillableStatus = "Refillable";
+				} else {
+					result.description = "This medication is active but expiration date has passed.";
+					result.display = medDomainData.fillableStatus = "Not Refillable";
+				}
 			} else {
 				result.description = "This medication is Active and fillable for " + fillableTimeString + ". ";
 				result.date = fillableTimeString;

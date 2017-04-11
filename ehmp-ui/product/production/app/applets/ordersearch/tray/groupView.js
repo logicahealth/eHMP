@@ -158,7 +158,7 @@ define([
     });
 
     var BodyGroupContainerCollectionView = Backbone.Marionette.CollectionView.extend({
-        className: 'accordion-container panel-group small',
+        className: 'accordion-container panel-group',
         options: defaultOptions,
         emptyView: EmptyGroupsView,
         emptyViewOptions: function() {

@@ -1,0 +1,76 @@
+ext.set('repo', uploadRepo)
+ext.set('groupId', 'us.vistacore.ehmp')
+ext.set('artifactId', 'vxsync')
+
+// add dummy test task so java plugin doesn't have to be applied
+task test {}
+
+task pruneNpm(type: Exec) {
+  group "VX-Sync Tasks"
+  description "prune package(s)"
+  commandLine  "npm", "prune"
+}
+
+clean.dependsOn pruneNpm
+
+task installNpm(type: Exec, dependsOn: pruneNpm) {
+  group "VX-Sync Tasks"
+  description "installs package(s)"
+  commandLine "npm", "install", "--registry", "https://store.vistacore.us/nexus/content/repositories/npm-all/"
+}
+
+task buildJava(type: Exec, dependsOn: installNpm) {
+  group "VX-Sync Tasks"
+  description "installs package(s)"
+  workingDir "${projectDir}/node_modules/xslt4node/node_modules/java"
+  commandLine "npm", "run", "install"
+}
+
+task unitTest(type: Exec, dependsOn: installNpm) {
+  group "VX-Sync Tasks"
+  description "installs package(s) and runs unit tests"
+  commandLine "npm", "test"
+}
+test.dependsOn unitTest
+
+task vxsyncIntTests{
+  group "VX-Sync Tasks"
+  description "installs package(s) and runs integration tests"
+  doLast{
+    exec {
+      executable = "rake"
+      args = ['inttest']
+    }
+  }
+}
+
+task vxsyncAllTests(dependsOn: [unitTest, vxsyncIntTests]) {
+  group "VX-Sync Tasks"
+  description "runs unit and integration tests"
+}
+
+task assemble(dependsOn: [clean, buildJava, installNpm]) {
+  group "VX-Sync Tasks"
+  description "installs package(s)"
+}
+
+build.dependsOn assemble
+
+task zipVXSync(type: Zip, dependsOn: [build]) {
+  extension = 'zip'
+  baseName = 'vxsync'
+  version = getVersionByCommitCountForProject(":production:vx-sync")
+  destinationDir buildDir
+  from projectDir
+  exclude 'build'
+  exclude 'logs'
+  exclude 'tests'
+  exclude 'Gemfile'
+  exclude 'Gemfile.lock'
+}
+
+uploadArchives.dependsOn zipVXSync
+
+artifacts {
+  archives file: zipVXSync.outputs.files.singleFile, name: 'vx-sync', type: 'zip', builtBy: zipVXSync
+}

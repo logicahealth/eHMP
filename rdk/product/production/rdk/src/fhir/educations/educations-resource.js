@@ -161,7 +161,7 @@ function createItem(jdsItem, pid) {
     //    "type"
     fhirItem.resource.type = {};
     fhirItem.resource.type.coding = [{
-        'system': 'http://ehmp.DNS   /terminology/1.0',
+        'system': 'http://ehmp.va.gov/terminology/1.0',
         'code': '/concept/' + conceptCategory + '.' + encodeURI(jdsItem.name),
         'display': jdsItem.name
     }];

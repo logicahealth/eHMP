@@ -1,146 +1,77 @@
 define([
+    'underscore',
     'backbone',
     'handlebars',
     'hbs!app/applets/logon/templates/main',
-    'app/applets/logon/facilityListView'
-], function(Backbone, Handlebars, mainTemplate, FacilityListView) {
+    'app/applets/logon/views/loginFormView',
+    'app/applets/logon/views/logoutView'
+], function(_, Backbone, Handlebars, mainTemplate, LoginFormView, LogoutView) {
     "use strict";
+
+    var LoginFormViewModel = Backbone.Model.extend({
+        defaults: {
+            loadingFacilitiesClass: "",
+            errorMessage: "",
+            disabled: true,
+            screenReaderAuthenticatingClass: 'hidden'
+        },
+        validate: function(attributes) {
+            var errorMessage = '';
+            if (_.isUndefined(attributes.selectedFacilityDivision) ||
+                attributes.selectedFacilityDivision === '' ||
+                _.isUndefined(attributes.selectedFacilitySite) ||
+                attributes.selectedFacilitySite === '') {
+                this.errorModel.set('selectedFacility', "Please select a facility");
+                errorMessage = 'please select a facility from the facility drop down list';
+            }
+            if (_.isUndefined(attributes.accessCode) || attributes.accessCode === '') {
+                this.errorModel.set('accessCode', "Please enter an access code");
+                errorMessage = 'please enter an access code';
+            }
+            if (_.isUndefined(attributes.verifyCode) || attributes.verifyCode === '') {
+                this.errorModel.set('verifyCode', "Please enter an verify code");
+                errorMessage = 'please enter an verify code';
+            }
+            if (!_.isEmpty(errorMessage)) {
+                return errorMessage;
+            }
+        }
+    });
 
     var MainView = Backbone.Marionette.LayoutView.extend({
         template: mainTemplate,
-        templateHelpers: function(){
-            return {
-                helpUrl : function(){
-                    return ADK.utils.helpUtils.getUrl('logon');
-                },
-                softwareVersion: function(){
-                    return ADK.Messaging.request('appManifest').get('overall_version');
-                }
-            };
-        },
         behaviors: {
             Tooltip: {}
         },
         regions: {
-            facilityListRegion: '#authenication-facility-list'
+            loginFormRegion: '#login-form-region'
         },
-        onRender: function(){
-            var randomNumber = Math.floor(Math.random() * 5) + 1;
-            $('body').addClass('bg'+randomNumber);
+        serializeData: function() {
+            return {
+                helpUrl: ADK.utils.helpUtils.getUrl('logon'),
+                softwareVersion: ADK.Messaging.request('appManifest').get('overall_version')
+            };
         },
-        events: {
-            'submit': 'login',
-            'propertychange .form-group': 'clearErrors',
-            'change .form-group': 'clearErrors',
-            'input .form-group': 'clearErrors',
-            'paste .form-group': 'clearErrors'
+        onRender: function() {
+            var NUMBER_OF_BACKGROUNDS = 3;
+            $('body').addClass('bg' + _.random(1, NUMBER_OF_BACKGROUNDS));
         },
         onShow: function() {
-            this.facilityListView = new FacilityListView({
-                'parentView': this
+            this.loginFormView = new LoginFormView({
+                model: new LoginFormViewModel(),
             });
-            this.facilityListRegion.show(this.facilityListView);
-        },
-        clearErrors: function() {
-            if (this.$el.find('form').hasClass('has-error')) {
-                this.$el.find('form').removeClass('has-error');
-            }
-            if (this.$el.find('#errorMessage').hasClass('alert-info')) {
-                this.$el.find('#errorMessage').removeClass('alert-info text-info');
-            }
-            this.$el.find('#errorMessage').empty();
-        },
-        login: function(event) {
-            event.preventDefault();
-            //disable login button
-            var login = this.$el.find('#login');
-            login.button('loading');
-
-            this.$el.find('#screenReaderAuthenticating').addClass('sr-only').removeClass('hidden').focus();
-            var fp = {
-                site: this.$el.find('form #facility')[0].value,
-                accessCode: this.$el.find('form #accessCode')[0].value,
-                verifyCode: this.$el.find('form #verifyCode')[0].value,
-                division: this.$el.find('form #facility option:selected').attr('data-division')
-            };
-            if (fp.site && fp.accessCode && fp.verifyCode && (fp.site !== "noneSelected")) {
-
-                var onSuccessfulLogin = function() {
-
-                    ADK.ADKApp.initAllRouters();
-                    ADK.Navigation.navigate(ADK.WorkspaceContextRepository.userDefaultScreen);
-                };
-
-                var thisItemView = this;
-                var onFailedLogin = function(error) {
-                    if (window.console && window.console.log) {
-                        console.log('Error logging in', error);
-                    }
-                    if (error) {
-                        switch (error.status) { 
-                            case 303:
-                            case 401:
-                                if (error.responseText) {
-                                    var errorMessage = $.parseJSON(error.responseText);
-                                    if (errorMessage.message)
-                                        errorMessage = errorMessage.message;
-                                    else if (errorMessage.errorMessage)
-                                        errorMessage = errorMessage.errorMessage;
-                                    thisItemView.$el.find('#errorMessage').html(errorMessage);
-                                } else {
-                                    thisItemView.$el.find('#errorMessage').html('Authentication error.');
-                                }
-                                thisItemView.$el.find('form').addClass('has-error');
-                                thisItemView.$el.find('#accessCode').focus();
-                                break;
-                            case 403:
-                                if (error.responseText) {
-                                    var errorMessageForbidden = $.parseJSON(error.responseText);
-                                    if (errorMessageForbidden.message)
-                                        errorMessageForbidden = errorMessageForbidden.message;
-                                    else if (errorMessageForbidden.errorMessage)
-                                        errorMessageForbidden = errorMessageForbidden.errorMessage;
-                                    thisItemView.$el.find('#errorMessage').html(errorMessageForbidden);
-                                } else {
-                                    thisItemView.$el.find('#errorMessage').html('You are not an authorized user of eHMP. Contact your local access control coordinator (ACC) for assistance.');
-                                }
-                                thisItemView.$el.find('form').addClass('has-error');
-                                break;
-                            case 503:
-                                thisItemView.$el.find('#errorMessage').html('SYNC NOT COMPLETE. Try again in a few minutes.');
-                                thisItemView.$el.find('#errorMessage').addClass('alert-info text-info');
-                                break;
-                            default:
-                                thisItemView.$el.find('#errorMessage').html('Unable to login due to server error. Status code: ' + error.status);
-                                thisItemView.$el.find('form').addClass('has-error');
-                                break;
-                        }
-                    } else {
-                        thisItemView.$el.find('#errorMessage').html('Authentication error.');
-                        thisItemView.$el.find('form').addClass('has-error');
-                    }
-                    //enable login button
-                    login.button('reset');
-                };
-
-                var authenticateUser = ADK.UserService.authenticate(fp.accessCode, fp.verifyCode, fp.site, fp.division);
-
-                authenticateUser.done(onSuccessfulLogin).fail(onFailedLogin);
-
-            } else {
-                this.$el.find('form').addClass('has-error');
-                this.$el.find('#errorMessage').html("Ensure all fields have been entered");
-                //enable login button
-                login.button('reset');
-
-            }
+            this.loginFormRegion.show(this.loginFormView);
         }
     });
+
     var appletConfig = {
         id: 'logon',
         getRootView: function() {
             return MainView;
         }
     };
+
+    LogoutView.register();
+
     return appletConfig;
 });

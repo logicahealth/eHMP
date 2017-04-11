@@ -1,9 +1,0 @@
-{
-  "id": "authentication",
-  "credentials": {
-    "encrypted_data": "fbcsGSCBPTV8qEkembOrYmd+obeAvoJOnNeAsCj3w0M3RleEGFQr3zEXDy4b\n63mpI7gmV7W+12hMHBGNQqSX8Fj+ixd5Us7G7g4E7p/Xbwv+vNUl+t4hzPY/\n45EEDGRs\n",
-    "iv": "W9eADlu+OM4BGkZBu7aenw==\n",
-    "version": 1,
-    "cipher": "aes-256-cbc"
-  }
-}

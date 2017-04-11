@@ -159,19 +159,11 @@ class NewsFeedColumnHeader < ADKContainer
   include Singleton
   def initialize
     super 
-    # Start section
-    # Had to change accessor from css to xpath, css accessor was working locally but failing on jenkins
-    # add_verify(CucumberLabel.new("Header1"), VerifyText.new, AccessHtmlElement.new(:css, "[data-instanceid=newsfeed] #newsfeed-activityDateTime"))
-    # add_verify(CucumberLabel.new("Header2"), VerifyText.new, AccessHtmlElement.new(:css, "[data-instanceid=newsfeed] #newsfeed-activity"))
-    # add_verify(CucumberLabel.new("Header3"), VerifyText.new, AccessHtmlElement.new(:css, "[data-instanceid=newsfeed] #newsfeed-displayType"))
-    # add_verify(CucumberLabel.new("Header4"), VerifyText.new, AccessHtmlElement.new(:css, "[data-instanceid=newsfeed] #newsfeed-primaryProviderDisplay"))
-    # add_verify(CucumberLabel.new("Header5"), VerifyText.new, AccessHtmlElement.new(:css, "[data-instanceid=newsfeed] #newsfeed-facilityName"))
     add_verify(CucumberLabel.new("Header1"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-instanceid='newsfeed'] [data-header-instanceid='newsfeed-activityDateTime']"))
     add_verify(CucumberLabel.new("Header2"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-instanceid='newsfeed'] [data-header-instanceid='newsfeed-activity']"))
     add_verify(CucumberLabel.new("Header3"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-instanceid='newsfeed'] [data-header-instanceid='newsfeed-displayType']"))
     add_verify(CucumberLabel.new("Header4"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-instanceid='newsfeed'] [data-header-instanceid='newsfeed-primaryProviderDisplay']"))
     add_verify(CucumberLabel.new("Header5"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-instanceid='newsfeed'] [data-header-instanceid='newsfeed-facilityName']"))
-    # End Section   
     add_action(CucumberLabel.new("Date/Time"), ClickAction.new, AccessHtmlElement.new(:css, "[data-instanceid='newsfeed'] [data-header-instanceid='newsfeed-activityDateTime'] a"))
     add_action(CucumberLabel.new("Type"), ClickAction.new, AccessHtmlElement.new(:css, "[data-instanceid='newsfeed'] [data-header-instanceid='newsfeed-displayType'] a"))  
     add_action(CucumberLabel.new("Facility"), ClickAction.new, AccessHtmlElement.new(:css, "[data-instanceid='newsfeed'] [data-header-instanceid='newsfeed-facilityName'] a"))    
@@ -294,14 +286,8 @@ end
 
 Then(/^the user sees modal pop\-up title "(.*?)"$/) do |modal_popup_title|
   driver = TestSupport.driver
-  aa = NewsFeedApplet.instance
-  #  aa.wait_until_element_present("Search Spinner")
-  #  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultLogin.wait_time) # seconds # wait until list opens
-  #  wait.until { driver.find_element(:id, "searchSpinner").attribute("style").strip =="display: none;" } # wait until specific list element is NOT
-  
+  aa = NewsFeedApplet.instance  
   expect(aa.wait_until_action_element_visible("modalPopUpTitle", DefaultLogin.wait_time)).to be_true
-  #loading_text = aa.perform_verification("modalPopUpTitle", "Loading...")
-  #loading_text = aa.perform_verification("modalPopUpTitle", "Loading...") until !loading_text
   expect(aa.perform_verification("modalPopUpTitle", modal_popup_title)).to be_true 
 end
 
@@ -404,9 +390,6 @@ end
 
 Then(/^the search results say "(.*?)" in NewsFeed Applet$/) do |search_result_text|
   aa = NewsFeedApplet.instance
-  #expect(aa.wait_until_xpath_count_greater_than("Number of Newsfeed Applet Rows", 1)).to be_true
-  #expect(aa.static_dom_element_exists?("No Records Found")).to be_true, "No Records Found is not displayed"
-  #expect(aa.wait_until_action_element_visible("No Records Found", 60)).to be_true   
   expect(aa.perform_verification("No Records Found", search_result_text)).to be_true
 end
 
@@ -419,30 +402,6 @@ Then(/^only (?:these|this) (\d+) (?:row|rows) (?:is|are) visible in Newfeed Appl
   browser_elements_list = driver.find_elements(:css, "#center-region #data-grid-newsfeed tr.selectable")
   expect(browser_elements_list.length).to eq(expected_rows.to_i), "Expected 1 row but #{browser_elements_list.length} are shown"
 end
-
-#Then(/^the user sees the modal pop\-up order$/) do |table|
-#  driver = TestSupport.driver
-#  aa = NewsFeedApplet.instance
-#  expect(aa.wait_until_action_element_visible("CloseButton", 60)).to be_true
-#  browser_elements_list = driver.find_elements(:xpath, "//div[@id='order-modal-content']/descendant::div[contains(@class,'row')]/descendant::div[contains(string(), 'Order #')]/following-sibling::div")
-#  p browser_elements_list.length 
-#  matched = false
-#  con = VerifyTableValue.new
-#  matched = con.verify_name_value(browser_elements_list, table)
-#  expect(matched).to be_true 
-#end
-#
-#Then(/^the user sees the modal pop\-up Attending Physician$/) do |table|
-#  driver = TestSupport.driver
-#  aa = NewsFeedApplet.instance
-#  expect(aa.wait_until_action_element_visible("CloseButton", 60)).to be_true
-#  browser_elements_list = driver.find_elements(:xpath, "//div[@id='order-modal-content']/descendant::div[contains(@class,'row')]/descendant::div[contains(string(), 'Attending Physician')]/following-sibling::div")
-#  p browser_elements_list.length 
-#  matched = false
-#  con = VerifyTableValue.new
-#  matched = con.verify_name_value(browser_elements_list, table)
-#  expect(matched).to be_true 
-#end
 
 Then(/^the NewsFeed Applet table contains specific rows$/) do |table|
   verify_table_rows_newsfeed(table)
@@ -504,16 +463,7 @@ Then(/^the Timeline grid is sorted in "([^"]*)" order based on "([^"]*)"$/) do |
 end
 
 # #content-region #data-grid-newsfeed tr.selectable td:nth-child(3)
-Then(/^the Timeline table diplays Type "([^"]*)" rows$/) do |input_text|
-  # type_column_values = TestSupport.driver.find_elements(:css, '#content-region #data-grid-newsfeed tr.selectable td:nth-child(3)')
-  # found = false
-  # type_column_values.each do |element|
-  #   p element.text
-  #   found = element.text.casecmp(input_text) == 0
-  #   break if found
-  # end
-  # expect(found).to eq(true)
-  
+Then(/^the Timeline table diplays Type "([^"]*)" rows$/) do |input_text|  
   newsfeed_applet = NewsFeedApplet.instance
   label = CucumberLabel.new("Type column values")
   elements = AccessHtmlElement.new(:css, '#content-region #data-grid-newsfeed tr.selectable td:nth-child(3)')

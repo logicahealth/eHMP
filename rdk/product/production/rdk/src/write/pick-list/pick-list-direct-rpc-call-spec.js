@@ -1,7 +1,5 @@
 'use strict';
 
-var _ = require('lodash');
-
 var handler = require('./pick-list-direct-rpc-call');
 var fetchModule = require('./medications/medication-list-fetch-list');
 
@@ -18,7 +16,7 @@ describe('direct rpc call pick-list handler', function() {
 
     it('responds with the correct error for a missing required parameter', function(done) {
         var req = {
-            param: function(x) {
+            param: function() {
                 return null;
             }
         };
@@ -32,7 +30,7 @@ describe('direct rpc call pick-list handler', function() {
 
     it('responds with the correct error for an empty required parameter', function(done) {
         var req = {
-            param: function(x) {
+            param: function() {
                 return '';
             }
         };
@@ -52,7 +50,7 @@ describe('direct rpc call pick-list handler', function() {
                     generalPurposeJdsServer: null,
                     rootPath: null,
                     vistaSites: {
-                        "site": {}
+                        'site': {}
                     }
                 }
             },

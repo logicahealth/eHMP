@@ -502,15 +502,15 @@ describe('synchronize.js', function() {
         });
     });
 
-    xdescribe('clearThenSyncPatient()', function() {
+    describe.skip('clearThenSyncPatient()', function() {
         it('', function() {});
     });
 
-    xdescribe('syncPatient()', function() {
+    describe.skip('syncPatient()', function() {
         it('', function() {});
     });
 
-    xdescribe('waitForFullPatientSync()', function() {
+    describe.skip('waitForFullPatientSync()', function() {
         it('', function() {});
     });
 });

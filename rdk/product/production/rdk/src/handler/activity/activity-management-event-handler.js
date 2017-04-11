@@ -18,7 +18,6 @@ function handle(log, config, environment, job, handlerCallback) {
         }, 'activity-management-event-handler.handle - received activity management event');
         //Logging to show a job is being processed by the activity-management-handler.
         var jobId = job.jobId;
-        var jobStatus = job.status;
         var dataDomain = job.dataDomain;
         log.warn({
             jobId: jobId,

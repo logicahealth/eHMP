@@ -2,13 +2,15 @@
 
 ## Notifications list [{{{path}}}]
 
-### Notifications for patient [GET {{{path}}}/{patient}/{patientId}/{list}{?userId}{&resolutionState}{&recipientFilter}]
+### Notifications for patient [GET {{{path}}}/patient/{patientId}/list{?userId}{&resolutionState}{&recipientFilter}]
 
 Get the list of notifications for the given patient id
 
 + Parameters
 
     + patientId (string, required) - patient id
+
+		Pattern: `^([a-zA-Z0-9]+);([a-zA-Z0-9]+)$|^([0-9]+)V([0-9]+)$`
 
     + userId (string, optional) - user id
 
@@ -25,7 +27,7 @@ Get the list of notifications for the given patient id
 :[Response 500]({{{common}}}/responses/500.md)
 
 
-### Notifications for staff [GET {{{path}}}/{staff}/{userId}/{list}{?resolutionState}{&recipientFilter}]
+### Notifications for staff [GET {{{path}}}/staff/{userId}/list{?resolutionState}{&recipientFilter}]
 
 Get the list of notifications for the given user id
 
@@ -45,7 +47,7 @@ Get the list of notifications for the given user id
 
 :[Response 500]({{{common}}}/responses/500.md)
 
-### Notifications for staff growler list [GET {{{path}}}/{staff}/{userId}/{growler}]
+### Notifications for staff growler list [GET {{{path}}}/staff/{userId}/growler]
 
 Get the list of notifications for the growler
 
@@ -61,7 +63,7 @@ Get the list of notifications for the growler
 
 :[Response 500]({{{common}}}/responses/500.md)
 
-### Notifications for staff indicator [GET {{{path}}}/{staff}/{userId}/{indicator}/{list}]
+### Notifications for staff indicator [GET {{{path}}}/staff/{userId}/indicator/list]
 
 Gets the list for global notification list based on the given user id
 
@@ -77,7 +79,7 @@ Gets the list for global notification list based on the given user id
 
 :[Response 500]({{{common}}}/responses/500.md)
 
-### Notifications for staff indicator [GET {{{path}}}/{staff}/{userId}/{indicator}/{summary}]
+### Notifications for staff indicator [GET {{{path}}}/staff/{userId}/indicator/summary]
 
 Gets the count for global notification list based on the given user id
 
@@ -143,7 +145,7 @@ Gets the count for global notification list based on the given user id
 :[Response 500]({{{common}}}/responses/500.md)
 
 
-### Update By Notification Id [POST {{{path}}}/{id}/{notificationId}/{resolved}]
+### Update By Notification Id [POST {{{path}}}/id/{notificationId}/resolved]
 
 Resolve a notification by notification Id
 
@@ -180,7 +182,7 @@ Resolve a notification by notification Id
 :[Response 500]({{{common}}}/responses/500.md)
 
 
-### Update Notifications by Reference Id [POST {{{path}}}/{reference-id}/{referenceId}/{resolved}]
+### Update Notifications by Reference Id [POST {{{path}}}/reference-id/{referenceId}/resolved]
 
 Resolve a notification by reference Id
 
@@ -216,7 +218,7 @@ Resolve a notification by reference Id
 
 :[Response 500]({{{common}}}/responses/500.md)
 
-### Notifications by reference id [GET {{{path}}}/{reference-id}/{referenceId}/{list}]
+### Notifications by reference id [GET {{{path}}}/reference-id/{referenceId}/list]
 
 Get the list of notifications for the given reference id
 

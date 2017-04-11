@@ -22,10 +22,6 @@ function isEqFilter(item) {
     return isTriplet(item) && item[0] === 'eq';
 }
 
-function isPartialNameQuery(item) {
-    return isTriplet(item) && item[0] === 'ilike' && item[1] === 'name';
-}
-
 function isEnterpriseQuery(item) {
     return isEqFilter(item) && item[1] === 'scope' && item[2] === 'enterprise';
 }
@@ -172,7 +168,6 @@ function createReqWithParam(map) {
 // FUTURE-TODO: Re-enable (remove .skip) once resource is fully supported/tested end-to-end by system.
 describe.skip('QuickOrders', function() {
     var req;
-    var result;
     var res = {
         status: function() {
             return {
@@ -184,9 +179,6 @@ describe.skip('QuickOrders', function() {
     var pjdsPutOptions;
     var pjdsGetOptions;
     var pjdsDeleteOptions;
-    var pjdsOpStub = function(req, res, options, callback) {
-        pjdsPutOptions = options;
-    };
     var storedData;
     var pjdsGetResult;
 

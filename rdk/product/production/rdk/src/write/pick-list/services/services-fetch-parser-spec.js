@@ -3,7 +3,7 @@
 var parse = require('./services-fetch-parser').parse;
 var logger = sinon.stub(require('bunyan').createLogger({name: 'services-fetch-parser'}));
 
-xdescribe('unit test to validate services fetch', function () {
+describe.skip('unit test to validate services fetch', function () {
     it('can parse the RPC data correctly', function () {
         /* jshint -W109 */
         var input = '1000^AMBULATORY CARE' + '\r\n' +

@@ -197,6 +197,11 @@ When(/^the user scrolls to the bottom of the Orders Applet$/) do
   wait.until { infiniate_scroll('#data-grid-orders tbody') }
 end
 
+When(/^the user scrolls to the bottom of the expanded Orders Applet$/) do
+  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time * 2)
+  wait.until { infinite_scroll_other('#data-grid-orders tbody') }
+end
+
 def there_is_at_least_one_nonempty_order_row
   return false unless @oc.wait_until_xpath_count_greater_than("applet - Table - xpath", 0)
   return false if TestSupport.driver.find_elements(:css, "[data-appletid=orders] tbody .empty").length > 0 

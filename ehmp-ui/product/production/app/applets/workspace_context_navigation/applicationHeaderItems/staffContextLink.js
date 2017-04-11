@@ -16,14 +16,20 @@ define([
     'use strict';
 
     var StaffContextLinkView = ContextLinkView.extend({
-        getContext: function(){
+        getContext: function() {
             return 'staff';
         },
         label: 'Staff View',
-        icon: '<i class="fa fa-home fa-lg"></i>'//,
-        // isActive: function(model){
-        //     return _.isEqual(model.get('context'), this.getContext()) && !_.isEqual(model.get('workspace'), 'my-notifications-full') ? true : false;
-        // }
+        icon: '<i class="fa fa-home fa-lg"></i>',
+        template: Handlebars.compile([
+            '{{#if isActive}}<p {{else}}<a href="#" title="Press enter to navigate to the {{getLabel}} centric workspaces." {{/if}}id="current-{{contextName}}-nav-header-tab" class="context-navigation-link{{#if isActive}} active{{/if}}">',
+            '{{getIcon}} {{lastname}}, {{firstname}}',
+            '{{#if isActive}}</p>{{else}}</a>{{/if}}'
+        ].join('\n')),
+        initialize: function() {
+            this.model = ADK.UserService.getUserSession();
+            ContextLinkView.prototype.initialize.apply(this, arguments);
+        }
     });
 
     ADK.Messaging.trigger('register:component', {

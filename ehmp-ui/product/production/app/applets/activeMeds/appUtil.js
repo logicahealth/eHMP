@@ -13,19 +13,6 @@ define([
 
             return days;
 
-        },
-        getCalculatedEffectiveFillsRemaining: function(expirationDateStr, daysSupplyForEachFill, fillsRemaining, status) {
-            var daysToExpiration = this.getDaysToExpiration(expirationDateStr);
-            if (daysToExpiration <= 0 || fillsRemaining === 0 || status.toUpperCase() === 'EXPIRED' || status.toUpperCase() === 'DISCONTINUED' || status.toUpperCase() === 'CANCELLED') {
-                return 0;
-            } else {
-                var estimatedFillsRemaining = parseFloat(daysToExpiration / daysSupplyForEachFill);
-                estimatedFillsRemaining = Math.floor(estimatedFillsRemaining); //round down to account for just starting a fill
-                if(fillsRemaining < estimatedFillsRemaining){
-                    estimatedFillsRemaining = fillsRemaining;
-                }
-                return estimatedFillsRemaining;
-            }
         }
     };
     return appHelper;

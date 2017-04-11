@@ -112,13 +112,6 @@ Then(/^verify the Numeric Lab Results Gist title is "([^"]*)"$/) do |title|
   expect(numeric_lab_results_gist.perform_verification("Numeric Lab Results Gist Title", title)).to be_true
 end
 
-Then(/^verify the Numeric Lab Results Gist applet has the following applet buttons$/) do |table|
-  numeric_lab_results_gist = LabResultsGist.instance
-  table.rows.each do | row |
-    expect(numeric_lab_results_gist.am_i_visible? row[0]).to eq(true), "Expected applet to have button #{row[0]}"
-  end
-end
-
 Then(/^verify the Numeric Lab Results Gist applet has the following headers$/) do |table|
   wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
   
@@ -336,3 +329,15 @@ Then(/^a quickview displays a numeric lab table with expected headers$/) do | ex
   end
 end
 
+Then(/^verify the Numeric Lab Results Gist applet has the buttons Refresh, Help, Filter Toggle and Expand$/) do
+  ehmp = PobNumericLabApplet.new
+  ehmp.wait_for_btn_applet_refresh
+  ehmp.wait_for_btn_applet_help
+  ehmp.wait_for_btn_applet_filter_toggle
+  ehmp.wait_for_btn_applet_expand_view
+
+  expect(ehmp).to have_btn_applet_refresh
+  expect(ehmp).to have_btn_applet_help
+  expect(ehmp).to have_btn_applet_filter_toggle
+  expect(ehmp).to have_btn_applet_expand_view 
+end

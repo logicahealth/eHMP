@@ -1,4 +1,4 @@
-Then(/^POB user clicks the actions tray$/) do
+Then(/^user closes the actions tray$/) do
   @ehmp = PobCommonElements.new
   begin    
     @ehmp.wait_for_btn_action_tray
@@ -60,4 +60,16 @@ Then(/^the detail modal title is set$/) do
   @ehmp.wait_for_fld_modal_title
   expect(@ehmp).to have_fld_modal_title
   expect(@ehmp.fld_modal_title.text.length).to be > 0, "Expected modal title to have a length > 0, title = '#{@ehmp.fld_modal_title.text}'"
+end
+
+Then(/^the modal dialog contains data labels$/) do
+  @ehmp = ModalElements.new
+  @ehmp.wait_until_fld_modal_detail_labels_visible
+  expect(@ehmp).to have_fld_modal_detail_labels
+end
+
+Then(/^the modal dialog contains data$/) do
+  ehmp = ModalElements.new
+  ehmp.wait_until_modal_body_visible
+  expect(ehmp).to have_modal_body
 end

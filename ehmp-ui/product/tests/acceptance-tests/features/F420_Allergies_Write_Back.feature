@@ -1,4 +1,4 @@
-@f420_allergies_write_back @regression @future @DE4560
+@f420_allergies_write_back  @future @DE4560
 
 Feature: F420 : Enter and Store an Allergy including Entered in Error
 

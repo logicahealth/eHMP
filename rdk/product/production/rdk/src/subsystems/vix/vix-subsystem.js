@@ -1,7 +1,6 @@
 'use strict';
 
 var rdk = require('../../core/rdk');
-var fs = require('fs');
 var _ = require('lodash');
 var http = rdk.utils.http;
 

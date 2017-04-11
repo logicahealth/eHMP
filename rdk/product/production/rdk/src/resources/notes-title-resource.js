@@ -110,13 +110,13 @@ function getUserLastTitle(req, res) {
         var recentTitles = [];
         var docArray = results.jds.concat(results.pjds);
         var documents = _.chain(docArray).sortBy('lastUpdateTime').reverse().value();
+        var findRecentTitle = function(recentTitle) {
+            return recentTitle.documentDefUid === item.documentDefUid;
+        };
 
         for (var i = 0; i < documents.length && recentTitles.length < 3; i++) {
             var item = documents[i];
-            var title = item.localTitle;
-            var duplicate = _.find(recentTitles, function(recentTitle) {
-                return recentTitle.documentDefUid === item.documentDefUid;
-            });
+            var duplicate = _.find(recentTitles, findRecentTitle);
             if (!duplicate) {
                 recentTitles.push({
                     localTitle: item.localTitle,

@@ -3,7 +3,10 @@
 var _ = require('lodash');
 
 var sensitiveDataValue = '*SENSITIVE*';
-var sensitiveDataFields = ['ssn', 'birthDate'];
+// last5 is considered sensitive but needed so leave it and let it get masked
+var sensitiveDataFields = ['last5', 'ssn', 'birthDate'];
+var blacklistDataFields = ['last4', 'ssn4'];
+
 // Replace contents of sensitive data fields with the "sensitive data" value.
 function hideSensitiveFields(patient, pepResults) {
     return removeSensitiveFields(_.mapValues(patient, function(value, key, object) {
@@ -16,20 +19,11 @@ function hideSensitiveFields(patient, pepResults) {
 
 // Remove sensitivity-related fields that are unused by the application
 function removeSensitiveFields(obj, results) {
-    if (obj.last4) {
-        // This field is considered sensitive and is unused by the application, so remove it
-        delete obj.last4;
-    }
-    //Remove last Five SSN Item
-    if (obj.last5) {
-        // This field is considered sensitive and is unused by the application, so remove it
-        delete obj.last5;
-    }
-    //Remove last SSN4 Item
-    if (obj.ssn4) {
-        // This field is considered sensitive and is unused by the application, so remove it
-        delete obj.ssn4;
-    }
+    //Remove blacklisted Items
+
+    obj = _.omit(obj, blacklistDataFields);
+
+    // TODO: why does this function also set sensitivity to false? This seems like room for a separate function.
     if (results && results.code && (results.code === 'Permit')) {
         obj.sensitive = false;
     }
@@ -41,3 +35,5 @@ module.exports.hideSensitiveFields = hideSensitiveFields;
 module.exports.removeSensitiveFields = removeSensitiveFields;
 
 module.exports._sensitiveDataValue = sensitiveDataValue;
+module.exports._sensitiveDataFields = sensitiveDataFields;
+module.exports._blacklistDataFields = blacklistDataFields;

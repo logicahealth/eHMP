@@ -50,7 +50,6 @@ function createReqWithParam(map) {
 // FUTURE-TODO: Re-enable (remove .skip) once resource is fully supported/tested end-to-end by system.
 describe.skip('Favorites', function() {
     var req;
-    var result;
     var res = {
         status: function() {
             return {
@@ -58,13 +57,9 @@ describe.skip('Favorites', function() {
             };
         }
     };
-    var ordersetPayload;
     var pjdsPutOptions;
     var pjdsGetOptions;
     var pjdsDeleteOptions;
-    var pjdsOpStub = function(req, res, options, callback) {
-        pjdsPutOptions = options;
-    };
     var storedFavorite;
     var pjdsGetResult;
 

@@ -28,3 +28,13 @@ task acceptanceTestOnc(dependsOn: bundleInstall){
     }
   }
 }
+
+task prepoptasks(dependsOn: bundleInstall){
+  description "Prepoplate tasks/activities"
+  doLast{
+    exec {
+      executable = "bundle"
+      args = ['exec', 'rake', 'prepopTasks']
+    }
+  }
+}

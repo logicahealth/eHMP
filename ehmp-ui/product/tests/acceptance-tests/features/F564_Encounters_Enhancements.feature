@@ -1,4 +1,4 @@
-@F564 @regression
+@F564  @reg1
 Feature: Encounters Applet Enhancements
 
 @US5650 @F564-2 @DE6882

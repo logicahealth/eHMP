@@ -401,7 +401,7 @@ describe('Global Timeline Resource', function() {
         });
 
         //consults dropped from parsing 2/18/15 - test no longer runs
-        xit('correctly sorts consults', function() {
+        it.skip('correctly sorts consults', function() {
             var JDSresults = {
                 procedures: {
                     data: {
@@ -439,7 +439,7 @@ describe('Global Timeline Resource', function() {
             expect(result).to.eql(expected);
         });
 
-        xit('correctly sorts procedure/image data', function() {
+        it.skip('correctly sorts procedure/image data', function() {
             var JDSresults = {
                 encounters: {
                     data: {

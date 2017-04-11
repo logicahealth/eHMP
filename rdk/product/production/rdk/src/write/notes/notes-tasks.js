@@ -1,7 +1,5 @@
 'use strict';
 
-var writeVprToJds = require('../core/jds-direct-writer');
-
 var noteTasks = {
 	updateUnsigned: [
 		require('./notes-validator').update,

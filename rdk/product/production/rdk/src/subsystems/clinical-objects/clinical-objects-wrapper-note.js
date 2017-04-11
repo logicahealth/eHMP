@@ -1,6 +1,5 @@
 'use strict';
 
-var rdk = require('../../core/rdk');
 var _ = require('lodash');
 
 // Clinical Objects come in as arrays with wrappers - this removes and stores that overhead inside of each array object
@@ -79,8 +78,8 @@ module.exports.wrapCreateNote = function(errorMessages, writebackContext) {
         For a patient with only an ICN identifier the format is
         "urn:va:patient:VLER:[icn-value]:[icn-value]” (e.g. "urn:va:patient:VLER:45679V45679:45679V45679")
     */
-    var pid = _.last(writebackContext.pid.split(';'));
-    var patientUid = 'urn:va:patient:' + writebackContext.siteHash + ':' + pid + ':' + pid;
+    var dfn = writebackContext.interceptorResults.patientIdentifiers.dfn;
+    var patientUid = 'urn:va:patient:' + writebackContext.interceptorResults.patientIdentifiers.site + ':' + dfn + ':' + dfn;
     var model = writebackContext.model;
     var clinicalObject = {
         patientUid: patientUid || errorMessages.push('failed to build patientUid from writebackContext'),
@@ -132,8 +131,8 @@ module.exports.wrapCreateAddendum = function(errorMessages, writebackContext) {
         For a patient with only an ICN identifier the format is
         "urn:va:patient:VLER:[icn-value]:[icn-value]” (e.g. "urn:va:patient:VLER:45679V45679:45679V45679")
     */
-    var pid = _.last(writebackContext.pid.split(';'));
-    var patientUid = 'urn:va:patient:' + writebackContext.siteHash + ':' + pid + ':' + pid;
+    var dfn = writebackContext.interceptorResults.patientIdentifiers.dfn;
+    var patientUid = 'urn:va:patient:' + writebackContext.interceptorResults.patientIdentifiers.site + ':' + dfn + ':' + dfn;
     var model = writebackContext.model;
     var clinicalObject = {
         patientUid: patientUid || errorMessages.push('failed to build patientUid from writebackContext'),

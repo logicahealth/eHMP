@@ -7,7 +7,6 @@ describe('single-instance ', function() {
 
 
     describe('happy path', function() {
-        var mockHttp;
         var req = {};
         beforeEach(function() {
             req.logger = sinon.stub(require('bunyan').createLogger({
@@ -29,13 +28,13 @@ describe('single-instance ', function() {
             req.app.config.activityDatabase = {
                 'user': 'activitydbuser',
                 'password': 'activitydb$11',
-                'connectString': 'IP             /xe'
+                'connectString': '10.4.4.208:1521/xe'
             };
 
             req.query = {};
             req.query.id = 1;
             req.jdsServer = {
-                'baseUrl': 'http://IP             ',
+                'baseUrl': 'http://10.2.2.110:9080',
                 'urlLengthLimit': 120
             };
         });
@@ -88,13 +87,13 @@ describe('single-instance ', function() {
             req.app.config.activityDatabase = {
                 'user': 'activitydbuser',
                 'password': 'activitydb$11',
-                'connectString': 'IP             /xe'
+                'connectString': '10.4.4.208:1521/xe'
             };
 
             req.query = {};
             req.query.id = 1;
             req.jdsServer = {
-                'baseUrl': 'http://IP             ',
+                'baseUrl': 'http://10.2.2.110:9080',
                 'urlLengthLimit': 120
             };
         });
@@ -104,7 +103,7 @@ describe('single-instance ', function() {
             expect(result).to.be.undefined();
         });
 
-        xit('_getPatientDemographics', function() {
+        it.skip('_getPatientDemographics', function() {
 
             var patient = {};
             var result = singleInstance._getPatientDemographics(req.logger);
@@ -114,7 +113,7 @@ describe('single-instance ', function() {
             expect(result).to.be.undefined();
         });
 
-        xit('_transformQueryResults', function() {
+        it.skip('_transformQueryResults', function() {
             var input = {};
 
             var result = singleInstance._transformQueryResults(req, 1);
@@ -324,6 +323,7 @@ describe('single-instance ', function() {
 
         it('getClinical object from pJDS with no object', function(done) {
             var input = {};
+            var object;
 
             mockHttp = sinon.stub(httpUtil, 'get', function(options, callback) {
                 return callback(null, {

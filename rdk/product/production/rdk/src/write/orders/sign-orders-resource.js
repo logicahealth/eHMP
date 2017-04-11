@@ -2,7 +2,7 @@
 
 var rdk = require('../../core/rdk');
 var RpcClient = require('vista-js').RpcClient;
-var getVistaRpcConfiguration = require('../../utils/rpc-config').getVistaRpcConfiguration;
+var vistaRpcConfiguration = require('../../utils/rpc-config');
 var async = require('async');
 var isNullish = require('../../utils/nullchecker').isNullish;
 var _ = require('lodash');
@@ -33,6 +33,7 @@ function getResourceConfig() {
 
 function signOrder(req, res) {
     req.logger.info('perform sign order');
+
     var userSession,
         site, duz;
 
@@ -45,12 +46,17 @@ function signOrder(req, res) {
         return;
     }
 
+    if (_.isUndefined(req.interceptorResults.patientIdentifiers.site)) {
+        req.logger.debug('signOrder - missing patient site from interceptor patient identifier results');
+        return res.status(rdk.httpstatus.precondition_failed).rdkSend('Missing patient site parameter.');
+    }
+
     var input = req.body.param;
     var signatureCode = input.signatureCode;
     var orders = input.orders;
     var pid = input.patientIEN;
     var locationIEN = input.locationIEN;
-    var rpcConfig = getVistaRpcConfiguration(req.app.config, userSession);
+    var rpcConfig = vistaRpcConfiguration.getVistaRpcConfiguration(req.app.config, userSession);
     // rpcConfig.context = 'OR CPRS GUI CHART';
 
     if (isNullish(pid) || isNullish(locationIEN) || isNullish(signatureCode) || isNullish(orders) || _.isEmpty(orders) || ('' in orders)) {

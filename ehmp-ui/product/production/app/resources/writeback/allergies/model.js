@@ -21,7 +21,6 @@ define([], function() {
             'IEN': null,
             'allergyName': null,
             'comment': null,
-            'dfn': null,
             'enteredBy': null,
             'eventDateTime': null,
             'historicalOrObserved': null,

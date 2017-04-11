@@ -129,7 +129,15 @@ And(/^the user enters text "(.*?)" and clicks row "(.*?)" save$/)  do |descripti
 
   @ehmp.wait_until_btn_military_history_save_visible(DefaultTiming.default_table_row_load_time)
   @ehmp.btn_military_history_save.click
-  !@ehmp.wait_until_fld_military_history_edit_header_visible(DefaultTiming.default_wait_time)
+  max_attempt = 1
+  begin
+    wait_until { @ehmp.has_btn_military_history_save? == false }
+  rescue
+    max_attempt-=1
+    retry if max_attempt >= 0
+    raise e if max_attempt < 0
+  end
+  @ehmp.wait_until_fld_military_history_edit_header_invisible(DefaultTiming.default_wait_time)
   @ehmp.wait_until_tbl_military_hist_data_row_loaded_visible(DefaultTiming.default_wait_time)
 
   p "Header: #{@ehmp.get_military_history_data_row("thead", "1", "2", 'th')}"

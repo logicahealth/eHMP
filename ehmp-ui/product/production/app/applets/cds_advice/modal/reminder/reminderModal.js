@@ -13,6 +13,14 @@ define([
         } : null;
         var View = Backbone.Marionette.ItemView.extend({
             template: bodyTpl,
+            serializeData: function() {
+                var data = this.model.toJSON();
+
+                if(_.get(data, 'details.detail')) {
+                    data.details.detail = Util.formatDetailText(data.details.detail);
+                }
+                return data;
+            },
             showDetails: function(model) {
                 var AdviceModal = require('app/applets/cds_advice/modal/advice/adviceModal');
                 var DefaultModal = require('app/applets/cds_advice/modal/default/defaultModal');
@@ -60,6 +68,7 @@ define([
         show: function (model) {
             ADK.UI.Modal.hide();
             showModal(model);
-        }
+        },
+        createBodyView: createBodyView
     };
 });

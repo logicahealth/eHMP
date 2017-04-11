@@ -688,6 +688,7 @@ define([
         fireSaveEvent: function(e) {
             if (this.showEdit) {
                 if (!this.model.isValid()) {
+                    this.transferFocusToFirstError();
                     return;
                 }
             }
@@ -730,6 +731,7 @@ define([
             this.model.unset('errorMessage');
 
             if (!this.model.isValid()) {
+                this.transferFocusToFirstError();
                 return;
             }
 

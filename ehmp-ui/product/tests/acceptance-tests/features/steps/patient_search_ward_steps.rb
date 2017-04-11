@@ -80,20 +80,10 @@ Then(/^the Ward list only includes wards with letters "([^"]*)"$/) do |term|
   end
 end
 
-When(/^user chooses to load a patient from the Ward results list$/) do
-  @ehmp = PobPatientSearch.new
-  patient_search = PatientSearch2.instance
-  @ehmp.wait_for_ward_search_results
-  expect(@ehmp.ward_search_results.length).to be > 0
-  @ehmp.ward_search_results[0].click
-  expect(patient_search.perform_action("Confirm")).to be_true
-  expect(wait_until_dom_has_confirmflag_or_patientsearch(120)).to be_true, "Patient selection did not complete successfully"
-
-end
-
 Then(/^Current Encounter displays the expected ward$/) do
   @ehmp = PobEncountersApplet.new
   expect(@ehmp).to have_btn_set_encounter
+  expect(@choosen_ward).to_not be_nil, "Expected variable choosen_ward to be set in a previous step"
   expect(@ehmp.current_encounter_text.text).to include @choosen_ward
 end
 

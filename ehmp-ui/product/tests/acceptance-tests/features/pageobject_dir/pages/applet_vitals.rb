@@ -33,6 +33,7 @@ class PobVitalsApplet < PobParentApplet
   element :quickview_tbl_th_result, "div.gist-popover th:nth-child(2)"
   element :quickview_tbl_th_refrange, "div.gist-popover th:nth-child(3)"
   element :quickview_tbl_th_facility, "div.gist-popover th:nth-child(4)"
+  elements :fld_expanded_headers, '#data-grid-vitals th a'
   
   def initialize
     super
@@ -73,5 +74,19 @@ class PobVitalsApplet < PobParentApplet
 
   def gist_vital_names_only
     fld_vital_names.map { | name_element | name_element.text  }
+  end
+
+  def expanded_headers_text_only
+    all_headers_css_selector = "#data-grid-vitals th a"
+    num_headers = fld_expanded_headers.length
+    html_index = 0
+    header_array = []
+    num_headers.times do
+      html_index += 1
+      css_selector = "#data-grid-vitals th:nth-child(#{html_index}) a"
+      full_script = "return $('#{css_selector}').contents().filter(function(){return this.nodeType == Node.TEXT_NODE}).text();"
+      header_array.push(page.execute_script(full_script).upcase)
+    end
+    header_array
   end
 end

@@ -1,10 +1,5 @@
 'use strict';
 var userResource = require('./user-resource');
-var rdk = require('../../core/rdk');
-var httpMocks = require('node-mocks-http');
-var _ = require('lodash');
-var querystring = require('querystring');
-var nock = require('nock');
 
 describe('User resource', function() {
     var index = 0;

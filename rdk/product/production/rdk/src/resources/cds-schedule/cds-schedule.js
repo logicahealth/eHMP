@@ -4,7 +4,6 @@
 var rdk = require('../../core/rdk');
 var _ = require('lodash');
 var ObjectId = require('mongoskin').ObjectID;
-var request = require('request');
 
 // Database
 var dbName = 'schedule';
@@ -56,7 +55,7 @@ function init(app) {
             "data": {
                 "cdsname": "Timeout",
                 "url":
-                        "IP            /cds-results-service/core/executeRulesJob"
+                        "10.2.2.49:8080/cds-results-service/core/executeRulesJob"
             },
             "type": "normal",
             "priority": 0,

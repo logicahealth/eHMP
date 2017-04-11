@@ -6,7 +6,7 @@ Feature: F130 Non-VA Medications (write-back)
 
   @MedicationSearchList @US1963 @US2426 @onc
   Scenario: Searching for Medication with ALCAINE
-    #http://IP             /resource/writeback/med/search?searchParam=alcaine
+    #http://10.4.4.105:8888/resource/writeback/med/search?searchParam=alcaine
     When the clients searches for medications with the string "alcaine"
     Then a successful response is returned
     And the VPR results contain

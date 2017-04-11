@@ -1,21 +1,21 @@
 @US1123 @vxsync @enrich
 Feature: create a web application to be used as point-of-care healthcare application
 
-@US1123_oneresponse
+@US1123_oneresponse @US17390
 Scenario: Search for existing patient by full name through RDK
 	When the client performs a fullName search through RDK API with search term "Eight,Imagepatient"
 	Then a successful response is returned
-	And the client receives 2 RDK VistA result(s)
+	And the client receives 1 RDK VistA result(s)
 	And the RDK search results contain
 	|field 			| value 			  |
 	|displayName 	| Eight, Imagepatient |
 	|genderCode 	| M 				  |
 	
-@US1123_oneresponse_summary
+@US1123_oneresponse_summary @US17390
 Scenario: Search for existing patient by full name through RDK
 	When the client performs a fullName summary search through RDK API with search term "Eight,Imagepatient"
 	Then a successful response is returned
-	And the client receives 2 RDK VistA result(s)
+	And the client receives 1 RDK VistA result(s)
 	And the RDK search results contain
 	  | field       | value                             |
       | displayName | Eight, Imagepatient               |
@@ -60,31 +60,31 @@ Scenario: Search for multiple patients by name through RDK
 	And the RDK search results contain 
 		|displayName|"Seven, Patient"|
 	
-@US1123_casecheck
+@US1123_casecheck @US17390
 Scenario: Search for multiple patients by name through RDK
 	When the client performs a fullName search through RDK API with search term "SEVEN,PATIENT"
 	Then a successful response is returned
 	And the RDK search results contain 
 		|displayName|"Seven, Patient"|
-	And the client receives 12 RDK VistA result(s)
+	And the client receives 1 RDK VistA result(s)
 	When the client performs a fullName search through RDK API with search term "seven,patient"
 	Then a successful response is returned
 	And the RDK search results contain 
 		|displayName|"Seven, Patient"|
-	And the client receives 12 RDK VistA result(s)
+	And the client receives 1 RDK VistA result(s)
 	
-@US1123_casecheck_summary
+@US1123_casecheck_summary @US17390
 Scenario: Search for multiple patients by name through RDK
 	When the client performs a fullName summary search through RDK API with search term "SEVEN,PATIENT"
 	Then a successful response is returned
 	And the RDK search results contain 
 		|displayName|"Seven, Patient"|
-	And the client receives 12 RDK VistA result(s)
+	And the client receives 1 RDK VistA result(s)
 	When the client performs a fullName search through RDK API with search term "seven,patient"
 	Then a successful response is returned
 	And the RDK search results contain 
 		|displayName|"Seven, Patient"|
-	And the client receives 12 RDK VistA result(s)
+	And the client receives 1 RDK VistA result(s)
 	
 @US1123_startIndex
 Scenario: Search for patients and set the start index

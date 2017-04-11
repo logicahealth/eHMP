@@ -1,6 +1,5 @@
 'use strict';
 var buildTasksResponse = require('./task-operations-resource').buildTasksResponse;
-var _ = require('lodash');
 var rdk = require('../../../core/rdk');
 var httpUtil = rdk.utils.http;
 

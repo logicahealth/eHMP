@@ -5,6 +5,9 @@ var RpcClient = require('vista-js').RpcClient;
 var logger = sinon.stub(require('bunyan').createLogger({name: 'vista-read-only-subsystem'}));
 var vistaConfig = {};
 var req = {
+    vistaConfig: {
+      division: '500'
+    },
     app: {
         config: {
             rpcConfig: {
@@ -17,12 +20,12 @@ var req = {
                         id: '500',
                         name: 'PANORAMA'
                     }],
-                    host: 'IP        ',
+                    host: '10.2.2.101',
                     port: 9210,
                     production: false,
-                    accessCode: 'PW    ',
-                    verifyCode: 'PW    !!',
-                    localIP: 'IP      ',
+                    accessCode: 'pu1234',
+                    verifyCode: 'pu1234!!',
+                    localIP: '10.2.2.1',
                     localAddress: 'localhost'
                 },
                 'C877': {
@@ -30,11 +33,11 @@ var req = {
                         id: '500',
                         name: 'KODAK'
                     }],
-                    host: 'IP        ',
+                    host: '10.2.2.102',
                     port: 9210,
                     production: false,
-                    accessCode: 'PW    ',
-                    verifyCode: 'PW    !!'
+                    accessCode: 'pu1234',
+                    verifyCode: 'pu1234!!'
                 }
             }
         }
@@ -74,4 +77,12 @@ describe('vista-read-only-subsystem', function() {
         done();
     });
 
+    it('Tests that get readonly vista config returns correct config', function(done) {
+        var config = vistaReadOnlySubsystem._getReadOnlyVistaConfig(req, '9E7A');
+        expect(config).not.to.be.null();
+
+        //division is simple value
+        expect(config.division).eql('500');
+        done();
+    });
 });

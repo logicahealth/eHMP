@@ -120,11 +120,11 @@ Feature: F140 - Global Patient Search
     Then a successful response is returned
     And the global response for too many results contains error message
       | field       | value                                   |
-      | msg         | <error>                                 |
+      | message     | <error>                                 |
 
       Examples:
       | lastname    | firstname   | ssnumber    | dobirth     | contenttype         | error                                                                              |
-      | SMITH       | JOHN        | NOT DEFINED | NOT DEFINED | application/json    | Search returned too many results please refine your search criteria and try again. |
+      | SMITH       | JOHN        | NOT DEFINED | NOT DEFINED | application/json    | Search returned too many results. Please refine your search criteria and try again. |
 
 
 @F140_globalsearch_api_8 @DE3534_1
@@ -223,8 +223,8 @@ Feature: F140 - Global Patient Search
     Then a successful response is returned
     And the global response for too many results contains error message
       | field       | value                                   |
-      | msg         | <error>                                 |
+      | message     | <error>                                 |
 
       Examples:
       | lastname    | firstname   | ssnumber    | dobirth     | contenttype         |error                   |
-     | Unknown    | PATIENT       | NOT DEFINED | 01/01/1953 | application/json    | No results were found. |
+     | Unknown    | PATIENT       | NOT DEFINED | 01/01/1953 | application/json    | No results found. Verify search criteria. |

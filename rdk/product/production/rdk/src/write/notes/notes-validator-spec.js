@@ -1,22 +1,22 @@
 'use strict';
 
-var _ = require('lodash');
-var httpUtil = require('../../core/rdk').utils.http;
 var notesValidator = require('./notes-validator');
 var writebackContext;
 
-describe('The Notes input validator', function () {
+describe('The Notes input validator', function() {
     beforeEach(function() {
         writebackContext = {
-            pid: '9E7A;8',
             resourceId: '12345',
-            duz: {'9E7A': 'duz1', 'C77A': 'duz2'},
+            duz: {
+                '9E7A': 'duz1',
+                'C77A': 'duz2'
+            },
             vistaConfig: {
-                host: 'IP        ',
+                host: '10.2.2.101',
                 port: 9210,
-                accessCode: 'PW    ',
-                verifyCode: 'PW    !!',
-                localIP: 'IP      ',
+                accessCode: 'pu1234',
+                verifyCode: 'pu1234!!',
+                localIP: '10.2.2.1',
                 localAddress: 'localhost',
                 context: 'HMP UI CONTEXT'
             },
@@ -34,7 +34,16 @@ describe('The Notes input validator', function () {
                 'pid': '9E7A;8',
                 'status': 'UNSIGNED'
             },
-            logger: sinon.stub(require('bunyan').createLogger({name: 'notes-validator'}))
+            interceptorResults: {
+                patientIdentifiers: {
+                    'siteDfn': '9E7A;8',
+                    'dfn': '8',
+                    'site': '9E7A'
+                }
+            },
+            logger: sinon.stub(require('bunyan').createLogger({
+                name: 'notes-validator'
+            }))
         };
     });
 
@@ -56,7 +65,7 @@ describe('The Notes input validator', function () {
         });
 
         it('encrypts the signature code and sets the dfn', function(done) {
-            writebackContext.model.signatureCode = 'PW    !!';
+            writebackContext.model.signatureCode = 'pu1234!!';
             writebackContext.model.signItems = [{}];
             notesValidator.sign(writebackContext, function() {
                 expect(writebackContext.model.signatureCode).to.be.truthy();
@@ -68,7 +77,7 @@ describe('The Notes input validator', function () {
 
     describe('validates update function', function() {
         it('returns an error if the pid does not exisit', function(done) {
-            delete writebackContext.pid;
+            delete writebackContext.interceptorResults.patientIdentifiers.siteDfn;
             notesValidator.update(writebackContext, function(error) {
                 expect(error).to.eql('The note\'s IEN and patient\'s PID are needed to update a note.');
                 done();
@@ -84,6 +93,7 @@ describe('The Notes input validator', function () {
         });
 
         it('sets the pid, siteHash, authorUid, uid, and localId in the writebackContext.model where siteHash is undefined', function(done) {
+            delete writebackContext.interceptorResults.patientIdentifiers.site;
             notesValidator.update(writebackContext, function() {
                 expect(writebackContext.model.pid).to.eql('8');
                 expect(writebackContext.model.siteHash).to.be.falsy();
@@ -94,7 +104,7 @@ describe('The Notes input validator', function () {
         });
 
         it('sets the pid, siteHash, authorUid, uid, and localId in the writebackContext.model where siteHash is defined', function(done) {
-            writebackContext.siteHash = '9E7A';
+            writebackContext.interceptorResults.patientIdentifiers.site = '9E7A';
             notesValidator.update(writebackContext, function() {
                 expect(writebackContext.model.pid).to.eql('8');
                 expect(writebackContext.model.siteHash).to.eql('9E7A');

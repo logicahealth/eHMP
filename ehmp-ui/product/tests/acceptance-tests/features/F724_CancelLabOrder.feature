@@ -1,4 +1,4 @@
-@F724
+@F724 @future @DE4560
 Feature: Cancel an Unsigned Outpatient Lab Order with lock and order refresh
 
 @US8414 @TC1887

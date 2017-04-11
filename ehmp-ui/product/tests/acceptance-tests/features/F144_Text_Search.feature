@@ -1,7 +1,6 @@
 #POC: Team Jupiter
 
-@f144_text_search @regression @triage
-
+@f144_text_search   @reg1
 Feature: F144-eHMP Viewer GUI - Text Search
 #User shall type a set of words into the search text box
 #After the user types 3 characters, the user shall be presented with a list of suggested search items/types
@@ -40,7 +39,7 @@ Scenario: User is able to filter the search based on time
   Then the the text search results only display results from the last 3mos ( or Unknown )
 
 
-@f144_5_med_search_result_view_detail @US2374 @DE832 @DE2337 @DE3798 @debug @DE6757
+@f144_5_med_search_result_view_detail @US2374 @DE832 @DE2337 @DE3798 @DE6757
 Scenario: Verify user is able to view the detail medication search results
   # Given user is logged into eHMP-UI
   And user searches for and selects "TEN,PATIENT"
@@ -50,7 +49,7 @@ Scenario: Verify user is able to view the detail medication search results
   Then the modal is displayed
   And the modal's title is "Medication - ascorbic acid"
 
-@f144_6_immunization_search_result_view_detail @US2364 @vimm @triage @DE5248
+@f144_6_immunization_search_result_view_detail @US2364 @vimm  @DE5248
 Scenario: User is able to view the detail immunization search results
   # Given user is logged into eHMP-UI
   And user searches for and selects "TEN,PATIENT"
@@ -79,50 +78,35 @@ Scenario: User is able to view the detail allergy search results
       | verified            |
       | observed/historical |
       | observed date       |
- 
-@f144_8_Problem_list_search_result_view_detail @US2251 @US2792 @DE2657 @DE5921 @DE6552 @DE6758 @debug @DE6989
+      
+@f144_8_Problem_list_search_result_view_detail @US2251 @US2792 @DE2657 @DE5921 @DE6552 @DE6758 @DE6989
 Scenario: User is able to view the detail of problem list search results
   Given user searches for and selects "Four,PATIENT"
-  Then user searches for "headache"
-  Then text search result contains
-  
-  |Grouped_search_results|
-  |Problem|
-  When the user clicks one of the search result "Problem" 
-  Then the sub group for "Problem" displays
-  When the user expands the Problem headache subgroup
-  And the sub group for "Problem" contains a row for "Headache"
-     | field    | Sub_group_search_results        |
-     | date     | is in valid format (mm/dd/yyyy) |
-     | status   | Inactive                        |
-     | facility | is valid facility               |
-  When the user displays the details for search result "Problem" subgroup "Headache"
-  Then the modal is displayed
+  When user enters the search term "headache" in the search record input field
+  Then text search returns data
+  And the user expands the main group "Problem"
+  And the user expands the subgroup "Headache"
+  And the user views details of the first "problem headache"
+  And the modal is displayed
   And the modal's title is "Headache"
-  And the "Headache details" modal dialog contains data
+  And the modal dialog contains data labels
 
 @f144_10_lab_report_search_result_view_detail @US2242 @DE865 @DE910 @DE2067 @DE4207 @DE5715 @DE6759
 Scenario: User is able to view the detail of Lab result search results
 
   Given user searches for and selects "Four,PATIENT"
-  When user searches for "hdl - serum"
-  Then text search result contains
-  
-  |Grouped_search_results|
-  |Laboratory|
-  
-  Then the user clicks one of the search result "Laboratory" 
-  Then the user clicks one of the search result "HDL"
+  When user enters the search term "hdl - serum" in the search record input field
+  Then text search returns data
+  And the user expands the main group "Laboratory"
+  And the user views details of the first "Lab HDL-Serum"
   Then the modal is displayed
   And the modal's title is "HDL (SERUM) 58 MG/DL" 
+  And the modal dialog contains data
   And the "Lab Detail" table contains headers
-    | Date       | Lab Test          | Flag | Result | Unit  | Ref Range | Facility |
-  And the "Lab Detail" row is
-    | Date       | Lab Test          | Flag | Result | Unit  | Ref Range | 
-    | 03/05/2010 | HDL - SERUM       |      | 58     | MG/DL | 40-60     | 
+    | Date | Lab Test | Flag | Result | Unit  | Ref Range | Facility |
 
   
-@f144_11_lab_order_search_result_view_detail @US2250 @DE2432 @DE3413 @DE5126 @DE5165 @DE6759 @DE6912
+@f144_11_lab_order_search_result_view_detail @US2250 @DE2432 @DE3413 @DE5126 @DE5165 @DE6759 @DE6912 @debug @DE7010
 Scenario: User is able to view the detail of lab order search results
   # Given user is logged into eHMP-UI
   And user searches for and selects "Four,PATIENT"
@@ -138,7 +122,7 @@ Scenario: User is able to view the detail of lab order search results
   And the modal's title is "URINALYSIS URINE WC LB #579"
   And Current Status for Lab is ACTIVE
     
-@f144_12a_radiology_order_search_result_view_detail @US2256 @DE2337 @DE2432 @DE4555 @DE6814
+@f144_12a_radiology_order_search_result_view_detail @US2256 @DE2337 @DE2432 @DE4555 @DE6814 @debug @DE7011
 Scenario: User is able to view the detail of radiology/Imaging orders search results
   # Given user is logged into eHMP-UI
   And user searches for and selects "Four,PATIENT"
@@ -157,72 +141,47 @@ Scenario: User is able to view the detail of radiology/Imaging orders search res
 
 @f144_12b_radiology_order_search_result_view_detail @US2256 @DE2337 @DE2432 @DE4555
 Scenario: User is able to view the detail of radiology/Imaging orders search results
-  # Given user is logged into eHMP-UI
-  And user searches for and selects "Four,PATIENT"
-  Then user searches for "Radiology"
-  Then text search result contains
-  
-  |Grouped_search_results|
-  |Imaging|
-  
-  Then the user clicks one of the search result "Imaging" 
-  Then the user clicks one of the search result "RADIOLOGIC EXAMINATION, KNEE; 1 OR 2 VIEWS" 
-  And the modal's title is "radiologic examination, knee; 1 or 2 views"
-  And Current Status for "Rad" is "COMPLETE" 
 
-    
+  Given user searches for and selects "Four,PATIENT"
+  When user enters the search term "Radiology" in the search record input field
+  Then text search returns data
+  And the user expands the main group "Imaging"
+  And the user views details of the first "Radiology Imaging"
+  And the modal is displayed
+  And the modal's title is "Radiologic Examination, Abdomen; Anteroposterior And Additional Oblique And Cone Views" 
+  And the modal dialog contains data labels
+  And modal detail status field has a value of "Completed"
+
 @f144_13_display_text_snippest_and_searched_text_is_highlighted @US2906 @DE2337 @DE2657
 Scenario: Text snippets should display when the requested text is found in the search result and the selected word should be highlighted.
   Given user searches for and selects "Four,PATIENT"
-  When user searches for "blood" 
-  Then text search result contains
-  	  | Grouped_search_results |
-      | Discharge Summary      |
-      | Laboratory             |
-      | Problem                |
-      | Progress Note          |
-      | Surgery Report         |
-      | Vital Sign             |
-
-  When the user clicks one of the search result "Progress Note"
-  Then the sub group for "Progress Note" displays
-  When the user expands the Progress Note subgroup
-  And the sub group for "Progress Note" contains a row for "Diabetes"
-     | field    | Sub_group_search_results |
-     | date     | is valid date format     |
-     | facility | is valid facility        |
-     | snippet  | blood                    |
-  And the text search snippet "blood" is highlighted 
+  When user enters the search term "blood" in the search record input field
+  Then text search returns data
+  And the user expands the main group "ProgressNote"
+  And the sub group returns data
+  And the user expands the subgroup "DIABETES"
+  And the search results containing search term "blood" are highlighted 
   
-  
- @f144_14_data_for_subgroup_not_loaded_until_clicked @US2791 @DE2337 @DE2767
+@f144_14_data_for_subgroup_not_loaded_until_clicked @US2791 @DE2337 @DE2767
  Scenario: Data under subgroup is not loaded until the User expands the sub group.
   Given user searches for and selects "Four,PATIENT"
-  And user searches for "Progress Notes"
-  And text search result contains
-  	  | Grouped_search_results |
-      | Progress Note          |
-      
-  When the user clicks one of the search result "Progress Note"
-  Then the sub group for "Progress Note" displays
+  When user enters the search term "Progress Notes" in the search record input field
+  Then text search returns data
+  And the user expands the main group "ProgressNote"
+  And the sub group returns data
   And no subgroup data rows are loaded
-  Then the user clicks one of the search result "General Medicine Note" 
-  Then subgroup data rows are loaded
-  Then the user clicks one of the search result "Anne Lab" 
-  Then more subgroup data rows are loaded
-   
-   
-
+  And the user expands the subgroup "GENERALMEDICINENOTE" 
+  And subgroup data rows are loaded
+  And the user expands the subgroup "ANNELAB" 
+  And more subgroup data rows are loaded
+ 
  @f144_15_subgrouping_view_of_progress_notes @US2376 @DE1575 @DE2767 @document_text_search
  Scenario:Text Search: Document data drill down "Progress Notes(Documents)" in Text Search
   And user searches for and selects "Four,PATIENT"
-  Then user searches for "Progress Notes"
-
-  Then text search result contains
-  	  | Grouped_search_results |
-      | Progress Note          |
-  Then the user clicks one of the search result "Progress Note"
-  Then the text search results contain document sub groups
+  When user enters the search term "Progress Notes" in the search record input field
+  Then text search returns data
+  And the user expands the main group "ProgressNote"
+  And the sub group returns data
   And the user expands all result groups
   And the text search subgroup "ProgressNote" results display
      | field    | Sub_group_search_results        |
@@ -231,16 +190,11 @@ Scenario: Text snippets should display when the requested text is found in the s
       
 @f144_16_subgrouping_view_of_Administrative_notes @US2792 @DE2337 @DE2657 @document_text_search
 Scenario:Text Search: Document data drill down "Administrative Notes(Documents)" in Text Search
-# Given user is logged into eHMP-UI
   And user searches for and selects "Ten,PATIENT"
-  Then user searches for "Administrative"
-  Then text search result contains
-  
-  	  | Grouped_search_results |
-      | Administrative Note      |
-    
-  Then the user clicks one of the search result "Administrative Note"
-  Then the text search results contain document sub groups
+  When user enters the search term "Administrative" in the search record input field
+  Then text search returns data
+  And the user expands the main group "AdministrativeNote"
+  And the sub group returns data
   And the user expands all result groups
   And the text search subgroup "AdministrativeNote" results display
      | field    | Sub_group_search_results        |
@@ -249,56 +203,37 @@ Scenario:Text Search: Document data drill down "Administrative Notes(Documents)"
  
 @f144_17_subgrouping_view_of_Advancedirective @US2792 @DE2337 @DE2657 @document_text_search
 Scenario:Text Search: Document data drill down "Advancedirective (Documents)"
-# Given user is logged into eHMP-UI
   And user searches for and selects "Ten,PATIENT"
-  Then user searches for "directive"
-  Then text search result contains
-  
-  	  | Grouped_search_results |
-      | Advance Directive      |
-    
-  Then the user clicks one of the search result "Advance Directive"
-  Then the text search results contain document sub groups
+  When user enters the search term "directive" in the search record input field
+  Then text search returns data
+  And the user expands the main group "AdvanceDirective"
+  And the sub group returns data
   And the user expands all result groups
   And the text search subgroup "AdvanceDirective" results display
      | field    | Sub_group_search_results        |
      | date     | is in valid format (mm/dd/yyyy) |
      | facility | is valid facility               |
       
- @f144_18_subgrouping_view_of_Clinical_Procedcure @US2792 @DE2337 @DE2657 @document_text_search
+@f144_18_subgrouping_view_of_Clinical_Procedcure @US2792 @DE2337 @DE2657 @document_text_search
 Scenario:Text Search: Document data drill down "Clinical Procedure (Documents)"
-# Given user is logged into eHMP-UI
-  And user searches for and selects "Ten,PATIENT"
-  Then user searches for "clinical procedure"
-  Then text search result contains
-  
-  	  | Grouped_search_results |
-      | Clinical Procedure      |
-      
-    
-  Then the user clicks one of the search result "Clinical Procedure"
-  Then the text search results contain document sub groups
+  Given user searches for and selects "Ten,PATIENT"
+  When user enters the search term "clinical procedure" in the search record input field
+  Then text search returns data
+  And the user expands the main group "ClinicalProcedure"
+  And the sub group returns data
   And the user expands all result groups
   And the text search subgroup "ClinicalProcedure" results display
      | field    | Sub_group_search_results        |
      | date     | is in valid format (mm/dd/yyyy) |
      | facility | is valid facility               |
-      
-      
-   
+  
 @f144_19_subgrouping_view_of_Consult_Report @US2792 @DE2337 @DE2657 @document_text_search
 Scenario:Text Search: Document data drill down "Consult Report"
-# Given user is logged into eHMP-UI
   And user searches for and selects "Ten,PATIENT"
-  Then user searches for "consult report"
-  Then text search result contains
-  
-  	  | Grouped_search_results |
-      | Consult Report         |
-      
-    
-  Then the user clicks one of the search result "Consult Report"
-  Then the text search results contain document sub groups
+  When user enters the search term "consult report" in the search record input field
+  Then text search returns data
+  And the user expands the main group "ConsultReport"
+  And the sub group returns data
   And the user expands all result groups
   And the text search subgroup "ConsultReport" results display
      | field    | Sub_group_search_results        |
@@ -308,17 +243,11 @@ Scenario:Text Search: Document data drill down "Consult Report"
       
 @f144_20_subgrouping_view_of_Consultation_Note_Document @US2792 @DE2337 @DE2657 @document_text_search
 Scenario:Text Search: Document data drill down "Consultation Note (Provider) Document"
-# Given user is logged into eHMP-UI
   And user searches for and selects "eight,PATIENT"
-  Then user searches for "consultation note (provider) document"
-  Then text search result contains
-  
-  	  | Grouped_search_results                     |
-      | consultation note (provider) document      |
-      
-    
-  Then the user clicks one of the search result "Consultation Note"
-  Then the text search results contain document sub groups
+  When user enters the search term "consultation note (provider) document" in the search record input field
+  Then text search returns data
+  And the user expands the main group "ConsultationNoteProviderDocument"
+  And the sub group returns data
   And the user expands all result groups
   And the text search subgroup "ConsultationNoteProviderDocument" results display
      | field    | Sub_group_search_results        |
@@ -327,17 +256,11 @@ Scenario:Text Search: Document data drill down "Consultation Note (Provider) Doc
       
 @f144_21_subgrouping_view_of_Crisis_Note_Document @US2792 @DE2337 @DE2657
 Scenario:Text Search: Document data drill down "Crisis Note"
-# Given user is logged into eHMP-UI
   And user searches for and selects "four,PATIENT"
-  Then user searches for "crisis note"
-  Then text search result contains
-  
-  	  | Grouped_search_results |
-      | Crisis Note            |
-      
-    
-  Then the user clicks one of the search result "Crisis Note"
-  Then the text search results contain document sub groups
+  When user enters the search term "crisis note" in the search record input field
+  Then text search returns data
+  And the user expands the main group "CrisisNote"
+  And the sub group returns data
   And the user expands all result groups
   And the text search subgroup "CrisisNote" results display
      | field    | Sub_group_search_results        |
@@ -346,17 +269,11 @@ Scenario:Text Search: Document data drill down "Crisis Note"
       
 @f144_22_subgrouping_view_of_Discharge_Summary_Document @US2792 @DE2337 @DE2657
 Scenario:Text Search: Document data drill down "Discharge Summary"
-# Given user is logged into eHMP-UI
   And user searches for and selects "four,PATIENT"
-  Then user searches for "Discharge Summary"
-  Then text search result contains
-  
-  	  | Grouped_search_results |
-      |Discharge Summary       |
-      
-    
-  Then the user clicks one of the search result "Discharge Summary"
-  Then the text search results contain document sub groups
+  When user enters the search term "Discharge Summary" in the search record input field
+  Then text search returns data
+  And the user expands the main group "DischargeSummary"
+  And the sub group returns data
   And the user expands all result groups
   And the text search subgroup "DischargeSummary" results display
      | field    | Sub_group_search_results        |
@@ -365,40 +282,21 @@ Scenario:Text Search: Document data drill down "Discharge Summary"
       
 @f144_23_subgrouping_view_of_Laboratory_Report_Document @US2792 @DE2337 @DE2657 @DE5288
 Scenario:Text Search: Document data drill down "Laboratory Report"
-# Given user is logged into eHMP-UI
   And user searches for and selects "ten,PATIENT"
-  Then user searches for "Laboratory Report"
-  Then text search result contains
-  
-  	  | Grouped_search_results |
-      | Laboratory Report      |
-      
-    
-  Then the user clicks one of the search result "Laboratory Report"
-  Then text search result contains
-      | sub_grouped_results            |
-      | LR ELECTRON MICROSCOPY REPORT  |
-      | LR MICROBIOLOGY REPORT         |
-      | LR SURGICAL PATHOLOGY REPORT   |
-      
-     
-  Then the user clicks one of the search result "LR ELECTRON MICROSCOPY REPORT" 
-  Then sub grouped search result for "LR ELECTRON MICROSCOPY REPORT" contains
-      | field    | Sub_group_search_results |
-      | date     | 10/23/1997               |
-      | facility | CAMP BEE                 |
+  When user enters the search term "Laboratory Report" in the search record input field
+  Then text search returns data
+  And the user expands the main group "LaboratoryReport"
+  And the sub group returns data
+  And the user expands the subgroup "LRELECTRONMICROSCOPYREPORT"   
+  And the sub group returns data
       
 @f144_24_subgrouping_view_of_Radiology_Report_Document @US2792 @DE2337 @DE2657
 Scenario:Text Search: Document data drill down "Radiology Report"
-# Given user is logged into eHMP-UI
   And user searches for and selects "ten,PATIENT"
-  Then user searches for "Radiology Report"
-  Then text search result contains
-  
-  	  | Grouped_search_results |
-      | Radiology Report       |
-  Then the user clicks one of the search result "Radiology Report"
-  Then the text search results contain document sub groups
+  When user enters the search term "Radiology Report" in the search record input field
+  Then text search returns data
+  And the user expands the main group "RadiologyReport"
+  And the sub group returns data
   And the user expands all result groups
   And the text search subgroup "RadiologyReport" results display
      | field    | Sub_group_search_results        |
@@ -406,31 +304,26 @@ Scenario:Text Search: Document data drill down "Radiology Report"
      | facility | is valid facility               |
   
       
- @f144_25_subgrouping_view_of_Surgery_Report_Document @US2792 @DE2337 @DE2657
+@f144_25_subgrouping_view_of_Surgery_Report_Document @US2792 @DE2337 @DE2657
 Scenario:Text Search: Document data drill down "Surgery Report"
-# Given user is logged into eHMP-UI
   And user searches for and selects "ten,PATIENT"
-  Then user searches for "Surgery Report"
-  Then text search result contains
-  	  | Grouped_search_results |
-      | Surgery Report         |
-  Then the user clicks one of the search result "Surgery Report"
-  Then the text search results contain document sub groups
+  When user enters the search term "Surgery Report" in the search record input field
+  Then text search returns data
+  And the user expands the main group "SurgeryReport"
+  And the sub group returns data
   And the user expands all result groups
   And the text search subgroup "SurgeryReport" results display
      | field    | Sub_group_search_results        |
      | date     | is in valid format (mm/dd/yyyy) |
      | facility | is valid facility               |
-      
-      
-@f144_26_Radiology_Report_detail_view_from_tex_search @US2363 @DE2337 @DE2657 @DE5290 @DE6814
-Scenario:User is able to view Radiology/Imaging Report detail from Text Search 
-# Given user is logged into eHMP-UI
+ 
+@f144_26_details_view_of_radiology_report @US2363 @DE2337 @DE2657 @DE5290 @DE6814 @debug @DE7013 
+Scenario:Text Search: Details view for  "Radiology Report"  
+     Given user is logged into eHMP-UI
   And user searches for and selects "ten,PATIENT"
   Then user searches for "Radiology Report"
-  Then text search result contains
-  
-  	  | Grouped_search_results |
+  Then text search result contains 
+   | Grouped_search_results |
       | Radiology Report       |
   Then the user clicks one of the search result "Radiology Report"
   Then the text search results contain document sub groups
@@ -441,7 +334,5 @@ Scenario:User is able to view Radiology/Imaging Report detail from Text Search
      | facility | is valid facility               |
   When the user selects a result from "RadiologyReport" subgroup
   Then a the Radiology Report modal displays
-
-
 
   

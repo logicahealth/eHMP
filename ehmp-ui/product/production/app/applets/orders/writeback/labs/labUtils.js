@@ -240,10 +240,11 @@ define([
             this.listenTo(orderDialogsDef, 'read:error', function() {
                 this.model.set('serverSideError', 'pick-list');
             });
-
             orderDialogsDef.fetch({
                 params: {
-                    location: location
+                    location: location,
+                    division: ADK.UserService.getUserSession().get('division'),
+                    site: ADK.UserService.getUserSession().get('site')
                 }
             });
         },

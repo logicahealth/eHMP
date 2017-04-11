@@ -4,9 +4,6 @@ define([
 ], function(Backbone, Marionette) {
     'use strict';
 
-    /*
-     ** AddLab Orders call Modal
-     */
     function onAddALabOrderClicked(event) {
         var channel = ADK.Messaging.getChannel('addALabOrderRequestChannel'),
             deferredResponse = channel.request('addLabOrderModal');

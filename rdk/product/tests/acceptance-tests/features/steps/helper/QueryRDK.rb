@@ -90,10 +90,10 @@ class RDClass
 
   def self.resourcedirectory_fetch
     if @@resourcedirectory_fetch.nil?
-      p "FIRST TIME: DISCOVER PATHS"
+      puts "FIRST FETCH SERVER TIME: DISCOVER PATHS"
       base_url = DefaultLogin.rdk_fetch_url
       path = "#{base_url}/resource/resourcedirectory"
-      p base_url
+      puts base_url
       @response = HTTParty.get(path)
       @@resourcedirectory_fetch= FetchResourceDirectory.new(JSON.parse(@response.body), base_url)
     end # if
@@ -102,10 +102,10 @@ class RDClass
 
   def self.resourcedirectory_writeback
     if @@resourcedirectory_writeback.nil?
-      p "FIRST TIME: DISCOVER PATHS"
+      puts "FIRST WRITEBACK SERVER TIME: DISCOVER PATHS"
       base_url = DefaultLogin.rdk_writeback_url
       path = "#{base_url}/resource/write-health-data/resourcedirectory"
-      p base_url
+      puts base_url
       @response = HTTParty.get(path)
       @@resourcedirectory_writeback= FetchResourceDirectory.new(JSON.parse(@response.body), base_url)
     end # if
@@ -114,10 +114,10 @@ class RDClass
 
   def self.resourcedirectory_picklist
     if @@resourcedirectory_picklist.nil?
-      p "FIRST TIME: DISCOVER PATHS"
+      puts "FIRST PICKLIST SERVER TIME: DISCOVER PATHS"
       base_url = DefaultLogin.rdk_picklist_url
       path = "#{base_url}/resource/write-pick-list/resourcedirectory"
-      p base_url
+      puts base_url
       @response = HTTParty.get(path)
       @@resourcedirectory_picklist= FetchResourceDirectory.new(JSON.parse(@response.body), base_url)
     end # if
@@ -150,7 +150,7 @@ class QueryRDKVisitAPI < BuildQuery
 end # class
 
 class QueryGenericRDK < BuildQuery
-  # http://IP             /visits/providers
+  # http://10.4.4.105:8888/visits/providers
   def initialize(command, pid = nil, action = nil)
     super()
     @number_parameters = 0
@@ -186,9 +186,8 @@ class QueryGenericRDK < BuildQuery
   end
 end # class
 
-#http://IP             /patientrecord/search/text?query=document&pid=9E7A;100022
+#http://10.4.4.105:8888/patientrecord/search/text?query=document&pid=9E7A;100022
 class QueryRDK < BuildQuery
-  p "inside class QueryRDK"
   def initialize(pid, type)
     super()
     domain_path = RDClass.resourcedirectory_fetch.get_url("patient-record-search-text")
@@ -199,7 +198,7 @@ class QueryRDK < BuildQuery
   end
 end
 
-#http://IP             /fhir/patient/urn:va:patient:9E7A:100716:100716
+#http://10.4.4.105:8888/fhir/patient/urn:va:patient:9E7A:100716:100716
 class QueryRDKDemographics < BuildQuery
   def initialize(type, uid)
     super()
@@ -212,7 +211,7 @@ class QueryRDKDemographics < BuildQuery
   end
 end
 
-#http://IP             /resource/fhir/patient/9E7A;253/observation
+#http://10.4.4.105:8888/resource/fhir/patient/9E7A;253/observation
 class QueryRDKFhir < BuildQuery
   def initialize(uid, domain)
     super()
@@ -225,7 +224,7 @@ class QueryRDKFhir < BuildQuery
   end
 end
 
-#http://IP             /resource/fhir/metadata
+#http://10.4.4.105:8888/resource/fhir/metadata
 class QueryRDKFhirMetadata < BuildQuery
   def initialize
     super()
@@ -234,7 +233,7 @@ class QueryRDKFhirMetadata < BuildQuery
   end
 end
 
-#http://IP           /resource/vler/9E7A;8/toc?encounterUid=urn:va:visit:9E7A:8:1218
+#http://10.4.4.5:8888/resource/vler/9E7A;8/toc?encounterUid=urn:va:visit:9E7A:8:1218
 class QueryRDKVler < BuildQuery
   def initialize(type)
     super()
@@ -257,9 +256,8 @@ if __FILE__ == $PROGRAM_NAME
   p QueryRDKAPI.new("uid", "3", "false").path
 end
 
-#http://IP             /patientrecord/domain/document?pid=10108V420871&filter=eq(kind,"Progress Note")
+#http://10.4.4.105:8888/patientrecord/domain/document?pid=10108V420871&filter=eq(kind,"Progress Note")
 class QueryRDKFilterBySummary < BuildQuery
-  p "inside class QueryRDKFilterBySummary"
   def initialize(pid = nil, filter = nil)
     super()
     @path = String.new(DefaultLogin.rdk_fetch_url)
@@ -273,7 +271,7 @@ class QueryRDKFilterBySummary < BuildQuery
   end
 end
 
-#http://IP             /resource/tasks?accessCode=PW    &verifyCode=PW    !!&site=9E7A
+#http://10.4.4.105:8888/resource/tasks?accessCode=pu1234&verifyCode=pu1234!!&site=9E7A
 #{"context": "patient","patientICN":"10108V420871","status":"Ready"}
 class RDKProcessList< BuildQuery
   def initialize
@@ -283,7 +281,7 @@ class RDKProcessList< BuildQuery
   end
 end
 
-#http://IP             /resource/tasks/startprocess?accessCode=PW    &verifyCode=PW    !!&site=9E7A
+#http://10.4.4.105:8888/resource/tasks/startprocess?accessCode=pu1234&verifyCode=pu1234!!&site=9E7A
 #{"deploymentId":"VistaCore:FITLabProject:0.0.0","processDefId":"FITLabProject.FITLabActivity","parameter":{"icn":"10108V420871","facility":"9E7A"}}
 class RDKStartProcess< BuildQuery
   def initialize
@@ -293,12 +291,12 @@ class RDKStartProcess< BuildQuery
   end
 end
 
-#http://IP             /resource/patient/record/domain/vital?filter=and(DATEFILTER)&pid=10107V395912
+#http://10.4.4.105:8888/resource/patient/record/domain/vital?filter=and(DATEFILTER)&pid=10107V395912
 class QueryRDKCCB < BuildQuery
   def initialize(type)
     super()
     @path = String.new(DefaultLogin.rdk_fetch_url)
-    @path.concat("/resource/patient/record/domain/vital?filter=and(ne(r350407%22%2C%2220150420235959%22))%2C%20ne(result%2CPass)&pid=" + type)
+    @path.concat("/resource/patient/record/domain/vital?filter=ne(result,Pass)&pid=" + type)
   end
 end
 

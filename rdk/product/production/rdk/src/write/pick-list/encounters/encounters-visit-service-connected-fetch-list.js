@@ -48,20 +48,23 @@ var _ = require('lodash');
  * @param params object which can contain optional and/or required parameters as described above.
  */
 module.exports.fetch = function(logger, configuration, callback, params) {
-    var dfn = _.get(params, 'dfn');
     var visitDate = _.get(params, 'visitDate');
-    var locationIEN =  locationUtil.getLocationIEN(_.get(params, 'locationUid'));
+    var locationIEN = locationUtil.getLocationIEN(_.get(params, 'locationUid'));
+    var options = {
+        requiresDfn: true
+    };
+    validate.getPatientDFN(params, options, function(err, patientDFN) {
+        if (err) {
+            return callback(err);
+        }
+        if (validate.isStringNullish(visitDate)) {
+            return callback('visitDate Cannot be Empty');
+        }
+        if (!locationIEN) {
+            return callback('locationIEN for Encounters Visit Service Cannot be Empty');
+        }
+        visitDate = dateConverter.getFilemanDateWithArgAsStr(visitDate);
 
-    if (validate.isStringNullish(dfn)) {
-        return callback('dfn Cannot be Empty');
-    }
-    if (validate.isStringNullish(visitDate)) {
-        return callback('visitDate Cannot be Empty');
-    }
-    if (!locationIEN) {
-        return callback('locationIEN for Encounters Visit Service Cannot be Empty');
-    }
-    visitDate = dateConverter.getFilemanDateWithArgAsStr(visitDate);
-
-    return rpcUtil.standardRPCCall(logger, configuration, 'ORWPCE SCSEL', dfn, visitDate, locationIEN, parse, callback);
+        return rpcUtil.standardRPCCall(logger, configuration, 'ORWPCE SCSEL', patientDFN, visitDate, locationIEN, parse, callback);
+    });
 };

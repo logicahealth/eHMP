@@ -1,5 +1,4 @@
 'use strict';
-var _ = require('lodash');
 var async = require('async');
 var pjdsHandler = require('./persistence/pjds-handler.js');
 

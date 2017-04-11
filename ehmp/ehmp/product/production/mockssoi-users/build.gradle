@@ -1,0 +1,12 @@
+ext.set('repo', uploadRepo)
+ext.set('groupId', 'us.vistacore.ssoi-mock')
+ext.set('artifactId', 'mockssoi-users')
+ext.set('ssoiUsersJson', ssoi_users_json_path())
+
+def ssoi_users_json_path(){
+  return "$projectDir/src/mockssoi-users.json"
+}
+
+artifacts {
+  archives new File(ssoi_users_json_path())
+}

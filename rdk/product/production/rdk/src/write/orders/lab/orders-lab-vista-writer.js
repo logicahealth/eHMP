@@ -1,14 +1,13 @@
 'use strict';
 
-var fhirUtils = require('../../../fhir/common/utils/fhir-converter');
 var locationUtils = require('../../../utils/location-util');
 var filemanDateUtil = require('../../../utils/fileman-date-converter');
 var rpcClientFactory = require('../../core/rpc-client-factory');
-var ordersUtils = require('../common/orders-utils');
 var orderChecks = require('../common/orders-common-check-vista-writer');
 var lockPatient = require('../common/orders-common-patient-lock');
 var vprOrders = require('../common/orders-common-vpr-order');
 var nullchecker = require('../../../core/rdk').utils.nullchecker;
+var _ = require('lodash');
 
 module.exports.create = function(writebackContext, callback) {
     writebackContext.vistaConfig.noReconnect = true;
@@ -40,7 +39,6 @@ module.exports.create = function(writebackContext, callback) {
                         lockPatient.unlockPatient(writebackContext);
                         return callback(err, data);
                     } else if (data) {
-                        var response = {};
                         var orderCheckList = [];
                         var dataList;
                         if (data.indexOf('\r\n') === -1) {
@@ -112,7 +110,6 @@ module.exports.update = function(writebackContext, callback) {
                         lockPatient.unlockPatient(writebackContext);
                         return callback(err, data);
                     } else if (data) {
-                        var response = {};
                         var orderCheckList = [];
                         var dataList;
                         if (data.indexOf('\r\n') === -1) {
@@ -179,7 +176,7 @@ function saveOrder(updateJds, writebackContext, rpcClient, callback) {
 
             if (err || !vprOrder) {
 
-                var msg = "Could not retrieve VPR order";
+                var msg = 'Could not retrieve VPR order';
                 if (err) {
                     msg = err.message;
                 }
@@ -221,14 +218,14 @@ function getParameters(dfn, model) {
             parameters.push('');
         }
         var inputList = {};
-        for (var i in model.inputList) {
+        _.each(model.inputList, function(value, i) {
             inputList[model.inputList[i].inputKey + ',1'] = model.inputList[i].inputValue; //FUTURE-TODO need further research on instance for future features
-        }
+        });
         //convert collection date/time
         if ((inputList['28,1'] !== 'LC') && (inputList['6,1'] !== 'TODAY')) {
             inputList['6,1'] = filemanDateUtil.getFilemanDateWithArgAsStr(inputList['6,1']);
         }
-
+        var i;
         if (model.commentList) {
             var wpInstance = '15,1'; //FUTURE-TODO need further research on instance for future features
             inputList[wpInstance] = 'ORDIALOG("WP",' + wpInstance + ')';
@@ -271,15 +268,14 @@ function isOrderChecked(model) {
 function getOrderChecks(data) {
     var response = {};
     var orderCheckList = [];
+    var check = {};
     if (data.indexOf('\r\n') === -1) {
-        var check = {};
         check.orderCheck = data;
         orderCheckList.push(check);
     } else {
         var dataList = data.split('\r\n');
         var i = 0;
         for (; i < dataList.length - 1; i++) {
-            var check = {};
             check.orderCheck = dataList[i];
             orderCheckList.push(check);
         }

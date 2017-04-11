@@ -1,5 +1,4 @@
 'use strict';
-var _ = require('lodash');
 var rdk = require('../../core/rdk');
 var rulesEngine = require('../pdp/rules-engine');
 var rules = require('../pdp/user-policy-rules').rules;
@@ -24,4 +23,4 @@ module.exports = function(req, res, callback) {
             code: rdk.httpstatus.forbidden
         }, null);
     });
-}
+};

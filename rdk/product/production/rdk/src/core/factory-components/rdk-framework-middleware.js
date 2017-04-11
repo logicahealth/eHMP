@@ -48,7 +48,7 @@ function setupAppMiddleware(app) {
 
 function setupTrustProxy(app) {
     app.use(function(req, res, next) {
-        var clientIsBalancer = (req.headers['x-forwarded-host'] === 'IP        ');
+        var clientIsBalancer = (req.headers['x-forwarded-host'] === '10.1.1.149');
         if (app.config.environment === 'development') {
             app[clientIsBalancer ? 'enable' : 'disable']('trust proxy');
         } else {

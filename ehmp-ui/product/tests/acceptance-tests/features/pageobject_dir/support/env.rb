@@ -4,13 +4,16 @@ require 'capybara'
 require 'site_prism'
 require 'selenium-webdriver'
 require 'capybara/rspec/matchers'
+require 'show_me_the_cookies'
 require_relative '../../steps/helper/DefaultLogin'
+require_relative 'siteprism_monkey_patch.rb'
 
 Capybara.default_wait_time = 15
-Capybara.app_host = ENV.keys.include?('EHMPUI_IP') ? ENV['EHMPUI_IP'] : "https://IP        "
+Capybara.app_host = ENV.keys.include?('EHMPUI_IP') ? ENV['EHMPUI_IP'] : "https://10.1.1.150"
 
 World(Capybara::DSL)
 World(Capybara::RSpecMatchers)
+World(ShowMeTheCookies)
 
 btype = ENV['BTYPE'] || 'phantomjs'
 bob = nil
@@ -55,7 +58,11 @@ Before do |scenario|
     # p "Before Scenario: #{Capybara.current_driver}"
   end
 
-  if scenario.test_steps.map(&:name).index { |s| s =~ DefaultLogin.login_step } and !DefaultLogin.logged_in
+  if scenario.test_steps.map(&:name).index { |s| s =~ DefaultLogin.launch_ehmp } and !DefaultLogin.logged_in
+    p "Launching ehmp-UI login page"
+    # step 'user launches eHMP-UI'
+
+  elsif scenario.test_steps.map(&:name).index { |s| s =~ DefaultLogin.login_step } and !DefaultLogin.logged_in
     p 'Logging in with non-Standard user!!!'
 
   elsif !scenario.test_steps.map(&:name).index { |s| s =~ DefaultLogin.login_step } and !DefaultLogin.logged_in
@@ -81,6 +88,7 @@ After do |scenario|
 
   p "scenario tags: #{scenario.source_tag_names}"
   RecordTime.save_test_duration(scenario.source_tag_names, scenario.failed?, temp_location)
+  refresh_zombie_tooltips
 
   if scenario.failed?
     DefaultLogin.logged_in = false
@@ -96,6 +104,8 @@ After do |scenario|
     TestSupport.driver.execute_script("ADK.Checks._checkCollection.reset();")
     close_any_open_modals #if scenario.source_tag_names.include? '@modal_test'
     step 'POB log me out'
+  elsif scenario.test_steps.map(&:name).index { |s| s =~ DefaultLogin.launch_ehmp } and !DefaultLogin.logged_in
+    TestSupport.driver.execute_script("ADK.Checks._checkCollection.reset();")
   elsif scenario.test_steps.map(&:name).index { |s| s =~ DefaultLogin.login_step } and DefaultLogin.logged_in
     TestSupport.driver.execute_script("ADK.Checks._checkCollection.reset();")
     close_any_open_modals #if scenario.source_tag_names.include? '@modal_test'
@@ -105,6 +115,6 @@ After do |scenario|
     TestSupport.driver.execute_script("ADK.Checks._checkCollection.reset();")
     close_any_open_modals #if scenario.source_tag_names.include? '@modal_test'
     TestSupport.driver.execute_script("ADK.Messaging.getChannel('toolbar').trigger('close:toolbar');")
-    step 'Navigate to Patient Search Screen'
+    step 'Navigate to Staff View screen ignore errors'
   end
 end

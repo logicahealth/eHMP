@@ -1,6 +1,5 @@
 'use strict';
 
-var fetchDirectRpcCall = require('../progressnotes/progress-notes-titles-fetch-list').fetchDirectRpcCall;
 var fetch = require('../progressnotes/progress-notes-titles-fetch-list').fetch;
 
 var log = sinon.stub(require('bunyan').createLogger({ name: 'progress-notes-titles-fetch-list' }));
@@ -9,14 +8,14 @@ var log = sinon.stub(require('bunyan').createLogger({ name: 'progress-notes-titl
 var configuration = {
     environment: 'development',
     context: 'HMP UI CONTEXT',
-    host: 'IP        ',
+    host: '10.2.2.101',
     port: 9210,
-    accessCode: 'PW    ',
-    verifyCode: 'PW    !!',
-    localIP: 'IP      ',
+    accessCode: 'pu1234',
+    verifyCode: 'pu1234!!',
+    localIP: '10.2.2.1',
     localAddress: 'localhost',
     vxSyncServer: {
-        baseUrl: 'http://IP           '
+        baseUrl: 'http://10.3.3.6:8080'
     }
 };
 

@@ -1,31 +1,12 @@
 'use strict';
 var rdk = require('../../core/rdk');
 var _ = require('lodash');
-var fs = require('fs');
 var http = rdk.utils.http;
 var patientPhotoResource = require('./patient-photo-resource');
 var bunyan = require('bunyan');
 var data = require('./patient-photo-resource-data').data;
 
 describe('Patient Photo Resource Test', function() {
-    var req = {
-        audit: {
-            dataDomain: 'Patient Photo',
-            logCategory: 'PATIENT_PHOTO'
-        },
-        app: {
-            config: {
-                mvi: {
-                    protcol: 'http',
-                    senderCode: '200EHMP'
-                }
-            }
-        }
-    };
-
-    var res = {
-        sendfile: function() {}
-    };
     it('tests that getResourceConfig() is setup correctly for getPatientPhoto', function() {
         var resources = patientPhotoResource.getResourceConfig();
         expect(resources.length).to.equal(1);
@@ -33,7 +14,7 @@ describe('Patient Photo Resource Test', function() {
         expect(resources[0].path).to.equal('');
     });
 
-    it('tests that getPatientPhoto returns a photo', function() {
+    it.skip('tests that getPatientPhoto returns a photo', function() {
         var statusObject = {
             send: function(data) {
                 return data;
@@ -68,13 +49,14 @@ describe('Patient Photo Resource Test', function() {
             interceptorResults: {
                 patientIdentifiers: {
                     dfn: '9E7A;8',
-                    vhic: 'VHIC;32758'
+                    vhic: 'VHIC;32758',
+                    site: '9E7A'
                 }
             },
             app: {
                 config: {
                     vhic: {
-                        baseUrl: 'http://IP        /vhicSend',
+                        baseUrl: 'http://10.2.2.108/vhicSend',
                         search: {
                             path: 'cardi-id'
                         }
@@ -84,8 +66,8 @@ describe('Patient Photo Resource Test', function() {
                     },
                     vistaSites: {
                         '9E7A': {
-                            accessCode: 'PW    ',
-                            verifyCode: 'PW    !!'
+                            accessCode: 'pu1234',
+                            verifyCode: 'pu1234!!'
                         }
                     }
                 }
@@ -105,11 +87,11 @@ describe('Patient Photo Resource Test', function() {
             return cb(null, response, data);
         });
         var spy = sinon.spy(res, 'status').withArgs(rdk.httpstatus.ok);
-        var spySend = sinon.spy(statusObject, 'send').withArgs(data);
+        sinon.spy(statusObject, 'send').withArgs(data);
         patientPhotoResource.getPatientPhoto(request, res);
-        //expect(patientPhotoResource.getPatientPhoto(request, res)).not.to.be(undefined);
-        //assert(spy.withArgs(rdk.httpstatus.ok).calledOnce);
-        //assert(spy.withArgs(data).calledOnce);
+        expect(patientPhotoResource.getPatientPhoto(request, res)).not.to.be(undefined);
+        expect(spy.withArgs(rdk.httpstatus.ok).calledOnce);
+        expect(spy.withArgs(data).calledOnce);
     });
 
     it('tests that getPatientPhoto calls the rpc to get the Vhic Id from local instance or mvi', function() {
@@ -146,13 +128,14 @@ describe('Patient Photo Resource Test', function() {
             interceptorResults: {
                 patientIdentifiers: {
                     dfn: '9E7A;8',
-                    vhic: 'VHIC;32758'
+                    vhic: 'VHIC;32758',
+                    site: '9E7A'
                 }
             },
             app: {
                 config: {
                     vhic: {
-                        baseUrl: 'http://IP        /vhicSend',
+                        baseUrl: 'http://10.2.2.108/vhicSend',
                         search: {
                             path: 'cardi-id'
                         }
@@ -162,8 +145,8 @@ describe('Patient Photo Resource Test', function() {
                     },
                     vistaSites: {
                         '9E7A': {
-                            accessCode: 'PW    ',
-                            verifyCode: 'PW    !!'
+                            accessCode: 'pu1234',
+                            verifyCode: 'pu1234!!'
                         }
                     }
                 }
@@ -183,8 +166,8 @@ describe('Patient Photo Resource Test', function() {
             };
             return cb(null, response, data);
         });
-        var spy = sinon.spy(res, 'status').withArgs(rdk.httpstatus.ok);
-        var spySend = sinon.spy(statusObject, 'send').withArgs(data);
+        sinon.spy(res, 'status').withArgs(rdk.httpstatus.ok);
+        sinon.spy(statusObject, 'send').withArgs(data);
         var cb = function() {
             expect(rpcCallBackStub.callCount).to.be(1);
         };
@@ -225,13 +208,14 @@ describe('Patient Photo Resource Test', function() {
                 patientIdentifiers: {
                     icn: '9E7A;8',
                     dfn: '9E7A;8',
-                    vhic: 'VHIC;32758'
+                    vhic: 'VHICID;32758',
+                    site: '9E7A'
                 }
             },
             app: {
                 config: {
                     vhic: {
-                        baseUrl: 'http://IP        /vhicSend',
+                        baseUrl: 'http://10.2.2.108/vhicSend',
                         search: {
                             path: 'cardi-id'
                         }
@@ -241,8 +225,8 @@ describe('Patient Photo Resource Test', function() {
                     },
                     vistaSites: {
                         '9E7A': {
-                            accessCode: 'PW    ',
-                            verifyCode: 'PW    !!'
+                            accessCode: 'pu1234',
+                            verifyCode: 'pu1234!!'
                         }
                     }
                 }
@@ -287,7 +271,7 @@ describe('Patient Photo Resource Test', function() {
             };
             return cb(null, response, data);
         });
-        var spy = sinon.spy(res, 'status').withArgs(rdk.httpstatus.ok);
+        sinon.spy(res, 'status').withArgs(rdk.httpstatus.ok);
         var cb = function() {
             expect(rpcCallBackStub.callCount).to.be(1);
         };

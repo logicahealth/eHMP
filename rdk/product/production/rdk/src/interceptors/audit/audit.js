@@ -32,6 +32,10 @@ function initializeRequestAudit(req, authInfo) {
         req.audit.authUserId = authDuz[authSite];
     }
 
+    if (_.has(authInfo, 'facility')) {
+        req.audit.facility = authInfo.facility;
+    }
+
     if (_.has(authInfo, 'systemName')) {
         req.audit.authUserId = authInfo.systemName;
     }

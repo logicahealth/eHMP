@@ -1,4 +1,4 @@
-@F294_reports_gist @regression
+@F294_reports_gist  @reg2
 Feature: F294 : Documetns Applet - Summary View
 As a clinician I would like to have a summary view of documents that contains only items 
 that are reports so that I can quickly get to information on reports
@@ -75,7 +75,7 @@ Scenario: View consult in reports gist
 @F294_4_ReportsGistDisplay_imaging_labreport @US4157
 Scenario: View imaging and lab reports in reports gist
   # Given user is logged into eHMP-UI
-  And user searches for and selects "ZZZRETFOURFORTYSEVEN"
+  And user searches for and selects "ZZZRETFOURFORTYSEVEN,PATIENT"
   Then Overview is active
   And the user has selected All within the global date picker
   And the Reports Gist Applet contains data rows

@@ -6,21 +6,6 @@ class ActiveScreen < AccessBrowserV2
   end
 end # 
 
-def user_views_screen(url, screen_name)
-  screen_url = "#{url}##{screen_name}"
-  p screen_url
-  TestSupport.navigate_to_url(screen_url)
-  TestSupport.wait_for_page_loaded
-end
-
-Given(/^user views screen "(.*?)"$/) do |screen_name|
-  user_views_screen(DefaultLogin.ehmpui_url, screen_name)
-end
-
-Given(/^user views screen "(.*?)" in the eHMP\-UI$/) do |screen_name|
-  user_views_screen(DefaultLogin.ehmpui_url, screen_name)
-end
-
 Then(/^"(.*?)" is active$/) do |screen_name|
   browser_access = ActiveScreen.instance
   expect(browser_access.wait_until_element_present("Active Screen", DefaultLogin.wait_time)).to be_true

@@ -1,4 +1,4 @@
-@F144_Lab_Results_Modal @Lab_Results @regression @triage @DE2903 @DE2969
+@F144_Lab_Results_Modal @Lab_Results   @DE2903 @DE2969 @reg1
 Feature: F144 - eHMP Viewer GUI - Numeric Lab Results - Applet Single Record Modal for Lab Panels from expanded view
 
 # Team: Andromeda, inherited by Team Venus

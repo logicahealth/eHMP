@@ -14,26 +14,26 @@ define([
     'use strict';
 
     var ContextLinkView = Backbone.Marionette.ItemView.extend({
-        getContext: function(){
+        getContext: function() {
             return ADK.WorkspaceContextRepository.userDefaultContext;
         },
         label: null,
         icon: null,
         tagName: 'li',
-        getTemplate: function() {
-            return Handlebars.compile([
-                '{{#if isActive}}<p {{else}}<a href="#" title="Press enter to navigate to the '+this.label +' centric workspaces." {{/if}}id="current-{{contextName}}-nav-header-tab" class="context-navigation-link{{#if isActive}} active{{/if}}">',
-                this.icon +' '+ this.label,
-                '{{#if isActive}}</p>{{else}}</a>{{/if}}'
-            ].join('\n'));
-        },
+        template: Handlebars.compile([
+            '{{#if isActive}}<p {{else}}<a href="#" title="Press enter to navigate to the {{getLabel}} centric workspaces." {{/if}}id="current-{{contextName}}-nav-header-tab" class="context-navigation-link{{#if isActive}} active{{/if}}">',
+            '{{getIcon}} {{getLabel}}',
+            '{{#if isActive}}</p>{{else}}</a>{{/if}}'
+        ].join('\n')),
         templateHelpers: function() {
             var self = this;
             return {
                 'isActive': function() {
                     return self.templateHelperModel.get('isActive');
                 },
-                contextName: self.getContext()
+                contextName: self.getContext(),
+                getIcon: new Handlebars.SafeString(this.icon || ''),
+                getLabel: this.label || ''
             };
         },
         events: {
@@ -42,7 +42,7 @@ define([
         modelEvents: {
             'change:fullName': 'render'
         },
-        isActive: function(model){
+        isActive: function(model) {
             return _.isEqual(model.get('context'), this.getContext()) ? true : false;
         },
         initialize: function() {
@@ -62,7 +62,7 @@ define([
         navigateToContextDefault: function(e) {
             e.preventDefault();
             var currentWorkspaceAndContextModel = ADK.WorkspaceContextRepository.currentWorkspaceAndContext;
-            if(currentWorkspaceAndContextModel.get('context') !== this.getContext() || currentWorkspaceAndContextModel.get('workspace') !== this.contextDefaultWorkspace){
+            if (currentWorkspaceAndContextModel.get('context') !== this.getContext() || currentWorkspaceAndContextModel.get('workspace') !== this.contextDefaultWorkspace) {
                 ADK.Navigation.navigate(this.contextDefaultWorkspace);
             }
         }

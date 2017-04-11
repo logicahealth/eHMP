@@ -101,9 +101,8 @@ define([
             extraClasses: ['row'],
             items: [{
                 control: 'container',
-                extraClasses: ['col-xs-12','display-flex','valign-bottom'],
-                items: [
-                {
+                extraClasses: ['col-xs-12', 'display-flex', 'valign-bottom'],
+                items: [{
                     control: 'popover',
                     behaviors: {
                         Confirmation: {
@@ -113,9 +112,8 @@ define([
                     },
                     label: 'Cancel',
                     name: 'problemSearchConfirmCancel',
-                    extraClasses: ['btn-default', 'btn-sm','right-margin-xs']
-                },
-                {
+                    extraClasses: ['btn-default', 'btn-sm', 'right-margin-xs']
+                }, {
                     control: "dropdown",
                     split: true,
                     label: "Accept",
@@ -131,8 +129,15 @@ define([
             }]
         }]
     }];
-
-    var problemSearchView = ADK.UI.Form.extend({
+    var ParentView = ADK.UI.Form;
+    var problemSearchView = ParentView.extend({
+        initialize: function() {
+            this.termsCollection = new ADK.UIResources.Picklist.Problems.Terms();
+            this.extendedTermsCollection = new ADK.UIResources.Picklist.Problems.ExtendedTerms();
+            this.bindEntityEvents(this.termsCollection, this.termCollectionEvents);
+            this.bindEntityEvents(this.extendedTermsCollection, this.termCollectionEvents);
+            ParentView.prototype.initialize.apply(this, arguments);
+        },
         ui: {
             'problemTerm': '#problemTerm',
             'resultsMessage': '.problem-results-message-container',
@@ -268,8 +273,52 @@ define([
             this.removeProblemResultTable();
             this.$('#problemTerm').val('').focus();
         },
+        onDestroy: function() {
+            this.unbindEntityEvents(this.termsCollection, this.termCollectionEvents);
+            this.unbindEntityEvents(this.extendedTermsCollection, this.termCollectionEvents);
+        },
+
+        termCollectionEvents: {
+            'read:success': function(collection, response) {
+                var termCollection = collection;
+                var extended = collection instanceof ADK.UIResources.Picklist.Problems.ExtendedTerms;
+                if (termCollection.length > 2) {
+                    // JSON format has 2 extra items added to the collection with results count - need to remove them
+                    termCollection.pop();
+                    termCollection.pop();
+
+                    this.ui.problemResults.trigger('control:hidden', false);
+
+                    if (extended) {
+                        this.model.set('resultsHeaderText', 'EXTENDED SEARCH RESULTS');
+                    } else {
+                        this.model.set('resultsHeaderText', 'SEARCH RESULTS');
+                    }
+
+                    this.ui.problemResults.trigger('control:loading:hide');
+                    this.ui.problemResults.trigger('control:picklist:set', [ParseUtil.buildSearchResults(termCollection)]);
+
+                    if (extended) {
+                        this.ui.freeTxtBtn.trigger('control:hidden', false);
+                    } else {
+                        this.ui.extendSearchBtn.trigger('control:hidden', false);
+                    }
+                } else {
+                    this.ui.problemResults.trigger('control:loading:hide');
+                    if (extended) {
+                        this.showRequestFtView();
+                    } else {
+                        this.performSearch(true);
+                    }
+                }
+            },
+            'read:error': function(collection, response) {
+                this.ui.problemResults.trigger('control:loading:hide');
+                this.ui.problemResults.trigger('control:hidden', true);
+                this.model.set('resultsMessage', ParseUtil.formatSearchErrorMessage(error));
+            }
+        },
         performSearch: function(extended) {
-            var form = this;
             this.removeProblemResultTable();
             this.ui.problemResults.trigger('control:hidden', false);
             this.ui.problemResults.trigger('control:loading:show');
@@ -278,51 +327,12 @@ define([
             var term = this.$('#problemTerm').val();
             var termCollection;
 
-            if (extended) {
-                termCollection = new ADK.UIResources.Picklist.Problems.ExtendedTerms();
-            } else {
-                termCollection = new ADK.UIResources.Picklist.Problems.Terms();
-            }
-
-            termCollection.on('read:success', function(collection, response) {
-                if (termCollection.length > 2) {
-                    // JSON format has 2 extra items added to the collection with results count - need to remove them
-                    termCollection.pop();
-                    termCollection.pop();
-
-                    form.ui.problemResults.trigger('control:hidden', false);
-
-                    if (extended) {
-                        form.model.set('resultsHeaderText', 'EXTENDED SEARCH RESULTS');
-                    } else {
-                        form.model.set('resultsHeaderText', 'SEARCH RESULTS');
-                    }
-
-                    form.ui.problemResults.trigger('control:loading:hide');
-                    form.ui.problemResults.trigger('control:picklist:set', [ParseUtil.buildSearchResults(termCollection)]);
-
-                    if (extended) {
-                        form.ui.freeTxtBtn.trigger('control:hidden', false);
-                    } else {
-                        form.ui.extendSearchBtn.trigger('control:hidden', false);
-                    }
-                } else {
-                    form.ui.problemResults.trigger('control:loading:hide');
-                    if (extended) {
-                        form.showRequestFtView();
-                    } else {
-                        form.performSearch(true);
-                    }
-                }
+            termCollection = (extended) ? this.extendedTermsCollection : this.termsCollection;
+            termCollection.fetch({
+                searchString: term,
+                synonym: 1,
+                noMinimumLength: 1
             });
-
-            termCollection.on('read:error', function(collection, error) {
-                form.ui.problemResults.trigger('control:loading:hide');
-                form.ui.problemResults.trigger('control:hidden', true);
-                form.model.set('resultsMessage', ParseUtil.formatSearchErrorMessage(error));
-            });
-
-            termCollection.fetch({ searchString: term, synonym: 1, noMinimumLength: 1 });
         }
     });
 

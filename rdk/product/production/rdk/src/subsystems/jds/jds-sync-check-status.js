@@ -1,7 +1,6 @@
 'use strict';
 
 var _ = require('lodash');
-var nullchecker = require('../../utils/nullchecker');
 
 
 // Extracts and returns and array containing a list of sites belonging to a patient
@@ -228,6 +227,9 @@ function getSiteSyncDataStatusSimple(siteSyncStatus) {
     if (!siteSyncStatus || _.isEmpty(siteSyncStatus)) {
         return dataStatusRet;
     }
+
+    dataStatusRet.isSolrSyncCompleted = siteSyncStatus.solrSyncCompleted;
+
     if (siteSyncStatus.hasError) {
         dataStatusRet.hasError = true;
         dataStatusRet.isSyncCompleted = false;

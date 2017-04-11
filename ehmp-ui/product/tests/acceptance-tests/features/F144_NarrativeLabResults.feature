@@ -1,4 +1,4 @@
-@F144 @DE1757 @regression @triage
+@F144 @DE1757   @reg1
 Feature: Narrative Lab Results
 
 
@@ -19,12 +19,7 @@ Scenario: User views the Narrative Lab Results
   And Narrative Lab Results applet loads without issue
 	Then the narrative lab results applet title is "NARRATIVE LAB RESULTS"
 
-	And the Narrative Lab Results applet contains buttons
-	    | buttons  |
-	    | Refresh  |
-	    | Help     |
-	    | Filter Toggle   |
-	    | Minimize View |
+	And the Narrative Lab Results applet contains buttons Refresh, Help, Filter Toggle and Minimize
 	And the Narrative Lab Results expanded contains headers
        | Headers     |
        | Date | 

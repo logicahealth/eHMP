@@ -54,7 +54,7 @@ end
 Then(/^POB New Notes form displays the heading "(.*?)"$/) do |input|
   ehmp = PobNotes.new
   ehmp.wait_until_fld_note_form_header_visible
-  expect(ehmp.fld_note_form_header).to have_text(input)
+  expect(ehmp.fld_note_form_header.text.upcase).to have_text(input.upcase)
 end
 
 Then(/^POB New Notes form displays the "(.*?)" with drop down list$/) do |input|

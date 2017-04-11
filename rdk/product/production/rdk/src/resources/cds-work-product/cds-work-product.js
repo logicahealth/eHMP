@@ -5,7 +5,6 @@ var http = rdk.utils.http;
 var nullchecker = rdk.utils.nullchecker;
 var async = require('async');
 var _ = require('lodash');
-var pidValidator = rdk.utils.pidValidator;
 var ObjectId = require('mongoskin').ObjectID;
 
 var dbName = 'work';
@@ -78,12 +77,12 @@ function fetchNames(req, items, fetchcb) {
         items,
 
         function(item, callback) {
-            //http://IP             /vpr/9E7A;237
+            //http://10.2.2.110:9080/vpr/9E7A;237
 
             var pid = item.pid;
             var jdsResource = '/vpr';
-            if (pidValidator.isDfn(pid)) {
-                pid = req.session.user.site + ';' + pid;
+            if (/^\d+$/.test(pid)) {
+                return callback('Numeric-only DFN found; a site is required.');
             }
             req.logger.info('vpr search using pid [%s]', pid);
 
@@ -390,9 +389,6 @@ module.exports.retrieveWorkProductsForProvider = retrieveWorkProductsForProvider
 function fetchPids(req, pid, callback) {
 
     var jdsResource = '/vpr/jpid';
-    if (pidValidator.isDfn(pid)) {
-        pid = req.session.user.site + ';' + pid;
-    }
     req.logger.info('WorkProducts.fetchPids: jpid search using pid [%s]', pid);
 
     var jdsPath = jdsResource + '/' + pid;

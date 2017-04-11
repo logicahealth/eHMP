@@ -282,22 +282,6 @@ describe('Clinical object note wrapper tests', function() {
 
 // Unit test data for unwrapping the clinical object
 // Note: The unwrapper only works on arrays, Gavin says we can add singleton support later if needed
-var clinicalObjectNull = null;
-var clinicalObjectEmpty = [];
-var clinicalObjectNoData = [{
-    uid: 'urn:va:ehmp-order:9E7A:3:de305d54-75b4-431b-adb2-eb6b9e546014',
-    patientUid: 'urn:va:patient:9E7A:3:3',
-    authorUid: 'urn:va:user:9E7A:123',
-    domain: 'order',
-    subDomain: 'laboratory',
-    visit: {
-        location: 'urn:va:location:9E7A:1',
-        serviceCategory: 'PSB',
-        dateTime: '20160101120000'
-    },
-    referenceId: '',
-    data: {}
-}];
 var clinicalObjectNullData = [{
     uid: 'urn:va:ehmp-order:9E7A:3:de305d54-75b4-431b-adb2-eb6b9e546014',
     patientUid: 'urn:va:patient:9E7A:3:3',
@@ -408,7 +392,13 @@ var create_valid = {
         'siteHash': '9E7A',
         'uid': '8be59740-c5ff-11e5-ae7a-3f55edc16583'
     },
-    'pid': '9E7A;8'
+    'interceptorResults': {
+        'patientIdentifiers': {
+            'siteDfn': '9E7A:8',
+            'site': '9E7A',
+            'dfn': '8'
+        }
+    }
 };
 
 var update_validAddendum = {
@@ -485,7 +475,6 @@ var update_validAddendum = {
         ehmpState: 'draft',
         data: {},
     }
-
 };
 
 var update_valid = {
@@ -699,7 +688,13 @@ var create_valid_addendum = {
         'siteHash': '9E7A',
         'uid': '8be59740-c5ff-11e5-ae7a-3f55edc16583'
     },
-    'pid': '9E7A;8'
+    'interceptorResults': {
+        'patientIdentifiers': {
+            'siteDfn': '9E7A:8',
+            'site': '9E7A',
+            'dfn': '8'
+        }
+    }
 };
 
 var valid_clinicalObjAddendum = {

@@ -1,6 +1,5 @@
 'use strict';
 var _ = require('lodash');
-var resourceList = [];
 
 /**TODO remove this facility list and use the new facility list resource */
 //facility list resource

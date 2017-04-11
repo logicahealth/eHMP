@@ -1,0 +1,91 @@
+table {
+    tbody tr {
+        border-bottom: 1px solid $grey-light;
+    }
+}
+
+table[class^="table-view"]{
+    &,
+    thead,
+    tbody {
+        display: block;
+    }
+    tr {
+        display: flex;
+        margin: 0;
+        width: 100%;
+        border-bottom: 1px solid $grey-lighter;
+        td,
+        th {
+            align-items: center;
+            display: block;
+            flex: 1;
+            height: auto;
+            max-width: none;
+            padding: 2px 5px;
+            word-wrap: break-word;
+            &.flex-width-date {
+                flex: none;
+                width: 115px;
+            }
+            &.flex-width-date-time {
+                flex: none;
+                width: 115px;
+            }
+            &.flex-width-comment {
+                flex: none;
+                width: 30px;
+                min-width: 20px;
+            }
+        }
+        td:only-child {
+            border-right: none;
+            width: 100%;
+        }
+    }
+    thead {
+        border-bottom: 2px solid $grey-light;
+        height: 20px;
+        tr {
+        	padding-right: 15px;
+        }
+        th, tr {
+            border-bottom: none;
+            text-align: left;
+            button {
+            	color: $grey-darkest;
+    			font-weight: bold;
+    			background: none;
+			    font-size: 11px;
+			    padding: 0;
+			    margin: 0;
+			    box-shadow: none;
+			    border: none;
+            }
+        }
+    }
+    tbody {
+        height: calc(100% - 20px);
+        overflow-y: auto;
+        -ms-overflow-style: -ms-autohiding-scrollbar;
+        tr {
+            cursor: pointer;
+            &.no-hover-state {
+                cursor: default;
+            }
+            &:not(.no-hover-state):hover {
+                background-color: $primary-lightest;
+            }
+            &.row-header {
+                background-color: $grey-lightest;
+            }
+            &:focus {
+                background-color: $primary-lighter;
+                color: $primary-dark;
+            }
+        }
+        &.no-scroll tr {
+        	padding-right: 15px;
+        }
+    }
+}

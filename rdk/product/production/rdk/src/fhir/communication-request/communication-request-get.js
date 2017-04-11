@@ -1,8 +1,6 @@
 'use strict';
 
-var rdk = require('../../core/rdk');
 var _ = require('lodash');
-var async = require('async');
 var communicationRequestFilter = require('./communication-request-filter');
 var pjdsHandler = require('./persistence/pjds-handler.js');
 
@@ -21,7 +19,6 @@ function buildFilter(queueName, id, status) {
 module.exports.handle = function(queue, queueName, params, callback) {
     var jdsQuery = {};
     var req = arguments[4];
-    var res = arguments[5];
     if (_.isString(params)) {
         //params = resourceId
         var id = params;

@@ -17,7 +17,7 @@ var DELAY = 0;
 var TTR = 300; //Lowering this value too much could result in an infinite loop
 
 var host = '127.0.0.1';
-var PORT        ;
+var port = 11300;
 var logger = null;
 
 var queues = {};

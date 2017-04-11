@@ -306,9 +306,12 @@
         .dropdown-body {
             max-height: 263px;
             overflow-y: auto;
-            .active a {
+            .list-group-item.active, .list-group-item.active:hover, .list-group-item.active:focus {
+                background-image: none;
+                text-shadow: none;
                 background-color: $primary-light;
                 color: $primary-dark;
+                border-color: $pure-white;
                 font-weight: bold;
             }
             li {

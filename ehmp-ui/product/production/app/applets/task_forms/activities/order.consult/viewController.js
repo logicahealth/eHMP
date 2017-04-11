@@ -49,7 +49,8 @@ define([
                     'Consult Order',
                     'false', [{
                         view: SelectConsultType,
-                        viewModel: new Backbone.Model()
+                        viewModel: new Backbone.Model(),
+                        helpMapping: 'consult_select_form'
                     }],
                     'actions'
                 );
@@ -100,7 +101,8 @@ define([
                     view: RequestView.form.extend({
                         actions: actions
                     }),
-                    viewModel: new RequestView.model(formModel)
+                    viewModel: new RequestView.model(formModel),
+                    helpMapping: 'consult_triage_form'
                 }];
 
                 // Send signal to change the state of the consult to Action if opened for the first time
@@ -147,7 +149,8 @@ define([
                         view: RequestView.form.extend({
                             actions: actions
                         }),
-                        viewModel: new RequestView.model(formModel)
+                        viewModel: new RequestView.model(formModel),
+                        helpMapping: 'consult_scheduling_form'
                     }],
                     'actions'
                 );
@@ -159,7 +162,8 @@ define([
                     'Sign Consult Order',
                     'false', [{
                         view: SignView.form.extend({}),
-                        viewModel: new Backbone.Model(formModel)
+                        viewModel: new Backbone.Model(formModel),
+                        helpMapping: 'consult_esig_form'
                     }],
                     ''
                 );

@@ -1,20 +1,3 @@
-[data-appletid="orders"] {
-    .grid-toolbar {
-        height: 25px;
-        .toolbar-item {
-            border-radius: 0;
-            padding: 2px 5px;
-            border: 0;
-            border-bottom: 1px solid $grey-light;
-            select {
-                min-width: 160px;
-                background-color: $pure-white;
-                background-clip: padding-box;
-                border: 1px solid $grey;
-            }
-        }
-    }
-    .applet-div-chrome-container .gridContainer .grid-container {
-        height: calc(100% - 25px);
-    }
-}
+// [data-appletid="orders"] {
+
+// }

@@ -60,7 +60,7 @@ When(/^the client requests full name patient search with name "(.*?)" starting w
   @response = HTTPartyRDK.get(path)
 end
 
-When(/^the client requests last(\d+) patient search with "(.*?)"$/) do |_arg1, name|
+When(/^the client requests last5 patient search with "(.*?)"$/) do |name|
   build_path = RDKQuery.new('patient-search-last5')
   build_path.add_parameter("last5", name)
 
@@ -68,7 +68,7 @@ When(/^the client requests last(\d+) patient search with "(.*?)"$/) do |_arg1, n
   @response = HTTPartyRDK.get(path)
 end
 
-When(/^the client requests last(\d+) patient search with "(.*?)" starting with (\d+) and limited to (\d+)$/) do |_arg1, name, start, limit|
+When(/^the client requests last5 patient search with "(.*?)" starting with (\d+) and limited to (\d+)$/) do |name, start, limit|
   build_path = RDKQuery.new('patient-search-last5')
   build_path.add_parameter("last5", name)
   build_path.add_parameter("start", start) 

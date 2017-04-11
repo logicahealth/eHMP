@@ -134,7 +134,9 @@ end
 
 Then(/^POB user is navigated back to overview page from encounters expand view$/) do
   @ehmp = PobEncountersApplet.new
-  PobOverView.new.wait_for_all_applets_to_load_in_overview
+  overview = PobOverView.new
+  overview.wait_for_all_applets_to_load_in_overview
+  expect(overview.fld_all_applets.length == 9).to be(true), "Overview didn't load all applets"
   @ehmp.menu.wait_until_fld_screen_name_visible
   expect(@ehmp.menu.fld_screen_name.text.upcase).to have_text("Overview".upcase)
 end

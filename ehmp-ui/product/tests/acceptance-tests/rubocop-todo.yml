@@ -138,3 +138,6 @@ ClassLength:
   Description: 'Avoid classes longer than 100 lines of code.'
   Max: 200
   Enabled: false
+
+WordArray:
+  Enabled: false

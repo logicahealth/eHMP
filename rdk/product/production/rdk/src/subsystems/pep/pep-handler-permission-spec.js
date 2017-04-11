@@ -51,11 +51,11 @@ describe('When pep permission handler is executed', function() {
     it('user permissions are set', function(done) {
 
         mockRulesEngine = sinon.stub(rulesEngine, 'executeRules', function(rules, facts, callback) {
-            callback(true);
+            callback('Permit');
         });
 
         handler(req, res, callback);
-        expect(callback).to.be.empty;
+        expect(callback.calledWith('Permit'));
 
         done();
     });

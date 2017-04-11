@@ -5,7 +5,6 @@ var _ = require('lodash');
 var httpUtil = rdk.utils.http;
 var nullChecker = require('../../utils/nullchecker');
 var uds = require('./user-defined-screens-resource');
-var nullchecker = rdk.utils.nullchecker;
 
 var USER_SCREENS_CONFIG = 'UserScreensConfig';
 

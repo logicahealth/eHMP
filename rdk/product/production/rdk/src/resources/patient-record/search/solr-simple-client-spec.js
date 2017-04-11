@@ -1,6 +1,5 @@
 'use strict';
 
-var _ = require('lodash');
 var solrSimpleClient = require('./solr-simple-client');
 var compileQueryParameters = solrSimpleClient.compileQueryParameters;
 var emulatedHmpGetRelativeDate = solrSimpleClient.emulatedHmpGetRelativeDate;

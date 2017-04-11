@@ -3,7 +3,6 @@
 // set up the packages we need
 var rdk = require('../../core/rdk');
 var _ = require('lodash');
-var mongo = require('mongoskin');
 var ObjectId = require('mongoskin').ObjectID;
 
 // Database

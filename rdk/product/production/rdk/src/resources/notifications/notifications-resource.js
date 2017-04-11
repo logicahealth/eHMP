@@ -1,5 +1,4 @@
 'use strict';
-var rdk = require('../../core/rdk');
 var notificationsOperations = require('./notifications-operations-resource');
 
 function getResourceConfig() {

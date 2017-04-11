@@ -1,6 +1,9 @@
+'use strict';
+
 var _ = require('lodash');
 
 var adjustTreatmentFactor = require('./utils').adjustTreatmentFactor;
+var adjustTreatmentFactors = require('./utils').adjustTreatmentFactors;
 var handleIncomingComments = require('./utils').handleIncomingComments;
 var handleOriginalComments = require('./utils').handleOriginalComments;
 var getVistaFormattedDateString = require('./utils')._getVistaFormattedDateString;
@@ -29,6 +32,27 @@ describe('Problem write back utilities', function() {
         });
     });
 
+    describe('test transforming all treatment factors', function (){
+        it('test adjusting all treatment factors', function (){
+            var model = {
+                agentOrange: 'yes',
+                radiation: 'no',
+                shipboard: '0',
+                persianGulfVet: '1',
+                combatVet: 'no',
+            };
+            adjustTreatmentFactors(model);
+            expect(model.agentOrange).to.be.eql('1^YES');
+            expect(model.radiation).to.be.eql('0^NO');
+            expect(model.shipboard).to.be.eql('0^NO');
+            expect(model.persianGulfVet).to.be.eql('1^YES');
+            expect(model.combatVet).to.be.eql('0^NO');
+            expect(model.MST).to.be.eql('0^NO');
+            expect(model.headOrNeckCancer).to.be.eql('0^NO');
+            expect(model.serviceConnected).to.be.eql('^Unknown');
+        });
+    });
+
     describe('comments management', function() {
 
         it('handle original comments with bad input', function () {
@@ -37,8 +61,8 @@ describe('Problem write back utilities', function() {
             expect(index).to.be.equal(0);
 
             var params = {};
-            var userIEN = undefined;
-            var username = undefined;
+            var userIEN;
+            var username;
             index = 0;
             index = handleOriginalComments(logger, originalCommentIndeces, null, userIEN, username, params, index);
             expect(index).to.be.equal(1);
@@ -57,7 +81,7 @@ describe('Problem write back utilities', function() {
             params = {};
             var originalComments = ['comment one', 'comment two'];
             var userIEN = 32;
-            var originalCommentIndeces = [1,2];
+            originalCommentIndeces = [1,2];
             index = handleOriginalComments(logger, originalCommentIndeces, originalComments, userIEN, username, params, index);
             expect(index).to.be.equal(3);
             arr = _.values(params);
@@ -73,10 +97,10 @@ describe('Problem write back utilities', function() {
 
             var originalComments = ['testing 1','testing 3','peach'];
             var userIEN = 32;
-            var originalCommentIndeces = [1,2,3];
+            originalCommentIndeces = [1,2,3];
             index = handleOriginalComments(logger, originalCommentIndeces, originalComments, userIEN, username, params, index);
 
-            arr = _.values(params);
+            var arr = _.values(params);
 
             expect(index).to.be.equal(originalComments.length + 1);
             expect(arr[0]).to.be.equal('GMPORIG(10,0)="3^"');
@@ -88,11 +112,11 @@ describe('Problem write back utilities', function() {
 
 
         it('handle incoming comments with bad input', function () {
-            var index = undefined;
-            var params = undefined;
-            var incomingComments = undefined;
-            var originalComments = undefined;
-            var userIEN = undefined;
+            var index;
+            var params;
+            var incomingComments;
+            var originalComments;
+            var userIEN;
 
             index = handleIncomingComments(logger, originalCommentIndeces, incomingComments, originalComments, userIEN, params, index);
             expect(index).to.be.equal(0);
@@ -107,16 +131,16 @@ describe('Problem write back utilities', function() {
             index = handleIncomingComments(logger, originalCommentIndeces, incomingComments, originalComments,
                 userIEN, params, index);
             expect(index).to.be.equal(1);
-            arr = _.values(params);
+            var arr = _.values(params);
             expect(arr[0]).to.be.equal('GMPFLD(10,0)="0"');
         });
 
         it('handle incoming comments with no comments at all', function () {
             var index = 0;
             var params = {};
-            var incomingComments = undefined;
-            var originalComments = undefined;
-            var userIEN = undefined;
+            var incomingComments;
+            var originalComments;
+            var userIEN;
 
             index = handleIncomingComments(logger, originalCommentIndeces, incomingComments, originalComments, userIEN, params, index);
             var arr = _.values(params);
@@ -132,7 +156,7 @@ describe('Problem write back utilities', function() {
             var userIEN = 32;
             index = handleIncomingComments(logger, originalCommentIndeces, incomingComments, [], userIEN, params, index);
             expect(index).to.be.equal(3);
-            arr = _.values(params);
+            var arr = _.values(params);
             expect(arr[0]).to.be.equal('GMPFLD(10,"NEW",1)="comment one"');
             expect(arr[1]).to.be.equal('GMPFLD(10,"NEW",2)="comment two"');
             expect(arr[2]).to.be.equal('GMPFLD(10,0)="2"');
@@ -148,7 +172,7 @@ describe('Problem write back utilities', function() {
             index = handleIncomingComments(logger, originalCommentIndeces, incomingComments,
                 originalComments, userIEN, params, index);
             expect(index).to.be.equal(4);
-            arr = _.values(params);
+            var arr = _.values(params);
 
             expect(arr[0].indexOf('GMPFLD(10,1)=')).to.be.equal(0);
             expect(arr[0].indexOf('1^1') > 0).to.be.truthy();
@@ -175,7 +199,7 @@ describe('Problem write back utilities', function() {
             index = handleIncomingComments(logger, originalCommentIndeces, incomingComments,
                 originalComments, userIEN, params, index);
             expect(index).to.be.equal(4);
-            arr = _.values(params);
+            var arr = _.values(params);
 
             // the following strangeness is due to the fact(bug) in indexOf routine, if
             // there is a " embedded in the string, indexOf always returns a -1.
@@ -205,7 +229,7 @@ describe('Problem write back utilities', function() {
             index = handleIncomingComments(logger, originalCommentIndeces, incomingComments,
                 originalComments, userIEN, params, index);
             expect(index).to.be.equal(4);
-            arr = _.values(params);
+            var arr = _.values(params);
 
             // the following strangeness is due to the fact(bug) in indexOf routine, if
             // there is a " embedded in the string, indexOf always returns a -1.
@@ -236,7 +260,7 @@ describe('Problem write back utilities', function() {
             var userIEN = 32;
             index = handleIncomingComments(logger, originalCommentIndeces, incomingComments,
                 originalComments, userIEN, params, index);
-            arr = _.values(params);
+            var arr = _.values(params);
             expect(index).to.be.equal(6);
 
 

@@ -40,7 +40,8 @@
         "1007": "Error parsing User Class RPC for DG Access and Provider results",
         "1008": "Error during Tabs Request",
         "1009": "No Tabs Results",
-        "1010": "VistA Security Error: No Tabs Permissions."
+        "1010": "VistA Security Error: No Tabs Permissions.",
+        "1011": "Selected division not found for this user"
     },
     "403": {
         "1000": "Forbidden"

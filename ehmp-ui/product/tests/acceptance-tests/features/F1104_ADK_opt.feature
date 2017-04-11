@@ -1,4 +1,4 @@
-@F1104 @regression @triage
+@F1104  @reg1
 Feature: ADK Optimization - Create Summary workspace
 
 @US15919 @US15919_screen

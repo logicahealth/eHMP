@@ -1,0 +1,259 @@
+{
+  "queryComplete": true,
+  "statusList": [
+    {
+      "partner": {
+        "partnerIdentifier": "2.16.840.1.113883.3.42.126.100001.13",
+        "partnerName": "ahlta",
+        "partnerType": "DOD"
+      },
+      "partnerStatus": "SUCCESS",
+      "expectedCount": 3,
+      "receivedCount": 3
+    }
+  ],
+  "dataList": {
+    "problems": [
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000001048"
+        },
+        "enteredBy": {
+          "name": "MIDT, LANDFONE"
+        },
+        "enteredDate": {
+          "start": "20140615114212",
+          "end": "20140615114212"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "11450-4"
+          }
+        ],
+        "facility": {
+          "name": "Landstuhl RMC",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.10002.100001.8",
+              "id": "0607"
+            }
+          ]
+        },
+        "chronicity": [
+          {
+            "display": "Chronic",
+            "primary": true
+          }
+        ],
+        "comment": null,
+        "modifiedDate": {
+          "start": "2014-06-15T11:42:12",
+          "end": "2014-06-15T11:42:12"
+        },
+        "onsetDate": {
+          "start": "2014-06-15T11:42:12",
+          "end": "2014-06-15T11:42:12"
+        },
+        "negationInd": false,
+        "problem": [
+          {
+            "display": "ASTHMA",
+            "primary": true,
+            "code": "31887",
+            "system": "2.16.840.1.113883.6.26"
+          },
+          {
+            "display": "ASTHMA",
+            "primary": false,
+            "code": "346.90",
+            "system": "2.16.840.1.113883.6.103"
+          }
+        ],
+        "provider": null,
+        "sourceOfInfo": [
+          {
+            "display": "Clinical Evidence",
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "Active",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000001049"
+        },
+        "enteredBy": {
+          "name": "MIDT, LANDFONE"
+        },
+        "enteredDate": {
+          "start": "20150915114212",
+          "end": "20150915114212"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "11450-4"
+          }
+        ],
+        "facility": {
+          "name": "Landstuhl RMC",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.10002.100001.8",
+              "id": "0607"
+            }
+          ]
+        },
+        "chronicity": [
+          {
+            "display": "Chronic",
+            "primary": true
+          }
+        ],
+        "comment": null,
+        "modifiedDate": {
+          "start": "2015-09-15T11:42:12",
+          "end": "2015-09-15T11:42:12"
+        },
+        "onsetDate": {
+          "start": "2015-09-15T11:42:12",
+          "end": "2015-09-15T11:42:12"
+        },
+        "negationInd": false,
+        "problem": [
+          {
+            "display": "MILD DEPRESSION",
+            "primary": true,
+            "code": "31887",
+            "system": "2.16.840.1.113883.6.26"
+          },
+          {
+            "display": "MILD DEPRESSION",
+            "primary": false,
+            "code": "346.90",
+            "system": "2.16.840.1.113883.6.103"
+          }
+        ],
+        "provider": null,
+        "sourceOfInfo": [
+          {
+            "display": "Clinical Evidence",
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "Active",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000001050"
+        },
+        "enteredBy": {
+          "name": "MIDT, LANDFONE"
+        },
+        "enteredDate": {
+          "start": "20161016114212",
+          "end": "20161016114212"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "11450-4"
+          }
+        ],
+        "facility": {
+          "name": "Landstuhl RMC",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.10002.100001.8",
+              "id": "0607"
+            }
+          ]
+        },
+        "chronicity": [
+          {
+            "display": "Chronic",
+            "primary": true
+          }
+        ],
+        "comment": null,
+        "modifiedDate": {
+          "start": "2016-10-16T11:42:12",
+          "end": "2016-10-16T11:42:12"
+        },
+        "onsetDate": {
+          "start": "2016-10-16T11:42:12",
+          "end": "2016-10-16T11:42:12"
+        },
+        "negationInd": false,
+        "problem": [
+          {
+            "display": "OBESITY",
+            "primary": true,
+            "code": "31887",
+            "system": "2.16.840.1.113883.6.26"
+          },
+          {
+            "display": "OBESITY",
+            "primary": false,
+            "code": "346.90",
+            "system": "2.16.840.1.113883.6.103"
+          }
+        ],
+        "provider": null,
+        "sourceOfInfo": [
+          {
+            "display": "Clinical Evidence",
+            "primary": true
+          }
+        ],
+        "status": [
+          {
+            "display": "Active",
+            "primary": true
+          }
+        ]
+      }
+    ]
+  }
+}

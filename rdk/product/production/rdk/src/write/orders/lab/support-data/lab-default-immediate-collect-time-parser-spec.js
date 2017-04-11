@@ -29,7 +29,7 @@ describe('verify lab default immediate collect time parser', function() {
     it('parse valid RPC data', function() {
         var result = parseRpcData(log, '3150702.1940^Jul 02, 2015@19:40^5^24');
         expect(result).to.eql([{
-            "defaultImmediateCollectTime": "20150702194000"
+            'defaultImmediateCollectTime': '20150702194000'
         }]);
     });
 

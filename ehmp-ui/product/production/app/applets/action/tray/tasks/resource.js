@@ -129,7 +129,7 @@ define([
                     parse: parseFetch
                 },
                 criteria: {
-                    patientICN: this.patientId,
+                    pid: this.patientId,
                     context: FETCH_CONTEXT,
                     subContext: FETCH_SUBCONTEXT,
                     status: FETCH_STATUS

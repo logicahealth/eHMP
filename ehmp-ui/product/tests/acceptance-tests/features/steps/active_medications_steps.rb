@@ -120,8 +120,11 @@ When(/^the user navigates to the expanded Active Medications Applet$/) do
 end
 
 When(/^the user expands the Active & Recent Medications applet$/) do
-  active_medications = ActiveMedications.instance
-  expect(active_medications.perform_action('Control - applet - Expand View')).to eq(true)
+  ehmp = PobActiveRecentMedApplet.new
+  ehmp.wait_for_btn_applet_expand_view
+  expect(ehmp).to have_btn_applet_expand_view
+  ehmp.btn_applet_expand_view.click
+  ehmp.wait_until_btn_applet_expand_view_invisible
 end
 
 When(/^the user minimizes the Meds Review applet$/) do

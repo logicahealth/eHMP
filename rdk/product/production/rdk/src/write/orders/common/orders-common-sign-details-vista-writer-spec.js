@@ -10,7 +10,7 @@ describe('write-back orders common sign details vista writer', function() {
         expectedObj.detail = 'detail data string';
         var orderCheckList = [];
         var orderCheck = {};
-        orderCheck.orderCheck = 'single order check'
+        orderCheck.orderCheck = 'single order check';
         orderCheckList.push(orderCheck);
         expectedObj.orderCheckList = orderCheckList;
         expectedObj.hash = '8dcdcea8294e70b408b1156db185e730';

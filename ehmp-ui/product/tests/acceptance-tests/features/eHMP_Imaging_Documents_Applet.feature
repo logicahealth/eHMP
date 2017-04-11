@@ -1,4 +1,5 @@
-Feature: eHMP_Document_Applet_Imaging @base
+@future @third_party
+Feature: eHMP_Document_Applet_Imaging
 
 Background: As a clinician, I need the ability to launch third party software to view patient images, so that I can use the advanced display features of the third party software.
 

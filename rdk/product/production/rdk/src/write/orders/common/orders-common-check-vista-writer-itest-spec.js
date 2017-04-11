@@ -5,13 +5,19 @@ var checkVistaWriter = require('./orders-common-check-vista-writer');
 var rpcClientFactory = require('./../../core/rpc-client-factory');
 
 var saveWritebackContext = {
-    pid: '9E7A;100615',
+    interceptorResults: {
+        patientIdentifiers: {
+            'dfn': '100615',
+            'siteDfn': '9E7A;100615',
+            'site': '9E7A'
+        }
+    },
     vistaConfig: {
-        host: 'IP        ',
+        host: '10.2.2.101',
         port: 9210,
-        accessCode: 'PW    ',
-        verifyCode: 'PW    !!',
-        localIP: 'IP      ',
+        accessCode: 'mx1234',
+        verifyCode: 'mx1234!!',
+        localIP: '10.2.2.1',
         localAddress: 'localhost',
         noReconnect: true
     },
@@ -21,45 +27,35 @@ var saveWritebackContext = {
         'orderDialog': 'LR OTHER LAB TESTS',
         'displayGroup': '5',
         'quickOrderDialog': '2',
-        'inputList': [
-            {
-                'inputKey': '4',
-                'inputValue': '350'
-            },
-            {
-                'inputKey': '126',
-                'inputValue': '1'
-            },
-            {
-                'inputKey': '127',
-                'inputValue': '72'
-            },
-            {
-                'inputKey': '180',
-                'inputValue': '9'
-            },
-            {
-                'inputKey': '28',
-                'inputValue': 'SP'
-            },
-            {
-                'inputKey': '6',
-                'inputValue': 'TODAY'
-            },
-            {
-                'inputKey': '29',
-                'inputValue': '28'
-            }
-        ],
+        'inputList': [{
+            'inputKey': '4',
+            'inputValue': '350'
+        }, {
+            'inputKey': '126',
+            'inputValue': '1'
+        }, {
+            'inputKey': '127',
+            'inputValue': '72'
+        }, {
+            'inputKey': '180',
+            'inputValue': '9'
+        }, {
+            'inputKey': '28',
+            'inputValue': 'SP'
+        }, {
+            'inputKey': '6',
+            'inputValue': 'TODAY'
+        }, {
+            'inputKey': '29',
+            'inputValue': '28'
+        }],
         'localId': '12519',
         'uid': 'urn:va:order:9E7A:100615:12519',
         'kind': 'Laboratory'
     },
-    interceptorResults: {
-        patientIdentifiers: {
-        }
-    },
-    logger: sinon.stub(require('bunyan').createLogger({name: 'check-vista-writer'}))
+    logger: sinon.stub(require('bunyan').createLogger({
+        name: 'check-vista-writer'
+    }))
 };
 
 describe('write-back orders common check vista writer integration tests', function() {
@@ -77,24 +73,21 @@ describe('write-back orders common check vista writer integration tests', functi
         });
     });
 
-/*
-    //This test will create new lab orders in Vista.  Uncomment to test locally
-    it('tests that check order returns successful vprResponse', function(done) {
-        this.timeout(10000);
-        saveWritebackContext.model.dfn = '3';
-        saveVistaWriter.create(saveWritebackContext, function(err, result) {
-            expect(err).to.be.falsy();
-            expect(saveWritebackContext.vprResponse).to.be.truthy();
+        //This test will create new lab orders in Vista.  Uncomment to test locally
+        it.skip('tests that check order returns successful vprResponse', function(done) {
+            this.timeout(10000);
+            saveWritebackContext.interceptorResults.patientIdentifiers.dfn = '3';
             saveVistaWriter.create(saveWritebackContext, function(err, result) {
                 expect(err).to.be.falsy();
                 expect(saveWritebackContext.vprResponse).to.be.truthy();
-                var response = JSON.parse(saveWritebackContext.vprResponse);
-                expect(response.orderCheckList).to.exist;
-                expect(response.orderCheckList[0].orderCheck).to.exist;
-                done();
+                saveVistaWriter.create(saveWritebackContext, function(err, result) {
+                    expect(err).to.be.falsy();
+                    expect(saveWritebackContext.vprResponse).to.be.truthy();
+                    var response = JSON.parse(saveWritebackContext.vprResponse);
+                    expect(response.orderCheckList).to.exist();
+                    expect(response.orderCheckList[0].orderCheck).to.exist();
+                    done();
+                });
             });
         });
-    });
-*/
-
 });

@@ -34,7 +34,7 @@ function stubResponse() {
 // FUTURE-TODO: Re-enable (remove .skip) once resource is fully supported/tested end-to-end by system.
 describe.skip('When getting a communication request', function() {
     var callback, spyDequeue, queue;
-    var queueName = 'provider/PW    ';
+    var queueName = 'provider/pu1234';
     var req = stubRequest();
     var res = stubResponse();
 

@@ -76,9 +76,7 @@ Then(/^Cover Sheet is active$/) do
   max_attempt = 2
   begin
     time_to_load = 90
-    p "DE6976: vitals applet not displaying, only wait for 8 applets to load"
-    expect(browser_access.wait_until_xpath_count_greater_than("Number of Applets", 7, time_to_load)).to be_true
-    #expect(browser_access.wait_until_xpath_count("Number of Applets", 9, time_to_load)).to be_true
+    expect(browser_access.wait_until_xpath_count("Number of Applets", 9, time_to_load)).to be_true
   rescue => e
     TestSupport.driver.navigate.refresh
     max_attempt -= 1

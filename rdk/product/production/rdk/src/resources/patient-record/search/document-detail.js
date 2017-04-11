@@ -3,7 +3,6 @@
 var util = require('util');
 var querystring = require('querystring');
 var _ = require('lodash');
-var async = require('async');
 var solrSimpleClient = require('./solr-simple-client');
 var rdk = require('../../../core/rdk');
 
@@ -22,7 +21,6 @@ function getDocumentDetail(req, res) {
         return res.status(rdk.httpstatus.bad_request).rdkSend('Missing parameter(s) ' + missingParameters.join(', '));
     }
 
-    var pid = req.query.pid;
     var query = req.query.query;
     var group_value = req.query['group.value'];
     var group_field = req.query['group.field'];

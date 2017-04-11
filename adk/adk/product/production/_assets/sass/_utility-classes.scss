@@ -1,0 +1,275 @@
+// please do not alter this file without reaching out to curtis scott on team comet
+// loading global variables
+@import 'variables';
+// variables for global values 
+$no: 0 !important;
+$xs: 5px !important;
+$sm: 10px !important;
+$md: 15px !important;
+$lg: 20px !important;
+$xl: 25px !important;
+$none: none;
+// width and height
+// percentage based widths, 1-100, increments of 5
+// e.g: .percent-width-5, .percent-width-10.... up to .percent-width-100
+$classPercentWidth: percent-width !default;
+@for $i from 1 through 20 {
+    .#{$classPercentWidth + '-' + $i * 5} {
+        width: #{$i * 5 + '%'} !important;
+        max-width: #{$i * 5 + '%'} !important;
+        min-width: #{$i * 5 + '%'} !important;
+    }
+}
+// pixel based width/height, 1-100, increments of 1
+// e.g: .pixel-width-1, .pixel-width-2.... up to .pixel-width-100
+// e.g: .pixel-height-1, .pixel-height-2.... up to .pixel-height100
+$classPixelHeight: pixel-height !default;
+$classPixelWidth: pixel-width !default;
+@for $i from 0 through 100 {
+    .#{$classPixelHeight + '-' + $i} {
+        height: #{$i + 'px'} !important;
+        max-height: #{$i + 'px'} !important;
+        min-height: #{$i + 'px'} !important;
+    }
+    .#{$classPixelWidth + '-' + $i} {
+        width: #{$i + 'px'} !important;
+        max-width: #{$i + 'px'} !important;
+        min-width: #{$i + 'px'} !important;
+    }
+}
+.auto-width {
+    width: auto !important;
+}
+.inherit-height {
+    height: inherit !important;
+}
+.percent-height-100 {
+    height: 100% !important;
+}
+// margin / padding
+// e.g: .all-margin-no, .all-margin-xs, .all-margin-sm, .all-margin-md, .all-margin-lg, .all-margin-xl
+// e.g: .all-padding-no, .all-padding-xs, .all-padding-sm, .all-padding-md, .all-padding-lg, .all-padding-xl
+$listVariable: $no $xs $sm $md $lg $xl;
+$listName: no xs sm md lg xl;
+$listProperty: margin padding;
+$listDirection: top left bottom right;
+@each $property in $listProperty {
+    @each $item in $listName {
+        $thisItem: index($listName, $item);
+        $varItem: nth($listVariable, $thisItem);
+        .all-#{$property + '-' + $item} {
+            #{$property}: $varItem;
+        }
+    }
+}
+// e.g: .left-margin-no, .left-margin-xs, .left-margin-sm, .left-margin-md, .left-margin-lg, .left-margin-xl
+// e.g: .top-margin-no, .top-margin-xs, .top-margin-sm, .top-margin-md, .top-margin-lg, .top-margin-xl
+// e.g: .right-margin-no, .right-margin-xs, .right-margin-sm, .right-margin-md, .right-margin-lg, .right-margin-xl
+// e.g: .bottom-margin-no, .bottom-margin-xs, .bottom-margin-sm, .bottom-margin-md, .bottom-margin-lg, .bottom-margin-xl
+@each $property in $listProperty {
+    @each $item in $listName {
+        $thisItem: index($listName, $item);
+        $varItem: nth($listVariable, $thisItem);
+        @each $direction in $listDirection {
+            .#{$direction + '-' + $property + '-' + $item} {
+                #{$property + '-' + $direction}: $varItem;
+            }
+        }
+    }
+}
+.center-margin {
+    margin: 0 auto !important;
+}
+// flex
+// creates flex-width classes e.g: .flex-width-1 has flex: 1; flex 1 - 10
+$flexClass: flex-width !default;
+@for $i from 0 through 10 {
+    .#{$flexClass + '-' + $i} {
+        flex: #{$i} !important;
+    }
+    .#{$flexClass + '-' + $i + '_5'} {
+        flex: #{$i + '.5'} !important;
+    }
+}
+$flexAlignItems: flex-start flex-end center baseline stretch;
+@each $alignment in $flexAlignItems {
+    .flex-align-#{$alignment} {
+        align-items: #{$alignment} !important;
+    }
+}
+$flexJustifyContent: flex-start flex-end center space-between space-around;
+@each $justification in $flexJustifyContent {
+    .flex-justify-#{$justification} {
+        justify-content: #{$justification} !important;
+    }
+}
+.flex-justify-content-end {
+    justify-content: flex-end !important;
+}
+.flex-grow-fixed {
+    flex-grow: 0 !important;
+    flex-shrink: 0 !important;
+}
+.flex-grow-loose {
+    flex-grow: 1 !important;
+    flex-shrink: 1 !important;
+}
+.flex-width-none {
+    flex: none !important;
+}
+.flex-wrap {
+    flex-wrap: wrap !important;
+}
+.flex-wrap-no {
+    flex-wrap: nowrap !important;
+}
+// creates flex-direction classes for all directions in our flexDirection variable below
+// e.g: .flex-direction-row has flex-direction: row
+$flexDirection: row row-reverse column column-reverse;
+@each $direction in $flexDirection {
+    .flex-direction-#{$direction} {
+        flex-direction: #{$direction} !important;
+    }
+}
+// creates order classes e.g: .order-1 has order: 1; order 1 - 10 
+$orderClass: order !default;
+@for $i from 0 through 10 {
+    .#{$orderClass + '-' + $i} {
+        order: #{$i} !important;
+    }
+}
+// color and background-colors
+// e.g: .color-primary and .background-color-primary for all colors in our colorListVariables variable below
+$colorListVariables: $primary $primary-dark $primary-light $primary-light-alt $primary-lighter $primary-lightest $secondary $secondary-light $secondary-dark $tertiary $tertiary-dark $tertiary-darker $pure-black $pure-white $grey $grey-dark $grey-darker $grey-darkest $grey-light $grey-lighter $grey-lightest $red $red-dark $red-lightest $pure-yellow $yellow-light $orange-dark;
+$colorlistName: primary primary-dark primary-light primary-light-alt primary-lighter primary-lightest secondary secondary-light secondary-dark tertiary tertiary-dark tertiary-darker pure-black pure-white grey grey-dark grey-darker grey-darkest grey-light grey-lighter grey-lightest red red-dark red-lightest pure-yellow yellow-light orange-dark;
+$colorlistProperty: color background-color;
+@each $property in $colorlistProperty {
+    @each $item in $colorlistName {
+        .#{$property + '-' + '' + $item} {
+            $thisItem: index($colorlistName, $item);
+            $varItem: nth($colorListVariables, $thisItem);
+            #{$property}: $varItem !important;
+        }
+    }
+}
+.background-color-no {
+    background-color: transparent !important;
+}
+// border styles
+// e.g: .top-border-grey and .top-border-grey-dark all colors in our borderColorVariables variable below
+$borderColorVariables: $grey $grey-dark $grey-darker $grey-darkest $grey-light $grey-lighter $grey-lightest $none;
+$borderColorNames: "grey" grey-dark grey-darker grey-darkest grey-light grey-lighter grey-lightest no;
+$borderProperty: border;
+$borderDirection: top right bottom left;
+// e.g: .all-border-(color) - setting all classes first so individual directions can be overwritten
+@each $color in $borderColorNames {
+    $thisItem: index($borderColorNames, $color);
+    $varItem: nth($borderColorVariables, $thisItem);
+    .all-border-#{$color} {
+       border: 1px solid $varItem !important;
+    }
+}
+.all-border-no {
+    border: none !important;
+}
+// e.g: .top-border-grey and .top-border-grey-dark all colors in our borderColorVariables variable above
+@each $color in $borderColorNames {
+    $thisItem: index($borderColorNames, $color);
+    $varItem: nth($borderColorVariables, $thisItem);
+    @each $direction in $borderDirection {
+        .#{$direction}-border-#{$color} {
+            border-#{$direction}: 1px solid $varItem !important;
+        }
+    }
+}
+// e.g: .left-border-no and .right-border-no all directions in our $borderDirection variable above
+@each $direction in $borderDirection {
+    .#{$direction}-border-no {
+        border-#{$direction}: none !important;
+    }
+}
+// display
+// e.g: .inline-block-display and .flex-display all properties in our displayProperty variable below
+$displayProperty: inline-block inline block flex none;
+@each $property in $displayProperty {
+    .#{$property}-display {
+        display: #{$property} !important;
+    }
+}
+// overflow styles
+// e.g: .auto-overflow-y and .hidden-overflow all properties in our overflowProperty variable below
+$overflowProperty: overflow overflow-y overflow-x;
+$overflowValues: visible hidden auto;
+@each $prop in $overflowProperty {
+    @each $value in $overflowValues {
+        .#{$value + '-' + $prop} {
+            #{$prop}: #{$value} !important;
+        }
+    }
+}
+// font helper classes
+// e.g: .auto-overflow-y and .hidden-overflow all properties in our fontSizeProperty variable below
+$fontSizeProperty: font-size !default;
+@for $i from 10 through 24 {
+    .#{$fontSizeProperty + '-' + $i} {
+        font-size: #{$i}px !important;
+    }
+}
+.bold-font {
+    font-weight: bold !important;
+}
+.transform-none {
+    text-transform: none !important;
+}
+.transform-text-capitalize {
+    text-transform: capitalize !important;
+}
+.transform-text-uppercase {
+    text-transform: uppercase !important;
+}
+// faux-table - flex cell layout
+.valign-bottom, .valign-middle {
+    display: flex !important;
+}
+.valign-bottom {
+    vertical-align: bottom !important;
+    justify-content: flex-end !important;
+}
+.valign-top {
+    vertical-align: top !important;
+    justify-content: flex-start !important;
+}
+.valign-middle {
+    vertical-align: middle !important;
+}
+// whitespace / wrapping
+.nowrap {
+    overflow: hidden !important;
+    white-space: nowrap !important;
+}
+.pre-wrap {
+    white-space: pre-wrap !important;
+}
+.white-space {
+    white-space: normal !important;
+}
+.word-break-break-word {
+    word-break: break-word !important;
+}
+.word-wrap-break-word {
+    word-wrap: break-word !important;
+}
+// misc
+.box-shadow-no {
+    box-shadow: none !important;
+}
+.position-absolute {
+    position: absolute !important;
+}
+.table-layout-fixed {
+    table-layout: fixed !important;
+}
+// needed to be available to overwrite display classes from above
+.hidden {
+    display: none !important;
+}

@@ -1,4 +1,4 @@
-@F280_Scope_Item @regression
+@F280_Scope_Item  @reg2
 Feature: F280 - Numeric Lab Results Applet
 # Apply gist view type as an option against applet domains. "As an eHMP  user, I need to view a complete operation gist view to include the Labs domain that displays all defined panels and data; so that I can access Labs information for a given patient."
 
@@ -10,12 +10,8 @@ Scenario: Verify Numeric Lab Results Gist applet
   And user searches for and selects "Five,Patient"
   And Overview is active
   Then verify the Numeric Lab Results Gist title is "LAB RESULTS"
-  And verify the Numeric Lab Results Gist applet has the following applet buttons
-      | button  |
-      | refresh |
-      | info    |
-      | filter  |
-      | expand  |
+  And verify the Numeric Lab Results Gist applet has the buttons Refresh, Help, Filter Toggle and Expand
+
   And verify the Numeric Lab Results Gist applet has the following headers
       | header   |
       | LAB TEST |

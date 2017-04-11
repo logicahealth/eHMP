@@ -12,7 +12,7 @@ var _ = require('lodash');
  * @param num the variable to check to see if it's a whole number
  * @returns {boolean} True if a whole number.
  */
-module.exports.isWholeNumber = function(num) {
+function isWholeNumber(num) {
     if (nullUtil.isNullish(num)) {
         return false;
     }
@@ -22,7 +22,7 @@ module.exports.isWholeNumber = function(num) {
     }
 
     return num % 1 === 0;
-};
+}
 
 /**
  * Checks to see if value is null, empty, or is not a String.  If any of those are true, this will return true.
@@ -49,5 +49,38 @@ module.exports.isStringLessThan3Characters = function(value) {
     return value.length < 3;
 };
 
+/**
+ * Gets the patientDFN (if required) after validating that a valid pid param has been passed in
+ * and the pid site matched the site param
+ *
+ * @param params The request params that contain the site and patient pid
+ * @param options The options that contains if the patient dfn is required to be present or not
+ * @returns {callback} returns callback object.
+ */
+module.exports.getPatientDFN = function(params, options, callback) {
+    var patientDFN;
+    var patientSite;
+    var requiresDfn = _.get(options, 'requiresDfn', false);
+    var site = _.get(params, 'site') || '';
+    var splitPid = (_.get(params, 'pid') || '').split(';');
+    if (splitPid.length === 2) {
+        patientDFN = _.last(splitPid);
+        patientSite = _.first(splitPid);
+    }
+    if (!requiresDfn && isStringNullish(patientDFN)) {
+        return callback(null, null);
+    }
+    if (!isWholeNumber(patientDFN)) {
+        return callback('Patient DFN must be a whole number', null);
+    }
+    if (isStringNullish(site)) {
+        return callback('Site param cannot be empty', null);
+    }
+    if (patientSite !== site) {
+        return callback('Patient Site does not equal Site param', null);
+    }
+    return callback(null, patientDFN);
+};
 
 module.exports.isStringNullish = isStringNullish;
+module.exports.isWholeNumber = isWholeNumber;

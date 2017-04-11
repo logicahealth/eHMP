@@ -1,0 +1,18 @@
+<S:Envelope xmlns:S="http://www.w3.org/2003/05/soap-envelope">
+  <S:Header>
+    <work:WorkContext xmlns:work="http://oracle.com/weblogic/soap/workarea/">rO0ABXdXAB53ZWJsb2dpYy5hcHAuVklDLUUtQXBwbGljYXRpb24AAADWAAAAI3dlYmxvZ2ljLndvcmthcmVhLlN0cmluZ1dvcmtDb250ZXh0AAg0LjAuMS4xNQAA</work:WorkContext>
+  </S:Header>
+  <S:Body>
+    <ns2:getVeteranPicturesResponse xmlns:ns2="http://cardpictureservice.vic.va.va.gov/">
+      <return>
+        <errorFlag>false</errorFlag>
+        <maxTruncated>false</maxTruncated>
+        <results>
+          <cardId>0</cardId>
+          <effectiveDate>2011-01-01T00:00:00-04:00</effectiveDate>
+          <picture></picture>
+        </results>
+      </return>
+    </ns2:getVeteranPicturesResponse>
+  </S:Body>
+</S:Envelope>

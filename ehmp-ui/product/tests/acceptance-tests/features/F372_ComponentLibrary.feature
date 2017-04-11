@@ -1,12 +1,9 @@
-@F372 @regression @triage
+@F372  
 Feature: F372 - UI Component Library - Patient Selection Box (Component)
 
 Background: 
-    # Given user is logged into eHMP-UI
-    And the user has navigated to the patient search screen
-        And the User selects mysite
-    And the User click on MySiteSearch
-    And user enters full last name "Eight"
+    Given staff view screen is displayed
+    When the user searchs My Site with search term EIGHT,PATIENT
     
 @US4982
 Scenario: 

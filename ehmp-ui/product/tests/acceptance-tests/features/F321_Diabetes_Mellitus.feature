@@ -1,4 +1,4 @@
-@F321 @US6173 @TC302 @regression @US7259 @test_no_logout @future @US146753
+@F321 @US6173 @TC302  @US7259 @test_no_logout @future @US146753
 Feature: Condition-based Analysis Workspaces - Immutable Diabetes Workspace
 
 # Filter tests based off of steps in eHMP_Regression Test Procedures for IOC Release 1.2.1_v1.0_08192015dia

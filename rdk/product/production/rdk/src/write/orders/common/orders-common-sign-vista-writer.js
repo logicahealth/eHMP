@@ -10,12 +10,13 @@ var crypto = require('crypto');
 var async = require('async');
 var _ = require('lodash');
 
-var ERR_MSG_SIG_FAILURE = "The electronic signature code entered is not valid.";
+var ERR_MSG_SIG_FAILURE = 'The electronic signature code entered is not valid.';
 var ERR_MSG_COMPARISON_FAILURE = 'The status of this order has recently changed.  Please refresh the order view and if necessary, try again.';
 
 function signOrders(writebackContext, callback) {
 
     writebackContext.vistaConfig.noReconnect = true;
+    writebackContext.model.dfn = writebackContext.interceptorResults.patientIdentifiers.dfn;
     rpcClientFactory.getRpcClient(writebackContext, 'OR CPRS GUI CHART', function (error, rpcClient) {
         if (error) {
             return callback(error, null);
@@ -90,7 +91,7 @@ function createSignOrderTasks(writebackContext) {
     var taskLockPatient = function (callback) {
         patientLock.lockPatient(writebackContext, function (err, result) {
             //utilize error message from VistA
-            if (result !== "1") {
+            if (result !== '1') {
                 return callback(err);
             }
 
@@ -108,7 +109,7 @@ function createSignOrderTasks(writebackContext) {
                 function (callback) {
                     orderLock.lockOrder(orderData.orderId, writebackContext, function (err, result) {
                         //utilize error message from VistA
-                        if (result !== "1") {
+                        if (result !== '1') {
                             return callback(err);
                         }
 
@@ -210,9 +211,9 @@ function signOrderSend(writebackContext, callback) {
                 return callback(err, data);
             }
 
-            var dataSplit = data.split("\r\n");
+            var dataSplit = data.split('\r\n');
 
-            var errorMsg = "";
+            var errorMsg = '';
 
             //generate sign response with orderIds and include any error messages from VistA
             var respList = [];
@@ -222,7 +223,7 @@ function signOrderSend(writebackContext, callback) {
                     if (pieces.length === 4) {
 
                         if (errorMsg.length > 0) {
-                            errorMsg += "\n";
+                            errorMsg += '\n';
                         }
 
                         errorMsg += pieces[3];

@@ -20,7 +20,7 @@ module.exports.parseDefaultImmediateCollectTime = function(logger, rpcData) {
         };
         retValue.push(defaultImmediateCollectTime);
     } else {
-        throw new Error("The RPC returned data but we couldn't understand it: " + rpcData);
+        throw new Error('The RPC returned data but we couldn\'t understand it: ' + rpcData);
     }
     logger.info({
         retValue: retValue

@@ -5,7 +5,6 @@
 //---
 
 var locationUtil = require('./location-util');
-var validate = require('../write/pick-list/utils/validation-util');
 
 describe('Location Utils - Get IEN', function () {
  it('verify clinics', function() {
@@ -24,7 +23,7 @@ describe('Location Utils - Get IEN', function () {
             expect(ien).to.be.null();
         });
 
-    
+
 });
 
 describe('Location Utils - Get UID', function () {
@@ -50,5 +49,5 @@ describe('Location Utils - Get UID', function () {
             expect(locationUid).to.be.null();
         });
 
-    
+
 });

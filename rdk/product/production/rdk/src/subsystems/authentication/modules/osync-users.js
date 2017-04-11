@@ -29,7 +29,8 @@ var saveOsyncUsers = function(req, res, saveUserJDSCallback, params) {
     };
 
     if (duz === 'unknown' || _.isEmpty(site)) {
-        var errorObj = new RdkError({
+        //jshint -W031
+        new RdkError({
             'error': 'No user duz for site found in duz object',
             'code': 'pjds.500.1001',
             'logger': logger
@@ -47,7 +48,7 @@ var saveOsyncUsers = function(req, res, saveUserJDSCallback, params) {
         if (err) {
             // just log the error we aren't going to require
             // the save to osync for a successful login
-            var errorObj = new RdkError({
+            new RdkError({
                 'error': err,
                 'code': 'pjds.500.1004',
                 'logger': logger

@@ -1,5 +1,4 @@
 'use strict';
-var rdk = require('../../../core/rdk');
 var taskOperations = require('./task-operations-resource');
 var consultTaskOperations = require('./consult-tasks-resource');
 

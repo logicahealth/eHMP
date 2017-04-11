@@ -3,7 +3,7 @@
 var _ = require('lodash');
 var validateAddInput = require('./problems-validator')._validateAddInput;
 
-xdescribe('Problems input validator', function () {
+describe.skip('Problems input validator', function () {
     var logger;
     beforeEach(function() {
         logger = sinon.stub(require('bunyan').createLogger({name: 'problems-validator'}));
@@ -13,24 +13,24 @@ xdescribe('Problems input validator', function () {
 
         it ('patient IEN is present', function () {
             var model = {
-                "MST" : "No",
-                "comments": [ "test comment one", "test comment two"],
-                "dateOfOnset": "20141113",
-                "dateRecorded": "20141113",
-                "enteredBy": "USER,PANORAMA",
-                "enteredByIEN": "10000000226",
-                "headOrNeckCancer": "No",
-                "lexiconCode": "",
-                "code":"",
-                "patientIEN": "100615",
-                "patientName": "EIGHT,OUTPATIENT",
-                "problemName": "soven test",
-                "problemText": "soven test",
-                "recordingProvider": "USER,PANORAMA",
-                "responsibleProvider": "USER,PANORAMA",
-                "responsibleProviderIEN": "10000000226",
-                "serviceConnected": "64^AUDIOLOGY",
-                "status": "A^ACTIVE"
+                'MST' : 'No',
+                'comments': [ 'test comment one', 'test comment two'],
+                'dateOfOnset': '20141113',
+                'dateRecorded': '20141113',
+                'enteredBy': 'USER,PANORAMA',
+                'enteredByIEN': '10000000226',
+                'headOrNeckCancer': 'No',
+                'lexiconCode': '',
+                'code':'',
+                'patientIEN': '100615',
+                'patientName': 'EIGHT,OUTPATIENT',
+                'problemName': 'soven test',
+                'problemText': 'soven test',
+                'recordingProvider': 'USER,PANORAMA',
+                'responsibleProvider': 'USER,PANORAMA',
+                'responsibleProviderIEN': '10000000226',
+                'serviceConnected': '64^AUDIOLOGY',
+                'status': 'A^ACTIVE'
             };
 
             var errors = [];
@@ -40,23 +40,23 @@ xdescribe('Problems input validator', function () {
 
         it ('patient name is present', function () {
             var model = {
-                "MST" : "No",
-                "comments": [ "test comment one", "test comment two"],
-                "dateOfOnset": "20141113",
-                "dateRecorded": "20141113",
-                "enteredBy": "USER,PANORAMA",
-                "enteredByIEN": "10000000226",
-                "headOrNeckCancer": "No",
-                "lexiconCode": "",
-                "patientIEN": "100615",
-                "patientName": "EIGHT,OUTPATIENT",
-                "problemName": "soven test",
-                "problemText": "soven test",
-                "recordingProvider": "USER,PANORAMA",
-                "responsibleProvider": "USER,PANORAMA",
-                "responsibleProviderIEN": "10000000226",
-                "serviceConnected": "64^AUDIOLOGY",
-                "status": "A^ACTIVE"
+                'MST' : 'No',
+                'comments': [ 'test comment one', 'test comment two'],
+                'dateOfOnset': '20141113',
+                'dateRecorded': '20141113',
+                'enteredBy': 'USER,PANORAMA',
+                'enteredByIEN': '10000000226',
+                'headOrNeckCancer': 'No',
+                'lexiconCode': '',
+                'patientIEN': '100615',
+                'patientName': 'EIGHT,OUTPATIENT',
+                'problemName': 'soven test',
+                'problemText': 'soven test',
+                'recordingProvider': 'USER,PANORAMA',
+                'responsibleProvider': 'USER,PANORAMA',
+                'responsibleProviderIEN': '10000000226',
+                'serviceConnected': '64^AUDIOLOGY',
+                'status': 'A^ACTIVE'
             };
 
             var errors = [];
@@ -66,23 +66,23 @@ xdescribe('Problems input validator', function () {
 
         it ('user IEN is present', function () {
             var model = {
-                "MST" : "No",
-                "comments": [ "test comment one", "test comment two"],
-                "dateOfOnset": "20141113",
-                "dateRecorded": "20141113",
-                "enteredBy": "USER,PANORAMA",
-                "enteredByIEN": "10000000226",
-                "headOrNeckCancer": "No",
-                "lexiconCode": "",
-                "patientIEN": "100615",
-                "patientName": "EIGHT,OUTPATIENT",
-                "problemName": "soven test",
-                "problemText": "soven test",
-                "recordingProvider": "USER,PANORAMA",
-                "responsibleProvider": "USER,PANORAMA",
-                "responsibleProviderIEN": "10000000226",
-                "serviceConnected": "64^AUDIOLOGY",
-                "status": "A^ACTIVE"
+                'MST' : 'No',
+                'comments': [ 'test comment one', 'test comment two'],
+                'dateOfOnset': '20141113',
+                'dateRecorded': '20141113',
+                'enteredBy': 'USER,PANORAMA',
+                'enteredByIEN': '10000000226',
+                'headOrNeckCancer': 'No',
+                'lexiconCode': '',
+                'patientIEN': '100615',
+                'patientName': 'EIGHT,OUTPATIENT',
+                'problemName': 'soven test',
+                'problemText': 'soven test',
+                'recordingProvider': 'USER,PANORAMA',
+                'responsibleProvider': 'USER,PANORAMA',
+                'responsibleProviderIEN': '10000000226',
+                'serviceConnected': '64^AUDIOLOGY',
+                'status': 'A^ACTIVE'
             };
 
             var errors = [];
@@ -92,23 +92,23 @@ xdescribe('Problems input validator', function () {
 
         it ('Bad errors parameter', function () {
             var model = {
-                "MST" : "No",
-                "comments": [ "test comment one", "test comment two"],
-                "dateOfOnset": "20141113",
-                "dateRecorded": "20141113",
-                "enteredBy": "USER,PANORAMA",
-                "enteredByIEN": "10000000226",
-                "headOrNeckCancer": "No",
-                "lexiconCode": "",
-                "patientIEN": "100615",
-                "patientName": "EIGHT,OUTPATIENT",
-                "problemName": "soven test",
-                "problemText": "soven test",
-                "recordingProvider": "USER,PANORAMA",
-                "responsibleProvider": "USER,PANORAMA",
-                "responsibleProviderIEN": "10000000226",
-                "serviceConnected": "64^AUDIOLOGY",
-                "status": "A^ACTIVE"
+                'MST' : 'No',
+                'comments': [ 'test comment one', 'test comment two'],
+                'dateOfOnset': '20141113',
+                'dateRecorded': '20141113',
+                'enteredBy': 'USER,PANORAMA',
+                'enteredByIEN': '10000000226',
+                'headOrNeckCancer': 'No',
+                'lexiconCode': '',
+                'patientIEN': '100615',
+                'patientName': 'EIGHT,OUTPATIENT',
+                'problemName': 'soven test',
+                'problemText': 'soven test',
+                'recordingProvider': 'USER,PANORAMA',
+                'responsibleProvider': 'USER,PANORAMA',
+                'responsibleProviderIEN': '10000000226',
+                'serviceConnected': '64^AUDIOLOGY',
+                'status': 'A^ACTIVE'
             };
 
             var errors;
@@ -119,21 +119,21 @@ xdescribe('Problems input validator', function () {
 
         it ('missing patient IEN and problem name', function () {
             var model = {
-                "MST" : "No",
-                "comments": [ "test comment one", "test comment two"],
-                "dateOfOnset": "20141113",
-                "dateRecorded": "20141113",
-                "enteredBy": "USER,PANORAMA",
-                "enteredByIEN": "10000000226",
-                "headOrNeckCancer": "No",
-                "lexiconCode": "",
-                "patientName": "EIGHT,OUTPATIENT",
-                "problemText": "soven test",
-                "recordingProvider": "USER,PANORAMA",
-                "responsibleProvider": "USER,PANORAMA",
-                "responsibleProviderIEN": "10000000226",
-                "serviceConnected": "64^AUDIOLOGY",
-                "status": "A^ACTIVE"
+                'MST' : 'No',
+                'comments': [ 'test comment one', 'test comment two'],
+                'dateOfOnset': '20141113',
+                'dateRecorded': '20141113',
+                'enteredBy': 'USER,PANORAMA',
+                'enteredByIEN': '10000000226',
+                'headOrNeckCancer': 'No',
+                'lexiconCode': '',
+                'patientName': 'EIGHT,OUTPATIENT',
+                'problemText': 'soven test',
+                'recordingProvider': 'USER,PANORAMA',
+                'responsibleProvider': 'USER,PANORAMA',
+                'responsibleProviderIEN': '10000000226',
+                'serviceConnected': '64^AUDIOLOGY',
+                'status': 'A^ACTIVE'
             };
 
             var errors = [];
@@ -145,22 +145,22 @@ xdescribe('Problems input validator', function () {
 
         it ('missing status', function () {
             var model ={
-                "MST" : "No",
-                "comments": [ "test comment one", "test comment two"],
-                "dateOfOnset": "20141113",
-                "dateRecorded": "20141113",
-                "enteredBy": "USER,PANORAMA",
-                "enteredByIEN": "10000000226",
-                "headOrNeckCancer": "No",
-                "lexiconCode": "",
-                "patientIEN": "100615",
-                "patientName": "EIGHT,OUTPATIENT",
-                "problemName": "soven test",
-                "problemText": "soven test",
-                "recordingProvider": "USER,PANORAMA",
-                "responsibleProvider": "USER,PANORAMA",
-                "responsibleProviderIEN": "10000000226",
-                "serviceConnected": "64^AUDIOLOGY"
+                'MST' : 'No',
+                'comments': [ 'test comment one', 'test comment two'],
+                'dateOfOnset': '20141113',
+                'dateRecorded': '20141113',
+                'enteredBy': 'USER,PANORAMA',
+                'enteredByIEN': '10000000226',
+                'headOrNeckCancer': 'No',
+                'lexiconCode': '',
+                'patientIEN': '100615',
+                'patientName': 'EIGHT,OUTPATIENT',
+                'problemName': 'soven test',
+                'problemText': 'soven test',
+                'recordingProvider': 'USER,PANORAMA',
+                'responsibleProvider': 'USER,PANORAMA',
+                'responsibleProviderIEN': '10000000226',
+                'serviceConnected': '64^AUDIOLOGY'
             };
 
             var errors = [];
@@ -170,22 +170,22 @@ xdescribe('Problems input validator', function () {
 
         it ('missing provider IEN model', function () {
             var model = {
-                "MST" : "No",
-                "comments": [ "test comment one", "test comment two"],
-                "dateOfOnset": "20141113",
-                "dateRecorded": "20141113",
-                "enteredBy": "USER,PANORAMA",
-                "enteredByIEN": "10000000226",
-                "headOrNeckCancer": "No",
-                "lexiconCode": "",
-                "patientIEN": "100615",
-                "patientName": "EIGHT,OUTPATIENT",
-                "problemName": "soven test",
-                "problemText": "soven test",
-                "recordingProvider": "USER,PANORAMA",
-                "responsibleProvider": "USER,PANORAMA",
-                "serviceConnected": "64^AUDIOLOGY",
-                "status": "A^ACTIVE"
+                'MST' : 'No',
+                'comments': [ 'test comment one', 'test comment two'],
+                'dateOfOnset': '20141113',
+                'dateRecorded': '20141113',
+                'enteredBy': 'USER,PANORAMA',
+                'enteredByIEN': '10000000226',
+                'headOrNeckCancer': 'No',
+                'lexiconCode': '',
+                'patientIEN': '100615',
+                'patientName': 'EIGHT,OUTPATIENT',
+                'problemName': 'soven test',
+                'problemText': 'soven test',
+                'recordingProvider': 'USER,PANORAMA',
+                'responsibleProvider': 'USER,PANORAMA',
+                'serviceConnected': '64^AUDIOLOGY',
+                'status': 'A^ACTIVE'
             };
 
             var errors = [];

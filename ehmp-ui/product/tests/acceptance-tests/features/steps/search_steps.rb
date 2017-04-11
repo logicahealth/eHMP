@@ -137,131 +137,24 @@ class PatientSearch2 < PatientSearch
   end
 end
 
-Then(/^the User selects mysite$/) do
-  patient_search= PatientSearch.instance
-  wait_until_present_and_perform_action(patient_search, 'mySite')
-end
+Then(/^the user select patient name "(.*?)"$/) do  |search_value|
+  step 'the My Site Tray displays'
+  step 'the My Site Tray contains search results'
+  my_site_tray = PobStaffView.new
 
-#MyCPRSList or Default tab
-Then(/^the User selects MyCPRSList$/) do
-  con= PatientSearch.instance
-  wait_until_present_and_perform_action(con, 'myCPRSList')
-end
+  name_only = []
+  index_of = -1
+  my_site_tray.patient_name_visible_text.each_with_index do | name_ssn, index |
+    result_name = Regexp.new("\\w+, \\w+-*\\w*").match(name_ssn).to_s
 
-#User clicks on patient search input
-Then(/^the User click on MySiteSearch$/) do
-  con= PatientSearch.instance
-  TestSupport.wait_for_page_loaded
-  wait_until_present_and_perform_action(con, 'mySiteSearch')
-end
-
-#Default search
-Then(/^user enters full last name in default search "(.*?)"$/) do  |search_value|
-  patient_search= PatientSearch.instance
-  wait_until_present_and perform_action(patient_search, 'defaultSearchInput', search_value)
-end
-
-#User clicks on Nationwide search
-Then(/^the User selects All Patient$/) do
-  # con= PatientSearch.sleep
-  # instance 5 # beause of DE2429
-  # wait_until_present_and_perform_action(con, "global")
-  expect(MyCprsListTab.instance.perform_action('nationwide_link')).to eq(true)
-end
-
-#Global search firstName
-Then(/^user enters first name in all patient search "(.*?)"$/) do  |search_value|
-  con= PatientSearch.instance
-  TestSupport.wait_for_page_loaded
-
-  con.perform_action('globalSearchFirstName', search_value)
-end
-
-#Global search lastName
-Then(/^user enters full last name in all patient search "(.*?)"$/) do  |search_value|
-  con= PatientSearch.instance
-
-  TestSupport.wait_for_page_loaded
-  loopi = 0
-  loop do
-    loopi = loopi + 1
-
-    con.perform_action('globalSearchLastName', search_value)
-
-    p con.get_element('globalSearchLastName').attribute('value').eql? search_value
-    break if con.get_element('globalSearchLastName').attribute('value').eql? search_value
-    p "globalSearchLastName was not what I expected #{con.get_element('globalSearchLastName').attribute('value')}"
-    con.get_element('globalSearchLastName').send_keys [:control, 'a'], :backspace
-
-    p con.get_element('globalSearchLastName').attribute('value')
-    p loopi
-    break if loopi > 3
+    updated_result_name = result_name.upcase.gsub(' ', '')
+    updated_search_value = search_value.upcase.gsub(' ', '')
+    index_of = index if updated_result_name.start_with?(updated_search_value)
+    break if index_of > -1
   end
-end
-
-#Global search DOB MMDDYYYY
-Then(/^user enters date of birth in all patient search "(.*?)"$/) do  |search_value|
-  con= PatientSearch.instance
-  TestSupport.wait_for_page_loaded
-  con.perform_action('globalSearchDob', search_value)
-end
-
-#Global search SSN
-Then(/^user enters ssn in all patient search "(\d+)"$/) do  |search_value|
-  con= PatientSearch.instance
-  TestSupport.wait_for_page_loaded
-  con.perform_action('globalSearchSsn', search_value)
-end
-
-#Global search button
-Then(/^the user click on All Patient Search$/) do
-  con= PatientSearch.instance
-  #TestSupport.wait_for_page_loaded
-  con.perform_action('globalSearch')
-end
-
-#Global patient search count
-Then(/^the Global Patient Search contains (\d+) rows$/) do |num_rows|
-  count = PatientSearch.instance
-  count.wait_until_xpath_count("Global Search Results", num_rows.to_i)
-  expect(count.perform_verification("Global Search Results", num_rows.to_i)).to be_true, "expected #{num_rows}"
-end
-
-Then(/^the user verifies the "(.*?)"$/) do  |error|
-  con = PatientSearch.instance
-  #driver = TestSupport.driver
-  con.wait_until_action_element_visible("Global Error Message", 60)
-  expect(con.static_dom_element_exists?("Global Error Message")).to be_true
-  expect(con.perform_verification("Global Error Message", error)).to be_true
-end
-
-Then(/^the user verifies the no patient found error "(.*?)"$/) do  |error|
-  con = PatientSearch.instance
-  con.wait_until_action_element_visible("no patient error message", 60)
-  expect(con.static_dom_element_exists?("no patient error message")).to be_true
-  expect(con.perform_verification("no patient error message", error)).to be_true
-end
-
-Then(/^user enters full last name "(.*?)"$/) do  |search_value|
-  con= PatientSearch.instance
-  # TestSupport.wait_for_page_loaded
-  wait_until_present_and_perform_action(con, 'patientSearchInput', search_value)
-  wait_until_present_and_perform_action(con, 'center')
-end
-
-Then(/^the user select default result patient name "(.*?)"$/) do  |name|
-  patient_search= PatientSearch.instance
-  expect(patient_search.select_default_patient_name_in_list(name)).to be_true
-end
-
-Then(/^the user select patient name "(.*?)"$/) do  |name|
-  patient_search= PatientSearch.instance
-  expect(patient_search.select_patient_name_in_list(name)).to be_true
-end
-
-Then(/^the user select all patient result patient name "(.*?)"$/) do  |name|
-  patient_search= PatientSearch.instance
-  expect(patient_search.select_global_patient_name_in_list(name)).to be_true
+  expect(index_of).to_not eq(-1), "Patient #{search_value} was not found in result list"
+  expect(index_of).to be < my_site_tray.my_site_search_results_name.length
+  my_site_tray.my_site_search_results_name[index_of].click
 end
 
 Then(/^the all patient "(.*?)" is displayed on confirm section header$/) do |arg1, table|
@@ -296,20 +189,17 @@ Then(/^the all patient "(.*?)" is displayed on acknowledgement confirm section$/
   end
 end
 
-Then(/^user cannot find patient name "(.*?)"$/) do  |name|
-  con= PatientSearch.instance
-  # TestSupport.wait_for_page_loaded
-  con.wait_until_element_present("Search Tab", 10)
-  wait_until_present_and_perform_action('Search Tab', name)
-  TestSupport.wait_for_page_loaded
-  con.add_verify(CucumberLabel.new("Search Tab"), VerifyText.new, AccessHtmlElement.new(:class, "patientDisplayName"))
-  expect(con.static_dom_element_exists?("Search Tab")).to eq(false)
-end
-
 Then(/^the user click on Confirm Selection$/) do
-  patient_search= PatientSearch.instance
-  expect(patient_search.wait_until_action_element_visible("Confirm", DefaultLogin.wait_time)).to be_true
-  expect(patient_search.perform_action("Confirm")).to be_true
+  patient_search = PobPatientSearch.new
+  expect(patient_search.wait_for_btn_confirmation).to eq(true)
+  patient_search.btn_confirmation.click
+
+  begin
+    patient_search.wait_until_btn_confirmation_invisible(30)
+  rescue Exception => e
+    p "Error waiting for invisibility: #{e}"
+  end
+  expect(patient_search).to_not have_btn_confirmation
 end
 
 Then(/^the user looks for "(.*?)"$/) do  |name|
@@ -328,17 +218,6 @@ Given(/^user attempt to click on Patient search$/) do
   end
 end
 
-Then(/^user looks for  My site$/) do
-  con= PatientSearch.instance
-  wait_until_present_and_perform_action(con, 'mySite')
-end
-
-# Then(/^On my site User looks for All$/) do
-#   con= PatientSearch.instance
-#   wait_until_present_and_perform_action(con, 'mySite')
-#   wait_until_present_and_perform_action(con, 'mySiteAll')
-# end
-
 Given(/^the confirmation box displays info for "(.*?)"$/) do |patient, table|
   error_messages=[]
   patient_details = TransPatientBarHTMLElements.instance
@@ -354,87 +233,11 @@ Given(/^the confirmation box displays info for "(.*?)"$/) do |patient, table|
   end
 end
 
-Then(/^the VPR results for "(.*?)" contain:$/) do |patient, table|
-  error_messages=[]
-  patient_details = TransPatientBarHTMLElements.instance
-  ps = PatientSearch.instance
-  #  TestSupport.wait_for_jquery_completed
-  header_xpath = patient_details.build_header_xpath(patient)
-  p header_xpath
-  expect(ps.wait_until_action_element_visible("patient identifying name", DefaultLogin.wait_time)).to be_true
-  element_found = (patient_details.dynamic_dom_element_exists?("xpath", header_xpath))
-  error_messages.push("Header for #{patient} was not element_found") unless element_found
-  table.rows.each do |row|
-    table_xpath = patient_details.build_table_contents_xpath(header_xpath, row[0])
-    table_element_found = patient_details.dynamic_dom_element_exists?("xpath", table_xpath)
-    error_messages.push("#{row[0]} was not element_found") unless table_element_found
-    element_found = table_element_found && element_found
-  end
-  error_messages.each do |message|
-    p message
-  end
-  expect(element_found).to be_true
-end
-
-Then(/^no results are displayed in patient search$/) do
-  con= PatientSearch.instance
-  #  TestSupport.wait_for_page_loaded
-  #con.wait_until_action_element_visible("Patient Result", 60)
-  # expect(con.static_dom_element_exists?("Patient Result")).to eq(false)
-  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultLogin.wait_time) # seconds # wait until list opens
-  wait.until { con.static_dom_element_exists?("Patient Result") == false }
-end
-
-Then(/^no results are displayed in word$/) do
-  con= PatientSearch.instance
-  #TestSupport.wait_for_page_loaded
-  # expect(!con.static_dom_element_exists?("locationDisplayName")).to eq(true)
-  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultLogin.wait_time) # seconds # wait until list opens
-  wait.until { con.static_dom_element_exists?("locationDisplayName") == false }
-end
-
-Then(/^the navigation bar displays the Patient Search Button$/) do
-  patient_search= PatientSearch.instance
-  expect(patient_search.wait_until_element_present("patientSearch")).to be_true
-end
-
-When(/^the user clicks the Patient Search Button$/) do
-  patient_search= PatientSearch.instance
-  expect(patient_search.perform_action("patientSearch")).to be_true
-end
-
 # this feature does not work the same anymore
-
-Given(/^user attempt to filter by keyword "(.*?)"$/) do |keyword|
-  patient_search= PatientSearch.instance
-  wait_until_present_and_perform_action(patient_search, 'wardKeyword', keyword)
-end
-
-Given(/^the user select keyword "(.*?)"$/) do |name|
-  patient_search= PatientSearch.instance
-  label = "Ward #{name}"
-  patient_search.add_action(CucumberLabel.new(label), ClickAction.new, AccessHtmlElement.new(:xpath, "//div[@id='wards-location-list-results']/descendant::span[contains(string(), '#{name}')]"))
-  wait_until_present_and_perform_action(patient_search, label)
-end
 
 Given(/^user enters patient "(.*?)" in the patient filter$/) do |patient|
   patient_search = PatientSearch.instance
   wait_until_present_and_perform_action(patient_search, "patientFilterInput", patient)
-end
-
-Then(/^the User selects mysite and clinics$/) do
-  con= PatientSearch.instance
-  TestSupport.wait_for_page_loaded
-  wait_until_present_and_perform_action(con, 'mySite')
-  wait_until_present_and_perform_action(con, 'clinics')
-end
-
-Then(/^the user verifies word "(.*?)"$/)  do  |error|
-  patient_search = PatientSearch.instance
-  # driver = TestSupport.driver 
-  expect(patient_search.wait_until_action_element_visible("error message padding", 60)).to be_true
-  expect(patient_search.static_dom_element_exists?("error message padding")).to be_true
-  expect(patient_search.perform_verification("error message padding", error)).to be_true
 end
 
 Then(/^the user verifies patient "(.*?)"$/) do  |error|
@@ -447,37 +250,17 @@ def wait_until_present_and_perform_action(access_browser_instance, cucumber_labe
   expect(access_browser_instance.perform_action(cucumber_label, action_extra)).to be_true, "Error performing action on #{cucumber_label}"
 end
 
-Then(/^the User selects mysite and Ward$/) do
-  sleep 5 # on approval from Rachel cindric beause of DE2429
-  patient_search_elements = PatientSearch.instance
-  wait_until_present_and_perform_action(patient_search_elements, 'mySite')
-  wait_until_present_and_perform_action(patient_search_elements, 'Ward')
-end
-
-Then(/^the user should not have Confirm Selection$/) do
-  con= PatientSearch.instance
-
-  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultLogin.wait_time) 
-  wait.until { con.static_dom_element_exists?("Confirm") == false } 
-end
-
-Given(/^the user verifies unAuthorized "(.*?)"$/) do |arg1|
-  con = PatientSearch.instance
-  expect(con.wait_until_action_element_visible("unAuthorized", 20)).to be_true
-  expect(con.static_dom_element_exists?("unAuthorized")).to be_true
-  expect(con.perform_verification("unAuthorized", arg1)).to be_true
-end
-
 Then(/^the user click on acknowledge restricted record$/) do
-  patient_search = PatientSearch.instance
-  expect(wait_until_present_and_perform_action(patient_search, "ackButton")).to be_true
-end
+  patient_search = PobPatientSearch.new
+  expect(patient_search.wait_for_btn_ack).to eq(true)
+  patient_search.btn_ack.click
 
-Then(/^the location list results displays (\d+) results$/) do |num_results|
-  patient_search = PatientSearch.instance
-  expect(patient_search.wait_until_element_present)
-  #expect(patient_search.wait_until_xpath_count("Number of Location List Results", num_results.to_i)).to be_true
-  expect(patient_search.perform_verification("Number of Location List Results", num_results.to_i)).to be_true
+  begin
+    patient_search.wait_until_btn_ack_invisible(30)
+  rescue Exception => e
+    p "Error waiting for invisibility: #{e}"
+  end
+  expect(patient_search).to_not have_btn_ack
 end
 
 def verify_table_headers_parient(access_browser_instance, table)
@@ -500,11 +283,6 @@ class ColumnHeader < AccessBrowserV2
     add_verify(CucumberLabel.new("columnName"), VerifyText.new, AccessHtmlElement.new(:css, ".columnName.no-padding-right.col-md-2"))
   end
 end 
-
-Given(/^the user looks for columnHeader$/) do  |table|
-  patient_search =ColumnHeader.instance
-  expect(verify_table_headers_parient(patient_search, table)).to be_true
-end
 
 When(/^the user clears though the Confirm Flag$/) do
   patient_search = PatientSearch2.instance
@@ -538,23 +316,6 @@ Then(/^the user confirms patient "(.*?)"$/) do |arg1|
   end
   expect(patient_search.perform_action("Confirm")).to be_true
   expect(wait_until_dom_has_confirmflag_or_patientsearch).to be_true, "Patient selection did not complete successfully"
-end
-
-Then(/^the user waits 10 seconds for sync to complete$/) do
-  sleep 10
-end
-
-Given(/^the user has navigated to the patient search screen$/) do
-  DefaultLogin.logged_in = true
-  navigate_in_ehmp '#/patient/patient-search-screen'
-  # navigate_in_ehmp '#patient-search-screen'
-  elements = PatientSearch.instance
-
-  need_refresh_de2106(elements)
-  
-  expect(elements.wait_until_element_present("mySite")).to be_true
-  expect(elements.wait_until_element_present("global")).to be_true
-  p "On url: #{TestSupport.driver.current_url}"
 end
 
 Then(/^a patient image is displayed$/) do

@@ -1,6 +1,5 @@
 'use strict';
 
-var rpcClientFactory = require('../utils/rpc-client-factory');
 var parse = require('./lab-order-specimens-parser').parse;
 var validate = require('./../utils/validation-util');
 var rpcUtil = require('./../utils/rpc-util');

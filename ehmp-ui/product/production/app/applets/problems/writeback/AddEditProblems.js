@@ -121,7 +121,7 @@ define([
             name: 'clinic',
             label: 'Clinic',
             showFilter: true,
-            pickList: [],
+            pickList: []
         }]
     };
 
@@ -433,6 +433,7 @@ define([
                         status: "error",
                         message: self.model.validationError
                     });
+                    this.transferFocusToFirstError();
                 } else {
                     this.initLoader();                    
                     this.model.unset("formStatus");

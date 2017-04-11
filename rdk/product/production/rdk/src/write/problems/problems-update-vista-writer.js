@@ -2,7 +2,6 @@
 
 var _ = require('lodash');
 var async = require('async');
-var moment = require('moment');
 
 var rpcClientFactory = require('../core/rpc-client-factory');
 var filemanDateUtil = require('../../utils/fileman-date-converter');
@@ -73,32 +72,32 @@ function constructRpcArgs(model) {
     params[index++] = 'GMPFLD(80101)=""';
     params[index++] = 'GMPFLD(80102)=""';
     params[index++] = 'GMPFLD(80201)=""';
-    params[index++] = 'GMPFLD(80202)="' + model.ICS + '"';
+    params[index++] = 'GMPFLD(80202)="' + model.ICD + '"';
 
     index = handleIncomingComments(model.logger, model.originalCommentIndeces, model.incomingComments, model.originalComments,
         model.userIEN, params, index);
-    params[index++] = 'GMPORIG(.01)=""';
+    params[index++] = 'GMPORIG(.01)="' + model.new01 + '"';
     params[index++] = 'GMPORIG(.03)=""';
-    params[index++] = 'GMPORIG(.05)=""';
+    params[index++] = 'GMPORIG(.05)="' + model.new05 + '"';
     params[index++] = 'GMPORIG(.08)=""';
-    params[index++] = 'GMPORIG(.12)=""';
-    params[index++] = 'GMPORIG(.13)=""';
-    params[index++] = 'GMPORIG(1.01)=""';
+    params[index++] = 'GMPORIG(.12)="' + model.originalStatus + '"';
+    params[index++] = 'GMPORIG(.13)="' + model.originalDateOfOnset + '"';
+    params[index++] = 'GMPORIG(1.01)="' + model.new101 + '"';
     params[index++] = 'GMPORIG(1.02)=""';
-    params[index++] = 'GMPORIG(1.05)=""';
+    params[index++] = 'GMPORIG(1.05)="' + model.originalResponsibleProvider + '"';
     params[index++] = 'GMPORIG(1.06)=""';
     params[index++] = 'GMPORIG(1.07)=""';
     params[index++] = 'GMPORIG(1.08)=""';
     params[index++] = 'GMPORIG(1.09)=""';
-    params[index++] = 'GMPORIG(1.1)=""';
-    params[index++] = 'GMPORIG(1.11)=""';
-    params[index++] = 'GMPORIG(1.12)=""';
-    params[index++] = 'GMPORIG(1.13)=""';
-    params[index++] = 'GMPORIG(1.14)=""';
-    params[index++] = 'GMPORIG(1.15)=""';
-    params[index++] = 'GMPORIG(1.16)=""';
-    params[index++] = 'GMPORIG(1.17)=""';
-    params[index++] = 'GMPORIG(1.18)=""';
+    params[index++] = 'GMPORIG(1.1)="' + model.originalServiceConnected + '"';
+    params[index++] = 'GMPORIG(1.11)="' + model.originalAgentOrange + '"';
+    params[index++] = 'GMPORIG(1.12)="' + model.originalRadiation + '"';
+    params[index++] = 'GMPORIG(1.13)="' + model.originalPersianGultVet + '"';
+    params[index++] = 'GMPORIG(1.14)="' + model.originalAcuity + '"';
+    params[index++] = 'GMPORIG(1.15)="' + model.originalHeadOrNeckCancer + '"';
+    params[index++] = 'GMPORIG(1.16)="' + model.originalMST + '"';
+    params[index++] = 'GMPORIG(1.17)="' + model.originalCombatVet + '"';
+    params[index++] = 'GMPORIG(1.18)="' + model.originalShipboard + '"';
     index = handleOriginalComments(model.logger, model.originalCommentIndeces, model.originalComments,
         model.userIEN, model.username, params, index);
     params[index++] = 'GMPORIG(80001)=""';
@@ -107,7 +106,7 @@ function constructRpcArgs(model) {
     params[index++] = 'GMPORIG(80004)=""';
     params[index++] = 'GMPORIG(80005)=""';
     params[index++] = 'GMPORIG(80201)=""';
-    params[index++] = 'GMPORIG(80202)="' + model.ICS + '"';
+    params[index++] = 'GMPORIG(80202)="' + model.ICD + '"';
 
     var arr = _.values(params);
     console.log(arr);
@@ -144,6 +143,18 @@ function updateProblemRPC(logger, siteId, model, rpcClient, input, callback) {
     model.ICD = retrieveSettings(result, 'ORG', '80202');
     model.new01 = retrieveSettings(result, 'ORG', '.01');
     model.originalCommentIndeces = getOriginalCommentIndeces(model.originalComments, result);
+    model.originalStatus = retrieveSettings(result, 'ORG', '.12');
+    model.originalDateOfOnset = retrieveSettings(result, 'ORG', '.13');
+    model.originalResponsibleProvider = retrieveSettings(result, 'ORG', '1.05');
+    model.originalServiceConnected = retrieveSettings(result, 'ORG', '1.1');
+    model.originalAgentOrange = retrieveSettings(result, 'ORG', '1.11');
+    model.originalRadiation = retrieveSettings(result, 'ORG', '1.12');
+    model.originalPersianGultVet = retrieveSettings(result, 'ORG', '1.13');
+    model.originalAcuity = retrieveSettings(result, 'ORG', '1.14');
+    model.originalHeadOrNeckCancer = retrieveSettings(result, 'ORG', '1.15');
+    model.originalMST = retrieveSettings(result, 'ORG', '1.16');
+    model.originalCombatVet = retrieveSettings(result, 'ORG', '1.17');
+    model.originalShipboard = retrieveSettings(result, 'ORG', '1.18');
 
     var rpcParameters = constructRpcArgs(model);
 

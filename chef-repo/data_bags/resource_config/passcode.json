@@ -1,9 +1,0 @@
-{
-  "id": "passcode",
-  "passcode": {
-    "encrypted_data": "rkKH8uDfqTg3RJV4GVnozgqq0TDKGgErpg5QlJW3+ElHw4R/nqT0hHTfxavy\nf/FO\n",
-    "iv": "YZWnw0m/2+8dA8D/QJ+D2Q==\n",
-    "version": 1,
-    "cipher": "aes-256-cbc"
-  }
-}

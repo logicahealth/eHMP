@@ -76,7 +76,8 @@ define([
                 workflowOptions.steps.push({
                     view: AddImmunizationView,
                     viewModel: formModel,
-                    stepTitle: 'Step 2'
+                    stepTitle: 'Step 2',
+                    helpMapping: 'immunizations_form'
                 });
 
                 var workflowView = new ADK.UI.Workflow(workflowOptions);

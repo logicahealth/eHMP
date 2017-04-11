@@ -10,9 +10,8 @@ var crypto = require('crypto');
 var moment = require('moment');
 var searchUtil = require('../patient-search/results-parser');
 var RpcClient = require('vista-js').RpcClient;
-var getVistaRpcConfiguration = require('../../utils/rpc-config').getVistaRpcConfiguration;
+var vistaRpcConfiguration = require('../../utils/rpc-config');
 var pidValidator = require('../../utils/pid-validator.js');
-var nullchecker = rdk.utils.nullchecker;
 // The base64 encoded gender-neutral image to return when a patient photo is not found in VHIC
 var genderNeutralEncodedImageString = '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';
 
@@ -64,17 +63,23 @@ function getPatientPhoto(req, res) {
             return fetchImageFromVhic(vhicId, req, res);
         }
         var requestedVhicId;
+        var patientIdentifiers = _.get(req, 'interceptorResults.patientIdentifiers', {});
         //Get the dfn from the request
-        if (nullchecker.isNullish(req.interceptorResults.patientIdentifiers) || nullchecker.isNullish(req.interceptorResults.patientIdentifiers.vhic)) {
+        if (_.isEmpty(patientIdentifiers) || _.isUndefined(patientIdentifiers.vhic)) {
             //if we do not have local id,  go straight to mvi
             return getImageUsingMVI(req, res);
         }
 
+        if (_.isUndefined(patientIdentifiers.site)) {
+            req.logger.debug('getPatientPhoto - missing patient site from interceptor patient identifier results');
+            return res.status(rdk.httpstatus.precondition_failed).rdkSend('Missing patient site parameter.');
+        }
         requestedVhicId = req.interceptorResults.patientIdentifiers.vhic;
         var requestedLocalId = requestedVhicId + VHIC_PID_QUALIFIER;
 
         //Otherwise go to local vista instance first to see if we have a VHIC ID stored
-        var rpcConfig = getVistaRpcConfiguration(req.app.config, req.session.user);
+        var vistaRpcConfigParams = vistaRpcConfiguration.getPatientCentricVistaRpcConfigurationParams(req.session.user, patientIdentifiers.site);
+        var rpcConfig = vistaRpcConfiguration.getVistaRpcConfiguration(req.app.config, vistaRpcConfigParams);
         rpcConfig.context = 'HMP SYNCHRONIZATION CONTEXT';
 
         if (requestedVhicId) {
@@ -174,21 +179,28 @@ function getImageUsingMVI(req, res) {
     };
 
     // Load the MVI SOAP request XML
-    var xml_1309 = fs.readFileSync(__dirname + '/../patient-search/xml/1309.xml').toString();
-    // Replace the variables inside the XML with the corresponding substitution values
-    // to build the MVI SOAP request
-    mviHttpConfig.body = _s.sprintf(xml_1309, mviQuerySub);
-    // Send the SOAP request to MVI
-    http.post(mviHttpConfig, function(error, response, data) {
-
-        if (error) {
+    fs.readFile(__dirname + '/../patient-search/xml/1309.xml', function(err,data){
+        if (err) {
             req.logger.warn({
-                error: error
-            }, 'Received error response from MVI when attempting a POST request.');
+                error: err
+            }, 'Received error response from synchronous FS.');
             return res.status(rdk.httpstatus.ok).type('jpeg').set('Content-Encoding', 'base64').send(genderNeutralEncodedImageString);
         }
-        var getIdCallback = getIdFromSoapEnvelope.bind(null, req, res);
-        return parseString(data, getIdCallback);
+        // Replace the variables inside the XML with the corresponding substitution values
+        // to build the MVI SOAP request
+        mviHttpConfig.body = _s.sprintf(data.toString(), mviQuerySub);
+        // Send the SOAP request to MVI
+        http.post(mviHttpConfig, function(error, response, data) {
+
+            if (error) {
+                req.logger.warn({
+                    error: error
+                }, 'Received error response from MVI when attempting a POST request.');
+                return res.status(rdk.httpstatus.ok).type('jpeg').set('Content-Encoding', 'base64').send(genderNeutralEncodedImageString);
+            }
+            var getIdCallback = getIdFromSoapEnvelope.bind(null, req, res);
+            return parseString(data, getIdCallback);
+        });
     });
 }
 
@@ -275,21 +287,26 @@ function fetchImageFromVhic(vhicId, req, res) {
         cardid: vhicIdOnly
     };
     // Load the VHIC SOAP request XML
-    var xml_vhic = fs.readFileSync(__dirname + '/xml/vhic.xml').toString();
+    fs.readFile(__dirname + '/xml/vhic.xml', function(err,data){
+        if (err) {
+            req.logger.warn({
+                error: err
+            }, 'Received error response from synchronous FS.');
+            return res.status(rdk.httpstatus.ok).type('jpeg').set('Content-Encoding', 'base64').send(genderNeutralEncodedImageString);
+        }
+        // Replace the variables inside the XML with the corresponding substitution values
+        // to build the VHIC SOAP request
+        vhicHttpConfig.body = _s.sprintf(data.toString(), vhicQuerySub);
 
-    // Replace the variables inside the XML with the corresponding substitution values
-    // to build the VHIC SOAP request
-    vhicHttpConfig.body = _s.sprintf(xml_vhic, vhicQuerySub);
-
-    if (vhicHttpConfig.baseUrl) {
-        //Send the soap request to VHIC
-        req.logger.debug(' Sending Vhic soap request ');
-        return sendSoapRequestToVhic(vhicHttpConfig, req, res);
-    } else {
-        req.logger.debug(' Sending Gender Neutral response. ');
-        return res.status(rdk.httpstatus.ok).type('jpeg').set('Content-Encoding', 'base64').send(genderNeutralEncodedImageString);
-    }
-
+        if (vhicHttpConfig.baseUrl) {
+            //Send the soap request to VHIC
+            req.logger.debug(' Sending Vhic soap request ');
+            return sendSoapRequestToVhic(vhicHttpConfig, req, res);
+        } else {
+            req.logger.debug(' Sending Gender Neutral response. ');
+            return res.status(rdk.httpstatus.ok).type('jpeg').set('Content-Encoding', 'base64').send(genderNeutralEncodedImageString);
+        }
+    });
 }
 
 function getVHICHttpConfig(req) {

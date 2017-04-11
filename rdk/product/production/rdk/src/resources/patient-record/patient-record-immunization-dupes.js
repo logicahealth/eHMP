@@ -1,3 +1,5 @@
+'use strict';
+
 var _ = require('lodash');
 
 function isPrimarySite(primarySites, site) {
@@ -10,7 +12,7 @@ function isPrimarySite(primarySites, site) {
     });
 
     return retVal;
-};
+}
 
 function removeDuplicateImmunizations(vistaSites, immunizations) {
 
@@ -29,7 +31,7 @@ function removeDuplicateImmunizations(vistaSites, immunizations) {
     var secondarySiteRecords = [];
     _.each(immunizations, function(immunization){
         immunization.administeredDateTime = _.isUndefined(immunization.administeredDateTime) ? 'N/A' : immunization.administeredDateTime;
-        isPrimarySite(vistaSites, immunization.facilityCode) ? primarySiteRecords.push(immunization) : secondarySiteRecords.push(immunization);
+        isPrimarySite(vistaSites, immunization.facilityCode) ? primarySiteRecords.push(immunization) : secondarySiteRecords.push(immunization); //jshint ignore:line
     });
 
 

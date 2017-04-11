@@ -1,6 +1,5 @@
 'use strict';
 
-var _ = require('lodash');
 var rdk = require('../../core/rdk');
 var RdkError = rdk.utils.RdkError;
 var authUtils = require('../../subsystems/authentication/utils');

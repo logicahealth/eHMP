@@ -1,14 +1,15 @@
 define([
-    "jquery",
-    "backbone",
-    "marionette",
-    "underscore",
-    "handlebars",
-    "moment",
+    'jquery',
+    'backbone',
+    'marionette',
+    'underscore',
+    'handlebars',
+    'moment',
     'app/applets/immunizations/util',
-    "app/applets/immunizations/modal/filterDateRangeView",
-    'hbs!app/applets/immunizations/modal/modalTemplate',
-  ], function($, Backbone, Marionette, _, Handlebars, moment, Util, FilterDateRangeView, modalTemplate) {
+    'app/resources/fetch/immunizations/utils',
+    'app/applets/immunizations/modal/filterDateRangeView',
+    'hbs!app/applets/immunizations/modal/modalTemplate'
+  ], function($, Backbone, Marionette, _, Handlebars, moment, Util, ResourcePoolUtils, FilterDateRangeView, modalTemplate) {
     'use strict';
     var gridOptions = {}, columns, TotalTestModel;
 
@@ -59,48 +60,25 @@ define([
         }
     });
 
-    var sharedDateRange;
 
-    function parseModel(response) {
-        response = Util.getAdministeredFormatted(response);
-        response = Util.getContraindicated(response);
-        response = Util.getFacilityColor(response);
-        response = Util.getStandardizedName(response);
-        response = Util.getObservedFormatted(response);
-        response = Util.getObservedTimeFormatted(response);
-        response = Util.getResultedFormatted(response);
-        response = Util.getResultedTimeFormatted(response);
-        response = Util.getNumericDate(response);
-
-        return response;
-    }
-
-
-    var TotalView = Backbone.Marionette.ItemView.extend({
-        template: Handlebars.compile('{{totalTests}}'),
-        tagName: 'span',
-        initialize: function() {
-            this.listenTo(this.model, 'change', this.render);
-        }
-
-    });
-
-   TotalTestModel = Backbone.Model.extend({
+    TotalTestModel = Backbone.Model.extend({
         defaults: {
             totalTests: 0
         }
-   });
+    });
 
-   var comparator = function(modelOne, modelTwo){
-        return -modelOne.get('administeredDateTime').localeCompare(modelTwo.get('administeredDateTime'));
-    };
-
-    var ModalView =  Backbone.Marionette.LayoutView.extend({
+    var ModalView = Backbone.Marionette.LayoutView.extend({
         template: modalTemplate,
-        fetchOptions: {},
-        modals: [],
         collectionEvents: {
-            'fetch:success': function(collection, response) {
+            'fetch:success': function(collection) {
+                if(_.isString(this.getOption('uid'))) {
+                    var matchingModel = collection.findWhere({uid: this.getOption('uid')});
+                    if(!_.isUndefined(matchingModel)) {
+                        _.extend(this.model.attributes, matchingModel.attributes);
+                        this.render();
+                    }
+                }
+
                 if (this.showNavHeader) {
                     this.model.set('navHeader', true);
                 }
@@ -112,7 +90,25 @@ define([
                     totalTests: length
                 });
 
-                this.dataGrid = ADK.Views.DataGrid.create(this.gridOptions);
+                var DataGrid = ADK.Views.DataGrid.returnView();
+                DataGrid = DataGrid.extend({
+                    DataGridRow: DataGrid.DataGridRow.extend({
+                        serializeModel: function() {
+                            var data = this.model.toJSON();
+                            data = ResourcePoolUtils.getAdministeredFormatted(data);
+                            data = Util.getContraindicated(data);
+                            data = Util.getFacilityColor(data);
+                            data = ResourcePoolUtils.getStandardizedName(data);
+                            data = Util.getObservedFormatted(data);
+                            data = Util.getObservedTimeFormatted(data);
+                            data = Util.getResultedFormatted(data);
+                            data = Util.getResultedTimeFormatted(data);
+                            data = Util.getNumericDate(data);
+                            return data;
+                        }
+                    })
+                });
+                this.dataGrid = new DataGrid(this.gridOptions);
 
                 if (this.leftColumn !== undefined && this.leftColumn !== null) {
                     this.leftColumn.reset();
@@ -141,28 +137,19 @@ define([
                 }));
             }
         },
-        modelCollectionEvents: {
-            'fetch:success': function(collection, resp) {
-                var model = collection.first();
-                if (model) this.model.set(model.toJSON());
+        childEvents: {
+            'date:range:collection:fetch': function(filterDateRangeView) {
+                this.collection.fetchCollection(undefined, filterDateRangeView.observedFrom, filterDateRangeView.observedTo);
+                this.leftColumn.show(ADK.Views.Loading.create());
             }
         },
-        modelEvents: {
-            'change': function() {
-                this.render();
-            }
-        },
-        initialize: function(options) {
+        initialize: function() {
             this.gridOptions = _.clone(gridOptions, {
                 deep: true
             });
             this.collection = this.getOption('collection') || ADK.PatientRecordService.createEmptyCollection({
                 pageable: true
             });
-            this.dataCollection = options.gridCollection;
-            if (!_.isEmpty(this.dataCollection)) {
-                this.dataCollection.comparator = comparator;
-            }
 
             if (this.showNavHeader) {
                 this.model.set('navHeader', true);
@@ -170,50 +157,19 @@ define([
 
             this.totalTestModel = new TotalTestModel();
 
-            this.fetchOptions.resourceTitle = 'patient-record-immunization';
-            this.fetchOptions.criteria = {
-                pid: this.model.get('pid')
-            };
-
-            if(this.modelCollection) {
-                _.set(this.modelCollection, 'fetchOptions.resourceTitle', this.fetchOptions.resourceTitle);
-                this.bindEntityEvents(this.modelCollection, this.modelCollectionEvents);
-            }
-
             this.modalDisplayName = this.model.get('name');
 
-            this.fetchOptions.collectionConfig = {
-                collectionParse: _.bind(this.filterCollection, this),
-                comparator: comparator
-            };
-
-            this.fetchOptions.pageable = true;
-
             this.gridOptions.appletConfig.gridTitle = 'This table represents the selected immunizations vaccine, ' + this.model.get('name');
-            this.getModals();
-        },
-        getModals: function() {
-            var modals = [];
-            var dataCollection = this.dataCollection;
-            if(this.dataCollection !== undefined){
-                _.each(this.dataCollection.models, function(m, key) {
-                    if (m.get('immunizations')) {
-                        var outterIndex = dataCollection.indexOf(m);
-                        _.each(m.get('immunizations').models, function(m2, key) {
-                            m2.set({
-                                'inAPanel': true,
-                                'parentIndex': outterIndex,
-                                'parentModel': m
-                            });
-                            modals.push(m2);
 
-                        });
-                    } else {
-                        modals.push(m);
-                    }
-                });
+            this.collection = new ADK.UIResources.Fetch.Immunizations.Collection([], {
+                isClientInfinite: true,
+                collectionParse: _.bind(this.filterCollection, this)
+            });
+            this.collection.fetchCollection();
+
+            if (this.sharedDateRange === undefined || this.sharedDateRange === null) {
+                this.resetSharedModalDateRangeOptions();
             }
-            this.modals = modals;
         },
         regions: {
             leftColumn: '.js-backgrid',
@@ -221,37 +177,25 @@ define([
             dateRangeFilter: '#dateRangeFilter'
         },
         resetSharedModalDateRangeOptions: function() {
-            sharedDateRange = new DateRangeModel();
+            this.sharedDateRange = new DateRangeModel();
         },
         onRender: function() {
-            if (this.modelCollection && this.modelCollection.isEmpty()) {
-                ADK.PatientRecordService.fetchCollection(this.modelCollection.fetchOptions, this.modelCollection);
-                return;
-            } else {
-                ADK.PatientRecordService.fetchCollection(this.fetchOptions, this.collection);
-            }
             var dateRange;
 
-            if (sharedDateRange === undefined || sharedDateRange === null) {
-                this.resetSharedModalDateRangeOptions();
-            }
-
-            if (sharedDateRange !== undefined && sharedDateRange !== null &&
-                sharedDateRange.get('preSelectedDateRange') !== undefined &&
-                sharedDateRange.get('preSelectedDateRange') !== null) {
-                dateRange = sharedDateRange.clone();
+            if (this.sharedDateRange !== undefined && this.sharedDateRange !== null &&
+                this.sharedDateRange.get('preSelectedDateRange') !== undefined &&
+                this.sharedDateRange.get('preSelectedDateRange') !== null) {
+                dateRange = this.sharedDateRange.clone();
             } else {
                 dateRange = new DateRangeModel();
             }
 
-            new DateRangeModel();
             var filterDateRangeView = new FilterDateRangeView({
                 model: dateRange,
                 parentView: this,
                 collection: this.collection
             });
-            filterDateRangeView.setFetchOptions(this.fetchOptions);
-            filterDateRangeView.setSharedDateRange(sharedDateRange);
+            filterDateRangeView.setSharedDateRange(this.sharedDateRange);
 
             this.dateRangeFilter.show(filterDateRangeView);
 
@@ -259,32 +203,26 @@ define([
         },
         filterCollection: function(coll) {
             coll.models.forEach(function(model) {
-                model.attributes = parseModel(model.attributes);
+                if (model.get('administeredDateTime')) {
+                    model.set('numericDate', ADK.utils.formatDate(model.get('administeredDateTime'), 'YYYYMMDD'));
+                }
             });
 
             var resultColl = [];
-            var allTypes = $.unique(coll.pluck('name'));
-            var knownTypes = [];
-            var displayTypes = knownTypes.filter(function(el) {
-                return allTypes.indexOf(el) != -1;
-            });
             var newColl = new Backbone.Collection(coll.where({
                 name: this.modalDisplayName
             }));
 
-            var momentToDate = moment(sharedDateRange.attributes.toDate).format("YYYYMMDD"),
-                momentFromDate = moment(sharedDateRange.attributes.fromDate).format("YYYYMMDD");
+            var momentToDate = moment(this.sharedDateRange.get('toDate')).format("YYYYMMDD"),
+                momentFromDate = moment(this.sharedDateRange.get('fromDate')).format("YYYYMMDD");
             newColl.each(function(column){
-                if(column.attributes.numericDate <= momentToDate && (column.attributes.numericDate >= momentFromDate|| sharedDateRange.attributes.fromDate === null)){
+                if(column.get('numericDate') <= momentToDate && (column.get('numericDate') >= momentFromDate || this.sharedDateRange.get('fromDate') === null)){
                     resultColl.push(column);
                 }
-            });
+            }, this);
 
             coll.reset(resultColl);
             return resultColl;
-        },
-        onDestroy: function() {
-            this.unbindEntityEvents(this.modelCollection, this.modelCollectionEvents);
         }
     });
 

@@ -1,4 +1,4 @@
-@F295_encounters_trend_view_procedure @regression
+@F295_encounters_trend_view_procedure  @reg1
 Feature: F295 - Encounters Applet - Procedure
 
 Background:
@@ -21,7 +21,7 @@ Scenario: Encounters trend view Applet displays encounter type Procedure
   | Last	  		|
   | Hx Occurrence	|
   
-@pob_f295_procedure_detail_view @F295-27.1 @F295-27.2 @F295-27.3 @F295-27.4 @F295-27.5 @F295-27.6 @F295-27.7 @F295-27.8 @US4154 @US5126 @DE3334 @DE4552 @DE6761 @debug
+@pob_f295_procedure_detail_view @F295-27.1 @F295-27.2 @F295-27.3 @F295-27.4 @F295-27.5 @F295-27.6 @F295-27.7 @F295-27.8 @US4154 @US5126 @DE3334 @DE4552 @DE6761 @debug @DE7021
 Scenario: Encounters trend view applet procedure type details can be viewed
   When the user views the details for the first Procedure type encounter
   Then the detail modal is displayed

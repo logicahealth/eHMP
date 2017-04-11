@@ -13,7 +13,7 @@ define([
 
             if (visit) {
                 saveAllergyModel.set('location', visit.uid);
-                saveAllergyModel.set('dfn', visit.refId);
+                saveAllergyModel.set('pid', currentPatient.get('pid'));
             }
 
             var userId = user.get('duz')[user.get('site')] ? user.get('duz')[user.get('site')] : user.get('duz')[0];
@@ -154,8 +154,8 @@ define([
                     if (group.pickList) {
                         var indexOfNoKnownAllergies = -1;
 
-                        _.each(group.pickList, function(groupAllergen, index){
-                            if(groupAllergen.label.toUpperCase().indexOf('NO KNOWN ALLERGIES') >= 0) {
+                        _.each(group.pickList, function(groupAllergen, index) {
+                            if (groupAllergen.label.toUpperCase().indexOf('NO KNOWN ALLERGIES') >= 0) {
                                 indexOfNoKnownAllergies = index;
                             }
                         });

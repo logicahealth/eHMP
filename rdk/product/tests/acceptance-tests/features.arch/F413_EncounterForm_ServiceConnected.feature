@@ -6,7 +6,7 @@ Feature: F413 - Enter and Store Encounter Form Data
 
 @F413-1.1 @service_connected_rated_disabilities @US6643 @debug
 Scenario: A request for Ten,Patient's service connected and rated disabilities successfully returns data
-	When the client requests service connected and rated disabilities information for user "9E7A;PW    " and patient id "9E7A;8"
+	When the client requests service connected and rated disabilities information for user "9E7A;pu1234" and patient id "9E7A;8"
 	Then a successful response is returned
 	And the response contains a service connected percentage of "20"
 	And the response contains a service connected value of "true"
@@ -25,7 +25,7 @@ Scenario: A request for Ten,Patient's service connected and rated disabilities s
 
 @F413-1.2 @service_connected_rated_disabilities @US6643 @debug
 Scenario: A request for Eight,Patient's service connected and rated disabilities returns no data
-	When the client requests service connected and rated disabilities information for user "9E7A;PW    " and patient id "9E7A;3"
+	When the client requests service connected and rated disabilities information for user "9E7A;pu1234" and patient id "9E7A;3"
 	Then a successful response is returned
 	And the response contains a service connected percentage of "0"
 	And the response contains a service connected value of "NO"
@@ -33,7 +33,7 @@ Scenario: A request for Eight,Patient's service connected and rated disabilities
 
 @F413-2.1 @service_connected_service_exposure @US6643 @debug
 Scenario: A request for Ten,Patient's service exposure list successfully returns data
-	When the client requests service connected exposure information for user "9E7A;PW    " and patient id "9E7A;101"
+	When the client requests service connected exposure information for user "9E7A;pu1234" and patient id "9E7A;101"
 	Then a successful response is returned
 	And the response contains the following exposure
 	    | field              | value                  								|

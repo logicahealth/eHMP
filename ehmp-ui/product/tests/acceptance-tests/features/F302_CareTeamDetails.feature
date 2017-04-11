@@ -49,9 +49,8 @@ Feature: F302 - Enhance Care Team Header
 
   @F302-3.2_PatientCareTeamDetailsKodak @US5256 @DE1309
     Scenario: Patient Information: Demographic verification (Kodak)
-    When POB user is logged into EHMP-UI with facility as  "KODAK" accesscode as  "PW    " verifycode as  "PW    !!"
-    And staff view screen is displayed
-    And Navigate to Patient Search Screen
+    When POB user is logged into EHMP-UI with facility as  "KODAK" accesscode as  "mx1234" verifycode as  "mx1234!!"
+    Then staff view screen is displayed
     And user searches for and selects "TWENTYTHREE,PATIENT"
 #    And Cover Sheet is active
     And the "patient identifying traits" is displayed with information
@@ -73,9 +72,8 @@ Feature: F302 - Enhance Care Team Header
 
 @F302-3.1_PatientCareTeamDetailsKodak @US5256 @DE1309 @non_default_login @DE4009
     Scenario: Patient Information: Demographic verification (Kodak)
-    When POB user is logged into EHMP-UI with facility as  "KODAK" accesscode as  "PW    " verifycode as  "PW    !!"
-    And staff view screen is displayed
-    And Navigate to Patient Search Screen
+    When POB user is logged into EHMP-UI with facility as  "KODAK" accesscode as  "mx1234" verifycode as  "mx1234!!"
+    Then staff view screen is displayed
     And user searches for and selects "twentythree,inpatient"
 #    And Cover Sheet is active
     And the "patient identifying traits" is displayed with information

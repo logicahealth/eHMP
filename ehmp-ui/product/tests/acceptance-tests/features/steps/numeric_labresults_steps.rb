@@ -110,7 +110,8 @@ Then(/^the Expanded Numeric Lab results table only diplays rows including text "
 end
 
 Then(/^the Numeric Lab Results Applet Text Filter is displayed$/) do
-  expect(@numeric_lab_results.am_i_visible? 'Filter Field').to eq(true)
+  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_wait_time)
+  wait.until { @numeric_lab_results.am_i_visible? 'Filter Field' }
 end
 
 Then(/^the Numeric Lab Results Applet Date Filter is displayed$/) do
@@ -127,7 +128,10 @@ Then(/^the Numeric Lab Results Applet Date Filter is displayed$/) do
 end
 
 When(/^the user clicks the Numeric Lab Results Applet Filter button$/) do
-  expect(@numeric_lab_results.perform_action('Control - applet - Filter Toggle')).to eq(true)
+  # expect(@numeric_lab_results.perform_action('Control - applet - Filter Toggle')).to eq(true)
+  ehmp = PobNumericLabApplet.new
+  expect(ehmp.wait_for_btn_applet_filter_toggle).to eq(true), "Filter button did not display"
+  ehmp.btn_applet_filter_toggle.click
 end
 
 Then(/^the Numeric Lab Results Applet Text Filter is not displayed$/) do

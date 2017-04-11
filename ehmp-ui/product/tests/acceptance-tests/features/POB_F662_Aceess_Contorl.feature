@@ -1,11 +1,11 @@
-@f662_pob_access_control_write_back @regression @DE4326 @future @DE4560
+@f662_pob_access_control_write_back  @DE4326 @future @DE4560
 Feature: F662 : eHMP Release 1.3 User Provisioning & Roles
 
 #The applet doesn't display completely in phantom JS due to latest CSS gridster changes
 
 @f662_pob_admin_applet_presence
 Scenario: For authorized users the Administration Applet is present and accessible.
-  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "PW    " verifycode as  "PW    !!"
+  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "vk1234" verifycode as  "vk1234!!"
   And staff view screen is displayed
   When Navigate to Patient Search Screen
   And the patient search screen is displayed
@@ -13,7 +13,7 @@ Scenario: For authorized users the Administration Applet is present and accessib
  
 @f662_pob_admin_applet_form_validation
 Scenario: Validate admin applet form fields.
-  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "PW    " verifycode as  "PW    !!"
+  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "vk1234" verifycode as  "vk1234!!"
   And staff view screen is displayed
   When Navigate to Patient Search Screen
   And the patient search screen is displayed
@@ -42,7 +42,7 @@ Scenario: Only authorized users have permission to access notes applet.
   
 @f662_pob_user_add_roles @add_remove
 Scenario: Authorized users can edit a users's role
-  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "PW    " verifycode as  "PW    !!"
+  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "vk1234" verifycode as  "vk1234!!"
   And staff view screen is displayed
   When Navigate to Patient Search Screen
   And the patient search screen is displayed
@@ -77,7 +77,7 @@ Scenario: Authorized users can view the Notes Applet
   
 @f662_pob_user_edit_self
 Scenario: Authorized users cannot edit their own roles
-  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "PW    " verifycode as  "PW    !!"
+  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "vk1234" verifycode as  "vk1234!!"
   And staff view screen is displayed
   When Navigate to Patient Search Screen
   And the patient search screen is displayed
@@ -92,7 +92,7 @@ Scenario: Authorized users cannot edit their own roles
 
 @f662_pob_user_remove_single_role
 Scenario: Authorized users can make a vista user inactive
-  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "PW    " verifycode as  "PW    !!"
+  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "vk1234" verifycode as  "vk1234!!"
   And staff view screen is displayed
   When Navigate to Patient Search Screen
   And the patient search screen is displayed
@@ -118,7 +118,7 @@ Scenario: Authorized users can make a vista user inactive
 
 @f662_pob_user_remove_all_roles @add_remove
 Scenario: Authorized users can make a vista user inactive
-  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "PW    " verifycode as  "PW    !!"
+  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "vk1234" verifycode as  "vk1234!!"
   And staff view screen is displayed
   When Navigate to Patient Search Screen
   And the patient search screen is displayed
@@ -143,7 +143,7 @@ Scenario: Inactive user cann't login
   
 @f662_pob_user_add_back_roles
 Scenario: Authorized users can add user roles
-  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "PW    " verifycode as  "PW    !!"
+  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "vk1234" verifycode as  "vk1234!!"
   And staff view screen is displayed
   When Navigate to Patient Search Screen
   And the patient search screen is displayed

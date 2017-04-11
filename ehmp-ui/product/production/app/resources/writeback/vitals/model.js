@@ -19,7 +19,6 @@ define([], function() {
         },
         defaults: {
             'dateTime': null,
-            'dfn': null,
             'enterdByIEN': null,
             'locIEN': null,      
             'vitals':null

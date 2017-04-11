@@ -1,5 +1,4 @@
 'use strict';
-var httpMocks = require('node-mocks-http');
 var RdkTimer = require('./timer');
 
 describe('Verify Timer', function() {
@@ -35,19 +34,16 @@ describe('Verify Timer', function() {
     });
 
     it('can round elapsed time', function() {
-        //Loop added so automated unit test runs will satisify the requirement to have a test case for DE6673.
-        for (var i = 0; i < 10000; i++) {
-            var roundLength = 4;
-            var timer = new RdkTimer({
-                'name': 'argon',
-                'start': true,
-                'roundTo': roundLength
-            });
+        var roundLength = 4;
+        var timer = new RdkTimer({
+            'name': 'argon',
+            'start': true,
+            'roundTo': roundLength
+        });
 
-            timer.stop();
+        timer.stop();
 
-            expect(timer.elapsedMilliseconds).must.be.a.number();
-            expect(String(timer.elapsedMilliseconds).split('.')[1].length).must.be.below(roundLength+1);
-        }
+        expect(timer.elapsedMilliseconds).must.be.a.number();
+        expect(String(timer.elapsedMilliseconds).split('.')[1].length).must.be.lte(roundLength);
     });
 });

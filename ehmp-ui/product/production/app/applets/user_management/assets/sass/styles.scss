@@ -4,6 +4,8 @@
     // do not remove this height *** required for resizeUtil.js to function (DE2928)
 	.grid-toolbar {
 		height: 55px;
+		overflow: visible;
+		padding-bottom: 0;
 	}
 	.data-grid {
 		width: 100%;

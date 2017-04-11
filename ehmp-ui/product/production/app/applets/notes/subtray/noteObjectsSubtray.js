@@ -136,6 +136,20 @@ define([
     });
 
     var NoteObjectCollectionView = Backbone.Marionette.CompositeView.extend({
+        behaviors: {
+            HelpLink: {
+                mapping: 'note_objects_subtray',
+                container: '.note-objects-help-button-container',
+                buttonOptions: {
+                    colorClass: 'bgc-primary-dark'
+                }
+            },
+            FlexContainer: {
+                container: '.modal-header',
+                direction: 'row',
+                alignItems: 'flex-start'
+            }
+        },
         template: NoteSubtrayTemplate,
         childView: NoteObjectView,
         emptyView: LoadingView,

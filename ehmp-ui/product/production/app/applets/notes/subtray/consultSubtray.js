@@ -269,6 +269,20 @@ define([
     });
 
     var ConsultCollectionView = Backbone.Marionette.CompositeView.extend({
+        behaviors: {
+            HelpLink: {
+                mapping: 'consults_subtray',
+                container: '.consult-header-help-button-container',
+                buttonOptions: {
+                    colorClass: 'bgc-primary-dark'
+                }
+            },
+            FlexContainer: {
+                container: '.modal-header',
+                direction: 'row',
+                alignItems: 'flex-start'
+            }
+        },
         template: ConsultSubtrayTemplate,
         childView: consultView,
         emptyView: LoadingView,
@@ -318,7 +332,7 @@ define([
                 cache: false,
                 patient: ADK.PatientRecordService.getCurrentPatient(),
                 criteria: {
-                    icn: ADK.PatientRecordService.getCurrentPatient().get('pid')
+                    pid: ADK.PatientRecordService.getCurrentPatient().get('pid')
                 }
             };
             fetchOptions.onError = function(model, resp) {

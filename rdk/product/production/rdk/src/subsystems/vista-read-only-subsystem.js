@@ -2,7 +2,6 @@
 
 var _ = require('lodash');
 var RpcClient = require('vista-js').RpcClient;
-var rdk = require('../core/rdk');
 
 var READ_ONLY_RPCS = [
     'ORQOR DETAIL'
@@ -26,6 +25,7 @@ function getReadOnlyVistaConfig(req, site) {
         req.logger.error('getReadOnlyVistaConfig: app rpcConfig context not found');
     }
     var vistaConfig = _.get(req, ['app', 'config', 'vistaSites', site]);
+    vistaConfig.division = req.vistaConfig.division;  //initiating user's logged in division
     if (!vistaConfig) {
         req.logger.error({site: site}, 'getReadOnlyVistaConfig: vistaSite not found');
     }
@@ -74,3 +74,4 @@ function closeAllRpcSystemClients(req) {
 module.exports.getRpcSystemClient = getRpcSystemClient;
 module.exports.closeAllRpcSystemClients = closeAllRpcSystemClients;
 module.exports.getSubsystemConfig = getSubsystemConfig;
+module.exports._getReadOnlyVistaConfig= getReadOnlyVistaConfig;

@@ -7,16 +7,16 @@ var pidValidator = rdk.utils.pidValidator;
 var nullchecker = rdk.utils.nullchecker;
 var _ = require('lodash');
 var async = require('async');
-var fs = require('fs');
 var parseString = require('xml2js').parseString;
-var getGenericJbpmConfig = require('../activity-utils').getGenericJbpmConfig;
-var processJsonObject = require('../activity-utils').processJsonObject;
-var processValue = require('../activity-utils').processValue;
-var wrapValueInCData = require('../activity-utils').wrapValueInCData;
-var getJbpmUser = require('../activity-utils').getJbpmUser;
-var getFormattedRoutesString = require('../activity-utils').getFormattedRoutesString;
-var parseAssignedTo = require('../activity-utils').parseAssignedTo;
-var filterIdentifiers = require('../activity-utils').filterIdentifiers;
+var activityUtils = require('../activity-utils');
+var getGenericJbpmConfig = activityUtils.getGenericJbpmConfig;
+var processJsonObject = activityUtils.processJsonObject;
+var processValue = activityUtils.processValue;
+var wrapValueInCData = activityUtils.wrapValueInCData;
+var getJbpmUser = activityUtils.getJbpmUser;
+var getFormattedRoutesString = activityUtils.getFormattedRoutesString;
+var parseAssignedTo = activityUtils.parseAssignedTo;
+var filterIdentifiers = activityUtils.filterIdentifiers;
 var activityDb = require('../../../subsystems/jbpm/jbpm-subsystem');
 var navMapping = require('./navigation-mapping');
 var patientRelatedTeams = require('../../../write/pick-list/team-management/teams-for-user-patient-related-fetch-list');
@@ -24,6 +24,7 @@ var moment = require('moment');
 var oracledb = require('oracledb');
 var facilitiesList = require('../../facility-moniker/vha-sites').data.items;
 var resultUtils = rdk.utils.results;
+var xmlTemplates = activityUtils.xmlTemplates;
 
 var dbSchema = 'activitydb';
 module.exports.dbSchema = dbSchema;
@@ -86,7 +87,7 @@ module.exports.getTeams = function(req, staffIEN, patientID, next) {
     patientRelatedTeams.fetch(req.logger, req.app.config.activityDatabase, patientRelatedTeamsCallback, {
         staffIEN: staffIEN,
         patientID: patientID,
-        site: req.site,
+        site: _.get(req, 'session.user.site'),
         pcmmDbConfig: req.app.config.jbpm.activityDatabase,
         fullConfig: req.app.config.pickListServer
     });
@@ -164,7 +165,6 @@ module.exports.buildTasksResponse = function(tasks, tasksRoutesList, req, parame
                                     getFacilityCorrespondingToTeam.bind(null, req, po.TEAM),
                                     function(result, nextStep) {
                                         if (_.isArray(result) && (result.length > 0) && (_.isUndefined(parameters.removeTask) || parameters.removeTask)) {
-                                            var site = req.session.user.site;
                                             var stationNumber = req.session.user.division;
 
                                             //screen for teams at the wrong facility
@@ -529,7 +529,7 @@ function getProvidersFromIds(creatorOwnerIds, req, cb) {
 }
 
 module.exports.getNamesFromIcns = function(icnToNameMap, req, cb) {
-    //http://IP             /data/index/pt-select-pid?range=9E7A;3,9E7A;8
+    //http://10.2.2.110:9080/data/index/pt-select-pid?range=9E7A;3,9E7A;8
     var jdsUrlStringLimit = _.get(req, 'app.config.jdsServer.urlLengthLimit') || 120;
     var jdsServer = req.app.config.jdsServer;
     var preSegmentUrl = '/data/index/pt-select-pid?range=';
@@ -644,7 +644,6 @@ module.exports.queryTasksRoutes = function(req, res, tasks, parameters, patientI
 };
 
 module.exports.getTasksRoutes = function(req, taskInstanceIds, routesCallback) {
-    var inQuery = '';
     var subQueryMax = 990;
     var data = [];
     var routeQuery = 'BEGIN TASKS.getTaskRoutes(:p_task_instance_ids, :recordset); END;';
@@ -711,9 +710,9 @@ module.exports.queryTasks = function(req, res) {
         return res.status(rdk.httpstatus.bad_request).rdkSend(idError.message);
     }
 
-    var patientICN = req.body.patientICN;
-    if (context === 'patient' && nullchecker.isNullish(patientICN)) {
-        idError = new Error('Missing patientICN property/value in input JSON.');
+    var pid = _.get(req, 'body.pid', null);
+    if (context === 'patient' && nullchecker.isNullish(pid)) {
+        idError = new Error('Missing pid property/value in input JSON.');
         req.logger.error(idError);
         return res.status(rdk.httpstatus.bad_request).rdkSend(idError.message);
     }
@@ -751,8 +750,8 @@ function buildQueryParameterObjectFromRequest(req, userTeams, facility) {
             parameters.facility = facility;
         }
 
-        if (nullchecker.isNotNullish(req.body.patientICN)) {
-            parameters.patientICN = req.body.patientICN;
+        if (nullchecker.isNotNullish(req.body.pid)) {
+            parameters.patientICN = req.body.pid;
         }
 
         if (nullchecker.isNotNullish(req.body.status)) {
@@ -836,7 +835,6 @@ module.exports.buildTaskQuery = function(req, res, parameters) {
     }
 
     async.series(prepFunctions, function(err, results) {
-        var site = req.session.user.site; //eg 9E7A
         var stationNumber = req.session.user.division;
         var user_id = getJbpmUser(req);
         var staff_id = user_id;
@@ -984,11 +982,7 @@ function handleComplete(req, res) {
 
         function(callback) {
             var completeTaskCommandXml;
-            var completeTaskCommandTemplateXml = fs.readFileSync(__dirname + '/complete-task-command-template.xml', {
-                encoding: 'utf8',
-                flag: 'r'
-            });
-
+            var completeTaskCommandTemplateXml = xmlTemplates.completeTaskCommandTemplate;
             var user = getJbpmUser(req);
 
             completeTaskCommandXml = completeTaskCommandTemplateXml.replace('{DeploymentId}', deploymentId).replace('{TaskId}', taskId).replace('{User}', user);
@@ -998,22 +992,11 @@ function handleComplete(req, res) {
             var taskParametersXML = '';
             var itemsList = '';
             if (req.body.parameter) {
-                var primitiveTypeXML = fs.readFileSync(__dirname + '/parameter-template.xml', {
-                    encoding: 'utf8',
-                    flag: 'r'
-                });
-                var complexObjectXML = fs.readFileSync(__dirname + '/complex-object-template.xml', {
-                    encoding: 'utf8',
-                    flag: 'r'
-                });
-                var complexObjectPropertiesXML = fs.readFileSync(__dirname + '/complex-object-properties-template.xml', {
-                    encoding: 'utf8',
-                    flag: 'r'
-                });
-                var complexArrayedObjectPropertiesXML = fs.readFileSync(__dirname + '/complex-arrayed-object-properties-template.xml', {
-                    encoding: 'utf8',
-                    flag: 'r'
-                });
+                var primitiveTypeXML = xmlTemplates.parameterTemplate;
+                var complexObjectXML = xmlTemplates.complexObjectTemplate;
+                var complexObjectPropertiesXML = xmlTemplates.complexObjectPropertiesXML;
+                var complexArrayedObjectPropertiesXML = xmlTemplates.complexArrayedObjectPropertiesXML;
+
                 _.each(req.body.parameter, function(value, key) {
                     var type = typeof value;
                     //**** Parent Container Object

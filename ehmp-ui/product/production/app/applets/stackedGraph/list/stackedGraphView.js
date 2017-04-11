@@ -227,7 +227,9 @@ define([
                         });
                     } else if (persistedPickListItem.graphType === 'Medications') {
                         channel = ADK.Messaging.getChannel('meds_review');
-                        var medCollection = new Backbone.Collection();
+                        var medCollection = ADK.ResourceService.createEmptyCollection({
+                            pageable: true
+                        });
                         self.listenToOnce(medCollection, 'read:success', function(collection) {
                             self.stopListening(medCollection, 'read:error');
                             $deferred.resolve({

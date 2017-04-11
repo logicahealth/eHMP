@@ -1,8 +1,8 @@
 'use strict';
-var rdk = require('../../../core/rdk');
 var _ = require('lodash');
 var moment = require('moment');
 var solrSmartClient = require('solr-smart-client');
+var querystring = require('querystring');
 var ForeverAgent = require('forever-agent');
 
 module.exports.executeSolrQuery = executeSolrQuery;
@@ -15,25 +15,38 @@ var foreverAgent = new ForeverAgent();
 
 function initSolr(solrConfig, req) {
     //initClient only needs to be called once.
-    if (solrClient === null){
+    if (solrClient === null) {
         req.logger.info('SolrSmartClient.InitClient called');
         solrClient = solrSmartClient.initClient(solrConfig.core, solrConfig.zooKeeperConnection, req.logger, foreverAgent);
     }
 }
 
-function executeSolrQuery(queryString, method, req, callback) {
-
+/**
+ * @param {Object|String} [query] - the query data to use in the Solr query
+ * @param {String} method - The type of Solr `handler` or path to execute
+ * @param {Object} req - A standard Express request Object
+ * @param {Function} callback(err,obj) - function to execute when Solr server responds
+ * @param {Error} callback().err
+ * @param {Object} callback().obj - JSON response sent by the Solr server deserialized
+ */
+function executeSolrQuery(query, method, req, callback) {
     var solrConfig = req.app.config.solrClient;
     initSolr(solrConfig, req);
 
-    solrClient.get(method, queryString, function(error, solrResult){
+    //US17315: adding requestId to solr query for logging at solr
+    if (typeof query === 'string') {
+        query = querystring.parse(query);
+    }
+    query.requestId = req.id;
+    req.logger.debug({ 'query': query }, 'Solr Request query object');
+
+    solrClient.get(method, query, function(error, solrResult) {
         if (error) {
             req.logger.error('Error performing search', (error.message || error));
-            return callback(error);
-        } else {
-            return callback(null, solrResult);
+            return callback(error, null);
         }
-    })
+        return callback(null, solrResult);
+    });
 }
 
 

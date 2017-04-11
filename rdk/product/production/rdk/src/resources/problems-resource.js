@@ -3,7 +3,7 @@
 var rdk = require('../core/rdk');
 var RpcClient = require('vista-js').RpcClient;
 var errorVistaJSCallback = 'VistaJS RPC callback error: ';
-var getVistaRpcConfiguration = require('../utils/rpc-config').getVistaRpcConfiguration;
+var vistaRpcConfiguration = require('../utils/rpc-config');
 var _ = require('lodash');
 
 var MATCHES_FOUND = 'matches found';
@@ -29,8 +29,8 @@ function getProblems(req, res) {
     req.logger.info('Problems resource GET called');
     req.audit.logCategory = 'PROBLEMS';
 
-    getData(req, function (err, data) {
-        if (typeof (err) === 'string') {
+    getData(req, function(err, data) {
+        if (typeof(err) === 'string') {
             req.logger.debug(err);
             return res.status(rdk.httpstatus.internal_server_error).rdkSend(err);
         }
@@ -62,7 +62,7 @@ function massageData(req, input, limit) {
 
     // turn limit into an integer...
     var limitNumber = Number(limit);
-    _.each(problems, function (problem, index) {
+    _.each(problems, function(problem, index) {
         var parts = problem.split('^');
 
         if (parts !== problem && (limitNumber === 0 || index < limitNumber)) {
@@ -93,7 +93,7 @@ function ProblemDefinition(input) {
 }
 
 /**
- * Calls the problems RPC. Uses the site id that is stored in the user session.
+ * Calls the problems RPC. Uses the site id that is stored in the the request patient identifier interceptor object.
  *
  * @param {Object} req - The default Express request.
  * @param {function} callback - The function to call back to.
@@ -109,11 +109,18 @@ function getData(req, callback) {
     params[1] = (uncoded === undefined) ? 'PLS' : 'CLF';
     params[2] = 0;
 
-    var rpcConfiguration = getVistaRpcConfiguration(req.app.config, req.session.user);
+    if (_.isUndefined(req.interceptorResults.patientIdentifiers.site)) {
+        req.logger.debug('getData - missing patient site from interceptor patient identifier results');
+        return callback('Missing patient site parameter.', null);
+    }
+
+    var vistaRpcConfigParams = vistaRpcConfiguration.getPatientCentricVistaRpcConfigurationParams(req.session.user, req.interceptorResults.patientIdentifiers.site);
+    var rpcConfiguration = vistaRpcConfiguration.getVistaRpcConfiguration(req.app.config, vistaRpcConfigParams);
+
     rpcConfiguration.accessCode = req.session.user.accessCode;
     rpcConfiguration.verifyCode = req.session.user.verifyCode;
 
-    RpcClient.callRpc(req.logger, rpcConfiguration, 'ORQQPL4 LEX', params, function (error, result) {
+    RpcClient.callRpc(req.logger, rpcConfiguration, 'ORQQPL4 LEX', params, function(error, result) {
         if (error) {
             req.logger.error(errorVistaJSCallback + error);
             return callback(error);
@@ -121,12 +128,12 @@ function getData(req, callback) {
         var returnMessage = result.trim();
 
         req.logger.debug('for ' + searchfor + ' we got ' + returnMessage);
-        req.logger.debug('Type for: ' + returnMessage + ' is ' + typeof (returnMessage));
+        req.logger.debug('Type for: ' + returnMessage + ' is ' + typeof(returnMessage));
         if (returnMessage === '') {
             callback(null, 'No data');
             return;
         }
-        if (typeof (returnMessage) === 'string') {
+        if (typeof(returnMessage) === 'string') {
             if (returnMessage.indexOf('Please try a different search') !== -1) {
                 callback('Search is unsupported');
                 return;

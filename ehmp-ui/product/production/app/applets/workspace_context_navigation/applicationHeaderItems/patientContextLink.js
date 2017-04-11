@@ -13,24 +13,33 @@ define([
 ) {
     'use strict';
 
-     var PatientContextLinkView = Backbone.Marionette.ItemView.extend({
+
+    var CurrentPatientLabelView = Backbone.Marionette.ItemView.extend({
+        tagName: 'li',
+        template: Handlebars.compile('<div class="current-patient-label--divider"></div><p class="current-patient-label arrow-right-after background-color-pure-white color-primary">Current Patient: </p>'),
+    });
+
+    var PatientContextLinkView = Backbone.Marionette.ItemView.extend({
         tagName: 'li',
         template: Handlebars.compile([
-             '{{#if shouldShow}}',
-             '{{#if isActive}}<p {{else}}<a href="#" title="Press enter to navigate to the patient centric workspaces for {{toTitleCase fullName}}." {{/if}}id="current-patient-nav-header-tab" class="context-navigation-link{{#if isActive}} active{{/if}}">',
-             '<span class="nav-ccow {{ccowBg}}"><span class="fa-stack"><i class="fa fa-stack-2x"></i><i class="fa fa-user font-size-15 fa-stack-1x fa-inverse {{ccowIconBg}}"></i></span> Current Patient: <b>{{toTitleCase fullName}}</b></span>',
-             '<span class="{{ccowClass}} {{vaultAvailable}} font-size-18 left-padding-xs" data-toggle="tooltip" data-html="true" title="{{ccowTooltip}}" data-placement="auto top" data-trigger="hover focus" data-container="body">',
-             '<span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span>',
-             '<span class="path7"></span><span class="path8"></span></span><span class="sr-only">{{ccowSrOnlyMessage}}</span>',
-             '{{#if isActive}}</p>{{else}}</a>{{/if}}',
-             '{{else}}',
-             '<p class="context-navigation-link">',
-             '<span class="nav-ccow {{ccowFakeBgNeeded}} {{ccowBg}}"><i class="fa fa-user font-size-15"></i> Current Patient: None </span>',
-             '<span class="{{ccowClass}} {{vaultAvailable}} font-size-18 left-padding-xs" ',
-             'data-toggle="tooltip" data-html="true" title="{{ccowTooltip}}" data-placement="auto top" data-trigger="hover focus" data-container="body">',
-             '<span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span>',
-             '<span class="path5"></span><span class="path6"></span><span class="path7"></span><span class="path8"></span></span><span class="sr-only">{{ccowSrOnlyMessage}}</span></p>',
-             '{{/if}}'
+            '{{#if shouldShow}}',
+            '{{#if isActive}}<p {{else}}<a href="#" title="Press enter to navigate to the patient centric workspaces for {{toTitleCase fullName}}." {{/if}}id="current-patient-nav-header-tab" class="context-navigation-link inline-block-display{{#if isActive}} active{{else}}  right-padding-no{{/if}}">',
+            '<span class="nav-ccow {{ccowBg}}"><strong>{{toTitleCase fullName}}</strong> ({{last5}})</span>',
+            '{{#unless isActive}}</a>{{/unless}}',
+            '<button type="button" id="ccowHeaderBarBtn" class="btn btn-icon inline-block-display {{ccowClass}} {{vaultAvailable}} {{ccowIconBg}} font-size-15" data-toggle="tooltip" data-html="true" title="{{ccowTooltip}}" data-placement="auto top" data-container="body">',
+            '<span class="sr-only">{{ccowSrOnlyMessage}}</span>',
+            '<span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span>',
+            '<span class="path7"></span><span class="path8"></span></button>',
+            '{{#if isActive}}</p>{{/if}}',
+            '{{else}}',
+            '<p id="current-patient-nav-header-tab" class="context-navigation-link inline-block-display right-padding-no">',
+            '<span class="nav-ccow {{ccowFakeBgNeeded}} {{ccowBg}}">None </span>',
+            '<button type="button" id="ccowHeaderBarBtn" class="btn btn-icon {{ccowClass}} {{vaultAvailable}} {{ccowIconBg}} font-size-15" ',
+            'data-toggle="tooltip" data-html="true" title="{{ccowTooltip}}" data-placement="auto top" data-container="body">',
+            '<span class="sr-only">{{ccowSrOnlyMessage}}</span>',
+            '<span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span>',
+            '<span class="path5"></span><span class="path6"></span><span class="path7"></span><span class="path8"></span></button></p>',
+            '{{/if}}'
         ].join('\n')),
         templateHelpers: function() {
             var self = this;
@@ -41,32 +50,41 @@ define([
                 'isActive': function() {
                     return self.templateHelperModel.get('isActive');
                 },
-                'ccowConnected' : function () {
+                'ccowConnected': function() {
                     return (ADK.CCOWService.getCcowStatus() === 'Connected');
                 },
-                'ccowFakeBgNeeded': function () {
+                'ccowFakeBgNeeded': function() {
                     if (this.ccowConnected()) {
                         return "";
                     } else {
                         return "";
                     }
                 },
-                'ccowBg': function () {
+                'ccowBg': function() {
                     if (this.ccowConnected()) {
                         return "";
                     } else {
-                        return "active background-color-red color-pure-white";
+                        return "active";
                     }
                 },
-                'vaultAvailable' : function () {
-                    if (ADK.CCOWService.vaultStatus) {
+                'ccowIconBg': function() {
+                    if (this.ccowConnected()) {
+                        return "background-color-pure-white";
+                    } else {
+                        return "active background-color-red";
+                    }
+                },
+                'vaultAvailable': function() {
+                    var vaultConnected = ADK.SessionStorage.getModel('ccow').get('vaultConnected');
+                    if (vaultConnected) {
                         return "";
                     } else {
                         return "vault-unavailable";
                     }
                 },
-                'ccowTooltip': function () {
-                    if (ADK.CCOWService.vaultStatus) {
+                'ccowTooltip': function() {
+                    var vaultConnected = ADK.SessionStorage.getModel('ccow').get('vaultConnected');
+                    if (vaultConnected) {
                         if (this.ccowConnected()) {
                             return "Clinical link on";
                         } else {
@@ -76,35 +94,28 @@ define([
                         return "Clinical link unavailable";
                     }
                 },
-                'ccowSrOnlyMessage': function () {
+                'ccowSrOnlyMessage': function() {
                     if (this.ccowConnected()) {
-                        return "This patient is connected to clinical link";
+                        return "Clinical link on. Click to break Clinical link";
                     } else {
                         return "This patient is disconnected from clinical link";
                     }
                 },
-                'ccowClass': function () {
+                'ccowClass': function() {
                     if (this.ccowConnected()) {
                         return "icon-ccow-connected";
                     } else {
                         return "icon-ccow-disconnected";
                     }
-                },
-                'ccowIconBg': function () {
-                    if (this.ccowConnected()) {
-                        return "color-primary";
-                    } else {
-                        return "color-pure-white";
-                    }
                 }
             };
         },
         events: {
-            'click #current-patient-nav-header-tab': 'navigateToPatientDefault',
-            'click span.icon-ccow-connected': function (e) {
+            'click a#current-patient-nav-header-tab': 'navigateToPatientDefault',
+            'click button.icon-ccow-connected': function(e) {
                 ADK.CCOWService.ccowIconSwitch(e, 'Disconnected');
             },
-            'click span.icon-ccow-disconnected': function (e) {
+            'click button.icon-ccow-disconnected': function(e) {
                 ADK.CCOWService.ccowIconSwitch(e, 'Connected');
             },
         },
@@ -124,16 +135,40 @@ define([
             });
             this.listenTo(this.templateHelperModel, 'change:shouldShow change:isActive', this.render);
             if ("ActiveXObject" in window) {
-                ADK.Messaging.on('ccow:updateHeaderStatus', this.render);
+                ADK.Messaging.on('ccow:updateHeaderStatus', _.bind(function(){
+                    this.$('#ccowHeaderBarBtn').tooltip('hide');
+                    this.render();
+                }, this));
             }
         },
         navigateToPatientDefault: function(e) {
             e.preventDefault();
             if (ADK.WorkspaceContextRepository.currentWorkspaceAndContext.get('context') !== 'patient' || ADK.WorkspaceContextRepository.currentWorkspaceAndContext.get('workspace') === 'patient-search-screen') {
                 var patientDefaultWorkspace = ADK.WorkspaceContextRepository.getDefaultScreenOfContext('patient');
-                ADK.PatientRecordService.setCurrentPatient(ADK.PatientRecordService.getCurrentPatient(), {workspaceId: patientDefaultWorkspace});
+                var currentpatient = ADK.PatientRecordService.getCurrentPatient();
+                if (currentpatient.has('pid')) {
+                    ADK.PatientRecordService.setCurrentPatient(currentpatient, {
+                        workspaceId: patientDefaultWorkspace
+                    });
+                } else {
+                    console.error("Current Patient is missing an identifier. Patient Model:", currentpatient.toJSON());
+                }
             }
             e.stopPropagation();
+        },
+        onRender: function() {
+            this.$('#ccowHeaderBarBtn').tooltip();
+        }
+    });
+
+    ADK.Messaging.trigger('register:component', {
+        type: "applicationHeaderItem",
+        group: "left",
+        key: "currentPatientLabel",
+        view: CurrentPatientLabelView,
+        orderIndex: 2,
+        shouldShow: function() {
+            return (ADK.UserService.hasPermissions('read-patient-record'));
         }
     });
 
@@ -142,7 +177,7 @@ define([
         group: "left",
         key: "patientContextLink",
         view: PatientContextLinkView,
-        orderIndex: 2,
+        orderIndex: 3,
         shouldShow: function() {
             return (ADK.UserService.hasPermissions('read-patient-record'));
         }

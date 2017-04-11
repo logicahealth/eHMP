@@ -1,7 +1,6 @@
 'use strict';
 
 var async = require('async');
-var _ = require('lodash');
 var pjds = require('../../subsystems/clinical-objects/clinical-objects-subsystem');
 
 /**

@@ -29,7 +29,7 @@ define([
         className: 'flex-display flex-align-center flex-justify-content-end'
     });
 
-    var PatientInformationCollectionView = Backbone.Marionette.CollectionView.extend({
+    var ContextSidebarCollectionView = Backbone.Marionette.CollectionView.extend({
         itemGroupName: 'patient-information',
         getChildView: function(item) {
             return item.get('view');
@@ -111,14 +111,14 @@ define([
         ui: {
             LeftNavigationBarContainer: '.context-navigation-bar.left',
             RightNavigationBarContainer: '.context-navigation-bar.right',
-            PatientSidebarContainer: '.patient-info-bar',
+            ContextSidebarContainer: '.context-sidebar--left',
             PatientWritebackTrayContainer: '.tray-container'
         },
         regions: {
             ContentLeftRegion: 'aside',
             LeftNavigationRegion: '@ui.LeftNavigationBarContainer',
             RightNavigationRegion: '@ui.RightNavigationBarContainer',
-            PatientSidebarRegion: '@ui.PatientSidebarContainer',
+            ContextSidebarRegion: '@ui.ContextSidebarContainer',
             PatientWritebackTrayRegion: '@ui.PatientWritebackTrayContainer',
             content_region: '#content-region'
         },
@@ -130,7 +130,7 @@ define([
             this.rightNavigationItemsCollectionView = new RightNavigationItemCollectionView({
                 collection: this.registeredComponentsCollection
             });
-            this.PatientInformationCollectionView = new PatientInformationCollectionView({
+            this.contextSidebarCollectionView = new ContextSidebarCollectionView({
                 collection: this.registeredComponentsCollection
             });
         },
@@ -138,7 +138,7 @@ define([
         onBeforeShow: function() {
             this.showChildView('LeftNavigationRegion', this.leftNavigationItemsCollectionView);
             this.showChildView('RightNavigationRegion', this.rightNavigationItemsCollectionView);
-            this.showChildView('PatientSidebarRegion', this.PatientInformationCollectionView);
+            this.showChildView('ContextSidebarRegion', this.contextSidebarCollectionView);
             this.showChildView('PatientWritebackTrayRegion', new TrayCollectionView({
                 collection: this.registeredComponentsCollection
             }));

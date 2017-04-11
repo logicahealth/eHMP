@@ -1,0 +1,185 @@
+{
+  "resourceType": "Bundle",
+  "type": "collection",
+  "id": "149c10f6-3a6c-4287-a193-4c09fb355cfb",
+  "link": [
+    {
+      "relation": "self",
+      "url": "http://10.149.31.57:8888/resource/fhir/patient/9E7A;129/diagnosticreport?name=urn:va:ien:60:1359:139"
+    }
+  ],
+  "total": 5,
+  "entry": [
+    {
+      "resource": {
+        "resourceType": "DiagnosticReport",
+        "name": {
+          "text": "Rheumatology",
+          "coding": [
+            {
+              "system": "urn:oid:2.16.840.1.113883.6.233",
+              "code": "urn:va:ien:60:1359:139",
+              "display": "Rheumatology"
+            }
+          ]
+        },
+        "status": "final",
+        "issued":  "2016-02-19T13:55:00",
+        "subject": {
+          "reference": "Patient/9E7A;129"
+        },
+        "performer": {
+          "reference": "5dac20ed-57d7-477f-8fbf-cc0560957fa2",
+          "display": "CAMP MASTER"
+        },
+        "contained": [
+           {
+            "resourceType": "Observation",
+            "id": "83bd2c9a-7322-412a-923c-2d8d059f088c",
+            "code": {
+              "text": "Rheumatoid factor",
+              "coding": [
+                {
+                  "system": "LOINC",
+                  "code": "14034-3",
+                  "display": "Rheumatoid factor [Units/​volume] in Cerebral spinal fluid"
+                }
+              ]
+            },
+            "issued": "2016-03-21T13:55:00",
+            "status": "final",
+            "valueString": "X",
+            "interpretation": {
+              "coding": [
+                {
+                  "system": "http://hl7.org/fhir/vs/observation-interpretation",
+                  "code": "HH",
+                  "display": "Above upper panic limits"
+                }
+              ]
+            },
+            "reliability": "ok",
+            "referenceRange": [
+              {
+                "high": {
+                  "value": null
+                },
+                "low": {
+                  "value": null
+                }
+              }
+            ]
+          },
+          {
+            "resourceType": "Observation",
+            "id": "83bd2c9a-7322-412a-923c-2d8d059f088b",
+            "code": {
+              "text": "Erythrocyte sedimentation rate",
+              "coding": [
+                {
+                  "system": "LOINC",
+                  "code": "4539-3",
+                  "display": "Erythrocyte sedimentation rate Zeta by Zetafuge"
+                }
+              ]
+            },
+            "issued": "2015-03-19T13:55:00",
+            "status": "final",
+            "valueString": "X",
+            "interpretation": {
+              "coding": [
+                {
+                  "system": "http://hl7.org/fhir/vs/observation-interpretation",
+                  "code": "HH",
+                  "display": "Above upper panic limits"
+                }
+              ]
+            },
+            "reliability": "ok",
+            "referenceRange": [
+              {
+                "high": {
+                  "value": null
+                },
+                "low": {
+                  "value": null
+                }
+              }
+            ]
+          },
+          {
+            "resourceType": "Observation",
+            "id": "83bd2c9a-7322-412a-923c-2d8d059f088b",
+            "code": {
+              "text": "C Reactive Protien",
+              "coding": [
+                {
+                  "system": "urn:oid:2.16.840.1.113883.6.233",
+                  "code": "urn:va:ien:60:123:139",
+                  "display": "C Reactive Protien"
+                }
+              ]
+            },
+            "issued": "2016-03-28T13:55:00",
+            "status": "final",
+            "valueString": "23",
+            "interpretation": {
+              "coding": [
+                {
+                  "system": "http://hl7.org/fhir/vs/observation-interpretation",
+                  "code": "HH",
+                  "display": "Above upper panic limits"
+                }
+              ]
+            },
+            "reliability": "ok",
+            "referenceRange": [
+              {
+                "high": {
+                  "value": null
+                },
+                "low": {
+                  "value": null
+                }
+              }
+            ]
+          }
+        ],
+        "identifier": [
+          {
+            "system": "urn:oid:2.16.840.1.113883.6.233",
+            "value": "urn:va:lab:9E7A:129:CH;7019779.864549;500027"
+          }
+        ],
+        "serviceCategory": {
+          "text": "Chemistry",
+          "coding": [
+            {
+              "system": "http://hl7.org/fhir/v2/0074",
+              "code": "CH",
+              "display": "Chemistry"
+            }
+          ]
+        },
+        "diagnosticDateTime": "1998-02-19T13:54:00",
+        "result": [
+          {
+            "reference": "#83bd2c9a-7322-412a-923c-2d8d059f088b",
+            "display": "Rheumatology"
+          }
+        ]
+      }
+    },
+    {
+    "resource":{"resourceType":"ValueSet","name":"CRP","expansion":{"contains":[{"system":"urn:oid:2.16.840.1.113883.6.233","code":"urn:va:ien:60:123:"},{"system":"LOINC","code":"43402-7"},{"system":"LOINC","code":"4537-7"},{"system":"LOINC","code":"18184-2"},{"system":"LOINC","code":"4538-5"},{"system":"LOINC","code":"4539-3"}]}}
+    },
+    {
+    "resource":{"resourceType":"ValueSet","description": "TEST Description", "identifier": [
+          {
+            "system": "urn:oid:2.16.840.1.113883.6.233",
+            "value": "urn:va:lab:9E7A:129:CH;7019779.864549;500027"
+          }
+        ],"name":"RF","description": "TEST Description","expansion":{"contains":[{"system":"LOINC","code":"46437-0"},{"system":"LOINC","code":"5299-3"},{"system":"LOINC","code":"14034-3"},{"system":"LOINC","code":"15203-3"}]}}
+    }
+  ]
+}

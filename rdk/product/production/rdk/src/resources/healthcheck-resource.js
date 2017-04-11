@@ -6,12 +6,12 @@ var healthCheckRegistry = {};
 var resultRegistry = {};
 
 function registerItem(item, name, type, logger) {
-    if(!item.healthcheck && !item.subsystems) {
+    if (!item.healthcheck && !item.subsystems) {
         logger.warn('no healthcheck defined for ' + type + ' named ' + name);
         return;
     }
     var healthcheck = item.healthcheck || {};
-    if(!item.subsystems && !healthcheck.check) {
+    if (!item.subsystems && !healthcheck.check) {
         logger.warn('health check has no check function or subsystem dependencies: ' + name);
     }
 
@@ -20,17 +20,17 @@ function registerItem(item, name, type, logger) {
         type: type
     };
 
-    if(healthcheck.check) {
+    if (healthcheck.check) {
         registeredCheck.check = healthcheck.check;
     }
 
-    if(healthcheck.interval) {
+    if (healthcheck.interval) {
         registeredCheck.interval = healthcheck.interval;
         //this bit starts up the regular background check of the healthcheck
         setInterval(updateResultRegistry, registeredCheck.interval, registeredCheck, logger, true);
     }
 
-    if(item.subsystems) {
+    if (item.subsystems) {
         registeredCheck.subsystems = item.subsystems;
     }
 
@@ -39,7 +39,7 @@ function registerItem(item, name, type, logger) {
         type: registeredCheck.type
     };
 
-    if(registeredCheck.subsystems) {
+    if (registeredCheck.subsystems) {
         var dependencies = {};
         _.each(item.subsystems, function(dependency) {
             dependencies[dependency] = false;
@@ -47,15 +47,13 @@ function registerItem(item, name, type, logger) {
         registeredCheckResult.subsystems = dependencies;
     }
 
-    if(healthcheck.check) {
+    if (healthcheck.check) {
         registeredCheckResult.check = false;
     }
 
     healthCheckRegistry[name] = registeredCheck;
     resultRegistry[name] = registeredCheckResult;
-    if(healthcheck.interval) {
-        updateResultRegistry(registeredCheck, logger, true);
-    }
+    updateResultRegistry(registeredCheck, logger, _.has(healthcheck, 'interval'));
 }
 
 function registerResource(configItem, logger) {
@@ -72,7 +70,7 @@ function registerSubsystem(subsytemConfig, subsystemName, logger) {
 function executeAll(logger) {
     var isHealthy = true;
     _.each(healthCheckRegistry, function(registeredCheck) {
-        if(!updateResultRegistry(registeredCheck, logger, false)) {
+        if (!updateResultRegistry(registeredCheck, logger, false)) {
             isHealthy = false;
         }
     });
@@ -86,15 +84,15 @@ function updateResult(registeredResult, isHealthy) {
 function updateResultRegistry(registeredCheck, logger, fromInterval) {
     var healthy = true;
 
-    if(!fromInterval) {
+    if (!fromInterval) {
         logger.info('checking: ' + registeredCheck.name);
     }
 
     var regCheck = registeredCheck;
     var regResult = resultRegistry[registeredCheck.name];
 
-    if(regCheck.check) {
-        if(regCheck.interval && !fromInterval) {
+    if (regCheck.check) {
+        if (regCheck.interval && !fromInterval) {
             healthy = resultRegistry[regCheck.name].check;
         } else {
             registeredCheck.check(updateResult.bind(null, regResult));
@@ -102,12 +100,12 @@ function updateResultRegistry(registeredCheck, logger, fromInterval) {
         }
     }
 
-    if(regCheck.subsystems) {
+    if (regCheck.subsystems) {
         var dependencieshealthy = true;
         _.each(registeredCheck.subsystems, function(dependency) {
-            if(healthCheckRegistry[dependency]) {
+            if (healthCheckRegistry[dependency]) {
                 regResult.subsystems[dependency] = resultRegistry[dependency].healthy;
-                if(!resultRegistry[dependency].healthy) {
+                if (!resultRegistry[dependency].healthy) {
                     dependencieshealthy = false;
                 }
             } else {
@@ -139,9 +137,9 @@ module.exports.getResourceConfig = function() {
             var isHealthy = executeAll(req.logger);
             req.logger.info('received request for health check, value ' + isHealthy);
 
-            if(req.param.e && isHealthy) {
+            if (req.param.e && isHealthy) {
                 return res.status(500).rdkSend();
-            } else if(req.param.e && !isHealthy) {
+            } else if (req.param.e && !isHealthy) {
                 return res.status(500).rdkSend();
             } else {
                 return res.rdkSend(isHealthy);
@@ -205,7 +203,7 @@ function createHtmlViewOfHealthCheck(logger, result) {
         'dlqcAAAAASUVORK5CYII=';
 
     var output = '<html><body>';
-    if(result) {
+    if (result) {
         output = output + 'healthy <img src="' + greenicon + '" /> ';
     } else {
         output = output + 'not healthy <img src="' + redicon + '" /> ';
@@ -214,7 +212,7 @@ function createHtmlViewOfHealthCheck(logger, result) {
 
     _.each(healthCheckRegistry, function(registeredCheck) {
         output = output + '<tr><td>' + registeredCheck.name + '</td><td>';
-        if(resultRegistry[registeredCheck.name].healthy) {
+        if (resultRegistry[registeredCheck.name].healthy) {
             output = output + '<img src="' + greenicon + '" alt="healthy" /> ';
         } else {
             output = output + '<img src="' + redicon + '" alt="unhealty" /> ';
@@ -223,9 +221,9 @@ function createHtmlViewOfHealthCheck(logger, result) {
 
         var dependencies = resultRegistry[registeredCheck.name].subsystems;
 
-        if(dependencies) {
+        if (dependencies) {
             _.each(dependencies, function(dependency, key) {
-                if(dependency) {
+                if (dependency) {
                     output = output + key + '<img src="' + greenicon + '" alt="healthy" /> ';
                 } else {
                     output = output + key + '<img src="' + redicon + '" alt="unhealty" /> ';

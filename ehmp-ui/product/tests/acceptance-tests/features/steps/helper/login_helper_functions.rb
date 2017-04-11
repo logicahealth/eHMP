@@ -13,9 +13,9 @@ class LoginHTMLElements < AccessBrowserV2
     add_action(CucumberLabel.new("AccessCode"), SendKeysAction.new, AccessHtmlElement.new(:id, "accessCode"))
     add_action(CucumberLabel.new("VerifyCode"),  SendKeysAction.new, AccessHtmlElement.new(:id, "verifyCode"))
     add_action(CucumberLabel.new("Facility"), ComboSelectAction.new, AccessHtmlElement.new(:id, "facility"))
-    add_action(CucumberLabel.new("SignIn"), ClickAction.new, AccessHtmlElement.new(:id, "login"))
+    add_action(CucumberLabel.new("SignIn"), ClickAction.new, AccessHtmlElement.new(:class, "login"))
     add_action(CucumberLabel.new("Signout"), ClickAction.new, AccessHtmlElement.new(:id, "logoutButton"))
-    add_verify(CucumberLabel.new("Login Error Message"), VerifyText.new, AccessHtmlElement.new(:id, "errorMessage"))
+    add_verify(CucumberLabel.new("Login Error Message"), VerifyContainsText.new, AccessHtmlElement.new(:id, "errorMessage"))
     add_action(CucumberLabel.new("center"), ClickAction.new, AccessHtmlElement.new(:id, "center"))
     add_action(CucumberLabel.new("currentuser"), ClickAction.new, AccessHtmlElement.new(:id, "eHMP-CurrentUser"))
   

@@ -81,20 +81,20 @@ describe('Service Connected Resource', function(){
                             '9E7A': {
                                 name: 'PANORAMA',
                                 division: '500',
-                                host: 'IP        ',
+                                host: '10.2.2.101',
                                 port: 9210,
                                 production: false,
-                                accessCode: 'PW    ',
-                                verifyCode: 'PW    !!'
+                                accessCode: 'pu1234',
+                                verifyCode: 'pu1234!!'
                             },
                             'C877': {
                                 name: 'KODAK',
                                 division: '500',
-                                host: 'IP        ',
+                                host: '10.2.2.102',
                                 port: 9210,
                                 production: false,
-                                accessCode: 'PW    ',
-                                verifyCode: 'PW    !!'
+                                accessCode: 'pu1234',
+                                verifyCode: 'pu1234!!'
                             }
                         }
                     }
@@ -155,20 +155,20 @@ describe('Service Connected Resource', function(){
                             '9E7A': {
                                 name: 'PANORAMA',
                                 division: '500',
-                                host: 'IP        ',
+                                host: '10.2.2.101',
                                 port: 9210,
                                 production: false,
-                                accessCode: 'PW    ',
-                                verifyCode: 'PW    !!'
+                                accessCode: 'pu1234',
+                                verifyCode: 'pu1234!!'
                             },
                             'C877': {
                                 name: 'KODAK',
                                 division: '500',
-                                host: 'IP        ',
+                                host: '10.2.2.102',
                                 port: 9210,
                                 production: false,
-                                accessCode: 'PW    ',
-                                verifyCode: 'PW    !!'
+                                accessCode: 'pu1234',
+                                verifyCode: 'pu1234!!'
                             }
                         }
                     }

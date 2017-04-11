@@ -9,7 +9,6 @@ var osyncUserData = require('./osync-users');
 var rdk = require('../../../core/rdk');
 var pjds = rdk.utils.pjdsStore;
 var SITE = '9E7A';
-var DUZ = '1000023';
 
 describe('Osync Users module', function() {
     var req;

@@ -17,28 +17,61 @@ define([
 
     var templateSelector = function(model) {
         var json = model.toJSON();
+        var content;
         var templateName = newsfeedUtils.templateSelector(json);
 
         switch(templateName) {
             case "emergencyDeptTemplate" :
                 return emergencyDeptTemplate(json);
             case "dischargedPatientTemplate" :
+                model.set("ext_filter_field","discharged");
                 return dischargedPatientTemplate(json);
             case "admittedPatientTemplate" :
+                model.set("ext_filter_field","admitted");
                 return admittedPatientTemplate(json);
             case "stopCodeVisitTemplate" :
+                if (model.get("isFuture")){
+                    model.set("ext_filter_field","to be seen in");
+                } else {
+                    model.set("ext_filter_field","seen in");
+                }
                 return stopCodeVisitTemplate(json);
             case "defaultVisitTemplate" :
+                model.set("ext_filter_field","visit");
                 return defaultVisitTemplate(json);
             case "immunizationTemplate" :
                 return immunizationTemplate(json);
             case "surgeryTemplate" :
+                content = model.get("typeName") + " surgery completed";
+                model.set("ext_filter_field", content);
                 return surgeryTemplate(json);
             case "procedureTemplate" :
+                if (model.get("statusName").toLowerCase() === "complete"){
+                    model.set("ext_filter_field", "completed");
+                } else {
+                    model.set("ext_filter_field", model.get("statusName"));
+                }
                 return procedureTemplate(json);
             case "consultTemplate" :
+                if (model.get("category").toLowerCase() === "p"){
+                    if (model.get("statusName").toLowerCase() === "pending") {
+                        content = "pending ";
+                    }
+                    content += model.get("orderName") + " ordered";
+                    if (model.get("providerDisplayName")) {
+                        content += " by " + model.get("providerDisplayName");
+                    }
+                } else {
+                    if (model.get("statusName").toLowerCase() === "pending") {
+                        content = "pending ";
+                    }
+                    content += "consulted " + model.get("orderName");
+                }
+                model.set("ext_filter_field",content);
                 return consultTemplate(json);
             case "laboratoryTemplate" :
+                content = model.get("typeName") + " - " + model.get("specimen");
+                model.set("ext_filter_field",content);
                 return laboratoryTemplate(json);
         }
     };

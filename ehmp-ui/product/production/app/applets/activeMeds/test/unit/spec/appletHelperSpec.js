@@ -120,6 +120,17 @@ define([
     });
 
     describe("Fillable test suite - active medications", function() {
+        it("Confirm 'Refillable' when expiration date is in the future, medication status is 'Active', supply should be exhausted (lastFilled + daysSupply is in the past), but last refill has not been picked up", function() {
+            medication.fillableStatus = 'Fillable for';
+            medication.orders[0].fillsRemaining = 1;
+            medication.expirationDate = moment().add(1, 'years');
+
+            var result = appletHelper.getFillableData(medication);
+            expect(result.display).toBe("Refillable");
+            expect(result.label).toBe("label label-warning");
+            expect(result.date).toBe(undefined);
+            expect(result.description).toBe('This medication is active and expiration date has not passed, but supply should be exhausted and the last refill has not been picked up.');
+        });
         it("Confirm 'Not Refillable' when expiration date is in the past and medication status is 'Active'", function() {
             medication.fillableStatus = 'Fillable for';
             medication.expirationDate = '20150605';
@@ -144,7 +155,7 @@ define([
             medication.fillableStatus = 'Fillable for';
             medication.fillsRemaining = medication.orders[0].fillsRemaining;
             medication.lastFilled = moment();
-            medication.expirationDate = moment().add(5, 'months');
+            medication.expirationDate = moment().add(5, 'months').add(4, 'days');
 
             var result = appletHelper.getFillableData(medication);
             expect(result.display).toBe("Fillable for");
@@ -200,7 +211,7 @@ define([
             expect(result.description).toBe('This medication is listed as expired but expiration date has not yet passed.');
         });
         it("Confirm 'Discontinued ??' when discontinue date is in the future and medication status is 'Discontinued'", function() {
-            medication.vaStatus = 'Discontinued';
+            medication.calculatedStatus = 'Discontinued';
             medication.standardizedVaStatus = appletHelper.getStandardizedVaStatus(medication);
             medication.stopped = moment().add(3, 'years');
             medication.overallStop = moment().add(3, 'years');
@@ -226,7 +237,7 @@ define([
             expect(result.description).toBe('This medication was expired 3 Years ago. ');
         });
         it("Confirm 'No Data' when medication is missing data to determine fillable status (lastFilled, fillsRemaining, fills)", function() {
-            medication.vaStatus = 'Active';
+            medication.calculatedStatus = 'Active';
             medication.standardizedVaStatus = appletHelper.getStandardizedVaStatus(medication);
             medication.lastFilled = "";
             medication.orders[0].fillsRemaining = "";

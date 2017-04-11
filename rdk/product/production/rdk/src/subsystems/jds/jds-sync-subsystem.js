@@ -1,16 +1,12 @@
 'use strict';
 
 var _ = require('lodash');
-var async = require('async');
 var util = require('util');
-var S = require('string');
 var rdk = require('../../core/rdk');
 var httpUtil = rdk.utils.http;
 var nullchecker = require('../../utils/nullchecker');
 var checkStatus = require('./jds-sync-check-status');
 var jdsSyncConfig = require('./jds-sync-config');
-var patientSearchResource = require('../../resources/patient-search/patient-search-resource');
-var pidValidator = rdk.utils.pidValidator;
 var isNullish = nullchecker.isNullish;
 var isNotNullish = nullchecker.isNotNullish;
 
@@ -19,6 +15,7 @@ module.exports.loadPatient = loadPatient;
 module.exports.loadPatientPrioritized = loadPatientPrioritized;
 module.exports.loadPatientForced = loadPatientForced;
 module.exports.clearPatient = clearPatient;
+module.exports.createSimpleStatusResult = createSimpleStatusResult;
 module.exports.getPatientStatus = getPatientStatus;
 module.exports.getPatientStatusSimple = getPatientStatusSimple;
 module.exports.getPatientStatusDetail = getPatientStatusDetail;
@@ -141,39 +138,47 @@ function getPatientDataStatusSimple(pid, req, callback) {
             return callback(syncResult.status || 500, createErrorResponse(syncResult.status, syncResult.data));
         }
 
-        var status = {};
-        var vistaSites = _.keys(req.app.config.vistaSites);
-        var sites = [];
-        if (syncResult.data) {
-            if (syncResult.data.sites) {
-                sites = _.keys(syncResult.data.sites);
-            }
-            if (syncResult.data.latestSourceStampTime) {
-                status.latestSourceStampTime = syncResult.data.latestSourceStampTime;
-            }
-        }
-
-        if (!_.isEmpty(sites)) {
-            _.each(sites, function(site) {
-                req.logger.debug(site);
-                if (_.contains(vistaSites, site)) {
-                    status.VISTA = status.VISTA || {};
-                    status.VISTA[site] = checkStatus.getSiteSyncDataStatusSimple(syncResult.data.sites[site]);
-                    req.logger.debug('getDataStatusSimple: site status converted: %j', status.VISTA[site]);
-                } else {
-                    status[site] = checkStatus.getSiteSyncDataStatusSimple(syncResult.data.sites[site]);
-                    req.logger.debug('getDataStatusSimple: site status converted: %j', status[site]);
-                }
-            });
-        }
-
-        status.allSites = syncResult.data.syncCompleted ? true : false;
+        var status = createSimpleStatusResult(req.logger, _.keys(req.app.config.vistaSites), syncResult);
 
         return callback(undefined, {
             status: 200,
             data: status
         });
     });
+}
+
+function createSimpleStatusResult(logger, vistaSites, syncResult) {
+    var status = {};
+    var sites = [];
+    if (syncResult.data) {
+        if (syncResult.data.sites) {
+            sites = _.keys(syncResult.data.sites);
+        }
+        if (syncResult.data.latestSourceStampTime) {
+            status.latestSourceStampTime = syncResult.data.latestSourceStampTime;
+        }
+        if (_.has(syncResult.data, 'solrSyncCompleted')) {
+            status.isSolrSyncCompleted = syncResult.data.solrSyncCompleted;
+        }
+    }
+
+    if (!_.isEmpty(sites)) {
+        _.each(sites, function(site) {
+            logger.debug(site);
+            if (_.contains(vistaSites, site)) {
+                status.VISTA = status.VISTA || {};
+                status.VISTA[site] = checkStatus.getSiteSyncDataStatusSimple(syncResult.data.sites[site]);
+                logger.debug('getDataStatusSimple: site status converted: %j', status.VISTA[site]);
+            } else {
+                status[site] = checkStatus.getSiteSyncDataStatusSimple(syncResult.data.sites[site]);
+                logger.debug('getDataStatusSimple: site status converted: %j', status[site]);
+            }
+        });
+    }
+
+    status.allSites = syncResult.data.syncCompleted ? true : false;
+
+    return status;
 }
 
 // This should only be used by the UI or in very

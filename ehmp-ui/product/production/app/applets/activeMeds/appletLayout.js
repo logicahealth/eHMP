@@ -60,7 +60,7 @@ define([
 
             this.appletOptions = {
                 filterEnabled: true, // removed for demo purposes due to it not working well with the timeline
-                filterFields: ['normalizedName', 'age', 'totalFillsRemaining', 'sig', 'drugClassName'],
+                filterFields: ['normalizedName', 'age', 'totalFillsRemaining', 'sig', 'drugClassName', 'facilityMoniker', 'vaStatus'],
                 summaryColumns: summaryConfiguration.summaryColumns,
                 appletConfiguration: summaryConfiguration,
                 enableModal: true,

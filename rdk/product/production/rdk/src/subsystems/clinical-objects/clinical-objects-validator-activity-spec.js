@@ -1,7 +1,5 @@
 'use strict';
 
-var _ = require('lodash');
-
 var validator = require('./clinical-objects-validator-activity');
 var requestSubdomainValidator = require('./clinical-objects-validator-request');
 
@@ -15,35 +13,35 @@ describe('activity clinical object validator', function() {
         late.setDate(late.getDate() + 4);
 
         json = {
-            "patientUid": "urn:va:patient:9E7A:3:3",
-            "authorUid": "urn:va:user:9E7A:123",
-            "domain": "ehmp-activity",
-            "subDomain": "request",
-            "visit": {
-                "location": "location UID",
-                "serviceCategory": "serviceCategoryCode",
-                "dateTime": "timestamp"
+            'patientUid': 'urn:va:patient:9E7A:3:3',
+            'authorUid': 'urn:va:user:9E7A:123',
+            'domain': 'ehmp-activity',
+            'subDomain': 'request',
+            'visit': {
+                'location': 'location UID',
+                'serviceCategory': 'serviceCategoryCode',
+                'dateTime': 'timestamp'
             },
-            "ehmpState": "active",
-            "displayName": "title",
-            "data": {
-                "activity": {
-                    "deploymentId": "VistaCore:Order",
-                    "processDefinitionId": "Order.Request",
-                    "processInstanceId": "123"
+            'ehmpState': 'active',
+            'displayName': 'title',
+            'data': {
+                'activity': {
+                    'deploymentId': 'VistaCore:Order',
+                    'processDefinitionId': 'Order.Request',
+                    'processInstanceId': '123'
                 }
             }
         };
 
         validator._setConfiguration({
-            "domains": {
-                "ehmp-activity": {
-                    "modulePath": "clinical-objects-validator-activity",
-                    "subdomains": {
-                        "request": {
-                            "modulePath": "clinical-objects-validator-request",
-                            "deploymentId": "VistaCore:Order",
-                            "processDefinitionId": "Order.Request"
+            'domains': {
+                'ehmp-activity': {
+                    'modulePath': 'clinical-objects-validator-activity',
+                    'subdomains': {
+                        'request': {
+                            'modulePath': 'clinical-objects-validator-request',
+                            'deploymentId': 'VistaCore:Order',
+                            'processDefinitionId': 'Order.Request'
                         }
                     }
                 }

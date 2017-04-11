@@ -2,6 +2,8 @@ class PobPatientSearch < SitePrism::Page
   set_url '/#patient-search-screen'
   set_url_matcher(/\/#patient-search-screen$/)
 
+  section :global_header, GlobalHeaderSection, ".navbar"
+
   # *****************  All_Form_Elements  ******************* #
 
   # *****************  All_Container_Elements  ******************* #
@@ -22,6 +24,7 @@ class PobPatientSearch < SitePrism::Page
   element :fld_global_Search_Last_N, "#globalSearchLastName"
   element :fld_global_Search_Ssn, "#globalSearchSsn"
   element :fld_global_Search_dob, "#globalSearchDob"
+  element :fld_confirm_modal, '#confirmSection'
   element :fld_confirm_header, "div[id='confirmSection'] .patientName"
   element :fld_patient_search_confirmation_info, "div[class='fixedHeightZone']"
   element :fld_nav_bar, "#header-region .navbar"
@@ -58,7 +61,7 @@ class PobPatientSearch < SitePrism::Page
   element :btn_allpatient, "#global"
   element :btn_confirmation, "button[id='confirmationButton']"
   element :btn_ack, "#ackButton"
-  element :btn_logout, "a[id='logoutButton']"
+
   element :btn_confirm, "#confirmFlaggedPatinetButton"
   element :btn_nationwide, "li[id='global'] a"
   element :btn_global_Search, "#globalSearchButton"
@@ -77,7 +80,6 @@ class PobPatientSearch < SitePrism::Page
   element :err_message1, "p[class='error-message padding']"
 
   # *****************  All_Drop_down_Elements  ******************* #
-  element :ddl_ehmp_current_user, "#eHMPCurrentUser"
 
   # *****************  All_Table_Elements  ******************* #
   element :tbl_patient_info, "div[class='patientInfo row']"

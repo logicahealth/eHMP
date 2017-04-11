@@ -7,7 +7,6 @@ var async = require('async');
 var rdk = require('../../../core/rdk');
 var jdsFilter = require('jds-filter');
 var httpUtil = rdk.utils.http;
-var nullchecker = rdk.utils.nullchecker;
 var auditUtil = require('../../../utils/audit');
 
 

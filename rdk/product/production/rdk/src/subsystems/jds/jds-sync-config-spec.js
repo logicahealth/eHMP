@@ -74,7 +74,7 @@ describe('jds-sync-config\'s', function() {
                     host: 'hmphost',
                     port: 3,
                     accessCode: '9E7A;500',
-                    verifyCode: 'PW    ;PW    !!'
+                    verifyCode: 'ep1234;ep1234!!'
                 },
                 jdsSync: {
                     settings: {

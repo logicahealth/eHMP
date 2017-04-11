@@ -350,62 +350,62 @@ describe('request clinical object', function() {
 
         it('successfully performs end-to-end validation', function(done) {
             var endToEndExampleJson = {
-                "deploymentId": "VistaCore:Order:1.0",
-                "processDefId": "Order.Request",
-                "parameter" : {
-                    "requestActivity": {
-                        "objectType" : "requestActivity",
-                        "uid": "urn:va:ehmp-activity:9E7A:100716:0e55ec7b-01a2-44e3-867a-343eb33f035d",
-                        "patientUid" : "urn:va:patient:9E7A:100716:100716",
-                        "authorUid" : "9E7A;100716",
-                        "domain": "ehmp-activity",
-                        "subDomain": "request",
-                        "visit" : {
-                            "location": "urn:va:location:9E7A:100716",
-                            "serviceCategory": "PS",
-                            "dateTime": "20160420130729"
+                'deploymentId': 'VistaCore:Order:1.0',
+                'processDefId': 'Order.Request',
+                'parameter' : {
+                    'requestActivity': {
+                        'objectType' : 'requestActivity',
+                        'uid': 'urn:va:ehmp-activity:9E7A:100716:0e55ec7b-01a2-44e3-867a-343eb33f035d',
+                        'patientUid' : 'urn:va:patient:9E7A:100716:100716',
+                        'authorUid' : '9E7A;100716',
+                        'domain': 'ehmp-activity',
+                        'subDomain': 'request',
+                        'visit' : {
+                            'location': 'urn:va:location:9E7A:100716',
+                            'serviceCategory': 'PS',
+                            'dateTime': '20160420130729'
                         },
-                        "ehmpState": "draft",
-                        "displayName": "Request Activity",
-                        "referenceId": "",
-                        "data": {
-                            "activity": {
-                                "deploymentId": "VistaCore:Order:1.0",
-                                "processDefinitionId": "Order.Request",
-                                "processInstanceId": "",
-                                "state": "draft",
-                                "initiator": "PW    ",
-                                "timeStamp": "20160420000000",
-                                "urgency": "Urgent",
-                                "assignTo": "Me",
-                                "routingCode": ""
+                        'ehmpState': 'draft',
+                        'displayName': 'Request Activity',
+                        'referenceId': '',
+                        'data': {
+                            'activity': {
+                                'deploymentId': 'VistaCore:Order:1.0',
+                                'processDefinitionId': 'Order.Request',
+                                'processInstanceId': '',
+                                'state': 'draft',
+                                'initiator': 'pu1234',
+                                'timeStamp': '20160420000000',
+                                'urgency': 'Urgent',
+                                'assignTo': 'Me',
+                                'routingCode': ''
                             },
-                            "signals": [],
-                            "requests": [
-                                {   "taskInstanceId":"",
-                                    "urgencyId": "10",
-                                    "urgency": "Urgent",
-                                    "earliestDate":"20160329000000",
-                                    "latestDate": "20160420000000",
-                                    "title": "Post procedure follow-up",
-                                    "assignTo": "Me",
-                                    "request": "This is my request",
-                                    "submittedByUid": "122",
-                                    "submittedTimeStamp": "20160420000000",
-                                    "visit" :
+                            'signals': [],
+                            'requests': [
+                                {   'taskInstanceId':'',
+                                    'urgencyId': '10',
+                                    'urgency': 'Urgent',
+                                    'earliestDate':'20160329000000',
+                                    'latestDate': '20160420000000',
+                                    'title': 'Post procedure follow-up',
+                                    'assignTo': 'Me',
+                                    'request': 'This is my request',
+                                    'submittedByUid': '122',
+                                    'submittedTimeStamp': '20160420000000',
+                                    'visit' :
                                     {
-                                        "location": "urn:va:location:[site]:[IEN]",
-                                        "serviceCategory": "PSB",
-                                        "dateTime": "20160420130729"
+                                        'location': 'urn:va:location:[site]:[IEN]',
+                                        'serviceCategory': 'PSB',
+                                        'dateTime': '20160420130729'
                                     }
                                 }
                             ],
-                            "responses": []
+                            'responses': []
                         }
                     },
-                    "icn" : "9E7A;100716",
-                    "pid" : "9E7A;100716",
-                    "formAction":"saved"
+                    'icn' : '9E7A;100716',
+                    'pid' : '9E7A;100716',
+                    'formAction':'saved'
                 }
             };
             endToEndValidator.validateUpdate([], endToEndExampleJson.parameter.requestActivity.uid, endToEndExampleJson.parameter.requestActivity, null, function(errorMessages) {

@@ -521,12 +521,12 @@ Then(/^the expanded Problems Applet is displayed$/) do
   wait.until {  aa.applet_grid_loaded }
 end
 
-Then(/^the Problems applet contains buttons$/) do |table|
-  table.rows.each do | button|
-    cucumber_label = "Control - applet - #{button[0]}"
-    expect(@cg.am_i_visible? cucumber_label).to eq(true), "Could not find button #{button[0]}"
-  end
-end
+# Then(/^the Problems applet contains buttons$/) do |table|
+#   table.rows.each do | button|
+#     cucumber_label = "Control - applet - #{button[0]}"
+#     expect(@cg.am_i_visible? cucumber_label).to eq(true), "Could not find button #{button[0]}"
+#   end
+# end
 
 When(/^user clicks on the Problem Name of first problem$/) do
   conditions = PobProblemsApplet.new

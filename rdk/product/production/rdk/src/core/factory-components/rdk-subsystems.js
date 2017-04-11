@@ -24,6 +24,9 @@ function registerAppSubsystems(app) {
     app.subsystems.register('favoriteOrderable', require('../../subsystems/orderables/favorite-orderable-subsystem'));
     app.subsystems.register('enterpriseOrderable', require('../../subsystems/orderables/enterprise-orderable-subsystem'));
     app.subsystems.register('vistaReadOnly', require('../../subsystems/vista-read-only-subsystem'));
+    if (_.get(app, 'config.enableMultidivisionProxyHealthcheck')) {
+        app.subsystems.register('vistaMultidivision', require('../../subsystems/vista-multidivision-subsystem'));
+    }
     if (_.get(app, 'config.vix')) {
         app.subsystems.register('vix', require('../../subsystems/vix/vix-subsystem'));
     }

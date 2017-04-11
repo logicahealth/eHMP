@@ -1,4 +1,4 @@
-@F144_allergy_applet @US2801 @DE621 @regression
+@F144_allergy_applet @US2801 @DE621 
 Feature: F144 - eHMP viewer GUI - Allergies
 #  Team Jupiter - refactored
 
@@ -7,9 +7,6 @@ Scenario: User views the Allergy applet on the coversheet page
 	# Given user is logged into eHMP-UI
   When user searches for and selects "BCMA,Eight"
   And Cover Sheet is active
-  And the "patient identifying traits" is displayed with information
-  | field			| value 				|
-  | patient name	| Bcma,Eight 			|
   Then The applet "ALLERGIES" on the coversheet page has been displayed
 	
 @US2801 @F144_1_allergy_applet_display @DE3371
@@ -17,9 +14,6 @@ Scenario: User views the Allergy applet on the coversheet page
 	# Given user is logged into eHMP-UI
   When user searches for and selects "BCMA,Eight"
   And Cover Sheet is active
-  And the "patient identifying traits" is displayed with information
-  | field			| value 				|
-  | patient name	| Bcma,Eight 			|
   Then The applet "ALLERGIES" on the coversheet page has been displayed
   And Applet ALLERGIES expanded view have the below table header
   | headers               |
@@ -35,9 +29,6 @@ Scenario: User views the Allergy applet on the coversheet page
 Scenario: User views the modal when a particular allergy pill is chosen
   Given user searches for and selects "BCMA,Eight"
   And Cover Sheet is active
-  And the "patient identifying traits" is displayed with information
-  | field     | value         |
-  | patient name  | Bcma,Eight      |
   And The applet "ALLERGIES" on the coversheet page has been displayed
   And the Allergies Gist contains at least 1 pill
   When user views the first allergy details
@@ -55,7 +46,7 @@ Scenario: User views the modal details when a particular allergy pill is chosen
   When user views the first allergy details
   Then the modal is displayed
   And the Allergy Detail modal displays either "Entered in Error" or "Edit Error"
-  And the user clicks the modal "Close Button"
+  And the user clicks the modal Close Button
   And the modal is closed
 
 @US2801 @F144_3b_allergy_applet_modal_detail_display @modal_test @DE549 @no_data @DE3709
@@ -77,7 +68,7 @@ Scenario: User views the modal details when a particular allergy pill is chosen
       | observed/historical |
       | observed date       |
 
-@US2801 @expand_minimize @DE4529 @debug @DE6976
+@US2801 @expand_minimize @DE4529 @DE6976
 Scenario: Verify expanded Allergies applet returns to coversheet
 	# Given user is logged into eHMP-UI
 	When user searches for and selects "BCMA,Eight"
@@ -93,9 +84,6 @@ Scenario: View Allergies Applet Single Page by clicking on Expand View
 	# Given user is logged into eHMP-UI
 	And user searches for and selects "BCMA,Eight"
 	Then Cover Sheet is active
-	Then the "patient identifying traits" is displayed with information
-	| field			| value 				|
-	| patient name	| Bcma,Eight 			|
     And The applet "ALLERGIES" on the coversheet page has been displayed
     And User clicks the Expand View in the Allergies Applet
     And the expanded Allergies Applet title is "ALLERGIES"
@@ -106,12 +94,12 @@ Scenario: Sort allergies applet by standardized name
 	# Given user is logged into eHMP-UI
 	When user searches for and selects "BCMA,Eight"
 	And Cover Sheet is active
-    And The applet "ALLERGIES" on the coversheet page has been displayed
-    And User clicks the Expand View in the Allergies Applet
-    And user sorts by the Standardized Allergen
-    Then the Allergies Applet is sorted in alphabetic order based on Standardized Allergen
-    And user sorts by the Allergen Name
-    And the Allergies Applet is sorted in alphabetic order based on Allergen Name
+  And The applet "ALLERGIES" on the coversheet page has been displayed
+  And User clicks the Expand View in the Allergies Applet
+  And user sorts the Expanded Allergies Applet by the Standardized Allergen
+  Then the Allergies Applet is sorted in alphabetic order based on Standardized Allergen
+  And user sorts the Expanded Allergies Applet by the Allergen Name
+  And the Allergies Applet is sorted in alphabetic order based on Allergen Name
     
 @f144_allergy_applet_summary_view_refresh
 Scenario: Allergies Gist displays all of the same details after applet is refreshed

@@ -99,6 +99,11 @@ function constructRpcArgs(immunization) {
         immunization.providerName + rpcDelimiter +
         immunization.primaryProvider;
 
+    if (!_.isEmpty(immunization.povCode)) {
+        retVal[index++] = 'POV+' + rpcDelimiter + immunization.povCode + rpcDelimiter + rpcDelimiter + immunization.povNarrative + rpcDelimiter + 
+            '0' + rpcDelimiter + immunization.providerName + rpcDelimiter + '0' + rpcDelimiter + rpcDelimiter;
+    }
+
     retVal[index] = 'IMM+' + rpcDelimiter;
     retVal[index] += immunization.immunizationIEN + rpcDelimiter;
     retVal[index] += category + rpcDelimiter;
@@ -261,11 +266,7 @@ function add(writebackContext, passedInCallback) {
         writebackContext.model.ehmpState = 'active';
         writebackContext.model.referenceId = results.uid;
         writebackContext.model.authorUid = results.performerUid;
-        writebackContext.model.patientUid = writebackContext.pid;
-
-        var userID = writebackContext.pid.split(';');
-        var patientUid = 'urn:va:patient:' + userID[0] + ':' + userID[1] + ':' + userID[1];
-        writebackContext.model.patientUid = writebackContext.pid = patientUid;
+        writebackContext.model.patientUid = 'urn:va:patient:' + writebackContext.interceptorResults.patientIdentifiers.site + ':' + writebackContext.interceptorResults.patientIdentifiers.dfn + ':' + writebackContext.interceptorResults.patientIdentifiers.dfn;
         writebackContext.model.createdDateTime = moment().format('YYYYMMDDhhmmss');
 
         return passedInCallback(null);

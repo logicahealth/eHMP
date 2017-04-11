@@ -40,7 +40,8 @@ var patientDemographicsLoad = function(app) {
         name: 'synchronization-demographics-load',
         path: '/demographics-load',
         interceptors: {
-            synchronize: false
+            synchronize: false,
+            validatePid: false  // because the pid validator demands a `DOD;` prefix edipi's
         },
         requiredPermissions: ['read-patient-record'],
         isPatientCentric: false,
@@ -201,3 +202,11 @@ function toResponseCallback(res, error, result) {
 }
 
 module.exports.getResourceConfig = getResourceConfig;
+module.exports._patientLoadEndpoint = patientLoadEndpoint;
+module.exports._patientClearEndpoint = patientClearEndpoint;
+module.exports._patientStatusEndpoint = patientStatusEndpoint;
+module.exports._patientDataStatusEndpoint = patientDataStatusEndpoint;
+module.exports._patientSyncStatusDetailEndpoint = patientSyncStatusDetailEndpoint;
+module.exports._patientDemographicsLoadEndpoint = patientDemographicsLoadEndpoint;
+module.exports._operationalStatusEndpoint = operationalStatusEndpoint;
+module.exports._toResponseCallback = toResponseCallback;

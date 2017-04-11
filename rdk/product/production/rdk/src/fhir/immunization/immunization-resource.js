@@ -137,7 +137,6 @@ function getFhirItems(result, req) {
 }
 
 function convertToFhir(result, req) {
-    var pid = req.query['subject.identifier'];
     var link = req.protocol + '://' + req.headers.host + req.originalUrl;
     var fhirResult = new fhirResource.Bundle([new fhirResource.Link(link, 'self')]);
 

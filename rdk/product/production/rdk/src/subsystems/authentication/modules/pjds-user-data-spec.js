@@ -150,11 +150,11 @@ describe('pJDS trust system data call', function() {
                 dgSensitiveAccess: true
             }
         };
-        getStub.callsArgWith(3, null, null);
+        getStub.callsArgWith(3, null, response);
         pjdsUserData.getTrustedSystemData(req, res, cb, params);
         var firstCb = cb.getCall(0);
         expect(cb.called).to.be.true();
-        expect(firstCb.args[0].code).to.match(/202.401.1003/);
+        expect(firstCb.args[0].error).to.equal('response name did not match the request name');
         expect(firstCb.args[1]).to.be.null();
     });
     it('just makes the callback with data when pjds returns no error', function() {
@@ -298,8 +298,28 @@ describe('pJDS login attempt call', function() {
         patchStub.callsArgWith(3, new Error('this is a bogus one'), null);
         pjdsUserData.setLoginAttempt(req, res, cb, params);
         var firstCb = cb.getCall(0);
+        expect(patchStub.calledBefore(firstCb)).to.be.true();
         expect(cb.called).to.be.true();
         expect(firstCb.args[0].code).to.match(/202.500.1001/);
+        expect(firstCb.args[1]).to.be.null();
+    });
+    it('sets default data properly for pjds patch if error during login', function() {
+        var message = 'login wasn\'t successful';
+        var params = {};
+        _.set(params, 'data', {});
+        _.set(params, 'error', new Error(message));
+        _.set(req, 'session.user.uid', 'urn:va:user:9E7A:153465246');
+        var response = {
+            status: 200
+        };
+        patchStub.callsArgWith(3, null, response);
+        pjdsUserData.setLoginAttempt(req, res, cb, params);
+        var firstCb = cb.getCall(0);
+        expect(patchStub.getCall(0).args[2]).to.be.a(Object);
+        expect(patchStub.getCall(0).args[2].data).to.have.keys(['lastUnsuccessfulLogin', 'unsuccessfulLoginAttemptCount', 'permissionSet']);
+        expect(patchStub.calledBefore(firstCb)).to.be.true();
+        expect(cb.called).to.be.true();
+        expect(firstCb.args[0]).to.match(message);
         expect(firstCb.args[1]).to.be.null();
     });
     it('just makes the callback with data when pjds returns no error', function() {
@@ -313,6 +333,9 @@ describe('pJDS login attempt call', function() {
         patchStub.callsArgWith(3, null, response);
         pjdsUserData.setLoginAttempt(req, res, cb, params);
         var firstCb = cb.getCall(0);
+        expect(patchStub.getCall(0).args[2]).to.be.a(Object);
+        expect(patchStub.getCall(0).args[2].data).to.have.keys(['lastSuccessfulLogin', 'unsuccessfulLoginAttemptCount']);
+        expect(patchStub.calledBefore(firstCb)).to.be.true();
         expect(cb.called).to.be.true();
         expect(firstCb.args[0]).to.be.null();
         expect(firstCb.args[1]).to.have.keys(['permissions', 'permissionSets']);

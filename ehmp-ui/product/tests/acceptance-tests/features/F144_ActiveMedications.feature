@@ -1,12 +1,15 @@
-@F144_ActiveMedications @regression @triage
+@F144_ActiveMedications   @reg2
 Feature: F144 - eHMP Viewer GUI - Active Medications
 
 # Team: Jupiter
 
+Background: 
+  # Given user is logged into eHMP-UI
+  Given user searches for and selects "Onehundredninetysix,Patient"
+
 @f144_1_active_medications_applet_inclusion @US2954 @US9493 @US8845
 Scenario: User views active medications on coversheet
-  # Given user is logged into eHMP-UI
-  Given user searches for and selects "Eightyeight,Patient"
+
   When Cover Sheet is active
   Then the "Active & Recent Medications" applet is displayed
   # US8845
@@ -17,8 +20,7 @@ Scenario: User views active medications on coversheet
 
 @f144_2_activie_medications_deatail @US2954 @DE831 @DE3798 @DE5017
 Scenario: Viewing modal details for  Active & Recent Medications.
-  # Given user is logged into eHMP-UI
-  Given user searches for and selects "Eightyeight,Patient"
+
   When Cover Sheet is active
   Then the "Active & Recent Medications" applet is displayed
   Given the Active & Recent Medications Applet displays at least 1 row
@@ -30,8 +32,7 @@ Scenario: Viewing modal details for  Active & Recent Medications.
   
 @f144_active_medications_refresh 
 Scenario: Active Medications applet displays all of the same details after applet is refreshed
-  # Given user is logged into eHMP-UI
-  Given user searches for and selects "Eightyeight,Patient"
+
   When Cover Sheet is active
   Then the "Active & Recent Medications" applet is displayed
   And the Active Medications Applet table contains data rows
@@ -40,7 +41,7 @@ Scenario: Active Medications applet displays all of the same details after apple
   
 @f144_active_medications_expand_applet_refresh 
 Scenario: Active Medications expand view applet displays all of the same details after applet is refreshed
-  And user searches for and selects "Eightyeight,Patient"
+
   When Cover Sheet is active
   Then the "Active & Recent Medications" applet is displayed
   When the user navigates to the expanded Active Medications Applet
@@ -49,9 +50,9 @@ Scenario: Active Medications expand view applet displays all of the same details
   When user refreshes Meds Review Applet
   Then the message on the Meds Review Applet does not say "An error has occurred"
 
-@f144_active_medications_expand_minimize @debug @DE6976
+@f144_active_medications_expand_minimize @DE6976
 Scenario: Coversheet Active Medications can be expanded
-  And user searches for and selects "Eightyeight,Patient"
+
   When Cover Sheet is active
   Then the "Active & Recent Medications" applet is displayed
   When the user expands the Active & Recent Medications applet
@@ -61,7 +62,7 @@ Scenario: Coversheet Active Medications can be expanded
   
 @f297_active_meds_info_button_integration_overview
 Scenario: Verify Active Meds applet on overview page has info button toolbar
-  When user searches for and selects "Eightyeight,Patient"
+
   And Overview is active
   And active meds gist is loaded successfully
   And user opens the first active medication gist item
@@ -69,7 +70,7 @@ Scenario: Verify Active Meds applet on overview page has info button toolbar
   
 @f297_active_meds_info_button_integration_coversheet
 Scenario: Verify Active Meds applet on coversheet page has info button toolbar
-  When user searches for and selects "Eightyeight,Patient"
+
   And Cover Sheet is active
   And active meds summary view is loaded successfully
   And user opens the first active medication summary item
@@ -77,7 +78,7 @@ Scenario: Verify Active Meds applet on coversheet page has info button toolbar
   
 @f297_active_meds_info_button_integration_expand_view
 Scenario: Verify active medication applet expanded view has info button toolbar
-  When user searches for and selects "Eightyeight,Patient"
+
   And Overview is active
   And user navigates to active meds expanded view 
   And user opens the first medication row

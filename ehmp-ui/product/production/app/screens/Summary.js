@@ -207,72 +207,7 @@ define([
             "dataMaxSizeY": 12,
             "viewType": "summary",
             "filterName": ""
-        }],/*most likely dead code
-        onResultClicked: function(clickedResult) {
-            var domain = clickedResult.uid.split(":")[2],
-                channelName = detailAppletChannels[domain],
-                modalView = null,
-                deferredResponse = $.Deferred();
-
-            if (channelName) {
-                if (!clickedResult.suppressModal) {
-                    // display spinner in modal while detail view is loading
-                    var modal = new ADK.UI.Modal({
-                        view: ADK.Views.Loading.create(),
-                        options: {
-                            size: "large",
-                            title: "Loading..."
-                        }
-                    });
-                    modal.show();
-                }
-
-                // request detail view from whatever applet is listening for this domain
-                var channel = ADK.Messaging.getChannel(channelName),
-                    deferredDetailResponse = channel.request('detailView', clickedResult);
-
-                deferredDetailResponse.done(function(response) {
-                    if (!clickedResult.suppressModal) {
-                        var modal = new ADK.UI.Modal({
-                            view: response.view,
-                            options: {
-                                size: "large",
-                                title: response.title
-                            }
-                        });
-                        modal.show();
-                        deferredResponse.resolve();
-                    } else {
-                        deferredResponse.resolve({
-                            view: response.view
-                        });
-                    }
-                });
-                deferredDetailResponse.fail(function(response) {
-                    deferredResponse.reject(response);
-                });
-            } else {
-                // no detail view available; use the default placeholder view
-                var detailView = new DefaultDetailView();
-
-                if (!clickedResult.suppressModal) {
-                    var modalView2 = new ADK.UI.Modal({
-                        view: detailView,
-                        options: {
-                            size: "large",
-                            title: "Detail - Placeholder"
-                        }
-                    });
-                    modalView2.show();
-                    deferredResponse.resolve();
-                } else {
-                    deferredResponse.resolve({
-                        view: detailView
-                    });
-                }
-            }
-            return deferredResponse.promise();
-        },*/
+        }],
         onStart: function() {
 
             OrdersFull.setUpEvents();  //probably not needed

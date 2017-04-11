@@ -1,4 +1,4 @@
-@F339 @regression @triage @DE3930 @US5278
+@F339   @DE3930 @US5278
 Feature: F339 - User Defined Work Spaces 2
 
 @US6295 @TC317 

@@ -3,7 +3,6 @@
 var _ = require('lodash');
 var fs = require('fs');
 var fspath = require('path');
-var url = require('url');
 var async = require('async');
 var apiBlueprint = require('./api-blueprint');
 var http = require('../../utils/http');
@@ -11,7 +10,6 @@ var http = require('../../utils/http');
 describe('API Blueprint resource registration', function() {
     var mountpoint;
     var markdownPath;
-    var logger;
 
     beforeEach(function () {
         mountpoint = '/test/example';
@@ -49,7 +47,7 @@ describe('API Blueprint resource registration', function() {
     });
 
     // enable this test to check parsing; it's disabled because it takes a long time
-    xit('should return JSON documentation for a registered resource', function(done) {
+    it.skip('should return JSON documentation for a registered resource', function(done) {
         this.timeout(5000);
 
         apiBlueprint.registerResource(mountpoint, markdownPath, false);
@@ -63,7 +61,7 @@ describe('API Blueprint resource registration', function() {
     });
 
     // enable this test to check parsing; it's disabled because it takes a long time
-    xit('should return JSON documentation for a registered resource with a path parameter', function(done) {
+    it.skip('should return JSON documentation for a registered resource with a path parameter', function(done) {
         this.timeout(5000);
 
         apiBlueprint.registerResource('/test/:pid/example', markdownPath, false);
@@ -76,7 +74,7 @@ describe('API Blueprint resource registration', function() {
     });
 
     // enable this test to check parsing; it's disabled because it takes a long time
-    xit('should return JSON documentation given an inexact path', function(done) {
+    it.skip('should return JSON documentation given an inexact path', function(done) {
         apiBlueprint.registerResource(mountpoint, markdownPath, false);
 
         var expected = require('./api-blueprint-spec-example-docs.json');
@@ -88,7 +86,7 @@ describe('API Blueprint resource registration', function() {
     });
 
     // enable this test to check pre-parsing; it's disabled because it takes a long time
-    xit('should cache and reuse pre-parsed JSON documentation', function(done) {
+    it.skip('should cache and reuse pre-parsed JSON documentation', function(done) {
         this.timeout(5000);
 
         fs.unlink(apiBlueprint.preparsedJsonPath(markdownPath), function () {
@@ -114,7 +112,7 @@ describe('API Blueprint resource registration', function() {
     });
 
     // enable this test to check pre-parsing; it's disabled because it takes a long time
-    xit('should not use cached JSON documentation when the original markdown is updated', function(done) {
+    it.skip('should not use cached JSON documentation when the original markdown is updated', function(done) {
         this.timeout(5000);
 
         var tempMarkdownPath = fspath.resolve('./temp-markdown.md');
@@ -160,7 +158,7 @@ describe('API Blueprint resource registration', function() {
     });
 
     // enable this test to check parsing; it's disabled because it takes a long time
-    xit('should return JSON documentation for an external registered resource', function(done) {
+    it.skip('should return JSON documentation for an external registered resource', function(done) {
         this.timeout(5000);
 
         sinon.stub(http, 'get', function(options, callback) {

@@ -2,7 +2,6 @@
 
 var _ = require('lodash');
 var async = require('async');
-var moment = require('moment');
 
 var configuration = require('./config/clinical-objects-config');
 
@@ -122,9 +121,8 @@ function validateDates(errorMessages, urgency, earliest, latest, ehmpState) {
             return;
         }
 
-        var diffSeconds = Math.ceil((latestDate - earliestDate) / 1000);//diff in seconds
         if(earliestDate > latestDate) {
-            errorMessages.push("Latest date is before earliest date");
+            errorMessages.push('Latest date is before earliest date');
         }
     }
 }
@@ -188,7 +186,7 @@ function executeValidationTasks(tasks, next) {
         }
 
         next(errorMessages);
-    })
+    });
 }
 
 function validateForMyTeams(errorMessages, model, appConfig, ehmpState, next) {
@@ -245,8 +243,6 @@ function validateAssignedFacility(assignedFacility, ehmpState, appConfig, errorM
     if ((ehmpState !== DRAFT_STATE) && (ehmpState !== DELETED_STATE)) {
         if (!isValidFacilityCode(assignedFacility)) {
             errorMessages.push('request.route contained malformed facility field: ' + assignedFacility);
-        } else {
-            //no-op for now--Any future further validation of assignedFacility would go here.
         }
     }
 
@@ -257,8 +253,6 @@ function validateAssignedPerson(assignedPerson, ehmpState, appConfig, errorMessa
     if ((ehmpState !== DRAFT_STATE) && (ehmpState !== DELETED_STATE)) {
         if (!isValidPerson(assignedPerson)) {
             errorMessages.push('request.route contained malformed person field: ' + assignedPerson);
-        } else {
-            //no-op for now--Any future further validation of assignedPerson would go here.
         }
     }
 
@@ -295,7 +289,7 @@ function validateAssignedRole(assignedRole, ehmpState, appConfig, errorMessages,
     if (!isValidRole(assignedRole)) {
         if ((ehmpState !== DRAFT_STATE) && (ehmpState !== DELETED_STATE)) {
             errorMessages.push('request.route contained malformed assignedRole field: ' + assignedRole);
-            next(null, errorMessages)
+            next(null, errorMessages);
         }
     } else if (ehmpState !== DELETED_STATE) {
         pcmm.validate(configuration.types.role, assignedRole, appConfig, function(aborted, success) {

@@ -28,19 +28,19 @@
         "name": "medication-orders-calc-max-refills",
         "modulePath": "medications/medication-orders-calc-max-refills-fetch-list",
         "vistaContext": "OR CPRS GUI CHART",
-        "requiredParams": ["patientDFN", "drug", "days", "ordItem", "discharge"],
+        "requiredParams": ["pid", "drug", "days", "ordItem", "discharge"],
         "requiredPermissions": ["future-release-not-available-for-use"]
     }, {
         "name": "medication-orders-default-days",
         "modulePath": "medications/medication-orders-default-days-fetch-list",
         "vistaContext": "OR CPRS GUI CHART",
-        "requiredParams": ["unitStr", "schedStr", "patientDFN", "drug", "oi"],
+        "requiredParams": ["unitStr", "schedStr", "pid", "drug", "oi"],
         "requiredPermissions": ["future-release-not-available-for-use"]
     }, {
         "name": "medication-orders-quantity-for-days-supply",
         "modulePath": "medications/medication-orders-quantity-for-days-supply-fetch-list",
         "vistaContext": "OR CPRS GUI CHART",
-        "requiredParams": ["daysSupply", "unitsPerDose", "schedule", "duration", "patientDFN", "drug"],
+        "requiredParams": ["daysSupply", "unitsPerDose", "schedule", "duration", "pid", "drug"],
         "requiredPermissions": ["future-release-not-available-for-use"]
     }, {
         "name": "new-persons-direct",
@@ -66,7 +66,7 @@
         "name": "radiology-dialog-default",
         "modulePath": "radiology/radiology-dialog-default-fetch-list",
         "vistaContext": "OR CPRS GUI CHART",
-        "requiredParams": ["patientDFN", "imagingType"],
+        "requiredParams": ["pid", "imagingType"],
         "optionalParams": ["anEventDiv"],
         "requiredPermissions": ["future-release-not-available-for-use"]
     }, {
@@ -123,7 +123,7 @@
         "vistaContext": "NOT APPLICABLE",
         "needsPcmm": true,
         "needsFullConfig": true,
-        "requiredParams": ["patientID"],
+        "requiredParams": ["pid"],
         "requiredPermissions": ["read-patient-record"]
     }, {
         "name": "teams-for-user-patient-related",
@@ -131,15 +131,7 @@
         "vistaContext": "NOT APPLICABLE",
         "needsPcmm": true,
         "needsFullConfig": true,
-        "requiredParams": ["staffIEN", "patientID"],
-        "requiredPermissions": ["read-patient-record"]
-    }, {
-        "name": "teams-for-facility",
-        "modulePath": "team-management/teams-for-facility-fetch-list",
-        "vistaContext": "NOT APPLICABLE",
-        "needsPcmm": true,
-        "needsFullConfig": true,
-        "requiredParams": ["facilityID"],
+        "requiredParams": ["staffIEN", "pid"],
         "requiredPermissions": ["read-patient-record"]
     }, {
         "name": "teams-for-facility-patient-related",
@@ -147,14 +139,7 @@
         "vistaContext": "NOT APPLICABLE",
         "needsPcmm": true,
         "needsFullConfig": true,
-        "requiredParams": ["facilityID", "patientID"],
-        "requiredPermissions": ["read-patient-record"]
-    }, {
-        "name": "roles-for-team",
-        "modulePath": "team-management/roles-for-team-fetch-list",
-        "vistaContext": "NOT APPLICABLE",
-        "needsPcmm": true,
-        "requiredParams": ["teamID"],
+        "requiredParams": ["facilityID", "pid"],
         "requiredPermissions": ["read-patient-record"]
     }]
 }

@@ -19,16 +19,13 @@ define([
         className: 'toolbar-item',
         events: {
             'change .appts-type-menu': 'filterBySite',
-
         },
-        clearSearchText: function () {
+        clearSearchText: function() {
             this.$el.parents('#grid-panel-' + this.instanceId).find('#input-filter-search-' + this.instanceId).val('');
             ADK.SessionStorage.setAppletStorageModel('appointments', 'filterText', '');
         },
-        filterBySite: function (event) {
+        filterBySite: function(event) {
             this.apptSite = this.$('.appts-type-menu').val();
-            // ADK.SessionStorage.setAppletStorageModel('appointments', 'siteFilter', this.apptSite);    
-
             this.filterResults(this.apptSite, this.collection, this.filterValue);
             this.setActiveSite(this.siteMenuItems, this.apptSite);
             var $target = $(event.currentTarget);
@@ -38,7 +35,7 @@ define([
             event.preventDefault();
             return true;
         },
-        setActiveSite: function (menuItems, activeSite) {
+        setActiveSite: function(menuItems, activeSite) {
             for (var i = 0; i < menuItems.models.length; i++) {
                 if (menuItems.models[i].get('site') === activeSite) {
                     menuItems.models[i].set('active', true);
@@ -47,7 +44,7 @@ define([
                 }
             }
         },
-        filterResults: function (apptSite, collection, filterValue) {
+        filterResults: function(apptSite, collection, filterValue) {
             var filterFunction;
             switch (apptSite) {
                 case 'LOCAL':
@@ -60,12 +57,11 @@ define([
                     ADK.utils.resetCollection(collection);
                     break;
             }
-
         },
-        filterResultsDefault: function (collection) {
+        filterResultsDefault: function(collection) {
             return this.filterResults(this.apptSite, collection, this.filterValue);
         },
-        onRender: function () {
+        onRender: function() {
             //set the overflow: visible for the orders panel to allow
             //the drop-down to drop below the boundaries of the applet, if needed
             $('#grid-panel-appointments').css({
@@ -88,5 +84,4 @@ define([
     });
 
     return ToolBarView;
-
 });

@@ -1,4 +1,4 @@
-@f360_immunization_write_back @regression @future @DE4560
+@f360_immunization_write_back  @future @DE4560
 
 Feature: F360 : Enter and Store Immunizations
 
@@ -57,7 +57,7 @@ Scenario: Validate 'add immunization' form fields validation
       | series drop down                      |
       | comment input box                     |
  
- @US6521 @TC476 @triage @future @US11272
+ @US6521 @TC476  @future @US11272
  Scenario: "No results" will be returned when the user try to search for none existed vaccine
   # Given user is logged into eHMP-UI
   And user searches for and selects "twenty,patient"
@@ -69,7 +69,7 @@ Scenario: Validate 'add immunization' form fields validation
   And the user searches for immunization "qqqqq"
   Then the immunization suggestion list displays "No results found"
 
-@US6521 @TC477 @triage @future @US11272
+@US6521 @TC477  @future @US11272
 Scenario: Verify immunization search validation
   # Given user is logged into eHMP-UI
   And user searches for and selects "twenty,patient"
@@ -81,7 +81,7 @@ Scenario: Verify immunization search validation
   And the user searches for immunization ""
   Then the immunization suggestion list displays "Enter 2 or more characters"
 
-@US6521 @TC477 @triage @future @US11272
+@US6521 @TC477  @future @US11272
 Scenario: Verify immunization search validation
   # Given user is logged into eHMP-UI
   And user searches for and selects "twenty,patient"

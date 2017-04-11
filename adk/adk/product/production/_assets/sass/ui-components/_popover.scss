@@ -1,0 +1,109 @@
+.gist-popover {
+    box-shadow: 0 1px 5px rgba(0,0,0,.5);
+    min-width: 326px;
+    background-color: white;
+    background-clip: border-box;
+    border-radius: 2px;
+    border: 5px solid $grey-lighter;
+    padding: 0px;
+    margin-top: 0px!important;
+    z-index: 10;
+    .popover-title-container {
+        display: table;
+        background-color: #dde3e8;
+        color: rgb(49, 103, 118);
+        font-size: 14px;
+        font-weight: bold;
+        border-radius: 1px;
+        border-bottom: 1px solid #ebebeb;
+        .popover-title {
+            display: table-cell;
+            padding-left: 0px;
+            font-weight: bold;
+            border-radius: 0;
+            background-color: #dde3e8;
+            border-bottom: none;
+        }
+        .popover-close-button {
+            display: table-cell;
+            background-color: #dde3e8;
+            padding-top: 4px;
+        }
+    }
+    .popover-content {
+        padding: 0;
+        th {
+            color: rgb(49, 103, 118);
+            font-weight: bold;
+        }
+    }
+}
+
+.popover {
+	min-width: 400px;
+	font-size: inherit;
+	font-family: 'Source Sans Pro', sans-serif;
+    &.popover-sm {
+        min-width: 100px;
+        text-align: center;
+    }
+	.popover-title {
+		font-size: 14px;
+		padding: 10px;
+	}
+	.popover-content {
+		max-height: 300px;
+		overflow-y: auto;
+		overflow-x: hidden;
+		padding: 10px;
+	}
+	&.popover-confirmation {
+		padding: 0;
+		box-shadow: 0 5px 10px rgba(0,0,0,0.4);
+		min-width: 0;
+		max-width: 160px;
+		background-color: $yellow-light;
+		&.top, &.bottom {
+			& > .arrow::after {
+				border-top-color: $yellow-light;
+			}
+		}
+		.popover-confirmation-header {
+			padding: 10px;
+		}
+		.popover-title {
+			padding: 0;
+			background-color: transparent;
+			border-bottom: none;
+			display: inline;
+		}
+		.popover-content {
+			padding: 0;
+			font-size: 12px;
+		}
+		.popover-confirmation-footer {
+			padding: 5px 10px 10px;
+			text-align: right;
+			border-radius: 0 0 5px 5px;
+			.close{
+				float: none;
+				opacity: 1;
+				&:hover{
+					outline: none;
+				}
+			}
+		}
+	}
+}
+.sidebar .sidebar-tray .modal-footer {
+	.popover-confirmation{
+		.btn.btn-sm{
+			padding: 5px 10px;
+		}
+		.btn-icon{
+			background: none;
+			box-shadow: none;
+			padding: 0;
+		}
+	}
+}

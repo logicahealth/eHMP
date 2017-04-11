@@ -2,8 +2,9 @@ define([
     'backbone',
     'marionette',
     'underscore',
-    'hbs!app/applets/cds_advice/modal/advice/adviceBodyTpl',
-], function(Backbone, Marionette, _, bodyTpl) {
+    'app/applets/cds_advice/util',
+    'hbs!app/applets/cds_advice/modal/advice/adviceBodyTpl'
+], function(Backbone, Marionette, _, Util, bodyTpl) {
     'use strict';
 
     function createBodyView(model) {
@@ -11,7 +12,15 @@ define([
             model: model
         } : null;
         var View = Backbone.Marionette.ItemView.extend({
-            template: bodyTpl
+            template: bodyTpl,
+            serializeData: function() {
+                var data = this.model.toJSON();
+
+                if(_.get(data, 'details.detail')) {
+                    data.details.detail = Util.formatDetailText(data.details.detail);
+                }
+                return data;
+            }
         });
         return new View(opts);
     }
@@ -33,6 +42,7 @@ define([
                 options: modalOptions
             });
             modal.show();
-        }
+        },
+        createBodyView: createBodyView
     };
 });

@@ -84,6 +84,7 @@ define([
         form.adjustButtonProperties();
     };
 
+    var facilitiesCollection;
     var retrieveFacilityPicklist = function(form) {
         form.ui.facilityField.trigger('control:disabled', true);
         showLoader(form, 'Loading');
@@ -96,12 +97,13 @@ define([
                 parse: function(response) {
                     return {
                         facilityID: response.division,
+                        siteCode: response.siteCode,
                         vistaName: response.name
                     };
                 }
             }
         };
-        var facilitiesCollection = ADK.ResourceService.fetchCollection(fetchOptions);
+        facilitiesCollection = ADK.ResourceService.fetchCollection(fetchOptions);
         form.listenToOnce(facilitiesCollection, 'sync', function(collection, response) {
             if (response.status === 200) {
                 if (response && response.data && response.data.items) {
@@ -182,6 +184,9 @@ define([
         form.model.unset('person');
 
         var setFacility = form.model.get('facility');
+        var setSite = facilitiesCollection.findWhere({
+            facilityID: setFacility
+        }).get('siteCode');
         var setAssignment = form.model.get('assignment');
 
         form.ui.teamField.trigger('control:disabled', true);
@@ -224,7 +229,8 @@ define([
             });
 
             people.fetch({
-                facilityID: setFacility
+                facilityID: setFacility,
+                site: setSite
             });
         } else if (setAssignment === 'opt_anyteam') {
             form.ui.teamContainer.trigger('control:hidden', false);
@@ -254,7 +260,8 @@ define([
             });
 
             teams.fetch({
-                facilityID: setFacility
+                facilityID: setFacility,
+                site: setSite
             });
         }
     };

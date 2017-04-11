@@ -1,6 +1,6 @@
 # Group Pick List
 
-## Medication defaults [/medication-defaults{?site}{&pharmacyType}{&outpatientDfn}{&locationIen}]
+## Medication defaults [/medication-defaults{?site}{&pharmacyType}{&outpid}{&locationIen}]
 
 Outpatient medication priorities, display messages, refills, and pickup options
 
@@ -19,8 +19,7 @@ ORWDPS1 ODSLCT
             + `F` - IV Fluids
             + `O` - Outpatient
 
-
-    + outpatientDfn (string, optional) - Patient DFN
+    :[pid]({{{common}}}/parameters/pid.md required:"optional")
 
     + locationIen (string, optional) - Encounter Location
 

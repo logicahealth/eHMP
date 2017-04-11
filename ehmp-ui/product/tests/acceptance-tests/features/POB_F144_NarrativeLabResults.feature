@@ -1,4 +1,4 @@
-#@F144 @DE1757 @regression @triage
+#@F144 @DE1757  
 @future
 Feature: Narrative Lab Results
 

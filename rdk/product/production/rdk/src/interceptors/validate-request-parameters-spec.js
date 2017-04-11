@@ -251,7 +251,7 @@ describe('The parameter validation interceptor', function() {
             return parameter;
         });
         if (templateParams) {
-            action.attributes.uriTemplate = '/some/url' + templateParams
+            action.attributes.uriTemplate = '/some/url' + templateParams;
         }
     }
 

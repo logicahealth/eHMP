@@ -3,8 +3,6 @@
 var auditUtil = require('../utils/audit');
 var RpcClient = require('vista-js').RpcClient;
 var rdk = require('../core/rdk');
-var httpUtil = rdk.utils.http;
-var util = require('util');
 var getVistaRpcConfiguration = require('../utils/rpc-config').getVistaRpcConfiguration;
 var async = require('async');
 var _ = require('lodash');
@@ -185,11 +183,10 @@ function getReportContentByReportID(req, res) {
         return res.status(rdk.httpstatus.bad_request).rdkSend('Report Id is missing');
 
     } else {
-        var pid = req.param('pid'),
-            site = req.param('site.code'),
-            reportId = req.param('id'),
-            params = [],
-            errorObj = {};
+        var pid = req.param('pid');
+        var reportId = req.param('id');
+        var params = [];
+        var errorObj = {};
 
         //Params
         params[0] = '0;' + pid;

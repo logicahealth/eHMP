@@ -1,0 +1,184 @@
+.sidebar {
+    .tray-loader {
+        background-color: rgba(255,255,255,0.80);
+        display: flex;
+        flex-direction: column;
+        height: calc(100% - 31px);
+        left: 0;
+        margin-top: 31px;
+        position: absolute;
+        top: 0;
+        width: 100%;
+        z-index: 50;
+        .tray-loader-animation {
+            align-self: center;
+            background-color: $pure-white;
+            border-radius: 10px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.35);
+            display: flex;
+            font-size: 14px;
+            margin: 20px;
+            padding: 2px 9px;
+            .loader-spinner {
+                height: 14px;
+                margin: 3px 3px 0 0;
+            }
+        }
+        .tray-loader-message{
+            overflow: hidden;
+            white-space: nowrap;
+        }
+    }
+    .sidebar-tray {
+        animation-fill-mode: forwards;
+        background: $primary-light;
+        border-radius: 0;
+        box-shadow: -2px 0px 12px rgba(0, 0, 0, 0.3);
+        overflow: hidden;
+        position: absolute;
+        transition: all 0.2s ease-out;
+        visibility: hidden;
+        width: 450px;
+        z-index: 3;
+        hr {
+            border-color: $grey;
+        }
+        p {
+            word-break: break-word;
+        }
+        label, .faux-label, legend {
+            color: $pure-black !important;
+            text-transform: lowercase;
+            &::first-letter {
+                text-transform: uppercase;
+            }
+        }
+        .radio input[type="radio"],
+        .radio-inline input[type="radio"],
+        .checkbox input[type="checkbox"],
+        .checkbox-inline input[type="checkbox"] {
+            position: absolute;
+            margin-left: -16px;
+            top: -2px;
+        }
+        h4, h5 {
+            word-wrap: break-word;
+        }
+        h5 {
+            color: $pure-black;
+        }
+        &.right {
+            box-shadow: -6px 0px 12px rgba(0, 0, 0, 0.3);
+            right: 0;
+        }
+        &.left {
+            box-shadow: 6px 0px 12px rgba(0, 0, 0, 0.3);
+            left: 0;
+        }
+        .fa-caret-down,
+        .fa-caret-right {
+            color: $primary;
+            font-size: 13px;
+        }
+        // Styling content inisde the tray
+        .panel {
+            .ncb-comment-container-region {
+                &.panel-body {
+                    background-color: transparent;
+                }
+            }
+            .treepicker-control {
+                &.panel-body {
+                    background-color: $pure-white;
+                }
+            }
+            .panel-body {
+                background-color: $primary-light;
+                &.action-list-container {
+                    background-color: $primary-light-alt;
+                    .btn-group {
+                        .btn {
+                            color: $pure-white;
+                            text-transform: uppercase;
+                            &.btn-default {
+                                background-color: $primary;
+                                &:hover {
+                                    background-color: $primary-dark;
+                                }
+                                .fa.pull-right {
+                                    padding-top: 3px;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        .accordion-container {
+            &.panel-group {
+                &.ftar {
+                    .panel {
+                        .ncb-comment-collapse-container {
+                            &.panel-collapse {
+                                background-color: transparent;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        .workflow-controller .modal-footer,
+        .modal-header,
+        .modal-content {
+            border-radius: 0;
+        }
+        .modal-body {
+            background-color: $primary-light;
+        }
+        .modal-footer {
+            background-color: $primary-light-alt;
+            border-radius: 0;
+            border-top: 1px solid $pure-white;
+            min-height: 45px;
+            .btn {
+                background-color: $pure-white;
+                box-shadow: 0px 1px 7px 0px rgba(0,0,0,0.15),0px 1px 2px 0px rgba(0,0,0,0.15);
+                &.dropdown-toggle {
+                    padding: 5px;
+                }
+                &.btn-sm {
+                    padding: 5px 5px;
+                }
+            }
+        }
+        .modal-content, .panel {
+            box-shadow: none;
+            border: none;
+        }
+        .modal-header,
+        .panel-heading {
+            border-radius: 0;
+            h4 {
+                color: $pure-white;
+                font-size: 12px;
+                line-height: 23px;
+                padding: 4px 0;
+                text-transform: uppercase;
+            }
+        }
+        // for activies radio buttons, should consider making this global for the component
+        .request-assignment .radio-inline+.radio-inline {
+            margin-left: 0px;
+        }
+    }
+    &.open > .sidebar-tray {
+        visibility: visible;
+        &.right {
+            overflow: visible;
+        }
+    }
+    &:not(.open) > .sidebar-tray {
+        overflow: hidden;
+        width: 0px !important;
+    }
+}

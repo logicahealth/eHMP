@@ -1,6 +1,5 @@
 'use strict';
 
-var _ = require('lodash');
 var pjds = require('./pjds-store');
 var logger = sinon.stub(require('bunyan').createLogger({
     name: 'pjds-store'

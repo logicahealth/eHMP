@@ -9,7 +9,7 @@ function reportError(errorStr, logger, callback) {
 }
 
 function getResourcePath(site, searchString) {
-	var resourcePath = 'resource/write-pick-list/?type=orderables' + '&site=' + site;
+	var resourcePath = 'resource/write-pick-list/orderables/?site=' + site;
     if (_.isString(searchString)) {
         resourcePath += '&searchString=' + searchString;
     }
@@ -49,10 +49,10 @@ function formatOrderables(orderables, site) {
 			items.push(item);
 
 		} else if(orderable.typeOfOrderable === 'entr') {
-			
+
             delete orderable.typeOfOrderable;
 			items.push(orderable);
-		
+
 		}
 
 	});
@@ -76,8 +76,6 @@ function fetchOrderables(req, searchString, callback) {
 
     rdk.utils.http.get(options, function(error, response, body) {
         req.logger.debug('orderables:: callback from get()');
-
-        var errorStr;
 
         if (error) {
             return reportError('Error fetching orderables' + ' - ' + (error.message || error), req.logger, callback);

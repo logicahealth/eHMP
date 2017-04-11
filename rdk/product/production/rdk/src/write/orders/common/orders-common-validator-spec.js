@@ -17,7 +17,7 @@ describe('write-back orders common validator', function() {
         editLabWritebackContext.resourceId = '12345';
         detailLabWritebackContext = {};
         detailLabWritebackContext.resourceId = '45678';
-        detailLabWritebackContext.siteParam = '9E7A'
+        detailLabWritebackContext.siteParam = '9E7A';
         discontinueDetailsLabWritebackContext = {
             model: {
                 'dfn': '100716',
@@ -26,9 +26,23 @@ describe('write-back orders common validator', function() {
                     '38965;1',
                     '38966;1'
                 ]
+            },
+            interceptorResults: {
+                patientIdentifiers: {
+                    siteDfn: '9E7A:100716',
+                    site: '9E7A',
+                    dfn: '100716'
+                }
             }
         };
         signDetailsLabWritebackContext = {};
+        signDetailsLabWritebackContext.interceptorResults = {
+            patientIdentifiers: {
+                siteDfn: '9E7A:100716',
+                site: '9E7A',
+                dfn: '100716'
+            }
+        };
         var signDetailsLabModel = {};
         signDetailsLabModel.dfn = '100716';
         signDetailsLabModel.provider = '1000000000';
@@ -41,7 +55,7 @@ describe('write-back orders common validator', function() {
                 'dfn': '100716',
                 'provider': '1000000000',
                 'location': '285',
-                'eSig': 'PW    !!',
+                'eSig': 'mx1234!!',
                 'orderList': [{
                     'orderId': '38989;1',
                     'orderDetailHash': 'some hash value'
@@ -52,6 +66,13 @@ describe('write-back orders common validator', function() {
                 }, {
                     orderCheck: '38989;1^24^2^Max lab test order freq exceeded for: HEMOGLOBIN A1C'
                 }]
+            },
+            interceptorResults: {
+                patientIdentifiers: {
+                    siteDfn: '9E7A:100716',
+                    site: '9E7A',
+                    dfn: '100716'
+                }
             }
         };
 
@@ -75,6 +96,13 @@ describe('write-back orders common validator', function() {
                     location: '32',
                     specimen: '8759'
                 }
+            },
+            interceptorResults: {
+                patientIdentifiers: {
+                    siteDfn: '9E7A:100716',
+                    site: '9E7A',
+                    dfn: '100716'
+                }
             }
         };
 
@@ -84,6 +112,13 @@ describe('write-back orders common validator', function() {
                 authorUid: 'Something',
                 domain: 'order',
                 ehmpState: 'draft'
+            },
+            interceptorResults: {
+                patientIdentifiers: {
+                    siteDfn: '9E7A:100716',
+                    site: '9E7A',
+                    dfn: '100716'
+                }
             }
         };
 

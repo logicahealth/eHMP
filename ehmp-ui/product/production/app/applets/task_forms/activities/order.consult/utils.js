@@ -54,7 +54,9 @@ define([
                                 taskId: taskModel.get('TASKID')
                             };
                             taskModel.set(enrichTaskModel);
-                            ADK.Messaging.getChannel('task_forms').trigger(taskModel.get('DEFINITIONID'), {formModel: taskModel});
+                            ADK.Messaging.getChannel('task_forms').trigger(taskModel.get('DEFINITIONID'), {
+                                formModel: taskModel
+                            });
                         } else {
                             // Not a review task
                             onSuccess();
@@ -167,51 +169,51 @@ define([
                 model.set('actionButtons', actionButtons);
             }
         },
-        enrichConsultModel: function(model){
+        enrichConsultModel: function(model) {
             var clinicalObject = model.get('clinicalObject');
             this.setCurrentAppointment(model);
 
-            if(!_.isUndefined(clinicalObject) && !_.isUndefined(clinicalObject.data) && !_.isUndefined(clinicalObject.data.consultOrders) && clinicalObject.data.consultOrders.length > 0){
+            if (!_.isUndefined(clinicalObject) && !_.isUndefined(clinicalObject.data) && !_.isUndefined(clinicalObject.data.consultOrders) && clinicalObject.data.consultOrders.length > 0) {
                 //Newest consult is last in the array
                 var consultOrder = clinicalObject.data.consultOrders[clinicalObject.data.consultOrders.length - 1];
                 model.set('consultOrder', consultOrder);
 
-                if(!_.isUndefined(consultOrder.conditions) && consultOrder.conditions.length > 0)
-                model.set('consultOrderCondition', consultOrder.conditions[0].name);
+                if (!_.isUndefined(consultOrder.conditions) && consultOrder.conditions.length > 0)
+                    model.set('consultOrderCondition', consultOrder.conditions[0].name);
                 this.setPrerequisiteData(consultOrder);
             }
         },
-        setCurrentAppointment: function(model){
+        setCurrentAppointment: function(model) {
             var appointmentObj = {};
-            if(!_.isUndefined(model.get('clinicalObject')) && !_.isUndefined(model.get('clinicalObject').data) && _.isArray(model.get('clinicalObject').data.appointments)){
+            if (!_.isUndefined(model.get('clinicalObject')) && !_.isUndefined(model.get('clinicalObject').data) && _.isArray(model.get('clinicalObject').data.appointments)) {
                 var appointment = model.get('clinicalObject').data.appointments[model.get('clinicalObject').data.appointments.length - 1];
 
-                if(!_.isUndefined(appointment)){
-                    if(!_.isUndefined(appointment.type) && appointment.type.name === 'VA'){
+                if (!_.isUndefined(appointment)) {
+                    if (!_.isUndefined(appointment.type) && appointment.type.name === 'VA') {
                         appointmentObj.type = 'VA';
-                        if(appointment.ewl === false){
-                            if(_.isUndefined(appointment.date)){
+                        if (appointment.ewl === false) {
+                            if (_.isUndefined(appointment.date)) {
                                 appointmentObj.unscheduled = true;
                             } else {
                                 appointmentObj.date = appointment.date;
                                 appointmentObj.provider = appointment.provider;
-                                if(!_.isUndefined(appointment.clinic)){
+                                if (!_.isUndefined(appointment.clinic)) {
                                     appointmentObj.clinic = appointment.clinic.name;
                                 }
                             }
                         }
-                    } else if(!_.isUndefined(appointment.type) && appointment.ewl === false && !_.isUndefined(appointment.type.name) && (appointment.type.name.toUpperCase() === 'CHOICE' ||
-                        appointment.type.name.toUpperCase() === 'DOD' || appointment.type.name.toUpperCase() === 'GEC' || appointment.type.name.toUpperCase() === 'NON-VA CARE' ||
-                        appointment.type.name.toUpperCase() === 'SHARING AGREEMENT')){
+                    } else if (!_.isUndefined(appointment.type) && appointment.ewl === false && !_.isUndefined(appointment.type.name) && (appointment.type.name.toUpperCase() === 'CHOICE' ||
+                            appointment.type.name.toUpperCase() === 'DOD' || appointment.type.name.toUpperCase() === 'GEC' || appointment.type.name.toUpperCase() === 'NON-VA CARE' ||
+                            appointment.type.name.toUpperCase() === 'SHARING AGREEMENT')) {
                         appointmentObj.type = 'Community Care';
                         appointmentObj.communityCareType = appointment.type.name;
-                        if(!_.isUndefined(appointment.status)){
+                        if (!_.isUndefined(appointment.status)) {
                             appointmentObj.status = appointment.status.name;
                         }
-                    } else if(!_.isUndefined(appointment.type) && !_.isUndefined(appointment.type.name) && appointment.type.name.toUpperCase() === 'ECONSULT'){
+                    } else if (!_.isUndefined(appointment.type) && !_.isUndefined(appointment.type.name) && appointment.type.name.toUpperCase() === 'ECONSULT') {
                         appointmentObj.type = 'eConsult';
-                    } else if(appointment.ewl){
-                        if(!_.isUndefined(model.get('clinicalObject').data.activity) && model.get('clinicalObject').data.activity.state !== 'Scheduling:Underway'){
+                    } else if (appointment.ewl) {
+                        if (!_.isUndefined(model.get('clinicalObject').data.activity) && model.get('clinicalObject').data.activity.state !== 'Scheduling:Underway') {
                             appointmentObj.ewl = true;
                         } else {
                             appointmentObj.unscheduled = true;
@@ -224,26 +226,26 @@ define([
 
             model.set('appointment', appointmentObj);
         },
-        setPrerequisiteData: function(consultOrder){
+        setPrerequisiteData: function(consultOrder) {
             var prerequisiteQuestions = [];
             var prerequisiteOrders = [];
             var totalMet = 0;
 
-            if(!_.isUndefined(consultOrder.questions)){
-                _.each(consultOrder.questions, function(question){
+            if (!_.isUndefined(consultOrder.questions)) {
+                _.each(consultOrder.questions, function(question) {
                     var preReqQuestion = {
                         label: question.question
                     };
 
-                    if(!_.isUndefined(question.answer)){
-                        if(question.answer.toUpperCase() === 'C928767E-F519-3B34-BFF2-A2ED3CD5C6C3'){
+                    if (!_.isUndefined(question.answer)) {
+                        if (question.answer.toUpperCase() === 'C928767E-F519-3B34-BFF2-A2ED3CD5C6C3') {
                             preReqQuestion.value = 'Yes';
                             preReqQuestion.met = true;
                             totalMet++;
-                        } else if(question.answer.toUpperCase() === 'D58A8003-B801-3DA2-83C1-E09497C9BB53'){
+                        } else if (question.answer.toUpperCase() === 'D58A8003-B801-3DA2-83C1-E09497C9BB53') {
                             preReqQuestion.value = 'No';
                             preReqQuestion.met = false;
-                        } else if(question.answer.toUpperCase() === '3E8DD206-FBDF-4478-9B05-7638682DD102'){
+                        } else if (question.answer.toUpperCase() === '3E8DD206-FBDF-4478-9B05-7638682DD102') {
                             preReqQuestion.value = 'Overridden';
                             preReqQuestion.met = true;
                             totalMet++;
@@ -254,36 +256,36 @@ define([
                 });
             }
 
-            if(!_.isUndefined(consultOrder.orderResults)){
-                _.each(consultOrder.orderResults, function(orderResult){
+            if (!_.isUndefined(consultOrder.orderResults)) {
+                _.each(consultOrder.orderResults, function(orderResult) {
                     var preReqOrder = {
                         label: orderResult.orderName
                     };
 
-                    if(!_.isUndefined(orderResult.status)){
-                        if(orderResult.status.toUpperCase() === 'ORDER'){
+                    if (!_.isUndefined(orderResult.status)) {
+                        if (orderResult.status.toUpperCase() === 'ORDER') {
                             preReqOrder.value = 'Ordered';
                             preReqOrder.met = false;
-                        } else if(orderResult.status.toUpperCase() === 'OVERRIDE'){
+                        } else if (orderResult.status.toUpperCase() === 'OVERRIDE') {
                             preReqOrder.value = 'Overridden';
                             preReqOrder.met = true;
                             totalMet++;
-                        } else if(orderResult.status.toUpperCase() === 'SATISFIED'){
+                        } else if (orderResult.status.toUpperCase() === 'SATISFIED') {
                             preReqOrder.value = 'Met by external data';
                             preReqOrder.met = true;
                             totalMet++;
-                        } else if(orderResult.status.toUpperCase() === 'PASSED'){
+                        } else if (orderResult.status.toUpperCase() === 'PASSED') {
                             preReqOrder.value = 'Complete';
                             preReqOrder.met = true;
                             totalMet++;
                         } else {
                             preReqOrder.value = LabStatusMappings[orderResult.status.toLowerCase()];
 
-                            if(_.isUndefined(preReqOrder.value)){
+                            if (_.isUndefined(preReqOrder.value)) {
                                 preReqOrder.value = 'Unknown';
                                 preReqOrder.met = false;
                             } else {
-                                if (preReqOrder.value === 'Complete'){
+                                if (preReqOrder.value === 'Complete') {
                                     preReqOrder.met = true;
                                     totalMet++;
                                 } else {
@@ -297,11 +299,11 @@ define([
                 });
             }
 
-            if(prerequisiteQuestions.length > 0){
+            if (prerequisiteQuestions.length > 0) {
                 consultOrder.enablePrerequisiteQuestions = true;
             }
 
-            if(prerequisiteOrders.length > 0){
+            if (prerequisiteOrders.length > 0) {
                 consultOrder.enablePrerequisiteOrders = true;
             }
 
@@ -311,6 +313,9 @@ define([
             consultOrder.totalMet = totalMet;
         }
     };
-
+    var channel = ADK.Messaging.getChannel('task_forms');
+    channel.reply('get_consult_utils', function() {
+        return Utils;
+    });
     return Utils;
 });

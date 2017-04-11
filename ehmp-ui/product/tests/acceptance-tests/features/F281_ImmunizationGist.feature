@@ -1,4 +1,4 @@
-@F281_immunization_gist @DE618 @regression @DE1267 @triage
+@F281_immunization_gist @DE618  @DE1267  @reg2
 
 Feature: F281 : Intervention Gist View
 	
@@ -14,7 +14,7 @@ Scenario: User views the immunization gist view
 	And the immunization gist view has the following information
 	| vaccine name			| age 	| 
 	
-@F281_2_immunizationGistDisplay @US3382  @DE861 @triage
+@F281_2_immunizationGistDisplay @US3382  @DE861 
 Scenario: User views the immunization gist view
 	# Given user is logged into eHMP-UI
 	And user searches for and selects "FORTYSIX,PATIENT"	

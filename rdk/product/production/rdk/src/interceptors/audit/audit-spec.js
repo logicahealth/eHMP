@@ -53,7 +53,7 @@ function buildRequest(pid) {
 }
 
 
-xdescribe('onFinish()', function(test) {
+describe.skip('onFinish()', function(test) {
     it('Expect audit is save on Finish Call', function() {
 
         var req = buildRequest(patient);

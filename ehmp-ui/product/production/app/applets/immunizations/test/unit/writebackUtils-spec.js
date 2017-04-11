@@ -41,18 +41,17 @@ define(['backbone', 'jasminejquery', 'app/applets/immunizations/writeback/utils/
             it('Test visit model properties - first case', function(){
                 var model = new Backbone.Model({administeredHistorical: 'administered', administeredBy: '99;TEST PROVIDER'});
                 var immunizationModel = WritebackUtil.buildSaveImmunizationModel(model, getPatient(true, true, true, true), new Backbone.Model());
-                expect(immunizationModel.get('encounterPatientDFN')).toEqual('3');
+                expect(immunizationModel.get('pid')).toEqual('9E7A;3');
                 expect(immunizationModel.get('encounterInpatient')).toEqual('1');
                 expect(immunizationModel.get('encounterLocation')).toEqual('uid:location:9E7A:27');
                 expect(immunizationModel.get('encounterServiceCategory')).toEqual('A');
                 expect(immunizationModel.get('encounterDateTime')).toEqual('20151031');
                 expect(immunizationModel.get('eventDateTime')).toEqual('20151031');
             });
-         
             it('Test visit model properties - second case', function(){
                 var model = new Backbone.Model({administeredHistorical: 'administered', administeredBy: '99;TEST PROVIDER'});
                 var immunizationModel = WritebackUtil.buildSaveImmunizationModel(model, getPatient(false, false, true, false), new Backbone.Model());
-                expect(immunizationModel.get('encounterPatientDFN')).toEqual('3');
+                expect(immunizationModel.get('pid')).toEqual('9E7A;3');
                 expect(immunizationModel.get('encounterInpatient')).toEqual('0');
                 expect(immunizationModel.get('encounterServiceCategory')).toEqual('A');
                 expect(immunizationModel.get('encounterDateTime')).toEqual('20151101');
@@ -114,6 +113,8 @@ define(['backbone', 'jasminejquery', 'app/applets/immunizations/writeback/utils/
                 expect(immunizationModel.get('VIS')).toEqual('1/20151031000000');
                 expect(immunizationModel.get('expirationDate')).toEqual('20171231');
                 expect(immunizationModel.get('encounterServiceCategory')).toEqual('O');
+                expect(immunizationModel.get('povCode')).toEqual('Z23');
+                expect(immunizationModel.get('povNarrative')).toEqual('Encounter for Immunization');
             });
 
             it('Test historical immunization model properties', function(){

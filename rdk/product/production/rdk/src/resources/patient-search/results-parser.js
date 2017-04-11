@@ -1,6 +1,7 @@
 'use strict';
 var _ = require('lodash');
 var moment = require('moment');
+var nc = require('namecase');
 var rdk = require('../../core/rdk');
 var pidValidator = rdk.utils.pidValidator;
 var maskSsn = require('./search-mask-ssn').maskSsn;
@@ -34,19 +35,22 @@ module.exports.transformPatient = function(patient, fromJDS) {
         }
     }
 
+    var givenNameDisplayParts = [];
     if (patient.fullName && (!patient.familyName || !patient.givenNames)) {
         var name = patient.fullName.split(',');
         patient.familyName = name[0];
         patient.givenNames = name[1];
+        givenNameDisplayParts.push(patient.givenNames);
     } else if (patient.familyName && patient.givenNames && !patient.fullName) {
         //put first name together
+        givenNameDisplayParts = givenNameDisplayParts.concat(patient.givenNames);
         if (_.isArray(patient.givenNames)) {
             patient.givenNames = patient.givenNames.join(' ');
         }
         patient.fullName = patient.familyName + ',' + patient.givenNames;
     }
     if (patient.fullName && !patient.displayName) {
-        patient.displayName = patient.fullName;
+        patient.displayName = nc(patient.familyName) + ',' + _.map(givenNameDisplayParts, nc).join(' ');
     }
 
     if (patient.birthDate) {
@@ -56,8 +60,7 @@ module.exports.transformPatient = function(patient, fromJDS) {
     if (!_.isUndefined(fromJDS) && fromJDS === true && patient.pid) {
         patient.summary = patient.displayName;
         if (!pidValidator.isIcn(patient.pid) &&
-            !pidValidator.isPidEdipi(patient.pid) &&
-            !pidValidator.isEdipi(patient.pid)) {
+            !pidValidator.isPidEdipi(patient.pid)) {
             var pidParts = patient.pid.split(';');
             if (pidValidator.isIcn(pidParts[1])) {
                 patient.pid = pidParts[1];
@@ -161,7 +164,7 @@ function formatSinglePatientSearchCommonFields(patient, hasDGAccess, forceFormat
 function formatSSN(ssn) {
     if (ssn) {
         var returnSSN = ssn;
-        if (ssn.length == SOCIAL_NINE_NUMBERS || ssn.length == SOCIAL_ELEVEN_NUMBERS) {
+        if (ssn.length === SOCIAL_NINE_NUMBERS || ssn.length === SOCIAL_ELEVEN_NUMBERS) {
             returnSSN = ssn.replace('-', '');
             returnSSN = returnSSN.substring(0, 3).concat('-').concat(returnSSN.substring(3, 5)).concat('-').concat(returnSSN.substring(5));
         }

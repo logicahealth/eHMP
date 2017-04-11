@@ -1,4 +1,4 @@
-@F414 @add_problem_comments @regression @future @DE4560
+@F414 @add_problem_comments  @future @DE4560
 
 Feature: Enter and Store A Problem List - with comments
 

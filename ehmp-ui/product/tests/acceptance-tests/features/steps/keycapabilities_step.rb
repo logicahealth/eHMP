@@ -117,6 +117,12 @@ def need_refresh_de2528(patient_search, search_value)
   enter_search_term(patient_search, search_value)
 end
 
+def refresh_zombie_tooltips(patient_search = nil)
+  tooltips = ToolTips.new.clear_all_tool_tips
+  p "visible tooltips that may cause test interference" unless tooltips
+  take_screenshot "visible_tooltips_#{Time.now}" unless tooltips
+end
+
 def need_refresh_de2106(patient_search)
   return if patient_search.wait_until_element_present("mySite", DefaultTiming.default_wait_time)
   p "mySite didn't show, try refreshing the page"
@@ -136,62 +142,95 @@ def enter_search_term(patient_search, search_value)
   expect(patient_search.perform_action("patientSearchInput", search_value)).to be_true
 end
 
+# def perform_patient_search_and_selection(search_value)
+#   DefaultLogin.logged_in = true
+#   patient_search = PatientSearch2.instance
+#   # if patient search button is found, click it to go to patient search
+#   patient_search.perform_action("patientSearch") if patient_search.static_dom_element_exists? "patientSearch"
+
+#   #patient_search.wait_until_element_present("mySite", DefaultLogin.wait_time)
+#   need_refresh_de2106(patient_search)
+
+#   @ehmp = PobPatientSearch.new
+#   wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
+#   begin
+#     wait.until { @ehmp.screen_loaded? }
+#   rescue Exception => e
+#     raise e unless @ehmp.screen_loaded? true
+#   end
+#   enter_search_term(patient_search, search_value)
+
+#   #----------------------------#
+#   need_refresh_de2528(patient_search, search_value)
+#   expect(patient_search.wait_until_xpath_count_greater_than("Patient Search Results", 0)).to be_true
+#   #----------------------------#
+#   results = TestSupport.driver.find_elements(:xpath, "//span[contains(@class, 'patientDisplayName')]")
+#   patient_search.select_patient_in_list(0)
+#   patient_search.wait_until_element_present("Confirm", DefaultLogin.wait_time)
+#   expect(patient_search.static_dom_element_exists? "Confirm").to be_true
+#   results = TestSupport.driver.find_element(:css, "#patient-search-confirmation div.patientName")
+#   @ehmp = PobPatientSearch.new
+#   begin
+#     @ehmp.wait_until_img_patient_visible
+#   rescue
+#     p "DE3576: img doesn't appear, try to continue anyway"
+#   end
+# end
+
 def perform_patient_search_and_selection(search_value)
   DefaultLogin.logged_in = true
-  patient_search = PatientSearch2.instance
-  # if patient search button is found, click it to go to patient search
-  patient_search.perform_action("patientSearch") if patient_search.static_dom_element_exists? "patientSearch"
+  search_value.gsub!(' ', '')
+  my_site_tray = PobStaffView.new
+  step 'Navigate to Staff View screen ignore errors' unless my_site_tray.has_fld_active_staff_view?
 
-  #patient_search.wait_until_element_present("mySite", DefaultLogin.wait_time)
-  need_refresh_de2106(patient_search)
+  step "the user searchs My Site with search term #{search_value}"
+  step 'the My Site Tray displays'
+  step 'the My Site Tray contains search results'
 
-  @ehmp = PobPatientSearch.new
-  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
-  begin
-    wait.until { @ehmp.screen_loaded? }
-  rescue Exception => e
-    raise e unless @ehmp.screen_loaded? true
+  my_site_tray = PobStaffView.new
+
+  name_only = []
+  index_of = -1
+  my_site_tray.patient_name_visible_text.each_with_index do | name_ssn, index |
+    result_name = Regexp.new("\\w+, \\w+\\w+-*\\w*").match(name_ssn).to_s
+    result_name.gsub!(' ', '')
+    index_of = index if result_name.upcase.eql?(search_value.upcase)
+    break if index_of > -1
   end
-  enter_search_term(patient_search, search_value)
-
-  #----------------------------#
-  need_refresh_de2528(patient_search, search_value)
-  expect(patient_search.wait_until_xpath_count_greater_than("Patient Search Results", 0)).to be_true
-  #----------------------------#
-  results = TestSupport.driver.find_elements(:xpath, "//span[contains(@class, 'patientDisplayName')]")
-  patient_search.select_patient_in_list(0)
-  patient_search.wait_until_element_present("Confirm", DefaultLogin.wait_time)
-  expect(patient_search.static_dom_element_exists? "Confirm").to be_true
-  results = TestSupport.driver.find_element(:css, "#patient-search-confirmation div.patientName")
-  @ehmp = PobPatientSearch.new
-  begin
-    @ehmp.wait_until_img_patient_visible
-  rescue
-    p "DE3576: img doesn't appear, try to continue anyway"
-  end
+  expect(index_of).to_not eq(-1), "Patient #{search_value} was not found in result list"
+  expect(index_of).to be < my_site_tray.my_site_search_results_name.length
+  my_site_tray.my_site_search_results_name[index_of].click
 end
 
 Given(/^user searches for and selects "(.*?)"$/) do |search_value|
+  ehmp = PobPatientSearch.new
   patient_search = PatientSearch2.instance
 
   perform_patient_search_and_selection search_value
-  if @ehmp.has_chk_previous_workspace?
-    @ehmp.chk_previous_workspace.click if @ehmp.chk_previous_workspace.checked?
-    p "resume recent workspace checkbox is INCORRECTLY checked.  May cause failure!" if @ehmp.chk_previous_workspace.checked?
+  expect(ehmp.wait_for_fld_confirm_modal).to eq(true), "Patient Confirmation box did not display"
+  ehmp.wait_for_chk_previous_workspace(2) # deliberately don't expect it
+
+  if ehmp.has_chk_previous_workspace?
+    ehmp.chk_previous_workspace.click if ehmp.chk_previous_workspace.checked?
+    p "resume recent workspace checkbox is INCORRECTLY checked.  May cause failure!" if ehmp.chk_previous_workspace.checked?
   end
   expect(patient_search.perform_action("Confirm")).to be_true
   expect(wait_until_dom_has_confirmflag_or_patientsearch).to be_true, "Patient selection did not complete successfully"
 end
 
 Given(/^user searches for and selects restricted patient "(.*?)"$/) do |search_value|
+  ehmp = PobPatientSearch.new
   patient_search = PatientSearch2.instance
   perform_patient_search_and_selection search_value
 
   expect(patient_search.perform_action('ackButton')).to be_true
 
-  if @ehmp.has_chk_previous_workspace?
-    @ehmp.chk_previous_workspace.click if @ehmp.chk_previous_workspace.checked?
-    p "resume recent workspace checkbox is INCORRECTLY checked.  May cause failure!" if @ehmp.chk_previous_workspace.checked?
+  expect(ehmp.wait_for_fld_confirm_modal).to eq(true), "Patient Confirmation box did not display"
+  ehmp.wait_for_chk_previous_workspace(2) # deliberately don't expect it
+
+  if ehmp.has_chk_previous_workspace?
+    ehmp.chk_previous_workspace.click if ehmp.chk_previous_workspace.checked?
+    p "resume recent workspace checkbox is INCORRECTLY checked.  May cause failure!" if ehmp.chk_previous_workspace.checked?
   end
 
   expect(patient_search.perform_action("Confirm")).to be_true

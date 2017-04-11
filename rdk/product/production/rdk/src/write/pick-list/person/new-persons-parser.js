@@ -3,27 +3,19 @@
 var _ = require('lodash');
 var rpcUtil = require('./../utils/rpc-util');
 
-function createNewPersonWithTitle(logger, fields) {
-    var newPersonWithTitle = {
-        code: fields[0],
-        name: fields[1],
-        title: fields[2]
-    };
-
-    logger.debug({newPersonWithTitle: newPersonWithTitle});
-    return newPersonWithTitle;
-}
-
 function createNewPerson(logger, fields) {
     var newPerson = {
         code: fields[0],
         name: fields[1]
     };
 
+    if(!_.isUndefined(fields[2])) {
+        newPerson.title = fields[2];
+    }
+
     logger.debug({newPerson: newPerson});
     return newPerson;
 }
-
 
 /**
  * Takes the return string from the RPC 'ORWU NEWPERS' and parses out the data.<br/><br/>
@@ -53,26 +45,20 @@ module.exports.parse = function(logger, rpcData) {
     var lines = rpcData.split('\r\n');
     lines = rpcUtil.removeEmptyValues(lines);
 
-    var FIELD_LENGTH_WITH_TITLE_EXPECTED = 3;
     var FIELD_LENGTH_EXPECTED = 2;
 
     _.each(lines, function(line) {
         var newPerson;
         var fields = line.split('^');
 
-        if (fields.length === FIELD_LENGTH_WITH_TITLE_EXPECTED) {
-            newPerson = createNewPersonWithTitle(logger, fields);
-            retValue.push(newPerson);
-        } else if (fields.length === FIELD_LENGTH_EXPECTED) {
+        if (fields.length >= FIELD_LENGTH_EXPECTED) {
             newPerson = createNewPerson(logger, fields);
             retValue.push(newPerson);
-        }
-        else {
+        } else {
             throw new Error('The RPC returned data but we couldn\'t understand it: ' + rpcData);
         }
     });
 
-    //console.log(JSON.stringify(retValue, null, 2));
     logger.info({retValue: retValue});
     return retValue;
 };

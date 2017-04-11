@@ -55,6 +55,6 @@ function search(req, res) {
     req.app.subsystems.orderset.getSearch(req, res);
 }
 
-function callDelete(req, res) {
+function callDelete(req, res) { //jshint ignore:line
     req.app.subsystems.orderset.delete(req, res);
 }

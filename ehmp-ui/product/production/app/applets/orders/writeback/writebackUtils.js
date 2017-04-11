@@ -29,6 +29,11 @@ define([
         var workflowOptions = _.extend({}, WORKFLOW_DEFAULTS, options);
         workflowOptions.steps = [];
         workflowOptions.title = title;
+        var helpMapping;
+        if (_.isString(workflowOptions.helpMapping)) {
+            helpMapping = workflowOptions.helpMapping;
+            delete workflowOptions.helpMapping;
+        }
 
         if (!visitNotRequired) {
             ADK.utils.writebackUtils.handleVisitWorkflow(workflowOptions, AddSelectVisit.extend({
@@ -39,7 +44,8 @@ define([
         workflowOptions.steps.push({
             view: view,
             viewModel: model,
-            onBeforeShow: _.get(options, 'onBeforeShow')
+            onBeforeShow: _.get(options, 'onBeforeShow'),
+            helpMapping: helpMapping
         });
 
         var workflow = new ADK.UI.Workflow(workflowOptions);

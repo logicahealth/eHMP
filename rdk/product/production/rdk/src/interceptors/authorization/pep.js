@@ -3,7 +3,6 @@
 var _ = require('lodash');
 var rdk = require('../../core/rdk');
 var RdkTimer = rdk.utils.RdkTimer;
-var RdkError = rdk.utils.RdkError;
 var pepSubsystem = require('../../subsystems/pep/pep-subsystem');
 
 

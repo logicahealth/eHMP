@@ -1,6 +1,5 @@
 'use strict';
 
-var _ = require('lodash');
 var authentication = require('./authentication');
 
 var config = {

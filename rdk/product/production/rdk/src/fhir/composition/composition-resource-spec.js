@@ -1,6 +1,5 @@
 'use strict';
 var _ = require('lodash');
-var compositionResource = require('./composition-resource');
 var composition = require('./composition');
 var fhirUtils = require('../common/utils/fhir-converter');
 var constants = require('../common/utils/constants');

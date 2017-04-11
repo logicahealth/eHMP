@@ -1,0 +1,233 @@
+#confirmSection {
+    background-color: $primary-lighter;
+    height: 90%; //phantomjs fallback
+    height: calc(100% - 25px);
+    position: absolute;
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    border-radius: 5px;
+    min-height: 475px;
+    .confirmHeader {
+        height: 0;
+        overflow: visible;
+        position: relative;
+        .help-icon-div {
+            position: absolute;
+            left: 7px;
+            top: 4px;
+        }
+        .btn.close {
+            display: none;
+            position: absolute;
+            right: 3px;
+            top: 0;
+            color: $grey-darkest;
+            opacity: 1;
+            &:hover {
+                color: $primary-dark;
+            }
+        }
+    }
+    .patientName {
+        font-size: 20px;
+        text-align: center;
+        margin: 20px 0;
+        color: $primary-dark;
+    }
+    .fixedHeightZone {
+        flex-grow: 1;
+        padding: 15px;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        .patientInfo {
+            flex-grow: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            #patient-image-container {
+                width: 172px;
+                height: 172px;
+                overflow: hidden;
+                border-radius: 86px;
+                border: 1px solid $pure-white;
+                margin: 0 auto;
+                padding: 10px;
+                background-color: $pure-white;
+                .patient-image {
+                    width: 150px;
+                    height: 150px;
+                    border-radius: 75px;
+                    background: url('../../_assets/img/patient.png') center center;
+                    background-size: cover;
+                }
+            }
+            .patient-detail-body {
+                font-size: 13px;
+                .sensitive-patient {
+                    border-radius: 3px;
+                    margin-top: -15px;
+                    padding: 2px 0;
+                }
+                .infoLabelStyle {
+                    text-align: right;
+                    font-weight: 600;
+                }
+            }
+        }
+        .confirmation-div {
+            margin: 0 -15px;
+            outline: none;
+            padding: 15px 15px 0 15px;
+            border-top: 2px solid $pure-white;
+            flex-grow: 0;
+            flex-shrink: 0;
+            .btn.disabled {
+                opacity: 1;
+            } 
+        }
+    }
+    // just for the flags section
+    .restricted {
+        .patientInfo {
+            #patient-image-container .patient-image {
+                background-image: url('../../_assets/img/spy.png');
+            }
+            .patient-detail-body {
+                h4.panel-title {
+                    border-bottom: 1px solid $pure-white;
+                    text-transform: uppercase;
+                    font-size: 12px;
+                    display: block;
+                    margin-bottom: 5px;
+                    button {
+                        padding: 0;
+                        color: $red-dark;
+                        .restricted-record-caret {
+                            &::before {
+                                content: "\f0d7";
+                                font: normal normal normal 14px/1 FontAwesome;
+                            }
+                        }
+                        &.collapsed {
+                            .restricted-record-caret {
+                                &::before {
+                                    content: "\f0da";
+                                }
+                            }
+                        }
+                    }
+                    > span {
+                        color: $grey-darkest;
+                        text-transform: none;
+                        display: block;
+                    }
+                }
+                .panel-body {
+                    padding: 0;
+                }
+            }
+        }
+        .confirmation-div {
+            #ackButton {
+                background-color: $red;
+                &:hover {
+                    background-color: $red-dark;
+                }
+            }
+        }
+    }
+    .flags {
+        .patientName {
+            margin: -8px -15px 0;
+            padding: 0 20px 6px 6px;
+            border-bottom: 2px $pure-white solid;
+            overflow: hidden;
+            flex-shrink: 0;
+            flex-grow: 0;
+            font-weight: 600;
+        }
+        .flags-wrapper {
+            flex-grow: 1;
+            overflow-y: auto;
+            margin: 0 -15px;
+            padding: 0 15px;
+            .sensitivePanel {
+                margin-top: 15px;
+                border: none;
+                border-radius: 5px;
+                box-shadow: none;
+                word-wrap: break-word;
+                .panel-heading {
+                    background-color: inherit;
+                    border: none;
+                    padding: 5px 10px 2px;
+                    border-bottom: 1px solid $grey-light;
+                    margin: 0;
+                    .panel-title {
+                        padding: 0;
+                        color: $primary-dark;
+                        text-transform: uppercase;
+                        font-size: 14px;
+                        display: flex;
+                        flex-wrap: wrap;
+                        & > span {
+                            white-space: nowrap;
+                            height: 17px;
+                            margin-bottom: 4px;
+                        }
+                        .label {
+                            margin-top: 2px;
+                            box-shadow: none;
+                            padding: 3px 5px;
+                            font-size: 11px;
+                            font-weight: normal;
+                            color: $grey-darkest;
+                        }
+                    }
+                }
+                .panel-body {
+                    padding: 10px;
+                    h5 {
+                        margin: 0 0 10px 0;
+                        padding: 0;
+                    }
+                }
+            }
+        }
+    }
+    .checkbox {
+        margin-top: 0;
+    }
+}
+#mainModalDialog.modal-dialog.patient-confirmation-modal {
+    margin: 40px auto 0;
+    .draggable-handle {
+        display: none;
+    }
+    .modal-header {
+        border-bottom: none;
+        right: 15px;
+        position: absolute;
+        z-index: 2;
+        background-color: transparent;
+        .close {
+            position: relative;
+            left: 10px;
+            top: 2px;
+        }
+    }
+    #modal-body.modal-body {
+        background: none;
+        padding: 0;
+        min-height: 500px;
+        #confirmSection {
+            height: 100%;
+            .confirmHeader {
+                .btn.close {
+                    display: block;
+                }
+            }
+        }
+    }
+}

@@ -1,7 +1,7 @@
 define([
     'underscore',
     'backbone',
-    'marionette', 
+    'marionette',
     'hbs!app/applets/ordersearch/tray/trayTpl',
     'app/applets/ordersearch/tray/mainMenuView',
     'app/applets/ordersearch/tray/searchBarView',
@@ -10,6 +10,19 @@ define([
     'use strict';
 
     var view = Backbone.Marionette.LayoutView.extend({
+        behaviors: {
+            HelpLink: {
+                container: '.order-search-header-help-button-container',
+                mapping: 'order_search_tray',
+                buttonOptions: {
+                    colorClass: 'bgc-primary-dark'
+                }
+            },
+            FlexContainer: {
+                container: '.order-search-header',
+                direction: 'row'
+            }
+        },
         template: Tpl,
         ui: {
             headerRegion: '.order-search-header',

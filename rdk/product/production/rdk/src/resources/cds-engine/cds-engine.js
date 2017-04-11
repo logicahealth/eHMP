@@ -3,7 +3,6 @@
 // set up the packages we need
 var rdk = require('../../core/rdk');
 var _ = require('lodash');
-var mongo = require('mongoskin');
 var ObjectId = require('mongoskin').ObjectID;
 
 var dbName = 'engine';
@@ -44,7 +43,7 @@ function init(app) {
  *             "type": "OpenCDS",
  *             "version": "2.0.5",
  *             "environment": {
- *             "environment": "url=http://IP            /opencds-decision-support-service,memory=32,cpus= 8,java_version=7,webservice=tomcat,webservice_version=7",
+ *             "environment": "url=http://10.2.2.47:8080/opencds-decision-support-service,memory=32,cpus= 8,java_version=7,webservice=tomcat,webservice_version=7",
  *         }]
  * }
  * @apiError (Error 404) data The entry for id, name, filter not located
@@ -127,7 +126,7 @@ module.exports.getEngine = getEngine;
  *             "class": "com.cognitive.cds.invocation.model.EngineInfo",
  *             "type": "OpenCDS",
  *             "version": "2.0.5",
- *             "environment": "url=http://IP            /opencds-decision-support-service,memory=32,cpus= 8,java_version=7,webservice=tomcat,webservice_version=7",
+ *             "environment": "url=http://10.2.2.47:8080/opencds-decision-support-service,memory=32,cpus= 8,java_version=7,webservice=tomcat,webservice_version=7",
  *             "_id": "555f4edee2d9eceab4e53ec8"
  *         }]
  * }

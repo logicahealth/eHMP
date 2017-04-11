@@ -1,4 +1,4 @@
-@F295_encounters_trend_view_visit @regression
+@F295_encounters_trend_view_visit  @reg1
 Feature: F295 - Encounters Applet - Visit 
 
 Background:

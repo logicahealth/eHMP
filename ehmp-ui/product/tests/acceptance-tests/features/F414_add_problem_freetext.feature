@@ -1,4 +1,4 @@
-@F414 @F414-4 @regression @future @DE4560
+@F414 @F414-4  @future @DE4560
 Feature: Enter and Store A Problem List - add a Freetext problem to the patient's problem list
 
 Background:

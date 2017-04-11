@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration status="debug">
+        <Properties>
+                <Property name="log-path">${sys:catalina.home}/logs</Property>
+        </Properties>
+        <Appenders>
+                <Console name="Console" target="SYSTEM_OUT">
+                        <PatternLayout pattern="%d{HH:mm:ss} [%t] %-5level %logger{36} - %msg%n" />
+                </Console>
+                <RollingFile name="CDS" fileName="${log-path}/${web:contextPath}.log"
+                        filePattern="${log-path}/${web:contextPath}-%d{yyyy-MM-dd}-%i.log.gz">
+                        <PatternLayout>
+                                <Pattern>%d{dd/MMM/yyyy HH:mm:ss,SSS}- %c{1}: %m%n</Pattern>
+                        </PatternLayout>
+                        <Policies>
+                                <SizeBasedTriggeringPolicy size= "<%= node['tomcat']['logging']['sizeBasedTriggeringPolicy'] %>" />
+                        </Policies>
+                        <DefaultRolloverStrategy max= "<%= node['tomcat']['logging']['defaultRolloverStrategy'] %>" />
+                </RollingFile>
+                <RollingFile name="RequestIDLog" fileName="${log-path}/requestId.log"
+                        filePattern="${log-path}requestId.log-%d{yyyy-MM-dd}-%i.log.gz">
+                        <PatternLayout pattern="{%highlight{&quot;name&quot;:&quot;%X{context}&quot;,&quot;hostname&quot;:&quot;%X{hostname}&quot;,&quot;sid&quot;:&quot;%X{sid}&quot;,&quot;requestId&quot;:&quot;%X{requestId}&quot;,&quot;level&quot;:&quot;%p&quot;,&quot;msg&quot;:&quot;%m %X{httpMethod} %X{path}&quot;,&quot;time&quot;:&quot;%X{dateTime}&quot;}{FATAL=blue bold, ERROR=blue bold, WARN=blue bold, INFO=blue bold, DEBUG=blue bold, TRACE=blue bold}}%n" />
+                        <Policies>
+                                <SizeBasedTriggeringPolicy size= "<%= node['tomcat']['logging']['sizeBasedTriggeringPolicy'] %>" />
+                        </Policies>
+                        <DefaultRolloverStrategy max= "<%= node['tomcat']['logging']['defaultRolloverStrategy'] %>" />
+                </RollingFile>
+        </Appenders>
+        <Loggers>
+                <Logger name="com.cognitive.cds.utils.log.filter.CDSDashboardRequestIdFilter" level="info" additivity="false">
+                        <AppenderRef ref="RequestIDLog" />
+                </Logger>
+                <Logger name="com.cognitivemedicine" level="info" additivity="false">
+                        <AppenderRef ref="CDS" />
+                </Logger>
+                <Logger name="RequestIdLogger" level="info">
+                        <AppenderRef ref="RequestIDLog" />
+                </Logger>
+                <Root level="error">
+                        <AppenderRef ref="Console" />
+                </Root>
+        </Loggers>
+</configuration>

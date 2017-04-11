@@ -1,6 +1,5 @@
 'use strict';
 
-var rdk = require('../../core/rdk');
 var httpMocks = require('node-mocks-http');
 var handlerFactory = require('./pep-handler-factory');
 

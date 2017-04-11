@@ -1,7 +1,7 @@
 #Team_Europa @DE3161
 Feature: F576 FHIR Domain - MedicationRx
 @F576_MedicationPrescription @US9154 @DE3161
-Scenario: Client can request Medication Rx in FHIR format (new format: http://IP             /resource/fhir/patient/5000000217V519385/medicationprescription)
+Scenario: Client can request Medication Rx in FHIR format (new format: http://10.4.4.105:8888/resource/fhir/patient/5000000217V519385/medicationprescription)
    Given a patient with "medicationprescription" in multiple VistAs
    When client sends GET request for medication prescription in FHIR format with "9E7A;100716"
    Then a successful response is returned

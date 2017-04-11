@@ -9,37 +9,19 @@
         <p><strong>* Browser support: Internet Explorer 11</strong></p>
         <p><strong>* Recommended window size: 1280 x 800px</strong></p>
     </div>
-    <form role="form">
+    <div class="login-form-container">
         <div class="login-container">
             <h1 class="logo text-center" aria-hidden="true">Enterprise Health Management Platform</h1>
             <div class="login-container-body">
                 <p class="sr-only">All fields are required</p>
-                <p id="errorMessage" class="text-danger text-center bottom-padding-xs" aria-live="assertive"></p>
-                <div class="form-group" id="facilityForm">
-                    <label for="facility">Select facility</label>
-                    <div id="authenication-facility-list"></div>
+                <div id="login-form-region"></div>
+            </div>
+            <div class="login-container-footer">
+                <div class="all-padding-sm top-padding-no text-center">
+                    <a id="linkHelp-logon" class="help-icon-link" href="{{helpUrl}}" target="helpIconUniqueWindow" title="Press enter to access the help content. You will be redirected to a new browser window.">Need Help Logging In?</a>
                 </div>
-                <div class="form-group" id="accessForm">
-                    <label for="accessCode">Access code</label>
-                    <input type="password" autocomplete="off" class="form-control" id="accessCode" name="accessCode" title="Enter in access code" required />
-                </div>
-                <div class="form-group" id="verifyForm">
-                    <label for="verifyCode">Verify code</label>
-                    <input type="password" autocomplete="off" class="code-error form-control" id="verifyCode" name="verifyCode" title="Enter in verfication code" required />
-                </div>
-                <button type="submit" data-loading-text="<i class='fa fa-spinner fa-spin'></i> Authenticating" class="btn btn-primary percent-width-100" id="login" title="Press enter to sign in">Sign In</button>
-                <div class="hidden" id="screenReaderAuthenticating">
-                    Authenticating
-                </div>
-                <div class="all-padding-sm top-padding-sm text-center">
-                    <a id="linkHelp-logon" class="help-icon-link" href="{{helpUrl}}" target="helpIconUniqueWindow" title="Press enter to access the help content. You will be redirected to a new browser window.">
-                    Need Help Logging In?
-                </a>
-                </div>
-                <div class="text-center">
-                    EHMP {{softwareVersion}}
-                </div>
+                <div><p class="text-center">EHMP {{softwareVersion}}</p></div>
             </div>
         </div>
-    </form>
+    </div>
 </div>

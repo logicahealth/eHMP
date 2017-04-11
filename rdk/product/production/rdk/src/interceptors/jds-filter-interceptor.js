@@ -1,7 +1,5 @@
 'use strict';
 
-var _ = require('lodash');
-var rdk = require('../core/rdk');
 var jdsFilterUtil = require('jds-filter');
 
 /**
@@ -13,7 +11,6 @@ module.exports = function(req, res, next) {
     req.interceptorResults.jdsFilter = {};
     var filter = req.query.filter;
     if(!filter) {
-        req.interceptorResults.jdsFilter.error = new Error('No jds filter query parameter');
         return next();
     }
 

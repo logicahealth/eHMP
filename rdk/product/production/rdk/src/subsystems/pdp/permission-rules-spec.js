@@ -2,9 +2,9 @@
 var rulesEngine = require('./rules-engine');
 var rules = require('./permission-rules').rules;
 
-/*
+
 describe('When permissions for a user are returned', function() {
-    it('required permissions are empty', function() {
+    it.skip('required permissions are empty', function() {
         var fact = {
         'permissions': {
             'required': [],
@@ -15,7 +15,7 @@ describe('When permissions for a user are returned', function() {
             expect(result.to.equal('Permit'));
         });
     });
-    it('required permissions are present', function() {
+    it.skip('required permissions are present', function() {
         var fact = {
         'permissions': {
             'required': ['test-role'],
@@ -26,7 +26,7 @@ describe('When permissions for a user are returned', function() {
             expect(result.to.equal('Permit'));
         });
     });
-    it('required permissions are absent', function() {
+    it.skip('required permissions are absent', function() {
         var fact = {
         'permissions': {
             'required': ['test-role'],
@@ -38,4 +38,3 @@ describe('When permissions for a user are returned', function() {
         });
     });
 });
-*/

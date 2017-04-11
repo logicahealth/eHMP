@@ -1,4 +1,4 @@
-@documents_NoData @regression
+@documents_NoData  @reg2
 Feature: F144 - eHMP Viewer GUI - Documents
 
 @f144_documents_navigation_thro_dropdwon @US1914

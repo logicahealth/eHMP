@@ -1,10 +1,8 @@
 'use strict';
 
 var _ = require('lodash');
-var util = require('util');
 var searchUtil = require('./results-parser');
 var rdk = require('../../core/rdk');
-var http = rdk.utils.http;
 var pidValidator = rdk.utils.pidValidator;
 var globalSearch = require('./global-search');
 
@@ -120,8 +118,6 @@ function syncJDSPatient(req, cb, pid, patientDemographics) {
 
     if ((req.body.icn && pidValidator.isIcn(req.body.icn)) || (pid && pidValidator.isIcn(pid))) {
         payload.icn = req.body.icn || pid;
-    } else if ((req.body.edipi && pidValidator.isEdipi(req.body.edipi)) || (pid && pidValidator.isEdipi(pid))) {
-        payload.edipi = req.body.edipi || pid;
     } else if (pid && pidValidator.isPidEdipi(pid)) {
         payload.edipi = pid.substring(4);
     }

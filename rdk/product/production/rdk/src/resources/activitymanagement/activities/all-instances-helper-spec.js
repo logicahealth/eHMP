@@ -25,8 +25,8 @@ describe('All activity instances utility functions', function () {
         req.session.user.duz = [];
         req.session.user.duz['9E7A'] = '3';
         req.app.config = {
-            "maximum_resultset_record": 500
-        }
+            'maximum_resultset_record': 500
+        };
     });
 
     it('adjustUserIds', function () {
@@ -68,6 +68,9 @@ describe('All activity instances utility functions', function () {
         req.query.context = 'staff';
         expect(helper.getErrorMessage(req)).to.be.equal('Malformed staff context request.');
 
+        req.query.domain = 'Consult';
+        expect(helper.getErrorMessage(req)).to.be.equal('');
+
         req.query.context = 'patient';
         expect(helper.getErrorMessage(req)).to.be.equal('Missing pid for patient context request.');
 
@@ -87,10 +90,6 @@ describe('All activity instances utility functions', function () {
     });
 
     it('getUserId', function () {
-        var site = req.session.user.site;
-        var user = req.session.user.duz[site];
-        var userId = site + ';' + user;
-
         expect(helper.getUserId(req)).to.be.equal('9E7A;3');
     });
 

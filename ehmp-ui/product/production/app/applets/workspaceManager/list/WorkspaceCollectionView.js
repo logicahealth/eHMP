@@ -83,7 +83,7 @@ define([
                 return {
                     class: 'table-row tableRow predefined-screen-row',
                     'data-screen-id': this.model.get('id'),
-                    role: 'row',
+                    role: 'row'
                 };
             } else {
                 return {
@@ -168,19 +168,28 @@ define([
                     // there was a click outside the popover, so hide the popover
                     var isTrigger = $(e.target).closest('[data-toggle="popover"]').is(associationsPopoverTrigger);
                     if (!isTrigger) { // ignore clicks on the trigger elem - let bootstrap handle those
-                        associationsPopoverTrigger.popover('hide');
+                        associationsPopoverTrigger.click();
                     }
                 }
             };
             var popoverKeyupHandler = function(e) {
                 var isEscKey = (e.type === 'keyup' && e.keyCode === 27 ? true : false);
-                var isCloseBtnClick = (e.type === 'click' && $(e.target).is('#associationManagerCloseBtn') ? true : false);
-                if ( isCloseBtnClick || isEscKey) {
+                if (isEscKey) {
                     e.stopPropagation();
-                    associationsPopoverTrigger.popover('hide');
+                    associationsPopoverTrigger.click();
                     associationsPopoverTrigger.focus();
                 }
             };
+
+            var closeButtonHandler = function(e) {
+                var isCloseBtnClick = (e.type === 'click' && $(e.target).is('#associationManagerCloseBtn') ? true : false);
+                if (isCloseBtnClick) {
+                    e.stopPropagation();
+                    associationsPopoverTrigger.click();
+                    associationsPopoverTrigger.focus();
+                }
+            };
+
             associationsPopoverTrigger.popup({
                 container: '[data-screen-id="' + self.screenOptions.id+'"]',
                 placement: _.bind(this.getPopoverPlacement, this, associationsPopoverTrigger),
@@ -189,6 +198,7 @@ define([
                 // This is a known issue in bootstrap 3: https://github.com/twbs/bootstrap/issues/12563
                 title: 'Title',
                 delay: 0,
+                animation: false,
                 content: function() {
                     self.associationManagerView = new AssociationManagerView({
                         model: self.model
@@ -205,13 +215,19 @@ define([
                 $('html').on('click.workspaceCollectionViewPopover', globalClickHandler);
 
                 // close the popover when escape is pressed
-                $('.association-manager-popover').on('keyup.workspaceCollectionViewPopover', popoverKeyupHandler);
-                $('.association-manager-popover').on('click.associationManagerCloseBtn', popoverKeyupHandler);
+                self.$el.find('.association-manager-popover').on('keyup.workspaceCollectionViewPopover', popoverKeyupHandler);
+
+                //close button
+                self.$el.find('.association-manager-popover').on('click.associationManagerCloseBtn', closeButtonHandler);
 
                 associationsPopoverTrigger.addClass('active')
                     .attr('aria-expanded', true);
             });
-            associationsPopoverTrigger.on('hidden.bs.popover', function(e) {
+
+            associationsPopoverTrigger.on('hide.bs.popover', function(e) {
+                $('html').off('click.workspaceCollectionViewPopover');
+                self.$el.find('.association-manager-popover').off('keyup.workspaceCollectionViewPopover');
+                self.$el.find('.association-manager-popover').off('click.associationManagerCloseBtn');
                 self.cleanupAssociationManager();
                 associationsPopoverTrigger.removeClass('active')
                     .attr('aria-expanded', false);
@@ -404,18 +420,15 @@ define([
         },
 
         cleanupAssociationManager: function() {
-            if (self.associationManagerView) {
-                self.associationManagerView.destroy();
-                $('html').off('click.workspaceCollectionViewPopover');
-                $('.association-manager-popover').off('keyup.workspaceCollectionViewPopover');
-                $('.association-manager-popover').off('click.associationManagerCloseBtn');
+            if (this.associationManagerView) {
+                this.associationManagerView.destroy();
             }
         },
 
         cleanupPopover: function() {
-            var $popover = this.$('[data-toggle="popover"]');
+            var $popover = this.$('.show-associations[data-toggle="popover"]');
             $popover.off('shown.bs.popover');
-            $popover.off('hidden.bs.popover');
+            $popover.off('hide.bs.popover');
             $popover.popover('destroy');
         },
         behaviors: {
@@ -702,7 +715,7 @@ define([
             var newId = newScreen.newId;
             var newScreenId = newScreen.newScreenId;
 
-            var hasCustomize = true;
+            var hasCustomize = false;
 
             var screenIndex;
             //this is to make sure we have the latest collection from session/jds

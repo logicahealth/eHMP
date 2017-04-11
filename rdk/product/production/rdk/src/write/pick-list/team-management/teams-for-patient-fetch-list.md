@@ -1,14 +1,16 @@
 # Group Pick List
 
-## Teams for Patient [/teams-for-patient{?site}{&patientID}]
+## Teams for Patient [/teams-for-patient{?site}{&pid}]
 
 Searches for teams for a patient-- note that this involves a call to pcmm instead of an RPC.
 
 + Parameters
 
     :[site]({{{common}}}/parameters/site.md)
-    
-    + patientID (string, required) - ICN of patient to find teams for.
+
+    + pid (string, required) - ICN of patient to find teams for.
+
+        Pattern: `^([0-9]+)V([0-9]+)$`
 
 ### GET
 

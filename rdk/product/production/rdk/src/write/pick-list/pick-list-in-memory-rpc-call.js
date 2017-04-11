@@ -11,6 +11,21 @@ var _ = require('lodash');
 
 
 module.exports.config = pickListConfig;
+module.exports._getSiteConfig = getSiteConfig;
+
+function getSiteConfig(site, app) {
+    var siteConfig = app.config.vistaSites[site];
+
+    if (nullUtil.isNullish(siteConfig)) {
+        return null;
+    }
+    return _.extend({}, siteConfig, {
+        jdsServer: app.config.jdsServer,
+        // RDK configs have site division arrays. RPCs have a configuration property of the same name. Setting
+        // to null otherwise the RPC calls will attempt to set division context to it (an Array) and fail.
+        division: null
+    });
+}
 
 
 /**
@@ -27,21 +42,20 @@ module.exports.inMemoryRpcCall = function(req, site, type, callback) {
     if (type.toLowerCase() === 'refresh') {
         if (dbList.refreshInProgress) {
             return callback(null, 'Refresh in progress');
-        }
-        else {
-            dbList.refresh(req.app, true,function(err, result) {
+        } else {
+            dbList.refresh(req.app, true, function(err, result) {
                 if (err) {
                     return callback(err);
                 }
 
-                return callback(null,result);
+                return callback(null, result);
             });
         }
     }
 
     var i = _.indexOf(_.pluck(pickListConfig, 'name'), type);
     if (i === -1) {
-        return callback(type+ ' Not yet implemented');
+        return callback(type + ' Not yet implemented');
     }
 
     // We already checked type and site at the start of this function.
@@ -56,12 +70,12 @@ module.exports.inMemoryRpcCall = function(req, site, type, callback) {
             if (nullUtil.isNullish(req.param(paramName)) || _.isEmpty(req.param(paramName))) {
                 callback('Parameter \'' + paramName + '\' cannot be null or empty');
                 aborted = true;
-                return false;//Break out of _.each
+                return false; //Break out of _.each
             }
             _.set(params, paramName, req.param(paramName).toUpperCase());
         });
         if (aborted) {
-            return true;//Callback was already called; stop here.
+            return true; //Callback was already called; stop here.
         }
     }
     if (_.has(pickListConfig[i], 'optionalParams')) {
@@ -73,9 +87,6 @@ module.exports.inMemoryRpcCall = function(req, site, type, callback) {
             }
         });
     }
-    if (pickListConfig[i].needsFullConfig) {
-        _.set(params, 'fullConfig', req.app.config);
-    }
     if (_.has(pickListConfig[i], 'filterForEntireRecursiveCollection')) {
         if (!validate.isStringNullish(req.param(pickListConfig[i].filterForEntireRecursiveCollection.paramNameForStringToSearchFor))) {
             filters = {};
@@ -83,19 +94,20 @@ module.exports.inMemoryRpcCall = function(req, site, type, callback) {
             _.set(filters, 'stringToSearchFor', req.param(pickListConfig[i].filterForEntireRecursiveCollection.paramNameForStringToSearchFor));
         }
     }
-    var siteConfig = req.app.config.vistaSites[site];
-    siteConfig.jdsServer = req.app.config.jdsServer;
+    var siteConfig = getSiteConfig(site, req.app);
 
     if (nullUtil.isNullish(siteConfig)) {
         return callback('The site (' + site + ') was not found in the configuration');
     }
+
+    siteConfig.jdsServer = req.app.config.jdsServer;
 
     if (!pickListConfig[i].vistaContext) {
         return callback('The vistaContext was not found in the pick-list-config-in-memory-rpc-call.json configuration');
     }
     siteConfig.context = pickListConfig[i].vistaContext;
 
-    dbList.retrievePickList(req.logger, siteConfig, params, filters, pickListConfig[i].modulePath, pickListConfig[i].dataNeedsRefreshAfterMinutes, callback);
+    dbList.retrievePickList(req.app, siteConfig, params, filters, pickListConfig[i].modulePath, pickListConfig[i].dataNeedsRefreshAfterMinutes, callback);
 };
 
 
@@ -123,10 +135,10 @@ function paramsAsString(params) {
  */
 module.exports.loadLargePickLists = function(app) {
     //This queue will populate each pick list.
-    var q = async.queue(function (params, callback) {
+    var q = async.queue(function(params, callback) {
         app.logger.info('PROCESSING LOADING OF LARGE PICK LIST - ' + paramsAsString(params));
 
-        var siteConfig = app.config.vistaSites[params.site];
+        var siteConfig = getSiteConfig(params.site, app);
         if (nullUtil.isNullish(siteConfig)) {
             return callback('The site (' + params.site + ') was not found in the configuration');
         }
@@ -135,20 +147,17 @@ module.exports.loadLargePickLists = function(app) {
             return callback('The vistaContext was not found in the pick-list-config-in-memory-rpc-call.json configuration');
         }
         siteConfig.context = pickListConfig[params.index].vistaContext;
-        siteConfig.jdsServer = app.config.jdsServer;
 
-        dbList.initialLoadPickList(app.logger, siteConfig, params, pickListConfig[params.index].modulePath, function(error) {
-                if (error) {
-                    app.logger.error(error);
-                }
-                else {
-                    app.logger.debug('Loaded');
-                }
-
-                app.logger.info('FINISHED PROCESSING LOADING OF LARGE PICK LIST - ' + paramsAsString(params));
-                callback();
+        dbList.initialLoadPickList(app, siteConfig, params, pickListConfig[params.index].modulePath, function(error) {
+            if (error) {
+                app.logger.error(error);
+            } else {
+                app.logger.debug('Loaded');
             }
-        );
+
+            app.logger.info('FINISHED PROCESSING LOADING OF LARGE PICK LIST - ' + paramsAsString(params));
+            callback();
+        });
     }, 1);
 
     //Called when all queues are finished being processed.
@@ -164,50 +173,59 @@ module.exports.loadLargePickLists = function(app) {
             _.each(app.config.vistaSites, function(siteObject, siteName) {
                 if (_.has(pickListConfig[i], 'requiredParams')) {
                     if (_.isEmpty(pickListConfig[i].initialLoadDefaultParams)) {
-                        app.logger.error('cannot have an empty initialLoadDefaultParams in the configuration if there are requiredParams');
-                        return;
-                    }
+                        // Log that initialLoadDefaultParams is empty but allow it. We require callers of resources that
+                        // are facility/division sensitive (e.g. teams-for-facility) to pass a facilityID parameter but we
+                        // don't get list the list of available facilities from the initial load default parameters, we get
+                        // it from the RDK configuration file.
+                        app.logger.info('initialLoadDefaultParams is empty in the configuration but there are requiredParams, this is OK for division sensitive picklists');
+                    } else if (!_.isArray(pickListConfig[i].initialLoadDefaultParams)) {
+                        return app.logger.error('initialLoadDefaultParams was not an array');
+                    } else {
+                        _.each(pickListConfig[i].requiredParams, function(requiredName) {
+                            var found = _.result(_.find(pickListConfig[i].initialLoadDefaultParams, requiredName), requiredName);
 
-                    if (!_.isArray(pickListConfig[i].initialLoadDefaultParams)) {
-                        app.logger.error('initialLoadDefaultParams was not an array');
-                        return;
-                    }
-
-                    _.each(pickListConfig[i].requiredParams, function (requiredName) {
-                        var found = _.result(_.find(pickListConfig[i].initialLoadDefaultParams, requiredName), requiredName);
-
-                        if (found === null || found === undefined) {
-                            app.logger.error('could not find ' + requiredName + ' in initialLoadDefaultParams - it is a requiredParams');
-                            return;
-                        }
-                    });
-                }
-
-                if (!_.isEmpty(pickListConfig[i].initialLoadDefaultParams)) {
-                    _.each(pickListConfig[i].initialLoadDefaultParams, function (initialLoadDefaultParam) {
-                        var params = {
-                            'pickList': pickListConfig[i].name,
-                            'site': siteName,
-                            'index': i
-                        };
-
-                        _.each(initialLoadDefaultParam, function (initialLoadDefaultParamFieldValue, initialLoadDefaultParamFieldName) {
-                            params[initialLoadDefaultParamFieldName] = initialLoadDefaultParamFieldValue;
+                            if (_.isNull(found) || _.isUndefined(found)) {
+                                app.logger.error('could not find ' + requiredName + ' in initialLoadDefaultParams - it is a requiredParams');
+                                return;
+                            }
                         });
-
-                        q.push(params);
-                    });
+                    }
                 }
-                else {
-                    var params = {
-                        'pickList': pickListConfig[i].name,
-                        'site': siteName,
-                        'index': i
-                    };
-                    q.push(params);
+                if (_.get(pickListConfig[i], 'needsFacilityGranularity')) {
+                    app.logger.info({
+                        pickListIndex: i
+                    }, 'needsFacilityGranularity');
+                    // add one entry for each division/facility
+                    _.each(siteObject.division, function(divisionObject) {
+                        app.logger.info({
+                            site: siteName,
+                            division: divisionObject.id
+                        }, 'adding to the queue');
+                        q.push(getPicklistEntries(siteName, pickListConfig, i, divisionObject.id));
+                    });
+                } else {
+                    q.push(getPicklistEntries(siteName, pickListConfig, i));
                 }
             });
         }
     });
-};
 
+    function getPicklistEntries(siteName, pickListConfig, index, facilityID) {
+        var params = {
+            'pickList': pickListConfig[index].name,
+            'site': siteName,
+            'index': index,
+            'facilityID': facilityID
+        };
+        var initialLoadDefaultParams = _.get(pickListConfig, [index, 'initialLoadDefaultParams']);
+        if (_.isEmpty(initialLoadDefaultParams)) {
+            return params;
+        }
+        // create one entry for each initial load default param
+        var entries = [];
+        _.each(initialLoadDefaultParams, function(initialLoadDefaultParamObj) {
+            entries.push(_.extend({}, params, initialLoadDefaultParamObj));
+        });
+        return entries;
+    }
+};

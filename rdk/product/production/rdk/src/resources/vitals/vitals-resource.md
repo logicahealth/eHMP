@@ -142,7 +142,8 @@ Validate the difference between previous and current vital measurements
                 "type": "object",
                 "properties": {
                     "pid": {
-                        "type": "string"
+                        "type": "string",
+                        "pattern": "^([a-zA-Z0-9]+);([a-zA-Z0-9]+)$|^([0-9]+)V([0-9]+)$"
                     },
                     "bloodpressure": {
                         "type": "object",

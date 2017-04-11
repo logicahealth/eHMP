@@ -37,7 +37,7 @@ def search_json(result_array, table, dateformat = DefaultDateFormat.format)
       end #output.each
       puts "for field #{fieldpath}: #{json_verify.error_message}"
     end # if found == false
-    expect(found).to eq(true)
+    expect(found).to eq(true), "Could not find #{fieldvaluestring} in #{fieldpath}"
     expect(result_array.length).to_not eq(0)
   end # table.rows.each
 end

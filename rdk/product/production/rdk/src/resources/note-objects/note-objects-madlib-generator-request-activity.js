@@ -1,8 +1,6 @@
 'use strict';
 var _ = require('lodash');
 var moment = require('moment');
-var rdk = require('../../core/rdk');
-var nullchecker = rdk.utils.nullchecker;
 
 /***********************************************************************
  * INCOMING:  A single Clinical Object

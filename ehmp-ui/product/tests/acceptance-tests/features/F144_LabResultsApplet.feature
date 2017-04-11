@@ -1,4 +1,4 @@
-@F144_Lab_Results_Base_Applet @Lab_Results @regression
+@F144_Lab_Results_Base_Applet @Lab_Results  @reg1
 Feature: F144 - eHMP Viewer GUI - Numeric Lab Results
 
 # Team: Andromeda, inherited by Team Venus
@@ -8,7 +8,7 @@ Feature: F144 - eHMP Viewer GUI - Numeric Lab Results
 
 
   
-@F144_numericlabresults_3 @debug @DE6976
+@F144_numericlabresults_3 @DE6976
 Scenario: Expanded Numeric Lab results applet minimizes to Coversheet screen
   Given user searches for and selects "Eight,Patient"
   Then Cover Sheet is active
@@ -54,7 +54,7 @@ Scenario: Numeric Lab Results Applet - Enable sorting flags by priority.
   When the user clicks the control "Flag column" in the "Numeric Lab Results applet"
   Then the Numeric Lab Results should be sorted by "Flag"
 
-@f144_1a_numeric_lab_results_base_applet_cover_sheet @DE2902 @DE2901 @DE3366 @DE3268
+@f144_1a_numeric_lab_results_base_applet_cover_sheet @DE2902 @DE2901 @DE3366 @DE3268 @testing_scroll
 Scenario: View ALL numeric lab results on Cover sheet
   Given user searches for and selects "Eight,Patient"
   And Cover Sheet is active

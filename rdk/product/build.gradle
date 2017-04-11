@@ -22,9 +22,11 @@ def artifactsToUpload = [
 allprojects {
   apply plugin: 'maven'
 
-  ext.set('repo', 'releases')
+  ext.set('repo', getNexusUploadRepository())
   ext.set('repoVersion', getRepoVersion())
   ext.set('branchName', getCurrentBranchName())
+  ext.set('nexusURL', getNexusURL())
+  ext.set('uploadRepo', getNexusUploadRepository())
   ext.set('currentCommitHash', getCurrentCommitHash())
 
   repositories {
@@ -32,10 +34,21 @@ allprojects {
   }
 }
 
+def getNexusURL() {
+    System.env.OVERRIDE_NEXUS_URL ?: 'https://store.vistacore.us'
+}
+
+def getNexusUploadRepository() {
+    System.env.NEXUS_UPLOAD_REPO ?: 'releases'
+}
 
 def getRepoVersion() {
     def v
-    v = new File(rootDir, "../infrastructure/properties/applicationVersionPrefix").getText()
+    if( System.getenv().keySet().contains('ARTIFACT_VERSION_PREFIX') ){
+        v = System.getenv()['ARTIFACT_VERSION_PREFIX']
+    } else {
+        v = new File(rootDir, "../infrastructure/properties/applicationVersionPrefix").getText()
+    }
     if (v.endsWith('.'))
         v = v.substring(0, v.length()-1)
     return v

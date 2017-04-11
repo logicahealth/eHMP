@@ -8,7 +8,7 @@ Add a new allergy for a patient to single Vista
 
 + Parameters
 
-    + pid (string, required) - patient id
+    :[pid]({{{common}}}/parameters/pid.md)
 
 
 + Request JSON Message (application/json)
@@ -115,7 +115,7 @@ Update an existing patient allergy
 
 + Parameters
 
-    + pid (string, required) - patient id
+    :[pid]({{{common}}}/parameters/pid.md)
 
 
 + Request JSON Message (application/json)

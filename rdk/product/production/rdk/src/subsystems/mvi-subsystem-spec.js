@@ -2,7 +2,6 @@
 
 var bunyan = require('bunyan');
 var _ = require('lodash');
-var fs = require('fs');
 var mviSubsystem = require('./mvi-subsystem');
 
 describe('mvi-subsystem', function () {

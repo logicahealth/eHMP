@@ -1,6 +1,6 @@
 # Group Pick List
 
-## Medication order defaults [/medication-order-defaults{?site}{&pharmacyType}{&ien}{&outpatientDfn}{&needPatientInstructions}{&pkiEnabled}]
+## Medication order defaults [/medication-order-defaults{?site}{&pharmacyType}{&ien}{&outpid}{&needPatientInstructions}{&pkiEnabled}]
 
 Outpatient medication dosages, dispense, route, schedule, guideline, message, DEA schedule.
 
@@ -22,7 +22,7 @@ ORWDPS2 OISLCT
 
     + ien (string, optional) - medication ien, from ORWUL FVSUB
 
-    + outpatientDfn (string, optional) - Patient DFN
+    :[pid]({{{common}}}/parameters/pid.md required:"optional")
 
     + needPatientInstructions (boolean, optional) - boolean for whether you need patient instructions
 

@@ -7,18 +7,12 @@ var problemsResource = require('./problems-resource');
 
 var mockReqResUtil = (function() {
     var logger = {
-        trace: function() {
-        },
-        debug: function() {
-        },
-        info: function() {
-        },
-        warn: function() {
-        },
-        error: function() {
-        },
-        fatal: function() {
-        }
+        trace: function() {},
+        debug: function() {},
+        info: function() {},
+        warn: function() {},
+        error: function() {},
+        fatal: function() {}
     };
 
     var res = {
@@ -62,6 +56,11 @@ var mockReqResUtil = (function() {
             },
             session: {
                 user: {
+                    site: '9E7A'
+                }
+            },
+            interceptorResults: {
+                patientIdentifiers: {
                     site: '9E7A'
                 }
             }

@@ -1,36 +1,3 @@
-DECLARE
-        u_count number;
-        user_name VARCHAR2 (50);
-        password VARCHAR(32);
-
-    BEGIN
-        u_count :=0;
-        user_name := 'ACTIVITYDB';
-
-        SELECT COUNT (1) INTO u_count FROM dba_users WHERE username = UPPER (user_name);
-
-         IF u_count = 0
-         THEN
-            password := 'activitydb';
-            EXECUTE IMMEDIATE 'CREATE USER '||user_name||' IDENTIFIED BY '||password||' ';
-            EXECUTE IMMEDIATE 'GRANT "DBA" TO '||user_name||'';
-            EXECUTE IMMEDIATE 'GRANT "CONNECT" TO '||user_name||'';
-            EXECUTE IMMEDIATE 'GRANT "RESOURCE" TO '||user_name||'' ;
-
-          END IF;
-
-          u_count := 0;
-
-        EXCEPTION
-           WHEN OTHERS
-              THEN
-                     DBMS_OUTPUT.put_line (SQLERRM);
-                     DBMS_OUTPUT.put_line ('   ');
-
-    END;
-
-/
-
 --------------------------------------------------------
 --  DDL for Sequence AM_TASKROUTE_ID_SEQ
 --------------------------------------------------------
@@ -1213,6 +1180,7 @@ BEGIN
     EXECUTE IMMEDIATE 'GRANT CREATE SESSION TO '||user_name||' ';
     EXECUTE IMMEDIATE 'GRANT CREATE PROCEDURE TO '||user_name||' ';
     EXECUTE IMMEDIATE 'GRANT CREATE TYPE TO '||user_name||' ';
+    EXECUTE IMMEDIATE 'GRANT EXECUTE ON SYS.DBMS_LOB TO '||user_name||' ';
 
     FOR tName IN (SELECT TABLE_NAME FROM dba_tables WHERE OWNER = 'ACTIVITYDB')
     LOOP

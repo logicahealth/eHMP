@@ -20,7 +20,7 @@ describe('Immunizations input validator', function () {
                 'encounterLocation' : '32'
             };
             var errors = [];
-            var validator = validateInput(logger, model, errors);
+            validateInput(logger, model, errors);
             expect(_.size(errors)).to.equal(0);
         });
 
@@ -31,7 +31,7 @@ describe('Immunizations input validator', function () {
         it('missing model', function () {
 
             var errors = [];
-            var validator = validateInput(logger, undefined, errors);
+            validateInput(logger, undefined, errors);
             expect(_.size(errors)).to.equal(1);
             expect(_.contains(errors, 'Missing model')).to.be.true();
         });
@@ -45,7 +45,7 @@ describe('Immunizations input validator', function () {
                 'encounterLocation' : '32'
             };
             var errors = [];
-            var validator = validateInput(logger, model, errors);
+            validateInput(logger, model, errors);
             expect(_.size(errors)).to.equal(1);
             expect(_.contains(errors, 'Missing encounterPatientDFN')).to.be.true();
         });
@@ -60,7 +60,7 @@ describe('Immunizations input validator', function () {
             };
 
             var errors = [];
-            var validator = validateInput(logger, model, errors);
+            validateInput(logger, model, errors);
             expect(_.size(errors)).to.equal(1);
             expect(_.contains(errors, 'Missing immunizationIEN')).to.be.true();
         });
@@ -72,7 +72,7 @@ describe('Immunizations input validator', function () {
                 'encounterLocation' : '32'
             };
             var errors = [];
-            var validator = validateInput(logger, model, errors);
+            validateInput(logger, model, errors);
             expect(_.size(errors)).to.equal(3);
             expect(_.contains(errors, 'Missing immunizationIEN')).to.be.true();
             expect(_.contains(errors, 'Missing visit date')).to.be.true();

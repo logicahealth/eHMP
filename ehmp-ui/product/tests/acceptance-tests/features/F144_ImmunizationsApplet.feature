@@ -1,4 +1,4 @@
-@US2171 @regression
+@US2171 
 Feature: F144 - eHMP viewer GUI - Immunizations
 #Team Neptune
 

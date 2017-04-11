@@ -3,18 +3,21 @@ var rdk = require('../../../core/rdk');
 var uriBuilder = rdk.utils.uriBuilder;
 var httpUtil = rdk.utils.http;
 var _ = require('lodash');
-var jbpm = require('../../../subsystems/jbpm/jbpm-subsystem');
 var parseString = require('xml2js').parseString;
-var fs = require('fs');
 var async = require('async');
+var activityUtils = require('../activity-utils');
+var processJsonObject = activityUtils.processJsonObject;
+var processValue = activityUtils.processValue;
+var wrapValueInCData = activityUtils.wrapValueInCData;
+var getGenericJbpmConfig = activityUtils.getGenericJbpmConfig;
 var processJsonObject = require('../activity-utils').processJsonObject;
 var processValue = require('../activity-utils').processValue;
 var wrapValueInCData = require('../activity-utils').wrapValueInCData;
 var getGenericJbpmConfig = require('../activity-utils').getGenericJbpmConfig;
-var activityDb = rdk.utils.pooledJbpmDatabase;
-var jdsFilter = require('jds-filter');
-var querystring = require('querystring');
 var nullchecker = rdk.utils.nullchecker;
+var xmlTemplates = activityUtils.xmlTemplates;
+var activityMockQuery = require('./activity-query-service-mock');
+
 
 JBPMServerError.prototype = Error.prototype;
 
@@ -45,34 +48,18 @@ function doStartProcess(config, deploymentId, processDefId, parameters, processC
 
     async.parallel([
             function(callback) {
-                var startProcessCommandTemplateXML = fs.readFileSync(__dirname + '/start-process-command-template.xml', {
-                    encoding: 'utf8',
-                    flag: 'r'
-                });
+                var startProcessCommandTemplateXML = xmlTemplates.startProcessCommandTemplate;
                 var startProcessCommandXML = startProcessCommandTemplateXML.replace('{DeploymentId}', deploymentId).replace('{ProcessId}', processDefId);
                 callback(null, startProcessCommandXML);
             },
             function(callback) {
                 var processParametersXML = '';
                 var itemsList = '';
-                var subitemsList = '';
                 if (parameters) {
-                    var primitiveTypeXML = fs.readFileSync(__dirname + '/../tasks/parameter-template.xml', {
-                        encoding: 'utf8',
-                        flag: 'r'
-                    });
-                    var complexObjectXML = fs.readFileSync(__dirname + '/../tasks/complex-object-template.xml', {
-                        encoding: 'utf8',
-                        flag: 'r'
-                    });
-                    var complexObjectPropertiesXML = fs.readFileSync(__dirname + '/../tasks/complex-object-properties-template.xml', {
-                        encoding: 'utf8',
-                        flag: 'r'
-                    });
-                    var complexArrayedObjectPropertiesXML = fs.readFileSync(__dirname + '/../tasks/complex-arrayed-object-properties-template.xml', {
-                        encoding: 'utf8',
-                        flag: 'r'
-                    });
+                    var primitiveTypeXML = xmlTemplates.parameterTemplate;
+                    var complexObjectXML = xmlTemplates.complexObjectTemplate;
+                    var complexObjectPropertiesXML = xmlTemplates.complexObjectPropertiesXML;
+                    var complexArrayedObjectPropertiesXML = xmlTemplates.complexArrayedObjectPropertiesXML;
 
                     _.each(parameters, function(value, key) {
                         var type = typeof value;
@@ -191,7 +178,7 @@ function abortProcess(req, res) {
     // [POST] /runtime/{deploymentId}/process/instance/{procInstanceID}/abort
     //
     // Example Postman URL:
-    // http://IP             /business-central/rest/runtime/VistaCore:VistaTasks:1.0.2/process/instance/1/abort
+    // http://10.4.4.208:8080/business-central/rest/runtime/VistaCore:VistaTasks:1.0.2/process/instance/1/abort
 
     req.audit.dataDomain = 'Tasks';
     req.audit.logCategory = 'ABORT_PROCESS';
@@ -300,11 +287,7 @@ function getActivityDefinitionsByQuery(req, res) {
     req.audit.logCategory = 'GET_ACTIVITY_DEFINITIONS_BY_QUERY';
 
     // temporary mock implementation
-    var lookupStr = fs.readFileSync(__dirname + '/activity-query-service-mock.json', {
-        encoding: 'utf8',
-        flag: 'r'
-    });
-    var lookupObj = JSON.parse(lookupStr);
+    var lookupObj = activityMockQuery;
 
     var lookupKey = '';
 
@@ -488,10 +471,7 @@ function doSignal(config, deploymentId, processInstanceId, signalName, signalCon
 
     async.parallel([
             function(callback) {
-                var signalEventCommandTemplateXML = fs.readFileSync(__dirname + '/signal-event-command-template.xml', {
-                    encoding: 'utf8',
-                    flag: 'r'
-                });
+                var signalEventCommandTemplateXML = xmlTemplates.signalEventCommandTemplate;
                 var signalEventCommandXML = signalEventCommandTemplateXML.replace('{DeploymentId}', deploymentId)
                     .replace('{ProcessInstanceId}', processInstanceId)
                     .replace('{EventType}', signalName);
@@ -500,22 +480,9 @@ function doSignal(config, deploymentId, processInstanceId, signalName, signalCon
             function(callback) {
                 var signalEventValueXML = '';
                 var itemsList = '';
-                var subitemsList = '';
                 if (signalContent) {
-
-                    signalEventValueXML = fs.readFileSync(__dirname + '/signal-event-value-template.xml', {
-                        encoding: 'utf8',
-                        flag: 'r'
-                    });
-                    var complexObjectPropertiesXML = fs.readFileSync(__dirname + '/../tasks/complex-object-properties-template.xml', {
-                        encoding: 'utf8',
-                        flag: 'r'
-                    });
-                    var complexArrayedObjectPropertiesXML = fs.readFileSync(__dirname + '/../tasks/complex-arrayed-object-properties-template.xml', {
-                        encoding: 'utf8',
-                        flag: 'r'
-                    });
-
+                    signalEventValueXML = xmlTemplates.signalEventValueTemplate;
+                    var complexObjectPropertiesXML = xmlTemplates.complexObjectPropertiesXML;
                     var value = _.head(_.values(signalContent));
                     var type = typeof value;
 

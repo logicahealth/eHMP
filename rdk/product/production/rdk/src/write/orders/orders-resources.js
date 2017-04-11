@@ -6,11 +6,11 @@ var writeVprToJds = require('../core/jds-direct-writer');
 var getCommonOrderTasks = require('./common/orders-common-tasks');
 
 var validateOrders = {};
-validateOrders['Laboratory'] = require('./lab/orders-lab-validator');
-validateOrders['Common'] = require('./common/orders-common-validator');
+validateOrders.Laboratory = require('./lab/orders-lab-validator');
+validateOrders.Common = require('./common/orders-common-validator');
 
 var writeOrderToVista = {};
-writeOrderToVista['Laboratory'] = require('./lab/orders-lab-vista-writer');
+writeOrderToVista.Laboratory = require('./lab/orders-lab-vista-writer');
 
 var writeToPjds = require('./common/orders-common-pjds-writer');
 
@@ -152,7 +152,7 @@ function commonOrder(action) {
         var commonOrderTasks = getCommonOrderTasks(action, req.body);
         if (commonOrderTasks) {
             tasks = []
-                .concat(validateOrders['Common'][action])
+                .concat(validateOrders.Common[action])
                 .concat(commonOrderTasks)
                 .concat(writeVprToJds);
         } else {

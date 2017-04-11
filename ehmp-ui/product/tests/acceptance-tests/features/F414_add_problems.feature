@@ -1,11 +1,10 @@
-@F414 @f414_problem_list @regression @future @DE4560
+@F414 @f414_problem_list  @future @DE4560
 Feature: Enter and Store A Problem List
 
 @F414_1 @UAT_script 
 Scenario:  eHMP user should not be able to add a problem without appropriate permissions
   Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "PUT1234" verifycode as  "PUT1234!!"
-  And staff view screen is displayed
-  And Navigate to Patient Search Screen
+    Then staff view screen is displayed
   And user searches for and selects "TWENTY,PATIENT"
   When Overview is active
   And user sees Problems Gist
@@ -13,9 +12,8 @@ Scenario:  eHMP user should not be able to add a problem without appropriate per
 
 @F414_2 @F414-1 @F414-2 @UAT_script @US6701 @US12012 @US6723 @TC3061 @DE5179
 Scenario: eHMP user with appropriate permissions is able to Add and Create Another problem
-  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "PW    " verifycode as  "PW    !!"
-  And staff view screen is displayed
-  And Navigate to Patient Search Screen
+  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "pu1234" verifycode as  "pu1234!!"
+    Then staff view screen is displayed
   Given user searches for and selects "TWENTY,PATIENT"
   And Overview is active
   And POB user selects and sets new encounter with location "Cardiology" and provider "Anesthesiologist,One"
@@ -110,9 +108,8 @@ Scenario: eHMP user can search for a problem in the Lexicon using SNOMED CT code
 
 @F414-3 @F414-3a @US11634 @US3592 @US6704
 Scenario: As an authorized user adding a problem to a patient's problem list, I need to be prompted to set the visit context if I haven't already done this
-  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "PW    " verifycode as  "PW    !!"
-  And staff view screen is displayed
-  And Navigate to Patient Search Screen
+  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "pu1234" verifycode as  "pu1234!!"
+    Then staff view screen is displayed
   And user searches for and selects "TWENTY,PATIENT"
   And Overview is active
   And user does not have an encounter set
@@ -122,9 +119,8 @@ Scenario: As an authorized user adding a problem to a patient's problem list, I 
 
 @F414-3 @F414-3b @US11634 @US3592 @US6704
 Scenario: As an authorized user adding a problem to a patient's problem list, I need to be prompted to set the visit context if I haven't already done this
-  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "PW    " verifycode as  "PW    !!"
-  And staff view screen is displayed
-  And Navigate to Patient Search Screen
+  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "pu1234" verifycode as  "pu1234!!"
+    Then staff view screen is displayed
   And user searches for and selects "TWENTY,PATIENT"
   And Overview is active
   And user sees Problems Gist
@@ -163,9 +159,8 @@ Scenario: Verify Clinic field label text is Service for inpatients
 
 @US12784 @US12784_outpatient
 Scenario: Verify Clinic field label text is Clinic for outpatients
-  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "PW    " verifycode as  "PW    !!"
-  And staff view screen is displayed
-  And Navigate to Patient Search Screen
+  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "pu1234" verifycode as  "pu1234!!"
+  Then staff view screen is displayed
   Given user searches for and selects "TWENTY,PATIENT"
   And Overview is active
   And POB user selects and sets new encounter with location "Cardiology" and provider "Anesthesiologist,One"

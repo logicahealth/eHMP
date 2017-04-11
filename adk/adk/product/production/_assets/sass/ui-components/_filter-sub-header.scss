@@ -1,0 +1,24 @@
+// sub-header for filtered applets
+[class$="-full"] {
+    div.sub-header {
+        display: none;
+    }
+}
+.applet-div-chrome-container {
+    div.sub-header {
+        padding: 0 5px;
+        background: $grey-lightest;
+        border-bottom: 1px solid $grey-lighter;
+        min-height: 18px;
+        .btn.btn-sm.btn-icon {
+            float: right;
+            padding: 0;
+            background: none;
+        }
+    }
+}
+[data-appletid="vista_health_summaries"], [data-appletid="allergy_grid"], [data-appletid="vitals"], [data-appletid="military_hist"] {
+    .sub-header {
+        display:none;
+    }
+}

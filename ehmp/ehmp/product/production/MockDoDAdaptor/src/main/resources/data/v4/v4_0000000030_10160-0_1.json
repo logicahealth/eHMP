@@ -1,0 +1,424 @@
+{
+  "queryComplete": true,
+  "statusList": [
+    {
+      "partner": {
+        "partnerIdentifier": "2.16.840.1.113883.3.42.126.100001.13",
+        "partnerName": "ahlta",
+        "partnerType": "DOD"
+      },
+      "partnerStatus": "SUCCESS",
+      "expectedCount": 11,
+      "receivedCount": 11
+    }
+  ],
+  "dataList": {
+    "medications": [
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "2165347221"
+        },
+        "enteredBy": {
+          "name": "Interface User"
+        },
+        "enteredDate": {
+          "start": "2014-09-15T08:00:00",
+          "end": "2014-09-15T08:00:00"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "10160-0"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL/0056"
+        },
+        "prescription": "O",
+        "active": false,
+        "comment": "^O^\nNONE",
+        "careSetting": "O",
+        "dispensingPharmacy": {
+          "name": "MAIN PHARMACY"
+        },
+        "fillCost": null,
+        "endDate": {
+          "start": "2015-09-15T08:00:00",
+          "end": "2015-09-15T08:00:00"
+        },
+        "startDate": {
+          "start": "2014-06-15T08:00:00",
+          "end": "2014-06-15T08:00:00"
+        },
+        "lastFillDate": {
+          "start": "2014-09-15T08:00:00",
+          "end": "2014-09-15T08:00:00"
+        },
+        "fillInfo": [
+          {
+            "action": [
+              {
+                "display": "Entered",
+                "primary": true
+              }
+            ],
+            "dispensingPharmacy": {
+              "name": "MAIN PHARMACY"
+            },
+            "enteredBy": {
+              "name": "Interface User"
+            },
+            "location": {
+              "name": "NH Great Lakes IL/0056"
+            },
+            "fillCost": null,
+            "fillDate": {
+              "start": "2014-09-15T08:00:00",
+              "end": "2014-09-15T08:00:00"
+            },
+            "fillNumber": "0",
+            "quantity": {
+              "raw": "1",
+              "value": 1,
+              "units": [
+                {
+                  "display": "mg/act",
+                  "primary": true
+                }
+              ]
+            }
+          }
+        ],
+        "drugs": [
+          {
+            "drug": [
+              {
+                "display": "Albuterol HFA 2 puff QID prn SOB",
+                "code": "3003257827",
+                "system": "2.16.840.1.113883.3.42.126.100001.16",
+                "primary": true
+              }
+            ],
+            "dosage": {
+              "raw": "1",
+              "value": 1,
+              "units": [
+                {
+                  "display": "mg",
+                  "primary": true
+                }
+              ]
+            }
+          }
+        ],
+        "numberOfRefills": 0,
+        "provider": {
+          "name": "AHLTADTE, ATTEND B",
+          "primary": true
+        },
+        "quantity": {
+          "raw": "1",
+          "value": 1,
+          "units": [
+            {
+              "display": "mg",
+              "primary": true
+            }
+          ]
+        },
+        "refillsRemaining": 0,
+        "rxNumber": {
+          "id": "131025-00076"
+        },
+        "sig": "",
+        "status": [
+          {
+            "display": "ACTIVE",
+            "primary": true
+          }
+        ],
+        "daysSupply": 90
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "2165347221"
+        },
+        "enteredBy": {
+          "name": "Interface User"
+        },
+        "enteredDate": {
+          "start": "2014-09-15T08:00:00",
+          "end": "2014-09-15T08:00:00"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "10160-0"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL/0056"
+        },
+        "prescription": "O",
+        "active": false,
+        "comment": "^O^\nNONE",
+        "careSetting": "O",
+        "dispensingPharmacy": {
+          "name": "MAIN PHARMACY"
+        },
+        "fillCost": null,
+        "endDate": {
+          "start": "2015-09-15T08:00:00",
+          "end": "2015-09-15T08:00:00"
+        },
+        "startDate": {
+          "start": "2014-09-15T08:00:00",
+          "end": "2014-09-15T08:00:00"
+        },
+        "lastFillDate": {
+          "start": "2014-09-15T08:00:00",
+          "end": "2014-09-15T08:00:00"
+        },
+        "fillInfo": [
+          {
+            "action": [
+              {
+                "display": "Entered",
+                "primary": true
+              }
+            ],
+            "dispensingPharmacy": {
+              "name": "MAIN PHARMACY"
+            },
+            "enteredBy": {
+              "name": "Interface User"
+            },
+            "location": {
+              "name": "NH Great Lakes IL/0056"
+            },
+            "fillCost": null,
+            "fillDate": {
+              "start": "2014-09-15T08:00:00",
+              "end": "2014-09-15T08:00:00"
+            },
+            "fillNumber": "0",
+            "quantity": {
+              "raw": "1",
+              "value": 1,
+              "units": [
+                {
+                  "display": "mg",
+                  "primary": true
+                }
+              ]
+            }
+          }
+        ],
+        "drugs": [
+          {
+            "drug": [
+              {
+                "display": "Sertraline 1 50mg tab qd",
+                "code": "3003257828",
+                "system": "2.16.840.1.113883.3.42.126.100001.16",
+                "primary": true
+              }
+            ],
+            "dosage": {
+              "raw": "1",
+              "value": 1,
+              "units": [
+                {
+                  "display": "mg",
+                  "primary": true
+                }
+              ]
+            }
+          }
+        ],
+        "numberOfRefills": 0,
+        "provider": {
+          "name": "AHLTADTE, ATTEND B",
+          "primary": true
+        },
+        "quantity": {
+          "raw": "1",
+          "value": 1,
+          "units": [
+            {
+              "display": "mg",
+              "primary": true
+            }
+          ]
+        },
+        "refillsRemaining": 0,
+        "rxNumber": {
+          "id": "131025-00076"
+        },
+        "sig": "",
+        "status": [
+          {
+            "display": "EXPIRED",
+            "primary": true
+          }
+        ],
+        "daysSupply": 90
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "2165347221"
+        },
+        "enteredBy": {
+          "name": "Interface User"
+        },
+        "enteredDate": {
+          "start": "2015-12-01T08:00:00",
+          "end": "2015-12-01T08:00:00"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "10160-0"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL/0056"
+        },
+        "prescription": "O",
+        "active": false,
+        "comment": "^O^\nNONE",
+        "careSetting": "O",
+        "dispensingPharmacy": {
+          "name": "MAIN PHARMACY"
+        },
+        "fillCost": null,
+        "endDate": {
+          "start": "2015-12-01T08:00:00",
+          "end": "2015-12-01T08:00:00"
+        },
+        "startDate": {
+          "start": "2015-12-01T08:00:00",
+          "end": "2015-12-01T08:00:00"
+        },
+        "lastFillDate": {
+          "start": "2015-12-01T08:00:00",
+          "end": "2015-12-01T08:00:00"
+        },
+        "fillInfo": [
+          {
+            "action": [
+              {
+                "display": "Entered",
+                "primary": true
+              }
+            ],
+            "dispensingPharmacy": {
+              "name": "MAIN PHARMACY"
+            },
+            "enteredBy": {
+              "name": "Interface User"
+            },
+            "location": {
+              "name": "NH Great Lakes IL/0056"
+            },
+            "fillCost": null,
+            "fillDate": {
+              "start": "2015-12-01T08:00:00",
+              "end": "2015-12-01T08:00:00"
+            },
+            "fillNumber": "0",
+            "quantity": {
+              "raw": "1",
+              "value": 1,
+              "units": [
+                {
+                  "display": "mg",
+                  "primary": true
+                }
+              ]
+            }
+          }
+        ],
+        "drugs": [
+          {
+            "drug": [
+              {
+                "display": "Sertraline 1 100mg tab qd",
+                "code": "3003257829",
+                "system": "2.16.840.1.113883.3.42.126.100001.16",
+                "primary": true
+              }
+            ],
+            "dosage": {
+              "raw": "1",
+              "value": 1,
+              "units": [
+                {
+                  "display": "mg",
+                  "primary": true
+                }
+              ]
+            }
+          }
+        ],
+        "numberOfRefills": 0,
+        "provider": {
+          "name": "AHLTADTE, ATTEND B",
+          "primary": true
+        },
+        "quantity": {
+          "raw": "1",
+          "value": 1,
+          "units": [
+            {
+              "display": "mg",
+              "primary": true
+            }
+          ]
+        },
+        "refillsRemaining": 0,
+        "rxNumber": {
+          "id": "131025-00076"
+        },
+        "sig": "",
+        "status": [
+          {
+            "display": "ACTIVE",
+            "primary": true
+          }
+        ],
+        "daysSupply": 90
+      }
+    ]
+  }
+}

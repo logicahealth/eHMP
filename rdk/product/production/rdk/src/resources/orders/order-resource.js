@@ -5,6 +5,7 @@ var _ = require('lodash');
 var moment = require('moment');
 var querystring = require('querystring');
 var clinicalObjectSubsystem = require('../../subsystems/clinical-objects/clinical-objects-subsystem');
+var UidUtil = require('../../utils/uid-utils');
 var QUERY_ENTERED_STRING = 'entered';
 
 function getResourceConfig(app) {
@@ -13,7 +14,6 @@ function getResourceConfig(app) {
         path: '/all-orders',
         get: getOrders,
         interceptors: {
-            authentication: false,
             jdsFilter: true,
             convertPid: true
         },
@@ -48,11 +48,32 @@ function getOrders(req, res) {
         logger: req.logger,
         json: true
     });
+
+    var patientIdentifiers = _.get(req, 'interceptorResults.patientIdentifiers', {});
+    var patientUids = _.get(patientIdentifiers, 'uids', []);
+    var patientUid;
+    if (_.isUndefined(patientIdentifiers.dfn) && _.isUndefined(patientIdentifiers.icn)) {
+        req.logger.debug('getOrders - Patient dfn or icn not found on interceptor results');
+        return res.status(rdk.httpstatus.precondition_failed).rdkSend('Patient dfn or icn not found on interceptor results');
+    }
+    if (_.isEmpty(patientUids)) {
+        req.logger.debug('getOrders - Patient uids not found on interceptor results');
+        return res.status(rdk.httpstatus.precondition_failed).rdkSend('Patient uids not found on interceptor results');
+    }
+    if (patientIdentifiers.dfn && patientIdentifiers.site) {
+        patientUid = UidUtil.getSiteDfnUidFromUidArray(req);
+    } else if (patientIdentifiers.icn) {
+        patientUid = UidUtil.getIcnUidFromUidArray(req);
+    }
+    if (_.isUndefined(patientUid)) {
+        req.logger.debug('getOrders - Patient uid not found in interceptor results uids array');
+        return res.status(rdk.httpstatus.precondition_failed).rdkSend('Patient uid not found in interceptor results uids array');
+    }
+
     var qDates = getQueryDates(req.query.filter);
-    var jdsreponse;
     var pjdsFilter = {
         ehmpState: 'active',
-        patientUid: req.interceptorResults.patientIdentifiers.uid,
+        patientUid: patientUid,
         domain: 'ehmp-activity',
         subDomain: 'consult',
         qStartDate: (!_.isEmpty(qDates)) ? qDates.qStartDate : '',
@@ -185,5 +206,7 @@ function parseJdsOrders(jdsResponse) {
         }
     });
 }
+/* For Testing */
+module.exports._getOrders = getOrders;
 
 module.exports.getResourceConfig = getResourceConfig;

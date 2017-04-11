@@ -12,25 +12,25 @@ pidValidator.initialize({
             '9E7A': {
                 name: 'PANORAMA',
                 division: '500',
-                host: 'IP        ',
-                localIP: 'IP      ',
+                host: '10.2.2.101',
+                localIP: '10.2.2.1',
                 localAddress: 'localhost',
                 port: 9210,
                 production: false,
-                accessCode: 'PW    ',
-                verifyCode: 'PW    !!',
+                accessCode: 'ep1234',
+                verifyCode: 'ep1234!!',
                 infoButtonOid: '1.3.6.1.4.1.3768'
             },
             'C877': {
                 name: 'KODAK',
                 division: '500',
-                host: 'IP        ',
-                localIP: 'IP      ',
+                host: '10.2.2.102',
+                localIP: '10.2.2.1',
                 localAddress: 'localhost',
                 port: 9210,
                 production: false,
-                accessCode: 'PW    ',
-                verifyCode: 'PW    !!',
+                accessCode: 'ep1234',
+                verifyCode: 'ep1234!!',
                 infoButtonOid: '1.3.6.1.4.1.3768'
             }
         }
@@ -46,6 +46,7 @@ var patientIdentifiers = {
     currentSiteDfn: 'currentSite;1',
     primarySiteDfn: '9E7A;1',
     edipi: '01',
+    pidEdipi: 'DOD;01',
     siteIcn: 'site;1V1'
 };
 
@@ -54,6 +55,7 @@ describe('site checks', function() {
         it('should determine if pid contains the site', function() {
             expect(pidValidator.containsSite(patientIdentifiers.siteIcn)).to.be.true();
             expect(pidValidator.containsSite(patientIdentifiers.icn)).to.be.false();
+            expect(pidValidator.containsSite(';1')).to.be.false();
         });
     });
     describe('isCurrentSite', function() {
@@ -93,12 +95,6 @@ describe('patient identifier format checks', function() {
             expect(pidValidator.isIcn(patientIdentifiers.dfn)).to.be.false();
         });
     });
-    describe('isDfn', function() {
-        it('should determine if pid is dfn', function() {
-            expect(pidValidator.isDfn(patientIdentifiers.dfn)).to.be.true();
-            expect(pidValidator.isDfn(patientIdentifiers.icn)).to.be.false();
-        });
-    });
     describe('isSiteIcn', function() {
         it('should determine if pid is site;icn', function() {
             expect(pidValidator.isSiteIcn(patientIdentifiers.siteIcn)).to.be.true();
@@ -111,10 +107,10 @@ describe('patient identifier format checks', function() {
             expect(pidValidator.isSiteDfn(patientIdentifiers.dfn)).to.be.false();
         });
     });
-    describe('isEdipi', function() {
-        it('should determine if pid is site;edipi', function() {
-            expect(pidValidator.isEdipi(patientIdentifiers.edipi)).to.be.true();
-            expect(pidValidator.isEdipi(patientIdentifiers.primarySiteDfn)).to.be.false();
+    describe('isPidEdipi', function() {
+        it('should determine if pid is DOD;edipi', function() {
+            expect(pidValidator.isPidEdipi(patientIdentifiers.pidEdipi)).to.be.true();
+            expect(pidValidator.isPidEdipi(patientIdentifiers.primarySiteDfn)).to.be.false();
         });
     });
 });

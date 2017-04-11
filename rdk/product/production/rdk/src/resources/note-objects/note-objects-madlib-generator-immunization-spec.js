@@ -47,7 +47,7 @@ describe('The note-objects-madlib-generator-immunization', function() {
             expect(retVal.indexOf('Admin Route/Site: INTRADERMAL  LEFT DELTOID') !== 0);
             expect(retVal.indexOf('Comments: ') === -1);
             expect(retVal.indexOf('Ordered by') === -1);
-        })
+        });
     });
 
     it ('check for existence of comments', function () {
@@ -122,7 +122,7 @@ describe('The note-objects-madlib-generator-immunization', function() {
                 {
                     'editionDate': 20120202,
                     'language': 'ENGLISH',
-                    'offeredDate': "",
+                    'offeredDate': '',
                     'visName': 'HEPATITIS B VIS'
             }
             ]
@@ -136,7 +136,7 @@ describe('The note-objects-madlib-generator-immunization', function() {
     });
 
     it('double check the ordered by field shows up', function() {
-        
+
         var immunization = {
             'administeredDateTime': 20160322100000,
             'cdcFullVaccineName': 'HEPATITIS A AND HEPATITIS B VACCINE\r\n',
@@ -174,13 +174,13 @@ describe('The note-objects-madlib-generator-immunization', function() {
                 {
                     'editionDate': 20120202,
                     'language': 'ENGLISH',
-                    'offeredDate': "",
+                    'offeredDate': '',
                     'visName': 'HEPATITIS B VIS'
                 },
                 {
                     'editionDate': 20120202,
                     'language': 'SPANISH',
-                    'offeredDate': "",
+                    'offeredDate': '',
                     'visName': 'HEPATITIS B VIS'
                 }
             ]

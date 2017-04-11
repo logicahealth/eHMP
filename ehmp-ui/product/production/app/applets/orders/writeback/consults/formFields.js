@@ -294,7 +294,7 @@ define([
                                 }, {
                                     control: 'textarea',
                                     name: 'orderResultComment',
-                                    label: 'Satisfied with data external to VA - Comment',
+                                    label: 'Satisfied with data external to <span class="transform-text-uppercase">VA</span> - Comment',
                                     extraClasses: 'top-margin-xs',
                                     required: true,
                                     rows: 7,

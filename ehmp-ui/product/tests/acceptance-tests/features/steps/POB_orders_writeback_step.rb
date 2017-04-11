@@ -106,8 +106,8 @@ Then(/^POB user accepts the order$/) do
   @ehmp.wait_until_btn_accept_visible
   expect(@ehmp).to have_btn_accept
   @ehmp.btn_accept.click
-  @ehmp.wait_until_fld_tray_loader_message_visible
-  @ehmp.wait_until_fld_tray_loader_message_invisible(30)
+  PobCommonElements.new.wait_until_fld_tray_loader_message_visible
+  PobCommonElements.new.wait_until_fld_tray_loader_message_invisible(30)
   max_attempt = 4
   begin
     if @ehmp.has_btn_accept_duplicate?

@@ -1,8 +1,6 @@
 'use strict';
 
 var rdk = require('../../core/rdk');
-var _ = require('lodash');
-var conceptRelationshipsResource = require('./concept-relationships-resource');
 var conceptRelationships = require('./concept-relationships');
 var crsSPARQL = require('./crs-sparql');
 var crsDataTransformer = require('./crs-data-transformer');
@@ -11,15 +9,6 @@ var crsDataItems = crsData.results.bindings;
 
 var logger = {
     debug: function() {}
-};
-
-var res = {
-    status: function(data) {
-        return data;
-    },
-    rdkSend: function(data) {
-        return data;
-    }
 };
 
 var req = {

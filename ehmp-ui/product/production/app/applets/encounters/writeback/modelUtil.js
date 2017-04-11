@@ -79,7 +79,7 @@ define([
                 criteria: {
                     type: 'encounters-visit-service-connected',
                     site: ADK.UserService.getUserSession().get('site'),
-                    dfn: ADK.PatientRecordService.getCurrentPatient().get('localId'),
+                    pid: ADK.PatientRecordService.getCurrentPatient().get('pid'),
                     visitDate: ADK.PatientRecordService.getCurrentPatient().get('visit').dateTime || '',
                     locationUid: ADK.PatientRecordService.getCurrentPatient().get('visit').locationUid
                 },
@@ -719,7 +719,6 @@ define([
             var currentPatient = ADK.PatientRecordService.getCurrentPatient();
             var patientPID = currentPatient.get('pid');
             var patientICN = currentPatient.get('icn');
-            var patientDFN = currentPatient.get('localId');
             var isInpatient;
             if (currentPatient.get('visit').newVisit) {
                 isInpatient = (currentPatient.patientStatusClass() === 'Inpatient') ? '1' : '0';
@@ -742,7 +741,6 @@ define([
             var saveEncounterModel = {
                 patientPID: patientPID,
                 patientICN: patientICN,
-                patientDFN: patientDFN,
                 isInpatient: isInpatient,
                 serviceCategory: serviceCategory,
                 locationUid: locationUid,

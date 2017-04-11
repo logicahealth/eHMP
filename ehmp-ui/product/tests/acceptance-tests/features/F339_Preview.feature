@@ -1,4 +1,4 @@
-@F172 @F339 @regression @triage
+@F172 @F339  
 Feature: User Defined Work Spaces - Preview
 
 Background:

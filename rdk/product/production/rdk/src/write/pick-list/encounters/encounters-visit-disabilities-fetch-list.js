@@ -1,8 +1,6 @@
 'use strict';
 var parse = require('./encounters-visit-disabilities-parser').parse;
-var validate = require('./../utils/validation-util');
 var rpcUtil = require('./../utils/rpc-util');
-var _ = require('lodash');
 
 
 /**
@@ -11,9 +9,9 @@ var _ = require('lodash');
  * <table border="1">
  * 	<tr><th colspan=2><b>REQUIRED PARAMS</b></th></tr>
  * 	<tr>
- * 		<td>dfn</td>
+ * 		<td>NONE</td>
  * 		<td>
- * 			The dfn
+ * 			NONE
  * 		</td>
  * 	</tr>
  * </table>
@@ -34,13 +32,7 @@ var _ = require('lodash');
  * @param logger The logger
  * @param configuration This contains the information necessary to connect to the RPC.
  * @param callback This will be called with the data retrieved from the RPC (or if there's an error).
- * @param params object which can contain optional and/or required parameters as described above.
  */
-module.exports.fetch = function(logger, configuration, callback, params) {
-    var dfn = _.get(params, 'dfn');
-    if (validate.isStringNullish(dfn)) {
-        return callback('DFN Cannot be Empty');
-    }
-
+module.exports.fetch = function(logger, configuration, callback) {
     return rpcUtil.standardRPCCall(logger, configuration, 'ORWPCE SCDIS', parse, callback);
 };

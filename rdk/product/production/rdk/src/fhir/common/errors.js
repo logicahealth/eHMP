@@ -1,5 +1,6 @@
 'use strict';
 var rdk = require('../../core/rdk');
+var _ = require('lodash');
 
 ParamError.prototype = Error.prototype;
 FetchError.prototype = Error.prototype;
@@ -48,7 +49,7 @@ module.exports.HTTPError = HTTPError;
 function getJDSErrorMessage(error) {
     var msg = '';
 
-    if (nullchecker.isNotNullish(error.errors)) {
+    if (!_.isEmpty(error.errors)) {
         msg = _.reduce(error.errors, function(memo, e) {
             if (!_.isEmpty(memo)) {
                 memo += ', ';

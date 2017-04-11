@@ -68,9 +68,7 @@ def verify_on_overview
 
   max_attempt = 2
   begin
-    p "DE6976: vitals applet not displaying, only wait for 8 applets to load"
-    expect(browser_access.wait_until_xpath_count_greater_than("Number of Applets", 7, 60)).to be_true
-    # expect(browser_access.wait_until_xpath_count("Number of Applets", 9, 60)).to be_true
+    expect(browser_access.wait_until_xpath_count("Number of Applets", 9, 60)).to be_true
   rescue => e
     TestSupport.driver.navigate.refresh
     max_attempt -= 1
@@ -95,10 +93,7 @@ def verify_on_overview
 end
 
 Then(/^Default Screen is active$/) do
-  #Default screen is currently Overview
-  patient_search = PatientSearch.instance
-  expect(patient_search.wait_until_element_present("patientSearch", 60)).to be_true
-  # if the default screen changes, create a new function, do not change verify_on_overview
+  #Default screen is currently Summary
   verify_on_summaryview
 end
 

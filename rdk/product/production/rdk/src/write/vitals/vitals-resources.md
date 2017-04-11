@@ -8,7 +8,7 @@ Add one or more new vitals for a patient in a single Vista
 
 + Parameters
 
-    + pid (string, required) - patient id
+    :[pid]({{{common}}}/parameters/pid.md)
 
 
 + Request JSON Message (application/json)
@@ -95,7 +95,7 @@ mark an existing patient vital as entered in error
 
 + Parameters
 
-    + pid (string, required) - patient id
+    :[pid]({{{common}}}/parameters/pid.md)
 
     + resourceId (string, required) - vital id
 

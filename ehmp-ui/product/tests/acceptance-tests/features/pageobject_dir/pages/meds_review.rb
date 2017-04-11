@@ -13,6 +13,7 @@ class PobMedsReview < PobParentApplet
   element :fld_inpatient_meds_group, "[id^='accordion'] [data-type-row='inpatient']"
   element :fld_outpatient_meds_group, "[id^='accordion'] [data-type-row='outpatient']"
   element :fld_med_item, :xpath, "//div[contains(@class, 'col-xs-3') and contains(string(), 'methocarbamol')]"
+  elements :fld_med_items, ".medication-layout-view .meds-item .col-xs-3"
 
   elements :fld_med_review_applet_rows, "[data-appletid='medication_review'] [class='panel-heading meds-item']"
   elements :fld_inpatient_meds_rows, "#inpatient-medication_review div.medication-layout-view .meds-item .col-xs-3:nth-of-type(1)"

@@ -82,8 +82,8 @@ Then(/^the results contain a problemText with the written value$/) do
   end
 end
 
-#http://IP             /vpr/all/find/problem?filter=like(problemText, "YourKeyWordToCheckFor%25")
-#http://IP             /vpr/all/find/problem?filter=like(problemText, \"ATOZ%25\")"
+#http://10.2.2.110:9080/vpr/all/find/problem?filter=like(problemText, "YourKeyWordToCheckFor%25")
+#http://10.2.2.110:9080/vpr/all/find/problem?filter=like(problemText, \"ATOZ%25\")"
 #@US2679_Problem_List_Search
 When(/^the client searches for problems with search criteria "(.*?)" in VPR format from RDK API$/) do |arg1|
   urlpath = QueryGenericRDK.new("problems")
@@ -132,8 +132,8 @@ When(/^the client runs data "(.*?)" using postman$/) do |arg1|
   }
   request = jsonreq.to_json
   urlobj = QueryGenericRDK.new("problems")
-  urlobj.add_parameter("accessCode", "PW    ")
-  urlobj.add_parameter("verifyCode", "PW    !!")
+  urlobj.add_parameter("accessCode", "pu1234")
+  urlobj.add_parameter("verifyCode", "pu1234!!")
   urlobj.add_parameter("site", "9E7A")
   url = urlobj.path
   p url

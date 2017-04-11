@@ -1,4 +1,4 @@
-@F282_problems_gist @regression @triage
+@F282_problems_gist   @reg1
 Feature: F82 - Problems Gist View
 
 @f282_problems_initial_view @F282-1.1 @F282-2.1 @US3390 @US4317

@@ -7,7 +7,7 @@ describe.skip('When messages are queued in memory', function() {
     var callback;
 
     var patientRecipient = 'patient/9E7A;10045';
-    var providerRecipient = 'provider/PW    ';
+    var providerRecipient = 'provider/pu1234';
 
     var singleRecipientMessage = {resourceType: 'CommunicationRequest',
         category: {coding: [{code: 'ehmp/msg/category/clinical'}]},

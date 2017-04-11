@@ -1,4 +1,4 @@
-@F353 @regression @triage
+@F353  
 Feature: F353 - stacked graphs
 
 Background:

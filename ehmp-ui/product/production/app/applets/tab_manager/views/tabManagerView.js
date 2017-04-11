@@ -19,6 +19,9 @@ define(['backbone',
 					this.closeTabs('navigate');
 				}
 			}, this);
+			this.listenTo(ADK.Messaging, 'context:patient:change', function(patient){
+				this.closeTabs();
+			}, this);
 			this.listenTo(ADK.Messaging, 'app:logout', function() {
 				this.closeTabs();
 			}, this);
@@ -32,6 +35,7 @@ define(['backbone',
 		closeTabs: function(action) {
 			if (self.viewerWindows.length > 0) {
 					self.viewerWindows.forEach(function(viewer) {
+						viewer.focus();
 						viewer.close();
 					});
 					self.viewerWindows = [];			}

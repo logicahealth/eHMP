@@ -25,7 +25,7 @@ subprojects {
     repositories.mavenDeployer {
       pom.groupId = "${->groupId}"
       pom.version = "${->version}"
-      repository(url: "https://store.vistacore.us/nexus/content/repositories/${->repo}/") {
+      repository(url: "${->nexusURL}/nexus/content/repositories/${->uploadRepo}/") {
         authentication(userName: System.getenv()['NEXUS_USER_NAME'], password: System.getenv()['NEXUS_PASSWORD'])
       }
     }

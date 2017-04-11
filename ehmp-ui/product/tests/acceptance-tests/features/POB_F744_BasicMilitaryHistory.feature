@@ -1,4 +1,4 @@
-@F744_BasicMilitaryHistory @US10809 @US10810 @regression
+@F744_BasicMilitaryHistory @US10809 @US10810 
 Feature: Basic Military History
 
   Background:
@@ -29,7 +29,7 @@ Feature: Basic Military History
       | Areas of Service         |
       | Occupational Specialties |
 
-  @US10809 @US10810 @TC2280_2 @TC2281_2 @DE6392 @debug
+  @US10809 @US10810 @TC2280_2 @TC2281_2 @DE6392 
   Scenario: Verify the Military History first row Edit View - Branch(s) of Service
     When the user clicks on data row number "1"
     And the buttons Details form and Edit form are displayed on
@@ -72,7 +72,7 @@ Feature: Basic Military History
       | Branch(es) Of Service    |
     Then the user validates Detail view saved text is displayed for row "1"
 
-  @US10809 @US10810 @TC2280_3 @TC2281_3 @DE6392 @debug
+  @US10809 @US10810 @TC2280_3 @TC2281_3 @DE6392 
   Scenario: Verify the Military History second row Edit View - Service Date(s)
     When the user clicks on data row number "2"
     And the buttons Details form and Edit form are displayed on
@@ -94,7 +94,7 @@ Feature: Basic Military History
     And the user edits text and clicks row "2" cancel
     Then the description for row "2" is not updated and displays previous text
 
-  @US10809 @US10810 @TC2280_4 @TC2281_4 @DE6392 @debug
+  @US10809 @US10810 @TC2280_4 @TC2281_4 @DE6392
   Scenario: Verify the Military History third row Edit View - Areas of Service
     When the user clicks on data row number "3"
     And the buttons Details form and Edit form are displayed on
@@ -116,7 +116,7 @@ Feature: Basic Military History
     And the user edits text and clicks row "3" cancel
     Then the description for row "3" is not updated and displays previous text
 
-  @US10809 @US10810 @TC2280_5 @TC2281_5 @DE6392 @debug
+  @US10809 @US10810 @TC2280_5 @TC2281_5 @DE6392
   Scenario: Verify the Military History fourth row Edit View - Occupational specialties
     When the user clicks on data row number "4"
     And the buttons Details form and Edit form are displayed on

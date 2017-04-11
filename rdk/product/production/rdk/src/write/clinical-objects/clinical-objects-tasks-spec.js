@@ -4,67 +4,84 @@ var bunyan = require('bunyan');
 var clinicalObjectsTasks = require('./clinical-objects-tasks');
 var clinicalObjectSubsystem = require('../../subsystems/clinical-objects/clinical-objects-subsystem');
 
-describe('clinical-objects-tasks', function () {
+describe('clinical-objects-tasks', function() {
     var writebackContext;
     var loadReference;
-    beforeEach(function () {
+    beforeEach(function() {
         writebackContext = {};
-        writebackContext.logger = sinon.stub(bunyan.createLogger({name: 'clinical-objects-tasks-spec'}));
-        writebackContext.pid = '9E7A;3';
+        writebackContext.logger = sinon.stub(bunyan.createLogger({
+            name: 'clinical-objects-tasks-spec'
+        }));
+        writebackContext.interceptorResults = {
+            patientIdentifiers: {
+                siteDfn: '9E7A;3',
+                site: '9E7A',
+                dfn: '3',
+                originalID: '9E7A;3'
+            }
+        };
         writebackContext.uid = 'urn:va:ehmp-order:9E7A:231:df6a996f-500b-4815-9772-3d33f519620d';
-        writebackContext.appConfig = {generalPurposeJdsServer: {baseUrl: 'foo'}};
+        writebackContext.appConfig = {
+            generalPurposeJdsServer: {
+                baseUrl: 'foo'
+            }
+        };
         loadReference = 'true';
-        writebackContext.model = {patientUid : 'urn:va:patient:9E7A:3:3'};
-        writebackContext.uidList = { uid: 'urn:va:ehmp-order:9E7A:231:df6a996f-500b-4815-9772-3d33f519620d'};
+        writebackContext.model = {
+            patientUid: 'urn:va:patient:9E7A:3:3'
+        };
+        writebackContext.uidList = {
+            uid: 'urn:va:ehmp-order:9E7A:231:df6a996f-500b-4815-9772-3d33f519620d'
+        };
     });
-    describe('.create', function () {
-        it('validates that the path pid and body pid are the same', function () {
+    describe('.create', function() {
+        it('validates that the path pid and body pid are the same', function() {
             // prevent the subsystem create from being called
             // in case the task's own validation fails
             sinon.stub(clinicalObjectSubsystem, 'create');
             writebackContext.model = {
                 patientUid: 'urn:va:patient:C877:3:3'
             };
-            clinicalObjectsTasks.create(writebackContext, function (err) {
+            clinicalObjectsTasks.create(writebackContext, function(err) {
                 expect(err).to.contain('path pid does not correlate to patient represented by patientUid');
             });
         });
-        it('calls clinicalObjectSubsystem.create with the correct arguments', function () {
+        it('calls clinicalObjectSubsystem.create with the correct arguments', function() {
             writebackContext.model = {
                 patientUid: 'urn:va:patient:9E7A:3:3'
             };
             var response = 'response';
-            sinon.stub(clinicalObjectSubsystem, 'create', function (logger, appConfig, model, callback) {
+            sinon.stub(clinicalObjectSubsystem, 'create', function(logger, appConfig, model, callback) {
                 expect(logger).to.equal(writebackContext.logger);
                 expect(appConfig).to.equal(writebackContext.appConfig);
                 expect(model).to.equal(writebackContext.model);
                 var err = null;
                 callback(err, response);
             });
-            clinicalObjectsTasks.create(writebackContext, function (err) {
+            clinicalObjectsTasks.create(writebackContext, function(err) {
                 expect(err).to.be.falsy();
                 expect(writebackContext.vprResponse).to.equal(response);
             });
         });
     });
-    describe('.read', function () {
-        it('validates that the uid is being passed in correctly', function () {
+    describe('.read', function() {
+        it('validates that the uid is being passed in correctly', function() {
             // prevent the subsystem create from being called
             // in case the task's own validation fails
             sinon.stub(clinicalObjectSubsystem, 'read');
             writebackContext.resourceId = {
                 uid: '9E7A:231:df6a996f-500b-4815-9772-3d33f519620d'
             };
-            clinicalObjectsTasks.read(writebackContext, function (err) {
+            clinicalObjectsTasks.read(writebackContext, function(err) {
                 expect(err).to.contain('model uid field is invalid');
             });
         });
-        it('calls clinicalObjectSubsystem.read with the correct uid', function () {
+        it('calls clinicalObjectSubsystem.read with the correct uid', function() {
             writebackContext.resourceId = {
                 uid: 'urn:va:ehmp-order:9E7A:231:df6a996f-500b-4815-9772-3d33f519620d'
             };
             var response = 'response';
-            sinon.stub(clinicalObjectSubsystem, 'read', function (logger, appConfig, uid, loadReference,  callback) {
+            sinon.stub(clinicalObjectSubsystem, 'read', function(logger, appConfig, uid, loadReference, callback) {
                 expect(logger).to.equal(writebackContext.logger);
                 expect(appConfig).to.equal(writebackContext.appConfig);
                 expect(uid).to.equal(writebackContext.resourceId);
@@ -72,31 +89,31 @@ describe('clinical-objects-tasks', function () {
                 var err = null;
                 callback(err, response);
             });
-            clinicalObjectsTasks.read(writebackContext, function (err) {
+            clinicalObjectsTasks.read(writebackContext, function(err) {
                 expect(err).to.be.falsy();
                 expect(writebackContext.vprResponse).to.equal(response);
             });
         });
 
     });
-    describe('.update', function () {
-        it('validates update is being passed a correct clinical object', function () {
+    describe('.update', function() {
+        it('validates update is being passed a correct clinical object', function() {
             // prevent the subsystem create from being called
             // in case the task's own validation fails
             sinon.stub(clinicalObjectSubsystem, 'update');
             writebackContext.uid = {
                 uid: '9E7A:231:df6a996f-500b-4815-9772-3d33f519620b'
             };
-            clinicalObjectsTasks.read(writebackContext, function (err) {
+            clinicalObjectsTasks.read(writebackContext, function(err) {
                 expect(err.pop()).to.contain('uid not found');
             });
         });
-        it('calls clinicalObjectSubsystem.update with the correct uid', function () {
+        it('calls clinicalObjectSubsystem.update with the correct uid', function() {
             writebackContext.resourceId = {
                 uid: 'urn:va:ehmp-order:9E7A:231:df6a996f-500b-4815-9772-3d33f519620d'
             };
             var response = 'response';
-            sinon.stub(clinicalObjectSubsystem, 'update', function (logger, appConfig, uid, body, callback) {
+            sinon.stub(clinicalObjectSubsystem, 'update', function(logger, appConfig, uid, body, callback) {
                 expect(logger).to.equal(writebackContext.logger);
                 expect(appConfig).to.equal(writebackContext.appConfig);
                 expect(uid).to.equal(writebackContext.resourceId);
@@ -104,24 +121,24 @@ describe('clinical-objects-tasks', function () {
                 var err = null;
                 callback(err, response);
             });
-            clinicalObjectsTasks.update(writebackContext, function (err) {
+            clinicalObjectsTasks.update(writebackContext, function(err) {
                 expect(err).to.be.falsy();
                 expect(writebackContext.vprResponse).to.equal(response);
             });
         });
 
-        it('calls clinicalObjectSubsystem.update with a patientUid containing an ICN value', function () {
+        it('calls clinicalObjectSubsystem.update with a patientUid containing an ICN value', function() {
             writebackContext.resourceId = {
                 uid: 'urn:va:ehmp-order:ICN:123456789:df6a996f-500b-4815-9772-3d33f519620d'
             };
 
-            writebackContext.pid = 'HDR;123456789';
-
+            writebackContext.interceptorResults.patientIdentifiers.siteDfn = 'HDR;123456789';
+            writebackContext.interceptorResults.patientIdentifiers.originalID = 'HDR;123456789';
             writebackContext.model = {
                 patientUid: 'urn:va:patient:ICN:123456789:123456789'
             };
             var response = 'response';
-            sinon.stub(clinicalObjectSubsystem, 'update', function (logger, appConfig, uid, body, callback) {
+            sinon.stub(clinicalObjectSubsystem, 'update', function(logger, appConfig, uid, body, callback) {
                 expect(logger).to.equal(writebackContext.logger);
                 expect(appConfig).to.equal(writebackContext.appConfig);
                 expect(uid).to.equal(writebackContext.resourceId);
@@ -129,14 +146,14 @@ describe('clinical-objects-tasks', function () {
                 var err = null;
                 callback(err, response);
             });
-            clinicalObjectsTasks.update(writebackContext, function (err) {
+            clinicalObjectsTasks.update(writebackContext, function(err) {
                 expect(err).to.be.falsy();
                 expect(writebackContext.vprResponse).to.equal(response);
             });
         });
 
     });
-    describe('.find', function () {
+    describe('.find', function() {
         // it('validates find is being passed a correct model', function () {
         //     // prevent the subsystem create from being called
         //     // in case the task's own validation fails
@@ -148,12 +165,12 @@ describe('clinical-objects-tasks', function () {
         //         expect(err.pop()).to.contain('uid not found');
         //     });
         // });
-        it('calls clinicalObjectSubsystem.find with the correct uid', function () {
+        it('calls clinicalObjectSubsystem.find with the correct uid', function() {
             writebackContext.resourceId = {
                 uid: 'urn:va:ehmp-order:9E7A:231:df6a996f-500b-4815-9772-3d33f519620d'
             };
             var response = 'response';
-            sinon.stub(clinicalObjectSubsystem, 'find', function (logger, appConfig, model, loadReference, callback) {
+            sinon.stub(clinicalObjectSubsystem, 'find', function(logger, appConfig, model, loadReference, callback) {
                 expect(logger).to.equal(writebackContext.logger);
                 expect(appConfig).to.equal(writebackContext.appConfig);
                 expect(model).to.equal(writebackContext.model);
@@ -161,7 +178,7 @@ describe('clinical-objects-tasks', function () {
                 var err = null;
                 callback(err, response);
             });
-            clinicalObjectsTasks.find(writebackContext, function (err) {
+            clinicalObjectsTasks.find(writebackContext, function(err) {
                 expect(err).to.be.falsy();
                 expect(writebackContext.vprResponse).to.equal(response);
             });
@@ -173,29 +190,29 @@ describe('clinical-objects-tasks', function () {
                 callback(err, {});
             });
             clinicalObjectsTasks.find(writebackContext, function(err) {
-                expect(err).to.be.null;
-                expect(writebackContext.vprResponse).to.be.empty;
+                expect(err).to.be.null();
+                expect(writebackContext.vprResponse).to.be.empty();
             });
         });
     });
-    describe('.getList', function () {
-        it('validates find is being passed a correct model', function () {
+    describe('.getList', function() {
+        it('validates find is being passed a correct model', function() {
             // prevent the subsystem create from being called
             // in case the task's own validation fails
             sinon.stub(clinicalObjectSubsystem, 'getList');
             writebackContext.model = {
                 model: '9E7A:231:df6a996f-500b-4815-9772-3d33f519620b'
             };
-            clinicalObjectsTasks.read(writebackContext, function (err) {
+            clinicalObjectsTasks.read(writebackContext, function(err) {
                 expect(err.pop()).to.contain('uid not found');
             });
         });
-        it('calls clinicalObjectSubsystem.getList with the correct uidList', function () {
+        it('calls clinicalObjectSubsystem.getList with the correct uidList', function() {
             writebackContext.resourceId = {
                 uid: 'urn:va:ehmp-order:9E7A:231:df6a996f-500b-4815-9772-3d33f519620d'
             };
             var response = 'response';
-            sinon.stub(clinicalObjectSubsystem, 'getList', function (logger, appConfig, uidList, loadReference, callback) {
+            sinon.stub(clinicalObjectSubsystem, 'getList', function(logger, appConfig, uidList, loadReference, callback) {
                 expect(logger).to.equal(writebackContext.logger);
                 expect(appConfig).to.equal(writebackContext.appConfig);
                 expect(uidList).to.equal(writebackContext.uidList);
@@ -203,7 +220,7 @@ describe('clinical-objects-tasks', function () {
                 var err = null;
                 callback(err, response);
             });
-            clinicalObjectsTasks.getList(writebackContext, function (err) {
+            clinicalObjectsTasks.getList(writebackContext, function(err) {
                 expect(err).to.be.falsy();
                 expect(writebackContext.vprResponse).to.equal(response);
             });

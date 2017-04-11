@@ -1,7 +1,5 @@
 'use strict';
-var rdk = require('../../core/rdk');
 var fhirResource = require('../common/entities/fhir-resource');
-var nullchecker = rdk.utils.nullchecker;
 var _ = require('lodash');
 
 var domains = {

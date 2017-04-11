@@ -18,7 +18,7 @@ var httpUtil = rdk.utils.http;
  */
 var defaultOptions = {
     jdsServer: {
-        baseUrl: 'http://IP             '
+        baseUrl: 'http://10.2.2.110:9080'
     },
     defaultExpirationTime: 1000 * 60 * 60 * 24 * 14
 };

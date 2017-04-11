@@ -51,7 +51,7 @@ describe('When adding a communication request', function() {
 
         message = {
             recipient: [{
-                reference: 'provider/PW    '
+                reference: 'provider/pu1234'
             }, {
                 reference: 'patient/9E7A;10045'
             }],
@@ -82,7 +82,7 @@ describe('When adding a communication request', function() {
             expect(callCount).to.equal(1);
             var queueNames = spyEnqueue.args[0][0];
             expect(queueNames.length).to.be(2);
-            expect(queueNames).must.include('provider/PW    ');
+            expect(queueNames).must.include('provider/pu1234');
             expect(queueNames).must.include('patient/9E7A;10045');
 
             var queueMessage = spyEnqueue.args[0][1];

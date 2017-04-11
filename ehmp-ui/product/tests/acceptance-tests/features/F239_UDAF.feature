@@ -1,4 +1,4 @@
-@F239_UDAF @regression @triage
+@F239_UDAF   @DE6991 @DE6976 @reg2
 Feature: F239 - User-Defined Applet Filters
 
 Background:

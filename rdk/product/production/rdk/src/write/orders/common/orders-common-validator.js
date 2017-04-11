@@ -1,9 +1,6 @@
 'use strict';
 
-var moment = require('moment');
 var _ = require('lodash');
-
-var UTC_STANDARD = module.exports.UTC_STANDARD = 'YYYYMMDDHHmmss+0000';
 
 module.exports.editLab = function(writebackContext, callback) {
     var error = null; // set if there is an error validating
@@ -35,7 +32,7 @@ module.exports.detailLab = function(writebackContext, callback) {
 module.exports.discontinueDetailsLab = function(writebackContext, callback) {
     var error = null; // set if there is an error validating
     if (writebackContext) {
-        if (_.isEmpty(writebackContext.model.dfn)) {
+        if (_.isEmpty(writebackContext.interceptorResults.patientIdentifiers.dfn)) {
             error = 'Missing dfn';
         }
         if (_.isEmpty(writebackContext.model.provider)) {
@@ -53,7 +50,7 @@ module.exports.discontinueDetailsLab = function(writebackContext, callback) {
 module.exports.signDetailsLab = function(writebackContext, callback) {
     var error = null; // set if there is an error validating
     if (writebackContext) {
-        if (_.isEmpty(writebackContext.model.dfn)) {
+        if (_.isEmpty(writebackContext.interceptorResults.patientIdentifiers.dfn)) {
             error = 'Missing dfn';
         }
         if (_.isEmpty(writebackContext.model.provider)) {
@@ -71,7 +68,7 @@ module.exports.signDetailsLab = function(writebackContext, callback) {
 module.exports.signOrdersLab = function(writebackContext, callback) {
     var error = null; // set if there is an error validating
     if (writebackContext) {
-        if (_.isEmpty(writebackContext.model.dfn)) {
+        if (_.isEmpty(writebackContext.interceptorResults.patientIdentifiers.dfn)) {
             error = 'Missing dfn';
         }
         if (_.isEmpty(writebackContext.model.provider)) {

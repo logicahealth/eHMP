@@ -1,4 +1,4 @@
-@f513_encounter_form_data @regression @future @DE4560
+@f513_encounter_form_data  @future @DE4560
 
 Feature: F513 : Visit Management (Enter an Encounter Context)
 
@@ -15,7 +15,7 @@ Scenario: Set new encounter for a patient
   And POB user selects set to apply changes
   And POB new visit encounter is set
   
-@f513_2_pob_set_visit_from_clinic_appointment @DE6132 @DE6637 @debug
+@f513_2_pob_set_visit_from_clinic_appointment @DE6132 @DE6637
 Scenario: Set new encounter for a patient from clinic appointment
   When user searches for and selects "appointment,inpatient"
   And Overview is active
@@ -26,7 +26,7 @@ Scenario: Set new encounter for a patient from clinic appointment
   And POB user selects set to apply changes
   Then POB new clinic appointment encounter is set
   
-@f513_3_pob_set_visit_from_hosptial_admission @DE6637 @debug
+@f513_3_pob_set_visit_from_hosptial_admission @DE6637
 Scenario: Set new encounter for a patient from hospital admission
   When user searches for and selects "zzzretiredonenineteen,patient"
   And Overview is active

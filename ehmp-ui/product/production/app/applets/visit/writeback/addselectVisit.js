@@ -12,12 +12,6 @@ define([
 
     var appointmentsArray = new Backbone.Collection([{}]);
     var admissionsArray = new Backbone.Collection([{}]);
-    var cachedData = {
-        'locations': new Backbone.Collection(),
-        'providers': new Backbone.Collection(),
-        'appointments': new Backbone.Collection([{}]),
-        'admissions': new Backbone.Collection([{}])
-    };
     var NewVisitModel = Backbone.Model.extend({
         defaults: {
             'locationUid': '',
@@ -453,10 +447,13 @@ define([
             var currentPatient = ADK.PatientRecordService.getCurrentPatient();
             var isInpatient = (currentPatient.patientStatusClass() === 'Inpatient') ? '1' : '0';
             e.preventDefault();
-            if (!this.dateValidation()) this.model.set('formStatus', {
-                status: 'error',
-                message: self.model.validationError
-            });
+            if (!this.dateValidation()) {
+                this.model.set('formStatus', {
+                    status: 'error',
+                    message: self.model.validationError
+                });
+                this.transferFocusToFirstError();
+            }
             else {
                 this.$el.trigger('tray.loaderShow', {
                     loadingString: 'Setting encounter'
@@ -610,7 +607,7 @@ define([
             }
             //Keep track of the tab we're on to preserve the correct call
             var currTab = self.currentTab;
-            collectionHandler.getProvidersPicklist(refreshDateTime, function(collection, response) {
+            this.providerCollection = collectionHandler.getProvidersPicklist(refreshDateTime, function(collection, response) {
                 //This is the correct call if we're still on the same tab or if the tab we're on,
                 // and the tab we were on when the call was made are both not the new visit tab.
                 var isCorrespondingResponse = (currTab === self.currentTab || (currTab.indexOf('New-Visit-tab-panel') < 0 && self.currentTab.indexOf('New-Visit-tab-panel') < 0));
@@ -641,7 +638,6 @@ define([
                     // Enable components if there's a context visit with provider and provider select box has selected item
                     self.validateForm();
                     self.$el.find(self.ui.selectEncounterProvider.selector).trigger('control:disabled', false);
-                    cachedData.providers.set(collection.models);
                     //If this isn't the corresponding response, either the correct response has already returned or we're still waiting on it.
                 } else if (!self.isDestroyed && !_.isUndefined(response) && isCorrespondingResponse) {
                     //Keep user from being able to press set
@@ -669,8 +665,6 @@ define([
                         footerView: SimpleAlertFooterItemView
                     });
                     alertView.show();
-                    console.log('Error retrieving provider picklist:');
-                    console.log(response);
                 }
                 // Clear loading spinner
                 if (_.isObject(self.ui.providerLoading) && $(self.ui.providerLoading.selector)) {
@@ -778,7 +772,7 @@ define([
         setNewEncounterLocation: function(model) {
             var locationUid = model.get('selectNewEncounterLocation');
             var locationDisplayName = model.get('_labelsForSelectedValues').get('selectNewEncounterLocation');
-            var locationModel = cachedData.locations.findWhere({
+            var locationModel = this.locationCollection.findWhere({
                 uid: locationUid
             });
             if (locationModel) {
@@ -912,7 +906,7 @@ define([
             }
         },
         setProvider: function(model) {
-            var selectedProvider = cachedData.providers.findWhere({
+            var selectedProvider = this.providerCollection.findWhere({
                 code: model.get('selectEncounterProvider')
             });
             // Assign the current patient context visit if model does not contain visit object
@@ -928,7 +922,7 @@ define([
         },
         setDatesAppointments: function(fromDate, toDate) {
             //filter the collection
-            var filteredCollection = collectionHandler.collectionDateFilter(cachedData.appointments, fromDate, toDate);
+            var filteredCollection = collectionHandler.collectionDateFilter(this.apptsCollection, fromDate, toDate);
             appointmentsArray.set(filteredCollection);
         },
         setDatesHospital: function(collection) {
@@ -952,12 +946,10 @@ define([
             var site = criteria.get("site");
             var currentPatient = ADK.PatientRecordService.getCurrentPatient();
             var currentPatientPID = currentPatient.get('pid');
-            var currentPatientDFN = currentPatient.get('localId');
             var fromDate = this.model.get('clinicAppointmentsFromDate');
             var toDate = this.model.get('clinicAppointmentsThroughDate');
             var appointmentsCriteria = {
                 pid: currentPatientPID,
-                patientDFN: currentPatientDFN,
                 fromDate: fromDate,
                 toDate: toDate,
                 site: site
@@ -975,7 +967,6 @@ define([
                             self.model.set('preSelectSRText', 'Appointment ' + contextVisit.get('formattedDateTime') + ' ' + contextVisit.get('locationDisplayName') + ' ' + contextVisit.get('facilityDisplay') + ' pre-selected from current Encounter.');
                         }
                     }
-                    cachedData.appointments.set(appts.models);
                     appointmentsArray.set(appts.models);
                     if (collection.length > 0) {
                         self.setDatesAppointments(fromDate, toDate);
@@ -988,7 +979,6 @@ define([
             if (!_.has(this, "admissionCollection.xhr") || !_.isFunction(_.get(this, "admissionCollection.xhr.state", null)) || this.admissionCollection.xhr.state() !== "pending") {
                 self.admissionCollection = collectionHandler.getAdmissions(function(collection) {
                     var admissions = collectionHandler.admissionsParser(collection);
-                    cachedData.admissions.set(admissions.models);
                     admissionsArray.set(admissions.models);
                     if (collection.length > 0) {
                         self.setDatesHospital(collection);
@@ -1043,7 +1033,7 @@ define([
             // the providers picklist
             this.refreshProviderPicklist('');
             //locations picklist
-            collectionHandler.getLocations(this, function(collection) {
+            this.locationCollection = collectionHandler.getLocations(this, function(collection) {
                 if (!self.isDestroyed) {
                     var parsedCollection = collectionHandler.locationsParser(collection);
                     var locations = self.getVerifiedMostRecent('locations');
@@ -1059,7 +1049,6 @@ define([
                         self.locationsQueue = [];
                         self.updatelocationsPickList(self, parsedCollection);
                     }
-                    cachedData.locations.set(collection.models);
                 }
                 // Clear loading spinner
                 if (_.isObject(self.ui.locationLoading) && $(self.ui.locationLoading.selector)) {
@@ -1077,6 +1066,20 @@ define([
         },
         onDestroy: function() {
             this.stopListening();
+            this.stopListening(this.providerCollection, 'fetch:success');
+            this.stopListening(this.providerCollection, 'fetch:error');
+            this.stopListening(this.locationCollection, 'fetch:success');
+            this.stopListening(this.locationCollection, 'fetch:error');
+
+            var admissionsCollectionXhr = _.get(this.admissionCollection, 'xhr');
+            if (admissionsCollectionXhr) {
+                admissionsCollectionXhr.abort();
+            }
+
+            var apptsCollectionXhr = _.get(this.apptsCollection, 'xhr');
+            if (apptsCollectionXhr) {
+                apptsCollectionXhr.abort();
+            }
         },
         onAttach: function() {
             // Loading...

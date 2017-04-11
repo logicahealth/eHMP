@@ -62,13 +62,6 @@ Then(/^the Medications Gist overview table contains headers$/) do |table|
   end
 end
 
-Then(/^the Medications Gist Applet contains buttons$/) do |table|
-  table.rows.each do | button|
-    cucumber_label = "Control - applet - #{button[0]}"
-    expect(@active_problems.am_i_visible? cucumber_label).to eq(true)
-  end
-end
-
 Then(/^the Medications Gist Applet displays results$/) do
   wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
   wait.until { @mg.applet_loaded? }
@@ -77,21 +70,10 @@ end
 
 Then(/^the medication gist view has the following information$/) do |table|
   expect(@mg.wait_until_action_element_visible("MedicationGistVisible", DefaultLogin.wait_time)).to be_true
-    
-  #  table.rows.each do | row |
-  #    expect(@mg.perform_verification('Name', row[0])).to be_true, "The value #{row[0]} is not present in the medication details"
-  #    expect(@mg.perform_verification('Description', row[1])).to be_true, "The value #{row[1]} is not present in the medication details"
-  #    expect(@mg.perform_verification('Count', row[2])).to be_true, "The value #{row[2]} is not present in the medication details"
-  #    expect(@mg.perform_verification('Graphic', row[3])).to be_true, "The value #{row[3]} is not present in the medication details"
-  #    expect(@mg.perform_verification('Age', row[4])).to be_true, "The value #{row[4]} is not present in the medication details"
-  #  end
   
   table.rows.each do |row|
     expect(@mg.perform_verification('Medication Gist Items', row[0])).to be_true, "The value #{row[0]} is not present in the medication details"
     expect(@mg.perform_verification('Medication Gist Items', row[1])).to be_true, "The value #{row[1]} is not present in the medication details"
-#    expect(@mg.perform_verification('Medication Gist Items', row[2])).to be_true, "The value #{row[2]} is not present in the medication details"
-#    expect(@mg.perform_verification('Medication Gist Items', row[3])).to be_true, "The value #{row[3]} is not present in the medication details"
-    #    expect(@mg.perform_verification('Medication Gist Items', row[4])).to be_true, "The value #{row[4]} is not present in the medication details"
   end
 end
 
@@ -191,4 +173,17 @@ When(/^user views the details for a medication in Medications Gist$/) do
   @mg.add_action(CucumberLabel.new('first med'), ClickAction.new, AccessHtmlElement.new(:css, "[data-appletid=activeMeds] div.gist-item-list div.table-row [role=presentation]:nth-child(1)"))
   expect(@mg.perform_action('first med')).to eq(true)
   expect(@mg.perform_action('Detail View Button')).to be_true
+end
+
+Then(/^the Medications Gist Applet contains buttons Refresh, Help, Filter Toggle, Expand$/) do
+  ehmp = PobActiveRecentMedApplet.new
+  ehmp.wait_for_btn_applet_refresh
+  ehmp.wait_for_btn_applet_help
+  ehmp.wait_for_btn_applet_filter_toggle
+  ehmp.wait_for_btn_applet_expand_view
+
+  expect(ehmp).to have_btn_applet_refresh
+  expect(ehmp).to have_btn_applet_help
+  expect(ehmp).to have_btn_applet_filter_toggle
+  expect(ehmp).to have_btn_applet_expand_view
 end

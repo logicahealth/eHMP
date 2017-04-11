@@ -12,6 +12,10 @@ The clinical object model would be used as the standardized data model for stori
 
 This API provides a generic REST-ful interface to the pJDS-based Clinical Objects subsystem.
 
++ Parameters
+
+    :[pid]({{{common}}}/parameters/pid.md)
+
 ### Find [POST {{{path}}}/find-clinical-object{?loadReference}]
 
 Find clinical objects.
@@ -165,7 +169,7 @@ List clinical objects.
 :[Response 500]({{{common}}}/responses/500.md)
 
 
-### Create [POST {{{path}}}{?pid}]
+### Create [POST {{{path}}}]
 
 Create a Clinical Object. The service will perform server-side validation of the required fields and return a **500** error if validation fails.  The following fields are considered mandatory:
 * patientUid
@@ -296,8 +300,6 @@ Retrieve a Clinical Object.
 
 + Parameters
 
-    + pid (string, required) - Patient ID
-
     + resourceId (string, required) - The unique identifier of the Clinical Object of interest, returned by the 'CREATE' feature
 
     + loadReference (boolean, optional) - Whether to load the referenced data for the clinical object
@@ -346,8 +348,6 @@ Update a Clinical Object. The service will perform server-side validation of the
 * visit
 
 + Parameters
-
-    + pid (string, required) - Patient ID
 
     + resourceId (string, required) - The 'uid' attribute of the Clinical Object of interest, returned by the 'CREATE' feature
 

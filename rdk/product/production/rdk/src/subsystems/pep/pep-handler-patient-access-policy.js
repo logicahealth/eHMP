@@ -33,8 +33,8 @@ function getPatient(obj, patientCallback) {
         return patientCallback(null, patients);
     };
     // Trigger the JDS fetch and run the check for sensitive data on a patient and finally run the pep paths can be as follows:
-    // http://IP             /data/index/pt-select-icn/?range=5123456789V027402
-    // http://IP             /data/index/pt-select-pid/?range=9E7A;18
+    // http://10.2.2.110:9080/data/index/pt-select-icn/?range=5123456789V027402
+    // http://10.2.2.110:9080/data/index/pt-select-pid/?range=9E7A;18
     var httpConfig = {
         cacheTimeout: 15 * 60 * 1000,
         timeout: 5000,
@@ -88,7 +88,6 @@ module.exports.maskSensitive = function(obj, callback) {
         return callback(error);
     }
     var items = ((obj.items || {}).data || {}).items || obj.items || [];
-    var self = this;
     async.eachSeries(items, function(item, done) {
         //Setup request object for patient centric search
         obj.pid = item.icn || item.pid;

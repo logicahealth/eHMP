@@ -64,7 +64,7 @@ class PobNumericLabApplet < PobParentApplet
   end
   
   def wait_until_applet_gist_loaded
-    wait_until { applet_gist_loaded? }
+    wait_until(DefaultTiming.default_table_row_load_time) { applet_gist_loaded? }
   end
 
   def gist_numeric_lab_names_only

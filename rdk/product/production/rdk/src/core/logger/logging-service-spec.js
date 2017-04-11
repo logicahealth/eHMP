@@ -1,6 +1,5 @@
 'use strict';
 
-var bunyan = require('bunyan');
 var _ = require('lodash');
 var EventEmitter = require('events').EventEmitter;
 var util = require('util');

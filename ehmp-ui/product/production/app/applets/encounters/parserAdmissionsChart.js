@@ -1,16 +1,14 @@
 define([
-    "moment",
-    'underscore'
-], function (moment, _) {
+    "moment"
+], function (moment) {
     'use strict';
 
-    var specialAdmissions = {
-        chartParser: function (data, debug) {
-            var DEBUG = debug || false;
+    return {
+        chartParser: function (data) {
             var days = 0;
-            var totalDays = 0;           
+            var totalDays = 0;
             var admissionChartData = [];
-            var result = {chartData: [], durationDays: 0}; 
+            var result = {chartData: [], durationDays: 0};
             var start;
             var stop;
             if (data) {
@@ -21,7 +19,7 @@ define([
                 }
             }
             for (var acdIterator = 0; acdIterator < admissionChartData.length; acdIterator++) {
-               start = moment(admissionChartData[acdIterator].arrivalDateTime, 'YYYYMMDDHHmmssSSS');
+                start = moment(admissionChartData[acdIterator].arrivalDateTime, 'YYYYMMDDHHmmssSSS');
                 if (admissionChartData[acdIterator].dischargeDateTime) {
                     stop = moment(admissionChartData[acdIterator].dischargeDateTime, 'YYYYMMDDHHmmssSSS');
                     days = (moment.duration(start.diff(stop))).asDays();
@@ -29,12 +27,11 @@ define([
                     stop = moment();
                     days = (moment.duration(start.diff(stop))).asDays();
                 }
-                result.chartData.push([start,stop]);
+                result.chartData.push([start, stop]);
                 totalDays = totalDays + days;
             }
             result.durationDays = totalDays;  // Duration of admission by reasonName field
             return result;
         }
     };
-    return specialAdmissions;
 });

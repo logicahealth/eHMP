@@ -6,7 +6,6 @@ var RpcClient = require('vista-js').RpcClient;
 var RpcParameter = RpcClient.RpcParameter;
 
 module.exports.create = function(writebackContext, callback) {
-    var pid = writebackContext.pid;
 
     rpcClientFactory.getRpcClient(writebackContext, null, function(error, rpcClient) {
         if (error) {
@@ -38,11 +37,11 @@ module.exports.create = function(writebackContext, callback) {
                 });
             }
         ], function(err, data) {
-            if(err) {
+            if (err) {
                 return callback(err, data);
             }
-            writebackContext.vprModel = null;  // implementers: set this by the VistA response
-            var error = null;  // implementers: set error if trouble writing back
+            writebackContext.vprModel = null; // implementers: set this by the VistA response
+            var error = null; // implementers: set error if trouble writing back
             return callback(error);
         });
     });
@@ -63,7 +62,6 @@ function otherVistaFunction(writebackContext, rpcClient, callback) {
 }
 
 module.exports.update = function(writebackContext, callback) {
-    var pid = writebackContext.pid;
 
     rpcClientFactory.getRpcClient(writebackContext, null, function(error, rpcClient) {
         if (error) {
@@ -76,17 +74,16 @@ module.exports.update = function(writebackContext, callback) {
         var rpcName = 'ORQPT MYRPC';
         parameters.push(new RpcParameter.literal('MYPARAM'));
         rpcClient.execute(rpcName, parameters, function(error, result) {
-            if(error) {
+            if (error) {
                 return callback(error, result);
             }
-            writebackContext.vprModel = null;  // implementers: set this by the VistA response
+            writebackContext.vprModel = null; // implementers: set this by the VistA response
             return callback(error);
         });
     });
 };
 
 module.exports.readNexTime = function(writebackContext, callback) {
-    var pid = writebackContext.pid;
     async.series([
         function getDataFromVista(callback) {
             var parameters = [];
@@ -100,12 +97,11 @@ module.exports.readNexTime = function(writebackContext, callback) {
                 callback);
         }
     ], function(err, data) {
-        if(err) {
+        if (err) {
             return callback(err, data);
         }
-        writebackContext.vprModel = null;  // implementers: set this by the VistA response
-        var error = null;  // implementers: set error if trouble writing back
+        writebackContext.vprModel = null; // implementers: set this by the VistA response
+        var error = null; // implementers: set error if trouble writing back
         return callback(error);
     });
 };
-

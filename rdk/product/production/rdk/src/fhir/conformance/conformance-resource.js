@@ -65,9 +65,9 @@ function register(name, data) {
  *
  * @apiDescription Returns a FHIR \'Conformance\' report.
  * @apiExample {js} Request Examples: // Full conformance statement
- *             http://IP           /resource/fhir/metadata // Conformance for a
+ *             http://10.4.4.1:8888/resource/fhir/metadata // Conformance for a
  *             resource(s)
- *             http://IP           /resource/fhir/metadata?resource=observation[,patient]
+ *             http://10.4.4.1:8888/resource/fhir/metadata?resource=observation[,patient]
  *
  *
  * @apiSuccess {json} data Json object conforming to the <a
@@ -96,7 +96,7 @@ function packageRequestedStatements(req) {
     } else {
         requestedDomain = requestedDomain.toLowerCase();
         conformanceArray = _.filter(resourceArray, function(o) {
-            return requestedDomain.indexOf(o.name) != -1;
+            return requestedDomain.indexOf(o.name) !== -1;
         });
     }
 

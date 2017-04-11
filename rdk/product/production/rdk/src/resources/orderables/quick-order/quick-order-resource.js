@@ -51,7 +51,7 @@ function search(req, res) {
     req.app.subsystems.quickorder.search(req, res);
 }
 
-function callDelete(req, res) {
+function callDelete(req, res) { //jshint ignore:line
     req.app.subsystems.quickorder.delete(req, res);
 }
 

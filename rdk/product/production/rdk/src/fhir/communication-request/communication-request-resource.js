@@ -13,7 +13,6 @@ var getRequestsHandler = require('./communication-request-get');
 var deleteRequestHandler = require('./communication-request-delete');
 var updateRequestHandler = require('./communication-request-update');
 var watchRequestHandler = require('./communication-request-watch');
-var constants = require('./communication-request-constants');
 var nameFromIcn = require('../common/utils/jds-patientname-fromIcn.js');
 var queue;
 

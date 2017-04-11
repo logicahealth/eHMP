@@ -2,6 +2,7 @@ define([
     "backbone",
     "marionette",
     "underscore",
+    "handlebars",
     "app/applets/patient_information/modelUtil",
     "hbs!app/applets/patient_information/demographics/templates/emergencyContactTemplate",
     "hbs!app/applets/patient_information/demographics/templates/nokContactTemplate",
@@ -15,6 +16,7 @@ define([
     Backbone,
     Marionette,
     _,
+    Handlebars,
     modelUtil,
     EmContactTemplate,
     NokContactTemplate,
@@ -55,9 +57,37 @@ define([
         }
     });
 
+    var HeaderView = Backbone.Marionette.ItemView.extend({
+        template: Handlebars.compile([
+            '<div data-flex-width="1" class="header-title-container">',
+            '<h4 class="panel-title">Patient Information</h4>',
+            '</div>',
+            '<div class="header-help-button-container top-padding-xs"></div>'
+        ].join('\n')),
+        behaviors: {
+            FlexContainer: {
+                direction: 'row'
+            },
+            HelpLink: {
+                container: '.header-help-button-container',
+                mapping: 'patient_demographics_tray',
+                buttonOptions: {
+                    colorClass: 'bgc-primary-dark'
+                }
+            }
+        },
+        className: 'left-padding-sm right-padding-sm'
+    });
+
+
     var patientHeaderDetailView = Backbone.Marionette.LayoutView.extend({
+        behaviors: {
+            FlexContainer: {
+                direction: 'column'
+            }
+        },
         template: PatientHeaderDetailTemplate,
-        className: 'container-fluid panel panel-default flex-display flex-direction-column inherit-height',
+        className: 'container-fluid panel panel-default',
         regions: {
             ptPhoneRegion: '#pt-header-pt-phone',
             ptAddressRegion: '#pt-header-pt-address',
@@ -65,7 +95,8 @@ define([
             ptEmContactRegion: '#pt-header-em-contact',
             ptNokContactRegion: '#pt-header-nok-contact',
             colThreeRegion: '#pt-header-em-ins',
-            colFourRegion: '#pt-header-em-misc'
+            colFourRegion: '#pt-header-em-misc',
+            headerRegion: '.header-content-container'
         },
         initialize: function(options) {
             this.model = ADK.PatientRecordService.getCurrentPatient();
@@ -127,6 +158,8 @@ define([
                 template: ServiceHistoryTemplate
             });
             this.colFourRegion.show(colFourView);
+
+            this.showChildView('headerRegion', new HeaderView());
         }
     });
     return patientHeaderDetailView;

@@ -1,14 +1,10 @@
 'use strict';
 var _ = require('lodash');
-var querystring = require('querystring');
 var util = require('util');
-var async = require('async');
 var rdk = require('../../core/rdk');
-var httpUtil = rdk.utils.http;
-var jdsFilter = require('jds-filter');
 var moment = require('moment');
 var RpcClient = require('vista-js').RpcClient;
-var getVistaRpcConfiguration = require('../../utils/rpc-config').getVistaRpcConfiguration;
+var vistaRpcConfiguration = require('../../utils/rpc-config');
 var nullchecker = rdk.utils.nullchecker;
 var paramUtil = require('../../utils/param-converter');
 var filemanDateUtil = require('../../utils/fileman-date-converter');
@@ -61,16 +57,18 @@ function getVisits(visitType, req, res) {
 */
 function getAdmissions(req, res) {
     if (nullchecker.isNullish(req.param('pid'))) {
-        return res.status(rdk.httpstatus.bad_request).rdkSend('Missing required patient identifiers');
+        return res.status(rdk.httpstatus.precondition_failed).rdkSend('Missing pid parameter');
     }
 
-    var patientDFN;
-    if (!nullchecker.isNullish(req.interceptorResults.patientIdentifiers) && !nullchecker.isNullish(req.interceptorResults.patientIdentifiers.dfn)) {
-        patientDFN = req.interceptorResults.patientIdentifiers.dfn;
-    }
+    var patientIdentifiers = _.get(req, 'interceptorResults.patientIdentifiers', {});
+    var patientDFN = _.get(patientIdentifiers, 'dfn');
 
-    if (nullchecker.isNullish(patientDFN)) {
-        return res.status(rdk.httpstatus.bad_request).rdkSend('Missing required patient identifiers');
+    if (_.isUndefined(patientDFN)) {
+        return res.status(rdk.httpstatus.precondition_failed).rdkSend('Missing dfn parameter');
+    }
+    if (_.isUndefined(patientIdentifiers.site)) {
+        req.logger.debug('getAdmissions - missing patient site from interceptor patient identifier results');
+        return res.status(rdk.httpstatus.precondition_failed).rdkSend('Missing patient site parameter.');
     }
 
     req.logger.debug({
@@ -80,11 +78,14 @@ function getAdmissions(req, res) {
     var limit = req.param('limit');
     var skipAdmissions = '0';
     var params = [patientDFN, '', '', skipAdmissions];
-    var rpcConfig = getVistaRpcConfiguration(req.app.config, req.session.user);
+    var vistaRpcConfigParams = vistaRpcConfiguration.getPatientCentricVistaRpcConfigurationParams(req.session.user, patientIdentifiers.site);
+    var rpcConfig = vistaRpcConfiguration.getVistaRpcConfiguration(req.app.config, vistaRpcConfigParams);
 
     RpcClient.callRpc(req.logger, rpcConfig, VISIT_RPC, params, function(error, result) {
         if (error) {
-            req.logger.error({admissionsRpcError: error});
+            req.logger.error({
+                admissionsRpcError: error
+            });
             return res.status(rdk.httpstatus.internal_server_error).rdkSend(error);
         }
 
@@ -93,7 +94,9 @@ function getAdmissions(req, res) {
         };
 
         if (result) {
-            req.logger.debug({admissionsRpcResult: result});
+            req.logger.debug({
+                admissionsRpcResult: result
+            });
 
             var admissions = result.split('\r\n');
 
@@ -113,7 +116,7 @@ function getAdmissions(req, res) {
                                 visitString: visitString
                             });
 
-                            var locationUid = locationUtil.getLocationUid(req.session.user.site,'W',visitString[0]);
+                            var locationUid = locationUtil.getLocationUid(patientIdentifiers.site, 'W', visitString[0]);
                             var locationName = visitString[3];
                             var details = visitString[4];
 
@@ -148,42 +151,52 @@ function getAdmissions(req, res) {
 */
 function getAppointments(req, res) {
     if (nullchecker.isNullish(req.param('pid'))) {
-        return res.status(rdk.httpstatus.bad_request).rdkSend('Missing required patient identifiers');
+        return res.status(rdk.httpstatus.precondition_failed).rdkSend('Missing pid parameter');
     }
 
-    var patientDFN;
-    if (!nullchecker.isNullish(req.interceptorResults.patientIdentifiers) && !nullchecker.isNullish(req.interceptorResults.patientIdentifiers.dfn)) {
-        patientDFN = req.interceptorResults.patientIdentifiers.dfn;
+    var patientIdentifiers = _.get(req, 'interceptorResults.patientIdentifiers', {});
+    var patientDFN = _.get(patientIdentifiers, 'dfn');
+    if (_.isUndefined(patientDFN)) {
+        return res.status(rdk.httpstatus.precondition_failed).rdkSend('Missing dfn parameter');
+    }
+    if (_.isUndefined(patientIdentifiers.site)) {
+        req.logger.debug('getAppointments - missing patient site from interceptor patient identifier results');
+        return res.status(rdk.httpstatus.precondition_failed).rdkSend('Missing patient site parameter.');
     }
 
-    if (nullchecker.isNullish(patientDFN)) {
-        return res.status(rdk.httpstatus.bad_request).rdkSend('Missing required patient identifiers');
-    }
+    req.logger.debug({
+        patientDFN: patientDFN
+    });
 
-    req.logger.debug({patientDFN: patientDFN});
-
-    var startDate = req.param('date.start') ||  moment().subtract('days', DEFAULT_DATE_RANGE).format('YYYYMMDDHHmmss');
+    var startDate = req.param('date.start') || moment().subtract('days', DEFAULT_DATE_RANGE).format('YYYYMMDDHHmmss');
     var endDate = req.param('date.end') || moment().add('days', DEFAULT_DATE_RANGE).format('YYYYMMDDHHmmss');
     var filemanStartDate = getFilemanDate(startDate);
     var filemanEndDate = getFilemanDate(endDate);
     var skipAdmissions = '1';
-    var rpcConfig = getVistaRpcConfiguration(req.app.config, req.session.user);
+    var vistaRpcConfigParams = vistaRpcConfiguration.getPatientCentricVistaRpcConfigurationParams(req.session.user, patientIdentifiers.site);
+    var rpcConfig = vistaRpcConfiguration.getVistaRpcConfiguration(req.app.config, vistaRpcConfigParams);
     var params = [patientDFN, filemanStartDate, filemanEndDate, skipAdmissions];
 
     RpcClient.callRpc(req.logger, rpcConfig, VISIT_RPC, params, function(error, result) {
         if (error) {
-            req.logger.error({appointmentsRpcError: error});
+            req.logger.error({
+                appointmentsRpcError: error
+            });
             return res.status(rdk.httpstatus.internal_server_error).rdkSend(error);
         }
 
-        var response = {'items': []};
+        var response = {
+            'items': []
+        };
 
         if (result) {
-            req.logger.debug({appointmentsRpcResult: result});
+            req.logger.debug({
+                appointmentsRpcResult: result
+            });
 
             var appointments = result.split('\r\n');
 
-            _.forEach (appointments, function(element) {
+            _.forEach(appointments, function(element) {
                 if (element) {
                     element = element.split(';');
 
@@ -194,7 +207,7 @@ function getAppointments(req, res) {
                     if (visitString) {
                         visitString = visitString.split('^');
 
-                        var locationUid = locationUtil.getLocationUid(req.session.user.site,'',visitString[0] );
+                        var locationUid = locationUtil.getLocationUid(patientIdentifiers.site, '', visitString[0]);
                         var locationDisplayName = visitString[2];
                         var details = visitString[3];
 
@@ -220,7 +233,7 @@ function getAppointments(req, res) {
  * @param {Object} dateTime - The date/time object to convert.
  *
  * @return The date/time object in Fileman format.
-*/
+ */
 function getFilemanDate(dateTime) {
     var dateTimeMoment = paramUtil.convertWriteBackInputDate(dateTime);
     var dateTimeFileman = filemanDateUtil.getFilemanDateTime(dateTimeMoment.toDate());

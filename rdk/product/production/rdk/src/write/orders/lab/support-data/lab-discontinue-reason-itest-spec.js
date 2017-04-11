@@ -8,11 +8,11 @@ var log = sinon.stub(require('bunyan').createLogger({
 var configuration = {
     environment: 'development',
     context: 'OR CPRS GUI CHART',
-    host: 'IP        ',
+    host: '10.2.2.101',
     port: 9210,
-    accessCode: 'PW    ',
-    verifyCode: 'PW    !!',
-    localIP: 'IP      ',
+    accessCode: 'pu1234',
+    verifyCode: 'pu1234!!',
+    localIP: '10.2.2.1',
     localAddress: 'localhost'
 };
 
@@ -21,7 +21,7 @@ describe('write back order discontinue after sign tests', function() {
         this.timeout(5000);
         getDiscontinueReason(log, configuration, function(err, result) {
             expect(err).to.be.null();
-            expect(result).not.to.be.undefined; 
+            expect(result).not.to.be.undefined();
             done();
         });
     });

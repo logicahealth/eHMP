@@ -1,5 +1,19 @@
-define(function() {
-    'use strict';
+(function(root, factory) {
+    "use strict";
+    if (typeof define === 'function' && define.amd) {
+        // AMD format (for use in app/r.js)
+        define(function() {
+            return factory();
+        });
+    } else if (typeof module === 'object' && module.exports) {
+        // CommonJS/Node format (for use in Gruntfile)
+        module.exports = factory();
+    } else {
+        // this follows common pattern, though this is expected to never get hit
+        root.ScreensManifest = factory();
+    }
+}(this, function() {
+    "use strict";
     var screensManifest = {
         ssoLogonScreen: 'sso'
     };
@@ -14,16 +28,8 @@ define(function() {
         fileName: 'LogonScreen'
     });
     screens.push({
-        routeName: 'patient-search-screen',
-        fileName: 'PatientSearch'
-    });
-    screens.push({
         routeName: 'medication-review',
         fileName: 'MedicationReview'
-    });
-    screens.push({
-        routeName: 'vital-list',
-        fileName: 'VitalList'
     });
     screens.push({
         routeName: 'appointments-full',
@@ -37,7 +43,6 @@ define(function() {
         routeName: 'reports-full',
         fileName: 'ReportsFull',
         requiredPermissions: []
-            //requiredPermissions: ['read-document'],
     });
     screens.push({
         routeName: 'lab-results-grid-full',
@@ -52,10 +57,6 @@ define(function() {
         fileName: 'CoverSheet'
     });
     screens.push({
-        routeName: 'cover-sheet-gridster',
-        fileName: 'CoverSheetGridster'
-    });
-    screens.push({
         routeName: 'allergy-grid-full',
         fileName: 'AllergyGridFull'
     });
@@ -63,7 +64,6 @@ define(function() {
         routeName: 'documents-list',
         fileName: 'Documents',
         requiredPermissions: []
-            //requiredPermissions: ['read-document']
     });
     screens.push({
         routeName: 'record-search',
@@ -73,7 +73,6 @@ define(function() {
         routeName: 'problems-full',
         fileName: 'ProblemsGridFull',
         requiredPermissions: []
-            //requiredPermissons: ['read-patient-problem']
     });
     screens.push({
         routeName: 'orders-full',
@@ -83,7 +82,6 @@ define(function() {
         routeName: 'news-feed',
         fileName: 'NewsFeed',
         requiredPermissions: []
-            //requiredPermissions: ['read-timeline']
     });
     screens.push({
         routeName: 'vitals-full',
@@ -159,9 +157,24 @@ define(function() {
         routeName: 'activities-staff-full',
         fileName: 'ActivitiesStaffFull'
     });
-
+    screens.push({
+        routeName: 'consults-patient-full',
+        fileName: 'ConsultsPatientFull'
+    });
+    screens.push({
+        routeName: 'consults-staff-full',
+        fileName: 'ConsultsStaffFull'
+    });
+    screens.push({
+        routeName: 'requests-patient-full',
+        fileName: 'RequestsPatientFull'
+    });
+    screens.push({
+        routeName: 'requests-staff-full',
+        fileName: 'RequestsStaffFull'
+    });
 
     screensManifest.screens = screens;
 
     return screensManifest;
-});
+}));

@@ -1,4 +1,4 @@
-@F226 @regression @triage
+@F226   @reg2
 Feature: Enter Plain Text Basic Progress Notes  (TIU)
 
 @US8033 @TC999_1

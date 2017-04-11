@@ -12,10 +12,10 @@ describe('unit test to validate radiology-orderables', function() {
 
         expect(result).to.eql([
             {
-                "ien": "1",
-                "name": "XRay",
-                "synonym": "XRAY",
-                "special": "n"
+                'ien': '1',
+                'name': 'XRay',
+                'synonym': 'XRAY',
+                'special': 'n'
             }
         ]);
     });
@@ -25,22 +25,22 @@ describe('unit test to validate radiology-orderables', function() {
 
         expect(result).to.eql([
             {
-                "ien": "1",
-                "name": "XRay",
-                "synonym": "XRAY",
-                "special": "n"
+                'ien': '1',
+                'name': 'XRay',
+                'synonym': 'XRAY',
+                'special': 'n'
             },
             {
-                "ien": "2",
-                "name": "YRay",
-                "synonym": "YRAY",
-                "special": "y"
+                'ien': '2',
+                'name': 'YRay',
+                'synonym': 'YRAY',
+                'special': 'y'
             },
             {
-                "ien": "3",
-                "name": "ZRay",
-                "synonym": "ZRAY",
-                "special": ""
+                'ien': '3',
+                'name': 'ZRay',
+                'synonym': 'ZRAY',
+                'special': ''
             }
         ]);
     });

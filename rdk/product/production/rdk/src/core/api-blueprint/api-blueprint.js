@@ -6,7 +6,7 @@ var fspath = require('path');
 var async = require('async');
 var handlebars = require('handlebars');
 var hercule = require('hercule');
-var drafter = require('drafter');
+var drafter = require('drafter.js');
 var http = require('../../utils/http');
 
 module.exports.commonDir = fspath.resolve(__dirname, './');
@@ -22,7 +22,9 @@ module.exports.preparsedJsonPath = preparsedJsonPath;
 module.exports.matchAction = matchAction;
 
 var domains = {
-    local: {resources: []}
+    local: {
+        resources: []
+    }
 };
 var localPrefix = 'local';
 
@@ -42,7 +44,10 @@ var paramTypeOrder = {
 
 function registerExternalUrlOnPrefix(url, prefix) {
     prefix = _.trim(prefix, '/');
-    domains[prefix] = domains[prefix] || {url: url, resources: []};
+    domains[prefix] = domains[prefix] || {
+        url: url,
+        resources: []
+    };
 }
 
 function registerResource(mountpoint, markdownPath, preload) {
@@ -56,7 +61,9 @@ function registerResource(mountpoint, markdownPath, preload) {
     // wrap colon-prefixed path parameters with braces
     mountpoint = mountpoint.replace(/\/:(\w+)(\/|$)/g, '/{$1}$2');
 
-    var existing = _.find(resources, {markdownPath: markdownPath});
+    var existing = _.find(resources, {
+        markdownPath: markdownPath
+    });
     if (existing && _.startsWith(existing.mountpoint, mountpoint)) {
         existing.mountpoint = mountpoint;
         return;
@@ -71,7 +78,7 @@ function registerResource(mountpoint, markdownPath, preload) {
     sortResources(resources);
 
     if (_.isUndefined(preload) || preload) {
-        var callback = _.isFunction(preload) ? preload : function(){};
+        var callback = _.isFunction(preload) ? preload : function() {};
         jsonDocumentationFromFile(resource.markdownPath, resource.mountpoint, callback);
     }
 }
@@ -165,7 +172,7 @@ function createEmptyJsonDocumentation() {
 }
 
 function jsonDocumentationFromFile(markdownPath, mountpoint, callback) {
-    loadPreparsedDocumentation(markdownPath, function (error, json) {
+    loadPreparsedDocumentation(markdownPath, function(error, json) {
         if (json) {
             return callback(null, json);
         }
@@ -182,7 +189,7 @@ function jsonDocumentationFromFile(markdownPath, mountpoint, callback) {
             decorateWarnings.bind(null, context, markdownPath),
             prependWarnings.bind(null, warnings),
             function writeParsedJson(json, done) {
-                fs.writeFile(preparsedJsonPath(markdownPath), JSON.stringify(json), function (error) {
+                fs.writeFile(preparsedJsonPath(markdownPath), JSON.stringify(json), function(error) {
                     done(null, json);
                 });
             }
@@ -195,16 +202,18 @@ function preparsedJsonPath(markdownPath) {
 }
 
 function loadPreparsedDocumentation(markdownPath, callback) {
-    fs.stat(preparsedJsonPath(markdownPath), function (error, preparsedStats) {
+    fs.stat(preparsedJsonPath(markdownPath), function(error, preparsedStats) {
         if (error) {
             return callback(error);
         }
-        fs.stat(markdownPath, function (error, markdownStats) {
+        fs.stat(markdownPath, function(error, markdownStats) {
             if (error) {
                 return callback(error);
             }
             if (preparsedStats.mtime.getTime() > markdownStats.mtime.getTime()) {
-                fs.readFile(preparsedJsonPath(markdownPath), {encoding: 'utf8'}, function (error, content) {
+                fs.readFile(preparsedJsonPath(markdownPath), {
+                    encoding: 'utf8'
+                }, function(error, content) {
                     if (error) {
                         return callback(error);
                     }
@@ -224,8 +233,13 @@ function loadPreparsedDocumentation(markdownPath, callback) {
 function loadFullMarkdown(markdownPath, mountpoint, warnings, callback) {
     var loadMarkdown = _.startsWith(markdownPath, 'http') ?
         loadMarkdownFromUrl.bind(null, markdownPath) :
-        fs.readFile.bind(null, markdownPath, {encoding: 'utf8'});
-    var resource = {mountpoint: mountpoint, markdownPath: markdownPath};
+        fs.readFile.bind(null, markdownPath, {
+            encoding: 'utf8'
+        });
+    var resource = {
+        mountpoint: mountpoint,
+        markdownPath: markdownPath
+    };
     async.waterfall([
         loadMarkdown,
         replaceTemplateVariables.bind(null, resource),
@@ -241,7 +255,10 @@ function loadMarkdownFromUrl(url, done) {
     _.each(['trace', 'debug', 'info', 'error', 'fatal'], function(level) {
         logger[level] = function() {};
     });
-    http.get({url: url, logger: logger}, function(error, response, markdown) {
+    http.get({
+        url: url,
+        logger: logger
+    }, function(error, response, markdown) {
         done(error, markdown);
     });
 }
@@ -282,7 +299,9 @@ function parseApiBlueprint(markdown, done) {
     var error;
     var json;
     try {
-        json = drafter.parse(markdown, {type: 'ast'});
+        json = drafter.parse(markdown, {
+            type: 'ast'
+        });
     } catch (e) {
         error = e;
     }
@@ -370,7 +389,9 @@ function mergeJsonDocumentation(targetJson, json) {
         return targetJson || json;
     }
     _.each(json.ast.resourceGroups, function(resourceGroup) {
-        var targetGroup = _.find(targetJson.ast.resourceGroups, {name: resourceGroup.name});
+        var targetGroup = _.find(targetJson.ast.resourceGroups, {
+            name: resourceGroup.name
+        });
         if (targetGroup) {
             targetGroup.resources = targetGroup.resources.concat(resourceGroup.resources);
         } else {
@@ -387,7 +408,9 @@ function decorateExternalPrefix(json, prefix) {
     if (json && prefix !== localPrefix) {
         json.__domain = prefix;
         json.ast.metadata = json.ast.metadata || [];
-        if (!_.find(json.ast.metadata, {name: 'HOST'})) {
+        if (!_.find(json.ast.metadata, {
+                name: 'HOST'
+            })) {
             json.ast.metadata.push({
                 name: 'HOST',
                 value: domains[prefix].url
@@ -438,10 +461,10 @@ function createUriTemplateRegex(uriTemplate) {
     // individualize comma-separated parameters
     var result;
     while (!!(result = /\{([#&\?\+]?)([^,\}]+),/g.exec(uriTemplate))) {
-      var operator = (result[1] === '?' ? '&' : result[1]);
-      uriTemplate = uriTemplate.substring(0, result.index) +
-        '{' + result[1] + result[2] +
-        '}{' + operator + uriTemplate.substring(result.index + result[0].length);
+        var operator = (result[1] === '?' ? '&' : result[1]);
+        uriTemplate = uriTemplate.substring(0, result.index) +
+            '{' + result[1] + result[2] +
+            '}{' + operator + uriTemplate.substring(result.index + result[0].length);
     }
     // swap out path parameters with regular expresssions
     uriTemplate = uriTemplate.replace(/\{\+[^\}]+\}/g, '(.*)');
@@ -457,6 +480,19 @@ function createUriTemplateRegex(uriTemplate) {
 function addParamTypes(parameters, uriTemplate) {
     var start = uriTemplate.indexOf('{');
     var foundQuery = false;
+    var eachFunction = function(name) {
+        var explode = _.endsWith(name, '*') || _.startsWith(name, '*');
+        if (explode) {
+            name = name.replace('*', '');
+        }
+        var parameter = _.find(parameters, {
+            name: name
+        });
+        if (parameter) {
+            parameter.paramType = paramType;
+            parameter.explode = explode;
+        }
+    };
     while (start !== -1) {
         ++start;
 
@@ -475,17 +511,7 @@ function addParamTypes(parameters, uriTemplate) {
         var end = uriTemplate.indexOf('}', start);
         var names = uriTemplate.substring(start, end).split(',');
 
-        _.each(names, function(name) {
-            var explode = _.endsWith(name, '*') || _.startsWith(name, '*');
-            if (explode) {
-                name = name.replace('*', '');
-            }
-            var parameter = _.find(parameters, {name: name});
-            if (parameter) {
-                parameter.paramType = paramType;
-                parameter.explode = explode;
-            }
-        });
+        _.each(names, eachFunction);
 
         start = uriTemplate.indexOf('{', end);
     }

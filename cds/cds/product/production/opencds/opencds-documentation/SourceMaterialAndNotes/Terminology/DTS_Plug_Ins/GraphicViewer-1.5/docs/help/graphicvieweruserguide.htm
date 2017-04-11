@@ -1,0 +1,333 @@
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta name=Generator content="Microsoft Word 11 (filtered)">
+<title>Graphic Viewer User Guide</title>
+<style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:Wingdings;
+	panose-1:5 0 0 0 0 0 0 0 0 0;}
+@font-face
+	{font-family:Tahoma;
+	panose-1:2 11 6 4 3 5 4 4 2 4;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin:0in;
+	margin-bottom:.0001pt;
+	font-size:12.0pt;
+	font-family:"Times New Roman";}
+p.MsoAcetate, li.MsoAcetate, div.MsoAcetate
+	{margin:0in;
+	margin-bottom:.0001pt;
+	font-size:8.0pt;
+	font-family:Tahoma;}
+@page Section1
+	{size:8.5in 11.0in;
+	margin:.6in .7in .6in .7in;}
+div.Section1
+	{page:Section1;}
+ /* List Definitions */
+ ol
+	{margin-bottom:0in;}
+ul
+	{margin-bottom:0in;}
+-->
+</style>
+
+</head>
+
+<body lang=EN-US>
+
+<div class=Section1>
+
+<p class=MsoNormal align=center style='text-align:center'><b><span
+style='font-size:14.0pt'>DTS Graphic Viewer User Guide</span></b></p>
+
+<p class=MsoNormal align=center style='text-align:center'><b><span
+style='font-size:14.0pt'>Version 1.5</span></b></p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><b><i><span style='font-size:14.0pt'>Introduction</span></i></b></p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>The Graphic Viewer is a DTS plug-in module that provides an
+alternate graphics-based Apelon KB browser component. The Graphics Viewer is
+available as an additional tab panel on the left side of the DTS application
+interface, from the Tools Menu, or from the Icon Bar. Panel operation is
+identical in the three cases.</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><b><i><span style='font-size:14.0pt'>Installation</span></i></b></p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>Extract the files in <span style='font-size:11.0pt;
+font-family:"Courier New"'>GraphicViewer-1.5.zip</span> into your <i>DTSInstall</i>
+directory. Be sure the <span style='font-size:11.0pt;font-family:"Courier New"'>Use
+folder names</span> box is checked. This will place all the Graphics Viewer files
+into the appropriate folders:</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><u>Folder</u>                                                  <u>Files</u></p>
+
+<p class=MsoNormal><i>DTSInstall</i>\bin\graphicviewer                <span
+style='font-size:11.0pt;font-family:"Courier New"'>GraphicViewerV15Sources.jar</span></p>
+
+<p class=MsoNormal><i>DTSInstall</i>\lib\modules                         <span
+style='font-size:11.0pt;font-family:"Courier New"'>graphicviewer.jar</span></p>
+
+<p class=MsoNormal><i>DTSInstall</i>\docs                                   <span
+style='font-size:11.0pt;font-family:"Courier New"'>graphicvieweruserguide.pdf</span>
+</p>
+
+<p class=MsoNormal><i>DTSInstall</i>\docs\help                            <span
+style='font-size:11.0pt;font-family:"Courier New"'>graphicvieweruserguide.htm</span>
+</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><b><i><span style='font-size:14.0pt'>Operation</span></i></b></p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>The Graphic Viewer opens in “neighborhood tree” view: it shows
+the (virtual) root of the Apelon KB at the far left of the panel with its children,
+which are the KB Namespaces, descending to the right. Double clicking on any of
+the Namespace names causes that Namespace to be the new focus of the view. The parent
+of the focus (the KB root) is shown above and to the right of the focus and its
+children (the “root concepts” of the Namespace) are shown below and to the
+right. Continue browsing by double clicking on any concept name which will make
+that concept the new focus and display the focus concept’s parents and children
+as well as any requested concept attributes (see below). Mousing over any
+concept displays the full concept name and relationship to the focus concept in
+the message area at the bottom of the panel.</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>The number of columns in the parent and child displays is
+dependent on the width of the Graphic Viewer panel. Increase the panel width to
+reformat the display to use more columns. See also the Field Width display
+option below. Increasing the (single column) Field Width will, in general,
+reduce the number of columns. Remember that the full name of any concept is
+always available in the message area by mousing over the concept.</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>The Combo Box at the top of the Graphic Viewer panel gives
+the “view axis”, or relationship type, for the hierarchical display. For
+Ontylog Namespaces, the default axis is the Ontylog Superconcepts and
+Subconcepts. For Thesaurus Namespaces, the Graphic Viewer uses the DTS default
+“<span style='font-size:11.0pt;font-family:"Courier New"'>Parent Of</span>”
+Association Type (if one exists in the Namespace). A different view axis can be
+used by selecting the desired Association Type from the Combo Box. The selected
+view axis remains in effect until there is a change in the focus concept
+Namespace (or another Association Type is picked).</p>
+
+<p class=MsoNormal> </p>
+
+<p class=MsoNormal>Right-clicking in any open (non-concept) area of the panel
+shows the Graphic Viewer popup menu. (Right-clicking on a concept is reserved
+for future use.)  Popup menu actions are:</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal style='margin-left:2.0in;text-indent:-2.0in'><span
+style='font-size:11.0pt;font-family:"Courier New"'>Root Concept</span>                     Sets
+the focus to the KB root.</p>
+
+<p class=MsoNormal style='margin-left:2.0in;text-indent:-2.0in'><span
+style='font-size:11.0pt;font-family:"Courier New"'>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-left:2.0in;text-indent:-2.0in'><span
+style='font-size:11.0pt;font-family:"Courier New"'>Previous Concept</span>            Sets
+the focus to the previously displayed concept (go back one concept).</p>
+
+<p class=MsoNormal style='margin-left:2.0in;text-indent:-2.0in'>&nbsp;</p>
+
+<p class=MsoNormal style='margin-left:2.0in;text-indent:-2.0in'><span
+style='font-size:11.0pt;font-family:"Courier New"'>Ancestor Tree</span>                   Displays
+an “ancestor tree” view: a graphic rendering of all ancestors of the focus concept
+(relative to the current view axis). Click any mouse button to return to the neighborhood
+tree view.</p>
+
+<p class=MsoNormal style='margin-left:2.0in;text-indent:-2.0in'><span
+style='font-size:11.0pt;font-family:"Courier New"'>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-left:2.0in;text-indent:-2.0in'><span
+style='font-size:11.0pt;font-family:"Courier New"'>Concept History</span>              Shows
+the recent history of displayed concepts in a cascade popup. Selecting a
+history concept makes it the new focus.</p>
+
+<p class=MsoNormal style='margin-left:2.0in;text-indent:-2.0in'>&nbsp;</p>
+
+<p class=MsoNormal style='margin-left:2.0in;text-indent:-2.0in'><span
+style='font-size:11.0pt;font-family:"Courier New"'>Display Options</span>              Opens
+a cascade menu with the following options for configuring the display. Most
+menu items toggle display of focus concept attributes to the right of the focus
+concept.</p>
+
+<p class=MsoNormal style='margin-left:2.0in;text-indent:-2.0in'><span
+style='font-size:11.0pt;font-family:"Courier New"'>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-left:3.0in;text-indent:-2.5in'><span
+style='font-size:11.0pt;font-family:"Courier New"'>White on Black</span><span
+style='font-size:11.0pt'>                             </span>Changes the
+background of the Viewer to be Black rather than White. (Item alternates with <span
+style='font-size:11.0pt;font-family:"Courier New"'>Black on White</span>.)</p>
+
+<p class=MsoNormal style='margin-left:3.0in;text-indent:-2.5in'>&nbsp;</p>
+
+<p class=MsoNormal style='margin-left:3.0in;text-indent:-2.5in'><span
+style='font-size:11.0pt;font-family:"Courier New"'>Field Width</span>                                   Opens
+a dialog box for setting the value of the minimum field display width for a
+column.</p>
+
+<p class=MsoNormal style='margin-left:3.0in;text-indent:-2.5in'>&nbsp;</p>
+
+<p class=MsoNormal style='margin-left:3.0in;text-indent:-2.5in'><span
+style='font-size:11.0pt;font-family:"Courier New"'>Show Rays</span>                                        Causes
+rays between the focus concept and parents, children and attributes to be
+shown. Set by default.</p>
+
+<p class=MsoNormal style='margin-left:3.0in;text-indent:-2.5in'>&nbsp;</p>
+
+<p class=MsoNormal style='margin-left:3.0in;text-indent:-2.5in'><span
+style='font-size:11.0pt;font-family:"Courier New"'>Show ToolTips</span>                               Causes
+a ToolTip to appear showing the concept or attribute name when mousing over the
+element. Set by default.</p>
+
+<p class=MsoNormal style='margin-left:3.0in;text-indent:-2.5in'>&nbsp;</p>
+
+<p class=MsoNormal style='margin-left:3.0in;text-indent:-2.5in'><span
+style='font-size:11.0pt;font-family:"Courier New"'>Show Preferred Term</span>                 Displays
+a concept’s Preferred Term rather than Name. If there is no such term, the name
+is used.</p>
+
+<p class=MsoNormal style='margin-left:2.5in;text-indent:-2.0in'><span
+style='font-size:11.0pt;font-family:"Courier New"'>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-left:3.0in;text-indent:-2.5in'><span
+style='font-size:11.0pt;font-family:"Courier New"'>Show Namespace</span>                             Displays
+concepts with their namespaces in standard qualified name format: <span
+style='font-size:11.0pt;font-family:"Courier New"'>Concept Name[Namespace]</span></p>
+
+<p class=MsoNormal style='margin-left:2.5in;text-indent:-2.0in'><span
+style='font-size:11.0pt;font-family:"Courier New"'>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-left:2.5in;text-indent:-2.0in'><span
+style='font-size:11.0pt;font-family:"Courier New"'>Show Code</span>                                        Displays
+the Concept Code in the Attributes area.</p>
+
+<p class=MsoNormal style='margin-left:2.5in;text-indent:-2.0in'>&nbsp;</p>
+
+<p class=MsoNormal style='margin-left:2.5in;text-indent:-2.0in'><span
+style='font-size:11.0pt;font-family:"Courier New"'>Show ID</span>                                            Displays
+the Concept ID in the Attributes area.</p>
+
+<p class=MsoNormal style='margin-left:2.5in;text-indent:-2.0in'>&nbsp;</p>
+
+<p class=MsoNormal style='margin-left:2.5in;text-indent:-2.0in'><span
+style='font-size:11.0pt;font-family:"Courier New"'>Show Synonyms</span>                               Displays
+Concept Synonyms in the Attributes area.</p>
+
+<p class=MsoNormal style='margin-left:2.5in;text-indent:-2.0in'>&nbsp;</p>
+
+<p class=MsoNormal style='margin-left:2.5in;text-indent:-2.0in'><span
+style='font-size:11.0pt;font-family:"Courier New"'>Show Properties</span>                          Displays
+Concept Properties in the Attributes area.</p>
+
+<p class=MsoNormal style='margin-left:2.5in;text-indent:-2.0in'>&nbsp;</p>
+
+<p class=MsoNormal style='margin-left:2.5in;text-indent:-2.0in'><span
+style='font-size:11.0pt;font-family:"Courier New"'>Show Roles</span>                                      Displays
+Concept Roles in the Attributes area.</p>
+
+<p class=MsoNormal style='margin-left:2.5in;text-indent:-2.0in'>&nbsp;</p>
+
+<p class=MsoNormal style='margin-left:2.5in;text-indent:-2.0in'><span
+style='font-size:11.0pt;font-family:"Courier New"'>Show Inverse Roles</span>                    Displays
+Concept Inverse Roles in the Attributes area.</p>
+
+<p class=MsoNormal style='margin-left:2.5in;text-indent:-2.0in'>&nbsp;</p>
+
+<p class=MsoNormal style='margin-left:2.5in;text-indent:-2.0in'><span
+style='font-size:11.0pt;font-family:"Courier New"'>Show Associations</span>                      Displays
+Concept Associations in the Attributes area.</p>
+
+<p class=MsoNormal style='margin-left:2.5in;text-indent:-2.0in'>&nbsp;</p>
+
+<p class=MsoNormal style='margin-left:2.5in;text-indent:-2.0in'><span
+style='font-size:11.0pt;font-family:"Courier New"'>Show Inverse Associations</span>    Displays
+Concept Inverse Associations in the Attributes area.</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>Double clicking on any Role, Inverse Role, Association or
+Inverse Association sets the focus concept to that attribute’s target concept.</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>Both the neighborhood and ancestor tree views support drag
+to and drop from other DTS Editor panels.</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><b><i>Revision History</i></b></p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal style='margin-left:1.5in;text-indent:-1.5in'>Version 1                     Initial
+release.    Only Ontylog Namespaces are supported.</p>
+
+<p class=MsoNormal style='margin-left:1.5in;text-indent:-1.5in'>&nbsp;</p>
+
+<p class=MsoNormal style='margin-left:1.5in;text-indent:-1.5in'>Version 1.1                  Added
+Ancestor Tree view, selectable background (black or white), and ToolTips.</p>
+
+<p class=MsoNormal style='margin-left:1.5in;text-indent:-1.5in'>&nbsp;</p>
+
+<p class=MsoNormal style='margin-left:1.5in;text-indent:-1.5in'>Version 1.2                  Support
+for Thesaurus Namespaces (including Local) and selection of View Axis.</p>
+
+<p class=MsoNormal style='margin-left:1.5in;text-indent:-1.5in'>&nbsp;</p>
+
+<p class=MsoNormal style='margin-left:1.5in;text-indent:-1.5in'>Version 1.3                  Concept-dependent
+positioning of Attributes.</p>
+
+<p class=MsoNormal style='margin-left:1.5in;text-indent:-1.5in'>&nbsp;</p>
+
+<p class=MsoNormal style='margin-left:1.5in;text-indent:-1.5in'>Version 1.4                  Rebuild
+for Eclipse.</p>
+
+<p class=MsoNormal style='margin-left:1.5in;text-indent:-1.5in'>&nbsp;</p>
+
+<p class=MsoNormal style='margin-left:1.5in;text-indent:-1.5in'>Version 1.5                  Rebuild
+for DTS V3.4. Persistent and synchronized configuration (display options). Field
+width, preferred terms and rays as display options. Adaptive columns. User
+Guide available in DTS <span style='font-size:11.0pt;font-family:"Courier New"'>Help</span>
+menu.</p>
+
+<p class=MsoNormal style='margin-left:1.5in;text-indent:-1.5in'>&nbsp;</p>
+
+</div>
+
+</body>
+
+</html>

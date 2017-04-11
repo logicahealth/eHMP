@@ -52,8 +52,7 @@ define([
             saveImmunizationModel.set('immunizationIEN', model.get('immunizationType'));
             saveImmunizationModel.set('series', model.get('series'));
             saveImmunizationModel.set('route', model.get('routeOfAdministration'));
-            var dfn = currentPatient.get('pid').split(';')[1];
-            saveImmunizationModel.set('encounterPatientDFN', dfn);
+            saveImmunizationModel.set('pid', currentPatient.get('pid'));
             if (model.get('dosage')) {
                 saveImmunizationModel.set('dose', model.get('dosage') + ';mL;448');
             }
@@ -81,8 +80,13 @@ define([
                 expirationDate = model.get('expirationDateAdministered');
                 var orderedByAdministered = model.get('orderedByAdministered');
                 if (!_.isEmpty(orderedByAdministered) && orderedByAdministered.indexOf(';') > 0) {
-                    saveImmunizationModel.set('orderingProviderIEN', orderedByAdministered.slice(0,orderedByAdministered.lastIndexOf(';')));
+                    saveImmunizationModel.set('orderingProviderIEN', orderedByAdministered.slice(0, orderedByAdministered.lastIndexOf(';')));
                 }
+                var pov = 'Z23^^Encounter for Immunization^0^' + administeredBy[1] + '^0^^';
+                saveImmunizationModel.set({
+                    'povCode': 'Z23',
+                    'povNarrative': 'Encounter for Immunization'
+                });
             } else {
                 saveImmunizationModel.set('informationSource', model.get('informationSource'));
                 if (model.get('administeredBy') && model.get('administeredBy').indexOf(';') > 0) {
@@ -94,7 +98,7 @@ define([
                 saveImmunizationModel.set('outsideLocation', model.get('administeredLocation'));
             }
 
-            if(!_.isUndefined(model.get('comments'))){
+            if (!_.isUndefined(model.get('comments'))) {
                 saveImmunizationModel.set('comment', model.get('comments'));
             }
             if (expirationDate) {

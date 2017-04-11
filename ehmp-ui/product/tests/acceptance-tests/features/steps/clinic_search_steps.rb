@@ -73,11 +73,6 @@ Before do
   @clinic_search = ClinicSearch.instance
 end
 
-When(/^the user clicks the Clinics pill$/) do
-  expect(MyCprsListTab.instance.perform_action('clinics_link')).to eq(true)
-  expect(MyCprsListTab.instance.perform_verification('clinics_tab', true)).to eq(true)
-end
-
 Then(/^the Clinics search input displays "([^"]*)"$/) do |arg1|
   expect(@clinic_search.perform_verification('Clinic Placeholder', arg1)).to eq(true)
 end

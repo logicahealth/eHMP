@@ -1,6 +1,5 @@
 'use strict';
 var rdk = require('../../../core/rdk');
-var uriBuilder = rdk.utils.uriBuilder;
 var httpUtil = rdk.utils.http;
 var nullchecker = rdk.utils.nullchecker;
 var _ = require('lodash');
@@ -8,7 +7,7 @@ var _ = require('lodash');
 
 
 module.exports.get = function(icn, req, callback) {
-    //http://IP             /vpr/9E7A;100013/find/patient?filter=in(pid,["9E7A;100013"])
+    //http://10.2.2.110:9080/vpr/9E7A;100013/find/patient?filter=in(pid,["9E7A;100013"])
 
     var jdsServer = req.app.config.jdsServer;
     var jdsPath = '/vpr/' + icn + '/find/patient?filter=in(pid,["' + icn + '"])';

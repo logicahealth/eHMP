@@ -1,14 +1,11 @@
-@F431 @DE3055
+@F431 @DE3055 @reg1
 Feature: Build a Activity Management Framework Environment
 
 Background:
-	# Given user is logged into eHMP-UI
-    When the patient search screen is displayed
-    When the user selects My Workspace from the navigation bar
-    Then Provider Centric View is active
+    Given staff view screen is displayed
     And the applets are displayed on the provider centric view
     | applet   |
-    | MY TASKS |
+    | TASKS |
 
 @US7422 @TC440
 Scenario: Verify a user can access detailed view of a task

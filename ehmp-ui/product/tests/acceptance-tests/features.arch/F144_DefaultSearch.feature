@@ -12,7 +12,7 @@ Scenario: default patient search
         | field      | value    |
         | Facility   | PANORAMA |
         | AccessCode | 1tdnurse |
-        | VerifyCode | PW       |
+        | VerifyCode | tdnurse1 |
         | SignIn     |          |
     Then the patient search screen is displayed
     And the User selects MyCPRSList

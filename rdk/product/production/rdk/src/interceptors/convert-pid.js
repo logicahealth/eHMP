@@ -27,9 +27,6 @@ module.exports = function(req, res, next) {
     }
 
     var jdsResource = '/vpr/jpid';
-    if (pidValidator.isDfn(pid)) {
-        pid = req.session.user.site + ';' + pid;
-    }
     var uid = '';
     var splitPid = '';
     var site = '';
@@ -46,9 +43,8 @@ module.exports = function(req, res, next) {
     } else if (pidValidator.isPidEdipi(pid)) {
         splitPid = pid.split(';');
         dfn = splitPid[1];
-        uid = 'urn:va:patient:DOD:' + dfn + ':' + dfn;
-    } else if (pidValidator.isEdipi(pid)) {
-        uid = 'urn:va:patient:DOD' + pid + ':' + pid;
+        site = splitPid[0];
+        uid = 'urn:va:patient:' + site + ':' + dfn + ':' + dfn;
     }
     req.logger.info('jpid search using pid [%s]', pid);
 
@@ -61,8 +57,10 @@ module.exports = function(req, res, next) {
 
     req.interceptorResults.patientIdentifiers = {
         originalID: pid,
-        uid: uid
+        uid: uid,
+        site: site
     };
+
 
     http.get(options, function(error, response, result) {
         if (error) {
@@ -99,23 +97,25 @@ module.exports = function(req, res, next) {
                 req.interceptorResults.patientIdentifiers.vhic = dfn;
                 uid = 'urn:va:patient:icn:' + pid + ':' + pid;
             } else if (pidValidator.isPidEdipi(pid)) {
-                req.interceptorResults.patientIdentifiers.pidEdipi = pid;
                 req.interceptorResults.patientIdentifiers.edipi = dfn;
+                req.interceptorResults.patientIdentifiers.pidEdipi = pid;
                 uid = 'urn:va:patient:DOD:' + dfn + ':' + dfn;
-            } else if (pidValidator.isEdipi(pid)) {
+            } else if (isNumeric(pid)) {
                 req.interceptorResults.patientIdentifiers.edipi = pid;
                 req.interceptorResults.patientIdentifiers.pidEdipi = 'DOD;' + pid;
                 uid = 'urn:va:patient:DOD:' + pid + ':' + pid;
             }
             req.interceptorResults.patientIdentifiers.uids.push(uid);
 
-            if(pidValidator.isSiteDfn(pid) && pidValidator.isPrimarySite(pid)){
-                 req.interceptorResults.patientIdentifiers.primarySites = req.interceptorResults.patientIdentifiers.primarySites.concat(pid);
+            if (pidValidator.isSiteDfn(pid) && pidValidator.isPrimarySite(pid)) {
+                req.interceptorResults.patientIdentifiers.primarySites = req.interceptorResults.patientIdentifiers.primarySites.concat(pid);
             }
-            if(!pidValidator.isIcn(pid)){
+            if (!pidValidator.isIcn(pid)) {
                 req.interceptorResults.patientIdentifiers.allSites = req.interceptorResults.patientIdentifiers.allSites.concat(pid);
             }
-            req.logger.debug({allIdentifiers: req.interceptorResults.patientIdentifiers.primarySites});
+            req.logger.debug({
+                allIdentifiers: req.interceptorResults.patientIdentifiers.primarySites
+            });
         });
 
         req.logger.debug(req.interceptorResults.patientIdentifiers);
@@ -123,3 +123,7 @@ module.exports = function(req, res, next) {
         next();
     });
 };
+
+function isNumeric(pid) {
+    return /^\d+$/.test(pid);
+}

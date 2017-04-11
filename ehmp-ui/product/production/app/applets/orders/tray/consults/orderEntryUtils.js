@@ -212,7 +212,8 @@ define([
             var workflowOptions = {
                 onBeforeShow: function() {
                     ADK.Messaging.getChannel('loadConsult').trigger('visit:ready');
-                }
+                },
+                helpMapping: 'consult_order_form'
             };
 
             var view = OrderEntryView.form.extend({

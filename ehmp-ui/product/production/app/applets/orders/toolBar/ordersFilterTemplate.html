@@ -1,9 +1,13 @@
-<form>
-    <label for="{{instanceId}}-type-options" class="color-grey-darkest bottom-margin-no">Order type:</label>
-    <select id="{{instanceId}}-type-options" title="Use up and down arrows to view options and then press enter to select.">
-        {{#each item}} {{#if show}}
-        <option value="{{displayGroup}}">{{mixedName}}</option>
-        {{/if}} {{/each}}
-    </select>
-    <button type="submit" class="sr-only" disabled="" aria-hidden="true">Submit</button>
+<form class="form-container">
+	<div class="form-inline">
+		<div class="form-group">
+			<label for="{{instanceId}}-type-options">Order type:</label>
+			<select id="{{instanceId}}-type-options" title="Use up and down arrows to view options and then press enter to select.">
+			    {{#each item}} {{#if show}}
+			    <option value="{{displayGroup}}">{{mixedName}}</option>
+			    {{/if}} {{/each}}
+			</select>
+		</div>
+		<button type="submit" class="sr-only" disabled="" aria-hidden="true">Submit</button>
+	</div>
 </form>

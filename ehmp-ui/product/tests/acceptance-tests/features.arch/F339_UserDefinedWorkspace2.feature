@@ -4,7 +4,7 @@ Feature: F339 - User Defined Work Spaces 2
 # This test is being moved to archive.
 # Manual test is defined in functional test TC87, TC322 and F339_ US4521_Verify the heading elements in the Workspace Manager
 Background: 
-    Given POB user is logged into EHMP-UI with facility as  "KODAK" accesscode as  "PW    " verifycode as  "PW    !!"
+    Given POB user is logged into EHMP-UI with facility as  "KODAK" accesscode as  "mx1234" verifycode as  "mx1234!!"
 	And user searches for and selects "Eight,Patient"
 	And Cover Sheet is active
 	And the "patient identifying traits" is displayed with information

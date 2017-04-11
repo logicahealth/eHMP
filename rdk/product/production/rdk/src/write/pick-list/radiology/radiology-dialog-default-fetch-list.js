@@ -36,21 +36,23 @@ var _ = require('lodash');
  * @param params object which can contain optional and/or required parameters as described above.
  */
 module.exports.fetch = function(logger, configuration, callback, params) {
-	var patientDFN = _.get(params, 'patientDFN');
     var anEventDiv = _.get(params, 'anEventDiv');
     var imagingType = _.get(params, 'imagingType');
+    var options = {
+        requiresDfn: true
+    };
+    validate.getPatientDFN(params, options, function(err, patientDFN) {
+        if (err) {
+            return callback(err);
+        }
+        if (!validate.isWholeNumber(imagingType)) {
+            return callback('imagingType cannot be empty and must be a whole number');
+        }
+        if (validate.isStringNullish(anEventDiv)) {
+            anEventDiv = '';
+        }
+        anEventDiv = anEventDiv.toUpperCase();
 
-    if (!validate.isWholeNumber(patientDFN)) {
-        return callback('patientDFN cannot be empty and must be a whole number');
-    }
-    if (!validate.isWholeNumber(imagingType)) {
-        return callback('imagingType cannot be empty and must be a whole number');
-    }
-    if (validate.isStringNullish(anEventDiv)) {
-        anEventDiv = '';
-    }
-
-    anEventDiv = anEventDiv.toUpperCase();
-
-    return rpcUtil.standardRPCCall(logger, configuration, 'ORWDRA32 DEF', patientDFN, anEventDiv, imagingType, parse, callback);
+        return rpcUtil.standardRPCCall(logger, configuration, 'ORWDRA32 DEF', patientDFN, anEventDiv, imagingType, parse, callback);
+    });
 };

@@ -1,5 +1,5 @@
 #Team Pluto
-@F693_OrdersAppletEnhancements @US10791 @regression
+@F693_OrdersAppletEnhancements @US10791  @reg1
 Feature: F693 - Orders Applet Enhancements
 
   @F693_OrdersAppletEnhancements @US10791

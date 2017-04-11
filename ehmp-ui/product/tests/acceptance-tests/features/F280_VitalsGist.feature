@@ -1,12 +1,9 @@
-@F280_VitalsGist @regression @triage 
+@F280_VitalsGist   @DE6991 @DE6976 @reg2
 
 Feature: F280 - Vitals Applet
 
-
-
-
 @F280_2_vitalsGist_View  @US4259 @DE2875 
-Scenario: Verfy vitals for patient using Overview Sheet
+Scenario: Verfy vitals for patient using Overview Sheet - verify data
   # Given user is logged into eHMP-UI
   And user searches for and selects "Five,Patient"
   Then Overview is active
@@ -28,11 +25,12 @@ Scenario: Verfy vitals for patient using Overview Sheet
   Then the Vitals gist displays no records for
       | CG    | CG           |
 
-@F280_3_vitalsGist_View  @US4259 
-Scenario: Verfy vitals for patient using Overview Sheet
+@F280_3_vitalsGist_View  @US4259 @DE7233
+Scenario: Verfy vitals for patient using Overview Sheet - verify no data display
   # Given user is logged into eHMP-UI
   And user searches for and selects "Ninetynine,Patient"
   Then Overview is active
+  When the user changes the global date filter to 24HR
   Then the "Vitals" applet is finished loading
   And user sees Vitals Gist
   Then the Vitals gist displays no records for

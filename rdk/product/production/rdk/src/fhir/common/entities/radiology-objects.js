@@ -1,6 +1,5 @@
 'use strict';
 var helpers = require('../utils/helpers.js');
-var rdk = require('../../../core/rdk');
 var utils = require('../utils/fhir-converter.js');
 var fhirResource = require('../entities/fhir-resource');
 var _ = require('lodash');
@@ -187,10 +186,10 @@ function CItemObservation(obj) {
     this._id = helpers.generateUUID();
 
     this.code = new fhirResource.CodeableConcept(obj.typeName, [new fhirResource.Coding('None', obj.typeName, 'CPT OID: 2.16.840.1.113883.6.12')]);
-    
+
     this.issued = utils.convertToFhirDateTime(obj.dateTime, utils.getSiteHash(obj.uid));
     this.appliesDateTime = utils.convertToFhirDateTime(obj.stampTime, utils.getSiteHash(obj.uid));
-    
+
     return this;
 }
 

@@ -1,14 +1,5 @@
 [data-appletid="todo_list"] {
-	.grid-toolbar {
-		.toolbar-item {
-        	padding: 2px 5px;
-        	.divider-vertical {
-    			border-left: 1px solid $grey-darkest;
-			}
-    	}
-    }
     .applet-div-chrome-container .gridContainer .grid-container {
-        height: calc(100% - 33px) !important;
         > div .data-grid table.backgrid thead th[data-header-instanceid="todo_list-ACTION"]{
             text-align: center;
             .sort-caret{
@@ -16,13 +7,5 @@
                 margin-left: 3px;
             }
         }
-    }
-    .form-group {
-        margin-bottom: 0;
-    }
-    .grid-container > div > p:first-child {
-        height: 71vh;
-        overflow: auto;
-        margin: 0;
     }
 }

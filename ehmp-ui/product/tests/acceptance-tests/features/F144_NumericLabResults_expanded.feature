@@ -1,4 +1,4 @@
-@F144 @F144_numericlabresults @regression @triages @DE4084
+@F144 @F144_numericlabresults  @DE4084 @reg2
 Feature: F144 - eHMP Viewer GUI - Numeric Lab Results
 
 Background:
@@ -23,14 +23,14 @@ Scenario: Expanded Numeric Lab results applet displays expected headers
   And the "Numeric Lab Results Applet" table has headers
     | Date | Lab Test | Flag | Result | Unit | Ref Range | Facility |
 
-@F144_numericlabresults_4
+@F144_numericlabresults_4 @testing_scroll
 Scenario: Expanded Numeric Lab results applet has infinite scroll
   #  Right now Numeric Lab results applet is loading ALL rows after global date All is applied
   Given the user is viewing the expanded Numeric Lab Results Applet
   And the user clicks the date control "All" in the "Numeric Lab Results applet"
   And Numeric Lab Results applet loads without issue
   And the the Numeric Lab Results applet is displaying a subset of rows
-  When the user scrolls to the bottom of the Numeric Lab Results Applet
+  When the user scrolls to the bottom of the expanded Numeric Lab Results Applet
   Then the Numeric Lab Results applet adds more rows
 
 

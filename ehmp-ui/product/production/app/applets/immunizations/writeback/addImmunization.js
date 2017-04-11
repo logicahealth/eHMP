@@ -540,11 +540,13 @@ define([
             },
             'submit': function(e) {
                 e.preventDefault();
-                if (!this.model.isValid())
+                if (!this.model.isValid()){
                     this.model.set("formStatus", {
                         status: "error",
                         message: this.model.validationError
                     });
+                    this.transferFocusToFirstError();
+                }
                 else {
                     this.$el.trigger('tray.loaderShow',{
                         loadingString:'Accepting'

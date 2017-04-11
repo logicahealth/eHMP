@@ -1,0 +1,20 @@
+<td class="flex-width-1">
+	<span aria-hidden="true" class="hidden user_info-ps-sm-th">Appt Date/Time:</span>
+	<span class="sr-only">Appointment date and time</span>
+	{{#if appointmentTime}}
+		{{formatDate appointmentTime "MM/DD/YYYY HH:mm"}}
+	{{else}}
+		No Appointment Date
+	{{/if}}
+</td>
+<td class="flex-width-2">
+	{{displayName}} ({{last5}})
+</td>
+<td class="flex-width-2">
+    {{birthDate}} {{#if age }}
+    <span class="sr-only">Age</span> ({{age}}y) {{/if}}
+    {{#if getGenderCode}}
+	    <span class="sr-only">Gender {{getGenderName}}</span>
+	    <span aria-hidden="true"> - {{getGenderCode}}</span>
+    {{/if}}
+</td>

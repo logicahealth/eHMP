@@ -2,7 +2,6 @@
 
 var clincialObjectsSubsystem = require('../../subsystems/clinical-objects/clinical-objects-subsystem');
 var noteObjectsResource = require('./note-objects-resource');
-var httpUtil = require('../../core/rdk').utils.http;
 var httpMocks = require('node-mocks-http');
 var req;
 var res;
@@ -40,7 +39,9 @@ describe('The note-objects-madlib-generator', function() {
             })),
             interceptorResults: {
                 patientIdentifiers: {
-                    dfn: '3'
+                    site: '9E7A',
+                    dfn: '3',
+                    uids: ['urn:va:patient:9E7A:3:3', 'urn:va:patient:icn:321V123:321V123']
                 }
             }
         };
@@ -57,7 +58,7 @@ describe('The note-objects-madlib-generator', function() {
     });
 
     describe('getNoteObjects', function() {
-             it('identifies missing Location parameter', function() {
+        it('identifies missing Location parameter', function() {
             delete req.query.visitLocation;
             noteObjectsResource.getNoteObjects(req, res);
             expect(spyStatus.calledWith(400)).to.be.true();
@@ -76,6 +77,34 @@ describe('The note-objects-madlib-generator', function() {
             noteObjectsResource.getNoteObjects(req, res);
             expect(spyStatus.calledWith(400)).to.be.true();
             expect(res.rdkSend.calledWith('Missing visitServiceCategory parameter')).to.be.true();
+        });
+
+        it('identifies missing patient site', function() {
+            delete req.interceptorResults.patientIdentifiers.site;
+            noteObjectsResource.getNoteObjects(req, res);
+            expect(spyStatus.calledWith(412)).to.be.true();
+            expect(res.rdkSend.calledWith('Patient identifiers not found on interceptor results')).to.be.true();
+        });
+
+        it('identifies missing patient dfn', function() {
+            delete req.interceptorResults.patientIdentifiers.dfn;
+            noteObjectsResource.getNoteObjects(req, res);
+            expect(spyStatus.calledWith(412)).to.be.true();
+            expect(res.rdkSend.calledWith('Patient identifiers not found on interceptor results')).to.be.true();
+        });
+
+        it('identifies missing patient uids', function() {
+            delete req.interceptorResults.patientIdentifiers.uids;
+            noteObjectsResource.getNoteObjects(req, res);
+            expect(spyStatus.calledWith(412)).to.be.true();
+            expect(res.rdkSend.calledWith('Patient uids not found on interceptor results')).to.be.true();
+        });
+
+        it('identifies missing patient uid for sitedfn', function() {
+            req.interceptorResults.patientIdentifiers.uids[0] = 'urn:va:patient:C877:3:3';
+            noteObjectsResource.getNoteObjects(req, res);
+            expect(spyStatus.calledWith(412)).to.be.true();
+            expect(res.rdkSend.calledWith('Patient uid not found in interceptor results uids array')).to.be.true();
         });
 
         it('returns error message when clincialObjectsSubsystem.find returns an error', function() {
@@ -190,18 +219,15 @@ function spawnNoteObject() {
                 'acuityCode': 'urn:va:prob-acuity:c',
                 'acuityName': 'chronic',
                 'agentOrangeExposure': 'NO',
-                'codes': [
-                    {
-                        'code': 401.9,
-                        'display': 'HYPERTENSION NOS',
-                        'system': 'urn:oid:2.16.840.1.113883.6.42'
-                    },
-                    {
-                        'code': '59621000',
-                        'display': 'Essential hypertension (disorder)',
-                        'system': 'http://snomed.info/sct'
-                    }
-                ],
+                'codes': [{
+                    'code': 401.9,
+                    'display': 'HYPERTENSION NOS',
+                    'system': 'urn:oid:2.16.840.1.113883.6.42'
+                }, {
+                    'code': '59621000',
+                    'display': 'Essential hypertension (disorder)',
+                    'system': 'http://snomed.info/sct'
+                }],
                 'entered': '20070410',
                 'facilityCode': '500',
                 'facilityName': 'CAMP MASTER',

@@ -10,7 +10,7 @@ module.exports = function(writebackContext, callback) {
             return callback(error, null);
         }
 
-        getOrderDetail(rpcClient, writebackContext.resourceId, writebackContext, function (err, data) {
+        getOrderDetail(rpcClient, writebackContext.resourceId, writebackContext, function(err, data) {
             if (err) {
                 return callback(err, null);
             }
@@ -25,7 +25,7 @@ module.exports.getDetail = function(resourceId, writebackContext, callback) {
         if (error) {
             return callback(error, null);
         }
-        getOrderDetail(rpcClient, resourceId, writebackContext, function (err, data) {
+        getOrderDetail(rpcClient, resourceId, writebackContext, function(err, data) {
             if (err) {
                 return callback(err, null);
             }
@@ -37,7 +37,7 @@ module.exports.getDetail = function(resourceId, writebackContext, callback) {
 function getOrderDetail(rpcClient, resourceId, writebackContext, callback) {
     var rpcName = 'ORQOR DETAIL';
     var dfn = writebackContext.interceptorResults.patientIdentifiers.dfn;
-    if(nullchecker.isNullish(dfn)){
+    if (nullchecker.isNullish(dfn)) {
         return callback('Missing required patient identifiers');
     }
 

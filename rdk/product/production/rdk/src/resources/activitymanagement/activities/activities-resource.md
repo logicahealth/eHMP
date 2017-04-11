@@ -14,7 +14,10 @@ Get available activity definitions
 
     + testIen (string, optional) - lab test identifier, site-specific
 
-    + type (string, optional) - String-based lookup for non-site-specific activities. Currently supports only "note" value
+    + type (enum[string], optional) - String-based lookup for non-site-specific activities. Currently supports only "note" value
+
+        + Members
+            + `note`
 
 
 + Response 200 (application/json)
@@ -24,7 +27,6 @@ Get available activity definitions
 :[Response 404]({{{common}}}/responses/404.md)
 
 :[Response 500]({{{common}}}/responses/500.md)
-
 
 
 ### Single Instance [GET {{{path}}}/singleInstance{?id}]
@@ -270,7 +272,7 @@ deploymentId requires format GroupId:ArtifactId:Version
 
 :[Response 500]({{{common}}}/responses/500.md)
 
-### Activity Instances Available [GET {{{path}}}/instances{&context}{&pid}{&createdByMe}{&intendedForMeAndMyTeams}{&startDate}{&endDate}{&mode}]
+### Activity Instances Available [GET {{{path}}}/instances{&context}{&pid}{&createdByMe}{&intendedForMeAndMyTeams}{&startDate}{&endDate}{&mode}{&domain}{&showOnlyFlagged}]
 
 Get activity instances
 
@@ -278,17 +280,27 @@ Get activity instances
 
     + context (string) - Either patient or staff
 
-    + pid (string, optional) - Patient pid (required only with patient context)
+    :[pid]({{{common}}}/parameters/pid.md required:"optional")
 
-    + mode (string, optional) - Patient pid (required only with patient context)
+        Required only with `patient` context.
 
-    + createdByMe (string, optional) - to query for instances that are created by me
+    + mode (string, optional) - to query for instances that are 'open' or 'closed'. queries for both open and closed instances if set to undefined or 'all'
+        + Default: `open`
 
-    + intendedForMeAndMyTeams (string, optional) - to query for instances that are related to me or my teams
+    + createdByMe (boolean, optional) - to query for instances that are created by me
+        + Default: `false`
+
+    + intendedForMeAndMyTeams (boolean, optional) - to query for instances that are related to me or my teams
+        + Default: `false`
 
     + startDate (string, optional) - designates the start of a date range for searches
 
     + endDate (string, optional) - designates the end of a date range for searches
+
+    + domain (string, optional) - to query for instances that are in the specified domain 
+
+    + showOnlyFlagged (boolean, optional) - Set to "true" to query for instances that are flagged.
+        + Default: `false`
 
 
 

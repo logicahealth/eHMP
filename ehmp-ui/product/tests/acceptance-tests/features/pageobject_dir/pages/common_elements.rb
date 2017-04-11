@@ -1,3 +1,18 @@
+class ToolTips < SitePrism::Page
+  elements :fld_tooltips, ".tooltip-inner"
+  def clear_all_tool_tips
+    zombie_tooltips = fld_tooltips.length
+    return true if zombie_tooltips.zero?
+    p "visible tooltips: #{zombie_tooltips}"
+    (0..zombie_tooltips).each do | index |
+      p "clear tooltip #{index}"
+      TestSupport.driver.execute_script("$('[data-toggle=tooltip], [tooltip-data-key]').tooltip('hide');")
+      sleep(1)
+    end
+    return fld_tooltips.length.zero?
+  end
+end
+
 class PobCommonElements < SitePrism::Page
   # *****************  All_Form_Elements  ******************* #
 
@@ -9,10 +24,11 @@ class PobCommonElements < SitePrism::Page
   element :fld_modal_header, "#modal-header h4"
   element :fld_modal_title, "h5.panel-title-label"
   elements :fld_clear_udf_tags, ".clear-udaf-tag"
-  element :fld_online_help_status_bar, "#linkHelp-status_bar i"
+  element :fld_online_help_status_bar, "footer #patientSyncStatusRegion .help-button-container .help-icon-link"
   element :fld_new_window, ".MsoNormal>b>span"
   element :fld_pick_list_input, "input[class='select2-search__field']"
   element :fld_action_tray_panel, ".accordion-container"
+  element :fld_tray_loader_message, ".tray-loader-message"
 
   # *****************  All_Button_Elements  ******************* #
   element :btn_action_tray, "#patientDemographic-action [title='Press enter to activate menu']"

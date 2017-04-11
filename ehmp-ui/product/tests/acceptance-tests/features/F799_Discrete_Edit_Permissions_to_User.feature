@@ -3,7 +3,7 @@ Feature: F799-Add/Remove additional Discrete Permissions to a User and Bulk Edit
 
 @f799_discrete_permissions_access_control_applet1
 Scenario: Accessing Access Control Coordinator in eHMP
-  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "PW    " verifycode as  "PW    !!"
+  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "vk1234" verifycode as  "vk1234!!"
   And staff view screen is displayed
   When Navigate to Patient Search Screen
   And the patient search screen is displayed
@@ -16,7 +16,7 @@ Scenario: Accessing Access Control Coordinator in eHMP
 
 @f799_discrete_permissions_access_control_applet2
 Scenario: Access Control Coordinator - User Information Detail Window
-  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "PW    " verifycode as  "PW    !!"
+  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "vk1234" verifycode as  "vk1234!!"
   And staff view screen is displayed
   When Navigate to Patient Search Screen
   And the patient search screen is displayed
@@ -46,7 +46,7 @@ Scenario: Access Control Coordinator - User Information Detail Window
 
 @f799_discrete_permissions_access_control_applet3
 Scenario: Access Control Coordinator – Available Permission Sets
-  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "PW    " verifycode as  "PW    !!"
+  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "vk1234" verifycode as  "vk1234!!"
   And staff view screen is displayed
   When Navigate to Patient Search Screen
   And the patient search screen is displayed
@@ -70,7 +70,7 @@ Scenario: Access Control Coordinator – Available Permission Sets
 
 @f799_discrete_permissions_access_control_applet4
 Scenario: Access Control Coordinator - Additional Individual Permissions
-  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "PW    " verifycode as  "PW    !!"
+  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "vk1234" verifycode as  "vk1234!!"
   And staff view screen is displayed
   When Navigate to Patient Search Screen
   And the patient search screen is displayed
@@ -99,7 +99,7 @@ Scenario: Access Control Coordinator - Additional Individual Permissions
 
 @f799_discrete_permissions_access_control_applet5
 Scenario: Access Control Coordinator - Delete Discreet Permissions
-  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "PW    " verifycode as  "PW    !!"
+  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "vk1234" verifycode as  "vk1234!!"
   And staff view screen is displayed
   When Navigate to Patient Search Screen
   And the patient search screen is displayed
@@ -119,7 +119,7 @@ Scenario: Access Control Coordinator - Delete Discreet Permissions
 
 @f799_discrete_permissions_access_control_applet6_1
 Scenario: Access Control Coordinator - Edit Own Permissions
-  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "PW    " verifycode as  "PW    !!"
+  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "vk1234" verifycode as  "vk1234!!"
   And staff view screen is displayed
   When Navigate to Patient Search Screen
   And the patient search screen is displayed

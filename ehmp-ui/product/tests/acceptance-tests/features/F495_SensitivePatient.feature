@@ -1,12 +1,19 @@
-@F495 @regression
+@F495  @reg1 @US8462 @TC1140 @F1142
 Feature: Handling Sensitive/Flagged Patients in PT Selection List
 
-@US8462 @TC1140
+@F495_F1142_1
 Scenario: As a user, I want to see any eHMP patient flagged as Sensitive ,to have their SSN/DOB to be displayed at "*SENSITIVE* so that if the patient identity information is not revealed. 
-	# Given user is logged into eHMP-UI
-	When the User selects mysite
-    And the User click on MySiteSearch
-    And user enters full last name "EMPLOYEE, ONE"
-    Then the patient name "EMPLOYEE, ONE" is displayed
-    And the patient ssn is "*SENSITIVE*"
-    And the patient DOB is "*SENSITIVE*"
+    Given staff view screen is displayed
+    When the user searchs My Site with search term EMPLOYEE,ONE
+    Then the My Site Tray displays
+    And the My Site Tray contains search results
+    And the My Site Tray results contain patient "EMPLOYEE,ONE(*SENSITIVE*)" with DOB "*SENSITIVE* - M"
+
+@F495_F1142_2
+Scenario: If I have correct permissions, as a user, I do not want any Sensitive patients to have thier SSN/DOB masked
+    Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "vk1234" verifycode as  "vk1234!!"
+    Given staff view screen is displayed
+    When the user searchs My Site with search term EMPLOYEE,ONE
+    Then the My Site Tray displays
+    And the My Site Tray contains search results
+    And the My Site Tray results contain patient "EMPLOYEE,ONE(E3045)" with DOB "04/07/1935(81y) - M"

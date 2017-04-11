@@ -14,13 +14,13 @@ function getOpenConsultTasks(req, res) {
     req.audit.dataDomain = 'Tasks';
     req.audit.logCategory = 'GET_OPEN_CONSULT_TASKS';
 
-    var icn = req.param('icn');
-    var icnError;
+    var pid = req.param('pid');
+    var pidError;
 
-    if (!icn) {
-        icnError = new Error('Unable to retrieve \'icn\' parameter');
-        req.logger.error(icnError);
-        return res.status(rdk.httpstatus.bad_request).rdkSend(icnError.message);
+    if (!pid) {
+        pidError = new Error('Unable to retrieve \'pid\' parameter');
+        req.logger.error(pidError);
+        return res.status(rdk.httpstatus.bad_request).rdkSend(pidError.message);
     }
 
     var consultTaskCb = function(err, results) {
@@ -31,7 +31,7 @@ function getOpenConsultTasks(req, res) {
         return res.rdkSend(results);
     };
 
-    callJpid(req, icn, function(error, response, result) {
+    callJpid(req, pid, function(error, response, result) {
         if (error) {
             req.logger.error(error);
         }
@@ -57,10 +57,10 @@ function getOpenConsultTasks(req, res) {
             // received malformed result from identifier lookup
             // no additional identifiers were retrieved (0 or 1 result in array)
             // all identifiers contained unqueryable characters
-            if (icn.indexOf(',') !== -1) {
-                return consultTaskCb(new Error('Invalid \'icn\' parameter'));
+            if (pid.indexOf(',') !== -1) {
+                return consultTaskCb(new Error('Invalid \'pid\' parameter'));
             }
-            return doGetOpenConsultTasks(icn, req.logger, getGenericJbpmConfig(req), req.app.config.jbpm.activityDatabase, consultTaskCb);
+            return doGetOpenConsultTasks(pid, req.logger, getGenericJbpmConfig(req), req.app.config.jbpm.activityDatabase, consultTaskCb);
         }
 
         return doGetOpenConsultTasks(identifiers.join(), req.logger, getGenericJbpmConfig(req), req.app.config.jbpm.activityDatabase, consultTaskCb);
@@ -195,6 +195,7 @@ function doGetOpenConsultTasks(identifiers, logger, jbpmConfig, dbConfig, consul
     };
 
     var query = 'BEGIN TASKS.getTasksByState(:p_patient_identifiers, :p_activity_states, :p_process_definition, :recordset); END;';
+    logger.debug({query: query, parameters: procParams}, 'consult-tasks-resource:doGetOpenConsultTasks executing stored procedure');
 
     activityDb.doExecuteProcWithParams({
         logger: logger

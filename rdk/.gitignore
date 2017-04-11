@@ -42,6 +42,7 @@ Thumbs.db
 /product/production/rdk/config/config.json
 /product/production/rdk/write/config/write-health-data-service-config.json
 /product/production/rdk/write/config/write-pick-list-service-config.json
+/product/production/rdk/config/ehmp-config*.json
 /product/production/rdk/config/rdk-fetch-server-config*.json
 /product/production/rdk/config/rdk-write-server-config*.json
 /product/production/rdk/config/rdk-pick-list-server-config*.json
@@ -78,7 +79,7 @@ infrastructure/vagrant/aws/rdk/chef_config
 product/production/rdk/logs
 
 /bin/
-
+!product/tests/acceptance-tests/Gemfile.lock
 /product/tests/**/.bundle/
 /product/tests/rdk_config_files/
 product/production/rdk/config/activity_handler-1.json

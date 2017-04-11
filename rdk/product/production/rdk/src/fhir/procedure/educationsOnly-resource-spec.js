@@ -1,8 +1,6 @@
 'use strict';
 var educations = require('./educations');
 var inputValue = require('./educationsOnly-resource-spec-data').jdsInput;
-var _ = require('lodash');
-
 
 describe('Procedure FHIR Resource - testing FHIR conversion of educations type data', function() {
     var req = {

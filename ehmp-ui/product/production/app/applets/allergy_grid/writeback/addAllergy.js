@@ -1,4 +1,5 @@
 define([
+    'underscore',
     'backbone',
     'marionette',
     'jquery',
@@ -6,11 +7,13 @@ define([
     'moment',
     'app/applets/allergy_grid/writeback/validationUtils',
     'app/applets/allergy_grid/writeback/writebackUtils'
-], function(Backbone, Marionette, $, Handlebars, moment, validationUtils, writebackUtils) {
+], function(_, Backbone, Marionette, $, Handlebars, moment, validationUtils, writebackUtils) {
     "use strict";
 
     var NO_KNOWN_ALLERGY_CODE_D = '132;GMRD(120.82,"D")';
     var NO_KNOWN_ALLERGY_CODE_B = '132;GMRD(120.82,"B")';
+
+    var patientAllergyArray = [];
 
     var allergenRow = {
         control: 'container',
@@ -33,7 +36,7 @@ define([
                     this.listenToOnce(allergenCollection, 'read:success', function(collection, response) {
                         allergenCollection.off('read:error');
                         var excludeNoKnownAllergies = false;
-                        if ((this.patientAllergyArray.length === 1 && this.patientAllergyArray[0].toUpperCase().indexOf('NO KNOWN ALLERGIES') < 0) || this.patientAllergyArray.length > 1) {
+                        if ((patientAllergyArray.length === 1 && patientAllergyArray[0].toUpperCase().indexOf('NO KNOWN ALLERGIES') < 0) || patientAllergyArray.length > 1) {
                             excludeNoKnownAllergies = true;
                         }
                         var picklist = writebackUtils.parseAllergenResponse(collection.toPicklist(), excludeNoKnownAllergies);
@@ -76,7 +79,7 @@ define([
                     }],
                     label: 'Choose an option',
                     srOnlyLabel: true,
-                    required: true,
+                    required: true
                 }]
             }]
         }, {
@@ -215,7 +218,7 @@ define([
                 rows: 4,
                 name: 'moreInfo',
                 label: 'Comments',
-                title: 'Enter in comments',
+                title: 'Enter in comments'
             }]
         }]
     };
@@ -252,7 +255,7 @@ define([
                     behaviors: {
                         Confirmation: {
                             title: 'Warning',
-                            eventToTrigger: 'allergies-confirm-cancel',
+                            eventToTrigger: 'allergies-confirm-cancel'
                         }
                     },
                     label: 'Cancel',
@@ -306,7 +309,7 @@ define([
                 if (!_.isUndefined(response.data) && !_.isEmpty(response.data.items)) {
                     _.each(response.data.items, function(allergy) {
                         if (!_.isEmpty(allergy.products) && !_.isUndefined(allergy.products[0].name)) {
-                            this.patientAllergyArray.push(allergy.products[0].name);
+                            patientAllergyArray.push(allergy.products[0].name);
                         }
                     }, this);
                 }
@@ -332,36 +335,26 @@ define([
                     messageView: ErrorMessageView.extend({
                         msg: 'Failed to load picklist data.'
                     }),
-                    footerView: ErrorFooterView,
+                    footerView: ErrorFooterView
 
                 });
                 errorAlertView.show();
             }
         },
         onInitialize: function() {
-            this.patientAllergyArray = [];
-            this.allergyCollection = new Backbone.Collection();
+            this.allergyCollection = new ADK.UIResources.Fetch.Allergies.Collection();
             this.operationalData = new ADK.UIResources.Picklist.Allergies.OperationalData();
 
             this.bindEntityEvents(this.allergyCollection, this.allergenCollectionEvents);
             this.bindEntityEvents(this.operationalData, this.operationalDataEvents);
         },
-        onShow: function() {
-            this.componentList.select_allergen.patientAllergyArray = this.patientAllergyArray;
-        },
         onRender: function() {
             var fetchOptions = {
-                resourceTitle: 'patient-record-allergy',
-                criteria: {
-                    filter: 'ne(removed, true)'
-                },
-                cache: true,
-                pageable: false,
                 onSuccess: function(collection, response) {
                     collection.trigger('read:success', collection, response);
                 }
             };
-            ADK.PatientRecordService.fetchCollection(fetchOptions, this.allergyCollection);
+            this.allergyCollection.fetchCollection(fetchOptions);
 
             this.operationalData.fetch();
             this.listenToOnce(this.model, 'change.inputted', this.registerChecks);
@@ -471,7 +464,7 @@ define([
                         }
                     );
                 }
-            },
+            }
         },
         showInProgress: function(message) {
             this.model.set('inProgressMessage', message);

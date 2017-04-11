@@ -287,12 +287,20 @@ CREATE OR REPLACE PACKAGE BODY ACTIVITYDBUSER.TASKS IS
                         OR ( tr.facility IS NOT NULL AND tr.facility = p_station_number)
                 ) AND ((p_task_statuses IS NULL AND ti.statusId in (1,2,3))
                       OR (p_task_statuses IS NOT NULL AND
-                          (EXISTS (select column_value from TABLE(v_task_statuses) where column_value = 'All') OR (tsl.status in (SELECT TO_CHAR(column_value) FROM TABLE(v_task_statuses)))))
+                          (EXISTS (
+                            SELECT INSTR(p_task_statuses, 'All') from dual where INSTR(p_task_statuses, 'All') > 0 
+                          ) OR (tsl.status in (
+                            SELECT TO_CHAR(regexp_substr(p_task_statuses,'[^,]+', 1, level)) from dual
+                            CONNECT by regexp_substr(p_task_statuses, '[^,]+', 1, level) is not null
+                          ))))
                 ) AND (p_process_instance_id IS NULL OR ti.processInstanceId = p_process_instance_id)
                 AND (v_min_priority = -1 OR (v_min_priority = v_max_priority and ti.priority = v_min_priority) OR (v_min_priority <> v_max_priority and ti.priority BETWEEN v_min_priority AND v_max_priority))
                 AND (p_task_instance_id IS NULL OR ti.id = p_task_instance_id)
                 AND ((p_start_date IS NULL OR p_end_date IS NULL) OR ((ti.earliestDate BETWEEN p_start_date AND p_end_date AND ti.statusId IN (4,5,6,8))  OR ti.statusId IN (0,1,2,3)))
-                AND (p_patient_identifiers IS NULL OR ti.icn in (SELECT TO_CHAR(column_value) FROM TABLE(v_patient_identifiers)));
+                AND (p_patient_identifiers IS NULL OR ti.icn in (
+                  SELECT TO_CHAR(regexp_substr(p_patient_identifiers,'[^,]+', 1, level)) from dual
+                  CONNECT by regexp_substr(p_patient_identifiers, '[^,]+', 1, level) is not null
+                ));
 
 
       --get the routes
@@ -314,12 +322,20 @@ CREATE OR REPLACE PACKAGE BODY ACTIVITYDBUSER.TASKS IS
                         OR ( tr.facility IS NOT NULL AND tr.facility = p_station_number)
                 ) AND ((p_task_statuses IS NULL AND ti.statusId in (1,2,3))
                       OR (p_task_statuses IS NOT NULL AND
-                          (EXISTS (select column_value from TABLE(v_task_statuses) where column_value = 'All') OR (tsl.status in (SELECT TO_CHAR(column_value) FROM TABLE(v_task_statuses)))))
+                          (EXISTS (
+                            SELECT INSTR(p_task_statuses, 'All') from dual where INSTR(p_task_statuses, 'All') > 0 
+                          ) OR (tsl.status in (
+                            SELECT TO_CHAR(regexp_substr(p_task_statuses,'[^,]+', 1, level)) from dual
+                            CONNECT by regexp_substr(p_task_statuses, '[^,]+', 1, level) is not null
+                          ))))
                 ) AND (p_process_instance_id IS NULL OR ti.processInstanceId = p_process_instance_id)
                 AND (v_min_priority = -1 OR (v_min_priority = v_max_priority and ti.priority = v_min_priority) OR (v_min_priority <> v_max_priority and ti.priority BETWEEN v_min_priority AND v_max_priority))
                 AND (p_task_instance_id IS NULL OR ti.id = p_task_instance_id)
                 AND ((p_start_date IS NULL OR p_end_date IS NULL) OR ((ti.earliestDate BETWEEN p_start_date AND p_end_date AND ti.statusId IN (4,5,6,8))  OR ti.statusId IN (0,1,2,3)))
-                AND (p_patient_identifiers IS NULL OR ti.icn in (SELECT TO_CHAR(column_value) FROM TABLE(v_patient_identifiers)));
+                AND (p_patient_identifiers IS NULL OR ti.icn in (
+                  SELECT TO_CHAR(regexp_substr(p_patient_identifiers,'[^,]+', 1, level)) from dual
+                  CONNECT by regexp_substr(p_patient_identifiers, '[^,]+', 1, level) is not null
+                ));
 
   END getTasksForTeams;
 
@@ -386,14 +402,6 @@ CREATE OR REPLACE PACKAGE BODY ACTIVITYDBUSER.TASKS IS
     v_station_number_prefix := v_station_number_prefix || '%';
 
   open recordset for
-      WITH tmp_TEAM_MEMBERSHIP AS (
-      SELECT TM.TEAM_ID,TM.team_position_id
-      FROM PCMM.TEAM_MEMBERSHIP TM
-      JOIN PCMM.STAFF S ON S.STAFF_ID=TM.STAFF_ID
-      WHERE S.VA_INSTITUTION_ID IN (  select ID
-            FROM SDSADM.STD_INSTITUTION
-            WHERE STATIONNUMBER like v_station_number_prefix)
-        AND S.STAFF_IEN= p_staff_id)
       SELECT DISTINCT ti.id as taskId,
             ti.taskName,
             ti.description,
@@ -435,46 +443,49 @@ CREATE OR REPLACE PACKAGE BODY ACTIVITYDBUSER.TASKS IS
                     OR (tr.userid IS NULL  --not routed to another user
                       AND (ti.actualOwner IS NULL) -- and is not claimed
                       AND ((tr.team IS NULL) OR (tr.team IN  (SELECT unique T.TEAM_ID FROM PCMM.TEAM T
-                        JOIN tmp_TEAM_MEMBERSHIP TM ON TM.TEAM_ID=T.TEAM_ID)))
+                      JOIN PCMM.MV_TEAM_STAFF_INST TSI ON TSI.TEAM_ID = T.TEAM_ID AND TSI.STAFF_IEN = p_staff_id AND TSI.STATIONNUMBER like v_station_number_prefix  
+                          )))
                       AND ((tr.facility IS NULL) OR (tr.facility IS NOT NULL AND tr.facility = p_station_number))
                       AND ((tr.teamfocus IS NULL) OR (tr.teamfocus in (
                         SELECT UNIQUE TF.CODE
                         FROM PCMM.TEAM T
                         JOIN PCMM.PCM_STD_TEAM_FOCUS TF ON T.PCM_STD_TEAM_FOCUS_ID=TF.PCM_STD_TEAM_FOCUS_ID
-                        JOIN tmp_TEAM_MEMBERSHIP TM ON TM.TEAM_ID=T.TEAM_ID))
+                        JOIN PCMM.MV_TEAM_STAFF_INST TSI ON TSI.TEAM_ID = T.TEAM_ID AND TSI.STAFF_IEN = p_staff_id AND TSI.STATIONNUMBER like v_station_number_prefix
+                        ))
                       )
                       AND ((tr.TEAMTYPE IS NULL) OR (tr.TEAMTYPE in (
                         SELECT UNIQUE t.PCM_STD_TEAM_CARE_TYPE_ID from pcmm.team t
-                        JOIN tmp_TEAM_MEMBERSHIP TM ON TM.TEAM_ID=T.TEAM_ID))
+                        JOIN PCMM.MV_TEAM_STAFF_INST TSI ON TSI.TEAM_ID = T.TEAM_ID AND TSI.STAFF_IEN = p_staff_id AND TSI.STATIONNUMBER like v_station_number_prefix
+                        ))
                       )
                       AND ((tr.TEAMROLE is null) OR (tr.TEAMROLE in (
-                        select unique tp.pcm_std_team_role_id  from tmp_TEAM_MEMBERSHIP tm
-                        join pcmm.team_position tp on tp.team_position_id = tm.team_position_id))
+                        SELECT UNIQUE TSI.PCM_STD_TEAM_ROLE_ID FROM PCMM.MV_TEAM_STAFF_INST TSI WHERE TSI.STAFF_IEN = p_staff_id AND TSI.STATIONNUMBER like v_station_number_prefix
+                        ))
                       )
                     ))
                     OR (p_facility IS NOT NULL AND tr.facility = p_facility)
                   )
                   AND ((p_task_statuses IS NULL AND ti.statusId in (1,2,3))
                       OR (p_task_statuses IS NOT NULL AND
-                          (EXISTS (select column_value from TABLE(v_task_statuses) where column_value = 'All') OR (tsl.status in (SELECT TO_CHAR(column_value) FROM TABLE(v_task_statuses)))))
+                          (EXISTS (
+                            Select INSTR(p_task_statuses, 'All') from dual where INSTR(p_task_statuses, 'All') > 0
+                          )
+                          OR (tsl.status in (select regexp_substr(p_task_statuses,'[^,]+', 1, level) from dual
+                              connect by regexp_substr(p_task_statuses, '[^,]+', 1, level) is not null))))
                   )
                   AND (p_process_instance_id IS NULL OR ti.processInstanceId = p_process_instance_id)
                   AND (v_min_priority = -1 OR (v_min_priority = v_max_priority and ti.priority = v_min_priority) OR (v_min_priority <> v_max_priority and ti.priority BETWEEN v_min_priority AND v_max_priority))
                   AND (p_task_instance_id IS NULL OR ti.id = p_task_instance_id)
                   AND ((p_start_date IS NULL OR p_end_date IS NULL) OR ((ti.earliestDate BETWEEN p_start_date AND p_end_date AND ti.statusId IN (4,5,6,8))  OR ti.statusId IN (0,1,2,3)))
-                  AND (p_patient_identifiers IS NULL OR ti.icn in (SELECT TO_CHAR(column_value) FROM TABLE(v_patient_identifiers)));
+                  AND (p_patient_identifiers IS NULL OR ti.icn in (
+                    SELECT TO_CHAR(regexp_substr(p_patient_identifiers,'[^,]+', 1, level)) from dual
+                    CONNECT by regexp_substr(p_patient_identifiers, '[^,]+', 1, level) is not null
+                  ));
 
   --get the routes
   --to do: reuse the select from previous resultset
   open recordset2 for
-      WITH tmp_TEAM_MEMBERSHIP AS (
-      SELECT TM.TEAM_ID,TM.team_position_id
-      FROM PCMM.TEAM_MEMBERSHIP TM
-      JOIN PCMM.STAFF S ON S.STAFF_ID=TM.STAFF_ID
-      WHERE S.VA_INSTITUTION_ID IN (  select ID
-            FROM SDSADM.STD_INSTITUTION
-            WHERE STATIONNUMBER like v_station_number_prefix)
-        AND S.STAFF_IEN= p_staff_id)
+
       SELECT DISTINCT tr.*
             FROM ACTIVITYDB.Am_TaskInstance ti INNER JOIN ACTIVITYDB.Am_TaskStatusLookup tsl ON ti.statusId = tsl.id
             INNER JOIN ACTIVITYDB.Am_ProcessInstance pi ON ti.processInstanceId = pi.processInstanceId
@@ -485,20 +496,36 @@ CREATE OR REPLACE PACKAGE BODY ACTIVITYDBUSER.TASKS IS
                     OR (tr.userid IS NULL  --not routed to another user
                       AND (ti.actualOwner IS NULL) -- and is not claimed
                       AND ((tr.team IS NULL) OR (tr.team IN  (SELECT unique T.TEAM_ID FROM PCMM.TEAM T
-                        JOIN tmp_TEAM_MEMBERSHIP TM ON TM.TEAM_ID=T.TEAM_ID)))
+                      JOIN PCMM.MV_TEAM_STAFF_INST TSI ON TSI.TEAM_ID = T.TEAM_ID AND TSI.STAFF_IEN = p_staff_id AND TSI.STATIONNUMBER like v_station_number_prefix
+                      )))
                       AND ((tr.facility IS NULL) OR (tr.facility IS NOT NULL AND tr.facility = p_station_number))
                       AND ((tr.teamfocus IS NULL) OR (tr.teamfocus in (
                         SELECT UNIQUE TF.CODE
                         FROM PCMM.TEAM T
                         JOIN PCMM.PCM_STD_TEAM_FOCUS TF ON T.PCM_STD_TEAM_FOCUS_ID=TF.PCM_STD_TEAM_FOCUS_ID
-                        JOIN tmp_TEAM_MEMBERSHIP TM ON TM.TEAM_ID=T.TEAM_ID))
+                        JOIN PCMM.MV_TEAM_STAFF_INST TSI ON TSI.TEAM_ID = T.TEAM_ID AND TSI.STAFF_IEN = p_staff_id AND TSI.STATIONNUMBER like v_station_number_prefix
+                        ))
                       )
                       AND ((tr.TEAMTYPE IS NULL) OR (tr.TEAMTYPE in (
                         SELECT UNIQUE t.PCM_STD_TEAM_CARE_TYPE_ID from pcmm.team t
-                        JOIN tmp_TEAM_MEMBERSHIP TM ON TM.TEAM_ID=T.TEAM_ID))
+                        JOIN (
+                          SELECT TM.TEAM_ID,TM.team_position_id
+                          FROM PCMM.TEAM_MEMBERSHIP TM
+                          JOIN PCMM.STAFF S ON S.STAFF_ID=TM.STAFF_ID
+                          WHERE S.VA_INSTITUTION_ID IN (  select ID
+                                FROM SDSADM.STD_INSTITUTION
+                                WHERE STATIONNUMBER like v_station_number_prefix)
+                            AND S.STAFF_IEN= p_staff_id) TM ON TM.TEAM_ID=T.TEAM_ID))
                       )
                       AND ((tr.TEAMROLE is null) OR (tr.TEAMROLE in (
-                        select unique tp.pcm_std_team_role_id  from tmp_TEAM_MEMBERSHIP tm
+                        select unique tp.pcm_std_team_role_id  from (
+      SELECT TM.TEAM_ID,TM.team_position_id
+      FROM PCMM.TEAM_MEMBERSHIP TM
+      JOIN PCMM.STAFF S ON S.STAFF_ID=TM.STAFF_ID
+      WHERE S.VA_INSTITUTION_ID IN (  select ID
+            FROM SDSADM.STD_INSTITUTION
+            WHERE STATIONNUMBER like v_station_number_prefix)
+        AND S.STAFF_IEN= p_staff_id) tm
                         join pcmm.team_position tp on tp.team_position_id = tm.team_position_id))
                       )
                     ))
@@ -506,13 +533,21 @@ CREATE OR REPLACE PACKAGE BODY ACTIVITYDBUSER.TASKS IS
                   )
                   AND ((p_task_statuses IS NULL AND ti.statusId in (1,2,3))
                       OR (p_task_statuses IS NOT NULL AND
-                          (EXISTS (select column_value from TABLE(v_task_statuses) where column_value = 'All') OR (tsl.status in (SELECT TO_CHAR(column_value) FROM TABLE(v_task_statuses)))))
+                          (EXISTS (
+                              Select INSTR(p_task_statuses, 'All') from dual where INSTR(p_task_statuses, 'All') > 0 
+                            ) OR (tsl.status in (
+                            SELECT TO_CHAR(regexp_substr(p_task_statuses,'[^,]+', 1, level)) from dual
+                            CONNECT by regexp_substr(p_task_statuses, '[^,]+', 1, level) is not null
+                          ))))
                   )
                   AND (p_process_instance_id IS NULL OR ti.processInstanceId = p_process_instance_id)
                   AND (v_min_priority = -1 OR (v_min_priority = v_max_priority and ti.priority = v_min_priority) OR (v_min_priority <> v_max_priority and ti.priority BETWEEN v_min_priority AND v_max_priority))
                   AND (p_task_instance_id IS NULL OR ti.id = p_task_instance_id)
                   AND ((p_start_date IS NULL OR p_end_date IS NULL) OR ((ti.earliestDate BETWEEN p_start_date AND p_end_date AND ti.statusId IN (4,5,6,8))  OR ti.statusId IN (0,1,2,3)))
-                  AND (p_patient_identifiers IS NULL OR ti.icn in (SELECT TO_CHAR(column_value) FROM TABLE(v_patient_identifiers)));
+                  AND (p_patient_identifiers IS NULL OR ti.icn in (
+                      SELECT TO_CHAR(regexp_substr(p_patient_identifiers,'[^,]+', 1, level)) from dual
+                      CONNECT by regexp_substr(p_patient_identifiers, '[^,]+', 1, level) is not null
+                    ));
 
   END getTasksForTeamRoles;
 
@@ -598,13 +633,22 @@ CREATE OR REPLACE PACKAGE BODY ACTIVITYDBUSER.TASKS IS
             left join NOTIFDB.NOTIFICATIONS_VIEW ntf ON (CONCAT('ehmp:task:',ti.id) = ntf.item AND ntf.REC_USER_ID = p_ntf_user_id AND ntf.salience >= p_max_salience AND ntf.RESOLUTION_STATE = p_resolution_state)
             WHERE ((p_task_statuses IS NULL AND ti.statusId in (1,2,3))
                       OR (p_task_statuses IS NOT NULL AND
-                          (EXISTS (select column_value from TABLE(v_task_statuses) where column_value = 'All') OR (tsl.status in (SELECT TO_CHAR(column_value) FROM TABLE(v_task_statuses)))))
+                          (EXISTS (
+                            Select INSTR(p_task_statuses, 'All') from dual where INSTR(p_task_statuses, 'All') > 0 
+                          ) OR (
+                            tsl.status in (
+                              SELECT TO_CHAR(regexp_substr(p_task_statuses,'[^,]+', 1, level)) from dual
+                              CONNECT by regexp_substr(p_task_statuses, '[^,]+', 1, level) is not null
+                          ))))
                   )
                   AND (p_process_instance_id IS NULL OR ti.processInstanceId = p_process_instance_id)
                   AND (v_min_priority = -1 OR (v_min_priority = v_max_priority and ti.priority = v_min_priority) OR (v_min_priority <> v_max_priority and ti.priority BETWEEN v_min_priority AND v_max_priority))
                   AND (p_task_instance_id IS NULL OR ti.id = p_task_instance_id)
                   AND ((p_start_date IS NULL OR p_end_date IS NULL) OR ((ti.earliestDate BETWEEN p_start_date AND p_end_date AND ti.statusId IN (4,5,6,8))  OR ti.statusId IN (0,1,2,3)))
-                  AND (p_patient_identifiers IS NULL OR ti.icn in (SELECT TO_CHAR(column_value) FROM TABLE(v_patient_identifiers)));
+                  AND (p_patient_identifiers IS NULL OR ti.icn in (
+                    SELECT TO_CHAR(regexp_substr(p_patient_identifiers,'[^,]+', 1, level)) from dual
+                    CONNECT by regexp_substr(p_patient_identifiers, '[^,]+', 1, level) is not null
+                  ));
     OPEN recordset2 FOR
       SELECT DISTINCT tr.*
             FROM ACTIVITYDB.Am_TaskInstance ti INNER JOIN ACTIVITYDB.Am_TaskStatusLookup tsl ON ti.statusId = tsl.id
@@ -612,13 +656,21 @@ CREATE OR REPLACE PACKAGE BODY ACTIVITYDBUSER.TASKS IS
             INNER JOIN ACTIVITYDB.Am_TaskRoute tr ON ti.id = tr.taskInstanceId
             WHERE ((p_task_statuses IS NULL AND ti.statusId in (1,2,3))
                       OR (p_task_statuses IS NOT NULL AND
-                          (EXISTS (select column_value from TABLE(v_task_statuses) where column_value = 'All') OR (tsl.status in (SELECT TO_CHAR(column_value) FROM TABLE(v_task_statuses)))))
+                          (EXISTS (
+                            SELECT INSTR(p_task_statuses, 'All') from dual where INSTR(p_task_statuses, 'All') > 0 
+                          ) OR (tsl.status in (
+                                SELECT TO_CHAR(regexp_substr(p_task_statuses,'[^,]+', 1, level)) from dual
+                                CONNECT by regexp_substr(p_task_statuses, '[^,]+', 1, level) is not null
+                          ))))
                   )
                   AND (p_process_instance_id IS NULL OR ti.processInstanceId = p_process_instance_id)
                   AND (v_min_priority = -1 OR (v_min_priority = v_max_priority and ti.priority = v_min_priority) OR (v_min_priority <> v_max_priority and ti.priority BETWEEN v_min_priority AND v_max_priority))
                   AND (p_task_instance_id IS NULL OR ti.id = p_task_instance_id)
                   AND ((p_start_date IS NULL OR p_end_date IS NULL) OR ((ti.earliestDate BETWEEN p_start_date AND p_end_date AND ti.statusId IN (4,5,6,8))  OR ti.statusId IN (0,1,2,3)))
-                  AND (p_patient_identifiers IS NULL OR ti.icn in (SELECT TO_CHAR(column_value) FROM TABLE(v_patient_identifiers)));
+                  AND (p_patient_identifiers IS NULL OR ti.icn in (
+                        SELECT TO_CHAR(regexp_substr(p_patient_identifiers,'[^,]+', 1, level)) from dual
+                        CONNECT by regexp_substr(p_patient_identifiers, '[^,]+', 1, level) is not null
+                      ));
 
   END getAllTasks;
 
@@ -677,9 +729,17 @@ CREATE OR REPLACE PACKAGE BODY ACTIVITYDBUSER.TASKS IS
             FROM ACTIVITYDB.Am_TaskInstance ti INNER JOIN ACTIVITYDB.Am_TaskStatusLookup tsl ON ti.statusId = tsl.id
             INNER JOIN ACTIVITYDB.Am_ProcessInstance pi ON ti.processInstanceId = pi.processInstanceId
             WHERE (p_task_instance_id IS NULL OR ti.id = p_task_instance_id)
-                  AND (p_task_statuses IS NULL OR (EXISTS (select column_value from TABLE(v_task_statuses) where column_value = 'All') OR tsl.status in (SELECT TO_CHAR(column_value) FROM TABLE(v_task_statuses))))
+                  AND (p_task_statuses IS NULL OR (EXISTS (
+                        SELECT INSTR(p_task_statuses, 'All') from dual where INSTR(p_task_statuses, 'All') > 0 
+                      ) OR tsl.status in (
+                        SELECT TO_CHAR(regexp_substr(p_task_statuses,'[^,]+', 1, level)) from dual
+                        CONNECT by regexp_substr(p_task_statuses, '[^,]+', 1, level) is not null
+                      )))
                   AND (p_task_definition_id IS NULL OR ti.definitionid = p_task_definition_id)
-                  AND (p_patient_identifiers IS NULL OR ti.icn in (SELECT TO_CHAR(column_value) FROM TABLE(v_patient_identifiers)));
+                  AND (p_patient_identifiers IS NULL OR ti.icn in (
+                      SELECT TO_CHAR(regexp_substr(p_patient_identifiers,'[^,]+', 1, level)) from dual
+                      CONNECT by regexp_substr(p_patient_identifiers, '[^,]+', 1, level) is not null
+                  ));
 
   END getTasksByIds;
 
@@ -804,6 +864,8 @@ CREATE OR REPLACE PACKAGE ACTIVITYDBUSER.ACTIVITIES IS
       p_mode IN VARCHAR2,
       p_start_date IN VARCHAR2,
       p_end_date IN VARCHAR2,
+      p_process_definition_id in VARCHAR2,
+      p_show_only_flagged in NUMBER,
       recordset OUT SYS_REFCURSOR
   );
 END ACTIVITIES;
@@ -931,7 +993,10 @@ CREATE OR REPLACE PACKAGE BODY ACTIVITYDBUSER.ACTIVITIES IS
         OPEN recordset FOR
             SELECT DISTINCT PCMM.TEAM_MEMBERSHIP.STAFF_ID FROM PCMM.TEAM_MEMBERSHIP
             INNER JOIN PCMM.TEAM ON PCMM.TEAM.TEAM_ID = PCMM.TEAM_MEMBERSHIP.TEAM_ID
-            WHERE PCMM.TEAM.TEAM_ID IN (SELECT column_value FROM TABLE(v_team_ids))
+            WHERE PCMM.TEAM.TEAM_ID IN (
+              SELECT regexp_substr(p_team_ids,'[^,]+', 1, level) from dual
+              CONNECT by regexp_substr(p_team_ids, '[^,]+', 1, level) is not null
+            )
             ORDER BY PCMM.TEAM_MEMBERSHIP.STAFF_ID ASC;
     END getMembersForTeam;
 
@@ -944,9 +1009,11 @@ CREATE OR REPLACE PACKAGE BODY ACTIVITYDBUSER.ACTIVITIES IS
 --    p_user_id               the pid for the user
 --    p_team_ids              null or commna separated list of team ids
 --    p_team_focus_ids        null or commna separated list of team focus ids
---    p_mode
+--    p_mode                  'open' to query for open instances or 'closed' to query for closed. If set to undefined or 'all' both open and closed intances return.
 --    p_start_date            the begin date when filtering by a date range (closed activities only)
 --    p_end_date              the end date when filtering by a date range (closed activities only)
+--    p_process_definition_id Filter on specific domain of activities; 'none' to ignore
+--    p_show_only_flagged     1 to Filter on only flagged activities; 0 to ignore
 --    recordset:              output result set
 --------------------------------------------------------
     PROCEDURE getActivites (
@@ -959,6 +1026,8 @@ CREATE OR REPLACE PACKAGE BODY ACTIVITYDBUSER.ACTIVITIES IS
         p_mode IN VARCHAR2,
         p_start_date IN VARCHAR2,
         p_end_date IN VARCHAR2,
+        p_process_definition_id in VARCHAR2,
+        p_show_only_flagged in NUMBER,
         recordset OUT SYS_REFCURSOR
     ) AS
     v_patient_ids VARCHARARRAY;
@@ -996,9 +1065,28 @@ CREATE OR REPLACE PACKAGE BODY ACTIVITYDBUSER.ACTIVITIES IS
                 (
                     p_patient_ids IS NOT NULL
                     AND
-                    pi.ICN IN (SELECT TO_CHAR(column_value) FROM TABLE(v_patient_ids))
+                    pi.ICN IN (
+                        SELECT TO_CHAR(regexp_substr(p_patient_ids,'[^,]+', 1, level)) from dual
+                        CONNECT by regexp_substr(p_patient_ids, '[^,]+', 1, level) is not null
+                    )
                 )
             )
+            AND (
+                (
+                  p_process_definition_id = 'none'
+                )
+              OR(
+                  pi.PROCESSDEFINITIONID = p_process_definition_id
+                )
+              )
+            AND (
+                  (
+                    p_show_only_flagged = 0
+                  )
+              OR(
+                    pi.ACTIVITYHEALTHY = 0
+                )
+              )
             AND
             (
                 p_mode IS NULL
@@ -1018,7 +1106,7 @@ CREATE OR REPLACE PACKAGE BODY ACTIVITYDBUSER.ACTIVITIES IS
                         )
                         AND
                         (
-                            pi.INITIATIONDATE BETWEEN TO_DATE (p_start_date, 'yyyymmddhhmi') AND TO_DATE (p_end_date, 'yyyymmddhhmi')
+                            pi.INITIATIONDATE BETWEEN TO_DATE (p_start_date, 'yyyymmddhh24mi') AND TO_DATE (p_end_date, 'yyyymmddhh24mi')
                         )
                     )
                     OR
@@ -1052,9 +1140,15 @@ CREATE OR REPLACE PACKAGE BODY ACTIVITYDBUSER.ACTIVITIES IS
                             LEFT OUTER JOIN PCMM.PCM_STD_TEAM_FOCUS tf on p.TEAMFOCUS = tf.CODE
                             WHERE USERID = p_user_id OR
                             (
-                                p.TEAM IN (SELECT TO_NUMBER(column_value) FROM TABLE(v_team_ids))
+                                p.TEAM IN (
+                                  SELECT TO_NUMBER(regexp_substr(p_team_ids,'[^,]+', 1, level)) from dual
+                                  CONNECT by regexp_substr(p_team_ids, '[^,]+', 1, level) is not null
+                                )
                                 OR
-                                tf.PCM_STD_TEAM_FOCUS_ID IN (SELECT TO_NUMBER(column_value) FROM TABLE(v_team_focus_ids))
+                                tf.PCM_STD_TEAM_FOCUS_ID IN (
+                                  SELECT TO_NUMBER(regexp_substr(p_team_focus_ids,'[^,]+', 1, level)) from dual
+                                  CONNECT by regexp_substr(p_team_focus_ids, '[^,]+', 1, level) is not null
+                                )
                             )
                         )
                     )

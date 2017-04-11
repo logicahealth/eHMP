@@ -5,7 +5,7 @@ Feature:F899 - Create Order Selection Service (RESTFul Service) that enables the
 
 @F899_1_Orderables_Search @US11561 @DE4192
   Scenario: The returned orderables data contains searching strings
-  Given the client requests picklist with the parameters for "orderables" with the user "9E7A;PW    "
+  Given the client requests picklist with the parameters for "orderables" with the user "9E7A;vk1234"
   | paramter name | value                 |
   | subtype       | All                   |
   | searchString  | URINE                 |

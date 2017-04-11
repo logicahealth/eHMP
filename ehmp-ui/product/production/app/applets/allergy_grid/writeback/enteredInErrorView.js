@@ -29,7 +29,8 @@ define([
                 steps: [{
                     view: EnteredInErrorView.buildFormView(),
                     viewModel: formModel,
-                    stepTitle: 'Step 1'
+                    stepTitle: 'Step 1',
+                    helpMapping: 'allergies_eie_form'
                 }]
             };
 

@@ -1,11 +1,7 @@
-define([
-    "moment",
-    "backbone",
-    "app/applets/encounters/appConfig"
-], function(moment, Backbone, CONFIG) {
+define(function () {
     'use strict';
 
-    var gistConfiguration = {
+    return {
         gistHeaders: {
             visits: {
                 name: {
@@ -69,7 +65,7 @@ define([
             },
             admissions: {
                 name: {
-                    title: 'Diagnosis',//'Location - CLN/WARD',
+                    title: 'Diagnosis',
                     sortable: true,
                     sortType: 'alphabetical',
                     key: 'subKind'
@@ -95,11 +91,11 @@ define([
             id: 'encounterCount',
             field: 'count'
         }, {
-            id: 'timeSince', //'age',
+            id: 'timeSince',
             field: 'time'
-        }, ],
+        }],
         filterFields: ['groupName', 'problemText', 'acuityName'],
         defaultView: 'encounters'
     };
-    return gistConfiguration;
+
 });

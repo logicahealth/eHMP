@@ -486,10 +486,10 @@ define(['backbone', 'jasminejquery', 'moment', 'app/applets/problems/writeback/w
                 }]);
 
                 var incomingComments = WritebackUtil.buildIncomingComments(originalCommentCollection, newCommentCollection, getUser());
-                expect(incomingComments.length).toEqual(3);
+                expect(incomingComments.length).toEqual(5);
                 expect(incomingComments[0]).toEqual('testing changes');
-                expect(incomingComments[1]).toEqual('new additional comment');
-                expect(incomingComments[2]).toEqual('another new comment');
+                expect(incomingComments[1]).toEqual('testing 2');
+                expect(incomingComments[2]).toEqual('test comment from another user');
             });
         });
 

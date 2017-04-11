@@ -6,7 +6,7 @@
 
 + Parameters
 
-    + pid (string, required) - Person id
+    :[pid]({{{common}}}/parameters/pid.md)
 
     + encounterUid (false, optional) - Referral encounter UID
 

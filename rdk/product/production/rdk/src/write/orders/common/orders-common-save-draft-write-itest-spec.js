@@ -28,7 +28,7 @@ var createDraft = {
     })),
     appConfig: {
         generalPurposeJdsServer: {
-            baseUrl: 'http://IP             /resource/write-health-data/patient/:pid/orders/save-draft'
+            baseUrl: 'http://10.4.4.105:9999/resource/write-health-data/patient/:pid/orders/save-draft'
         }
     }
 };
@@ -59,7 +59,7 @@ var updateDraft = {
     })),
     appConfig: {
         generalPurposeJdsServer: {
-            baseUrl: 'http://IP             /resource/write-health-data/patient/:pid/orders/save-draft'
+            baseUrl: 'http://10.4.4.105:9999/resource/write-health-data/patient/:pid/orders/save-draft'
         }
     }
 };
@@ -90,7 +90,7 @@ var deleteDraft = {
     })),
     appConfig: {
         generalPurposeJdsServer: {
-            baseUrl: 'http://IP             /resource/write-health-data/patient/:pid/orders/save-draft'
+            baseUrl: 'http://10.4.4.105:9999/resource/write-health-data/patient/:pid/orders/save-draft'
         }
     }
 };
@@ -121,7 +121,7 @@ var updateDraftStateError = {
     })),
     appConfig: {
         generalPurposeJdsServer: {
-            baseUrl: 'http://IP             /resource/write-health-data/patient/:pid/orders/save-draft'
+            baseUrl: 'http://10.4.4.105:9999/resource/write-health-data/patient/:pid/orders/save-draft'
         }
     }
 };
@@ -152,7 +152,7 @@ var updateDraftStateError = {
 //     })),
 //     appConfig: {
 //         generalPurposeJdsServer: {
-//             baseUrl: 'http://IP             /resource/write-health-data/patient/:pid/orders/save-draft'
+//             baseUrl: 'http://10.4.4.105:9999/resource/write-health-data/patient/:pid/orders/save-draft'
 //         }
 //     }
 // };

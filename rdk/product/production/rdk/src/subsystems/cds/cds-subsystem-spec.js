@@ -37,8 +37,6 @@ var _ = require('lodash');
 
     describe('MongoDB server configuration', function() {
 
-        var db;
-
         it('MongoDB connection facility is functional', function() {
 
             //Create the mocked MongoDB functions that are used by the code that we're testing...

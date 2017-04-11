@@ -1,4 +1,4 @@
-@F337 @regression @triage
+@F337   @reg1
 Feature: CCB Enhancements
 
 @US4321

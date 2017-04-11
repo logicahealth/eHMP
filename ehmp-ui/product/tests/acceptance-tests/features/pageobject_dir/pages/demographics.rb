@@ -16,6 +16,8 @@ class PobDemographicsElements < SitePrism::Page
   element :fld_work_phone_value, '#pt-header-pt-phone dl>dd:nth-of-type(3)'
   element :fld_work_phone_discrepancies, '#demo-work-phone .fa-exclamation-circle'
 
+  element :fld_patient_info_block, '.patient-info'
+  elements :fld_patient_info_options, '.patient-info span'
   element :fld_patient_name_status, '#patientDemographic h2'
   element :fld_patient_dob, "[data-instanceid='patientDemographic-patientInfo-dob']"
   element :fld_patient_info, ".patient-info.toggle-details p"

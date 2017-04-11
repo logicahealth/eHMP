@@ -42,6 +42,12 @@ define([
 
     var Switchboard = Backbone.Marionette.CollectionView;
     var AppletLayoutView = Backbone.Marionette.LayoutView.extend({
+        behaviors: {
+            HelpLink: {
+                mapping: 'workspace_editor',
+                container: '.help-button-container'
+            }
+        },
         template: appletEditor,
         appletUnderSwitchboard: '',
         modelEvents: {

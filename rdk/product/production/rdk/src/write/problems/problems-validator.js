@@ -41,18 +41,18 @@ function validateAddInput(logger, model, errors) {
     }
 
     //     this is really the code from the pick list, in RPC land
-//     it is the (1)=GMPFLD(.01)="12474^410.90" ;CODE FROM LEXICON SEARCH ABOUT
+    //     it is the (1)=GMPFLD(.01)="12474^410.90" ;CODE FROM LEXICON SEARCH ABOUT
 
-//    {
-//        "lexIen": "7044423",
-//        "prefText": "Headache",
-//        "code": "R69.",
-//        "codeIen": "521774",
-//        "codeSys": "SNOMED CT",
-//        "conceptId": "25064002",
-//        "desigId": "41990019",
-//        "version": "ICD-10-CM"
-//    }
+    //    {
+    //        "lexIen": "7044423",
+    //        "prefText": "Headache",
+    //        "code": "R69.",
+    //        "codeIen": "521774",
+    //        "codeSys": "SNOMED CT",
+    //        "conceptId": "25064002",
+    //        "desigId": "41990019",
+    //        "version": "ICD-10-CM"
+    //    }
 
     if (_.isUndefined(model.code)) {
         errors.push('code is missing');
@@ -117,9 +117,7 @@ function update(writebackContext, callback) {
     var model = writebackContext.model;
 
     // dfn is now part of the interceptor results...
-    model.dfn = writebackContext.pid;
-    model.dfn = model.dfn.split(';');
-    model.dfn = model.dfn[1];
+    model.dfn = writebackContext.interceptorResults.patientIdentifiers.dfn;
     model.problemIEN = writebackContext.resourceId;
     model.enteredBy = writebackContext.duz[writebackContext.siteHash];
 

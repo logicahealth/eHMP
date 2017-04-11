@@ -1,9 +1,9 @@
-@F352 @regression @triage
+@F352   @DE6991 @DE6976 @reg1
 Feature: Tile Sorting
 
 Background:
   Given user searches for and selects "Nineteen,Patient"
-  And Summary View is active
+  And Overview is active
   And the user clicks the Workspace Manager
   And the user deletes all user defined workspaces
   And the user creates a user defined workspace named "tilesort"

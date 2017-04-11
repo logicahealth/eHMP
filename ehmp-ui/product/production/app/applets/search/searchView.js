@@ -21,6 +21,15 @@ define([
         DATE_FORMAT = 'MM/DD/YYYY';
 
     var SearchView = Backbone.Marionette.ItemView.extend({
+        behaviors: {
+            HelpLink: {
+                container: '.help-button-container',
+                mapping: 'record_search',
+                buttonOptions: {
+                    icon: 'fa-question-circle'
+                }
+            }
+        },
         util: searchUtil,
         template: searchTemplate,
         searchResultTemplate: searchResultTemplate,
@@ -48,6 +57,13 @@ define([
                     }
                 })
             });
+
+            var ehmpConfig = ADK.Messaging.request('ehmpConfig');
+            var featureFlags = ehmpConfig.get('featureFlags');
+            var trackSolrStorageBoolean = _.get(featureFlags, 'trackSolrStorage');
+            this.model = new Backbone.Model();
+            this.model.set('showWarningMessage', !trackSolrStorageBoolean);
+
             this.collection = new Collection();
             this.searchResults = new Collection();
 

@@ -1,0 +1,86 @@
+{
+  "cache_patches": [
+    "xcode_zblxes.kid",
+    "zrpcdie.kid"
+  ],
+  "vista_patches": [
+    "HMP_PREREQ_BUNDLE_2-0_V2-9.KID",
+    "PSB3_0P94T2.KID",
+    "PSB_3-0_95.KID",
+    "OR_3-0_421T5.KID",
+    "MD_1_46T2.KID",
+    "GMRV_5-0_32T4.KID",
+    "DG_5-3_921T2.KID",
+    "PSN_4.0_448.KID",
+    "PSS_1_197T3.KID",
+    "PX_1-0_215V3.KID",
+    "PX_1_216v7.KID",
+    "HMP_2-0.KID",
+    "HMP2_0P01T4.KID",
+    "HMP2_0P02T11.KID",
+    "HMP_DE6589_JD.KID",
+    "HMP_UI_CONTEXT.KID"
+  ],
+  "vista-panorama_patches": [
+    "HMP_UI_CONTEXT_VIMM215.KID",
+    "HMP_US14699.KID",
+    "HMP_CONTEXT.KID"
+  ],
+  "vista-panorama_test_data": [
+    "ZZPANORAMA_1_1.KID",
+    "ZZPANORAMA-MASK_1_1.KID",
+    "HMP_PATIENT_TEST_DATA.KID",
+    "ZZUS9184-1.KID",
+    "ZZECUS16821.KID",
+    "ZZUS12085.KID",
+    "ZZUS13708-PANORAMA.KID",
+    "ZZUS15337.KID",
+    "ZZUS15198-PANORAMA.KID",
+    "ZZUS16044-PANORAMA.KID",
+    "ZZUS16399-PANORAMA.KID",
+    "ZZUS16440-PANORAMA.KID",
+    "NORA-PANORAMA.KID",
+    "NORA-VITALS.KID"
+  ],
+  "vista-kodak_patches": [
+    "HMP_UI_CONTEXT_VIMM215.KID",
+    "HMP_US14699.KID",
+    "HMP_CONTEXT.KID"
+
+  ],
+  "vista-kodak_test_data": [
+    "ZZKODAK_1_1.KID",
+    "ZZKODAK-MASK_1_1.KID",
+    "HMP_PATIENT_TEST_DATA_KODAK.KID",
+    "ZZUS9184-2.KID",
+    "ZZECUS16821.KID",
+    "ZZUS12085.KID",
+    "ZZUS13708-KODAK.KID",
+    "ZZUS15337.KID",
+    "ZZECUS16972.KID",
+    "ZZUS15198-KODAK.KID",
+    "ZZUS16044-KODAK.KID",
+    "ZZECUSKOD.KID",
+    "ZZUS16399-KODAK.KID",
+    "ZZUS16440-KODAK.KID",
+    "NORA-PANORAMA.KID",
+    "NORA-VITALS.KID"
+  ],
+  "vista-polaroid_patches": [
+    "HMP_UI_CONTEXT_VIMM215.KID",
+    "HMP_US14699.KID",
+    "HMP_CONTEXT.KID"
+
+ ],
+  "test_data_patches": [
+    "ZZECTL.KID"
+  ],
+  "cds_data_patches": [
+    "ZZCDS.KID"
+  ],
+  "global_test_data_patches": [
+  ],
+  "fmql_patches": [
+    "CGFMQL-1.0.kid"
+  ]
+}

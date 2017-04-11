@@ -16,7 +16,6 @@ var cdsDefinition = require('../../resources/cds-patient-list/definition');
 var cdsPatientList = require('../../resources/cds-patient-list/patient-list');
 var cdsMetrics = require('../../resources/cds-metrics/metrics');
 var cdsIntent = require('../../resources/cds-intent/cds-intent');
-var cdsSchedule = require('../../resources/cds-schedule/cds-schedule');
 
 var mongoServerConfigured = false;
 var invocationConfigured = false;
@@ -36,19 +35,22 @@ function isCDSInvocationConfigured() {
 function isCDSMongoServerConfigured() {
     return mongoServerConfigured;
 }
-
-var cdsMongoServer;
-var mongoskinOptions;
-var logger;
-
-function getMongoskinOptions(config) {
-    var sslCA = _.isEmpty(_.get(config.cdsMongoServer.rootCert)) ? null : [fs.readFileSync(config.cdsMongoServer.rootCert)];
-    return {
+var cdsSubsystemSettings = {
+    cdsMongoServer: null,
+    mongoskinOptions: null,
+    logger: null,
+    rootCert: null
+};
+function getMongoskinOptions(callback) {
+    if (cdsSubsystemSettings.mongoskinOptions) {
+        return callback(cdsSubsystemSettings.mongoskinOptions);
+    }
+    var mongoOptions = {
         'server': {
             'ssl': true,
             'sslValidate': false,
             'sslInvalidHostNameAllowed': true,
-            'sslCA': sslCA,
+            'sslCA': null,
             'socketOptions': {
                 'connectTimeoutMS': 500,
                 'socketTimeoutMS': 500
@@ -62,16 +64,28 @@ function getMongoskinOptions(config) {
         'replSet': {},
         'mongos': {}
     };
+    if (_.isEmpty(cdsSubsystemSettings.rootCert)) {
+        return callback(mongoOptions);
+    }
+    fs.readFile(cdsSubsystemSettings.rootCert, function(error, data) {
+        if (!error) {
+            mongoOptions.server.sslCA = [data];
+        }
+        return callback(mongoOptions);
+    });
 }
 
-var onDomainError = function (er) {
+var onDomainError = function(er) {
     //reset database connections
     cdsdbConnections = {};
-    logger.error({error: er}, 'Error connecting to database.');
+    cdsSubsystemSettings.logger.error({
+        error: er
+    }, 'Error connecting to database.');
 };
 
 
 function init(app, subsystemLogger) {
+    cdsSubsystemSettings.rootCert = _.get(app.config, 'cdsMongoServer.rootCert');
     if (!_.isUndefined(domain)) {
         domain.removeListener('error', onDomainError);
     }
@@ -79,33 +93,34 @@ function init(app, subsystemLogger) {
 
     domain.on('error', onDomainError);
 
-    logger = subsystemLogger;
-    logger.debug('beginning cds subsystem configuration...');
+    cdsSubsystemSettings.logger = subsystemLogger;
+    cdsSubsystemSettings.logger.debug('beginning cds subsystem configuration...');
 
     if (!_.isUndefined(app.config.cdsInvocationServer)) {
         invocationConfigured = true;
         cdsInvocationUrl = app.config.externalProtocol + '://' + app.config.cdsInvocationServer.host + ':' + app.config.cdsInvocationServer.port;
-        logger.debug('invocationConfigured: ' + invocationConfigured);
+        cdsSubsystemSettings.logger.debug('invocationConfigured: ' + invocationConfigured);
     }
 
     if (!_.isUndefined(app.config.cdsMongoServer.host)) {
         //configuration is present, but connects will be created lazily as needed.
         mongoServerConfigured = true;
-        cdsMongoServer = app.config.cdsMongoServer; //keep the configuration items to create connections below...
-        logger.debug('mongoServerConfigured: ' + mongoServerConfigured);
+        cdsSubsystemSettings.cdsMongoServer = app.config.cdsMongoServer; //keep the configuration items to create connections below...
+        cdsSubsystemSettings.logger.debug('mongoServerConfigured: ' + mongoServerConfigured);
 
         //setting additional connection options for SSL, connection pooling, etc.
-        mongoskinOptions = getMongoskinOptions(app.config);
-
-        // db setup
-        // cdsAgenda.init(app, subsystemLogger);
-        cdsCriteria.init(app, subsystemLogger);
-        cdsDefinition.init(app, subsystemLogger);
-        cdsEngine.init(app, subsystemLogger);
-        cdsIntent.init(app, subsystemLogger);
-        cdsMetrics.init(app, subsystemLogger);
-        cdsPatientList.init(app, subsystemLogger);
-        cdsWorkProduct.init(app, subsystemLogger);
+        getMongoskinOptions(function(mongoskinOptionsConfig) {
+            cdsSubsystemSettings.mongoskinOptions = mongoskinOptionsConfig;
+            // db setup
+            // cdsAgenda.init(app, subsystemLogger);
+            cdsCriteria.init(app, subsystemLogger);
+            cdsDefinition.init(app, subsystemLogger);
+            cdsEngine.init(app, subsystemLogger);
+            cdsIntent.init(app, subsystemLogger);
+            cdsMetrics.init(app, subsystemLogger);
+            cdsPatientList.init(app, subsystemLogger);
+            cdsWorkProduct.init(app, subsystemLogger);
+        });
     }
 }
 
@@ -167,42 +182,39 @@ function getSubsystemConfig(app, logger) {
     };
 }
 
-function getCDSDB(dbName, initDbFunc,  callback) {
-
-    var db;
+function getCDSDB(dbName, initDbFunc, callback) {
 
     if (!mongoServerConfigured) {
         return callback('CDS Mongo Server is not configured!', null);
     }
-
-    var connectionString = cdsDBUtil.getMongoDBConnectionString(dbName, cdsMongoServer, logger);
-    var MongoClient = require('mongodb').MongoClient;
-
-    domain.run(function() {
-        if (_.has(cdsdbConnections, dbName)) {
-            return callback(null, cdsdbConnections[dbName]);
-        }
-
-        MongoClient.connect(connectionString, mongoskinOptions, function(err, db) {
-
-            if (err) {
-                logger.error({
-                    error: err
-                }, 'error: Unable to connect to database: \'' + dbName + '\'');
-                return callback(err, null);
+    getMongoskinOptions(function(mongoskinOptions) {
+        var connectionString = cdsDBUtil.getMongoDBConnectionString(dbName, cdsSubsystemSettings.cdsMongoServer, cdsSubsystemSettings.logger);
+        var MongoClient = require('mongodb').MongoClient;
+        domain.run(function() {
+            if (_.has(cdsdbConnections, dbName)) {
+                return callback(null, cdsdbConnections[dbName]);
             }
 
-            logger.info('success: Connected to database: \'' + dbName + '\'');
-            if (_.isFunction(initDbFunc)) {
-                initDbFunc(db);
-            }
-            cdsdbConnections[dbName] = db;
-            return callback(null, cdsdbConnections[dbName]);
+            MongoClient.connect(connectionString, mongoskinOptions, function(err, db) {
+
+                if (err) {
+                    cdsSubsystemSettings.logger.error({
+                        error: err
+                    }, 'error: Unable to connect to database: \'' + dbName + '\'');
+                    return callback(err, null);
+                }
+
+                cdsSubsystemSettings.logger.info('success: Connected to database: \'' + dbName + '\'');
+                if (_.isFunction(initDbFunc)) {
+                    initDbFunc(db);
+                }
+                cdsdbConnections[dbName] = db;
+                return callback(null, cdsdbConnections[dbName]);
+
+            });
 
         });
-
     });
-
 }
 
 function getCDSDBCount() {
@@ -229,3 +241,4 @@ module.exports.getCDSDBCount = getCDSDBCount;
 module.exports.getAgenda = cdsAgenda.getAgenda;
 module.exports.getAgendaJobProcessorName = cdsAgenda.getAgendaJobProcessorName;
 module.exports.testMongoDBId = testMongoDBId;
+module.exports._cdsSubsystemSettings = cdsSubsystemSettings;

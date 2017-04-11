@@ -1,0 +1,86 @@
+{
+  "queryComplete": true,
+  "statusList": [
+    {
+      "partner": {
+        "partnerIdentifier": "2.16.840.1.113883.3.42.126.100001.13",
+        "partnerName": "ahlta",
+        "partnerType": "DOD"
+      },
+      "partnerStatus": "SUCCESS",
+      "expectedCount": 10,
+      "receivedCount": 10
+    }
+  ],
+  "dataList": {
+    "allergies": [
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000012126"
+        },
+        "enteredBy": {
+          "name": "AHLTADTE, ATTEND B"
+        },
+        "enteredDate": {
+          "start": "2013-12-18T20:10:49",
+          "end": "2013-12-18T20:10:49"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "48765-2"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL/0056"
+        },
+        "allergen": [
+          {
+            "code": "14236002",
+            "display": "MILK",
+            "system": "2.16.840.1.113883.3.42.127.100001.209",
+            "primary": true
+          }
+        ],
+        "comment": null,
+        "onsetDate": {
+          "start": "2013-12-18T05:00:00",
+          "end": "2013-12-18T05:00:00"
+        },
+        "reactions": [
+          {
+            "reaction": [
+              {
+                "display": "NAUSEA,VOMITING",
+                "primary": true
+              }
+            ],
+            "comment": null
+          }
+        ],
+        "sourceOfInfo": [
+          {
+            "display": "Patient",
+            "primary": true
+          }
+        ],
+        "type": [
+          {
+            "display": "ALLERGY",
+            "primary": true
+          }
+        ]
+      }
+    ]
+  }
+}

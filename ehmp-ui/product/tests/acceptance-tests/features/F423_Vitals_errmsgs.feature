@@ -1,4 +1,4 @@
-@f423_vitals_write_back_errmsgs @regression @future
+@f423_vitals_write_back_errmsgs  @future
 Feature: F423 : Enter and Store Vitals
 
 # US7939, TC993: cannot automate

@@ -34,6 +34,9 @@ class PobAllergiesApplet < PobParentApplet
   elements :expanded_allegy_names_screenreader_text, "[data-appletid='allergy_grid'] table tbody tr.selectable td:first-of-type span"
   elements :expanded_allergy_column_allergen_names, "#data-grid-allergy_grid > tbody > tr > td.string-cell.sortable.renderable.toolbar-cell"
   elements :expanded_allergy_column_s_allergen, "#data-grid-allergy_grid tr > td.string-cell.flex-width-1_5.sortable"
+
+  element :expanded_header_standardized_allergen, "[data-header-instanceid='allergy_grid-standardizedName'] a"
+  element :expanded_header_allergen_name, "[data-header-instanceid='allergy_grid-summary'] a"
   # *****************  All_Button_Elements  ******************* #
   element :btn_add_allergy, "[data-appletid=allergy_grid] .applet-add-button"
   element :btn_add_allergy_cancel, ".allergiesConfirmCancel button[data-original-title='Warning']"

@@ -1,12 +1,10 @@
 'use strict';
-var querystring = require('querystring');
-var textSearch = require('./text-search');
-var solrSimpleClient = require('./solr-simple-client');
 
+var textSearch = require('./text-search');
 var buildSolrQuery = textSearch._buildSolrQuery;
 var buildSpecializedSolrQuery = textSearch._buildSpecializedSolrQuery;
 
-xdescribe('build solr query', function () {
+describe.skip('build solr query', function () {
     it('should construct a query string with all arguments filled', function () {
         var reqQuery = {
             q: 'metformin',
@@ -68,7 +66,7 @@ xdescribe('build solr query', function () {
 });
 
 
-xdescribe('build specialized solr query', function () {
+describe.skip('build specialized solr query', function () {
     it('should build a specialized solr query for med domain', function () {
         var reqQuery = {pid: 10108, domain: 'med', query: 'metformin'};
         var specializedSolrQuery = buildSpecializedSolrQuery(reqQuery, 'med');

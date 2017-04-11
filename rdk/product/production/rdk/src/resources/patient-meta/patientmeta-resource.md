@@ -4,7 +4,7 @@
 
 + Parameters
 
-    + pid (string, required) - the patient's pid
+    :[pid]({{{common}}}/parameters/pid.md)
 
 
 ### GET

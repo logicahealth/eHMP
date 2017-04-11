@@ -1,7 +1,4 @@
 'use strict';
-var rdk = require('../../../core/rdk');
-//var _ = require('lodash');
-//var nullchecker = rdk.utils.nullchecker;
 var jdsFilter = require('jds-filter');
 var moment = require('moment');
 var querystring = require('querystring');

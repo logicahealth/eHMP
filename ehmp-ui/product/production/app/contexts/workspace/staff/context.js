@@ -3,13 +3,15 @@ define([
     'backbone',
     'marionette',
     'jquery',
-    'handlebars'
+    'handlebars',
+    'app/contexts/workspace/staff/layout'
 ], function(
     _,
     Backbone,
     Marionette,
     $,
-    Handlebars
+    Handlebars,
+    Layout
 ) {
     'use strict';
 
@@ -19,18 +21,10 @@ define([
         defaultScreen: 'provider-centric-view',
         userRequired: true,
         layout: function(workspaceModel) {
-            return Backbone.Marionette.LayoutView.extend({
-                className: "container-fluid",
-                template: Handlebars.compile('<div id="content-region" class="row top-padding-xs hidden-overflow"></div>'),
-                regions: {
-                    content_region: '#content-region'
-                }
-            });
+            return Layout;
         },
-        enter: function () {
-        },
-        exit: function () {
-        },
+        enter: function() {},
+        exit: function() {},
         navigateTo: function(workspaceId) {
             var changeContext = function() {
                 return {

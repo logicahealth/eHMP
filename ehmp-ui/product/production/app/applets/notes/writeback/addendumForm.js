@@ -49,7 +49,8 @@ define([
                 workflow.changeHeaderTitle(CONFIG.PREVIEW_TITLE);
                 workflow.headerModel.unset('actionItems');
                 model.openTrayOnDestroy = true;
-            }
+            },
+            helpMapping: 'notes_preview_form'
         });
 
         var workflow = new ADK.UI.Workflow(workflowOptions);
@@ -118,6 +119,7 @@ define([
             view: AddendumSignView,
             viewModel: signModel,
             stepTitle: 'E-Signature',
+            helpMapping: 'notes_esig_form',
             onBeforeShow: function() {
                 workflow.changeHeaderTitle('Sign');
                 workflow.headerModel.unset('actionItems');

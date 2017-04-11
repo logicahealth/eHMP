@@ -3,7 +3,7 @@
 var _ = require('lodash');
 var mongo = require('mongoskin');
 var cdsSpecUtil = require('../../resources/cds-spec-util/cds-spec-util');
-var loadResources = require('../../utils/test-resources-loader');
+var loadResources = require('../../utils/test-resources-loader-spec-helper');
 var buildDescription = loadResources.buildDescription;
 var enforcedResourcePermissions = require('./enforced-resource-permissions');
 

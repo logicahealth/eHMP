@@ -50,6 +50,9 @@ define([
         cell: Backgrid.StringCell.extend ({
             className: 'string-cell flex-width-date'
         }),
+        sortValue: function(model, sortKey) {
+            return model.get('doneDate');
+        },
         hoverTip: 'clinicalreminders_donedate'
     };
 
@@ -59,41 +62,11 @@ define([
 
     // Disabling CDS Advice on dev branch to exclude the functionality from the coming production release.
     var selectedUse = 'providerInteractiveAdvice';
-
-    //Collection fetchOptions
-    var fetchOptions = {
-        pageable: true,
-        resourceTitle: 'cds-advice-list',
-        cache: true, // let the CDS Advice RDK resource control the cache rules
-        criteria: {
-            // pid:  This is set by the ADK when fetching the collection.
-            use: selectedUse,
-            cache: true // default to cached results
-        },
-        viewModel: {
-            parse: function(response) {
-                response.typeText = Util.getTypeText(response.type);
-                response.priorityText = Util.getPriorityText(response.priority);
-                response.priorityCSS = Util.getPriorityCSS(response.priority);
-                response.dueDateFormatted = Util.formatDate(response.dueDate);
-                response.doneDateFormatted = Util.formatDate(response.doneDate);
-                return response;
-            }
-        }
-    };
-
-    var detailsPromise;
-    var _super;
     var GridApplet = ADK.Applets.BaseGridApplet;
 
     var AppletLayoutView = GridApplet.extend({
-        localId: null,
         initialize: function(options) {
-            var self = this;
-
-            _super = GridApplet.prototype;
-
-            fetchOptions.pageable = !options.appletConfig.fullScreen;
+            this._super = GridApplet.prototype;
 
             var dataGridOptions = {
                 summaryColumns: summaryColumns,
@@ -101,62 +74,45 @@ define([
                 enableModal: true,
                 filterEnabled: true,
                 filterFields: _.pluck(fullScreenColumns, 'name'),
-                onClickRow: function(model, event) { //Row click event handler
-                    self.onClickRowHandler(model, event);
-                },
-                collection: ADK.PatientRecordService.createEmptyCollection(fetchOptions)
+                onClickRow: _.bind(this.onClickRowHandler, this),
+                collection: new ADK.UIResources.Fetch.CdsAdvice.List({isClientInfinite: true})
             };
-            self.dataGridOptions = dataGridOptions;
-            _super.initialize.call(self, options);
+            this.dataGridOptions = dataGridOptions;
+            this.dataGridOptions.collection.fetchCollection({use: selectedUse, cache: true});
+            this._super.initialize.call(this, options);
         },
-        onRender: function() {
-            _super.onRender.apply(this, arguments);
-
-            ADK.PatientRecordService.fetchCollection(fetchOptions, this.dataGridOptions.collection);
-        },
+        DataGrid: ADK.Applets.BaseGridApplet.DataGrid.extend({
+            DataGridRow: ADK.Applets.BaseGridApplet.DataGrid.DataGridRow.extend({
+                serializeModel: function() {
+                    var data = this.model.toJSON();
+                    data.priorityCSS = Util.getPriorityCSS(data.priority);
+                    return data;
+                }
+            })
+        }),
         refresh: function() {
-            fetchOptions.criteria.cache = false; // this is an explicit refresh, we don't want a cached response
-            _super.refresh.apply(this, arguments);
-            fetchOptions.criteria.cache = true; // restore default cache behavior
+            _.set(this, 'dataGridOptions.collection.fetchOptions.criteria.cache', false);
+            this._super.refresh.apply(this, arguments);
+            _.set(this, 'dataGridOptions.collection.fetchOptions.criteria.cache', true);
         },
         onClickRowHandler: function(model, event) {
-            var self = this;
-
             if (model.get('details')) {
                 // we got the details, show the popup
-                self.showDetails(model);
+                this.showDetails(model);
             } else {
                 // show loading popup while we wait for the details
-                LoadingModal.show(model, Util.getTypeText(model.get('type')));
-                self.getDetails(model);
+                LoadingModal.show(model, model.get('typeText'));
+                this.getDetails(model);
             }
         },
         getDetails: function(model) {
-            var self = this;
-            var fetchOptions = {
-                resourceTitle: 'cds-advice-detail',
-                criteria: {
-                    id: model.get('id'),
-                    use: selectedUse
-                },
-                onError: function(data) {
-                    ErrorModal.show(model.get('title'));
-                    delete model.xhr;
-                }
-            };
-            var data = ADK.PatientRecordService.fetchModel(fetchOptions);
-
-            this.listenToOnce(data, 'sync', function(data) {
+            var details = new ADK.UIResources.Fetch.CdsAdvice.Detail({id: model.get('id'), use: selectedUse});
+            this.listenToOnce(details, 'sync', function(data) {
                 delete model.xhr;
-                // check for empty details
-                var dataJSON = data.toJSON();
-                if (dataJSON.detail) {
-                    dataJSON.detail = Util.formatDetailText(data.get('detail'));
-                }
-                model.set('details', dataJSON);
-                self.showDetails(model);
+                model.set('details', data.toJSON());
+                this.showDetails(model);
             });
-            model.xhr = data.fetch();
+            model.xhr = details.fetch();
         },
         showDetails: function(model) {
             switch (model.get('type')) {

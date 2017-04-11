@@ -1,0 +1,33 @@
+grails.jmeadowsURL = <%= jmeadows[:jmeadows][:application][:protocol]%>://<%= jmeadows[:jmeadows][:ipaddress]%><%= jmeadows[:jmeadows][:application][:path]%>?<%= jmeadows[:jmeadows][:application][:path_query]%>
+#http://10.2.100.100/jMeadows/JMeadowsDataService?WSDL
+#grails.jmeadowsURL = http://r02hinapp26pp.r02.med.va.gov:14112/jMeadows_accel_mock/JMeadowsDataService?WSDL
+#grails.jmeadowsURL = http://r02hinapp26pp.r02.med.va.gov:14112/jMeadows_accel/JMeadowsDataService?WSDL
+#grails.jmeadowsURL = http://r02hinapp26pp.r02.med.va.gov:14112/jMeadows_POAM/JMeadowsDataService?WSDL
+#grails.jmeadowsURL = http://localhost:8088/mockJMeadowsDataPortBinding?WSDL
+#grails.jmeadowsURL = http://localhost:8282/jMeadows/JMeadowsDataService?WSDL
+
+grails.jmeadowsUsername = lPg3yVP9O1ll3gk9KR4Ifg==
+grails.jmeadowsPassword = hd4DYbgZ1Rq+RIoJqHtmOQ==
+
+grails.smartCardBypass = true
+grails.testSmartCard = 987654333
+grails.isEncryptedTokenDebug = false
+grails.trustAllSSLHostnamesAndCerts = false
+
+grails.dodAuthUserEnabled = false
+grails.vaAuthUserEnabled = false
+
+connectionTimeoutMS = 30000
+requestTimeoutMS = 130000
+
+vlerRequestTimeoutMS = 485000
+vlerStyleSheet = <?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<?xml-stylesheet type=\"text/xsl\" href=\"../c32styles/nhin/cda2textSections.xsl\"?>
+
+grails.extLib = ext-3.4.0
+
+#grails tomcat plugin 2 way SSL connector configurations
+grails.enableTomcatPlugin2WaySSL = false
+grails.tomcatPlugin2WaySSLKeystoreFile = C:\\glassfish\\domains\\domain1\\config\\keystore.jks
+grails.tomcatPlugin2WaySSLKeystorePass = changeit
+grails.tomcatPlugin2WaySSLTruststoreFile = C:\\glassfish\\domains\\domain1\\config\\jssecacerts
+grails.tomcatPlugin2WaySSLTruststorePass = changeit

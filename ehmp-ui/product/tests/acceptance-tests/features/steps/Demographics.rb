@@ -179,14 +179,30 @@ Then(/^the Patient's Name is "([^"]*)"$/) do |name|
 end
 
 Then(/^the Patient's Status is "([^"]*)"$/) do |status|
-  @ehmp = PobDemographicsElements.new unless @ehmp.is_a? PobDemographicsElements
-  @ehmp.wait_until_fld_patient_name_status_visible
-  expect(@ehmp.fld_patient_name_status.text.downcase).to include(status.downcase)
+  ehmp = PobDemographicsElements.new unless @ehmp.is_a? PobDemographicsElements
+
+  last_label = ''
+  last_data = ''
+
+  max_attempt = 2
+  begin
+    expect(ehmp.wait_for_fld_patient_info_block).to eq(true)
+    expect(ehmp.fld_patient_info_options.length).to be >=2
+
+    last_label = ehmp.fld_patient_info_options.last(2)[0].text.upcase
+    last_data = ehmp.fld_patient_info_options.last(2)[1].text.upcase
+  rescue Exception => e
+    max_attempt-=1
+    retry if max_attempt > 0
+    raise e if max_attempt <= 0
+  end
+  expect(last_label).to eq('TYPE OF CARE:')
+  expect(last_data).to eq(status.upcase)
 end
 
 Then(/^the Patient's DOB is in format MM\/DD\/YYYY \(AGEy\)$/) do
   @ehmp = PobDemographicsElements.new unless @ehmp.is_a? PobDemographicsElements
-  @ehmp.wait_until_fld_patient_name_status_visible
+  expect(@ehmp.wait_for_fld_patient_info_block).to eq(true)
   years = Regexp.new("\\d{2}\\/\\d{2}\\/\\d{4}\s\\(\\d{2}y.*\\)")
   expect((@ehmp.fld_patient_info.text).should =~ (years)).to eq(true), "Actual: #{@ehmp.fld_patient_dob.text}, Expected Format: MM/DD/YYYY (AGEy)"
 end

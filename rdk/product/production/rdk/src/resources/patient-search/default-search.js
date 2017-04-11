@@ -3,7 +3,6 @@
 var async = require('async');
 var RpcClient = require('vista-js').RpcClient;
 var searchUtil = require('./results-parser');
-var searchMaskSsn = require('./search-mask-ssn');
 var rdk = require('../../core/rdk');
 var httpUtil = rdk.utils.http;
 var _ = require('lodash');
@@ -46,6 +45,11 @@ module.exports.getMyCPRS = function(req, res) {
 
             if (!_.isObject(result)) {
                 return res.status(rdk.httpstatus.internal_server_error).rdkSend(result);
+            }
+            if (_.isEmpty(_.get(result, 'data.items'))) {
+                return res.status(200).rdkSend(_.extend({}, result, {
+                    message: 'No results found. Please make sure your CPRS Default Search is configured properly.'
+                }));
             }
             req.logger.debug('default-search.getMyCPRS returning result');
             return res.status(rdk.httpstatus.ok).rdkSend(result);
@@ -261,6 +265,8 @@ function getVistaConfig(request) {
     config.siteCode = site;
     config.accessCode = request.session.user.accessCode;
     config.verifyCode = request.session.user.verifyCode;
+    config.division = request.session.user.division;
+
     return config;
 }
 

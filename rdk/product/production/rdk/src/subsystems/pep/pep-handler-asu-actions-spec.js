@@ -2,13 +2,14 @@
 
 var rdk = require('../../core/rdk');
 var httpMocks = require('node-mocks-http');
-var handlerFactory = require('./pep-handler-factory');
 var handler = require('./pep-handler-asu-actions');
 var asuProcess = require('../../subsystems/asu/asu-process');
-var _ = require('lodash');
 
 describe('When pep handler asu actions is called', function() {
-    var req, mock, callback, res;
+    var req;
+    var mock;
+    var callback;
+    var res;
     var puUid = 'urn:va:user:9E7A:10000000270';
     var puName = 'USER,PANORAMA';
     var site = '9E7A';
@@ -22,10 +23,6 @@ describe('When pep handler asu actions is called', function() {
           uid: 'urn:va:asu-class:9E7A:561'
         }
     ];
-    var next = function(e, r) {
-        var err = e;
-        var result = r;
-    };
 
     beforeEach(function(done) {
         req = {};

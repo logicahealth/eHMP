@@ -76,7 +76,7 @@ define([
             ADK.UI.Modal.hide();
 
             var workflowTitle = (this.model.get('discontinueBtnLabel') || 'Cancel Order');
-            Utils.launchWorkflow(model, DiscontinueView, {size: 'medium'}, workflowTitle);
+            Utils.launchWorkflow(model, DiscontinueView, { size: 'medium', helpMapping: 'lab_order_discontinue_form' }, workflowTitle);
         },
         signOrder: function(e) {
             e.preventDefault();
@@ -103,7 +103,8 @@ define([
                 headerOptions: {
                     closeButtonOptions: {title: 'Press enter to cancel.'}
                 },
-                triggerElement: this.triggerElement
+                triggerElement: this.triggerElement,
+                helpMapping: 'lab_order_esig_form'
             };
             Utils.launchWorkflow(model, SignView, workflowOptions, 'Sign Order');
         },
@@ -129,7 +130,8 @@ define([
                 steps: [{
                     view: writebackView,
                     viewModel: formModel,
-                    stepTitle: 'Step 1'
+                    stepTitle: 'Step 1',
+                    helpMapping: 'lab_order_form'
                 }]
             };
             var workflowView = new ADK.UI.Workflow(workflowOptions);

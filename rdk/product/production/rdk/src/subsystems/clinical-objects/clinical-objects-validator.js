@@ -13,7 +13,7 @@ module.exports.validateUpdate = validateUpdate;
 module.exports.validateFind = validateFind;
 module.exports.validateGetClinicalObjectList = validateGetClinicalObjectList;
 
-var UTC_STANDARD = module.exports.UTC_STANDARD = 'YYYYMMDDHHmmss+0000';
+module.exports.UTC_STANDARD = 'YYYYMMDDHHmmss+0000';
 
 function validateCreate(errorMessages, model, appConfig, next) {
     validateCreateModel(errorMessages, model, appConfig, next);

@@ -30,10 +30,14 @@ define([
         return response;
     };
 
-    //Grabbing Order Id for other parts of applet
+
     Util.getFieldFromUid = function(uid, field) {
         var uidFields = ['siteCode', 'orderId'];
-        if (_.includes(uidFields, field) && _.isString(uid) && uid.split(':').length == 6) {
+        var OPERATIONAL_DATA_UID_LENGTH = 5;
+        var PATIENT_DATA_UID_LENGTH = 6;
+        var uidLength = uid.split(':').length;
+
+        if (_.includes(uidFields, field) && _.isString(uid) && (uidLength == OPERATIONAL_DATA_UID_LENGTH || uidLength == PATIENT_DATA_UID_LENGTH)) {
             switch (field) {
                 case 'siteCode':
                     return uid.split(':')[3];

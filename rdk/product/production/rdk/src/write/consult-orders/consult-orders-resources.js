@@ -1,9 +1,6 @@
 'use strict';
 
-var _ = require('lodash');
-var rdk = require('../../core/rdk');
 var writebackWorkflow = require('../core/writeback-workflow');
-var encryptSig = require('../orders/common/orders-sig-code-encryptor');
 var signatureValidator = require('./consult-order-validator');
 
 module.exports.getResourceConfig = function() {

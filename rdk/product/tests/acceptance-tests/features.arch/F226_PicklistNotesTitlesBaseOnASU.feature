@@ -31,7 +31,7 @@ Scenario: Filter Note Titles Pick-lists with New RPC based on ASU Rules
 
 @F226_2_List_Of_Notes_Titles_based_on_ASU_Rules @US10978
 Scenario: Filter Note Titles Pick-lists with New RPC based on ASU Rules
-  When the client requests a picklist with the parameters for "progress-notes-titles-asu-filtered" with the user "9E7A;PW    "
+  When the client requests a picklist with the parameters for "progress-notes-titles-asu-filtered" with the user "9E7A;mx1234"
       | paramter name  | value         |
       | docStatus      | UNTRANSCRIBED |
       | actionNames    | ENTRY         |

@@ -1,4 +1,4 @@
-@F144_Global_Date_Filter @regression @triage
+@F144_Global_Date_Filter  
 Feature: F144 - eHMP Viewer GUI - Global Date Filter
 
 # Team: Andromeda

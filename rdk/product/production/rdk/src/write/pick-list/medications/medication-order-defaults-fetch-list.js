@@ -50,35 +50,39 @@ var _ = require('lodash');
 module.exports.fetch = function(logger, configuration, callback, params) {
     var ien = _.get(params, 'ien');
     var pharmacyType = _.get(params, 'pharmacyType');
-    var outpatientDfn = _.get(params, 'outpatientDfn');
-    var needPatientInstructions = Boolean(_.get(params, 'needPatientInstructions'));
-    var pkiEnabled = Boolean(_.get(params, 'pkiEnabled'));
+    var options = {
+        requiresDfn: false
+    };
+    validate.getPatientDFN(params, options, function(err, outpatientDfn) {
+        if (err) {
+            return callback(err);
+        }
+        var needPatientInstructions = Boolean(_.get(params, 'needPatientInstructions'));
+        var pkiEnabled = Boolean(_.get(params, 'pkiEnabled'));
 
-    if (!validate.isWholeNumber(ien)) {
-        ien = null;
-    }
-    if (validate.isStringNullish(pharmacyType)) {
-        return callback('pharmacyType cannot be empty');
-    }
-    if (!validate.isWholeNumber(outpatientDfn)) {
-        outpatientDfn = null;
-    }
-    if (!_.isBoolean(needPatientInstructions)) {
-        needPatientInstructions = false;
-    }
-    if (!_.isBoolean(pkiEnabled)) {
-        pkiEnabled = false;
-    }
+        if (!validate.isWholeNumber(ien)) {
+            ien = null;
+        }
+        if (validate.isStringNullish(pharmacyType)) {
+            return callback('pharmacyType cannot be empty');
+        }
+        if (!_.isBoolean(needPatientInstructions)) {
+            needPatientInstructions = false;
+        }
+        if (!_.isBoolean(pkiEnabled)) {
+            pkiEnabled = false;
+        }
 
-    pharmacyType = pharmacyType.toUpperCase();
+        pharmacyType = pharmacyType.toUpperCase();
 
-    //NOTE: If more types are supported, add them with documentation in the Javadoc as to what those types represent.
-    if (pharmacyType !== 'U' && pharmacyType !== 'O' && pharmacyType !== 'X') {
-        return callback('view must be \'U\', \'O\', or \'X\'');
-    }
+        //NOTE: If more types are supported, add them with documentation in the Javadoc as to what those types represent.
+        if (pharmacyType !== 'U' && pharmacyType !== 'O' && pharmacyType !== 'X') {
+            return callback('view must be \'U\', \'O\', or \'X\'');
+        }
 
-    needPatientInstructions = rpcUtil.convertBooleanToYN(needPatientInstructions);
-    pkiEnabled = rpcUtil.convertBooleanToYN(pkiEnabled);
+        needPatientInstructions = rpcUtil.convertBooleanToYN(needPatientInstructions);
+        pkiEnabled = rpcUtil.convertBooleanToYN(pkiEnabled);
 
-    return rpcUtil.standardRPCCall(logger, configuration, 'ORWDPS2 OISLCT', ien, pharmacyType, outpatientDfn, needPatientInstructions, pkiEnabled, parse, callback);
+        return rpcUtil.standardRPCCall(logger, configuration, 'ORWDPS2 OISLCT', ien, pharmacyType, outpatientDfn, needPatientInstructions, pkiEnabled, parse, callback);
+    });
 };

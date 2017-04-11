@@ -34,4 +34,4 @@ module.exports.parse = function(rows, sites, vistaNameToFilterBy) {
         };
     });
     return result;
-}
+};

@@ -38,6 +38,15 @@ define([
     });
 
     var FilterDateRangeView = Backbone.Marionette.LayoutView.extend({
+        behaviors: {
+            HelpLink: {
+                container: '.help-button-container',
+                mapping: 'gdf',
+                buttonOptions: {
+                    icon: 'fa-question-circle'
+                }
+            }
+        },
         template: gdrSelectorTemplate,
         className: 'global-grid-filter-daterange',
         regions: {

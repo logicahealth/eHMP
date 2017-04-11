@@ -9,47 +9,6 @@ Given(/^the On-line Help icon on login page of eHMP\-UI$/) do
   expect(driver.find_element(:id, "linkHelp-logon")).to be_true
 end
 
-Then(/^the On-line Help icon is present on Patient Search page$/) do
-  driver = TestSupport.driver
-  expect(driver.find_element(:id, "linkHelp-patient_search")).to be_true
-end
-
-Given(/^user searches for patient "(.*?)"$/) do |search_value|
-  patient_search = PatientSearch.instance
-  driver = TestSupport.driver
-
-  # if patient search button is found, click it to go to patient search
-  patient_search.perform_action("patientSearch") if patient_search.static_dom_element_exists? "patientSearch"
-
-  #verify icon help on My CPRS List
-  patient_search.wait_until_element_present("myCPRSList", DefaultLogin.wait_time)
-  expect(patient_search.perform_action("myCPRSList")).to be_true
-  expect(driver.find_element(:id, "linkHelp-myCPRSList")).to be_true
-
-  patient_search.wait_until_element_present("mySite", DefaultLogin.wait_time)
-  expect(patient_search.perform_action("mySite")).to be_true
-
-  element = nil
-  Selenium::WebDriver::Wait.new(:timeout => DefaultLogin.wait_time).until {
-    element = driver.find_element(:id, "patientSearchInput")
-    element.displayed?
-    element.click
-  }
-
-  expect(patient_search.perform_action("patientSearchInput", search_value)).to be_true
-  expect(patient_search.wait_until_xpath_count_greater_than("Patient Search Results", 0)).to be_true
-
-  results = TestSupport.driver.find_elements(:xpath, "//span[contains(@class, 'patientDisplayName')]")
-  patient_search.select_patient_in_list(0)
-
-  driver = TestSupport.driver
-  
-  patient_search.wait_until_element_present("Confirm", DefaultLogin.wait_time)
-
-  expect(driver.find_element(:id, "linkHelp-patient_search_confirm")).to be_true
-  expect(driver.find_element(:id, "linkHelp-mySite")).to be_true
-end
-
 def verify_common_help_buttons
   PobProblemsApplet.new.wait_for_btn_applet_help
   expect(PobProblemsApplet.new).to have_btn_applet_help, "help icon not present on Problmes Applet"
@@ -116,17 +75,27 @@ end
 Then(/^the On-line Help page is opened by clicking on the On-line Help icon$/) do
   driver = TestSupport.driver
 
-  pagehelp = driver.find_element(:id, "linkHelp-patient_search")
-  pagehelp.click
+  @ehmp = PobMedsReview.new
+  @ehmp.wait_for_btn_applet_help
+  expect(@ehmp).to have_btn_applet_help, "help icon not present on MedsReview Applet"
+  num_windows = driver.window_handles.length
+  @ehmp.btn_applet_help.click
+  begin
+    wait_until { driver.window_handles.length > num_windows }
+  rescue Exception => e
+    p e
+    expect(driver.window_handles.length).to be > num_windows, "New window did not open"
+  end
 
   driver.switch_to.window(driver.window_handles.last) {
     begin
       wait = Selenium::WebDriver::Wait.new(:timeout => 15)
       wait.until {
-        expect(driver.find_element(:class, "WordSection3")).to be_true
+        expect(driver.find_element(:xpath, "//img[contains(@alt, 'Veterans Affairs')]")).to be_true
       }
     rescue Exception => e
       p "Error: #{e}"
+      raise e
     end
   }
 end

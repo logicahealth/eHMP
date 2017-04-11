@@ -7,11 +7,11 @@ var rpcClientFactory = require('./../../core/rpc-client-factory');
 var editWritebackContext = {
     pid: '9E7A;100615',
     vistaConfig: {
-        host: 'IP        ',
+        host: '10.2.2.101',
         port: 9210,
-        accessCode: 'PW    ',
-        verifyCode: 'PW    !!',
-        localIP: 'IP      ',
+        accessCode: 'mx1234',
+        verifyCode: 'mx1234!!',
+        localIP: '10.2.2.1',
         localAddress: 'localhost',
         noReconnect: true
     },
@@ -21,11 +21,11 @@ var editWritebackContext = {
 var saveWritebackContext = {
     pid: '9E7A;100615',
     vistaConfig: {
-        host: 'IP        ',
+        host: '10.2.2.101',
         port: 9210,
-        accessCode: 'PW    ',
-        verifyCode: 'PW    !!',
-        localIP: 'IP      ',
+        accessCode: 'mx1234',
+        verifyCode: 'mx1234!!',
+        localIP: '10.2.2.1',
         localAddress: 'localhost'
     },
     model: {
@@ -88,9 +88,9 @@ describe('write-back orders common edit vista writer integration tests', functio
         });
     });
 
-/*
+
     //This test will create a new lab order in Vista.  Uncomment to test locally
-    it('tests that edit order returns successful vprResponse', function(done) {
+    it.skip('tests that edit order returns successful vprResponse', function(done) {
         this.timeout(10000);
         saveVistaWriter.create(saveWritebackContext, function(err, result) {
             expect(err).to.be.falsy();
@@ -107,6 +107,5 @@ describe('write-back orders common edit vista writer integration tests', functio
             });
         });
     });
-*/
 
 });

@@ -1,7 +1,6 @@
 'use strict';
 var parse = require('./immunization-data-parser').parse;
 var rpcUtil = require('./../utils/rpc-util');
-var validate = require('./../utils/validation-util');
 var _ = require('lodash');
 
 

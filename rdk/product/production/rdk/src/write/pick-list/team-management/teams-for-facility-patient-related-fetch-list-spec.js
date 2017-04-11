@@ -48,11 +48,11 @@ describe('teams-for-facility-patient-related fetch list', function(){
     it('returns expected JSON', function() {
         fetch(dummyLogger, dummyConfig, function(err, result) {
             expect(result).to.be.truthy();
-            expect(_.get(result[0], "teamID")).to.be("42");
-            expect(_.get(result[0], "teamName")).to.be("Towel - ABB");
+            expect(_.get(result[0], 'teamID')).to.be('42');
+            expect(_.get(result[0], 'teamName')).to.be('Towel - ABB');
 
-            expect(_.get(result[1], "teamID")).to.be("777z");
-            expect(_.get(result[1], "teamName")).to.be("My Team Name - ABB");
+            expect(_.get(result[1], 'teamID')).to.be('777z');
+            expect(_.get(result[1], 'teamName')).to.be('My Team Name - ABB');
         }, params);
     });
 });

@@ -1,8 +1,7 @@
 'use strict';
-var _ = require('lodash');
 var assignRequestSite = require('./assign-request-site');
 
-function createRequest(site, reqUserSessionSite, reqPIDSiteDfnSite, configSite) {
+function createRequest(site, reqUserSessionSite, reqPatientSite, configSite) {
     var reqConfigSite = {};
     reqConfigSite[configSite] = {};
     return {
@@ -14,15 +13,15 @@ function createRequest(site, reqUserSessionSite, reqPIDSiteDfnSite, configSite) 
         },
         app: {config: {vistaSites: reqConfigSite, interceptors: {assignRequestSite: {disabled: false}}}},
         session: {user: { site:  reqUserSessionSite || ''}},
-        interceptorResults: { patientIdentifiers: { siteDfn: reqPIDSiteDfnSite || '' }},
+        interceptorResults: { patientIdentifiers: { site: reqPatientSite || '' }},
         site: site || ''
     };
 }
 
-function reqTestUrl(site, reqUserSessionSite, reqPIDSiteDfnSite, configSite) {
+function reqTestUrl(site, reqUserSessionSite, reqPatientSite, configSite) {
     var next = function() {};
     var res = {};
-    var req = createRequest(site, reqUserSessionSite, reqPIDSiteDfnSite, configSite);
+    var req = createRequest(site, reqUserSessionSite, reqPatientSite, configSite);
     assignRequestSite(req, res, next);
     expect(req.site).to.equal('9E7A');
 }

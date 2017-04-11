@@ -1,25 +1,28 @@
-<form class="top-padding-xs bottom-padding-xs left-padding-no">
-    <div class="form-group">
-        <label for="{{instanceId}}-assigned-to-options" class="bottom-margin-no">Assigned to:</label>
-        <select id="{{instanceId}}-assigned-to-options" name="assignedTo" title="Use up and down arrows to view options and then press enter to select.">
-            {{#each assignedTo}}
-            {{#if show}}
-            <option value="{{value}}">{{displayText}}</option>
-            {{/if}}
-            {{/each}}
-        </select>
+<form class="form-container">
+    <div class="form-inline">
+        <div class="form-group">
+            <label for="{{instanceId}}-assigned-to-options">Assigned to:</label>
+            <select id="{{instanceId}}-assigned-to-options" name="assignedTo" title="Use up and down arrows to view options and then press enter to select.">
+                {{#each assignedTo}}
+                {{#if show}}
+                <option value="{{value}}">{{displayText}}</option>
+                {{/if}}
+                {{/each}}
+            </select>
+        </div>
         {{#if isSummaryView}}
-        <p class="inline-block-display bottom-margin-no left-margin-xs">Displaying only Due tasks</p>
+        <p>Displaying only Due tasks</p>
         {{else}}
-        <span class="left-margin-xs divider-vertical"></span>
-        <label for="{{instanceId}}-status-options" class="left-margin-xs right-margin-xs">Display:</label>
-        <select id="{{instanceId}}-status-options" name="status" title="Use up and down arrows to view options and then press enter to select.">
-            {{#each status}}
-            {{#if show}}
-            <option value="{{value}}">{{displayText}}</option>
-            {{/if}}
-            {{/each}}
-        </select>
+        <div class="form-group">
+            <label for="{{instanceId}}-status-options">Display:</label>
+            <select id="{{instanceId}}-status-options" name="status" title="Use up and down arrows to view options and then press enter to select.">
+                {{#each status}}
+                {{#if show}}
+                <option value="{{value}}">{{displayText}}</option>
+                {{/if}}
+                {{/each}}
+            </select>
+        </div>
         {{/if}}
     </div>
 </form>

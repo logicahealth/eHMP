@@ -1,4 +1,4 @@
-@F295_encounters_trend_view @regression
+@F295_encounters_trend_view  @reg1
 Feature: F295 - Encounters Applet
 
 @pob_f295_encounters_initial_view @F295-1.1 @F295-1.2 @F295-1.3 @F295_4 @F295-1.5 @F295-1.7 @US3706 @US4001 @US4154 @US5126
@@ -14,7 +14,7 @@ Scenario: User views the encounters gist view
       | Last          |
   And POB Encounters trend view has data rows
 
-@pob_f295_encounters_expand_view_from_trend_view
+@pob_f295_encounters_expand_view_from_trend_view @debug @DE6991 @DE6976
 Scenario: User can expand Encounters applet from trend view
   When user searches for and selects "Sixhundred,Patient" 
   Then Overview is active

@@ -337,7 +337,7 @@ end
 Then(/^the Stacked Graphs applet displays a row for "([^"]*)"$/) do |row|
 
   @ehmp = PobStackedGraph.new unless @ehmp.is_a? PobStackedGraph
-  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
+  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time * 2)
   wait.until { @ehmp.fld_stacked_graphs.length > 0 }
   wait.until { @ehmp.first_column_text_downcase.include? row.downcase }
 

@@ -1,19 +1,13 @@
 define([
     'jquery',
-    'jquery.inputmask',
-    'bootstrap-datepicker',
     'moment',
     'backbone',
     'marionette',
     'underscore',
     'hbs!app/applets/immunizations/modal/dateRangeTemplate',
     'hbs!app/applets/immunizations/modal/dateRangeHeaderTemplate'
-], function($, InputMask, DatePicker, moment, Backbone, Marionette, _, dateRangeTemplate, dateRangeHeaderTemplate) {
+], function($, moment, Backbone, Marionette, _, dateRangeTemplate, dateRangeHeaderTemplate) {
     'use strict';
-
-    var fetchCollection = function(fetchOptions) {
-        ADK.PatientRecordService.fetchCollection(fetchOptions);
-    };
 
     var DateRangeHeaderView = Backbone.Marionette.ItemView.extend({
         template: dateRangeHeaderTemplate,
@@ -33,9 +27,7 @@ define([
 
 
     var FilterDateRangeView = Backbone.Marionette.LayoutView.extend({
-        fetchOptions: {},
         sharedDateRange: {},
-        hasCustomDateRangeFieldsBeenInitialized: false,
         template: dateRangeTemplate,
         initialize: function(options) {
             this.parentView = options.parentView;
@@ -57,7 +49,7 @@ define([
         getSharedDateRange: function() {
             return this.sharedDateRange;
         },
-        monitorCustomDateRange: function(event) {
+        monitorCustomDateRange: function() {
             if (this.checkCustomRangeCondition()) {
                 this.$el.find('#customRangeApply').removeAttr('disabled');
             } else {
@@ -88,7 +80,6 @@ define([
         },
         applyDateRange: function(event) {
             var fromDate, toDate;
-            var isFetchable = true;
 
             this.setDateRangeValues = function(timeUnit, timeValue, selectedId) {
                 fromDate = moment().subtract(timeUnit, timeValue).format('MM/DD/YYYY');
@@ -149,15 +140,15 @@ define([
             }
 
             if (fromDate !== undefined && fromDate !== null) {
-                this.fetchOptions.criteria.observedFrom = moment(fromDate).format('YYYYMMDD');
+                this.observedFrom = moment(fromDate).format('YYYYMMDD');
             } else {
-                delete this.fetchOptions.criteria.observedFrom;
+                delete this.observedFrom;
             }
 
             if (toDate !== undefined && toDate !== null) {
-                this.fetchOptions.criteria.observedTo = moment(toDate).format('YYYYMMDD');
+                this.observedTo = moment(toDate).format('YYYYMMDD');
             } else {
-                delete this.fetchOptions.criteria.observedTo;
+                delete this.observedTo;
             }
 
             this.model.set('fromDate', fromDate);
@@ -172,11 +163,9 @@ define([
                 this.$el.find('#' + event.currentTarget.id).addClass('active-range');
             }
 
-            if (isFetchable) {
-                this.fetchDateRangeFilteredCollection();
-            }
+            this.triggerMethod('date:range:collection:fetch');
         },
-        onBeforeDestroy: function(event) {
+        onBeforeDestroy: function() {
             this.sharedDateRange.set('fromDate', this.model.get('fromDate'));
             this.sharedDateRange.set('toDate', this.model.get('toDate'));
             this.sharedDateRange.set('customFromDate', this.model.get('customFromDate'));
@@ -215,7 +204,7 @@ define([
                 targetElement.trigger('click');
             }
         },
-        onRender: function(event) {
+        onRender: function() {
             this.$('#filterFromDate').inputmask('m/d/y', {
                 'placeholder': 'MM/DD/YYYY'
             });
@@ -274,13 +263,6 @@ define([
                     }
                 }
             }
-        },
-        fetchDateRangeFilteredCollection: function() {
-            ADK.PatientRecordService.fetchCollection(this.fetchOptions, this.collection);
-            this.parentView.leftColumn.show(ADK.Views.Loading.create());
-        },
-        setFetchOptions: function(fetchOptions) {
-            this.fetchOptions = fetchOptions;
         }
     });
 

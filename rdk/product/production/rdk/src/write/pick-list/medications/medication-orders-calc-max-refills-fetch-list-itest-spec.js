@@ -9,11 +9,11 @@ var log = sinon.stub(require('bunyan').createLogger({ name: 'medication-orders-c
 var configuration = {
     environment: 'development',
     context: 'OR CPRS GUI CHART',
-    host: 'IP        ',
+    host: '10.2.2.101',
     port: 9210,
-    accessCode: 'PW    ',
-    verifyCode: 'PW    !!',
-    localIP: 'IP      ',
+    accessCode: 'pu1234',
+    verifyCode: 'pu1234!!',
+    localIP: '10.2.2.1',
     localAddress: 'localhost'
 };
 
@@ -25,6 +25,6 @@ describe('medication-orders-calc-max-refills resource integration test', functio
             expect(err).to.be.falsy();
             expect(result).to.be.truthy();
             done();
-        }, {patientDFN: '100615', drug: '213^', days: '90', ordItem: '1348', discharge: false});
+        }, { site: '9E7A', pid: '9E7A;100615', drug: '213^', days: '90', ordItem: '1348', discharge: false });
     });
 });

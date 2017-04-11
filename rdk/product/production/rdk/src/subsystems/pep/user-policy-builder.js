@@ -30,7 +30,6 @@ function buildUserPolicy(req) {
 }
 
 function auditSensitiveDataAccessInVista(req, patient) {
-    var key = patient.pid.split(';')[0];
     var localpid = patient.pid.split(';')[1];
     var serverConfig = rpcUtil.getVistaRpcConfiguration(req.app.config, req.session.user);
 

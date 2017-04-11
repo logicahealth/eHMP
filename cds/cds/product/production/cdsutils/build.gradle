@@ -1,0 +1,30 @@
+apply plugin: 'java'
+
+sourceCompatibility = property('javaVersion')
+targetCompatibility = property('targetJavaVersion')
+
+// In this section you declare where to find the dependencies of your project
+repositories {
+     maven { url "https://store.vistacore.us/nexus/content/repositories/public"	 }
+}
+dependencies {
+	compile group: 'javax.servlet', name: 'javax.servlet-api', version:property('servlet-api')
+	compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: property('jacksonVersion')
+	compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: property('jacksonVersion')
+	compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: property('jacksonVersion')
+	compile group: 'com.fasterxml.jackson.jaxrs', name: 'jackson-jaxrs-json-provider', version: property('jacksonVersion')
+	compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: property('log4jVersion')
+	compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: property('log4jVersion')
+	compile group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: property('log4jVersion')
+	compile group: 'org.apache.logging.log4j', name: 'log4j-web', version: property('log4jVersion')
+	compile group: 'org.apache.commons', name: 'commons-lang3', version:property('commons-lang3')
+	testCompile group: 'junit', name: 'junit', version: property('junitVersion')
+	compile group: 'org.apache.cxf', name: 'cxf-rt-features-logging', version: property('cxfVersion')
+	compile group: 'org.apache.cxf', name: 'cxf-rt-transports-http', version: property('cxfVersion')
+}
+
+jar {
+	rootSpec.exclude('**/javax.servlet*')
+	rootSpec.exclude('**/log4j*')
+	rootSpec.exclude('**/slf4j*')
+}

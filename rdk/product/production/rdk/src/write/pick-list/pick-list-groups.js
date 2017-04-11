@@ -16,7 +16,7 @@ function getPickListGroup(req, site, type, serverSend) {
         if (!results || !results.length) {
             return serverSend(err, results);
         }
-        
+
         serverSend(err, {
             data: results,
             totalItems: results.length
@@ -30,4 +30,4 @@ module.exports.getPickListGroup = getPickListGroup;
 //Changes the configuration for testing.
 module.exports._setConfig = function(config) {
     pickListConfig = config;
-}
+};

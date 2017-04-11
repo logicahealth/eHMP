@@ -2,9 +2,7 @@
 var _ = require('lodash');
 var encryptor = require('../orders/common/orders-sig-code-encryptor');
 var nullchecker = require('../../utils/nullchecker');
-var querystring = require('querystring');
 var httpUtil = require('../../core/rdk').utils.http;
-var async = require('async');
 var clinicalObjUtil = require('../../subsystems/clinical-objects/clinical-objects-wrapper-note');
 var clinicalObjSubsystem = require('../../subsystems/clinical-objects/clinical-objects-subsystem');
 var asu = require('../../subsystems/asu/asu-process');
@@ -14,8 +12,8 @@ module.exports.unsigned = function(writebackContext, callback) {
     var error = null;
     var logger = writebackContext.logger;
     // Add PID, author, status, and siteHash to the model
-    writebackContext.model.pid = _.last(writebackContext.pid.split(';'));
-    writebackContext.model.siteHash = writebackContext.siteHash;
+    writebackContext.model.pid = writebackContext.interceptorResults.patientIdentifiers.dfn;
+    writebackContext.model.siteHash = writebackContext.interceptorResults.patientIdentifiers.site;
     if (!writebackContext.model.authorUid) {
         writebackContext.model.authorUid = writebackContext.duz[writebackContext.siteHash];
     }
@@ -45,8 +43,8 @@ module.exports.createAddendum = function(writebackContext, callback) {
     var logger = writebackContext.logger;
     var model = writebackContext.model;
 
-    model.pid = _.last(writebackContext.pid.split(';'));
-    model.siteHash = writebackContext.siteHash;
+    model.pid = writebackContext.interceptorResults.patientIdentifiers.dfn;
+    model.siteHash = writebackContext.interceptorResults.patientIdentifiers.site;
 
     if (!model.authorUid) {
         model.authorUid = writebackContext.duz[writebackContext.siteHash];
@@ -77,7 +75,7 @@ module.exports.createAddendum = function(writebackContext, callback) {
 };
 
 module.exports.update = function(writebackContext, callback) {
-    var pid = writebackContext.pid;
+    var pid = writebackContext.interceptorResults.patientIdentifiers.siteDfn;
     var ien = writebackContext.resourceId;
     var error = null;
 
@@ -87,8 +85,8 @@ module.exports.update = function(writebackContext, callback) {
     }
 
     // Set the model's attributes using the endpoint and session.
-    writebackContext.model.pid = _.last(writebackContext.pid.split(';'));
-    writebackContext.model.siteHash = writebackContext.siteHash;
+    writebackContext.model.pid = writebackContext.interceptorResults.patientIdentifiers.dfn;
+    writebackContext.model.siteHash = writebackContext.interceptorResults.patientIdentifiers.site;
 
     //Remove 'localId', 'authorUid', 'siteHash', and 'pid' from model so that they aren't overwritten.
     addUid(writebackContext);
@@ -109,8 +107,7 @@ module.exports.sign = function(writebackContext, callback) {
         return setImmediate(callback, 'signatureCode is missing from the model. A signature code is required to sign a note.');
     }
     writebackContext.model.signatureCode = encryptor.encryptSig(writebackContext.model.signatureCode);
-    var pid = writebackContext.pid;
-    writebackContext.model.dfn = _.last(writebackContext.pid.split(';'));
+    writebackContext.model.dfn = writebackContext.interceptorResults.patientIdentifiers.dfn;
 
     var uid = writebackContext.model.signItems[0].uid;
     var logger = writebackContext.logger;
@@ -144,19 +141,20 @@ module.exports.signAddendum = function(writebackContext, callback) {
         return setImmediate(callback, 'signatureCode is missing from the model. A signature code is required to sign a addendum.');
     }
     writebackContext.model.signatureCode = encryptor.encryptSig(writebackContext.model.signatureCode);
-    var pid = writebackContext.pid;
-    writebackContext.model.dfn = _.last(writebackContext.pid.split(';'));
+    writebackContext.model.dfn = writebackContext.interceptorResults.patientIdentifiers.dfn;
     return setImmediate(callback, error);
 };
 
 module.exports.runDeleteRecordASU = function(writebackContext, callback) {
     var logger = writebackContext.logger;
-    var appConfig = writebackContext.appConfig;
 
     var doc = writebackContext.model;
     var currentUserUid = 'urn:va:user:' + writebackContext.siteHash + ':' + writebackContext.duz[writebackContext.siteHash];
     var docAuthor = doc.authorUid;
-    logger.info({currentUser:currentUserUid, docAuthor:docAuthor});
+    logger.info({
+        currentUser: currentUserUid,
+        docAuthor: docAuthor
+    });
     if (currentUserUid === docAuthor && doc.status === 'UNSIGNED') {
         logger.info('AUTHORIZED - User is the author. Allow DELETE RECORD of UNSIGNED document with business rule.');
         return setImmediate(callback, null);
@@ -180,15 +178,24 @@ module.exports.runDeleteRecordASU = function(writebackContext, callback) {
             vistaUserClass: writebackContext.vistaUserClass
         }
     };
-    logger.info({asuRequest: asuItem});
+    logger.info({
+        asuRequest: asuItem
+    });
     asu.getAsuPermissionForActionNames(request, asuItem, function(asuError, asuResult) {
         var item = asuItem.data.items[0];
 
         if (!nullchecker.isNullish(asuError) || _.isNull(asuResult)) {
-            logger.error({item:item.localTitle, error:asuError, result:asuResult});
+            logger.error({
+                item: item.localTitle,
+                error: asuError,
+                result: asuResult
+            });
             return setImmediate(callback, 'ASU permission check failed: ' + asuError);
         }
-        logger.debug({item:item.localTitle, result:asuResult});
+        logger.debug({
+            item: item.localTitle,
+            result: asuResult
+        });
         var denied = _.chain(asuResult)
             .filter(function(perm) {
                 return perm.hasPermission === false;

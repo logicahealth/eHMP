@@ -5,7 +5,7 @@ $LOAD_PATH.unshift path unless $LOAD_PATH.include?(path)
 require 'VerifyJsonRuntimeValue.rb'
 
 When(/^the client requests manual expiration time "(.*?)" for patient with pid "(.*?)" and site "(.*?)"$/) do |time, pid, site_name|
-  # http://IP             /sync/expire?pid=11016V630869&vistaId=CDS&time=20140916170917.123
+  # http://10.4.4.105:8888/sync/expire?pid=11016V630869&vistaId=CDS&time=20140916170917.123
   # path = QueryRDKSync.new("expirepatientdata", pid)
   path = RDKQuery.new('synchronization-expirepatientdata')
   path.add_parameter("pid", pid)
@@ -14,7 +14,7 @@ When(/^the client requests manual expiration time "(.*?)" for patient with pid "
   p path.path
   
   user = "9E7A;500"
-  pass = "PW    ;PW    !!"
+  pass = "pu1234;pu1234!!"
   begin
     @response = HTTPartyRDK.post(path.path)
   rescue Timeout::Error

@@ -10,7 +10,7 @@ var async = require('async');
 // Clinical Reminders
 var RpcClient = require('vista-js').RpcClient;
 var RpcParameter = require('vista-js').RpcParameter;
-var getVistaRpcConfiguration = require('../../utils/rpc-config').getVistaRpcConfiguration;
+var vistaRpcConfiguration = require('../../utils/rpc-config');
 var filemanDateUtil = require('../../utils/fileman-date-converter');
 var errorVistaJSCallback = 'VistaJS RPC callback error: ';
 
@@ -138,25 +138,24 @@ function mergeLists(adviceList, reminders, workProducts) {
     return merged;
 }
 /*
- * Make an RPC call to retrieve clinical reminders. Uses the site id that is stored in the user session.
+ * Make an RPC call to retrieve clinical reminders. Uses the site id that is stored in the request patient identifier interceptor object.
  *
  * @param {object} req The HTTP request object
  * @param {object} res The HTTP response object
  * @param {callback} next The next function
- * @param {string} pid The user identfier
  * @param {callback} callback The provided callback when complete
  */
-function getClinicalRemindersList(req, res, next, pid, callback) {
-    if (_.isUndefined(_.get(req, 'interceptorResults.patientIdentifiers.dfn'))) {
-        req.logger.error('CDS Advice - Error retrieving clinical reminders, DFN is nullish.');
+function getClinicalRemindersList(req, res, callback) {
+    var patientIdentifiers = _.get(req, 'interceptorResults.patientIdentifiers', {});
+    if (_.isUndefined(patientIdentifiers.dfn) || _.isUndefined(patientIdentifiers.site)) {
+        req.logger.debug('CDS Advice - getClinicalRemindersList - interceptor results patient identifiers missing');
         return callback(null, []); // Return empty list here!
     }
     req.logger.info('retrieve clinical reminder list');
-    var dfn = req.interceptorResults.patientIdentifiers.dfn;
-    req.logger.trace('DFN: ' + dfn);
-    var vistaConfig = getVistaRpcConfiguration(req.app.config, req.session.user);
-
-    RpcClient.callRpc(req.logger, vistaConfig, 'ORQQPX REMINDERS LIST', [RpcParameter.literal(dfn)], function(error, result) {
+    req.logger.trace('DFN: ' + patientIdentifiers.dfn);
+    var vistaRpcConfigParams = vistaRpcConfiguration.getPatientCentricVistaRpcConfigurationParams(req.session.user, patientIdentifiers.site);
+    var vistaConfig = vistaRpcConfiguration.getVistaRpcConfiguration(req.app.config, vistaRpcConfigParams);
+    RpcClient.callRpc(req.logger, vistaConfig, 'ORQQPX REMINDERS LIST', [RpcParameter.literal(patientIdentifiers.dfn)], function(error, result) {
         if (error) {
             req.logger.error(errorVistaJSCallback + error);
             return callback(null, []); // Return empty list here!
@@ -231,8 +230,7 @@ function getRulesResultsList(req, res, pid, use, callback) {
         context: {
             patientId: pid,
             userId: req.session.user.username, // req.session.user.duz[0],
-            siteId: req.session.user.site,
-            credentials: '11111' // req.session.cookie
+            credentials: '11111' // req.session.cookie //TODO: Team Europa to update
         },
         reason: use
     };
@@ -357,7 +355,7 @@ function getCDSAdviceList(req, res, next) {
                 getRulesResultsList(req, res, pid, use, callback);
             },
             function(callback) {
-                getClinicalRemindersList(req, res, next, pid, callback);
+                getClinicalRemindersList(req, res, callback);
             },
             function(callback) {
                 var provider = getKeyValue(req.session.user.duz);
@@ -448,6 +446,8 @@ function getKeyValue(obj) {
     }
     return 'BAD OBJECT';
 }
+/* For testing */
+module.exports._getClinicalRemindersList = getClinicalRemindersList;
 
 module.exports.getCDSAdviceList = getCDSAdviceList;
 module.exports.setReadStatus = setReadStatus;

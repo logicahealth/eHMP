@@ -2,7 +2,6 @@
 
 var signVistaWriter = require('./orders-common-sign-vista-writer'),
     rpcClientFactory = require('./../../core/rpc-client-factory'),
-    vistaWriter = require('./../lab/orders-lab-vista-writer'),
     detailVistaWriter = require('./orders-common-detail-vista-writer'),
     crypto = require('crypto');
 
@@ -11,18 +10,18 @@ var signVistaWriter = require('./orders-common-sign-vista-writer'),
 //    var writebackContext = {
 //        pid: '9E7A;100615',
 //        vistaConfig: {
-//            host: 'IP        ',
+//            host: '10.2.2.101',
 //            port: 9210,
-//            accessCode: 'PW    ',
-//            verifyCode: 'PW    !!',
-//            localIP: 'IP      ',
+//            accessCode: 'mx1234',
+//            verifyCode: 'mx1234!!',
+//            localIP: '10.2.2.1',
 //            localAddress: 'localhost'
 //        },
 //        model: {
 //            'dfn': '100615',
 //            'provider': '10000000271',
 //            'location': '285',
-//            'eSig':'PW    !!',
+//            'eSig':'mx1234!!',
 //            'orderList': [{
 //                'orderId': '38999;1'
 //            }],
@@ -60,80 +59,76 @@ var signVistaWriter = require('./orders-common-sign-vista-writer'),
 //    });
 //});
 
-describe('Checks the sign order send functionality', function () {
+describe('Checks the sign order send functionality', function() {
 
     var writebackContext = {
-        pid: '9E7A;100615',
+        interceptorResults: {
+            patientIdentifiers: {
+                'dfn': '100615',
+                'siteDfn': '9E7A;100615',
+                'site': '9E7A'
+            }
+        },
         vistaConfig: {
-            host: 'IP        ',
+            host: '10.2.2.101',
             port: 9210,
-            accessCode: 'PW    ',
-            verifyCode: 'PW    !!',
-            localIP: 'IP      ',
+            accessCode: 'mx1234',
+            verifyCode: 'mx1234!!',
+            localIP: '10.2.2.1',
             localAddress: 'localhost',
             noReconnect: true
         },
         model: {
             'provider': '10000000238',
             'location': '285',
-            'eSig': 'PW    !!',
+            'eSig': 'mx1234!!',
             'orderDialog': 'LR OTHER LAB TESTS',
             'displayGroup': '5',
             'quickOrderDialog': '2',
-            'inputList': [
-                {
-                    'inputKey': '4',
-                    'inputValue': '1191'
-                },
-                {
-                    'inputKey': '126',
-                    'inputValue': '1'
-                },
-                {
-                    'inputKey': '127',
-                    'inputValue': '72'
-                },
-                {
-                    'inputKey': '180',
-                    'inputValue': '9'
-                },
-                {
-                    'inputKey': '28',
-                    'inputValue': 'SP'
-                },
-                {
-                    'inputKey': '6',
-                    'inputValue': 'TODAY'
-                },
-                {
-                    'inputKey': '29',
-                    'inputValue': '28'
-                }
-            ],
-            'commentList': [
-                {
-                    'comment': '~For Test: AMIKACIN'
-                },
-                {
-                    'comment': '~Dose is expected to be at &UNKNOWN level.'
-                },
-                {
-                    'comment': 'additional comment'
-                }
-            ],
+            'inputList': [{
+                'inputKey': '4',
+                'inputValue': '1191'
+            }, {
+                'inputKey': '126',
+                'inputValue': '1'
+            }, {
+                'inputKey': '127',
+                'inputValue': '72'
+            }, {
+                'inputKey': '180',
+                'inputValue': '9'
+            }, {
+                'inputKey': '28',
+                'inputValue': 'SP'
+            }, {
+                'inputKey': '6',
+                'inputValue': 'TODAY'
+            }, {
+                'inputKey': '29',
+                'inputValue': '28'
+            }],
+            'commentList': [{
+                'comment': '~For Test: AMIKACIN'
+            }, {
+                'comment': '~Dose is expected to be at &UNKNOWN level.'
+            }, {
+                'comment': 'additional comment'
+            }],
             'kind': 'Laboratory'
         },
-        logger: sinon.stub(require('bunyan').createLogger({name: 'sign-vista-writer'}))
+        logger: sinon.stub(require('bunyan').createLogger({
+            name: 'sign-vista-writer'
+        }))
     };
 
-    afterEach(function () {
+    afterEach(function() {
         rpcClientFactory.closeRpcClient(writebackContext);
     });
 
     //This test will create a new lab order in Vista.  Uncomment to test locally
     //it('returns order ien(s) if the save sign order is successful', function (done) {
     //
-    //    writebackContext.model.dfn = '100615';  //set missing DFN
+    //    writebackContext.interceptorResults.patientIdentifiers.dfn = '100615';  //set missing DFN
     //    this.timeout(20000);
     //    vistaWriter.create(writebackContext, function (err, result) {
     //        expect(err).to.be.falsy();
@@ -159,41 +154,45 @@ describe('Checks the validate signature functionality', function() {
     var writebackContext = {
         pid: '9E7A;100615',
         vistaConfig: {
-            host: 'IP        ',
+            host: '10.2.2.101',
             port: 9210,
-            accessCode: 'PW    ',
-            verifyCode: 'PW    !!',
-            localIP: 'IP      ',
+            accessCode: 'mx1234',
+            verifyCode: 'mx1234!!',
+            localIP: '10.2.2.1',
             localAddress: 'localhost'
         },
         model: {
             'dfn': '100615',
             'provider': '10000000238',
             'location': '285',
-            'eSig':'PW    !!'
+            'eSig': 'mx1234!!'
 
         },
-        logger: sinon.stub(require('bunyan').createLogger({name: 'sign-vista-writer'}))
+        logger: sinon.stub(require('bunyan').createLogger({
+            name: 'sign-vista-writer'
+        }))
     };
 
     var writebackContext2 = {
         pid: '9E7A;100615',
         vistaConfig: {
-            host: 'IP        ',
+            host: '10.2.2.101',
             port: 9210,
-            accessCode: 'PW    ',
-            verifyCode: 'PW    !!',
-            localIP: 'IP      ',
+            accessCode: 'mx1234',
+            verifyCode: 'mx1234!!',
+            localIP: '10.2.2.1',
             localAddress: 'localhost'
         },
         model: {
             'dfn': '100615',
             'provider': '10000000238',
             'location': '285',
-            'eSig':'shouldfail!!'
+            'eSig': 'shouldfail!!'
 
         },
-        logger: sinon.stub(require('bunyan').createLogger({name: 'sign-vista-writer'}))
+        logger: sinon.stub(require('bunyan').createLogger({
+            name: 'sign-vista-writer'
+        }))
     };
 
     afterEach(function() {
@@ -212,7 +211,7 @@ describe('Checks the validate signature functionality', function() {
     it('returns false if validate signature is unsuccessful', function(done) {
         this.timeout(7000);
         signVistaWriter.validateSignature(writebackContext2, function(err, result) {
-            expect(result).to.equal("0");
+            expect(result).to.equal('0');
             done();
         });
     });
@@ -223,15 +222,17 @@ describe('Checks the order detail comparison functionality', function() {
     var detailWritebackContext = {
         pid: '9E7A;100615',
         vistaConfig: {
-            host: 'IP        ',
+            host: '10.2.2.101',
             port: 9210,
-            accessCode: 'PW    ',
-            verifyCode: 'PW    !!',
-            localIP: 'IP      ',
+            accessCode: 'mx1234',
+            verifyCode: 'mx1234!!',
+            localIP: '10.2.2.1',
             localAddress: 'localhost',
             noReconnect: true
         },
-        logger: sinon.stub(require('bunyan').createLogger({name: 'order-detail-comparator'}))
+        logger: sinon.stub(require('bunyan').createLogger({
+            name: 'order-detail-comparator'
+        }))
     };
 
     afterEach(function() {
@@ -243,7 +244,7 @@ describe('Checks the order detail comparison functionality', function() {
         self.timeout(5000);
 
         //grab order detail
-        detailVistaWriter.getDetail('12519;1', detailWritebackContext, function(err, result){
+        detailVistaWriter.getDetail('12519;1', detailWritebackContext, function(err, result) {
 
             expect(err).to.be.falsy();
             expect(result).to.be.truthy();
@@ -264,7 +265,7 @@ describe('Checks the order detail comparison functionality', function() {
     it('tests that order detail fails to match a given hash string', function(done) {
         var self = this;
         self.timeout(5000);
-        signVistaWriter.compareOrderDetails('12519;1', "thisisnotacorrecthashvalue", detailWritebackContext, function(err, result) {
+        signVistaWriter.compareOrderDetails('12519;1', 'thisisnotacorrecthashvalue', detailWritebackContext, function(err, result) {
             expect(err).to.be.falsy();
             expect(result).to.be.falsy();
 
@@ -278,11 +279,11 @@ describe('Checks the order detail comparison functionality', function() {
 //    var writebackContext = {
 //        pid: '9E7A;100615',
 //        vistaConfig: {
-//            host: 'IP        ',
+//            host: '10.2.2.101',
 //            port: 9210,
-//            accessCode: 'PW    ',
-//            verifyCode: 'PW    !!',
-//            localIP: 'IP      ',
+//            accessCode: 'mx1234',
+//            verifyCode: 'mx1234!!',
+//            localIP: '10.2.2.1',
 //            localAddress: 'localhost'
 //        },
 //        model: {
@@ -318,6 +319,3 @@ describe('Checks the order detail comparison functionality', function() {
 //        });
 //    });
 //});
-
-
-

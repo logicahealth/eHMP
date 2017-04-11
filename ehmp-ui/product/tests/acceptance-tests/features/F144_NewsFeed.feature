@@ -1,4 +1,4 @@
-@F144_NewsFeedApplet @regression
+@F144_NewsFeedApplet 
 
 Feature: F144-eHMP Viewer GUI - Timeline(NewsFeed)
 

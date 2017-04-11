@@ -19,7 +19,7 @@ describe.skip('When the communication resource is called', function() {
         req.logger = logger;
         req.params = {
             resourceId: 1000,
-            recipientId: 'PW    '
+            recipientId: 'pu1234'
         };
 
         res = httpMocks.createResponse();

@@ -51,10 +51,10 @@ Scenario: delete all requests for a recipient
 
 @US10088 @US10089 @US100091 @US10556 @Communication_Request_Get_By_Id @future @DE6042
 Scenario: retrieve a single request for a recipient
-    Given the system knows about the following communication requests for the "provider%2FPW    " recipient
+    Given the system knows about the following communication requests for the "provider%2Fpu1234" recipient
     | category                      | sender                   | medium                     | recipient          | payload                    | status    | reason                      | subject            | priority           |
-    | ehmp/msg/category/clinical    | ehmp/activity/123/task/5 | ehmp/msg/medium/ui/inline  | provider/PW        | patient/9E7A;10045/lab/123 | requested | ehmp/msg/reason/decision    | patient/9E7A;10045 | ehmp/msg/priority/high |
-    When the client retrieves a communication request for recipient "provider%2FPW    " with the resource id
+    | ehmp/msg/category/clinical    | ehmp/activity/123/task/5 | ehmp/msg/medium/ui/inline  | provider/pu1234    | patient/9E7A;10045/lab/123 | requested | ehmp/msg/reason/decision    | patient/9E7A;10045 | ehmp/msg/priority/high |
+    When the client retrieves a communication request for recipient "provider%2Fpu1234" with the resource id
     Then a successful response is returned
     And the communication request contains
      	| field 					       	    | value                    				     |
@@ -62,25 +62,25 @@ Scenario: retrieve a single request for a recipient
       	| sender.reference                      | ehmp/activity/123/task/5                   |
        	| category.coding.code                  | ehmp/msg/category/clinical                 |
        	| medium.coding.code                    | ehmp/msg/medium/ui/inline             		 |
-       	| recipient.reference                   | provider/PW                                |
+       	| recipient.reference                   | provider/pu1234                            |
        	| payload.contentReference.reference    | patient/9E7A;10045/lab/123                 |
        	| status                                | requested                                  |
        	| reason.coding.code                    | ehmp/msg/reason/decision                   |
        	| subject.reference                     | patient/9E7A;10045                         |
        	| priority.coding.code                  | ehmp/msg/priority/high                     |
-    And remove all communication requests for recipient "provider%2FPW    "
+    And remove all communication requests for recipient "provider%2Fpu1234"
 
 @US10089 @US10556 @Communication_Request_Delete_By_Id @future @DE6042
 Scenario: delete a single request for a recipient
-    Given the system knows about the following communication requests for the "provider%2FPW    " recipient
+    Given the system knows about the following communication requests for the "provider%2Fpu1234" recipient
     | category                      | sender                   | medium                     | recipient          | payload                    | status    | reason                      | subject            | priority           |
-    | ehmp/msg/category/clinical    | ehmp/activity/123/task/5 | ehmp/msg/medium/ui/inline  | provider/PW        | patient/9E7A;10045/lab/123 | requested | ehmp/msg/reason/decision    | patient/9E7A;10045 | ehmp/msg/priority/high |
-    When the client deletes the communication request for recipient "provider%2FPW    " with a resource id
+    | ehmp/msg/category/clinical    | ehmp/activity/123/task/5 | ehmp/msg/medium/ui/inline  | provider/pu1234    | patient/9E7A;10045/lab/123 | requested | ehmp/msg/reason/decision    | patient/9E7A;10045 | ehmp/msg/priority/high |
+    When the client deletes the communication request for recipient "provider%2Fpu1234" with a resource id
 
 @US10088 @US100091 @US10556 @Communication_Request_Get_By_Id_No_Request @future @DE6042
 Scenario: not found when retrieving a single request for a recipient that does not exist
     Given communication request with an unknown resource id
-    When the client retrieves a communication request for recipient "provider%2FPW    " with an unknown resource id
+    When the client retrieves a communication request for recipient "provider%2Fpu1234" with an unknown resource id
     Then a not-found response is returned
 
 @US10089 @US10556 @Communication_Request_Add_Bad_Request @future @DE6042

@@ -4,10 +4,9 @@ var rdk = require('../../core/rdk');
 var httpUtil = rdk.utils.http;
 var RpcClient = require('vista-js').RpcClient;
 var filemanDateUtil = require('../../utils/fileman-date-converter');
-var getVistaRpcConfiguration = require('../../utils/rpc-config').getVistaRpcConfiguration;
+var vistaRpcConfiguration = require('../../utils/rpc-config');
 var paramUtil = require('../../utils/param-converter');
 var _ = require('lodash');
-var nullchecker = rdk.utils.nullchecker;
 
 function getResourceConfig() {
     return [{
@@ -21,7 +20,7 @@ function getResourceConfig() {
             synchronize: true,
             convertPid: true
         },
-        requiredPermissions: ["read-vital"],
+        requiredPermissions: ['read-vital'],
         isPatientCentric: true,
         subsystems: ['patientrecord', 'jds', 'solr', 'jdsSync', 'authorization']
     }, {
@@ -31,7 +30,7 @@ function getResourceConfig() {
         description: {
             get: 'Returns all qualifier information for the vital types selected. If no types are selected, then all qualifiers are returned.'
         },
-        requiredPermissions: ["read-vital"],
+        requiredPermissions: ['read-vital'],
         isPatientCentric: false,
         subsystems: ['patientrecord', 'jds', 'solr', 'jdsSync', 'authorization']
     }, {
@@ -45,14 +44,14 @@ function getResourceConfig() {
             synchronize: true,
             convertPid: true
         },
-        requiredPermissions: ["read-vital"],
+        requiredPermissions: ['read-vital'],
         isPatientCentric: true,
         subsystems: ['patientrecord', 'jds', 'solr', 'jdsSync', 'authorization']
     }, {
         name: 'vitals-vitalsRule',
         path: '/vitals-rule',
         post: execVitalsRule,
-        requiredPermissions: ["read-vital"],
+        requiredPermissions: ['read-vital'],
         isPatientCentric: false,
     }];
 }
@@ -63,7 +62,7 @@ function execVitalsRule(req, res) {
     // cdsInvocationServer config is not available so return empty list
     if (!req.app && !req.app.config && !req.app.config.cdsInvocationServer) {
         return res.status(rdk.httpstatus.not_found).rdkSend('Height (or Weight) difference from previous measurement could not be validated because the server is not available');
-        //return callback(null, ["Height (or Weight) difference from previous measurement could not be validated because the server is not available"]);
+        //return callback(null, ['Height (or Weight) difference from previous measurement could not be validated because the server is not available']);
     }
 
     if (!req.body.pid) {
@@ -122,13 +121,13 @@ function execVitalsRule(req, res) {
     var paramKeys = _.keys(req.body) || {};
 
 
-    _.each(paramKeys, function (pk) {
+    _.each(paramKeys, function(pk) {
         formatParamsForCDSRulesCheck(pk, req.body[pk], content.parameters);
     });
 
     config.body = content;
 
-    httpUtil.post(config, function (error, response, result) {
+    httpUtil.post(config, function(error, response, result) {
         if (error) {
             res.status(rdk.httpstatus.internal_server_error).rdkSend(error);
             return;
@@ -145,155 +144,137 @@ function execVitalsRule(req, res) {
  */
 function formatParamsForCDSRulesCheck(paramKey, keyvalue, parameterCollection) {
     switch (paramKey) {
-    case 'bloodpressure':
-        parameterCollection['BloodPressure'] = {
-            resourceType: 'Observation',
-            code: {
-                coding: [
-                    {
+        case 'bloodpressure':
+            parameterCollection.BloodPressure = {
+                resourceType: 'Observation',
+                code: {
+                    coding: [{
                         system: 'http://loinc.org',
                         code: '55284-4'
-                        }
-                    ]
-            },
-            valueString: keyvalue.value
-        };
-        break;
-    case 'temperature':
-        parameterCollection['Temperature'] = {
-            resourceType: 'Observation',
-            code: {
-                coding: [
-                    {
+                    }]
+                },
+                valueString: keyvalue.value
+            };
+            break;
+        case 'temperature':
+            parameterCollection.Temperature = {
+                resourceType: 'Observation',
+                code: {
+                    coding: [{
                         system: 'http://loinc.org',
                         code: '8310-5'
-                        }
-                    ]
-            },
-            valueQuantity: {
-                value: keyvalue.value,
-                units: keyvalue.units
-            }
-        };
-        break;
-    case 'respiration':
-        parameterCollection['Respiration'] = {
-            resourceType: 'Observation',
-            code: {
-                coding: [
-                    {
+                    }]
+                },
+                valueQuantity: {
+                    value: keyvalue.value,
+                    units: keyvalue.units
+                }
+            };
+            break;
+        case 'respiration':
+            parameterCollection.Respiration = {
+                resourceType: 'Observation',
+                code: {
+                    coding: [{
                         system: 'http://loinc.org',
                         code: '9279-1'
-                        }
-                    ]
-            },
-            valueQuantity: {
-                value: keyvalue.value,
-                units: keyvalue.units
-            }
-        };
-        break;
-    case 'pulse':
-        parameterCollection['Pulse'] = {
-            resourceType: 'Observation',
-            code: {
-                coding: [
-                    {
+                    }]
+                },
+                valueQuantity: {
+                    value: keyvalue.value,
+                    units: keyvalue.units
+                }
+            };
+            break;
+        case 'pulse':
+            parameterCollection.Pulse = {
+                resourceType: 'Observation',
+                code: {
+                    coding: [{
                         system: 'http://loinc.org',
                         code: '8867-4'
-                        }
-                    ]
-            },
-            valueQuantity: {
-                value: keyvalue.value,
-                units: keyvalue.units
-            }
-        };
-        break;
-    case 'pain':
-        parameterCollection['Pain'] = {
-            resourceType: 'Observation',
-            code: {
-                coding: [
-                    {
+                    }]
+                },
+                valueQuantity: {
+                    value: keyvalue.value,
+                    units: keyvalue.units
+                }
+            };
+            break;
+        case 'pain':
+            parameterCollection.Pain = {
+                resourceType: 'Observation',
+                code: {
+                    coding: [{
                         system: 'http://loinc.org',
                         code: '72514-3'
-                        }
-                    ]
-            },
-            valueQuantity: {
-                value: keyvalue.value
-            }
-        };
-        break;
-    case 'circumferencegirth':
-        parameterCollection['CircumferenceGirth'] = {
-            resourceType: 'Observation',
-            code: {
-                coding: [
-                    {
+                    }]
+                },
+                valueQuantity: {
+                    value: keyvalue.value
+                }
+            };
+            break;
+        case 'circumferencegirth':
+            parameterCollection.CircumferenceGirth = {
+                resourceType: 'Observation',
+                code: {
+                    coding: [{
                         system: 'http://loinc.org',
                         code: '9844-2'
-                        }
-                    ]
-            },
-            valueQuantity: {
-                value: keyvalue.value,
-                units: keyvalue.units
-            }
-        };
-        break;
-    case 'pulseoximetry':
-        parameterCollection['PulseOximetry'] = {
-            resourceType: 'Observation',
-            code: {
-                coding: [
-                    {
+                    }]
+                },
+                valueQuantity: {
+                    value: keyvalue.value,
+                    units: keyvalue.units
+                }
+            };
+            break;
+        case 'pulseoximetry':
+            parameterCollection.PulseOximetry = {
+                resourceType: 'Observation',
+                code: {
+                    coding: [{
                         system: 'http://loinc.org',
                         code: '59408-5'
-                        }
-                    ]
-            },
-            valueQuantity: {
-                value: keyvalue.value,
-                code: keyvalue.units
-            }
-        };
-        break;
-    case 'weight':
-        parameterCollection['Weight'] = {
-            resourceType: 'Observation',
-            code: {
-                coding: [
-                    {
+                    }]
+                },
+                valueQuantity: {
+                    value: keyvalue.value,
+                    code: keyvalue.units
+                }
+            };
+            break;
+        case 'weight':
+            parameterCollection.Weight = {
+                resourceType: 'Observation',
+                code: {
+                    coding: [{
                         system: 'http://loinc.org',
                         code: '29463-7'
-                        }
-                    ]
-            },
-            valueQuantity: {
-                value: keyvalue.value,
-                units: keyvalue.units
-            }
-        };
-        break;
-    case 'height':
-        parameterCollection['Height'] = {
-            resourceType: 'Observation',
-            code: {
-                coding: [
-                    {
+                    }]
+                },
+                valueQuantity: {
+                    value: keyvalue.value,
+                    units: keyvalue.units
+                }
+            };
+            break;
+        case 'height':
+            parameterCollection.Height = {
+                resourceType: 'Observation',
+                code: {
+                    coding: [{
                         system: 'http://loinc.org',
                         code: '8302-2'
-                        }
-                    ]
-            },
-            valueQuantity: {
-                value: keyvalue.value,
-                units: keyvalue.units
-            }
-        };
-        break;
+                    }]
+                },
+                valueQuantity: {
+                    value: keyvalue.value,
+                    units: keyvalue.units
+                }
+            };
+            break;
     }
 
 }
@@ -303,7 +284,7 @@ function formatParamsForCDSRulesCheck(paramKey, keyvalue, parameterCollection) {
 /**
  *  Returns the observation date/time and reading of the record closest to the
  *  date/time specified for the patient and vital type. Uses the site id that is
- *  stored in the user session.
+ *  stored in the the request patient identifier interceptor object.
  *
  *  REST params:
  *    pid ; patient ID
@@ -317,8 +298,8 @@ function formatParamsForCDSRulesCheck(paramKey, keyvalue, parameterCollection) {
  */
 function getClosestVital(req, res) {
     req.logger.info('vital resource closest reading GET called');
-
-    var dfn = req.interceptorResults.patientIdentifiers.dfn,
+    var patientIdentifiers = _.get(req, 'interceptorResults.patientIdentifiers', {});
+    var dfn = _.get(patientIdentifiers, 'dfn'),
         ts = req.param('ts'),
         type = req.param('type'),
         flag = req.param('flag');
@@ -329,14 +310,17 @@ function getClosestVital(req, res) {
     if (typeof flag === 'undefined') {
         flag = '';
     }
-
-    if(nullchecker.isNullish(dfn)){
-        return res.status(500).rdkSend('Missing required patient identifiers');
+    if (_.isUndefined(patientIdentifiers.site)) {
+        req.logger.debug('getAllVitals - missing patient site from interceptor patient identifier results');
+        return res.status(rdk.httpstatus.precondition_failed).rdkSend('Missing patient site parameter.');
     }
 
-    var vistaConfig = getVistaRpcConfiguration(req.app.config, req.session.user);
-
-    RpcClient.callRpc(req.logger, vistaConfig, 'GMV CLOSEST READING', [dfn, ts, type, flag], function (error, message) {
+    if (_.isUndefined(dfn)) {
+        return res.status(rdk.httpstatus.precondition_failed).rdkSend('getAllVitals - Missing required patient identifier dfn');
+    }
+    var vistaRpcConfigParams = vistaRpcConfiguration.getPatientCentricVistaRpcConfigurationParams(req.session.user, patientIdentifiers.site);
+    var vistaConfig = vistaRpcConfiguration.getVistaRpcConfiguration(req.app.config, vistaRpcConfigParams);
+    RpcClient.callRpc(req.logger, vistaConfig, 'GMV CLOSEST READING', [dfn, ts, type, flag], function(error, message) {
         if (!error) {
             message = message.split('^');
             var response = {
@@ -358,7 +342,7 @@ function getClosestVital(req, res) {
 
 /**
  *  Lists all vitals/measurements data for a given date/time span.
- *  Uses the site id that is stored in the user session.
+ *  Uses the site id that is stored in the the request patient identifier interceptor object.
  *
  *  REST params:
  *    pid ; patient ID
@@ -368,19 +352,19 @@ function getClosestVital(req, res) {
  */
 function getAllVitals(req, res) {
     req.logger.info('vital resource all vitals GET called');
-
-    var dfn = req.interceptorResults.patientIdentifiers.dfn,
+    var patientIdentifiers = _.get(req, 'interceptorResults.patientIdentifiers', {});
+    var dfn = _.get(patientIdentifiers, 'dfn'),
         start = req.param('date.start'),
         end = req.param('date.end');
 
-    if (typeof dfn === 'undefined' ||
-        typeof start === 'undefined' ||
-        typeof end === 'undefined') {
-        return res.status(rdk.httpstatus.bad_request).rdkSend('Missing parameters.  Please include a pid, date.start, and date.end parameter.');
+    if (_.isUndefined(dfn) ||
+        _.isUndefined(start) ||
+        _.isUndefined(end)) {
+        return res.status(rdk.httpstatus.precondition_failed).rdkSend('Missing parameters.  Please include a pid, date.start, and date.end parameter.');
     }
-
-    if(nullchecker.isNullish(dfn)){
-        return res.status(500).rdkSend('Missing required patient identifiers');
+    if (_.isUndefined(patientIdentifiers.site)) {
+        req.logger.debug('getAllVitals - missing patient site from interceptor patient identifier results');
+        return res.status(rdk.httpstatus.precondition_failed).rdkSend('Missing patient site parameter.');
     }
 
     start = paramUtil.convertWriteBackInputDate(start);
@@ -392,12 +376,11 @@ function getAllVitals(req, res) {
     end = filemanDateUtil.getFilemanDateTime(end.toDate());
 
     var rpcParam = [dfn, start, end].join('^');
-
-    var vistaConfig = getVistaRpcConfiguration(req.app.config, req.session.user);
-
-    RpcClient.callRpc(req.logger, vistaConfig, 'GMV V/M ALLDATA', [rpcParam], function (error, message) {
+    var vistaRpcConfigParams = vistaRpcConfiguration.getPatientCentricVistaRpcConfigurationParams(req.session.user, patientIdentifiers.site);
+    var vistaConfig = vistaRpcConfiguration.getVistaRpcConfiguration(req.app.config, vistaRpcConfigParams);
+    RpcClient.callRpc(req.logger, vistaConfig, 'GMV V/M ALLDATA', [rpcParam], function(error, message) {
         if (!error) {
-            RpcClient.callRpc(req.logger, vistaConfig, 'GMV VITALS/CAT/QUAL', [''], function (err, msg) {
+            RpcClient.callRpc(req.logger, vistaConfig, 'GMV VITALS/CAT/QUAL', [''], function(err, msg) {
                 if (err) {
                     res.status(rdk.httpstatus.bad_gateway).rdkSend('RPC error: ' + error);
                     return;
@@ -668,9 +651,9 @@ function getQualifierInformation(req, res) {
 
     var rpcParametersArray = paramUtil.convertArrayToRPCParameters(jsonTypes);
 
-    var vistaConfig = getVistaRpcConfiguration(req.app.config, req.session.user);
+    var vistaConfig = vistaRpcConfiguration.getVistaRpcConfiguration(req.app.config, req.session.user);
 
-    RpcClient.callRpc(req.logger, vistaConfig, 'GMV VITALS/CAT/QUAL', rpcParametersArray, function (error, message) {
+    RpcClient.callRpc(req.logger, vistaConfig, 'GMV VITALS/CAT/QUAL', rpcParametersArray, function(error, message) {
         if (!error) {
             var response = formatQualifierInformationOutput(message);
             res.rdkSend(response);
@@ -691,7 +674,7 @@ function formatQualifierInformationOutput(messageElements) {
         items: []
     };
 
-    messageElements.forEach(function (element) {
+    messageElements.forEach(function(element) {
         element = element.split('^');
 
         if (element[0] === 'V') {

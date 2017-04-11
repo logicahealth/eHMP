@@ -12,6 +12,7 @@ define([], function() {
     });
 
     var Qualifiers = ADK.Resources.Picklist.Collection.extend({
+        resource: 'write-pick-list-vitals',
         type: 'vitals',
         model: Qualifier
     });

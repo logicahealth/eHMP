@@ -23,9 +23,6 @@ var NAME_INDEX = 1;
 var vistaUserInfo = function(req, res, userInfoCB, params) {
     var logger = req.logger;
     var rpcClient = params.rpcClient;
-    var site = params.site;
-    var data = params.data;
-    var vistaSites = req.app.config.vistaSites;
     //call to get corsTabs and rptTabs
     var timer = new RdkTimer({
         'name': 'userInfoRPCCallTimer',
@@ -66,7 +63,7 @@ var vistaUserInfo = function(req, res, userInfoCB, params) {
         obj.corsTabs = (result[CORTABS_INDEX] === '1') ? 'true' : 'false';
         obj.rptTabs = (result[RPC_INDEX] === '1') ? 'true' : 'false';
 
-        if (obj.corsTabs == 'false' && obj.rptTabs == 'false') {
+        if (obj.corsTabs === 'false' && obj.rptTabs === 'false') {
             errorObj = new RdkError({
                 'code': 'vista.401.1010'
             });

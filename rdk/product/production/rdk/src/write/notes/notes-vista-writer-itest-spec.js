@@ -5,11 +5,11 @@ var vistaWriter = require('./notes-vista-writer');
 var writebackContext = {
     pid: '9E7A;8',
     vistaConfig: {
-        host: 'IP        ',
+        host: '10.2.2.101',
         port: 9210,
-        accessCode: 'PW    ',
-        verifyCode: 'PW    !!',
-        localIP: 'IP      ',
+        accessCode: 'pu1234',
+        verifyCode: 'pu1234!!',
+        localIP: '10.2.2.1',
         localAddress: 'localhost',
         context: 'HMP UI CONTEXT'
     },
@@ -27,16 +27,16 @@ var writebackContext = {
     logger: sinon.stub(require('bunyan').createLogger({name: 'notes-vista-writer'}))
 };
 
-// describe('write-back notes vista writer integration', function() {
-//     describe('tests unsigned', function() {
-//         it('returns success with note ien', function(done) {
-//             this.timeout(5000);
-//             vistaWriter.unsigned(writebackContext, function(err, result) {
-//                 expect(err).to.be.falsy();
-//                 expect(writebackContext.vprResponse).to.be.undefined();
-//                 expect(writebackContext.model.localId).to.be.truthy();
-//                 done();
-//             });
-//         });
-//     });
-// });
+describe('write-back notes vista writer integration', function() {
+    describe('tests unsigned', function() {
+        it.skip('returns success with note ien', function(done) {
+            this.timeout(5000);
+            vistaWriter.unsigned(writebackContext, function(err, result) {
+                expect(err).to.be.falsy();
+                expect(writebackContext.vprResponse).to.be.undefined();
+                expect(writebackContext.model.localId).to.be.truthy();
+                done();
+            });
+        });
+    });
+});

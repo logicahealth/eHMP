@@ -17,7 +17,7 @@ var rpcClientFactory = require('../utils/rpc-client-factory');
  * searchString is used when an RPC call requires a minimum of 3 characters in order to return data<br/>
  * This is not a filter - it is a search string.  For example, searching for RAD may return RADIACARE; however, searching for
  * DIA will not return RADIACARE.  Also, the search term may not always be the first 3 characters.  For example,
- * DIA will also return "CONTRAST MEDIA <DIAGNOSTIC DYES>".
+ * DIA will also return 'CONTRAST MEDIA <DIAGNOSTIC DYES>'.
  * @param view the type of data to return - known values we've seen used elsewhere are:<br/>
  * CLF (unknown what this is used for)<br/>
  * PLS (Problem Listing)
@@ -53,7 +53,7 @@ module.exports.getOrqqpl4LexLookUp = function(logger, configuration, searchStrin
         }
 
         if (recordCount >= 5000) {
-            return callback("Your search " + searchString + " matched " + recordCount + " records, too many to Display. Refine your search",
+            return callback('Your search ' + searchString + ' matched ' + recordCount + ' records, too many to Display. Refine your search',
                 null, 456);
         }
 

@@ -1,4 +1,4 @@
-@f338_MedReviewApplet @regression
+@f338_MedReviewApplet  @reg1
 
 Feature: F338 - Meds Review Sparkline 2 -  Med Review applet display
 
@@ -63,7 +63,7 @@ Scenario: Display of medication details for inpatient medications
       | Links              |
       | Patient Education  |
 #
-@f338_5_medication_column_default_and_sorting_name @US5903 @DE1479  @triage
+@f338_5_medication_column_default_and_sorting_name @US5903 @DE1479  
 Scenario: Med Review Applet is sorted by the status first and then by name in alpha order.
   # Given user is logged into eHMP-UI
   Given user searches for and selects "fourteen,Patient"
@@ -112,7 +112,7 @@ Scenario: Display of medication summary for outpatient medications after searchi
   When user navigates to Meds Review Applet
   Then "Meds Review" is active
   And the user has selected All within the global date picker
-  #And the user clicks on search filter in Meds Review Applet
+  And the user clicks on search filter in Meds Review Applet
   And the user filters the Medication Review Applet by text "Aspirin"
   Then the Medication Review table only diplays rows including text "Aspirin"
 

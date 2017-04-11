@@ -4,7 +4,6 @@ var _ = require('lodash');
 var bunyan = require('bunyan');
 var httpMocks = require('node-mocks-http');
 var sysAuth = require('./get-session');
-var rdk = require('../../../core/rdk');
 
 var VALID_SYSTEM = 'CDS';
 

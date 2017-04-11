@@ -8,11 +8,11 @@ var async = require('async');
 var saveWritebackContext = {
     pid: '9E7A;100615',
     vistaConfig: {
-        host: 'IP        ',
+        host: '10.2.2.101',
         port: 9210,
-        accessCode: 'PW    ',
-        verifyCode: 'PW    !!',
-        localIP: 'IP      ',
+        accessCode: 'mx1234',
+        verifyCode: 'mx1234!!',
+        localIP: '10.2.2.1',
         localAddress: 'localhost',
         noReconnect: true
     },
@@ -67,9 +67,8 @@ describe('write-back orders common action valid vista writer integration tests',
         });
     });
 
-/*
     //This test will create new lab orders in Vista.  Uncomment to test locally
-    it('tests that action valid returns no error', function(done) {
+    it.skip('tests that action valid returns no error', function(done) {
         this.timeout(15000);
         async.waterfall([
             function(callback) {
@@ -110,6 +109,6 @@ describe('write-back orders common action valid vista writer integration tests',
             done();
         });
     });
-*/
+
 
 });

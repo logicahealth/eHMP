@@ -1,6 +1,6 @@
 # Group Pick List
 
-## Medication orders default days [/medication-orders-default-days{?site}{&unitStr}{&schedStr}{&patientDFN}{&drug}{&oi}]
+## Medication orders default days [/medication-orders-default-days{?site}{&unitStr}{&schedStr}{&pid}{&drug}{&oi}]
 
 DIRECT RPC CALL - Returns med order days supply value
 
@@ -16,7 +16,7 @@ ORWDPS1 DFLTSPLY
 
     + schedStr (string, required) - The schedStr
 
-    + patientDFN (string, required) - The patient DFN
+    :[pid]({{{common}}}/parameters/pid.md)
 
     + drug (string, required) - The drug
 

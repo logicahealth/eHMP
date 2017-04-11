@@ -29,7 +29,12 @@
     "400": {
         "1000": "Bad Request",
         "1001": "Missing Required Credential",
-        "1002": "Invalid Site Code Provided"
+        "1002": "Invalid Site Code Provided",
+        "1003": "Missing site information from session or request",
+        "1004": "Missing name.full parameter",
+        "1005": "Missing last5 parameter",
+        "1006": "Missing pid parameter",
+        "1007": "Invalid Pid. Please pass either ICN or Primary Site ID."
     },
     "401": {
         "1000": "Unauthorized",
@@ -63,7 +68,9 @@
         "1001": "There was an error trying to regenerate an express session for a new user",
         "1002": "Error destroying session",
         "1003": "Could not locate session to end",
-        "1004": "Could not locate session to refresh"
+        "1004": "Could not locate session to refresh",
+        "1005": "Could not retrieve the requested configuration",
+        "1006": "Could not save tracker information to external server"
     },
     "502": {
         "1000": "Bad Gateway"

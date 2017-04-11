@@ -1,7 +1,5 @@
 'use strict';
 
-var _ = require('lodash');
-
 var asuProcess = require('../../../subsystems/asu/asu-process');
 
 var endpoint = require('./progress-notes-titles-endpoint');
@@ -22,7 +20,7 @@ var dummyLogger = {
 describe('progress-notes-titles-endpoint', function() {
     var mockConfiguration = {
         asuServer: {
-            baseUrl: 'http://IP           ',
+            baseUrl: 'http://10.3.3.6:9000',
             timeout: '30000'
         }
     };

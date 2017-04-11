@@ -1,7 +1,5 @@
 'use strict';
 var _ = require('lodash');
-var bunyan = require('bunyan');
-var httpMocks = require('node-mocks-http');
 var utils = require('./utils');
 
 function getRequest(params) {

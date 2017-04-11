@@ -13,8 +13,8 @@ module.exports = function(req, res, next) {
         return next();
     }
     if (!req.site) {
-        if (!_.isEmpty(_.result(req, 'interceptorResults.patientIdentifiers.siteDfn', ''))) {
-            req.site = req.interceptorResults.patientIdentifiers.siteDfn;
+        if (!_.isEmpty(_.result(req, 'interceptorResults.patientIdentifiers.site', ''))) {
+            req.site = req.interceptorResults.patientIdentifiers.site;
         } else if (!_.isEmpty(_.result(req, 'session.user.site', ''))) {
             req.site = req.session.user.site;
         } else if (!_.isEmpty(_.result(req, 'app.config.vistaSites', {}))) {

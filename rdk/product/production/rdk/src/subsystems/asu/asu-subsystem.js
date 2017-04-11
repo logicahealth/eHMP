@@ -1,7 +1,6 @@
 'use strict';
 
 var _ = require('lodash');
-var url = require('url');
 var asuProcess = require('./asu-process');
 var rdk = require('../../core/rdk');
 var nullchecker = rdk.utils.nullchecker;

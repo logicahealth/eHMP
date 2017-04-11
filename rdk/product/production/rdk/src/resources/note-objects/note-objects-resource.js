@@ -5,9 +5,9 @@ var async = require('async');
 var rdk = require('../../core/rdk');
 var clincialObjectsSubsystem = require('../../subsystems/clinical-objects/clinical-objects-subsystem');
 var httpUtil = rdk.utils.http;
+var UidUtil = require('../../utils/uid-utils');
 var madlibStringGenerator = require('./note-objects-madlib-generator');
 var moment = require('moment');
-var locationUtil = rdk.utils.locationUtil;
 var description = {
     get: 'Get note objects for an author for a given visit'
 };
@@ -24,8 +24,7 @@ module.exports.getResourceConfig = function(app) {
         subsystems: ['patientrecord', 'jds', 'solr', 'jdsSync', 'authorization'],
         interceptors: {
             operationalDataCheck: false,
-            synchronize: false,
-            convertPid: true
+            synchronize: false
         },
         requiredPermissions: ['sign-note'],
         isPatientCentric: true
@@ -58,9 +57,24 @@ function getNoteObjects(req, res) {
     var site = req.session.user.site;
     var user = req.session.user.duz[site];
     var authorUid = 'urn:va:user:' + site + ':' + user;
-    var patientUid = 'urn:va:patient:' + site + ':' + req.interceptorResults.patientIdentifiers.dfn + ':' + req.interceptorResults.patientIdentifiers.dfn;
     var logger = req.logger;
     var appConfig = req.app.config;
+    var patientIdentifiers = _.get(req, 'interceptorResults.patientIdentifiers', {});
+    var patientUids = _.get(patientIdentifiers, 'uids', []);
+    var patientUid;
+    if (_.isUndefined(patientIdentifiers.dfn) || _.isUndefined(patientIdentifiers.site)) {
+        logger.debug('getNoteObjects - Patient dfn not found on interceptor results');
+        return res.status(rdk.httpstatus.precondition_failed).rdkSend('Patient identifiers not found on interceptor results');
+    }
+    if (_.isEmpty(patientUids)) {
+        logger.debug('getNoteObjects - Patient uids not found on interceptor results');
+        return res.status(rdk.httpstatus.precondition_failed).rdkSend('Patient uids not found on interceptor results');
+    }
+    patientUid = UidUtil.getSiteDfnUidFromUidArray(req);
+    if (_.isUndefined(patientUid)) {
+        logger.debug('getNoteObjects - Patient uid not found in interceptor results uids array');
+        return res.status(rdk.httpstatus.precondition_failed).rdkSend('Patient uid not found in interceptor results uids array');
+    }
 
     var clinicalObjFilter = {
         'patientUid': patientUid,

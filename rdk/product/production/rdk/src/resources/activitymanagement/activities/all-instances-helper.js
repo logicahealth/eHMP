@@ -1,6 +1,5 @@
 'use strict';
 var _ = require('lodash');
-var moment = require('moment');
 
 var MAXIMUM_NUMBER_OF_IDS_PER_REQUEST = 10;
 var OPENINSTANCES = 'open';
@@ -16,11 +15,12 @@ function isPatientRequest(req) {
 
 function getErrorMessage(req) {
     var context = req.query.context;
+    var domain = req.query.domain;
     if (context !== 'patient' && context !== 'staff') {
         return 'Context must be either patient or staff.';
     }
 
-    if (context === 'staff' && _.isEmpty(req.query.createdByMe) && _.isEmpty(req.query.intendedForMeAndMyTeams)) {
+    if (context === 'staff' && _.isEmpty(req.query.createdByMe) && _.isEmpty(req.query.intendedForMeAndMyTeams) && _.isUndefined(domain)) {
         return 'Malformed staff context request.';
     }
 
@@ -28,7 +28,7 @@ function getErrorMessage(req) {
         return 'Missing pid for patient context request.';
     }
 
-    if (!!(req.query.startDate) !== !!(req.query.endDate)) {
+    if (_.has(req, 'query.startDate') !== _.has(req, 'query.endDate')) {
         return 'start date or end date is missing.';
     }
 
@@ -164,3 +164,7 @@ module.exports.adjustUserIds = adjustUserIds;
 module.exports._getRecordSetMaximumCount = getRecordSetMaximumCount;
 module.exports._isRequestForOpenOnly = isRequestForOpenOnly;
 module.exports._isRequestForClosedOnly = isRequestForClosedOnly;
+module.exports.isPatientRequest = isPatientRequest;
+module.exports.isUserPartOfIntendedUsers = isUserPartOfIntendedUsers;
+module.exports.isIntendedForMyTeams = isIntendedForMyTeams;
+module.exports.truncateResultSetToMaximum = truncateResultSetToMaximum;

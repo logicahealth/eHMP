@@ -2,8 +2,6 @@
 
 var parse = require('./progress-notes-titles-parser').parse;
 var rpcUtil = require('./../utils/rpc-util');
-var validate = require('./../utils/validation-util');
-var _ = require('lodash');
 
 
 

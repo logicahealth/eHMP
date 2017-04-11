@@ -1,4 +1,4 @@
-@F295_encounters_trend_view_appointment @regression
+@F295_encounters_trend_view_appointment  @reg1
 Feature: F295 - Encounters Applet - Appointment 
 
 Background:

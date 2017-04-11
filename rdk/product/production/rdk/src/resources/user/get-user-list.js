@@ -7,7 +7,6 @@ var nullChecker = rdk.utils.nullchecker;
 var httpUtil = rdk.utils.http;
 var _ = require('lodash');
 var userUtil = require('./user-whitelist');
-var util = require('util');
 var pjds = rdk.utils.pjdsStore;
 
 var users = {};
@@ -103,7 +102,6 @@ users.getUserList = function(req, res) {
             }
             return false;
         });
-        var USER_LIMIT = req.app.config.userResourceConfig.limit;
         var errorLooping = false;
         _.each(result.data.items, function(user, index) {
             if (errorLooping) {
@@ -182,7 +180,7 @@ users.getUserList = function(req, res) {
                 exactMatchCount++;
             }
             if (!_.isUndefined(reqFilterParameters.duz) &&
-                user.duz == reqFilterParameters.duz) {
+                _(user.duz).toString() === _(reqFilterParameters.duz).toString()) {
                 exactMatchCount++;
             }
             user.exactMatchCount = exactMatchCount;
@@ -310,7 +308,12 @@ users.getUserList = function(req, res) {
             filter: jdsFilterPath,
             order: 'name asc'
         };
-        var jdsPath = '/data/find/user' + '?' + querystring.stringify(jdsQuery);
+
+        if (_.has(req.session, 'user.site')) {
+            jdsQuery.range = 'urn:va:user:' + req.session.user.site + ':*';
+        }
+
+        var jdsPath = '/data/index/user-uid' + '?' + querystring.stringify(jdsQuery);
         var jdsConfig = req.app.config.jdsServer;
         var httpConfig = {
             logger: req.logger,

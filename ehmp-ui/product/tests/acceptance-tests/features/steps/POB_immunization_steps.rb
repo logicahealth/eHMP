@@ -44,7 +44,16 @@ Given(/^POB user adds a new immunization$/) do
   @ehmp.wait_until_btn_applet_add_visible
   expect(@ehmp).to have_btn_applet_add
   @ehmp.btn_applet_add.click
-  PobCommonElements.new.wait_until_fld_modal_body_visible
+   
+  max_attempt = 2
+  begin
+    PobCommonElements.new.wait_until_fld_modal_body_visible 
+  rescue Exception => e
+    max_attempt-=1
+    raise e if max_attempt <= 0
+    p "*** Going to retry Adding Immunization ***"
+    retry if max_attempt > 0
+  end
 end
 
 When(/^POB user adds administered immunization "([^"]*)"$/) do |immunization_type|

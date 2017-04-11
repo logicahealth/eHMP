@@ -1,23 +1,17 @@
-@F144_sensitivepatient @regression @triage
+@F144_sensitivepatient  
 Feature: user selects sensitive patient
 
 #POC: Team Mercury
 
 Background:
-    # Given user is logged into eHMP-UI
-    And the user has navigated to the patient search screen
+    Given staff view screen is displayed
 
 @select_sensitive_patient
 Scenario: user selects sensitive patient
-    #And the User selects mysite and All
-    And the User selects mysite
-    And the User click on MySiteSearch
-    And user enters full last name "zzzretfivefifty"
+    When the user searchs My Site with search term Zzzretfivefifty
     And the user select patient name "Zzzretfivefifty, Patient"
     And the user click on acknowledge restricted record
-    #Then the user click on TestConfirm
-    Then the user click on Confirm Selection
-    Then the "patient identifying traits" is displayed with information
-		| field			| value 				    |
-		| patient name	| Zzzretfivefifty,Patient	|
+    And the user click on Confirm Selection
+    And Overview is active
+    Then the Global Header displays the user name "Zzzretfivefifty,Patient (Z2121)"
 

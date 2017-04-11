@@ -1,0 +1,346 @@
+// adk theme - based on a custom bootstrap theme
+// disabled btn and fieldset elements
+.btn.disabled,
+.btn[disabled],
+fieldset[disabled] .btn {
+    pointer-events: auto;
+    cursor: not-allowed;
+    filter: alpha(opacity=50);
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    opacity: .5;
+    background-color: $grey-light;
+    color: $grey-darkest;
+}
+
+// base btn styles
+.btn {
+    background-image: none;
+    background: none;
+    border: none;
+    border-radius: 2px;
+    text-shadow: none;
+    color: $pure-white;
+    font-size: 12px;
+    padding: 6px 12px;
+    line-height: 1.42857;
+    box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.30);
+    font-weight: 600;
+    &:focus,
+    &.active:focus,
+    &:active,
+    &:active:focus {
+        outline: 1px dotted;
+    }
+    // sizing
+    &.btn-lg {
+        padding: 10px 16px;
+        font-size: 14px;
+        line-height: 1.33333;
+        border-radius: 2px;
+    }
+    &.btn-sm {
+        padding: 5px 10px;
+        font-size: 11px;
+        line-height: 1.5;
+        border-radius: 2px;
+    }
+    &.btn-xs {
+        padding: 0 10px;
+        font-size: 13px;
+        line-height: 1.8;
+        border-radius: 20px;
+        text-transform: capitalize;
+        font-weight: 400;
+    }
+    // default styling
+    &.btn-default {
+        border: none;
+        background: $primary-light;
+        color: $primary;
+        text-transform: uppercase;
+        &:hover,
+        &:focus,
+        &:active,
+        &.active,
+        &:active:focus {
+            background: darken($primary-light, 10%);
+            border: none;
+            color: $primary-dark;
+        }
+        &[disabled],
+        &[disabled]:hover,
+        &[disabled]:focus,
+        &[disabled]:active  {
+            background-color: $primary-light-alt;
+            color: $primary;
+        }
+    }
+    // color variations
+    &.btn-primary,
+    &.btn-success,
+    &.btn-info,
+    &.btn-warning,
+    &.btn-danger,
+    &.btn-link {
+        &[disabled],
+        &[disabled]:hover,
+        &[disabled]:focus,
+        &[disabled]:active {
+            background-color: $grey-light;
+        }
+    }
+    &.btn-primary {
+        background-color: $primary;
+        text-transform: uppercase;
+        &:hover,
+        &:focus,
+        &:active {
+            background-color: $primary-dark;
+        }
+    }
+    &.btn-success {
+        background-color: $secondary;
+        text-transform: uppercase;
+        &:hover,
+        &:focus,
+        &:active {
+            background-color: $secondary-dark;
+        }
+    }
+    &.btn-info {
+        background-color: $grey-darker;
+        text-transform: uppercase;
+        &:hover,
+        &:focus,
+        &:active {
+            background-color: $grey-darkest;
+        }
+    }
+    &.btn-warning {
+        background-color: $tertiary;
+        text-transform: uppercase;
+        color: $grey-darkest;
+        &:hover,
+        &:focus,
+        &:active {
+            background-color: $tertiary-dark;
+        }
+    }
+    &.btn-danger {
+        background-color: $red;
+        text-transform: uppercase;
+        &:hover,
+        &:focus,
+        &:active {
+            background-color: $red-dark;
+        }
+    }
+    &.btn-link {
+        color: $primary;
+        box-shadow: none;
+    }
+    // icons
+    &.btn-icon {
+        color: $primary;
+        background: none;
+        font-size: 11px;
+        padding: 4px;
+        box-shadow: none;
+        &:hover {
+            color: $primary-dark;
+        }
+        &[disabled],
+        &[disabled]:hover,
+        &[disabled]:focus,
+        &[disabled]:active {
+            background: none;
+        }
+    }
+    // applet toolbar, could be moved out into that component?
+    &.btn-toolbar {
+        float: left;
+        width: 24px;
+        height: 24px;
+        margin: 0px;
+        padding: 0;
+        &:hover,
+        &:focus,
+        &:active {
+            background-color: $pure-white;
+            border: 2px solid $secondary;
+            color: $secondary;
+        }
+    }
+    // background colors to determine custom button styles
+    &.bgc-primary-dark {
+        color: $pure-white;
+        &:hover {
+            color: $primary-light;
+        }
+    }
+    &.bgc-primary-light {
+        color: $primary;
+        &:hover {
+            color: $primary-dark;
+        }
+    }
+    &.bgc-pure-white {
+        color: $primary;
+        &:hover {
+            color: $primary-dark;
+        }
+    }
+}
+
+// button drop down
+.btn-group {
+    &.btn-group-xs {
+        box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.30);
+        border-radius: 3px;
+        > .btn {
+            padding: 6px 9px;
+            box-shadow: none;
+            border-left: 1px solid $pure-white;
+            margin-left: 0;
+            &:first-child {
+                border-left: none;
+            }
+            &.btn-default {
+                &:active:focus {
+                    border-left: 1px solid $pure-white;
+                }
+            }
+        }
+    }
+    > .btn {
+        &:focus {
+            outline: 1px dotted;
+        }
+        &.active-range {
+            background-color: $primary-dark;
+            color: $pure-white;
+        }
+        &:first-child {
+            border-left: none;
+        }
+        &:last-child {
+            border-right: none;
+        }
+        &.dropdown-toggle {
+            background-color: $primary;
+            color: $pure-white;
+            font-weight: 600;
+            &:focus {
+                outline: 1px dotted;
+            }
+        }
+    }
+    &.btn-group--date-range {
+        box-shadow: 0 3px 5px rgba(0,0,0,.125);
+        height: 100%;
+        .btn {
+            border-radius: 0;
+            box-shadow: none;
+            &.active {
+                background: $primary-dark;
+                color: $pure-white;
+            }
+        }
+        > .btn, .button-control {
+            &:first-child, &:first-child .btn {
+                border-top-left-radius: 2px;
+                border-bottom-left-radius: 2px;
+            }
+            &:last-child, &:last-child .btn {
+                border-top-right-radius: 2px;
+                border-bottom-right-radius: 2px;
+            }
+        }
+    }
+}
+
+// labels, could be moved out into a component?
+.posting {
+    .label {
+        border: none;
+        border-radius: 4px;
+        box-shadow: none;
+        color: $pure-white;
+        cursor: pointer;
+        display: inline-block;
+        font-weight: 400;
+        font-size: 14px;
+        margin: 1px 0px;
+        padding: 4px 6px;
+        width: 25px;
+    }
+}
+
+// I want to move these over to the form sass file - CSS
+.btn-form-control {
+    border-left: 0;
+    border-radius: 0;
+    min-width: 100px;
+}
+
+.form-group {
+    .input-group-btn {
+        vertical-align: bottom;
+    }
+}
+
+// buttons for triggering accordion - adjusting styles
+.btn.btn-accordion {
+    // needed bc of the rows having font awesome font family
+    font-family: 'Source Sans Pro', sans-serif;
+    padding: 0;
+    text-transform: capitalize;
+    color: $grey-darkest;
+    font-size: 11px;
+    text-align: left;
+    box-shadow: none;
+    width: initial;
+    &:hover,
+    &:focus,
+    &:active {
+        text-decoration: none;
+    }
+}
+
+.panel-group {
+    .btn.btn-accordion {
+        width: 100%;
+    }
+}
+
+// Date Ranger Filter buttons
+.btn-date-range {
+    margin-right: 20px;
+
+    .btn-group-xs .btn {
+        padding: 4px 6px;
+        text-transform: none;
+    }
+    .btn {
+        padding: 4px 6px;
+    }
+    label {
+        margin: 0 3px 0 6px
+    }
+    .input-group-addon {
+        padding: 0px 6px;
+        .fa-calendar {
+            font-size: 13px;
+        }
+    }
+    .input-group.date {
+        input {
+            &.input-sm {
+                height: 25px;
+                padding: 0 0 0 3px;
+                width: 71px;
+            }
+        }
+    }
+}

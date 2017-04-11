@@ -3,19 +3,16 @@ define([
     'marionette',
     'handlebars',
     'app/applets/immunizations/util',
+    'app/resources/fetch/immunizations/utils',
     'app/applets/immunizations/modal/modalView',
     'app/applets/immunizations/writeback/addImmunization',
     'app/applets/immunizations/writeback/loadWorkflow',
     'app/applets/visit/writeback/addselectVisit',
-    "app/applets/immunizations/appConfig",
-    "app/applets/immunizations/gistUtil",
-    "hbs!app/applets/immunizations/templates/tooltip"
-], function(Backbone, Marionette, Handlebars, Util, ModalView, AddImmunizationView, LoadWorkflowView, addselectEncounter, CONFIG, gUtil, tooltip) {
-
+    'hbs!app/applets/immunizations/templates/tooltip'
+], function(Backbone, Marionette, Handlebars, Util, ResourcePoolUtils, ModalView, AddImmunizationView, LoadWorkflowView, addselectEncounter, tooltip) {
     'use strict';
-    // Switch ON/OFF debug info
-    var DEBUG = CONFIG.debug;
-    //Data Grid Columns
+
+    var IMMUNIZATIONS = 'immunizations';
 
     var summaryAdminDateCol = {
         name: 'administeredFormatted',
@@ -94,7 +91,7 @@ define([
         hoverTip: 'immuninizations_repeatcontraindicated'
     });
 
-    fullScreenColumns.splice(5, 1, _.extend({},summaryAdminDateCol, {
+    fullScreenColumns.splice(5, 1, _.extend({}, summaryAdminDateCol, {
         flexWidth: 'flex-width-3',
         cell: Backgrid.StringCell.extend({
             className: 'string-cell flex-width-3'
@@ -106,113 +103,6 @@ define([
             type: 'panel'
         }
     });
-    var gistParseModel = {
-        parse: function(response) {
-            if (DEBUG) console.log("gistParseModel----->>");
-            if (DEBUG) console.log(response);
-            response.tooltip = tooltip(response);
-            return response;
-        }
-    };
-
-    var comparator = function(modelOne, modelTwo){
-        return -modelOne.get('administeredDateTime').localeCompare(modelTwo.get('administeredDateTime'));
-    };
-
-    var gistConfiguration = {
-        transformCollection: function(collection) {
-            collection.comparator = comparator;
-            if (DEBUG) console.log("ImmunGist ----->> preare collection (grouping)");
-            var shallowCollection = collection.clone();
-            var i_group = [];
-            var arr_cid = [];
-            var remove = [];
-            var i, k;
-            // parse model
-            for (i = 0; i < shallowCollection.length; i++) {
-                // model parsing
-                shallowCollection.at(i).set({
-                    administeredFormatted: shallowCollection.at(i).get("administeredFormatted"),
-                    timeSince: shallowCollection.at(i).get("timeSinceDate"),
-                    isReaction: gUtil.isReaction(shallowCollection.at(i).get("reactionName")),
-                    seriesNorm: gUtil.seriesNormalization(shallowCollection.at(i).get("seriesName"))
-                });
-                //-------------
-                if (DEBUG) console.log(shallowCollection.at(i).get("name"));
-                if (!_.contains(arr_cid, shallowCollection.at(i).cid)) {
-                    i_group = shallowCollection.where({
-                        name: shallowCollection.at(i).get("name")
-                    });
-                    for (k = 0; k < i_group.length; k++) {
-                        arr_cid.push(i_group[k].cid);
-                    }
-                    i_group = _.without(i_group, shallowCollection.at(i));
-                    remove = _.union(remove, i_group);
-                    shallowCollection.at(i).set({
-                        group: i_group,
-                        group_items: i_group.length + 1
-                    });
-                }
-            }
-            // remove groupped models
-            shallowCollection.remove(remove);
-            collection.reset(shallowCollection.models, {
-                reindex: true,
-                silent: true
-            });
-
-            _.each(collection.models, function(model) {
-                model.set('tooltip', tooltip(model.attributes));
-
-            });
-            //------------------------
-            return collection;
-        },
-        gistModel: [{
-            id: 'name',
-            field: 'name'
-        }, {
-            id: 'seriesNorm',
-            field: 'seriesNorm' //'series'
-        }, {
-            id: 'age',
-            field: 'timeSince' //'age'
-        }],
-        defaultView: 'pill' //'intervention'
-    };
-    var viewParseModel = {
-        parse: function(response) {
-            response = Util.getAdministeredFormatted(response);
-            response = Util.getTimeSinceDate(response);
-            response = Util.getContraindicated(response);
-            response = Util.getFacilityColor(response);
-            response = Util.getStandardizedName(response);
-            response = Util.getCommentBubble(response);
-            return response;
-        },
-        defaults: {
-            'applet_id': 'immunizations'
-        }
-    };
-
-    //Collection fetchOptions
-    var summaryConfiguration = {
-        fetchOptions: {
-            resourceTitle: 'patient-record-immunization',
-            pageable: true,
-            viewModel: viewParseModel,
-            criteria: {
-                filter: 'ne(removed, true)'
-            },
-            cache: true
-        }
-    };
-    var _fetchOptions = {
-        resourceTitle: 'patient-record-immunization',
-        pageable: true,
-        viewModel: viewParseModel,
-        cache: true
-    };
 
     function setupAddHandler(options) {
         channel.off('addItem');
@@ -233,8 +123,6 @@ define([
 
     var AppletLayoutView = ADK.Applets.BaseGridApplet.extend({
         initialize: function(options) {
-            var fetchOptions = _.clone(_fetchOptions);
-            if (DEBUG) console.log("Immunizations initialization ----->>");
             this._super = ADK.Applets.BaseGridApplet.prototype;
             var dataGridOptions = {};
             dataGridOptions.filterFields = _.pluck(fullScreenColumns, 'name');
@@ -251,11 +139,10 @@ define([
             setupAddHandler(dataGridOptions);
 
             dataGridOptions.tblRowSelector = '#data-grid-' + this.options.appletConfig.instanceId + ' tbody tr';
-            var self = this;
 
             var buttonTypes = ['infobutton', 'detailsviewbutton'];
 
-            if(ADK.UserService.hasPermissions('add-immunization')){
+            if (ADK.UserService.hasPermissions('add-immunization')) {
                 buttonTypes.push('additembutton');
             }
 
@@ -296,36 +183,31 @@ define([
                 }
             };
 
-            fetchOptions.onSuccess = function() {
-                if (dataGridOptions.collection.length > 0) {
-                    $('#data-grid-' + dataGridOptions.instanceId + ' tbody tr').each(function() {
-                        $(this).attr("data-infobutton", $(this).find('td:first').text());
-                    });
-                }
-            };
-
-            dataGridOptions.collection = (_.isUndefined(dataGridOptions.collection)) ? new Backbone.Collection() : dataGridOptions.collection;
-            dataGridOptions.collection.model = dataGridOptions.collection.model.extend({
-                defaults: {
-                    'applet_id': 'immunizations'
-                }
-            });
-            dataGridOptions.collection.comparator = comparator;
-            dataGridOptions.collection.fetchOptions = fetchOptions;
             this.dataGridOptions = dataGridOptions;
+            this.dataGridOptions.collection = new ADK.UIResources.Fetch.Immunizations.Collection([], {
+                isClientInfinite: true
+            });
+            this.dataGridOptions.collection.fetchCollection(this.columnsViewType);
 
-            ADK.PatientRecordService.fetchCollection(this.dataGridOptions.collection.fetchOptions, this.dataGridOptions.collection);
-
-            this.listenTo(ADK.Messaging.getChannel('immunization'), 'refreshGridView', function() {
+            this.listenTo(ADK.Messaging.getChannel(IMMUNIZATIONS), 'refreshGridView', function() {
                 this.refresh({});
             });
 
             this._super.initialize.apply(this, arguments);
 
         },
-        onRender: function() {
-            this._super.onRender.apply(this, arguments);
-        }
+        DataGrid: ADK.Applets.BaseGridApplet.DataGrid.extend({
+            DataGridRow: ADK.Applets.BaseGridApplet.DataGrid.DataGridRow.extend({
+                serializeModel: function() {
+                    var data = this.model.toJSON();
+                    data = Util.getTimeSinceDate(data);
+                    data = Util.getContraindicated(data);
+                    data = Util.getFacilityColor(data);
+                    data = Util.hasCommentBubble(data);
+                    return data;
+                }
+            })
+        })
     });
 
     var getDetailsModal = function(model, collection) {
@@ -352,35 +234,26 @@ define([
     };
 
     // expose gist detail view through messaging
-    var channel = ADK.Messaging.getChannel('immunizations');
+    var channel = ADK.Messaging.getChannel(IMMUNIZATIONS);
 
 
     channel.on('detailView', function(params) {
-        if (DEBUG) console.log("Immunizations gistDetailView ----->>");
         getDetailsModal(params.model, params.collection);
     });
 
     // expose detail view through messaging
     channel.reply('detailView', function(params) {
 
-        var fetchOptions = {
-            criteria: {
-                "uid": params.uid
-            },
-            patient: ADK.PatientRecordService.getCurrentPatient(),
-            resourceTitle: 'patient-record-immunization',
-            viewModel: viewParseModel
-        };
-
         var gridCollection = params.collection || params.model.collection;
-        if(params.model) params.model.set('name', params.model.get('summary'));
+        if (params.model) params.model.set('name', params.model.get('summary'));
 
         return {
             view: ModalView.extend({
                 model: new Backbone.Model(_.get(params, 'model.attributes')),
                 navHeader: false,
-                modelCollection: ADK.PatientRecordService.createEmptyCollection(fetchOptions),
-                gridCollection: gridCollection
+                gridCollection: gridCollection,
+                modelCollectionFlag: true,
+                uid: params.uid
             }),
             title: function() {
                 return Util.getModalTitle(this.model || this.view.prototype.model);
@@ -391,19 +264,60 @@ define([
     var GistView = ADK.AppletViews.PillsGistView.extend({
         className: 'app-size',
         initialize: function(options) {
-            var self = this;
             this._super = ADK.AppletViews.PillsGistView.prototype;
             var buttonTypes = ['infobutton', 'detailsviewbutton', 'quicklookbutton'];
 
-            if(ADK.UserService.hasPermissions('add-immunization')){
+            if (ADK.UserService.hasPermissions('add-immunization')) {
                 buttonTypes.push('additembutton');
             }
 
+            var CollectionDef = ADK.UIResources.Fetch.Immunizations.Collection.extend({
+                model: Backbone.Model.extend({
+                    parse: function(response) {
+                        ResourcePoolUtils.getAdministeredFormatted(response);
+                        Util.getTimeSinceDate(response);
+                        response.isReaction = Util.isReaction(_.get(response, 'reactionName', ''));
+                        response.seriesNorm = Util.seriesNormalization(_.get(response, 'seriesName', ''));
+                        return response;
+                    }
+                }),
+            });
+
+            this.collection = new CollectionDef([], {
+                isClientInfinite: true
+            });
+
+            this.collection.fetchCollection();
+
             this.appletOptions = {
                 filterFields: _.pluck(fullScreenColumns, 'name'),
-                collectionParser: gistConfiguration.transformCollection,
-                gistModel: gistConfiguration.gistModel,
-                collection: ADK.PatientRecordService.fetchCollection(_fetchOptions),
+                collectionParser: function(collection) {
+                    var set = collection.groupBy('name');
+
+                    var models = [];
+                    _.each(set, function(val, key) {
+                        var recent = _.max(val, function(model) {
+                            return model.get('administeredDateTime');
+                        });
+                        recent.set('group', val);
+                        models.push(recent);
+                    });
+
+                    collection.reset(models, {silent:true});
+
+                    return collection;
+                },
+                gistModel: [{
+                    id: 'name',
+                    field: 'name'
+                }, {
+                    id: 'seriesNorm',
+                    field: 'seriesNorm'
+                }, {
+                    id: 'age',
+                    field: 'timeSinceDate'
+                }],
+                collection: this.collection,
                 toolbarOptions: {
                     buttonTypes: buttonTypes,
                     triggerSelector: '[data-infobutton]'
@@ -412,11 +326,20 @@ define([
 
             setupAddHandler(this.appletOptions);
 
-            this.listenTo(ADK.Messaging.getChannel('immunization'), 'refreshGridView', function() {
-                this.refresh({});
-            });
-
             this._super.initialize.apply(this, arguments);
+
+            var OriginalPillGist = this.appletOptions.AppletView;
+            var PillGist = OriginalPillGist.extend({
+                childView: OriginalPillGist.prototype.childView.extend({
+                    serializeModel: function() {
+                        var modelJSON = this.model.toJSON();
+                        modelJSON.tooltip = tooltip(modelJSON);
+                        return modelJSON;
+                    }
+                })
+            });
+            this.appletOptions.AppletView = PillGist;
+            this.setAppletView();
         }
     });
 
@@ -437,6 +360,7 @@ define([
             view: LoadWorkflowView,
             viewModel: formModel,
             stepTitle: 'Load Workflow',
+            helpMapping: 'immunizations_form'
         });
 
         var workflowView = new ADK.UI.Workflow(workflowOptions);
@@ -447,7 +371,7 @@ define([
     }
 
     var applet = {
-        id: "immunizations",
+        id: IMMUNIZATIONS,
         viewTypes: [{
             type: 'gist',
             view: GistView,

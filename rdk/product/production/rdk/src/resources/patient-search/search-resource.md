@@ -133,7 +133,8 @@ Parameters may be provided as query parameters or in the request body. The `name
                 "properties": {
                     "pid": {
                         "type": "string",
-                        "description": "patient's mvi id"
+                        "description": "patient's mvi id",
+                        "pattern": "^([a-zA-Z0-9]+);([a-zA-Z0-9]+)$|^([0-9]+)V([0-9]+)$"
                     },
                     "demographics": {
                         "type": "object",

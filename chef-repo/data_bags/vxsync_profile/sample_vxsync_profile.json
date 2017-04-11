@@ -1,6 +1,0 @@
-{
-  "id": "sample_vxsync_profile",
-  "process_profile": {
-    "subscriber_storage": {"number_of_copies": 7}
-  }
-}

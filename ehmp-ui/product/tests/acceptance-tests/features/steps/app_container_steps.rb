@@ -9,15 +9,9 @@ class AppContainer < AccessBrowserV2
     super
     add_action(CucumberLabel.new("Current User Menu"), ClickAction.new, AccessHtmlElement.new(:id, "eHMPCurrentUser"))
     add_action(CucumberLabel.new("Help Menu"), ClickAction.new, AccessHtmlElement.new(:id, "eHMP-Help"))
-    
-    add_verify(CucumberLabel.new("Current User Menu Text"), VerifyContainsText.new, AccessHtmlElement.new(:id, "eHMPCurrentUser"))
   end
 end # 
 
 Then(/^the navigation bar displays "(.*?)"$/) do |app_container_html_element|
   expect(AppContainer.instance.wait_until_element_present(app_container_html_element)).to be_true
-end
-
-Then(/^the Current User Menu Text displays "(.*?)"$/) do |user_name|
-  expect(AppContainer.instance.perform_verification("Current User Menu Text", user_name)).to be_true
 end

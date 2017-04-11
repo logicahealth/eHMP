@@ -1,4 +1,4 @@
-@PO_F926_Notes_Write_Back @regression @future @DE4560
+@PO_F926_Notes_Write_Back  @future @DE4560
 
 Feature: F926 : Enter Plain Text Basic Progress Notes  (TIU), Move Notes Modal to Tray
 
@@ -55,7 +55,7 @@ Scenario: Create new note.
 @f926_notes_applet_signs_new_note 
 Scenario: Sign a note.
 
-  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "PW    " verifycode as  "PW    !!"
+  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "vk1234" verifycode as  "vk1234!!"
   Then staff view screen is displayed
   When user searches for and selects "eighteen,patient"
   Then Overview is active
@@ -63,7 +63,7 @@ Scenario: Sign a note.
   When POB user opens the Notes applet
   And POB user opens New Note to create a note
   And POB user creates New Note "ADHC SOCIAL WORK"
-  And POB user signs the note "ADHC SOCIAL WORK" as "PW    !!"
+  And POB user signs the note "ADHC SOCIAL WORK" as "vk1234!!"
   Then POB user sees the new note "ADHC SOCIAL WORK" under recently signed notes header
   
 @f926_notes_applet_edit_and_preview_note

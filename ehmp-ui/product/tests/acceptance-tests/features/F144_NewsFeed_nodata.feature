@@ -1,4 +1,4 @@
-@F144_NewsFeedApplet_NoData @regression @triage
+@F144_NewsFeedApplet_NoData   @DE6991 @DE6976
 Feature: F144-eHMP Viewer GUI - Timeline(NewsFeed)
 
 @f144_newsFeed_navigate_thro_dropdown @US2457 
@@ -70,7 +70,7 @@ Scenario: News feed applet displays all of the appointments for a given patient 
 @f144_newsfeed_labs @US2845 @DE713
 Scenario: News feed applet displays all of the lab visits for a given patient in a grid form
   # Given user is logged into eHMP-UI
-  And user searches for and selects "ZZZRETFOURFORTYSEVEN"
+  And user searches for and selects "ZZZRETFOURFORTYSEVEN,PATIENT"
   And the user has selected All within the global date picker
   When user navigates to Timeline Applet
   Then the NewsFeed Applet table contains rows of type "Laboratory"
@@ -78,7 +78,7 @@ Scenario: News feed applet displays all of the lab visits for a given patient in
 @f144_newsfeed_refresh 
 Scenario: News feed applet displays all of the same details after applet is refreshed
   # Given user is logged into eHMP-UI
-  Given user searches for and selects "ZZZRETFOURFORTYSEVEN"
+  Given user searches for and selects "ZZZRETFOURFORTYSEVEN,PATIENT"
   And user navigates to Timeline Applet
   And the user has selected All within the global date picker
   And the NewsFeed Applet table contains data rows

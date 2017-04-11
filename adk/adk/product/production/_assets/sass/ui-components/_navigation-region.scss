@@ -1,0 +1,15 @@
+$xs: 5px;
+.provider-centric-header {
+      background-color: $pure-white;
+}
+#navigation-region {
+    background: $pure-white;
+    padding: $xs 12px;
+    min-height: 37px;
+}
+
+@media (min-width: 768px) {
+    #navigation-region .navbar-right {
+        margin-right: 0px;
+    }
+}

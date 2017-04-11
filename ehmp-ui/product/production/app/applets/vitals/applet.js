@@ -145,7 +145,8 @@ define([
         workflowOptions.steps.push({
             view: writebackView,
             viewModel: formModel,
-            stepTitle: 'Step 2'
+            stepTitle: 'Step 2',
+            helpMapping: 'vitals_form'
         });
         workflowView = new ADK.UI.Workflow(workflowOptions);
         workflowView.show({

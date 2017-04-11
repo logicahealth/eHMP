@@ -3,13 +3,10 @@
 var _ = require('lodash');
 var rdk = require('../../core/rdk');
 var jdsDomains = require('./jds-domains');
-var querystring = require('querystring');
 var patientRecordAnnotator = require('./patient-record-annotator');
 var http = rdk.utils.http;
 var jdsFilter = require('jds-filter');
-var resultUtils = rdk.utils.results;
 var asuUtils = require('../../resources/patient-record/asu-utils');
-var nullchecker = rdk.utils.nullchecker;
 var vix = require('../vix/vix-subsystem');
 var async = require('async');
 var availableJdsTemplates = require('../../../config/jdsTemplates.json');
@@ -23,6 +20,7 @@ module.exports.getSubsystemConfig = getSubsystemConfig;
 module.exports.getPatientDomainData = getPatientDomainData;
 module.exports.getByUid = getByUid;
 module.exports._filterAsuDocuments = filterAsuDocuments;
+module.exports._fetchJdsAndFillPagination = fetchJdsAndFillPagination;
 
 function getSubsystemConfig(app, logger) {
     return {
@@ -48,7 +46,7 @@ function getSubsystemConfig(app, logger) {
 }
 
 /**
- * @param {HttpRequest} req
+ * @param {IncomingMessage} req
  * @param {String|Number} pid The pid of the pre-synchronized patient
  * @param {String} domain
  * @param {Object} query querystring.stringify object
@@ -81,82 +79,212 @@ function getPatientDomainData(req, pid, domain, query, vlerQuery, callback) {
 
     var vlerCallType = vlerQuery.vlerCallType;
     var vlerUid = vlerQuery.vlerUid;
-    var jdsPath =  createJDSPath(jdsResource, query, req);
+    var jdsPath = createJDSPath(jdsResource, req);
     var options = _.extend({}, req.app.config.jdsServer, {
         url: jdsPath,
+        qs: query,
         logger: req.logger,
         json: true
     });
 
+    if (name === 'document-view') {
+        return requestDocuments(req, pid, options, callback);
+    }
+    if (name === 'patient') {
+        return requestPatient(req, pid, options, callback);
+    }
+    if (name === 'med') {
+        return requestMedications(req, pid, options, callback);
+    }
+
     return rdk.utils.http.get(options, function(error, response, responseBody) {
-        if (error) {
-            req.logger.error(error);
-            return callback(error, null, 500);
-        }
-        if (_.has(responseBody, 'error')) {
-            return callback(new Error(responseBody.error), responseBody, response.statusCode);
-        }
-        if (!_.has(responseBody, 'data')) {
-            return callback(new Error('Missing data in JDS response. Is the patient synced?'), responseBody, response.statusCode);
-        }
-        if (name === 'document-view') {
-            return transformDocumentView(req, responseBody, response.statusCode, callback);
+        var errorCheck = isResponseError(req, error, response, responseBody);
+        if (errorCheck) {
+            return callback(errorCheck, responseBody, response.statusCode);
         }
         if (name === 'vlerdocument') {
             return transformVler(req.logger, vlerCallType, vlerUid, name, responseBody, response.statusCode, callback);
         }
-        if (name === 'patient') {
-            return transformCwadf(req, pid, responseBody, callback);
-        }
-        if (name === 'med') {
-            removeParentMedications(responseBody);
-        }
-        return callback(null, applyFilters(name, transformDomainData(name, responseBody), req.query.afterFilter), response.statusCode);
+        return callback(null, transformDomainData(name, responseBody), response.statusCode);
     });
 }
 
-function createJDSPath(jdsResource, query, req) {
-    var jdsPath = '';
-    var jdsTemplate = _.get(req, 'query.template');
+function isResponseError(req, error, response, responseBody) {
+    if (error) {
+        req.logger.error(error);
+        return error;
+    }
+    if (_.has(responseBody, 'error')) {
+        return new Error(responseBody.error);
+    }
+    if (!_.isArray(_.get(responseBody, 'data.items'))) {
+        return new Error('Missing data in JDS response. Is the patient synced?');
+    }
+    return false;
+}
 
-    if (jdsTemplate && availableJdsTemplates.hasOwnProperty(jdsTemplate)) {
-        jdsPath = jdsResource + '/' + jdsTemplate + '?' + querystring.stringify(query);
+function requestDocuments(req, pid, options, callback) {
+    async.parallel([
+        function(callback) {
+            var vixSubsystemPresent = _.get(req, 'app.subsystems.vix');
+            if (vixSubsystemPresent) {
+                return vix.fetchBseToken.fetch(req, callback);
+            }
+            return callback(null, null);
+        },
+        function(callback) {
+            return fetchJdsAndFillPagination(req, options,
+                function(req, responseBody, callback) {
+                    return filterAsuDocuments(req, responseBody, function(err, results) {
+                        return callback(err, results);
+                    });
+                },
+                function(err, results, statusCode) {
+                    return callback(err, results, statusCode);
+                }
+            );
+        }
+    ], function(error, response) {
+        if (error) {
+            req.logger.error(error);
+            return callback(error, null, 500);
+        }
+        var vixResponse = response[0];
+        var asuResponse = response[1];
+        var responseBody = asuResponse[0];
+        var statusCode = asuResponse[1];
+        var bodyHasItems = _.size(_.get(responseBody, 'data.items')) > 0;
+
+        if (vixResponse && bodyHasItems) {
+            return vix.addImagesToDocument(req, responseBody, vixResponse.token, function(err, responseBody) {
+                return callback(null, responseBody, statusCode);
+            });
+        }
+        return callback(null, responseBody, statusCode);
+    });
+}
+
+function requestMedications(req, pid, options, callback) {
+    var afterFilter = req.body.afterFilter || req.query.afterFilter;
+    var afterFilterObject;
+    if (afterFilter) {
+        try {
+            afterFilterObject = jdsFilter.parse(afterFilter);
+        } catch (ex) {
+            return callback(ex, null, 500);
+        }
+    }
+    return fetchJdsAndFillPagination(req, options,
+        function responseFilterer(req, responseBody, callback) {
+            removeParentMedications(responseBody);
+            responseBody = transformDomainData('med', responseBody);
+            applyFilters(responseBody, afterFilterObject);
+            return callback(null, responseBody);
+        },
+        function handler(err, jdsResponse, statusCode) {
+            if (err) {
+                return callback(err, jdsResponse, statusCode);
+            }
+            return callback(err, jdsResponse, statusCode);
+        }
+    );
+}
+
+/**
+ *
+ * @param {IncomingMessage} req
+ * @param {Object} jdsOptions
+ * @param {Function} responseFilterer (req, responseBody, callback(err, jdsResponse))
+ * @param {Function} callback (err, jdsResponse, statusCode)
+ */
+function fetchJdsAndFillPagination(req, jdsOptions, responseFilterer, callback) {
+    var requestedItemCount = _.parseInt(_.get(jdsOptions, 'qs.limit'));
+    var moreItemsAvailable = true;
+    var combinedFilteredItems = [];
+    var lastPageMetadata;
+    var initialPageMetadata;
+
+    return async.whilst(
+        function test() {
+            if (requestedItemCount > 0) {
+                return (
+                    _.size(combinedFilteredItems) < requestedItemCount &&
+                    moreItemsAvailable
+                );
+            }
+            return moreItemsAvailable;
+        },
+        function(callback) {
+            if (lastPageMetadata) {
+                _.set(jdsOptions, 'qs.start',
+                    _.parseInt(_.get(jdsOptions, 'qs.start', 0)) + lastPageMetadata.itemsPerPage);
+            }
+            rdk.utils.http.get(jdsOptions, function(error, response, responseBody) {
+                var errorCheck = isResponseError(req, error, response, responseBody);
+                if (errorCheck) {
+                    return callback(errorCheck, null, _.get(response, 'statusCode'));
+                }
+                if (!initialPageMetadata) {
+                    initialPageMetadata = _.pick(responseBody.data,
+                        'updated',
+                        'startIndex', // start
+                        'pageIndex');
+                }
+                lastPageMetadata = _.pick(responseBody.data,
+                    'totalItems',
+                    'currentItemCount',
+                    'itemsPerPage', // limit
+                    'totalPages'
+                );
+                moreItemsAvailable = _.parseInt(_.get(jdsOptions, 'qs.start', 0)) + lastPageMetadata.currentItemCount < lastPageMetadata.totalItems;
+                return responseFilterer(req, responseBody, function(err, results) {
+                    if (err) {
+                        return callback(err);
+                    }
+                    combinedFilteredItems = combinedFilteredItems.concat(results.data.items);
+                    return callback();
+                });
+            });
+        },
+        function(err) {
+            if (err) {
+                return callback(err, null, 500);
+            }
+            var excessItemCount = Math.max(0, _.size(combinedFilteredItems) - requestedItemCount);
+            if (excessItemCount > 0) {
+                combinedFilteredItems.length = requestedItemCount;
+            }
+            var fakeJdsResponse = {
+                data: {
+                    items: combinedFilteredItems
+                }
+            };
+            _.assign(fakeJdsResponse.data, initialPageMetadata, lastPageMetadata);
+            fakeJdsResponse.data.currentItemCount = _.size(combinedFilteredItems);
+            if (_.parseInt(_.get(jdsOptions, 'qs.limit'))) {
+                fakeJdsResponse.data.nextStartIndex = _.parseInt(_.get(jdsOptions, 'qs.start')) + lastPageMetadata.currentItemCount - excessItemCount;
+            }
+            return callback(null, fakeJdsResponse, 200);
+        }
+    );
+}
+
+function createJDSPath(jdsResource, req) {
+    var jdsPath = '';
+    var jdsTemplate = _.get(req, 'body.template') || _.get(req, 'query.template');
+
+    if (_.has(availableJdsTemplates, jdsTemplate)) {
+        jdsPath = jdsResource + '/' + jdsTemplate;
     } else {
-        jdsPath = jdsResource + '?' + querystring.stringify(query);
+        jdsPath = jdsResource;
     }
 
     return jdsPath;
 }
 
-function transformDocumentView(req, responseBody, statusCode, callback) {
-    async.waterfall([
-        function(callback) {
-            return filterAsuDocuments(req, responseBody, function(err, results) {
-                if (err) {
-                    req.logger.error(err);
-                    return callback(err, null, 500);
-                }
-                responseBody = results;
-                return callback(null, responseBody, statusCode);
-            });
-        },
-        function(responseBody, statusCode, callback) {
-            var vixSubsystemPresent = _.get(req, 'app.subsystems.vix');
-            var bodyHasItems = _.size(_.get(responseBody, 'data.items')) > 0;
-            if (vixSubsystemPresent && bodyHasItems) {
-                return vix.addImagesToDocument(req, responseBody, function(err, responseBody) {
-                    return callback(null, responseBody, statusCode);
-                });
-            }
-            return callback(null, responseBody, statusCode);
-        }
-    ], function(err, responseBody, statusCode) {
-        return callback(err, responseBody, statusCode);
-    });
-}
 
 /**
- * @param {HttpRequest} req
+ * @param {IncomingMessage} req
  * @param {String} pid The pid of the pre-synchronized patient
  * @param {String} uid The uid of the item to look up
  * @param {Function} callback receives (error, response, statusCode)
@@ -170,7 +298,7 @@ function getByUid(req, pid, uid, callback) {
         logger: req.logger,
         json: true
     });
-    http.get(options, function (error, response, responseBody) {
+    http.get(options, function(error, response, responseBody) {
         if (error) {
             req.logger.error(error);
             return callback(error, null, 500);
@@ -185,6 +313,19 @@ function getByUid(req, pid, uid, callback) {
     });
 }
 
+function requestPatient(req, pid, options, callback) {
+    return fetchJdsAndFillPagination(req, options,
+        function responseFilterer(req, responseBody, callback) {
+            return transformCwadf(req, pid, responseBody, function(err, domainData, statusCode) {
+                return callback(err, domainData);
+            });
+        },
+        function handler(err, jdsResponse, statusCode) {
+            return callback(err, jdsResponse, statusCode);
+        }
+    );
+}
+
 function transformCwadf(req, pid, domainData, callback) {
 
     var filter = ['not', ['exists', 'removed'],
@@ -195,7 +336,8 @@ function transformCwadf(req, pid, domainData, callback) {
         filter: filterString
     };
     var options = _.extend({}, req.app.config.jdsServer, {
-        url: '/vpr/' + pid + '/index/cwad?' + querystring.stringify(queryObject),
+        url: '/vpr/' + pid + '/index/cwad',
+        qs: queryObject,
         logger: req.logger,
         json: true
     });
@@ -267,19 +409,19 @@ function transformVler(logger, vlerCallType, vlerUid, name, jdsResponse, statusC
     }
 }
 
-function applyFilters(domainName, domainData, filterString) {
-    if (domainName === 'med') {
-        if (filterString) {
-            var filterObj;
-            try {
-                filterObj = jdsFilter.parse(filterString);
-            } catch (e) {
-                return domainData;
-            }
-
-            domainData = resultUtils.filterResults(domainData, filterObj);
-        }
+function applyFilters(domainData, filterObject) {
+    var dataItems = _.get(domainData, 'data.items');
+    if (!_.isArray(dataItems)) {
+        return domainData;
     }
+    if (!_.isArray(filterObject)) {
+        return domainData;
+    }
+    var newDataItems = jdsFilter.applyFilters(filterObject, dataItems);
+    if (_.isError(newDataItems)) {
+        return domainData;
+    }
+    _.set(domainData, 'data.items', newDataItems);
     return domainData;
 }
 
@@ -305,8 +447,7 @@ function filterVlerData(vlerCallType, vlerUid, name, domainData) {
 }
 
 function filterAsuDocuments(req, details, callback) {
-    if (nullchecker.isNullish(details) && nullchecker.isNullish(details.data) &&
-        nullchecker.isNullish(details.data.items) || !details.data.items.length) {
+    if (_.isEmpty(_.get(details, 'data.items'))) {
         return callback(null, details);
     }
     var requiredPermission = 'VIEW';
@@ -324,21 +465,15 @@ function removeParentMedications(response) {
     if (!_.isArray(_.get(response, 'data.items'))) {
         return;
     }
-
-    var initialCount = response.data.items.length;
-
-    response.data.items = _.reject(response.data.items, function (item) {
-        return _.find(item.orders, function (order) {
+    response.data.items = _.reject(response.data.items, function(item) {
+        return _.find(item.orders, function(order) {
             return !_.isEmpty(order.childrenOrderUids);
         });
     });
-
-    var removedCount = initialCount - response.data.items.length;
-    if (response.data.totalItems) {
-        response.data.totalItems -= removedCount;
-    }
-    if (response.data.currentItemCount) {
-        response.data.currentItemCount -= removedCount;
-    }
 }
+
 module.exports.filterAsuDocuments = filterAsuDocuments;
+module.exports._isResponseError = isResponseError;
+module.exports._requestDocuments = requestDocuments;
+module.exports._requestMedications = requestMedications;
+module.exports._applyFilters = applyFilters;

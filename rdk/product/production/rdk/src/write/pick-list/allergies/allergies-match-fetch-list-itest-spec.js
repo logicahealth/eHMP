@@ -8,16 +8,16 @@ var log = sinon.stub(require('bunyan').createLogger({ name: 'allergies-match-fet
 var configuration = {
     environment: 'development',
     context: 'OR CPRS GUI CHART',
-    host: 'IP        ',
+    host: '10.2.2.101',
     port: 9210,
-    accessCode: 'PW    ',
-    verifyCode: 'PW    !!',
-    localIP: 'IP      ',
+    accessCode: 'pu1234',
+    verifyCode: 'pu1234!!',
+    localIP: '10.2.2.1',
     localAddress: 'localhost'
 };
 
 describe('allergies-match resource integration test', function() {
-    it('can call the RPC', function(done) {
+    it.skip('can call the RPC', function(done) {
         this.timeout(20000);
 
         fetchList(log, configuration, function(err, result) {

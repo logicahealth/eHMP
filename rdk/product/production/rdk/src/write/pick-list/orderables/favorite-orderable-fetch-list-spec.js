@@ -1,6 +1,5 @@
 'use strict';
 
-var _ = require('lodash');
 var rdk = require('../../../core/rdk');
 var pjds = rdk.utils.pjdsStore;
 var fetch = require('./favorite-orderable-fetch-list').fetch;
@@ -18,9 +17,9 @@ var THE_UID = 'userUid';
 var DUMMY_CONFIG = 'dummyConfig';
 
 describe('Favorite orderables pick-list resource', function() {
-    var pjdsGetReq = undefined;
-    var pjdsGetOptions = undefined;
-    var params = undefined;
+    var pjdsGetReq;
+    var pjdsGetOptions;
+    var params;
 
     beforeEach(function() {
         params = {

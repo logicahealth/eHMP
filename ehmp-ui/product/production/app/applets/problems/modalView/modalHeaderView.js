@@ -8,15 +8,13 @@ define([
 
     return Backbone.Marionette.ItemView.extend({
         events: {
-            'click #ccdPrevious, #ccdNext': 'navigateModal'
+            'click #ccdPrevious': function() {
+                this.theView.getPrevModal();
+            },
+            'click #ccdNext': function() {
+                this.theView.getNextModal();
+            }
         },
-
-        navigateModal: function(e) {
-            var $target = $(e.currentTarget);
-            var id = $target.attr('id');
-            id === 'ccdPrevious' ? this.theView.getPrevModal() : this.theView.getNextModal();
-        },
-
         template: HeaderTemplate
 
     });

@@ -156,7 +156,11 @@ describe('extractDfnsFromRpc', function() {
     });
     it('should handle no patients found', function() {
         locationsResource._extractDfnsFromRpc(null, 'clinic', '^No patients found.\r\n', callback);
-        expect(callback.calledWith('No patients found.')).to.be.true();
+        expect(callback.calledWith('No results found.')).to.be.true();
+    });
+    it('should handle no appointments', function() {
+        locationsResource._extractDfnsFromRpc(null, 'ward', '^No appointments.\r\n', callback);
+        expect(callback.calledWith('No results found.')).to.be.true();
     });
     it('should return a list of patients with room/bed numbers when given a patient for a ward', function() {
         var rpcResponse = '100708^ONE,INPATIENT^722-^3130830.1\r\n100710^TWO,INPATIENT^722-^3131002.13\r\n100711^THREE,INPATIENT^724-^3131003.13\r\n100712^FOUR,INPATIENT^724-^3131010.13\r\n100713^FIVE,INPATIENT^724-^3131202.13\r\n';
@@ -279,5 +283,63 @@ describe('selectPatientsFromDfnsInBatches', function() {
             jdsCalls.must.equal(3);
             patientItems.must.eql(expectedPatientItems);
         });
+    });
+});
+
+describe('RPC calls', function() {
+    var req = {
+        session: {
+            user: {
+                accessCode: 'dummyAccessCode',
+                verifyCode: 'dummyVerifyCode',
+                division: '500'
+            }
+        },
+
+        app: {
+            config: {
+                rpcConfig: {
+                    context: 'ORQOR DETAIL',
+                    siteHash: '9E7A'
+                },
+                vistaSites: {
+                    '9E7A': {
+                        division: [{
+                            id: '500',
+                            name: 'PANORAMA'
+                        }],
+                        host: '10.2.2.101',
+                        port: 9210,
+                        production: false,
+                        accessCode: 'pu1234',
+                        verifyCode: 'pu1234!!',
+                        localIP: '10.2.2.1',
+                        localAddress: 'localhost'
+                    },
+                    'C877': {
+                        division: [{
+                            id: '500',
+                            name: 'KODAK'
+                        }],
+                        host: '10.2.2.102',
+                        port: 9210,
+                        production: false,
+                        accessCode: 'pu1234',
+                        verifyCode: 'pu1234!!'
+                    }
+                }
+            }
+        },
+        logger: logger,
+        _rpcSystemClients: {}
+    };
+
+    it('Tests that config returns correct config', function() {
+        var config = locationsResource._getVistaConfig(req, '9E7A');
+
+        expect(config).not.to.be.null();
+
+        //division is simple value
+        expect(config.division).eql('500');
     });
 });

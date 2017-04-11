@@ -1,6 +1,5 @@
 'use strict';
 
-var rpcClientFactory = require('../utils/rpc-client-factory');
 var parse = require('./radiology-orderables-parser').parse;
 var validate = require('./../utils/validation-util');
 var rpcUtil = require('./../utils/rpc-util');
@@ -11,7 +10,7 @@ var _ = require('lodash');
  * Calls the RPC 'ORWDRA32 RAORDITM' repeatedly and parses out the data<br/><br/>
  *
  * Required parameter: imgType
- * 
+ *
  * @param logger The logger
  * @param configuration This contains the information necessary to connect to the RPC.
  * @param callback This will be called with the array of data retrieved from multiple calls to the RPC (or if there's an error).

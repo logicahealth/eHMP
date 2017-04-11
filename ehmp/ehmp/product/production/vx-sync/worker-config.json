@@ -1,0 +1,1276 @@
+{
+  "VXSYNC_IP": "10.3.3.6",
+  "vxsync": {
+    "trackSolrStorage": true,
+    "configRefresh": 60000,
+    "rules": {
+      "accept-all": {
+      },
+      "rapid-fire": {
+      },
+      "operational-data-sync": {
+        "odsAttempts": 10,
+        "odsDelay": 30
+      },
+      "expiration": {
+        "default": 3600000,
+        "dod": 3600000
+      },
+      "error-cooldown": {
+        "default": 600000,
+        "DOD": 600000
+      }
+    },
+    "eventPrioritizationRules": {
+        "site-type": {},
+        "domain-type": {
+            "consult": 20,
+            "allergy": -20,
+            "order": 40
+        }
+    },
+    "retrySync": {"maxRetries": 3},
+    "endpointMaxSockets": 5,
+    "maxMetastampSize": 10485760,
+    "vistaAssigningAuthority": "USVHA",
+    "vistaSites": {
+        "C877": {
+          "name": "KODAK",
+          "host": "10.2.2.102",
+          "port": 9210,
+          "accessCode": "ep1234",
+          "verifyCode": "ep1234!!",
+          "localIP": "127.0.0.1",
+          "stationNumber": "507",
+          "localAddress": "localhost",
+          "connectTimeout": 3000,
+          "sendTimeout": 20000
+      },
+        "9E7A": {
+          "name": "PANORAMA",
+          "host": "10.2.2.101",
+          "port": 9210,
+          "accessCode": "ep1234",
+          "verifyCode": "ep1234!!",
+          "localIP": "127.0.0.1",
+          "stationNumber": "500",
+          "localAddress": "localhost",
+          "connectTimeout": 3000,
+          "sendTimeout": 20000
+      }
+    },
+    "vista": {
+      "domainsNoSolrTracking": ["auxiliary", "diagnosis", "education", "exam", "factor", "obs", "patient", "roadtrip", "skin", "task", "treatment"],
+      "domains": [
+        "allergy",
+        "auxiliary",
+        "appointment",
+        "diagnosis",
+        "document",
+        "immunization",
+        "lab",
+        "med",
+        "obs",
+        "order",
+        "problem",
+        "procedure",
+        "consult",
+        "image",
+        "surgery",
+        "task",
+        "visit",
+        "vital",
+        "ptf",
+        "exam",
+        "cpt",
+        "education",
+        "pov",
+        "skin",
+        "treatment",
+        "roadtrip",
+        "patient"
+      ]
+    },
+    "syncRequestApi": {
+        "protocol": "http",
+        "host": "127.0.0.1",
+        "port": 8080,
+        "patientSyncPath": "/sync/doLoad",
+        "patientSyncDemoPath": "/sync/demographicSync",
+        "patientUnsyncPath": "/sync/clearPatient",
+        "patientStatusPath": "/sync/status",
+        "method": "POST"
+    },
+
+    "hmp.server.id": "hmp-development-box",
+    "hmp.version": "0.7-S65",
+    "hmp.batch.size": "1000",
+    "hmp.extract.schema": "3.001",
+
+    "jmeadows": {
+        "disabled": false,
+        "version": "2.3.3.0.2",
+        "domains": [
+            "allergy",
+            "appointment",
+            "consult",
+            "demographics",
+            "dischargeSummary",
+            "encounter",
+            "immunization",
+            "lab",
+            "medication",
+            "order",
+            "problem",
+            "progressNote",
+            "radiology",
+            "vital"
+        ],
+        "defaults": {
+            "host": "127.0.0.1",
+            "port": "5400",
+            "adminPort": "5401",
+            "method": "GET",
+            "timeout": 60000
+        },
+        "allergy": {
+            "path": "/dod/allergy"
+        },
+        "appointment": {
+            "path": "/dod/appointment"
+        },
+        "consult": {
+            "path": "/dod/consult"
+        },
+        "demographics": {
+            "path": "/dod/demographics"
+        },
+        "dischargeSummary": {
+            "path": "/dod/dischargeSummary"
+        },
+        "document": {
+            "path": "/dod/document"
+        },
+        "encounter": {
+            "path": "/dod/encounter"
+        },
+        "immunization": {
+            "path": "/dod/immunization"
+        },
+        "lab": {
+            "path": "/dod/lab"
+        },
+        "medication": {
+            "path": "/dod/medication"
+        },
+        "order": {
+            "path": "/dod/order"
+        },
+        "problem": {
+            "path": "/dod/problem"
+        },
+        "progressNote": {
+            "path": "/dod/progressNote"
+        },
+        "ptf": {
+            "path": "/dod/ptf"
+        },
+        "radiology": {
+            "path": "/dod/radiology"
+        },
+        "vital": {
+            "path": "/dod/vital"
+        }
+    },
+    "hdr": {
+        "domains": [
+            "allergy",
+            "appointment",
+            "consult",
+            "cpt",
+            "document",
+            "immunization",
+            "image",
+            "lab",
+            "med",
+            "order",
+            "pov",
+            "problem",
+            "procedure",
+            "surgery",
+            "visit",
+            "vital"
+        ],
+        "operationMode": "REQ/RES",
+        "defaults": {
+            "host": "localhost",
+            "port": "5400",
+            "adminPort": "5401",
+            "method": "GET",
+            "timeout": 60000
+        },
+        "blackList": [
+                
+                {
+                   "siteHash": "2927",
+                   "stationNumber": "202"
+                }
+                ,
+                {
+                   "siteHash": "A8C2",
+                   "stationNumber": "504"
+                }
+        ],
+        "disabled": false,
+        "pubsubConfig": {
+          "host": "10.4.4.205",
+          "port": 8999,
+          "protocol": "http",
+          "path": "repositories.med.va.gov/fpds/vpr/",
+          "server": "HMPTest",
+          "clientName": "eHMP",
+          "_type": "json",
+          "identifier": "USVHA",
+          "extractSchema": "3.001",
+          "maxBatchSize": 500,
+          "timeout": 60000
+        },
+        "med": {
+            "path": "/hdr/getData?domain=med"
+        },
+        "treatment": {
+            "path": "/hdr/getData?domain=treatment"
+        },
+        "diagnosis": {
+            "path": "/hdr/getData?domain=diagnosis"
+        },
+        "visit": {
+            "path": "/hdr/getData?domain=visit"
+        },
+        "education": {
+            "path": "/hdr/getData?domain=education"
+        },
+        "pov": {
+            "path": "/hdr/getData?domain=pov"
+        },
+        "lab": {
+            "path": "/hdr/getData?domain=lab"
+        },
+        "vlerdocument": {
+            "path": "/hdr/getData?domain=vlerdocument"
+        },
+        "skin": {
+            "path": "/hdr/getData?domain=skin"
+        },
+        "surgery": {
+            "path": "/hdr/getData?domain=surgery"
+        },
+        "immunization": {
+            "path": "/hdr/getData?domain=immunization"
+        },
+        "obs": {
+            "path": "/hdr/getData?domain=obs"
+        },
+        "document": {
+            "path": "/hdr/getData?domain=document"
+        },
+        "order": {
+            "path": "/hdr/getData?domain=order"
+        },
+        "auxiliary": {
+            "path": "/hdr/getData?domain=auxiliary"
+        },
+        "mh": {
+            "path": "/hdr/getData?domain=mh"
+        },
+        "consult": {
+            "path": "/hdr/getData?domain=consult"
+        },
+        "procedure": {
+            "path": "/hdr/getData?domain=procedure"
+        },
+        "ptf": {
+            "path": "/hdr/getData?domain=ptf"
+        },
+        "vital": {
+            "path": "/hdr/getData?domain=vital"
+        },
+        "task": {
+            "path": "/hdr/getData?domain=task"
+        },
+        "cpt": {
+            "path": "/hdr/getData?domain=cpt"
+        },
+        "image": {
+            "path": "/hdr/getData?domain=image"
+        },
+        "problem": {
+            "path": "/hdr/getData?domain=problem"
+        },
+        "roadtrip": {
+            "path": "/hdr/getData?domain=roadtrip"
+        },
+        "appointment": {
+            "path": "/hdr/getData?domain=appointment"
+        },
+        "exam": {
+            "path": "/hdr/getData?domain=exam"
+        },
+        "patient": {
+            "path": "/hdr/getData?domain=patient"
+        },
+        "allergy": {
+            "path": "/hdr/getData?domain=allergy"
+        }
+    },
+    "vler": {
+        "domains": [
+            "vlerdocument"
+        ],
+        "disabled": false,
+        "defaults": {
+            "host": "localhost",
+            "port": "5400",
+            "adminPort": "5401",
+            "method": "GET",
+            "timeout": 60000
+        },
+        "vlerdocument": {
+            "documentListPath": "/vler/documentList",
+            "documentPath": "/vler/document"
+        }
+    },
+    "recordEnrichment": {
+        "domains": [
+            "allergy",
+            "appointment",
+            "image",
+            "consult",
+            "cpt",
+            "document",
+            "education",
+            "immunization",
+            "lab",
+            "med",
+            "order",
+            "patient",
+            "pov",
+            "procedure",
+            "problem",
+            "ptf",
+            "surgery",
+            "visit",
+            "vital"
+        ]
+    },
+    "handlerProfiles": {
+      "defaultWorkerCount": 1,
+      "profileCollection": {
+        "default": "all",
+        "error": {
+          "error-request": {
+            "workerCount": 1
+          }
+        },
+        "primary": {
+          "vista-C877-subscribe-request": {
+            "workerCount": 1
+          },
+          "vista-9E7A-subscribe-request": {
+            "workerCount": 1
+          },
+          "enterprise-sync-request": {
+            "workerCount": 4
+          },
+          "vista-operational-subscribe-request": {
+            "workerCount": 1
+          }
+        },
+        "jmeadows": {
+          "jmeadows-sync-request": {
+            "workerCount": 1
+          },
+
+          "jmeadows-sync-allergy-request": {
+            "workerCount": 1
+          },
+          "jmeadows-sync-appointment-request": {
+            "workerCount": 1
+          },
+          "jmeadows-sync-consult-request": {
+            "workerCount": 1
+          },
+          "jmeadows-sync-demographics-request": {
+            "workerCount": 1
+          },
+          "jmeadows-sync-dischargeSummary-request": {
+            "workerCount": 1
+          },
+          "jmeadows-sync-encounter-request": {
+            "workerCount": 1
+          },
+          "jmeadows-sync-immunization-request": {
+            "workerCount": 1
+          },
+          "jmeadows-sync-lab-request": {
+            "workerCount": 1
+          },
+          "jmeadows-sync-medication-request": {
+            "workerCount": 1
+          },
+          "jmeadows-sync-note-request": {
+            "workerCount": 1
+          },
+          "jmeadows-sync-order-request": {
+            "workerCount": 1
+          },
+          "jmeadows-sync-problem-request": {
+            "workerCount": 1
+          },
+          "jmeadows-sync-progressNote-request": {
+            "workerCount": 1
+          },
+          "jmeadows-sync-radiology-request": {
+            "workerCount": 1
+          },
+          "jmeadows-sync-vital-request": {
+            "workerCount": 1
+          },
+
+          "jmeadows-xform-allergy-vpr": {
+            "workerCount": 1
+          },
+          "jmeadows-xform-appointment-vpr": {
+            "workerCount": 1
+          },
+          "jmeadows-xform-consult-vpr": {
+            "workerCount": 1
+          },
+          "jmeadows-xform-demographics-vpr": {
+            "workerCount": 1
+          },
+          "jmeadows-xform-dischargeSummary-vpr": {
+            "workerCount": 1
+          },
+          "jmeadows-xform-encounter-vpr": {
+            "workerCount": 1
+          },
+          "jmeadows-xform-immunization-vpr": {
+            "workerCount": 1
+          },
+          "jmeadows-xform-lab-vpr": {
+            "workerCount": 1
+          },
+          "jmeadows-xform-medication-vpr": {
+            "workerCount": 1
+          },
+          "jmeadows-xform-note-vpr": {
+            "workerCount": 1
+          },
+          "jmeadows-xform-order-vpr": {
+            "workerCount": 1
+          },
+          "jmeadows-xform-problem-vpr": {
+            "workerCount": 1
+          },
+          "jmeadows-xform-progressNote-vpr": {
+            "workerCount": 1
+          },
+          "jmeadows-xform-radiology-vpr": {
+            "workerCount": 1
+          },
+          "jmeadows-xform-vital-vpr": {
+            "workerCount": 1
+          }
+        },
+        "hdr": {
+          "hdr-sync-request": {
+            "workerCount": 1
+          },
+
+          "hdr-sync-allergy-request": {
+            "workerCount": 1
+          },
+          "hdr-sync-appointment-request": {
+            "workerCount": 1
+          },
+          "hdr-sync-consult-request": {
+            "workerCount": 1
+          },
+          "hdr-sync-cpt-request": {
+            "workerCount": 1
+          },
+          "hdr-sync-document-request": {
+            "workerCount": 1
+          },
+          "hdr-sync-image-request": {
+            "workerCount": 1
+          },
+          "hdr-sync-immunization-request": {
+            "workerCount": 1
+          },
+          "hdr-sync-lab-request": {
+            "workerCount": 1
+          },
+          "hdr-sync-med-request": {
+            "workerCount": 1
+          },
+          "hdr-sync-order-request": {
+            "workerCount": 1
+          },
+          "hdr-sync-patient-request": {
+            "workerCount": 1
+          },
+          "hdr-sync-pov-request": {
+            "workerCount": 1
+          },
+          "hdr-sync-problem-request": {
+            "workerCount": 1
+          },
+          "hdr-sync-procedure-request": {
+            "workerCount": 1
+          },
+          "hdr-sync-surgery-request": {
+            "workerCount": 1
+          },
+          "hdr-sync-vital-request": {
+            "workerCount": 1
+          },
+          "hdr-sync-visit-request": {
+            "workerCount": 1
+          },
+
+          "hdr-xform-allergy-vpr": {
+            "workerCount": 1
+          },
+          "hdr-xform-appointment-vpr": {
+            "workerCount": 1
+          },
+          "hdr-xform-consult-vpr": {
+            "workerCount": 1
+          },
+          "hdr-xform-cpt-vpr": {
+            "workerCount": 1
+          },
+          "hdr-xform-document-vpr": {
+            "workerCount": 1
+          },
+          "hdr-xform-image-vpr": {
+            "workerCount": 1
+          },
+          "hdr-xform-immunization-vpr": {
+            "workerCount": 1
+          },
+          "hdr-xform-lab-vpr": {
+            "workerCount": 1
+          },
+          "hdr-xform-med-vpr": {
+            "workerCount": 1
+          },
+          "hdr-xform-order-vpr": {
+            "workerCount": 1
+          },
+          "hdr-xform-patient-vpr": {
+            "workerCount": 1
+          },
+          "hdr-xform-pov-vpr": {
+            "workerCount": 1
+          },
+          "hdr-xform-problem-vpr": {
+            "workerCount": 1
+          },
+          "hdr-xform-procedure-vpr": {
+            "workerCount": 1
+          },
+          "hdr-xform-surgery-vpr": {
+            "workerCount": 1
+          },
+          "hdr-xform-vital-vpr": {
+            "workerCount": 1
+          },
+          "hdr-xform-visit-vpr": {
+            "workerCount": 1
+          }
+        },
+        "vistaProcessor": {
+            "vista-record-processor-request": {
+            "workerCount": 4
+          }
+        },
+        "vistahdr": {
+          "vistahdr-2939-subscribe-request": {
+            "workerCount": 1
+          },
+          "vistahdr-FFC7-subscribe-request": {
+            "workerCount": 1
+          }
+        },
+        "vler": {
+          "vler-sync-request": {
+            "workerCount": 5
+          },
+          "vler-xform-vpr": {
+            "workerCount": 5
+          }
+        },
+        "pgd": {
+          "pgd-sync-request": {
+            "workerCount": 1
+          },
+          "pgd-xform-vpr": {
+            "workerCount": 1
+          }
+        },
+        "document": {
+          "jmeadows-pdf-document-transform": {
+            "workerCount": 1
+          },
+          "jmeadows-document-retrieval": {
+            "workerCount": 1
+          },
+          "jmeadows-cda-document-conversion": {
+            "workerCount": 1
+          }
+        },
+        "storage": {
+          "store-record": {
+            "workerCount": 5
+          },
+          "solr-record-storage": {
+            "workerCount": 5
+          },
+          "operational-store-record": {
+            "workerCount": 8
+          }
+        },
+        "enrichment": {
+          "record-enrichment": {
+            "workerCount": 3
+          }
+        },
+        "prioritization": {
+          "event-prioritization-request": {
+            "workerCount": 8
+          }
+        },
+        "publish": {
+          "publish-data-change-event": {
+            "workerCount": 1
+          }
+        },
+        "resync": {
+          "resync-request": {
+            "workerCount": 1
+          }
+        },
+        "update": {
+          "record-update": {
+            "workerCount": 1
+          }
+        },
+        "retirement": {
+          "patient-record-retirement": {
+            "workerCount": 1
+          }
+        }
+      }
+    },
+    "parallelPublish": 20,
+    "beanstalk": {
+      "repoUniversal": {
+        "priority": 10,
+        "delay": 0,
+        "ttr": 120,
+        "timeout": 10,
+        "initMillis": 1000,
+        "maxMillis": 15000,
+        "incMillis": 1000
+    },
+    "repoDefaults": {
+        "host": "127.0.0.1",
+        "port": 5000,
+        "tubename": "vx-sync",
+        "tubePrefix": "vxs-",
+        "jobTypeForTube": true
+    },
+      "jobTypes": {
+        "error-request": {
+        },
+
+        "enterprise-sync-request": {
+        },
+        "vista-operational-subscribe-request": {
+        },
+        "vista-C877-subscribe-request": {
+        },
+        "vista-9E7A-subscribe-request": {
+        },
+        "jmeadows-sync-request": {
+        },
+        "jmeadows-sync-allergy-request": {
+        },
+        "jmeadows-sync-appointment-request": {
+        },
+        "jmeadows-sync-consult-request": {
+        },
+        "jmeadows-sync-demographics-request": {
+        },
+        "jmeadows-sync-dischargeSummary-request": {
+        },
+        "jmeadows-sync-encounter-request": {
+        },
+        "jmeadows-sync-immunization-request": {
+        },
+        "jmeadows-sync-lab-request": {
+        },
+        "jmeadows-sync-medication-request": {
+        },
+        "jmeadows-sync-note-request": {
+        },
+        "jmeadows-sync-order-request": {
+        },
+        "jmeadows-sync-problem-request": {
+        },
+        "jmeadows-sync-progressNote-request": {
+        },
+        "jmeadows-sync-radiology-request": {
+        },
+        "jmeadows-sync-vital-request": {
+        },
+        "jmeadows-xform-allergy-vpr": {
+        },
+        "jmeadows-xform-appointment-vpr": {
+        },
+        "jmeadows-xform-consult-vpr": {
+        },
+        "jmeadows-xform-demographics-vpr": {
+        },
+        "jmeadows-xform-dischargeSummary-vpr": {
+        },
+        "jmeadows-xform-encounter-vpr": {
+        },
+        "jmeadows-xform-immunization-vpr": {
+        },
+        "jmeadows-xform-lab-vpr": {
+        },
+        "jmeadows-xform-medication-vpr": {
+        },
+        "jmeadows-xform-note-vpr": {
+        },
+        "jmeadows-xform-order-vpr": {
+        },
+        "jmeadows-xform-problem-vpr": {
+        },
+        "jmeadows-xform-progressNote-vpr": {
+        },
+        "jmeadows-xform-radiology-vpr": {
+        },
+        "jmeadows-xform-vital-vpr": {
+        },
+        "jmeadows-pdf-document-transform": {
+        },
+        "jmeadows-document-retrieval": {
+        },
+        "jmeadows-cda-document-conversion": {
+        },
+        "hdr-sync-request": {
+        },
+        "hdr-sync-allergy-request": {
+        },
+        "hdr-sync-appointment-request": {
+        },
+        "hdr-sync-consult-request": {
+        },
+        "hdr-sync-cpt-request": {
+        },
+        "hdr-sync-document-request": {
+        },
+        "hdr-sync-image-request": {
+        },
+        "hdr-sync-immunization-request": {
+        },
+        "hdr-sync-lab-request": {
+        },
+        "hdr-sync-med-request": {
+        },
+        "hdr-sync-order-request": {
+        },
+        "hdr-sync-patient-request": {
+        },
+        "hdr-sync-pov-request": {
+        },
+        "hdr-sync-problem-request": {
+        },
+        "hdr-sync-procedure-request": {
+        },
+        "hdr-sync-surgery-request": {
+        },
+        "hdr-sync-visit-request": {
+        },
+        "hdr-sync-vital-request": {
+        },
+        "hdr-xform-allergy-vpr": {
+        },
+        "hdr-xform-appointment-vpr": {
+        },
+        "hdr-xform-consult-vpr": {
+        },
+        "hdr-xform-cpt-vpr": {
+        },
+        "hdr-xform-document-vpr": {
+        },
+        "hdr-xform-image-vpr": {
+        },
+        "hdr-xform-immunization-vpr": {
+        },
+        "hdr-xform-lab-vpr": {
+        },
+        "hdr-xform-med-vpr": {
+        },
+        "hdr-xform-order-vpr": {
+        },
+        "hdr-xform-patient-vpr": {
+        },
+        "hdr-xform-pov-vpr": {
+        },
+        "hdr-xform-problem-vpr": {
+        },
+        "hdr-xform-procedure-vpr": {
+        },
+        "hdr-xform-surgery-vpr": {
+        },
+        "hdr-xform-visit-vpr": {
+        },
+        "hdr-xform-vital-vpr": {
+        },
+        "vler-sync-request": {
+        },
+        "vler-xform-vpr": {
+        },
+        "pgd-sync-request": {
+        },
+        "pgd-xform-vpr": {
+        },
+        "record-enrichment": {
+        	"tubeDetails": [{"ratio": 5000, "priority": {"startValue": 1, "endValue": 20}}, {"ratio": 3000, "priority": {"startValue": 21, "endValue": 40}}, {"ratio": 2000, "priority": {"startValue": 41, "endValue": 60}}, {"ratio": 1000, "priority": {"startValue": 61, "endValue": 80}}, {"ratio": 500, "priority": {"startValue": 81, "endValue": 100}}]
+        },
+        "store-record": {
+        },
+        "solr-record-storage": {
+        },
+        "event-prioritization-request": {
+        },
+        "vistahdr-2939-subscribe-request" :{
+        },
+        "vistahdr-FFC7-subscribe-request" :{
+        },
+        "vista-record-processor-request": {
+        },
+        "operational-store-record": {
+        },
+        "publish-data-change-event": {
+        },
+        "activity-management-event": {
+        },
+        "resync-request": {
+            "delay": 30
+        },
+        "record-update": {
+            "host": "127.0.0.1",
+            "port": 4999
+        },
+        "patient-record-retirement": {
+        }
+      }
+    },
+        "jds": {
+            "protocol": "http",
+            "host": "10.2.2.110",
+            "port": "9082",
+            "timeout": 300000
+        },
+        "pjds": {
+            "protocol": "http",
+            "host": "10.2.2.110",
+            "port": "9082",
+            "timeout": 300000
+        },
+
+        "solrClient": {
+            "core": "vpr",
+            "zooKeeperConnection": "10.4.4.205:2181"
+        },
+
+        "mvi": {
+            "protocol": "http",
+            "host": "127.0.0.1",
+            "port": "5400",
+            "correspondingIds": "/mvi/correspondingIds",
+            "attendedSearch": "/mvi/attendedSearch",
+            "timeout": 60000
+        },
+
+        "terminology": {
+            "protocol": "http",
+            "host": "127.0.0.1",
+            "port": "5400",
+            "timeout": 60000,
+            "lncPath": "/term/lnc",
+            "drugPath": "/term/drug",
+            "jlvPath": "/term/jlv",
+            "jlvListPath": "/term/jlvList"
+        },
+    "documentStorage": {
+      "staging": {
+        "path": "/var/vxsync/documents/staged",
+        "permissions": "700"
+      },
+      "publish": {
+        "path": "/var/vxsync/documents/published",
+        "permissions": "400"
+      },
+      "uriRoot": "/documents"
+    },
+
+    "error-processing": {
+      "jdsGetErrorLimit" : 1000,
+      "profiles": {
+        "catastrophic-recovery": {
+          "enabled": false,
+          "ignoreSeverity": true,
+          "loopDelayMillis": 30000,
+          "jobTypes": [
+            "error-request",
+            "operational-store-record",
+            "solr-record-storage",
+            "store-record",
+            "record-enrichment",
+            "event-prioritization-request",
+            "vista-record-processor-request",
+            "vista-C877-data-poller",
+            "vista-9E7A-data-poller",
+            "vista-C877-subscribe-request",
+            "vista-9E7A-subscribe-request",
+            "hdr-xform-allergy-vpr",
+            "hdr-xform-appointment-vpr",
+            "hdr-xform-consult-vpr",
+            "hdr-xform-cpt-vpr",
+            "hdr-xform-document-vpr",
+            "hdr-xform-image-vpr",
+            "hdr-xform-immunization-vpr",
+            "hdr-xform-lab-vpr",
+            "hdr-xform-med-vpr",
+            "hdr-xform-order-vpr",
+            "hdr-xform-patient-vpr",
+            "hdr-xform-pov-vpr",
+            "hdr-xform-problem-vpr",
+            "hdr-xform-procedure-vpr",
+            "hdr-xform-surgery-vpr",
+            "hdr-xform-vital-vpr",
+            "hdr-xform-visit-vpr",
+            "hdr-sync-allergy-request",
+            "hdr-sync-appointment-request",
+            "hdr-sync-consult-request",
+            "hdr-sync-cpt-request",
+            "hdr-sync-document-request",
+            "hdr-sync-image-request",
+            "hdr-sync-immunization-request",
+            "hdr-sync-lab-request",
+            "hdr-sync-med-request",
+            "hdr-sync-order-request",
+            "hdr-sync-patient-request",
+            "hdr-sync-pov-request",
+            "hdr-sync-problem-request",
+            "hdr-sync-procedure-request",
+            "hdr-sync-surgery-request",
+            "hdr-sync-vital-request",
+            "hdr-sync-visit-request",
+            "hdr-sync-request",
+            "jmeadows-cda-document-conversion",
+            "jmeadows-pdf-document-transform",
+            "jmeadows-document-retrieval",
+            "jmeadows-xform-allergy-vpr",
+            "jmeadows-xform-appointment-vpr",
+            "jmeadows-xform-consult-vpr",
+            "jmeadows-xform-demographics-vpr",
+            "jmeadows-xform-dischargeSummary-vpr",
+            "jmeadows-xform-encounter-vpr",
+            "jmeadows-xform-immunization-vpr",
+            "jmeadows-xform-lab-vpr",
+            "jmeadows-xform-medication-vpr",
+            "jmeadows-xform-note-vpr",
+            "jmeadows-xform-order-vpr",
+            "jmeadows-xform-problem-vpr",
+            "jmeadows-xform-progressNote-vpr",
+            "jmeadows-xform-radiology-vpr",
+            "jmeadows-xform-vital-vpr",
+            "jmeadows-sync-allergy-request",
+            "jmeadows-sync-appointment-request",
+            "jmeadows-sync-consult-request",
+            "jmeadows-sync-demographics-request",
+            "jmeadows-sync-dischargeSummary-request",
+            "jmeadows-sync-encounter-request",
+            "jmeadows-sync-immunization-request",
+            "jmeadows-sync-lab-request",
+            "jmeadows-sync-medication-request",
+            "jmeadows-sync-note-request",
+            "jmeadows-sync-order-request",
+            "jmeadows-sync-problem-request",
+            "jmeadows-sync-progressNote-request",
+            "jmeadows-sync-radiology-request",
+            "jmeadows-sync-vital-request",
+            "jmeadows-sync-request",
+            "vler-sync-request",
+            "vler-xform-vpr",
+            "enterprise-sync-request"
+          ]
+        },
+        "record-enrichment": {
+          "enabled": false,
+          "ignoreSeverity": true,
+          "loopDelayMillis": 30000,
+          "jobTypes": [
+            "record-enrichment"
+          ]
+        },
+        "activity-management": {
+          "enabled": false,
+          "ignoreSeverity": true,
+          "loopDelayMillis": 30000,
+          "jobTypes": [
+            "activity-management-event"
+          ]
+        },
+        "jmeadows": {
+          "enabled": false,
+          "loopDelayMillis": 30000,
+          "jobTypes": [
+            "jmeadows-sync-request",
+
+            "jmeadows-sync-allergy-request",
+            "jmeadows-sync-appointment-request",
+            "jmeadows-sync-consult-request",
+            "jmeadows-sync-demographics-request",
+            "jmeadows-sync-dischargeSummary-request",
+            "jmeadows-sync-encounter-request",
+            "jmeadows-sync-immunization-request",
+            "jmeadows-sync-lab-request",
+            "jmeadows-sync-medication-request",
+            "jmeadows-sync-note-request",
+            "jmeadows-sync-order-request",
+            "jmeadows-sync-problem-request",
+            "jmeadows-sync-progressNote-request",
+            "jmeadows-sync-radiology-request",
+            "jmeadows-sync-vital-request",
+
+            "jmeadows-xform-allergy-vpr",
+            "jmeadows-xform-appointment-vpr",
+            "jmeadows-xform-consult-vpr",
+            "jmeadows-xform-demographics-vpr",
+            "jmeadows-xform-dischargeSummary-vpr",
+            "jmeadows-xform-encounter-vpr",
+            "jmeadows-xform-immunization-vpr",
+            "jmeadows-xform-lab-vpr",
+            "jmeadows-xform-medication-vpr",
+            "jmeadows-xform-note-vpr",
+            "jmeadows-xform-order-vpr",
+            "jmeadows-xform-problem-vpr",
+            "jmeadows-xform-progressNote-vpr",
+            "jmeadows-xform-radiology-vpr",
+            "jmeadows-xform-vital-vpr"
+          ]
+        },
+        "hdr": {
+          "enabled": false,
+          "loopDelayMillis": 30000,
+          "jobTypes": [
+            "hdr-sync-request",
+
+            "hdr-sync-allergy-request",
+            "hdr-sync-appointment-request",
+            "hdr-sync-consult-request",
+            "hdr-sync-cpt-request",
+            "hdr-sync-document-request",
+            "hdr-sync-image-request",
+            "hdr-sync-immunization-request",
+            "hdr-sync-lab-request",
+            "hdr-sync-med-request",
+            "hdr-sync-order-request",
+            "hdr-sync-patient-request",
+            "hdr-sync-pov-request",
+            "hdr-sync-problem-request",
+            "hdr-sync-procedure-request",
+            "hdr-sync-surgery-request",
+            "hdr-sync-vital-request",
+            "hdr-sync-visit-request",
+
+            "hdr-xform-allergy-vpr",
+            "hdr-xform-appointment-vpr",
+            "hdr-xform-consult-vpr",
+            "hdr-xform-cpt-vpr",
+            "hdr-xform-document-vpr",
+            "hdr-xform-image-vpr",
+            "hdr-xform-immunization-vpr",
+            "hdr-xform-lab-vpr",
+            "hdr-xform-med-vpr",
+            "hdr-xform-order-vpr",
+            "hdr-xform-patient-vpr",
+            "hdr-xform-pov-vpr",
+            "hdr-xform-problem-vpr",
+            "hdr-xform-procedure-vpr",
+            "hdr-xform-surgery-vpr",
+            "hdr-xform-vital-vpr",
+            "hdr-xform-visit-vpr"
+          ]
+        },
+        "vler": {
+          "enabled": false,
+          "loopDelayMillis": 30000,
+          "jobTypes": [
+            "vler-sync-request",
+            "vler-xform-vpr"
+          ]
+        },
+        "pgd": {
+          "enabled": false,
+          "loopDelayMillis": 30000,
+          "jobTypes": [
+            "pgd-sync-request",
+            "pgd-xform-vpr"
+          ]
+        }
+      }
+    },
+
+    "error-handling": {
+      "writers": ["log-error-writer", "jds-error-writer"],
+      "log-error-writer": {
+        "logger": {
+          "name": "errors",
+          "level": "debug"
+        }
+      }
+    },
+    "auditPath": "/var/log/vxsync/audit/",
+    "loggers": [
+      {
+        "name": "root",
+        "streams": [{
+            "level": "warn",
+            "type": "rotating-file",
+            "path": "/var/log/vxsync/vxsync.log",
+            "period": "1d",
+            "count": 7
+        }]
+      }
+    ],
+    "metrics": [
+      {
+        "name": "metrics",
+        "level": "fatal"
+      }
+    ],
+    "healthcheck": {
+          "heartbeatEnabled": false,
+          "heartbeatIntervalMillis": 300000,
+          "heartbeatStaleAgeMillis": 600000
+      },
+    "osync": {
+        "syncPriority": 50,
+        "rpcContext": "HMP SYNCHRONIZATION CONTEXT",
+        "configRefresh": 0,
+        "syncUrl": "http://10.3.3.6:8080/sync/doLoad",
+        "statusUrl": "http://10.3.3.6:8080/sync/status",
+        "mixedEnvironmentMode": true,
+        "activeUserThresholdDays": 30,
+        "handlerProfiles": {
+            "profileCollection": {
+                "default": "all",
+                "primary": {
+                  "admissions": {
+                    "workerCount": 1
+                  },
+                  "appointments": {
+                    "workerCount": 1
+                  },
+                  "sync": {
+                    "workerCount": 6
+                  },
+                  "patientlist": {
+                    "workerCount": 4
+                  }
+                }
+            }
+        },
+        "beanstalk": {
+            "repoUniversal": {
+                "priority": 10,
+                "delay": 0,
+                "ttr": 60,
+                "timeout": 10,
+                "initMillis": 1000,
+                "maxMillis": 15000,
+                "incMillis": 1000
+            },
+            "repoDefaults": {
+                "host": "127.0.0.1",
+                "port": 5001,
+                "tubename": "osync",
+                "tubePrefix": "osync-",
+                "jobTypeForTube": true
+            },
+            "jobTypes": {
+                "admissions": {},
+                "appointments": {},
+                "sync": {},
+                "patientlist": {}
+            }
+        },
+        "appointmentsOptions": {
+            "daysInFuture": 1
+        },
+        "loggers": [{
+            "name": "root",
+            "streams": [{
+                "level": "debug",
+                "type": "rotating-file",
+                "path": "/var/log/osync/osync.log",
+                "period": "1d",
+                "count": 7
+            }]
+        }, {
+            "name": "valid_patients",
+            "streams": [{
+                "level": "debug",
+                "type": "rotating-file",
+                "path": "/var/log/osync/osync_valid_patients.log",
+                "period": "1d",
+                "count": 7
+            }]
+        }, {
+            "name": "results",
+            "streams": [{
+                "level": "debug",
+                "type": "rotating-file",
+                "path": "/var/log/osync/osync_results.log",
+                "period": "1d",
+                "count": 7
+            }]
+        }],
+        "metrics": [{
+            "name": "metrics",
+            "level": "fatal"
+        }]
+    },
+    "recordRetirement": {
+      "rules": {
+        "largePatientRecord": {
+          "patientTotalSizeLimit": 100000000,
+          "avgSizePerEvent": 100
+	      }
+      },
+      "lastAccessed": 180,
+      "utilityLogLevel": "warn"
+    }
+  }
+}

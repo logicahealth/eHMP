@@ -557,7 +557,7 @@ function getSimplifiedSortArray(params, fhirToJDSAttrMap) {
  * @return {Boolean}   true if params list contains all valid sortable parameters, else false.
  */
 function isSortParamsValid(params, fhirToJDSAttrMap) {
-    getSimplifiedSortArray(params, fhirToJDSAttrMap);
+    var mapList = getSimplifiedSortArray(params, fhirToJDSAttrMap);
     return isSortCriteriaValid(params, mapList);
 }
 

@@ -1,10 +1,4 @@
 .patient-info-bar {
-    background: $pure-white;
-    border-left: none;
-    border-right: 1px solid $grey;
-    min-height: 710px;
-    width: 160px;
-    z-index: 3;
     .patient-demographic-help {
         padding-left: 10px;
         position: absolute;
@@ -49,26 +43,6 @@
             font-size: 14px;
             strong {
                 color: $primary;
-            }
-        }
-    }
-    .sidebar {
-        &.open {
-            > button i {
-                transform: rotate(180deg);
-            }
-        }
-        > button {
-            &.btn-icon {
-                background-color: transparent;
-                &:hover, &:focus, &:active, &.active, &:active:focus {
-                    background-color: transparent;
-                    border: none;
-                    color: $primary-dark;
-                    .fa-inverse {
-                        color: $pure-white;
-                    }
-                }
             }
         }
     }

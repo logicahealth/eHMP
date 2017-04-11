@@ -1,6 +1,5 @@
 'use strict';
 
-var cdsIntent = require('./cds-intent');
 var interceptors = {
     operationalDataCheck: false,
     pep: false,

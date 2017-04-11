@@ -35,7 +35,7 @@ Feature: F832 - DoD Only Patient Search
 @F832_dodonlysearch_4 @US11169
   Scenario: Sync by DOD;PID + Demographics
     When the client requests syncing a patient by demographics with content "{"edipi": "DOD;0000000003","demographics": {"givenNames": "PATIENT","familyName": "DODONLY"}}"
-    Then a internal server error response is returned
+    Then a bad request response is returned
 
 @F832_dodonlysearch_5 @US11168
   Scenario: Sync by EDIPI + Demographics with DOB and SSN

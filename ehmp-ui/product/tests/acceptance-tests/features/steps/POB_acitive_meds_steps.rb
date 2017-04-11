@@ -43,8 +43,8 @@ end
 
 When(/^user opens the first medication row$/) do
   @ehmp = PobMedsReview.new
-  @ehmp.wait_until_fld_med_item_visible
-  @ehmp.fld_med_item.click
+  wait_until { @ehmp.fld_med_items.length > 0 }
+  @ehmp.fld_med_items[0].click
 end
 
 Then(/^the user sorts the Medication Gist by column Medication$/) do

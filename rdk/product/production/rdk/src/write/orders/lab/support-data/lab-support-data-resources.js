@@ -48,40 +48,45 @@ function fetchSupportData(req, res) {
     var configuration = _.extend({}, req.app.config.vistaSites[site], {
         context: 'OR CPRS GUI CHART',
         accessCode: req.session.user.accessCode,
-        verifyCode: req.session.user.verifyCode
+        verifyCode: req.session.user.verifyCode,
+        // RDK configs have site division arrays. RPCs have a configuration property of the same name. Setting
+        // to null otherwise the RPC calls will attempt to set division context to it (an Array) and fail.
+        division: null
     });
 
     var serverSend = function(error, json) {
         if (error) {
-            res.status(500).rdkSend(error);
-        } else {
-            res.status(200).rdkSend(json);
+            return res.status(500).rdkSend(error);
         }
+        return res.status(200).rdkSend(json);
     };
 
-    if (type === 'lab-default-immediate-collect-time') {
-        getDefaultImmediateCollectTime(log, configuration, serverSend);
-        return;
-    } else if (type === 'lab-collect-times') {
-        getLabCollectTimes(log, configuration, req.param('dateSelected'), req.param('location'), serverSend);
-        return;
-    } else if (type === 'lab-valid-immediate-collect-time') {
-        isValidImmediateCollectTime(log, configuration, req.param('timestamp'), serverSend);
-        return;
-    } else if (type === 'lab-future-lab-collects') {
-        getFutureLabCollects(log, configuration, req.param('location'), serverSend);
-        return;
-    } else if (type === 'discontinue-reason') {
-        getDiscontinueReason(log, configuration, serverSend);
-        return;
-    } else if (type === 'lab-specimens') {
-        getLabSpecimens(log, configuration, serverSend);
-        return;
-    } else if (type === 'lab-current-time') {
-        getCurrentTime(log, configuration, serverSend);
-        return;
-    } else {
-        serverSend('Not yet implemented');
-        return;
+    switch (type) {
+        case 'lab-default-immediate-collect-time':
+            getDefaultImmediateCollectTime(log, configuration, serverSend);
+            break;
+        case 'lab-collect-times':
+            // pass the logged user's division so the validation is done for the correct division
+            getLabCollectTimes(log, configuration, req.param('dateSelected'), req.param('location'), req.session.user.division, serverSend);
+            break;
+        case 'lab-valid-immediate-collect-time':
+            // pass the logged user's division so the validation is done for the correct division
+            isValidImmediateCollectTime(log, configuration, req.param('timestamp'), req.session.user.division, serverSend);
+            break;
+        case 'lab-future-lab-collects':
+            // pass the logged user's division to get the values for the correct division
+            getFutureLabCollects(log, configuration, req.param('location'), req.session.user.division, serverSend);
+            break;
+        case 'discontinue-reason':
+            getDiscontinueReason(log, configuration, serverSend);
+            break;
+        case 'lab-specimens':
+            getLabSpecimens(log, configuration, serverSend);
+            break;
+        case 'lab-current-time':
+            getCurrentTime(log, configuration, serverSend);
+            break;
+        default:
+            serverSend('Not yet implemented');
     }
 }

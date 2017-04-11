@@ -25,7 +25,8 @@ define([
 
         workflowOptions.steps.push({
             view: ResponseFormView,
-            viewModel: formModel
+            viewModel: formModel,
+            helpMapping: 'response_order_form'
         });
 
         var workflowController = new ADK.UI.Workflow(workflowOptions);

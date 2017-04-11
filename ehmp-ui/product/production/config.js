@@ -12,9 +12,15 @@ require.config({
         'highcharts': 'highcharts/highstock.src',
         'highcharts-more': 'highcharts/highcharts-more.src',
         'pattern-fill': 'highcharts/pattern-fill',
+        'async': 'node_modules/async/lib/async',
 
         // Plugins
         'jasminejquery': 'node_modules/jasmine-jquery/lib/jasmine-jquery',
         'testUtil': 'test/testUtil'
+    },
+    'hbs': {
+        'templateExtension': 'html',
+        'helpers': false,
+        'handlebarsPath': 'handlebars'
     }
 });

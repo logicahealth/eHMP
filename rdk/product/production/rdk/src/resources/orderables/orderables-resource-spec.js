@@ -2,9 +2,7 @@
 
 var _ = require('lodash');
 var rdk = require('../../core/rdk');
-var pjds = rdk.utils.pjdsStore;
 var orderables = require('./orderables');
-var orderablesResource = require('./orderables-resource');
 
 var enterpriseOrderable = require('../../subsystems/orderables/enterprise-orderable-subsystem');
 
@@ -60,40 +58,40 @@ function createReqWithParam(map) {
 
 
 function getMockPickListResponse() {
-    //NOTE: doing this as a function as if we use a variable, any changes to it in processing 
+    //NOTE: doing this as a function as if we use a variable, any changes to it in processing
     //will actually edit this and cause trouble with sequential tests, etc.
-    return {  
-       'data':[  
-          {  
+    return {
+       'data':[
+          {
              'ien':'1255',
              'synonym':'BB CBC-TEST',
              'name':'BB CBC-TEST',
              'typeOfOrderable':'lab'
           },
-          {  
+          {
              'ien':'210',
              'synonym':'CBC',
              'name':'CBC',
              'typeOfOrderable':'lab'
           },
-          {  
+          {
              'active':true,
              'createdBy':'urn:va:user:9E7A:10000000270',
-             'data':{  
-                'activity':{  
+             'data':{
+                'activity':{
                    'deploymentId':'VistaCore:Order',
                    'processDefinitionId':'Order:Consult'
                 },
-                'codes':[  
-                   {  
+                'codes':[
+                   {
                       'code':'2601-3',
                       'display':'Magnesium [Moles/volume] in Serum or Plasma',
                       'system':'urn:oid:2.16.840.1.113883.6.1'
                    }
                 ],
-                'prerequisites':{  
+                'prerequisites':{
                    'cdsIntent':'name on a cds intent to be executed',
-                   'questions':[  
+                   'questions':[
                       'Q1',
                       'Q2'
                    ]

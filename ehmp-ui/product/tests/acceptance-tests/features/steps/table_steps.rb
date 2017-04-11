@@ -1,29 +1,3 @@
-Then(/^the table contains (\d+) rows$/) do |num_rows|
-  driver = TestSupport.driver
-  for i in 0..30
-    #rows = driver.find_elements(:css, "#appletContent tr")
-    rows = driver.find_elements(:css, ".grid-container tr")
-    #rows = driver.find_elements(:css, "#grid-panel-numeric_lab_results_grid tr")
-    break unless rows.length != num_rows.to_i
-    p "table rows: #{rows.length}"
-    sleep 1
-
-  end
-  expect(rows.length).to eq(num_rows.to_i)
-end
-
-Then(/^the modal contains (\d+) rows$/) do |num_rows|
-  driver = TestSupport.driver
-  for i in 0..30
-    rows = driver.find_elements(:css, "#mainModal tr")
-    break unless rows.length != num_rows.to_i
-    p "table rows: #{rows.length}"
-    sleep 1
-
-  end
-  expect(rows.length).to eq(num_rows.to_i)
-end
-
 def verify_table_headers(access_browser_instance, table)
   driver = TestSupport.driver
   #headers = driver.find_elements(:css, "#appletContent th")
@@ -83,65 +57,6 @@ def avoid_block_nesting_text(row_defined_in_cucumber, cols_displayed_in_browser)
   end #for col_index
   p error_message unless matched
   return matched
-end
-
-Then(/^the table contains rows$/) do |table|
-  p "in function"
-  driver = TestSupport.driver
-  #rows_displayed_in_browser = driver.find_elements(:css, "#appletContent tr")
-  #rows_displayed_in_browser = driver.find_elements(:css, "#data-grid-numeric_lab_results_grid tr")
-  rows_displayed_in_browser = driver.find_elements(:css, "#data-grid-numeric_lab_results_grid tr")
-  p "rows displayed: #{rows_displayed_in_browser.length}"
-
-  table.rows.each do |row_defined_in_cucumber|
-    matched = false
-    for i in 1..rows_displayed_in_browser.length - 1
-      #p "row: #{i}"
-      #cols_displayed_in_browser = driver.find_elements(:xpath, "//div[@id='appletContent']/descendant::tr[#{i}]/descendant::td")
-      cols_displayed_in_browser = driver.find_elements(:xpath, "//table[@id='data-grid-numeric_lab_results_grid']/descendant::tr[#{i}]/descendant::td")
-      #p "cols displayed: #{cols_displayed_in_browser.length}"
-      if row_defined_in_cucumber.length != cols_displayed_in_browser.length
-        matched = false
-      else
-        matched = avoid_block_nesting(row_defined_in_cucumber, cols_displayed_in_browser)
-        p "matched index: #{i}" if matched
-        break if matched
-      end # if - else
-    end # for i
-    p "could not match data: #{row_defined_in_cucumber}" unless matched
-    expect(matched).to be_true
-  end # table.rows.each
-end
-
-Then(/^the modal contains rows$/) do |table|
-  driver = TestSupport.driver
-  #driver.manage.timeouts.implicit_wait = 30
-  #p "beginning of finding elements"
-  #rows_displayed_in_browser = driver.find_elements(:css, "#modal-region tbody tr")
-  sleep 3
-  #rows_displayed_in_browser = driver.find_elements(:css, "#modal-region > div > div > tbody > tr")
-  rows_displayed_in_browser = driver.find_elements(:xpath, "//div[@id='modal-region']/descendant::tr")
-  #p "after rows are found"
-  #unless rows_displayed_in_browser.nil?
-  #  p "row not found"
-  #else
-  #  p "row found"
-  #end
-  p "rows displayed #{rows_displayed_in_browser.length}"
-  table.rows.each do |row_defined_in_cucumber|
-    matched = false
-    for i in 1..rows_displayed_in_browser.length - 1
-      cols_displayed_in_browser = driver.find_elements(:xpath, "//div[@id='modal-region']/descendant::tr[#{i}]/descendant::td")
-      if row_defined_in_cucumber.length != cols_displayed_in_browser.length
-        matched = false
-      else
-        matched = avoid_block_nesting(row_defined_in_cucumber, cols_displayed_in_browser)
-        break if matched
-      end # if - else
-    end # for i
-    p "could not match data: #{row_defined_in_cucumber}" unless matched
-    expect(matched).to be_true
-  end # table.rows.each
 end
 
 class TableHeadersContainer < AccessBrowserV2
@@ -422,10 +337,6 @@ Then(/^the "(.*?)" table contains headers$/) do |table_name, expected_table|
     browser_headers[i].location_once_scrolled_into_view
     verify_elements_equal(expected_headers[i], browser_headers[i].text)
   end
-end
-
-Then(/^the "(.*?)" first row contains$/) do |table_name, expected_row|
-  verify_single_row(table_name, expected_row)
 end
 
 Then(/^the "(.*?)" table contains rows$/) do |table_name, expected_table|

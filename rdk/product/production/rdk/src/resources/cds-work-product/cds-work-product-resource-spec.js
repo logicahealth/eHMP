@@ -112,8 +112,6 @@ describe('CDS Work Product Resource', function() {
             //sinon.spy(res, 'rdkSend');
         });
 
-        var db;
-
         it('retrieveWorkProduct responds HTTP Bad Request when id parameter is not valid', function() {
 
             //Create the mocked MongoDB functions that are used by the code that we're testing...

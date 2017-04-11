@@ -1,4 +1,4 @@
-@F304 @triage @regression
+@F304   @reg1
 Feature: Health Summaries (VistA Web Health Exchange)
 
 Background:

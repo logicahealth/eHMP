@@ -1,0 +1,18 @@
+<td class="flex-width-2">
+    <span class="sr-only">. Appointment Date and Time</span> {{formatDate appointment "MM/DD/YYYY HH:mm"}}
+</td>
+<td class="flex-width-3">
+    <span class="sr-only">. Location</span> {{locationName}}
+    {{#if roomBed}}<span class="sr-only">. Room-Bed</span> ({{roomBed}}){{/if}}
+</td>
+<td class="flex-width-3">
+    {{displayName}} ({{last5}})
+</td>
+<td class="flex-width-3">
+    {{birthDate}} {{#if age }}
+    <span class="sr-only">Age</span> ({{age}}y) {{/if}}
+    {{#if getGenderCode}}
+        <span class="sr-only">Gender {{getGenderName}}</span>
+        <span aria-hidden="true"> - {{getGenderCode}}</span>
+    {{/if}}
+</td>

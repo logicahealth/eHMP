@@ -1,0 +1,140 @@
+{
+  "dataList": {
+    "allergies": [
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000001126"
+        },
+        "enteredBy": {
+          "name": "AHLTADTE, ATTEND B"
+        },
+        "enteredDate": {
+          "start": "2013-12-18T20:10:49",
+          "end": "2013-12-18T20:10:49"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "48765-2"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL/0056"
+        },
+        "allergen": [
+          {
+            "code": "14236002",
+            "display": "BEE POLLEN (BEE POLLEN)",
+            "system": "2.16.840.1.113883.3.42.127.100001.209",
+            "primary": true
+          }
+        ],
+        "comment": null,
+        "onsetDate": {
+          "start": "2013-12-18T05:00:00",
+          "end": "2013-12-18T05:00:00"
+        },
+        "reactions": [
+          {
+            "reaction": [
+              {
+                "display": "Rash",
+                "primary": true
+              }
+            ],
+            "comment": null
+          }
+        ],
+        "sourceOfInfo": [
+          {
+            "display": "Patient",
+            "primary": true
+          }
+        ],
+        "type": [
+          {
+            "display": "Drug Allergy",
+            "primary": true
+          }
+        ]
+      },
+      {
+        "repository": {
+          "name": "ahlta",
+          "ids": [
+            {
+              "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13"
+            }
+          ]
+        },
+        "recordId": {
+          "id": "1000001127"
+        },
+        "enteredBy": {
+          "name": "AHLTADTE, ATTEND B"
+        },
+        "enteredDate": {
+          "start": "2013-12-18T20:51:00",
+          "end": "2013-12-18T20:51:00"
+        },
+        "dataDomain": [
+          {
+            "system": "2.16.840.1.113883.6.1",
+            "primary": true,
+            "display": null,
+            "code": "48765-2"
+          }
+        ],
+        "facility": {
+          "name": "NH Great Lakes IL/0056"
+        },
+        "allergen": [
+          {
+            "code": "1140",
+            "display": "CEFACLOR (CEFACLOR)",
+            "system": "2.16.840.1.113883.3.42.127.100001.209",
+            "primary": true
+          }
+        ],
+        "comment": null,
+        "onsetDate": {
+          "start": "2013-12-03T05:00:00",
+          "end": "2013-12-03T05:00:00"
+        },
+        "reactions": [
+          {
+            "reaction": [
+              {
+                "display": "Nausea",
+                "primary": true
+              }
+            ],
+            "comment": null
+          }
+        ],
+        "sourceOfInfo": [
+          {
+            "display": "Patient",
+            "primary": true
+          }
+        ],
+        "type": [
+          {
+            "display": "Drug Allergy",
+            "primary": true
+          }
+        ]
+      }
+    ]
+  }
+}

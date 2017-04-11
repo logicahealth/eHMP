@@ -12,7 +12,7 @@ ORWPCE SCSEL
 
     :[site]({{{common}}}/parameters/site.md)
 
-    + dfn (string, required) - The dfn
+    :[pid]({{{common}}}/parameters/pid.md)
 
     :[visitDate]({{{common}}}/parameters/visitDate.md required:"required")
 

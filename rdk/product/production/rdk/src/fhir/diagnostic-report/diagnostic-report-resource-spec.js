@@ -3,10 +3,7 @@ var diagnosticReport = require('./diagnostic-report-resource');
 var diagnosticReportIn = require('./diagnostic-report-resource-spec-data');
 var labResults = require('./lab-result-resource');
 var jdsInput = diagnosticReportIn.inputValue;
-var rdk = require('../../core/rdk');
 var _ = require('lodash');
-var diagnosticreport = require('./diagnostic-report-resource');
-var diagnosticreportIn = require('./diagnostic-report-resource-spec-data');
 
 var req = {
     '_pid': '9E7A;253',
@@ -32,8 +29,8 @@ function createParam(propName, value) {
 
 describe('DiagnosticReport Conformance Statement', function() {
 
-    var testConformance = diagnosticreportIn.conformanceData;
-    var builtConformance = diagnosticreport.createConformanceData();
+    var testConformance = diagnosticReportIn.conformanceData;
+    var builtConformance = diagnosticReport.createConformanceData();
 
     it('verifies that a generated conformance statement exists', function() {
         expect(builtConformance).not.to.be.undefined();
@@ -58,9 +55,6 @@ describe('DiagnosticReport Conformance Statement', function() {
 });
 
 describe('DiagnosticReport FHIR Resource', function() {
-    it('Verifies that resource is parameters are configured correctly', function() {
-        var config = diagnosticReport.getResourceConfig()[0];
-    });
     it('Verifies correct resource name and path', function() {
         var config = diagnosticReport.getResourceConfig()[0];
         expect(config.name).to.eql('fhir-diagnostic-report');

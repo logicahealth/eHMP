@@ -1,4 +1,4 @@
-@F339 @regression @triage @DE3930
+@F339   @DE3930
 Feature: User Defined Work Spaces 2 - Cloning Existing Workspaces
 
 Background:
@@ -60,7 +60,7 @@ Scenario: Filter in Work Space Manager To Filter By Work Space Description
   When the user filters the workspace manager on term "filterdescription"
   Then the workspace manager only displays workspaces with description "filterdescription"
 
-@US4509_2 @debug @DE6976
+@US4509_2 @DE6976
 Scenario: Incorporating Gist views within applicable applets
   Given the user creates a user defined workspace named "gistviews"
   When the user customizes the "gistviews" workspace

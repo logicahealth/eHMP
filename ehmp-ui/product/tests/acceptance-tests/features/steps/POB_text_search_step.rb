@@ -53,3 +53,73 @@ Then(/^the search suggestions containing search term "([^"]*)" are bold$/) do |t
   elements = @ehmp.search_suggestion_bold text
   expect(elements.length).to be > 0, "Expected at least 1 search suggestion to contain a bolded '#{text}'"
 end
+
+When(/^the user expands the main group "([^"]*)"$/) do |main_group_title|
+  ehmp = PobRecordSearch.new
+  ehmp.expand_main_group(main_group_title)
+  ehmp.wait_for_fld_main_group_title
+  expect(ehmp).to have_fld_main_group_title
+  ehmp.fld_main_group_title.click
+end
+
+Then(/^the user expands the subgroup "([^"]*)"$/) do |sub_group_title|
+  ehmp = PobRecordSearch.new
+  ehmp.expand_sub_group(sub_group_title)
+  ehmp.wait_for_fld_sub_group_title
+  expect(ehmp).to have_fld_sub_group_title
+  ehmp.fld_sub_group_title.click
+end
+
+Then(/^user enters the search term "([^"]*)" in the search record input field$/) do |search_text|
+  ehmp = PobRecordSearch.new
+  ehmp.wait_until_txt_search_text_visible(60)
+  wait = Selenium::WebDriver::Wait.new(:timeout => 20)
+  wait.until { ehmp.txt_search_text.disabled? != true } 
+  expect(ehmp).to have_txt_search_text
+  ehmp.txt_search_text.set search_text
+  ehmp.txt_search_text.native.send_keys(:enter)
+end
+
+Then(/^text search returns data$/) do
+  ehmp = PobRecordSearch.new
+  ehmp.wait_until_fld_main_group_visible
+  rows = ehmp.fld_main_group
+  expect(rows.length >= 1).to eq(true), "this test expects at least 1 row, found only #{rows.length}"
+end
+
+def choose_first_search_result
+  ehmp = PobRecordSearch.new
+  ehmp.wait_until_fld_search_results_data_rows_visible
+  expect(ehmp).to have_fld_search_results_data_rows
+  rows = ehmp.fld_search_results_data_rows
+  expect(rows.length >= 1).to eq(true), "this test needs at least 1 row, found only #{rows.length}"
+  rows[0].click
+end
+
+Then(/^the user views details of the first "([^"]*)"$/) do |not_used|
+  choose_first_search_result
+end
+
+Then(/^modal detail status field has a value of "([^"]*)"$/) do |status_result|
+  ehmp = PobRecordSearch.new
+  ehmp.wait_until_status_result_visible
+  expect(ehmp.status_result.text.upcase).to have_text(status_result.upcase)
+end
+
+Then(/^the sub group returns data$/) do
+  ehmp = PobRecordSearch.new
+  ehmp.wait_until_fld_document_sub_groups_visible
+  rows = ehmp.fld_document_sub_groups
+  expect(rows.length >= 1).to eq(true), "this test expects at least 1 row, found only #{rows.length}"
+end
+
+Then(/^the search results containing search term "([^"]*)" are highlighted$/) do |text|
+  ehmp = PobRecordSearch.new
+  ehmp.wait_until_search_term_match_visible(20)
+  elements = ehmp.search_term_match
+  expect(elements.length).to be > 0, "Expected at least 1 search suggestion to contain a highlighted text '#{text}'"
+  elements.each do |element|
+    expect(element.text.upcase == text.upcase).to be true
+  end
+end
+

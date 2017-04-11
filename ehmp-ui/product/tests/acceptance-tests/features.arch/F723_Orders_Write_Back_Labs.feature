@@ -87,8 +87,8 @@ Scenario: Create a Lab Order and Sign it.
   When user logs in with credentials
      | field      | value    |
      | Facility   | PANORAMA |
-     | AccessCode | PW       |
-     | VerifyCode | PW    !! |
+     | AccessCode | vk1234   |
+     | VerifyCode | vk1234!! |
      | SignIn     |          |
   Then the patient search screen is displayed
   And user searches for and selects "twenty,patient"
@@ -101,7 +101,7 @@ Scenario: Create a Lab Order and Sign it.
   When the user clicks the control "Expand View" in the "Orders applet"
   And verifies the above "24 hr urine calcium" order is added to patient record
   Then user opens the detail view of the order "24 hr urine calcium"
-  And user signs the order as "PW    !!"
+  And user signs the order as "vk1234!!"
   And the user verifies order status changes to "PENDING"
     
 @f723_4_lab_order_create_and_discontinue @future

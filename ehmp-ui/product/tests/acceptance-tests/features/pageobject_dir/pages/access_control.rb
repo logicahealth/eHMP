@@ -40,7 +40,7 @@ class PobAccessControl < SitePrism::Page
   element :btn_edit_role, ".modal-body button:nth-child(1)"
   element :btn_save, "#mainWorkflow .save > button"
   element :btn_user_info_modal_close, "#modal-close-button"
-  element :btn_edit_perm_modal_close, "#mainWorkflow .col-xs-2 button > i"
+  element :btn_edit_perm_modal_close, ".custom-on-close-method > i"
 
   elements :btn_remove_selected_set, ".selected-region [title^='Press enter to remove']"
   elements :btn_available_permission_sets_add_remove, ".container-fluid > div .available-region .auto-overflow-y div:nth-child(3) > button"

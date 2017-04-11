@@ -30,7 +30,7 @@ describe('createOuterceptorHandler', function() {
                     }
                 ]
             }
-        }
+        };
         app.response.app = app;
         originalSend = sinon.spy(app.response, 'send');
         app.outerceptorPathRegistry.myPath = _.map(app.outerceptorPathRegistry.myPath, function(func) {

@@ -62,13 +62,7 @@ define([
                             response.totalFillsRemaining = 'No Data';
                         }
                     } else if (!isExpiredCancelledOrDiscontinued) {
-
-                        if (response.expirationDate !== undefined && response.orders[0].daysSupply) {
-                            response.effectiveFillsRemaining =  AppUtil.getCalculatedEffectiveFillsRemaining(response.expirationDate, response.orders[0].daysSupply, response.orders[0].fillsRemaining, response.calculatedStatus);
-                        } else {
-                            response.effectiveFillsRemaining = response.orders[0].fillsRemaining;
-                        }
-                        response.totalFillsRemaining =  response.effectiveFillsRemaining;
+                        response.totalFillsRemaining =  response.orders[0].fillsRemaining;
                     }
                 },
                 updateFillableStatus: function(response) {
@@ -163,7 +157,7 @@ define([
             id: 'fillableStatus',
             field: 'fillableStatus'
         }],
-        filterFields: ['normalizedName', 'age', 'totalFillsRemaining', 'sig', 'drugClassName']
+        filterFields: ['normalizedName', 'age', 'totalFillsRemaining', 'sig', 'drugClassName', 'fillableStatus']
     };
     return gistConfiguration;
 });

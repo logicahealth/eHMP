@@ -41,22 +41,26 @@ var _ = require('lodash');
  */
 module.exports.fetch = function(logger, configuration, callback, params) {
     var pharmacyType = _.get(params, 'pharmacyType');
-    var outpatientDfn = _.get(params, 'outpatientDfn');
-    var locationIen = locationUtil.getLocationIEN( _.get(params, 'locationUid'));
+    var options = {
+        requiresDfn: false
+    };
+    validate.getPatientDFN(params, options, function(err, outpatientDfn) {
+        if (err) {
+            return callback(err);
+        }
+        var locationIen = locationUtil.getLocationIEN(_.get(params, 'locationUid'));
 
-   if (validate.isStringNullish(pharmacyType)) {
-        return callback('pharmacyType cannot be empty and it must be \'U\', \'F\', or \'O\'');
-    }
-    if (validate.isStringNullish(outpatientDfn)) {
-        outpatientDfn = null;
-    }
+        if (validate.isStringNullish(pharmacyType)) {
+            return callback('pharmacyType cannot be empty and it must be \'U\', \'F\', or \'O\'');
+        }
 
-    pharmacyType = pharmacyType.toUpperCase();
+        pharmacyType = pharmacyType.toUpperCase();
 
-    //NOTE: If more types are supported, add them with documentation in the Javadoc as to what those types represent.
-    if (pharmacyType !== 'U' && pharmacyType !== 'F' && pharmacyType !== 'O') {
-        return callback('view must be \'U\', \'F\', or \'O\'');
-    }
+        //NOTE: If more types are supported, add them with documentation in the Javadoc as to what those types represent.
+        if (pharmacyType !== 'U' && pharmacyType !== 'F' && pharmacyType !== 'O') {
+            return callback('view must be \'U\', \'F\', or \'O\'');
+        }
 
-    return rpcUtil.standardRPCCall(logger, configuration, 'ORWDPS1 ODSLCT', pharmacyType, outpatientDfn, locationIen, parse, callback);
+        return rpcUtil.standardRPCCall(logger, configuration, 'ORWDPS1 ODSLCT', pharmacyType, outpatientDfn, locationIen, parse, callback);
+    });
 };

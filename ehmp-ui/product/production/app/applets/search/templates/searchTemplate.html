@@ -39,19 +39,19 @@
                 </fieldset>
             </form>
         </div>
-        <div class="col-xs-1 pixel-width-10 pull-right left-padding-no">
-            {{{helpIconLink 'record_search'}}}
-        </div>
+        <div class="col-xs-1 pixel-width-10 pull-right left-padding-no help-button-container"></div>
     </div>
     <div class="row auto-overflow">
+        {{#if showWarningMessage}}
         <div class="col-xs-12 all-padding-no">
             <p class="all-padding-sm">Search is still under development and may not return all expected results. Review the patient record manually to ensure accuracy.</p>
         </div>
+        {{/if}}
         <div class="col-xs-12 all-padding-no search-spinner">
             <p class="all-padding-sm">
                 <i class="fa fa-spinner fa-spin right-padding-xs"></i> Loading...
             </p>
         </div>
-        <div class="search-results col-xs-12 panel-group"></div>
+        <div class="search-results top-margin-lg col-xs-12 panel-group"></div>
     </div>
 </div>

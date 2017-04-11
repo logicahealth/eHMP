@@ -8,11 +8,11 @@ var async = require('async');
 var detailWritebackContext = {
     pid: '9E7A;100615',
     vistaConfig: {
-        host: 'IP        ',
+        host: '10.2.2.101',
         port: 9210,
-        accessCode: 'PW    ',
-        verifyCode: 'PW    !!',
-        localIP: 'IP      ',
+        accessCode: 'mx1234',
+        verifyCode: 'mx1234!!',
+        localIP: '10.2.2.1',
         localAddress: 'localhost',
         noReconnect: true
     },
@@ -24,11 +24,11 @@ var detailWritebackContext = {
 var saveWritebackContext = {
     pid: '9E7A;100615',
     vistaConfig: {
-        host: 'IP        ',
+        host: '10.2.2.101',
         port: 9210,
-        accessCode: 'PW    ',
-        verifyCode: 'PW    !!',
-        localIP: 'IP      ',
+        accessCode: 'mx1234',
+        verifyCode: 'mx1234!!',
+        localIP: '10.2.2.1',
         localAddress: 'localhost'
     },
     model: {
@@ -85,9 +85,9 @@ describe('write-back orders common detail vista writer integration tests', funct
         });
     });
 
-/*
+
     //This test will create a new lab order in Vista.  Uncomment to test locally
-    it('tests that detail order returns successful detail', function(done) {
+    it.skip('tests that detail order returns successful detail', function(done) {
         this.timeout(20000);
         async.waterfall([
             function(callback) {
@@ -140,6 +140,5 @@ describe('write-back orders common detail vista writer integration tests', funct
             done();
         });
     });
-*/
 
 });

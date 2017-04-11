@@ -47,7 +47,6 @@ class VitalsGist <  AllApplets
     appletid_css = "[data-appletid=#{@appletid}]"
     add_applet_buttons appletid_css
     add_applet_add_button appletid_css
-    add_applet_title appletid_css
 
     add_verify(CucumberLabel.new("Vitals Gist Title"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-appletid=vitals] .panel-title"))
     add_verify(CucumberLabel.new("Blood pressure Sistolic"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-appletid='vitals'] [data-row-instanceid='BPS'] .problem-name"))
@@ -93,9 +92,6 @@ class VitalsGist <  AllApplets
   end
 
   def applet_loaded?
-    title_visible = am_i_visible?('Title')
-    p "DE6976: vital applet is not displaying, attempt to continue" unless title_visible
-    return true unless title_visible
     return TestSupport.driver.find_elements(:css, '[data-appletid=vitals] .grid-container div.gist-item').length > 0
   rescue => e 
     # p e
@@ -139,7 +135,7 @@ Then(/^the Vitals gist displays no records for$/) do |table|
   end
 end
 
-class VitalsCoversheet < AllApplets
+class VitalsCoversheet < AccessBrowserV2
   include Singleton
   attr_reader :appletid
   def initialize
@@ -160,8 +156,6 @@ class VitalsCoversheet < AllApplets
     add_vital('PN', Regexp.new("\\d+"), date_format)
     add_vital('CG', Regexp.new("\\d+"), date_format)
     add_action(CucumberLabel.new('Add'), ClickAction.new, AccessHtmlElement.new(:css, "#{appletid_css} .applet-add-button"))
-
-    add_applet_title appletid_css
   end
 
   def add_vital(vital, bp_format, date_format)
@@ -172,9 +166,7 @@ class VitalsCoversheet < AllApplets
   end
 
   def applet_loaded
-    title_visible = am_i_visible?('Title')
-    p "DE6976: vital applet is not displaying, attempt to continue" unless title_visible
-    return true unless title_visible
+    # [data-appletid=vitals] tr
     return TestSupport.driver.find_elements(:css, "[data-appletid=vitals] tr").length > 0
   rescue Exception => myerror
     p myerror
@@ -365,4 +357,15 @@ When(/^the user views the first Vitals Gist quicklook table via the toolbar$/) d
   ehmp.wait_for_fld_vital_quickview_popover
   expect(ehmp).to have_fld_vital_quickview_popover
   ehmp.wait_until_fld_vital_quickview_popover_visible
+end
+
+Then(/^the Vitals Gist Applet contains buttons Refresh, Help and Expand$/) do
+  ehmp = PobVitalsApplet.new
+  ehmp.wait_for_btn_applet_refresh
+  ehmp.wait_for_btn_applet_help
+  ehmp.wait_for_btn_applet_expand_view
+
+  expect(ehmp).to have_btn_applet_refresh
+  expect(ehmp).to have_btn_applet_help
+  expect(ehmp).to have_btn_applet_expand_view
 end

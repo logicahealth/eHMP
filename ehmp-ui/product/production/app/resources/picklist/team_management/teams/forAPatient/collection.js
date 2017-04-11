@@ -8,7 +8,7 @@ define([
         model: Team,
         params: function(method, options) {
             return {
-                patientID: options.patientID || ''
+                pid: options.patientID || ''
             };
         }
     });

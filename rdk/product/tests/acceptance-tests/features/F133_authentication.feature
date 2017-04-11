@@ -18,7 +18,7 @@ Feature: F133 - SDK VistA Write-Back Architecture
       | site        | 9E7A                              |
       Examples:
       | accesscode    | verifycode   | site       | division | contenttype         |
-      | PW            | PW    !!     | 9E7A       | 500      | application/json    |
+      | pu1234        | pu1234!!     | 9E7A       | 500      | application/json    |
 
   @F133_authentication_api_2 @US2990
   Scenario Outline: Authentication should fail if both CPRS tab settings are false
@@ -29,4 +29,4 @@ Feature: F133 - SDK VistA Write-Back Architecture
       | code         | <code>        |
       Examples:
       | accesscode    | verifycode   | site       | division  | contenttype         | code              |
-      | PW            | PW    !!     | 9E7A       | 500       | application/json    | 100.401.1010      |
+      | lu1234        | lu1234!!     | 9E7A       | 500       | application/json    | 100.401.1010      |

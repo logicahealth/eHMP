@@ -1,4 +1,5 @@
 'use strict';
+//jshint -W109
 var inputValue = {
     "data": {
         "updated": 20150514191428,

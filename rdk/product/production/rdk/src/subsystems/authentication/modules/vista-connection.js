@@ -48,6 +48,8 @@ var accessVerifyConnection = function(req, res, connectCB, params) {
                 code = 'vista.401.1004';
             } else if (message.match(/ECONNREFUSED/)) {
                 code = 'vista.503.1001';
+            } else if (message.match(/Selected division not found for this user/)) {
+                code = 'vista.401.1011';
             }
             //Error Handling for Authentication
             errorObj = new RdkError({

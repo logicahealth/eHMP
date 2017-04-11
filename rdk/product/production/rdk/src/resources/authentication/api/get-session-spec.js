@@ -4,14 +4,9 @@ var _ = require('lodash');
 var bunyan = require('bunyan');
 var httpMocks = require('node-mocks-http');
 var auth = require('./get-session');
-var rdk = require('../../../core/rdk');
-var RpcClient = require('vista-js').RpcClient;
 
 var validDuz = '10VEHU';
 var validPwd = 'VEHU10';
-var invalidDuz = 'zzz';
-var invalidPwd = 'xxx';
-var site = 'C877';
 var division = '500';
 var invalidSite = '1337';
 

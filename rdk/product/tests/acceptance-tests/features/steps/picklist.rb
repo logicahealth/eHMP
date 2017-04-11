@@ -21,12 +21,12 @@ When(/^the client requests picklist with the parameters and site "([^"]*)"$/) do
   end
   querypicklist.add_parameter('site', site)
   path = querypicklist.path
-  @response = HTTPartyRDK.get_as_user(path, "#{site};PW    ", "PW    !!")
+  @response = HTTPartyRDK.get_as_user(path, "#{site};vk1234", "vk1234!!")
   @json_object = JSON.parse(@response.body)
 end
 
 When(/^the client requests a picklist with the parameters for "([^"]*)" with the user "([^"]*)"$/)  do |title, username, table|
-  querypicklist = RDKQueryPicklist.new(title)
+  querypicklist = RDKQueryPicklist.new('write-pick-list-' + title)
   table.rows.each do |row|
     querypicklist.add_parameter(row[0], row[1])
   end

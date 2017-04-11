@@ -1,8 +1,5 @@
 'use strict';
 
-var _ = require('lodash');
-var solrSimpleClient = require('./solr-simple-client');
-
 var hmpSolrResponseTransformer = require('./hmp-solr-response-transformer');
 
 var updateCumulativeResponseData = hmpSolrResponseTransformer._updateCumulativeResponseData;

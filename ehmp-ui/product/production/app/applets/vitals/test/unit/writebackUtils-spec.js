@@ -46,7 +46,7 @@ define(['jquery', 'backbone', 'marionette', 'jasminejquery', 'moment', 'testUtil
                 var model = getModel('12/01/2013', '12:12');
                 var vitalsModel = WritebackUtil.buildSaveVitalsModel(model, false, getIENMap(), getUser(), getCurrentPatient(), saveVitalsModel);
                 expect(vitalsModel.get('dateTime')).toEqual('201312011212');
-                expect(vitalsModel.get('dfn')).toEqual('1234');
+                expect(vitalsModel.get('pid')).toEqual('9E7A;1234');
                 expect(vitalsModel.get('locationUid')).toEqual('urn:va:location:9E7A:195');
                 expect(vitalsModel.get('enterdByIEN')).toEqual('1234');
                 expect(vitalsModel.get('vitals').length).toEqual(0);

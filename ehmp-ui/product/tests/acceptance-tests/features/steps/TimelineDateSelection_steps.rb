@@ -80,14 +80,6 @@ Given(/^user enters today's date in from field$/) do
   puts "This is the date: #{dt}"
 end
 
-Given(/^user enters yesterday's date in to field$/) do 
-  con = GTDate.instance
-  currentdt = (Time.now - 864_00)
-  dt = currentdt.strftime('%m/%d/%Y')
-  con.perform_action("To Date", dt)
-  puts "This is the date: #{dt}"
-end
-
 Then(/^the from tooltip contains text "(.*?)"$/) do |arg1|
   con = GTDate.instance
   driver = TestSupport.driver
@@ -104,30 +96,6 @@ Then(/^the to tooltip contains text "(.*?)"$/) do |arg1|
   expect(driver.find_element(:css, "#filterToDateGlobal").attribute("data-original-title")).to include(arg1)
 end
 
-def wait_until_date_filter_closes
-  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultLogin.wait_time) # seconds # wait until list opens
-  driver = TestSupport.driver
-  wait.until { driver.find_element(:id, 'trendHistoryChartContainer').displayed? == false }
-end
-
-Then(/^the date filter closes$/) do
-  wait_until_date_filter_closes
-end
-
-Then(/^the to date displays today's date$/) do 
-  con = GTDate.instance
-  currentdt = Time.now 
-  dt = currentdt.strftime('%m/%d/%Y')
-  expect(con.perform_verification("To Date", dt)).to be_true
-  puts "This is the date: #{dt}"
-end
-
-Then(/^the user clicks on the outside of GDT$/) do
-  con = GTDate.instance
-  expect(con.wait_until_action_element_visible("Outside", DefaultLogin.wait_time)).to be_true
-  expect(con.perform_action("Outside", "")).to be_true
-end
-
 Then(/^the Date Filter displays "(.*?)" months in the past and "(.*?)" months in the future$/) do |months_past, months_future|
   con = GTDate.instance
   date_format_template = "%m/%d/%Y"
@@ -138,5 +106,3 @@ Then(/^the Date Filter displays "(.*?)" months in the past and "(.*?)" months in
   expect(con.perform_verification("To Date", expected_to_date)).to be_true
   expect(con.perform_verification("From Date", expected_from_date)).to be_true
 end
-
-

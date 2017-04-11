@@ -15,17 +15,19 @@ end
 def environment_endpoints(env)
   case env
   when "virtualbox"
-    ENV["RDK_IP"] = knife_search_for_ip("resource_server")
-    ENV["RDK_PORT"] = knife_search_for_attribute("resource_server", ["rdk", "fetch_server", "port"], "default")
+    ENV["RDK_FETCH_HOST"] = knife_search_for_ip("resource_server")
+    ENV["RDK_FETCH_PORT"] = knife_search_for_attribute("resource_server", ["rdk", "fetch_server", "port"], "default")
+    ENV["RDK_WRITEBACK_HOST"] = knife_search_for_ip("resource_server")
     ENV["RDK_WRITEBACK_PORT"] = knife_search_for_attribute("resource_server", ["rdk", "write_back", "port"], "default")
+    ENV["RDK_PICKLIST_HOST"] = knife_search_for_ip("resource_server")
     ENV["RDK_PICKLIST_PORT"] = knife_search_for_attribute("resource_server", ["rdk", "pick_list", "port"], "default")
   when "aws"
-    ENV["RDK_IP"] = knife_search_for_ip("resource_server")
-    ENV["RDK_PORT"] = knife_search_for_attribute("resource_server", ["rdk", "fetch_server", "port"], "default")
-    ENV["RDK_WRITEBACK_PORT"] = knife_search_for_attribute("resource_server", ["rdk", "write_back", "port"], "default")
+    ENV["RDK_FETCH_HOST"] = knife_search_for_ip("resource_server")
+    ENV["RDK_FETCH_PORT"] = knife_search_for_attribute("resource_server", ["rdk", "fetch_server", "port"], "default")
     ENV["RDK_WRITEBACK_HOST"] = knife_search_for_ip("resource_server")
-    ENV["RDK_PICKLIST_PORT"] = knife_search_for_attribute("resource_server", ["rdk", "pick_list", "port"], "default")
+    ENV["RDK_WRITEBACK_PORT"] = knife_search_for_attribute("resource_server", ["rdk", "write_back", "port"], "default")
     ENV["RDK_PICKLIST_HOST"] = knife_search_for_ip("resource_server")
+    ENV["RDK_PICKLIST_PORT"] = knife_search_for_attribute("resource_server", ["rdk", "pick_list", "port"], "default")
   else
     fail "Unrecognized environment type: #{env}. Allowable types are: 'virtualbox' and 'aws'"
   end
@@ -35,7 +37,7 @@ def get_rdk_config_files(driver)
   configDir = "./rdk_config_files"
   configs = ["rdk-fetch-server-config.json", "rdk-pick-list-server-config.json", "rdk-write-server-config.json"]
   key = knife_search_for_key_name("rdk", driver)
-  user = driver == "aws" ? "PW      " : "vagrant"
+  user = driver == "aws" ? "ec2-user" : "vagrant"
   ip = knife_search_for_ip("resource_server")
   Dir.mkdir("#{configDir}") unless File.exists?("#{configDir}")
   puts "copy rdk configs from rdk machine to #{configDir}"
@@ -71,7 +73,7 @@ task :scpRdkLogs, :driver do |t, args|
   logDir = "./rdk_logs"
   logs = ["*.log"]
   key = knife_search_for_key_name("rdk", args[:driver])
-  user = args[:driver] == "aws" ? "PW      " : "vagrant"
+  user = args[:driver] == "aws" ? "ec2-user" : "vagrant"
   ip = knife_search_for_ip("resource_server")
   Dir.mkdir("#{logDir}") unless File.exists?("#{logDir}")
   logs.each do |logname|
@@ -83,7 +85,7 @@ desc "Copy vxsync logs from the guest to the host"
 task :scpVxsyncLogs, :driver do |t, args|
   logDir = "vxsync_error_logs"
   key = knife_search_for_key_name("vxsync", args[:driver])
-  user = args[:driver] == "aws" ? "PW      " : "vagrant"
+  user = args[:driver] == "aws" ? "ec2-user" : "vagrant"
   ip = knife_search_for_ip("vxsync_client")
   Dir.mkdir("#{logDir}") unless File.exists?("#{logDir}")
   sh('scp', '-o', 'StrictHostKeyChecking=no', '-i', "#{key}", "#{user}@#{ip}:/tmp/*_stderr.log", "#{logDir}")

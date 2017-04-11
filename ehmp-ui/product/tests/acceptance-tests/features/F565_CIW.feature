@@ -1,4 +1,4 @@
-@F565 @regression @workspace_test @regression @triage @DE6249
+@F565  @workspace_test   @DE6249 @debug @DE7016
 Feature: F565 - Include Concept Invoked Workspaces Menu to Additional Views
 
 Background:

@@ -1,5 +1,6 @@
 define([
     'backbone',
+    'underscore',
     'handlebars',
     'app/applets/problems/modalView/modalView',
     'app/applets/problems/modalView/modalHeaderView',
@@ -13,10 +14,10 @@ define([
     'app/applets/visit/writeback/addselectVisit',
     'app/applets/problems/writeback/formModel',
     'app/applets/problems/writeback/workflowUtils'
-], function(Backbone, Handlebars, ModalView, modalHeader, modalFooter, Util, tooltip, GistView, AddEditProblemsView, ProblemSearchView, RequestFreeTextView, addselectEncounter, FormModel, WorkflowUtils) {
+], function(Backbone, _, Handlebars, ModalView, modalHeader, modalFooter, Util, tooltip, GistView, AddEditProblemsView, ProblemSearchView, RequestFreeTextView, addselectEncounter, FormModel, WorkflowUtils) {
     'use strict';
     var problemChannel = ADK.Messaging.getChannel('problems');
-    var allEncounterDateArray = [];
+
     //Data Grid Columns
     var summaryColumns = [{
         name: 'problemText',
@@ -40,7 +41,7 @@ define([
         cell: 'string',
         sortType: 'cycle',
         hoverTip: 'conditions_status'
-    }, ];
+    }];
 
     var fullScreenColumns =
         summaryColumns.concat([{
@@ -51,7 +52,7 @@ define([
                 className: 'string-cell flex-width-2'
             }),
             sortType: 'cycle',
-            sortValue: function(model, sortKey) {
+            sortValue: function(model) {
                 return model.get("onset");
             },
             hoverTip: 'conditions_onsetdate'
@@ -63,7 +64,7 @@ define([
                 className: 'string-cell flex-width-2'
             }),
             sortType: 'cycle',
-            sortValue: function(model, sortKey) {
+            sortValue: function(model) {
                 return model.get("updated");
             },
             hoverTip: 'conditions_lastupdated'
@@ -114,45 +115,6 @@ define([
         hoverTip: 'conditions_standardizeddescription'
     });
 
-    var viewParseModel = {
-        parse: function(response) {
-            var crsUtil = ADK.utils.crsUtil;
-            response = Util.getStandardizedDescription(response);
-            response = Util.getStatusName(response);
-            response = Util.getServiceConnected(response);
-            response = Util.getProblemText(response);
-            response = Util.getICDCode(response);
-            response = Util.getAcuityName(response);
-            response = Util.getFacilityColor(response);
-            response = Util.getOnsetFormatted(response);
-            response = Util.getEnteredFormatted(response);
-            response = Util.getUpdatedFormatted(response);
-            response = Util.getCommentBubble(response);
-            response = Util.getICDName(response);
-            response = Util.getTimeSince(response);
-            response = Util.getStatusName(response);
-            response[crsUtil.crsAttributes.CRSDOMAIN] = crsUtil.domain.PROBLEM;
-            response.applet_id = 'problems';
-            response.facNameTruncated = response.facilityName.substring(0, 3);
-            response.enteredBy = response.enteredBy;
-            response.recordedBy = response.recordedBy;
-            response.recordedOn = response.recordedOn;
-
-            return response;
-        }
-    };
-
-    //Collection fetchOptions
-    var fetchOptions = {
-        resourceTitle: 'patient-record-problem',
-        pageable: false,
-        criteria: {
-            filter: 'ne(removed, true)'
-        },
-        cache: true,
-        viewModel: viewParseModel
-    };
-
     var AppletLayoutView = ADK.Applets.BaseGridApplet.extend({
         className: '',
         initialize: function(options) {
@@ -173,7 +135,6 @@ define([
             var self = this;
             var patientExposure = ADK.PatientRecordService.getCurrentPatient().get('exposure') || [];
             self.exposure = Util.parseExposure(patientExposure);
-            this.fetchOptions = fetchOptions;
             dataGridOptions.toolbarOptions = {
                 buttonTypes: ['infobutton', 'detailsviewbutton']
             };
@@ -192,7 +153,8 @@ define([
                 this.refresh({});
             });
 
-            dataGridOptions.collection = ADK.PatientRecordService.fetchCollection(this.fetchOptions);
+            dataGridOptions.collection = this.collection = new ADK.UIResources.Fetch.Problems.Collection();
+            dataGridOptions.collection.fetchCollection(this.fetchOptions);
 
             this.listenTo(dataGridOptions.collection, 'sync', function(collection) {
                 collection.each(function(model) {
@@ -229,7 +191,7 @@ define([
                     }),
                     'footerView': modalFooter.extend({
                         model: model
-                    }),
+                    })
                 };
 
                 var modal = new ADK.UI.Modal({
@@ -266,7 +228,25 @@ define([
         },
         onDestroy: function() {
             ADK.utils.crsUtil.removeStyle(this);
-        }
+        },
+        DataGrid: ADK.Applets.BaseGridApplet.DataGrid.extend({
+            DataGridRow: ADK.Applets.BaseGridApplet.DataGrid.DataGridRow.extend({
+                serializeModel: function() {
+                    if (!this.model) {
+                        return {};
+                    }
+
+                    var model = this.model;
+                    var problemData = model.toJSON();
+
+                    problemData.statusName = model.getStatusName(problemData.statusName);
+                    problemData.problemText = model.getProblemText(problemData.problemText);
+                    problemData.icdCode = model.getICDCode(problemData.icdCode);
+                    problemData.enteredFormatted = ADK.utils.formatDate(problemData.entered);
+                    return problemData;
+                }
+            })
+        })
     });
 
     // expose detail view through messaging
@@ -277,8 +257,7 @@ define([
                 "uid": params.uid
             },
             patient: ADK.PatientRecordService.getCurrentPatient(),
-            resourceTitle: 'patient-record-problem',
-            viewModel: viewParseModel
+            resourceTitle: 'patient-record-problem'
         };
 
         var data = ADK.PatientRecordService.createEmptyCollection(fetchOptions);
@@ -299,6 +278,15 @@ define([
     });
 
     channel.reply('finalizeConsultOrder', function() {
+        var fetchOptions = {
+            resourceTitle: 'patient-record-problem',
+            pageable: false,
+            criteria: {
+                filter: 'ne(removed, true)'
+            },
+            cache: true,
+            viewModel: {}
+        };
         return {
             fetchOptions: fetchOptions
         };

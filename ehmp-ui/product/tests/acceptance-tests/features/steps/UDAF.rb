@@ -40,7 +40,8 @@ When(/^the user filters applet "(.*?)" grid by text "(.*?)"$/) do |applet_id, in
   @ehmp.to_filter_applet_grid(applet_id)
   expect(@ehmp.btn_add_filter.disabled?).to eq(true)
   wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
-  wait.until { infiniate_scroll('[data-appletid=lab_results_grid] table tbody') }
+  wait.until { infinite_scroll_other('[data-appletid=lab_results_grid] table tbody') }
+  # wait.until { infiniate_scroll('[data-appletid=lab_results_grid] table tbody') }
   row_count = @ehmp.fld_grid_rows.length
   @ehmp.fld_filter.set input_text
   wait.until { @ehmp.btn_add_filter.disabled? == false }

@@ -1,0 +1,11 @@
+<td>
+    {{displayName}} ({{last5}})
+</td>
+<td>
+    {{birthDate}} {{#if age }}
+    <span class="sr-only">Age</span> ({{age}}y) {{/if}}
+    {{#if getGenderCode}}
+	    <span class="sr-only">Gender {{getGenderName}}</span>
+	    <span aria-hidden="true"> - {{getGenderCode}}</span>
+    {{/if}}
+</td>

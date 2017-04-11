@@ -2221,7 +2221,7 @@ public class ConsultSignalProcessing implements java.io.Serializable {
 						}
 						t_order.setStatusDate(currentDateString);
 						//the following check for !isEmptyString() is required because if it is empty or null we don't want to wait for a result 
-					} else if (!ConsultHelperUtil.isEmptyString(t_order.getStatus()) && !OrderStatus.ORDER_STATUS_COMPLETE.equalsIgnoreCase(t_order.getStatus()) && !OrderStatus.ORDER_STATUS_OVERRIDE.equalsIgnoreCase(t_order.getStatus()) && OrderStatus.ORDER_STATUS_SATISFIED.equalsIgnoreCase(t_order.getStatus())) {
+					} else if (!ConsultHelperUtil.isEmptyString(t_order.getStatus()) && !OrderStatus.ORDER_STATUS_COMPLETE.equalsIgnoreCase(t_order.getStatus()) && !OrderStatus.ORDER_STATUS_OVERRIDE.equalsIgnoreCase(t_order.getStatus()) && !OrderStatus.ORDER_STATUS_SATISFIED.equalsIgnoreCase(t_order.getStatus())) {
 						Logging.debug("ConsultSignalProcessing.processPrereqOrderUpdateSignal: Still waiting for Lab results for: " + t_order.getOrderName());
 						completed = false;
 					}

@@ -325,7 +325,7 @@ define([
                 if (formAction === 'draft') {
                     ADK.Messaging.trigger('action:draft:refresh');
                 }
-                displayBanner(formAction, 'Request');
+                displayBanner(formAction);
             },
             onError: function(req, res) {
                 var errorMessage = JSON.parse(res.responseText).message;
@@ -376,7 +376,7 @@ define([
                 if (signalAction === 'draft') {
                     ADK.Messaging.trigger('action:draft:refresh');
                 }
-                displayBanner(signalAction, 'Request');
+                displayBanner(signalAction);
             },
             onError: function(req, res) {
                 var errorMessage = JSON.parse(res.responseText).message;
@@ -460,19 +460,14 @@ define([
                 });
                 errorBanner.show();
             } else {
-                var successBanner = new ADK.UI.Notification({
-                    type: 'success',
-                    title: 'Response Activity',
-                    message: 'Request successfully updated.'
-                });
-                successBanner.show();
+                displayBanner(formAction);
             }
 
             modalCloseAndRefresh(result);
         });
     }
 
-    var displayBanner = function(action, activityType, options) {
+    var displayBanner = function(action, options) {
         var suppressBanner = !!(_.get(options, 'suppressBanner', false));
         if (suppressBanner === false) {
             var message = 'Successfully ' + constructBannerMessage(action);

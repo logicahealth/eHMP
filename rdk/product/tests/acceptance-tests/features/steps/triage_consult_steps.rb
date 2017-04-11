@@ -80,11 +80,11 @@ When(/^the "([^"]*)" client requests the task is updated to be signed$/) do |use
   post_update_sign_completed(payload_json, user)
 end
 
-Given(/^the user 9E7A;PW     has created and signed a consult for patient "([^"]*)"$/) do |pid|
+Given(/^the user 9E7A;vk1234 has created and signed a consult for patient "([^"]*)"$/) do |pid|
   create_a_default_consult pid
-  retrieve_task_id '9E7A;PW    '
+  retrieve_task_id '9E7A;vk1234'
   sign_a_default_consult pid
-  retrieve_task_id '9E7A;PW    '
+  retrieve_task_id '9E7A;mx1234'
 end
 
 def post_update_task(payload, user)

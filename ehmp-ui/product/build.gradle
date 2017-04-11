@@ -13,6 +13,8 @@ allprojects {
   ext.set('repoVersion', getRepoVersion())
   ext.set('branchName', getCurrentBranchName())
   ext.set('currentCommitHash', getCurrentCommitHash())
+  ext.set('nexusURL', getNexusURL())
+  ext.set('uploadRepo', getNexusUploadRepository())
   ext.set('commitCountDir', projectDir)
 
   def repoCommitCountClosure = {
@@ -43,16 +45,28 @@ allprojects {
     repositories.mavenDeployer {
       pom.groupId = "${->groupId}"
       pom.version = "${->version}"
-      repository(url: "https://store.vistacore.us/nexus/content/repositories/${->repo}/") {
+      repository(url: "${->nexusURL}/nexus/content/repositories/${->uploadRepo}/") {
         authentication(userName: System.getenv()['NEXUS_USER_NAME'], password: System.getenv()['NEXUS_PASSWORD'])
       }
     }
   }
 }
 
+def getNexusURL() {
+    System.env.OVERRIDE_NEXUS_URL ?: 'https://store.vistacore.us'
+}
+
+def getNexusUploadRepository() {
+    System.env.NEXUS_UPLOAD_REPO ?: 'releases'
+}
+
 def getRepoVersion() {
   def v
-  v = new File(rootDir, "../infrastructure/properties/applicationVersionPrefix").getText()
+  if( System.getenv().keySet().contains('ARTIFACT_VERSION_PREFIX') ){
+      v = System.getenv()['ARTIFACT_VERSION_PREFIX']
+  } else {
+      v = new File(rootDir, "../infrastructure/properties/applicationVersionPrefix").getText()
+  }
   if (v.endsWith('.'))
     v = v.substring(0, v.length()-1)
   return v
@@ -288,24 +302,35 @@ task recentTest(dependsOn: bundleInstallAcceptance){
   }
 }
 
-task triageTest(dependsOn: bundleInstallAcceptance){
+task regressionTest1(dependsOn: bundleInstallAcceptance){
   group "test"
   doLast{
     exec {
       workingDir = "${rootDir}/tests/acceptance-tests"
       executable = "bundle"
-      args = ['exec', 'rake', 'failingTests']
+      args = ['exec', 'rake', 'codequality', 'regressionTest1']
     }
   }
 }
 
-task regressionTest(dependsOn: bundleInstallAcceptance){
+task regressionTest2(dependsOn: bundleInstallAcceptance){
   group "test"
   doLast{
     exec {
       workingDir = "${rootDir}/tests/acceptance-tests"
       executable = "bundle"
-      args = ['exec', 'rake', 'codequality', 'regressionTests']
+      args = ['exec', 'rake', 'codequality', 'regressionTest2']
+    }
+  }
+}
+
+task regressionTest3(dependsOn: bundleInstallAcceptance){
+  group "test"
+  doLast{
+    exec {
+      workingDir = "${rootDir}/tests/acceptance-tests"
+      executable = "bundle"
+      args = ['exec', 'rake', 'codequality', 'regressionTest3']
     }
   }
 }

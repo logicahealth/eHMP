@@ -1,6 +1,6 @@
 # Group Pick List
 
-## Teams for Facility [/teams-for-facility-patient-related{?site}{&facilityID}{&patientID}]
+## Teams for Facility [/teams-for-facility-patient-related{?site}{&facilityID}{&pid}]
 
 Searches for teams at a facility for a given patient -- note that this involves a call to pcmm instead of an RPC.
 
@@ -10,7 +10,9 @@ Searches for teams at a facility for a given patient -- note that this involves 
 
     + facilityID (string, required) - Station number of facility to find teams for.
 
-    + patientID (string, required) - ICN of patient to find teams for.
+    + pid (string, required) - ICN of patient to find teams for.
+
+        Pattern: `^([0-9]+)V([0-9]+)$`
 
 ### GET
 

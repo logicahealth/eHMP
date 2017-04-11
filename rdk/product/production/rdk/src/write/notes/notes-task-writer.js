@@ -159,7 +159,7 @@ module.exports.getTask = function(writebackContext, callback) {
     var options = _.extend({}, requestConfig, {
         body: {
             'processInstanceId': parseInt(writebackContext.model.processInstanceId),
-            'icn': writebackContext.siteHash + ';' + writebackContext.model.pid
+            'icn': writebackContext.interceptorResults.patientIdentifiers.site + ';' + writebackContext.model.pid
         }
     });
     httpUtil.post(options, function(err, response, body) {
@@ -276,7 +276,7 @@ module.exports.complete = function(writebackContext, callback) {
 //
 // The deploymentId and processInstanceId is needed for completeConsults and disconnectConsults
 module.exports.getOpenConsultsForNoteUid = function(req, writebackContext, callback) {
-    var pid = writebackContext.pid;
+    var pid = writebackContext.interceptorResults.patientIdentifiers.siteDfn;
     var pidError;
 
     if (!pid) {
@@ -492,7 +492,6 @@ function getDeploymentId(deployments) {
 }
 
 function createTaskJson(writebackContext) {
-    var logger = writebackContext.logger;
     var model = writebackContext.model;
     var title = model.localTitle.replace(/</g, '(').replace(/>/g, ')').replace(/&/g, ' AND ');
     var noteInformation = '\nPatient: ' + model.patientName +

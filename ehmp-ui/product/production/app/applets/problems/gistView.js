@@ -1,5 +1,6 @@
 define([
     'backbone',
+    'underscore',
     'app/applets/problems/modalView/modalView',
     'app/applets/problems/modalView/modalHeaderView',
     'app/applets/problems/modalView/modalFooterView',
@@ -7,46 +8,18 @@ define([
     'hbs!app/applets/problems/list/tooltip',
     'moment',
     'app/applets/problems/writeback/AddEditProblems',
-    'app/applets/problems/writeback/writebackUtils',
     'app/applets/problems/writeback/workflowUtils',
     'hbs!app/applets/problems/list/gistViewLayout',
     'hbs!app/applets/problems/list/gistChildLayout'
-], function(Backbone, ModalView, modalHeader, modalFooter, Util, tooltip, moment, AddEditProblemsView, WritebackUtils, WorkflowUtils, gistViewLayout, gistChildLayout) {
+], function(Backbone, _, ModalView, modalHeader, modalFooter, Util, tooltip, moment, AddEditProblemsView, WorkflowUtils, gistViewLayout, gistChildLayout) {
     'use strict';
 
     var allEncounterDateArray = [];
-    var viewParseModel = {
-        parse: function(response) {
-
-            response = Util.getStandardizedDescription(response);
-            response = Util.getStatusName(response);
-            response = Util.getServiceConnected(response);
-            response = Util.getProblemText(response);
-            response = Util.getICDCode(response);
-            response = Util.getAcuityName(response);
-            response = Util.getFacilityColor(response);
-            response = Util.getOnsetFormatted(response);
-            response = Util.getEnteredFormatted(response);
-            response = Util.getUpdatedFormatted(response);
-            response = Util.getCommentBubble(response);
-            response = Util.getICDName(response);
-            response = Util.getTimeSince(response);
-            return response;
-        }
-    };
+    
     var gistConfiguration = {
-        fetchOptions: {
-            resourceTitle: 'patient-record-problem',
-            pageable: false,
-            criteria: {
-                filter: 'ne(removed, true)'
-            },
-            cache: true,
-            viewModel: viewParseModel
-        },
-        enableTileSorting: true,
+        //TODO: This needs to be moved to the collection
         transformCollection: function(collection) {
-            var ProblemGroupModel = Backbone.Model.extend({});
+            var ProblemGroupModel = ADK.UIResources.Fetch.Problems.Model.extend({});
             var problemGroupsCollection = collection;
             var instanceId = this.options.instanceId;
             problemGroupsCollection.comparator = function(problemOne, problemTwo) {
@@ -73,7 +46,6 @@ define([
             });
             //map grouped problems and return the models
             var screenId = ADK.Messaging.request('get:current:screen').config.id;
-            var isWorkspaceScreen = screenId.indexOf('workspace') > -1;
             var problemGroups = _.map(groups, function(problems, groupName) {
                 return new ProblemGroupModel({
                     groupName: groupName,
@@ -133,7 +105,7 @@ define([
                     facNameTruncated: problems[0].get('facilityName').substring(0, 3),
                     enteredBy: problems[0].get('enteredBy'),
                     recordedBy: problems[0].get('recordedBy'),
-                    recordedOn: problems[0].get('recordedOn')                  
+                    recordedOn: problems[0].get('recordedOn')
                 });
             });
             problemGroupsCollection.reset(problemGroups);
@@ -243,57 +215,7 @@ define([
                 model.set('tooltip', tooltip(model));
             });
             return problemGroupsCollection;
-        },
-        gistHeaders: {
-            name: {
-                title: 'Problem',
-                sortable: true,
-                sortType: 'alphabetical',
-                key: 'groupName',
-                hoverTip: 'conditions_problem'
-            },
-            acuityName: {
-                title: 'Acuity',
-                sortable: true,
-                sortType: 'alphabetical',
-                key: 'acuityName',
-                hoverTip: 'conditions_acuity'
-            },
-            statusName: {
-                title: 'Status',
-                sortable: true,
-                sortType: 'alphabetical',
-                key: 'statusName',
-                hoverTip: 'conditions_status'
-            },
-            facilityMoniker: {
-                title: 'Facility',
-                sortable: true,
-                sortType: 'alphabetical',
-                key: 'facilityMoniker',
-                hoverTip: 'conditions_facility'
-            }
-        },
-        gistModel: [{
-            id: 'groupName',
-            field: 'groupName'
-        }, {
-            id: 'allGroupedComments',
-            field: 'allGroupedComments'
-        }, {
-            id: 'facilityMoniker',
-            field: 'facilityMoniker'
-        }, {
-            id: 'statusName',
-            field: 'statusName'
-        }, {
-            id: 'acuityName',
-            field: 'acuityName'
-        }, {
-            id: 'problemText',
-            field: 'problemText'
-        }],
-        filterFields: ['problemText', 'standardizedDescription', 'acuityName', 'statusName', 'onsetFormatted', 'updatedFormatted', 'providerDisplayName', 'facilityMoniker', 'comments']
+        }
     };
 
     var GistViewItem = ADK.Views.EventGist.getRowItem().extend({
@@ -306,21 +228,68 @@ define([
     });
 
     var GistView = ADK.AppletViews.EventsGistView.extend({
+        appletOptions: {
+            gistHeaders: {
+                name: {
+                    title: 'Problem',
+                    sortable: true,
+                    sortType: 'alphabetical',
+                    key: 'groupName',
+                    hoverTip: 'conditions_problem'
+                },
+                acuityName: {
+                    title: 'Acuity',
+                    sortable: true,
+                    sortType: 'alphabetical',
+                    key: 'acuityName',
+                    hoverTip: 'conditions_acuity'
+                },
+                statusName: {
+                    title: 'Status',
+                    sortable: true,
+                    sortType: 'alphabetical',
+                    key: 'statusName',
+                    hoverTip: 'conditions_status'
+                },
+                facilityMoniker: {
+                    title: 'Facility',
+                    sortable: true,
+                    sortType: 'alphabetical',
+                    key: 'facilityMoniker',
+                    hoverTip: 'conditions_facility'
+                }
+            },
+            gistModel: [{
+                id: 'groupName',
+                field: 'groupName'
+            }, {
+                id: 'allGroupedComments',
+                field: 'allGroupedComments'
+            }, {
+                id: 'facilityMoniker',
+                field: 'facilityMoniker'
+            }, {
+                id: 'statusName',
+                field: 'statusName'
+            }, {
+                id: 'acuityName',
+                field: 'acuityName'
+            }, {
+                id: 'problemText',
+                field: 'problemText'
+            }],
+            filterFields: ['problemText', 'standardizedDescription', 'acuityName', 'statusName', 'onsetFormatted', 'updatedFormatted', 'providerDisplayName', 'facilityMoniker', 'comments']
+        },
         initialize: function(options) {
-            var self = this;
             this._super = ADK.AppletViews.EventsGistView.prototype;
-            this.appletOptions = {
-                filterFields: gistConfiguration.filterFields,
-                collectionParser: gistConfiguration.transformCollection,
-                gistModel: gistConfiguration.gistModel,
-                gistHeaders: gistConfiguration.gistHeaders,
-                enableTileSorting: gistConfiguration.enableTileSorting,
-                binningOptions: gistConfiguration.binningOptions,
-                onClickRow: this.onClickRow,
-                showLinksButton: true,
-                showCrsButton: true,
-                AppletView: ExtendedGistView
-            };
+
+            this.appletOptions.enableTileSorting = true;
+            this.appletOptions.collectionParser = gistConfiguration.transformCollection;
+            this.appletOptions.serializeData = this._serializeData;
+            this.appletOptions.serializeModel = this._serializeData;
+            this.appletOptions.showLinksButton = true;
+            this.appletOptions.showCrsButton = true;
+            this.appletOptions.AppletView = ExtendedGistView;
 
             if (ADK.UserService.hasPermission('add-condition-problem') && ADK.PatientRecordService.isPatientInPrimaryVista()) {
                 this.appletOptions.onClickAdd = function(event) {
@@ -342,24 +311,12 @@ define([
                     WorkflowUtils.startEditProblemsWorkflow(AddEditProblemsView, existingProblemModel);
                 }
             });
-
-            ADK.Messaging.getChannel('problems').on('detailView', function(params) {
+            this.listenTo(ADK.Messaging.getChannel('problems'), 'detailView', function(params) {
                 var model = params.model;
-                var siteCode = ADK.UserService.getUserSession().get('site'),
-                    pidSiteCode = model.get('pid') ? model.get('pid').split(';')[0] : '';
                 var view = new ModalView({
                     model: model,
-                    collection: self.appletOptions.collection
+                    collection: params.collection
                 });
-                var fetchOptions = {
-                    criteria: {
-                        "uid": params.uid
-                    },
-                    patient: ADK.PatientRecordService.getCurrentPatient(),
-                    resourceTitle: 'patient-record-problem',
-                    viewModel: view
-                };
-                var response = $.Deferred();
                 var modalOptions = {
                     'title': Util.getModalTitle(model),
                     'size': 'normal',
@@ -377,7 +334,8 @@ define([
                 });
                 modal.show();
             });
-            this.appletOptions.collection = ADK.PatientRecordService.fetchCollection(gistConfiguration.fetchOptions);
+            this.appletOptions.collection = this.collection = new ADK.UIResources.Fetch.Problems.Collection();
+            this.collection.fetchCollection(this.fetchOptions);
 
             this.listenTo(ADK.Messaging.getChannel('problems'), 'refreshGridView', function() {
                 this.refresh({});
@@ -385,8 +343,18 @@ define([
 
             this._super.initialize.apply(this, arguments);
         },
+        _serializeData: function serializeData() {
+            var model = this.model;
+            var problemData = model.toJSON();
+
+            problemData.statusName = model.getStatusName(problemData.statusName);
+            problemData.problemText = model.getProblemText(problemData.problemText);
+            problemData.icdCode = model.getICDCode(problemData.icdCode);
+            problemData.enteredFormatted = ADK.utils.formatDate(problemData.entered);
+            return problemData;
+        },
         events: {
-            'toolbar.show': function(event) {
+            'toolbar.show': function() {
                 ADK.utils.crsUtil.removeStyle(this);
             },
             'toolbar.hide': function(event) {

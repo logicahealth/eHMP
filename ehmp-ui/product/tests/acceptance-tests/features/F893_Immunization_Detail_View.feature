@@ -1,8 +1,8 @@
-@f893_immunization_enhanced_detail_view @regression @DE4560 @future
+@f893_immunization_enhanced_detail_view  @DE4560 @future
 
 Feature: F893 : Enhanced Immunization Detail View with VIMM Fields
 
-@893_1_add_administered @UAT_script @DE6768 @debug
+@893_1_add_administered @UAT_script  @debug @DE7023 @DE6768
 Scenario: Add administered immunization and verify detail view and note object creation
 
   Given user searches for and selects "twenty,patient"

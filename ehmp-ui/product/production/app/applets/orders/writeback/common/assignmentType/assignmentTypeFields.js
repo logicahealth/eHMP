@@ -31,8 +31,8 @@ define([
     }
 
     function getAssignToTitle(omitMeAssignmentOption) {
-        var title = 'Person, My Teams, or Any Team';
-        return omitMeAssignmentOption ? title : 'Assign to Me, ' + title;
+        var title = 'Person, My Teams, Patient\'s Teams, or Any Team';
+        return 'Assign to ' + (omitMeAssignmentOption ? title : 'Me, ' + title);
     }
 
     // return assignmentTypeFields;

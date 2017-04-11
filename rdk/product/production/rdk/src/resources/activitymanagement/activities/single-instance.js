@@ -2,8 +2,6 @@
 
 var _ = require('lodash');
 var async = require('async');
-var querystring = require('querystring');
-var jdsFilter = require('jds-filter');
 var rdk = require('../../../core/rdk');
 var clinicalObjectSubsystem = require('../../../subsystems/clinical-objects/clinical-objects-subsystem');
 var filterAsuDocuments = require('../../../subsystems/jds/jds-subsystem').filterAsuDocuments;
@@ -39,13 +37,20 @@ function transformQueryResults(req, instanceId, data, callback) {
     results.processDefinitionId = data.PROCESSDEFINITIONID;
     results.facilityRequestDivisionId = data.FACILITYID;
 
+
+    var splitPid = (results.pid || '').split(';');
+    if (splitPid.length === 2) {
+        var site = _.first(splitPid);
+        var vistaSites = req.app.config.vistaSites;
+        results.facilityRequestDivisionId = _.get(vistaSites[site], 'division');
+    }
     var urgency = data.URGENCY;
 
     if (!_.isUndefined(urgency)) {
         results.urgency = urgency;
     }
 
-    pidToNameLookup(req, results.userID, function (err, user) {
+    pidToNameLookup(req, results.userID, function(err, user) {
         if (err) {
             req.logger.error(err);
             return callback(null, results);
@@ -64,13 +69,13 @@ function transformHistoryQueryResults(req, results, data, callback) {
 
     var temp = [];
 
-    async.eachSeries(data, function (item, cb) {
+    async.eachSeries(data, function(item, cb) {
         var obj = {};
         obj.taskName = item.TASKNAME;
         obj.signalAction = item.SIGNALACTION;
         obj.signalStatusTimestamp = item.STATUSTIMESTAMP;
         obj.signalHistory = item.SIGNALHISTORY;
-        pidToNameLookup(req, item.SIGNALOWNERNAME, function (err, owner) {
+        pidToNameLookup(req, item.SIGNALOWNERNAME, function(err, owner) {
             if (err) {
                 req.logger.error(err);
             } else {
@@ -103,7 +108,7 @@ function getTaskDetails(req, callback) {
 
     var procQuery = 'BEGIN ACTIVITIES.getInstance(:p_process_instance_id, :recordset); END;';
 
-    activityDb.doExecuteProcWithParams(req, req.app.config.jbpm.activityDatabase, procQuery, procParams, function (err, data) {
+    activityDb.doExecuteProcWithParams(req, req.app.config.jbpm.activityDatabase, procQuery, procParams, function(err, data) {
         if (err) {
             req.logger.error(err);
             return callback(err);
@@ -116,7 +121,7 @@ function getTaskDetails(req, callback) {
             return callback(null, '');
         }
 
-        transformQueryResults(req, instanceId, data, function (err, results) {
+        transformQueryResults(req, instanceId, data, function(err, results) {
             return callback(null, results);
         });
     });
@@ -140,7 +145,7 @@ function getTaskHistory(req, results, callback) {
 
     var procQuery = 'BEGIN ACTIVITIES.getActivityHistory(:p_process_instance_id, :recordset); END;';
 
-    activityDb.doExecuteProcWithParams(req, req.app.config.jbpm.activityDatabase, procQuery, procParams, function (err, data) {
+    activityDb.doExecuteProcWithParams(req, req.app.config.jbpm.activityDatabase, procQuery, procParams, function(err, data) {
         if (err) {
             req.logger.error(err);
             return callback(err);
@@ -151,7 +156,7 @@ function getTaskHistory(req, results, callback) {
             return callback(null, results);
         }
 
-        transformHistoryQueryResults(req, results, data, function (err, result) {
+        transformHistoryQueryResults(req, results, data, function(err, result) {
             return callback(null, results);
         });
     });
@@ -209,7 +214,7 @@ function getPatientDemographics(req, results, callback) {
         json: true
     });
 
-    httpUtil.get(options, function (err, response, body) {
+    httpUtil.get(options, function(err, response, body) {
         if (err) {
             req.logger.error(err);
             return callback(null, results);
@@ -259,7 +264,7 @@ function getClinicalObjectDetails(req, results, callback) {
 
     var logger = req.logger;
     var clinicalObjectUID = results.clinicalObjectUID;
-    var clinObjects = clinicalObjectSubsystem.read(logger, req.app.config, clinicalObjectUID, true, function (err, object) {
+    clinicalObjectSubsystem.read(logger, req.app.config, clinicalObjectUID, true, function(err, object) {
         if (err) {
             logger.error('error retrieving clinical object');
             return callback('error retrieving clinical object');
@@ -282,7 +287,7 @@ function getNoteClinicalObjectDetails(req, results, callback) {
     }
 
     var logger = req.logger;
-    var clinObjects = clinicalObjectSubsystem.read(logger, req.app.config, noteClinicalObjectUid, true, function (err, object) {
+    clinicalObjectSubsystem.read(logger, req.app.config, noteClinicalObjectUid, true, function(err, object) {
         if (err) {
             logger.debug('error retrieving clinical object for note');
             return callback(null, results);
@@ -296,7 +301,7 @@ function getNoteClinicalObjectDetails(req, results, callback) {
         details.data.items.push(object.data);
 
         //Run through the ASU rules
-        filterAsuDocuments(req, details, function (err, response) {
+        filterAsuDocuments(req, details, function(err, response) {
             if (!err && !_.isEmpty(response)) {
                 results.associatedNoteClinicalObject = object;
             }
@@ -311,7 +316,7 @@ function pidToNameLookup(req, userID, callback) {
         req.logger.error('Invalid user ID');
         return callback('Invalid user ID');
     }
-    httpUtil.get(options, function (err, response, body) {
+    httpUtil.get(options, function(err, response, body) {
         if (err) {
             req.logger.error(err);
             return callback(err);
@@ -372,8 +377,6 @@ function lookupActions(logger, results, records, callback) {
     var current;
     while (index < length) {
         current = record[index];
-        var massagedState = state.toLowerCase().trim();
-        var massagedSubState = substate.toLowerCase().trim();
         if (current.state.toLowerCase() === state.toLowerCase().trim() &&
             current.substate.toLowerCase() === substate.toLowerCase().trim()) {
             results.actions = current.actions;
@@ -397,7 +400,7 @@ function getActions(req, results, callback) {
 
     var logger = req.logger;
 
-    lookupActions(logger, results, actionsJson, function (err, result) {
+    lookupActions(logger, results, actionsJson, function(err, result) {
         if (err) {
             logger.error(err);
         }
@@ -424,7 +427,7 @@ function get(req, res) {
     var actions = getActions.bind(null, req);
 
     async.waterfall([taskDetails, taskHistory, patientDetails, clinicalObject, noteClinicalObject, actions],
-        function (err, results) {
+        function(err, results) {
             if (err) {
                 logger.error(err);
                 return res.status(rdk.httpstatus.internal_server_error).rdkSend(err);

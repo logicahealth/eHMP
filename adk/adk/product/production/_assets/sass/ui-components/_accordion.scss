@@ -1,0 +1,27 @@
+//The accordion is currently being used in the write back tray summary view 11/30/2016 - TT//
+.accordion-container.panel-group {
+    .panel {
+        .panel-heading {
+            background-color: $primary-lightest;
+            button,
+            a {
+                &.accordion-toggle:before {
+                    content: "\f078";
+                    font-family: 'FontAwesome';
+                    padding-right: 2px;
+                }
+                &.accordion-toggle.collapsed:before {
+                    content: "\f054";
+                }
+                &:hover,
+                &:focus {
+                    color: $primary-dark;
+                    text-decoration: none;
+                }
+            }
+            .panel-title {
+                line-height: 1.4em;
+            }
+        }
+    }
+}

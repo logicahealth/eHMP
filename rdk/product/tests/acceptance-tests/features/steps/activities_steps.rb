@@ -102,7 +102,7 @@ def request_activities_instances_available(user, table)
 end
 
 When(/^the client requests open activities for the staff context$/) do |table|
-  request_activities_instances_available "9E7A;PW    ", table
+  request_activities_instances_available "9E7A;pu1234", table
 end
 
 When(/^the clicent requests open activities for the patient context$/) do |table|
@@ -165,7 +165,7 @@ When(/^the user tdnurse has started an activity assigned to a person with parame
     parameters[parameter] = value
   end
   payload_json = start_person_activity(parameters).to_json 
-  @response = HTTPartyRDK.post_as_user(path, "9E7A;1tdnurse", "PW      ", payload_json, headers)
+  @response = HTTPartyRDK.post_as_user(path, "9E7A;1tdnurse", "tdnurse1", payload_json, headers)
 end
 
 Given(/^the user "([^"]*)" has started an activity assigned to a person with parameters$/) do |user, table|
@@ -193,7 +193,7 @@ Given(/^the user tdnurse has started an activity for any team with parameters$/)
     parameters[parameter] = value
   end
   payload_json = start_anyteam_activity(parameters).to_json 
-  @response = HTTPartyRDK.post_as_user(path, "9E7A;1tdnurse", "PW      ", payload_json, headers)
+  @response = HTTPartyRDK.post_as_user(path, "9E7A;1tdnurse", "tdnurse1", payload_json, headers)
 end
 
 Given(/^the user tdnurse has started an activity for my teams with parameters$/) do |table|
@@ -207,7 +207,7 @@ Given(/^the user tdnurse has started an activity for my teams with parameters$/)
     parameters[parameter] = value
   end
   payload_json = start_myteam_activity(parameters).to_json 
-  @response = HTTPartyRDK.post_as_user(path, "9E7A;1tdnurse", "PW      ", payload_json, headers)
+  @response = HTTPartyRDK.post_as_user(path, "9E7A;1tdnurse", "tdnurse1", payload_json, headers)
 end
 
 Given(/^the user tdnurse has started an activity assigned to me with parameters$/) do |table|
@@ -219,7 +219,7 @@ Given(/^the user tdnurse has started an activity assigned to me with parameters$
     parameters[parameter] = value
   end
   payload_json = start_activity_assignedtome(parameters).to_json 
-  @response = HTTPartyRDK.post_as_user(path, "9E7A;1tdnurse", "PW      ", payload_json, TaskHelper.headers)
+  @response = HTTPartyRDK.post_as_user(path, "9E7A;1tdnurse", "tdnurse1", payload_json, TaskHelper.headers)
 end
 
 Given(/^the user "([^"]*)" has started a consult with parameters$/) do |user, table|
@@ -238,7 +238,7 @@ Given(/^the user tdnurse has started an activity for Patient's Teams with parame
     parameters[parameter] = value
   end
   payload_json = start_patientteam_activity(parameters).to_json 
-  @response = HTTPartyRDK.post_as_user(path, "9E7A;1tdnurse", "PW      ", payload_json, headers)
+  @response = HTTPartyRDK.post_as_user(path, "9E7A;1tdnurse", "tdnurse1", payload_json, headers)
 end
 
 def all_values_in_set(response_body, fieldsource)

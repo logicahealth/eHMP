@@ -13,14 +13,14 @@ module.exports.getResourceConfig = function() {
             operationalDataCheck: false,
             synchronize: false
         },
-        requiredPermissions: ['add-lab-order'], 
+        requiredPermissions: ['add-lab-order'],
         isPatientCentric: true
     }];
 };
 
 function saveNoteObject(req, res) {
     var tasks = [
-        validateNumericLabResults['saveNoteObject'],
+        validateNumericLabResults.saveNoteObject,
         saveNoteObjectTask
     ];
     writebackWorkflow(req, res, tasks);

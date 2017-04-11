@@ -10,7 +10,6 @@ var definitionList = configImport.definedMetricDefinitions;
 var groupList = configImport.definedMetricGroups;
 
 // Database
-var mongo = require('mongoskin');
 var ObjectID = require('mongoskin').ObjectID;
 var thisApp;
 
@@ -390,7 +389,7 @@ function toISOString(epoch) {
  * @apiParam {String} [origin] Used to filter by using the name of the source from where a metric originated
  * @apiParam {String="Direct","Background"} [invocationType] describes how a metric is generated
  * @apiExample {js} Example usage:
- * curl -i http://IP             /resource/metrics/metrics?metricId=1&startPeriod=1431607947079&endPeriod=1431636747079&granularity=3600000&origin=SystemA&invocationType=Direct
+ * curl -i http://10.4.4.105:8888/resource/metrics/metrics?metricId=1&startPeriod=1431607947079&endPeriod=1431636747079&granularity=3600000&origin=SystemA&invocationType=Direct
  * @apiErrorExample {json} Error-Response:
  *     HTTP/1.1 400 Bad Request
  *     {

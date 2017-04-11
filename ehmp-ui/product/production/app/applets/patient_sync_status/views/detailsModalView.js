@@ -1,10 +1,10 @@
 define([
-    "backbone",
-    "marionette",
-    "underscore",
+    'backbone',
+    'marionette',
+    'underscore',
     'async',
     'moment',
-    "hbs!app/applets/patient_sync_status/templates/detailsModalTemplate"
+    'hbs!app/applets/patient_sync_status/templates/detailsModalTemplate'
 ], function(Backbone, Marionette, _, Async, Moment, modalTemplate) {
     'use strict';
     var jdsDomainToUiDomain = function(domain) {
@@ -47,7 +47,6 @@ define([
     };
 
     var siteDisplayNameMapping = {};
-    var pollingRequests = [];
 
     var isSecondarySite = function(siteName){
         return siteName === 'DOD' || siteName === 'HDR' || siteName === 'VLER' ? 'secondary' : 'primary';
@@ -298,7 +297,7 @@ define([
         _.each(jobStatuses, function(jobStatus){
 
             if(jobStatus.site){
-                var source = siteMapping[jobStatus.site];
+                var source = siteMapping[jobStatus.site] || 'allVa';
                 if(source && !syncMap[source]){
                     var sourceProperties = getSourceProperties(source);
                     syncMap[source] = { sourceName: source, sites: [], sourceDisplayName: sourceProperties.sourceDisplayName, sourceType: sourceProperties.sourceType, allDomains: [] };
@@ -370,6 +369,7 @@ define([
             view.getSecondarySiteTimeSince = _.bind(view.parentView.getSecondarySiteTimeSince, view.parentView);
             var currentSiteCode = ADK.SessionStorage.get.sessionModel('user').get('site');
             siteMapping[currentSiteCode] = 'mySite';
+            this.pollingRequests = [];
             var fetchOptions = {
                 resourceTitle:'synchronization-status',
                 cache: false,
@@ -381,12 +381,23 @@ define([
                 }
             };
 
-            ADK.PatientRecordService.fetchCollection(fetchOptions);
+            this.syncStatusCollection = ADK.PatientRecordService.fetchCollection(fetchOptions);
         },
         onBeforeDestroy: function(){
-            _.each(pollingRequests, function(request){
+            _.each(this.pollingRequests, function(request){
                 request.forceCanceled = true;
             });
+        },
+        onDestroy: function(){
+            var syncStatusCollectionXhr = _.get(this.syncStatusCollection, 'xhr');
+            if (syncStatusCollectionXhr) {
+                syncStatusCollectionXhr.abort();
+            }
+
+            var syncLoadCollectionXhr = _.get(this.syncLoadCollection, 'xhr');
+            if (syncLoadCollectionXhr) {
+                syncLoadCollectionXhr.abort();
+            }
         },
         setModelFromResponse: function(view, collection, markPendingJobsAsErrored, diffDetail, selectedSourceName){
             var newModel = buildSyncMap(collection, markPendingJobsAsErrored, diffDetail, view.getSecondarySiteTimeSince);
@@ -512,7 +523,7 @@ define([
             var self = this;
 
             // Cancel any current polling before submitting this request
-            _.each(pollingRequests, function(request){
+            _.each(this.pollingRequests, function(request){
                 request.forceCanceled = true;
             });
 
@@ -544,7 +555,7 @@ define([
                 }
             };
 
-            ADK.PatientRecordService.fetchCollection(fetchOptions);
+            this.syncLoadCollection = ADK.PatientRecordService.fetchCollection(fetchOptions);
         },
         forceSyncAll: function(){
             var self = this;
@@ -562,8 +573,9 @@ define([
             });
         },
         pollUntilSyncComplete: function(view, successCallback, errorCallback){
-            pollingRequests.push({statusComplete: false, numAttempts: 0});
-            var pollingRequestIndex = pollingRequests.length - 1;
+            var self = this;
+            this.pollingRequests.push({statusComplete: false, numAttempts: 0});
+            var pollingRequestIndex = this.pollingRequests.length - 1;
 
             Async.doUntil(
                 function(next){
@@ -572,31 +584,31 @@ define([
                         cache: false,
                         onSuccess: function(collection, response){
                             if(isSyncComplete(collection)){
-                                pollingRequests[pollingRequestIndex].statusComplete = true;
+                                self.pollingRequests[pollingRequestIndex].statusComplete = true;
                             } else {
-                                pollingRequests[pollingRequestIndex].numAttempts++;
+                                self.pollingRequests[pollingRequestIndex].numAttempts++;
                             }
 
                             var previousSelectedSource = view.model.get('selectedSource').sourceName;
 
-                            var markPendingJobsAsErrored = pollingRequests[pollingRequestIndex].numAttempts > MAX_NUM_SYNC_STATUS_REQUESTS ? true : false;
+                            var markPendingJobsAsErrored = self.pollingRequests[pollingRequestIndex].numAttempts > MAX_NUM_SYNC_STATUS_REQUESTS ? true : false;
                             view.setModelFromResponse(view, collection, markPendingJobsAsErrored, view.parentView.diffDetail, previousSelectedSource);
                         },
                         onError: function(collection, response){
-                            pollingRequests[pollingRequestIndex].statusComplete = true;
+                            self.pollingRequests[pollingRequestIndex].statusComplete = true;
                         }
                     };
 
-                    ADK.PatientRecordService.fetchCollection(statusFetchOptions);
+                    self.syncStatusCollection = ADK.PatientRecordService.fetchCollection(statusFetchOptions);
                     // Delay between each loop
                     setTimeout(next, 5000);
                 },
                 function(){
-                    return pollingRequests[pollingRequestIndex].statusComplete === true || pollingRequests[pollingRequestIndex].numAttempts > MAX_NUM_SYNC_STATUS_REQUESTS || pollingRequests[pollingRequestIndex].forceCanceled;
+                    return self.pollingRequests[pollingRequestIndex].statusComplete === true || self.pollingRequests[pollingRequestIndex].numAttempts > MAX_NUM_SYNC_STATUS_REQUESTS || self.pollingRequests[pollingRequestIndex].forceCanceled;
                 },
                 function(err){
-                    if(!pollingRequests[pollingRequestIndex].forceCanceled){
-                        if(err || pollingRequests[pollingRequestIndex].numAttempts > MAX_NUM_SYNC_STATUS_REQUESTS){
+                    if(!self.pollingRequests[pollingRequestIndex].forceCanceled){
+                        if(err || self.pollingRequests[pollingRequestIndex].numAttempts > MAX_NUM_SYNC_STATUS_REQUESTS){
                             if(errorCallback){
                                 errorCallback();
                             }
@@ -608,7 +620,19 @@ define([
                     }
                 }
             );
-        }
+        },
+        isSyncComplete: isSyncComplete,
+        makeMapReadyForUI: makeMapReadyForUI,
+        processSourcesForMap: processSourcesForMap,
+        buildSyncMap: buildSyncMap,
+        getSourceProperties: getSourceProperties,
+        createJobStatusObject: createJobStatusObject,
+        createDomainObject: createDomainObject,
+        isVxSyncBasisStampTime: isVxSyncBasisStampTime,
+        ignorePatientDomainForSite: ignorePatientDomainForSite,
+        getSiteDisplayName: getSiteDisplayName,
+        createSyncSourceObject: createSyncSourceObject,
+        isSecondarySite: isSecondarySite
     });
 
     return ModalView;

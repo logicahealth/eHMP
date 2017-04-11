@@ -1,6 +1,5 @@
 'use strict';
 
-var _ = require('lodash');
 var authentication = require('../../../core/rdk').utils.authentication;
 
 module.exports.getSiteAbbreviation = function(vistaSitesConfig, stationNumber) {

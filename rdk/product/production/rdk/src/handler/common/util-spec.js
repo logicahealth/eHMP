@@ -41,30 +41,29 @@ var testJob = {
     }
 };
 
-var env = {};
 
 var config = {
     'rdk': {
         protocol: 'http',
-        host: 'IP        ',
+        host: '10.4.4.105',
         activityPort: 8888,
         writePort:9999,
         timeout: 60000,
-        accessCode: 'PW    ',
-        verifyCode: 'PW    !!',
+        accessCode: 'pu1234',
+        verifyCode: 'pu1234!!',
         activityURI: '/resource/activities/startactivityevent',
         writeURI: '/resource/write-health-data/patient'
     },
     'jdsServer': {
-        'baseUrl': 'http://IP             ',
+        'baseUrl': 'http://10.2.2.110:9080',
         'timeout': 120000
     },
     'generalPurposeJdsServer': {
-        'baseUrl': 'http://IP             ',
+        'baseUrl': 'http://10.2.2.110:9080',
         'urlLengthLimit': 120
     },
     'jbpm': {
-        'baseUrl': 'http://IP             ',
+        'baseUrl': 'http://10.4.4.208:8080',
         'apiPath': '/business-central/rest',
         'adminUser': {
             'username': 'bpmsAdmin',
@@ -78,12 +77,12 @@ var config = {
         'activityDatabase': {
             'user': 'activitydbuser',
             'password': 'activitydb$11',
-            'connectString': 'IP             /xe'
+            'connectString': '10.4.4.208:1521/xe'
         },
         'notifsDatabase': {
             'user': 'notifdb',
             'password': 'notifdb',
-            'connectString': 'IP             /xe'
+            'connectString': '10.4.4.208:1521/xe'
         }
     }
 };
@@ -167,7 +166,6 @@ describe('handler-util-spec.js', function() {
 
         it('throws an error if given incorrect job type', function() {
             var badTypeJob = {type: 'definitely-not-an-activity-management-event'};
-            var done = false;
             util.isValidRequest(badTypeJob, activityRequestType, logger, function(error, result) {
                 expect(error).to.eql('Incorrect job type');
             });
@@ -346,7 +344,7 @@ describe('handler-util-spec.js', function() {
             var mockIsPrimarySite = sinon.stub(pidValidator, 'isPrimarySite', function() {
                 return true;
             });
-            var response = util.constructPatientUid(pid, logger);
+            util.constructPatientUid(pid, logger);
             mockIsPrimarySite.restore();
         });
 
@@ -354,7 +352,7 @@ describe('handler-util-spec.js', function() {
             var mockIsPrimarySite = sinon.stub(pidValidator, 'isPrimarySite', function() {
                 return false;
             });
-            var response = util.constructPatientUid(pid, logger);
+            util.constructPatientUid(pid, logger);
             mockIsPrimarySite.restore();
         });
     });

@@ -388,14 +388,15 @@ end
 
 Then(/^the user clicks on search filter in Meds Review Applet$/) do
   aa = MedReviewApplet.instance
-  expect(aa.wait_until_action_element_visible("Meds Review Search Filter", DefaultLogin.wait_time)).to be_true
-  expect(aa.perform_action("Meds Review Search Filter", "")).to be_true
+  expect(aa.wait_until_action_element_visible("Control - applet - Filter Toggle", DefaultLogin.wait_time)).to be_true
+  expect(aa.perform_action("Control - applet - Filter Toggle", "")).to be_true
+  
 end
 
 Then(/^the user types "(.*?)" in search box of the Meds Review Applet$/) do |search_field|
-  aa = MedReviewApplet.instance
-  expect(aa.wait_until_action_element_visible("Meds Review Filter input", DefaultLogin.wait_time)).to be_true
-  expect(aa.perform_action("Meds Review Filter input", search_field)).to be_true
+  aa = MedReviewApplet.instance    
+  expect(aa.wait_until_action_element_visible("Control - applet - Text Filter", DefaultLogin.wait_time)).to be_true
+  expect(aa.perform_action("Control - applet - Text Filter", search_field)).to be_true  
 end
 
 Then(/^user selects the "(.*?)" detail icon in Meds Review Applet$/) do |arg1|

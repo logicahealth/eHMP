@@ -135,6 +135,10 @@ app.register('/permissions', ROOT + '/src/resources/permissions/permissions-reso
 
 app.register('/shortcuts', ROOT + '/src/resources/shortcuts/shortcuts-resource');
 
+// Configuration endpoints
+app.register('/configuration', ROOT + '/src/resources/configuration/ehmp-configuration-resource');
+app.register('/tracker', ROOT + '/src/resources/tracker/tracker-resource');
+
 // TEST RESOURCE for Generic RPC Calls
 // DO NOT ENABLE IN PRODUCTION; IT IS A SECURITY RISK!
 // app.register('/test', '../src/resources/vista-resource');
@@ -143,6 +147,6 @@ app.logger.info('app created with ' + app.resourceRegistry.getResources().length
 
 // FUTURE-TODO: maybe start listening earlier, asynchronously register resources
 var port = app.config.appServer.port;
-app.rdkListen(port, function () {
+app.rdkListen(port, function() {
     app.logger.info('application now listening on %s', port);
 });

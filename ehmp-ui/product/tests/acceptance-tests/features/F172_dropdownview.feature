@@ -1,5 +1,5 @@
 #Team Neptune
-@US3702 @US4540 @regression
+@US3702 @US4540  @reg2
 Feature:F172 User-Defined Screens
 	
 @DE949

@@ -12,8 +12,8 @@ function buildRequest() {
         },
         session: {
             user: {
-                accessCode: 'PW    ',
-                verifyCode: 'PW    !!',
+                accessCode: 'pu1234',
+                verifyCode: 'pu1234!!',
                 ssn: '666884833',
                 breakglass: true,
                 sensitive: false,
@@ -50,7 +50,7 @@ function buildRequest() {
                 vistaSites: {
                     '9E7A': {
                         name: 'PANORAMA',
-                        host: 'IP        '
+                        host: '10.2.2.101'
                     }
                 }
             }
@@ -106,7 +106,7 @@ describe('PEP Policy', function() {
     });
 
     //NOTE: THIS WAS FAILING BEFORE OUR MIGRATION FROM JDS TO AN RPC CALL SO IT HAS BEEN COMMENTED OUT.
-    xit('PEP policy returns expected result for Breakglass policy', function(done) {
+    it.skip('PEP policy returns expected result for Breakglass policy', function(done) {
         req.session.user.dgSensitiveAccess = false;
         this.timeout(15000);
         nock('http://localhost:8080')
@@ -125,7 +125,7 @@ describe('PEP Policy', function() {
 
     });
     //NOTE: THIS WAS FAILING BEFORE OUR MIGRATION FROM JDS TO AN RPC CALL SO IT HAS BEEN COMMENTED OUT.
-    xit('PEP policy returns expected result - permit', function(done) {
+    it.skip('PEP policy returns expected result - permit', function(done) {
 
         req.app.config.jdsServer.baseUrl = 'http://localhost:8085';
         this.timeout(15000);

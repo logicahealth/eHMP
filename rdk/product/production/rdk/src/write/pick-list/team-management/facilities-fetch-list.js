@@ -33,7 +33,7 @@ module.exports.fetch = function(logger, configuration, callback, params) {
 
     var pcmmDbConfig = _.get(params, 'pcmmDbConfig');
 
-    logger.trace("facilities picklist: query = " + query);
+    logger.trace('facilities picklist: query = ' + query);
     pcmm.doQueryWithParams(pcmmDbConfig, query, bindVars, function(err, rows) {
         logger.trace({error: err, rows: rows}, 'facilities picklist');
         if (err) {

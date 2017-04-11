@@ -1,7 +1,6 @@
 'use strict';
 
 var rdk = require('../../core/rdk');
-var moment = require('moment');
 var pjds = rdk.utils.pjdsStore;
 var _ = require('lodash');
 var pidValidator = rdk.utils.pidValidator;
@@ -29,9 +28,6 @@ function getLastWorkspace(req, res, otherPid, callback) {
     if (pidValidator.isIcn(pid)) {
         patientIdentifier = 'icn:' + pid;
     } else if (pidValidator.isPidEdipi(pid)) {
-        patientIdentifier = 'edipi:' + pid;
-    } else if (pidValidator.isEdipi(pid)) {
-        pid = 'DOD;' + pid;
         patientIdentifier = 'edipi:' + pid;
     } else if (pidValidator.isSiteDfn(pid)) {
         patientIdentifier = 'pid:' + pid;

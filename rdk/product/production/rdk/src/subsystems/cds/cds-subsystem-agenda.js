@@ -10,7 +10,6 @@
  */
 
 var rdk = require('../../core/rdk');
-var mongo = require('mongoskin');
 var Agenda = require('agenda');
 var request = require('request');
 var _ = require('lodash');
@@ -64,8 +63,6 @@ function initDb(app, dbConnection) {
         return null;
     }
 }
-
-function ignoreErrors() {}
 
 function sendRequest(job, done) {
 

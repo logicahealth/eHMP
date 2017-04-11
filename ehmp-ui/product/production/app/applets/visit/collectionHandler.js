@@ -27,16 +27,19 @@ define([
                 //If the picklist fetch fails
                 callback(null, response);
             });
+            return people;
         },
         getLocations: function(form, callback) {
             var locations = new ADK.UIResources.Picklist.Encounters.Locations();
             var siteCode = ADK.UserService.getUserSession().get('site');
             form.listenTo(locations, 'read:success', function(collection, response) {
+                form.stopListening(locations, 'read:error');
                 callback(collection);
             });
             locations.fetch({
                 site: siteCode
             });
+            return locations;
         },
         getAdmissions: function(callback) {
             var admissionsfetchOptions = {

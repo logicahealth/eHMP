@@ -1,0 +1,10 @@
+{
+    "complexObjectPropertiesXML": "<{Key}>{Value}</{Key}>",
+    "complexArrayedObjectPropertiesXML": "<{Key} id='{ID}'>{Value}</{Key}>",
+    "completeTaskCommandTemplate": "<?xml version='1.0' encoding='UTF-8' standalone='yes'?><command-request><deployment-id>{DeploymentId}</deployment-id><complete-task><task-id>{TaskId}</task-id><user-id>{User}</user-id><data>{Parameters}</data></complete-task></command-request>",
+    "complexObjectTemplate": "<item key='{Key}'><value xsi:type='{Type}' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'>{Value}</value></item>",
+    "parameterTemplate": "<item key='{Key}'><value xsi:type='xs:{Type}' xmlns:xs='http://www.w3.org/2001/XMLSchema' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'>{Value}</value></item>",
+    "signalEventCommandTemplate": "<?xml version='1.0' encoding='UTF-8' standalone='yes'?><command-request><deployment-id>{DeploymentId}</deployment-id><signal-event process-instance-id='{ProcessInstanceId}' event-type='{EventType}'>{EventValue}</signal-event></command-request>",
+    "signalEventValueTemplate": "<event xsi:type='{Type}' xmlns:xs='http://www.w3.org/2001/XMLSchema' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'>{Value}</event>",
+    "startProcessCommandTemplate": "<?xml version='1.0' encoding='UTF-8' standalone='yes'?><command-request><deployment-id>{DeploymentId}</deployment-id><start-process processId='{ProcessId}'><parameter>{Parameters}</parameter></start-process></command-request>"
+}

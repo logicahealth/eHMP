@@ -249,7 +249,7 @@ define([
 
                     manualNoteCounter++;
 
-                    var sortedCommentsCollection = _.sortBy(commentsCollection, 'noteCounter');
+                    var sortedCommentsCollection = _.sortBy(commentsCollection, 'noteCounter').reverse();
                     newFormData.annotations = new Backbone.Collection(sortedCommentsCollection);
                     newFormData.originalComments = new Backbone.Collection(sortedCommentsCollection);
                 });

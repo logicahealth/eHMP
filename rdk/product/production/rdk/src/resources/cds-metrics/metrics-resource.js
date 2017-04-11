@@ -1,7 +1,5 @@
 'use strict';
 
-var cdsMetrics = require('./metrics');
-
 var interceptors = {
     audit: true,
     authentication: true,

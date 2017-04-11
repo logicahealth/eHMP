@@ -1,0 +1,127 @@
+{
+  "queryComplete": "true",
+  "dataList": [
+    {
+      "dataRecord": {
+        "OnsetDate": "20140615114212",
+        "MedcinId": "31887",
+        "EncounterNumber": "0",
+        "EnteredBy": "MIDT, LANDFONE",
+        "EnteredDate": "20140615114212",
+        "RepositoryId": "2.16.840.1.113883.3.42.126.100001.13",
+        "LastModifiedDate": "20140615114212",
+        "ChronicityName": "Chronic",
+        "ProblemId": "2155379726",
+        "CustodianName": "ahlta",
+        "LongDescription": "ASTHMA",
+        "ProblemName": "ASTHMA",
+        "StatusName": "Active",
+        "Comments": "",
+        "HospitalLocation": "Landstuhl RMC",
+        "IcdCode": "346.90",
+        "Acuity": "Chronic",
+        "CustodianId": "2.16.840.1.113883.3.42.126.100001.13",
+        "OtherIdentifier": "+",
+        "HospitalDmisId": "0607",
+        "ShortDescription": "ASTHMA",
+        "Source": "Clinical Evidence",
+        "Status": "1024",
+        "EncounterDate": "20140615114212",
+        "Facility": "",
+        "LoincCode": "11450-4",
+        "Provider": "",
+        "EventId": "1000001048"
+      },
+      "dataType": 3
+    },
+    {
+      "dataRecord": {
+        "OnsetDate": "20150915114212",
+        "MedcinId": "31887",
+        "EncounterNumber": "0",
+        "EnteredBy": "MIDT, LANDFONE",
+        "EnteredDate": "20150915114212",
+        "RepositoryId": "2.16.840.1.113883.3.42.126.100001.13",
+        "LastModifiedDate": "20150915114212",
+        "ChronicityName": "Chronic",
+        "ProblemId": "2155379726",
+        "CustodianName": "ahlta",
+        "LongDescription": "MILD DEPRESSION",
+        "ProblemName": "MILD DEPRESSION",
+        "StatusName": "Active",
+        "Comments": "",
+        "HospitalLocation": "Landstuhl RMC",
+        "IcdCode": "346.90",
+        "Acuity": "Chronic",
+        "CustodianId": "2.16.840.1.113883.3.42.126.100001.13",
+        "OtherIdentifier": "+",
+        "HospitalDmisId": "0607",
+        "ShortDescription": "MILD DEPRESSION",
+        "Source": "Clinical Evidence",
+        "Status": "1024",
+        "EncounterDate": "20150915114212",
+        "Facility": "",
+        "LoincCode": "11450-4",
+        "Provider": "",
+        "EventId": "1000001049"
+      },
+      "dataType": 3
+    },
+    {
+      "dataRecord": {
+        "OnsetDate": "20161016114212",
+        "MedcinId": "31887",
+        "EncounterNumber": "0",
+        "EnteredBy": "MIDT, LANDFONE",
+        "EnteredDate": "20161016114212",
+        "RepositoryId": "2.16.840.1.113883.3.42.126.100001.13",
+        "LastModifiedDate": "20161016114212",
+        "ChronicityName": "Chronic",
+        "ProblemId": "2155379726",
+        "CustodianName": "ahlta",
+        "LongDescription": "OBESITY",
+        "ProblemName": "OBESITY",
+        "StatusName": "Active",
+        "Comments": "",
+        "HospitalLocation": "Landstuhl RMC",
+        "IcdCode": "346.90",
+        "Acuity": "Chronic",
+        "CustodianId": "2.16.840.1.113883.3.42.126.100001.13",
+        "OtherIdentifier": "+",
+        "HospitalDmisId": "0607",
+        "ShortDescription": "OBESITY",
+        "Source": "Clinical Evidence",
+        "Status": "1024",
+        "EncounterDate": "20161016114212",
+        "Facility": "",
+        "LoincCode": "11450-4",
+        "Provider": "",
+        "EventId": "1000001050"
+      },
+      "dataType": 3
+    }
+  ],
+  "statusList": [
+    {
+      "ExpectedCount": "",
+      "RetrievedCount": "",
+      "SiteStatus": "UNKNOWN",
+      "SiteName": "ahlta",
+      "SiteId": "2.16.840.1.113883.3.42.126.100001.13"
+    },
+    {
+      "ExpectedCount": "3",
+      "RetrievedCount": "0",
+      "SiteStatus": "IN_PROGRESS",
+      "SiteName": "ahlta",
+      "SiteId": "2.16.840.1.113883.3.42.126.100001.13"
+    },
+    {
+      "ExpectedCount": "3",
+      "RetrievedCount": "3",
+      "SiteStatus": "COMPLETE",
+      "SiteName": "ahlta",
+      "SiteId": "2.16.840.1.113883.3.42.126.100001.13"
+    }
+  ]
+}

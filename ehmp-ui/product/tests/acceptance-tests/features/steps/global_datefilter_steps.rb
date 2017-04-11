@@ -355,22 +355,31 @@ Then(/^the Custom date field "(.*?)" button should be "(.*?)" (?:on|in) the "(.*
 end
 
 Given(/^the user has selected All within the global date picker$/) do
-  
-  # When the user clicks the control "Date Filter Toggle" on the "Coversheet"
   expect(@cc.perform_action('Control - Coversheet - Date Filter Toggle')).to be_true, "Was not able to select Control - Coversheet - Date Filter Toggle"
   @cc.wait_until_action_element_visible 'Trend History Chart'
 
   @ehmp = PobGlobalDateFilter.new
   @ehmp.wait_until_btn_all_range_visible
-  # And the user clicks the date control "All" on the "Coversheet"
-  expect(@cc.perform_action('Control - Coversheet - All')).to be_true, "Was not able select Control - Coversheet - All"
-  # And the user clicks the control "Apply" on the "Coversheet"
-  # @ehmp.wait_until_btn_Apply_dates_visible
+  @ehmp.wait_until_btn_Apply_dates_visible
+  @ehmp.btn_all_range.click
+
+  begin
+    @ehmp.wait_until_gdt_newsfeed_applet_loaded
+  rescue Exception => e
+    p "exception waiting for GDF table to load, attempt to continue anyway: #{e}"
+  end
   
+  # -------------  in Phantomjs the apply button is not displaying, for some reason old framework could still access it
+  #@ehmp.btn_Apply_dates.click
   expect(@cc.perform_action('Control - Coversheet - Apply')).to be_true, "was not able to select Global Date Filter: Apply button"
+  # -------------
+
   @cc.wait_until_action_element_invisible 'Trend History Chart'
 
-  expect(@cc.perform_verification('Element - Range Text', 'All')).to be_true
+  expect(@ehmp.wait_for_fld_date_range_chosen).to eq(true), "Date Range Choosen span not visible"
+  expect(@ehmp.fld_date_range_chosen.text.upcase).to eq('ALL')
+
+  refresh_zombie_tooltips
 end
 
 Given(/^the user has selected 24h within the global date picker$/) do
@@ -503,13 +512,15 @@ end
 
 Then(/^the Global Date Filter displays an Inpatient legend$/) do
   @ehmp = PobGlobalDateFilter.new unless @ehmp.is_a? PobGlobalDateFilter
+  @ehmp.wait_for_fld_inpatient_legend_label
+  @ehmp.wait_for_fld_inpatient_legend_color
   expect(@ehmp).to have_fld_inpatient_legend_label
   expect(@ehmp).to have_fld_inpatient_legend_color
 end
 
 Then(/^the Global Date Filter displays Inpatient bins$/) do
   @ehmp = PobGlobalDateFilter.new unless @ehmp.is_a? PobGlobalDateFilter
-  sleep 2
+  @ehmp.wait_for_fld_inpatient_legend_color
   legend_color = @ehmp.legend_color(@ehmp.fld_inpatient_legend_color)
   expect(@ehmp.bins_with_color(legend_color).length).to be > 0
 end

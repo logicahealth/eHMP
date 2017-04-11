@@ -18,7 +18,7 @@ define([
             return response;
         },
         getModifiedVaStatus: function() {
-            var vaStatus = this.get("vaStatus");
+            var vaStatus = this.get("calculatedStatus") || this.get("vaStatus");
             if (vaStatus) {
                 var lowerCaseVaStatus = vaStatus.toLowerCase();
                 if (lowerCaseVaStatus === "discontinued/edit") {
@@ -440,8 +440,13 @@ define([
                     result.label = 'label label-warning';
                 }
                 if (daysLeft <= 0 && hoursLeft <= 0) {
-                    result.description = "This medication is "+vaStatus+" but expiration date has passed.";
-                    result.display = "Not Refillable";
+                    if (fillsRemaining === 1) {
+                        result.description = "This medication is "+vaStatus+" and expiration date has not passed, but supply should be exhausted and the last refill has not been picked up.";
+                        result.display = "Refillable";
+                    } else {
+                        result.description = "This medication is "+vaStatus+" but expiration date has passed.";
+                        result.display = "Not Refillable";
+                    }
                     result.label = 'label label-warning';
                 } else {
                     result.description = "This medication is active and fillable for " + durationUnitText + ".";

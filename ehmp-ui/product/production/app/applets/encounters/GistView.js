@@ -1,12 +1,3 @@
-//----------------------------------------
-// Name:        Encounters Applet
-// File:        GistView.js
-// Version:     1.2
-// Date:        2014-12-17
-// Modified:    2015-03-09
-// Team:        Jupiter
-// Description:
-//----------------------------------------
 define([
     "underscore",
     "jquery",
@@ -19,16 +10,19 @@ define([
     "app/applets/encounters/appConfig",
     "app/applets/encounters/appUtil",
     "app/applets/encounters/gistConfig"
-], function(_, $, Backbone, Marionette, highcharts, moment, gistView, item, CONFIG, util, gistConfig) { //subItem,
+], function (_, $, Backbone, Marionette, highcharts, moment, gistView, item, CONFIG, util, gistConfig) { //subItem,
     'use strict';
-    // Switch ON/OFF debug info
-    var DEBUG = CONFIG.debug;
+    /* global ADK */
+
+    // TODO: Is it okay to assume 30 days per month here?
+    // (30 days/month)(24 hours/day)(3600 seconds/hour)(1000 milliseconds/second)
+    var MILLISECONDS_PER_MONTH = 2592000000;
 
     var gistOptions = {
         gistChartOptions: {
             global: {
                 useUTC: false,
-                timezoneOffset: 5 * 60
+                timezoneOffset: 5 * 60  // TODO: wth this is a national site!
             },
             chart: {
                 animation: true,
@@ -37,7 +31,7 @@ define([
                 spacing: [1, 1, 1, 1],
                 backgroundColor: '#F2F2F2',
                 events: {
-                    click: function(e) {
+                    click: function (e) {
                         $(e.target).closest('[data-toggle=popover]').trigger('click');
                     }
                 }
@@ -55,7 +49,7 @@ define([
                 enabled: false,
                 hideDelay: 10,
                 borderWidth: 1,
-                formatter: function() {
+                formatter: function () {
                     return this.point.plotX;
                 }
             },
@@ -63,7 +57,7 @@ define([
                 series: {
                     cursor: 'pointer',
                     pointWidth: 5,
-                    pointInterval: 24 * 3600 * 1000 * 30, // one month //day
+                    pointInterval: MILLISECONDS_PER_MONTH,
                     enableMouseTracking: false
                 },
                 column: {
@@ -112,65 +106,70 @@ define([
                 data: [],
                 type: 'column',
                 name: "",
-                pointRange: 24 * 3600 * 1000 * 30,
+                pointRange: MILLISECONDS_PER_MONTH,
                 color: 'rgb(124, 181, 236)'
             }, {
                 data: [],
                 type: 'column',
                 color: '#406E7B',
                 name: "now",
-                pointRange: 24 * 3600 * 1000 * 30
+                pointRange: MILLISECONDS_PER_MONTH
             }]
         }
     };
     var gistUtil = {
-        reflowHChart: function(e) {
-            if (DEBUG) console.log("Enc Gist sub gist ----->> reflow chart");
-            $(this).find('.graph-container', e.target).each(function() { // target each element with the .contains-chart class
-                if (!_.isUndefined($(this).highcharts())) $(this).highcharts().reflow(); // target the chart itself
+        reflowHChart: function (e) {
+            $(this).find('.graph-container', e.target).each(function () {
+                if (!_.isUndefined($(this).highcharts())) {
+                    $(this).highcharts().reflow();
+                }
             });
         },
-        showChart: function(obj) {
+        showChart: function (obj) {
             // Reset Chart options
-            obj.gistOptions.gistChartOptions.series[0].data = [];
-            //obj.gistOptions.gistChartOptions.series[0].pointStart = 0;
-            obj.gistOptions.gistChartOptions.series[0].name = "";
-            obj.gistOptions.gistChartOptions.series[1].data = [];
-            obj.gistOptions.gistChartOptions.xAxis.plotLines[0].width = 0;
-            obj.gistOptions.gistChartOptions.yAxis[0].max = null;
-            //obj.gistOptions.gistChartOptions.series[1].pointStart = 0;
-            var k, max;
+            var chartOptions = obj.gistOptions.gistChartOptions;
+            chartOptions.series[0].data = [];
+            chartOptions.series[0].name = "";
+            chartOptions.series[1].data = [];
+            chartOptions.xAxis.plotLines[0].width = 0;
+            chartOptions.yAxis[0].max = null;
             var $pointer = null;
             if (obj.model.get("processed")) {
                 // prepare chart data
-                obj.gistOptions.gistChartOptions.series[0].name = obj.model.get("kind");
-                max = 0;
+                chartOptions.series[0].name = obj.model.get("kind");
                 // if chart is empty -> set yAxis.max = 10
                 if (obj.model.get("empty")) {
-                    obj.gistOptions.gistChartOptions.yAxis[0].max = 10;
+                    chartOptions.yAxis[0].max = 10;
                 }
-                // First event on the Chart
-                obj.gistOptions.gistChartOptions.series[1].data.push([util.convertChartDate(obj.model.get("firstEvent")), 0]);
+
+                var chartDate = util.convertChartDate(obj.model.get("firstEvent"));
+                var maxDate = util.convertChartDate(obj.model.get("maxChart"));
+                var nowMoment = moment(util.nowChart());
+
+                chartOptions.series[1].data.push([chartDate, 0]);
+
                 // Now on the Chart if Now in selected time frame
-                if ((moment(util.nowChart()).isBefore(util.convertChartDate(obj.model.get("maxChart")))) && (moment(util.nowChart()).isAfter(util.convertChartDate(obj.model.get("firstEvent"))))) {
-                    obj.gistOptions.gistChartOptions.xAxis.plotLines[0].width = 2;
+                if (nowMoment.isBefore(maxDate) && nowMoment.isAfter(chartDate)) {
+                    chartOptions.xAxis.plotLines[0].width = 2;
                 }
+
                 // Right border of chart
-                obj.gistOptions.gistChartOptions.series[1].data.push([util.convertChartDate(obj.model.get("maxChart")), 0]);
+                chartOptions.series[1].data.push([maxDate, 0]);
 
                 //  tooltip data&position correction !!!
-                obj.gistOptions.gistChartOptions.plotOptions.column.cropThreshold = obj.model.get("count");
+                chartOptions.plotOptions.column.cropThreshold = obj.model.get("count");
+
                 // Create Chart
                 $pointer = obj.$el.find('.graph-container');
-                $pointer.highcharts(obj.gistOptions.gistChartOptions);
+                $pointer.highcharts(chartOptions);
                 obj.$el.find('.highcharts-background').attr('fill', 'rgba(0,0,0,0)');
             }
             return $pointer;
         },
-        chartReflow: function(obj) {
+        chartReflow: function (obj) {
             var pointer;
             var model;
-            if (typeof(obj.model) !== 'undefined') {
+            if (!_.isUndefined(obj.model)) {
                 model = obj.model;
             } else {
                 model = obj;
@@ -180,14 +179,14 @@ define([
             } else {
                 pointer = obj.$el.find('.graph-container');
             }
-            if (typeof(pointer.highcharts()) !== 'undefined') {
+            if (!_.isUndefined(pointer.highcharts())) {
                 pointer.highcharts().reflow();
             }
         },
-        binning_normal_function: function(val) {
+        binning_normal_function: function (val) {
             return Math.log((val * val * val + 1) / 0.1);
         }, // Data normalization function
-        chartDataBinning: function(obj) {
+        chartDataBinning: function (obj) {
             // ADK Binning & Normalization
             var model = obj.model;
             var binned = [];
@@ -199,9 +198,8 @@ define([
             };
             if (!model.get("empty")) {
                 var pointer = obj.$el.find('.graph-container');
-                var chartWidth = pointer.width();
-                config.chartWidth = chartWidth;
-                if (typeof(pointer.highcharts()) !== 'undefined') {
+                config.chartWidth = pointer.width();
+                if (!_.isUndefined(pointer.highcharts())) {
                     input.series = model.get("chartData");
                     input.isDuration = model.get("isDuration") || false;
                     input.oldestDate = util.convertChartDate(model.get("firstEvent"));
@@ -217,7 +215,7 @@ define([
         attributes: {
             "aria-live": "assertive"
         },
-        className: 'background-color-grey-lightest percent-height-100',
+        className: 'background-color-grey-lightest percent-height-100'
     });
 
     var wrongView = Backbone.Marionette.ItemView.extend({
@@ -228,7 +226,7 @@ define([
     });
 
     var iItem = Backbone.Marionette.CompositeView.extend({
-        attributes: function() {
+        attributes: function () {
             return {
                 'data-group-instanceid': 'panel-' + this.model.get('elKind'),
                 'role': 'tab',
@@ -239,49 +237,48 @@ define([
         gistOptions: gistOptions,
         childViewContainer: ".panel-collapse",
         chartPointer: null,
-        initialize: function() {
-            if (DEBUG) console.log("initialize ----->> iItem");
-            //$('[data-toggle=popover]').popover('hide');
-            this.model.set('instanceid', appletConfig.instanceId);
+        initialize: function () {
+            var instanceId = this.model.get('appletConfig').instanceId;
+            this.model.set('instanceid', instanceId);
             this.collection = this.model.get("node");
             this.addChildViews = false;
 
         },
-        createPopover: function() {
-            var self = this;
+        createPopover: function () {
             this.ui.popoverEl.popup({
                 trigger: 'click',
                 container: 'body',
                 placement: 'bottom',
                 title: 'Title',
                 delay: 0,
-                template: '<div class="popover gist-popover" role="tooltip" aria-live="assertive"><div class="popover-title all-padding-xs"></div><div class="popover-content"></div></div>',
+                template: '<div class="popover gist-popover" role="tooltip" aria-live="assertive"><div class="popover-title all-padding-xs"></div><div class="popover-content"></div></div>'
             });
-            this.ui.popoverEl.on('shown.bs.popover', _.bind(function() {
+            this.ui.popoverEl.on('shown.bs.popover', _.bind(function () {
                 this.ui.popoverEl.focus();
-                this.ui.popoverEl.on('blur', _.bind(function() {
+                this.ui.popoverEl.on('blur', _.bind(function () {
                     this.ui.popoverEl.popup('hide');
                 }, this));
-                this.ui.popoverEl.on('keydown', function(e) {
-                    var isEscKey = (e.keyCode === 27 ? true : false);
+                this.ui.popoverEl.on('keydown', function (e) {
+                    var isEscKey = (e.keyCode === 27);
                     if (isEscKey) {
                         e.stopPropagation();
                         $(e.target).closest('[data-toggle="popover"]').popup('hide');
-                        $('html').off('keydown');
+                        $('html').off('keydown'); // TODO: WHY IS THERE A EVENT ON html??!
                         $(e.target).closest('[data-toggle="popover"]').focus();
                     }
                 });
             }, this));
         },
-        buildChildView: function(child, ChildViewClass, childViewOptions) {
+        buildChildView: function (child) {
             if (!_.isUndefined(child.get('kind'))) {
+                var appletConfig = this.model.get('appletConfig');
                 var childOptions = {
                     appletConfig: {
                         gistSubName: child.get('kind'),
-                        instanceId: window.appletConfig.instanceId,
-                        id: window.appletConfig.id
+                        instanceId: appletConfig.instanceId,
+                        id: appletConfig.id
                     },
-                    showInfoButton: window.showInfoButton,
+                    showInfoButton: false,
                     gistHeaders: gistConfig.gistHeaders[(child.get('kind').toLowerCase())],
                     gistModel: gistConfig.gistModel,
                     collection: child.get('collection'),
@@ -296,7 +293,7 @@ define([
                 return wrongView;
             }
         },
-        addChild: function() {
+        addChild: function () {
             //this prevents graphs being added to DOM on first load.
             //we defer to first time the row is expanded by click. This code will trigger when we trigger collection reset event.
             if (this.addChildViews) {
@@ -309,7 +306,7 @@ define([
         events: {
             'click .left-side': 'onClickLeftSide',
             'click .right-side': 'onClickRightSide',
-            'keydown .right-side': function(evt) {
+            'keydown .right-side': function (evt) {
                 if (evt.which == 13) {
                     this.$(evt.currentTarget).click();
                 }
@@ -317,13 +314,7 @@ define([
         },
 
         caretStatus: false,
-        caretOn: function() {
-            this.$el.find("#caret").attr("class", "caret");
-        },
-        caretOff: function() {
-            this.$el.find("#caret").attr("class", "right-caret");
-        },
-        caretSwitch: function() {
+        caretSwitch: function () {
             var theCaret = this.$el.find(".left-side .fa");
             var arrowPosition = theCaret.attr("arrowPosition");
             if (arrowPosition === "right") {
@@ -334,7 +325,7 @@ define([
                 theCaret.addClass("fa-caret-right").removeClass("fa-caret-down");
             }
         },
-        onClickRightSide: function(event) {
+        onClickRightSide: function (event) {
             if (_.isUndefined(this.ui.popoverEl.attr('aria-describedby'))) {
                 var eventTarget = $(event.target);
                 eventTarget.trigger('click');
@@ -343,7 +334,7 @@ define([
                 event.stopImmediatePropagation();
             }
         },
-        onClickLeftSide: function(event) {
+        onClickLeftSide: function (event) {
             event.preventDefault();
             event.stopImmediatePropagation();
             this.drawGraphsOnFirstToggle();
@@ -351,34 +342,30 @@ define([
             if (!this.model.get('empty')) {
                 this.$('.panel-collapse').collapse('toggle');
                 this.caretSwitch();
-                var expandedAttr = (this.$(event.currentTarget).attr('aria-expanded') === "true" ? "false" : "true");
-                if (expandedAttr === 'true') {
-                    this.$(event.currentTarget).attr('aria-expanded', expandedAttr);
-                    this.$(event.currentTarget).attr('title', 'Press enter to collapse ' + this.model.get('kind') + ' accordion.');
-                } else {
-                    this.$(event.currentTarget).attr('aria-expanded', expandedAttr);
-                    this.$(event.currentTarget).attr('title', 'Press enter to expand ' + this.model.get('kind') + ' accordion.');
-
-                }
+                var expandedAttr = this.$(event.currentTarget).attr('aria-expanded') === "true";
+                var msg = expandedAttr ? "expand" : "collapse";
+                msg = "Press enter to " + msg + ' ' + this.model.get('kind') + ' accordion.';
+                this.$(event.currentTarget).attr('aria-expanded', expandedAttr);
+                this.$(event.currentTarget).attr('title', msg);
             }
         },
-        drawGraphsOnFirstToggle: function() {
+        drawGraphsOnFirstToggle: function () {
             if (!this.addChildViews) {
                 this.addChildViews = true;
                 this.collection.trigger("reset");
             }
         },
-        onRender: function() {
+        onRender: function () {
             this.chartPointer = gistUtil.showChart(this);
             this.createPopover();
         },
-        onDomRefresh: function() {
+        onDomRefresh: function () {
             gistUtil.chartDataBinning(this);
             gistUtil.chartReflow(this);
             this.$el.find('svg').attr('focusable', false);
             this.$el.find('svg').attr('aria-hidden', true);
         },
-        onBeforeDestroy: function() {
+        onBeforeDestroy: function () {
             if (this.chartPointer) {
                 var chart = this.chartPointer.highcharts();
                 if (chart) {
@@ -387,7 +374,7 @@ define([
             }
             this.cleanupPopover();
         },
-        cleanupPopover: function() {
+        cleanupPopover: function () {
             var $popover = this.$('[data-toggle="popover"]');
             $popover.off('shown.bs.popover');
             $popover.off('hidden.bs.popover');
@@ -412,37 +399,30 @@ define([
         childView: iItem,
         childViewContainer: ".enc-gist-list",
         gistOptions: gistOptions,
-        initialize: function(options) {
+        initialize: function (options) {
             this.collection = options.collection;
             this.maximizeScreen = options.appletConfig.maximizeScreen;
-            this._super = Backbone.Marionette.CompositeView.prototype;
-            this._super.initialize.apply(this, arguments);
 
             this.listenTo(this.collection, "customfilter", onCustomFilter);
             this.listenTo(this.collection, "clear_customfilter", onClearCustomFilter);
-            this.listenTo(this.collection, "reset", function() {
-                if (DEBUG) console.log("EncGist ----->> Collection reset -->>GistView");
-                if (DEBUG) console.log(this.collection);
-            });
+            GistView.__super__.initialize.apply(this, arguments);
         },
-        onShow: function() {
+        onShow: function () {
             this.$('.enc-gist-list').on('shown.bs.collapse', gistUtil.reflowHChart);
             if (this.collection.length <= 0) {
                 this.$('.enc-gist-list').removeAttr('role');
             }
-            var self = this;
-            _.each(this.$('[data-header-instanceid]'), function(span) {
-                self.$(span).append('<span class="sr-only">( ' + span.getAttribute('data-original-title') + ' )</span>');
-            });
+            _.each(this.$('[data-header-instanceid]'), function (span) {
+                this.$(span).append('<span class="sr-only">( ' + span.getAttribute('data-original-title') + ' )</span>');
+            }, this);
         },
-        onDestroy: function() {
+        onDestroy: function () {
             this.$('.enc-gist-list').off();
         },
         behaviors: {
             Tooltip: {}
         }
     });
-
 
     return GistView;
 });

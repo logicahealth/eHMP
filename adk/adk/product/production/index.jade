@@ -1,0 +1,44 @@
+!!! 5
+- var ver = buildStamp
+- var adkMinified = 'app.min.js?ver='+ver
+unless adkMin
+    adkMinified = 'config.js?ver='+ver
+
+html(data-placeholder-focus='false', lang='en', class='no-js ui-mobile-rendering')
+
+    head
+        meta(http-equiv='X-UA-Compatible', content='IE=edge, chrome=1')
+        meta(charset='utf-8')
+        meta(name='description', content='')
+        meta(name='author', content='Agilex')
+        meta(name='viewport', content='user-scalable=yes, initial-scale=1.0, maximum-scale=5.0, width=device-width')
+        meta(name='apple-mobile-web-app-status-bar-style', content='black-translucent')
+        meta(name='apple-mobile-web-app-capable', content='yes')
+
+        title eHMP
+
+        link(rel='icon', href='favicon.ico')
+        link(rel='stylesheet', href='_assets/css/views/loading-screen.css')
+        link(rel='stylesheet', href='app/css/applets.css?ver='+ver)
+
+        if(owa)
+            script(src='_assets/js/owa.js')
+        script
+            var require = {
+                waitSeconds: 60
+            };
+        script(data-main=adkMinified, src='_assets/libs/custom/require/require-2.1.8.js')
+
+    body
+        div#top-region
+            div.initial-app-load-indicator
+                img(width='320',height='71',src='_assets/img/VA_logo.png',alt='VA Logo')
+                h1 Loading eHMP<span aria-hidden='true'>.</span><span aria-hidden='true'>.</span><span aria-hidden='true'>.</span>
+        div.container-fluid.right-padding-no.left-padding-no
+            div#center-region.row
+        div#bottom-region
+        div#workflow-region.workflow-region
+        div#modal-region
+        div#alert-region
+        div#aria-live-assertive-region.sr-only(aria-live='assertive')
+        div#aria-live-polite-region.sr-only(aria-live='polite')

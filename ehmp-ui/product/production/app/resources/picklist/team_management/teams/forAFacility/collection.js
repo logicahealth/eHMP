@@ -8,7 +8,8 @@ define([
         model: Team,
         params: function(method, options) {
             return {
-                facilityID: options.facilityID || ''
+                facilityID: options.facilityID || '',
+                site: options.site || ''
             };
         }
     });

@@ -1,5 +1,5 @@
 #Team Neptune
-#@US1847 @regression @appointmentsandvisits @triage
+#@US1847  @appointmentsandvisits 
 @future
 Feature:F144-eHMP Viewer GUI - Appointments & Visits
 

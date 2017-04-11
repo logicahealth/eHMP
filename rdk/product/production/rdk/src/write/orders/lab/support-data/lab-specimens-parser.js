@@ -23,13 +23,13 @@ module.exports.parseLabSpecimens = function(logger, rpcData) {
                     var specimen = {
                         id: fields[0],
                         name: fields[1]
-                    }
+                    };
                     retValue.push(specimen);
                 }
             }
         }
     } else {
-        throw new Error("The RPC returned data but we couldn't understand it: " + rpcData);
+        throw new Error('The RPC returned data but we couldn\'t understand it: ' + rpcData);
     }
     logger.info({
         retValue: retValue

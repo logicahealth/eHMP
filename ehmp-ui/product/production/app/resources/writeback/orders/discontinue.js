@@ -143,7 +143,6 @@ define([
             var siteCode = this.user.get('site');
             this.set({
                 pid: this.patient.get('pid'),
-                dfn: this.patient.get('localId'),
                 location: location,
                 siteCode: siteCode,
                 provider: _.get(this.user.get('duz'), siteCode || '')
@@ -203,7 +202,7 @@ define([
                 return;
             }
 
-            var data = this.pick(['dfn', 'kind', 'location', 'provider', 'orderList', 'reason']);
+            var data = this.pick(['pid', 'kind', 'location', 'provider', 'orderList', 'reason']);
             this.destroy({
                 contentType: 'application/json',
                 data: JSON.stringify(data)

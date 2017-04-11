@@ -33,6 +33,6 @@ function callAdd(req, res) {
     req.app.subsystems.favoriteOrderable.addFavorites(req, res);
 }
 
-function callDelete(req, res) {
+function callDelete(req, res) { //jshint ignore:line
     req.app.subsystems.favoriteOrderable.deleteFavorites(req, res);
 }

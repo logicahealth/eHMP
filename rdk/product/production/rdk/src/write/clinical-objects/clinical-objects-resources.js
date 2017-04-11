@@ -1,6 +1,5 @@
 'use strict';
 
-var rdk = require('../../core/rdk');
 var writebackWorkflow = require('../core/writeback-workflow');
 var clinicalObjectsTasks = require('./clinical-objects-tasks');
 
@@ -13,7 +12,7 @@ module.exports.getResourceConfig = function() {
             operationalDataCheck: false,
             synchronize: false
         },
-        requiredPermissions: ['read-clinical-object'], 
+        requiredPermissions: ['read-clinical-object'],
         isPatientCentric: true
     }, {
         name: 'clinical-object-list-get',
@@ -23,7 +22,7 @@ module.exports.getResourceConfig = function() {
             operationalDataCheck: false,
             synchronize: false
         },
-        requiredPermissions: ['read-clinical-object'], 
+        requiredPermissions: ['read-clinical-object'],
         isPatientCentric: true
     }, {
         name: 'clinical-object-add',
@@ -33,7 +32,7 @@ module.exports.getResourceConfig = function() {
             operationalDataCheck: false,
             synchronize: false
         },
-        requiredPermissions: ['create-clinical-object'], 
+        requiredPermissions: ['create-clinical-object'],
         isPatientCentric: true
     }, {
         name: 'clinical-object-update',
@@ -43,7 +42,7 @@ module.exports.getResourceConfig = function() {
             operationalDataCheck: false,
             synchronize: false
         },
-        requiredPermissions: ['edit-clinical-object'], 
+        requiredPermissions: ['edit-clinical-object'],
         isPatientCentric: true
     }, {
         name: 'clinical-object-read',
@@ -53,7 +52,7 @@ module.exports.getResourceConfig = function() {
             operationalDataCheck: false,
             synchronize: false
         },
-        requiredPermissions: ['read-clinical-object'], 
+        requiredPermissions: ['read-clinical-object'],
         isPatientCentric: true
     }];
 };

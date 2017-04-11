@@ -8,7 +8,7 @@ Add a new immunization for a patient in a single Vista
 
 + Parameters
 
-    + pid (string, required) - patient id
+    :[pid]({{{common}}}/parameters/pid.md)
 
 
 + Request JSON Message (application/json)
@@ -116,7 +116,7 @@ Mark an immunization as entered in error.
 
 + Parameters
 
-    + pid (string, required) - patient id
+    :[pid]({{{common}}}/parameters/pid.md)
 
     + resourceId (string, required) - ID of the immunization
 

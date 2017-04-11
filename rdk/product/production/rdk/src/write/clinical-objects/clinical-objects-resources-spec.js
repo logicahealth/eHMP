@@ -11,7 +11,6 @@ describe('Unit tests for write-back clinical object resources', function() {
         var findResource = resources[0];
         var getListResource = resources[1];
         var createResource = resources[2];
-        var updateResource = resources[3];
         var readResource = resources[4];
 
         expect(findResource.name).to.be('clinical-object-find');

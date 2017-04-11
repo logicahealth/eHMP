@@ -40,7 +40,7 @@ function getUserDefinedScreens(req, res) {
 
     var tasks = [];
 
-    var predefinedScreenIdsString = req.param('predefinedScreens');
+    var predefinedScreenIdsString = req.query.predefinedScreens;
 
     if(nullchecker.isNotNullish(predefinedScreenIdsString)) {
         var predefinedScreensIdsArray = predefinedScreenIdsString.split(',');

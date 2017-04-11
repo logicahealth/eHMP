@@ -1,7 +1,6 @@
 'use strict';
 
 var vitalsValidator = require('./vitals-validator');
-var _ = require('lodash');
 
 var logger = sinon.stub(require('bunyan').createLogger({
     name: 'vitals-vista-writer-validator'

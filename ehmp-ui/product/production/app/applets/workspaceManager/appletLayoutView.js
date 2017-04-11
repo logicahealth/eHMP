@@ -36,6 +36,12 @@ define([
     });
 
     var AppletLayoutView = Backbone.Marionette.LayoutView.extend({
+        behaviors: {
+            HelpLink: {
+                container: '.help-button-container',
+                mapping: 'workspace_manager'
+            }
+        },
         template: screenEditor,
         className: 'workspaceManager-applet percent-height-100',
         initialize: function() {

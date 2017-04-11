@@ -13,42 +13,42 @@ var writebackContext = {
             '9E7A': {
                 name: 'PANORAMA',
                 division: '500',
-                host: 'IP        ',
+                host: '10.2.2.101',
                 port: 9210,
                 production: false,
-                accessCode: 'PW    ',
-                verifyCode: 'PW    !!',
+                accessCode: 'ep1234',
+                verifyCode: 'ep1234!!',
                 localIP: '127.0.0.1',
                 localAddress: 'localhost'
             },
             'C877': {
                 name: 'KODAK',
                 division: '500',
-                host: 'IP        ',
+                host: '10.2.2.102',
                 port: 9210,
                 production: false,
-                accessCode: 'PW    ',
-                verifyCode: 'PW    !!',
+                accessCode: 'ep1234',
+                verifyCode: 'ep1234!!',
                 localIP: '127.0.0.1',
                 localAddress: 'localhost'
             }
         }
     },
     model: {
-        "provider": "10000000231",
-        "location": "285",
-        "eSig": "PW    !!",
-        "orderList": [{
-            'orderId': "38030;1",
-            'orderDetailHash': "foobar"
+        'provider': '10000000231',
+        'location': '285',
+        'eSig': 'mx1234!!',
+        'orderList': [{
+            'orderId': '38030;1',
+            'orderDetailHash': 'foobar'
         }, {
-            'orderId': "38032;1",
-            'orderDetailHash': "foobar"
+            'orderId': '38032;1',
+            'orderDetailHash': 'foobar'
         }]
     },
     interceptorResults: {
         patientIdentifiers: {
-            "dfn": "3",
+            'dfn': '3',
         }
     },
     logger: sinon.stub(require('bunyan').createLogger({name: 'order-detail-comparator'}))
@@ -76,7 +76,7 @@ describe('Checks getVprOrder functionality', function () {
         vprOrder.getVprOrder(writebackContext, 'urn:va:order:9E7A:3:99999999', function(err, result){
             expect(result).to.be.falsy();
             expect(err).to.be.truthy();
-            expect(err.message).to.equal("Failed to parse order VPR result.");
+            expect(err.message).to.equal('Failed to parse order VPR result.');
             done();
         });
     });

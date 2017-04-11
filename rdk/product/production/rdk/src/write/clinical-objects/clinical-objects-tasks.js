@@ -6,14 +6,16 @@ var uidUtils = require('../../utils/uid-utils');
 
 module.exports.create = function(writebackContext, callback) {
     var logger = writebackContext.logger;
-    var pid = writebackContext.pid;
+    var pid = writebackContext.interceptorResults.patientIdentifiers.originalID;
     var body = writebackContext.model;
     var appConfig = writebackContext.appConfig;
 
     var errorMessages = [];
     validatePatientIdentifier(errorMessages, pid, body);
     if (!_.isEmpty(errorMessages)) {
-        logger.info({validationErrors: errorMessages}, 'clinical-objects-tasks create');
+        logger.info({
+            validationErrors: errorMessages
+        }, 'clinical-objects-tasks create');
         return callback(errorMessages);
     }
 
@@ -47,14 +49,16 @@ module.exports.read = function(writebackContext, callback) {
 module.exports.update = function(writebackContext, callback) {
     var logger = writebackContext.logger;
     var uid = writebackContext.resourceId;
-    var pid = writebackContext.pid;
+    var pid = writebackContext.interceptorResults.patientIdentifiers.originalID;
     var body = writebackContext.model;
     var appConfig = writebackContext.appConfig;
 
     var errorMessages = [];
     validatePatientIdentifier(errorMessages, pid, body);
     if (!_.isEmpty(errorMessages)) {
-        logger.info({validationErrors: errorMessages}, 'clinical-objects-tasks create');
+        logger.info({
+            validationErrors: errorMessages
+        }, 'clinical-objects-tasks create');
         return callback(errorMessages);
     }
 
@@ -92,7 +96,7 @@ module.exports.getList = function(writebackContext, callback) {
     var uidList = writebackContext.uidList;
     var loadReference = writebackContext.loadReference;
 
-    return clinicalObjectSubsystem.getList(logger, appConfig, uidList, loadReference, function(err, response){
+    return clinicalObjectSubsystem.getList(logger, appConfig, uidList, loadReference, function(err, response) {
         if (isClinicalObjectNotFound(err)) {
             err = undefined;
             response = {};
@@ -104,19 +108,6 @@ module.exports.getList = function(writebackContext, callback) {
         return callback(null);
     });
 };
-
-function pidAndUidMatch(pid, uid) {
-    var splitPid = pid.split(';');
-    var splitUid = uid.split(':');
-
-    var pidSite = splitPid[0];
-    var uidSite = splitUid[3];
-
-    var pidDfn = splitPid[1];
-    var uidDfn = splitUid[4];
-
-    return ((pidSite === uidSite) && (pidDfn === uidDfn));
-}
 
 function validatePatientIdentifier(errorMessages, pid, model) {
     if (!_.isObject(model)) {
@@ -142,13 +133,13 @@ function validatePatientIdentifier(errorMessages, pid, model) {
     //if patientUid site piece is ICN and pid starts with either VLER or HDR, just compare id values
     if (uidSite === 'ICN' &&
         (_.startsWith(pid, 'VLER') || _.startsWith(pid, 'HDR'))) {
-        var icn = pid.substr(pid.lastIndexOf(';')+1);
+        var icn = pid.substr(pid.lastIndexOf(';') + 1);
 
         isInvalid = icn !== uidLocalId;
     }
     //otherwise compare pids
     else {
-        var pidFromUid = uidSite + ";" + uidLocalId;
+        var pidFromUid = uidSite + ';' + uidLocalId;
 
         isInvalid = pid !== pidFromUid;
     }

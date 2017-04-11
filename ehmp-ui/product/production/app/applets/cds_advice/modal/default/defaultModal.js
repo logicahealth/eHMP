@@ -13,6 +13,14 @@ define([
         };
         var View = Backbone.Marionette.ItemView.extend({
             template: modalTemplate,
+            serializeData: function() {
+                var data = this.model.toJSON();
+
+                if(_.get(data, 'details.detail')) {
+                    data.details.detail = Util.formatDetailText(data.details.detail);
+                }
+                return data;
+            },
             showDetails: function(model) {
                 var AdviceModal = require('app/applets/cds_advice/modal/advice/adviceModal');
                 var ReminderModal = require('app/applets/cds_advice/modal/reminder/reminderModal');
@@ -59,6 +67,7 @@ define([
          */
         show: function (model) {
             showModal(model);
-        }
+        },
+        createView: createView
     };
 });

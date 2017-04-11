@@ -1,0 +1,27 @@
+--------------------------------------------------------
+--  Clear Inactive Connections
+--------------------------------------------------------
+DECLARE
+U_COUNT NUMBER;
+RECORDSET SYS_REFCURSOR;
+TYPE CURSREC
+IS
+  RECORD
+  (
+    SID NUMBER,
+    SERIAL# NUMBER
+  );
+REC CURSREC;
+BEGIN
+
+  OPEN RECORDSET FOR
+    SELECT SID,"SERIAL#" FROM V$SESSION WHERE STATUS = 'INACTIVE' AND USERNAME IN ('NOTIFDB','ACTIVITYDB','ACTIVITYDBUSER', 'JBPM');
+
+  LOOP
+    FETCH RECORDSET INTO REC;
+    EXIT WHEN RECORDSET%NOTFOUND;
+    EXECUTE IMMEDIATE 'ALTER SYSTEM KILL SESSION ''' || REC.SID || ',' || REC.SERIAL# || '''';
+  END LOOP;
+
+END;
+/

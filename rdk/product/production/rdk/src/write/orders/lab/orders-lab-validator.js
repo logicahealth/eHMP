@@ -18,12 +18,12 @@ function validateSave(update, writebackContext, callback) {
         if (model) {
             if (update && !model.orderId) {
                 error = 'Missing order ID';
-            } else if (!model.dfn || !model.provider || !model.location || !model.orderDialog || !model.displayGroup ||
+            } else if (!writebackContext.interceptorResults.patientIdentifiers.dfn || !model.provider || !model.location || !model.orderDialog || !model.displayGroup ||
                 !model.quickOrderDialog || !model.inputList || (model.inputList.length < 1) || !model.kind) {
                 error = 'Missing input parameter';
             } else if (!model.clinicalObject) {
                 error = 'Missing Clinical Object';
-            } else if (!model.clinicalObject.data || (model.clinicalObject.data.pastDueDate == null)) {  //empty string pastDueDate is allowed
+            } else if (!model.clinicalObject.data || (model.clinicalObject.data.pastDueDate === null || model.clinicalObject.data.pastDueDate === undefined)) { //empty string pastDueDate is allowed
                 error = 'Missing Past Due Date field';
             }
         } else {
@@ -41,12 +41,12 @@ function validateSave(update, writebackContext, callback) {
         }
     }
     return setImmediate(callback, error);
-};
+}
 
 module.exports.discontinueLab = function(writebackContext, callback) {
     var error = null; // set if there is an error validating
     if (writebackContext) {
-        if (!writebackContext.model.dfn) {
+        if (!writebackContext.interceptorResults.patientIdentifiers.dfn) {
             error = 'Missing dfn';
         }
         if (!writebackContext.model.provider) {

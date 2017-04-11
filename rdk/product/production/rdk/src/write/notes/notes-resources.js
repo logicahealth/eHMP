@@ -7,8 +7,6 @@ var writeNoteToPjds = require('./notes-unsigned-pjds-writer');
 var writeNoteTask = require('./notes-task-writer');
 var writeVprToJds = require('../core/jds-direct-writer');
 var writeNoteAudit = require('./notes-audit-logger');
-var getNoteTasks = require('./notes-tasks');
-var _ = require('lodash');
 
 module.exports.getResourceConfig = function(app) {
 
@@ -146,7 +144,7 @@ function updateNote(req, res) {
     writebackWorkflow(req, res, tasks);
 }
 
-function deleteUnsignedNotes(req, res) {
+function deleteUnsignedNotes(req, res) { //jshint ignore:line
     var tasks = [
         validateNote.delete,
         writeNoteToPjds.getNote,
@@ -204,7 +202,7 @@ function signAddendum(req, res) {
     writebackWorkflow(req, res, tasks);
 }
 
-function deleteUnsignedAddendum(req, res) {
+function deleteUnsignedAddendum(req, res) { //jshint ignore:line
     var tasks = [
         validateNote.delete,
         writeNoteToPjds.getAddendum,

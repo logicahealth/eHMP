@@ -14,6 +14,7 @@ var rdkInterceptors = require('./factory-components/rdk-interceptors');
 var rdkOuterceptors = require('./factory-components/rdk-outerceptors');
 var rdkResources = require('./factory-components/rdk-resources');
 var rdkDocumentation = require('./factory-components/rdk-documentation');
+var rdkEhmpConfigLoader = require('./factory-components/rdk-ehmp-config-loader');
 
 function AppFactory() {
     if (!(this instanceof AppFactory)) {
@@ -78,6 +79,7 @@ var buildApp = function(config, argv, defaultConfigFilename) {
 
     metrics.initialize(app);
     pidValidator.initialize(app);
+    app.ehmpConfig = rdkEhmpConfigLoader.processEhmpConfig(argv);
 
     app.auditer = {};
     app.auditer.logger = app.loggingservice.get('audit');
@@ -161,14 +163,14 @@ function logCrashes(app) {
 
 function registerPid(app) {
     app.use(function(req, res, next) {
-        if (req.param('pid')) {
+        if (req.params.pid || req.body.pid || req.query.pid) {
             return next();
         }
         req.logger.debug('registerPid() ');
         var pid;
 
         if (_.has(req.query, 'subject.identifier')) {
-            pid = req.param('subject.identifier');
+            pid = req.params['subject.identifier'] || req.body['subject.identifier'] || req.query['subject.identifier'];
         }
 
         if (pid === undefined) {

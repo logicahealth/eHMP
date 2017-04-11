@@ -1,4 +1,5 @@
 class CustomizeWorkspace < SitePrism::Page
+  element :btn_workspace_editor, '.workspace-editor-trigger-button'
   element :fld_search_applets , '#searchApplets'
   element :btn_done, '#exitEditing'
   element :fld_applet_carousel, '#applets-carousel'

@@ -135,15 +135,15 @@ describe('Search Util', function() {
         describe('name transformations', function(){
             it('full name to given/family name', function(){
                 var patient = {fullName: 'SMITH,JOHN'};
-                expect(search.transformPatient(patient)).to.eql({fullName:'SMITH,JOHN',givenNames:'JOHN',familyName:'SMITH', displayName:'SMITH,JOHN'});
+                expect(search.transformPatient(patient)).to.eql({fullName:'SMITH,JOHN',givenNames:'JOHN',familyName:'SMITH', displayName:'Smith,John'});
             });
             it('given/family name to full name', function(){
                 var patient = {givenNames:'JOHN',familyName:'SMITH'};
-                expect(search.transformPatient(patient)).to.eql({fullName:'SMITH,JOHN',givenNames:'JOHN',familyName:'SMITH', displayName:'SMITH,JOHN'});
+                expect(search.transformPatient(patient)).to.eql({fullName:'SMITH,JOHN',givenNames:'JOHN',familyName:'SMITH', displayName:'Smith,John'});
             });
             it('multiple given names to full name', function(){
                 var patient = {givenNames:['BILLY','BOB'],familyName:'SMITH'};
-                expect(search.transformPatient(patient)).to.eql({fullName:'SMITH,BILLY BOB',givenNames:'BILLY BOB',familyName:'SMITH', displayName:'SMITH,BILLY BOB'});
+                expect(search.transformPatient(patient)).to.eql({fullName:'SMITH,BILLY BOB',givenNames:'BILLY BOB',familyName:'SMITH', displayName:'Smith,Billy Bob'});
             });
         });
         describe('dob transformations', function(){

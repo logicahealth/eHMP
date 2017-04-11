@@ -439,6 +439,29 @@ def infiniate_scroll(table_id)
   driver = TestSupport.driver
   found_bottom = false
   number_of_attempts = 0
+  until found_bottom && number_of_attempts > 7
+    count1 = driver.find_elements(:css, "#{table_id} tr").length 
+    p "scroll row #{count1} into view"
+    element = driver.find_element(:css, "#{table_id} tr:nth-child(#{count1})")
+
+    TestSupport.driver.execute_script("$('#{table_id} tr:nth-child(#{count1})').focusin()")
+    element.send_keys(:arrow_down)
+    sleep 1
+    count2 = driver.find_elements(:css, "#{table_id} tr").length
+    found_bottom = (count1 == count2)
+    number_of_attempts = found_bottom ? number_of_attempts + 1 : 0
+    sleep 1 if found_bottom
+  end
+  return found_bottom
+rescue Exception => e
+  p "error thrown #{e}"
+  return false
+end
+
+def infinite_scroll_other(table_id)
+  driver = TestSupport.driver
+  found_bottom = false
+  number_of_attempts = 0
   until found_bottom && number_of_attempts >2
     count1 = driver.find_elements(:css, "#{table_id} tr").length
     p "scroll row #{count1} into view"
@@ -454,6 +477,11 @@ def infiniate_scroll(table_id)
 rescue Exception => e
   p "error thrown #{e}"
   return false
+end
+
+When(/^the user scrolls to the bottom of the expanded Numeric Lab Results Applet$/) do
+  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultLogin.wait_time)
+  wait.until { infinite_scroll_other('#data-grid-lab_results_grid tbody') }
 end
 
 When(/^the user scrolls to the bottom of the Numeric Lab Results Applet$/) do 

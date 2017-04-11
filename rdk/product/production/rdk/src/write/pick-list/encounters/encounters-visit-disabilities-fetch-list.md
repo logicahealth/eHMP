@@ -12,8 +12,6 @@ ORWPCE SCDIS
 
     :[site]({{{common}}}/parameters/site.md)
 
-    + dfn: `230` (string, required) - The dfn
-
 ### GET
 
 + Response 200 (application/json)

@@ -109,6 +109,7 @@
         "modulePath": "labs/lab-collect-times-fetch-list",
         "vistaContext": "OR CPRS GUI CHART",
         "dataNeedsRefreshAfterMinutes": 3000,
+        "optionalParams": ["division"],
         "requiredPermissions": ["add-lab-order"]
     }, {
         "name": "lab-order-dialog-def",
@@ -163,7 +164,7 @@
         "vistaContext": "OR CPRS GUI CHART",
         "dataNeedsRefreshAfterMinutes": 3000,
         "requiredParams": ["pharmacyType"],
-        "optionalParams": ["outpatientDfn", "locationIen"],
+        "optionalParams": ["pid", "locationIen"],
         "requiredPermissions": ["future-release-not-available-for-use"]
     }, {
         "name": "medication-index",
@@ -178,7 +179,7 @@
         "vistaContext": "OR CPRS GUI CHART",
         "dataNeedsRefreshAfterMinutes": 3000,
         "requiredParams": ["pharmacyType"],
-        "optionalParams": ["ien", "outpatientDfn", "needPatientInstructions", "pkiEnabled"],
+        "optionalParams": ["ien", "pid", "needPatientInstructions", "pkiEnabled"],
         "requiredPermissions": ["future-release-not-available-for-use"]
     }, {
         "name": "medication-orders",
@@ -265,14 +266,26 @@
         "name": "people-for-facility",
         "modulePath": "team-management/people-for-facility-fetch-list",
         "vistaContext": "NOT APPLICABLE",
-        "needsFullConfig": true,
+        "dataNeedsRefreshAfterMinutes": 3000,
         "requiredParams": ["facilityID"],
         "optionalParams": ["searchString"],
-        "initialLoadDefaultParams": [{
-            "facilityID": "500"
-        }, {
-            "facilityID": "507"
-        }],
-        "requiredPermissions":["schedule-consult-order"]
+        "requiredPermissions": ["schedule-consult-order"]
+    }, {
+        "name": "teams-for-facility",
+        "modulePath": "team-management/teams-for-facility-fetch-list",
+        "vistaContext": "NOT APPLICABLE",
+        "dataNeedsRefreshAfterMinutes": 3000,
+        "largePickListRetry": 65,
+        "needsFacilityGranularity": true,
+        "requiredParams": ["facilityID"],
+        "requiredPermissions": ["read-patient-record"]
+    }, {
+        "name": "roles-for-team",
+        "modulePath": "team-management/roles-for-team-fetch-list",
+        "vistaContext": "NOT APPLICABLE",
+        "dataNeedsRefreshAfterMinutes": 3000,
+        "needsPcmm": true,
+        "requiredParams": ["teamID"],
+        "requiredPermissions": ["read-patient-record"]
     }]
 }

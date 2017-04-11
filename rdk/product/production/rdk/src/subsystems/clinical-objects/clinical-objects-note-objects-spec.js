@@ -1,6 +1,5 @@
 'use strict';
 
-var _ = require('lodash');
 var noteObject = require('./clinical-objects-note-objects');
 
 describe('Clinical object note object tests', function() {

@@ -1,51 +1,22 @@
 .patient-postings {
-    ul.postings {
-        list-style-type: none;
-        padding-left: 0;
-        li {
-            margin: 5px 0px;
-            > button {
-                width: 100%;
-                text-align: left;
-                .fa-stack {
-                    margin-right: -5px;
-                    margin-top: 2px;
-                    float: right;
-                    font-size: 8px;
-                    .fa-stack-1x {
-                        font-size: 10px;
-                    }
-                }
+   .cwad-detail-list {
+        .dl-horizontal {
+            dt {
+                width: 65px;
             }
-            &.open {
-                > button {
-                    color: $pure-white;
-                    background-color: $primary-dark;
-                    .fa-inverse {
-                        color: $primary-dark;
-                    }
-                }
+            dd {
+                margin-left: 70px;
+            }
+            dt, dd {
+                text-overflow: inherit;
+                white-space: normal;
+                word-wrap: break-word;
+                word-break: keep-all;
             }
         }
-       .cwad-detail-list {
-            .dl-horizontal {
-                dt {
-                    width: 65px;
-                }
-                dd {
-                    margin-left: 70px;
-                }
-                dt, dd {
-                    text-overflow: inherit;
-                    white-space: normal;
-                    word-wrap: break-word;
-                    word-break: keep-all;
-                }
-            }
-            .content {
-                padding: 3px 10px;
-                margin: 5px 0;
-            }
+        .content {
+            padding: 3px 10px;
+            margin: 5px 0;
         }
     }
 }

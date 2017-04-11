@@ -1,4 +1,4 @@
-@F144 @F144_numericlabresults @regression @triage @DE4084
+@F144 @F144_numericlabresults   @DE4084 @reg2
 Feature: F144 - eHMP Viewer GUI - Numeric Lab Results
 
 Background:
@@ -8,7 +8,7 @@ Background:
   And user navigates to expanded Numeric Lab Results Applet
   And Numeric Lab Results applet loads without issue
 
-@F144_numericlabresults_9 @US2481 @TA7508
+@F144_numericlabresults_9 @US2481 @TA7508 @debug @DE7233
 Scenario: Default date range of the applet is 18 months past and 6 months in the future.
   Given the user is viewing the expanded Numeric Lab Results Applet
   Then the Numeric Lab Results Applet Text Filter is displayed 

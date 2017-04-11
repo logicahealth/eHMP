@@ -1,5 +1,5 @@
-@F295_encounters_trend_view_admission @regression
-Feature: F295 - Encounters Applet - Admission 
+@F295_encounters_trend_view_admission  @reg1
+Feature: F295 - Encounters Applet - Admission  
 
 Background:
   

@@ -51,7 +51,9 @@ function renderDocumentation(req, res) {
         module.exports.resourcesUri = req.path.substring(0, index);
     }
 
-    req.logger.debug({mountpoint: mountpoint}, 'Render API Blueprint docs');
+    req.logger.debug({
+        mountpoint: mountpoint
+    }, 'Render API Blueprint docs');
 
     if (mountpoint.length <= 1) {
         renderAllResources(req, res);
@@ -66,33 +68,38 @@ function renderAllResources(req, res) {
     if (fullHtml) {
         return sendHtml(res, null, fullHtml);
     }
-
-    fullHtml = fs.readFileSync(fspath.resolve(__dirname, './loading.html'), {encoding: 'utf8'});
-
-    apiBlueprint.getAllJsonDocumentation(function(error, json) {
+    fs.readFile(fspath.resolve(__dirname, './loading.html'), {
+        encoding: 'utf8'
+    }, function(error, data) {
         if (error) {
             return res.status(500).rdkSend(error);
         }
-
-        var indexPath = fspath.resolve(__dirname, './index.md');
-        async.waterfall([
-            apiBlueprint.jsonDocumentationFromFile.bind(null, indexPath, null),
-            function mergeJson(indexJson, callback) {
-                indexJson = apiBlueprint.mergeJsonDocumentation(indexJson, json);
-                callback(null, indexJson);
-            },
-            prependResourcesUri,
-            addFieldsParameter,
-            addSpyForVersioningParameter,
-            addMissingExampleWarnings,
-            displayWarnings,
-            renderHtml
-        ], function(error, html) {
+        fullHtml = data;
+        apiBlueprint.getAllJsonDocumentation(function(error, json) {
             if (error) {
                 return res.status(500).rdkSend(error);
             }
-            fullHtml = html;
-            sendHtml(res, error, html);
+
+            var indexPath = fspath.resolve(__dirname, './index.md');
+            async.waterfall([
+                apiBlueprint.jsonDocumentationFromFile.bind(null, indexPath, null),
+                function mergeJson(indexJson, callback) {
+                    indexJson = apiBlueprint.mergeJsonDocumentation(indexJson, json);
+                    callback(null, indexJson);
+                },
+                prependResourcesUri,
+                addFieldsParameter,
+                addSpyForVersioningParameter,
+                addMissingExampleWarnings,
+                displayWarnings,
+                renderHtml
+            ], function(error, html) {
+                if (error) {
+                    return res.status(500).rdkSend(error);
+                }
+                fullHtml = html;
+                sendHtml(res, error, html);
+            });
         });
     });
 }
@@ -198,7 +205,7 @@ function addSpyForVersioningParameter(json, done) {
         default: '',
         example: '',
         values: []
-    }, function (action) {
+    }, function(action) {
         return development && hasJsonResponse(action);
     }, json, done);
 }
@@ -246,7 +253,10 @@ function hasJsonResponse(action) {
         return _.find(example.responses, function(response) {
             var statusCode = parseInt(response.name, 10);
             return (isNaN(statusCode) || statusCode < 300) &&
-                _.find(response.headers, {name: 'Content-Type', value: 'application/json'});
+                _.find(response.headers, {
+                    name: 'Content-Type',
+                    value: 'application/json'
+                });
         });
     });
 }
@@ -259,13 +269,13 @@ function addMissingExampleWarnings(json, done) {
     _.each(json.ast.resourceGroups, function(resourceGroup) {
         _.each(resourceGroup.resources, function(resource) {
             _.each(resource.actions, function(action) {
-                _.each(action.examples, function (example) {
+                _.each(action.examples, function(example) {
                     var requests = _.map(example.requests, withType.bind(null, 'request'));
                     var responses = _.map(example.responses, withType.bind(null, 'response'));
 
-                    _.each(requests.concat(responses), function (item) {
+                    _.each(requests.concat(responses), function(item) {
                         if (!item.example.body || !item.example.schema) {
-                            var contentType = (_.find(item.example.headers, function (header) {
+                            var contentType = (_.find(item.example.headers, function(header) {
                                 return header.name === 'Content-Type';
                             }) || {}).value;
                             if (contentType && _.contains(contentType, 'json')) {
@@ -366,7 +376,9 @@ function displayWarnings(json, done) {
 function findResourceById(resourceId, json) {
     var resource;
     _.each(json.ast.resourceGroups, function(resourceGroup) {
-        resource = _.find(resourceGroup.resources, {__id: resourceId});
+        resource = _.find(resourceGroup.resources, {
+            __id: resourceId
+        });
         if (resource) {
             return false;
         }
@@ -375,7 +387,9 @@ function findResourceById(resourceId, json) {
 }
 
 function renderHtml(json, done) {
-    theme.render(json.ast, {themeForms: true}, done);
+    theme.render(json.ast, {
+        themeForms: true
+    }, done);
 }
 
 function sendHtml(res, error, html) {

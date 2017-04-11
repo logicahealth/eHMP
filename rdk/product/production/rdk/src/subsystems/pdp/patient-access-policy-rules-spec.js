@@ -174,7 +174,7 @@ describe('Test all policy rules', function() {
         };
         rulesEngine.executeRules(rules, fact, function(result) {
             expect(result.code).to.equal('BreakGlass');
-            expect(result.reason === 'SensitiveAccessRequired').to.be.true;
+            expect(result.reason === 'SensitiveAccessRequired').to.be.true();
         });
     });
     it('sensitivePolicyPermit', function() {

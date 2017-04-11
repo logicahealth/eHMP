@@ -2,7 +2,6 @@
 
 var resourceDirectoryResource = require('./resource-directory-resource');
 var ResourceRegistry = require('./resource-registry');
-var express = require('express');
 
 describe('resourceDirectoryResource', function() {
     var req;

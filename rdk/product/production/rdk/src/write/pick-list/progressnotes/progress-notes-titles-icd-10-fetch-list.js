@@ -8,7 +8,7 @@ var _ = require('lodash');
 /**
  * Calls the RPC 'ORWLEX GETI10DX' and parses out the data<br/><br/>
  *
- * <table border="1">
+ * <table border='1'>
  * 	<tr><th colspan=2><b>REQUIRED PARAMS</b></th></tr>
  * 	    <tr>
  * 		<td>searchString</td>
@@ -23,7 +23,7 @@ var _ = require('lodash');
  * <br/>
  * <br/>
  *
- * <table border="1">
+ * <table border='1'>
  * 	<tr><th colspan=2><b>OPTIONAL PARAMS</b></th></tr>
  * 	<tr><td colspan=2><b>NONE</b></td></tr>
  * </table>
@@ -49,7 +49,7 @@ module.exports.fetch = function(logger, configuration, callback, params) {
         }
 
         if(rpcData >= 5000) {
-            return callback("Your search "+searchString+" matched "+ rpcData + " records, too many to Display. Refine your search", null);
+            return callback('Your search '+searchString+' matched '+ rpcData + ' records, too many to Display. Refine your search', null);
         }
 
         return rpcUtil.standardRPCCall(logger, configuration, 'ORWLEX GETI10DX', searchString, parse, callback);

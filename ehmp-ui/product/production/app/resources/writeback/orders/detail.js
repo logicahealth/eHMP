@@ -19,8 +19,7 @@ define([
             };
 
             var url = ADK.ResourceService.buildUrl('orders-lab-detail', {
-                dfn: this.patient.get('localId'),
-                site: Util.getFieldFromUid(this.get('uid'), 'siteCode')
+                site: Util.getFieldFromUid(this.user.get('uid'), 'siteCode') //TODO: currently set to user site to perform comparison of pid site vs user site on rdk side util. Need to restructure logic on rdk side to pass in full request obj 
             });
 
             if (ADK.PatientRecordService.getCurrentPatient().get('acknowledged')) {

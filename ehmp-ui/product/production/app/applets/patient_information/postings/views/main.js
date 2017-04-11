@@ -18,7 +18,7 @@ define([
     var PostingsView = Backbone.Marionette.CompositeView.extend({
         tagName: 'section',
         className: 'patient-postings',
-        template: Handlebars.compile('<div class="section-content"><ul class="postings"></ul></div>'),
+        template: Handlebars.compile('<ul class="postings tray-list--arrow-right"></ul>'),
         regions: {
             cwadDetails: '#cwad-details',
         },
@@ -27,23 +27,28 @@ define([
             this.collection = new Backbone.Collection([{
                 isEnabledMethodName: 'hasCrisisNotes',
                 cwadIdentifier: 'crisis notes',
-                cwadDescription: null
+                cwadDescription: null,
+                helpMapping: 'crisis_notes_cwadf_tray'
             }, {
                 isEnabledMethodName: 'hasFlags',
                 cwadIdentifier: 'warnings',
-                cwadDescription: null
+                cwadDescription: null,
+                helpMapping: 'warnings_cwadf_tray'
             }, {
                 isEnabledMethodName: 'hasAllergies',
                 cwadIdentifier: 'allergies',
-                cwadDescription: null
+                cwadDescription: null,
+                helpMapping: 'allergies_cwadf_tray'
             }, {
                 isEnabledMethodName: 'hasDirectives',
                 cwadIdentifier: 'directives',
-                cwadDescription: 'Scanned images of Advance Directives are unavailable in this version of eHMP; reference CPRS/VistA Imaging for Advance Directives.'
+                cwadDescription: 'Scanned images of Advance Directives are unavailable in this version of eHMP; reference CPRS/VistA Imaging for Advance Directives.',
+                helpMapping: 'directives_cwadf_tray'
             }, {
                 isEnabledMethodName: 'hasPatientFlags',
                 cwadIdentifier: 'patient flags',
-                cwadDescription: null
+                cwadDescription: null,
+                helpMapping: 'flags_cwadf_tray'
             }]);
         },
         childViewContainer: 'ul.postings',
@@ -51,7 +56,6 @@ define([
             _eventPrefix: 'patientInformationTray',
             tagName: 'li',
             initialize: function(){
-                this.getOption('patientModel');
                 this.isEnabledMethodName = this.model.get('isEnabledMethodName');
                 this.listenTo(this.getOption('patientModel'), 'change:cwadf change:patientRecordFlag', function(model, value){
                     this.handleDisabledButton(model[this.isEnabledMethodName]());
@@ -75,6 +79,7 @@ define([
                     options: {
                         cwadIdentifier: model.get('cwadIdentifier'),
                         cwadDescription: model.get('cwadDescription'),
+                        helpMapping: model.get('helpMapping'),
                         patientModel: this.model
                     }
                 }),

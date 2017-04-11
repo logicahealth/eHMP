@@ -343,7 +343,8 @@ define([
                     key: "notes",
                     headerLabel: "Notes",
                     dropdownLabel: "New Note",
-                    listView: NotesTraySummaryView
+                    listView: NotesTraySummaryView,
+                    helpMapping: 'notes_tray' // subject to change depending on mapping
                 }
             }),
             position: 'right',

@@ -1,8 +1,144 @@
 'use strict';
 
 var search = require('./global-search');
+var fs = require('fs');
+var _ = require('lodash');
+var loadXML1305File = function(path, xml1305FilesObj, property) {
+    fs.readFile(__dirname + path, function(error, results) {
+        if (error) {
+            xml1305FilesObj[property] = '';
+        } else {
+            xml1305FilesObj[property] = results.toString();
+        }
 
+    });
+};
 describe('Global Search', function() {
+    var xml1305ActualFiles = {};
+    var xml1305ExpectedFiles = {};
+
+    before('Load xml1305 Files', function(done) {
+        loadXML1305File('/xml/1305-ssn.xml', xml1305ExpectedFiles, 'xml1305SSN');
+        loadXML1305File('/xml/1305-dob.xml', xml1305ExpectedFiles, 'xml1305DoB');
+        loadXML1305File('/xml/1305-fullName.xml', xml1305ExpectedFiles, 'xml1305FullName');
+        loadXML1305File('/xml/1305-firstName.xml', xml1305ExpectedFiles, 'xml1305FirstName');
+        loadXML1305File('/xml/1305-lastName.xml', xml1305ExpectedFiles, 'xml1305LastName');
+        loadXML1305File('/xml/1305.xml', xml1305ExpectedFiles, 'xml1305');
+        var req = {
+            session: {}
+        };
+        var res = {
+            status: function(status) {
+                res.status = status;
+                return {
+                    rdkSend: function(error) {
+                        done();
+                        return error;
+                    }
+                };
+            }
+        };
+        search._loadXML1305Files(req, res, function(files) {
+            xml1305ActualFiles = files;
+            done();
+        });
+    });
+    describe('xml1305 Validation', function() {
+        describe('Actual values are not empty', function() {
+            it(' xml1305ActualFiles is not empty ', function() {
+                expect(_.isEmpty(xml1305ActualFiles)).to.equal(false);
+            });
+        });
+        describe('Expected values are not empty', function() {
+            it('xml1305ExpectedFiles is not empty ', function() {
+                expect(_.isEmpty(xml1305ExpectedFiles)).to.equal(false);
+            });
+            it('xml1305SSN is not empty', function() {
+                expect(xml1305ExpectedFiles.xml1305SSN).to.not.equal('');
+            });
+            it('xml1305DoB is not empty', function() {
+                expect(xml1305ExpectedFiles.xml1305DoB).to.not.equal('');
+            });
+            it('xml1305FullName is not empty', function() {
+                expect(xml1305ExpectedFiles.xml1305FullName).to.not.equal('');
+            });
+            it('xml1305FirstName is not empty', function() {
+                expect(xml1305ExpectedFiles.xml1305FirstName).to.not.equal('');
+            });
+            it('xml1305LastName is not empty', function() {
+                expect(xml1305ExpectedFiles.xml1305LastName).to.not.equal('');
+            });
+            it('xml1305 is not empty', function() {
+                expect(xml1305ExpectedFiles.xml1305).to.not.equal('');
+            });
+        });
+        describe('xml1305SSN Validation', function() {
+            it('xml1305SSN is not Undefined', function() {
+                expect(_.isUndefined(xml1305ActualFiles.xml1305SSN)).to.equal(false);
+            });
+            it('xml1305SSN is not Empty', function() {
+                expect(_.isEmpty(xml1305ActualFiles.xml1305SSN)).to.equal(false);
+            });
+            it('xml1305SSN is expected value', function() {
+                expect(xml1305ActualFiles.xml1305SSN).to.equal(xml1305ExpectedFiles.xml1305SSN);
+            });
+        });
+        describe('xml1305DoB Validation', function() {
+            it('xml1305DoB is not Undefined', function() {
+                expect(_.isUndefined(xml1305ActualFiles.xml1305DoB)).to.equal(false);
+            });
+            it('xml1305DoB is not Empty', function() {
+                expect(_.isEmpty(xml1305ActualFiles.xml1305DoB)).to.equal(false);
+            });
+            it('xml1305DoB is expected value', function() {
+                expect(xml1305ActualFiles.xml1305DoB).to.equal(xml1305ExpectedFiles.xml1305DoB);
+            });
+        });
+        describe('xml1305FullName Validation', function() {
+            it('xml1305FullName is not Undefined', function() {
+                expect(_.isUndefined(xml1305ActualFiles.xml1305FullName)).to.equal(false);
+            });
+            it('xml1305FullName is not Empty', function() {
+                expect(_.isEmpty(xml1305ActualFiles.xml1305FullName)).to.equal(false);
+            });
+            it('xml1305FullName is expected value', function() {
+                expect(xml1305ActualFiles.xml1305FullName).to.equal(xml1305ExpectedFiles.xml1305FullName);
+            });
+        });
+        describe('xml1305FirstName Validation', function() {
+            it('xml1305FirstName is not Undefined', function() {
+                expect(_.isUndefined(xml1305ActualFiles.xml1305FirstName)).to.equal(false);
+            });
+            it('xml1305FirstName is not Empty', function() {
+                expect(_.isEmpty(xml1305ActualFiles.xml1305FirstName)).to.equal(false);
+            });
+            it('xml1305FirstName is expected value', function() {
+                expect(xml1305ActualFiles.xml1305FirstName).to.equal(xml1305ExpectedFiles.xml1305FirstName);
+            });
+        });
+        describe('xml1305LastName Validation', function() {
+            it(' xml1305LastName is not Undefined', function() {
+                expect(_.isUndefined(xml1305ActualFiles.xml1305LastName)).to.equal(false);
+            });
+            it('xml1305LastName is not Empty', function() {
+                expect(_.isEmpty(xml1305ActualFiles.xml1305LastName)).to.equal(false);
+            });
+            it('xml1305LastName is expected value', function() {
+                expect(xml1305ActualFiles.xml1305LastName).to.equal(xml1305ExpectedFiles.xml1305LastName);
+            });
+        });
+        describe('xml1305 Validation', function() {
+            it('xml1305 is not Undefined', function() {
+                expect(_.isUndefined(xml1305ActualFiles.xml1305)).to.equal(false);
+            });
+            it('xml1305 is not Empty', function() {
+                expect(_.isEmpty(xml1305ActualFiles.xml1305)).to.equal(false);
+            });
+            it('xml1305 is expected value', function() {
+                expect(xml1305ActualFiles.xml1305).to.equal(xml1305ExpectedFiles.xml1305);
+            });
+        });
+    });
     describe('Parameter Validation', function() {
         it('No Search Params', function() {
             expect(search._checkInvalidGlobalSearchParameters({})).to.be.truthy();
@@ -91,13 +227,13 @@ describe('Global Search', function() {
             })).to.be.truthy();
         });
 
-        xit('DoB unreasonable historical date', function() {
+        it.skip('DoB unreasonable historical date', function() {
             expect(search._checkInvalidGlobalSearchParameters({
                 lname: 'DSFJLDK',
                 dob: '01/01/1645'
             })).to.be.truthy();
         });
-        xit('DoB unreasonable future date', function() {
+        it.skip('DoB unreasonable future date', function() {
             expect(search._checkInvalidGlobalSearchParameters({
                 lname: 'DSFJLDK',
                 dob: '01/01/2453'
@@ -196,7 +332,9 @@ describe('Global Search', function() {
             var req = {
                 session: {},
                 query: {},
-                logger: sinon.stub(require('bunyan').createLogger({name: 'global-search-spec'}))
+                logger: sinon.stub(require('bunyan').createLogger({
+                    name: 'global-search-spec'
+                }))
             };
             var res = {
                 status: function(status) {
@@ -209,7 +347,11 @@ describe('Global Search', function() {
             };
             var testICN = '4325679V4325679';
             var cb = function(err, globalPatient) {
-                expect(err).to.match({ 'message': 'Session has no global params', 'patientICN': '4325679V4325679', 'status': 500 });
+                expect(err).to.match({
+                    'message': 'Session has no global params',
+                    'patientICN': '4325679V4325679',
+                    'status': 500
+                });
                 expect(globalPatient).to.equal(null);
                 done();
             };

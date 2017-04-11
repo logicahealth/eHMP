@@ -48,6 +48,7 @@ define([
             view: PreviewView,
             viewModel: model,
             stepTitle: CONFIG.PREVIEW_TITLE_UNSIGNED,
+            helpMapping: 'notes_preview_form',
             onBeforeShow: function() {
                 workflow.changeHeaderTitle(CONFIG.PREVIEW_TITLE_UNSIGNED);
                 workflow.headerModel.unset('actionItems');
@@ -128,6 +129,7 @@ define([
             view: NotesSignView,
             viewModel: signModel,
             stepTitle: 'E-Signature',
+            helpMapping: 'notes_esig_form',
             onBeforeShow: function() {
                 workflow.headerModel.unset('actionItems');
                 workflow.changeHeaderCloseButtonOptions({

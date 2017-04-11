@@ -1,4 +1,4 @@
-@US2411 @regression
+@US2411  @reg2
 Feature: F144 - eHMP viewer GUI - Active Problems
 #Team Neptune 
 

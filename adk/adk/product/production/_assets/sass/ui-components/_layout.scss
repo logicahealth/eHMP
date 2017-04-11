@@ -1,0 +1,167 @@
+// documents view
+.documents-list {
+    #content-region > div,
+    #content-region-wrapper,
+    #content-region,
+    #content-region .contentPadding,
+    #content-region .contentPadding > div,
+    #content-region #center,
+    #content-region #center > div,
+    #content-region .gridContainer,
+    #content-region .grid-container,
+    #content-region .grid-container > div,
+    #content-region .data-grid,
+    #content-region .docApp,
+    #content-region .panel-body  {
+        height: 100%;
+        overflow-y: hidden;
+    }
+}
+.my-notifications-full {
+    #center-region {
+        background-color: $pure-white;
+    }
+}
+.documents-list {
+    .data-grid {
+        height: 69vh;
+        overflow-y: scroll;
+        margin-bottom: 5px;
+    }
+    #doc-detail-wrapper {
+        height: 69vh;
+        overflow-y: scroll;
+        overflow-x: hidden;
+    }
+}
+.documents-list #center-region #content-region, 
+.news-feed #center-region #content-region {
+    overflow: hidden;
+}
+.overview #content-region .panel-body {
+    height: 100%;
+    overflow-x: hidden;
+}
+
+
+// element with a id of navigation-region
+#navigation-region {
+    background: $pure-white;
+    min-height: 37px;
+    padding: 5px;
+    .context-navigaton-bar-wrapper {
+        -ms-flex-pack: space-between;
+        justify-content: space-between;
+        .context-navigation-bar {
+            &.right {
+                flex-grow: 1;
+                flex-shrink: 0;
+                > .nav {
+                    margin: 0 0 0 auto;
+                    max-width: 1000px;
+                }
+            }
+        }
+    }
+}
+// element with an id of center-region
+#center-region {
+    background: $secondary-light; /* For browsers that do not support gradients */
+    background: linear-gradient(to bottom, $pure-white  10%, $secondary-light 25%, $secondary-light 100%); /* Standard syntax */
+    display: block;
+    margin: 0;
+    min-width: 984px;
+    overflow-y: hidden;
+    padding: 0;
+    .contentPadding {
+        padding: 5px 13px 0 7px;
+    }
+    #content-region-wrapper {
+        display: block;
+        padding: 0;
+    }
+}
+// body element with data-full-screen="true"
+body[data-full-screen="true"] {
+    #content-region {
+        .contentPadding,
+        .contentPadding > div,
+        .contentPadding > div > div:first-child,
+        [data-instanceid],
+        .gridContainer,
+        .grid-container,
+        .gridContainer > div,
+        .grid-container > div,
+        .panel-body,
+        .data-grid {
+            height: 100%;
+        }
+        .applet-div-chrome-container {
+            .gridContainer {
+                div.panel-body {
+                    overflow-x: hidden;
+                    overflow-y: hidden;
+                    &.grid-applet-panel {
+                        display: flex;
+                        flex-direction: column;
+                        .grid-container {
+                            height: auto;
+                            min-height: 200px; // phantomjs fallback
+                            min-height: calc(2vh - 2vh);
+                            position: relative;
+                            flex-grow: 1;
+                            flex-shrink: 1;
+                            & > div {
+                                position: absolute;
+                                height: 100%;
+                                width: 100%;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        [data-instanceid] {
+            min-height: 230px; // phantomjs fallback
+            min-height: calc(2vh - 2vh);
+            padding-bottom: 10px;
+            > .panel {
+                height: 100%;
+                margin: 0;
+            }
+        }
+    }
+    #center-region > div {
+        height: 100%; // phantomjs fallback
+        height: calc(100% - 15px);
+    }
+    div.sidebar-tray div.panel-body {
+        overflow: visible;
+    }
+}
+
+// patient-context
+body.patient-context {
+    #center-region {
+        background: $primary-light; /* For browsers that do not support gradients */
+        background: linear-gradient(to bottom, $pure-white  10%, $primary-light 25%, $primary-light 100%); /* Standard syntax */
+    }
+    .navbar.navbar-default {
+        background-color: $primary-light;
+    }
+}
+
+// pdf link styling
+.add-pdf-container {
+    position: fixed;
+    right: 5px;
+    top: 8px;
+    a {
+        font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+        font-size: 10pt;
+        padding: 3px 7px;
+        background: $grey-light;
+        border-radius: 4px;
+        text-decoration: none;
+    }
+}

@@ -1,7 +1,6 @@
 'use strict';
 var procedure = require('./procedure');
 var inputValue = require('./procedureOnly-resource-spec-data').inputValue;
-var fhirUtils = require('../common/utils/fhir-converter');
 
 describe('Procedure FHIR Resource - testing FHIR conversion of non-educations procedure type data', function() {
 

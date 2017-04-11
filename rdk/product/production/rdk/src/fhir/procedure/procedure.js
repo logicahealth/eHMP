@@ -3,7 +3,6 @@
 var fhirResource = require('../common/entities/fhir-resource');
 var fhirToJDSSearch = require('../common/utils/fhir-to-jds-search');
 var fhirUtils = require('../common/utils/fhir-converter');
-var helpers = require('../common/utils/helpers');
 var rdk = require('../../core/rdk');
 var nullchecker = rdk.utils.nullchecker;
 var _ = require('lodash');

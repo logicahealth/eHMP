@@ -35,9 +35,9 @@ define([
                         '{{#each orderCheckData}}',
                         '  <div class="text-danger bold">{{warning}}</div>',
                         '  <div class="override-text">({{index}} of {{count}}) {{label}}</div><br/>',
-                        '{{/each}}',
+                        '{{/each}}'
                     ].join('\n'))
-                }],
+                }]
             }, {
                 control: "input",
                 extraClasses: ["override-text", "col-xs-12", "reason-for-override"],
@@ -182,7 +182,7 @@ define([
                     this.$(e.target).trigger('change');
                     this.$el.trigger('submit');
                 }
-            },
+            }
         },
         modelEvents: {
             'sign:success': 'onSuccess',

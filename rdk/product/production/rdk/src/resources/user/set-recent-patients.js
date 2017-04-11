@@ -62,9 +62,6 @@ function setEhmpUserContext(req, res, next) {
         } else if (pidValidator.isPidEdipi(patientId.value)) {
             patientIdentifier = 'edipi:' + pid;
             patientId.type = 'edipi';
-        } else if (pidValidator.isEdipi(patientId.value)) {
-            patientIdentifier = 'edipi:DOD;' + patientId.value;
-            patientId.type = 'edipi';
         } else if (pidValidator.isSiteDfn(patientId.value)) {
             patientIdentifier = 'pid:' + patientId.value;
             patientId.type = 'pid';

@@ -3,7 +3,7 @@ Feature:F899 - Orderable Pick-list Service
 
 @F899_1_Orderables_alltypes @US12254
   Scenario: Create Endpoint for 'All' Order type with search string
-  When the client requests picklist with the parameters for "orderables" with the user "9E7A;PW    "
+  When the client requests picklist with the parameters for "orderables" with the user "9E7A;vk1234"
   | paramter name | value                 |
   | subtype       | All                   |
   | searchString  | URINE                 |
@@ -16,7 +16,7 @@ Feature:F899 - Orderable Pick-list Service
   | synonym         | PROV URINE          |
   | typeOfOrderable | lab                 |
 
-  When the client requests picklist with the parameters for "orderables" with the user "9E7A;PW    "
+  When the client requests picklist with the parameters for "orderables" with the user "9E7A;vk1234"
   | paramter name | value                 |
   | searchString  | URINE                 |
   Then a successful response is returned
@@ -31,7 +31,7 @@ Feature:F899 - Orderable Pick-list Service
 
 @F899_2_Orderables_alltypes @US12254
   Scenario: searching for orderables without searchString
-  When the client requests picklist with the parameters for "orderables" with the user "9E7A;PW    "
+  When the client requests picklist with the parameters for "orderables" with the user "9E7A;vk1234"
   | paramter name | value      |
   | subtype       | all        |
   Then a successful response is returned
@@ -39,7 +39,7 @@ Feature:F899 - Orderable Pick-list Service
 
 @F899_3_Orderables_labs @US12254
   Scenario: Create Endpoint for 'Lab' Order type with search string
-  When the client requests picklist with the parameters for "orderables" with the user "C877;PW    "
+  When the client requests picklist with the parameters for "orderables" with the user "C877;vk1234"
   | paramter name | value                                   |
   | subtype       | Lab   |
   | searchString  | Blood |

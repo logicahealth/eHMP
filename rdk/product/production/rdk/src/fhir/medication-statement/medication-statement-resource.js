@@ -6,7 +6,6 @@ var domains = require('../common/domain-map.js');
 var errors = require('../common/errors');
 var _ = require('lodash');
 var nullchecker = rdk.utils.nullchecker;
-var fhirResource = require('../common/entities/fhir-resource');
 var confUtils = require('../conformance/conformance-utils');
 var conformance = require('../conformance/conformance-resource');
 

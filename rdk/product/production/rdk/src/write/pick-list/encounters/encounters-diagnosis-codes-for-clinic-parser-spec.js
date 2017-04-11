@@ -1,3 +1,4 @@
+'use strict';
 
 var log = sinon.stub(require('bunyan').createLogger({
     name: 'diagnostic-codes-clinic-parser'

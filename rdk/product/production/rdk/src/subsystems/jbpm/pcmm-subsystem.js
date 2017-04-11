@@ -65,8 +65,6 @@ function validate(typeJson, instanceJson, appConfig, cb, errors) {
         }
     };
 
-    var success = false;
-
     //We only ever need to check that the selected team/role exists in the database
     var MAX_ROWS = 1;
 

@@ -1,4 +1,4 @@
-@F144_allergy_applet @US2801 @DE621 @regression
+@F144_allergy_applet @US2801 @DE621 
 Feature: F144 - eHMP viewer GUI - Allergies Expanded
 
 Background:
@@ -13,12 +13,5 @@ Background:
 Scenario: Verify Expanded Allergies Applet contains expected buttons
   When the expanded Allergies Applet is displayed
   And the Allergies Applet expand view contains data rows
-  Then the Allergies expand Applet contains buttons
-    | buttons  |
-    | Refresh  |
-    | Help     |
-    | Minimize View |
-  And the Allergies expand Applet does not contain buttons
-    | buttons |
-    | Filter Toggle |
-    | Expand View   |
+  Then the Allergies expand Applet contains buttons Refresh, Help and Minimize
+  And the Allergies expand Applet does not contain buttons Filter Toggle or Expand

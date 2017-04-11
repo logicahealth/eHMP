@@ -154,7 +154,7 @@ Given(/^a HS report request was sent with patientID "(.*?)", siteID "(.*?)", rep
   path = query.path
   p path
   @response = HTTPartyRDK.get(path)
-  #@response = HTTPartyRDK.get_with_authorization_for_user(path, '9E7A;PW    ', 'PW    !!')
+  #@response = HTTPartyRDK.get_with_authorization_for_user(path, '9E7A;pu1234', 'pu1234!!')
   #p @response
   expect(@response.code).to eq(200)
 end

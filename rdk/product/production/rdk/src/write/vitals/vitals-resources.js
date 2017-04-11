@@ -4,7 +4,6 @@ var writebackWorkflow = require('../core/writeback-workflow');
 var validateVitals = require('./vitals-validator');
 var writeVitalToVista = require('./vitals-vista-writer');
 var writeVprToJds = require('../core/jds-direct-writer');
-var rdk = require('../../core/rdk');
 
 module.exports.getResourceConfig = function() {
     return [{

@@ -1,0 +1,8 @@
+{
+    "featureFlags": {
+        "trackSolrStorage": false
+    },
+    "settings": {
+        "solrIndexingDelay": 3000
+    }
+}

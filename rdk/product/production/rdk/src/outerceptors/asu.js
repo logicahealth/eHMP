@@ -3,7 +3,6 @@
 var _ = require('lodash');
 var S = require('string');
 var nullchecker = require('../utils/nullchecker');
-var asuProcess = require('../subsystems/asu/asu-process');
 var asuUtils = require('../resources/patient-record/asu-utils');
 module.exports = asu;
 
@@ -28,8 +27,7 @@ function asu(req, res, body, callback) {
 
 
 
-    if (!_.isUndefined(responseObject) && !_.isUndefined(responseObject.data) && !_.isUndefined(responseObject.data.items)
-        && !_.isUndefined(responseObject.data.items.results) ) {
+    if (!_.isEmpty(_.get(responseObject, 'data.items.results'))) {
         var tempRespObj = {};
         tempRespObj.data = {};
         tempRespObj.data.items = [];
@@ -72,7 +70,7 @@ function asu(req, res, body, callback) {
 
 function isItNotADocument(req) {
     var uid = req.query.uid;
-    if (nullchecker.isNotNullish(uid) && !S(uid).contains(":document:") && nullchecker.isNullish(req.query.documentDefUid)) {
+    if (nullchecker.isNotNullish(uid) && !S(uid).contains(':document:') && nullchecker.isNullish(req.query.documentDefUid)) {
         return true;
     }
     return false;

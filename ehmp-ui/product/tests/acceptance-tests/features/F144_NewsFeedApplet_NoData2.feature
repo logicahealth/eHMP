@@ -1,4 +1,4 @@
-@F144_NewsFeedApplet_NoData @regression @triage
+@F144_NewsFeedApplet_NoData  
 Feature: F144-eHMP Viewer GUI - Timeline(NewsFeed)
 
 Background:

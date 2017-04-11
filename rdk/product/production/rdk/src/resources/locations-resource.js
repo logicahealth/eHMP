@@ -1,19 +1,16 @@
 'use strict';
 
 var util = require('util');
-var querystring = require('querystring');
 var _ = require('lodash');
 var async = require('async');
 var moment = require('moment');
 var rdk = require('../core/rdk');
 var RpcClient = require('vista-js').RpcClient;
-var httpUtil = rdk.utils.http;
 var dateUtil = require('../utils/fileman-date-converter');
-var maskPtSelectSsn = require('./patient-search/search-mask-ssn').maskPtSelectSsn;
-var patientSearchResource = require('./patient-search/patient-search-resource');
+var patientSearchUtil = require('./patient-search/patient-search-util');
 var locationUtil = rdk.utils.locationUtil;
-var patientSearchUtil = require('./patient-search/results-parser');
-var formatPatientSearchCommonFields = patientSearchUtil.formatPatientSearchCommonFields;
+var patientSearchResultsParser = require('./patient-search/results-parser');
+var formatPatientSearchCommonFields = patientSearchResultsParser.formatPatientSearchCommonFields;
 var pidValidatorIsSiteDfn = require('../utils/pid-validator').isSiteDfn;
 
 function getResourceConfig() {
@@ -35,6 +32,17 @@ function getResourceConfig() {
     );
 }
 
+function getVistaConfig(req, siteCode) {
+    var vistaConfig = _.extend({}, req.app.config.vistaSites[siteCode], {
+        context: 'HMP UI CONTEXT',
+        accessCode: req.session.user.accessCode,
+        verifyCode: req.session.user.verifyCode,
+        division: req.session.user.division
+    });
+
+    return vistaConfig;
+}
+
 function searchLocation(locationType, req, res) {
     /*
     locationUid come from /data/index/locations-{clinics,wards}
@@ -45,7 +53,7 @@ function searchLocation(locationType, req, res) {
 
     filter is required to prevent a search from showing every patient in a clinic or ward by default
      */
-    var location = _.get(req,'query.uid','');
+    var location = _.get(req, 'query.uid', '');
 
     if (!location) {
         return res.status(rdk.httpstatus.bad_request).rdkSend('Missing uid parameter');
@@ -60,11 +68,7 @@ function searchLocation(locationType, req, res) {
     if (!_.has(req.app.config.vistaSites, siteCode)) {
         return res.status(500).rdkSend(new Error('Unknown VistA'));
     }
-    var vistaConfig = _.extend({}, req.app.config.vistaSites[siteCode], {
-        context: 'HMP UI CONTEXT',
-        accessCode: req.session.user.accessCode,
-        verifyCode: req.session.user.verifyCode
-    });
+    var vistaConfig = getVistaConfig(req, siteCode);
 
     var vistaRpc;
     var parameters;
@@ -79,8 +83,10 @@ function searchLocation(locationType, req, res) {
     }
     var hasDGAccess = _.result(req, 'session.user.dgSensitiveAccess', 'false') === 'true';
 
+
     async.waterfall(
         [
+
             RpcClient.callRpc.bind(RpcClient, req.logger, vistaConfig, vistaRpc, parameters),
             extractPatientInfoFromRpc.bind(null, req, locationType),
             selectPatientsFromDfnsInBatches.bind(null, req, locationType, siteCode),
@@ -103,11 +109,18 @@ function searchLocation(locationType, req, res) {
                     req.logger.error('Error searching location');
                     req.logger.error(err);
                     return res.status(rdk.httpstatus.internal_server_error).rdkSend(err.message);
-                } else {
-                    req.logger.warn('Potential error searching location');
-                    req.logger.warn(err);
-                    return res.status(rdk.httpstatus.ok).rdkSend(err);
                 }
+                req.logger.warn('Potential error searching location');
+                req.logger.warn(err);
+                if (_.isString(err)) {
+                    return res.status(200).rdkSend({
+                        data: {
+                            items: []
+                        },
+                        message: err
+                    });
+                }
+                return res.status(200).rdkSend(err);
             }
 
             if (!_.isObject(result)) {
@@ -116,9 +129,14 @@ function searchLocation(locationType, req, res) {
                 }, 'result is not an object');
                 return res.status(rdk.httpstatus.internal_server_error).rdkSend(result);
             }
+            if (_.isEmpty(_.get(result, 'data.items'))) {
+                return res.status(200).rdkSend(_.extend({}, result, {
+                    message: 'No results found.'
+                }));
+            }
             result = formatPatientSearchCommonFields(result, hasDGAccess);
             _.each(result.items, function(item) {
-                item = patientSearchUtil.transformPatient(item, false);
+                item = patientSearchResultsParser.transformPatient(item, false);
             });
             return res.status(rdk.httpstatus.ok).rdkSend(result);
         }
@@ -142,6 +160,9 @@ function extractPatientInfoFromRpc(req, locationType, rpcResponse, callback) {
     if (error) {
         if (error[1].match(/^Server Error/i)) {
             return callback(new Error(error[1]));
+        }
+        if (_.includes(['No appointments.', 'No patients found.'], error[1])) {
+            return callback('No results found.');
         }
         return callback(error[1]);
     }
@@ -173,7 +194,7 @@ function extractPatientInfoFromRpc(req, locationType, rpcResponse, callback) {
         patientDfnRoomBed = _.compact(patientDfnRoomBed);
     }
     if (patientDfnRoomBed.length === 0) {
-        return callback('No patients found');
+        return callback('No results found.');
     }
     callback(null, patientDfnRoomBed);
 }
@@ -213,18 +234,14 @@ function selectPatientsFromDfnsInBatches(req, locationType, siteCode, patientInf
 function selectPatientsFromDfns(req, locationType, range, patientInfoFromRpc, callback) {
     var order = _.get(req, 'query.order', '');
 
-    var site = patientSearchResource.getSite(req.logger, 'locations-resource.selectPatientsFromDfns', '', req);
-
     var filter = req.query.filter;
     req.logger.debug('locations-resource.selectPatientsFromDfns Entering method');
 
     async.mapSeries(range, function(pid, mapcallback) {
+        var site = patientSearchUtil.getSite(req.logger, 'locations-resource.selectPatientsFromDfns', pid, req);
         if (site === null) {
-            site = patientSearchResource.getSite(req.logger, 'locations-resource.selectPatientsFromDfns', pid, req);
-            if (site === null) {
-                req.logger.error('locations-resource.selectPatientsFromDfns.selectPatientsFromDfns ERROR couldn\'t obtain site');
-                return mapcallback('Missing site information from session or request');
-            }
+            req.logger.error('locations-resource.selectPatientsFromDfns.selectPatientsFromDfns ERROR couldn\'t obtain site');
+            return mapcallback('Missing site information from session or request');
         }
 
         if (!pidValidatorIsSiteDfn(pid)) {
@@ -237,7 +254,7 @@ function selectPatientsFromDfns(req, locationType, range, patientInfoFromRpc, ca
             searchType: 'PID',
             searchString: pid
         };
-        patientSearchResource.callPatientSearch(req, 'rdk.locations-resource', req.app.config.jdsServer, searchOptions, function(error, retvalue) {
+        patientSearchUtil.callPatientSearch(req, 'rdk.locations-resource', req.app.config.jdsServer, searchOptions, function(error, retvalue) {
             //req.logger.debug('locations-resource.selectPatientsFromDfns: inside httpUtil: ' + JSON.stringify(retvalue, null, 2));
             req.logger.debug('locations-resource.selectPatientsFromDfns: retrieved data for pid: ' + pid);
             try {
@@ -262,7 +279,7 @@ function selectPatientsFromDfns(req, locationType, range, patientInfoFromRpc, ca
         if (err) {
             req.logger.error({
                 error: err
-            }, 'locations-resource.selectPatientsFromDfns: error occurred after calling patientSearchResource.callPatientSearch');
+            }, 'locations-resource.selectPatientsFromDfns: error occurred after calling patientSearchUtil.callPatientSearch');
             return callback(err);
         }
 
@@ -270,11 +287,11 @@ function selectPatientsFromDfns(req, locationType, range, patientInfoFromRpc, ca
         var ptRetvalue = selectPatientsFromDfnsCreateReturn(results);
 
         //req.logger.debug('locations-resource.selectPatientsFromDfns Before filter: ' + JSON.stringify(ptRetvalue, null, 2));
-        patientSearchResource.filter(req.logger, 'locations-resource.selectPatientsFromDfns', filter, ptRetvalue);
+        patientSearchUtil.filter(req.logger, 'locations-resource.selectPatientsFromDfns', filter, ptRetvalue);
         //req.logger.debug('locations-resource.selectPatientsFromDfns After filter: ' + JSON.stringify(ptRetvalue, null, 2));
 
         //req.logger.debug('locations-resource.selectPatientsFromDfns Before sort: ' + JSON.stringify(ptRetvalue, null, 2));
-        patientSearchResource.sort(req.logger, 'locations-resource.selectPatientsFromDfns', order, ptRetvalue);
+        patientSearchUtil.sort(req.logger, 'locations-resource.selectPatientsFromDfns', order, ptRetvalue);
         //req.logger.debug('locations-resource.selectPatientsFromDfns After sort: ' + JSON.stringify(ptRetvalue, null, 2));
 
         callback(null, ptRetvalue);
@@ -347,3 +364,4 @@ module.exports.getResourceConfig = getResourceConfig;
 module.exports._handleError = handleError;
 module.exports._extractDfnsFromRpc = extractPatientInfoFromRpc;
 module.exports._selectPatientsFromDfnsInBatches = selectPatientsFromDfnsInBatches;
+module.exports._getVistaConfig = getVistaConfig;

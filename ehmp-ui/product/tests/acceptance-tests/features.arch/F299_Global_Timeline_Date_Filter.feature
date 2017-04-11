@@ -2,7 +2,16 @@
 
 Feature: F299 : Global timeline date filter
 
-
+@US5552 @DE6815
+Scenario: Verify Inpatient / Outpatient Bins
+  Given user searches for and selects "Eight,Patient"
+  And Overview is active 
+  When the user opens the Global Date Filter
+  Then the Global Date Filter displays an Inpatient legend
+  And the Global Date Filter displays Inpatient bins
+  And the Global Date Filter displays an Outpatient legend
+  And the Global Date Filter displays Outpatient bins
+  
 # Requirement changed by DE6230: in discussion
 # [8/17/16, 11:26:02 AM] Ben Cushing: Good point.  Please add +6 months to all predefined date ranges from Today back
 @f299-3.17_date_menu_only_selects_past_to_present @US4228 @TA14378a @DE842

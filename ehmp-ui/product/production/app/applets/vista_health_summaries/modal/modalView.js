@@ -2,77 +2,49 @@ define([
     'backbone',
     'marionette',
     'underscore',
-    "app/applets/vista_health_summaries/appletHelpers",
     'hbs!app/applets/vista_health_summaries/modal/modalTemplate'
-], function (Backbone, Marionette, _, AppletHelper, modalTemplate) {
+], function (Backbone, Marionette, _, modalTemplate) {
     'use strict';
-
-    var dataCollection;
 
     var ModalView = Backbone.Marionette.LayoutView.extend({
         template: modalTemplate,
-        fetchOptions: {},
+        modelEvents: {
+            'change': 'render'
+        },
         initialize: function (options) {
-            var self = this;
             this.reportDetailLoadingView = ADK.Views.Loading.create();
 
-            dataCollection = options.gridCollection;
-
-            if (this.showNavHeader) {
-                this.model.attributes.navHeader = true;
-            }
-
-            this.target = options.target;
-
             if (!this.model.get('detail')) {
-
-                // fetch report detail from rdk resource
-                this.fetchOptions.resourceTitle = 'healthsummaries-getReportContentByReportID';
-                this.fetchOptions.viewModel = {
-                    parse: AppletHelper.parseReportDetailResponse
-                };
-                
-                this.fetchOptions.patientIdentifierType = 'icn';
-                
-                this.fetchOptions.pageable = true;
-                this.fetchOptions.cache = true;
-                this.fetchOptions.criteria = {
+                this.data = new ADK.UIResources.Fetch.VistaHealthSummaries.Details({
                     'site.code': this.model.get('siteKey'),
                     'id': this.model.get('reportID') + ';' + this.model.get('hsReport')
-                };
+                });
+                this.bindEntityEvents(this.data, this.getOption('fetchEvents'));
+                this.data.fetch();
 
-                // on fetch error
-                this.fetchOptions.onError = function (model, resp) {
-                    self.model.set('detail', 'Error : unable to run report');
-                    self.render();
-                };
-
-                // on success
-                // xxx: if (model.detail) don;t fetch again.
-                this.fetchOptions.onSuccess = function (collection, response) {
-
-                    var detail = collection.first().get('detail');
-                    self.model.set('detail', detail);
-
-                    self.render();
-                };
-
-                var data = ADK.PatientRecordService.fetchCollection(this.fetchOptions);
-
-            } else {
-                self.render();
             }
         },
         regions: {
-            reportDetail: '.vhs-report-detail',
+            reportDetail: '.vhs-report-detail'
         },
-        onRender: function () {
-
+        fetchEvents: {
+            'sync': function (model) {
+                this.model.set('detail', _.get(model, 'attributes.data.detail', ''));
+            },
+            'error': function(error) {
+                this.model.set('detail', 'Error : unable to run report');
+            }
         },
         onShow: function() {
             if(!this.model.get('detail')){
                 this.reportDetail.show(this.reportDetailLoadingView);
             }
+        },
+        onDestroy: function () {
+            if (_.get(this, 'data.xhr')) {
+                this.data.xhr.abort();
+            }
+            this.unbindEntityEvents(this.data, this.getOption('fetchEvents'));
         }
     });
     return ModalView;

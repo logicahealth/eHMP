@@ -254,7 +254,8 @@ define([
                     stepTitle: DEFAULT_ENCOUNTER_TITLE,
                     onBeforeShow: function() {
                         //Removed in order to Disable Encounter Form: self.visitOpen = true;
-                    }
+                    },
+                    helpMapping: 'visit_form'
                 }
                 /* Removed in order to Disable Encounter Form:
                 , {
@@ -269,7 +270,8 @@ define([
                         this.stopListening(self.viewModel, 'change.inputted', self.setUpChecks);
                         self.workflow.changeHeaderTitle(DEFAULT_ENCOUNTER_TITLE + formUtil.getEncounterDetailTitle());
                         showEncounter.handleEncounterWorkflow(self.workflow, self.encounterWorkflowOptions.steps[2].viewModel, self.patientModel.get('visit'));
-                    }
+                    },
+                    helpMapping: 'encounters_form'
                 }, {
                     view: EncountersForm,
                     viewModel: this.viewModel,
@@ -278,7 +280,8 @@ define([
                         self.visitOpen = false;
                         this.stopListening(self.viewModel, 'change.inputted', self.setUpChecks);
                         this.listenToOnce(self.viewModel, 'change.inputted', self.setUpChecks);
-                    }
+                    },
+                    helpMapping: 'encounters_form'
                 }*/
                 ]
             };

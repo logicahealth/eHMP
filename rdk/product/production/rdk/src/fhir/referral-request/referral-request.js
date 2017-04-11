@@ -9,7 +9,6 @@
 var rdk = require('../../core/rdk');
 var nullchecker = rdk.utils.nullchecker;
 var _ = require('lodash');
-var helpers = require('../common/utils/helpers.js');
 var fhirResource = require('../common/entities/fhir-resource');
 var fhirUtils = require('../common/utils/fhir-converter');
 var constants = require('../common/utils/constants');

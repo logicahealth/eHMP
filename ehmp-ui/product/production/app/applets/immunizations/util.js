@@ -1,10 +1,11 @@
 define([
     'backbone',
     'marionette',
-    'underscore',
-    'app/applets/immunizations/utilParse'
-], function(Backbone, Marionette, _, Util) {
+    'underscore'
+], function(Backbone, Marionette, _) {
     "use strict";
+
+    var Util = {};
 
     Util.getTimeSinceDate = function(response){
         if(response.administeredDateTime) {
@@ -13,14 +14,6 @@ define([
                 timeSinceDate = timeSinceDate.substring(0, timeSinceDate.length - 2);
             }
             response.timeSinceDate = timeSinceDate;
-        }
-
-        return response;
-    };
-
-    Util.getAdministeredFormatted = function(response) {
-        if (response.administeredDateTime) {
-            response.administeredFormatted = ADK.utils.formatDate(response.administeredDateTime).replace(/00\//g,"");
         }
         return response;
     };
@@ -66,6 +59,48 @@ define([
             response.resultedTimeFormatted = ADK.utils.formatDate(response.resulted, 'HH:mm');
         }
         return response;
+    };
+
+    Util.getContraindicated = function(response) {
+        if (response.contraindicated) {
+            response.contraindicatedDisplay = 'Yes';
+
+        } else {
+          response.contraindicatedDisplay = 'No';
+        }
+        return response;
+    };
+
+    Util.getFacilityColor = function(response) {
+        if (_.get(response, 'facilityCode') === 'DOD') {
+            response.facilityColor = 'DOD';
+        } else {
+            response.facilityColor = 'nonDOD';
+        }
+        return response;
+    };
+
+    Util.hasCommentBubble = function(response) {
+        if (_.get(response, 'comment')) {
+            response.commentBubble = true;
+        }
+        return response;
+    };
+
+    Util.isReaction = function(reaction) {
+        if (_.isString(reaction)) {
+            if ((reaction.toLowerCase() === "no") || (reaction.toLowerCase() === "none"))
+                return "No";
+        }
+        return (reaction ? "Yes" : "No");
+    };
+
+    Util.seriesNormalization = function(series) {
+        if (series === '0' || _.isEmpty(series)) {
+            return false;
+        } else {
+            return series;
+        }
     };
 
     return Util;

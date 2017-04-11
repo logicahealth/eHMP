@@ -1,4 +1,4 @@
-@F144_Lab_Results_Modal @Lab_Results @regression @triage
+@F144_Lab_Results_Modal @Lab_Results   @reg1
 Feature: F144 - eHMP Viewer GUI - Numeric Lab Results in expanded view
 
 # Team: Andromeda, inherited by Team Venus

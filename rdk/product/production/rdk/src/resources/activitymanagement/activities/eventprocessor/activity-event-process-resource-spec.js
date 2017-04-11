@@ -1,6 +1,5 @@
 'use strict';
 var aep = require('./activity-event-process-resource');
-var _ = require('lodash');
 var httpstatus = require('../../../../core/httpstatus');
 
 var pagesize1k = [

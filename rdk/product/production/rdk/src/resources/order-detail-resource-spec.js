@@ -24,7 +24,8 @@ describe('Order Detail', function() {
         var req = {
             interceptorResults: {
                 patientIdentifiers: {
-                    dfn: 3
+                    dfn: 3,
+                    site: '9E7A'
                 }
             },
             param: function() {
@@ -34,8 +35,8 @@ describe('Order Detail', function() {
             },
             session: {
                  user: {
-                    username: '9E7A;PW    ',
-                    password: 'PW    !!',
+                    username: '9E7A;pu1234',
+                    password: 'pu1234!!',
                     site: '9E7A'
                 }
             },
@@ -57,20 +58,20 @@ describe('Order Detail', function() {
                         '9E7A': {
                             name: 'PANORAMA',
                             division: '500',
-                            host: 'IP        ',
+                            host: '10.2.2.101',
                             port: 9210,
                             production: false,
-                            accessCode: 'PW    ',
-                            verifyCode: 'PW    !!'
+                            accessCode: 'pu1234',
+                            verifyCode: 'pu1234!!'
                         },
                         'C877': {
                             name: 'KODAK',
                             division: '500',
-                            host: 'IP        ',
+                            host: '10.2.2.102',
                             port: 9210,
                             production: false,
-                            accessCode: 'PW    ',
-                            verifyCode: 'PW    !!'
+                            accessCode: 'pu1234',
+                            verifyCode: 'pu1234!!'
                         }
                     }
                 }

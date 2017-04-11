@@ -1,6 +1,5 @@
 'use strict';
 
-var rdk = require('../../core/rdk');
 var writebackWorkflow = require('../core/writeback-workflow');
 var validateExample = require('./example-validator');
 var writeExampleToVista = require('./example-vista-writer');

@@ -1,4 +1,4 @@
-#http://10.4.4.105:8888/patientrecord/labpanels?pid=9E7A%3B1&_ack=true&accessCode=PW    &verifyCode=PW    !!&site=9E7A
+#http://10.4.4.105:8888/patientrecord/labpanels?pid=9E7A%3B1&_ack=true&accessCode=pu1234&verifyCode=pu1234!!&site=9E7A
 class LabsByPanel < BuildQuery
   def initialize(parameter_hash_table)
     super()

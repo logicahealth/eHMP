@@ -1,0 +1,188 @@
+#log4j properties
+LOG4J_PROPERTIES = log4j.xml
+
+# CHCSWS endpoint
+CHCS_URL = https://localhost:4433/CHCSWS/CHCSDataService?wsdl
+
+# VistaDataService endpoint
+VISTA_URL = <%= node[:mocks][:jmeadows][:vds_endpoint]%>
+
+#PIX service endpoint
+PIX_URL = https://vaww.esbpp.lovell.fhcc.va.gov:443/PIXServiceWS/PIXManager_Service?wsdl
+
+# BHIERealyService endpoint
+#BHIE_RELAY_SERVICE_URL = http://localhost:8080/BHIERelayService-2.3.1.0-production/BHIERelayService?wsdl
+BHIE_RELAY_SERVICE_URL = <%= node[:mocks][:jmeadows][:bhie_relay_endpoint]%>
+
+# PDWS endpoint
+PDWS_PS_URL = http://10.2.100.100/MockPDWS/EntityPatientSearch?wsdl
+PDWS_PR_URL = <%= node[:mocks][:jmeadows][:pwds_endpoint]%>
+PDWS_FS_URL = http://10.2.100.100/MockPDWS/EntityPatientFamilySearch?wsdl
+PDWS_FR_URL = http://10.2.100.100/MockPDWS/EntityPatientFamilyRetrieve?wsdl
+
+# PDWS HL7 Message Header Processing Code
+PDWS_PROC_CODE = T
+
+# PDWS HL7 Message Sender Device ID
+PDWS_SND_DEV_ID = 161841
+
+# PDWS DEBUG FLAG ** workaround for access denied issue
+DEBUG_SOAP_OUTPUT = false
+
+# MVI endpoint
+MVI_URL = http://10.2.100.100/MockMVI/IdMWebService?wsdl
+#MVI_URL =http://localhost:8088/MVIService?WSDL
+
+# MVI HL7 Message Sender Device ID
+MVI_SND_DEV_ID = 200JNUS
+
+# Restrict VA user access to DoD-only patient information
+VA_USER_RESTRICT = TRUE
+
+# Allow VA user access to DoD-only patient information (Audited and prompted)
+VA_USER_ALLOW_RESTRICT_ACCESS = TRUE
+
+# CHCSWS encrypted username
+CHCSWS_USERNAME = lcVsOM5WHUw0Y5vIJe+gGA==
+
+# CHCSWS ecnrypted password
+CHCSWS_PWD = W0GYBTca9wgkTwy2r5qcbA==
+
+# BHIERealyService encrypted username
+BHIE_RELAY_SERVICE_USERNAME = lcVsOM5WHUw0Y5vIJe+gGA==
+
+# BHIERealyService encrypted password
+BHIE_RELAY_SERVICE_PWD = W0GYBTca9wgkTwy2r5qcbA==
+
+#  true to relax SSL v3 security requirements. (Use this for debugging purposes only!)
+IS_TRUST_ALL_SSL_HOSTNAMES_AND_CERTS = true
+
+# true to utilize C3PO for as the sql connection pooling api.
+# If false, defaults to utilizing JNDI lookup for connection pool.
+USE_C3PO = false
+
+# SQL server JDBC connection string (for use with C3PO)
+SQL_URL = <%= node[:mocks][:sql_url]%>
+#SQL_URL: jdbc:oracle:thin:iehrowner/iehr0wner@//r02hindbs01pp.r02.med.va.gov:1521/healthpp
+
+# SQL server JDBC connection string (for use with C3PO)
+SQL_URL_ENCRYPTED = <%= node[:mocks][:sql_url]%>
+
+# SQL server driver (for use with C3PO)
+SQL_DRIVER = com.microsoft.sqlserver.jdbc.SQLServerDataSource
+#SQL_DRIVER: oracle.jdbc.driver.OracleDriver
+
+# JDNI connection pooling lookup name
+JNDI_JDBC = jdbc/JanusSQL
+
+# JDNI connection pooling lookup name
+JNDI_JDBC_ENCRYPTED = jdbc/JanusSQL
+
+# General service request timeout setting in milliseconds
+REQUEST_TIMEOUT_MS = 110000
+
+# General service connection timeout setting in milliseconds
+CONNECTION_TIMEOUT_MS = 30000
+
+# General thread timeout in milliseconds
+THREAD_TIMEOUT_MS = 115000
+
+# General service request timeout setting in milliseconds
+VLER_REQUEST_TIMEOUT_MS = 480000
+
+# General service connection timeout setting in milliseconds
+VLER_CONNECTION_TIMEOUT_MS = 30000
+
+
+# Default error message string
+ERROR_MSG_CONNECTION_UNAVAILABLE = Connection unavailable.
+
+# Default edr service related error message string
+ERROR_MSG_EDR_DOCS = Unable to retrieve eDR scanned document
+
+# BHIE/DoD adapter clinical domain enablement configurations. BHIE use is for DoD data only, not VA.
+
+# BHIE custodian OIDs. Each OID represents a particular data site that BHIE aggregates from.
+# These custodian OIDs are included as BHIE query included or excluded site parameters.
+
+# AHLTA custodian OID.
+BHIE_CUSTODIAN_OID_AHLTA = 2.16.840.1.113883.3.42.126.100001.13
+
+# TMDS custodian OID
+BHIE_CUSTODIAN_OID_TMDS = 2.16.840.1.113883.3.42.10009.100001.13
+
+# VA custodian OID
+BHIE_CUSTODIAN_OID_VA = 2.16.840.1.113883.3.42.10002.100001.8.22200
+
+# ESSENTRIS custdian OID
+BHIE_CUSTODIAN_OID_ESS = 2.16.840.1.113883.3.42.144.100001.17
+
+# CHCS custodian OID
+BHIE_CUSTODIAN_OID_CHCS = 2.16.840.1.113883.3.42.127.100001.15
+
+# SHARE custodian OID
+BHIE_CUSTODIAN_OID_SHARE = 2.16.840.1.113883.3.42.10002.100001.8
+
+# FHIE custodian OID
+BHIE_CUSTODIAN_OID_FHIE = 1.1.1.999
+
+# Site code to return with BHIE error beans (utilized when BHIE connection is unavailable).
+BHIE_ERROR_SITE_CODE = DOD
+
+# Site name to return with BHIE error bean (utilized when BHIE connection is unavailable).
+BHIE_ERROR_SITE_NAME = DOD
+
+# Site moniker to return with BHIE error bean (utilized when BHIE connection is unavailable).
+BHIE_ERROR_SITE_MONIKER = DOD
+
+# The local VA facility's patient IEN OID - for use with the PIX Service patient identifier map.
+LOCAL_VA_IEN_OID = 2.16.840.1.113883.3.42.10006.100005.8
+
+# Vista enterprise ICN OID - for use with the PIX Service patient identifier map.
+VISTA_ICN_OID = 2.16.840.1.113883.3.42.10006.100005.2
+
+# The DoD enterprise EDIPN (EDIPI) OID - for use with the Pix Service identifier map.
+DOD_EDIPN_OID = 2.16.840.1.113883.3.42.10001.100001.12
+
+# VA agency name string Should be configured as VA
+AGENCY_VA = VA
+
+# DOD agency name string. Should be configured as DOD
+AGENCY_DOD = DOD
+
+#SiteMap EHCache name  (EHCache)
+EHCACHE_NAME_SITEMAP = sites
+
+#RPC site endpoint environment (enterprise, hrg, nc_gold, etc.)
+RPC_ENDPOINT_ENVIRONMENT = dev
+
+#CACHE site endpoint environment (enterprise, hrg, nc_gold, etc.)
+CACHE_ENDPOINT_ENVIRONMENT = dev
+
+SHARE_ENDPOINT_ENVIRONMENT = dev
+
+MEDWEB_ENDPOINT_ENVIRONMENT = dev
+
+AHLTA_ENDPOINT_ENVIRONMENT = dev
+
+#meant for temporary use during transition to enterprise
+LOCAL_CHCS_SITECODE = N00211
+
+#meant for temporary use during transition to enterprise
+LOCAL_VISTA_SITECODE = 556
+
+#use terminology mapping cache (hashMap) if set to true
+#else use SQL server without hashMap cache
+USE_TERM_MAPPING_CACHE = false
+
+#Load mapping data from SQL Server on startup
+LOAD_VLER_SITE_CACHE = false
+
+#use AHLTA snareworks instead of SQL whitelist.
+USE_SNAREWORKS = false
+
+# DMIS IDs and facilities used for mapping DMIS IDs to clinic names for patient demographic's PCM clinic
+DMIS_FILE_NAME = 201506_dmisid_cma.properties
+DMIS_TOKEN_DELIM = ,
+DMIS_ID_TOKEN_POS = 0
+DMIS_NAME_TOKEN_POS = 5

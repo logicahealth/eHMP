@@ -1,4 +1,4 @@
-@f423_vitals_write_back @regression @US7939_TC991 @US7939_TC992 @US11272 @future @DE4560
+@f423_vitals_write_back  @US7939_TC991 @US7939_TC992 @US11272 @future @DE4560 @debug @DE7008
 Feature: F423 : Enter and Store Vitals
 
 # US7939, TC993: cannot automate

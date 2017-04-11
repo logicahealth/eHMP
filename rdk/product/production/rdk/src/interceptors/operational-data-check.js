@@ -1,6 +1,4 @@
 'use strict';
-var _ = require('lodash');
-var util = require('util');
 
 var operationDataLoaded = {};
 

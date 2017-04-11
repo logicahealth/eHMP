@@ -17,7 +17,7 @@ define([
                 processDefId: taskModel.get('processDefId'),
                 taskid: String(taskModel.get('taskId')),
                 state: state,
-                icn: taskModel.get('patientIcn'),
+                pid: taskModel.get('patientIcn'),
                 parameter: parameterObj
             },
             onSuccess: onSuccess,

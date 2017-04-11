@@ -7,7 +7,7 @@ function setAuditInfo(writebackContext, category) {
     if (!_.isUndefined(writebackContext.audit)) {
         writebackContext.audit.dataDomain = 'progress-notes';
         writebackContext.audit.logCategory = category;
-        writebackContext.audit.patientId = writebackContext.pid;
+        writebackContext.audit.patientId = writebackContext.interceptorResults.patientIdentifiers.siteDfn;
     }
 
     if (!_.isUndefined(writebackContext.model)) {

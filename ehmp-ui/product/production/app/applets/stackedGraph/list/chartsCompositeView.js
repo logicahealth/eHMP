@@ -252,7 +252,9 @@ define([
                         }
                     };
 
-                    var medGroups = ADK.PatientRecordService.createEmptyCollection();
+                    var medGroups = ADK.PatientRecordService.createEmptyCollection({
+                        pageable: true
+                    });
                     self.listenToOnce(medGroups, 'read:success', function(collection) {
                         self.stopListening(medGroups, 'read:error');
                         var groupNames = MedsResource.getMedicationGroupNames(collection);

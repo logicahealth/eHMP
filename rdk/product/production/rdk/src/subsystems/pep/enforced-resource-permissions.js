@@ -6,7 +6,7 @@
  * Should be kept up-to-date with: https://wiki.vistacore.us/display/VACORE/Patient+Read+Permission+Mappings#PatientReadPermissionMappings-Resource>Permission
  * Used by pep-config-enforcer-spec.js to ensure resources are assigned the correct permissions
  */
-
+//jshint -W069
 var permissions = {};
 
 permissions['patient-record-allergy'] = {

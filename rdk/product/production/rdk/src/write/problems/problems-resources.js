@@ -10,7 +10,7 @@ var updateProblem = require('./problems-update-vista-writer').update;
 
 var writeVprToJds = require('../core/jds-direct-writer');
 
-module.exports.getResourceConfig = function () {
+module.exports.getResourceConfig = function() {
     return [{
         name: 'problem-add',
         path: '',
@@ -20,8 +20,7 @@ module.exports.getResourceConfig = function () {
         },
         requiredPermissions: ['add-condition-problem'],
         isPatientCentric: true
-    }
-        , {
+    }, {
         name: 'problem-update',
         path: '/:resourceId',
         put: update,
@@ -30,8 +29,7 @@ module.exports.getResourceConfig = function () {
         },
         requiredPermissions: ['edit-condition-problem'],
         isPatientCentric: true
-    }
-    ];
+    }];
 };
 
 function add(req, res) {
@@ -51,4 +49,3 @@ function update(req, res) {
     ];
     writebackWorkflow(req, res, tasks);
 }
-

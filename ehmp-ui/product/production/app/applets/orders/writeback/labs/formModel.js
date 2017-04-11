@@ -20,8 +20,7 @@ define([
         initialize: function() {
             this.patient = ADK.PatientRecordService.getCurrentPatient();
             if (this.patient) {
-                this.dfn = this.patient.get('localId');
-                this.set('dfn', this.dfn);
+                this.set('pid', this.patient.get('pid'));
             }
             this.session = ADK.UserService.getUserSession();
             if (this.session) {
@@ -31,7 +30,7 @@ define([
             }
         },
         validate: function(attributes, options) {
-			this.errorModel.clear();
+            this.errorModel.clear();
             if (this.get('collectionType') === 'SP' || this.get('collectionType') === 'WC') {
                 var collectionDate = this.get('collectionDate');
                 var collectionTime = _.isUndefined(this.get('collectionTime')) ? '00:00' : this.get('collectionTime');
@@ -39,22 +38,22 @@ define([
                 var serverTimeDifference = this.get('serverTimeDifference');
                 var serverTime = moment().add(serverTimeDifference, 'milliseconds');
                 if (this.get('collectionDateTime') !== 'TODAY' && collectionDateTime < serverTime) {
-                    if (this.get('collectionDate') !== moment().format('MM/DD/YYYY')){
-						this.errorModel.set({
-							collectionDate: "The start date may not be earlier than the present"
-						});
+                    if (this.get('collectionDate') !== moment().format('MM/DD/YYYY')) {
+                        this.errorModel.set({
+                            collectionDate: "The start date may not be earlier than the present"
+                        });
                     }
-                    if (!_.isUndefined(this.get('collectionTime'))){
-						this.errorModel.set({
-							collectionTime: "Collection times in the past are not allowed"
-						});
+                    if (!_.isUndefined(this.get('collectionTime'))) {
+                        this.errorModel.set({
+                            collectionTime: "Collection times in the past are not allowed"
+                        });
                     }
                 }
             }
             if (this.get('collectionType') === 'I' && !this.labCanCollect()) {
-				this.errorModel.set({
-					collectionType: "Immediate collect is not available for this test/sample"
-				});
+                this.errorModel.set({
+                    collectionType: "Immediate collect is not available for this test/sample"
+                });
             }
             if (!_.isEmpty(this.errorModel.toJSON())) {
                 return "Validation errors. Please fix.";
@@ -66,15 +65,14 @@ define([
             var collSampList = this.get('collectionSampleListCache');
             var collectionSample = this.get('collectionSample');
 
-            if (!_.isUndefined(collSampList) && !_.isUndefined(labCollSampDefault)){
+            if (!_.isUndefined(collSampList) && !_.isUndefined(labCollSampDefault)) {
                 var selectedCollectionSample = _.filter(collSampList, function(e) {
                     return e.ien == collectionSample;
                 });
                 if (!_.isEmpty(selectedCollectionSample) && selectedCollectionSample[0].n === labCollSampDefault) {
                     labCanCollect = true;
                 }
-            }
-            else if (_.isUndefined(collSampList)) {
+            } else if (_.isUndefined(collSampList)) {
                 labCanCollect = true;
             }
             return labCanCollect;
@@ -102,7 +100,7 @@ define([
             if (collectionType === 'LC' && this.get('collectionDateTimePicklist') === 'LO') {
                 var futureLabCollectDateTime = moment(this.get('futureLabCollectDate'));
                 var difference = futureLabCollectDateTime.diff(moment(), 'days') + 1;
-                collectionDateTime = 'T+' + difference + '@' + this.get('futureLabCollectTime').replace(':','');
+                collectionDateTime = 'T+' + difference + '@' + this.get('futureLabCollectTime').replace(':', '');
             } else if (collectionType === 'LC') {
                 collectionDateTime = this.get('collectionDateTimePicklist').length > 0 ? this.get('collectionDateTimePicklist').substr(1) : "";
             } else if (collectionType === 'I') {
@@ -140,11 +138,13 @@ define([
         generateCommentList: function() {
             var commentFields = this.pick(['forTest', 'sampleDrawnAt', 'additionalComments', 'anticoagulantText', 'orderCommentText', 'doseDrawText', 'urineVolume']);
             return _.map(commentFields, function(commentField) {
-                return {comment: commentField};
+                return {
+                    comment: commentField
+                };
             });
         }
 
     });
 
-	return addOrderModel;
+    return addOrderModel;
 });

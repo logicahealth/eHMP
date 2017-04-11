@@ -1,9 +1,0 @@
-{
-  "id": "vxsync_client",
-  "vxsync": {
-    "encrypted_data": "KB/Uhw9G3uLwLQmtr5rW18npEWPWichdkyfmb2hE65C4gmTY4fFJmnNf3qw6\nYnd9\n",
-    "iv": "wrLy4mi+4yotRCGbUEYTOQ==\n",
-    "version": 1,
-    "cipher": "aes-256-cbc"
-  }
-}

@@ -1,6 +1,5 @@
 'use strict';
 
-var _ = require('lodash');
 var rdk = require('../../../core/rdk');
 var pjds = rdk.utils.pjdsStore;
 var fetch = require('./order-set-fetch-list').fetch;
@@ -19,9 +18,9 @@ var THE_UID = 'userUid';
 var DUMMY_CONFIG = 'dummyConfig';
 
 describe('Order sets pick-list resource', function() {
-    var pjdsGetReq = undefined;
-    var pjdsGetOptions = undefined;
-    var params = undefined;
+    var pjdsGetReq;
+    var pjdsGetOptions;
+    var params;
 
     beforeEach(function() {
         params = {

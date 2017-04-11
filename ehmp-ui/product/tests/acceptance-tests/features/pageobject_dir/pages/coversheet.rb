@@ -1,6 +1,11 @@
+path = File.expand_path '..', __FILE__
+$LOAD_PATH.unshift path unless $LOAD_PATH.include?(path)
+require 'global_header_section.rb'
 class PobCoverSheet < SitePrism::Page
   set_url '/#/patient/cover-sheet'
   set_url_matcher(/\/#\/patient\/cover-sheet/)
+
+  section :global_header, GlobalHeaderSection, ".navbar"
   # *****************  All_Form_Elements  ******************* #
   # *****************  All_Logo_Elements  ******************* #
   # *****************  All_Field_Elements  ******************* #

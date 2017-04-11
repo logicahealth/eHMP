@@ -1,4 +1,4 @@
-@F911 @US11427 @regression @triage @base_test @base
+@F911 @US11427   @base_test @base @reg1
 Feature: Convert Rspec/firefox Tests to Cucumber/phantomjs
 
 @TC405 @TC406 @TC407 @TC409 @TC411 @TC412 @TC414 @TC415
@@ -17,15 +17,11 @@ Scenario: The cover sheet screen should load without issue
   Then the Community Health Summaries applet Summary is displayed
   And 'An error has occured' is not displayed in any of the coversheet applets
 
-@TC416 @TC417 @TC418 @TC419 @TC420 @TC421 @TC422 @TC423 @DE6976 @three
+@TC416 @TC417 @TC418 @TC419 @TC420 @TC421 @TC422 @TC423 @DE6976
 Scenario: The overview screen should load without issue
 #  Given user is logged into eHMP-UI
-  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "TWO1234" verifycode as  "TWO1234!!"
-  Then staff view screen is displayed
-  Then Navigate to Patient Search Screen
-  Then the patient search screen is displayed
   And user searches for and selects "BCMA,Eight"
-  Then Overview is active
+  Then Overview is active 
   Then the Numeric Lab Results Trend applet is displayed
   Then the Vitals Trend applet is displayed
   Then the Immunization Trend applet is displayed
@@ -54,7 +50,7 @@ Scenario: The timeline screen should load without issue
 @TC413 
 Scenario: The user should be able to perform a text search
 #  Given user is logged into eHMP-UI
-  And user searches for and selects "BCMA,Eight"
+  And user searches for and selects "Eight,Patient"
   And Overview is active
   Then user searches for "pulse"
   Then Text Search results are displayed

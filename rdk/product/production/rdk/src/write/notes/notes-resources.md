@@ -183,7 +183,8 @@ Add a new unsigned note for a patient to single VistA
                     },
                     "pid": {
                         "type": "string",
-                        "description": "Patient PID identifier"
+                        "description": "Patient PID identifier",
+                        "pattern": "^([a-zA-Z0-9]+);([a-zA-Z0-9]+)$|^([0-9]+)V([0-9]+)$"
                     },
                     "processInstanceId": {
                         "type": "string",
@@ -489,7 +490,8 @@ Update an existing patient unsigned note
                     },
                     "pid": {
                         "type": "string",
-                        "description": "Patient PID identifier"
+                        "description": "Patient PID identifier",
+                        "pattern": "^([a-zA-Z0-9]+);([a-zA-Z0-9]+)$|^([0-9]+)V([0-9]+)$"
                     },
                     "processInstanceId": {
                         "type": "string",

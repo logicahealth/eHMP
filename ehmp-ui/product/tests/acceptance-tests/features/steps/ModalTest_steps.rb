@@ -11,7 +11,7 @@ class ModalTest < AccessBrowserV2
   include Singleton
   def initialize
     super
-    add_action(CucumberLabel.new("Close Button"), ClickAction.new, AccessHtmlElement.new(:css, "#modal-footer div div.pull-right .btn.btn-default")) 
+    add_action(CucumberLabel.new("Close Button"), ClickAction.new, AccessHtmlElement.new(:css, "#modal-close-button")) 
     add_action(CucumberLabel.new("Cancel Button"), ClickAction.new, AccessHtmlElement.new(:css, "#modal-footer div div.pull-right #cancelBtn"))
     add_verify(CucumberLabel.new("ModalTitle"), VerifyContainsText.new, AccessHtmlElement.new(:id, "mainModalLabel"))
   end
@@ -24,6 +24,13 @@ end
 When(/^the user clicks the modal "(.*?)"$/) do |button|
   con = ModalTest.instance
   expect(con.perform_action(button)).to be_true
+end
+
+Then(/^the user clicks the modal Close Button$/) do
+  modal = ModalElements.new
+  modal.wait_until_btn_modal_close_visible
+  expect(modal).to have_btn_modal_close
+  modal.btn_modal_close.click
 end
 
 def element_is_not_present?(how, what)

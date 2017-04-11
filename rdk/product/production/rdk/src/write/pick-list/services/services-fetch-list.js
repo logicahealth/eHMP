@@ -25,4 +25,4 @@ var rpcUtil = require('./../utils/rpc-util');
  */
 module.exports.fetch = function(logger, configuration, callback) {
     return rpcUtil.standardRPCCall(logger, configuration, 'ORQQPL SRVC SRCH', '', '1', parse, callback);
-}
+};

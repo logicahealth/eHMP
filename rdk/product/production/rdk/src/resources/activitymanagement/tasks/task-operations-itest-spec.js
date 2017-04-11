@@ -2,7 +2,6 @@
 
 var tasksResource = require('./task-operations-resource');
 var _ = require('lodash');
-var util = require('util');
 
 var fakeRequest = {
     app: {
@@ -11,17 +10,17 @@ var fakeRequest = {
                 activityDatabase: {
                     'user': 'activitydbuser',
                     'password': 'activitydb$11',
-                    'connectString': 'IP             /xe'
+                    'connectString': '10.4.4.208:1521/xe'
                 }
             },
             jdsServer: {
-                'baseUrl': 'http://IP             ',
+                'baseUrl': 'http://10.2.2.110:9080',
                 'urlLengthLimit': 120
             }
         }
     },
     session: {
-        user: { //PW    
+        user: { //pu1234
             duz: {
                 '9E7A': '10000000270'
             },

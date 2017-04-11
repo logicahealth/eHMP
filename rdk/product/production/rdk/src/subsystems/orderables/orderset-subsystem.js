@@ -274,7 +274,7 @@ module.exports.updateOrderSet = function(req, res) {
 };
 
 module.exports.getSearch = function(req, res) {
-    search(req, res, req.param('name'), req.session.user.site, req.session.user.uid, function(error, result) {
+    search(req, res, req.param('name'), req.session.user.site, req.session.user.uid, function(error, result) { 
         if (error) {
             req.logger.error('OrderSet search: ', error);
             return res.status(rdk.httpstatus.internal_server_error).rdkSend('An error occurred when searching for OrderSet.');

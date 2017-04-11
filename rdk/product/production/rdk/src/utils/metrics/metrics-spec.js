@@ -16,7 +16,7 @@ describe('Metrics spec', function() {
             logger: logger,
             config: {
                 mvi: {
-                    baseUrl: 'http://IP               '
+                    baseUrl: 'http://10.10.01.101:9080'
                 },
                 jdsServer: {
                     baseUrl: ''
@@ -30,7 +30,7 @@ describe('Metrics spec', function() {
                 vistaSites: {
                     '9E7A': {
                         name: 'PANORAMA',
-                        host: 'IP        '
+                        host: '10.2.2.101'
                     }
                 }
             }
@@ -61,7 +61,7 @@ describe('Metrics spec', function() {
 
     it('handle outgoing start with mvi host', function() {
         var data = metrics.handleOutgoingStart({
-            baseUrl: 'http://IP               ',
+            baseUrl: 'http://10.10.01.101:9080',
             url: '/something'
         }, logger);
 
@@ -71,7 +71,7 @@ describe('Metrics spec', function() {
 
     it('handle outgoing start with 9E7A vista host', function() {
         var data = metrics.handleOutgoingStart({
-            baseUrl: 'http://IP             ',
+            baseUrl: 'http://10.2.2.101:8888',
             url: '/path'
         }, logger);
 
@@ -81,11 +81,11 @@ describe('Metrics spec', function() {
 
     it('assemble a full URL from baseUrl and url', function() {
         var data = metrics.handleOutgoingStart({
-            baseUrl: 'http://IP             ',
+            baseUrl: 'http://10.2.2.101:8888',
             url: '/path'
         }, logger);
 
-        expect(data.host.host).to.equal('http://IP             /path');
+        expect(data.host.host).to.equal('http://10.2.2.101:8888/path');
     });
 
     it('handle incoming start', function() {

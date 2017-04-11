@@ -1,18 +1,12 @@
 'use strict';
 
 var rdk = require('../../core/rdk');
-var _ = require('lodash');
 var procedureResource = require('./procedure-resource');
-var procedure = require('./procedure');
-var educations = require('./educations');
 var inputValueProcedure = require('./procedureAll-resource-spec-data').inputValueProcedure;
 var inputValueEducations = require('./procedureAll-resource-spec-data').inputValueEducations;
-var fhirUtils = require('../common/utils/fhir-converter');
 
 var async = require('async');
 
-var procedureJDSPath;
-var educationsJDSPath;
 var pid = '9E7A;227';
 var req;
 var res = {

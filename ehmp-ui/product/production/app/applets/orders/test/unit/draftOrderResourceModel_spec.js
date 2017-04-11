@@ -49,7 +49,7 @@ define([
                 statusCode: 201,
                 headers: {
                     date: 'Tue, 09 Feb 2016 00:02:35 GMT',
-                    location: 'http://IP             /clinicobj/' + testUid,
+                    location: 'http://10.2.2.110:9080/clinicobj/' + testUid,
                     'content-type': 'application/json',
                     'content-length': '0'
                 },
@@ -58,15 +58,15 @@ define([
                         protocol: 'http:',
                         slashes: true,
                         auth: null,
-                        host: 'IP             ',
+                        host: '10.2.2.110:9080',
                         port: '9080',
-                        hostname: 'IP        ',
+                        hostname: '10.2.2.110',
                         hash: null,
                         search: null,
                         query: null,
                         pathname: '/clinicobj',
                         path: '/clinicobj',
-                        href: 'http://IP             /clinicobj'
+                        href: 'http://10.2.2.110:9080/clinicobj'
                     },
                     method: 'POST',
                     headers: {

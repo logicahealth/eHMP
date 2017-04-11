@@ -11,3 +11,16 @@ Scenario: Verify applet selection catalog/bucket lists the default workspace
     When the user copies My Workspace workspace
     And the user chooses to customize the My Workspace copy
     Then the default workspace applet is also listed in the applet selection catalog/bucket.
+
+ @US6598 @US7006 
+Scenario: Provider View
+	# Given user is logged into eHMP-UI
+    When the patient search screen is displayed
+    Then Staff View Navigation is displayed
+
+@US7215 @US7006 @TC1051 @TC1236 @TC1239 @DE3055
+Scenario: Add applets to Provider View - navigate to Provider Centric View from patient search screen
+    # Given user is logged into eHMP-UI
+    And the patient search screen is displayed
+    When the user selects Staff View from the navigation bar
+    Then Provider Centric View is active

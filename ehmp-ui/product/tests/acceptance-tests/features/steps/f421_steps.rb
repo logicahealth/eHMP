@@ -76,8 +76,11 @@ Then(/^the workspace editor button is displayed$/) do
   expect(editor.wait_until_element_present('Plus Button')).to eq(true)
 end
 
-When(/^the user selects Patient Selection from navigation bar$/) do
-  expect(PatientSearch.instance.perform_action('patientSearch')).to eq(true)
+When(/^the user selects Staff View from navigation bar$/) do
+  header = PobHeaderFooter.new
+  expect(header.wait_for_fld_staff_view).to eq(true)
+  header.fld_staff_view.click
+  wait_for_staff_view_loaded_ignore_errors
 end
 
 When(/^the user selects current patient link$/) do

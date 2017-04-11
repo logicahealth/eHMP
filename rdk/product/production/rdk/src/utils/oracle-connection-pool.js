@@ -184,11 +184,11 @@ module.exports.doExecuteProcMultipleRecordSets = function(req, dbConfig, query, 
                                     }
                                     self._doCloseRecordset(req, result.outBinds.recordset, function(cberr) {
                                         return parallelCb(err, null); //return the original error
-                                    })
+                                    });
                                 }
                                 self._doCloseRecordset(req, result.outBinds.recordset, function(err) {
                                     return parallelCb(null, rows); //only return the cb after recordset is done
-                                })
+                                });
                             });
 
                         },
@@ -201,11 +201,11 @@ module.exports.doExecuteProcMultipleRecordSets = function(req, dbConfig, query, 
                                     }
                                     self._doCloseRecordset(req, result.outBinds.recordset2, function() {
                                         return parallelCb(err, null); //only return the cb after recordset is done
-                                    })
+                                    });
                                 }
                                 self._doCloseRecordset(req, result.outBinds.recordset2, function() {
                                     return parallelCb(null, rows); //only return the cb after recordset is done
-                                })
+                                });
                             });
                         }
                     ],
@@ -319,7 +319,6 @@ module.exports._doCloseRecordset = function(req, recordSet, cb) {
     //warning : this method does not close the connection
     //        : it only closes the record set
     //        : make sure you issue ._doClose once you've closed all your resultsets
-    var self = this;
     recordSet.close(
         function(err) {
             if (err) {

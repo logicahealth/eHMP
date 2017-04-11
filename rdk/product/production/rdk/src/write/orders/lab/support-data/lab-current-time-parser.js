@@ -19,7 +19,7 @@ module.exports.parseCurrentTime = function(logger, rpcData) {
         };
         retValue.push(currentTime);
     } else {
-        throw new Error("The RPC returned data but we couldn't understand it: " + rpcData);
+        throw new Error('The RPC returned data but we couldn\'t understand it: ' + rpcData);
     }
     logger.info({
         retValue: retValue

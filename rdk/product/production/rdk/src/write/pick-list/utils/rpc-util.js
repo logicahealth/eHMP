@@ -307,4 +307,4 @@ module.exports.getBooleanValue = function(value) {
     else {
         throw new Error('getBooleanValue: Was not a boolean value it was a: ' + typeof value);
     }
-}
+};

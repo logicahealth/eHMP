@@ -1,6 +1,6 @@
 # Group Pick List
 
-## Medication orders quantity for days supply [/medication-orders-quantity-for-days-supply{?site}{&daysSupply}{&unitsPerDose}{&schedule}{&duration}{&patientDFN}{&drug}]
+## Medication orders quantity for days supply [/medication-orders-quantity-for-days-supply{?site}{&daysSupply}{&unitsPerDose}{&schedule}{&duration}{&pid}{&drug}]
 
 DIRECT RPC CALL - Returns med order quantity value for days supply
 
@@ -20,7 +20,7 @@ ORWDPS2 DAY2QTY
 
     + duration: `~` (string, required) - DUR PARAMETER = DURATION, NO DURATION VALUE
 
-    + patientDFN: `100615` (number, required) - PAT PARAMETER = PATIENT FILE #2 IEN
+    :[pid]({{{common}}}/parameters/pid.md)
 
     + drug: `213` (string, required) - DRG PARAMETER = DRUG FILE #50 IEN
 

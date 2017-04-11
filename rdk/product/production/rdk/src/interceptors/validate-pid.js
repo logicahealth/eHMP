@@ -13,7 +13,7 @@ var pidValidator = rdk.utils.pidValidator;
 module.exports = function(req, res, next) {
     req.logger.info('validate-pid interceptor invoked');
 
-    var pid = _.result(req, 'query.pid') || _.result(req, 'params.pid') || _.result(req, 'body.pid') || _.result(req, 'body.icn')|| _.result(req, 'body.edipi')||'';
+    var pid = _.result(req, 'query.pid') || _.result(req, 'params.pid') || _.result(req, 'body.pid') || _.result(req, 'body.icn') || _.result(req, 'body.edipi') || '';
     if (nullchecker.isNullish(pid)) {
         return next();
     }
@@ -23,11 +23,11 @@ module.exports = function(req, res, next) {
         return next();
     }
 
-    if (pidValidator.isEdipi(pid) || pidValidator.isPidEdipi(pid)) {
+    if (pidValidator.isPidEdipi(pid)) {
         req.logger.debug('is edipi: %s', pid);
         return next();
     }
 
-    var errorMsg = "Invalid Pid. Please pass either ICN, EDIPI or Primary Site ID.";
+    var errorMsg = 'Invalid Pid. Please pass either ICN, EDIPI or Primary Site ID.';
     return res.status(400).rdkSend(errorMsg);
 };

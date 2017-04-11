@@ -189,7 +189,6 @@ function handleRPCResponse (writebackContext, err, response) {
 function create (writebackContext, callback) {
     var logger = writebackContext.logger;
     var vistaConfig = writebackContext.vistaConfig;
-    var model = writebackContext.model;
     var dfn = writebackContext.interceptorResults.patientIdentifiers.dfn;
 
     if(nullchecker.isNullish(dfn)){
@@ -199,7 +198,6 @@ function create (writebackContext, callback) {
 
     var allergies = getAllergyRPCString(writebackContext.model, logger);
     logger.debug({allergies: allergies});
-
 
     RpcClient.callRpc(logger, vistaConfig, 'HMP WRITEBACK ALLERGY', [0, dfn, allergies], function (err, result) {
         handleRPCResponse(writebackContext, err, result);

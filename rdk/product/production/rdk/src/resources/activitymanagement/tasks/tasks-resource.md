@@ -12,7 +12,7 @@ Get tasks with given context and assigned to certain parties
             {
                 "context": "ssss",
                 "subContext": "ssss",
-                "patientICN": "ssss",
+                "pid": "9E7A;3",
                 "status": "ssss",
                 "priority": "ssss",
                 "getNotifications": false,
@@ -37,8 +37,9 @@ Get tasks with given context and assigned to certain parties
                     "subContext": {
                         "type": "string"
                     },
-                    "patientICN": {
-                        "type": "string"
+                    "pid": {
+                        "type": "string",
+                        "pattern": "^([a-zA-Z0-9]+);([a-zA-Z0-9]+)$|^([0-9]+)V([0-9]+)$"
                     },
                     "status": {
                         "type": "string"
@@ -144,7 +145,7 @@ Get current tasks with given context
 
             {
                 "processInstanceId": 23,
-                "patientICN": "ssss",
+                "pid": "9E7A;3",
                 "priority": "ssss"
             }
 
@@ -160,8 +161,9 @@ Get current tasks with given context
                     "processInstanceId": {
                         "type": "integer"
                     },
-                    "patientICN": {
-                        "type": "string"
+                    "pid": {
+                        "type": "string",
+                        "pattern": "^([a-zA-Z0-9]+);([a-zA-Z0-9]+)$|^([0-9]+)V([0-9]+)$"
                     },
                     "priority": {
                         "type": "string"
@@ -195,13 +197,15 @@ Returns all the details of task with given id, including: taskID, taskType (Huma
 :[Response 500]({{{common}}}/responses/500.md)
 
 
-### GetOpenConsults [GET {{{path}}}/openconsults{?icn}]
+### GetOpenConsults [GET {{{path}}}/openconsults{?pid}]
 
 Returns all the details of tasks of type open consult for a given user, including: taskID, taskType (Human or System), and task state etc.
 
 + Parameters
 
-    + icn (string, required) - icn of the patient for whom we want open consults
+    :[pid]({{{common}}}/parameters/pid.md)
+
+        For the patient for whom we want open consults.
 
 + Response 200 (application/json)
 

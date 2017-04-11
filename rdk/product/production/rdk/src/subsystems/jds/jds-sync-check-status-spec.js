@@ -87,28 +87,32 @@ describe('JDS Utils Testing', function() {
         });
         it('Testing with sample Sync Status: syncCompleted', function(){
             var testSiteStatus = {
-              latestJobTimestamp: 1464293174353,
-              pid: '9E7A;3',
-              sourceStampTime: 20160526160604,
-              syncCompleted: true
+                latestJobTimestamp: 1464293174353,
+                pid: '9E7A;3',
+                sourceStampTime: 20160526160604,
+                syncCompleted: true,
+                solrSyncCompleted: true
             };
             var retStatus = jdsUtils.getSiteSyncDataStatusSimple(testSiteStatus);
             expect(retStatus.isSyncCompleted).to.eql(true);
             expect(retStatus.hasError).to.be.undefined();
             expect(retStatus.completedStamp).to.eql(testSiteStatus.sourceStampTime);
+            expect(retStatus.isSolrSyncCompleted).to.eql(testSiteStatus.solrSyncCompleted);
         });
         it('Testing with sample Sync Status: hasError', function(){
             var testSiteStatus = {
-              hasError: true,
-              latestJobTimestamp: 1464293174353,
-              pid: '9E7A;3',
-              sourceStampTime: 20160526160604,
-              syncCompleted: false
+                hasError: true,
+                latestJobTimestamp: 1464293174353,
+                pid: '9E7A;3',
+                sourceStampTime: 20160526160604,
+                syncCompleted: false,
+                solrSyncCompleted: false
             };
             var retStatus = jdsUtils.getSiteSyncDataStatusSimple(testSiteStatus);
             expect(retStatus.isSyncCompleted).to.eql(false);
             expect(retStatus.hasError).to.eql(true);
             expect(retStatus.completedStamp).to.be.undefined();
+            expect(retStatus.isSolrSyncCompleted).to.eql(testSiteStatus.solrSyncCompleted);
         });
         it('Testing with sample Sync Status: not completed', function(){
             var testSiteStatus = {
@@ -121,6 +125,7 @@ describe('JDS Utils Testing', function() {
             expect(retStatus.isSyncCompleted).to.eql(false);
             expect(retStatus.hasError).to.eql(false);
             expect(retStatus.completedStamp).to.be.undefined();
+            expect(retStatus.isSolrSyncCompleted).to.be.undefined();
         });
     });
 });

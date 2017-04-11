@@ -37,12 +37,12 @@ module.exports.directRpcCall = function(req, site, type, callback) {
             if (nullUtil.isNullish(req.param(paramName)) || _.isEmpty(req.param(paramName))) {
                 callback('Parameter \'' + paramName + '\' cannot be null or empty');
                 aborted = true;
-                return false;//Break out of _.each
+                return false; //Break out of _.each
             }
             _.set(params, paramName, req.param(paramName).toUpperCase());
         });
         if (aborted) {
-            return true;//The request was unsuccessful, but this was still the correct function to handle it.
+            return true; //The request was unsuccessful, but this was still the correct function to handle it.
         }
     }
     if (_.has(pickListConfig[i], 'optionalParams')) {
@@ -72,11 +72,17 @@ module.exports.directRpcCall = function(req, site, type, callback) {
     if (!pickListConfig[i].vistaContext) {
         return callback('The vistaContext was not found in the pick-list-config-in-memory-rpc-call.json configuration');
     }
-    siteConfig.context = pickListConfig[i].vistaContext;
-    siteConfig.vxSyncServer = req.app.config.vxSyncServer;
-    siteConfig.generalPurposeJdsServer = req.app.config.generalPurposeJdsServer;
-    siteConfig.site = site;
-    siteConfig.rootPath = req.app.config.rootPath;
+    // work on a copy of site config to avoid mutating the original
+    siteConfig = _.extend({}, siteConfig, {
+        context: pickListConfig[i].vistaContext,
+        vxSyncServer: req.app.config.vxSyncServer,
+        generalPurposeJdsServer: req.app.config.generalPurposeJdsServer,
+        site: site,
+        rootPath: req.app.config.rootPath,
+        // RDK configs have site division arrays. RPCs have a configuration property of the same name. Setting
+        // to null otherwise the RPC calls will attempt to set division context to it (an Array) and fail.
+        division: null
+    });
 
     require(pickListRoot + pickListConfig[i].modulePath).fetch(req.logger, siteConfig, function(err, result, statusCode, headers) {
         callback(err, result, statusCode, headers);

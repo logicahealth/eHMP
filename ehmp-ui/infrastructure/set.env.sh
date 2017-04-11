@@ -12,7 +12,7 @@ project_name=ehmp-ui
 
 jdk_version="jdk1.8.0_92"
 
-export VAGRANT_BIN=/usr/bin/vagrant
+export VAGRANT_BIN=/usr/local/bin/vagrant
 
 export GRADLE_HOME=/usr/local/gradle/gradle-2.4
 export GROOVY_HOME=/usr/local/groovy/groovy-2.0.6

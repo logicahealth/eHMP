@@ -11,6 +11,7 @@ var moment = require('moment');
 var asuUtils = require('./asu-utils');
 var vistaJs = require('vista-js');
 var filemanDateUtil = require('../../utils/fileman-date-converter');
+var UidUtil = require('../../utils/uid-utils');
 var RpcParameter = vistaJs.RpcParameter;
 var RpcClient = vistaJs.RpcClient;
 var clincialObjectsSubsystem = require('../../subsystems/clinical-objects/clinical-objects-subsystem');
@@ -58,7 +59,8 @@ var getResourceConfig = function() {
 };
 
 function getPatientNotes(req, res) {
-    if (!req.query.localPid) {
+    var localPid = req.body.localPid || req.query.localPid;
+    if (!localPid) {
         return res.status(rdk.httpstatus.bad_request).rdkSend('Missing localPid parameter');
     }
 
@@ -378,9 +380,8 @@ function readVistaSignedNotes(req, callback) {
 
 
 function getDocumentsFromJds(req, queryConfig, callback) {
-    var pid = req.query.pid;
+    var pid = req.body.pid || req.query.pid;
     var index = 'docs-view';
-    var baseJdsResource = '/vpr/' + pid + '/index/' + index;
     var jdsQuery = {};
     var filter = [];
 
@@ -429,7 +430,6 @@ function getDocumentsFromJds(req, queryConfig, callback) {
 }
 
 function getDocumentsFromPjds(req, callback) {
-    var pid = _.last(req.query.localPid.split(';'));
     var site = req.session.user.site;
     var user = req.session.user.duz[site];
     var authorUid = 'urn:va:user:' + site + ':' + user;
@@ -441,7 +441,26 @@ function getDocumentsFromPjds(req, callback) {
         For a patient with only an ICN identifier the format is
         "urn:va:patient:VLER:[icn-value]:[icn-value]” (e.g. "urn:va:patient:VLER:45679V45679:45679V45679")
     */
-    var patientUid = 'urn:va:patient:' + site + ':' + pid + ':' + pid;
+    var patientIdentifiers = _.get(req, 'interceptorResults.patientIdentifiers', {});
+    var patientUids = _.get(patientIdentifiers, 'uids', []);
+    var patientUid;
+    if (_.isUndefined(patientIdentifiers.dfn) && _.isUndefined(patientIdentifiers.icn)) {
+        logger.debug('getDocumentsFromPjds - Patient dfn or icn not found on interceptor results');
+        return callback('Patient dfn or icn not found on interceptor results', null);
+    }
+    if (_.isEmpty(patientUids)) {
+        logger.debug('getDocumentsFromPjds - Patient uids not found on interceptor results');
+        return callback('Patient uids not found on interceptor results', null);
+    }
+    if (patientIdentifiers.dfn && patientIdentifiers.site) {
+        patientUid = UidUtil.getSiteDfnUidFromUidArray(req);
+    } else if (req.interceptorResults.patientIdentifiers.icn) {
+        patientUid = UidUtil.getIcnUidFromUidArray(req);
+    }
+    if (_.isUndefined(patientUid)) {
+        logger.debug('getDocumentsFromPjds - Patient uid not found in interceptor results uids array');
+        return callback('Patient uid not found in interceptor results uids array', null);
+    }
 
     var clinicalObjFilter = {
         'authorUid': authorUid,
@@ -490,7 +509,7 @@ function getDocumentsFromPjds(req, callback) {
 
 function getAddendaFromPjds(req, removeNonAuthorNote, callback) {
     var logger = req.logger;
-    var pid = req.query.localPid || req.query.pid;
+    var pid = req.body.localPid || req.body.pid || req.query.localPid || req.query.pid;
 
     if (pid.indexOf(';') <= -1) {
         req.logger.warn(pid + ' is not a regular pid');
@@ -508,7 +527,26 @@ function getAddendaFromPjds(req, removeNonAuthorNote, callback) {
         For a patient with only an ICN identifier the format is
         "urn:va:patient:VLER:[icn-value]:[icn-value]” (e.g. "urn:va:patient:VLER:45679V45679:45679V45679")
     */
-    var patientUid = 'urn:va:patient:' + site + ':' + pid + ':' + pid;
+    var patientIdentifiers = _.get(req, 'interceptorResults.patientIdentifiers', {});
+    var patientUids = _.get(patientIdentifiers, 'uids', []);
+    var patientUid;
+    if (_.isUndefined(patientIdentifiers.dfn) && _.isUndefined(patientIdentifiers.icn)) {
+        logger.debug('getAddendaFromPjds - Patient dfn or icn not found on interceptor results');
+        return callback('Patient dfn or icn not found on interceptor results', null);
+    }
+    if (_.isEmpty(patientUids)) {
+        logger.debug('getAddendaFromPjds - Patient uids not found on interceptor results');
+        return callback('Patient uids not found on interceptor results', null);
+    }
+    if (patientIdentifiers.dfn && patientIdentifiers.site) {
+        patientUid = UidUtil.getSiteDfnUidFromUidArray(req);
+    } else if (req.interceptorResults.patientIdentifiers.icn) {
+        patientUid = UidUtil.getIcnUidFromUidArray(req);
+    }
+    if (_.isUndefined(patientUid)) {
+        logger.debug('getAddendaFromPjds - Patient uid not found in interceptor results uids array');
+        return callback('Patient uid not found in interceptor results uids array', null);
+    }
 
     var addendumObjFilter = {
         'domain': 'ehmp-note',
@@ -553,7 +591,6 @@ function getAddendaFromPjds(req, removeNonAuthorNote, callback) {
         parents = _.filter(parents, function(parent, index) {
             parent.uid = parent.clinicalObject.referenceId;
 
-            var addenda = [];
             if (parent.status === 'RETRACTED') {
                 // Update addendum clinical obj
                 retractClinicalObject(parent, logger, appConfig);
@@ -641,7 +678,6 @@ function createModelForUnsignedAddendum(logger, parent, authorUid) {
 function createModelForDocumentAddendum(logger, addendum, parent) {
     var newAddendum = _.clone(addendum);
     var statusDisplayName = newAddendum.status.toLowerCase();
-    var objLocationName;
     statusDisplayName = statusDisplayName.charAt(0).toUpperCase() + statusDisplayName.substr(1);
     newAddendum.app = 'vista';
     newAddendum.documentDefUid = parent.documentDefUid;
@@ -795,17 +831,20 @@ function getLocationName(req, cb) {
 
     var DFN = req.interceptorResults.patientIdentifiers.dfn;
 
-    if(nullchecker.isNullish(DFN)){
+    if (nullchecker.isNullish(DFN)) {
         return cb('Missing required patient identifiers');
     }
 
-    var config = req.app.config;
-    var site = req.session.user.site;
     var HMP_UI_CONTEXT = 'HMP UI CONTEXT';
     var RPC_NAME = 'TIU DOCUMENTS BY CONTEXT';
     var START_DATE = filemanDateUtil.getFilemanDateTime(new Date(moment().subtract(2, 'years').format('MMMM D, YYYY HH:mm:ss')));
     var STOP_DATE = filemanDateUtil.getFilemanDateTime(new Date(moment().format('MMMM D, YYYY HH:mm:ss')));
-    var vistaConfig = _.extend({}, req.app.config.vistaSites[site], {
+    if (_.isUndefined(req.interceptorResults.patientIdentifiers.site)) {
+        req.logger.debug('getLocationName - missing patient site from interceptor patient identifier results');
+        return cb('Missing patient site parameter.', null);
+    }
+
+    var vistaConfig = _.extend({}, req.app.config.vistaSites[req.interceptorResults.patientIdentifiers.site], {
         context: HMP_UI_CONTEXT,
         accessCode: req.session.user.accessCode,
         verifyCode: req.session.user.verifyCode
@@ -822,7 +861,7 @@ function getLocationName(req, cb) {
     parameters.push(RpcParameter.literal('D')); // sort order by reference date/time D/A
     parameters.push(RpcParameter.literal('1')); // sBOOLEAN parameter determines whether addenda will be included in the return array
 
-    var rpc = RpcClient.callRpc(req.logger, vistaConfig, RPC_NAME, parameters, function(err, result) {
+    RpcClient.callRpc(req.logger, vistaConfig, RPC_NAME, parameters, function(err, result) {
         if (err) {
             req.logger.error(err, 'Rresource patient-record-notes: function getLocationName(), error on RPC TIU DOCUMENTS BY CONTEXT call');
             return cb(null, []); // return empty list in case of error
@@ -913,7 +952,8 @@ function setLocationName(obj, locationsList) {
 }
 
 function getNoteUidAssociatedtoConsultUid(req, res) {
-    if (!req.query.consultUid) {
+    var consultUid = req.body.consultUid || req.query.consultUid;
+    if (!consultUid) {
         return res.rdkSend({
             data: {
                 noteClinicalObjectUid: ''
@@ -921,7 +961,7 @@ function getNoteUidAssociatedtoConsultUid(req, res) {
         });
     }
 
-    clincialObjectsSubsystem.read(req.logger, req.app.config, req.query.consultUid, true, function(err, response) {
+    clincialObjectsSubsystem.read(req.logger, req.app.config, consultUid, true, function(err, response) {
         if (err) {
             req.logger.error('getNoteUidAssociatedtoConsultUid error:', err);
             return res.status(rdk.httpstatus.internal_server_error).rdkSend(err);

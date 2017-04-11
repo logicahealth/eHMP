@@ -2896,24 +2896,24 @@ define([
             expect(result.date).toBe("60d");
             expect(result.description).toBe('This medication is active and fillable for 60 days.');
         });
-        it("Confirm active and not fillable, when last filled, overallStop and stopped date are undefined", function() {
+        it("Confirm 'Refillable' when expiration date is in the future, medication status is 'Active', supply should be exhausted (lastFilled + daysSupply is in the past), but last refill has not been picked up", function() {
             var timeSinceDate = {};
             var orders = medication.get('orders');
             orders[0].fillsRemaining = 1;
-            orders[0].daysSupply = 60;
+            orders[0].daysSupply = 30;
 
-            medication.set("lastFilled", undefined);
+            medication.set("lastFilled", "20150501");
             medication.set("vaStatus", 'active');
             medication.set("orders", orders);
-            medication.set("overallStart", '201602020000');
-            medication.set("overallStop", undefined);
-            medication.set("stopped", undefined);
+            medication.set("overallStart", '20150501');
+            medication.set("stopped", moment().add(1, 'years'));
+            medication.set("overallStop", moment().add(1, 'years'));
 
-            var result = medication.getNextMedication(timeSinceDate, moment('02/01/2017 00:00', 'MM/DD/YYYY HH:mm'));
-            expect(result.display).toBe("Not Refillable");
+            var result = medication.getNextMedication(timeSinceDate);
+            expect(result.display).toBe("Refillable");
             expect(result.label).toBe("label label-warning");
             expect(result.date).toBe(undefined);
-            expect(result.description).toBe('This medication is active but expiration date has passed.');
+            expect(result.description).toBe("This medication is active and expiration date has not passed, but supply should be exhausted and the last refill has not been picked up.");
         });
         it("Confirm not refillable when stopped and overallStop dates are in the past and medication status is active", function() {
             var timeSinceDate = {};

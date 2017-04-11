@@ -230,6 +230,8 @@ define([
                 else {
                     this.checkServerSideValidations();
                 }
+            }else{
+                this.transferFocusToFirstError();
             }
         },
         checkServerSideValidations: function() {
@@ -404,7 +406,6 @@ define([
 
             this.model.set({
                 pid: pid,
-                dfn: localId,
                 provider: providerCode,
                 orderDialog: 'LR OTHER LAB TESTS',
                 quickOrderDialog: '2',

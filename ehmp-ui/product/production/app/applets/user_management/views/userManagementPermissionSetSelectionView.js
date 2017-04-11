@@ -26,14 +26,14 @@ define([
                     if (model.get('duz').toString() === currentUserDuz) {
                         editingSelf = true;
                     }
-                    var userPermissionSets = model.get('permissionSets');
+                    var userPermissionSets = _.get(model.get('permissionSets'), 'val', []);
                     allPermissionSets.each(function(permissionSet) {
                         var keepACC = (editingSelf && ADK.UserService.hasPermission('edit-own-permissions') && permissionSet.get('val') === 'acc');
                         if (keepACC) {
                             permissionSet.set('keepSelected', true);
                         }
                         permissionSet.set('permissionsCollection', appletUtil.createPermissionsCollectionFromList(permissionSet.get('permissions')));
-                        if (_.indexOf(userPermissionSets.val, permissionSet.get('val')) > -1) {
+                        if (_.indexOf(userPermissionSets, permissionSet.get('val')) > -1) {
                             permissionSet.set('selected', true);
                         } else {
                             permissionSet.set('selected', false);
@@ -402,12 +402,13 @@ define([
                             ADK.UI.Workflow.hide();
                             var value = '';
                             var alertMessage = '';
-                            if (permissionSetsArray && permissionSetsArray.data && permissionSetsArray.data.val) {
+                            if (_.get(permissionSetsArray, 'data.val', false)) {
                                 value = permissionSetsArray.data.val.join();
                                 alertMessage = 'The permissions have been successfully modified with no errors. ';
                                 var ehmpStatus = 'active';
 
-                                if (permissionSetsArray.data.val.length === 0 && permissionSetsArray.data.additionalPermissions && permissionSetsArray.data.additionalPermissions.length === 0) {
+                                if (permissionSetsArray.data.val.length === 0 &&
+                                    _.isEmpty(_.get(permissionSetsArray, 'data.additionalPermissions'))) {
                                     ehmpStatus = 'inactive';
                                     alertMessage = alertMessage + 'All Permission Sets and Additional Individual Permissions have been removed. User ' + userModel.get('fname') + ' ' + userModel.get('lname') + ' is now inactive in eHMP';
                                 }

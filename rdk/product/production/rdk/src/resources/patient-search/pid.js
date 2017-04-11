@@ -1,12 +1,12 @@
 'use strict';
-var rdk = require('../../core/rdk');
 var util = require('util');
 var _ = require('lodash');
-var auditUtil = require('../../utils/audit');
-var mask = require('./search-mask-ssn');
-var maskPtSelectSsn = mask.maskPtSelectSsn;
+var rdk = require('../../core/rdk');
 var pidValidator = rdk.utils.pidValidator;
-var patientSearchResource = require('./patient-search-resource');
+var RdkError = rdk.utils.RdkError;
+var auditUtil = require('../../utils/audit');
+var maskPtSelectSsn = require('./search-mask-ssn').maskPtSelectSsn;
+var patientSearchUtil = require('./patient-search-util');
 var globalSearch = require('./global-search');
 var lastWorkspace = require('./last-workspace');
 
@@ -32,39 +32,40 @@ function performPatientSearch(req, res, otherPid, internalCallback, maskSSN) {
     var pid = otherPid || req.param('pid');
     req.logger.debug('Performing pid.performPatientSearch with PID value: "%s"', pid);
     if (!pid) {
-        return res.status(rdk.httpstatus.bad_request).rdkSend('Missing pid parameter');
+        var pidError = new RdkError({
+            code: 'rdk.400.1006',
+            logger: req.logger
+        });
+        return res.status(pidError.status).rdkSend(pidError);
     }
-    var site = patientSearchResource.getSite(req.logger, 'pid.performPatientSearch', pid, req);
+    auditUtil.addAdditionalMessage(req, 'searchCriteriaPid', util.format('pid=%s', pid));
+    var site = patientSearchUtil.getSite(req.logger, 'pid.performPatientSearch', pid, req);
     if (site === null) {
-        req.logger.error('pid.performPatientSearch ERROR couldn\'t obtain site');
-        return res.status(rdk.httpstatus.bad_request).rdkSend('Missing site information from session or request');
+        var siteError = new RdkError({
+            code: 'rdk.400.1003',
+            error: 'pid.performPatientSearch ERROR couldn\'t obtain site',
+            logger: req.logger
+        });
+        return res.status(siteError.status).rdkSend(siteError);
     }
     req.logger.debug('pid.performPatientSearch retrieving patient data for ' + pid);
-    auditUtil.addAdditionalMessage(req, 'searchCriteriaPid', util.format('pid=%s', pid));
     var jdsResource;
-    var vxSyncPid = '';
-    var useVxSyncPid = false;
     if (pidValidator.isIcn(pid)) {
         req.logger.debug('pid.performPatientSearch single patient search: using icn');
         jdsResource = 'ICN';
     } else if (pidValidator.isPidEdipi(pid)) {
         req.logger.debug('pid.performPatientSearch single patient search: using pidedipi as pid');
         jdsResource = 'PID';
-        vxSyncPid = site + ';' + pid;
-        useVxSyncPid = true;
-    } else if (pidValidator.isEdipi(pid)) {
-        req.logger.debug('pid.performPatientSearch single patient search: using edipi as pid');
-        pid = 'DOD;' + pid;
-        vxSyncPid = site + ';' + pid;
-        useVxSyncPid = true;
-        jdsResource = 'PID';
-        req.logger.debug('pid.performPatientSearch edipi ' + pid);
     } else if (pidValidator.isSiteDfn(pid)) {
         req.logger.debug('pid.performPatientSearch single patient search: using site;dfn');
         jdsResource = 'PID';
     } else {
-        req.logger.error('pid.performPatientSearch single patient search: pid or icn not detected in PID: "%s"', pid);
-        return res.status(rdk.httpstatus.bad_request).rdkSend('Invalid Pid. Please pass either ICN or Primary Site ID.');
+        var inValidPidError = new RdkError({
+            code: 'rdk.400.1007',
+            error: util.format('pid.performPatientSearch single patient search: pid or icn not detected in PID: "%s"', pid),
+            logger: req.logger
+        });
+        return res.status(inValidPidError.status).rdkSend(inValidPidError);
     }
 
     var processPatientGlobalSearch = function(err, result) {
@@ -115,7 +116,7 @@ function performPatientSearch(req, res, otherPid, internalCallback, maskSSN) {
             }
         };
         return checkLastWorkspace(req, res, pid, patientsObj, internalCallback);
-    }
+    };
 
     var processPatientSelect = function(err, result) {
         if (err) {
@@ -139,28 +140,35 @@ function performPatientSearch(req, res, otherPid, internalCallback, maskSSN) {
         }
         /* Patient was not found in JDS or VXSync/VistA, check MVI to get demographics */
         globalSearch._getPatientDemographicWithICN(req, res, pid, processPatientGlobalSearch);
-    }
+    };
 
-    patientSearchResource.callJDSPatientSearch(req, 'pid.performPatientSearch', site, jdsResource, pid, function(err, result) {
+    patientSearchUtil.callJDSPatientSearch(req, 'pid.performPatientSearch', site, jdsResource, pid, function(err, result) {
         var errorReasonCode = _.result(err, 'message.error.errors[0].reason', undefined);
         var jdsStatus = _.result(err, 'status', null);
         /**
          * If JPID or Demographics not found
          * or if JDS had an error or went down
-         * call VxSync CallPatientSearch 
+         * call VxSync CallPatientSearch
          **/
         if (jdsStatus === 400 && (errorReasonCode === 224 || errorReasonCode === 225) || jdsStatus === 500) {
-            var pidToUse = pid;
-            if (useVxSyncPid === true) {
-                pidToUse = vxSyncPid;
-            }
             var searchOptions = {
                 site: site,
                 searchType: jdsResource,
-                searchString: pidToUse
+                searchString: pid
             };
-            patientSearchResource.callPatientSearch(req, 'pid.performPatientSearch', req.app.config.jdsServer, searchOptions, processPatientSelect);
+            if (pidValidator.isPidEdipi(pid)) {
+                /* Patient was not found in JDS or VXSync/VistA, check MVI to get demographics */
+                globalSearch._getPatientDemographicWithICN(req, res, pid, processPatientGlobalSearch);
+            } else {
+                patientSearchUtil.callPatientSearch(req, 'pid.performPatientSearch', req.app.config.jdsServer, searchOptions, processPatientSelect);
+            }
         } else if (jdsStatus) {
+            /**
+             * TODO: This seems redundant as the jdsStatus is defaulted to null,
+             * then if jdsStatus is truthy (in this case not null) we use it.
+             * Why not just always use it since if it's falsey its defaulted
+             * to null already above (around line 147)?
+             * */
             return processPatientSelect(jdsStatus, result);
         } else {
             return processPatientSelect(null, result);

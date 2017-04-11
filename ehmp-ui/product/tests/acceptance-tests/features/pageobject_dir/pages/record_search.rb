@@ -5,7 +5,7 @@ class PobRecordSearch < SitePrism::Page
   element :fld_suggestion_list, "#suggestList"
   elements :fld_suggestion_list_items, :xpath, "//ul[@id='suggestList']/li"
   elements :fld_spelling_suggestions, :xpath, "//ul[@id='suggestList']/descendant::span[string() = 'Spelling Suggestion']"
-
+  element :fld_no_results_message, "#suggestListDiv #noResults"
   elements :fld_result_message, "#search-results-message"
   elements :fld_search_suggest_labels, "#suggestListDiv .label-default"
   element :fld_search_suggest_search_for, "#suggestList li:first-of-type"
@@ -19,7 +19,7 @@ class PobRecordSearch < SitePrism::Page
   elements :fld_search_results_data_rows, '.search-result-item'
   elements :fld_search_result_items_displayed, ".search-result-item[style='display: block;']"
   elements :fld_search_result_items_hidden, ".search-result-item[style='display: none;']"
-  elements :fld_search_result_dates, ".subgroupItem .row > div:nth-of-type(1)"
+  elements :fld_search_result_dates, ".subgroupItem .row > div:nth-of-type(1) span"
   elements :fld_search_result_facilities, ".subgroupItem .row > div:nth-of-type(3)"
 
   element :fld_first_document_subgroup, '[aria-expanded=true] div.documentSubgroup'
@@ -37,6 +37,9 @@ class PobRecordSearch < SitePrism::Page
   element :btn_7d, "button[id='7d-range-text-search']"
   element :btn_72hr, "button[id='72hr-range-text-search']"
   element :btn_24hr, "button[id='24hr-range-text-search']"
+  
+  element :status_result, "[data-detail='status']"
+  elements :search_term_match, ".cpe-search-term-match"
 
   def displayed_result_dates
     p fld_search_result_items_displayed.length
@@ -87,5 +90,19 @@ class PobRecordSearch < SitePrism::Page
     p "div[id$='#{groupontext}'] .subgroupItem .row > div:nth-of-type(3)"
     self.class.elements :fld_subgroup_dates, "div[id$='#{groupontext}'] .subgroupItem .row > div:nth-of-type(1)"
     self.class.elements :fld_subgroup_facilities, "div[id$='#{groupontext}'] .subgroupItem .row > div:nth-of-type(3)"
+  end
+  
+  def expand_main_group(group_name)
+    po_id = "result-group-title-" + "#{group_name}"
+    self.class.element :fld_main_group_title, "[id='#{po_id}']"
+  end
+  
+  def expand_sub_group(group_name)
+    po_id = "result-subGroup-title-" + "#{group_name}"
+    self.class.element :fld_sub_group_title, "[id^='#{po_id}']"
+  end
+  
+  def define_element_suggestion_text(i)
+    self.class.element :fld_text_search_suggestion, "#suggestList li:nth-child(#{i}) a span:nth-child(1)"
   end
 end

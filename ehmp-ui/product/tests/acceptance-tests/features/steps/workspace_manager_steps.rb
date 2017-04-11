@@ -92,9 +92,11 @@ Then(/^the applet "(.*?)" Allergies expanded applet is displayed$/) do |id|
 end
 
 When(/^the user edits the user defined workspace$/) do
-  ehmp = ScreenEditor.instance
-  expect(ehmp.perform_action('Plus Button')).to eq(true)
   @ehmp = CustomizeWorkspace.new
+  @ehmp.wait_for_btn_workspace_editor
+  expect(@ehmp).to have_btn_workspace_editor
+  @ehmp.btn_workspace_editor.click
+
   @ehmp.wait_until_btn_done_visible
   @ehmp.wait_until_fld_applet_carousel_visible
 end

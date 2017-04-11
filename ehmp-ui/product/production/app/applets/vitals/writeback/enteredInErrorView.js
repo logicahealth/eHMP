@@ -27,7 +27,8 @@ define([
                 steps: [{
                     view: EnteredInErrorView.buildFormView(disableReasonField),
                     viewModel: formModel,
-                    stepTitle: 'Step 1'
+                    stepTitle: 'Step 1',
+                    helpMapping: 'vitals_eie_form'
                 }],
                 keyboard: false,
                 size: 'small'

@@ -1,0 +1,64 @@
+.context-sidebar--left {
+    background: $pure-white;
+    border-left: none;
+    border-right: 1px solid $grey;
+    min-height: 710px;
+    width: 160px;
+    z-index: 3;
+    ul.tray-list--arrow-right {
+	    list-style-type: none;
+	    padding: 0px 15px;
+	    li {
+	        margin: 5px 0px;
+	        > button {
+	            width: 100%;
+	            text-align: left;
+	            font-size: 12px;
+	            .fa-stack {
+	                margin-right: -5px;
+	                margin-top: 2px;
+	                float: right;
+	                font-size: 8px;
+	                .fa-stack-1x {
+	                    font-size: 10px;
+	                }
+	            }
+	            i {
+	            	display: none; //Only show arrow when open
+	            }
+	        }
+	        &.open {
+	            > button {
+	                color: $pure-white;
+	                background-color: $primary-dark;
+	                i {
+	                	display: inherit; //Only show arrow when open
+	                }
+	                .fa-inverse {
+	                    color: $primary-dark;
+	                }
+	            }
+	        }
+	    }
+    }
+    .sidebar {
+        &.open {
+            > button i {
+                transform: rotate(180deg);
+            }
+        }
+        > button {
+            &.btn-icon {
+                background-color: transparent;
+                &:hover, &:focus, &:active, &.active, &:active:focus {
+                    background-color: transparent;
+                    border: none;
+                    color: $primary-dark;
+                    .fa-inverse {
+                        color: $pure-white;
+                    }
+                }
+            }
+        }
+    }
+}

@@ -93,18 +93,20 @@ end
 def environment_endpoints(env)
   case env
   when "virtualbox"
-    ENV["RDK_IP"] = knife_search_for_ip("resource_server")
-    ENV["RDK_PORT"] = "8888"
+    ENV["RDK_FETCH_HOST"] = knife_search_for_ip("resource_server")
+    ENV["RDK_FETCH_PORT"] = "8888"
+    ENV["RDK_WRITEBACK_HOST"] = knife_search_for_ip("resource_server")
     ENV["RDK_WRITEBACK_PORT"]="9999"
+    ENV["RDK_PICKLIST_HOST"] = knife_search_for_ip("resource_server")
     ENV["RDK_PICKLIST_PORT"]="7777"
   when "aws"
-    ENV["RDK_IP"] = knife_search_for_ip("resource_server")
-    ENV["RDK_PORT"] = "8888"
+    ENV["RDK_FETCH_HOST"] = knife_search_for_ip("resource_server")
+    ENV["RDK_FETCH_PORT"] = "8888"
     ENV["RDK_WRITEBACK_PORT"]="9999"
     ENV["RDK_WRITEBACK_HOST"] = knife_search_for_ip("resource_server")
     ENV["RDK_PICKLIST_PORT"]="7777"
     ENV["RDK_PICKLIST_HOST"] = knife_search_for_ip("resource_server")
-    ENV["Perf_Monitor_IP"] = 'IP           '
+    ENV["Perf_Monitor_IP"] = '10.150.78.227'
   else
     fail "Unrecognized environment type: #{env}. Allowable types are: 'virtualbox' and 'aws'"
   end

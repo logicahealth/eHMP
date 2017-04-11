@@ -1,8 +1,5 @@
 'use strict';
 
-var rdk = require('../../core/rdk');
-var _ = require('lodash');
-var pjds = rdk.utils.pjdsStore;
 var lastWorkspace = require('./last-workspace');
 var httpMocks = require('node-mocks-http');
 var req;

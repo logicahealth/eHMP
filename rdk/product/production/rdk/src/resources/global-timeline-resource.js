@@ -3,7 +3,6 @@
 var rdk = require('../core/rdk');
 var _ = require('lodash');
 var httpUtil = rdk.utils.http;
-var util = require('util');
 var async = require('async');
 var moment = require('moment');
 var whiteList = ['SCHEDULED/KEPT','CHECKED IN', 'INPATIENT APPOINTMENT', 'FUTURE', 'NON-COUNT', 'ACTION REQUIRED', 'NO ACTION TAKEN'];
@@ -73,7 +72,7 @@ function getTimeline(req, res) {
 function getData(req, callback) {
     var pid = req.param('pid');
 
-    //encounter: http://IP             /vpr/10108V420871/index/encounter
+    //encounter: http://10.2.2.110:9080/vpr/10108V420871/index/encounter
 
     async.parallel({
             encounters: function(callback) {

@@ -1,7 +1,5 @@
 'use strict';
 
-var cdsWorkProduct = require('./cds-work-product');
-
 var interceptors = {
     operationalDataCheck: false,
     synchronize: false

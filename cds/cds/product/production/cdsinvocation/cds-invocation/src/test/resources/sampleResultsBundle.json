@@ -1,0 +1,241 @@
+
+{
+    "status": {
+        "code": "0"
+    },
+    "resultsTest": [
+        {
+            "type": "Test",
+            "body": {
+                "resourceType": "Bundle",
+                "id": "c25246d4-cea3-3f69-a93c-e3547dee84c1",
+                "meta": {
+                    "lastUpdated": "2015-04-08T14:18:42.864"
+                },
+                "type": "searchset",
+                "base": "http://127.0.0.1:8888/resource/fhir/",
+                "total": 3,
+                "entry": [
+                    {
+                        "resource": {
+                            "resourceType": "Patient",
+                            "extension": [
+                                {
+                                    "url": "http://vistacore.us/fhir/profiles/@main#service-connected",
+                                    "valueCoding": {
+                                        "code": "Y",
+                                        "display": "Service Connected"
+                                    }
+                                },
+                                {
+                                    "url": "http://vistacore.us/fhir/profiles/@main#sensitive",
+                                    "valueBoolean": false
+                                },
+                                {
+                                    "url": "http://vistacore.us/fhir/profiles/@main#religion",
+                                    "valueCoding": {
+                                        "code": "urn:va:pat-religion:29",
+                                        "display": "UNKNOWN/NO PREFERENCE"
+                                    }
+                                },
+                                {
+                                    "url": "http://vistacore.us/fhir/profiles/@main#service-connected-percent",
+                                    "valueQuantity": {
+                                        "value": 0,
+                                        "units": "%"
+                                    }
+                                }
+                            ],
+                            "text": {
+                                "status": "generated",
+                                "div": "<div>SEVEN,PATIENT. SSN: 666000007</div>"
+                            },
+                            "contained": [
+                                {
+                                    "resourceType": "Organization",
+                                    "id": "abefa604-c309-4e41-cf9a-8a9cf11dc062",
+                                    "identifier": [
+                                        {
+                                            "system": "http://vistacore.us/fhir/id/facility-code",
+                                            "value": "998"
+                                        }
+                                    ],
+                                    "name": "ABILENE (CAA)"
+                                }
+                            ],
+                            "identifier": [
+                                {
+                                    "system": "http://vistacore.us/fhir/id/uid",
+                                    "value": "urn:va:patient:9E7A:253:253"
+                                },
+                                {
+                                    "use": "official",
+                                    "system": "http://hl7.org/fhir/sid/us-ssn",
+                                    "value": "666000007"
+                                },
+                                {
+                                    "system": "http://vistacore.us/fhir/id/dfn",
+                                    "value": "253"
+                                },
+                                {
+                                    "system": "http://vistacore.us/fhir/id/pid",
+                                    "value": "9E7A;253"
+                                },
+                                {
+                                    "system": "http://vistacore.us/fhir/id/lrdfn",
+                                    "value": "394"
+                                },
+                                {
+                                    "system": "http://vistacore.us/fhir/id/icn",
+                                    "value": "10107V395912"
+                                }
+                            ],
+                            "name": [
+                                {
+                                    "use": "official",
+                                    "text": "SEVEN,PATIENT",
+                                    "family": [
+                                        "SEVEN"
+                                    ],
+                                    "given": [
+                                        "PATIENT"
+                                    ]
+                                }
+                            ],
+                            "telecom": [
+                                {
+                                    "system": "phone",
+                                    "value": "(222)555-7720",
+                                    "use": "work"
+                                },
+                                {
+                                    "system": "phone",
+                                    "value": "(222)555-8235",
+                                    "use": "home"
+                                }
+                            ],
+                            "gender": "male",
+                            "birthDate": "1935-04-07",
+                            "address": [
+                                {
+                                    "use": "home",
+                                    "line": [
+                                        "Any Street"
+                                    ],
+                                    "city": "Any Town",
+                                    "state": "WV"
+                                }
+                            ],
+                            "maritalStatus": {
+                                "coding": [
+                                    {
+                                        "system": "http://hl7.org/fhir/v3/MaritalStatus",
+                                        "code": "UNK",
+                                        "display": "unknown"
+                                    }
+                                ]
+                            },
+                            "contact": [
+                                {
+                                    "relationship": [
+                                        {
+                                            "coding": [
+                                                {
+                                                    "system": "http://hl7.org/fhir/patient-contact-relationship",
+                                                    "code": "family",
+                                                    "display": "Next of Kin"
+                                                }
+                                            ],
+                                            "text": "Next of Kin"
+                                        }
+                                    ],
+                                    "name": {
+                                        "use": "usual",
+                                        "text": "VETERAN,BROTHER"
+                                    }
+                                }
+                            ],
+                            "managingOrganization": {
+                                "reference": "#abefa604-c309-4e41-cf9a-8a9cf11dc062"
+                            }
+                        }
+                    },
+                    {
+                        "resource": {
+                            "resourceType": "Observation",
+                            "text": {
+                                "status": "generated",
+                                "div": "<div>REFUSES HEPATITIS C TESTING</div>"
+                            },
+                            "code": {
+                                "coding": [
+                                    {
+                                        "system": "http://ehmp.va.gov/terminology/1.0",
+                                        "code": "/concept/HF.REFUSES%20HEPATITIS%20C%20TESTING",
+                                        "display": "REFUSES HEPATITIS C TESTING"
+                                    }
+                                ]
+                            },
+                            "appliesDateTime": "2001-04-09T13:46:26",
+                            "status": "final",
+                            "reliability": "unknown",
+                            "identifier": [
+                                {
+                                    "use": "official",
+                                    "system": "http://vistacore.us/fhir/id/uid",
+                                    "value": "urn:va:factor:9E7A:253:25"
+                                }
+                            ],
+                            "subject": {
+                                "reference": "Patient/253"
+                            },
+                            "performer": [
+                                {
+                                    "reference": "78d208f5-7ace-4246-a67e-2eca8bed50ab",
+                                    "display": "FT. LOGAN"
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "resource": {
+                            "resourceType": "Observation",
+                            "text": {
+                                "status": "generated",
+                                "div": "<div>REFUSES HEPATITIS C TESTING</div>"
+                            },
+                            "code": {
+                                "coding": [
+                                    {
+                                        "system": "http://ehmp.va.gov/terminology/1.0",
+                                        "code": "/concept/HF.REFUSES%20HEPATITIS%20C%20TESTING",
+                                        "display": "REFUSES HEPATITIS C TESTING"
+                                    }
+                                ]
+                            },
+                            "appliesDateTime": "2001-04-09T13:46:26",
+                            "status": "final",
+                            "reliability": "unknown",
+                            "identifier": [
+                                {
+                                    "use": "official",
+                                    "system": "http://vistacore.us/fhir/id/uid",
+                                    "value": "urn:va:factor:C877:253:25"
+                                }
+                            ],
+                            "subject": {
+                                "reference": "Patient/253"
+                            },
+                            "performer": [
+                                {
+                                    "reference": "2a4444eb-64aa-4542-e083-6d9df348b123",
+                                    "display": "FT. LOGAN"
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}

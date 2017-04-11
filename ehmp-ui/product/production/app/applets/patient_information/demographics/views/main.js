@@ -16,6 +16,16 @@ define([
     'use strict';
 
     var DemographicsView = Backbone.Marionette.LayoutView.extend({
+        behaviors: {
+            HelpLink: {
+                container: '.patient-demographic-help',
+                mapping: 'patient_demographic',
+                buttonOptions: {
+                    icon: 'fa-question-circle',
+                    colorClass: 'bgc-primary-dark'
+                }
+            }
+        },
         tagName: 'section',
         className: 'patient-demographic',
         template: DemographicsTemplate,
@@ -31,14 +41,23 @@ define([
                     return false;
                 },
                 vaultAvailable : function () {
-                    if (ADK.CCOWService.vaultStatus) {
+                    var vaultConnected = ADK.SessionStorage.getModel('ccow').get('vaultConnected');
+                    if (vaultConnected) {
                         return "";
                     } else {
                         return "vault-unavailable";
                     }
                 },
+                ccowSrOnlyMessage: function () {
+                    if (ADK.CCOWService.getCccowStatusSecondary() === 'Connected') {
+                        return 'Clinical link on. Click to break Clinical link';
+                    }
+
+                    return 'This patient is disconnected from clinical link';
+                },
                 ccowTooltip: function () {
-                    if (ADK.CCOWService.vaultStatus) {
+                    var vaultConnected = ADK.SessionStorage.getModel('ccow').get('vaultConnected');
+                    if (vaultConnected) {
                         if (this.ccowConnected()) {
                             return "Clinical link on";
                         } else {
@@ -67,7 +86,10 @@ define([
                     patientImage: ADK.SessionStorage.get.sessionModel('patient-image').get('image')
                 });
             }
-            this.listenTo(ADK.Messaging, 'ccow:updatedPatientPhotoCcowStatus', this.render);
+            this.listenTo(ADK.Messaging, 'ccow:updatedPatientPhotoCcowStatus', _.bind(function() {
+                this.$('#ccowStatus').tooltip('hide');
+                this.render();
+            }, this));
         },
         fetchPatientPhoto: function() {
             var self = this;
@@ -105,10 +127,10 @@ define([
                 e.preventDefault();
                 this.$('.sidebar > button').click();
             },
-            'click span.icon-ccow-connected': function (e) {
+            'click button.icon-ccow-connected': function (e) {
                 ADK.CCOWService.ccowIconSwitch(e, 'Disconnected');
             },
-            'click span.icon-ccow-disconnected': function (e) {
+            'click button.icon-ccow-disconnected': function (e) {
                 ADK.CCOWService.ccowIconSwitch(e, 'Connected');
             },
         },
@@ -118,13 +140,9 @@ define([
                 //     model: this.model
                 // }));
                 this.patientDetailsRegion.show(new DetailTray());
-                this.$('#ccow-broken-link-tooltip, #ccow-connected-link-tooltip').tooltip({
-                    delay: {
-                        'show': 0,
-                        'hide': 0
-                    }
-                });
             }
+
+            this.$('#ccowStatus').tooltip();
         }
     });
 

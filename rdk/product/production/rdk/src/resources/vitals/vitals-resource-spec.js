@@ -27,20 +27,20 @@ describe('Vitals Resource Test', function() {
                         '9E7A': {
                             name: 'PANORAMA',
                             division: '500',
-                            host: 'IP        ',
+                            host: '10.2.2.101',
                             port: 9210,
                             production: false,
-                            accessCode: 'PW    ',
-                            verifyCode: 'PW    !!'
+                            accessCode: 'pu1234',
+                            verifyCode: 'pu1234!!'
                         },
                         'C877': {
                             name: 'KODAK',
                             division: '500',
-                            host: 'IP        ',
+                            host: '10.2.2.102',
                             port: 9210,
                             production: false,
-                            accessCode: 'PW    ',
-                            verifyCode: 'PW    !!'
+                            accessCode: 'pu1234',
+                            verifyCode: 'pu1234!!'
                         }
                     }
                 }
@@ -65,7 +65,8 @@ describe('Vitals Resource Test', function() {
     it('tests the closest reading', function() {
         req.interceptorResults = {
             patientIdentifiers: {
-                dfn: 3
+                dfn: 3,
+                site: '9E7A'
             }
         };
         req.param = function(param) {
@@ -82,7 +83,8 @@ describe('Vitals Resource Test', function() {
     it('tests the all vitals', function() {
         req.interceptorResults = {
             patientIdentifiers: {
-                dfn: 3
+                dfn: 3,
+                site: '9E7A'
             }
         };
         req.param = function(param) {

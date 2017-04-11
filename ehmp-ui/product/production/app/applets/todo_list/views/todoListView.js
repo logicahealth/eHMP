@@ -270,7 +270,7 @@ define([
                 //patient data
                 this.fetchOptions.criteria = {
                     context: "patient",
-                    patientICN: ADK.PatientRecordService.getCurrentPatient().get('pid'),
+                    pid: ADK.PatientRecordService.getCurrentPatient().get('pid'),
                     subContext: assignedTo,
                     status: statusMappings[status].toString(),
                     getNotifications: true

@@ -4,10 +4,8 @@ var fs = require('fs');
 var fspath = require('path');
 var _ = require('lodash');
 var ajv = require('ajv')();
-var async = require('async');
 var apidoc = require('apidoc-core');
-var rdk = require('../rdk');
-var loadResources = require('../../utils/test-resources-loader');
+var loadResources = require('../../utils/test-resources-loader-spec-helper');
 var buildDescription = loadResources.buildDescription;
 var apiBlueprint = require('./api-blueprint');
 
@@ -65,7 +63,7 @@ describe('API Blueprint documentation,', function() {
 
                 it('must have an API Blueprint documentation file', function (done) {
                     fs.stat(markdownPath, function (error, stats) {
-                        expect(stats, 'Please write API Blueprint documentation for ' + filePath + '\nSee instructions at https://IP        /documentation/#/rdk/documenting').to.not.be.undefined();
+                        expect(stats, 'Please write API Blueprint documentation for ' + filePath + '\nSee instructions at https://10.1.1.150/documentation/#/rdk/documenting').to.not.be.undefined();
                         done();
                     });
                 });

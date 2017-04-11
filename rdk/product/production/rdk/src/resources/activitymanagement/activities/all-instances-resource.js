@@ -2,13 +2,10 @@
 var rdk = require('../../../core/rdk');
 var httpUtil = rdk.utils.http;
 var _ = require('lodash');
-var moment = require('moment');
 var async = require('async');
 var getFormattedRoutesString = require('../activity-utils').getFormattedRoutesString;
 var parseAssignedTo = require('../activity-utils').parseAssignedTo;
 var activityDb = require('../../../subsystems/jbpm/jbpm-subsystem');
-var nullchecker = rdk.utils.nullchecker;
-var querystring = require('querystring');
 var parse = require('../../../write/pick-list/team-management/teams-parser').parse;
 var helpers = require('./all-instances-helper');
 var resultUtils = rdk.utils.results;
@@ -24,6 +21,7 @@ function getTeams(req, callback) {
     };
 
     var procQuery = 'BEGIN ACTIVITIES.getTeamsForUser(:p_user_duz, :p_station_number, :recordset); END;';
+    req.logger.debug({query: procQuery, parameters: procParams}, 'all-instances-resource:getTeams executing stored procedure');
 
     activityDb.doExecuteProcWithParams(req, req.app.config.jbpm.activityDatabase, procQuery, procParams, function (err, data) {
         req.logger.debug({
@@ -62,7 +60,7 @@ function getTeamMembers(req, teams, callback) {
 
     var teamsIds = '';
 
-    _.map(teams, function (team, index) {
+    _.map(teams, function(team, index) {
         if (index !== 0) {
             teamsIds += ',';
         }
@@ -74,6 +72,7 @@ function getTeamMembers(req, teams, callback) {
     };
 
     var procQuery = 'BEGIN ACTIVITIES.getMembersForTeam(:p_team_ids, :recordset); END;';
+    req.logger.debug({query: procQuery, parameters: procParams}, 'all-instances-resource:getTeamMembers executing stored procedure');
 
     activityDb.doExecuteProcWithParams(req, req.app.config.jbpm.activityDatabase, procQuery, procParams, function (err, data) {
         req.logger.debug({
@@ -91,7 +90,7 @@ function getTeamMembers(req, teams, callback) {
 }
 
 function updateIdentities(req, rows, results) {
-    _.each(rows, function (activity) {
+    _.each(rows, function(activity) {
         req.logger.debug({
             activityInCallback: activity
         });
@@ -121,9 +120,7 @@ function updateIdentities(req, rows, results) {
 function getDemographics(req, input, callback) {
     var rows = input.rows;
 
-    var vistaSites = req.app.config.vistaSites;
-
-    queryJDSForDemographics(rows, req, helpers.isStaffRequest(req), function (err, results) {
+    queryJDSForDemographics(rows, req, helpers.isStaffRequest(req), function(err, results) {
         if (err) {
             return callback(err);
         }
@@ -142,27 +139,27 @@ function queryJDSForDemographics(response, req, includePatientData, callback) {
     var JDSQueries = [];
 
     if (includePatientData) {
-        _.each(response, function (activity) {
+        _.each(response, function(activity) {
             pidList.push(activity.PID);
         });
 
         var JDSQueriesForPatient = helpers.getJDSQueryFromIds(req.logger, 'patient', pidList);
 
-        _.each(JDSQueriesForPatient, function (query) {
-            JDSQueries.push(function (callback) {
+        _.each(JDSQueriesForPatient, function(query) {
+            JDSQueries.push(function(callback) {
                 runJDSQuery(req, query, callback);
             });
         });
     }
 
-    _.each(response, function (activity) {
+    _.each(response, function(activity) {
         if (!_.isNull(activity.CREATEDBYID)) {
             users[activity.CREATEDBYID] = {};
         }
 
         if (!_.isNull(activity.ASSIGNEDTOID)) {
             activity.assignedToRoutes = parseAssignedTo(activity.ASSIGNEDTOID);
-            _.each(activity.assignedToRoutes, function (parsedRoute) {
+            _.each(activity.assignedToRoutes, function(parsedRoute) {
                 if (!_.isUndefined(parsedRoute.user)) {
                     users[parsedRoute.user] = {};
                 }
@@ -174,13 +171,13 @@ function queryJDSForDemographics(response, req, includePatientData, callback) {
     userList = helpers.adjustUserIds(req.logger, userList);
 
     var JDSQueriesForUsers = helpers.getJDSQueryFromIds(req.logger, 'user', userList);
-    _.each(JDSQueriesForUsers, function (query) {
-        JDSQueries.push(function (callback) {
+    _.each(JDSQueriesForUsers, function(query) {
+        JDSQueries.push(function(callback) {
             runJDSQuery(req, query, callback);
         });
     });
 
-    async.parallelLimit(JDSQueries, 15, function (err, results) {
+    async.parallelLimit(JDSQueries, 15, function(err, results) {
         if (err) {
             req.logger.error(err);
             return callback(err);
@@ -191,12 +188,11 @@ function queryJDSForDemographics(response, req, includePatientData, callback) {
             patients: {}
         };
 
-        _.each(results, function (result) {
+        _.each(results, function(result) {
             // each result is now an array of demographics
-            _.each(result, function (item) {
+            _.each(result, function(item) {
                 if (item.uid.indexOf('user') !== -1) {
                     var uidSplit = item.uid.split(':');
-                    var length = uidSplit;
                     var pid = uidSplit[uidSplit.length - 2] + ';' + uidSplit[uidSplit.length - 1];
                     resultObj.users[pid] = item.name;
                 } else if (item.uid.indexOf('pt-select') !== -1) {
@@ -226,7 +222,7 @@ function runJDSQuery(req, query, callback) {
         json: true
     });
 
-    httpUtil.get(options, function (err, response, returnedData) {
+    httpUtil.get(options, function(err, response, returnedData) {
         if (err) {
             logger.error(err.message);
             return callback(err);
@@ -258,7 +254,7 @@ function getInstances(req, results, callback) {
     var patientIds = '';
     var counter = 0;
 
-    _.each(results.patientIdentifiers, function (pid) {
+    _.each(results.patientIdentifiers, function(pid) {
         if (counter > 0) {
             patientIds += ',';
         }
@@ -266,22 +262,40 @@ function getInstances(req, results, callback) {
         patientIds += pid;
         counter++;
     });
+    var convertReqBooleanToNumber = function(reqParam) {
+        var number = 0;
+        if (reqParam === 'true') {
+            number = 1;
+        }
+        return number;
+    };
+    var p_process_definition_id = 'none';
+    if (!_.isUndefined(req.query.domain) && !_.isEmpty(req.query.domain)) {
+        p_process_definition_id = 'Order.' + _.capitalize(req.query.domain);
+    }
 
+    var mode;
+    if(!_.isEmpty(req.query.mode) && req.query.mode !== 'all'){
+        mode = req.query.mode;
+    }
     var procParams = {
-        p_created_by_me: _.isEmpty(req.query.createdByMe) ? 0 : 1,
-        p_intended_for_me: _.isEmpty(req.query.intendedForMeAndMyTeams) ? 0 : 1,
+        p_created_by_me: convertReqBooleanToNumber(req.query.createdByMe),
+        p_intended_for_me: convertReqBooleanToNumber(req.query.intendedForMeAndMyTeams),
         p_user_id: userId,
         p_patient_ids: patientIds,
         p_team_ids: teamIds,
         p_team_focus_ids: teamFocusIds,
-        p_mode: req.query.mode,
+        p_mode: mode,
         p_start_date: req.query.startDate,
-        p_end_date: req.query.endDate
+        p_end_date: req.query.endDate,
+        p_process_definition_id: p_process_definition_id,
+        p_show_only_flagged: convertReqBooleanToNumber(req.query.showOnlyFlagged)
     };
 
-    var procQuery = 'BEGIN ACTIVITIES.getActivites(:p_created_by_me, :p_intended_for_me, :p_user_id, :p_patient_ids, :p_team_ids, :p_team_focus_ids, :p_mode, :p_start_date, :p_end_date, :recordset); END;';
+    var procQuery = 'BEGIN ACTIVITIES.getActivites(:p_created_by_me, :p_intended_for_me, :p_user_id, :p_patient_ids, :p_team_ids, :p_team_focus_ids, :p_mode, :p_start_date, :p_end_date, :p_process_definition_id, :p_show_only_flagged, :recordset); END;';
+    req.logger.debug({query: procQuery, parameters: procParams}, 'all-instances-resource:getInstances executing stored procedure');
 
-    activityDb.doExecuteProcWithParams(req, req.app.config.jbpm.activityDatabase, procQuery, procParams, function (err, data) {
+    activityDb.doExecuteProcWithParams(req, req.app.config.jbpm.activityDatabase, procQuery, procParams, function(err, data) {
         if (err) {
             req.logger.error(err);
             return callback(err);
@@ -318,7 +332,7 @@ function getActivityInstances(req, res) {
     jobs.push(demographics);
 
     async.waterfall(jobs,
-        function (err, results) {
+        function(err, results) {
             if (err) {
                 req.logger.error(err);
                 return res.status(rdk.httpstatus.bad_request).rdkSend(err.message);
@@ -335,7 +349,7 @@ function getActivityInstances(req, res) {
                 teamsMembership: finalAnswer.teamsMembership
             });
 
-            _.each(finalAnswer.items, function (item) {
+            _.each(finalAnswer.items, function(item) {
                 req.logger.debug({
                     returnValues: item
                 });
@@ -359,7 +373,7 @@ function getPatientIdentifiers(req, results, callback) {
         logger: req.logger,
         json: true
     });
-    httpUtil.get(options, function (error, response, result) {
+    httpUtil.get(options, function(error, response, result) {
         if (error) {
             return callback(error);
         }

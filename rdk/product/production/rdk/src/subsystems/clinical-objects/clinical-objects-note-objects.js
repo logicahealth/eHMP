@@ -95,7 +95,7 @@ function getValue(model, key) {
 }
 
 // We use 4-colon-delineated clusters in several places, this helper takes a cluster and clamps it to be similar to a desired form (* in form is a wildcard) - This function will fail on "::" empty fields
-function clusterIsMatch(cluster, form) {
+function clusterIsMatch(cluster, form) { //jshint ignore:line
 	if (_.isEmpty(cluster) || _.isEmpty(form)) {
 		return false;
 	}

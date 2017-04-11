@@ -1,5 +1,5 @@
 #Team Neptune
-@US2113 @DE460 @US4283  @regression
+@F153_community_health_summaries @US2113 @DE460 @US4283  
 Feature:F153-HIE C32 - Community Health Summaries
 
 Background:
@@ -19,7 +19,7 @@ Scenario: Community Health Sorting - Authoring Institution
     When user clicks on the column header "Authoring Institution" in CHS Gist
     Then Authoring Institution column is sorted in "descending" order in CHS Gist
 
-@US2113_expand @DE4084 @debug @DE6976
+@US2113_expand @DE4084 @DE6976
 Scenario: User will be able to expand and minimize community health sumamry
   When the user clicks the Community Health Summary Expand Button
   Then the Expanded Community Health Summary applet displays

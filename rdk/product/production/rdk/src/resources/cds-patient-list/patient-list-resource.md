@@ -392,8 +392,7 @@
 
     + value (string, required) - patient id
 
-        Pattern: `^([0-9]+)$|^([a-zA-Z0-9]+);([a-zA-Z0-9]+)$|^([0-9]+)V([0-9]+)$`
-
+        Pattern: `^([a-zA-Z0-9]+);([a-zA-Z0-9]+)$|^([0-9]+)V([0-9]+)$`
 
 + Response 200 (application/json)
 

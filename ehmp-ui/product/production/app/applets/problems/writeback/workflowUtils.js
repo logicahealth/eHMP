@@ -25,13 +25,15 @@ define([
             workflowOptions.steps.push({
                 view: ProblemSearchView,
                 viewModel: formModel,
-                stepTitle: 'Add Problem'
+                stepTitle: 'Add Problem',
+                helpMapping: 'problems_form' // may need to change if this step has it's own doc link
             });
 
             workflowOptions.steps.push({
                     view: RequestFreeTextView,
                     viewModel: formModel,
-                    stepTitle: 'Request free text'
+                    stepTitle: 'Request free text',
+                    helpMapping: 'problems_form' // may need to change if this step has it's own doc link
             });
 
             workflowOptions.steps.push({
@@ -43,7 +45,8 @@ define([
                         currentForm.stopListening(currentForm.model, 'change.inputted', currentForm.registerChecks);
                         currentForm.unregisterChecks.apply(currentForm);
                         currentForm.listenToOnce(currentForm.model, 'change', currentForm.registerChecks);
-                    }
+                    },
+                    helpMapping: 'problems_form' // may need to change if this step has it's own doc link
             });
 
             var workflowController = new ADK.UI.Workflow(workflowOptions);
@@ -70,6 +73,7 @@ define([
                 view: AddEditProblemsView,
                 viewModel: formModel,
                 stepTitle: 'Edit Problem',
+                helpMapping: 'problems_form', // may need to change if this step has it's own doc link
                 onBeforeShow: function() {
                     var currentForm = this.workflowControllerView.getCurrentFormView();
                     currentForm.stopListening(currentForm.model, 'change.inputted', currentForm.registerChecks);

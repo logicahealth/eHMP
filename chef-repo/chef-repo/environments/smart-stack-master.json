@@ -1,0 +1,18 @@
+{
+  "name": "smart-stack-master",
+  "description": "smart-stack testing chef environment",
+  "override_attributes": {
+    "rdk_config": {
+      "rdk-0": {
+        "write_back": { "processes": 3 },
+        "fetch_server": { "processes": 3 },
+        "pick_list": { "processes": 3 }
+      },
+      "rdk-1": {
+        "write_back": { "processes": 3 },
+        "fetch_server": { "processes": 3 },
+        "pick_list": { "processes": 3 }
+      }
+    }
+  }
+}

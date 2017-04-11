@@ -12,8 +12,8 @@ class PobTasksApplet < PobParentApplet
     add_expanded_applet_fields appletid_css
   end
 
-  def applet_loaded?
-    return true if has_fld_error_msg? && DefaultLogin.local_testrun # this is here because locally this is allowed
+  def applet_loaded?(allow_errors = DefaultLogin.local_testrun)
+    return true if has_fld_error_msg? && allow_errors # this is here because locally this is allowed
     return true if has_fld_empty_row?
     return true if tbl_task_rows.length > 0
     false

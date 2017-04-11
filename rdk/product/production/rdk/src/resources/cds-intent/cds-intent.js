@@ -3,7 +3,6 @@
 var rdk = require('../../core/rdk');
 var nullchecker = rdk.utils.nullchecker;
 var _ = require('lodash');
-var mongo = require('mongoskin');
 
 var dbName = 'intent';
 var intentCollection = 'cdsintent';
@@ -53,7 +52,7 @@ var initDb = function (dbConnection) {
  * use this method to either get a single entity or return a list of entities which might be useful for testing
  * or other future uses.
  * @apiExample {js} Example usage:
- * curl -i http://IP             /resource/cds/intent/registry?name=FirstEngine&scope=Enterprise
+ * curl -i http://10.4.4.105:8888/resource/cds/intent/registry?name=FirstEngine&scope=Enterprise
  * @apiSuccess {json} payload Json object containing a list of all datapoint values for the given uri parameters.
  * @apiSuccessExample {json} GetIntent-Response
  * HTTP/1.1 200 OK

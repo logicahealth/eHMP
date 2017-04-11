@@ -1,0 +1,7 @@
+"docker-image-refresh-download-%branch%" {
+	template = 'templates/docker-image-refresh-download.tpl'
+	description = "This build updates all aidk (docker) slaves with configuration and software changes."
+	
+   gitUrl = 'https://code.vistacore.us/scm/pi/chef-repo.git'
+   gitBranch = '%branch%'
+}

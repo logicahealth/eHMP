@@ -1,0 +1,18 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "eHMP Config Schema",
+	"description": "The schema for the ehmp-config successful return",
+	"type": "object",
+	"required": [
+		"data",
+		"status"
+	],
+	"properties": {
+		"data": {
+			"type": "object"
+		},
+		"status": {
+			"type": "integer"
+		}
+	}
+}

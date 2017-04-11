@@ -3,7 +3,6 @@
 var rdk = require('../../../core/rdk');
 var nullchecker = rdk.utils.nullchecker;
 var _ = require('lodash');
-var _s = require('underscore.string');
 module.exports.addSpecializedResultsToResponse = addSpecializedResultsToResponse;
 module.exports._updateCumulativeResponseData = updateCumulativeResponseData;
 module.exports._transformSolrHighlightingToHmpObject = transformSolrHighlightingToHmpObject;

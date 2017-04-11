@@ -9,11 +9,11 @@ var log = sinon.stub(require('bunyan').createLogger({ name: 'medication-orders-q
 var configuration = {
     environment: 'development',
     context: 'OR CPRS GUI CHART',
-    host: 'IP        ',
+    host: '10.2.2.101',
     port: 9210,
-    accessCode: 'PW    ',
-    verifyCode: 'PW    !!',
-    localIP: 'IP      ',
+    accessCode: 'pu1234',
+    verifyCode: 'pu1234!!',
+    localIP: '10.2.2.1',
     localAddress: 'localhost'
 };
 
@@ -25,7 +25,7 @@ describe('medication-orders-quantity-for-days-supply resource integration test',
             expect(err).to.be.falsy();
             expect(result).to.be.truthy();
             done();
-        }, {daysSupply: 90, unitsPerDose: '2^', schedule: 'Q6H PRN^', duration: '~^', patientDFN: '100615', drug: '213'});
+        }, { site: '9E7A', daysSupply: 90, unitsPerDose: '2^', schedule: 'Q6H PRN^', duration: '~^', pid: '9E7A;100615', drug: '213' });
     });
 
     it('will handle returning an empty field if schedule is not correct', function (done) {
@@ -35,7 +35,7 @@ describe('medication-orders-quantity-for-days-supply resource integration test',
             expect(err).to.be.falsy();
             expect(result).to.be.truthy();
             done();
-        }, {daysSupply: 90, unitsPerDose: '2^', schedule: '^', duration: '~^', patientDFN: '100615', drug: '213'});
+        }, { site: '9E7A', daysSupply: 90, unitsPerDose: '2^', schedule: '^', duration: '~^', pid: '9E7A;100615', drug: '213' });
     });
 });
 

@@ -15,6 +15,7 @@ var mvi = require('../../subsystems/mvi-subsystem');
 var maskPtSelectSsn = require('./search-mask-ssn').maskPtSelectSsn;
 var searchJds = require('./search-jds');
 var sensitivityUtils = rdk.utils.sensitivity;
+var pidValidator = rdk.utils.pidValidator;
 
 module.exports._getPatientDemographicWithICN = getPatientDemographicWithICN;
 // below: _ exports for unit testing only
@@ -22,14 +23,45 @@ module.exports._checkInvalidGlobalSearchParameters = checkInvalidGlobalSearchPar
 module.exports._parseGlobalSearchResults = parseGlobalSearchResults;
 module.exports._queryGlobalSearch = queryGlobalSearch;
 module.exports._getGlobalSearchParams = getGlobalSearchParams;
+module.exports._loadXML1305Files = loadXML1305Files;
 
 var MVI_QUERY_DATE_FORMAT = 'YYYYMMDD';
-var xml_1305_ssn = fs.readFileSync(__dirname + '/xml/1305-ssn.xml').toString();
-var xml_1305_dob = fs.readFileSync(__dirname + '/xml/1305-dob.xml').toString();
-var xml_1305_fullName = fs.readFileSync(__dirname + '/xml/1305-fullName.xml').toString();
-var xml_1305_firstName = fs.readFileSync(__dirname + '/xml/1305-firstName.xml').toString();
-var xml_1305_lastName = fs.readFileSync(__dirname + '/xml/1305-lastName.xml').toString();
-var xml_1305 = fs.readFileSync(__dirname + '/xml/1305.xml').toString();
+var loadXML1305File = function(path, callback) {
+    fs.readFile(__dirname + path, function(error, results) {
+        if (error) {
+            return callback(error, results);
+        }
+        return callback(null, results.toString());
+    });
+};
+
+function loadXML1305Files(req, res, callback) {
+    async.parallel([function(callback) {
+        loadXML1305File('/xml/1305-ssn.xml', callback);
+    }, function(callback) {
+        loadXML1305File('/xml/1305-dob.xml', callback);
+    }, function(callback) {
+        loadXML1305File('/xml/1305-fullName.xml', callback);
+    }, function(callback) {
+        loadXML1305File('/xml/1305-firstName.xml', callback);
+    }, function(callback) {
+        loadXML1305File('/xml/1305-lastName.xml', callback);
+    }, function(callback) {
+        loadXML1305File('/xml/1305.xml', callback);
+    }], function(error, results) {
+        if (error) {
+            return res.status(rdk.httpstatus.internal_server_error).rdkSend(error);
+        }
+        return callback({
+            xml1305SSN: results[0],
+            xml1305DoB: results[1],
+            xml1305FullName: results[2],
+            xml1305FirstName: results[3],
+            xml1305LastName: results[4],
+            xml1305: results[5]
+        });
+    });
+}
 
 var mviResponseCodes = {
     tooManyResults: 'QE',
@@ -50,20 +82,18 @@ module.exports.getGlobalSearch = function(req, res) {
     }, 'global search received parameters');
     var errorMessage = checkInvalidGlobalSearchParameters(params);
     if (errorMessage) {
-        res.status(rdk.httpstatus.not_acceptable).rdkSend(errorMessage);
-    } else {
-        queryGlobalSearch(config, params, req, res, function(errCode, result) {
-            if (errCode) {
-                req.logger.error(result);
-                res.status(errCode).rdkSend(result);
-                return;
-            }
-
-            parseGlobalSearchResults(throwAwaySoapEnvelope(result), req, function(toSend) {
-                res.rdkSend(toSend);
-            });
-        });
+        return res.status(rdk.httpstatus.not_acceptable).rdkSend(errorMessage);
     }
+    return queryGlobalSearch(config, params, req, res, function(errCode, result) {
+        if (errCode) {
+            req.logger.error(result);
+            return res.status(errCode).rdkSend(result);
+        }
+
+        return parseGlobalSearchResults(throwAwaySoapEnvelope(result), req, function(toSend) {
+            return res.rdkSend(toSend);
+        });
+    });
 };
 
 function throwAwaySoapEnvelope(result) {
@@ -86,162 +116,125 @@ function getGlobalSearchParams(req) {
     return params;
 }
 
-function queryGlobalSearch(config, queryParams, request, response, next) {
-    var httpConfig = getMVISoapRequestHTTPConfig(request, queryParams);
-    try {
-        http.post(httpConfig, function(error, resp, data) {
+function queryGlobalSearch(config, queryParams, req, res, next) {
+    loadXML1305Files(req, res, function(xml1305Files) {
+        var httpConfig = getMVISoapRequestHTTPConfig(req, queryParams, xml1305Files);
+        return http.post(httpConfig, function(error, resp, data) {
             if (error) {
-                next(500, {
-                    'data': {
-                        'items': []
-                    },
+                return next(500, {
                     message: 'Cannot connect to MVI.'
                 });
-                return;
-            } else {
-                parseString(data, function(err, result) {
-                    if (!err) {
-                        request.logger.trace({
-                            result: result
-                        }, 'MVI Result');
-                        next(null, result);
-                    } else {
-                        request.logger.debug(util.inspect(err));
-                        var statusCode = resp.statusCode >= 300 ? resp.statusCode : 500;
-                        next(statusCode, err);
-                    }
-                    return;
-                });
             }
-        });
-    } catch (err) {
-        // BH: Note that this error won't appear in the stderr log, because it's caught. (Should we throw it?)
-        next(500, {
-            'data': {
-                'items': []
-            },
-            message: 'Cannot connect to MVI.'
-        });
-    }
-}
-
-
-function parseGlobalSearchResults(results, request, callback, isSSNMasked, checkPatientSensitivity, formatPatientSearchCommonFields) {
-    try {
-        var msg = '';
-        var acknowledgementDetail = '';
-        var patientList = [];
-        var responseCode = searchUtil.getResponseCode(results);
-        if (_.isUndefined(isSSNMasked)) {
-            isSSNMasked = true;
-        }
-        if (_.isUndefined(checkPatientSensitivity)) {
-            checkPatientSensitivity = true;
-        }
-        if (_.isUndefined(formatPatientSearchCommonFields)) {
-            formatPatientSearchCommonFields = true;
-        }
-        if (responseCode !== undefined && responseCode.length > 0) {
-            if (responseCode === mviResponseCodes.tooManyResults) {
-                msg = 'Search returned too many results please refine your search criteria and try again.';
-                callback({
-                    'data': {
-                        'items': []
-                    },
-                    'msg': msg
-                });
-                return;
-            }
-            if (responseCode === mviResponseCodes.noResultsFound) {
-                msg = 'No results were found.';
-                callback({
-                    'data': {
-                        'items': []
-                    },
-                    'msg': msg
-                });
-                return;
-            }
-            if (responseCode === mviResponseCodes.mviApplicationError) {
-                var typeCode = searchUtil.getTypeCode(results);
-                if (typeCode === mviResponseCodes.applicationErrorTypeCodes.systemError) {
-                    acknowledgementDetail = searchUtil.getAcknowledgementDetail(results);
-                    request.logger.warn('The VA MVI Application experienced a system error: %s', acknowledgementDetail);
-                    msg = 'The VA MVI Application experienced a system error. Please try again later.';
-                    callback({
-                        'data': {
-                            'items': []
-                        },
-                        'msg': msg
-                    });
-                    return;
-                } else {
-                    acknowledgementDetail = searchUtil.getAcknowledgementDetail(results);
-                    request.logger.warn('No results were found due to a VA MVI Application or Data error: %s', acknowledgementDetail);
-                    msg = 'No results were found due to a VA MVI Application or Data error. Please modify your search and try again.';
-                    callback({
-                        'data': {
-                            'items': []
-                        },
-                        'msg': msg
-                    });
-                    return;
+            return parseString(data, function(err, result) {
+                if (err) {
+                    req.logger.debug(util.inspect(err));
+                    var statusCode = resp.statusCode >= 300 ? resp.statusCode : 500;
+                    return next(statusCode, err);
                 }
-            }
-        }
-
-        var doCallback = function(cb, patientListForCallback, msgForCallback) {
-            var objForCallback = {
-                'data': {
-                    'items': patientListForCallback
-                },
-                'msg': msgForCallback
-            };
-            return isSSNMasked ? cb(maskPtSelectSsn(objForCallback)) : cb(objForCallback);
-        };
-
-        var patients = results.controlActProcess[0].subject;
-        if (patients !== null && patients !== undefined) {
-            if (_.isArray(patients)) {
-                async.eachSeries(patients, function(data, cb) {
-                    parseGlobalPatient(data, request, function(patient) {
-                        patientList.push(patient);
-                        setImmediate(cb);
-                    }, checkPatientSensitivity, formatPatientSearchCommonFields);
-                }, function(err) {
-                    if (err) {
-                        request.logger.error(err);
-                        callback({
-                            'msg': 'Unable to parse response from MVI.'
-                        });
-                        return;
-                    }
-
-                    doCallback(callback, patientList, msg);
-                });
-            } else {
-                parseGlobalPatient(patients, request, function(patient) {
-                    patientList.push(patient);
-                    doCallback(callback, patientList, msg);
-                }, checkPatientSensitivity, formatPatientSearchCommonFields);
-            }
-        } else {
-            doCallback(callback, [], 'No results were found.');
-        }
-    } catch (e) {
-        // BH: Note that this error won't appear in the stderr log, because it's caught. (Should we throw it?)
-        request.logger.error(e);
-        callback({
-            'msg': 'Cannot connect to MVI.'
+                req.logger.trace({
+                    result: result
+                }, 'MVI Result');
+                return next(null, result);
+            });
         });
-    }
+    });
 }
 
-function parseGlobalPatient(searchResult, request, callback, checkPatientSensitivity, formatPatientSearchCommonFields) {
+
+function parseGlobalSearchResults(results, req, callback, isSSNMasked, checkPatientSensitivity, formatPatientSearchCommonFields) {
+    var acknowledgementDetail = '';
+    var patientList = [];
+    var responseCode = searchUtil.getResponseCode(results);
+    var emptyDataItems = {
+        data: {
+            items: []
+        }
+    };
+    if (_.isUndefined(isSSNMasked)) {
+        isSSNMasked = true;
+    }
+    if (_.isUndefined(checkPatientSensitivity)) {
+        checkPatientSensitivity = true;
+    }
+    if (_.isUndefined(formatPatientSearchCommonFields)) {
+        formatPatientSearchCommonFields = true;
+    }
+    if (responseCode === mviResponseCodes.tooManyResults) {
+        return callback(_.extend({}, emptyDataItems, {
+            'message': 'Search returned too many results. Please refine your search criteria and try again.'
+        }));
+    }
+    if (responseCode === mviResponseCodes.noResultsFound) {
+        return callback(_.extend({}, emptyDataItems, {
+            'message': 'No results found. Verify search criteria.'
+        }));
+    }
+    if (responseCode === mviResponseCodes.mviApplicationError) {
+        var typeCode = searchUtil.getTypeCode(results);
+        if (typeCode === mviResponseCodes.applicationErrorTypeCodes.systemError) {
+            acknowledgementDetail = searchUtil.getAcknowledgementDetail(results);
+            req.logger.warn('The VA MVI Application experienced a system error: %s', acknowledgementDetail);
+            return callback(_.extend({}, emptyDataItems, {
+                'message': 'The VA MVI Application experienced a system error. Please try again later.'
+            }));
+        }
+        acknowledgementDetail = searchUtil.getAcknowledgementDetail(results);
+        req.logger.warn('No results found due to a VA MVI Application or Data error: %s', acknowledgementDetail);
+        return callback(_.extend({}, emptyDataItems, {
+            'message': 'No results found due to a VA MVI Application or Data error. Please modify your search and try again.'
+        }));
+    }
+
+    var maskSsn = function(responseObject) {
+        if (isSSNMasked) {
+            return maskPtSelectSsn(responseObject);
+        }
+        return responseObject;
+    };
+
+    var patients = _.get(results, 'controlActProcess[0].subject');
+    if (patients === null || patients === undefined) {
+        return callback(_.extend({}, emptyDataItems, {
+            message: 'No results found. Verify search criteria.'
+        }));
+    }
+    if (!_.isArray(patients)) {
+        return parseGlobalPatient(patients, req, function(patient) {
+            patientList.push(patient);
+            var callbackObject = {
+                data: {
+                    items: patientList
+                }
+            };
+            return callback(maskSsn(callbackObject));
+        }, checkPatientSensitivity, formatPatientSearchCommonFields);
+    }
+    return async.eachSeries(patients, function(data, cb) {
+        return parseGlobalPatient(data, req, function(patient) {
+            patientList.push(patient);
+            return setImmediate(cb);
+        }, checkPatientSensitivity, formatPatientSearchCommonFields);
+    }, function(err) {
+        if (err) {
+            req.logger.error(err);
+            return callback(_.extend({}, emptyDataItems, {
+                'message': 'Unable to parse response from MVI.'
+            }));
+        }
+        var callbackObject = {
+            data: {
+                items: patientList
+            }
+        };
+        return callback(maskSsn(callbackObject));
+    });
+}
+
+function parseGlobalPatient(searchResult, req, callback, checkPatientSensitivity, formatPatientSearchCommonFields) {
     var patient = {};
     var patientPerson = searchUtil.getPatientPerson(searchResult);
     var patientName = patientPerson.name;
-    var hasDGAccess = _.result(request, 'session.user.dgSensitiveAccess', 'false') === 'true';
+    var hasDGAccess = _.result(req, 'session.user.dgSensitiveAccess', 'false') === 'true';
     if (_.isUndefined(checkPatientSensitivity)) {
         checkPatientSensitivity = true;
     }
@@ -264,7 +257,7 @@ function parseGlobalPatient(searchResult, request, callback, checkPatientSensiti
         patient.familyName = patientName.family[0];
     } else {
         //This should never occur according the the MVI specification
-        request.logger.warn('No Name record with use as L found for this patient. Putting Unknown in First and Last Name.');
+        req.logger.warn('No Name record with use as L found for this patient. Putting Unknown in First and Last Name.');
         patient.givenNames = 'Unknown';
         patient.familyName = 'Unknown';
     }
@@ -279,7 +272,7 @@ function parseGlobalPatient(searchResult, request, callback, checkPatientSensiti
     } else if (otherID.$.classCode === 'SSN') {
         patient.ssn = otherID.id[0].$.extension;
     } else {
-        request.logger.warn('No SSN found in the MVI record that was returned.');
+        req.logger.warn('No SSN found in the MVI record that was returned.');
     }
     patient.birthDate = patientPerson.birthTime[0].$.value;
 
@@ -306,8 +299,12 @@ function parseGlobalPatient(searchResult, request, callback, checkPatientSensiti
 
     patient = searchUtil.transformPatient(patient);
 
+    if (patient.idClass === 'EDIPI') {
+        patient.pid = 'DOD;' + patient.pid;
+    }
+
     if (checkPatientSensitivity) {
-        return setPatientSensitivity(request, patient, callback, formatPatientSearchCommonFields, hasDGAccess);
+        return setPatientSensitivity(req, patient, callback, formatPatientSearchCommonFields, hasDGAccess);
     }
     patient.sensitive = false;
     sensitivityUtils.removeSensitiveFields(patient);
@@ -325,12 +322,12 @@ function setPatientSensitivity(req, patient, callback, formatPatientSearchCommon
         hasDGAccess = false;
     }
     var searchOptions = {
-        'site': _.result(req, 'session.user.site'),
+        'site': _.result(req, 'session.user.site', ''), //TODO: DE5961 - look and see if jds/jpid has any vistA identifiers for this user if ICN and then pt-select for sensitivity
         'searchString': patient.pid,
-        'searchType': 'PID'
+        'searchType': 'ICN'
     };
     if (patient.sensitive && !hasDGAccess) {
-        patient = sensitivityUtils.hideSensitiveFields(patient)
+        patient = sensitivityUtils.hideSensitiveFields(patient);
         if (formatPatientSearchCommonFields) {
             formatSinglePatientSearchCommonFields(patient, hasDGAccess);
         }
@@ -406,29 +403,29 @@ function checkInvalidGlobalSearchParameters(params) {
     return false;
 }
 
-function getMVISoapRequestHTTPConfig(req, queryParams) {
+function getMVISoapRequestHTTPConfig(req, queryParams, xml1305Files) {
     var query = '';
     var querySub = {};
 
     if (queryParams.ssn) {
-        query += xml_1305_ssn;
+        query += xml1305Files.xml1305SSN;
         querySub.ssn = queryParams.ssn.replace(/-/g, '');
     }
     if (queryParams.dob) {
-        query += xml_1305_dob;
+        query += xml1305Files.xml1305DoB;
         querySub.dob = queryParams.dob.format(MVI_QUERY_DATE_FORMAT);
     }
 
     if (queryParams.fname || queryParams.lname) {
         if (queryParams.fname && queryParams.lname) {
-            query += xml_1305_fullName;
+            query += xml1305Files.xml1305FullName;
             querySub.lname = queryParams.lname;
             querySub.fname = queryParams.fname;
         } else if (queryParams.fname) {
-            query += xml_1305_firstName;
+            query += xml1305Files.xml1305FirstName;
             querySub.fname = queryParams.fname;
         } else {
-            query += xml_1305_lastName;
+            query += xml1305Files.xml1305LastName;
             querySub.lname = queryParams.lname;
         }
     }
@@ -440,7 +437,7 @@ function getMVISoapRequestHTTPConfig(req, queryParams) {
         sender: req.app.config.mvi.senderCode,
         msgID: crypto.randomBytes(8).toString('hex') //16 bit ID small enough to be easily spoofed
     };
-    var soapRequest = _s.sprintf(xml_1305, querySub);
+    var soapRequest = _s.sprintf(xml1305Files.xml1305, querySub);
     var httpConfig = mvi.getMVIHttpConfig(req.app.config, req.logger);
     httpConfig.body = soapRequest;
     return httpConfig;
@@ -464,7 +461,7 @@ function getPatientDemographicWithICN(req, res, pid, callback) {
     }
     req.logger.debug({
         globalSearchParams: req.session.globalSearchParams
-    }, "Get patient demographic global search params");
+    }, 'Get patient demographic global search params');
     var errorMessage = checkInvalidGlobalSearchParameters(req.session.globalSearchParams);
     if (errorMessage) {
         return res.status(rdk.httpstatus.not_acceptable).rdkSend(errorMessage);
@@ -475,7 +472,7 @@ function getPatientDemographicWithICN(req, res, pid, callback) {
             return res.status(errCode).rdkSend(result);
         }
         parseGlobalSearchResults(throwAwaySoapEnvelope(result), req, function(parsedResults) {
-            if (parsedResults.msg && /Cannot connect to MVI/.test(parsedResults.msg)) {
+            if (parsedResults.message && /Cannot connect to MVI/.test(parsedResults.message)) {
                 errorObj = {
                     'message': 'Cannot connect to MVI',
                     'parsedResults': parsedResults,
@@ -491,7 +488,7 @@ function getPatientDemographicWithICN(req, res, pid, callback) {
                 };
                 return callback(errorObj, null);
             }
-            var pidID = pid.split(';')[1] || pid;
+            var pidID = pidValidator.isPidEdipi(pid) ? pid : pid.split(';')[1] || pid;
             var patientObject = _.find(parsedResults.data.items, {
                 'pid': pidID
             });

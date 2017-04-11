@@ -10,7 +10,8 @@ define([
         var workflowOptions = {
             onBeforeShow: function() {
                 ADK.Messaging.getChannel('addOrders').trigger('visit:ready');
-            }
+            },
+            helpMapping: 'lab_order_form'
         };
         Utils.launchWorkflow(formModel, LabTrayView, workflowOptions, 'Order a Lab Test', 'actions');
     };

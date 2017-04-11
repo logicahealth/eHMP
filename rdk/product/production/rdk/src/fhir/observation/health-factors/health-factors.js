@@ -2,7 +2,6 @@
 var rdk = require('../../../core/rdk');
 var nullchecker = rdk.utils.nullchecker;
 var _ = require('lodash');
-var errors = require('../../common/errors.js');
 var helpers = require('../../common/utils/helpers.js');
 var fhirUtils = require('../../common/utils/fhir-converter');
 var fhirToJDSSearch = require('../../common/utils/fhir-to-jds-search');
@@ -78,9 +77,9 @@ function buildCodeQuery(codeQuery) {
             code = codeSystemSplit[0];
         }
 
-        // http://ehmp.DNS   /terminology/1.0 does not exist in VPR, FHIR mapping associates the system with VPR record's name.
+        // http://ehmp.va.gov/terminology/1.0 does not exist in VPR, FHIR mapping associates the system with VPR record's name.
         // That's the only system that could be queried to get results.
-        if ((nullchecker.isNullish(system) || system === 'http://ehmp.DNS   /terminology/1.0') && conceptCodeRegex.test(code)) {
+        if ((nullchecker.isNullish(system) || system === 'http://ehmp.va.gov/terminology/1.0') && conceptCodeRegex.test(code)) {
             // FHIR mapping sets the code for all VPR Health Factors as: '/concept/HF.' + encodeURI(jdsItem.name)
             // When searching for a code with that pattern we know to deconstruct it and search for name
             var name = decodeURI(code.match(conceptCodeRegex)[1]);
@@ -148,7 +147,7 @@ function createHF(jdsItem) {
 
     fhirItem.resource.code = {};
     fhirItem.resource.code.coding = [{
-        'system': 'http://ehmp.DNS   /terminology/1.0',
+        'system': 'http://ehmp.va.gov/terminology/1.0',
         'code': '/concept/' + conceptCategory + '.' + encodeURI(jdsItem.name),
         'display': jdsItem.name
     }];

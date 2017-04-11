@@ -3,7 +3,6 @@
 var rdk = require('../core/rdk');
 var _ = require('lodash');
 var nullchecker = rdk.utils.nullchecker;
-var jdsFilter = require('jds-filter');
 
 function sortResults(items, orderString) {
 
@@ -55,38 +54,6 @@ function sortResults(items, orderString) {
     return items;
 }
 
-function filterResults(results, filterObject) {
-    if (!_.isObject(results) || !_.isObject(results.data) ||
-        !_.isArray(results.data.items) || nullchecker.isNullish(filterObject)) {
-        return results;
-    }
-
-    var items = results.data.items;
-    var startingItemCount = results.data.currentItemCount;
-
-    if (startingItemCount) {
-        var calculatedCurrentCount = items.length;
-        if (calculatedCurrentCount !== startingItemCount) {
-            startingItemCount = 0; //if we don't match the count we got from JDS, we won't try to update it
-        }
-    }
-
-    items = jdsFilter.applyFilters(filterObject, results.data.items);
-
-    if (startingItemCount > 0) {
-        var calculatedEndCount = items.length;
-        if (startingItemCount > calculatedEndCount) {
-            //if items were indeed filtered out, change the count
-            results.data.currentItemCount = calculatedEndCount;
-        }
-    }
-
-    delete results.data.items;
-    results.data.items = items;
-
-    return results;
-}
-
 /**
  *  Unescapes special characters from string fields
  *
@@ -128,4 +95,3 @@ function convertHexEscapeCodes(str) {
 
 module.exports.unescapeSpecialCharacters = unescapeSpecialCharacters;
 module.exports.sortResults = sortResults;
-module.exports.filterResults = filterResults;

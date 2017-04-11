@@ -1,18 +1,11 @@
 'use strict';
 var rdk = require('../../core/rdk');
-var fs = require('fs');
 var _ = require('lodash');
 var jbpm = require('../../subsystems/jbpm/jbpm-subsystem');
 var nullchecker = rdk.utils.nullchecker;
-var complexObjectPropertiesXML = fs.readFileSync(__dirname + '/tasks/complex-object-properties-template.xml', {
-    encoding: 'utf8',
-    flag: 'r'
-});
-
-var complexArrayedObjectPropertiesXML = fs.readFileSync(__dirname + '/tasks/complex-arrayed-object-properties-template.xml', {
-    encoding: 'utf8',
-    flag: 'r'
-});
+var xmlTemplates = require('./xml-templates');
+var complexObjectPropertiesXML = xmlTemplates.complexObjectPropertiesXML;
+var complexArrayedObjectPropertiesXML = xmlTemplates.complexArrayedObjectPropertiesXML;
 
 function getJbpmUser(req) {
     var loginSite = _.get(req, 'session.user.site', '');
@@ -206,10 +199,10 @@ function getFormattedRoutesString(parsedRoutes, users, isTaskRoute) {
             // Here we parse Request team assignment
             if (!_.isUndefined(sortedParsedRoute.TM && !_.isUndefined(sortedParsedRoute.TR))) {
                 if(!_.startsWith(formattedRoutesString, sortedParsedRoute.TM)) {
-                    formattedRoutesString = sortedParsedRoute.TM + " - ";
+                    formattedRoutesString = sortedParsedRoute.TM + ' - ';
                 }
                 if(!_.isUndefined(sortedParsedRoute.TR)) {
-                    formattedRoutesString += sortedParsedRoute.TR + ", ";
+                    formattedRoutesString += sortedParsedRoute.TR + ', ';
                 }
             } else if (!_.isUndefined(sortedParsedRoute.FC)) {
                 if (facility === sortedParsedRoute.FC) {
@@ -348,3 +341,4 @@ module.exports.validateClinicalObject = validateClinicalObject;
 module.exports.getFormattedRoutesString = getFormattedRoutesString;
 module.exports.parseAssignedTo = parseAssignedTo;
 module.exports.filterIdentifiers = filterIdentifiers;
+module.exports.xmlTemplates = xmlTemplates;

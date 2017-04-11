@@ -1,0 +1,62 @@
+ext.set('repo', uploadRepo)
+ext.set('groupId', 'us.vistacore.adk')
+ext.set('artifactId', 'adk')
+
+def adkTar = file("build/adk.tgz")
+group = 'us.vistacore.adk'
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.moowork.gradle:gradle-grunt-plugin:0.5'
+    }
+}
+apply plugin: 'grunt'
+
+task installNpm (type: Exec ){
+    commandLine "npm", "install"
+}
+task installBower (type: Exec ){
+    commandLine "bower-installer", "-p", "-r"
+}
+
+task findAndReplace {
+	 new GroovyShell().run(file("replaceIP.groovy"))	
+}
+
+task test {}
+task intTest{}
+intTest.dependsOn  installNpm, installBower, grunt_inttest
+test.dependsOn  installNpm, installBower, grunt_test
+task build {}
+build.dependsOn  installNpm, installBower, grunt_build
+grunt_build.dependsOn grunt_sass
+
+apply from : 'grunt_sass_errors.gradle'
+
+grunt_sass {
+    def sassLogFile = createGruntSassLogFile("${projectDir}/sass.log")
+    doFirst {
+        logGruntSassToFile(logging, sassLogFile)
+    }
+
+    doLast {
+        if (errorsInGruntSass(sassLogFile))
+            throw new GradleException('ERRORS SOMEWHERE IN SASS CODE/BUILD!')
+    }
+}
+
+
+uploadArchives.dependsOn  installNpm, installBower, grunt_test, grunt_deploy
+grunt_deploy.mustRunAfter  installNpm, installBower
+grunt_build.mustRunAfter  installNpm, installBower
+grunt_test.mustRunAfter  installNpm, installBower
+grunt_inttest.mustRunAfter  installNpm, installBower
+grunt_minify.mustRunAfter  installNpm, installBower
+grunt_sass.mustRunAfter  installNpm, installBower
+
+artifacts {
+    archives adkTar
+}

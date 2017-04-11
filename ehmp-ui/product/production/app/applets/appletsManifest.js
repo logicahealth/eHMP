@@ -1,13 +1,31 @@
-define(['main/ADK'], function(ADK) {
+(function(root, factory) {
+    "use strict";
+    if (typeof define === 'function' && define.amd) {
+        // AMD format (for use in app/r.js)
+        define(['main/ADK'], function(ADK) {
+            return factory(ADK);
+        });
+    } else if (typeof module === 'object' && module.exports) {
+        // CommonJS/Node format (for use in Gruntfile)
+        module.exports = factory();
+    } else {
+        // this follows common pattern, though this is expected to never get hit
+        root.ScreensManifest = factory();
+    }
+}(this, function(ADK) {
     'use strict';
     var appletsManifest = {};
-    var crsDomain = ADK.utils.crsUtil.domain;
+    var crsDomain = {};
+    if (ADK) {
+        crsDomain = ADK.utils.crsUtil.domain;
+    }
     var applets = [{
         id: 'ui_components_demo',
         title: 'UI Components Demo',
         context: ['demo'],
         showInUDWSelection: false,
-        permissions: []
+        permissions: [],
+        concatenate: false
     }, {
         id: "patient_information",
         title: "Patient Information",
@@ -31,7 +49,6 @@ define(['main/ADK'], function(ADK) {
     }, {
         id: 'notes',
         title: 'Notes',
-        //permissions: ['sign-progress-note', 'add-visit']
         context: ['patient'],
         permissions: [],
         requiredByLayout: ['patient']
@@ -152,7 +169,6 @@ define(['main/ADK'], function(ADK) {
         maximizeScreen: 'documents-list',
         showInUDWSelection: true,
         permissions: ['read-document']
-        //permissions: []
     }, {
         id: 'medication_review',
         title: 'Medications Review',
@@ -201,10 +217,11 @@ define(['main/ADK'], function(ADK) {
         permissions: [],
         dependencies: ['ssoLogon']
     }, {
-        id: 'patient_search',
-        title: 'Patient Search',
+        id: 'patient_selection',
+        title: 'Patient Selection',
         context: ['patient', 'staff'],
-        permissions: ['read-patient-record']
+        permissions: ['read-patient-record'],
+        requiredByLayout: true
     }, {
         id: 'discharge_summary',
         title: 'Discharge Summary',
@@ -292,15 +309,29 @@ define(['main/ADK'], function(ADK) {
         context: ['patient', 'staff'],
         showInUDWSelection: true,
         maximizeScreen: 'activities-patient-full',
-        permissions: []
+        permissions: ['read-task']
     }, {
         id: "tab_manager",
         title: "Tab Manager",
         context: ['patient', 'staff'],
         showInUDWSelection: false,
         permissions: []
+    }, {
+        id: "consults",
+        title: "Consults",
+        context: ['patient', 'staff'],
+        showInUDWSelection: true,
+        maximizeScreen: 'consults-patient-full',
+        permissions: ['read-task']
+    }, {
+        id: "requests",
+        title: "Requests",
+        context: ['patient', 'staff'],
+        showInUDWSelection: true,
+        maximizeScreen: 'requests-patient-full',
+        permissions: ['read-task']
     }];
 
     appletsManifest.applets = applets;
     return appletsManifest;
-});
+}));

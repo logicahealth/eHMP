@@ -18,16 +18,12 @@ define([
         routeName: 'patient',
         defaultScreen: 'summary',
         requiredPermissions: ['read-patient-record'],
-        searchScreen: 'patient-search-screen',
         userRequired: true,
         enter: function () {
         },
         exit: function () {
         },
         layout: function(workspaceModel) {
-            if(workspaceModel.get('id') === 'patient-search-screen'){
-                return null;
-            }
             return Layout;
         },
         navigateTo: function(workspaceId) {
@@ -46,12 +42,10 @@ define([
                     };
                 };
                 if (ADK.UserService.hasPermissions(['read-patient-record'])) {
-                    if (!_.isEqual(workspaceId, 'patient-search-screen') && _.isEmpty(ADK.PatientRecordService.getCurrentPatient().attributes)) {
-                        return {
-                            workspaceId: 'patient-search-screen'
-                        };
+                    if (_.isEmpty(ADK.PatientRecordService.getCurrentPatient().attributes)) {
+                        return changeContext();
                     } else {
-                        if (_.isEqual(workspaceId, 'patient-search-screen') || ADK.UserService.hasPermissions(ADK.WorkspaceContextRepository.getWorkspacePermissions(workspaceId))) {
+                        if (ADK.UserService.hasPermissions(ADK.WorkspaceContextRepository.getWorkspacePermissions(workspaceId))) {
                             return {
                                 workspaceId: workspaceId
                             };

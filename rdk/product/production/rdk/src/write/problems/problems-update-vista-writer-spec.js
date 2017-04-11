@@ -1,9 +1,7 @@
 'use strict';
 
-var moment = require('moment');
 
 var transformModel = require('./problems-update-vista-writer')._transformModel;
-var constructRpcArgs = require('./problems-update-vista-writer')._constructRpcArgs;
 var problemMatch = require('./problems-update-vista-writer')._getUpdatedProblem;
 var retrieveSettings = require('./problems-update-vista-writer')._retrieveSettings;
 

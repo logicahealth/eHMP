@@ -22,7 +22,7 @@ function isEqFilter(item) {
     return isTriplet(item) && item[0] === 'eq';
 }
 
-function isPartialNameQuery(item) {
+function isPartialNameQuery(item) { //jshint ignore:line
     return isTriplet(item) && item[0] === 'ilike' && item[1] === 'name';
 }
 
@@ -173,7 +173,6 @@ function createReqWithParam(map) {
 // FUTURE-TODO: Re-enable (remove .skip) once resource is fully supported/tested end-to-end by system.
 describe.skip('OrderSets', function() {
     var req;
-    var result;
     var res = {
         status: function() {
             return {
@@ -185,9 +184,6 @@ describe.skip('OrderSets', function() {
     var pjdsPutOptions;
     var pjdsGetOptions;
     var pjdsDeleteOptions;
-    var pjdsOpStub = function(req, res, options, callback) {
-        pjdsPutOptions = options;
-    };
     var storedOrderSet;
     var pjdsGetResult;
 

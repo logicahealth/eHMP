@@ -10,7 +10,6 @@ var SITE = '9E7A';
 var DIVISION = '411';
 var ACCESS_CODE = 'JENGA';
 var VERIFY_CODE = 'JENGA';
-var FAKE_VERIFY_CODE = 'JENAG';
 var DUZ = 'blanco';
 
 describe('Vista Connection Module', function() {
@@ -121,6 +120,19 @@ describe('Vista Connection Module', function() {
         connectStub.callArgWith(0, new Error('context DRAGONBORN does not exist'), null);
         expect(cb.called).to.be.true();
         expect(cb.args[0][0].code).to.match(/100.401.1004/);
+        expect(cb.args[0][1]).to.to.be.null();
+    });
+
+    it('returns error when VistA user does not have division access', function() {
+        var params = {
+            rpcClient: rpcClient,
+            site: SITE,
+            division: DIVISION
+        };
+        vistaConnect(req, res, cb, params);
+        connectStub.callArgWith(0, new Error('Selected division not found for this user'), null);
+        expect(cb.called).to.be.true();
+        expect(cb.args[0][0].code).to.match(/100.401.1011/);
         expect(cb.args[0][1]).to.to.be.null();
     });
 

@@ -18,16 +18,19 @@ var full_incomplete = {
             latestJobTimestamp: 1467819360679,
             pid: '9E7A;3',
             sourceStampTime: 20160706094004,
-            syncCompleted: true
+            syncCompleted: true,
+            solrSyncCompleted: true
         },
         C877: {
             latestJobTimestamp: 1467819360679,
             pid: 'C877;3',
             sourceStampTime: 20160706093941,
-            syncCompleted: false
+            syncCompleted: false,
+            solrSyncCompleted: false
         }
     },
-    syncCompleted: false
+    syncCompleted: false,
+    solrSyncCompleted: false
 };
 
 var full_complete = {
@@ -40,16 +43,19 @@ var full_complete = {
             latestJobTimestamp: 1467819360679,
             pid: '9E7A;3',
             sourceStampTime: 20160706094004,
-            syncCompleted: true
+            syncCompleted: true,
+            solrSyncCompleted: true
         },
         C877: {
             latestJobTimestamp: 1467819360679,
             pid: 'C877;3',
             sourceStampTime: 20160706093941,
-            syncCompleted: true
+            syncCompleted: true,
+            solrSyncCompleted: true
         }
     },
-    syncCompleted: true
+    syncCompleted: true,
+    solrSyncCompleted: true
 };
 
 var site_incomplete = {
@@ -60,13 +66,15 @@ var site_incomplete = {
             latestJobTimestamp: 1467819360679,
             pid: '9E7A;3',
             sourceStampTime: 20160706094004,
-            syncCompleted: true
+            syncCompleted: true,
+            solrSyncCompleted: true
         },
         C877: {
             latestJobTimestamp: 1467819360679,
             pid: 'C877;3',
             sourceStampTime: 20160706093941,
-            syncCompleted: false
+            syncCompleted: false,
+            solrSyncCompleted: false
         }
     }
 };
@@ -79,13 +87,15 @@ var site_complete = {
             latestJobTimestamp: 1467819360679,
             pid: '9E7A;3',
             sourceStampTime: 20160706094004,
-            syncCompleted: true
+            syncCompleted: true,
+            solrSyncCompleted: true
         },
         C877: {
             latestJobTimestamp: 1467819360679,
             pid: 'C877;3',
             sourceStampTime: 20160706093941,
-            syncCompleted: true
+            syncCompleted: true,
+            solrSyncCompleted: true
         }
     }
 };
@@ -99,13 +109,15 @@ var site_error = {
             pid: '9E7A;3',
             sourceStampTime: 20160706094004,
             hasError: true,
-            syncCompleted: false
+            syncCompleted: false,
+            solrSyncCompleted: false
         },
         C877: {
             latestJobTimestamp: 1467819360679,
             pid: 'C877;3',
             sourceStampTime: 20160706093941,
-            syncCompleted: true
+            syncCompleted: true,
+            solrSyncCompleted: true
         }
     }
 };
@@ -121,17 +133,20 @@ var full_error = {
             latestJobTimestamp: 1467819360679,
             pid: '9E7A;3',
             sourceStampTime: 20160706094004,
-            syncCompleted: true
+            syncCompleted: true,
+            solrSyncCompleted: true
         },
         C877: {
             latestJobTimestamp: 1467819360679,
             pid: 'C877;3',
             sourceStampTime: 20160706093941,
             hasError: true,
-            syncCompleted: false
+            syncCompleted: false,
+            solrSyncCompleted: false
         }
     },
-    syncCompleted: false
+    syncCompleted: false,
+    solrSyncCompleted: false
 };
 
 describe('jdsSync\'s', function() {
@@ -246,6 +261,23 @@ describe('jdsSync\'s', function() {
         });
     });
 
+    describe('getPatientDataStatusSimple', function() {
+        it('should add the pid and detailed params to the path', function(done) {
+            expectHttpFetch('jdsServer', '/status/test;patientId?detailed=true');
+            req.app.subsystems.jdsSync.getPatientStatusDetail(pid, req, expectSuccess(done));
+        });
+
+        it('should return 404 when a patient isn\'t found', function(done) {
+            expectHttpFetch('jdsServer', '/status/test;patientId?detailed=true', 404);
+            req.app.subsystems.jdsSync.getPatientStatusDetail(pid, req, expectError(done, 404, 'pid test;patientId is unsynced'));
+        });
+
+        it('should return a standard error result for other errors', function(done) {
+            expectHttpFetch('jdsServer', '/status/test;patientId?detailed=true', 407);
+            req.app.subsystems.jdsSync.getPatientStatusDetail(pid, req, expectError(done, 407));
+        });
+    });
+
     describe('getOperationalStatus', function() {
         var site = 'testsite';
 
@@ -282,7 +314,31 @@ describe('jdsSync\'s', function() {
             req.app.subsystems.jdsSync.getPatientAllSites(pid, req, expectError(done, 407));
         });
     });
+    //jshint -W069
+    describe('createSimpleStatusResult', function() {
+        it('should return a sync complete response', function() {
+            var status = jdsSync.createSimpleStatusResult(req.logger, _.keys(req.app.config.vistaSites), {data: full_complete});
 
+            expect(status.allSites).to.be.true();
+            expect(status.isSolrSyncCompleted).to.be.true();
+            expect(status.VISTA['9E7A'].isSyncCompleted).to.be.true();
+            expect(status.VISTA['9E7A'].isSolrSyncCompleted).to.be.true();
+            expect(status.VISTA['C877'].isSyncCompleted).to.be.true();
+            expect(status.VISTA['C877'].isSolrSyncCompleted).to.be.true();
+        });
+
+        it('should return a sync incomplete response', function() {
+            var status = jdsSync.createSimpleStatusResult(req.logger, _.keys(req.app.config.vistaSites), {data: full_incomplete});
+
+            expect(status.allSites).to.be.false();
+            expect(status.isSolrSyncCompleted).to.be.false();
+            expect(status.VISTA['9E7A'].isSyncCompleted).to.be.true();
+            expect(status.VISTA['9E7A'].isSolrSyncCompleted).to.be.true();
+            expect(status.VISTA['C877'].isSyncCompleted).to.be.false();
+            expect(status.VISTA['C877'].isSolrSyncCompleted).to.be.false();
+        });
+    });
+    //jshint +W069
     describe('syncStatusResultProcessor', function() {
         it('should respond with a 500 if the response is falsey', function() {
             var error = 599;
@@ -392,7 +448,7 @@ describe('jdsSync\'s', function() {
                     host: 'hmphost',
                     port: 3,
                     accessCode: '9E7A;500',
-                    verifyCode: 'PW    ;PW    !!'
+                    verifyCode: 'ep1234;ep1234!!'
                 },
                 jdsSync: {
                     settings: {
@@ -466,14 +522,6 @@ describe('jdsSync\'s', function() {
         return fluent;
     }
 
-    function expectHttpPost(payload, serverName, path, status, response, error) {
-        var fluent = expectHttpFetch(serverName, path, status, response, error);
-        var expected = httpExpected[httpExpected.length-1];
-        expected.content = payload;
-        expected.method = 'POST';
-        return fluent;
-    }
-
     function expectSuccess(done, status) {
         var callsback = 0;
         return function(error, result) {
@@ -483,19 +531,6 @@ describe('jdsSync\'s', function() {
             } else if (result && result.status) {
                 expect(result.status).to.be.between(200, 202);
             }
-            httpExpected.must.be.empty();
-
-            callsback++;
-            expect(callsback).to.equal(1);
-            // allow the check for only one invocation of callback:
-            setImmediate(done);
-        };
-    }
-
-    function expectResponse(done, expected) {
-        var callsback = 0;
-        return function(err, actual) {
-            expect(actual).to.eql(expected);
             httpExpected.must.be.empty();
 
             callsback++;

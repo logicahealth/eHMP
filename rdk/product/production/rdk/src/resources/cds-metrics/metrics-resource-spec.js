@@ -4,7 +4,6 @@
 var rdk = require('../../core/rdk');
 var metricsResource = require('./metrics-resource');
 var cdsMetrics = require('./metrics');
-var MongoClient = require('mongodb').MongoClient;
 var cdsSpecUtil = require('../cds-spec-util/cds-spec-util');
 var cdsSubsystem = require('../../subsystems/cds/cds-subsystem');
 

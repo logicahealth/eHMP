@@ -1,5 +1,4 @@
 'use strict';
-var _ = require('lodash');
 var utils = require('./requests-picklists-utils');
 var testVistaSitesConfig = {
     'ABCD': {

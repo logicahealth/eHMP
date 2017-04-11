@@ -1,0 +1,40 @@
+.grid-toolbar, 
+// '.toolbar-item' below, is only really needed until activites is refactored
+.toolbar-item {
+    &:empty {
+        display: none;
+    }
+    form.form-container {
+        padding: 5px 5px 2px;
+        border-bottom: 1px solid $grey-light;
+        .form-inline {
+            max-height: 25px;
+            overflow: hidden;
+            .form-group {
+                padding: 0 7px 0 5px;
+                border-left: 1px solid grey;
+                &:first-child {
+                    padding-left: 0;
+                    border-left: none;
+                }
+                &:last-child {
+                    padding-right: 0;
+                }
+                select {
+                    padding: 0;
+                    max-height: 20px;
+                }
+                label {
+                    margin: 0 5px 0 0;
+                }
+                input[type="checkbox"] {
+                    top: 1px;
+                    margin-right: 2px;
+                }
+            }
+            p {
+                display: inline-block;
+            }
+        }
+    }
+}

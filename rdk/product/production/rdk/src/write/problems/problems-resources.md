@@ -8,7 +8,7 @@ Save problem form information to VistA
 
 + Parameters
 
-    + pid (string, required) - patient id
+    :[pid]({{{common}}}/parameters/pid.md)
 
 
 + Request JSON Message (application/json)
@@ -149,7 +149,7 @@ Update problem form information to VistA
 
 + Parameters
 
-    + pid (string, required) - patient id
+    :[pid]({{{common}}}/parameters/pid.md)
 
 
 + Request JSON Message (application/json)

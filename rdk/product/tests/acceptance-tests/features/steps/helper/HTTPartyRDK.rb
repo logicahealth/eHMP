@@ -1,4 +1,5 @@
 require "httparty"
+require 'cucumber/term/ansicolor'
 
 path = File.expand_path '..', __FILE__
 $LOAD_PATH.unshift path unless $LOAD_PATH.include?(path)
@@ -10,18 +11,19 @@ require "PatientPickerDomElements.rb"
 class TestClients
   @users = {}
 
-  @users["9E7A;PW    "] = "PW    !!"
-  @users["C877;PW    "] = "PW    !!"
+  @users["9E7A;pu1234"] = "pu1234!!"
+  @users["C877;pu1234"] = "pu1234!!"
   @users["9E7A;pr12345"] = "pr12345!!"
-  @users["UnauthorizedUser"] = "PW      "
-  @users["AuditLogUser"] = "PW    !!"
-  @users["9E7A;PW    "] = "PW    !!"
-  @users["9E7A;1tdnurse"] = "PW      "
-  @users["9E7A;PW    "] = "baduser"
-  @users["9E7A;PW    "] = "PW    !!"
-  @users["C877;PW    "] = "PW    !!"
+  @users["UnauthorizedUser"] = "pa55w0rd"
+  @users["AuditLogUser"] = "xx1234!!"
+  @users["9E7A;lu1234"] = "lu1234!!"
+  @users["9E7A;1tdnurse"] = "tdnurse1"
+  @users["9E7A;xx1234"] = "baduser"
+  @users["9E7A;mx1234"] = "mx1234!!"
+  @users["C877;mx1234"] = "mx1234!!"
   @users["9E7A;nurse18"] = "eigh18!!"
-  @users['9E7A;PW    '] = 'PW    !!'
+  @users['9E7A;vk1234'] = 'vk1234!!'
+  @users['C877;TWO1234'] = 'TWO1234!!'
 
   def self.password_for(username)
     return @users[username]
@@ -53,7 +55,7 @@ class HTTPartyRDK
   @divisions["C877"] = "507"
 
   def self.default_credentials
-    return { :accessCode => "PW    ", :verifyCode => "PW    !!", :site => "9E7A", :division => "500" }
+    return { :accessCode => "pu1234", :verifyCode => "pu1234!!", :site => "9E7A", :division => "500" }
   end
 
   def self.time_elapsed_last_call
@@ -66,7 +68,7 @@ class HTTPartyRDK
   end
 
   def self.build_options(credentials)
-    p "Using credentials: #{credentials}"
+    puts Color.grey "Using credentials: #{credentials}"
     tokens = @keychain[credentials]
     headers = {}
     headers['Cookie'] = tokens[:cookie] unless tokens[:cookie].nil?
@@ -84,9 +86,9 @@ class HTTPartyRDK
 
     authentication_path = RDKQuery.new('authentication-authentication').path
     options = { :body => payload.to_json, :headers => { 'Content-Type' => 'application/json' }, :timeout => @time_out_time, :verify => false }
-    puts format_options_to_curl('POST', authentication_path, options)
+    puts Color.grey format_options_to_curl('POST', authentication_path, options)
     @response = HTTParty.post(authentication_path, options)
-    p "Authentication: #{payload} had a #{@response.code} response"
+    puts Color.grey "Authentication: #{payload} had a #{@response.code} response"
 
     if @response.code != 200
       @keychain[credentials] = nil
@@ -95,8 +97,8 @@ class HTTPartyRDK
 
     jwt = @response.headers['X-Set-JWT']
     cookie = @response.headers['set-cookie']
-    p "Authentication JWT: #{jwt}"
-    p "Authentication cookie: #{cookie}"
+    puts Color.grey "Authentication JWT: #{jwt.inspect}"
+    puts Color.grey "Authentication cookie: #{cookie.inspect}"
     cookie_hash = HTTParty::CookieHash.new
     cookie_hash.add_cookies(cookie)
     tokens = {}
@@ -177,30 +179,30 @@ class HTTPartyRDK
   # Don't call this directly; use the methods above
   # We expect opt to already contain authenticated tokens
   def self.wrap_httparty(method, path, opt = {}, credentials = default_credentials)
-    p "#{method.upcase} #{path}"
+    puts Color.magenta "#{method.upcase} #{path}"
     @response = nil
     return opt[:authentication_response] if opt.key?(:authentication_response) && opt[:authentication_response].code != 200
 
     options = deep_merge(build_options(credentials), opt)
-    puts format_options_to_curl(method, path, options)
+    puts Color.grey format_options_to_curl(method, path, options)
     begin
       @time_start = Time.new
       begin
         @response = HTTParty.send(method.downcase, path, options)
         if @response.code == 401
-          p "Failed credentials: #{credentials}"
-          p "Failed keychain: #{@keychain}"
+          puts Color.red "Failed credentials: #{credentials}"
+          puts Color.red "Failed keychain: #{@keychain}"
           @keychain[credentials] = nil
         end
       rescue Exception => e
-        p "Exception: #{e}"
+        puts Color.red "Exception: #{e}"
       end
       @time_done = Time.new
-      request_id = @response.headers['requestid']
-      p "requestId: #{request_id}" if request_id
+      request_id = @response.headers['X-Request-ID']
+      puts Color.grey "requestId: #{request_id}" if request_id
     rescue Exception => e
       @time_done = Time.new
-      p "Time to failure: #{time_elapsed_last_call}"
+      puts Color.red "Time to failure: #{time_elapsed_last_call}"
       raise e, "Time to failure: #{time_elapsed_last_call}"
     end
     if method.upcase == 'DELETE' && path == '/resource/authentication'
@@ -222,4 +224,15 @@ end
 def deep_merge(first, second)
   merger = proc { |key, v1, v2| (v1.is_a? Hash) && (v2.is_a? Hash) ? v1.merge(v2, &merger) : v2 }
   first.merge(second, &merger)
+end
+
+class Color
+  extend Cucumber::Term::ANSIColor
+  # clear (reset)
+  # bold, dark
+  # black, red, green, yellow, blue, magenta, cyan, white
+  def self.grey(string)
+    # Basic ANSI grey color, compatible with Jenkins
+    bold(black(string))
+  end
 end

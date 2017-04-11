@@ -23,9 +23,7 @@ define([
 
             saveVitalsModel.set('dateTime', dateTaken);
 
-            var dfn = currentPatient.get('pid').split(';')[1];
-            saveVitalsModel.set('dfn', dfn);
-
+            saveVitalsModel.set('pid', currentPatient.get('pid'));
             if (visit) {
                 saveVitalsModel.set('locationUid', visit.locationUid);
             }
@@ -75,7 +73,7 @@ define([
             return saveVitalsModel;
         },
         addVitals: function(model, isPass, ienMap, successCallback, errorCallback) {
-            var saveVitalsModel = new ADK.UIResources.Writeback.Vitals.Model(); 
+            var saveVitalsModel = new ADK.UIResources.Writeback.Vitals.Model();
             var currentPatient = ADK.PatientRecordService.getCurrentPatient();
             var user = ADK.UserService.getUserSession();
             var saveModel = this.buildSaveVitalsModel(model, isPass, ienMap, user, currentPatient, saveVitalsModel);
@@ -136,47 +134,47 @@ define([
         retrievePickLists: function(form, successCallback, errorCallback) {
             var that = this;
             var vitalQualifiers = new ADK.UIResources.Picklist.Vitals.Qualifiers();
-            form.listenTo(vitalQualifiers, 'read:success', function(collection, resp){
+            form.listenTo(vitalQualifiers, 'read:success', function(collection, resp) {
                 if (resp && resp.data) {
-                        var items = resp.data;
-                        form.model.set('vitalsIENMap', picklistUtils.getIENMap(items));
-                        updatePickList(form, 'select', 'bp-location-po', picklistUtils.getQualifier(items, 'BLOOD PRESSURE', 'LOCATION'));
-                        updatePickList(form, 'select', 'bp-method-po', picklistUtils.getQualifier(items, 'BLOOD PRESSURE', 'METHOD'));
-                        updatePickList(form, 'select', 'bp-position-po', picklistUtils.getQualifier(items, 'BLOOD PRESSURE', 'POSITION'));
-                        updatePickList(form, 'select', 'bp-cuff-size-po', picklistUtils.getQualifier(items, 'BLOOD PRESSURE', 'CUFF SIZE'));
-                        updatePickList(form, 'select', 'temperature-location-po', picklistUtils.getQualifier(items, 'TEMPERATURE', 'LOCATION'));
-                        updatePickList(form, 'select', 'respiration-method-po', picklistUtils.getQualifier(items, 'RESPIRATION', 'METHOD'));
-                        updatePickList(form, 'select', 'respiration-position-po', picklistUtils.getQualifier(items, 'RESPIRATION', 'POSITION'));
-                        updatePickList(form, 'select', 'pulse-location-po', picklistUtils.getQualifier(items, 'PULSE', 'LOCATION'));
-                        updatePickList(form, 'select', 'pulse-method-po', picklistUtils.getQualifier(items, 'PULSE', 'METHOD'));
-                        updatePickList(form, 'select', 'pulse-position-po', picklistUtils.getQualifier(items, 'PULSE', 'POSITION'));
-                        updatePickList(form, 'select', 'pulse-site-po', picklistUtils.getQualifier(items, 'PULSE', 'SITE'));
-                        updatePickList(form, 'select', 'height-quality-po', picklistUtils.getQualifier(items, 'HEIGHT', 'QUALITY'));
-                        updatePickList(form, 'select', 'weight-method-po', picklistUtils.getQualifier(items, 'WEIGHT', 'METHOD'));
-                        updatePickList(form, 'select', 'weight-quality-po', picklistUtils.getQualifier(items, 'WEIGHT', 'QUALITY'));
-                        updatePickList(form, 'select', 'cg-location-po', picklistUtils.getQualifier(items, 'CIRCUMFERENCE/GIRTH', 'LOCATION'));
-                        updatePickList(form, 'select', 'cg-site-po', picklistUtils.getQualifier(items, 'CIRCUMFERENCE/GIRTH', 'SITE'));
-                        updatePickList(form, 'select', 'po-method-po', picklistUtils.getQualifier(items, 'PULSE OXIMETRY', 'METHOD'));
-                    }
+                    var items = resp.data;
+                    form.model.set('vitalsIENMap', picklistUtils.getIENMap(items));
+                    updatePickList(form, 'select', 'bp-location-po', picklistUtils.getQualifier(items, 'BLOOD PRESSURE', 'LOCATION'));
+                    updatePickList(form, 'select', 'bp-method-po', picklistUtils.getQualifier(items, 'BLOOD PRESSURE', 'METHOD'));
+                    updatePickList(form, 'select', 'bp-position-po', picklistUtils.getQualifier(items, 'BLOOD PRESSURE', 'POSITION'));
+                    updatePickList(form, 'select', 'bp-cuff-size-po', picklistUtils.getQualifier(items, 'BLOOD PRESSURE', 'CUFF SIZE'));
+                    updatePickList(form, 'select', 'temperature-location-po', picklistUtils.getQualifier(items, 'TEMPERATURE', 'LOCATION'));
+                    updatePickList(form, 'select', 'respiration-method-po', picklistUtils.getQualifier(items, 'RESPIRATION', 'METHOD'));
+                    updatePickList(form, 'select', 'respiration-position-po', picklistUtils.getQualifier(items, 'RESPIRATION', 'POSITION'));
+                    updatePickList(form, 'select', 'pulse-location-po', picklistUtils.getQualifier(items, 'PULSE', 'LOCATION'));
+                    updatePickList(form, 'select', 'pulse-method-po', picklistUtils.getQualifier(items, 'PULSE', 'METHOD'));
+                    updatePickList(form, 'select', 'pulse-position-po', picklistUtils.getQualifier(items, 'PULSE', 'POSITION'));
+                    updatePickList(form, 'select', 'pulse-site-po', picklistUtils.getQualifier(items, 'PULSE', 'SITE'));
+                    updatePickList(form, 'select', 'height-quality-po', picklistUtils.getQualifier(items, 'HEIGHT', 'QUALITY'));
+                    updatePickList(form, 'select', 'weight-method-po', picklistUtils.getQualifier(items, 'WEIGHT', 'METHOD'));
+                    updatePickList(form, 'select', 'weight-quality-po', picklistUtils.getQualifier(items, 'WEIGHT', 'QUALITY'));
+                    updatePickList(form, 'select', 'cg-location-po', picklistUtils.getQualifier(items, 'CIRCUMFERENCE/GIRTH', 'LOCATION'));
+                    updatePickList(form, 'select', 'cg-site-po', picklistUtils.getQualifier(items, 'CIRCUMFERENCE/GIRTH', 'SITE'));
+                    updatePickList(form, 'select', 'po-method-po', picklistUtils.getQualifier(items, 'PULSE OXIMETRY', 'METHOD'));
+                }
             });
             vitalQualifiers.fetch();
 
-            form.listenTo(vitalQualifiers, 'read:error', function(collection){
+            form.listenTo(vitalQualifiers, 'read:error', function(collection) {
                 _.bind(errorCallback, form)();
             });
-            form.listenTo(vitalQualifiers, 'read:success', function(collection){
+            form.listenTo(vitalQualifiers, 'read:success', function(collection) {
                 _.bind(successCallback, form)();
             });
         },
-        buildEnteredInErrorVitalCollection: function(vitalsList, checkedVital, site){
+        buildEnteredInErrorVitalCollection: function(vitalsList, checkedVital, site) {
             var collection = new Backbone.Collection();
 
-            _.each(vitalsList, function(model){
-                if(model.get('typeName') !== 'BMI' && model.get('typeName').toUpperCase() !== 'BLOOD PRESSURE SYSTOLIC' && model.get('typeName').toUpperCase() !== 'BLOOD PRESSURE DIASTOLIC' &&
-                    model.get('pid') && model.get('pid').split(';')[0] === site){
+            _.each(vitalsList, function(model) {
+                if (model.get('typeName') !== 'BMI' && model.get('typeName').toUpperCase() !== 'BLOOD PRESSURE SYSTOLIC' && model.get('typeName').toUpperCase() !== 'BLOOD PRESSURE DIASTOLIC' &&
+                    model.get('pid') && model.get('pid').split(';')[0] === site) {
                     collection.add({
                         itemName: model.get('localId'),
-                        itemValue: model.get('localId') === checkedVital.get('localId') ? true: false,
+                        itemValue: model.get('localId') === checkedVital.get('localId') ? true : false,
                         itemLabel: model.get('typeName'),
                         itemEIEValue: model.get('result') + ' ' + model.get('units')
                     });
