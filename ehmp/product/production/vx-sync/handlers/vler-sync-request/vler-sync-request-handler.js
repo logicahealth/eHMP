@@ -106,7 +106,7 @@ function handle(log, config, environment, job, handlerCallback) {
                     log.error('vler-to-vpr-xform-handler.handle: Received error while attempting to store metaStamp for pid: %s.  Error: %s;  Response: %j; metaStamp:[%j]', job.patientIdentifier.value, error, response, domainMetastamp);
                     error = errorUtil.createTransient('Unable to store metastamp', error);
 
-                    // TODO:   Push this to an error message location.  We do not want to error out the entire set of messages for one problem.
+                    // FUTURETODO:   Push this to an error message location.  We do not want to error out the entire set of messages for one problem.
                     //--------------------------------------------------------------------------------------------------------------------------
                     return handlerCallback(null, 'FailedVlerError');
                 }
@@ -114,7 +114,7 @@ function handle(log, config, environment, job, handlerCallback) {
                 if (!response) {
                     log.error('vler-to-vpr-xform-handler.handle:  Failed to store metaStamp for pid: %s - no response returned.  Error: %s;  Response: %j; metaStamp:[%j]', job.patientIdentifier.value, error, response, domainMetastamp);
 
-                    // TODO:   Push this to an error message location.  We do not want to error out the entire set of messages for one problem.
+                    // FUTURETODO:   Push this to an error message location.  We do not want to error out the entire set of messages for one problem.
                     //--------------------------------------------------------------------------------------------------------------------------
                     // return callback(util.format('Failed to store metaStamp for pid: %s - no response returned.  Error: %s;  Response: %j; metaStamp:[%j]', syncStartJob.pid, error, response, syncStartJob.metaStamp), null);
 
@@ -124,7 +124,7 @@ function handle(log, config, environment, job, handlerCallback) {
                 if (response.statusCode !== 200) {
                     log.error('vler-to-vpr-xform-handler.handle:  Failed to store metaStamp for pid: %s - incorrect status code returned. Error: %s;  Response: %j; metaStamp:[%j]', job.patientIdentifier.value, error, response, domainMetastamp);
 
-                    // TODO:   Push this to an error message location.  We do not want to error out the entire set of messages for one problem.
+                    // FUTURETODO:   Push this to an error message location.  We do not want to error out the entire set of messages for one problem.
                     //--------------------------------------------------------------------------------------------------------------------------
                     // return callback(util.format('Failed to store metaStamp for pid: %s - incorrect status code returned.  Error: %s;  Response: %j; metaStamp:[%j]', syncStartJob.pid, error, response, syncStartJob.metaStamp), null);
 

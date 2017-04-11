@@ -9,7 +9,8 @@ describe('write-back orders common validator', function() {
     var signDetailsLabWritebackContext;
     var signLabWritebackContext;
     var draftLabWritebackContext;
-    var findDraftLabWritebackContext;
+    var findDraftWritebackContext;
+    var readDraftWritebackContext;
 
     beforeEach(function() {
         editLabWritebackContext = {};
@@ -39,8 +40,8 @@ describe('write-back orders common validator', function() {
             model: {
                 'dfn': '100716',
                 'provider': '1000000000',
-               'location': '285',
-                'eSig': 'mx1234!!',
+                'location': '285',
+                'eSig': 'PW    !!',
                 'orderList': [{
                     'orderId': '38989;1',
                     'orderDetailHash': 'some hash value'
@@ -77,13 +78,17 @@ describe('write-back orders common validator', function() {
             }
         };
 
-        findDraftLabWritebackContext = {
+        findDraftWritebackContext = {
             model: {
                 patientUid: '9E7A;100716',
                 authorUid: 'Something',
                 domain: 'order',
                 ehmpState: 'draft'
             }
+        };
+
+        readDraftWritebackContext = {
+            resourceId: 'urn:va:ehmp-order:9E7A;3:de305d54-75b4-431b-adb2-eb6b9e546014'
         };
     });
 
@@ -178,15 +183,31 @@ describe('write-back orders common validator', function() {
     });
 
     it('identifies good find draft request', function(done) {
-        validator.findDraftLabOrders(findDraftLabWritebackContext, function(err) {
+        validator.findDraftOrders(findDraftWritebackContext, function(err) {
             expect(err).to.be.falsy();
             done();
         });
     });
 
     it('identifies bad find draft request', function(done) {
-        findDraftLabWritebackContext.model.patientUid = null;
-        validator.findDraftLabOrders(findDraftLabWritebackContext, function(err) {
+        findDraftWritebackContext.model.patientUid = null;
+        validator.findDraftOrders(findDraftWritebackContext, function(err) {
+            console.log(err);
+            expect(err).to.be.truthy();
+            done();
+        });
+    });
+
+    it('identifies good read draft request', function(done) {
+        validator.readDraftOrder(readDraftWritebackContext, function(err) {
+            expect(err).to.be.falsy();
+            done();
+        });
+    });
+
+    it('identifies bad read draft request', function(done) {
+        readDraftWritebackContext.resourceId = null;
+        validator.readDraftOrder(readDraftWritebackContext, function(err) {
             console.log(err);
             expect(err).to.be.truthy();
             done();

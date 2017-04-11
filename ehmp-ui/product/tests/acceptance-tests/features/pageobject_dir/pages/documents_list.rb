@@ -7,6 +7,10 @@ class PobDocumentsList < PobParentApplet
   # *****************  All_Field_Elements  ******************* #
   element :fld_documents_heading, "div[data-appletid='documents'] .grid-applet-heading"
   elements :fld_date_headers, "[data-appletid=documents] td.group-by-header"
+
+  elements :fld_document_rows_description, "#data-grid-documents tr > td.handlebars-cell.flex-width-2.sortable.renderable"
+  elements :fld_document_rows_type, "#data-grid-documents > tbody > tr > td:nth-child(3)"
+
   # *****************  All_Button_Elements  ******************* #
 
   # *****************  All_Drop_down_Elements  ******************* #
@@ -28,5 +32,9 @@ class PobDocumentsList < PobParentApplet
     return true if has_fld_empty_row?
     return true if fld_date_headers.length > 0
     false
+  end
+
+  def document_types
+    fld_document_rows_type.map { |td| td.text }
   end
 end

@@ -22,8 +22,10 @@
 SOLR_JAVA_MEM="-Xms512m -Xmx512m"
 
 # Enable verbose GC logging
-GC_LOG_OPTS="-verbose:gc -XX:+PrintHeapAtGC -XX:+PrintGCDetails \
--XX:+PrintGCDateStamps -XX:+PrintGCTimeStamps -XX:+PrintTenuringDistribution -XX:+PrintGCApplicationStoppedTime"
+#GC_LOG_OPTS="-verbose:gc -XX:+PrintHeapAtGC -XX:+PrintGCDetails \
+#-XX:+PrintGCDateStamps -XX:+PrintGCTimeStamps -XX:+PrintTenuringDistribution -XX:+PrintGCApplicationStoppedTime"
+# Disable GC logging which isn't very useful and consumes a lot of disk space
+GC_LOG_OPTS=""
 
 # These GC settings have shown to work well for a number of common Solr workloads
 GC_TUNE="-XX:NewRatio=3 \
@@ -97,9 +99,9 @@ ENABLE_REMOTE_JMX_OPTS="false"
 # Uncomment to set SSL-related system properties
 # Be sure to update the paths to the correct keystore for your environment
 #SOLR_SSL_OPTS="-Djavax.net.ssl.keyStore=etc/solr-ssl.keystore.jks \
-#-Djavax.net.ssl.keyStorePassword=secret \
+#-Djavax.net.ssl.keyStoreVsID            \
 #-Djavax.net.ssl.trustStore=etc/solr-ssl.keystore.jks \
-#-Djavax.net.ssl.trustStorePassword=secret"
+#-Djavax.net.ssl.trustStoreVsID           "
 
 # Uncomment to set a specific SSL port (-Djetty.ssl.port=N); if not set
 # and you are using SSL, then the start script will use SOLR_PORT for the SSL port

@@ -212,7 +212,7 @@ define([
                     self.userDefinedFiltersCollectionChanged.call(self);
                 }, self);
 
-                this.listenTo(this.collection, 'fetchSuccessfull', this.onFetchCollection);
+                this.listenTo(this.collection, 'fetchSuccessful', this.onFetchCollection);
                 this.listenTo(this.collection, 'backgrid:sorted', this.onSort);
                 this.listenTo(this.collection, 'baseGistView:sortNone', this.onSortNone);
                 this.listenTo(this.collection, 'baseGistView:sortManual', this.onSortManual);
@@ -246,6 +246,7 @@ define([
                 this.collection = options.collection;
                 this.maximizedScreen = options.maximizedScreen;
                 this.filterName = options.filterName || '';
+                this.filterText = options.filterText || '';
                 this.model = options.model;
                 this.destinationCollection = options.destinationCollection;
 
@@ -302,7 +303,7 @@ define([
 
                 // expect at least 1 characters to start filtering.
                 if (!isFilterKeyMatchingPattern || (this.searchBox().val().length < 1 &&
-                        this.collection.models.length === originalModelsCount && this.userDefinedFilters.length === 0)) {
+                    this.collection.models.length === originalModelsCount && this.userDefinedFilters.length === 0)) {
                     this.prevSearchTextLength = this.searchBox().val().length;
                     if (!isFilterKeyMatchingPattern) {
                         this.$('.filter-add').attr('disabled', true);
@@ -399,11 +400,20 @@ define([
                 }
 
                 var fullCollection = this.collection.fullCollection || this.collection;
-                if (fullCollection.preFilterCollection) this.preFilterCollection = fullCollection.preFilterCollection;
+                if (!_.isUndefined(fullCollection.preFilterCollection) && fullCollection.length === fullCollection.preFilterCollection.length) {
+                    var fullColModels = fullCollection.filter(function(model) {
+                        return model;
+                    });
+                    var preFilterColModels = fullCollection.preFilterCollection.filter(function(model) {
+                        return model;
+                    });
+                    if (_.difference(fullColModels, preFilterColModels)) {
+                        this.preFilterCollection = fullCollection.preFilterCollection;
+                    }
+                }
                 // capture pre-filtered collections for restoring collections on clearing of filters.
                 if (_.isEmpty(this.preFilterCollection)) {
                     this.preFilterCollection = fullCollection.clone();
-                    fullCollection.preFilterCollection = this.preFilterCollection;  // persist preFilterCollection on applet refresh
                 }
 
                 var matcher = _.bind(this.makeMatcher(query), this);
@@ -416,8 +426,8 @@ define([
                     var clonedModels = this.preFilterCollection.models;
                     // deep cloning models if the collection has panels (nested collections) that should be filtered
                     if (col.fullCollection.where({
-                            isPanel: "Panel"
-                        }).length > 0) {
+                        isPanel: "Panel"
+                    }).length > 0) {
                         clonedModels = this.preFilterCollection.map(function(model) {
                             var newModel = model.clone();
                             if (model.has('labs')) {
@@ -527,7 +537,7 @@ define([
                 }
             },
             clearInputBtnDisplay: function() {
-                var searchVal = this.searchBox().val();
+                var searchVal = this.searchBox().val() || this.filterText;
                 if (searchVal) {
                     this.$(".clear-input").show();
                     if (searchVal.length > 2) {

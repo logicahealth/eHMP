@@ -9,7 +9,7 @@ define([
 ], function(Backbone, Marionette, _, Handlebars, Async, MainBodyView, Utils) {
     'use strict';
     var ActivityOverview = {
-        startActivityDetails: function(processId){
+        startActivityDetails: function(processId, readOnly){
             var modal = new ADK.UI.Modal({
                 view: ADK.Views.Loading.create(),
                 options: {
@@ -27,7 +27,7 @@ define([
                 },
                 onSuccess: function(collection){
                     var model = collection.models[0];
-                    Utils.enrichSingleActivityModel(model, ADK.Messaging.request('facilityMonikers'), ADK.WorkspaceContextRepository.currentContext.get('id'));
+                    Utils.enrichSingleActivityModel(model, ADK.Messaging.request('facilityMonikers'), ADK.WorkspaceContextRepository.currentContextId, readOnly);
 
 
                     if(!_.isUndefined(model.get('processDefinitionId'))){
@@ -72,7 +72,7 @@ define([
                 size: 'large'
             };
 
-            if(!_.isUndefined(FooterView)){
+            if(!_.isUndefined(FooterView) && !model.get('readOnly')){
                 modalOptions.footerView = new FooterView({model: model});
             }
 

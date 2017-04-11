@@ -21,8 +21,6 @@ function fetchMvi1305FileName(lastName, firstName, dob, ssn) {
         return "0 Results";
     else if (ssn === "666000008")
         return "Single Record Patient Eight";
-    else if (ssn === "666000608")
-        return "Single Record Outpatient Eight";
     else if (ssn === "111111234")
         return "Single Record Patient EDIPIOnly";
     else if (ssn === "666000808")
@@ -57,6 +55,30 @@ function fetchMvi1305FileName(lastName, firstName, dob, ssn) {
         return "Single Record Outpatient Eight";
     else if ((lastName === "ALIAS") && (firstName === "OUTPATIENT"))
         return "Single Record Outpatient Eight";
+    else if ((lastName === "KODAK") && (firstName === "ONE"))
+        return "Kodak One";
+    else if ((lastName === "PANORAMA") && (firstName === "ONE"))
+        return "Panorama One";
+    else if ((lastName === "KODAK") && (firstName === "TWO"))
+        return "Kodak Two";
+    else if ((lastName === "PANORAMA") && (firstName === "TWO"))
+        return "Panorama Two";
+    else if ((lastName === "KODAK") && (firstName === "THREE"))
+        return "Kodak Three";
+    else if ((lastName === "PANORAMA") && (firstName === "THREE"))
+        return "Panorama Three";
+    else if ((lastName === "KODAK") && (firstName === "FOUR"))
+        return "Kodak Four";
+    else if ((lastName === "KODAK") && (firstName === "FIVE"))
+        return "Kodak Five";
+    else if ((lastName === "KODAK") && (firstName === "SIX"))
+        return "Kodak Six";
+    else if ((lastName === "KODAK") && (firstName === "SEVEN"))
+        return "Kodak Seven";
+    else if ((lastName === "KODAK") && (firstName === "EIGHT"))
+        return "Kodak Eight";
+    else if ((lastName === "KODAK") && (firstName === "NINE"))
+        return "Kodak Nine";
     else if ((lastName === "EIGHT") && (firstName === "INPATIENT") && (dob === "19450309"))
         return "Single Record Inpatient Eight";
     else if ((lastName === "EIGHT") && (firstName === "IMAGEPATIENT") && (dob === "19530415"))

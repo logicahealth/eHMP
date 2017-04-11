@@ -56,7 +56,7 @@
                 <span><strong>Start Date/Time</strong></span><br />
                 <span>
                     {{#if overallStart}}
-                        {{formatDate overallStart "MM/DD/YYYY HH:mm"}}
+                        {{formatDate overallStart "MM/DD/YYYY"}}
                     {{else}}
                         No Data
                     {{/if}}
@@ -67,10 +67,10 @@
             <p>
                 <span><strong>Stop Date/Time</strong></span><br />
                 {{#if isDiscontinued}}
-                <span class="right-padding-xs">{{#if stopped}}{{formatDate stopped "MM/DD/YYYY HH:mm"}}{{else}}No Data{{/if}}</span>
+                <span class="right-padding-xs">{{#if stopped}}{{formatDate stopped "MM/DD/YYYY"}}{{else}}No Data{{/if}}</span>
                 {{/if}}
                 {{#if showExpiredDate}}
-                <span>{{#if overallStop}}({{expireText}} {{formatDate overallStop "MM/DD/YYYY HH:mm"}}){{else}}No Data{{/if}}</span>
+                <span>{{#if overallStop}}({{expireText}} {{formatDate overallStop "MM/DD/YYYY"}}){{else}}No Data{{/if}}</span>
                 {{/if}}
             </p>
         </div>

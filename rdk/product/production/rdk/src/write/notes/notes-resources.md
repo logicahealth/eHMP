@@ -1,4 +1,4 @@
-# Group Patient
+# Group Writeback
 
 ## Notes [{{{path}}}]
 
@@ -287,20 +287,11 @@ Add a new unsigned note for a patient to single VistA
                     "patientName",
                     "patientStatus",
                     "pid",
-                    "processInstanceId",
                     "referenceDateTime",
-                    "siteHash",
                     "status",
                     "statusDisplayName",
                     "text",
-                    "uid",
-                    "updated",
-                    "value",
-                    "id",
-                    "itemUniqueID",
-                    "displayGroup",
-                    "derivBody",
-                    "deriv_isEditForm"
+                    "value"
                 ]
             }
 
@@ -577,7 +568,6 @@ Update an existing patient unsigned note
                     }
                 },
                 "required": [
-                    "_labelsForSelectedValues",
                     "app",
                     "author",
                     "authorDisplayName",
@@ -610,12 +600,7 @@ Update an existing patient unsigned note
                     "text",
                     "uid",
                     "updated",
-                    "value",
-                    "id",
-                    "itemUniqueID",
-                    "displayGroup",
-                    "derivBody",
-                    "deriv_isEditForm"
+                    "value"
                 ]
             }
 

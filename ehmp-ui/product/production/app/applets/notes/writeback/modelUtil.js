@@ -2,9 +2,10 @@ define([
     'backbone',
     'marionette',
     'underscore',
+    'moment',
     'app/applets/notes/writeback/operationConfirmationView',
     'app/applets/notes/writeback/errorView'
-], function(Backbone, Marionette, _, ConfirmationView, ErrorView) {
+], function(Backbone, Marionette, _, moment, ConfirmationView, ErrorView) {
     'use strict';
     var channel = ADK.Messaging.getChannel('notes');
     var LINE_LENGTH = 80;
@@ -245,6 +246,7 @@ define([
                             addendum.text[0].noPermission = true;
                         }
                     }
+
                     if (addendum.status === 'UNCOSIGNED') {
                         var clinicians = (addendum.clinicians || []);
                         _.each(clinicians, function(clinician) {
@@ -283,12 +285,12 @@ define([
         deleteAddendumWithPrompt: function(model, config) {
             config = config || {};
             var self = this;
-            var message = 'This addendum cannot be retrieved once it is deleted. Select No to return back to the form, or Yes to proceed with deleting.';
+            var message = 'Are you sure you want to delete?';
 
             var confirmationConfig = {
                 message: message,
                 title: 'Delete Addendum',
-                title_icon: 'icon-delete',
+                title_icon: 'icon-triangle-exclamation',
                 yes_callback: function() {
                     self.deleteAddendum(model, config);
                 },
@@ -310,7 +312,7 @@ define([
             var confirmationConfig = {
                 message: message,
                 title: 'Delete',
-                title_icon: 'icon-delete',
+                title_icon: 'icon-triangle-exclamation',
                 yes_callback: function() {
                     self.deleteNote(model, config);
                 },
@@ -326,20 +328,8 @@ define([
         },
         deleteAddendum: function(model, config) {
             config = config || {};
-            var ien = model.get('uid');
 
-            if (model.isNew()) {
-                if (_.isFunction(config.completeCallback)) {
-                    config.completeCallback();
-                }
-
-                if (_.isFunction(config.successCallback)) {
-                    config.successCallback();
-                }
-                return;
-            }
-
-            if (model.get('status') === 'UNSIGNED' && ien.length > 0) {
+            if (model.get('status') === 'UNSIGNED') {
                 var criteria = {};
 
                 model.destroy({
@@ -386,8 +376,8 @@ define([
 
                         if (!config.silent) {
                             var deleteAlertView = new ADK.UI.Notification({
-                                title: 'Success!',
-                                message: 'Deleted Successfully.',
+                                title: 'Success',
+                                message: 'Addendum deleted',
                                 type: 'success'
                             });
 
@@ -463,8 +453,8 @@ define([
 
                         if (!config.silent) {
                             var deleteAlertView = new ADK.UI.Notification({
-                                title: 'Success!',
-                                message: 'Deleted Successfully.',
+                                title: 'Success',
+                                message: 'Note deleted',
                                 type: 'success'
                             });
 
@@ -485,6 +475,26 @@ define([
                 suffix
             ];
             return fields.join('---');
+        },
+        setLocation: function(model) {
+            var url = ADK.ResourceService.buildUrl('operational-data-by-uid-getData', {
+                        uid: model.get("locationUid")
+                    });
+            var urlFetch = new Backbone.Collection();
+            urlFetch.url = url;
+            urlFetch.fetch({
+                        error: function(collection, res) {
+                            throw new Error(res);
+                        },
+                        success: function(result) {
+                            var facilityObject = result.at(0);
+                            if (_.isUndefined(facilityObject)) return;
+                            var facilityName = facilityObject.get("facilityName");
+                            if (!_.isUndefined(facilityName)) {
+                                model.set("facilityName",facilityName);
+                            }
+                        }
+            });
         }
     };
     return util;

@@ -25,24 +25,29 @@ These tools are not optional. Please run your code through these tools with the 
    For rdk-wide relative `require`s, only require rdk/rdk and make module variables from it.  
    For example:
    ```JavaScript
-   var rdk = require('../../core/rdk');        // good, main rdk require
+   var rdk = require('../../core/rdk');       // good, main rdk require
    var httpUtil = rdk.utils.http;             // good, no extra relative requires
    var httpUtil = require('../../util/http'); // bad, unnecessary relative require
-   var _ = require('lodash');             // good
+   var _ = require('lodash');                 // good
    var _s = require('underscore.string');     // good
    ```
- * Use the drilldown utility for accessing deep object properties.
+ * Use `_.get`, `_.set`, and `_.result` for accessing deep object properties.
    ```JavaScript
-   var dd = require('drilldown');
+   var _ = require('lodash');
    var response1 = {data: {error: 'Something went wrong'}};
    var response2 = {data: {items: [{foo: 1},{foo: 2}]}};
 
    var items = response1.data.items;  // TypeError, crashes the resource server
-   var items = dd(response1)('data')('items').val;
+   var items = _.get(response1, 'data.items');
    // because response1.data.items does not exist, items is undefined
 
-   var items = dd(response2)('data')('items').val;
+   var items = _.get(response2, 'data.items');
    // because response2.data.items exists, items is [{foo: 1},{foo: 2}]
+
+   var field = 'items';
+   var items = _.get(response2, ['data', items]);
+   // safely get fields from user input
+   // or fields which can't be described with dot notation
    ```
  * The following documents have additional development guidelines:
     * [Resources](resources.md)
@@ -120,7 +125,7 @@ These are ideal and recommended, but not always easily doable.
         console.log(i);
     }
     ```
-    The above code will print `11`, which is the value of `i` when the for loop exits.
+    The above code will print `10`, which is the value of `i` when the for loop exits.
  * **"Hoisting"**
     * **Variable declarations** (`var x;`) are processed before any code is executed.  
       **Variable assignments** (`x = 1;`) are processed as the line is executed.  

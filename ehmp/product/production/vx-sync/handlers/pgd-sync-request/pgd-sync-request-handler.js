@@ -15,14 +15,14 @@ function handle(log, config, environment, job, handlerCallback) {
     };
 
     var jobsToPublish = _.map(domains, function(domain) {
-        // TODO: remove this
+        // FUTURETODO: remove this
         var newJob = jobUtil.createPgdXformVpr(job.patientIdentifier, domain, _.clone(record), job);
         newJob.record.uid = 'urn:va:' + newJob.dataDomain + ':PGD:' + job.patientIdentifier.value + ':' + job.jobId;
         if (newJob.dataDomain === 'obs') {
             newJob.record.typeName = 'something';
         }
         return newJob;
-        // TODO: enable this version once stampTime is added and events have legit UIDs
+        // FUTURETODO: enable this version once stampTime is added and events have legit UIDs
         // return jobUtil.createPgdXformVpr(job.patientIdentifier, domain, record, requestStampTime, job);
     });
 

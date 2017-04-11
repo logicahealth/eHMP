@@ -1,4 +1,3 @@
-/*jslint node: true*/
 'use strict';
 
 var rdk = require('../../core/rdk');
@@ -8,6 +7,7 @@ var filemanDateUtil = require('../../utils/fileman-date-converter');
 var getVistaRpcConfiguration = require('../../utils/rpc-config').getVistaRpcConfiguration;
 var paramUtil = require('../../utils/param-converter');
 var _ = require('lodash');
+var nullchecker = rdk.utils.nullchecker;
 
 function getResourceConfig() {
     return [{
@@ -21,7 +21,7 @@ function getResourceConfig() {
             synchronize: true,
             convertPid: true
         },
-        requiredPermissions: [],
+        requiredPermissions: ["read-vital"],
         isPatientCentric: true,
         subsystems: ['patientrecord', 'jds', 'solr', 'jdsSync', 'authorization']
     }, {
@@ -31,7 +31,7 @@ function getResourceConfig() {
         description: {
             get: 'Returns all qualifier information for the vital types selected. If no types are selected, then all qualifiers are returned.'
         },
-        requiredPermissions: [],
+        requiredPermissions: ["read-vital"],
         isPatientCentric: false,
         subsystems: ['patientrecord', 'jds', 'solr', 'jdsSync', 'authorization']
     }, {
@@ -45,14 +45,14 @@ function getResourceConfig() {
             synchronize: true,
             convertPid: true
         },
-        requiredPermissions: [],
+        requiredPermissions: ["read-vital"],
         isPatientCentric: true,
         subsystems: ['patientrecord', 'jds', 'solr', 'jdsSync', 'authorization']
     }, {
         name: 'vitals-vitalsRule',
         path: '/vitals-rule',
         post: execVitalsRule,
-        requiredPermissions: [],
+        requiredPermissions: ["read-vital"],
         isPatientCentric: false,
     }];
 }
@@ -143,157 +143,157 @@ function execVitalsRule(req, res) {
  * CDS Vitals Rules Formatting and Check
  *
  */
-function formatParamsForCDSRulesCheck (paramKey, keyvalue , parameterCollection) {
+function formatParamsForCDSRulesCheck(paramKey, keyvalue, parameterCollection) {
     switch (paramKey) {
-        case 'bloodpressure' :
-            parameterCollection['BloodPressure'] = {
-                resourceType: 'Observation',
-                code: {
-                    coding: [
-                        {
-                            system: 'http://loinc.org',
-                            code: '55284-4'
+    case 'bloodpressure':
+        parameterCollection['BloodPressure'] = {
+            resourceType: 'Observation',
+            code: {
+                coding: [
+                    {
+                        system: 'http://loinc.org',
+                        code: '55284-4'
                         }
                     ]
-                },
-                valueString: keyvalue.value
-            };
-            break;
-        case 'temperature' :
-            parameterCollection['Temperature'] = {
-                resourceType: 'Observation',
-                code: {
-                    coding: [
-                        {
-                            system: 'http://loinc.org',
-                            code: '8310-5'
+            },
+            valueString: keyvalue.value
+        };
+        break;
+    case 'temperature':
+        parameterCollection['Temperature'] = {
+            resourceType: 'Observation',
+            code: {
+                coding: [
+                    {
+                        system: 'http://loinc.org',
+                        code: '8310-5'
                         }
                     ]
-                },
-                valueQuantity: {
-                    value: keyvalue.value,
-                    units: keyvalue.units
-                }
-            };
-            break;
-        case 'respiration' :
-            parameterCollection['Respiration'] = {
-                resourceType: 'Observation',
-                code: {
-                    coding: [
-                        {
-                            system: 'http://loinc.org',
-                            code: '9279-1'
+            },
+            valueQuantity: {
+                value: keyvalue.value,
+                units: keyvalue.units
+            }
+        };
+        break;
+    case 'respiration':
+        parameterCollection['Respiration'] = {
+            resourceType: 'Observation',
+            code: {
+                coding: [
+                    {
+                        system: 'http://loinc.org',
+                        code: '9279-1'
                         }
                     ]
-                },
-                valueQuantity: {
-                    value: keyvalue.value,
-                    units:  keyvalue.units
-                }
-            };
-            break;
-        case 'pulse' :
-            parameterCollection['Pulse'] = {
-                resourceType: 'Observation',
-                code: {
-                    coding: [
-                        {
-                            system: 'http://loinc.org',
-                            code: '8867-4'
+            },
+            valueQuantity: {
+                value: keyvalue.value,
+                units: keyvalue.units
+            }
+        };
+        break;
+    case 'pulse':
+        parameterCollection['Pulse'] = {
+            resourceType: 'Observation',
+            code: {
+                coding: [
+                    {
+                        system: 'http://loinc.org',
+                        code: '8867-4'
                         }
                     ]
-                },
-                valueQuantity: {
-                    value: keyvalue.value,
-                    units: keyvalue.units
-                }
-            };
-            break;
-        case 'pain':
-            parameterCollection['Pain'] = {
-                resourceType: 'Observation',
-                code: {
-                    coding: [
-                        {
-                            system: 'http://loinc.org',
-                            code: '72514-3'
+            },
+            valueQuantity: {
+                value: keyvalue.value,
+                units: keyvalue.units
+            }
+        };
+        break;
+    case 'pain':
+        parameterCollection['Pain'] = {
+            resourceType: 'Observation',
+            code: {
+                coding: [
+                    {
+                        system: 'http://loinc.org',
+                        code: '72514-3'
                         }
                     ]
-                },
-                valueQuantity: {
-                    value: keyvalue.value
-                }
-            };
-            break;
-        case 'circumferencegirth' :
-            parameterCollection['CircumferenceGirth'] = {
-                resourceType: 'Observation',
-                code: {
-                    coding: [
-                        {
-                            system: 'http://loinc.org',
-                            code: '9844-2'
+            },
+            valueQuantity: {
+                value: keyvalue.value
+            }
+        };
+        break;
+    case 'circumferencegirth':
+        parameterCollection['CircumferenceGirth'] = {
+            resourceType: 'Observation',
+            code: {
+                coding: [
+                    {
+                        system: 'http://loinc.org',
+                        code: '9844-2'
                         }
                     ]
-                },
-                valueQuantity: {
-                    value: keyvalue.value,
-                    units: keyvalue.units
-                }
-            };
-            break;
-        case 'pulseoximetry' :
-            parameterCollection['PulseOximetry'] = {
-                resourceType: 'Observation',
-                code: {
-                    coding: [
-                        {
-                            system: 'http://loinc.org',
-                            code: '59408-5'
+            },
+            valueQuantity: {
+                value: keyvalue.value,
+                units: keyvalue.units
+            }
+        };
+        break;
+    case 'pulseoximetry':
+        parameterCollection['PulseOximetry'] = {
+            resourceType: 'Observation',
+            code: {
+                coding: [
+                    {
+                        system: 'http://loinc.org',
+                        code: '59408-5'
                         }
                     ]
-                },
-                valueQuantity: {
-                    value: keyvalue.value,
-                    code: keyvalue.units
-                }
-            };
-            break;
-        case 'weight' :
-            parameterCollection['Weight'] = {
-                resourceType: 'Observation',
-                code: {
-                    coding: [
-                        {
-                            system: 'http://loinc.org',
-                            code: '29463-7'
+            },
+            valueQuantity: {
+                value: keyvalue.value,
+                code: keyvalue.units
+            }
+        };
+        break;
+    case 'weight':
+        parameterCollection['Weight'] = {
+            resourceType: 'Observation',
+            code: {
+                coding: [
+                    {
+                        system: 'http://loinc.org',
+                        code: '29463-7'
                         }
                     ]
-                },
-                valueQuantity: {
-                    value: keyvalue.value,
-                    units: keyvalue.units
-                }
-            };
-            break;
-        case 'height' :
-            parameterCollection['Height'] = {
-                resourceType: 'Observation',
-                code: {
-                    coding: [
-                        {
-                            system: 'http://loinc.org',
-                            code: '8302-2'
+            },
+            valueQuantity: {
+                value: keyvalue.value,
+                units: keyvalue.units
+            }
+        };
+        break;
+    case 'height':
+        parameterCollection['Height'] = {
+            resourceType: 'Observation',
+            code: {
+                coding: [
+                    {
+                        system: 'http://loinc.org',
+                        code: '8302-2'
                         }
                     ]
-                },
-                valueQuantity: {
-                    value: keyvalue.value,
-                    units: keyvalue.units
-                }
-            };
-            break;
+            },
+            valueQuantity: {
+                value: keyvalue.value,
+                units: keyvalue.units
+            }
+        };
+        break;
     }
 
 }
@@ -330,7 +330,11 @@ function getClosestVital(req, res) {
         flag = '';
     }
 
-    var vistaConfig = getVistaRpcConfiguration(req.app.config, req.session.user.site, req.session.user);
+    if(nullchecker.isNullish(dfn)){
+        return res.status(500).rdkSend('Missing required patient identifiers');
+    }
+
+    var vistaConfig = getVistaRpcConfiguration(req.app.config, req.session.user);
 
     RpcClient.callRpc(req.logger, vistaConfig, 'GMV CLOSEST READING', [dfn, ts, type, flag], function (error, message) {
         if (!error) {
@@ -375,6 +379,10 @@ function getAllVitals(req, res) {
         return res.status(rdk.httpstatus.bad_request).rdkSend('Missing parameters.  Please include a pid, date.start, and date.end parameter.');
     }
 
+    if(nullchecker.isNullish(dfn)){
+        return res.status(500).rdkSend('Missing required patient identifiers');
+    }
+
     start = paramUtil.convertWriteBackInputDate(start);
     end = paramUtil.convertWriteBackInputDate(end);
     if (!start || !end) {
@@ -385,7 +393,7 @@ function getAllVitals(req, res) {
 
     var rpcParam = [dfn, start, end].join('^');
 
-    var vistaConfig = getVistaRpcConfiguration(req.app.config, req.session.user.site, req.session.user);
+    var vistaConfig = getVistaRpcConfiguration(req.app.config, req.session.user);
 
     RpcClient.callRpc(req.logger, vistaConfig, 'GMV V/M ALLDATA', [rpcParam], function (error, message) {
         if (!error) {
@@ -660,7 +668,7 @@ function getQualifierInformation(req, res) {
 
     var rpcParametersArray = paramUtil.convertArrayToRPCParameters(jsonTypes);
 
-    var vistaConfig = getVistaRpcConfiguration(req.app.config, req.session.user.site, req.session.user);
+    var vistaConfig = getVistaRpcConfiguration(req.app.config, req.session.user);
 
     RpcClient.callRpc(req.logger, vistaConfig, 'GMV VITALS/CAT/QUAL', rpcParametersArray, function (error, message) {
         if (!error) {
@@ -701,9 +709,9 @@ function formatQualifierInformationOutput(messageElements) {
                     currentVital.abnormalSystolicLowValue = element[7];
                     currentVital.abnormalDiastolicLowValue = element[8];
                 } else if ((currentVital.type === 'TEMPERATURE' ||
-                    currentVital.type === 'RESPIRATION' ||
-                    currentVital.type === 'PULSE' ||
-                    currentVital.type === 'CENTRAL VENOUS PRESSURE') && element.length >= 7) {
+                        currentVital.type === 'RESPIRATION' ||
+                        currentVital.type === 'PULSE' ||
+                        currentVital.type === 'CENTRAL VENOUS PRESSURE') && element.length >= 7) {
                     currentVital.abnormalHighValue = element[5];
                     currentVital.abnormalLowValue = element[6];
 

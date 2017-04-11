@@ -4,7 +4,7 @@ define([
     'use strict';
 
     var Roles = ADK.Resources.Picklist.Collection.extend({
-        type: 'roles-for-team',
+        resource: 'write-pick-list-roles-for-team',
         model: Role,
         params: function(method, options) {
             return {

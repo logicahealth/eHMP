@@ -2,7 +2,6 @@
 
 var rdk = require('../../core/rdk');
 var _ = require('lodash');
-var dd = require('drilldown');
 var crsSPARQL = require('./crs-sparql');
 var crsDataTransformer = require('./crs-data-transformer');
 
@@ -40,7 +39,7 @@ function getRelatedConcepts(req, targetDomains, conceptDomain, conceptId, callba
             req.logger.error({error: error}, 'concept-relationships::getRelatedConceptsFromCRS: ' + internalError);
             return callback(internalError);
         }
-        var data = dd(body)('results')('bindings').val;
+        var data = _.get(body, 'results.bindings');
         return callback(null, crsDataTransformer.transform(targetDomains, data));
     });
 }

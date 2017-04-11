@@ -20,6 +20,7 @@ define([], function() {
             RESCHEDULE: 'RESCHEDULE',
             RELEASE: {
                 CONSULT: 'RELEASE.CONSULT',
+                ECONSULT: 'RELEASE.ECONSULT',
                 EWL: 'RELEASE.EWL',
                 COMMUNITY: 'RELEASE.COMMUNITY'
             }

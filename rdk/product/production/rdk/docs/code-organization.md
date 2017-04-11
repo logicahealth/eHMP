@@ -76,8 +76,8 @@ Everything here is automatically generated and overwritten upon deployment
   core/                     framework code
   utils/                    generally useful functions
   subsystems/               provide interfaces to external systems
-  interceptors/             incoming middleware
-  outerceptors/             outgoing middleware
+  interceptors/             middleware which runs before a request handler
+  outerceptors/             middleware which runs after a request handler and before sending the response
   resources/                resource code
   fhir/                     fhir resources
 

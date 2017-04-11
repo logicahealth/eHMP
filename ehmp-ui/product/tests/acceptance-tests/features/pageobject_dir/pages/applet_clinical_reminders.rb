@@ -11,7 +11,7 @@ class PobClinicalRemindersApplet < PobParentApplet
 
   # *****************  All_Field_Elements  ******************* #
   element :fld_cds_modal_content, ".detail-modal-content pre"
-  element :fld_title, "a[tooltip-data-key='clinicalreminders_title']"
+  element :fld_title, "[data-header-instanceid='cds_advice-title'] a"
 
   # *****************  All_Button_Elements  ******************* #
 
@@ -30,6 +30,7 @@ class PobClinicalRemindersApplet < PobParentApplet
     add_text_filter appletid_css
     add_generic_error_message appletid_css
     add_empty_table_row appletid_css
+    add_expanded_applet_fields appletid_css
   end
   
   def applet_grid_loaded

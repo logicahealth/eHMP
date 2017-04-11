@@ -15,10 +15,10 @@ var mockConfig = {
     "vistaSites": {
         "9E7A": {
             "name": "panorama",
-            "host": "IP_ADDRESS",
+            "host": "IP        ",
             "port": 9210,
-            "accessCode": "PW",
-            "verifyCode": "PW",
+            "accessCode": "ep1234",
+            "verifyCode": "ep1234!!",
             "localIP": "127.0.0.1",
             "stationNumber": 500,
             "localAddress": "localhost",
@@ -27,10 +27,10 @@ var mockConfig = {
         },
         "C877": {
             "name": "kodak",
-            "host": "IP_ADDRESS",
+            "host": "IP        ",
             "port": 9210,
-            "accessCode": "PW",
-            "verifyCode": "PW",
+            "accessCode": "ep1234",
+            "verifyCode": "ep1234!!",
             "localIP": "127.0.0.1",
             "stationNumber": 500,
             "localAddress": "localhost",
@@ -59,8 +59,9 @@ describe('patientlist.handle', function() {
         runs(function() {
             var job = {};
             job.type = 'patientlist';
-            job.source = 'appointments';
-            job.users = [{"duz": {"9E7A": "10000000237"},"lastlogin": "2015-08-07T15:16:59-04:00"},{"duz": {"C877": "10000000239"},"lastlogin": "2015-08-07T15:17:21-04:00"}];
+            job.source = 'active-users';
+            job.users = [{"uid": "urn:va:user:9E7A:10000000237", "site": "9E7A", "id": "10000000237"},
+                        {"uid": "urn:va:user:C877:10000000239", "site": "C877", "id": "10000000239"}];
 
             var mockEnvironment = {};
             var mockPublisher = new Publisher(log, mockConfig, job.type);

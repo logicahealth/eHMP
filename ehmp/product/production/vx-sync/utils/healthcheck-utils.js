@@ -89,23 +89,23 @@ function sendHeartbeat(logger, config, environment, processName, profile, proces
        callback: The callback to call when the function is complete
 */
 function retrieveHeartbeats(logger, config, environment, callback) {
-    logger.debug('healthcheck-utils.retreiveHeartbeats(): Entering method');
+    logger.debug('healthcheck-utils.retrieveHeartbeats(): Entering method');
 
     environment.jds.getOperationalDataMutableByFilter('?filter=exists(\"heartbeatTime\")', function(error, response, result) {
         if (error) {
-            logger.error('healthcheck-utils.retreiveHeartbeats(): Got error from JDS: %s', error);
+            logger.error('healthcheck-utils.retrieveHeartbeats(): Got error from JDS: %s', error);
             callback('FailedJdsError');
         } else if (!response) {
-            logger.error('healthcheck-utils.retreiveHeartbeats(): Response is null or undefined');
+            logger.error('healthcheck-utils.retrieveHeartbeats(): Response is null or undefined');
             callback('FailedJdsNoResponse');
         } else if (response.statusCode !== 200) {
-            logger.error('healthcheck-utils.retreiveHeartbeats(): Unexpected statusCode received from JDS: %s', response.statusCode);
+            logger.error('healthcheck-utils.retrieveHeartbeats(): Unexpected statusCode received from JDS: %s', response.statusCode);
             callback('FailedJdsWrongStatusCode');
         } else if (!result) {
-            logger.error('healthcheck-utils.retreiveHeartbeats(): Result is null or undefined');
+            logger.error('healthcheck-utils.retrieveHeartbeats(): Result is null or undefined');
             callback('FailedJdsNoResult');
         } else {
-            logger.trace('healthcheck-utils.retreiveHeartbeats(): Got result from JDS: %j', result);
+            logger.trace('healthcheck-utils.retrieveHeartbeats(): Got result from JDS: %j', result);
             callback(null, result);
         }
     });
@@ -124,13 +124,13 @@ function retrieveHeartbeats(logger, config, environment, callback) {
        callback: The callback to call when the function is complete
 */
 function retrieveStaleHeartbeats(logger, config, environment, currentMoment, callback) {
-    logger.debug('healthcheck-utils.retreiveStaleHeartbeats(): Entering method. currentMoment: %s', currentMoment);
+    logger.debug('healthcheck-utils.retrieveStaleHeartbeats(): Entering method. currentMoment: %s', currentMoment);
 
     var currentTime = currentMoment;
     var staleTime = currentTime.clone();
     var staleAgeMillis = config.healthcheck.heartbeatStaleAgeMillis;
     staleTime.subtract(staleAgeMillis, 'milliseconds');
-    logger.debug('healthcheck-utils.retreiveStaleHeartbeats(): staleAgeMillis: %s staleTime: %s', staleAgeMillis, staleTime);
+    logger.debug('healthcheck-utils.retrieveStaleHeartbeats(): staleAgeMillis: %s staleTime: %s', staleAgeMillis, staleTime);
 
     retrieveHeartbeats(logger, config, environment, function(error, response) {
         if (error) {
@@ -141,7 +141,7 @@ function retrieveStaleHeartbeats(logger, config, environment, currentMoment, cal
                 return heartbeatTime.isBefore(staleTime);
             });
 
-            logger.debug('healthcheck-utils.retreiveStaleHeartbeats(): Found stale heartbeats: %j', staleHeartbeats);
+            logger.debug('healthcheck-utils.retrieveStaleHeartbeats(): Found stale heartbeats: %j', staleHeartbeats);
             callback(null, staleHeartbeats);
         }
     });

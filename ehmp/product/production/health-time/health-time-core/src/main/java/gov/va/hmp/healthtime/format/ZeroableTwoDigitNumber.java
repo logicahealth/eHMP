@@ -10,8 +10,10 @@ import java.io.Writer;
 import java.util.Locale;
 
 /**
- * TODO: Complete documentation for ZeroableTwoDigitNumber
+ * Class for parsing and formatting Two Digit Number to Zeroable numbers.
+ * If VA FileMan Dates and Date/Times two digit fields are empty replace with value zero. 
  */
+
 class ZeroableTwoDigitNumber extends TwoDigitNumber {
 
     private Character fillChar = '0';

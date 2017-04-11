@@ -1,4 +1,4 @@
-@F144_Lab_Results_Base_Applet_Filter @Lab_Results @regression @triage
+@F144_Lab_Results_Base_Applet_Filter @Lab_Results @regression
 Feature: F144 - eHMP Viewer GUI - Numeric Lab Results - Filtering
 
 # Team: Andromeda

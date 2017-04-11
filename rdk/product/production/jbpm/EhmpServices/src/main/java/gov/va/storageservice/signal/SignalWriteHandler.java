@@ -11,9 +11,11 @@ import org.kie.api.runtime.process.WorkItemHandler;
 import org.kie.api.runtime.process.WorkItemManager;
 import org.kie.internal.runtime.Cacheable;
 import org.kie.internal.runtime.Closeable;
+import org.springframework.http.HttpStatus;
 
 import gov.va.activitydb.entities.SignalInstance;
 import gov.va.ehmp.services.exception.EhmpServicesException;
+import gov.va.ehmp.services.exception.ErrorResponseUtil;
 import gov.va.ehmp.services.utils.Logging;
 import gov.va.kie.utils.EntityManagerUtil;
 import gov.va.kie.utils.WorkItemUtil;
@@ -42,11 +44,11 @@ public class SignalWriteHandler implements WorkItemHandler, Closeable, Cacheable
 		
 		try {
 			Logging.info("Entering SignalWriteHandler.executeWorkItem");
-			String name = WorkItemUtil.extractStringParam(workItem, "name");
-			String action = WorkItemUtil.extractStringParam(workItem, "action");
-			String owner = WorkItemUtil.extractStringParam(workItem, "owner");
+			String name = WorkItemUtil.extractRequiredStringParam(workItem, "name");
+			String action = WorkItemUtil.extractRequiredStringParam(workItem, "action");
+			String owner = WorkItemUtil.extractRequiredStringParam(workItem, "owner");
 			Date statusTimeStamp = Calendar.getInstance().getTime();
-			String history = WorkItemUtil.extractStringParam(workItem, "history");
+			String history = WorkItemUtil.extractRequiredStringParam(workItem, "history");
 			long processedSignalId = workItem.getProcessInstanceId();
 			
 			Logging.debug("SignalWriteHandler.executeWorkItem name = " + name);
@@ -67,6 +69,9 @@ public class SignalWriteHandler implements WorkItemHandler, Closeable, Cacheable
 			Logging.debug("SignalWriteHandler.executeWorkItem response = " + response);
 		} catch (EhmpServicesException e) {
 			response = e.toJsonString();
+		} catch (Exception e) {
+			Logging.error("SignalWriteHandler.executeWorkItem: An unexpected condition has happened: " + e.getMessage());
+			response = ErrorResponseUtil.create(HttpStatus.INTERNAL_SERVER_ERROR, "SignalWriteHandler.executeWorkItem: An unexpected condition has happened: ", e.getMessage());
 		}
 		
 		WorkItemUtil.completeWorkItem(workItem, manager, response);

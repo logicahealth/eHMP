@@ -22,7 +22,6 @@ jar {
     }
 }
 
-// TODO don't hardcode the version
 publishing {
     publications {
         maven(MavenPublication) {

@@ -1,6 +1,6 @@
 When(/^the client requests documents for the patient "(.*?)" in JDS$/) do |pid|
-  # path = "http://IP_ADDRESS:PORT/vpr/9E7A;3/index/document"
-  # path = http://IP_ADDRESS:PORT/data/find/asu-rule
+  # path = "http://IP             /vpr/9E7A;3/index/document"
+  # path = http://IP             /data/find/asu-rule
   base_jds_url = DefaultLogin.jds_url
   p jds_path = "#{base_jds_url}/vpr/#{pid}/index/document"
   p rule_path = "#{base_jds_url}/data/find/asu-rule"

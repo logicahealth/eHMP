@@ -28,7 +28,10 @@ function clearTestPatient(config, patientIdentifierValue) {
         var options = {
             url: config.protocol + '://' + config.host + ':' + config.port + config.patientUnsyncPath,
             method: 'POST',
-            qs: {pid: patientIdentifierValue}};
+            qs: {
+                pid: patientIdentifierValue
+            }
+        };
 
         request.post(options, function(error, response) {
             actualError = error;
@@ -77,7 +80,9 @@ describe('resync-request-handler', function() {
 
         beforeEach(function() {
             config = {
-                retrySync: {maxRetries: 3},
+                retrySync: {
+                    maxRetries: 3
+                },
                 syncRequestApi: {
                     protocol: 'http',
                     host: host,
@@ -94,7 +99,7 @@ describe('resync-request-handler', function() {
                 },
                 jds: _.defaults(wConfig.jds, {
                     protocol: 'http',
-                    host: 'IP_ADDRESS',
+                    host: 'IP        ',
                     port: 9080
                 })
             };
@@ -130,7 +135,7 @@ describe('resync-request-handler', function() {
             var completed = false;
             var actualError, actualSyncStatus;
 
-            testHandler(handle, dummyLogger, config, environment, host, port, tubename, job, [], null, function (error, response) {
+            testHandler(handle, dummyLogger, config, environment, host, port, tubename + '-first', job, [], null, function(error) {
                 actualError = error;
                 retrieveSyncStatus(job.patientIdentifier, environment, function(error, syncStatus) {
                     actualError = error;
@@ -139,18 +144,18 @@ describe('resync-request-handler', function() {
                 });
             });
 
-            waitsFor(function () {
+            waitsFor(function() {
                 return completed;
             }, 'response from resync test handler timed out.', 10000);
 
-            runs(function () {
+            runs(function() {
                 expect(actualError).toBeFalsy();
                 expect(actualSyncStatus).toBe(200);
             });
         });
 
         it('and the sync is still in process then a new job is put back on the queue for the patient', function() {
-            config.syncRequestApi.patientStatusPath='/sync/invalid';
+            config.syncRequestApi.patientStatusPath = '/sync/invalid';
 
             var job = {
                 type: 'resync-request',
@@ -164,7 +169,7 @@ describe('resync-request-handler', function() {
 
             var matchingJobTypes = [jobUtil.resyncRequestType()];
 
-            testHandler(handle, dummyLogger, config, environment, host, port, tubename, job, matchingJobTypes);
+            testHandler(handle, dummyLogger, config, environment, host, port, tubename + '-second', job, matchingJobTypes);
         });
     });
 });

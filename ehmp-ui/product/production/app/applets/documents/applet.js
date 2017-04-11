@@ -4,24 +4,27 @@ define([
     'underscore',
     'moment',
     'handlebars',
-    'app/applets/documents/debugFlag',
+    'app/applets/documents/appConfig',
     'app/applets/documents/detailCommunicator',
     'app/applets/documents/appletHelper',
     'app/applets/documents/docDetailsDisplayer',
     'app/applets/documents/collectionHandler',
     'app/applets/notes/writeback/formUtil',
     'app/applets/documents/modalFooter',
-    'app/applets/documents/docUtils'
-], function (Backbone, Marionette, _, moment, Handlebars, DEV, DetailCommunicator, appletHelper, DocDetailsDisplayer,
-    CollectionHandler, NotesFormUtil, ModalFooter, DocUtils) {
+    'app/applets/documents/modalHeader',
+    'app/applets/documents/docUtils',
+    'app/applets/documents/imaging/views/imageIndicatorView',
+    "app/applets/documents/imaging/helpers/thumbnailHelper"
+], function (Backbone, Marionette, _, moment, Handlebars, appConfig, DetailCommunicator, appletHelper, DocDetailsDisplayer,
+    CollectionHandler, NotesFormUtil, ModalFooter, ModalHeader, DocUtils, ImageIndicator, ThumbnailHelper) {
     "use strict";
 
-    var DEBUG = DEV.flag;
+    var DEBUG = appConfig.debug;
     var fetchOptions = {
         cache: true,
         pageable: true,
         resourceTitle: 'patient-record-document-view',
-        allowAbort: true,
+        allowAbort: true
     };
     //var DEBUG = true;
     //The important changes are in the columns array as well as replacing the dataGridOptions.groupBy logic with this:   dataGridOptions.groupable = this.options.groupView;
@@ -60,7 +63,7 @@ define([
         groupableOptions: {
             innerSort: "referenceDateTime"
         },
-        template: Handlebars.compile('{{localTitle}}{{#if addendaText}} <strong>(w/ Addendum)</strong> {{/if}}'),
+        template: Handlebars.compile('{{localTitle}} <strong>{{addendumIndicator}}</strong> '),
         hoverTip: 'documents_description'
     }, {
         name: 'kind',
@@ -73,7 +76,7 @@ define([
         hoverTip: 'documents_type'
     }, {
         name: 'authorDisplayName',
-        label: 'Author or Verifier',
+        label: 'Author/Verifier',
         cell: 'string',
         groupable: true,
         groupableOptions: {
@@ -90,13 +93,20 @@ define([
         },
         template: Handlebars.compile('{{facilityName}}{{#if dodComplexNoteUri}}*{{/if}}'),
         hoverTip: 'documents_facility'
+    }, {
+        name:'hasImages',
+        label:'Images',
+        editable:false,
+        cell:ImageIndicator,
+        flexWidth:'flex-width-0_5',
+        hoverTip: 'documents_images'
     }];
     var summaryColumns = [fullScreenColumns[0], fullScreenColumns[2], fullScreenColumns[3]];
 
     //------------------------------------------------------------
 
     var filterOptions = {
-        filterFields: ['dateDisplay', 'localTitle', 'kind', 'authorDisplayName', 'facilityName', 'imageLocation', 'dateTimeDisplay', 'orderName', 'reason']
+        filterFields: ['dateDisplay', 'localTitle', 'kind', 'authorDisplayName', 'facilityName', 'imageLocation', 'dateTimeDisplay', 'orderName', 'reason', 'addendumIndicator']
     };
     //------------------------------------------------------------
 
@@ -105,19 +115,22 @@ define([
             if (DEBUG) console.log("Doc Tab App -----> init start");
             this._super = ADK.Applets.BaseGridApplet.prototype;
             var self = this;
+            this.modalCollection = new Backbone.Collection();
             var dataGridOptions = {
                 filterEnabled: true,
                 onClickRow: function (model, event, gridView) {
                     var docType = model.get('kind');
                     var complexDocBool = model.get('complexDoc');
-                    var resultDocCollection;
-                    var childDocCollection = appletHelper.getChildDocs.call(gridView, model);
+                    var resultDocCollection = new appletHelper.ResultsDocCollection();
+                    var childDocCollection = new appletHelper.ChildDocCollection();
+                    appletHelper.getChildDocs.call(gridView, model, childDocCollection);
 
                     if (complexDocBool) {
-                        resultDocCollection = appletHelper.getResultsFromUid.call(gridView, model);
+                        appletHelper.getResultsFromUid.call(gridView, model, resultDocCollection);
                     }
 
                     if (this.parent !== undefined) {
+                        self.modalCollection.reset();
                         self.changeModelAndView(model, docType, resultDocCollection, childDocCollection);
                     }
 
@@ -134,7 +147,7 @@ define([
             dataGridOptions.parent = this;
             dataGridOptions.appletConfig = options.appletConfig;
             dataGridOptions.groupable = true;
-            if (ADK.UserService.hasPermission('sign-note') && ADK.UserService.hasPermission('add-encounter')) {
+            if (ADK.UserService.hasPermission('sign-note') && ADK.PatientRecordService.isPatientInPrimaryVista()) {
                 dataGridOptions.onClickAdd = function (event) {
                     var notesFormOptions = {
                         model: undefined,
@@ -159,18 +172,23 @@ define([
                 if (DEBUG) console.log("Doc Tab date filter range----->" + JSON.stringify(date));
                 this.dataGridOptions.collection.fetchOptions.criteria.filter = 'or(' + this.buildJdsDateFilter('referenceDateTime') + ',' + this.buildJdsDateFilter('dateTime') + '),' +
                         'not(and(in(kind,["Consult","Imaging","Procedure"]),ne(statusName,"COMPLETE")))'; //fill out incomplete consults, images and procedures.;
+                this.dataGridOptions.collection.fetchOptions.criteria.template = 'notext';
                 this.fetchData();
 
             }, this);
             this.dataGridOptions = dataGridOptions;
             fetchOptions.criteria = {
                     filter: 'or(' + this.buildJdsDateFilter('referenceDateTime') + ',' + this.buildJdsDateFilter('dateTime') + '),' +
-                        'not(and(in(kind,["Consult","Imaging","Procedure"]),ne(statusName,"COMPLETE")))' //fill out incomplete consults, images and procedures.
+                        'not(and(in(kind,["Consult","Imaging","Procedure"]),ne(statusName,"COMPLETE")))', //fill out incomplete consults, images and procedures.
+                    template: 'notext'
             };
-            var model = Backbone.Model.extend({
+           var model = Backbone.Model.extend({
                 parse: function(resp) {
                     ADK.Enrichment.addFacilityMoniker(resp);
                     appletHelper.parseDocResponse(resp);
+                    if (resp.complexDoc) {
+                        resp.authorDisplayName = appletHelper.stringNormalization(appletHelper.getAuthorVerifier(resp));
+                    }
                     return resp;
                 }
             });
@@ -209,58 +227,44 @@ define([
             });
         },
 
-        changeModelAndView: function (newModel, docType, resultDocCollection, childDocCollection, modelCollection) {
-            var self = this;
+        changeModelAndView: function (newModel, docType, resultDocCollection, childDocCollection) {
             if (newModel.get('documentClass') === "PROGRESS NOTES") {
-                DocUtils.getDoc.call(this, newModel.get('uid'), function (error, model) {
-                    if (error || !model) {
-                        DocUtils.showDocError.call(this);
-                    } else {
-                        self.changeModelView(model, docType, resultDocCollection, childDocCollection);
-                    }
-                });
+                this.changeModelView(newModel, docType, resultDocCollection, childDocCollection);
+                DocUtils.getDoc.call(this, newModel.get('uid'), this.modalCollection);
             } else {
+                this.modalCollection.reset(newModel);
                 this.changeModelView(newModel, docType, resultDocCollection, childDocCollection);
             }
-
         },
 
-        changeModelView: function (newModel, docType, resultDocCollection, childDocCollection) {
+        changeModelView: function (newModel, docType, resultDocCollection, childDocCollection, originalModel) {
             if (DEBUG) console.log("Doc Tab App -----> changeView");
-            var deferredViewResponse = DocDetailsDisplayer.getView.call(this, newModel, docType, resultDocCollection, childDocCollection);
-            var self = this;
-            deferredViewResponse.done(function (results) {
-                var modalOptions = {
-                    'title': results.title || DocDetailsDisplayer.getTitle(newModel, docType),
-                    'size': 'large' //,
-                };
-                if (DocUtils.canAddAddendum(newModel)) {
-                    modalOptions.footerView = ModalFooter.extend({
-                        model: newModel
-                    });
-                }
+            var results = DocDetailsDisplayer.getView.call(this, newModel, docType, resultDocCollection, childDocCollection, this.modalCollection);
+            var view = new results.view();
 
-                //dod pdf documents
-                if (results.view.model && results.view.model.get('dodPdfDocumentUri')) {
-                    modalOptions.size = 'xlarge';
-                }
-
-                var modal = new ADK.UI.Modal({
-                    view: results.view,
-                    options: modalOptions
+            var modalOptions = {
+                'title': results.title,
+                'size': 'large',
+                'showLoading': true,
+                'headerView': ModalHeader.extend({
+                    model: newModel,
+                    theView: view,
+                    resultDocCollection: resultDocCollection,
+                    childDocCollection: childDocCollection
+                })
+            };
+            if (DocUtils.canAddAddendum(newModel)) {
+                modalOptions.footerView = ModalFooter.extend({
+                    model: newModel
                 });
-                modal.show();
+            }
 
-                //dod pdf documents
-                if (results.view.model && results.view.model.get('dodPdfDocumentUri')) {
-
-                    //prevent modal from displaying a scroll bar (needed to avoid display of two scroll bars)
-                    $('#modal-body').css('max-height', '100%');
-                }
-
+            var modal = new ADK.UI.Modal({
+                view: view,
+                options: modalOptions
             });
+            modal.show();
         },
-
     });
 
     var applet = {

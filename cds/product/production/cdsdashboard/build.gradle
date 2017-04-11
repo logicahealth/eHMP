@@ -36,7 +36,7 @@ allprojects {
       pom.groupId = "${groupId}"
       pom.version = "${version}"
       repository(url: "https://store.vistacore.us/nexus/content/repositories/${->repo}/") {
-        authentication(userName: System.getenv()['NEXUS_USER_NAME'], VsID       ystem.getenv()['NEXUS_PASSWORD'])
+        authentication(userName: System.getenv()['NEXUS_USER_NAME'], password: System.getenv()['NEXUS_PASSWORD'])
       }
     }
   }

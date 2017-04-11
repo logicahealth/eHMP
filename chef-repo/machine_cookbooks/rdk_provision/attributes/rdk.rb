@@ -9,8 +9,8 @@ default[:rdk_provision][:rdk][:copy_files] = {}
 # rdk specific aws configuration options
 default[:rdk_provision][:rdk][:aws][:instance_type] = "m3.xlarge"
 default[:rdk_provision][:rdk][:aws][:subnet] = "subnet-213b2256"
-default[:rdk_provision][:rdk][:aws][:ssh_username] = "ec2-user"
-default[:rdk_provision][:rdk][:aws][:ssh_keyname] = "vagrantaws_c82a142d5205"
+default[:rdk_provision][:rdk][:aws][:ssh_username] = "PW      "
+default[:rdk_provision][:rdk][:aws][:ssh_keyname] = "redacted"
 default[:rdk_provision][:rdk][:aws][:ssh_key_path] = "#{ENV['HOME']}/Projects/vistacore/.chef/keys/#{node[:rdk_provision][:rdk][:aws][:ssh_keyname]}"
 #######################################################################################################################
 

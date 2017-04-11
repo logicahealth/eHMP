@@ -8,7 +8,7 @@ task :scpCDSILogs, :driver do |t, args|
   logDir = "./cdsi_logs"
   logs = ["catalina.out"]
   key = knife_search_for_key_name("cdsinvocation", args[:driver])
-  user = "ec2-user"
+  user = "PW      "
   ip = knife_search_for_ip("cdsinvocation")
   Dir.mkdir("#{logDir}") unless File.exists?("#{logDir}")
   logs.each do |logname|
@@ -17,7 +17,8 @@ task :scpCDSILogs, :driver do |t, args|
 end
 
 def knife_search_for_ip(machine_name)
-  stack = ENV['JOB_NAME'] || ENV['USER']
+  release = File.read(File.dirname(__FILE__) + "/../../infrastructure/properties/releaseVersion")
+  stack = ENV['JOB_NAME'] || ENV['USER'] || "#{ENV['USER']}-#{release}"
   if ENV.key?('BUNDLE_BIN_PATH')
     raw_search = Bundler.with_clean_env { `/opt/chefdk/bin/knife search node \'role:#{machine_name} AND stack:#{stack}\' -Fj --config ~/Projects/vistacore/.chef/knife.rb` }
   else
@@ -30,7 +31,8 @@ def knife_search_for_ip(machine_name)
 end
 
 def knife_search_for_key_name(machine_name, driver)
-  stack = ENV['JOB_NAME'] || ENV['USER']
+  release = File.read(File.dirname(__FILE__) + "/../../infrastructure/properties/releaseVersion")
+  stack = ENV['JOB_NAME'] || ENV['USER'] || "#{ENV['USER']}-#{release}"
   driver == "aws" ? key_box = "#{machine_name}-#{stack}-noint" : key_box = "#{machine_name}-#{stack}"
   raw_search = `/opt/chefdk/bin/knife search node \'name:#{key_box}\' -Fj --config ~/Projects/vistacore/.chef/knife.rb`
   parsed_search = JSON.parse(raw_search)
@@ -59,7 +61,7 @@ task :syncCache do
   ]
 
   ENV["JDS_IP"] = knife_search_for_ip("jds")
-  ENV["VX_SYNC_IP"] = knife_search_for_ip("vxsync")
+  ENV["VX_SYNC_IP"] = knife_search_for_ip("vxsync_client")
   PatientSynchronizer.wait_until_operational_data_loaded "http://#{ENV["JDS_IP"]}:9080", 600, ["9E7A", "C877"]
   PatientSynchronizer.synchronize_patient_list "http://#{ENV["VX_SYNC_IP"]}:8080", 3600, patient_sync_list
 end

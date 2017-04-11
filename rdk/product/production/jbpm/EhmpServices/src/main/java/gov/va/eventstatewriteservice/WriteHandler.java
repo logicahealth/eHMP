@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 
 
 import gov.va.ehmp.services.exception.EhmpServicesException;
+import gov.va.ehmp.services.exception.ErrorResponseUtil;
 import gov.va.ehmp.services.utils.Logging;
 import gov.va.eventstatewriteservice.entities.ProcessedEventState;
 import gov.va.kie.utils.EntityManagerUtil;
@@ -40,13 +41,13 @@ public class WriteHandler implements WorkItemHandler, Closeable,
 		try {
 			Logging.info("Event State Write Service WriteHandler.executeWorkItem has been called");
 
-			dataLocation  = WorkItemUtil.extractStringParam(workItem, "dataLocation");
+			dataLocation  = WorkItemUtil.extractRequiredStringParam(workItem, "dataLocation");
 			Logging.debug("Event State Write Service WriteHandler.executeWorkItem: dataLocation=" + dataLocation);
 
-			value  = WorkItemUtil.extractStringParam(workItem, "value");
+			value  = WorkItemUtil.extractRequiredStringParam(workItem, "value");
 			Logging.debug("Event State Write Service WriteHandler.executeWorkItem: value=" + value);
 
-			listenerId  = WorkItemUtil.extractLongParam(workItem, "listenerId");	
+			listenerId  = WorkItemUtil.extractRequiredLongParam(workItem, "listenerId");	
 			Logging.debug("Event State Write Service WriteHandler.executeWorkItem: listenerId=" + listenerId);
 											
 			insertDataIntoProcessedEventStateTable(dataLocation, value, listenerId);
@@ -57,6 +58,9 @@ public class WriteHandler implements WorkItemHandler, Closeable,
 		catch (EhmpServicesException e) {
 			e.printStackTrace();
 			serviceResponse = e.toJsonString();
+		} catch (Exception e) {
+			Logging.error("WriteHandler.executeWorkItem: An unexpected condition has happened: " + e.getMessage());
+			serviceResponse = ErrorResponseUtil.create(HttpStatus.INTERNAL_SERVER_ERROR, "WriteHandler.executeWorkItem: An unexpected condition has happened: ", e.getMessage());
 		}
 	
 		Logging.debug("Event State Write Service WriteHandler.executeWorkItem: ServiceResponse=" + serviceResponse);

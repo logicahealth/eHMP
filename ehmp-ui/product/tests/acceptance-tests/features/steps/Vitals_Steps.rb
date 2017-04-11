@@ -50,26 +50,6 @@ class Vitals < AllApplets
     p e
     false
   end
-
-  # def clear_filter
-  #   css_filter = '#grid-filter-button-vitals span.applet-filter-title'
-  #   driver = TestSupport.driver
-  #   element = driver.find_element(:css, css_filter)
-  #   p "Class: #{element.attribute('class')}"
-  #   unless element.attribute('class').include? 'hidden'
-  #     p "need to clear the filter"
-  #     add_action(CucumberLabel.new('Remove All'), ClickAction.new, AccessHtmlElement.new(:css, '#content-region .remove-all'))
-  #     html_action_element = 'Search Filter'
-
-  #     # Open Filter
-  #     wait_until_action_element_visible(html_action_element, 40)
-  #     perform_action(html_action_element) unless am_i_visible? 'Remove All'
-
-  #     # Wait until the filter terms are displayed
-  #     wait_until_action_element_visible('Remove All', 40)
-  #     perform_action('Remove All')
-  #   end
-  # end
 end
 
 When(/^the user clears any existing filters$/) do

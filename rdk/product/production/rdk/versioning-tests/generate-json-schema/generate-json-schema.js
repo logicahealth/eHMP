@@ -24,7 +24,7 @@ function generateSchema(json, options, customizer) {
         }
         generateSchemaPortion(json, schema, options, path);
 if (options.useReferences) {
-// TODO: create a definitions section, maybe combine similar definitions, replace with $refs
+// FUTURE-TODO: create a definitions section, maybe combine similar definitions, replace with $refs
 }
     }
     return schema;

@@ -306,6 +306,7 @@ describe('record-enrichment-document-xformer.js', function() {
                     expect(typeof record.referenceDateTime).toEqual('string');
                     expect(typeof record.localId).toEqual('string');
                     expect(typeof record.facilityCode).toEqual('string');
+                    expect(typeof record.localTitle).toEqual('string');
                     _.each(record.text, function(textItem) {
                         expect(typeof textItem.dateTime).toEqual('string');
                         expect(typeof textItem.enteredDateTime).toEqual('string');
@@ -575,6 +576,97 @@ describe('record-enrichment-document-xformer.js', function() {
                     //-------------------------
                     expect(record.isInterdisciplinary).toBe('true');
                     expect(record.interdisciplinaryType).toBe('child');
+                    finished = true;
+                });
+            });
+
+            waitsFor(function() {
+                return finished;
+            }, 'Call failed to return in time.', 500);
+        });
+        it('Checking numeric localTitle', function() {
+            var finished = false;
+            var environment = {
+                terminologyUtils: {
+                    CODE_SYSTEMS: CODE_SYSTEMS,
+                    getJlvMappedCode: getJlvMappedCode_ReturnValidCode,
+                    getJlvMappedCodeList: getJlvMappedCodeList_ReturnValidCode
+                }
+            };
+
+            var documentRecord = {
+                'documentClass': 'PROGRESS NOTES',
+                'documentDefUid': 'urn:va:doc-def:9E7A:1632',
+                'documentTypeCode': 'D',
+                'documentTypeName': 'Advance Directive',
+                'encounterName': '20 MINUTE May 16, 2007',
+                'encounterUid': 'urn:va:visit:9E7A:3:5670',
+                'entered': 20070516095030,
+                'facilityCode': 500,
+                'facilityName': 'CAMP MASTER',
+                'lastUpdateTime': 20070516095030,
+                'localId': 3853,
+                'localTitle': 179,
+                'parentUid': 'urn:va:document:9E7A:3:111',                              // This will force the interdisciplinaryType to be set to child.
+                'nationalTitle': {
+                    'name': 'ADVANCE DIRECTIVE',
+                    'vuid': 'urn:va:vuid:4693421'
+                },
+                'pid': '9E7A;3',
+                'referenceDateTime': 200705160950,
+                'stampTime': 20070516095030,
+                'status': 'COMPLETED',
+                'text': [{
+                    'clinicians': [{
+                        'name': 'LABTECH,FIFTYNINE',
+                        'role': 'AU',
+                        'uid': 'urn:va:user:9E7A:10000000049'
+                    }, {
+                        'name': 'LABTECH,FIFTYNINE',
+                        'role': 'S',
+                        'signature': 'FIFTYNINE LABTECH',
+                        'signedDateTime': 20070516095031,
+                        'uid': 'urn:va:user:9E7A:10000000049'
+                    }, {
+                        'name': 'LABTECH,SIXTY',
+                        'role': 'ATT',
+                        'uid': 'urn:va:user:9E7A:10000000060'
+                    }, {
+                        'name': 'LABTECH,SIXTYONE',
+                        'role': 'C',
+                        'signature': 'SIXTYONE LABTECH',
+                        'signedDateTime': 20070516095030,
+                        'uid': 'urn:va:user:9E7A:10000000061'
+                    }, {
+                        'name': 'LABTECH,FIFTYNINE',
+                        'role': 'ES',
+                        'uid': 'urn:va:user:9E7A:10000000049'
+                    }, {
+                        'name': 'MG',
+                        'role': 'E',
+                        'uid': 'urn:va:user:9E7A:10000000049'
+                    }],
+                    'content': '   VistA Imaging - Scanned Document\r\n',
+                    'enteredDateTime': 200705160949,
+                    'dateTime': 200705160950,
+                    'status': 'COMPLETED',
+                    'statusDisplayName': 'IT IS COMPLETED',                     // This will force us to not do a conversion of the status to use for this field
+                    'uid': 'urn:va:document:9E7A:3:3853'
+                }],
+                'uid': 'urn:va:document:9E7A:3:3853'
+            };
+            var documentJob = {
+                record: documentRecord
+            };
+
+            runs(function() {
+                xformer(log, config, environment, documentJob.record, function(error, record) {
+                    expect(error).toBeNull();
+                    expect(record).toBeTruthy();
+
+                    // Root level record fields
+                    //-------------------------
+                    expect(typeof record.localTitle).toEqual('string');
                     finished = true;
                 });
             });

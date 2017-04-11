@@ -148,27 +148,39 @@ function addInMissingProvidersFields(providerList) {
 //------------------------------------------------------------------------------------
 function addInMissingRootFields(record) {
 
-	var firstProvider = null;
+	var principleProvider = null;
+    var hasRoles = false;
 	if (!_.isEmpty(record.providers)) {
-		firstProvider = record.providers[0];
+        _.each(record.providers, function(provider) {
+            if (_.isString(provider.providerRole)) {
+                hasRoles = true;
+                if (provider.providerRole == "Primary") {
+		            principleProvider = provider;
+                }
+            }
+        });
+
+        if (!hasRoles) {
+            principleProvider = record.providers[0];
+        }
 	}
 
 	// providerUid
 	//------------
-	if ((!_.isString(record.providerUid)) && (firstProvider) && (_.isString(firstProvider.uid))) {
-		record.providerUid = firstProvider.uid;
+	if ((!_.isString(record.providerUid)) && (principleProvider) && (_.isString(principleProvider.uid))) {
+		record.providerUid = principleProvider.uid;
 	}
 
 	// providerName
 	//--------------
-	if ((!_.isString(record.providerName)) && (firstProvider) && (_.isString(firstProvider.providerName))) {
-		record.providerName = firstProvider.providerName;
+	if ((!_.isString(record.providerName)) && (principleProvider) && (_.isString(principleProvider.providerName))) {
+		record.providerName = principleProvider.providerName;
 	}
 
 	// providerDisplayName
 	//--------------------
-	if ((!_.isString(record.providerDisplayName)) && (firstProvider) && (_.isString(firstProvider.providerName))) {
-		record.providerDisplayName = ncUtil.namecase(firstProvider.providerName);
+	if ((!_.isString(record.providerDisplayName)) && (principleProvider) && (_.isString(principleProvider.providerName))) {
+		record.providerDisplayName = ncUtil.namecase(principleProvider.providerName);
 	}
 
 	// Kind

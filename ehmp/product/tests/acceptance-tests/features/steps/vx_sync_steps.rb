@@ -40,7 +40,7 @@ Given(/^a patient with pid "(.*?)" has not been synced through VX\-Sync API for 
   
   if clear_patient == true
     p clear_path = "#{base_url}/sync/clearPatient?#{icn_pid}=#{pid}"
-    # http://IPADDRESS:POR/sync/clearPatient?pid=9E7A;227
+    # http://IP           /sync/clearPatient?pid=9E7A;227
     response = vx_sync.clear_request(clear_path)
     fail "Unsync patient faild! Expected response code 202, received #{response.code}" unless response.code == 202
   end
@@ -147,7 +147,7 @@ When(/^the client forced sync for patient with pid "(.*?)" at "(.*?)" secondary 
    
   
   p path_forced = sync_path + "&forcedSync=#{site_names}"
-  # p path_forced = "http://IPADDRESS:POR/sync/doLoad?pid=9E7A;227&forcedSync=[%22dod%22,%22hdr%22,%22vler%22]"
+  # p path_forced = "http://IP           /sync/doLoad?pid=9E7A;227&forcedSync=[%22dod%22,%22hdr%22,%22vler%22]"
   
   vx_sync = VxSync.new
   max_wait_time = 300

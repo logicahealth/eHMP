@@ -42,7 +42,7 @@ var JdsClientDummy = require(global.VX_DUMMIES + 'jds-client-dummy');
 var config = {
     jds: {
         protocol: 'http',
-        host: 'IP_ADDRESS',
+        host: 'IP        ',
         port: 9080
     },
     'hmp.batch.size': 1000,

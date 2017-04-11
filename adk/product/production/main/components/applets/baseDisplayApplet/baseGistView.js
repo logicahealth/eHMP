@@ -55,12 +55,12 @@ define([
                 this.sortCollection($(event.target));
             },
             'dropdown.show': function(e) {
-                this.$('.scrolling-content').one('scroll.dropdown.' + this.cid, _.bind(function(event) {
+                this.$('.auto-overflow-y').one('scroll.dropdown.' + this.cid, _.bind(function(event) {
                     this.$('.applet-dropdown.open').trigger('dropdown.hide');
                 }, this));
             },
             'dropdown.hide': function(e) {
-                this.$('.scrolling-content').off('scroll.dropdown.' + this.cid);
+                this.$('.auto-overflow-y').off('scroll.dropdown.' + this.cid);
             }
         },
         childEvents: {
@@ -150,8 +150,6 @@ define([
             }
 
             this.listenTo(this.collection, 'fetch:success', function(collection) {
-                self.setUnsorted();
-
                 if(self.manualOrder){
                     // Reapply tile sorting
                     self.applyTileSorting(false);
@@ -165,19 +163,22 @@ define([
                 // It took a while to figure out what this does, so I am documenting it for future readers.
                 // This controls the scroll speed of the manual sort.
                 var gridAppletPanel = $('#' + this.options.appletConfig.instanceId).find('.grid-applet-panel').first();
-                $('<div id="' + this.options.appletConfig.instanceId + '-scroll-bottom" class="grid-applet-container-1"/>').insertAfter($(gridAppletPanel)).on('dragenter', function(e) {
+                var gridContentHeader = this.$('.header').first();
+                var gridContentBody = this.$('.body').first();
+
+                $('<div id="' + this.options.appletConfig.instanceId + '-scroll-bottom" class="grid-applet-container-1"/>').insertAfter($(gridContentBody)).on('dragenter', function(e) {
                     self.bottomInterval = setInterval(function() {
-                        var newScrollTop = $(gridAppletPanel).scrollTop();
-                        $(gridAppletPanel).scrollTop(newScrollTop + 10);
+                        var newScrollTop = $(gridAppletPanel).find('.scrolling-content').scrollTop();
+                        $(gridAppletPanel).find('.scrolling-content').scrollTop(newScrollTop + 10);
                     }, 25);
                 }).on('dragleave', function(e) {
                     self.bottomInterval && clearInterval(self.bottomInterval);
                 });
 
-                $('<div id="' + this.options.appletConfig.instanceId + '-scroll-top" class="grid-applet-container-2"/>').insertBefore($(gridAppletPanel)).on('dragenter', function(e) {
+                $('<div id="' + this.options.appletConfig.instanceId + '-scroll-top" class="grid-applet-container-2"/>').insertBefore($(gridContentHeader)).on('dragenter', function(e) {
                     self.topInterval = setInterval(function() {
-                        var newScrollTop = $(gridAppletPanel).scrollTop();
-                        $(gridAppletPanel).scrollTop(newScrollTop - 10);
+                        var newScrollTop = $(gridAppletPanel).find('.scrolling-content').scrollTop();
+                        $(gridAppletPanel).find('.scrolling-content').scrollTop(newScrollTop - 10);
                     }, 25);
                 }).on('dragleave', function(e) {
                     self.topInterval && clearInterval(self.topInterval);
@@ -191,12 +192,6 @@ define([
             TileSortManager.getSortOptions(this.collection, sortId, this.appletOptions.tileSortingUniqueId, function(wasSorted, newCollection) {
                 self.collection = newCollection;
                 self.manualSortModels = newCollection.models;
-
-                _.each(self.collection.models, function(item) {
-                    _.each(self.gistModel, function(object) {
-                        item.set(object.id, item.get(object.field));
-                    });
-                }, self);
 
                 if (wasSorted && !self.manualOrder) {
                     self.manualOrder = true;
@@ -316,24 +311,24 @@ define([
             }
         },
         sortedSR: function(header, dir) {
-             var parentRow = header.closest('.table-row');
+            var parentRow = header.closest('.table-row');
             if (parentRow.find('[aria-live]').length < 1) {
                 parentRow.prepend('<div aria-live="polite" aria-atomic="true" class="sr-only applet-sorting"></div>');
             }
             var ariaRegion = parentRow.find('[aria-live]');
-            parentRow.find('span').text('Press enter to sort');
-            if(dir === "asc") {
+            parentRow.find('.sort-span').text('Press enter to sort');
+            if (dir === "asc") {
                 ariaRegion.text('Sorted ascending. Press enter to sort descending');
-                header.find('span').text('Sorted ascending. Press enter to sort descending');
+                header.find('.sort-span').text('Sorted ascending. Press enter to sort descending');
             } else if (dir === "desc") {
                 ariaRegion.text('Sorted descending. Press enter to reset sort');
-                header.find('span').text('Sorted descending. Press enter to reset sort');
+                header.find('.sort-span').text('Sorted descending. Press enter to reset sort');
             } else if (dir == "manual") {
                 ariaRegion.text('Sorted manually. Press enter to sort');
-                header.find('span').text('Sorted descending. Press enter to sort');
+                header.find('.sort-span').text('Sorted descending. Press enter to sort');
             } else {
                 ariaRegion.text('Press enter to sort');
-                header.find('span').text("Press enter to sort");
+                header.find('.sort-span').text("Press enter to sort");
             }
         },
         reorderRows: function(target, reorderObj) {
@@ -362,10 +357,12 @@ define([
             var instanceId = this.options.appletConfig.instanceId + '_' + this.options.appletConfig.id;
 
             this.manualOrder = false;
-            this.sortCollection(this.$('.header .table-cell a:first'));
+            var firstColumnHeader = this.$('.header .table-cell a:first');
+            this.sortCollection(firstColumnHeader);
             TileSortManager.removeSort(instanceId);
 
             this.$('[data-toggle="tooltip"]').tooltip('hide');
+            firstColumnHeader.focus();
         },
         hidePopovers: function(e) {
             Messaging.getChannel('toolbar').trigger('close:quicklooks');

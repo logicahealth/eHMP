@@ -5,21 +5,21 @@ module.exports.getResourceConfig = function() {
         name: 'favorites-get',
         path: '',
         get: callGet,
-        requiredPermissions: [],
+        requiredPermissions: ['read-orderable-favorite'],
         isPatientCentric: false,
         subsystems: ['pjds', 'favoriteOrderable']
     },{
         name: 'favorites-add',
         path: '',
         post: callAdd,
-        requiredPermissions: [],
+        requiredPermissions: ['add-orderable-favorite'],
         isPatientCentric: false,
         subsystems: ['pjds', 'favoriteOrderable']
     },{
         name: 'favorites-delete',
         path: '',
         delete: callDelete,
-        requiredPermissions: [],
+        requiredPermissions: ['delete-orderable-favorite'],
         isPatientCentric: false,
         subsystems: ['pjds', 'favoriteOrderable']
     }];

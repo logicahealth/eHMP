@@ -17,7 +17,7 @@ import javax.xml.ws.ResponseWrapper;
  * Generated source version: 2.1
  * 
  */
-@WebService(name = "JMeadowsData", targetNamespace = "http://webservice.jmeadows.DNS       /")
+@WebService(name = "JMeadowsData", targetNamespace = "http://webservice.jmeadows.med.DNS   /")
 @XmlSeeAlso({
     ObjectFactory.class
 })
@@ -36,8 +36,8 @@ public interface JMeadowsData {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "login", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.Login")
-    @ResponseWrapper(localName = "loginResponse", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.LoginResponse")
+    @RequestWrapper(localName = "login", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.Login")
+    @ResponseWrapper(localName = "loginResponse", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.LoginResponse")
     public User login(
             @WebParam(name = "siteCode", targetNamespace = "")
             String siteCode,
@@ -59,8 +59,8 @@ public interface JMeadowsData {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getConsultReport", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetConsultReport")
-    @ResponseWrapper(localName = "getConsultReportResponse", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetConsultReportResponse")
+    @RequestWrapper(localName = "getConsultReport", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetConsultReport")
+    @ResponseWrapper(localName = "getConsultReportResponse", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetConsultReportResponse")
     public List<FreeTextReport> getConsultReport(
             @WebParam(name = "queryBean", targetNamespace = "")
             JMeadowsQuery queryBean)
@@ -76,8 +76,8 @@ public interface JMeadowsData {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getProviderProfile", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetProviderProfile")
-    @ResponseWrapper(localName = "getProviderProfileResponse", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetProviderProfileResponse")
+    @RequestWrapper(localName = "getProviderProfile", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetProviderProfile")
+    @ResponseWrapper(localName = "getProviderProfileResponse", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetProviderProfileResponse")
     public User getProviderProfile(
             @WebParam(name = "queryBean", targetNamespace = "")
             JMeadowsQuery queryBean)
@@ -93,8 +93,8 @@ public interface JMeadowsData {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getMedicationDetail", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetMedicationDetail")
-    @ResponseWrapper(localName = "getMedicationDetailResponse", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetMedicationDetailResponse")
+    @RequestWrapper(localName = "getMedicationDetail", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetMedicationDetail")
+    @ResponseWrapper(localName = "getMedicationDetailResponse", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetMedicationDetailResponse")
     public FreeTextReport getMedicationDetail(
             @WebParam(name = "queryBean", targetNamespace = "")
             JMeadowsQuery queryBean)
@@ -110,8 +110,8 @@ public interface JMeadowsData {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getOrderDetail", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetOrderDetail")
-    @ResponseWrapper(localName = "getOrderDetailResponse", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetOrderDetailResponse")
+    @RequestWrapper(localName = "getOrderDetail", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetOrderDetail")
+    @ResponseWrapper(localName = "getOrderDetailResponse", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetOrderDetailResponse")
     public FreeTextReport getOrderDetail(
             @WebParam(name = "queryBean", targetNamespace = "")
             JMeadowsQuery queryBean)
@@ -127,8 +127,8 @@ public interface JMeadowsData {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getPatientCurrentVitals", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientCurrentVitals")
-    @ResponseWrapper(localName = "getPatientCurrentVitalsResponse", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientCurrentVitalsResponse")
+    @RequestWrapper(localName = "getPatientCurrentVitals", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientCurrentVitals")
+    @ResponseWrapper(localName = "getPatientCurrentVitalsResponse", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientCurrentVitalsResponse")
     public List<Vitals> getPatientCurrentVitals(
             @WebParam(name = "queryBean", targetNamespace = "")
             JMeadowsQuery queryBean)
@@ -144,8 +144,8 @@ public interface JMeadowsData {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getPatientInsurances", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientInsurances")
-    @ResponseWrapper(localName = "getPatientInsurancesResponse", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientInsurancesResponse")
+    @RequestWrapper(localName = "getPatientInsurances", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientInsurances")
+    @ResponseWrapper(localName = "getPatientInsurancesResponse", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientInsurancesResponse")
     public List<InsuranceBean> getPatientInsurances(
             @WebParam(name = "queryBean", targetNamespace = "")
             JMeadowsQuery queryBean)
@@ -161,8 +161,8 @@ public interface JMeadowsData {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getOutpatientProcedures", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetOutpatientProcedures")
-    @ResponseWrapper(localName = "getOutpatientProceduresResponse", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetOutpatientProceduresResponse")
+    @RequestWrapper(localName = "getOutpatientProcedures", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetOutpatientProcedures")
+    @ResponseWrapper(localName = "getOutpatientProceduresResponse", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetOutpatientProceduresResponse")
     public List<Procedure> getOutpatientProcedures(
             @WebParam(name = "queryBean", targetNamespace = "")
             JMeadowsQuery queryBean)
@@ -178,8 +178,8 @@ public interface JMeadowsData {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getProblemDetail", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetProblemDetail")
-    @ResponseWrapper(localName = "getProblemDetailResponse", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetProblemDetailResponse")
+    @RequestWrapper(localName = "getProblemDetail", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetProblemDetail")
+    @ResponseWrapper(localName = "getProblemDetailResponse", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetProblemDetailResponse")
     public ProblemDetail getProblemDetail(
             @WebParam(name = "queryBean", targetNamespace = "")
             JMeadowsQuery queryBean)
@@ -195,8 +195,8 @@ public interface JMeadowsData {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getProgressNote", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetProgressNote")
-    @ResponseWrapper(localName = "getProgressNoteResponse", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetProgressNoteResponse")
+    @RequestWrapper(localName = "getProgressNote", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetProgressNote")
+    @ResponseWrapper(localName = "getProgressNoteResponse", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetProgressNoteResponse")
     public FreeTextReport getProgressNote(
             @WebParam(name = "queryBean", targetNamespace = "")
             JMeadowsQuery queryBean)
@@ -212,8 +212,8 @@ public interface JMeadowsData {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getRadiologyReport", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetRadiologyReport")
-    @ResponseWrapper(localName = "getRadiologyReportResponse", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetRadiologyReportResponse")
+    @RequestWrapper(localName = "getRadiologyReport", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetRadiologyReport")
+    @ResponseWrapper(localName = "getRadiologyReportResponse", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetRadiologyReportResponse")
     public RadiologyReport getRadiologyReport(
             @WebParam(name = "queryBean", targetNamespace = "")
             JMeadowsQuery queryBean)
@@ -229,8 +229,8 @@ public interface JMeadowsData {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getVLERDocumentList", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetVLERDocumentList")
-    @ResponseWrapper(localName = "getVLERDocumentListResponse", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetVLERDocumentListResponse")
+    @RequestWrapper(localName = "getVLERDocumentList", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetVLERDocumentList")
+    @ResponseWrapper(localName = "getVLERDocumentListResponse", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetVLERDocumentListResponse")
     public List<VlerDocument> getVLERDocumentList(
             @WebParam(name = "queryBean", targetNamespace = "")
             JMeadowsQuery queryBean)
@@ -247,8 +247,8 @@ public interface JMeadowsData {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getVLERDocument", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetVLERDocument")
-    @ResponseWrapper(localName = "getVLERDocumentResponse", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetVLERDocumentResponse")
+    @RequestWrapper(localName = "getVLERDocument", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetVLERDocument")
+    @ResponseWrapper(localName = "getVLERDocumentResponse", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetVLERDocumentResponse")
     public VlerDocument getVLERDocument(
             @WebParam(name = "vDoc", targetNamespace = "")
             VlerDocument vDoc,
@@ -266,8 +266,8 @@ public interface JMeadowsData {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getUserAlerts", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetUserAlerts")
-    @ResponseWrapper(localName = "getUserAlertsResponse", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetUserAlertsResponse")
+    @RequestWrapper(localName = "getUserAlerts", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetUserAlerts")
+    @ResponseWrapper(localName = "getUserAlertsResponse", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetUserAlertsResponse")
     public List<Alert> getUserAlerts(
             @WebParam(name = "queryBean", targetNamespace = "")
             JMeadowsQuery queryBean)
@@ -283,8 +283,8 @@ public interface JMeadowsData {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getVisitNotes", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetVisitNotes")
-    @ResponseWrapper(localName = "getVisitNotesResponse", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetVisitNotesResponse")
+    @RequestWrapper(localName = "getVisitNotes", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetVisitNotes")
+    @ResponseWrapper(localName = "getVisitNotesResponse", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetVisitNotesResponse")
     public FreeTextReport getVisitNotes(
             @WebParam(name = "queryBean", targetNamespace = "")
             JMeadowsQuery queryBean)
@@ -306,8 +306,8 @@ public interface JMeadowsData {
      * @throws JMeadowsException_Exception
      */
     @WebMethod
-    @RequestWrapper(localName = "logAudit", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.LogAudit")
-    @ResponseWrapper(localName = "logAuditResponse", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.LogAuditResponse")
+    @RequestWrapper(localName = "logAudit", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.LogAudit")
+    @ResponseWrapper(localName = "logAuditResponse", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.LogAuditResponse")
     public void logAudit(
             @WebParam(name = "siteCode", targetNamespace = "")
             String siteCode,
@@ -341,8 +341,8 @@ public interface JMeadowsData {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getProviderAppointments", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetProviderAppointments")
-    @ResponseWrapper(localName = "getProviderAppointmentsResponse", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetProviderAppointmentsResponse")
+    @RequestWrapper(localName = "getProviderAppointments", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetProviderAppointments")
+    @ResponseWrapper(localName = "getProviderAppointmentsResponse", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetProviderAppointmentsResponse")
     public List<PatientAppointments> getProviderAppointments(
             @WebParam(name = "queryBean", targetNamespace = "")
             JMeadowsQuery queryBean)
@@ -358,8 +358,8 @@ public interface JMeadowsData {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getProviderAdmissions", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetProviderAdmissions")
-    @ResponseWrapper(localName = "getProviderAdmissionsResponse", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetProviderAdmissionsResponse")
+    @RequestWrapper(localName = "getProviderAdmissions", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetProviderAdmissions")
+    @ResponseWrapper(localName = "getProviderAdmissionsResponse", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetProviderAdmissionsResponse")
     public List<PatientAdmission> getProviderAdmissions(
             @WebParam(name = "queryBean", targetNamespace = "")
             JMeadowsQuery queryBean)
@@ -375,8 +375,8 @@ public interface JMeadowsData {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getWardAdmissions", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetWardAdmissions")
-    @ResponseWrapper(localName = "getWardAdmissionsResponse", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetWardAdmissionsResponse")
+    @RequestWrapper(localName = "getWardAdmissions", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetWardAdmissions")
+    @ResponseWrapper(localName = "getWardAdmissionsResponse", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetWardAdmissionsResponse")
     public List<PatientAdmission> getWardAdmissions(
             @WebParam(name = "queryBean", targetNamespace = "")
             JMeadowsQuery queryBean)
@@ -392,8 +392,8 @@ public interface JMeadowsData {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getProviderUnsignedNotes", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetProviderUnsignedNotes")
-    @ResponseWrapper(localName = "getProviderUnsignedNotesResponse", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetProviderUnsignedNotesResponse")
+    @RequestWrapper(localName = "getProviderUnsignedNotes", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetProviderUnsignedNotes")
+    @ResponseWrapper(localName = "getProviderUnsignedNotesResponse", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetProviderUnsignedNotesResponse")
     public List<ProgressNote> getProviderUnsignedNotes(
             @WebParam(name = "queryBean", targetNamespace = "")
             JMeadowsQuery queryBean)
@@ -409,8 +409,8 @@ public interface JMeadowsData {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getProviderConsultsRequested", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetProviderConsultsRequested")
-    @ResponseWrapper(localName = "getProviderConsultsRequestedResponse", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetProviderConsultsRequestedResponse")
+    @RequestWrapper(localName = "getProviderConsultsRequested", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetProviderConsultsRequested")
+    @ResponseWrapper(localName = "getProviderConsultsRequestedResponse", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetProviderConsultsRequestedResponse")
     public List<Consult> getProviderConsultsRequested(
             @WebParam(name = "queryBean", targetNamespace = "")
             JMeadowsQuery queryBean)
@@ -426,8 +426,8 @@ public interface JMeadowsData {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getProviderConsultsReceived", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetProviderConsultsReceived")
-    @ResponseWrapper(localName = "getProviderConsultsReceivedResponse", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetProviderConsultsReceivedResponse")
+    @RequestWrapper(localName = "getProviderConsultsReceived", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetProviderConsultsReceived")
+    @ResponseWrapper(localName = "getProviderConsultsReceivedResponse", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetProviderConsultsReceivedResponse")
     public List<Consult> getProviderConsultsReceived(
             @WebParam(name = "queryBean", targetNamespace = "")
             JMeadowsQuery queryBean)
@@ -443,8 +443,8 @@ public interface JMeadowsData {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getProviderOrdersPending", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetProviderOrdersPending")
-    @ResponseWrapper(localName = "getProviderOrdersPendingResponse", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetProviderOrdersPendingResponse")
+    @RequestWrapper(localName = "getProviderOrdersPending", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetProviderOrdersPending")
+    @ResponseWrapper(localName = "getProviderOrdersPendingResponse", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetProviderOrdersPendingResponse")
     public List<Order> getProviderOrdersPending(
             @WebParam(name = "queryBean", targetNamespace = "")
             JMeadowsQuery queryBean)
@@ -460,8 +460,8 @@ public interface JMeadowsData {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getProviderOrdersResulted", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetProviderOrdersResulted")
-    @ResponseWrapper(localName = "getProviderOrdersResultedResponse", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetProviderOrdersResultedResponse")
+    @RequestWrapper(localName = "getProviderOrdersResulted", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetProviderOrdersResulted")
+    @ResponseWrapper(localName = "getProviderOrdersResultedResponse", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetProviderOrdersResultedResponse")
     public List<Order> getProviderOrdersResulted(
             @WebParam(name = "queryBean", targetNamespace = "")
             JMeadowsQuery queryBean)
@@ -477,8 +477,8 @@ public interface JMeadowsData {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getPatientLabResults", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientLabResults")
-    @ResponseWrapper(localName = "getPatientLabResultsResponse", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientLabResultsResponse")
+    @RequestWrapper(localName = "getPatientLabResults", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientLabResults")
+    @ResponseWrapper(localName = "getPatientLabResultsResponse", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientLabResultsResponse")
     public List<LabResult> getPatientLabResults(
             @WebParam(name = "queryBean", targetNamespace = "")
             JMeadowsQuery queryBean)
@@ -494,8 +494,8 @@ public interface JMeadowsData {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getPatientLabReport", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientLabReport")
-    @ResponseWrapper(localName = "getPatientLabReportResponse", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientLabReportResponse")
+    @RequestWrapper(localName = "getPatientLabReport", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientLabReport")
+    @ResponseWrapper(localName = "getPatientLabReportResponse", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientLabReportResponse")
     public FreeTextReport getPatientLabReport(
             @WebParam(name = "queryBean", targetNamespace = "")
             JMeadowsQuery queryBean)
@@ -511,8 +511,8 @@ public interface JMeadowsData {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getPatientMedications", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientMedications")
-    @ResponseWrapper(localName = "getPatientMedicationsResponse", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientMedicationsResponse")
+    @RequestWrapper(localName = "getPatientMedications", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientMedications")
+    @ResponseWrapper(localName = "getPatientMedicationsResponse", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientMedicationsResponse")
     public List<Medication> getPatientMedications(
             @WebParam(name = "queryBean", targetNamespace = "")
             JMeadowsQuery queryBean)
@@ -528,8 +528,8 @@ public interface JMeadowsData {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getPatientForms", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientForms")
-    @ResponseWrapper(localName = "getPatientFormsResponse", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientFormsResponse")
+    @RequestWrapper(localName = "getPatientForms", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientForms")
+    @ResponseWrapper(localName = "getPatientFormsResponse", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientFormsResponse")
     public List<Form> getPatientForms(
             @WebParam(name = "queryBean", targetNamespace = "")
             JMeadowsQuery queryBean)
@@ -545,8 +545,8 @@ public interface JMeadowsData {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getPatientProgressNotes", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientProgressNotes")
-    @ResponseWrapper(localName = "getPatientProgressNotesResponse", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientProgressNotesResponse")
+    @RequestWrapper(localName = "getPatientProgressNotes", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientProgressNotes")
+    @ResponseWrapper(localName = "getPatientProgressNotesResponse", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientProgressNotesResponse")
     public List<ProgressNote> getPatientProgressNotes(
             @WebParam(name = "queryBean", targetNamespace = "")
             JMeadowsQuery queryBean)
@@ -562,8 +562,8 @@ public interface JMeadowsData {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getBHIENoteImage", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetBHIENoteImage")
-    @ResponseWrapper(localName = "getBHIENoteImageResponse", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetBHIENoteImageResponse")
+    @RequestWrapper(localName = "getBHIENoteImage", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetBHIENoteImage")
+    @ResponseWrapper(localName = "getBHIENoteImageResponse", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetBHIENoteImageResponse")
     public NoteImage getBHIENoteImage(
             @WebParam(name = "queryBean", targetNamespace = "")
             JMeadowsQuery queryBean)
@@ -579,8 +579,8 @@ public interface JMeadowsData {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getPatientDischargeSummaries", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientDischargeSummaries")
-    @ResponseWrapper(localName = "getPatientDischargeSummariesResponse", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientDischargeSummariesResponse")
+    @RequestWrapper(localName = "getPatientDischargeSummaries", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientDischargeSummaries")
+    @ResponseWrapper(localName = "getPatientDischargeSummariesResponse", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientDischargeSummariesResponse")
     public List<ProgressNote> getPatientDischargeSummaries(
             @WebParam(name = "queryBean", targetNamespace = "")
             JMeadowsQuery queryBean)
@@ -596,8 +596,8 @@ public interface JMeadowsData {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getPatientConsultRequests", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientConsultRequests")
-    @ResponseWrapper(localName = "getPatientConsultRequestsResponse", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientConsultRequestsResponse")
+    @RequestWrapper(localName = "getPatientConsultRequests", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientConsultRequests")
+    @ResponseWrapper(localName = "getPatientConsultRequestsResponse", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientConsultRequestsResponse")
     public List<Consult> getPatientConsultRequests(
             @WebParam(name = "queryBean", targetNamespace = "")
             JMeadowsQuery queryBean)
@@ -613,8 +613,8 @@ public interface JMeadowsData {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getPatientOrders", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientOrders")
-    @ResponseWrapper(localName = "getPatientOrdersResponse", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientOrdersResponse")
+    @RequestWrapper(localName = "getPatientOrders", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientOrders")
+    @ResponseWrapper(localName = "getPatientOrdersResponse", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientOrdersResponse")
     public List<Order> getPatientOrders(
             @WebParam(name = "queryBean", targetNamespace = "")
             JMeadowsQuery queryBean)
@@ -630,8 +630,8 @@ public interface JMeadowsData {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getPatientProblemList", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientProblemList")
-    @ResponseWrapper(localName = "getPatientProblemListResponse", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientProblemListResponse")
+    @RequestWrapper(localName = "getPatientProblemList", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientProblemList")
+    @ResponseWrapper(localName = "getPatientProblemListResponse", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientProblemListResponse")
     public List<Problem> getPatientProblemList(
             @WebParam(name = "queryBean", targetNamespace = "")
             JMeadowsQuery queryBean)
@@ -647,8 +647,8 @@ public interface JMeadowsData {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getPatientRads", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientRads")
-    @ResponseWrapper(localName = "getPatientRadsResponse", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientRadsResponse")
+    @RequestWrapper(localName = "getPatientRads", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientRads")
+    @ResponseWrapper(localName = "getPatientRadsResponse", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientRadsResponse")
     public List<RadiologyReport> getPatientRads(
             @WebParam(name = "queryBean", targetNamespace = "")
             JMeadowsQuery queryBean)
@@ -664,8 +664,8 @@ public interface JMeadowsData {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getPatientVitals", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientVitals")
-    @ResponseWrapper(localName = "getPatientVitalsResponse", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientVitalsResponse")
+    @RequestWrapper(localName = "getPatientVitals", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientVitals")
+    @ResponseWrapper(localName = "getPatientVitalsResponse", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientVitalsResponse")
     public List<Vitals> getPatientVitals(
             @WebParam(name = "queryBean", targetNamespace = "")
             JMeadowsQuery queryBean)
@@ -681,8 +681,8 @@ public interface JMeadowsData {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getPatientLabTestResults", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientLabTestResults")
-    @ResponseWrapper(localName = "getPatientLabTestResultsResponse", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientLabTestResultsResponse")
+    @RequestWrapper(localName = "getPatientLabTestResults", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientLabTestResults")
+    @ResponseWrapper(localName = "getPatientLabTestResultsResponse", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientLabTestResultsResponse")
     public List<LabResult> getPatientLabTestResults(
             @WebParam(name = "queryBean", targetNamespace = "")
             JMeadowsQuery queryBean)
@@ -698,8 +698,8 @@ public interface JMeadowsData {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getLabOrderResult", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetLabOrderResult")
-    @ResponseWrapper(localName = "getLabOrderResultResponse", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetLabOrderResultResponse")
+    @RequestWrapper(localName = "getLabOrderResult", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetLabOrderResult")
+    @ResponseWrapper(localName = "getLabOrderResultResponse", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetLabOrderResultResponse")
     public List<LabResult> getLabOrderResult(
             @WebParam(name = "queryBean", targetNamespace = "")
             JMeadowsQuery queryBean)
@@ -715,8 +715,8 @@ public interface JMeadowsData {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getAdmissionDetails", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetAdmissionDetails")
-    @ResponseWrapper(localName = "getAdmissionDetailsResponse", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetAdmissionDetailsResponse")
+    @RequestWrapper(localName = "getAdmissionDetails", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetAdmissionDetails")
+    @ResponseWrapper(localName = "getAdmissionDetailsResponse", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetAdmissionDetailsResponse")
     public AdmissionDetail getAdmissionDetails(
             @WebParam(name = "queryBean", targetNamespace = "")
             JMeadowsQuery queryBean)
@@ -732,8 +732,8 @@ public interface JMeadowsData {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getAdmissionDiagnosis", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetAdmissionDiagnosis")
-    @ResponseWrapper(localName = "getAdmissionDiagnosisResponse", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetAdmissionDiagnosisResponse")
+    @RequestWrapper(localName = "getAdmissionDiagnosis", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetAdmissionDiagnosis")
+    @ResponseWrapper(localName = "getAdmissionDiagnosisResponse", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetAdmissionDiagnosisResponse")
     public List<Diagnosis> getAdmissionDiagnosis(
             @WebParam(name = "queryBean", targetNamespace = "")
             JMeadowsQuery queryBean)
@@ -749,8 +749,8 @@ public interface JMeadowsData {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getAdmissionProcedures", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetAdmissionProcedures")
-    @ResponseWrapper(localName = "getAdmissionProceduresResponse", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetAdmissionProceduresResponse")
+    @RequestWrapper(localName = "getAdmissionProcedures", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetAdmissionProcedures")
+    @ResponseWrapper(localName = "getAdmissionProceduresResponse", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetAdmissionProceduresResponse")
     public List<Procedure> getAdmissionProcedures(
             @WebParam(name = "queryBean", targetNamespace = "")
             JMeadowsQuery queryBean)
@@ -766,8 +766,8 @@ public interface JMeadowsData {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getProviderLabAbnormalResults", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetProviderLabAbnormalResults")
-    @ResponseWrapper(localName = "getProviderLabAbnormalResultsResponse", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetProviderLabAbnormalResultsResponse")
+    @RequestWrapper(localName = "getProviderLabAbnormalResults", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetProviderLabAbnormalResults")
+    @ResponseWrapper(localName = "getProviderLabAbnormalResultsResponse", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetProviderLabAbnormalResultsResponse")
     public List<LabResult> getProviderLabAbnormalResults(
             @WebParam(name = "queryBean", targetNamespace = "")
             JMeadowsQuery queryBean)
@@ -783,8 +783,8 @@ public interface JMeadowsData {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getJanusGUIConfig", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetJanusGUIConfig")
-    @ResponseWrapper(localName = "getJanusGUIConfigResponse", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetJanusGUIConfigResponse")
+    @RequestWrapper(localName = "getJanusGUIConfig", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetJanusGUIConfig")
+    @ResponseWrapper(localName = "getJanusGUIConfigResponse", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetJanusGUIConfigResponse")
     public String getJanusGUIConfig(
             @WebParam(name = "queryBean", targetNamespace = "")
             JMeadowsQuery queryBean)
@@ -801,8 +801,8 @@ public interface JMeadowsData {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "setJanusGUIConfig", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.SetJanusGUIConfig")
-    @ResponseWrapper(localName = "setJanusGUIConfigResponse", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.SetJanusGUIConfigResponse")
+    @RequestWrapper(localName = "setJanusGUIConfig", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.SetJanusGUIConfig")
+    @ResponseWrapper(localName = "setJanusGUIConfigResponse", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.SetJanusGUIConfigResponse")
     public boolean setJanusGUIConfig(
             @WebParam(name = "queryBean", targetNamespace = "")
             JMeadowsQuery queryBean,
@@ -820,8 +820,8 @@ public interface JMeadowsData {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getProviderFlags", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetProviderFlags")
-    @ResponseWrapper(localName = "getProviderFlagsResponse", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetProviderFlagsResponse")
+    @RequestWrapper(localName = "getProviderFlags", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetProviderFlags")
+    @ResponseWrapper(localName = "getProviderFlagsResponse", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetProviderFlagsResponse")
     public String getProviderFlags(
             @WebParam(name = "queryBean", targetNamespace = "")
             JMeadowsQuery queryBean)
@@ -838,8 +838,8 @@ public interface JMeadowsData {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "setProviderFlags", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.SetProviderFlags")
-    @ResponseWrapper(localName = "setProviderFlagsResponse", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.SetProviderFlagsResponse")
+    @RequestWrapper(localName = "setProviderFlags", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.SetProviderFlags")
+    @ResponseWrapper(localName = "setProviderFlagsResponse", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.SetProviderFlagsResponse")
     public boolean setProviderFlags(
             @WebParam(name = "queryBean", targetNamespace = "")
             JMeadowsQuery queryBean,
@@ -858,8 +858,8 @@ public interface JMeadowsData {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getIehrUserProfile", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetIehrUserProfile")
-    @ResponseWrapper(localName = "getIehrUserProfileResponse", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetIehrUserProfileResponse")
+    @RequestWrapper(localName = "getIehrUserProfile", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetIehrUserProfile")
+    @ResponseWrapper(localName = "getIehrUserProfileResponse", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetIehrUserProfileResponse")
     public IehrUserProfile getIehrUserProfile(
             @WebParam(name = "smartCardID", targetNamespace = "")
             String smartCardID,
@@ -877,8 +877,8 @@ public interface JMeadowsData {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "setIehrUserProfile", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.SetIehrUserProfile")
-    @ResponseWrapper(localName = "setIehrUserProfileResponse", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.SetIehrUserProfileResponse")
+    @RequestWrapper(localName = "setIehrUserProfile", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.SetIehrUserProfile")
+    @ResponseWrapper(localName = "setIehrUserProfileResponse", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.SetIehrUserProfileResponse")
     public boolean setIehrUserProfile(
             @WebParam(name = "iehrUserProfile", targetNamespace = "")
             IehrUserProfile iehrUserProfile)
@@ -892,8 +892,8 @@ public interface JMeadowsData {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getSites", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetSites")
-    @ResponseWrapper(localName = "getSitesResponse", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetSitesResponse")
+    @RequestWrapper(localName = "getSites", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetSites")
+    @ResponseWrapper(localName = "getSitesResponse", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetSitesResponse")
     public List<Site> getSites();
 
     /**
@@ -905,8 +905,8 @@ public interface JMeadowsData {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getLoginInfo", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetLoginInfo")
-    @ResponseWrapper(localName = "getLoginInfoResponse", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetLoginInfoResponse")
+    @RequestWrapper(localName = "getLoginInfo", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetLoginInfo")
+    @ResponseWrapper(localName = "getLoginInfoResponse", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetLoginInfoResponse")
     public List<AuditEntry> getLoginInfo(
             @WebParam(name = "cardID", targetNamespace = "")
             String cardID)
@@ -920,8 +920,8 @@ public interface JMeadowsData {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getServiceErrors", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetServiceErrors")
-    @ResponseWrapper(localName = "getServiceErrorsResponse", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetServiceErrorsResponse")
+    @RequestWrapper(localName = "getServiceErrors", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetServiceErrors")
+    @ResponseWrapper(localName = "getServiceErrorsResponse", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetServiceErrorsResponse")
     public String getServiceErrors();
 
     /**
@@ -933,8 +933,8 @@ public interface JMeadowsData {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getAuthUser", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetAuthUser")
-    @ResponseWrapper(localName = "getAuthUserResponse", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetAuthUserResponse")
+    @RequestWrapper(localName = "getAuthUser", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetAuthUser")
+    @ResponseWrapper(localName = "getAuthUserResponse", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetAuthUserResponse")
     public AuthUserInfo getAuthUser(
             @WebParam(name = "authUserInfoQuery", targetNamespace = "")
             AuthUserInfo authUserInfoQuery)
@@ -950,8 +950,8 @@ public interface JMeadowsData {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "selectPatientMVI", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.SelectPatientMVI")
-    @ResponseWrapper(localName = "selectPatientMVIResponse", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.SelectPatientMVIResponse")
+    @RequestWrapper(localName = "selectPatientMVI", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.SelectPatientMVI")
+    @ResponseWrapper(localName = "selectPatientMVIResponse", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.SelectPatientMVIResponse")
     public ResponsePatientSelect selectPatientMVI(
             @WebParam(name = "queryBean", targetNamespace = "")
             JMeadowsQuery queryBean)
@@ -964,8 +964,8 @@ public interface JMeadowsData {
      * @throws JMeadowsException_Exception
      */
     @WebMethod
-    @RequestWrapper(localName = "selectPatientForVASensitive", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.SelectPatientForVASensitive")
-    @ResponseWrapper(localName = "selectPatientForVASensitiveResponse", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.SelectPatientForVASensitiveResponse")
+    @RequestWrapper(localName = "selectPatientForVASensitive", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.SelectPatientForVASensitive")
+    @ResponseWrapper(localName = "selectPatientForVASensitiveResponse", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.SelectPatientForVASensitiveResponse")
     public void selectPatientForVASensitive(
             @WebParam(name = "queryBean", targetNamespace = "")
             JMeadowsQuery queryBean)
@@ -978,8 +978,8 @@ public interface JMeadowsData {
      * @throws JMeadowsException_Exception
      */
     @WebMethod
-    @RequestWrapper(localName = "auditVARestrictedAccess", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.AuditVARestrictedAccess")
-    @ResponseWrapper(localName = "auditVARestrictedAccessResponse", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.AuditVARestrictedAccessResponse")
+    @RequestWrapper(localName = "auditVARestrictedAccess", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.AuditVARestrictedAccess")
+    @ResponseWrapper(localName = "auditVARestrictedAccessResponse", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.AuditVARestrictedAccessResponse")
     public void auditVARestrictedAccess(
             @WebParam(name = "queryBean", targetNamespace = "")
             JMeadowsQuery queryBean)
@@ -995,8 +995,8 @@ public interface JMeadowsData {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getPatientAdmissions", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientAdmissions")
-    @ResponseWrapper(localName = "getPatientAdmissionsResponse", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientAdmissionsResponse")
+    @RequestWrapper(localName = "getPatientAdmissions", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientAdmissions")
+    @ResponseWrapper(localName = "getPatientAdmissionsResponse", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientAdmissionsResponse")
     public List<PatientAdmission> getPatientAdmissions(
             @WebParam(name = "queryBean", targetNamespace = "")
             JMeadowsQuery queryBean)
@@ -1012,8 +1012,8 @@ public interface JMeadowsData {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getPatientHistory", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientHistory")
-    @ResponseWrapper(localName = "getPatientHistoryResponse", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientHistoryResponse")
+    @RequestWrapper(localName = "getPatientHistory", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientHistory")
+    @ResponseWrapper(localName = "getPatientHistoryResponse", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientHistoryResponse")
     public List<PatientHistory> getPatientHistory(
             @WebParam(name = "queryBean", targetNamespace = "")
             JMeadowsQuery queryBean)
@@ -1029,8 +1029,8 @@ public interface JMeadowsData {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getPatientAllergies", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientAllergies")
-    @ResponseWrapper(localName = "getPatientAllergiesResponse", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientAllergiesResponse")
+    @RequestWrapper(localName = "getPatientAllergies", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientAllergies")
+    @ResponseWrapper(localName = "getPatientAllergiesResponse", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientAllergiesResponse")
     public List<Allergy> getPatientAllergies(
             @WebParam(name = "queryBean", targetNamespace = "")
             JMeadowsQuery queryBean)
@@ -1046,8 +1046,8 @@ public interface JMeadowsData {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getAllergyDetail", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetAllergyDetail")
-    @ResponseWrapper(localName = "getAllergyDetailResponse", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetAllergyDetailResponse")
+    @RequestWrapper(localName = "getAllergyDetail", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetAllergyDetail")
+    @ResponseWrapper(localName = "getAllergyDetailResponse", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetAllergyDetailResponse")
     public AllergyDetail getAllergyDetail(
             @WebParam(name = "queryBean", targetNamespace = "")
             JMeadowsQuery queryBean)
@@ -1063,8 +1063,8 @@ public interface JMeadowsData {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getPatientEncountersReport", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientEncountersReport")
-    @ResponseWrapper(localName = "getPatientEncountersReportResponse", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientEncountersReportResponse")
+    @RequestWrapper(localName = "getPatientEncountersReport", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientEncountersReport")
+    @ResponseWrapper(localName = "getPatientEncountersReportResponse", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientEncountersReportResponse")
     public FreeTextReport getPatientEncountersReport(
             @WebParam(name = "queryBean", targetNamespace = "")
             JMeadowsQuery queryBean)
@@ -1080,8 +1080,8 @@ public interface JMeadowsData {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getPatientAppointments", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientAppointments")
-    @ResponseWrapper(localName = "getPatientAppointmentsResponse", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientAppointmentsResponse")
+    @RequestWrapper(localName = "getPatientAppointments", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientAppointments")
+    @ResponseWrapper(localName = "getPatientAppointmentsResponse", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientAppointmentsResponse")
     public List<PatientAppointments> getPatientAppointments(
             @WebParam(name = "queryBean", targetNamespace = "")
             JMeadowsQuery queryBean)
@@ -1097,8 +1097,8 @@ public interface JMeadowsData {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getPatientEncounters", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientEncounters")
-    @ResponseWrapper(localName = "getPatientEncountersResponse", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientEncountersResponse")
+    @RequestWrapper(localName = "getPatientEncounters", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientEncounters")
+    @ResponseWrapper(localName = "getPatientEncountersResponse", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientEncountersResponse")
     public List<Encounter> getPatientEncounters(
             @WebParam(name = "queryBean", targetNamespace = "")
             JMeadowsQuery queryBean)
@@ -1114,8 +1114,8 @@ public interface JMeadowsData {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getPatientClinicalReminders", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientClinicalReminders")
-    @ResponseWrapper(localName = "getPatientClinicalRemindersResponse", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientClinicalRemindersResponse")
+    @RequestWrapper(localName = "getPatientClinicalReminders", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientClinicalReminders")
+    @ResponseWrapper(localName = "getPatientClinicalRemindersResponse", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientClinicalRemindersResponse")
     public List<ClinicalReminder> getPatientClinicalReminders(
             @WebParam(name = "queryBean", targetNamespace = "")
             JMeadowsQuery queryBean)
@@ -1131,8 +1131,8 @@ public interface JMeadowsData {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getClinicalReminderDetail", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetClinicalReminderDetail")
-    @ResponseWrapper(localName = "getClinicalReminderDetailResponse", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetClinicalReminderDetailResponse")
+    @RequestWrapper(localName = "getClinicalReminderDetail", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetClinicalReminderDetail")
+    @ResponseWrapper(localName = "getClinicalReminderDetailResponse", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetClinicalReminderDetailResponse")
     public FreeTextReport getClinicalReminderDetail(
             @WebParam(name = "queryBean", targetNamespace = "")
             JMeadowsQuery queryBean)
@@ -1148,8 +1148,8 @@ public interface JMeadowsData {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getPatientDemographics", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientDemographics")
-    @ResponseWrapper(localName = "getPatientDemographicsResponse", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientDemographicsResponse")
+    @RequestWrapper(localName = "getPatientDemographics", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientDemographics")
+    @ResponseWrapper(localName = "getPatientDemographicsResponse", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientDemographicsResponse")
     public List<PatientDemographics> getPatientDemographics(
             @WebParam(name = "queryBean", targetNamespace = "")
             JMeadowsQuery queryBean)
@@ -1165,8 +1165,8 @@ public interface JMeadowsData {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getPatientDemographicsDetail", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientDemographicsDetail")
-    @ResponseWrapper(localName = "getPatientDemographicsDetailResponse", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientDemographicsDetailResponse")
+    @RequestWrapper(localName = "getPatientDemographicsDetail", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientDemographicsDetail")
+    @ResponseWrapper(localName = "getPatientDemographicsDetailResponse", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientDemographicsDetailResponse")
     public List<PatientDemographicsDetail> getPatientDemographicsDetail(
             @WebParam(name = "queryBean", targetNamespace = "")
             JMeadowsQuery queryBean)
@@ -1182,8 +1182,8 @@ public interface JMeadowsData {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getPatientImmunizations", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientImmunizations")
-    @ResponseWrapper(localName = "getPatientImmunizationsResponse", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientImmunizationsResponse")
+    @RequestWrapper(localName = "getPatientImmunizations", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientImmunizations")
+    @ResponseWrapper(localName = "getPatientImmunizationsResponse", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientImmunizationsResponse")
     public List<Immunization> getPatientImmunizations(
             @WebParam(name = "queryBean", targetNamespace = "")
             JMeadowsQuery queryBean)
@@ -1199,8 +1199,8 @@ public interface JMeadowsData {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getPatientLabs", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientLabs")
-    @ResponseWrapper(localName = "getPatientLabsResponse", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientLabsResponse")
+    @RequestWrapper(localName = "getPatientLabs", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientLabs")
+    @ResponseWrapper(localName = "getPatientLabsResponse", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetPatientLabsResponse")
     public List<LabOrder> getPatientLabs(
             @WebParam(name = "queryBean", targetNamespace = "")
             JMeadowsQuery queryBean)
@@ -1216,8 +1216,8 @@ public interface JMeadowsData {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "lookupPatient", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.LookupPatient")
-    @ResponseWrapper(localName = "lookupPatientResponse", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.LookupPatientResponse")
+    @RequestWrapper(localName = "lookupPatient", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.LookupPatient")
+    @ResponseWrapper(localName = "lookupPatientResponse", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.LookupPatientResponse")
     public List<Patient> lookupPatient(
             @WebParam(name = "queryBean", targetNamespace = "")
             JMeadowsQuery queryBean)
@@ -1239,8 +1239,8 @@ public interface JMeadowsData {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "loginEnterprise", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.LoginEnterprise")
-    @ResponseWrapper(localName = "loginEnterpriseResponse", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.LoginEnterpriseResponse")
+    @RequestWrapper(localName = "loginEnterprise", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.LoginEnterprise")
+    @ResponseWrapper(localName = "loginEnterpriseResponse", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.LoginEnterpriseResponse")
     public User loginEnterprise(
             @WebParam(name = "cardID", targetNamespace = "")
             String cardID,
@@ -1268,8 +1268,8 @@ public interface JMeadowsData {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "lookupPatientPDWS", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.LookupPatientPDWS")
-    @ResponseWrapper(localName = "lookupPatientPDWSResponse", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.LookupPatientPDWSResponse")
+    @RequestWrapper(localName = "lookupPatientPDWS", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.LookupPatientPDWS")
+    @ResponseWrapper(localName = "lookupPatientPDWSResponse", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.LookupPatientPDWSResponse")
     public ResponsePatientQuery lookupPatientPDWS(
             @WebParam(name = "queryBean", targetNamespace = "")
             PdwsQueryBean queryBean)
@@ -1285,8 +1285,8 @@ public interface JMeadowsData {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "updateUserSubjectDN", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.UpdateUserSubjectDN")
-    @ResponseWrapper(localName = "updateUserSubjectDNResponse", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.UpdateUserSubjectDNResponse")
+    @RequestWrapper(localName = "updateUserSubjectDN", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.UpdateUserSubjectDN")
+    @ResponseWrapper(localName = "updateUserSubjectDNResponse", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.UpdateUserSubjectDNResponse")
     public boolean updateUserSubjectDN(
             @WebParam(name = "authUserInfoQuery", targetNamespace = "")
             AuthUserInfo authUserInfoQuery)
@@ -1302,8 +1302,8 @@ public interface JMeadowsData {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "selectPatient", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.SelectPatient")
-    @ResponseWrapper(localName = "selectPatientResponse", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.SelectPatientResponse")
+    @RequestWrapper(localName = "selectPatient", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.SelectPatient")
+    @ResponseWrapper(localName = "selectPatientResponse", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.SelectPatientResponse")
     public Patient selectPatient(
             @WebParam(name = "queryBean", targetNamespace = "")
             JMeadowsQuery queryBean)
@@ -1317,8 +1317,8 @@ public interface JMeadowsData {
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getVersion", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetVersion")
-    @ResponseWrapper(localName = "getVersionResponse", targetNamespace = "http://webservice.jmeadows.DNS       /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetVersionResponse")
+    @RequestWrapper(localName = "getVersion", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetVersion")
+    @ResponseWrapper(localName = "getVersionResponse", targetNamespace = "http://webservice.jmeadows.med.DNS   /", className = "gov.va.med.jmeadows_2_3_0.webservice.GetVersionResponse")
     public String getVersion();
 
 }

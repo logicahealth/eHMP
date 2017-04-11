@@ -7,7 +7,7 @@ module.exports.fetchExternalData = fetchExternalData;
 
 //note that subsystems must be registered in app-factory to be registered with rdk
 
-function getSubsystemConfig(app) {
+function getSubsystemConfig(app, logger) {
     return {
         healthcheck: {
             name: 'jds',
@@ -17,7 +17,7 @@ function getSubsystemConfig(app) {
                     timeout: 4000,
                     baseUrl: 'http://127.0.0.1:8888',
                     url: '/ping',
-                    logger: app.logger
+                    logger: logger
                 };
                 rdk.utils.http.get(localConfig, function(err) {
                     if(err) {

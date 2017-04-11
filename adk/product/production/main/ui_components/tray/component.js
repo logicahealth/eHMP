@@ -145,9 +145,10 @@ define([
                         (View instanceof Backbone.Marionette.CompositeView) ||
                         (View instanceof Backbone.Marionette.LayoutView) ? View : (typeof View === 'function') ? new View() : undefined;
                     if (!_.isUndefined(viewToShow)) {
-                        this.TrayRegion.show(viewToShow, {
+                        var showOptions = this.TrayRegion.currentView instanceof this.getOption('tray') ? {
                             preventDestroy: true
-                        });
+                        } : {};
+                        this.TrayRegion.show(viewToShow, showOptions);
                         this.configureDateTimepickerEvents(this.TrayRegion.currentView);
                         this.setFocusToFirstMenuItem();
                     }
@@ -240,14 +241,10 @@ define([
             var theTray = this.$('.sidebar-tray');
             theTray.off('keydown.trayFocusAction');
             // remove the loader
-            theLoader.animate({
-                opacity: '0'
-            }, 300, function() {
-                $(this).remove();
-            });
+            theLoader.remove();
             if (this.isOpen()) {
-                // if we took the focus from somewhere, send it back
-                if (this._loaderFocusedElement && this._loaderFocusedElement.length) {
+                // if we took the focus from somewhere, send it back (if it's there and it is focusable)
+                if (this._loaderFocusedElement && this._loaderFocusedElement.length && this._loaderFocusedElement.is(':focusable')) {
                     this._loaderFocusedElement.focus();
                 } else {
                     // send it back to the tray, where it defaults to.

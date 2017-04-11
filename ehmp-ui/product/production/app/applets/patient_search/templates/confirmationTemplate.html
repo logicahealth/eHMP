@@ -10,13 +10,18 @@
     <div class="patientInfo">
         <div id="patient-image-container" class="patient-detail-head">
             {{#if patientImage}}
-                <div aria-hidden="true" class="patient-image" style="background-image:url('{{patientImage}}')"></div>
+            <div aria-hidden="true" class="patient-image" style="background-image:url('{{patientImage}}')"></div>
             {{else}}
-                <div aria-hidden="true" class="patient-image" id="patient-image"></div>
+            <div aria-hidden="true" class="patient-image" id="patient-image"></div>
             {{/if}}
         </div>
         <div class="patientName">{{formatName displayName ',' ', '}}</div>
         <div class="patient-detail-body">
+            {{#if sensitive}}
+            <div class="row">
+                <div class="col-xs-offset-4 col-xs-4 text-center background-color-pure-white color-red bottom-margin-md font-size-14 sensitive-patient"><span class="sr-only">Sensitive info: </span>*SENSITIVE*</div>
+            </div>
+            {{/if}}
             <div class="row">
                 <div class="col-xs-6 infoLabelStyle">DOB:</div>
                 <div class="col-xs-6" id="confirm_birthDate">{{formatDate birthDate "MM/DD/YYYY"}}</div>
@@ -57,4 +62,10 @@
             <span aria-hidden="true">Confirm Selection</span>
         </button>
     </div>
+</div>
+<div class="hidden" id="screenReaderSyncing">
+    Syncing patient data...
+</div>
+<div class="hidden" id="screenReaderLoading">
+    Loading patient data...
 </div>

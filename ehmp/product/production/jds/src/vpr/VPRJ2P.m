@@ -51,7 +51,7 @@ RBLDALL ; Rebuild all patients (includes templates)
  . . ; Need to pass JPID and OPID to make sure we can get the key
  . . S PID=$$MKPID(JPID,OPID)
  . . I '$L(PID) D LOGMSG^VPRJ("vpr","Error creating PID: "_OPID) Q
- . . S KEY="" F  S KEY=$O(^VPRPTJ("JSON",JPID,OPID,KEY)) Q:KEY=""  D RBLDOBJ(PID,KEY)
+ . . S KEY="" F  S KEY=$O(^VPRPTJ("JSON",JPID,OPID,KEY)) Q:KEY=""  D RBLDOBJ(OPID,KEY)
  . . D LOGCNT^VPRJ("vpr")
  D RESUME^VPRJ
  L -^VPRPT
@@ -115,7 +115,7 @@ RBLDOBJ(PID,KEY) ; Re-build a single object
  K ^VPRPTJ("TEMPLATE",JPID,PID,KEY)
  K ^VPRPTJ("KEY",KEY,PID)
  ; call save the replace the object & reset indexes
- D SAVE^VPRJPS(PID,.JSON)
+ D SAVE^VPRJPS(JPID,.JSON)
  L -^VPRPT(JPID,PID,KEY)
  Q
 CLRINDEX(OK) ; Clear all the indexes, preserving the "put patient" part

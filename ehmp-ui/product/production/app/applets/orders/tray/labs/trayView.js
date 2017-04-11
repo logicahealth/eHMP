@@ -4,13 +4,14 @@ define([
     'marionette',
     'jquery',
     'handlebars',
+    'moment',
     'app/applets/orders/viewUtils',
     'app/applets/orders/writeback/writebackUtils',
     'app/applets/orders/writeback/labs/labUtils',
     'app/applets/orders/writeback/labs/formFields',
     'app/applets/orders/writeback/labs/formUtils',
     'app/applets/orders/behaviors/draftOrder'
-], function(ADK, Backbone, Marionette, $, Handlebars, ViewUtils, Utils, LabUtils, FormFields, FormUtils, DraftBehavior) {
+], function(ADK, Backbone, Marionette, $, Handlebars, moment, ViewUtils, Utils, LabUtils, FormFields, FormUtils, DraftBehavior) {
     "use strict";
 
     var FormModel = Backbone.Model.extend({
@@ -79,7 +80,7 @@ define([
             "acceptAddAnotherButton": "#acceptDrpDwnContainer-accept-add",
             "cancelButton": "#cancelButton",
             "saveButton": "#saveButton",
-            "deleteButton": "#deleteButton",
+            "deleteButton": ".labtestAddConfirmDelete button",
             "errorMessage": ".errorMessage",
             "notificationDate": ".notificationDate",
             "dynamicFields": ".anticoagulant, .sampleDrawnAtContainer, .additionalComments, .orderComment, .urineVolume, .doseContainer, .drawContainer, .immediateCollectionContainer, .futureLabCollectTimesContainer, .otherSpecimenContainer, .otherCollectionSample",
@@ -109,7 +110,15 @@ define([
             this.enableCancelButton(true);
             this.listenToOnce(this.model, 'change.inputted', this.registerChecks);
         },
+        onAttach: function(){
+            if (this.ui.availableLabTests.is(':visible')){
+                this.$el.trigger('tray.loaderShow',{
+                    loadingString:'Loading'
+                });
+            }
+        },
         onDestroy: function() {
+            this.$el.trigger('tray.loaderHide');
             this.unregisterChecks();
         },
         registerChecks: function() {
@@ -136,28 +145,13 @@ define([
             "click @ui.acceptAddAnotherButton": function(e) {
                 this.ui.acceptDrpDwnContainer.text("Accept & Add Another").trigger('click');
             },
-            "click @ui.cancelButton": function(e) {
-                e.preventDefault();
-                var closeAlertView = new ViewUtils.DialogBox({
-                    title: 'Cancel',
-                    message: 'All unsaved changes will be lost. Are you sure you want to cancel?',
-                    confirmButton: 'Yes',
-                    cancelButton: 'No',
-                    confirmTitle: 'Press enter to cancel',
-                    cancelTitle: 'Press enter to go back',
-                    onConfirm: function() {
-                        var TrayView = ADK.Messaging.request("tray:writeback:actions:trayView");
-                        if (TrayView) {
-                            TrayView.$el.trigger('tray.reset');
-                        }
-                    }
-                });
-                closeAlertView.show();
+            'lab-test-add-confirm-cancel':function(e){
+                this.workflow.close();
             },
             "click @ui.saveButton": function(e) {
                 this.saveDraft();
             },
-            "click @ui.deleteButton": function(e) {
+            'lab-test-add-confirm-delete': function(e){
                 this.deleteDraft();
             },
             "submit": function(e) {
@@ -172,7 +166,7 @@ define([
             if (this.model.isValid()) {
                 this.enableInputFields(false);
                 this.enableCancelButton(false);
-                this.showInProgress('Validating...');
+                this.showInProgress('Accepting');
                 this.ui.inProgressContainer.removeClass('hidden');
                 this.enableFooterButtons(false);
 
@@ -263,7 +257,7 @@ define([
             this.ui.inputFields.trigger('control:disabled', true);
             this.ui.availableLabTests.trigger('control:disabled', true);
             this.enableFooterButtons(false);
-            this.enableCancelButton(false);
+            this.enableCancelButton(true);
             this.ui.errorMessage.trigger('control:title', 'System Error');
             this.ui.errorMessage.trigger('control:icon', 'fa-exclamation-circle');
             this.hideInProgress();
@@ -280,11 +274,13 @@ define([
             var localId = patient.get('localId');
             var uid = patient.get('uid');
             var pid = patient.get("pid");
+            var specialtyUid = patient.get('specialtyUid');
 
-            var session = ADK.UserService.getUserSession();
-            var siteCode = session.get('site');
-            var provider = session.get('duz')[siteCode];
-
+            var visit = ADK.PatientRecordService.getCurrentPatient().get('visit');
+            var providerCode = '';
+            if (!_.isEmpty(visit) && !_.isEmpty(visit.selectedProvider)) {
+                providerCode = visit.selectedProvider.code;
+            }
 
             this.listenTo(form.model, 'save:error', function(model, resp) {
                 var errorMessage = JSON.parse(resp.responseText).message;
@@ -299,7 +295,7 @@ define([
                     message: "Failed to accept lab order: " + resp.responseText
                 });
                 form.enableInputFields(true);
-                form.enableCancelButton(false);
+                form.enableCancelButton(true);
                 form.hideInProgress();
                 form.ui.availableLabTests.trigger('control:disabled', false);
                 form.enableFooterButtons(true);
@@ -357,6 +353,7 @@ define([
                         cancelButtonClasses: 'btn-danger btn-sm',
                         onConfirm: function() {
                             model.set('orderCheckList', model.get('orderCheckOriginalList'));
+                            this.showInProgress('Accepting');
                             form.saveOrder(model, form);
                         },
                         onCancel: function() {
@@ -374,12 +371,10 @@ define([
                 } else {
                     ordersModel.set('items', model.get('items'));
                     var saveAlertView = new ADK.UI.Notification({
-                        title: 'Lab Order Submitted',
-                        icon: 'fa-check',
-                        message: 'Lab order successfully accepted with no errors.',
+                        title: 'Success',
+                        message: 'Lab Order Submitted',
                         type: "success"
                     });
-                    saveAlertView.show();
                     model.trigger('draft:reset');
                     this.unregisterChecks();
                     if (form.ui.acceptDrpDwnContainer.text() === ("Accept")) {
@@ -396,19 +391,21 @@ define([
                         form.enableFooterButtons(false);
                         form.enableCancelButton(true);
                         this.listenToOnce(this.model, 'change.inputted', this.registerChecks);
+                        form.$('.modal-body').scrollTop(0);
                     }
                     this.model.unset('orderCheckList');
                     this.stopListeningSaveCallback();
                     Utils.refreshApplet();
+                    saveAlertView.show();
                 }
             });
 
-            this.showInProgress('Saving...');
+            this.showInProgress('Accepting');
 
             this.model.set({
                 pid: pid,
                 dfn: localId,
-                provider: provider,
+                provider: providerCode,
                 orderDialog: 'LR OTHER LAB TESTS',
                 quickOrderDialog: '2',
                 displayGroup: '6',
@@ -418,6 +415,10 @@ define([
                 uid: uid,
                 kind: 'Laboratory'
             });
+
+            if (specialtyUid) {
+                this.model.set('specialtyId', specialtyUid.split(':').pop());
+            }
 
             this.model.trigger('draft:copyToModel');
 
@@ -483,11 +484,15 @@ define([
             }
         },
         showInProgress: function(message) {
+            this.$el.trigger('tray.loaderShow',{
+                loadingString:message
+            });
             this.model.set('inProgressMessage', message);
-            this.ui.inProgressContainer.trigger('control:hidden', false);
+            //this.ui.inProgressContainer.trigger('control:hidden', false);
         },
         hideInProgress: function() {
-            this.ui.inProgressContainer.trigger('control:hidden', true);
+            this.$el.trigger('tray.loaderHide');
+            //this.ui.inProgressContainer.trigger('control:hidden', true);
             this.model.unset('inProgressMessage');
         },
         handleCollectionTypeListCache: function() {
@@ -566,8 +571,10 @@ define([
             },
             'change:availableLabTests': function(model) {
                 var ien = model.get('availableLabTests');
+                this.enableInputFields(false);
+                this.enableFooterButtons(false);
                 if (!_.isEmpty(ien)) {
-                    this.showInProgress('Loading...');
+                    this.showInProgress('Loading');
                     var visit = ADK.PatientRecordService.getCurrentPatient().get('visit');
                     if (visit) {
                         if (visit.locationUid) {
@@ -578,7 +585,6 @@ define([
                     if (_.isUndefined(model.get('collectionDate'))) {
                         FormUtils.setInitialCollectionDateTimeValues(this);
                     }
-                    this.enableInputFields(false);
                     LabUtils.retrieveOrderableItemLoad.apply(this);
                 }
             },

@@ -1,4 +1,3 @@
-/*jslint node: true*/
 'use strict';
 
 var rdk = require('../../core/rdk');
@@ -23,6 +22,8 @@ var fhirToJDSAttrMap = [{
     description: 'When prescription was authorized.',
     searchable: true
 }];
+confUtils.addCountAttribute(fhirToJDSAttrMap); //adding the _count attribute that is common to (almost) all endpoints.
+
 
 // Issue call to Conformance registration
 conformance.register(confUtils.domains.MEDICATION_PRESCRIPTION, createMedicationPrescriptionConformanceData());
@@ -127,7 +128,7 @@ function convertToFhir(result, req) {
 
 
 function convertToMedicationPrescription(item, pid) {
-    var mp = new fhirResource.MedicationPrescription_DSTU2(helpers.generateUUID(), item.vaStatus);
+    var mp = new fhirResource.MedicationPrescription_DSTU2(item.uid, item.vaStatus);
     mp.contained = [];
 
     // Identifier

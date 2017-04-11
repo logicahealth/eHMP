@@ -1,10 +1,7 @@
 When(/^the client requests immunization for the patient "(.*?)" in FHIR format$/) do |pid|
-  temp = RDKQuery.new('immunization')
-  temp.add_parameter("subject.identifier", pid)
-  #temp.add_parameter("domain", "imun")
-  temp.add_acknowledge("true")
-  p temp.path
-  @response = HTTPartyRDK.get(temp.path)
+  temp = QueryRDKCDSfhir.new
+  path = temp.path + "/immunization?subject.identifier=#{pid}"
+  @response = HTTPartyRDK.get(path)
 end
 
 Then(/^the FHIR results contain immunization/) do |table|
@@ -50,28 +47,30 @@ Then(/^the FHIR results contain immunization/) do |table|
 end
 
 When(/^the client requests immunization for that sensitive patient "(.*?)"$/) do |pid|
-  temp = RDKQuery.new('immunization')
-  temp.add_parameter("subject.identifier", pid)
-  #temp.add_parameter("domain", "imun")
-  temp.add_acknowledge("false")
-  p temp.path
-  @response = HTTPartyRDK.get(temp.path)
+  temp = QueryRDKCDSfhir.new
+  path = temp.path + "/immunization?subject.identifier=#{pid}"
+  @response = HTTPartyRDK.get(path)
 end
 
 When(/^the client breaks glass and repeats a request for immunization for that patient "(.*?)"$/) do |pid|
-  temp = RDKQuery.new('immunization')
-  temp.add_parameter("subject.identifier", pid)
-  #temp.add_parameter("domain", "imun")
-  temp.add_acknowledge("true")
-  p temp.path
-  @response = HTTPartyRDK.get(temp.path)
+  temp = QueryRDKCDSfhir.new
+  path = temp.path + "/immunization?subject.identifier=#{pid}&_ack=true"
+  @response = HTTPartyRDK.get(path)
 end
 
 When(/^the client requests "(.*?)" immunization for the patient "(.*?)" in FHIR format$/) do |limit, pid|
-  temp = RDKQuery.new('immunization')
-  temp.add_parameter("subject.identifier", pid)
-  temp.add_parameter("limit", limit)
-  temp.add_acknowledge("true")
-  p temp.path
-  @response = HTTPartyRDK.get(temp.path)
+  temp = QueryRDKCDSfhir.new
+  path = temp.path + "/immunization?subject.identifier=#{pid}&_count=#{limit}&_ack=true"
+  @response = HTTPartyRDK.get(path)
+  json = JSON.parse(@response.body)
+  i = 0
+  resourcetype = []
+  while i < json["entry"].size
+    resourcetype [i]  = json["entry"][i]["resource"]["resourceType"]
+    puts resourcetype [i]
+    expect(resourcetype[i] <= "Immunization").to eq(true)
+    i += 1
+  end
+  puts i
+  expect(i.to_s == limit).to eq(true)
 end

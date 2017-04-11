@@ -4,19 +4,27 @@ var _ = require('lodash');
 var rdk = require('../../core/rdk');
 var jdsDomains = require('./jds-domains');
 var querystring = require('querystring');
-var dd = require('drilldown');
 var patientRecordAnnotator = require('./patient-record-annotator');
 var http = rdk.utils.http;
 var jdsFilter = require('jds-filter');
 var resultUtils = rdk.utils.results;
 var asuUtils = require('../../resources/patient-record/asu-utils');
 var nullchecker = rdk.utils.nullchecker;
+var vix = require('../vix/vix-subsystem');
+var async = require('async');
+var availableJdsTemplates = require('../../../config/jdsTemplates.json');
+
+
+module.exports.constants = {};
+module.exports.constants.MAX_JDS_URL_SIZE = 1024;
+module.exports.constants.JDS_RANGE_DELIMITER = ',';
 
 module.exports.getSubsystemConfig = getSubsystemConfig;
 module.exports.getPatientDomainData = getPatientDomainData;
+module.exports.getByUid = getByUid;
 module.exports._filterAsuDocuments = filterAsuDocuments;
 
-function getSubsystemConfig(app) {
+function getSubsystemConfig(app, logger) {
     return {
         healthcheck: {
             name: 'jds',
@@ -25,7 +33,7 @@ function getSubsystemConfig(app) {
                 var jdsOptions = _.extend({}, app.config.jdsServer, {
                     url: '/ping',
                     timeout: 5000,
-                    logger: app.logger
+                    logger: logger
                 });
 
                 http.get(jdsOptions, function(err) {
@@ -73,7 +81,7 @@ function getPatientDomainData(req, pid, domain, query, vlerQuery, callback) {
 
     var vlerCallType = vlerQuery.vlerCallType;
     var vlerUid = vlerQuery.vlerUid;
-    var jdsPath = jdsResource + '?' + querystring.stringify(query);
+    var jdsPath =  createJDSPath(jdsResource, query, req);
     var options = _.extend({}, req.app.config.jdsServer, {
         url: jdsPath,
         logger: req.logger,
@@ -92,14 +100,7 @@ function getPatientDomainData(req, pid, domain, query, vlerQuery, callback) {
             return callback(new Error('Missing data in JDS response. Is the patient synced?'), responseBody, response.statusCode);
         }
         if (name === 'document-view') {
-            return filterAsuDocuments(req, responseBody, function(err, results) {
-                if (err) {
-                    req.logger.error(err);
-                    return callback(err, null, 500);
-                }
-                responseBody = results;
-                return callback(null, responseBody, response.statusCode);
-            });
+            return transformDocumentView(req, responseBody, response.statusCode, callback);
         }
         if (name === 'vlerdocument') {
             return transformVler(req.logger, vlerCallType, vlerUid, name, responseBody, response.statusCode, callback);
@@ -107,7 +108,80 @@ function getPatientDomainData(req, pid, domain, query, vlerQuery, callback) {
         if (name === 'patient') {
             return transformCwadf(req, pid, responseBody, callback);
         }
+        if (name === 'med') {
+            removeParentMedications(responseBody);
+        }
         return callback(null, applyFilters(name, transformDomainData(name, responseBody), req.query.afterFilter), response.statusCode);
+    });
+}
+
+function createJDSPath(jdsResource, query, req) {
+    var jdsPath = '';
+    var jdsTemplate = _.get(req, 'query.template');
+
+    if (jdsTemplate && availableJdsTemplates.hasOwnProperty(jdsTemplate)) {
+        jdsPath = jdsResource + '/' + jdsTemplate + '?' + querystring.stringify(query);
+    } else {
+        jdsPath = jdsResource + '?' + querystring.stringify(query);
+    }
+
+    return jdsPath;
+}
+
+function transformDocumentView(req, responseBody, statusCode, callback) {
+    async.waterfall([
+        function(callback) {
+            return filterAsuDocuments(req, responseBody, function(err, results) {
+                if (err) {
+                    req.logger.error(err);
+                    return callback(err, null, 500);
+                }
+                responseBody = results;
+                return callback(null, responseBody, statusCode);
+            });
+        },
+        function(responseBody, statusCode, callback) {
+            var vixSubsystemPresent = _.get(req, 'app.subsystems.vix');
+            var bodyHasItems = _.size(_.get(responseBody, 'data.items')) > 0;
+            if (vixSubsystemPresent && bodyHasItems) {
+                return vix.addImagesToDocument(req, responseBody, function(err, responseBody) {
+                    return callback(null, responseBody, statusCode);
+                });
+            }
+            return callback(null, responseBody, statusCode);
+        }
+    ], function(err, responseBody, statusCode) {
+        return callback(err, responseBody, statusCode);
+    });
+}
+
+/**
+ * @param {HttpRequest} req
+ * @param {String} pid The pid of the pre-synchronized patient
+ * @param {String} uid The uid of the item to look up
+ * @param {Function} callback receives (error, response, statusCode)
+ *     where error is null if there was no error performing the fetch
+ *     where response is the response body object
+ *     where statusCode is the fetch status code if available
+ */
+function getByUid(req, pid, uid, callback) {
+    var options = _.extend({}, req.app.config.jdsServer, {
+        url: '/vpr/' + pid + '/' + uid,
+        logger: req.logger,
+        json: true
+    });
+    http.get(options, function (error, response, responseBody) {
+        if (error) {
+            req.logger.error(error);
+            return callback(error, null, 500);
+        }
+        if (_.has(responseBody, 'error')) {
+            return callback(responseBody.error, responseBody, response.statusCode);
+        }
+        if (!_.has(responseBody, 'data')) {
+            return callback(new Error('Missing data in JDS response. Is the patient synced?'), responseBody, response.statusCode);
+        }
+        return callback(null, responseBody, response.statusCode);
     });
 }
 
@@ -148,6 +222,9 @@ function transformCwadf(req, pid, domainData, callback) {
             });
 
             var patientRecordFlag = _(domainData.data.items)
+                .reject(function(item) {
+                    return item.pid && (item.pid.indexOf('HDR;') === 0 || item.pid.indexOf('VLER;') === 0 || item.pid.indexOf('DOD;') === 0);
+                })
                 .pluck('patientRecordFlag')
                 .compact()
                 .flatten()
@@ -207,7 +284,6 @@ function applyFilters(domainName, domainData, filterString) {
 }
 
 function transformDomainData(domainName, domainData) {
-    //var sites = getSyncedSites();  // TODO implement?
     if (domainName === 'vital') {
         patientRecordAnnotator.addCalculatedBMI(domainData);
         patientRecordAnnotator.addReferenceRanges(domainData);
@@ -243,3 +319,26 @@ function filterAsuDocuments(req, details, callback) {
         return callback(error, details);
     });
 }
+
+function removeParentMedications(response) {
+    if (!_.isArray(_.get(response, 'data.items'))) {
+        return;
+    }
+
+    var initialCount = response.data.items.length;
+
+    response.data.items = _.reject(response.data.items, function (item) {
+        return _.find(item.orders, function (order) {
+            return !_.isEmpty(order.childrenOrderUids);
+        });
+    });
+
+    var removedCount = initialCount - response.data.items.length;
+    if (response.data.totalItems) {
+        response.data.totalItems -= removedCount;
+    }
+    if (response.data.currentItemCount) {
+        response.data.currentItemCount -= removedCount;
+    }
+}
+module.exports.filterAsuDocuments = filterAsuDocuments;

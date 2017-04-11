@@ -14,79 +14,82 @@ var nullchecker = rdk.utils.nullchecker;
 var lineFormatter = '\n';
 
 function normalizeDate(input) {
-    var retVal;
+    var newDate;
 
     input = input.toString();
-    retVal = moment(input).format('MM/DD/YYYY');
-    return retVal;
+    newDate = moment(input).format('MM/DD/YYYY');
+    return newDate;
 }
 
-function generateRequestStr (request) {
+function generateRequestStr(request) {
 
-    var retVal = normalizeDate(request.submittedTimeStamp) + lineFormatter;
+    var requestStr = normalizeDate(request.submittedTimeStamp) + lineFormatter;
 
-    retVal += _.unescape(request.title) + lineFormatter;
+    requestStr += _.unescape(request.title) + lineFormatter;
 
-    if (request.urgency != "Routine") {
-        retVal += request.urgency + lineFormatter;
+    if (request.urgency !== 'routine') {
+        requestStr += request.urgency.substring(0, 1).toUpperCase() + request.urgency.substring(1) + lineFormatter;
     }
 
-    retVal += "Requested by: "+ request.submittedByName + lineFormatter;
-    retVal += "Request: "+ _.unescape(request.request) + lineFormatter;
+    requestStr += 'Requested by: ' + request.submittedByName + lineFormatter;
+    requestStr += 'Request: ' + _.unescape(request.request) + lineFormatter;
+    requestStr += 'Assigned to: ' + getAssignTo(request) + lineFormatter;
 
-    if (request.assignTo === "Me") {
-        retVal += "Assigned to: "+ request.submittedByName + lineFormatter;
-    } else {
-        retVal += "Assigned to: "+ getAssignTo(request, request.submittedByName)
-                    + lineFormatter;
-    }
-    return retVal;
+    return requestStr;
 }
 
 var responseActionMap = {
-    "complete" : "Completed by: ",
-    "clarification": "Returned For Clarification by: ",
-    "decline" : "Declined by: ",
-    "reassign": "Reassigned to: "
-}
+    'complete': 'Completed by: ',
+    'clarification': 'Returned For Clarification by: ',
+    'decline': 'Declined by: ',
+    'reassign': 'Reassigned to: '
+};
 
 function generateResponseStr(response) {
-
     var action = responseActionMap[response.action];
 
-    var retVal = normalizeDate(response.submittedTimeStamp) + lineFormatter;
-    retVal += action;
+    var responseStr = normalizeDate(response.submittedTimeStamp) + lineFormatter;
+    responseStr += action;
 
-/*
- * If the action is "complete" there is not assignment
- */
-    if(response.action != "complete") {
-        retVal += getAssignTo(response, response.submittedByName) + lineFormatter; //TODO
+    /*
+     * If the action is 'complete' there is not assignment
+     */
+    if (response.action === 'reassign') {
+        // reassign
+        responseStr += getAssignTo(response) + lineFormatter;
+        responseStr += _.unescape(response.request ? response.request + '.' + lineFormatter : response.comment ? response.comment + '.' + lineFormatter : '');
+        responseStr += 'Reassigned by: ';
+        responseStr += response.submittedByName + lineFormatter;
+    } else if (response.action !== 'complete') {
+        // clarification // decline
+        responseStr += response.submittedByName + lineFormatter;
+        responseStr += _.unescape(response.request ? response.request + '.' + lineFormatter : response.comment ? response.comment + '.' + lineFormatter : '');
+        responseStr += 'Assigned to: ';
+        responseStr += getAssignTo(response) + lineFormatter;
+    } else {
+        // complete
+        responseStr += response.submittedByName + lineFormatter;
     }
-    else {
-        retVal += response.submittedByName + lineFormatter;
-    }
-    retVal += _.unescape(response.request ? response.request + "." + lineFormatter: response.comment ? response.comment+ "." + lineFormatter: "");
 
-    return retVal;
+    return responseStr;
 }
 
 function addType(type) {
     return function(item) {
         item._type = type;
         return item;
-    }
+    };
 }
 
 /*
  * Create a string of all incoming Request Activity clinical Object's
  * request(s) and response(s) in sequential submittedDateTime order
  *
- * activityRequests - the "data" portion of the Request Activity clinical Object
- * @return madlib string
+ * @param {object} activityRequests - the 'data' portion of the Request Activity clinical Object
+ * @returns {string} madlib text
  */
 function getActivityRequestMadlib(activityRequests) {
-    var retVal;
+    var madlibStr;
 
     //-------------------------------------------------------------
     //SORT all Requests and Responses asc
@@ -110,57 +113,44 @@ function getActivityRequestMadlib(activityRequests) {
         return item._type === 'request' ? generateRequestStr(item) : generateResponseStr(item);
     });
 
-    retVal = madlibStrings.join(lineFormatter);
+    madlibStr = madlibStrings.join(lineFormatter);
 
-    return retVal;
+    return madlibStr;
 }
 
-function getAssignTo(item, personName) {
-    var retStr = "";
-    var listOfRoles;
-    _.forEach(item.route.assignedRoles, function(role, n) {
-        if (n === 0) {
-            listOfRoles = role.name;
-        } else {
-            listOfRoles += ", " + role.name;
-        }
-    })
+function getAssignTo(item) {
+    var retStr;
 
-    //----------------------------------------------
-    // Assign to Person use case
-    //----------------------------------------------
-    if (item.assignTo  === "Person") {
-        retStr += personName + " at " + item.route.facility;
-    }
-    //----------------------------------------------
-    // Assign to a Team or to a Team Care Type using My teams or Any Team use case
-    //----------------------------------------------
-    else if (item.assignTo === "My Teams" || item.assignTo === "Any Team") {
-        //----------------------------
-        // Assign to a team
-        //----------------------------
-        if (item.route.patientsAssignment) {
-            retStr += "Patients " + item.route.teamCareType.name + " team. ";
-            retStr += " Roles: " + listOfRoles;
-        }
-        //----------------------------
-        // Assign to a Team Care Type
-        //----------------------------
-        else {
-            retStr += item.route.team.name + " at " + item.route.facility;
-            retStr += " Roles: " + listOfRoles;
-        }
-    }
+    switch (item.assignTo) {
+        case 'Person':
+            retStr = item.route.personName + ' at ' + item.route.facilityName;
+            break;
+        case 'Me':
+            retStr = item.submittedByName;
+            break;
+        case 'My Teams':
+        case 'Any Team':
+        case 'Patient\'s Teams':
+            var rolesStr = '  Roles: ' + _.map(item.route.assignedRoles, 'name').join(', ');
 
-    retStr += ". ";
+            if (item.route.patientsAssignment) {
+                retStr = 'Patients ' + item.route.teamCareType.name + ' team.' + rolesStr;
+            } else {
+                retStr = item.route.team.name + ' at ' + item.route.team.code + rolesStr;
+            }
+            break;
+        default:
+    }
     return retStr;
 }
 
 /*
  * Call madlib generator for an incoming single Request Activity clinical object
  *
- * sourceClinicalObject - incoming single Request Activity clinical object
- * @return madlib string
+ * @param {array} errorMessages Reference to error array used to communicate errors in the
+ *                              generation of the madlib text
+ * @param {object} sourceClinicalObject Incoming single Request Activity clinical object
+ * @returns {string} madlib tezxt
  */
 function getMadlibString(errorMessages, sourceClinicalObject) {
 
@@ -172,7 +162,7 @@ function getMadlibString(errorMessages, sourceClinicalObject) {
     var activityData = sourceClinicalObject.data;
 
     if (!_.isEmpty(activityData)) {
-        var madlib =  getActivityRequestMadlib(sourceClinicalObject.data);
+        var madlib = getActivityRequestMadlib(sourceClinicalObject.data);
         return madlib;
     }
 

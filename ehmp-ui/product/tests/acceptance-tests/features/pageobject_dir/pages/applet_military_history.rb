@@ -12,9 +12,9 @@ class PobAppletMilitaryApplet < SitePrism::Page
   element :btn_military_history_cancel, "#cancelBtn"
   element :fld_military_history_edit_header, "#main-workflow-label-Edit-Military-History"
   element :fld_military_history_remaining_characters, ".description > span"
-  element :btn_military_history_detail_view_close, "#close-btn"
+  element :btn_military_history_detail_view_close, "#modal-close-button"
   element :mdl_detail_view_title, ".modal-title"
-  element :mdl_detail_view_description, ".workflow-controller .modal-body p"
+  element :mdl_detail_view_description, "#mainModalDialog #modal-body p"
   element :btn_military_history_dismiss_edit_view, '.modal-header [data-dismiss="modal"]'
   element :btn_minimize_military_history, '[data-appletid="military_hist"] .applet-minimize-button'
   

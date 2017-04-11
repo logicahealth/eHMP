@@ -4,7 +4,7 @@ Feature:F144 - eHMP viewer GUI - Vitals
 
 
 
-@US2800g
+@US2800g @debug @DE6976
 Scenario: Expanding Vitals applet from coversheet returns to coversheet
   # Given user is logged into eHMP-UI
   And user searches for and selects "Eight,PATIENT"
@@ -19,6 +19,7 @@ Scenario: User views vitals coversheet to view data
   # Given user is logged into eHMP-UI
   And user searches for and selects "Eight,PATIENT"
   Then Cover Sheet is active
+  And the user has selected All within the global date picker
   And the "Vitals Coversheet" contain 5 items 
   And the Coversheet Vitals table contains 
     | label | value | date |
@@ -59,6 +60,7 @@ Scenario: User uses the vitals expanded view to filter
   Then Cover Sheet is active
   When the user expands the vitals applet
   Then the expanded vitals applet is displayed
+  And the user clicks the All vitals range
   And the user filters the Vitals Applet by text "BAY"
   Then the vitals table only diplays rows including text "BAY"
 
@@ -75,7 +77,7 @@ Scenario: User uses the vitals expanded view to filter by date
   Then the Expanded Vitals applet only displays rows from the last 24 hours
 
 
-@f144_vitals_modal_details @data_specific @DE4976
+@f144_vitals_modal_details @data_specific @DE4976 @DE6010
 Scenario: Users will be able to view modal popup for a particular vital 
   # Given user is logged into eHMP-UI
   And user searches for and selects "Eight,Patient"
@@ -85,7 +87,7 @@ Scenario: Users will be able to view modal popup for a particular vital
   And the user clicks the All vitals range
   When the user views the first Vital detail view
   Then the modal is displayed
-  And the modal's title is "BMI"
+  And the modal's title is "Body Mass Index"
   And the Vital Detail modal displays 
       | modal item     |
       | Vital          | 
@@ -112,6 +114,7 @@ Scenario: Vitals expand view applet displays all of the same details after apple
   And Cover Sheet is active
   Then the "Vitals" applet is displayed
   Then the user expands the vitals applet
+  And the user clicks the All vitals range
   And the Vitals Applet contains data rows
   When user refreshes Vitals Applet
   Then the message on the Vitals Applet does not say "An error has occurred"
@@ -120,6 +123,7 @@ Scenario: Vitals expand view applet displays all of the same details after apple
 Scenario: Verify Vitals applet on overview page has info button toolbar
   When user searches for and selects "eight,patient"
   Then Overview is active
+  And the user has selected All within the global date picker
   And vitals gist is loaded successfully
   When user opens the first vitals gist item
   Then vitals info button is displayed
@@ -129,5 +133,6 @@ Scenario: Verify Vitals applet expanded view has info button toolbar
   When user searches for and selects "eight,patient"
   Then Overview is active
   And user navigates to Vitals expanded view 
+  And the user clicks the All vitals range
   When user opens the first Vitals row
   Then vitals info button is displayed

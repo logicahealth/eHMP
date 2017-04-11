@@ -36,7 +36,8 @@ define([
                 if (resultDocs && resultDocs.length > 0 && resultDocs[0].resultUid) {
                     var uid = resultDocs[0].resultUid;
                     var currentPatient = ADK.PatientRecordService.getCurrentPatient();
-                    var deferredDetailResponse = ADK.Messaging.getChannel("narrative_lab_results_grid").request('extDetailView', {
+                    var response = ADK.Messaging.getChannel("narrative_lab_results_grid").request('extDetailView', {
+                        model: model,
                         uid: uid,
                         patient: {
                             icn: currentPatient.attributes.icn,
@@ -45,13 +46,7 @@ define([
                         suppressModal: true
                     });
 
-                    deferredDetailResponse.done(function(detailData) {
-                        onSuccess(detailData, model, dataCollection, navHeader, appletOptions, id);
-                    });
-                    deferredDetailResponse.fail(function(error) {
-                        onFail(error, model, dataCollection);
-                    });
-
+                    onSuccess(response, model, dataCollection, navHeader, appletOptions, id);
                 } else {
                     onFail("Lab has no link to a result document", model, dataCollection);
                 }
@@ -61,15 +56,18 @@ define([
             var modalOptions = {
                 'title': detailData.title,
                 'size': 'large',
-                'footerView': modalFooterView.extend()
+                'footerView': modalFooterView.extend(),
+                'showLoading': true
             };
 
             detailModel.set('lab_detail_title', detailData.title);
 
+            var view = new detailData.view();
+
             if (navHeader) {
                 modalOptions.headerView = ModalHeaderView.extend({
                     model: detailModel,
-                    theView: detailData.view,
+                    theView: view,
                     dataCollection: dataCollection,
                     navHeader: navHeader,
                     appletOptions: appletOptions
@@ -77,11 +75,10 @@ define([
             }
 
             var modal = new ADK.UI.Modal({
-                view: detailData.view,
+                view: view,
                 options: modalOptions
             });
             modal.show();
-            modal.$el.closest('.modal').find('#' + id).focus();
         },
         showErrorModal: function(error, itemModel, dataCollection) {
             var modalOptions = {

@@ -1,7 +1,9 @@
 class ReportsGistContainer <  AllApplets
   include Singleton
+  attr_reader :appletid
   def initialize
     super
+    @appletid = 'reports'
     appletid_css = '[data-appletid=reports]'
     add_verify(CucumberLabel.new("Reports Title"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-appletid=reports] .panel-title"))
     add_action(CucumberLabel.new("Procedure"), ClickAction.new, AccessHtmlElement.new(:xpath, ".//*[@id='center-region']/descendant::*[@data-row-instanceid='urn-va-procedure-9E7A-65-5-MCAR(699,']/td[1]"))
@@ -161,9 +163,10 @@ When(/^the user views the details for the first "([^"]*)" Report$/) do |arg1|
 end
 
 Then(/^the Report Detail modal displays$/) do |table|
-  report_modal = ReportModal.instance
-  table.rows.each do | row |
-    expect(report_modal.perform_verification(row[0], '')).to eq(true), "#{row[0]} is not visible on the modal"
+  @ehmp = PobReportsApplet.new
+  @ehmp.wait_for_fld_reports_row_details_header
+  table.rows.each do |headers|
+    expect(object_exists_in_list(@ehmp.fld_reports_row_details_header, "#{headers[0]}")).to eq(true), "Field '#{headers[0]}' was not found"
   end
 end
 

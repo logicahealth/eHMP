@@ -9,10 +9,10 @@ var logger = sinon.stub(require('bunyan').createLogger({
 describe('Verify RPC Client Factory', function() {
     it('returns the same created client', function() {
         var config = {
-            host: 'IP_ADDRESS',
+            host: 'IP        ',
             port: 9210,
-            accessCode: 'PW',
-            verifyCode: 'PW',
+            accessCode: 'PW    ',
+            verifyCode: 'PW    !!',
             context: 'VPR UI CONTEXT',
             localIP: '127.0.0.1',
             localAddress: 'localhost',
@@ -28,10 +28,10 @@ describe('Verify RPC Client Factory', function() {
 
     it('returns different clients for different configurations', function() {
         var configA = {
-            host: 'IP_ADDRESS',
+            host: 'IP        ',
             port: 9210,
-            accessCode: 'PW',
-            verifyCode: 'PW',
+            accessCode: 'PW    ',
+            verifyCode: 'PW    !!',
             context: 'HMP UI CONTEXT',
             localIP: '127.0.0.1',
             localAddress: 'localhost',
@@ -40,10 +40,10 @@ describe('Verify RPC Client Factory', function() {
         };
 
         var configB = {
-            host: 'IP_ADDRESS',
+            host: 'IP        ',
             port: 9210,
-            accessCode: 'PW',
-            verifyCode: 'PW',
+            accessCode: 'PW    ',
+            verifyCode: 'PW    !!',
             context: 'OR CPRS GUI CHART',
             localIP: '127.0.0.1',
             localAddress: 'localhost',

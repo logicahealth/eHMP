@@ -1,6 +1,6 @@
 class PobSummaryScreen < SitePrism::Page
-  set_url '/#overview'
-  set_url_matcher(/\/#overview$/)
+  set_url '/#/patient/summary'
+  set_url_matcher(/\/#\/patient\/summary$/)
   # *****************  All_Form_Elements  ******************* #
   # *****************  All_Logo_Elements  ******************* #
   # *****************  All_Field_Elements  ******************* #

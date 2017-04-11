@@ -5,35 +5,35 @@ module.exports.getResourceConfig = function() {
         name: 'quickorder-create',
         path: '',
         post: create,
-        requiredPermissions: [],
+        requiredPermissions: ['add-quick-order'],
         isPatientCentric: false,
         subsystems: ['pjds', 'quickorder']
     }, {
         name: 'quickorder-get',
         path: '/:uid',
         get: get,
-        requiredPermissions: [],
+        requiredPermissions: ['read-quick-order'],
         isPatientCentric: false,
         subsystems: ['pjds', 'quickorder']
     }, {
         name: 'quickorder-search',
         path: '',
         get: search,
-        requiredPermissions: [],
+        requiredPermissions: ['read-quick-order'],
         isPatientCentric: false,
         subsystems: ['pjds', 'quickorder']
     }, {
         name: 'quickorder-delete',
         path: '/:uid',
         delete: callDelete,
-        requiredPermissions: [],
+        requiredPermissions: ['delete-quick-order'],
         isPatientCentric: false,
         subsystems: ['pjds', 'quickorder']
     }, {
         name: 'quickorder-update',
         path: '/:uid',
         put: update,
-        requiredPermissions: [],
+        requiredPermissions: ['edit-quick-order'],
         isPatientCentric: false,
         subsystems: ['pjds', 'quickorder']
     }];

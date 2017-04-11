@@ -18,6 +18,34 @@ form {
             }
             div.selectList-value {
                 float: right;
+                .form-group {
+                    position: relative;
+                    .select-list-caret {
+                        border-left: 4px solid transparent;
+                        border-right: 4px solid transparent;
+                        border-top: 5px solid $primary;
+                        height: 0;
+                        position: absolute;
+                        right: 5px;
+                        top: 5px;
+                        width: 0;
+                    }
+                    select {
+                        -webkit-appearance: none;
+                        -moz-appearance: none;
+                        -ms-appearance: none;
+                        -o-appearance: none;
+                        appearance: none;
+                        background-color: $pure-white;
+                        border: 1px solid $grey;
+                        height: 20px;
+                        padding-left: 5px;
+                        padding-right: 15px;
+                    }
+                    select::-ms-expand {
+                        display: none;
+                    }
+                }
             }
         }
     }

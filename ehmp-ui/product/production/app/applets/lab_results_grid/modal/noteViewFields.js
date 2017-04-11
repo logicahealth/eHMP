@@ -22,7 +22,7 @@ define([
                 }]
             }, {
                 control: 'container',
-                template: Handlebars.compile('<div class="col-xs-12"><h5 class="top-padding-no">Lab Test</h5><p class="bottom-margin-no">{{displayName}}</p></div>'),
+                template: Handlebars.compile('<div class="col-xs-12"><h5 class="top-padding-no">Lab Test</h5><p class="bottom-margin-no">{{typeName}}</p></div>'),
                 extraClasses: ['row', 'bottom-padding-sm']
             }, {
                 control: 'container',

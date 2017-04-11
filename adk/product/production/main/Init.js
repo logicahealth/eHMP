@@ -47,14 +47,6 @@ define([
     // limit browser to supported browsers
     BrowserDetector.enforceBrowserType();
 
-    /*
-     TODO: This should be a temporary fix and removed at some point!
-     The newer versions of moment are AMD compatible, and because we are using require.js moment is no longer
-     placed into the window. However there are several applets that expect it to be there.  These applets should
-     switch to using require to access moment.
-     */
-    window.moment = moment;
-
     // This is not necessary but it helps stop moment form spamming the console
     moment.suppressDeprecationWarnings = true;
 

@@ -1,6 +1,5 @@
 'use strict';
 
-var dd = require('drilldown');
 var rdk = require('../../core/rdk');
 var moment = require('moment');
 var pjds = rdk.utils.pjdsStore;
@@ -52,7 +51,7 @@ function getLastWorkspace(req, res, otherPid, callback) {
     };
     pjds.get(req, res, pjdsOptions, function(error, response) {
         var resultObj = {};
-        resultObj.status = dd(response)('statusCode').val;
+        resultObj.status = _.get(response, 'statusCode');
         resultObj.data = [];
         if (error) {
             resultObj.status = 202;

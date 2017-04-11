@@ -7,8 +7,8 @@ define([
     'use strict';
     
     var ENCOUNTER_FORM_ERROR_MSG = '<h3>There was an error submitting the form.  Your changes cannot be saved at this time.</h3>';
-    var ENCOUNTER_FORM_ERROR_TITLE = 'Encounter Form Error';
-    var ENCOUNTER_FORM_ERROR_ICON = 'icon-error';
+    var ENCOUNTER_FORM_ERROR_TITLE = 'Error';
+    var ENCOUNTER_FORM_ERROR_ICON = 'icon-circle-exclamation';
     var ENCOUNTER_FORM_ERROR_NO_WRITEBACK_RESPONSE = 'No response was received from the writeback server. Contact your System Administrator for assistance.';
     var callbacks = {
         error: function(model, resp) {
@@ -119,7 +119,7 @@ define([
                     ].join('\n'))
                 });
                 var SimpleAlertFooterItemView = Backbone.Marionette.ItemView.extend({
-                    template: Handlebars.compile(['{{ui-button "OK" classes="btn-primary alert-continue" title="Press enter to continue."}}'].join('\n')),
+                    template: Handlebars.compile(['{{ui-button "OK" classes="btn-primary alert-continue btn-sm" title="Press enter to close."}}'].join('\n')),
                     events: {
                         'click button': function() {
                             ADK.UI.Alert.hide();

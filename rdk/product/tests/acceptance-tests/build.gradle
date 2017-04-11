@@ -58,3 +58,13 @@ task acceptanceTestCDS(dependsOn: bundleInstall){
     }
   }
 }
+
+task jbpmTests(dependsOn: bundleInstall){
+  description "Runs the JBPM acceptance tests for RDK"
+  doLast{
+    exec {
+      executable = "bundle"
+      args = ['exec', 'rake', 'jbpmTests']
+    }
+  }
+}

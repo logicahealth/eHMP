@@ -5,7 +5,6 @@ if( !System.getenv().keySet().contains('WORKSPACE') ){
 }
 
 def artifactsToUpload = [
-  vistaTasks: [name: 'VistaTasks', proj: ':production:jbpm:VistaTasks', env_var: 'JBPM_VISTATASKS_VERSION'],
   fitlabProject: [name: 'FITLabProject', proj: ':production:jbpm:FITLabProject', env_var: 'JBPM_FITLABPROJECT_VERSION'],
   general_medicine: [name: 'General_Medicine', proj: ':production:jbpm:General_Medicine', env_var: 'JBPM_GENERAL_MEDICINE_VERSION'],
   order: [name: 'Order', proj: ':production:jbpm:Order', env_var: 'JBPM_ORDER_VERSION'],

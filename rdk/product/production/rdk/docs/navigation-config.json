@@ -9,8 +9,17 @@
         "name": "Resources",
         "url": "./#/rdk/resources"
     }, {
-        "name": "Subsystems",
-        "url": "./#/rdk/subsystems"
+        "name": "Utilities",
+        "url": "./#/rdk/utils"
+    }, {
+        "name": "Logging",
+        "url": "./#/rdk/logging"
+    }, {
+        "name": "Documenting Resources",
+        "url": "./#/rdk/documenting"
+    }, {
+        "name": "Testing",
+        "url": "./#/rdk/testing"
     }],
     "right_nav_items": [],
     "footer_nav_items": []

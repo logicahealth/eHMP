@@ -32,7 +32,7 @@ define([
         tagName: 'div',
         templateHelpers: function(value) {
             return {
-                insurance: function() {
+                getInsurance: function() {
                     var ins = this.insurance;
                     if (ins && ins.length) {
                         ins.sort(function(a, b) {

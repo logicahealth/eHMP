@@ -32,13 +32,15 @@ body {
     -moz-border-radius: 5px;
     font-size: 11px;
     font-weight: 600;
+    white-space: normal;
+    display: inline-flex;
 }
 
 .label-default {
     background-color: $grey-darker;
 }
 .label-danger {
-    background-color: $red;
+    background-color: $red-dark;
     color: $pure-white;
 }
 .label-success {

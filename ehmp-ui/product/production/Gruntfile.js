@@ -117,7 +117,8 @@ module.exports = function (grunt) {
                         'grouped_categories': 'empty:',
                         'backgrid': 'empty:',
                         'pdf': 'empty:',
-                        'typeahead': 'empty:'
+                        'typeahead': 'empty:',
+                        'jquery.scrollTo': 'empty:'
                     },
                     modules: [
                         { name: 'min/applets/activeMeds/applet' },
@@ -138,7 +139,6 @@ module.exports = function (grunt) {
                         { name: 'min/applets/orders/applet' },
                         { name: 'min/applets/patient_search/applet' },
                         { name: 'min/applets/problems/applet' },
-                        { name: 'min/applets/problems_add_edit/applet' },
                         { name: 'min/applets/reports/applet' },
                         { name: 'min/applets/ssoLogon/applet' },
                         { name: 'min/applets/stackedGraph/applet' },
@@ -163,7 +163,8 @@ module.exports = function (grunt) {
                         { name: 'min/applets/todo_list/applet' },
                         { name: 'min/applets/user_management/applet' },
                         { name: 'min/applets/workspace_context_navigation/applet' },
-                        { name: 'min/applets/short_cuts/applet' }
+                        { name: 'min/applets/short_cuts/applet' },
+                        { name: 'min/applets/tab_manager/applet' }
                     ],
                     onModuleBundleComplete: function(data) {
                         console.log('Module ' + data.name + ' created successfully!');

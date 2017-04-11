@@ -2,37 +2,12 @@
 
 var _ = require('lodash');
 var solrSimpleClient = require('./solr-simple-client');
-var generateFacetMap = solrSimpleClient.generateFacetMap;
 var compileQueryParameters = solrSimpleClient.compileQueryParameters;
 var emulatedHmpGetRelativeDate = solrSimpleClient.emulatedHmpGetRelativeDate;
 var escapeQueryChars = solrSimpleClient.escapeQueryChars;
 
 
-// TODO: test executeSolrQuery with http interception+mock
-
-describe('generate facet map', function () {
-    it('should generate an object with "T-" values', function () {
-        var facetMap = generateFacetMap();
-        var nonTeeMinusValues = [];
-        _.toArray(facetMap).forEach(function (teeMinus) {
-            if (!teeMinus.toLowerCase().match(/^(t-\d+(m|d|h|y)$|^all$)/)) {
-                nonTeeMinusValues = nonTeeMinusValues.concat(teeMinus);
-            }
-        });
-        expect(nonTeeMinusValues.length).to.equal(0);
-    });
-
-    it('should generate an object with solr datetime facet keys', function () {
-        var facetMap = generateFacetMap();
-        var nonSolrDatetimeKeys = [];
-        Object.keys(facetMap).forEach(function (solrFacet) {
-            if (!solrFacet.match(/\{!ex=dt\}datetime:\[(\*|\d{8})\ TO \*]$/)) {
-                nonSolrDatetimeKeys = nonSolrDatetimeKeys.concat(solrFacet);
-            }
-        });
-        expect(nonSolrDatetimeKeys.length).to.equal(0);
-    });
-});
+// FUTURE-TODO: test executeSolrQuery with http interception+mock
 
 describe('get emulated HMP relative date with T- values', function () {
     it('should return a YYYYMMDD date for years', function () {

@@ -41,7 +41,8 @@ class TextSearchContainer < AccessBrowserV2
     add_verify(CucumberLabel.new("Headache"), VerifyText.new, AccessHtmlElement.new(:id, "mainModalLabel"))
     add_verify(CucumberLabel.new("Snippest"), VerifyContainsText.new, AccessHtmlElement.new(:id, "ResultHighlightssubgroupItem0"))
     add_verify(CucumberLabel.new("Rad Order Status"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-detail='status']"))
-    add_verify(CucumberLabel.new("Lab Order Status"), VerifyText.new, AccessHtmlElement.new(:xpath, "//*[@id='modal-body']/descendant::div/div[9]/div[2]"))
+    status_format = Regexp.new(".*Current Status:\s*ACTIVE.*")
+    add_verify(CucumberLabel.new("Lab Order Status"), VerifyTextFormat.new(status_format), AccessHtmlElement.new(:css, ".detail-modal-content"))
       
     add_verify(CucumberLabel.new("Modal Detail Content"), VerifyContainsText.new, AccessHtmlElement.new(:css, ".detail-modal-content"))         
   end
@@ -83,7 +84,7 @@ class TextSearchContainerDrillDown < AccessBrowserV2
     add_action(CucumberLabel.new("ANKLE 2 VIEWS"), ClickAction.new, AccessHtmlElement.new(:id, "result-subGroup-title-ANKLE2VIEWS-1"))
     add_action(CucumberLabel.new("ANESTHESIA REPORT"), ClickAction.new, AccessHtmlElement.new(:id, "result-subGroup-title-ANESTHESIAREPORT-1"))
     add_action(CucumberLabel.new("Sub Group List"), ClickAction.new, AccessHtmlElement.new(:css, ".search-results .subgroupItem .row .col-xs-4")) 
-    add_action(CucumberLabel.new("Penicillin"), ClickAction.new, AccessHtmlElement.new(:css, "#result-group-AllergyAdverseReaction .topLevelItem:nth-child(4) .row .col-xs-4:nth-child(1)"))
+    add_action(CucumberLabel.new("Penicillin"), ClickAction.new, AccessHtmlElement.new(:css, "#result-group-AllergyAdverseReaction .topLevelItem:nth-child(4) .row .col-xs-12"))
     add_action(CucumberLabel.new("Headache"), ClickAction.new, AccessHtmlElement.new(:xpath, "//div[contains(@class,'searchResultItem')]/descendant::div[contains(string(),'Headache')]"))
     add_action(CucumberLabel.new("Cholera"), ClickAction.new, AccessHtmlElement.new(:xpath, "//strong[contains(text(),'CHOLERA')]"))
     #add_action(CucumberLabel.new("Urinalysis"), ClickAction.new, AccessHtmlElement.new(:xpath, "//div[contains(@class,'searchResultItem')]/descendant::div[contains(string(),'URINALYSIS')]"))
@@ -98,6 +99,7 @@ class TextSearchContainerDrillDown < AccessBrowserV2
     add_action(CucumberLabel.new("HIP 2 OR MORE VIEWS"), ClickAction.new, AccessHtmlElement.new(:css, "[data-uid='urn:va:document:9E7A:229:7059168.8441-1']"))
     add_action(CucumberLabel.new("Imaging"), ClickAction.new, AccessHtmlElement.new(:id, 'result-group-title-Imaging'))
     add_action(CucumberLabel.new("RADIOLOGIC EXAMINATION, KNEE; 1 OR 2 VIEWS"), ClickAction.new, AccessHtmlElement.new(:css, "[data-uid='urn:va:image:9E7A:229:7059382.8389-1']"))
+    add_action(CucumberLabel.new("Anne Lab"), ClickAction.new, AccessHtmlElement.new(:id, 'result-subGroup-title-ANNELAB-1'))
   end
 end
 
@@ -410,6 +412,15 @@ Then(/^the user sees the search text "(.*?)" in yellow$/) do |_search_text|
   expect(matched).to be_true, "color in browser: #{text_color} found in feature file yellow" 
 end
 
+Then(/^Current Status for Lab is ACTIVE$/) do
+  aa = TextSearchContainer.instance
+  order_status = "Lab"
+  order_type_status = order_status + " " + "Order Status"
+  aa.wait_until_element_present(order_type_status, 60)
+  expect(aa.static_dom_element_exists?(order_type_status)).to be_true, "element did not exists"
+  expect(aa.perform_verification(order_type_status, order_status)).to be_true, "Order status is #{order_type_status}"
+end
+
 Then(/^Current Status for "(.*?)" is "(.*?)"$/) do |order_type, order_status|
   aa = TextSearchContainer.instance
   
@@ -434,7 +445,7 @@ Then(/^user searches for "(.*?)" with no suggestion$/) do |text|
   aa = TextSearchContainer.instance
   search_text(text)
   aa.add_verify(CucumberLabel.new("Text Search Suggestion No Results"), VerifyText.new, AccessHtmlElement.new(:css, '#suggestListDiv #noResults'))
-  expect(aa.perform_verification('Text Search Suggestion No Results', 'No results')).to eq(true), "There should be no text search suggestions"
+  expect(aa.perform_verification('Text Search Suggestion No Results', 'No results', 30)).to eq(true), "There should be no text search suggestions"
 end
 
 Then(/^user searches for "(.*?)" with no duplicates in the results dropdown$/) do |text|
@@ -465,7 +476,7 @@ Then(/^user searches for "([^"]*)" and verifies spelling suggestions are display
   search_text(text)
 
   @ehmp = PobRecordSearch.new
-  @ehmp.wait_until_fld_suggestion_list_visible
+  @ehmp.wait_until_fld_suggestion_list_visible(DefaultTiming.default_table_row_load_time)
   expect(@ehmp.fld_spelling_suggestions.length).to be > 0
 end
 
@@ -736,4 +747,30 @@ Then(/^a the Radiology Report modal displays$/) do
   expect(@ehmp.fld_results_links.length).to be > 0
   @ehmp.wait_for_fld_result_doc
   expect(@ehmp).to have_fld_result_doc
+end
+
+Then(/^no subgroup data rows are loaded$/) do
+  ehmp = PobRecordSearch.new
+  ehmp.wait_for_btn_expand_sub_group
+  expect(ehmp.btn_expand_sub_group.length).to be > 0
+  expect(ehmp.fld_search_results_data_rows.length).to eq(0)
+  @subgroup_data_row_count = 0
+end
+
+Then(/^subgroup data rows are loaded$/) do
+  ehmp = PobRecordSearch.new
+  ehmp.wait_for_fld_search_results_data_rows
+  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_wait_time) 
+  wait.until { ehmp.fld_search_results_data_rows.length > 0 }
+  expect(ehmp.fld_search_results_data_rows.length).to be > 0
+  @subgroup_data_row_count = ehmp.fld_search_results_data_rows.length
+end
+
+Then(/^more subgroup data rows are loaded$/) do
+  expect(@subgroup_data_row_count).to_not be_nil
+  ehmp = PobRecordSearch.new
+  ehmp.wait_for_fld_search_results_data_rows
+  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_wait_time) 
+  wait.until { ehmp.fld_search_results_data_rows.length > @subgroup_data_row_count }
+  expect(ehmp.fld_search_results_data_rows.length).to be > @subgroup_data_row_count
 end

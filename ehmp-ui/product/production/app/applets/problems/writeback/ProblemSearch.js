@@ -6,17 +6,17 @@ define([
     'handlebars',
     'app/applets/problems/writeback/parseUtils',
     'app/applets/problems/writeback/writebackUtils'
-], function(Backbone, Marionette, $, Moment, Handlebars, ParseUtil, WritebackUtils) {
+], function(Backbone, Marionette, $, moment, Handlebars, ParseUtil, WritebackUtils) {
     'use strict';
 
     var selectProblemContainer = {
         control: 'container',
-        extraClasses: ['row', 'all-padding-sm'],
+        extraClasses: ['row', 'all-padding-sm', 'bottom-padding-no'],
         items: [{
             control: 'container',
-            modelListeners: ['showKeepProblem', 'problemText', 'row'],
-            template: '{{#if showKeepProblem}}<p><strong>Currently Selected Problem</strong></p><p>{{problemText}}</p><div class="pull-right"><button type="button" id="keepProblemBtn" class="btn btn-sm btn-primary keep-problem-btn" title="Press enter to keep previous problem name.">Keep Previous Problem Name</button></div>{{/if}}',
-            extraClasses: ['all-padding-md', 'keep-problem-container', 'form-group', 'background-color-primary-lightest'],
+            modelListeners: ['row', 'showKeepProblem', 'problemText'],
+            extraClasses: ['row', 'all-padding-md', 'top-padding-lg', 'keep-problem-container', 'background-color-pure-white'],
+            template: '{{#if showKeepProblem}}<div class="col-xs-6 left-padding-no"><p class="bottom-margin-xs"><strong>Currently Selected Problem</strong></p><p>{{problemText}}</p></div><div class="col-xs-6 all-padding-no"><button type="button" id="keepProblemBtn" class="btn btn-sm btn-primary" title="Press enter to keep previous problem name.">Keep Previous Problem Name</button></div>{{/if}}',
             hidden: true
         }, {
             control: 'container',
@@ -25,18 +25,19 @@ define([
                 control: 'searchbar',
                 id: 'problemTerm',
                 name: 'problemTerm',
-                label: 'Problem Name',
+                label: 'Problem name',
                 placeholder: 'Search for problem',
                 required: true,
                 extraClasses: ['col-xs-12', 'top-margin-sm'],
-                title: 'Enter in text to search for a problem.'
+                title: 'Enter in text to search for a problem',
+                minimumInputLength: 3
             }]
         }]
     };
 
     var problemResultsContainer = {
         control: 'container',
-        extraClasses: ['problem-results-container', 'row', 'all-padding-sm'],
+        extraClasses: ['problem-results-container', 'row', 'all-padding-sm', 'top-padding-no'],
         items: [{
             control: 'container',
             extraClasses: ['text-center', 'col-xs-12', 'problem-results-header', 'color-primary-dark', 'all-margin-no', 'bottom-border-grey-light', 'all-padding-xs'],
@@ -72,7 +73,7 @@ define([
                 label: 'Enter Free Text',
                 hidden: true,
                 extraClasses: ['btn-default', 'btn-xs'],
-                title: 'Press enter to enter search as free Text'
+                title: 'Press enter search as free text'
             }]
         }]
     };
@@ -80,7 +81,7 @@ define([
     var problemResultsMessageContainer = {
         control: 'container',
         extraClasses: ['problem-results-message-container', 'left-margin-xs', 'row'],
-        template: '{{#each resultsMessage}}{{this}}<br>{{/each}}',
+        template: '<span aria-live="assertive">{{#each resultsMessage}}{{this}}<br />{{/each}}</span>',
         modelListeners: ['resultsMessage']
     };
 
@@ -100,15 +101,21 @@ define([
             extraClasses: ['row'],
             items: [{
                 control: 'container',
-                extraClasses: ['col-xs-12'],
-                items: [{
-                    control: 'button',
-                    id: 'cancelButtonFormSearchProblem',
-                    extraClasses: ['btn-default', 'btn-sm'],
+                extraClasses: ['col-xs-12','display-flex','valign-bottom'],
+                items: [
+                {
+                    control: 'popover',
+                    behaviors: {
+                        Confirmation: {
+                            title: 'Warning',
+                            eventToTrigger: 'problem-search-confirm-cancel'
+                        }
+                    },
                     label: 'Cancel',
-                    type: 'button',
-                    name: 'cancel-form-search-problem'
-                }, {
+                    name: 'problemSearchConfirmCancel',
+                    extraClasses: ['btn-default', 'btn-sm','right-margin-xs']
+                },
+                {
                     control: "dropdown",
                     split: true,
                     label: "Accept",
@@ -124,26 +131,6 @@ define([
             }]
         }]
     }];
-
-    var CancelMessageView = Backbone.Marionette.ItemView.extend({
-        template: Handlebars.compile('All unsaved changes will be lost. Are you sure you want to cancel?'),
-        tagName: 'p'
-    });
-    var CancelFooterView = Backbone.Marionette.ItemView.extend({
-        template: Handlebars.compile('{{ui-button "No" classes="btn-default" title="Press enter to go back."}}{{ui-button "Yes" classes="btn-primary" title="Press enter to cancel."}}'),
-        events: {
-            'click .btn-primary': function() {
-                ADK.UI.Alert.hide();
-                ADK.UI.Workflow.hide();
-                WritebackUtils.unregisterChecks();
-                this.options.workflow.close();
-            },
-            'click .btn-default': function() {
-                ADK.UI.Alert.hide();
-            }
-        },
-        tagName: 'span'
-    });
 
     var problemSearchView = ADK.UI.Form.extend({
         ui: {
@@ -161,7 +148,8 @@ define([
             'freeTxtBtn': '#freeTxtBtn',
             'extendSearchBtn': '#extendedSearchBtn',
             'searchAddContainer': '.searchAddContainer',
-            'keepProblemContainer': '.keep-problem-container'
+            'keepProblemContainer': '.keep-problem-container',
+            'clearInputBtn': '.clear-input-btn'
 
         },
         fields: ProblemSearchFields,
@@ -191,16 +179,9 @@ define([
                 e.preventDefault();
                 this.performSearch(true);
             },
-            'click #cancelButtonFormSearchProblem': function(e) {
-                e.preventDefault();
-                var cancelAlertView = new ADK.UI.Alert({
-                    title: 'Cancel',
-                    icon: 'icon-cancel',
-                    messageView: CancelMessageView,
-                    footerView: CancelFooterView,
-                    workflow: this.workflow
-                });
-                cancelAlertView.show();
+            'problem-search-confirm-cancel': function(e) {
+                WritebackUtils.unregisterChecks();
+                this.workflow.close();
             },
             'keypress @ui.cancelSearch': function(e) {
                 e.preventDefault();
@@ -232,6 +213,10 @@ define([
             'click @ui.cancelSearch': function(e) {
                 e.preventDefault();
                 this.handleCancelButton();
+            },
+            'click @ui.clearInputBtn': function(e) {
+                e.preventDefault();
+                this.removeProblemResultTable();
             }
         },
         modelEvents: {
@@ -286,7 +271,6 @@ define([
         performSearch: function(extended) {
             var form = this;
             this.removeProblemResultTable();
-            this.ui.problemTermBtnComp.trigger('control:disabled', true);
             this.ui.problemResults.trigger('control:hidden', false);
             this.ui.problemResults.trigger('control:loading:show');
             this.ui.problemResultsHeader.trigger('control:hidden', false);
@@ -330,12 +314,9 @@ define([
                         form.performSearch(true);
                     }
                 }
-
-                form.ui.problemTermBtnComp.trigger('control:disabled', false);
             });
 
             termCollection.on('read:error', function(collection, error) {
-                form.ui.problemTermBtnComp.trigger('control:disabled', false);
                 form.ui.problemResults.trigger('control:loading:hide');
                 form.ui.problemResults.trigger('control:hidden', true);
                 form.model.set('resultsMessage', ParseUtil.formatSearchErrorMessage(error));

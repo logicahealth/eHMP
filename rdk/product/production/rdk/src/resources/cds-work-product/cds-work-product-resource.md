@@ -25,8 +25,9 @@ Get work product
 
 + Parameters
 
-    + id (string, required) - work product id
+    + id (string, optional) - work product id; `*` means it returns the first 500 work products
 
+        + Default: `*`
 
 + Response 200 (application/json)
 

@@ -50,7 +50,7 @@ define([], function() {
     });
 
     var allergies = ADK.Resources.Picklist.Collection.extend({
-        type: 'allergies-match',
+        resource: 'write-pick-list-allergies-match',
         model: AllergenGroup,
         params: function(method, options) {
             return {

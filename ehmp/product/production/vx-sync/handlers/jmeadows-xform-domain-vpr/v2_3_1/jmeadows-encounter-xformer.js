@@ -11,7 +11,7 @@ function dodEncounterToVPR(dodEncounter, edipi){
         locationName: dodEncounter.clinic,
         facilityName: 'DOD',
         facilityCode: 'DOD',
-        appoinmentStatus: dodEncounter.status,
+        appointmentStatus: dodEncounter.status,
         typeName: dodEncounter.apptType,
         typeDisplayName: dodEncounter.apptType,
         dispositionName: dodEncounter.dischargeDisposition,

@@ -6,7 +6,7 @@
     	<div class="control inline-block-display dropdown-control dropup right-margin-sm">
 	        <div class="btn-group">
 	            <button type="button" class="btn dropdown-toggle dropup btn-sm btn-default btn-caret" title="Press enter for available actions" data-toggle="dropdown" {{#if actionButtons}}{{else}}disabled="true" {{/if}}>Actions <i class="fa fa-caret-up"></i></button>
-	            <ul id="consultAction" class="dropdown-menu ">
+	            <ul id="consultAction" class="dropdown-menu dropdown-menu-right">
 	                {{#each actionButtons}}
 	                <li title="Press enter to select {{label}}" data-signal="{{signal}}">
 	                    <a href="#">{{label}}</a>

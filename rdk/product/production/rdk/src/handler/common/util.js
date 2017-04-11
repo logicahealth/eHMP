@@ -1,6 +1,6 @@
 'use strict';
 
-var _ = require('underscore');
+var _ = require('lodash');
 var clincialObjectsSubsystem = require('../../subsystems/clinical-objects/clinical-objects-subsystem');
 var rdk = require('../../core/rdk');
 var pidValidator = rdk.utils.pidValidator;
@@ -92,7 +92,7 @@ function findClinicalObject(referenceId, patientUid, config, type, log, loadRefe
                 return callback(null, {});
             }
 
-            log.warn('clincialObjectsSubsystem error: Failed to read the notes from pJDS. ', err);
+            log.warn('clincialObjectsSubsystem error: ', err);
             return callback(err, null);
         }
 
@@ -115,9 +115,9 @@ function buildClinicalObject(job, log) {
 
     clinicalObject.authorUid = job.record.authorUid ? job.record.authorUid : job.record.providerUid;
     if ('order' === job.dataDomain) {
-        clinicalObject.subDomain = job.record.kind;
+        clinicalObject.subDomain = job.record.kind.toLowerCase();
     } else {
-        clinicalObject.subDomain = job.dataDomain;
+        clinicalObject.subDomain = job.dataDomain.toLowerCase();
     }
     clinicalObject.domain = 'ehmp-activity';
     clinicalObject.referenceId = job.record.uid;

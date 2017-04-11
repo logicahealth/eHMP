@@ -281,8 +281,6 @@ def get_container_key(control_name, parent_name)
   return container_key
 end
 
-# ######################## When ########################
-
 When(/^the user clicks the control "(.*?)" (?:on|in) the "(.*?)"$/) do |control_name, parent_name|
   container_key = get_container_key(control_name, parent_name)
   wait_and_perform(container_key.container, container_key.map_key)
@@ -295,10 +293,6 @@ end
 
 When(/^the user closes modal by clicking the "(.*?)" control$/) do |close_control|
   wait_and_perform(@uc, "Control - modal - #{close_control}")
-end
-
-When(/^the user clicks the refresh button in the "(.*?)" applet$/) do |applet_name|
-  refresh_applet(applet_name)
 end
 
 def expand_applet(applet_key)
@@ -325,25 +319,6 @@ Then(/^the "(.*?)" should be "(.*?)" (?:on|in) the "(.*?)"$/) do |html_element, 
   container_key = get_container_key(nil, parent_name)
 
   verify_element_displayed(container_key.container, "#{container_key.modal_or_applet} - #{html_element}", display_state)
-end
-
-Then(/^"(.*?)" pages of results should be displayed (?:on|in) the "(.*?)"$/) do |expected_pages, parent_name|
-  driver = TestSupport.driver
-
-  applet_name = parent_name.sub(/ applet/, "")
-  applet_id = get_applet_id(applet_name)
-
-  wait = Selenium::WebDriver::Wait.new(:timeout => 15)
-
-  paginator_key = "[data-appletid=#{applet_id}] .backgrid-paginator ul li"
-
-  begin
-    # constant 2 is the number of arrows (next,prev)
-    wait.until { (driver.find_elements(:css, paginator_key).size - 2) == expected_pages.to_i }
-  rescue
-    p "Number of actual pages found: #{(driver.find_elements(:css, paginator_key).size - 2)}"
-    raise
-  end
 end
 
 Then(/no results should be found (?:on|in) the "(.*?)"/) do |parent_name|
@@ -399,13 +374,6 @@ And(/^the modal's title is displayed$/) do
   @ehmp = PobCommonElements.new
   @ehmp.wait_for_fld_modal_header
   expect(@ehmp).to have_fld_modal_header
-end
-
-Then(/^the "(.*?)" single page view is displayed$/) do |_expected_single_page|
-  singe_page_key = "Single Page View"
-  @uc.wait_until_element_present(singe_page_key, 15)
-  is_single_page = @uc.static_dom_element_exists?(singe_page_key)
-  expect(is_single_page).to be_true
 end
 
 Then(/^the modal is displayed$/) do

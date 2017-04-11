@@ -495,7 +495,7 @@ VistaClient.prototype.getPatientDataByDomain = function(vistaId, dfn, domain, ca
 
         // Find the actual data and return that...
         //-----------------------------------------------------
-        if ((vistaResponse) && (vistaResponse.data) && (vistaResponse.data.totalItems) && (vistaResponse.data.items)) {
+        if (vistaResponse && vistaResponse.data && !_.isUndefined(vistaResponse.data.items)) {
             self.log.debug('vista-client.getPatientDataByDomain.handleSuccessfulResponse: successfully retrieved domain data for patient %s; vistaResponse: %s', pid, vistaResponse);
             return callback(null, vistaResponse.data.items);
         }

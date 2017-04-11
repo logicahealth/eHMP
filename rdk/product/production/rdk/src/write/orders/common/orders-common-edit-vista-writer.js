@@ -1,6 +1,3 @@
-/*
- TODO: Using ORWDX LOADRSP until RPC wrapper is in place
- */
 'use strict';
 
 var rpcClientFactory = require('./../../core/rpc-client-factory');

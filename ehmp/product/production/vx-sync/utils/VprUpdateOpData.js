@@ -121,7 +121,7 @@ VprUpdateOpData.prototype.retrieveLastUpdateTime = function(callback) {
 		}
 
 		if (response.statusCode !== 200) {
-			errorMessage = 'Failed to retreive last update time from JDS for vistaId: ' + self.vistaId + ' response.statusCode: ' + response.statusCode;
+			errorMessage = 'Failed to retrieve last update time from JDS for vistaId: ' + self.vistaId + ' response.statusCode: ' + response.statusCode;
 //			console.log('Failed to retrieve last update time.  response: %j', response);
 			self.log.error('storeLastUpdateTime: ' + errorMessage + ' response: [%j]', response);
 			return callback(errorMessage, null);

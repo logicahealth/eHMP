@@ -18,9 +18,3 @@
         height: calc(100% - 25px);
     }
 }
-
-#select2-team-results {
-    [x-is-label="My Teams Associated with Patient"], [x-is-label="Patient's Teams"] {
-        background-color: $primary-lighter;
-    }
-}

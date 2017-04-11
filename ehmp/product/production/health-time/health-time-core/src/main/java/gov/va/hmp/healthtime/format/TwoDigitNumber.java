@@ -14,7 +14,8 @@ import java.io.Writer;
 import java.util.Locale;
 
 /**
- * TODO: Complete documentation for TwoDigitNumber
+ * Class for creating Two-digit month, two-digit day, last two digits of year of VA FileMan Dates and Date/Times.
+ * FileMan stores dates and date/times that use a 4 digit year instead of a 3 digit year, formatted like "YYYMMDD.HHMMSS" 
  */
 class TwoDigitNumber implements DateTimePrinter, DateTimeParser {
     protected DateTimeFieldType type;

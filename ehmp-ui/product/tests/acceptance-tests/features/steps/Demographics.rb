@@ -1,5 +1,16 @@
 Then(/^user selects Patient Demographic drop down$/) do
   @ehmp = PobDemographicsElements.new
+  max_attempt = 2
+  begin
+    @ehmp.wait_until_btn_demographic_visible(10)
+  rescue => e
+    p "attempt refresh"
+    TestSupport.driver.navigate.refresh
+    max_attempt -= 1
+    retry if max_attempt > 0
+    raise e if max_attempt <= 0
+  end
+
   @ehmp.wait_until_btn_demographic_visible(30)
   expect(@ehmp).to have_btn_demographic
   @ehmp.btn_demographic.click
@@ -206,7 +217,7 @@ end
 
 And(/^the Patient Information expanded area contains fields/) do |table|
   @ehmp = PobDemographicsElements.new
-  @ehmp.wait_for_fld_demographic_group_fields minimum: 5
+  @ehmp.wait_for_fld_demographic_group_fields
   @ehmp.wait_until_fld_demographic_group_fields_visible
 
   table.rows.each do |headers|

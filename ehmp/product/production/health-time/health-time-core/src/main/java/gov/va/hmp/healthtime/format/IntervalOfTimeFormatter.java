@@ -4,7 +4,7 @@ import gov.va.hmp.healthtime.IntervalOfTime;
 import gov.va.hmp.healthtime.PointInTime;
 
 /**
- * TODOC: Provide summary documentation of class IntervalOfTimeFormatter
+ * Class implementing a time interval from pairs from text.
  */
 public class IntervalOfTimeFormatter {
 

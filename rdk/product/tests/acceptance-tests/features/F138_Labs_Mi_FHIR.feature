@@ -143,53 +143,15 @@
        | resource.specimen.display                       | SERUM                        |
        | resource.result.display                         | HDL                |
        | resource.text.status                            | generated                    |
-
- @F138_5_labs_mi_fhir @fhir @9E7A1
- Scenario: Client can request lab (MI) results in FHIR format
- 	Given a patient with "lab (MI) results" in multiple VistAs
-  #And a patient with pid "9E7A;1" has been synced through the RDK API
- 	When the client requests labs for the patient "9E7A;1" in FHIR format
- 	Then a successful response is returned
-       And the results contain lab "(MI)" results
-       | field                               | values                                    |
-       | resource.identifier.value		  | CONTAINS urn:va:lab:9E7A:1:MI		    |
-       | resource.text.div			  | CONTAINS urn:va:accession:9E7A:1:MI;	    |
-       | resource.subject.reference           | Patient/9E7A;1		                |
-       | resource.contained.identifier.type.text  | facility-code                             |
-       | resource.contained.identifier.value  | 500						    |
-       | resource.performer.display           | CAMP MASTER                               |
-       | resource.contained.type.text 	  | BLOOD                                     |
-       | resource.name.text			  | BLOOD CULTURE SET #1       		    |
-       | resource.contained.valueString	  | CONTAINS NEGATIVE				    |
-       | resource.contained.status		  | final						    |
-
- @F138_6_labs_mi_fhir @fhir @9E7A1
- Scenario: Client can request lab (MI) results in FHIR format
- 	Given a patient with "lab (MI) results" in multiple VistAs
-       #And a patient with pid "9E7A;1" has been synced through the RDK API
- 	When the client requests labs for the patient "9E7A;1" in FHIR format
- 	Then a successful response is returned
-       And the results contain lab "(MI)" results
-       | field                               | values                                    |
-       | resource.identifier.value		  | CONTAINS urn:va:lab:9E7A:1:MI		    |
-       | resource.text.div			  | CONTAINS urn:va:accession:9E7A:1:MI;	    |
-       | resource.subject.reference           | Patient/9E7A;1		                |
-       | resource.contained.identifier.type.text  | facility-code                             |
-       | resource.contained.identifier.value  | 500						    |
-       | resource.performer.display           | CAMP MASTER		                      |
-       | resource.contained.type.text 	  | BLOOD                                     |
-       | resource.name.text	      	  | BLOOD CULTURE SET #1       		    |
-       | resource.contained.valueString	  | CONTAINS NEGATIVE				    |
-       | resource.contained.status		  | final						    |
-
- @F138_7_labs_mi_neg_fhir @fhir @5000000009V082878
+ 
+@F138_5_labs_mi_neg_fhir @fhir @5000000009V082878
  Scenario: Negative scenario.  Client can request lab (MI) results in FHIR format
        Given a patient with "No lab results" in multiple VistAs
        When the client requests labs for the patient "9E7A;100125" in FHIR format
        Then a successful response is returned
        Then corresponding matching FHIR records totaling "1" are displayed
 
- @F138_8_labs_mi_fhir @fhir @11016V630869 @DE974
+ @F138_6_labs_mi_fhir @fhir @11016V630869 @DE974
  Scenario: Client can request lab (MI) results in FHIR format
        Given a patient with "lab (MI) results" in multiple VistAs
       # And a patient with pid "11016V630869" has been synced through the RDK API

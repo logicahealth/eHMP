@@ -148,9 +148,9 @@ define([
                 self.toolbarView.hideSearchView();
                 self.toolbarView.enableSearchForm();
             });
-            this.listenTo(ADK.Messaging, 'userPermissionSetsUpdated', function(model) {
+            this.listenTo(ADK.Messaging, 'userPermissionsUpdated', function(model) {
                 var alertOptions = {
-                    title: 'Modified Permission Sets',
+                    title: 'Modified Permissions',
                     message: model.get('modalAlertMessage'),
                     type: 'success',
                     icon: 'fa-check'
@@ -159,7 +159,7 @@ define([
                 self.refresh();
             });
             this.listenTo(ADK.Messaging, 'users-applet:bulk-edit-successful', function(editedUserNames) {
-                appletUtil.appletAlert.success(self.dataGridOptions.collection, 'Modified Permission Sets', 'Permissions for the following users were successfully updated: ' + editedUserNames);
+                appletUtil.appletAlert.success(self.dataGridOptions.collection, 'Modified Permissions', 'Permissions for the following users were successfully updated: ' + editedUserNames);
                 self.refresh();
             });
             this._super.initialize.apply(this, arguments);

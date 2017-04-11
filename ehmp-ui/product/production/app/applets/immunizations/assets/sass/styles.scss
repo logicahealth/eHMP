@@ -1,13 +1,31 @@
-[data-appletid="immunizations"] {
-
-}
+[data-appletid="immunizations"] {}
 
 .immunization-type-container .loading {
-	position: absolute;
-	top: 28px;
-	left: 17px;
-	z-index: 9;
+    position: absolute;
+    top: 28px;
+    left: 17px;
+    z-index: 9;
 }
-#patientDemographic-newObservation .form-group {
-    min-height: 50px;
+
+.immunization-administration-fields {
+    .form-group {
+        min-height: 50px;
+    }
+}
+
+[data-tray-width-scale="0.33"] {
+    .expirationDateAdministered,
+    .manufacturerAdministered,
+    .administrationDate {
+        .well-collapse {
+            border: 1px solid $grey;
+            min-height: 27px;
+        }
+    }
+    min-height: 20px;
+    .dosage {
+        label {
+            text-transform: capitalize !important;
+        }
+    }
 }

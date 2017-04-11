@@ -12,7 +12,7 @@ define([
                 extraClasses: ["modal-body"],
                 items: [{
                     control: "container",
-                    extraClasses: ["container-fluid"],
+                    extraClasses: ['container-fluid', 'flex-display', 'flex-direction-column', 'percent-height-100'],
                     items: [{
                         control: "container",
                         items: [{
@@ -25,7 +25,6 @@ define([
                             hidden: true
                         }]
                     }, {
-                        //title container
                         control: "container",
                         extraClasses: ["row"],
                         items: [{
@@ -47,7 +46,6 @@ define([
                                     sorter: function(data, params) {
                                         var sortedData;
                                         var filterText = params.term;
-
                                         // This utilizes an undocumented feature of Select2 version 4.0.0. It may fail if the lib's
                                         // future release changes its internal structure of data.
                                         if (!_.isEmpty(data) && !_.isUndefined(_.first(data).children)) {
@@ -105,7 +103,6 @@ define([
                             }]
                         }]
                     }, {
-                        //Date and Time picker
                         control: "container",
                         extraClasses: ["row"],
                         items: [{
@@ -115,10 +112,10 @@ define([
                                 control: "datepicker",
                                 id: "derivReferenceDate",
                                 name: "derivReferenceDate",
-                                title: "Enter in a date in the following format, " + options.referenceDateFormat.toUpperCase(),
                                 label: "Date",
                                 required: true,
                                 flexible: true,
+                                minPrecision: 'day',
                                 options: {
                                     endDate: '0d'
                                 }
@@ -137,52 +134,64 @@ define([
                             }]
                         }]
                     }, {
-                        //notes body container
                         control: "container",
-                        extraClasses: ["row"],
+                        extraClasses: ['row', 'notes-textarea-wrapper'],
                         items: [{
                             control: "container",
-                            extraClasses: ["col-xs-12"],
+                            extraClasses: ["col-xs-12", "percent-height-100", 'position-absolute'],
                             items: [{
                                 control: "textarea",
+                                extraClasses:['percent-height-100', 'flex-display', 'flex-direction-column'],
                                 id: "derivBody",
                                 name: "noteBody",
                                 title: "Enter in note details",
                                 label: "Note",
                                 placeholder: "",
-                                rows: 27,
                                 required: true,
                                 disabled: true,
                                 maxlength: 1000000, // 1 Megabyte is the maximum for the RDK
                                 charCount: false
                             }]
                         }]
+                    },{
+                        control: "container",
+                        extraClasses: ["row"],
+                        template: Handlebars.compile('{{#if lastSavedDisplayTime}}<div class="bottom-margin-no top-margin-xs col-xs-12 font-size-11"><span id="notes-saved-at-view2">Saved {{lastSavedDisplayTime}}</span></div>{{/if}}'),
+                        modelListeners: ["lastSavedDisplayTime"]
                     }]
                 }]
             }, {
                 //buttons container
                 control: "container",
-                extraClasses: ["modal-footer footer-extended"],
+                extraClasses: ["modal-footer"],
                 items: [{
                     control: "container",
                     extraClasses: ["row"],
                     items: [{
                         control: "container",
-                        extraClasses: ["col-xs-12"],
-                        template: Handlebars.compile('{{#if lastSavedDisplayTime}}<p><span id="notes-saved-at-view2">Saved {{lastSavedDisplayTime}}</span></p>{{/if}}'),
-                        modelListeners: ["lastSavedDisplayTime"]
-                    }, {
-                        control: "container",
-                        extraClasses: ["col-xs-12"],
+                        extraClasses: ['col-xs-12','display-flex','valign-bottom'],
                         items: [{
-                            label: "Delete",
-                            type: "button",
-                            control: "button",
-                            name: "note-delete",
-                            id: "delete-form-btn",
-                            title: "Press enter to delete and close note",
-                            extraClasses: ["btn-danger", "btn-sm", "pull-left"]
-                        }, {
+                            control:'container',
+                            extraClasses:['flex-grow-loose','text-left'],
+                            items:[
+                                {
+                                    control: 'popover',
+                                    behaviors: {
+                                        Confirmation: {
+                                            title: 'Delete',
+                                            eventToTrigger: 'note-confirm-delete',
+                                            message:'Are you sure you want to delete?',
+                                            confirmButtonTitle: 'Press enter to delete'
+                                        }
+                                    },
+                                    label: 'Delete',
+                                    name: 'noteConfirmDelete',
+                                    id:'noteConfirmDelete',
+                                    extraClasses: ['btn-default', 'btn-sm']
+                                }
+                            ]
+                        },
+                        {
                             label: "Preview",
                             type: "button",
                             control: "button",

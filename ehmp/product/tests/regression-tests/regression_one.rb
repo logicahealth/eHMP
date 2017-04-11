@@ -15,7 +15,7 @@ driver = ARGV[0] || "virtualbox"
 options = {
   server: knife_search_for_ip("vista-panorama"),
   user: driver == "aws" ? "ec2-user" : "vagrant",
-  password:      PW",
+  password: "vagrant",
   patient: "regression,female",
   sudo: true,
   ssh_key: true,

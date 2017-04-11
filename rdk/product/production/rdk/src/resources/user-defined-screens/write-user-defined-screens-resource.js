@@ -7,7 +7,6 @@ var async = require('async');
 var filter = require('./user-defined-filter-resource');
 var graph = require('./user-defined-stack-resource');
 var uds = require('./user-defined-screens-resource');
-var dd = require('drilldown');
 var nullchecker = rdk.utils.nullchecker;
 
 var USER_SCREENS_CONFIG = 'UserScreensConfig';
@@ -16,7 +15,6 @@ var interceptors = {
     operationalDataCheck: false,
     synchronize: false
 };
-var permissions = [];
 
 function getResourceConfig() {
     return [{
@@ -24,14 +22,14 @@ function getResourceConfig() {
         path: '',
         post: saveUserDefinedScreens,
         interceptors: interceptors,
-        requiredPermissions: permissions,
+        requiredPermissions: ['access-general-ehmp'],
         isPatientCentric: false
     }, {
         name: 'write-user-defined-screens-copy',
         path: '/copy',
         post: copyUserDefinedWorkspace,
         interceptors: interceptors,
-        requiredPermissions: permissions,
+        requiredPermissions: ['access-general-ehmp'],
         isPatientCentric: false
     }, {
         name: 'write-user-defined-screens',
@@ -39,7 +37,7 @@ function getResourceConfig() {
         put: updateWorkspaceId,
         interceptors: interceptors,
         subsystems: ['jdsSync'],
-        requiredPermissions: permissions,
+        requiredPermissions: ['access-general-ehmp'],
         isPatientCentric: false
     }];
 }
@@ -68,10 +66,10 @@ function saveUserDefinedScreens(req, res) {
             res.status(rdk.httpstatus.internal_server_error).rdkSend(err);
         } else {
             var udsData = {};
-            var userDefinedScreensData = dd(data)('userDefinedScreens').val;
-            var userDefinedFiltersData = dd(data)('userDefinedFilters').val;
-            var userDefinedGraphsData = dd(data)('userDefinedGraphs').val;
-            var userDefinedTileSortData = dd(data)('userDefinedSorts').val;
+            var userDefinedScreensData = _.get(data, 'userDefinedScreens');
+            var userDefinedFiltersData = _.get(data, 'userDefinedFilters');
+            var userDefinedGraphsData = _.get(data, 'userDefinedGraphs');
+            var userDefinedTileSortData = _.get(data, 'userDefinedSorts');
             if(screenType === USER_SCREENS_CONFIG) {
                 udsData = {
                     _id: screenId,
@@ -187,13 +185,13 @@ function copyUserDefinedWorkspace(req, res) {
             return res.status(rdk.httpstatus.internal_server_error).rdkSend(err);
         } else {
             var count;
-            var tempUserDefinedFiltersData = dd(data)('userDefinedFilters').val;
+            var tempUserDefinedFiltersData = _.get(data, 'userDefinedFilters');
             if(nullchecker.isNotNullish(tempUserDefinedFiltersData)) {
                 userDefinedFiltersData = tempUserDefinedFiltersData;
             }
             req.logger.debug({userDefinedFiltersData: userDefinedFiltersData}, 'userDefinedFilters data before copy');
 
-            var tempUserDefinedGraphsData = dd(data)('userDefinedGraphs').val;
+            var tempUserDefinedGraphsData = _.get(data, 'userDefinedGraphs');
             if(nullchecker.isNotNullish(tempUserDefinedGraphsData)) {
                 userDefinedGraphsData = tempUserDefinedGraphsData;
             }
@@ -259,7 +257,7 @@ function copyUserDefinedWorkspace(req, res) {
                 });
             } else {
                 req.logger.debug('predifined:::222 ' + predefined);
-                var userDefinedScreensData = dd(data)('userDefinedScreens').val;
+                var userDefinedScreensData = _.get(data, 'userDefinedScreens');
                 req.logger.debug({userDefinedScreensData: userDefinedScreensData}, 'userDefinedScreens before copied workspace');
                 if(nullchecker.isNotNullish(userDefinedScreensData)) {
                     var copiedWorkspace;
@@ -274,7 +272,7 @@ function copyUserDefinedWorkspace(req, res) {
                     req.logger.debug({userDefinedScreensData: userDefinedScreensData}, 'userDefinedScreens after copied workspace');
                 }
 
-                userDefinedFiltersData = dd(data)('userDefinedFilters').val;
+                userDefinedFiltersData = _.get(data, 'userDefinedFilters');
                 if(nullchecker.isNotNullish(userDefinedFiltersData)) {
                     var copiedFilterData;
                     for (count = 0; count < userDefinedFiltersData.length; count++) {
@@ -287,7 +285,7 @@ function copyUserDefinedWorkspace(req, res) {
                     }
                 }
 
-                userDefinedGraphsData = dd(data)('userDefinedGraphs').val;
+                userDefinedGraphsData = _.get(data, 'userDefinedGraphs');
                 if(nullchecker.isNotNullish(userDefinedGraphsData)) {
                     var copiedGraphsData;
                     for (count = 0; count < userDefinedGraphsData.length; count++) {
@@ -300,7 +298,7 @@ function copyUserDefinedWorkspace(req, res) {
                     }
                 }
 
-                userDefinedTileSortData = dd(data)('userDefinedSorts').val;
+                userDefinedTileSortData = _.get(data, 'userDefinedSorts');
                 if(nullchecker.isNotNullish(userDefinedTileSortData)) {
                     var copiedTileSortData;
                     for (count = 0; count < userDefinedTileSortData.length; count++) {
@@ -351,7 +349,7 @@ function updateWorkspaceId(req, res) {
             req.logger.error(err);
             return res.status(rdk.httpstatus.internal_server_error).rdkSend(err);
         } else {
-            var userDefinedScreensData = dd(data)('userDefinedScreens').val;
+            var userDefinedScreensData = _.get(data, 'userDefinedScreens');
             var screenIndex;
 
             screenIndex = findIndex(userDefinedScreensData, function(screen) {
@@ -361,7 +359,7 @@ function updateWorkspaceId(req, res) {
                 userDefinedScreensData[screenIndex].id = newId;
             }
 
-            var userDefinedFiltersData = dd(data)('userDefinedFilters').val;
+            var userDefinedFiltersData = _.get(data, 'userDefinedFilters');
 
             screenIndex = findIndex(userDefinedFiltersData, function(screen) {
                 return screen.id === oldId;
@@ -370,7 +368,7 @@ function updateWorkspaceId(req, res) {
                 userDefinedFiltersData[screenIndex].id = newId;
             }
 
-            var userDefinedGraphsData = dd(data)('userDefinedGraphs').val;
+            var userDefinedGraphsData = _.get(data, 'userDefinedGraphs');
 
             screenIndex = findIndex(userDefinedGraphsData, function(screen) {
                 return screen.id === oldId;
@@ -379,7 +377,7 @@ function updateWorkspaceId(req, res) {
                 userDefinedGraphsData[screenIndex].id = newId;
             }
 
-            var userDefinedTileSortData = dd(data)('userDefinedSorts').val;
+            var userDefinedTileSortData = _.get(data, 'userDefinedSorts');
 
             screenIndex = findIndex(userDefinedTileSortData, function(screen) {
                 return screen.id === oldId;
@@ -476,8 +474,8 @@ function findIndex(array, callback) {
 function createScreenIdFromRequest(req, screenType) {
     var uid;
     var userSession = req.session.user;
-    var site = dd(userSession)('site').val;
-    var ien = dd(userSession)('duz')(site).val;
+    var site = _.get(userSession, 'site');
+    var ien = _.get(userSession, ['duz', site]);
 
     if(!_.isUndefined(site) && !_.isUndefined(ien)) {
         uid = site.concat(';').concat(ien);

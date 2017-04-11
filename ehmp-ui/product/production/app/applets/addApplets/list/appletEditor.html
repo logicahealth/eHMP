@@ -1,9 +1,10 @@
 <div class="container-fluid workspace-editor-container all-margin-xl" role="application">
-    <div class="row panel-heading left-padding-no">
+    <div class="row panel-heading">
         <div class="col-xs-11">
-            <h3 class="all-margin-no all-padding-no">Workspace Editor</h3>
+            <h2 class="all-margin-no top-padding-xs font-size-14 bold-font">Workspace Editor</h2>
         </div>
         <div class="col-xs-1 text-right">
+            {{{helpIconLink 'workspace_editor' 'fa fa-question font-size-13'}}}
             <button type="button" id="editorFilterBtn" data-toggle="collapse" data-target="#workspace-editor-filter" class="btn btn-icon collapsed" title="Press enter to expand filter.">
                 <i class="fa fa-filter color-primary"></i>
             </button>
@@ -41,8 +42,16 @@
         </div>
     </div>
     <div class="row panel-footer">
-        <div class="col-xs-12">
-            <button type="submit" name="doneEditing" id="exitEditing" title="Press enter to save and close and return to the workspace manager" class="btn btn-primary btn-sm pull-right">Save &amp; Close</button>
+        <div class="col-xs-12 all-padding-no">
+            <button type="button" class="btn btn-primary btn-sm delete-workspace" title="Press enter to delete this workspace">Delete</button>
+            <div class="pull-right">
+                <button type="button" class="btn btn-primary btn-sm open-manager" title="Press enter to go to Workspace Manager">
+                    Go to Workspace Manager
+                </button>
+                <button type="submit" id="exitEditing" title="Press enter to accept" class="btn btn-primary btn-sm left-margin-xs pull-right">
+                    Accept
+                </button>
+            </div>
         </div>
     </div>
 </div>

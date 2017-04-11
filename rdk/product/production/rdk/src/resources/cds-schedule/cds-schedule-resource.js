@@ -12,36 +12,33 @@ var interceptors = {
 
 exports.getResourceConfig = function (app) {
 
-    // db setup
-    cdsSchedule.init(app);
-
     return [{
         name: 'cds-schedule-cds-schedule-get',
         path: '/job',
         get: cdsSchedule.getJob,
         interceptors: interceptors,
-        requiredPermissions: [],
+        requiredPermissions: ['read-cds-schedule'],
         isPatientCentric: false
     }, {
         name: 'cds-schedule-cds-schedule-post',
         path: '/job',
         post: cdsSchedule.postJob,
         interceptors: interceptors,
-        requiredPermissions: [],
+        requiredPermissions: ['manage-cds-schedule'],
         isPatientCentric: false
     }, {
         name: 'cds-schedule-cds-schedule-put',
         path: '/job',
         put: cdsSchedule.putJob,
         interceptors: interceptors,
-        requiredPermissions: [],
+        requiredPermissions: ['manage-cds-schedule'],
         isPatientCentric: false
     }, {
         name: 'cds-schedule-cds-schedule-delete',
         path: '/job',
         delete: cdsSchedule.deleteJob,
         interceptors: interceptors,
-        requiredPermissions: [],
+        requiredPermissions: ['manage-cds-schedule'],
         isPatientCentric: false
     }];
 };

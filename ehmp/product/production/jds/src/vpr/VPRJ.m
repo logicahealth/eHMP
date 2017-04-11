@@ -165,7 +165,7 @@ FULLRSET ; reset (delete data and re-init) for VPR and non-patient data
  ;BL eHMP may require multiple ports. Store ports in VPRHTTP(X,"port") and restart
  I $G(^VPRHTTP(1,"port")) D
  . N PORT
- . S NMPORT  
+ . S NMPORT=0
  . F  S NMPORT=$O(^VPRHTTP(NMPORT)) Q:NMPORT'=+NMPORT  D
  . . S PORT=^VPRHTTP(NMPORT,"port")
  . . W !,"Restarting HTTP Listener on Port "_PORT

@@ -25,6 +25,7 @@ var argv = require('yargs')
   .describe('domain', 'specific operational domains to sync')
   .describe('uid', 'specify a list of uids of operational data to sync')
   .describe('syncAll', 'sync all operational data for a VistA site')
+  .string('site') // do not do the auto conversion of site value, always use string type. @DE6501
   .argv;
 
 var logger = require('bunyan').createLogger({
@@ -252,7 +253,7 @@ function validateUids(uids, site, callback) {
 
 
 // this function will sync a domain of VistA Operational data
-// It will retreive VistA operational data by domain via RPC call.
+// It will retrieve VistA operational data by domain via RPC call.
 // Generate and create meta stamp and save those to JDS.
 // Create and Publish Opetational Data to Vx-Sync Tubes.
 function syncVistAOpDataByDomain(site, domain, callback) {

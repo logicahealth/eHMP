@@ -3,19 +3,11 @@
 # Recipe:: default
 #
 
+default[:vxsync][:start_vxsync_services] = true
 default[:vxsync][:filename] = 'vxsync.zip'
 default[:vxsync][:artifact_path] = "#{Chef::Config['file_cache_path']}/#{node[:vxsync][:filename]}"
-default[:vxsync][:home_dir] = '/opt/vxsync'
-default[:vxsync][:service_name] = 'vxsync'
-default[:vxsync][:log_directory] = "/var/log/vxsync"
-default[:vxsync][:log_prefix] = "vxsync"
-default[:vxsync][:log_ext] = ".log"
-default[:vxsync][:log_pattern]="#{node[:vxsync][:log_directory]}/#{node[:vxsync][:log_prefix]}#{node[:vxsync][:log_ext]}"
-default[:vxsync][:config_file] = "#{node[:vxsync][:home_dir]}/worker-config.json"
-default[:vxsync][:persistence_dir] = "#{node[:vxsync][:home_dir]}/data"
-default[:vxsync][:documents_dir] = "/var/vxsync/documents"
-default[:vxsync][:bluepill_log_dir] = "#{node[:vxsync][:log_directory]}/bluepill"
 default[:vxsync][:web_service_port] = 8080
+default[:vxsync][:endpoint_max_sockets] = 5
 default[:vxsync][:config_refresh] = 60000
 default[:vxsync][:max_file_size] = 20000000
 default[:vxsync][:beanstalk_ttr] = 120
@@ -40,7 +32,9 @@ default[:vxsync][:beanstalk_processes] = {
 }
 default[:vxsync][:ods_attempts] = 10
 default[:vxsync][:ods_delay] = 30
+default[:vxsync][:site_list] = ["9E7A", "C877"]
 default[:vxsync][:hdr_enabled] = true
+default[:vxsync][:hdr_mode] = "REQ/RES"
 default[:vxsync][:jmeadows_enabled] = true
 default[:vxsync][:vler_enabled] = true
 default[:vxsync][:publish_tubes]=true
@@ -56,128 +50,12 @@ default[:vxsync][:hdr_blacklist_sites] = [
     "station_number" => 202
   },
   {
-    "siteHash" => "A8C2",
+    "site_hash" => "A8C2",
     "station_number" => 504
   }
 ]
-default[:vxsync][:processes] = {
-  :subscriber_primary => {
-    :template => "subscriber_host.sh.erb",
-    :config => {
-      :profile => "primary"
-    },
-  },
-  :subscriber_jmeadows => {
-    :template => "subscriber_host.sh.erb",
-    :config => {
-      :profile => "jmeadows"
-    },
-  },
-  :subscriber_hdr => {
-    :template => "subscriber_host.sh.erb",
-    :config => {
-      :profile => "hdr"
-    },
-  },
-  :subscriber_vler => {
-    :template => "subscriber_host.sh.erb",
-    :config => {
-      :profile => "vler"
-    },
-  },
-  :subscriber_pgd => {
-    :template => "subscriber_host.sh.erb",
-    :config => {
-      :profile => "pgd"
-    },
-  },
-  :subscriber_document => {
-    :template => "subscriber_host.sh.erb",
-    :config => {
-      :profile => "document"
-    },
-  },
-  :subscriber_storage => {
-    :template => "subscriber_host.sh.erb",
-    :config => {
-      :profile => "storage"
-    },
-    :number_of_copies => 3
-  },
-  :subscriber_enrichment => {
-    :template => "subscriber_host.sh.erb",
-    :config => {
-      :profile => "enrichment"
-    },
-  },
-  :subscriber_prioritization =>
-  {
-    :template => "subscriber_host.sh.erb",
-    :config => {
-      :profile => "prioritization"
-    },
-  },
-  :subscriber_publish => {
-    :template => "subscriber_host.sh.erb",
-    :config => {
-      :profile => "publish"
-    },
-  },
-  :subscriber_error => {
-    :template => "subscriber_host.sh.erb",
-    :config => {
-      :profile => "error"
-    },
-  },
-  :subscriber_vistaProcessor =>
-  {
-    :template => "subscriber_host.sh.erb",
-    :config => {
-      :profile => "vistaProcessor"
-    },
-  },
-  :subscriber_vistahdr => {
-    :template => "subscriber_host.sh.erb",
-    :config => {
-      :profile => "vistahdr"
-    },
-  },
-  :subscriber_resync => {
-    :template => "subscriber_host.sh.erb",
-    :config => {
-      :profile => "resync"
-    },
-  },
-  :error_processor => {
-    :template => "error_processor_host.sh.erb",
-    :config => {
-    },
-  },
-  :'sync-request-endpoint' => {
-    :template => "sync_request_endpoint.sh.erb",
-    :config => {
-      :port => 8080
-    },
-  },
-  :'writeback-endpoint' => {
-    :template => "writeback_endpoint.sh.erb",
-    :config => {
-      :port => 9090
-    },
-  },
-  :unsync => {
-    :template => "unsync.sh.erb",
-    :config => {
-      :port => 8091
-    },
-  },
-  :'admin-endpoint' => {
-    :template => "admin_endpoint.sh.erb",
-    :config => {
-      :port => 9999
-    },
-  }
-}
+default[:vxsync][:vxsync_applications] = ["client", "vista"]
+default[:vxsync][:clear_logs] = nil
 
 default[:soap_handler][:filename] = 'soap_handler.jar'
 default[:soap_handler][:artifact_path] = "#{Chef::Config['file_cache_path']}/#{node[:soap_handler][:filename]}"
@@ -201,7 +79,7 @@ default[:terminology][:artifacts] = {
     :dir_name => 'drug'
   },
   :jlvdb => {
-    :version => '1.UMLS2014AB.20141010',
+    :version => '1.1',
     :dir_name => 'jlv'
   },
   :lncdb => {
@@ -211,10 +89,22 @@ default[:terminology][:artifacts] = {
 }
 
 ############################################
+# error-processing
+############################################
+default[:error_processing][:jdsGetErrorLimit] = 1000
+default[:error_processing][:profiles][:catastrophic_recovery][:enabled] = false
+default[:error_processing][:profiles][:record_enrichment][:enabled] = false
+default[:error_processing][:profiles][:activity_management][:enabled] = false
+default[:error_processing][:profiles][:jmeadows][:enabled] = false
+default[:error_processing][:profiles][:hdr][:enabled] = false
+default[:error_processing][:profiles][:vler][:enabled] = false
+default[:error_processing][:profiles][:pgd][:enabled] = false
+
+############################################
 # osync
 ############################################
 default[:osync][:source] = nil
-default[:osync][:home] = "#{node[:vxsync][:home_dir]}"
+default[:osync][:home] = '/opt/vxsync_client'
 default[:osync][:config] = nil
 default[:osync][:service] = 'osync'
 default[:osync][:log_directory] = "/var/log/osync"
@@ -223,6 +113,7 @@ default[:osync][:bluepill_log_directory] = "#{node[:osync][:log_directory]}/blue
 default[:osync][:config_refresh] = 0
 default[:osync][:max_file_size] = 2000000
 default[:osync][:beanstalk_ttr] = 60
+default[:osync][:mixedEnvironmentMode] = true
 default[:osync][:processes] = {
   :opportunistic_sync_jobrepo => {
     :template => "osync_job_repo.sh.erb",

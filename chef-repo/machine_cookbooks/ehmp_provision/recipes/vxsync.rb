@@ -6,7 +6,7 @@
 chef_gem "chef-provisioning-ssh"
 require 'chef/provisioning/ssh_driver'
 
-include_asu = find_optional_node_by_criteria(node[:machine][:stack], 'role:asu', 'role:vxsync').nil?
+include_asu = find_optional_node_by_criteria(node[:machine][:stack], 'role:asu', 'role:vxsync_client').nil? && node[:ehmp_provision][:vxsync][:vxsync_applications].include?("client")
 
 ############################################## Staging Artifacts #############################################
 if ENV.has_key?('VX_SYNC_LOCAL_FILE')
@@ -38,19 +38,27 @@ end
 
 ############################################## Staging Artifacts #############################################
 
-machine_ident = "vxsync"
 
-boot_options = node[:ehmp_provision][machine_ident.to_sym]["#{node[:machine][:driver]}".to_sym]
+boot_options = node[:ehmp_provision][:vxsync]["#{node[:machine][:driver]}".to_sym]
 node.default[:ehmp_provision][:vxsync][:copy_files].merge!(node[:machine][:copy_files])
 
 machine_deps = parse_dependency_versions "machine"
 ehmp_deps = parse_dependency_versions "ehmp_provision"
 
+machine_ident = ENV['VXSYNC_IDENT'] || "vxsync"
+db_item = ENV['VXSYNC_DB_ITEM'] || ENV['VXSYNC_IDENT']
+
+unless db_item.nil?
+  db_attributes = Chef::EncryptedDataBagItem.load("vxsync_env", db_item, node[:common][:data_bag_string])
+  node.override[:machine] = Chef::Mixin::DeepMerge.hash_only_merge(node[:machine], db_attributes["machine"]) unless db_attributes["machine"].nil?
+  node.override[:ehmp_provision][:vxsync][:vxsync_applications] = db_attributes["vxsync"]["vxsync_applications"] unless (db_attributes["vxsync"].nil? || db_attributes["vxsync"]["vxsync_applications"].nil?)
+end
+
 r_list = []
 r_list << "recipe[packages::enable_internal_sources@#{machine_deps["packages"]}]"
-r_list << "recipe[packages::disable_external_sources@#{machine_deps["packages"]}]" unless node[:machine][:allow_web_access]
+r_list << "recipe[packages::disable_external_sources@#{machine_deps["packages"]}]" unless node[:machine][:allow_web_access] || node[:machine][:driver] == "ssh"
 r_list << "recipe[role_cookbook::#{node[:machine][:driver]}@#{machine_deps["role_cookbook"]}]"
-r_list << "role[vxsync]"
+node[:ehmp_provision][:vxsync][:vxsync_applications].each { |app| r_list << "role[vxsync_#{app}]" }
 r_list << "role[asu]" if include_asu
 if ENV.has_key?("RESET_SYNC")
   r_list << "recipe[vxsync::reset_vxsync@#{ehmp_deps["vxsync"]}]"
@@ -63,6 +71,7 @@ else
   r_list << "recipe[asu::uninstall@#{ehmp_deps["asu"]}]" unless include_asu
 end
 r_list << "recipe[packages::upload@#{machine_deps["packages"]}]" if node[:machine][:cache_upload]
+r_list << "recipe[packages::remove_localrepo@#{machine_deps["packages"]}]" if node[:machine][:driver] == "ssh"
 
 if ENV.has_key?("NO_RESET")
   reset = false
@@ -110,8 +119,10 @@ machine machine_name do
     reset_vxsync: {
       reset: reset
     },
+    db_item: db_item,
     vxsync: {
-      source: vxsync_source
+      source: vxsync_source,
+      clear_logs: node[:machine][:driver] == "aws"
     },
     soap_handler: {
       source: soap_handler_source
@@ -122,6 +133,7 @@ machine machine_name do
     beats: {
       logging: node[:machine][:logging]
     }
+
   )
   files lazy { node[:ehmp_provision][:vxsync][:copy_files] }
   chef_environment node[:machine][:environment]

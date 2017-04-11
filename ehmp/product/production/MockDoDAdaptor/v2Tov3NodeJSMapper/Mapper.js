@@ -95,7 +95,7 @@ for (var domainTypeNum = 0; domainTypeNum < domainNames.length; domainTypeNum++)
 
         var filePath = '../src/main/resources/data/v4/v4_' + edipi + "_" + loinc + "_" + iter_ext;
 
-        jf.writeFileSync(filePath , v4JSON);
+        jf.writeFileSync(filePath , v4JSON, {spaces: 2});
     }
 
 }

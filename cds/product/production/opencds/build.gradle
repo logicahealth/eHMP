@@ -19,7 +19,7 @@ allprojects {
       url 'https://store.vistacore.us/nexus/content/groups/public'
     }
   }
- 
+
  uploadArchives {
     repositories.mavenDeployer {
       pom.groupId = "${groupId}"
@@ -31,4 +31,5 @@ allprojects {
   }
 }
 
+project(':production:opencds').build.dependsOn(project(':production:cdsinvocation:cds-engine-agent').build)
 project(':production:opencds').build.dependsOn(project(':production:opencds:opencds-knowledge-repository-data').build)

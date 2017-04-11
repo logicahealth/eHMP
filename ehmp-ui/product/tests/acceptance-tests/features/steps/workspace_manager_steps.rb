@@ -52,7 +52,7 @@ When(/^the user customizes the "(.*?)" workspace$/) do |workspace_id|
     @ehmp.wait_until_fld_applets_in_current_view_visible(30)
     applets = @ehmp.fld_applets_in_current_view
     applets.each do | applet |
-      id = applet['id'].split('-')[1]
+      id = applet['data-instanceid'].split('-')[1]
       remove_applet_from_current_view id
     end
     expect(@ehmp.fld_applets_in_current_view.length).to eq(0)

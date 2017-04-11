@@ -31,12 +31,12 @@ define([
             }
             if (attributes.showOverride && (reasonForOverride.length < 3)) {
                 this.errorModel.set({
-                    reason_for_override: 'Override reason must be at least 3 characters long.'
+                    reason_for_override: 'Override reason must be at least 3 characters long'
                 });
             }
             if (signatureCode.length < 6) {
                 this.errorModel.set({
-                    signature_code: 'Must be at least 6 characters long.'
+                    signature_code: 'Must be at least 6 characters long'
                 });
             }
             if (!this.errorModel.isEmpty()) {
@@ -67,8 +67,8 @@ define([
 
             result.detailSummary = signOrders.detail;
             var strArrayStatus = result.detailSummary.substring(result.detailSummary.search('Current Status:'), result.detailSummary.length).split('\r')[0];
-            var vistaStatus = strArrayStatus.replace('Current Status:', '').trim();
-            var jdsStatus = this.get('statusName');
+            var vistaStatus = strArrayStatus.replace('Current Status:', '').trim().toUpperCase();
+            var jdsStatus = (this.get('statusName') || '').toUpperCase();
 
             //There may be multiple signature activities in the detail summary, so we make sure we account for that possibility
             var modifiedStatus = result.detailSummary.replace(/Signature:/g, "Signature:|").replace(/\r/g, "|").split('|');
@@ -81,6 +81,7 @@ define([
                 })
                 .last()
                 .value();
+            vistaSignatureStatus = (_.isString(vistaSignatureStatus) ? vistaSignatureStatus.toUpperCase() : '');
 
             // [Mike F]: The JDS sync for discontinued, unsigned orders isn't *quite* working like it's supposed to. Currently, discontinued, unsigned order
             // JDS status will show as 'UNRELEASED', while VistA status will show as 'PENDING'.  In this special case, we adjust the JDS status to equal
@@ -111,7 +112,7 @@ define([
                 result.orderDetailHash = signOrders.hash;
 
                 var detailSummaryLines = result.detailSummary.split('\r');
-                result.summary = detailSummaryLines[0];
+                result.summary = this.attributes.summary;
 
                 if (!_.isEmpty(result.orderCheck)) {
                     result.orderCheckData = _.map(result.orderCheck, function(orderCheck, index, orderChecks) {
@@ -142,7 +143,7 @@ define([
             this.unset('errorMessage', {
                 silent: true
             });
-            var location = _.get(this.patient.get('visit'), 'locationUid').split(':').pop();
+            var location = _.get(this.patient.get('visit'), 'locationUid', '').split(':').pop();
             var siteCode = this.user.get('site');
             this.set({
                 pid: this.patient.get('pid'),

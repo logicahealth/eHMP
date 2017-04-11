@@ -1,4 +1,4 @@
-HMPDCRC ;SLC/MKB,AGP,ASMR/RRB,CK - Compute CRC32 for VistA data;Apr 27, 2016 10:35:07
+HMPDCRC ;SLC/MKB,AGP,ASMR/RRB - Compute CRC32 for VistA data;May 15, 2016 14:15
  ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1**;May 15, 2016;Build 1
  ;Per VA Directive 6402, this routine should not be modified.
  ;

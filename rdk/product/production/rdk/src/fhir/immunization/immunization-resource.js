@@ -27,15 +27,9 @@ var fhirToJDSAttrMap = [{
     definition: 'http://www.hl7.org/FHIR/2015May/datatypes.html#integer',
     description: 'This indicates the starting index of resources that will be fetched.',
     searchable: true
-},{
-    fhirName: 'limit', // Note this attribute is a app-defined search param, not a Fhir specified attribute.
-    vprName: '',
-    dataType: 'integer',
-    definition: 'http://www.hl7.org/FHIR/2015May/datatypes.html#integer',
-    description: 'This indicates the total number of resources that will be fetched.',
-    searchable: true
-}
-];
+}];
+confUtils.addCountAttribute(fhirToJDSAttrMap); //adding the _count attribute that is common to (almost) all endpoints.
+
 
 // Issue call to Conformance registration
 conformance.register(confUtils.domains.IMMUNIZATION, createConformanceData());
@@ -51,11 +45,21 @@ function createConformanceData() {
 
 var getResourceConfig = function() {
     return [{
-        name: 'immunization',
+        name: 'fhir-immunization',
         path: '',
         get: getImmunization,
         subsystems: ['patientrecord', 'jds', 'solr', 'jdsSync', 'authorization'],
-        requiredPermissions: [],
+        interceptors: { fhirPid: true },
+        requiredPermissions: ['read-fhir'],
+        isPatientCentric: true,
+        permitResponseFormat: true
+    },{
+        name: 'fhir-immunization-search',
+        path: '_search',
+        post: getImmunization,
+        subsystems: ['patientrecord', 'jds', 'solr', 'jdsSync', 'authorization'],
+        interceptors: { fhirPid: true },
+        requiredPermissions: ['read-fhir'],
         isPatientCentric: true,
         permitResponseFormat: true
     }];
@@ -88,7 +92,7 @@ function getImmunization(req, res) {
 function getImmunizationData(req, pid, callback) {
     var config = req.app.config;
     var start = req.param('start') || 0;
-    var limit = req.param('limit');
+    var limit = req.param('_count');
     var jdsQuery = {
         start: start
     };
@@ -226,6 +230,7 @@ function createImmunization(jdsItem, fhirItems, req, updated) {
     fhirItem.resource = {};
 
     fhirItem.resource.resourceType = 'Immunization';
+    fhirItem.resource.id = jdsItem.uid;
     fhirItem.resource.text = {
         'status': 'generated',
         'div': '<div>' + _.escape(jdsItem.summary) + '</div>'

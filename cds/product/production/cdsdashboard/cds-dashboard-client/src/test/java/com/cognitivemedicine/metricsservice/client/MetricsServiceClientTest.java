@@ -28,18 +28,21 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+import org.junit.Ignore;
 
 import com.cognitivemedicine.metricsservice.model.Dashboard;
 import com.cognitivemedicine.metricsservice.model.Metric;
 import com.cognitivemedicine.metricsservice.model.MetricGroup;
 import com.cognitivemedicine.metricsservice.model.RdkTimeoutException;
 
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
+
 /**
  * Unit test for simple App.
  */
+@Ignore("This is a service integration test suite")
 public class MetricsServiceClientTest extends TestCase {
 	private Logger logger = Logger.getLogger(MetricsServiceClient.class
 			.getName());

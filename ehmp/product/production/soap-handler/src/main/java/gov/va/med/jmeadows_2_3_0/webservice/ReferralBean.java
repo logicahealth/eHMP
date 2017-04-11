@@ -17,12 +17,12 @@ import javax.xml.bind.annotation.XmlType;
  * <pre>
  * &lt;complexType name="referralBean">
  *   &lt;complexContent>
- *     &lt;extension base="{http://webservice.vds.DNS       /}dataBean">
+ *     &lt;extension base="{http://webservice.vds.med.DNS   /}dataBean">
  *       &lt;sequence>
  *         &lt;element name="authorizationNumber" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="clinic" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="fromDate" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="insuranceInfo" type="{http://webservice.vds.DNS       /}insuranceBean" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="insuranceInfo" type="{http://webservice.vds.med.DNS   /}insuranceBean" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element name="patientICN" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="primaryCarePractitioner" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="primaryDiagnosis" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -43,7 +43,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "referralBean", namespace = "http://webservice.vds.DNS       /", propOrder = {
+@XmlType(name = "referralBean", namespace = "http://webservice.vds.med.DNS   /", propOrder = {
     "authorizationNumber",
     "clinic",
     "fromDate",

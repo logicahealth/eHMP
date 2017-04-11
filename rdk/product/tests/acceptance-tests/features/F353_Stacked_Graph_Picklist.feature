@@ -10,12 +10,6 @@ Feature: F353 Stacked Graph Picklists - Vitals, Labs, Meds
 #   And the results contain
 #       | name                                | value                                                  |
 #       | data.updated                        | IS_SET                                                 |
-#       | data.totalItems                     | 1236                                                   |
-#       | data.currentItemCount               | 4                                                      |
-#       | data.itemsPerPage                   | 4                                                      |
-#       | data.startIndex                     | 0                                                      |
-#       | data.pageIndex                      | 0                                                      |
-#       | data.totalPages                     | 309                                                    |
 #       | data.items.stampTime                | IS_SET                                                 |
 #       | data.items.dialogAdditionalInformation.sendPatientTimes.internal      | LT                   |
 #       | data.items.dialogAdditionalInformation.sendPatientTimes.name          | Today                |
@@ -33,9 +27,9 @@ Feature: F353 Stacked Graph Picklists - Vitals, Labs, Meds
 #       | data.items.linktype                 | LRT                                                    |
 #       | data.items.name                     | TRAZODONE                                              |
 #       | data.items.synonym.name             | DESYREL                                                |
-#       | data.items.types.abb                |                                                        |
-#       | data.items.types.internal           |                                                        |
-#       | data.items.types.type               |                                                        |
+#       | data.items.types.abb                | CH                                                     |
+#       | data.items.types.internal           | CH                                                     |
+#       | data.items.types.type               | Chemistry                                              |
 #       | data.items.types.uid                | CONTAINS urn:va:labTyp                                 |
 #       | data.items.uid                      | CONTAINS urn:va:orderable                              |
 
@@ -47,17 +41,11 @@ Scenario: Viewing the list of all Meds data for picklist
   And the results contain
       | name                                | value                                                  |
       | data.updated                        | IS_SET                                                 |
-      | data.totalItems                     | 2828                                                   |
-      | data.currentItemCount               | 6                                                      |
-      | data.itemsPerPage                   | 6                                                      |
-      | data.startIndex                     | 0                                                      |
-      | data.pageIndex                      | 0                                                      |
-      | data.totalPages                     | 472                                                    |
       | data.items.stampTime                | IS_SET                                                 |
-      | data.items.internal                 | 1344                                                   |
-      | data.items.link                     | 1                                                      |
+      | data.items.internal                 | 2047                                                   |
+      | data.items.link                     | 704                                                    |
       | data.items.linktype                 | PSP                                                    |
-      | data.items.name                     | CONTAINS ACETAMINOPHEN                                 |
+      | data.items.name                     | CONTAINS SODIUM                                        |
       | data.items.types.type               | MEDS                                                   |
       | data.items.uid                      | CONTAINS urn:va:orderable                              |
 
@@ -69,12 +57,6 @@ Scenario: Viewing the list of all Meds data for picklist
 #   And the results contain
 #       | name                                | value                                                  |
 #       | data.updated                        | IS_SET                                                 |
-#       | data.totalItems                     | 19                                                     |
-#       | data.currentItemCount               | 5                                                      |
-#       | data.itemsPerPage                   | 5                                                      |
-#       | data.startIndex                     | 0                                                      |
-#       | data.pageIndex                      | 0                                                      |
-#       | data.totalPages                     | 4                                                      |
 
 #       | data.items.abbreviation             | BP                                                     |
 #       | data.items.effective            	  | 20070607120123                                         |

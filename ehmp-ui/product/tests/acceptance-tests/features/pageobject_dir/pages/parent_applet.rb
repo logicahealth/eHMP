@@ -24,6 +24,11 @@ class PobParentApplet < SitePrism::Page
     self.class.element(:btn_applet_add, "#{appletid_css} .applet-add-button")
   end
 
+  def add_modal_elements
+    self.class.element(:fld_modal_body, "#modal-body")
+    self.class.element :btn_close_modal, "#modal-footer .pull-right > button"
+  end
+
   def add_title(appletid_css)
     title_css = "#{appletid_css} .panel-title-label"
     self.class.element(:fld_applet_title, title_css)
@@ -45,7 +50,13 @@ class PobParentApplet < SitePrism::Page
   end
   
   def add_empty_gist(appletid_css)
-    self.class.element(:fld_empty_gist, "#{appletid_css} div.empty-gist-list")
+    self.class.element(:fld_empty_gist, "#{appletid_css} p.color-grey-darkest")
+  end
+
+  def add_expanded_applet_fields(appletid_css)
+    self.class.element(:fld_expanded_applet_title, "#{appletid_css}  .grid-applet-heading h5")
+    self.class.elements(:fld_expanded_applet_thead, "#{appletid_css} thead > tr > th")
+    self.class.elements(:fld_expanded_applet_table_rows, "#{appletid_css} tr.selectable")
   end
   
   def add_toolbar_buttons
@@ -55,9 +66,16 @@ class PobParentApplet < SitePrism::Page
     self.class.element(:btn_quick_view, "[button-type=quick-look-button-toolbar]")
   end
 
-  def wait_until
+  def add_tile_sort_elements
+    self.class.element :fld_manual_sort, ".tilesort-remove-sort"
+    self.class.element :btn_remove_manual_sort, ".tilesort-remove-sort button"
+    self.class.element :btn_tile_sort, "[button-type=tilesort-button-toolbar]"
+    self.class.element :btn_tile_sort_active, "[button-type=tilesort-button-toolbar].background-color-secondary-dark"
+  end
+
+  def wait_until(wait_timeout = Capybara.default_wait_time)
     require "timeout"
-    Timeout.timeout(Capybara.default_wait_time) do
+    Timeout.timeout(wait_timeout) do
       sleep(0.1) until yield
     end
   end

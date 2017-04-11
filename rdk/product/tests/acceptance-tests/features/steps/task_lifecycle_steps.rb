@@ -41,9 +41,9 @@ And(/^the result does not contain the new task ID$/) do
 end
 
 When(/^the client changes state of the newly created task to "(.*?)"$/) do |state|
-  query = RDKQuery.new('tasks-changestate')
+  query = RDKQuery.new('tasks-update')
   path = query.path
-  content = "{\"deploymentid\":\"#{@deployment_id}\",\"parameter\":{\"out_training_completed\":true,\
+  content = "{\"deploymentId\":\"#{@deployment_id}\",\"parameter\":{\"out_training_completed\":true,\
           \"out_training_notes\":\"Done\"},\"state\":\"#{state}\",\"taskid\":\"#{@new_task_id}\"}"
   @response = HTTPartyRDK.post(path, content, { "Content-Type" => "application/json" })
 end

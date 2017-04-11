@@ -6,6 +6,9 @@
                     &.header {
                         background-color: $pure-white;
                     }
+                    .btn-accordion:focus {
+                        background-color: $primary-lightest;
+                    }
                 }
             }
         }

@@ -10,7 +10,7 @@ var request = require('request');
 
 var siteList = process.env.VXSYNC_SITELIST || ('9E7A,C877');
 var timeoutSecs = Number(process.env.VXSYNC_OPD_TIMEOUT_SECS) || 900;
-var host = process.env.JDS_IP || 'IP_ADDRESS';
+var host = process.env.JDS_IP || 'IP        ';
 var port = Number(process.env.JDS_PORT) || 9080;
 var protocol = process.env.JDS_PROTOCOL || 'http';
 

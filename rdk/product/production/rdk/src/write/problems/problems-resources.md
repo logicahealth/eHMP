@@ -16,21 +16,24 @@ Save problem form information to VistA
     + Body
 
             {
-                "patientIEN": "ssss",
-                "patientName": "ssss",
-                "dateLastModified" : "ssss",
                 "dateOfOnset": "ssss",
+                "problemNumber": "ssss",
+                "snomedCode":"ssss",
+                "lexiconCode": "ssss",
+                "code" : "ssss",
+                "problemName": "ssss",
+                "problemText": "ssss",
+                "patientIEN":"ssss",
+                "patientName":"ssss",
+                "dateLastModified":"ssss",
                 "dateRecorded": "ssss",
                 "enteredBy": "ssss",
                 "enteredByIEN": "ssss",
-                "lexiconCode": "ssss",
-                "problemName": "ssss",
-                "problemText": "ssss",
-                "providerIEN": "ssss",
+                "status": "ssss",
+                "acuity": "ssss",
                 "recordingProvider": "ssss",
                 "responsibleProvider": "ssss",
-                "responsibleProviderIEN": "ssss",
-                "service": "ssss"
+                "responsibleProviderIEN": "ssss"
             }
 
     + Schema
@@ -39,78 +42,94 @@ Save problem form information to VistA
                 "$schema": "http://json-schema.org/draft-04/schema#",
                 "type": "object",
                 "required": [
+                    "dateOfOnset",
+                    "problemName",
+                    "problemText",
                     "patientIEN",
                     "patientName",
                     "dateLastModified",
-                    "dateOfOnset",
                     "dateRecorded",
                     "enteredBy",
                     "enteredByIEN",
-                    "problemName",
-                    "problemText",
-                    "providerIEN",
+                    "status",
+                    "acuity",
                     "recordingProvider",
                     "responsibleProvider",
-                    "responsibleProviderIEN",
-                    "service"
+                    "responsibleProviderIEN"
                 ],
                 "properties": {
-                    "patientIEN": {
+                        "dateOfOnset": {
+                            "type": "string",
+                            "description": "date/time of onset"
+                        },
+                        "problemName": {
                         "type": "string",
-                        "description": "patient IEN"
-                    },
-                    "patientName": {
-                        "type": "string",
-                        "description": "name of the patient"
-                    },
-                    "dateLastModified": {
-                        "type": "string",
-                        "description": "date last modified"
-                    },
-                    "dateOfOnset": {
-                        "type": "string",
-                        "description": "date/time of onset"
-                    },
-                    "dateRecorded": {
-                        "type": "string",
-                        "description": "date recorded"
-                    },
-                    "enteredBy": {
-                        "type": "string",
-                        "description": "entered by name"
-                    },
-                    "enteredByIEN": {
-                        "type": "string",
-                        "description": "entered by IEN"
-                    },
-                    "problemName": {
-                        "type": "string",
-                         "description": "name for the problem"
-                    },
-                    "problemText": {
+                        "description": "name for the problem"
+                        },
+                        "problemText": {
                         "type": "string",
                         "description": "text for the problem"
-                    },
-                    "providerIEN": {
+                        },
+                        "problemNumber": {
                         "type": "string",
-                        "description": "provider IEN"
-                    },
-                    "recordingProvider" : {
+                        "description": "IEN for the problem"
+                        },
+                        "snomedCode": {
                         "type": "string",
-                        "description": "recording provider name"
-                    },
-                    "responsibleProvider" : {
-                        "type": "string",
-                        "description": "responsbile provider name"
-                    },
-                    "responsibleProviderIEN" : {
-                        "type": "string",
-                        "description": "responsible provider IEN"
-                    },
-                    "service" : {
-                        "type": "string",
-                        "description": "service type"
-                    }
+                        "description": "snomedCode"
+                        },
+                        "lexiconCode" : {
+                            "type": "string",
+                            "description": "lexiconCode"
+                        },
+                        "code" : {
+                            "type": "string",
+                            "description": "code"
+                        },
+                        "patientIEN": {
+                            "type": "string",
+                            "description": "patient IEN"
+                        },
+                        "patientName": {
+                            "type": "string",
+                            "description": "name of the patient"
+                        },
+                        "dateRecorded": {
+                            "type": "string",
+                            "description": "date recorded"
+                        },
+                        "dateLastModified": {
+                            "type": "string",
+                            "description": "date last modified"
+                        },
+                        "enteredBy": {
+                            "type": "string",
+                            "description": "entered by name"
+                        },
+                        "enteredByIEN": {
+                            "type": "string",
+                            "description": "entered by IEN"
+                        },
+                        "status": {
+                            "type": "string",
+                            "description": "status"
+                        },
+                        "acuity": {
+                            "type": "string",
+                            "description": "acuity"
+                        },
+                        "recordingProvider" : {
+                            "type": "string",
+                            "description": "recording provider name"
+                        },
+                        "responsibleProvider" : {
+                            "type": "string",
+                            "description": "responsbile provider name"
+                        },
+                        "responsibleProviderIEN" : {
+                            "type": "string",
+                            "description": "responsible provider IEN"
+                        }
                 }
             }
 

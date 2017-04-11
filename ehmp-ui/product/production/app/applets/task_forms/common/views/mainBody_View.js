@@ -19,6 +19,16 @@ define([
                 activityHistoryRegion: '#activityHistoryRegion'
             },
             initialize: function(){
+
+                if(!_.isUndefined(this.model.get('gender'))){
+                    if(this.model.get('gender') === 'M'){
+                        this.model.set('fullGenderName', 'Male');    
+                    }
+                    else{
+                        this.model.set('fullGenderName', 'Female');
+                    }
+                }
+
                 this.nameStatusView = new NameStatusView({model: this.model});
                 this.domainDetailsView = new DomainDetailsView({model: this.model});
                 this.currentTasksView = new CurrentTasksView({model: this.model});

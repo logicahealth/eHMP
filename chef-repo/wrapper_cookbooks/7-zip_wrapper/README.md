@@ -1,6 +1,5 @@
 7-zip_wrapper Cookbook
 ======================
-TODO: A wrapper cookbook for 7-zip to pull from local server instead of internet
 
 
 Requirements

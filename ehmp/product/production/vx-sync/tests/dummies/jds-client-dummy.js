@@ -93,6 +93,20 @@ JdsClient.prototype.getSyncStatus = function(patientIdentifier, callback) {
     }
 };
 
+JdsClient.prototype.getSimpleSyncStatus = function(patientIdentifier, callback) {
+    var args = _.toArray(arguments);
+    callback = args.pop();
+
+    if ((this.error.length >= this.responseIndex) && (this.response.length >= this.responseIndex) && (this.result.length >= this.responseIndex)) {
+        this.responseIndex++;
+        callback(this.error[this.responseIndex-1], this.response[this.responseIndex-1], this.result[this.responseIndex-1]);
+    }
+    else {
+        this.responseIndex++;
+        callback(this.error[0], this.response[0], this.result[0]);
+    }
+};
+
 JdsClient.prototype.clearSyncStatus = function(callback) {
     if ((this.error.length >= this.responseIndex) && (this.response.length >= this.responseIndex)) {
         this.responseIndex++;

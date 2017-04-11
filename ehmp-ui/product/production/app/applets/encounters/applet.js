@@ -15,6 +15,7 @@ define([
     "backbone",
     "marionette",
     "crossfilter",
+    "moment",
     "app/applets/encounters/GistView",
     "app/applets/encounters/appConfig",
     "app/applets/encounters/appUtil",
@@ -23,7 +24,7 @@ define([
     'app/applets/encounters/writeback/modelUtil',
     'app/applets/encounters/tray/trayView',
     'app/applets/encounters/writeback/showEncounter'
-], function(Handlebars, _, Backbone, Marionette, Crossfilter, GistView, CONFIG, util, gistConf, WritebackForm, formUtil, trayView, showEncounter) {
+], function(Handlebars, _, Backbone, Marionette, Crossfilter, moment, GistView, CONFIG, util, gistConf, WritebackForm, formUtil, trayView, showEncounter) {
     'use strict';
     // Switch ON/OFF debug info
     var DEBUG = CONFIG.debug;
@@ -544,7 +545,7 @@ define([
         },
 
         showDocumentDetail: function(params) {
-            if (DEBUG) console.log("detailView --->>documents");
+            if (DEBUG) console.log("detailView --->>documents ", params);
             util.showDetailView(params, "documents");
         },
         onBeforeDestroy: function() {

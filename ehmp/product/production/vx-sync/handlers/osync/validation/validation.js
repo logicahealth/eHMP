@@ -3,8 +3,8 @@
 var _ = require('lodash');
 var errorUtil = require(global.VX_UTILS + 'error');
 var nullUtil = require(global.VX_UTILS + 'null-utils');
-var jobUtil = require(global.VX_UTILS + 'osync-job-utils');
-var jdsUtil = require(global.VX_UTILS + 'jds-utils');
+var jobUtil = require(global.OSYNC_UTILS + 'osync-job-utils');
+var jdsUtil = require(global.OSYNC_UTILS + 'jds-utils');
 var patientIdUtil = require(global.VX_UTILS + 'patient-identifier-utils');
 
 /**

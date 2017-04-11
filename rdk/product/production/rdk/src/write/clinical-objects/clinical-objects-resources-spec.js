@@ -22,7 +22,7 @@ describe('Unit tests for write-back clinical object resources', function() {
         });
 
         expect(findResource.requiredPermissions).to.be.an.array();
-        expect(findResource.requiredPermissions).to.be.empty();
+        expect(findResource.requiredPermissions).to.eql(['read-clinical-object']);
         expect(findResource.post).not.to.be.undefined();
 
         expect(getListResource.name).to.be('clinical-object-list-get');
@@ -33,7 +33,7 @@ describe('Unit tests for write-back clinical object resources', function() {
         });
 
         expect(getListResource.requiredPermissions).to.be.an.array();
-        expect(getListResource.requiredPermissions).to.be.empty();
+        expect(getListResource.requiredPermissions).to.eql(['read-clinical-object']);
         expect(getListResource.get).not.to.be.undefined();
 
         expect(createResource.name).to.be('clinical-object-add');
@@ -43,7 +43,7 @@ describe('Unit tests for write-back clinical object resources', function() {
             synchronize: false
         });
         expect(createResource.requiredPermissions).to.be.an.array();
-        expect(createResource.requiredPermissions).to.be.empty();
+        expect(createResource.requiredPermissions).to.eql(['create-clinical-object']);
         expect(createResource.post).not.to.be.undefined();
 
         expect(readResource.name).to.be('clinical-object-read');
@@ -53,7 +53,7 @@ describe('Unit tests for write-back clinical object resources', function() {
             synchronize: false
         });
         expect(readResource.requiredPermissions).to.be.an.array();
-        expect(readResource.requiredPermissions).to.be.empty();
+        expect(readResource.requiredPermissions).to.eql(['read-clinical-object']);
         expect(readResource.get).not.to.be.undefined();
     });
 });

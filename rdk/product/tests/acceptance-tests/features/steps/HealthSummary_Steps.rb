@@ -23,11 +23,11 @@ Then(/^authentication error returned for an unauthenticated user$/) do
   #p path
   user = ""
   pass = "bad"
-  @response = HTTPartyRDK.get_as_user(path, user, pass)
+  @response = HTTParty.get(path)
   result_array = JSON.parse(@response.body)
-  expect(@response.code).to eq(400), "response code was #{@response.code}: response body #{@response.body}"
-  #puts JSON.pretty_generate(@response)
-  if result_array["message"] == "Missing Required Credential"
+  expect(@response.code).to eq(401), "response code was #{@response.code}: response body #{@response.body}"
+  p JSON.pretty_generate(@response)
+  if result_array["data"]["error"] == "Web Token could not be verified. Log out, clear browser cookies and log in again."
     p "   +++   TEST CASE PASSED   +++  "
   else fail(" test case failed")
   end	
@@ -154,7 +154,7 @@ Given(/^a HS report request was sent with patientID "(.*?)", siteID "(.*?)", rep
   path = query.path
   p path
   @response = HTTPartyRDK.get(path)
-  #@response = HTTPartyRDK.get_with_authorization_for_user(path, '9E7A;pu1234', 'pu1234!!')
+  #@response = HTTPartyRDK.get_with_authorization_for_user(path, '9E7A;PW    ', 'PW    !!')
   #p @response
   expect(@response.code).to eq(200)
 end

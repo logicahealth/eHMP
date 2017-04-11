@@ -15,7 +15,8 @@ Then(/^POB user selects and sets new encounter with location "(.*?)" and provide
   @ehmp.fld_tab_new_visit.click
 
   # set location
-  @ehmp.wait_until_ddl_encounter_location_visible
+  @ehmp.wait_for_ddl_encounter_location
+  # @ehmp.wait_until_ddl_encounter_location_visible
   expect(@ehmp).to have_ddl_encounter_location
   @ehmp.ddl_encounter_location.click
   @ehmp.wait_until_fld_encounter_search_box_visible
@@ -50,6 +51,10 @@ When(/^the POB user selects change current encounter$/) do
   expect(@ehmp.btn_set_encounter).to have_text("Current Encounter")
   expect(@ehmp).to have_btn_set_encounter
   @ehmp.btn_set_encounter.click
+
+  @ehmp.wait_for_btn_confirm_encounter
+  @ehmp.wait_until_fld_tray_loader_invisible(60)
+  expect(@ehmp).to_not have_fld_tray_loader
 end
 
 When(/^POB user chooses to set a new visit$/) do

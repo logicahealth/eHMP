@@ -159,8 +159,8 @@ define([
 
             var result = appletHelper.getFillableData(medication);
             expect(result.display).toBe("Fillable for");
-            expect(result.date).toBe('11m');
-            expect(result.description).toBe('This medication is Active and fillable for 11m. ');
+            expect(result.date).toBe('10m');
+            expect(result.description).toBe('This medication is Active and fillable for 10m. ');
         });
         it("Confirm '0 Refills' when fillsRemaining = 0 and medication status is 'Active'", function() {
             medication.orders[0].fillsRemaining = 0;

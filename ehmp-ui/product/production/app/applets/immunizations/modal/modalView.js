@@ -4,20 +4,13 @@ define([
     "marionette",
     "underscore",
     "handlebars",
+    "moment",
     'app/applets/immunizations/util',
     "app/applets/immunizations/modal/filterDateRangeView",
     'hbs!app/applets/immunizations/modal/modalTemplate',
-    "app/applets/immunizations/modal/modalHeaderView",
-  ], function($, Backbone, Marionette, _, Handlebars, Util, FilterDateRangeView, modalTemplate, modalHeader) {
+  ], function($, Backbone, Marionette, _, Handlebars, moment, Util, FilterDateRangeView, modalTemplate) {
     'use strict';
-    var currentModel, currentCollection, gridOptions = {},
-    columns, mockData2, DataGridView, DataGridCollection, chartOptions, Chart, categories, data, fetchCollection = {},
-    low, high, TotalTestModel;
-    var modals = [],
-    panelModals = [], modalDisplayName,
-    dataCollection;
-
-    DataGridCollection = Backbone.Collection.extend({});
+    var gridOptions = {}, columns, TotalTestModel;
 
     columns = [{
         name: "administeredFormatted",
@@ -98,8 +91,6 @@ define([
         }
    });
 
-   var totalTestModel = new TotalTestModel();
-
    var comparator = function(modelOne, modelTwo){
         return -modelOne.get('administeredDateTime').localeCompare(modelTwo.get('administeredDateTime'));
     };
@@ -107,112 +98,105 @@ define([
     var ModalView =  Backbone.Marionette.LayoutView.extend({
         template: modalTemplate,
         fetchOptions: {},
-        initialize: function(options) {
-            this.loadingView = ADK.Views.Loading.create();
-            dataCollection = options.gridCollection;
-            if (!_.isEmpty(dataCollection)) {
-                dataCollection.comparator = comparator;
+        modals: [],
+        collectionEvents: {
+            'fetch:success': function(collection, response) {
+                if (this.showNavHeader) {
+                    this.model.set('navHeader', true);
+                }
+
+                this.gridOptions.collection = collection;
+                var length = _.get(collection, 'fullCollection.length', collection.length);
+
+                this.totalTestModel.set({
+                    totalTests: length
+                });
+
+                this.dataGrid = ADK.Views.DataGrid.create(this.gridOptions);
+
+                if (this.leftColumn !== undefined && this.leftColumn !== null) {
+                    this.leftColumn.reset();
+                    this.leftColumn.show(this.dataGrid);
+                }
+
+                var collectionsPageSize = _.get(collection, 'state.pageSize', null);
+                if (collection.length !== 0) {
+                    if (length <= collectionsPageSize) {
+                        this.$('.js-backgrid').append('<div class="backgrid-paginator"></div>');
+                    } else {
+                        this.paginatorView = ADK.Views.Paginator.create({
+                            collection: gridOptions.collection,
+                            windowSize: 4
+                        });
+                        this.$('.js-backgrid').append(this.paginatorView.render().el);
+                    }
+                } else {
+                    $('#data-grid-immunizations-modalView').find('tbody').append($('<tr><td>No Records Found</td></tr>'));
+                }
+            },
+            'fetch:error': function(resp) {
+                var errorModel = new Backbone.Model(resp);
+                this.leftColumn.show(ADK.Views.Error.create({
+                    model: errorModel
+                }));
             }
-            this.getModals();
+        },
+        modelCollectionEvents: {
+            'fetch:success': function(collection, resp) {
+                var model = collection.first();
+                if (model) this.model.set(model.toJSON());
+            }
+        },
+        modelEvents: {
+            'change': function() {
+                this.render();
+            }
+        },
+        initialize: function(options) {
+            this.gridOptions = _.clone(gridOptions, {
+                deep: true
+            });
+            this.collection = this.getOption('collection') || ADK.PatientRecordService.createEmptyCollection({
+                pageable: true
+            });
+            this.dataCollection = options.gridCollection;
+            if (!_.isEmpty(this.dataCollection)) {
+                this.dataCollection.comparator = comparator;
+            }
 
             if (this.showNavHeader) {
-                this.model.attributes.navHeader = true;
+                this.model.set('navHeader', true);
             }
+
+            this.totalTestModel = new TotalTestModel();
 
             this.fetchOptions.resourceTitle = 'patient-record-immunization';
             this.fetchOptions.criteria = {
-                pid: this.model.attributes.pid // "10108V420871"
+                pid: this.model.get('pid')
             };
 
-            modalDisplayName = this.model.attributes.name;
+            if(this.modelCollection) {
+                _.set(this.modelCollection, 'fetchOptions.resourceTitle', this.fetchOptions.resourceTitle);
+                this.bindEntityEvents(this.modelCollection, this.modelCollectionEvents);
+            }
 
-
-            var self = this;
+            this.modalDisplayName = this.model.get('name');
 
             this.fetchOptions.collectionConfig = {
-                collectionParse: self.filterCollection,
+                collectionParse: _.bind(this.filterCollection, this),
                 comparator: comparator
             };
 
             this.fetchOptions.pageable = true;
 
-            gridOptions.appletConfig.gridTitle = 'This table represents the selected immunizations vaccine, ' + this.model.attributes.name;
-
-            this.fetchOptions.onSuccess = function(collection, response) {
-                self.collection = collection;
-                self.$el.find('.immunizationsNext, .immunizationsPrev').attr('disabled', false);
-
-                if (self.showNavHeader) {
-                    self.model.attributes.navHeader = true;
-                }
-
-                gridOptions.collection = self.collection;
-
-                currentModel = options.model;
-                self.model = options.model;
-                currentCollection = options.collection;
-
-                totalTestModel.set({
-                    totalTests: gridOptions.collection.fullCollection.length
-                });
-
-                self.dataGrid = ADK.Views.DataGrid.create(gridOptions);
-
-                if (self.leftColumn !== undefined && self.leftColumn !== null) {
-                    self.leftColumn.reset();
-                    self.leftColumn.show(self.dataGrid);
-                }
-
-                gridOptions.collection = self.collection;
-                if (collection.length !== 0) {
-
-                    self.paginatorView = ADK.Views.Paginator.create({
-                        collection: gridOptions.collection,
-                        windowSize: 4
-                    });
-                    self.$('.js-backgrid').append(self.paginatorView.render().el);
-                } else {
-                    $('#data-grid-immunizations-modalView').find('tbody').append($('<tr><td>No Records Found</td></tr>'));
-                }
-            }; // end of onSuccess
-
-            this.fetchOptions.onError = function(resp) {
-              var errorModel = new Backbone.Model(resp);
-              self.leftColumn.show(ADK.Views.Error.create({
-                model: errorModel
-              }));
-            };
-        },
-        events: {
-            'click .immunizationsNext': 'getNextModal',
-            'click .immunizationsPrev': 'getPrevModal'
-        },
-        getNextModal: function(e) {
-            var next = _.indexOf(modals, this.model) + 1;
-            if (next >= modals.length) {
-                this.getModals();
-                next = 0;
-            }
-            var model = modals[next];
-            this.setNextPrevModal(model, e);
-
-        },
-        getPrevModal: function(e) {
-            var next = _.indexOf(modals, this.model) - 1;
-            if (next < 0) {
-                this.getModals();
-                next = modals.length - 1;
-            }
-            var model = modals[next];
-
-            this.setNextPrevModal(model, e);
-
+            this.gridOptions.appletConfig.gridTitle = 'This table represents the selected immunizations vaccine, ' + this.model.get('name');
+            this.getModals();
         },
         getModals: function() {
-            modals = [];
-            panelModals = [];
-            if(dataCollection !== undefined){
-                _.each(dataCollection.models, function(m, key) {
+            var modals = [];
+            var dataCollection = this.dataCollection;
+            if(this.dataCollection !== undefined){
+                _.each(this.dataCollection.models, function(m, key) {
                     if (m.get('immunizations')) {
                         var outterIndex = dataCollection.indexOf(m);
                         _.each(m.get('immunizations').models, function(m2, key) {
@@ -229,50 +213,7 @@ define([
                     }
                 });
             }
-        },
-        setNextPrevModal: function(model, e) {
-            if (this.showNavHeader) {
-                model.attributes.navHeader = true;
-            }
-            if (model.get('inAPanel')) {
-                var dataTableEl = $('#data-grid-' + this.options.appletConfig.instanceId);
-                var tr = $(dataTableEl + ' > tbody>tr.selectable').eq(model.get('parentIndex'));
-                if (!tr.data('isOpen')) {
-                    tr.trigger('click');
-                }
-                $(dataTableEl + ' > tbody>tr.selectable').not(tr).each(function() {
-                    var $this = $(this);
-                    if ($this.data('isOpen')) {
-                        $this.trigger('click');
-                    }
-                });
-
-            }
-
-            var view = new ModalView({
-                model: model,
-                gridCollection: dataCollection,
-                navHeader: this.showNavHeader
-            });
-
-            var siteCode = ADK.UserService.getUserSession().get('site'),
-                pidSiteCode = model.get('pid') ? model.get('pid').split(';')[0] : '';
-
-            var modalOptions = {
-                'title': 'Vaccine - ' + model.get('name'),
-                'size': 'xlarge',
-                'headerView': modalHeader.extend({
-                    model: model,
-                    theView: view
-                })
-            };
-
-            var modal = new ADK.UI.Modal({
-                view: view,
-                options: modalOptions
-            });
-            modal.show();
-            modal.$el.closest('.modal').find('#' + e).focus();
+            this.modals = modals;
         },
         regions: {
             leftColumn: '.js-backgrid',
@@ -283,6 +224,12 @@ define([
             sharedDateRange = new DateRangeModel();
         },
         onRender: function() {
+            if (this.modelCollection && this.modelCollection.isEmpty()) {
+                ADK.PatientRecordService.fetchCollection(this.modelCollection.fetchOptions, this.modelCollection);
+                return;
+            } else {
+                ADK.PatientRecordService.fetchCollection(this.fetchOptions, this.collection);
+            }
             var dateRange;
 
             if (sharedDateRange === undefined || sharedDateRange === null) {
@@ -300,17 +247,17 @@ define([
             new DateRangeModel();
             var filterDateRangeView = new FilterDateRangeView({
                 model: dateRange,
-                parentView: this
+                parentView: this,
+                collection: this.collection
             });
             filterDateRangeView.setFetchOptions(this.fetchOptions);
             filterDateRangeView.setSharedDateRange(sharedDateRange);
 
             this.dateRangeFilter.show(filterDateRangeView);
 
-            this.leftColumn.show(this.loadingView);
-
-            self.collection = ADK.PatientRecordService.fetchCollection(this.fetchOptions);
-        },filterCollection: function(coll) {
+            this.leftColumn.show(ADK.Views.Loading.create());
+        },
+        filterCollection: function(coll) {
             coll.models.forEach(function(model) {
                 model.attributes = parseModel(model.attributes);
             });
@@ -322,10 +269,9 @@ define([
                 return allTypes.indexOf(el) != -1;
             });
             var newColl = new Backbone.Collection(coll.where({
-                name: modalDisplayName
+                name: this.modalDisplayName
             }));
 
-            //TODO: Remove once resource gets created
             var momentToDate = moment(sharedDateRange.attributes.toDate).format("YYYYMMDD"),
                 momentFromDate = moment(sharedDateRange.attributes.fromDate).format("YYYYMMDD");
             newColl.each(function(column){
@@ -334,7 +280,11 @@ define([
                 }
             });
 
+            coll.reset(resultColl);
             return resultColl;
+        },
+        onDestroy: function() {
+            this.unbindEntityEvents(this.modelCollection, this.modelCollectionEvents);
         }
     });
 

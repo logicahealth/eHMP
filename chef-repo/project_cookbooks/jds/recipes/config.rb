@@ -2,21 +2,21 @@
 # Cookbook Name:: jds
 # Recipe:: config
 #
+user_password = Chef::EncryptedDataBagItem.load("credentials", "jds_passwords", node[:data_bag_string])["user_password"]
 
-[node[:jds][:cache_jsonvpr_vista_dir], node[:jds][:cache_jsonvpr_dir]].each do |dir|
-  directory(dir) do
-    owner node[:jds][:cache_user]
-    group node[:jds][:cache_user]
-    mode "0750"
-  end
+directory(node[:jds][:jds_database_location]) do
+  owner node[:jds][:cache_user]
+  group node[:jds][:cache_user]
+  recursive true
+  mode "0750"
 end
 
 cookbook_file "vprnamespace.mac" do
   path "#{Chef::Config[:file_cache_path]}/vprnamespace.mac"
   owner node[:jds][:cache_user]
   group node[:jds][:cache_user]
-  mode "0640"
-  action :create_if_missing
+  mode "0755"
+  action :create
 end
 
 # Retrieve cache license from encrypted data bag
@@ -29,6 +29,7 @@ file "#{node[:jds][:cache_mgr_dir]}/cache.key" do
   group node[:jds][:cache_user]
   mode "0640"
   action :create
+  notifies :restart, "service[#{node[:jds][:service_name]}]"
 end
 
 # Retrieve database encryption key and details from encrypted data bag
@@ -65,45 +66,55 @@ end
 
 # Activate database encryption key and configure startup options
 jds_key_block "key block" do
+  cache_username node[:jds][:default_admin_user]
+  cache_password user_password
   log node[:jds][:chef_log]
   only_if { node[:jds][:build_jds] }
 end
 
 # Set database security parameters
 jds_security_block "security block" do
+  cache_username node[:jds][:default_admin_user]
+  cache_password user_password
   log node[:jds][:chef_log]
   only_if { node[:jds][:build_jds] }
 end
 
+# This is apache configuration for the embedded apache server in Cache 2014
+template "#{node[:jds][:cache_dir]}/httpd/conf/httpd.conf" do
+  source 'http.conf.erb'
+  owner node[:jds][:cache_user]
+  group node[:jds][:cache_user]
+  mode '0755'
+  notifies :restart, "service[#{node[:jds][:service_name]}]"
+end
+
 jds_mumps_block "create namespace" do
+  cache_username node[:jds][:default_admin_user]
+  cache_password user_password
   namespace "%SYS"
   command [
     "set RoutineFile = \"#{Chef::Config[:file_cache_path]}/vprnamespace.mac\"",
     "OPEN RoutineFile USE RoutineFile ZLOAD",
     "ZSAVE VPRNAMESPACE",
-    "D CREATE^VPRNAMESPACE(\"#{node[:jds][:cache_namespace]}\", \"#{node[:jds][:cache_jsonvpr_dir]}\")"
+    "D CREATE^VPRNAMESPACE(\"#{node[:jds][:cache_namespace]}\", \"#{node[:jds][:jds_database_location]}\")"
   ]
   log node[:jds][:chef_log]
-  not_if "echo -e \"i ##class(%SYS.Namespace).Exists(\\\"#{node[:jds][:cache_namespace]}\\\") w \\\"found\\\"\" | #{node[:jds][:session]} | grep \"found\""
+  not_if "echo -e \"i ##class(%SYS.Namespace).Exists(\\\"#{node[:jds][:cache_namespace]}\\\") w \\\"found\\\"\" | #{node[:jds][:session]} | grep \"found\"", :user => node[:jds][:install_user]
 end
 
 # make CSP.ini 600
 file "#{node[:jds][:cache_dir]}/csp/bin/CSP.ini" do
-  mode '0640'
+  mode '0755'
 end
 
-file "#{node[:jds][:cache_jsonvpr_dir]}/CACHE.DAT" do
-  content lazy { ::File.open("/tmp/CACHE.DAT").read }
-  action :create
-  notifies :restart, "service[#{node[:jds][:cache_service]}]", :immediately
-  notifies :delete, "file[/tmp/CACHE.DAT]", :immediately
-  only_if { node[:jds][:build_jds] && File.exists?("/tmp/CACHE.DAT") }
-end
-
+# conditionally create or remove cron job to delete journal files
+# This is disabled in production and production like environments
+# In development this is enabled
 clear_jds_journal_action = node[:jds][:clear_jds_journal] ? :create : :delete
-# Copy cron job to clear jds journal entries
+
 cookbook_file "clear_jds_journal" do
   path "#{node[:jds][:cron_dir]}/clear_jds_journal"
-  mode "0644"
+  mode "0755"
   action clear_jds_journal_action
 end

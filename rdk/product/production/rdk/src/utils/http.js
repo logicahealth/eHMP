@@ -1,6 +1,7 @@
 'use strict';
 
 var util = require('util');
+var fs = require('fs');
 var request = require('request');
 var metrics = require('./metrics/metrics');
 var cache = require('memory-cache');
@@ -18,7 +19,8 @@ var _ = require('lodash');
  *
  * options.url => the URL to make the request to, including the protocol. Required.
  * options.logger => a logger object with standard logging calls (trace, debug, info, warn,
- *      error, fatal). Required.
+ *      error, fatal). If logger.fields.requestId exists it will be added to the request as
+ *      a X-Request-ID header. options.logger is required.
  * options.method => the HTTP method for the request. Required if calling this wrapper directly
  *      instead of using one of the convenience functions like get, put, post and delete.
  * options.timeout => the request timeout in milliseconds. Defaults to 120000 if undefined.
@@ -31,6 +33,22 @@ var _ = require('lodash');
  * options supports all other properties that
  *      {@link https://github.com/request/request#requestoptions-callback|request supports}.
  *
+ * If options has any of the following properties:
+ * options.key
+ * options.cert
+ * options.pfx
+ * options.ca
+ * options.agentOptions.key
+ * options.agentOptions.cert
+ * options.agentOptions.pfx
+ * options.agentOptions.ca
+ * And if the property is a string starting with `/`, that property is
+ * assumed to be a file path to a certificate and that property is replaced
+ * with the certificate's contents.
+ * options.ca and options.agentOptions.ca may be an array, and the same
+ * behavior applies to all elements of the array.
+ * If a certificate can't be read, the process exits with status code 1.
+ *
  * callback => a function that takes an error, the response of type
  *      {@link http://nodejs.org/api/http.html#http_http_incomingmessage|httpIncomingMessage},
  *      and the response body text.
@@ -39,13 +57,15 @@ var _ = require('lodash');
  *      further if desired.
  */
 
-module.exports = wrapRequest(withLogging, withMetrics, withJSON, withForever);
-module.exports.get = wrapRequest(withMethod('GET'), withLogging, withCaching, withMetrics, withForever);
-module.exports.post = wrapRequest(withMethod('POST'), withLogging, withMetrics, withJSON, withForever);
-module.exports.put = wrapRequest(withMethod('PUT'), withLogging, withMetrics, withJSON, withForever);
-module.exports.delete = wrapRequest(withMethod('DELETE'), withLogging, withMetrics, withForever);
+module.exports = wrapRequest(withRequestID, withLogging, withMetrics, withCertificates, withJSON, withForever);
+module.exports.get = wrapRequest(withMethod('GET'), withRequestID, withLogging, withCaching, withMetrics, withCertificates, withForever);
+module.exports.patch = wrapRequest(withMethod('PATCH'), withRequestID, withLogging, withMetrics, withCertificates, withJSON, withForever);
+module.exports.post = wrapRequest(withMethod('POST'), withRequestID, withLogging, withMetrics, withCertificates, withJSON, withForever);
+module.exports.put = wrapRequest(withMethod('PUT'), withRequestID, withLogging, withMetrics, withCertificates, withJSON, withForever);
+module.exports.delete = wrapRequest(withMethod('DELETE'), withRequestID, withLogging, withMetrics, withCertificates, withForever);
 module.exports.initializeTimeout = initializeTimeout;
 module.exports.setMaxSockets = setMaxSockets;
+module.exports._withCertificates = withCertificates;
 
 var defaultTimeout = 120000;
 
@@ -70,14 +90,11 @@ function wrapRequest() {
         next = wrapper.bind(null, next);
     });
 
-
     return function(options, callback) {
         options = _.clone(options);
         if (!options.timeout) {
             options.timeout = defaultTimeout;
         }
-
-
         return next(options, callback);
     };
 }
@@ -104,7 +121,7 @@ function withLogging(next, options, callback) {
     logger.debug(logOptions);
 
     return next(options, function(error, response, body) {
-        _.merge(logOptions, {'elapsed milliseconds': now() - begin});
+        logOptions['elapsed milliseconds'] = now() - begin;
 
         if (error) {
             if (error.code === 'ETIMEDOUT' || error.code === 'ESOCKETTIMEDOUT') {
@@ -123,6 +140,15 @@ function withLogging(next, options, callback) {
     });
 }
 
+function withRequestID(next, options, callback) {
+    var requestId = _.get(options, 'logger.fields.requestId');
+    if (_.isString(requestId)) {
+        options.headers = options.headers || {};
+        _.defaults(options.headers, { 'X-Request-ID': requestId });
+    }
+    return next(options, callback);
+}
+
 function withMetrics(next, options, callback) {
     var metricData = metrics.handleOutgoingStart(options, options.logger);
 
@@ -137,6 +163,61 @@ function withMetrics(next, options, callback) {
             return callback(error, response, body);
         }
     });
+}
+
+var tlsProperties = [
+    ['key'],
+    ['cert'],
+    ['ca'],
+    ['pfx'],
+    ['agentOptions', 'key'],
+    ['agentOptions', 'cert'],
+    ['agentOptions', 'ca'],
+    ['agentOptions', 'pfx']
+];
+
+function withCertificates(next, options, callback) {
+    _.each(tlsProperties, function(pemProperty) {
+        var tlsPropertyValue = _.get(options, pemProperty);
+        if (isFilePath(tlsPropertyValue)) {
+            next = readKey.bind(null, tlsPropertyValue, pemProperty, next);
+        } else if (_.isArray(tlsPropertyValue)) {
+            _.each(tlsPropertyValue, function(pemFile, index) {
+                if (isFilePath(pemFile)) {
+                    var propertyPath = pemProperty.concat(index);
+                    next = readKey.bind(null, pemFile, propertyPath, next);
+                }
+            });
+        }
+    });
+    return next(options, callback);
+
+    function isFilePath(string) {
+        // Keys may not be ascii armored so it is easier to check if
+        // the value might be a path to a certificate than to check if the
+        // value is already a certificate.
+        return _.isString(string) && /^\//.test(string);
+    }
+
+    function readKey(file, property, next) {
+        return fs.readFile(file, function(err, data) {
+            if (err) {
+                console.error('Error reading file %s from HTTPS configuration, property %s. (assuming property values that start with / are file paths)', file, property, err);
+                options.logger.fatal({
+                    err: err,
+                    file: file,
+                    property: property
+                }, 'Error reading file from HTTPS configuration. (assuming property values that start with / are file paths)');
+                options.logger.fatal(new Error().stack);
+                if (_.isFunction(callback)) {
+                    callback(err);
+                }
+                process.exit(1);
+            }
+            _.set(options, property, data);
+            return next(options, callback);
+        });
+    }
 }
 
 function withJSON(next, options, callback) {
@@ -194,5 +275,7 @@ function reportConfigurationError(error, callback) {
 }
 
 function createLogOptions(options) {
-    return {'http options': _.merge({}, options, {logger: true})};
+    return {
+        'http options': _.defaults({logger: true}, options)
+    };
 }

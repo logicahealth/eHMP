@@ -64,7 +64,7 @@ ORWU NEWPERS
 
     :[site]({{{common}}}/parameters/site.md)
 
-    + searchString (string, required) - Used when an RPC call requires a minimum of 3 characters in order to return data
+    + searchString (string, optional) - Used when an RPC call requires a minimum of 3 characters in order to return data
 
         This is not a filter - it is a search string.  For example, searching for RAD may return RADIACARE;
         however, searching for DIA will not return RADIACARE.  Also, the search term may not always be the
@@ -109,7 +109,7 @@ ORWU NEWPERS
                     }
                 ],
                 "status": 200
-            }        
+            }
 
     + Schema
 

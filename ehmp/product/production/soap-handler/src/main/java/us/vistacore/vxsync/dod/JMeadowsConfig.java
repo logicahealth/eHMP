@@ -68,7 +68,7 @@ public class JMeadowsConfig {
     }
 
     public void setUserName(String userName) {
-        this.VsID        serName;
+        this.userName = userName;
     }
 
     public String getUserIen() {

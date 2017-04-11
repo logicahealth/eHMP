@@ -36,15 +36,15 @@ define([
             var ariaRegion = header.parent().find('[aria-live]');
             if(dir === "asc") {
                 ariaRegion.text('Sorted ascending. Press enter to sort descending');
-                header.find('span').text("Sorted ascending. Press enter to sort descending");
+                header.find('.sort-span').text("Sorted ascending. Press enter to sort descending");
             } else if (dir === "desc") {
                 ariaRegion.text('Sorted descending. Press enter to sort ascending');
-                header.find('span').text("Sorted descending. Press enter to sort ascending");
+                header.find('.sort-span').text("Sorted descending. Press enter to sort ascending");
             } else {
                 ariaRegion.text('Press enter to sort');
-                header.find('span').text("Press enter to sort");
+                header.find('.sort-span').text("Press enter to sort");
             }
-            header.siblings().find('span').text('Press enter to sort');
+            header.siblings().find('.sort-span').text('Press enter to sort');
         },
         onClick: function(e) {
             e.preventDefault();

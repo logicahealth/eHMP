@@ -11,6 +11,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import gov.va.ehmp.services.exception.EhmpServicesException;
+import gov.va.ehmp.services.exception.ErrorResponseUtil;
 import gov.va.ehmp.services.utils.Logging;
 import gov.va.kie.utils.WorkItemUtil;
 import gov.va.signalregistrationservice.util.RegistrationUtil;
@@ -41,17 +42,19 @@ public class RegistrationHandler implements WorkItemHandler, Closeable,
 	}
 
 	public void executeWorkItem(WorkItem workItem, WorkItemManager manager) {
-		String signalName, signalContent, eventDescription, eventName, serviceResponse;
+		String serviceResponse;
 		JsonObject matchJsonObject = null;
 		
 		try {
 			Logging.info("Signal Service RegistrationHandler.executeWorkItem has been called");
 
-			signalName  = WorkItemUtil.extractStringParam(workItem, "signalName");	
+			String signalName  = WorkItemUtil.extractRequiredStringParam(workItem, "signalName");	
 			Logging.debug("Signal Service RegistrationHandler.executeWorkItem: signalName=" + signalName);
-			signalContent  = WorkItemUtil.extractStringParam(workItem, "signalContent");				
+			
+			String signalContent  = WorkItemUtil.extractRequiredStringParam(workItem, "signalContent");				
 			Logging.debug("Signal Service RegistrationHandler.executeWorkItem: signalContent=" + signalContent);
-			String matchObject  = WorkItemUtil.extractStringParam(workItem, "matchObject");
+			
+			String matchObject  = WorkItemUtil.extractRequiredStringParam(workItem, "matchObject");
 			Logging.debug("Signal Service RegistrationHandler.executeWorkItem: matchObject=" + matchObject);
 						
 			try {
@@ -62,9 +65,10 @@ public class RegistrationHandler implements WorkItemHandler, Closeable,
 				throw new EhmpServicesException(HttpStatus.BAD_REQUEST, e.getMessage());
 			}
 			
-			eventDescription  = WorkItemUtil.extractStringParam(workItem, "eventDescription");	
+			String eventDescription  = WorkItemUtil.extractRequiredStringParam(workItem, "eventDescription");	
 			Logging.debug("Signal Service RegistrationHandler.executeWorkItem: eventDescription=" + eventDescription);
-			eventName  = WorkItemUtil.extractStringParam(workItem, "eventName");
+			
+			String eventName  = WorkItemUtil.extractRequiredStringParam(workItem, "eventName");
 			Logging.debug("Signal Service RegistrationHandler.executeWorkItem: eventName=" + eventName);
 
 			long processInstanceId = workItem.getProcessInstanceId();
@@ -80,6 +84,9 @@ public class RegistrationHandler implements WorkItemHandler, Closeable,
 		catch (EhmpServicesException e) {
 			e.printStackTrace();
 			serviceResponse = e.toJsonString();
+		} catch (Exception e) {
+			Logging.error("RegistrationHandler.executeWorkItem: An unexpected condition has happened: " + e.getMessage());
+			serviceResponse = ErrorResponseUtil.create(HttpStatus.INTERNAL_SERVER_ERROR, "RegistrationHandler.executeWorkItem: An unexpected condition has happened: ", e.getMessage());
 		}
 		
 		WorkItemUtil.completeWorkItem(workItem, manager, serviceResponse);
@@ -98,7 +105,7 @@ public class RegistrationHandler implements WorkItemHandler, Closeable,
 			JsonObject matchJsonObject, long processInstanceId) throws EhmpServicesException {
 		
 		try {
-			EntityManager em = RegistrationUtil.getEntityManager(ksession);		
+			EntityManager em = RegistrationUtil.getEntityManager(ksession);
 			em.joinTransaction();
 			
 			// Insert row into EVENT_MATCH_CRITERIA			

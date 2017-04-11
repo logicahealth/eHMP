@@ -20,4 +20,8 @@
 #  *******************************************************************************
 # 
 wsdlURL=http://<%= @cdsinvocation['ipaddress'] %>:8080/opencds/evaluate?wsdl
-mongo-db-url=mongodb://<%= @cdsdb['ipaddress'] %>:<%= @cdsdb['cdsdb']['config']['port'] %>
+mongo_host=<%= @cdsdb['ipaddress'] %>
+mongo_port=<%= @cdsdb[:mongodb][:config][:port]  %>
+mongo_username=<%= @mongodb_creds['cds']['user'] %>
+mongo_password=<%= @mongodb_creds['cds']['password'] %>
+mongo_connectionsPerHost=10

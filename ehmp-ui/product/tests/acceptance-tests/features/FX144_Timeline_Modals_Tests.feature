@@ -1,6 +1,13 @@
-@F144_TimelineApplet_Modals @regression @data_specific @triage
+@F144_TimelineApplet_Modals @regression @data_specific @triage @DE6696
 
 Feature: F144-eHMP Viewer GUI - Timeline(NewsFeed) - Modal Tests
+
+# DE6696: Default automated user is unable to see Timeline
+Background:
+  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "PW    " verifycode as  "PW    !!"
+  And staff view screen is displayed
+  And Navigate to Patient Search Screen
+
 
 @f144_timeline_visit_modal_details @data_specific
 Scenario: Users will be able to view modal popup for event Visits
@@ -67,8 +74,8 @@ Scenario: Users will be able to view modal popup for event Discharge
       | Movements		|
       | Reason			|
       
-@f144_timeline_immunization_modal_details @F893 @US3313 @DE5248
-Scenario: Users will be able to view modal popup for event Discharge
+@f144_timeline_immunization_modal_details @F893 @US3313 @DE5248 @DE6519 @debug @DE6761
+Scenario: Users will be able to view modal popup for event Immunization
   # Given user is logged into eHMP-UI
   And user searches for and selects "ZZZRETFOURNINETEEN,Patient"
   And the user has selected All within the global date picker
@@ -77,15 +84,16 @@ Scenario: Users will be able to view modal popup for event Discharge
   When the user views the first Timeline event "Immunization" detail view
   Then the modal is displayed
   And the modal's title is "Vaccine - PNEUMOCOCCAL, UNSPECIFIED FORMULATION"
-  And the Timeline event "Immunization" Detail modal displays 
+  And the Timeline event Immunization Detail modal displays
       | modal item        |
       | Name              | 
-      | Date Administered | 
+      | Date administered | 
       | Location          | 
-      | Administered By   | 
+      | Administered by   | 
 
 
-@f144_timeline_surgery_modal_details @data_specific @DE2907 @DE3334 @DE4552 @debug
+
+@f144_timeline_surgery_modal_details @data_specific @DE2907 @DE3334 @DE4552 @debug @DE6761
 Scenario: Users will be able to view modal popup for event Surgery
   # Given user is logged into eHMP-UI
   And user searches for and selects "ZZZRETFOUREIGHTY,Patient"
@@ -103,7 +111,7 @@ Scenario: Users will be able to view modal popup for event Surgery
       | Date/Time       | 
       | Providers       | 
 
-@f144_timeline_procedure_modal_details @data_specific @DE3334 @DE4552 @debug
+@f144_timeline_procedure_modal_details @data_specific @DE3334 @DE4552 @debug @DE6761
 Scenario: Users will be able to view modal popup for event Procedure
   # Given user is logged into eHMP-UI
   And user searches for and selects "Sixhundred,Patient"
@@ -164,7 +172,7 @@ Scenario: Users will be able to view modal popup for event DoD Encounter
       | Facility        | 
       | Providers		|
       
-@f144_timeline_lab_modal_details @data_specific @debug @DE4207
+@f144_timeline_lab_modal_details @data_specific @DE4207 @debug @DE6761
 Scenario: Users will be able to view modal popup for event Lab
   # Given user is logged into eHMP-UI
   And user searches for and selects "ZZZRETFOURFORTYSEVEN,Patient"

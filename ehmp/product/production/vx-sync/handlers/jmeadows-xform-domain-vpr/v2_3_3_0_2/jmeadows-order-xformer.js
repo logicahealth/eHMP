@@ -20,9 +20,14 @@ function dodOrderToVPR(dodRecord, edipi) {
     vprOrder.name = dodRecord.orderDetail;
     vprOrder.content = dodRecord.orderDetail;
     vprOrder.summary = vprOrder.content;
+    vprOrder.orderNumber = dodRecord.orderid;
 
     // Empty string is intended here
-    vprOrder.statusName = '';
+    if (!_.isNull(dodRecord.status) && !_.isUndefined(dodRecord.status)) {
+        vprOrder.statusName = new String(dodRecord.status);
+    } else {
+        vprOrder.statusName = '';
+    }
 
     if (dodRecord.orderingProvider && dodRecord.orderingProvider.name) {
         vprOrder.providerName = dodRecord.orderingProvider.name;

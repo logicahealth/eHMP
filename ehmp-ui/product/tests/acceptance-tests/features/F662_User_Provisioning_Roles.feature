@@ -3,13 +3,13 @@ Feature: F662 : eHMP Release 1.3 User Provisioning & Roles
 
 @f662_1_admin_applet_presence
 Scenario: For authorized users the Administration Applet is present and accessible.
-  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "vk1234" verifycode as  "vk1234!!"
+  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "PW    " verifycode as  "PW    !!"
   Then the patient search screen is displayed
   And user can view the Access Control Applet
  
 @f662_2_admin_applet_form_validation
 Scenario: Validate admin applet form fields.
-  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "vk1234" verifycode as  "vk1234!!"
+  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "PW    " verifycode as  "PW    !!"
   Then the patient search screen is displayed
   When user views the Access Control Applet
   And the Access Control applet modal title says "Users FOR PANORAMA (9E7A)"
@@ -40,7 +40,7 @@ Scenario: Only authorized users have permission to access notes applet.
   
 @f662_4_user_add_roles
 Scenario: Authorized users can edit a users's role
-  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "vk1234" verifycode as  "vk1234!!"
+  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "PW    " verifycode as  "PW    !!"
   Then the patient search screen is displayed
   When user views the Access Control Applet
   Then user enters "TRACY" in the first name field
@@ -62,7 +62,7 @@ Scenario: Authorized users can view the Notes Applet
   
 @f662_6_user_delete_roles
 Scenario: Authorized users can delete a users's role
-  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "vk1234" verifycode as  "vk1234!!"
+  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "PW    " verifycode as  "PW    !!"
   Then the patient search screen is displayed
   When user views the Access Control Applet
   Then user enters "TRACY" in the first name field
@@ -78,7 +78,7 @@ Scenario: Authorized users can delete a users's role
   
 @f662_7_user_edit_self
 Scenario: Authorized users cannot edit their own roles
-  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "vk1234" verifycode as  "vk1234!!"
+  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "PW    " verifycode as  "PW    !!"
   Then the patient search screen is displayed
   When user views the Access Control Applet
   Then user enters "VIHAAN" in the first name field
@@ -91,7 +91,7 @@ Scenario: Authorized users cannot edit their own roles
   
 @f662_8_user_remove_all_roles
 Scenario: Authorized users can make a vista user inactive
-  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "vk1234" verifycode as  "vk1234!!"
+  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "PW    " verifycode as  "PW    !!"
   Then the patient search screen is displayed
   When user views the Access Control Applet
   Then user enters "TRACY" in the first name field
@@ -113,7 +113,7 @@ Scenario: Inactive user cann't login
   
 @f662_10_user_add_roles
 Scenario: Authorized users can make a vista user inactive
-  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "vk1234" verifycode as  "vk1234!!"
+  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "PW    " verifycode as  "PW    !!"
   Then the patient search screen is displayed
   When user views the Access Control Applet
   Then user enters "TRACY" in the first name field

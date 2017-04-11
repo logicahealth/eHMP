@@ -6,9 +6,10 @@ var logger = sinon.stub(require('bunyan').createLogger({
     name: 'queue-beanstalk.js'
 }));
 
-describe('When messages are queued in beanstalk', function() {
+// FUTURE-TODO: Re-enable (remove .skip) once resource is fully supported/tested end-to-end by system.
+describe.skip('When messages are queued in beanstalk', function() {
     var patientRecipient = 'patient/9E7A;10045';
-    var providerRecipient = 'provider/pu1234';
+    var providerRecipient = 'provider/PW    ';
 
     var singleRecipientMessage = {resourceType: 'CommunicationRequest',
         category: {coding: [{code: 'ehmp/msg/category/clinical'}]},

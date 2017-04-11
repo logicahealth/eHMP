@@ -1,4 +1,3 @@
-/*jslint node: true */
 'use strict';
 
 var rdk = require('../../core/rdk');
@@ -6,31 +5,30 @@ var http = rdk.utils.http;
 var nullchecker = rdk.utils.nullchecker;
 var async = require('async');
 var _ = require('lodash');
-var dd = require('drilldown');
 var pidValidator = rdk.utils.pidValidator;
 var ObjectId = require('mongoskin').ObjectID;
 
 var dbName = 'work';
 var workCollection = 'work';
 var subscriptionCollection = 'subscriptions';
-
-var db = {};
-
-var isCDSMongoServerAvailable = false;
+var thisApp;
+var logger;
 var testId;
 
 //
-// Database Init
+// Database Init - dbErrorCallback can be null if an error message is to be returned on failure.
+// Please see retrieveWorkProductsForProvider for a custom error callback
 //
-function initDb(app) {
-
+var initDb = function(db) {
     db.collection(workCollection).ensureIndex({
         provider: 1,
         type: 1,
         priority: 1
     }, {}, function(error) {
         if (error) {
-            app.logger.error({error: error}, 'error ensuring ' + workCollection + ' index');
+            logger.error({
+                error: error
+            }, 'error ensuring ' + workCollection + ' index');
         }
     });
 
@@ -40,24 +38,20 @@ function initDb(app) {
         unique: true
     }, function(error) {
         if (error) {
-            app.logger.error({error: error}, 'error ensuring ' + subscriptionCollection + ' index');
+            logger.error({
+                error: error
+            }, 'error ensuring ' + subscriptionCollection + ' index');
+            return;
         }
     });
-}
-
-module.exports.init = function(app) {
-    if (!dd(app)('subsystems')('cds')('isCDSMongoServerConfigured').exists || !app.subsystems.cds.isCDSMongoServerConfigured()) {
-        return;
-    }
-    isCDSMongoServerAvailable = true;
-    app.subsystems.cds.getCDSDB(dbName, function(error, dbConnection) {
-        if (!error) {
-            db = dbConnection;
-            initDb(app);
-        } //if we have an error, it's logged by the cds subsystem.
-    });
-    testId = app.subsystems.cds.testMongoDBId;
 };
+
+var init = function(app, subsystemLogger) {
+    thisApp = app;
+    logger = subsystemLogger;
+    testId = thisApp.subsystems.cds.testMongoDBId;
+};
+module.exports.init = init;
 
 //
 // Utility Methods
@@ -80,12 +74,12 @@ function getKeyValue(obj) {
 function fetchNames(req, items, fetchcb) {
 
     async.each(
-            
-        items, 
- 
+
+        items,
+
         function(item, callback) {
-            //http://IP_ADDRESS:PORT/vpr/9E7A;237
-            
+            //http://IP             /vpr/9E7A;237
+
             var pid = item.pid;
             var jdsResource = '/vpr';
             if (pidValidator.isDfn(pid)) {
@@ -107,19 +101,26 @@ function fetchNames(req, items, fetchcb) {
                     } else {
                         err = result.error;
                     }
-                    req.logger.debug({error: err}, 'cds-work-product.fetchNames - Error fetching name');
+                    req.logger.error({
+                        error: err
+                    }, 'cds-work-product.fetchNames - Error fetching name');
+
+                    return callback(err);
                 }
                 if (nullchecker.isNotNullish(result) && nullchecker.isNotNullish(result.data) && nullchecker.isNotNullish(result.data.items[0])) {
                     item.displayName = result.data.items[0].displayName;
                     item.fullName = result.data.items[0].fullName;
                 }
-                setImmediate(callback);
+                return callback();
             });
         },
-
+        // This function is called if an item cannot be successfully processed or if an error occurred during the processing
         function(err) {
-                // call back all async items complete
-            fetchcb(items);
+            if (err) {
+                req.logger.error('Error fetching names:');
+                req.logger.error(err);
+            }
+            return fetchcb(items);
         });
 }
 
@@ -268,41 +269,49 @@ var defaultSubscriptions = {
  *     "error": ""
  * }
  */
-module.exports.retrieveInbox = function(req, res) {
-    if (!isCDSMongoServerAvailable) {
-        return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS persistence store is unavailable.');
+var retrieveInbox = function(req, res) {
+    if (_.isUndefined(thisApp)) {
+        return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS work-product is unavailable.');
     }
-
-    req.logger.debug('CDS Work Product GET retrieveInbox called');
-
-    var userId = getKeyValue(req.session.user.duz);
-    var query = {};
-    query.assignments = {
-        $elemMatch: {
-            'user.id': userId
+   thisApp.subsystems.cds.getCDSDB(dbName, initDb, function(error, dbConnection) {
+        if (error) {
+            return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS persistence store is unavailable.');
         }
-    };
-    var projection = {
-        'workproduct': 1
-    };
+        req.logger.debug('CDS Work Product GET retrieveInbox called');
 
-    var status = rdk.httpstatus.ok;
-    db.collection(workCollection).find(query, projection).toArray(function(err, result) {
-        if (nullchecker.isNotNullish(err)) {
-            req.logger.debug({error: err});
-            status = rdk.httpstatus.not_found;
-            return res.status(status).rdkSend(err);
-        }
+        var userId = getKeyValue(req.session.user.duz);
+        var query = {};
+        query.assignments = {
+            $elemMatch: {
+                'user.id': userId
+            }
+        };
+        var projection = {
+            'workproduct': 1
+        };
 
-        req.logger.debug('results: ' + result);
-        var items = formatForRDK(result);
-        fetchNames(req, items, function (items) {
-            var data = {items: items };
-            return res.status(status).rdkSend(data);
+        var status = rdk.httpstatus.ok;
+        dbConnection.collection(workCollection).find(query, projection).toArray(function(err, result) {
+            if (nullchecker.isNotNullish(err)) {
+                req.logger.debug({
+                    error: err
+                });
+                status = rdk.httpstatus.not_found;
+                return res.status(status).rdkSend(err);
+            }
+
+            req.logger.debug('results: ' + result);
+            var items = formatForRDK(result);
+            return fetchNames(req, items, function(items) {
+                var data = {
+                    items: items
+                };
+                return res.status(status).rdkSend(data);
+            });
         });
     });
 };
-
+module.exports.retrieveInbox = retrieveInbox;
 
 /**
  * @apiIgnore This is not used externally.  This method is used by cdsAdviceList.
@@ -352,29 +361,34 @@ module.exports.retrieveInbox = function(req, res) {
  * }
  *
  */
-module.exports.retrieveWorkProductsForProvider = function(req, provider, pid, readStatus, callback) {
-    if (!isCDSMongoServerAvailable) {
-        return callback(null, []); // return empty list
+var retrieveWorkProductsForProvider = function(req, provider, pid, readStatus, callback) {
+    if (_.isUndefined(thisApp)) {
+        return callback(null, []);
     }
-
-    if (nullchecker.isNotNullish(pid)) {
-        fetchPids(req, pid, function(error, pids) {
-            if (error) {
-                req.logger.error('retrieveWorkProductsForProvider: jpid search using pid [%s], error: %s', pid, error);
-               // call callback with empty list
-               return callback(null, []);
-            }
-            // proceed and fetch work products
-            fetchWorkProduct(req, provider, pids, readStatus, callback);
-        });
-    } else {
-        // fetch work products without pid 
-        fetchWorkProduct(req, provider, null, readStatus, callback);
-    }
+    thisApp.subsystems.cds.getCDSDB(dbName, initDb, function(error, dbConnection) {
+        if (error) {
+            return callback(null, []);
+        }
+        if (nullchecker.isNotNullish(pid)) {
+            fetchPids(req, pid, function(error, pids) {
+                if (error) {
+                    req.logger.error('retrieveWorkProductsForProvider: jpid search using pid [%s], error: %s', pid, error);
+                    // call callback with empty list
+                    return callback(null, []);
+                }
+                // proceed and fetch work products
+                return fetchWorkProduct(dbConnection, req, provider, pids, readStatus, callback);
+            });
+        } else {
+            // fetch work products without pid
+            return fetchWorkProduct(dbConnection, req, provider, null, readStatus, callback);
+        }
+    });
 };
+module.exports.retrieveWorkProductsForProvider = retrieveWorkProductsForProvider;
 
 function fetchPids(req, pid, callback) {
-        
+
     var jdsResource = '/vpr/jpid';
     if (pidValidator.isDfn(pid)) {
         pid = req.session.user.site + ';' + pid;
@@ -390,18 +404,20 @@ function fetchPids(req, pid, callback) {
 
     http.get(options, function(error, response, result) {
         if (error) {
-            callback(error, null);
+            return callback(error, null);
         }
         pid = result.patientIdentifiers;
-        callback(null, pid);
+        return callback(null, pid);
     });
 }
 
-function fetchWorkProduct(req, provider, pid, readStatus, callback) {
+function fetchWorkProduct(dbConnection, req, provider, pid, readStatus, callback) {
 
     var workProductQuery = {};
     if (nullchecker.isNotNullish(pid)) {
-        workProductQuery['workproduct.context.subject.id'] = { $in: pid };
+        workProductQuery['workproduct.context.subject.id'] = {
+            $in: pid
+        };
     }
 
     var read = readStatus === 'true';
@@ -422,16 +438,19 @@ function fetchWorkProduct(req, provider, pid, readStatus, callback) {
         'workproduct': 1
     };
 
-    db.collection(workCollection).find(workProductQuery, projection)
-        .sort({'workproduct.generationDate': -1})
+    dbConnection.collection(workCollection).find(workProductQuery, projection)
+        .sort({
+            'workproduct.generationDate': -1
+        })
         .limit(500).toArray(function(err, result) {
             if (nullchecker.isNotNullish(err)) {
+                req.logger.error('fetchWorkProduct: jpid search using pid [%s], error: %s', pid, err);
                 //in these errors, there is nothing we can do but return no messages...
                 return callback(null, []);
             }
             //callback
             var items = formatForRDK(result);
-            fetchNames(req, items, function (items) {
+            fetchNames(req, items, function(items) {
                 //var data = {items: items };
                 return callback(null, items);
             });
@@ -543,40 +562,45 @@ function fetchWorkProduct(req, provider, pid, readStatus, callback) {
  *   "message": ""
  * }
  */
-module.exports.createWorkProduct = function(req, res) {
-    if (!isCDSMongoServerAvailable) {
-        return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS persistence store is unavailable.');
+var createWorkProduct = function(req, res) {
+    if (_.isUndefined(thisApp)) {
+        return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS work product is unavailable.');
     }
-
-    req.logger.debug('CDS Work Product POST createWorkProduct called');
-
-    var product = req.body;
-
-    //putting this into a wrapper object for easier access, etc.
-    var wrapper = {};
-    wrapper.workproduct = product;
-    wrapper.assignments = [];
-
-    var status = rdk.httpstatus.created;
-
-    db.collection(workCollection).insert(wrapper, function(err, result) {
-        status = rdk.httpstatus.created;
-        if (nullchecker.isNotNullish(err)) {
-            status = rdk.httpstatus.bad_request;
-            return res.status(rdk.httpstatus.bad_request).rdkSend(err);
+    thisApp.subsystems.cds.getCDSDB(dbName, initDb, function(error, dbConnection) {
+        if (error) {
+            return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS persistence store is unavailable.');
         }
-        return res.status(status).rdkSend(workProductForClient(result));
+        req.logger.debug('CDS Work Product POST createWorkProduct called');
+
+        var product = req.body;
+
+        //putting this into a wrapper object for easier access, etc.
+        var wrapper = {};
+        wrapper.workproduct = product;
+        wrapper.assignments = [];
+
+        var status = rdk.httpstatus.created;
+
+        dbConnection.collection(workCollection).insert(wrapper, function(err, result) {
+            status = rdk.httpstatus.created;
+            if (nullchecker.isNotNullish(err)) {
+                status = rdk.httpstatus.bad_request;
+                return res.status(rdk.httpstatus.bad_request).rdkSend(err);
+            }
+            if (result && result.ops) {
+                result = result.ops;
+            }
+            return res.status(status).rdkSend(workProductForClient(result));
+        });
     });
 };
-
-
+module.exports.createWorkProduct = createWorkProduct;
 /**
  * @api {get} /resource/cds/work-product/product Retrieves work products from the database.
  * @apiName retrieveWorkProduct
  * @apiGroup CDSWorkProduct
  *
- * @apiParam {String} id Work Product Id
- * @apiParam {String} . Returns first 500 work products
+ * @apiParam {String} [id=*] Work Product Id; default is '*' which means it returns first 500 work products
  *
  * @apiDescription Retrieves a work product from the database.
  *
@@ -678,41 +702,45 @@ module.exports.createWorkProduct = function(req, res) {
  *   "message": "Missing or invalid work product id."
  * }
  */
-module.exports.retrieveWorkProduct = function(req, res) {
-    if (!isCDSMongoServerAvailable) {
-        return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS persistence store is unavailable.');
+var retrieveWorkProduct = function(req, res) {
+    if (_.isUndefined(thisApp)) {
+        return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS work product is unavailable.');
     }
-
-    req.logger.debug('CDS Work Product GET retrieveWorkProduct called');
-
-    var matchQuery = {};
-
-    //first check that we have an id...
-    var id = req.query.id;
-    if (id === '*') {
-        id = null;
-    }
-    if (id) {
-        //make sure the id is in a valid format, return the error if not...
-        var idValidationError = testId(id);
-        if (nullchecker.isNotNullish(idValidationError)) {
-            return res.status(rdk.httpstatus.bad_request).rdkSend(idValidationError);
+    thisApp.subsystems.cds.getCDSDB(dbName, initDb, function(error, dbConnection) {
+        if (error) {
+            return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS persistence store is unavailable.');
         }
-        matchQuery._id = new ObjectId(id);
-    }
+        req.logger.debug('CDS Work Product GET retrieveWorkProduct called');
 
-    db.collection(workCollection).find(matchQuery).limit(500).toArray(function(err, result) {
-        if (nullchecker.isNotNullish(err)) {
-            return res.status(rdk.httpstatus.internal_server_error).rdkSend(err);
+        var matchQuery = {};
+
+        //first check that we have an id...
+        var id = req.query.id;
+        if (id === '*') {
+            id = null;
         }
-        if (nullchecker.isNullish(result)) {
-            return res.status(rdk.httpstatus.not_found).rdkSend('Work Product with id \'' + id + '\' was not found.');
+        if (id) {
+            //make sure the id is in a valid format, return the error if not...
+            var idValidationError = testId(id);
+            if (nullchecker.isNotNullish(idValidationError)) {
+                return res.status(rdk.httpstatus.bad_request).rdkSend(idValidationError);
+            }
+            matchQuery._id = new ObjectId(id);
         }
-        //default status is 'ok'
-        return res.status(rdk.httpstatus.ok).rdkSend(workProductForClient(result));
+
+        dbConnection.collection(workCollection).find(matchQuery).limit(500).toArray(function(err, result) {
+            if (nullchecker.isNotNullish(err)) {
+                return res.status(rdk.httpstatus.internal_server_error).rdkSend(err);
+            }
+            if (nullchecker.isNullish(result)) {
+                return res.status(rdk.httpstatus.not_found).rdkSend('Work Product with id \'' + id + '\' was not found.');
+            }
+            //default status is 'ok'
+            return res.status(rdk.httpstatus.ok).rdkSend(workProductForClient(result));
+        });
     });
 };
-
+module.exports.retrieveWorkProduct = retrieveWorkProduct;
 
 /**
  * @api {put} /resource/cds/work-product/product Updates a work product in the database.
@@ -720,6 +748,8 @@ module.exports.retrieveWorkProduct = function(req, res) {
  * @apiGroup CDSWorkProduct
  *
  * @apiDescription Updates a work product in the database.
+ *
+ * @apiParam {string} id work product id
  *
  * @apiSuccess (Success 200) {json} data with a '1' for successful match and update, or a '0' for no match and update.
  * @apiSuccessExample Success-Response:
@@ -745,44 +775,48 @@ module.exports.retrieveWorkProduct = function(req, res) {
  *   "message": "Work Product with id <id> was not found."
  * }
  */
-module.exports.updateWorkProduct = function(req, res) {
-    if (!isCDSMongoServerAvailable) {
-        return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS persistence store is unavailable.');
+var updateWorkProduct = function(req, res) {
+    if (_.isUndefined(thisApp)) {
+        return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS work product is unavailable.');
     }
-
-    req.logger.debug('CDS Work Product PUT updateWorkProduct called');
-
-    var id = req.query.id;
-    var product = req.body;
-
-    if (nullchecker.isNullish(id)) {
-        return res.status(rdk.httpstatus.bad_request).rdkSend('Missing or invalid work product id.');
-    }
-    //make sure the id is in a valid format, return the error if not...
-    var idValidationError = testId(id);
-    if (nullchecker.isNotNullish(idValidationError)) {
-        return res.status(rdk.httpstatus.bad_request).rdkSend(idValidationError);
-    }
-
-    db.collection(workCollection).update({
-        _id: new ObjectId(id)
-    }, {
-        $set: {
-            workproduct: product
+    thisApp.subsystems.cds.getCDSDB(dbName, initDb, function(error, dbConnection) {
+        if (error) {
+            return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS persistence store is unavailable.');
         }
-    }, function(err, numUpdated) {
-        if (nullchecker.isNullish(err)) {
-            if (numUpdated === 0) {
-                // no records updated, id not found
-                return res.status(rdk.httpstatus.not_found).rdkSend('Work Product with id \'' + id + '\' was not found.');
+        req.logger.debug('CDS Work Product PUT updateWorkProduct called');
+
+        var id = req.query.id;
+        var product = req.body;
+
+        if (nullchecker.isNullish(id)) {
+            return res.status(rdk.httpstatus.bad_request).rdkSend('Missing or invalid work product id.');
+        }
+        //make sure the id is in a valid format, return the error if not...
+        var idValidationError = testId(id);
+        if (nullchecker.isNotNullish(idValidationError)) {
+            return res.status(rdk.httpstatus.bad_request).rdkSend(idValidationError);
+        }
+
+        dbConnection.collection(workCollection).update({
+            _id: new ObjectId(id)
+        }, {
+            $set: {
+                workproduct: product
             }
-            //status default is 'ok'
-            return res.status(rdk.httpstatus.ok).rdkSend(numUpdated);
-        }
-        return res.status(rdk.httpstatus.internal_server_error).rdkSend(err);
+        }, function(err, numUpdated) {
+            if (nullchecker.isNullish(err)) {
+                if (numUpdated === 0) {
+                    // no records updated, id not found
+                    return res.status(rdk.httpstatus.not_found).rdkSend('Work Product with id \'' + id + '\' was not found.');
+                }
+                //status default is 'ok'
+                return res.status(rdk.httpstatus.ok).rdkSend(numUpdated);
+            }
+            return res.status(rdk.httpstatus.internal_server_error).rdkSend(err);
+        });
     });
 };
-
+module.exports.updateWorkProduct = updateWorkProduct;
 
 /**
  * @apiIgnore This is not used externally.  This method is used internally and not exposed via rest.
@@ -796,34 +830,38 @@ module.exports.updateWorkProduct = function(req, res) {
  * @apiSuccess {json} data Json object containing a one for successful match and update, zero if there was no record to update.
  *
  */
-module.exports.setReadStatus = function setReadStatus(id, readStatus, provider, callback) {
-    if (!isCDSMongoServerAvailable) {
-        return callback(null, 'CDS persistence store is unavailable.');
+var setReadStatus = function(id, readStatus, provider, callback) {
+    if (_.isUndefined(thisApp)) {
+        return callback(null, []);
     }
-
-    var read = readStatus === 'true';
-    try {
-        db.collection(workCollection).update({
-            _id: new ObjectId(id),
-            'assignments.user.id': provider
-        }, {
-            $set: {
-                'assignments.$.readStatus': read
-            }
-        }, function(err, result) {
-            if (err) {
-                return callback(null, err);
-            }
-            if (result) {
-                return callback(result, null);
-            }
-            return callback(null, 'Advice with id \'' + id + '\' not found.');
-        });
-    } catch (error) {
-        callback(null, error.message);
-    }
+    thisApp.subsystems.cds.getCDSDB(dbName, initDb, function(error, dbConnection) {
+        if (error) {
+            return callback(error, null);
+        }
+        var read = readStatus === 'true';
+        try {
+            dbConnection.collection(workCollection).update({
+                _id: new ObjectId(id),
+                'assignments.user.id': provider
+            }, {
+                $set: {
+                    'assignments.$.readStatus': read
+                }
+            }, function(err, result) {
+                if (err) {
+                    return callback(null, err);
+                }
+                if (result) {
+                    return callback(result, null);
+                }
+                return callback(null, 'Advice with id \'' + id + '\' not found.');
+            });
+        } catch (error) {
+            return callback(null, error.message);
+        }
+    });
 };
-
+module.exports.setReadStatus = setReadStatus;
 
 /**
  * @api {delete} /resource/cds/work-product/product Delete a work product in the database.
@@ -831,6 +869,8 @@ module.exports.setReadStatus = function setReadStatus(id, readStatus, provider, 
  * @apiGroup CDSWorkProduct
  *
  * @apiDescription Delete a work product in the database.
+ *
+ * @apiParam {string} id work product id
  *
  * @apiSuccess (Success 201) {json} data with a '1' for successful match and delete, or a '0' for no match and delete.
  * @apiSuccessExample Success-Response:
@@ -856,38 +896,42 @@ module.exports.setReadStatus = function setReadStatus(id, readStatus, provider, 
  *     "message": ""
  * }
  */
-module.exports.deleteWorkProduct = function(req, res) {
-    if (!isCDSMongoServerAvailable) {
-        return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS persistence store is unavailable.');
+var deleteWorkProduct = function(req, res) {
+    if (_.isUndefined(thisApp)) {
+        return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS work product is unavailable.');
     }
-
-    req.logger.debug('CDS Work Product DELETE deleteWorkProduct called');
-
-    var id = req.query.id;
-
-    if (nullchecker.isNullish(id)) {
-        return res.status(rdk.httpstatus.bad_request).rdkSend('Missing or invalid work product id.');
-    }
-    //make sure the id is in a valid format, return the error if not...
-    var idValidationError = testId(id);
-    if (nullchecker.isNotNullish(idValidationError)) {
-        return res.status(rdk.httpstatus.bad_request).rdkSend(idValidationError);
-    }
-
-    db.collection(workCollection).remove({
-        _id: new ObjectId(id)
-    }, function(err, numDeleted) {
-        if (nullchecker.isNullish(err)) {
-            if (numDeleted === 0) {
-                // no record deleted, id not found
-                return res.status(rdk.httpstatus.not_found).rdkSend('Work Product with id \'' + id + '\' was not found.');
-            }
-            return res.status(rdk.httpstatus.ok).rdkSend(numDeleted);
+    thisApp.subsystems.cds.getCDSDB(dbName, initDb, function(error, dbConnection) {
+        if (error) {
+            return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS persistence store is unavailable.');
         }
-        return res.status(rdk.httpstatus.internal_server_error).rdkSend(err);
+        req.logger.debug('CDS Work Product DELETE deleteWorkProduct called');
+
+        var id = req.query.id;
+
+        if (nullchecker.isNullish(id)) {
+            return res.status(rdk.httpstatus.bad_request).rdkSend('Missing or invalid work product id.');
+        }
+        //make sure the id is in a valid format, return the error if not...
+        var idValidationError = testId(id);
+        if (nullchecker.isNotNullish(idValidationError)) {
+            return res.status(rdk.httpstatus.bad_request).rdkSend(idValidationError);
+        }
+
+        dbConnection.collection(workCollection).remove({
+            _id: new ObjectId(id)
+        }, function(err, numDeleted) {
+            if (nullchecker.isNullish(err)) {
+                if (numDeleted === 0) {
+                    // no record deleted, id not found
+                    return res.status(rdk.httpstatus.not_found).rdkSend('Work Product with id \'' + id + '\' was not found.');
+                }
+                return res.status(rdk.httpstatus.ok).rdkSend(numDeleted);
+            }
+            return res.status(rdk.httpstatus.internal_server_error).rdkSend(err);
+        });
     });
 };
-
+module.exports.deleteWorkProduct = deleteWorkProduct;
 
 /**
  * @api {get} /resource/cds/work-product/subscriptions Retrieves user subscriptions for the authenticated user.
@@ -942,36 +986,40 @@ module.exports.deleteWorkProduct = function(req, res) {
  *     "message": ""
  * }
  */
-module.exports.retrieveSubscriptions = function(req, res) {
-    if (!isCDSMongoServerAvailable) {
-        return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS persistence store is unavailable.');
+var retrieveSubscriptions = function(req, res) {
+    if (_.isUndefined(thisApp)) {
+        return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS work product is unavailable.');
     }
-
-    req.logger.debug('CDS Work Product GET retrieveSubscriptions called');
-
-    var userId = getKeyValue(req.session.user.duz);
-    db.collection(subscriptionCollection).findOne({
-        user: userId
-    }, function(err, result) {
-
-        req.logger.debug('error: ' + err);
-        req.logger.debug('result: ' + result);
-
-        if (nullchecker.isNullish(result)) { // none found - use defaults.
-            result = defaultSubscriptions;
-        } else if (result && result.data) { // found some, just pass the part that matters.
-            result = result.data;
+    thisApp.subsystems.cds.getCDSDB(dbName, initDb, function(error, dbConnection) {
+        if (error) {
+            return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS persistence store is unavailable.');
         }
+        req.logger.debug('CDS Work Product GET retrieveSubscriptions called');
 
-        if (nullchecker.isNullish(err)) {
-            //default status is 'ok'
-            return res.status(rdk.httpstatus.ok).rdkSend(result);
-        }
-        //this should be unreachable in practice, since we default the response.
-        return res.status(rdk.httpstatus.not_found).rdkSend(err);
+        var userId = getKeyValue(req.session.user.duz);
+        dbConnection.collection(subscriptionCollection).findOne({
+            user: userId
+        }, function(err, result) {
+
+            req.logger.debug('error: ' + err);
+            req.logger.debug('result: ' + result);
+
+            if (nullchecker.isNullish(result)) { // none found - use defaults.
+                result = defaultSubscriptions;
+            } else if (result && result.data) { // found some, just pass the part that matters.
+                result = result.data;
+            }
+
+            if (nullchecker.isNullish(err)) {
+                //default status is 'ok'
+                return res.status(rdk.httpstatus.ok).rdkSend(result);
+            }
+            //this should be unreachable in practice, since we default the response.
+            return res.status(rdk.httpstatus.not_found).rdkSend(err);
+        });
     });
 };
-
+module.exports.retrieveSubscriptions = retrieveSubscriptions;
 
 /**
  * @api {put} /resource/cds/work-product/subscriptions Updates user subscriptions for the authenticated user.
@@ -1003,34 +1051,37 @@ module.exports.retrieveSubscriptions = function(req, res) {
  *     "message": ""
  * }
  */
-module.exports.updateSubscriptions = function(req, res) {
-    if (!isCDSMongoServerAvailable) {
-        return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS persistence store is unavailable.');
+var updateSubscriptions = function(req, res) {
+    if (_.isUndefined(thisApp)) {
+        return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS work product is unavailable.');
     }
-
-    req.logger.debug('CDS Work Product PUT updateSubscriptions called');
-
-    var product = req.body;
-    var userId = getKeyValue(req.session.user.duz);
-    product.user = userId;
-
-    db.collection(subscriptionCollection).update({
-        user: userId
-    }, product, {
-        upsert: true
-    }, function(err, numUpdated) {
-        if (nullchecker.isNotNullish(err)) {
-            req.logger.debug('error: ' + err);
-            return res.status(rdk.httpstatus.internal_server_error).rdkSend(err);
+    thisApp.subsystems.cds.getCDSDB(dbName, initDb, function(error, dbConnection) {
+        if (error) {
+            return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS persistence store is unavailable.');
         }
-        req.logger.debug('numUpdated: ' + numUpdated);
-        //this is an 'upsert' to no need to check for number of records updated.  There will always be one.
-        //status default is 'ok'
-        return res.status(rdk.httpstatus.ok).rdkSend(numUpdated);
+        req.logger.debug('CDS Work Product PUT updateSubscriptions called');
+
+        var product = req.body;
+        var userId = getKeyValue(req.session.user.duz);
+        product.user = userId;
+
+        dbConnection.collection(subscriptionCollection).update({
+            user: userId
+        }, product, {
+            upsert: true
+        }, function(err, numUpdated) {
+            if (nullchecker.isNotNullish(err)) {
+                req.logger.debug('error: ' + err);
+                return res.status(rdk.httpstatus.internal_server_error).rdkSend(err);
+            }
+            req.logger.debug('numUpdated: ' + numUpdated);
+            //this is an 'upsert' to no need to check for number of records updated.  There will always be one.
+            //status default is 'ok'
+            return res.status(rdk.httpstatus.ok).rdkSend(numUpdated);
+        });
     });
-
 };
-
+module.exports.updateSubscriptions = updateSubscriptions;
 /**
  * @api {delete} /resource/cds/work-product/subscriptions Deletes user subscriptions for the authenticated user.
  * @apiName deleteSubscriptions
@@ -1055,27 +1106,31 @@ module.exports.updateSubscriptions = function(req, res) {
  * }
  *
  */
-module.exports.deleteSubscriptions = function(req, res) {
-    if (!isCDSMongoServerAvailable) {
-        return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS persistence store is unavailable.');
+var deleteSubscriptions = function(req, res) {
+    if (_.isUndefined(thisApp)) {
+        return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS work product is unavailable.');
     }
-
-    req.logger.debug('CDS Work Product DELETE deleteSubscriptions called');
-
-    var userId = getKeyValue(req.session.user.duz);
-
-    db.collection(subscriptionCollection).remove({
-        user: userId
-    }, function(err, numDeleted) {
-        if (nullchecker.isNullish(err)) {
-            if (numDeleted === 0) {
-                // do we want to return this error in this case since they'd just get the defaults anyways?
-                // no record deleted, id not found
-                return res.status(rdk.httpstatus.not_found).rdkSend('Subscriptions for user \'' + userId + '\' was not found.');
-            }
-            return res.status(rdk.httpstatus.ok).rdkSend(numDeleted);
+    thisApp.subsystems.cds.getCDSDB(dbName, initDb, function(error, dbConnection) {
+        if (error) {
+            return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS persistence store is unavailable.');
         }
-        return res.status(rdk.httpstatus.internal_server_error).rdkSend(err);
-    });
+        req.logger.debug('CDS Work Product DELETE deleteSubscriptions called');
 
+        var userId = getKeyValue(req.session.user.duz);
+
+        dbConnection.collection(subscriptionCollection).remove({
+            user: userId
+        }, function(err, numDeleted) {
+            if (nullchecker.isNullish(err)) {
+                if (numDeleted === 0) {
+                    // do we want to return this error in this case since they'd just get the defaults anyways?
+                    // no record deleted, id not found
+                    return res.status(rdk.httpstatus.not_found).rdkSend('Subscriptions for user \'' + userId + '\' was not found.');
+                }
+                return res.status(rdk.httpstatus.ok).rdkSend(numDeleted);
+            }
+            return res.status(rdk.httpstatus.internal_server_error).rdkSend(err);
+        });
+    });
 };
+module.exports.deleteSubscriptions = deleteSubscriptions;

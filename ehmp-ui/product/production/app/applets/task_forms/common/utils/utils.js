@@ -1,4 +1,6 @@
-define([], function() {
+define([
+    'moment'
+], function(moment) {
     "use strict";
 
     // Compare two versions numbers and return the highest one
@@ -39,6 +41,33 @@ define([], function() {
     }
 
     var utils = {
+        getTaskData: function(taskId, onSuccess) {
+            var fetchOptions = {
+                resourceTitle: 'tasks-gettask',
+                fetchType: 'GET',
+                cache: false,
+                criteria: {
+                    taskid: taskId
+                },
+                onSuccess: function(collection) {
+                    onSuccess(collection);
+                }
+            };
+
+            ADK.ResourceService.fetchCollection(fetchOptions);
+        },
+        getFacilities: function(onSuccess) {
+            var fetchOptions = {
+                resourceTitle: 'authentication-list',
+                fetchType: 'GET',
+                cache: true,
+                onSuccess: function(collection) {
+                    onSuccess(collection);
+                }
+            };
+
+            ADK.ResourceService.fetchCollection(fetchOptions);
+        },
         // Properly format the expiration date
         formatDueDateTime: function(expDate) {
             return moment(expDate).format('lll');

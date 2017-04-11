@@ -19,7 +19,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  * <pre>
  * &lt;complexType name="vitals">
  *   &lt;complexContent>
- *     &lt;extension base="{http://webservice.vds.DNS       /}dataBean">
+ *     &lt;extension base="{http://webservice.vds.med.DNS   /}dataBean">
  *       &lt;sequence>
  *         &lt;element name="comments" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="dateTimeTaken" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/>
@@ -28,7 +28,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *         &lt;element name="resultComments" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="units" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="unitsCode" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="vitalModifiers" type="{http://webservice.vds.DNS       /}vitalModifier" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="vitalModifiers" type="{http://webservice.vds.med.DNS   /}vitalModifier" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element name="vitalType" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="vitalsIEN" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
@@ -40,7 +40,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "vitals", namespace = "http://webservice.vds.DNS       /", propOrder = {
+@XmlType(name = "vitals", namespace = "http://webservice.vds.med.DNS   /", propOrder = {
     "comments",
     "dateTimeTaken",
     "qualifiers",

@@ -4,7 +4,7 @@ var _ = require('lodash');
 var rdk = require('../core/rdk');
 var http = rdk.utils.http;
 
-function getSubsystemConfig(app) {
+function getSubsystemConfig(app, logger) {
     return {
         healthcheck: {
             name: 'vxSync',
@@ -14,7 +14,7 @@ function getSubsystemConfig(app) {
                  var vxSyncOptions = _.extend({}, app.config.vxSyncServer, {
                     url: '/ping',
                     timeout: 5000,
-                    logger: app.logger
+                    logger: logger
                 });
                 //console.log(2);
 

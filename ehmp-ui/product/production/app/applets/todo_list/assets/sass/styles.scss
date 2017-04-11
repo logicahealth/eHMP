@@ -8,7 +8,7 @@
     	}
     }
     .applet-div-chrome-container .gridContainer .grid-container {
-        height: calc(100% - 42px) !important;
+        height: calc(100% - 33px) !important;
         > div .data-grid table.backgrid thead th[data-header-instanceid="todo_list-ACTION"]{
             text-align: center;
             .sort-caret{
@@ -19,10 +19,6 @@
     }
     .form-group {
         margin-bottom: 0;
-    }
-    .data-grid {
-        height: 71vh;
-        overflow: auto;
     }
     .grid-container > div > p:first-child {
         height: 71vh;

@@ -12,31 +12,37 @@ var fhirToJDSAttrMap = [ {
     vprName : '',
     dataType : 'string',
     definition : 'http://hl7.org/FHIR/2015May/datatypes.html#string',
-    description : 'One of the resource types defined as part of FHIR',
+    description : 'One or more of the resource types defined as part of FHIR',
     searchable : true
 }];
 
 function getResourceConfig() {
-    // register the conformance data
-    try { // don't fail on initialization
-        register('conformance', createConformanceData());
-    } catch (e) {
-    }
-
     return [{
-        name : 'conformance-metadata',
+        name : 'fhir-conformance-metadata',
         path : '',
         get : getMetadata,
         subsystems : [ 'authorization' ],
         interceptors : {},
         permitResponseFormat : true,
-        requiredPermissions : [],
+        requiredPermissions : ['read-fhir'],
+        isPatientCentric : false
+    },{
+        name : 'fhir-conformance-metadata-search',
+        path : '_search',
+        post : getMetadata,
+        subsystems : [ 'authorization' ],
+        interceptors : {},
+        permitResponseFormat : true,
+        requiredPermissions : ['read-fhir'],
         isPatientCentric : false
     }];
 }
 
+//Issue call to Conformance registration
+register(conformanceUtils.domains.CONFORMANCE, createConformanceData());
+
 function createConformanceData() {
-    var resourceType = 'Conformance';
+    var resourceType = conformanceUtils.domains.CONFORMANCE;
     var profileReference = 'http://www.hl7.org/FHIR/2015May/conformance.html';
     var interactions = [ 'read', 'search-type' ];
 
@@ -59,17 +65,21 @@ function register(name, data) {
  *
  * @apiDescription Returns a FHIR \'Conformance\' report.
  * @apiExample {js} Request Examples: // Full conformance statement
- *             http://IPADDRESS:POR/resource/fhir/metadata // Conformance for a
+ *             http://IP           /resource/fhir/metadata // Conformance for a
  *             resource(s)
- *             http://IPADDRESS:POR/resource/fhir/metadata?resource=observation[,patient]
+ *             http://IP           /resource/fhir/metadata?resource=observation[,patient]
  *
  *
  * @apiSuccess {json} data Json object conforming to the <a
  *             href="http://www.hl7.org/FHIR/2015May/conformance.html">Conformance
  *             FHIR DTSU2 specification</a>.
- * @apiSuccessExample Success-Response: HTTP/1.1 200 OK { }
+ * @apiSuccessExample Success-Response:
+ *             HTTP/1.1 200 OK
+ *             { }
  * @apiError (Error 400) Invalid parameters.
- * @apiErrorExample Error-Response: HTTP/1.1 400 Bad Request { }
+ * @apiErrorExample Error-Response:
+ *             HTTP/1.1 400 Bad Request
+ *             { }
  */
 
 function getMetadata(req, res) {
@@ -84,7 +94,10 @@ function packageRequestedStatements(req) {
     if (_.isEmpty(requestedDomain)) {
         conformanceArray = resourceArray;
     } else {
-        conformanceArray = _.filter(resourceArray, {'name':requestedDomain.toLowerCase()});
+        requestedDomain = requestedDomain.toLowerCase();
+        conformanceArray = _.filter(resourceArray, function(o) {
+            return requestedDomain.indexOf(o.name) != -1;
+        });
     }
 
     var conformanceData = _.sortBy(conformanceArray, function(o) {
@@ -106,7 +119,7 @@ function packageRequestedStatements(req) {
             out.push(item.data);
         }
     });
-   
+
     return conformance;
 }
 

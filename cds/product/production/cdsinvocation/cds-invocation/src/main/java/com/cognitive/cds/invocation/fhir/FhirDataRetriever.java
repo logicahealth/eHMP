@@ -221,13 +221,13 @@ public class FhirDataRetriever implements IFhirDataRetriever {
         
         client.replacePath(path);
         if (query.length() > 0) {
-            client.query(StringEscapeUtils.escapeHtml4( query ));
+            client.query(StringEscapeUtils.unescapeHtml4( query ));
         }
         
         // Get resource data via existing RDK client
         Response response = client.accept("application/json")
                 .type("application/json").get();
-        fhirClient.updateClient(client);
+        
         return response;
     }
 

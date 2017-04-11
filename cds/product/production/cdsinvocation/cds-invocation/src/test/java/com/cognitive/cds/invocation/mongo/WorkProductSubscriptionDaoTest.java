@@ -27,13 +27,13 @@ package com.cognitive.cds.invocation.mongo;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -49,7 +49,7 @@ public class WorkProductSubscriptionDaoTest {
     private static MongoDbDao mongoDbDao;
     private WorkProductSubscriptionDao workProductSubscriptionDao;
     private WorkProductDao workProductDao;
-    private static Logger logger = Logger.getLogger(WorkProductSubscriptionDaoTest.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(WorkProductSubscriptionDaoTest.class);
 
     @BeforeClass
     public static void beforeClass() {
@@ -57,7 +57,7 @@ public class WorkProductSubscriptionDaoTest {
             ApplicationContext context = new ClassPathXmlApplicationContext("classpath:mongodb-dao-context.xml");
             mongoDbDao = (MongoDbDao) context.getBean("mongoDbDao");
         } catch (Exception e) {
-            logger.log(Level.SEVERE, "Error loading connection properties.  Cannot connect to MongoDB");
+            LOGGER.error("Error loading connection properties. Cannot connect to MongoDB");
         }
     }
 
@@ -87,7 +87,7 @@ public class WorkProductSubscriptionDaoTest {
         try {
             id = workProductSubscriptionDao.insertWorkProductSubscription(wpsTest);
         } catch (JsonProcessingException e) {
-            logger.log(Level.SEVERE, e.getMessage());
+            LOGGER.error(e.getMessage());
         }
 
         Assert.assertTrue(id != null);
@@ -96,7 +96,7 @@ public class WorkProductSubscriptionDaoTest {
         try {
             workProductSubscriptionDao.deleteWorkProductSubscription(wpsTest);
         } catch (JsonProcessingException e) {
-            logger.log(Level.SEVERE, e.getMessage());
+            LOGGER.error(e.getMessage());
         }
 
     }

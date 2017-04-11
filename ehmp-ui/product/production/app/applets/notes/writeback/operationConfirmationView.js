@@ -37,8 +37,8 @@ define([
           });
         this.showModal = function(event) {
             var operationConfirmationView = new ADK.UI.Alert({
-                title: params.title,
-                icon: params.title_icon,
+                title: 'Delete',
+                icon: 'icon-triangle-exclamation',
                 messageView: operationBodyView,
                 footerView: operationFooterView
             });

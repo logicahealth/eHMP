@@ -10,8 +10,9 @@ define([
     'main/components/views/loadingView',
     'main/components/views/errorView',
     'main/components/applets/grid_applet/views/filterDateRangeView',
-    'main/adk_utils/crsUtil'
-], function($, _, utils, BaseDisplayApplet, DataGrid, CollectionFilter, ResourceService, SessionStorage, LoadingView, ErrorView, FilterDateRangeView, CrsUtil) {
+    'main/adk_utils/crsUtil',
+    '/main/components/behaviors/tooltip.js'
+], function($, _, utils, BaseDisplayApplet, DataGrid, CollectionFilter, ResourceService, SessionStorage, LoadingView, ErrorView, FilterDateRangeView, CrsUtil, Tooltip) {
     'use strict';
 
     var SCROLL_TRIGGERPOINT = 40; 
@@ -79,7 +80,8 @@ define([
             }
         },
         ui: {
-            'GroupHeader': 'tr.group-by-header'
+            'GroupHeader': 'tr.group-by-header',
+            '$tooltip': '[tooltip-data-key], [data-toggle=tooltip]'
         },
         events: {
             'click @ui.GroupHeader': 'fetchRowsOnClick'
@@ -115,7 +117,7 @@ define([
             var e = event.currentTarget;
             if ((e.scrollTop + e.clientHeight + SCROLL_TRIGGERPOINT > e.scrollHeight) && this.appletOptions.collection.hasNextPage()) {
                 event.preventDefault();
-                this.appletOptions.collection.getNextPage({});
+                this.appletOptions.collection.getNextPage({sort: false});
                 // DE4343 fix
                 /*var searchText = SessionStorage.getAppletStorageModel(this.appletConfig.instanceId, 'filterText', true);
                 if (this.filterView && (this.filterView.userDefinedFilters.length > 0 || (!_.isUndefined(searchText) && !_.isNull(searchText) && searchText !== ''))) {
@@ -153,7 +155,10 @@ define([
                 });
                 elementToScroll.trigger("scroll.infinite");
             }
+            this.bindUIElements();
+            Tooltip.prototype.onRender.call(this);
         },
+        buildConfig: Tooltip.prototype.buildConfig,
         refresh: function(event) {
             this._base.refresh.apply(this, arguments);
         },

@@ -1,7 +1,7 @@
 <html>
 	<head>
-		<link href="http://getbootstrap.com/dist/css/bootstrap.css" rel="stylesheet">
-		<link href="http://paypal.github.io/bootstrap-accessibility-plugin/plugins/css/bootstrap-accessibility.css" rel="stylesheet">
+		<link href="../_assets/libs/bower/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+		<link href="../_assets/libs/custom/bootstrap/accessibility/bootstrap-accessibility.css" rel="stylesheet">
 	</head>
 	<body style="margin: 2em 2em 2em 2em">
 		<h1>Overview</h1>
@@ -154,7 +154,7 @@
 					<div id="upsidedownTab">
 						<h5>REVERSED TAB</h5>
 						<p>
-							This is meant to demonstrate that the placemenet is not important.  However, it should be noted that this format is discouraged since the DOM order is illogical for keyboard navigation.  In general, actionable elements should be in the DOM before dynamic content.
+							This is meant to demonstrate that the placement is not important.  However, it should be noted that this format is discouraged since the DOM order is illogical for keyboard navigation.  In general, actionable elements should be in the DOM before dynamic content.
 						</p>
 						<!-- BEGIN TAB EXAMPLE -->
 						<!--
@@ -282,7 +282,7 @@
 		            			    When the alert is dismissed with keyboard make sure the focus is transferred back to the element which fired this alert.  This is not handled by default and requires custom event handling.  See the source code for this page.
 		            			</p>
 		            			<p>
-		            			    Note that this element is not dyanmically generated in this example so when dismiss is triggered the element is automatically destroyed.  In typical use we would generated this element and inject it into a region which would avoid the first concern and allow us to reopen this alert once closed since the DOM elements would be generated again.
+		            			    Note that this element is not dynamically generated in this example so when dismiss is triggered the element is automatically destroyed.  In typical use we would generated this element and inject it into a region which would avoid the first concern and allow us to reopen this alert once closed since the DOM elements would be generated again.
 		            			 </p>
 		            		</p>
 		      			</div>
@@ -482,15 +482,15 @@
       				<li><a href="http://www.w3.org/TR/WCAG20/">WCAG 2.0 Documentation</a></li>
       				<li><a href="https://paypal.github.io/bootstrap-accessibility-plugin/demo.html">PayPal Accessibility Library</a> (Click link in header to load library)</li>
 					<li><a href="http://getbootstrap.com/components/">Bootstrap Components</a></li>
-					<li><a href="http://www.section508.DNS   /">VA Section 508</a></li>
+					<li><a href="http://www.section508.va.gov/">VA Section 508</a></li>
       			</ul>
       		</li>
 
 
 		</ul>
-		<script src="http://paypal.github.io/bootstrap-accessibility-plugin/bs3.1.1/js/jquery.min.js"></script>
-		<script src="http://paypal.github.io/bootstrap-accessibility-plugin/bs3/dist/js/bootstrap.min.js"></script>
-		<script src="http://paypal.github.io/bootstrap-accessibility-plugin/plugins/js/bootstrap-accessibility.min.js"></script>
+		<script src="../_assets/libs/bower/jquery/jquery.min.js"></script>
+		<script src="../_assets/libs/bower/bootstrap/bootstrap.min.js"></script>
+		<script src="../_assets/libs/custom/bootstrap/accessibility/bootstrap-accessibility.min.js"></script>
 		<script type="text/javascript">
 			$(function () {
 				$('[role="region" ]').attr('tabindex', 0);

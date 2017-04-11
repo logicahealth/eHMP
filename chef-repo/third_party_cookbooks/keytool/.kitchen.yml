@@ -1,0 +1,29 @@
+---
+driver:
+  name: vagrant
+
+provisioner:
+  name: chef_solo
+
+platforms:
+  - name: centos-6.5
+    driver:
+      box_url: "http://opscode-vm-bento.s3.amazonaws.com/vagrant/virtualbox/opscode_centos-6.5_chef-provisionerless.box"
+
+suites:
+  - name: java6
+    run_list:
+      - recipe[java]
+      - recipe[keytool::default]
+      - recipe[keytool::test]
+    attributes:
+      java:
+        jdk_version: 6
+  - name: java7
+    run_list:
+      - recipe[java]
+      - recipe[keytool::default]
+      - recipe[keytool::test]
+    attributes:
+      java:
+        jdk_version: 7

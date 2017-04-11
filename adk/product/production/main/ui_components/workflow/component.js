@@ -380,11 +380,13 @@ define([
                     var TrayRegion = this.TrayView.TrayRegion;
                     var trayKeyString = trayKey.replace(/s$/, '');
                     if (!_.isUndefined(TrayRegion)) {
-                        this.listenTo(ResizeUtils.dimensions.contentRegion, 'change', function(model) {
-                            var $trayRegion = TrayView.TrayRegion.$el;
-                            var contentRegionHeight = model.get('height');
-                            this.adjustFormDimensions($trayRegion, contentRegionHeight);
-                        }, this);
+                        this.TrayView.listenTo(ResizeUtils.dimensions.contentRegion, 'change', _.bind(function(model) {
+                            if(!_.isUndefined(this.SubTrayRegion)){
+                                var $trayRegion = TrayView.TrayRegion.$el;
+                                var contentRegionHeight = model.get('height');
+                                this.adjustFormDimensions($trayRegion, contentRegionHeight);
+                            }
+                        }, this));
 
                         var self = this;
                         if (TrayRegion.currentView instanceof WorkflowView) {
@@ -396,7 +398,7 @@ define([
                             });
                             var SimpleAlertFooterItemView = Backbone.Marionette.ItemView.extend({
                                 template: Handlebars.compile([
-                                    '{{ui-button "OK" classes="btn-primary alert-continue" title="Press enter to continue."}}'
+                                    '{{ui-button "OK" classes="btn-primary alert-continue btn-sm" title="Press enter to close."}}'
                                 ].join('\n')),
                                 events: {
                                     'click button': function() {
@@ -406,6 +408,8 @@ define([
                                 }
                             });
                             var alertView = new ADK.UI.Alert({
+                                title: 'Attention',
+                                icon: 'icon-circle-exclamation',
                                 messageView: SimpleAlertItemView,
                                 footerView: SimpleAlertFooterItemView
                             });

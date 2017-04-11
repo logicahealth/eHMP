@@ -2,7 +2,6 @@
 
 var rdk = require('../../core/rdk');
 var _ = require('lodash');
-var dd = require('drilldown');
 var async = require('async');
 var pjds = rdk.utils.pjdsStore;
 
@@ -11,9 +10,9 @@ var orderSet = require('./orderset-subsystem');
 var quickOrder = require('./quickorder-subsystem');
 
 var dataStore = 'orderfavs';
-module.exports.getSubsystemConfig = function(app) {
+module.exports.getSubsystemConfig = function(app, logger) {
     return {
-        healthcheck: pjds.createHealthcheck(dataStore, app)
+        healthcheck: pjds.createHealthcheck(dataStore, app, logger)
     };
 };
 
@@ -55,7 +54,7 @@ module.exports.getFavorites = function(req, res) {
 
         var asyncCalls = [];
 
-        if (!dd(result)('data')('items').exists) {
+        if (!_.get(result, 'data.items')) {
             return res.status(rdk.httpstatus.ok).rdkSend({data: {items: []}});
         }
 

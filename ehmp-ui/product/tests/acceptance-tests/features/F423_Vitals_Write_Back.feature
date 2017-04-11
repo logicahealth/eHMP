@@ -7,6 +7,7 @@ Background:
   # Given user is logged into eHMP-UI
   And user searches for and selects "twenty,patient"
   Then Cover Sheet is active
+  And user navigates to Vitals expanded view 
   And POB user selects and sets new encounter with location "Cardiology" and provider "Audiologist,One"
   Then user adds a new vitals
   And user chooses to "Expand All" on add vitals modal detail screen
@@ -36,15 +37,8 @@ Scenario: Validate Blood Pressure form fields on add vital modal screen.
   | BP Cuff Size	  |
   | BP Position		  | 
   | BP Units		  |
-  And the add vitals detail modal displays form fields for "Blood Pressure"
-  | modeal_item_form_fields	|
-  | BP Input Box			|
-  | BP Unavailable Input Box|
-  | BP Refused Input Box	|
-  | BP Location Drop Down	|
-  | BP Method Drop Down		|
-  | BP Cuff Size Drop Down	|
-  | BP Position Drop Down	|
+  And the add vitals detail modal displays form fields for Blood Pressure
+
   
 @f423_add_vital_temperature_validation @US6477 @US7939 @TC990
 Scenario: Validate temperature form fields on add vital modal screen.
@@ -57,14 +51,7 @@ Scenario: Validate temperature form fields on add vital modal screen.
   | Temp Units F		  |
   | Temp Units C	      |
   | Temp Location	  |
-  And the add vitals detail modal displays form fields for "Temperature"
-  | modeal_item_form_fields		|
-  | Temp Input Box				|
-  | Temp Unavailable Input Box	|
-  | Temp Refused Input Box		|
-  | Temp Location Drop Down		|
-  | Temp Units F Input Box		|
-  | Temp Units C Input Box		|
+  And the add vitals detail modal displays form fields for Temperature
   
 @f423_add_vital_pulse_validation @US6482
 Scenario: Validate pulse form fields on add vital modal screen.
@@ -79,15 +66,7 @@ Scenario: Validate pulse form fields on add vital modal screen.
   | Pulse Position	    |
   | Pulse Site			|
   | Pulse Location	  	|
-  And the add vitals detail modal displays form fields for "Pulse"
-  | modeal_item_form_fields		|
-  | Pulse Input Box				|
-  | Pulse Unavailable Input Box	|
-  | Pulse Refused Input Box		|
-  | Pulse Method Drop Down		|
-  | Pulse Position Drop Down	|
-  | Pulse Site Drop Down		|
-  | Pulse Location Drop Down	|
+  And the add vitals detail modal displays form fields for Pulse
   
 @f423_add_vital_respiration_validation @US6478
 Scenario: Validate respiration form fields on add vital modal screen.
@@ -100,13 +79,8 @@ Scenario: Validate respiration form fields on add vital modal screen.
   | Respiration Units		|
   | Respiration Method		|
   | Respiration Position	|
-  And the add vitals detail modal displays form fields for "Respiration"
-  | modeal_item_form_fields				|
-  | Respiration Input Box				|
-  | Respiration Unavailable Input Box	|
-  | Respiration Refused Input Box		|
-  | Respiration Method Drop Down		|
-  | Respiration Position Drop Down		|
+  And the add vitals detail modal displays form fields for Respiration
+
   
 @f423_add_vital_PO_validation @US6480
 Scenario: Validate Pulse Oximetry form fields on add vital modal screen.
@@ -119,13 +93,8 @@ Scenario: Validate Pulse Oximetry form fields on add vital modal screen.
   | PO Units						|
   | PO Supplemental Oxygen Flow Rate|
   | PO Method						|
-  And the add vitals detail modal displays form fields for "Pulse Oximetry"
-  | modeal_item_form_fields						|
-  | PO Input Box								|
-  | PO Unavailable Input Box					|
-  | PO Refused Input Box						|
-  | PO Supplemental Oxygen Flow Rate Input Box	|
-  | PO Method Drop Down							|
+  And the add vitals detail modal displays form fields for Pulse Oximetry
+
   
 @f423_add_vital_height_validation @US6484 @US7939 @TC990
 Scenario: Validate Height form fields on add vital modal screen.
@@ -138,14 +107,8 @@ Scenario: Validate Height form fields on add vital modal screen.
   | Ht Units in				|
   | Ht Units cm				|
   | Ht Quality				|
-  And the add vitals detail modal displays form fields for "Height"
-  | modeal_item_form_fields		|
-  | Ht Input Box				|
-  | Ht Unavailable Input Box	|
-  | Ht Refused Input Box		|
-  | Ht Units in Input Box		|
-  | Ht Units cm Input Box		|
-  | Ht Quality Drop Down		|
+  And the add vitals detail modal displays form fields for Height
+
 
 @f423_add_vital_weight_validation @US6474 @US7939 @TC990
 Scenario: Validate Weight form fields on add vital modal screen.
@@ -159,15 +122,7 @@ Scenario: Validate Weight form fields on add vital modal screen.
   | Wt Units kg				|
   | Wt Method				|
   | Wt Quality				|
-  And the add vitals detail modal displays form fields for "Weight"
-  | modeal_item_form_fields		|
-  | Wt Input Box				|
-  | Wt Unavailable Input Box	|
-  | Wt Refused Input Box		|
-  | Wt Units lb Input Box		|
-  | Wt Units kg Input Box		|
-  | Wt Method Drop Down			|
-  | Wt Quality Drop Down		|
+  And the add vitals detail modal displays form fields for Weight
   
 @f423_add_vital_pain_validation @US6483
 Scenario: Validate Pain form fields on add vital modal screen.
@@ -197,15 +152,7 @@ Scenario: Validate Circumference/Girth form fields on add vital modal screen.
   | CG Units cm				|
   | CG Site					|
   | CG Location				|
-  And the add vitals detail modal displays form fields for "Circumference/Girth"
-  | modeal_item_form_fields		|
-  | CG Input Box				|
-  | CG Unavailable Input Box	|
-  | CG Refused Input Box		|
-  | CG Units in Input Box		|
-  | CG Units cm Input Box		|
-  | CG Site Drop Down			|
-  | CG Location Drop Down		|
+  And the add vitals detail modal displays form fields for Circumference/Girth
   
 @f423_add_vital @US6338 @US8923 @US7939 @TC955
 Scenario: Add a vital record.
@@ -231,13 +178,11 @@ Scenario: Add a vital record.
   Then user adds vitals to patient record 
   Then user closes the new observation window
   Then the "Vitals" applet is displayed
-  Then the user expands the vitals applet
-  Then the expanded vitals applet is displayed
   And the recently added vital record is displayed
       | vital type 			   | value  |
-      | Blood Pressure         | 130/80 |
+      | Blood Pressure     | 130/80 |
 
-@US7261 @TC949 @DE3732 @debug
+@US7261 @TC949 @DE3732
 Scenario: Patient On a Pass button on Vitals form
   When user chooses to Pass on entering vitals
   Then the form fields for "Blood Pressure" are disabled

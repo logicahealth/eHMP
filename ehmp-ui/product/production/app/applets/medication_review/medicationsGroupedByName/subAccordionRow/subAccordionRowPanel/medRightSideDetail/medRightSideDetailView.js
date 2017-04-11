@@ -8,6 +8,9 @@ define([
 ], function(Backbone, Marionette, InpatientMedRightSideDetail, OutpatientMedRightSideDetail, IvMedRightSideDetail, NonvaMedRightSideDetail) {
     'use strict';
     return Backbone.Marionette.ItemView.extend({
+        modelEvents: {
+            'change': 'render'
+        },
         templateHelpers: function() {
             return {
                 slicedOrderUid: this.model.getOrderUid(),
@@ -28,7 +31,8 @@ define([
                     }
                 },
                 isDiscontinued: function() {
-                    var vaStatus = this.vaStatus.toLowerCase();
+                    var vaStatus = _.get(this, 'vaStatus', '').toLowerCase();
+                    if(_.isEmpty(vaStatus)) return;
                     if (vaStatus === "discontinued" || vaStatus === "discontinued/edit") {
                         return true;
                     } else {
@@ -36,7 +40,8 @@ define([
                     }
                 },
                 expireText: function() {
-                    var vaStatus = this.vaStatus.toLowerCase();
+                    var vaStatus = _.get(this, 'vaStatus', '').toLowerCase();
+                    if(_.isEmpty(vaStatus)) return;
                     if (vaStatus === 'expired') {
                         return 'Expired';
                     } else {
@@ -44,7 +49,8 @@ define([
                     }
                 },
                 showExpiredDate: function() {
-                    var vaStatus = this.vaStatus.toLowerCase();
+                    var vaStatus = _.get(this, 'vaStatus', '').toLowerCase();
+                    if(_.isEmpty(vaStatus)) return;
                     if (!this.getStoppedAsMoment.isAfter(this.getOverallStopAsMoment) && (vaStatus === "discontinued" || vaStatus === "discontinued/edit")) {
                         return false;
                     } else {

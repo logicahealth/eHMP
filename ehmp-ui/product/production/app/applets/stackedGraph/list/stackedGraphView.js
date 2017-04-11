@@ -3,6 +3,7 @@ define([
     'marionette',
     'underscore',
     'highcharts',
+    'moment',
     'hbs!app/applets/stackedGraph/list/stackedGraphViewTemplate',
     'app/applets/stackedGraph/list/chartsCompositeView',
     'app/applets/medication_review_v2/medicationCollectionHandler',
@@ -12,7 +13,7 @@ define([
     'highcharts-more',
     'app/applets/medication_review_v2/applet',
     'app/applets/lab_results_grid/applet'
-], function(Backbone, Marionette, _, Highcharts, StackedGraphViewTemplate, ChartsCompositeView, CollectionHandler, MedsResource, Utils) {
+], function(Backbone, Marionette, _, Highcharts, moment, StackedGraphViewTemplate, ChartsCompositeView, CollectionHandler, MedsResource, Utils) {
     "use strict";
 
     return Backbone.Marionette.LayoutView.extend({
@@ -84,12 +85,12 @@ define([
                 }
 
                 var bodyView = Backbone.Marionette.ItemView.extend({
-                    template: _.template('<p><strong>Are you sure you want to remove the ' + response.model.attributes.typeName + ' graph?</strong></p>')
+                    template: _.template('<p><strong>Are you sure you want to delete the ' + response.model.attributes.typeName + ' graph?</strong></p>')
                 });
 
                 var footerView = Backbone.Marionette.ItemView.extend({
-                    template: _.template('<button type="button" class="btn btn-default" title="Press enter to cancel and close this dialog" data-dismiss="modal">Cancel</button>' +
-                        '<button type="button" class="btn btn-danger" title="Press enter to delete this stacked graph" data-dismiss="modal">Delete</button>'),
+                    template: _.template('<button type="button" class="btn btn-default btn-sm" title="Press enter to go back" data-dismiss="modal">No</button>' +
+                        '<button type="button" class="btn btn-danger btn-sm" title="Press enter to delete" data-dismiss="modal">Yes</button>'),
                     events: {
                         'click .btn-danger': 'deleteGraph',
                         'click .btn-default': 'cancelDelete'
@@ -160,8 +161,8 @@ define([
                 });
 
                 var modal = new ADK.UI.Alert({
-                    title: 'Remove Graph',
-                    icon: 'icon-delete',
+                    title: 'Delete',
+                    icon: 'icon-triangle-exclamation',
                     messageView: bodyView,
                     footerView: footerView.extend({
                         model: footerModel
@@ -226,11 +227,17 @@ define([
                         });
                     } else if (persistedPickListItem.graphType === 'Medications') {
                         channel = ADK.Messaging.getChannel('meds_review');
-                        CollectionHandler.fetchAllMeds(false, function(collection) {
+                        var medCollection = new Backbone.Collection();
+                        self.listenToOnce(medCollection, 'read:success', function(collection) {
+                            self.stopListening(medCollection, 'read:error');
                             $deferred.resolve({
                                 collection: collection
                             });
                         });
+                        self.listenToOnce(medCollection, 'read:error', function(collection) {
+                            self.stopListening(medCollection, 'read:success');
+                        });
+                        CollectionHandler.fetchAllMeds(false, medCollection);
                     }
 
                     $deferred.done(function(response) {

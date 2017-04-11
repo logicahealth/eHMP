@@ -109,6 +109,13 @@ module.exports.transformPatient = function(patient, fromJDS) {
     return patient;
 };
 
+/**
+ * Applies formatting to a subset of patient data fields for a group of patients.
+ *
+ * @param {Object} patients - The group of patients whose data needs to be formatted.
+ * @param {boolean} hasDGAccess - Whether or not the user has DG Access.
+ * @return {Object} patients - The patients, with formatting applied.
+ */
 module.exports.formatPatientSearchCommonFields = function(patients, hasDGAccess) {
     var items = ((patients || {}).data || {}).items || patients || [];
     _.each(items, function(item) {
@@ -117,12 +124,22 @@ module.exports.formatPatientSearchCommonFields = function(patients, hasDGAccess)
     return patients;
 };
 
+/**
+ * Applies formatting to a subset of patient data fields for a single patient.
+ *
+ * @param {Object} patient - The patient whose data needs to be formatted.
+ * @param {boolean} hasDGAccess - Whether or not the user has DG Access.
+ * @param {boolean} forceFormatting - Whether or not to bypass formatting restrictions.
+ * @return {Object} patient - The patient, with formatting applied.
+ */
 function formatSinglePatientSearchCommonFields(patient, hasDGAccess, forceFormatting) {
     if (_.isUndefined(forceFormatting)) {
         forceFormatting = false;
     }
     patient.displayName = formatName(patient.displayName, ',', ', ');
-    //Don't format "*SENSITIVE*" values (User with DGSensitiveAccess with cause sensitive patient ssn and birthDate to not have "*SENSITIVE*" values)
+
+    // Don't format "*SENSITIVE*" values (User with DGSensitiveAccess will cause
+    // sensitive patient ssn and birthDate to not have "*SENSITIVE*" values)
     if (!patient.ssn || typeof patient.ssn !== 'string' || (patient.sensitive && !hasDGAccess && !forceFormatting)) {
         return patient;
     }
@@ -132,8 +149,15 @@ function formatSinglePatientSearchCommonFields(patient, hasDGAccess, forceFormat
     var maskedSsn = maskSsn(patient.ssn);
     patient.ssn = maskedSsn;
     return patient;
-};
+}
 
+/**
+ * Formats an SSN. Places hyphens in the desired location.
+ *
+ * @param {string} ssn - The ssn to format.
+ * @return {string} returnSSN - The hyphenated SSN, or an empty string if the
+ *                  SSN couldn't be formatted.
+ */
 function formatSSN(ssn) {
     if (ssn) {
         var returnSSN = ssn;
@@ -146,14 +170,28 @@ function formatSSN(ssn) {
     return '';
 }
 
+/**
+ * Formats a date into MM/DD/YYYY format.
+ *
+ * @param {string} date - The date to format.
+ * @return {string} The formatted date, or an empty string if the
+ *                  date couldn't be formatted.
+ */
 function formatDate(date) {
-    var displayFormat = "MM/DD/YYYY";
+    var displayFormat = 'MM/DD/YYYY';
     if (date) {
         return moment(date).format(displayFormat);
     }
     return '';
 }
 
+/**
+ * Calculates an age given a date of birth.
+ *
+ * @param {string} dob - The date of birth.
+ * @return {string} The calculated age, or an empty string if the
+ *                  age couldn't be calculated.
+ */
 function getAge(dob) {
     if (dob) {
         var dobString = moment(dob);

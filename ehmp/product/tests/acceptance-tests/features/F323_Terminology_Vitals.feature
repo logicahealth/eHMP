@@ -26,7 +26,7 @@ Scenario: An authorized user can access VA Vitals and see standardized LOINC val
       #Loinc code
       | codes.code    | 8310-5              |
       | codes.system  | http://loinc.org    |
-      | codes.display | BODY TEMPERATURE    |
+      | codes.display | Body temperature    |
       #VA code
       | typeCode      | urn:va:vuid:4500638 |
       

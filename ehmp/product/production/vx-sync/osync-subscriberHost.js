@@ -9,11 +9,11 @@ var _ = require('underscore');
 var Worker = require(global.VX_JOBFRAMEWORK).Worker;
 var HandlerRegistry = require(global.VX_JOBFRAMEWORK).HandlerRegistry;
 var queueConfig = require(global.VX_JOBFRAMEWORK).QueueConfig;
-var jobUtil = require(global.VX_UTILS + 'osync-job-utils');
+var jobUtil = require(global.OSYNC_UTILS + 'osync-job-utils');
 var pollerUtils = require(global.VX_UTILS + 'poller-utils');
 var config = require(global.VX_ROOT + 'worker-config');
 var logUtil = require(global.VX_UTILS + 'log');
-var jdsUtil = require(global.VX_UTILS + 'jds-utils');
+var jdsUtil = require(global.OSYNC_UTILS + 'jds-utils');
 
 logUtil.initialize(config, 'osync');
 

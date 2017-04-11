@@ -6,7 +6,7 @@ var _ = require('lodash');
 describe('Educations FHIR Resource', function() {
     it('Verifies correct resource name and path', function() {
         var config = Educations.getResourceConfig()[0];
-        expect(config.name).to.eql('educations-educations');
+        expect(config.name).to.eql('fhir-educations');
         expect(config.path).to.eql('');
     });
 });

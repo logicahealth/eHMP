@@ -1,15 +1,18 @@
 
 
 Given(/^a quick-order for the user$/) do
-  query = RDKQuery.new("quickorder-create")
+  temp = RDKOrder.new
+  path = temp.path + "quickorder"
   quickorder_json = File.read('./features/steps/data/quickorder.json')
-  @response = HTTPartyRDK.post(query.path, quickorder_json, { 'Content-Type' => 'application/json' })
+  @response = HTTPartyRDK.post(path, quickorder_json, { 'Content-Type' => 'application/json' })
 end
 
 Given(/^an order-set for the user$/) do
-  query = RDKQuery.new("orderset-create")
+  temp = RDKOrder.new
+  path = temp.path + "orderset"
   orderset_json = File.read('./features/steps/data/orderset.json')
-  @response = HTTPartyRDK.post(query.path, orderset_json, { 'Content-Type' => 'application/json' })
+  @response = HTTPartyRDK.post(path, orderset_json, { 'Content-Type' => 'application/json' })
+  puts @response.body
 end
 
 Given(/^an enterprise-orderable for the user$/) do
@@ -20,16 +23,18 @@ end
 
 When(/^the user requests orderables of type "(.*?)"$/) do |subtype|
   query = RDKQueryPicklist.new("write-pick-list-orderables")
-  query.add_parameter("searchString", "hyper")
-  query.add_parameter("site", "9E7A")
+  query.add_parameter("searchString", "Rheu")
+  query.add_parameter("site", "C877")
   query.add_parameter("subtype", subtype)
   @response = HTTPartyRDK.get(query.path)
+  puts @response
 end
 
 Then(/^there are (\d+) orderables in the results$/) do |num|
   response_json = JSON.parse(@response.body)
   response_size = response_json["totalItems"]
   expect(response_size).to eq(num.to_i)
+  puts @response
 end
 
 Then(/^the results are sorted by name$/) do
@@ -63,3 +68,6 @@ Then(/^the orderables results contain$/) do |table|
     expect(contains).to eq(true)
   end
 end
+
+
+

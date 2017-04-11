@@ -7,7 +7,8 @@ sourceCompatibility = property('javaVersion')
 targetCompatibility = property('targetJavaVersion')
 
 repositories {
-     maven { url "https://store.vistacore.us/nexus/content/repositories/public" }
+     maven { url "https://store.vistacore.us/nexus/content/repositories/public"
+	 }
 }
 dependencies {
     compile group: 'org.mongodb', name: 'mongo-java-driver', version:'3.0.2'
@@ -18,7 +19,10 @@ dependencies {
     compile group: 'ca.uhn.hapi.fhir', name: 'hapi-fhir-structures-dstu2', version: property('hapiVersion')
     compile group: 'org.springframework', name: 'spring-test', version: property('springVersion')
     compile group: 'org.springframework.security', name: 'spring-security-core', version: property('springSecurityVersion')
-    compile group: 'org.slf4j', name: 'slf4j-log4j12', version: property('slf4jVersion')
+    compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: property('log4jVersion')
+	compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: property('log4jVersion')
+	compile group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: property('log4jVersion')
+	compile group: 'org.apache.logging.log4j', name: 'log4j-web', version: property('log4jVersion')
     compile group: 'org.opencds', name: 'dss-java-stub', version: property('openCDSDSSVersion')
     compile group: 'org.opencds', name: 'opencds-vmr-1_0-schema', version: property('openCDSVMRVersion')
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: property('jacksonVersion')

@@ -109,63 +109,6 @@ Feature: F138 Return of Radiology Reports in FHIR format
      | field                                         | kodak_value            |
      | resource.requestDetail.reference              | IS_SET                |
 
- # following 2 scenarios are checking for another patient for return of radiology results.
- # only few fields are checked to validate data integrity.
- @F138_5_radiologyreport_fhir @fhir @9E7A1
- Scenario: Client can request radiology report results in FHIR format
-   Given a patient with "radiology report results" in multiple VistAs
-   When the client requests radiology report results for the patient "9E7A;1" in FHIR format
-   Then a successful response is returned
-   And the FHIR results contain "radiology report results"
- 	   | field											                | value							                          			    |
- 		 | resource.identifier.value						      | CONTAINS urn:va:image:9E7A:1:7039491	          	    |
- 	   | resource.subject.reference             		| Patient/9E7A;1                                        |
-     | resource.codedDiagnosis.text           		| NORMAL                                                |
-     | resource.name.text                     		| WRIST 2 VIEWS                                         |
-     | resource.extension.url						        	| http://vistacore.us/fhir/extensions/rad#caseId        |
-     | resource.extension.valueString					    | 37										                                |
-     | resource.extension.url                 		| http://vistacore.us/fhir/extensions/rad#hasImages     |
-     | resource.extension.valueString         		| false                                                 |
-     | resource.contained.identifier.value    		| 500                                                   |
-     | resource.contained.name                		| CAMP MASTER                                           |
-     | resource.status                        		| final	                                  	            |
-     | resource.extension.url                 		| http://vistacore.us/fhir/extensions/rad#locationUid   |
-     | resource.extension.valueString         		| urn:va:location:9E7A:40                 	            |
-     | resource.issued                       			| IS_FHIR_FORMATTED_DATE                                |
-     | resource.extension.url                 		| http://vistacore.us/fhir/extensions/rad#providerName  |
-     | resource.extension.valueString         		| PROVIDER,FIFTY                                        |
-     | resource.extension.url						        	| http://vistacore.us/fhir/extensions/rad#imageLocation |
-     | resource.extension.valueString					    | RADIOLOGY MAIN FLOOR					                      	|
-
- @F138_6_radiologyreport_fhir @fhir @9E7A1
- Scenario: Client can request radiology report results in FHIR format
-   Given a patient with "radiology report results" in multiple VistAs
-  # And a patient with pid "9E7A;1" has been synced through the RDK API
-   When the client requests radiology report results for the patient "9E7A;1" in FHIR format
-   Then a successful response is returned
-   Then the client receives 70 FHIR "VistA" result(s)
-   #And the client receives 70 FHIR "kodak" result(s)
-   And the FHIR results contain "radiology report results"
-
- 		    | field										                	| value										                              |
- 		    | resource.identifier.value					      	| CONTAINS urn:va:image:9E7A:1:7039491		              |
- 	        | resource.subject.reference             		| Patient/9E7A;1                                        |
-        	| resource.codedDiagnosis.text           		| NORMAL                                                |
-         	| resource.name.text                     		| WRIST 2 VIEWS                                         |
-        	| resource.extension.url							        | http://vistacore.us/fhir/extensions/rad#caseId        |
-       	    | resource.extension.valueString				    	| 37									                                	|
-        	| resource.extension.url                 		| http://vistacore.us/fhir/extensions/rad#hasImages     |
-        	| resource.extension.valueString         		| false                                                 |
-        	| resource.contained.identifier.value    		| 500                                                 |
-        	| resource.status                        		| final	                                              	|
-            | resource.extension.url                 		| http://vistacore.us/fhir/extensions/rad#locationUid   |
-        	| resource.extension.valueString         		| urn:va:location:9E7A:40                              	|
-            | resource.extension.url                 		| http://vistacore.us/fhir/extensions/rad#providerName  |
-        	| resource.extension.valueString         		| PROVIDER,FIFTY                                        |
-        	| resource.extension.url						        	| http://vistacore.us/fhir/extensions/rad#imageLocation |
-        	| resource.extension.valueString					    | RADIOLOGY MAIN FLOOR					                      	|
-    And FHIR date and time conver to Zulu format for Radiology report
-    
  # negative test case.
  @F138_7_radiologyreport_neg_fhir @fhir @9E7A100184
  Scenario: Negative scenario.  Client can request radiology results in FHIR format

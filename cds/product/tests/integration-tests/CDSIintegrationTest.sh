@@ -6,7 +6,7 @@ then
 	ping -c 3 $1 > /dev/null
 	if [ $? -eq 0 ]
 	then
-		TCPport=8080
+		TCPPORT     
 		targetURL=http://$IPaddr:$TCPport/cds-results-service/rest/invokeRulesForPatient
 		jsonPayload=/tmp/jasonPayload.$$
 

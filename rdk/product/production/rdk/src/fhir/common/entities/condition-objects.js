@@ -30,8 +30,8 @@ function BuildConditionItem(item) {
     var contained_and_refs = new BuildContained_and_refs(item);
     var siteHash = fhirUtils.getSiteHash(item.uid);
     var ret = {
-        //_id: item.uid,
         resourceType: 'Condition',
+        id: item.uid,
         //        status: 'confirmed',
         category: new BuildCategory(item),
         stage: new BuildStage(item),

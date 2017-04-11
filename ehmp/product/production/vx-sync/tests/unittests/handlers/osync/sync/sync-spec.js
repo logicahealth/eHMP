@@ -251,8 +251,8 @@ describe('validation unit test', function() {
             });
 
             mockConfig = {
-                syncUrl: "http://IPADDRESS:POR/sync/doLoad",
-                statusUrl: "http://IPADDRESS:POR/sync/status"
+                syncUrl: "http://IP           /sync/doLoad",
+                statusUrl: "http://IP           /sync/status"
             };
 
             mockEnvironment = {

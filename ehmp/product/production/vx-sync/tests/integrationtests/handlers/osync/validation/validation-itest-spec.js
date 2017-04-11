@@ -17,7 +17,7 @@ var mockHandlerCallback = {
 var mockConfig = {
     jds: {
         protocol: 'http',
-        host: 'IP_ADDRESS',
+        host: 'IP        ',
         port: 9080,
         "jdsSaveURI": "/user/set/this",
         "jdsGetURI": "/user/get",

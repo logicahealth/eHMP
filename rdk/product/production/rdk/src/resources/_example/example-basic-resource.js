@@ -52,7 +52,7 @@ function getResourceConfig(app) {  // jshint ignore:line
 function sampleGet(req, res) {
     req.logger.debug('sample resource GET called');
 
-    var myQueryParam = req.param('myQueryParam');
+    var myQueryParam = req.query.myQueryParam;
     if(!myQueryParam) {
         req.logger.info('myQueryParam not provided');
         return res.status(rdk.httpstatus.bad_request).rdkSend('Missing myQueryParam parameter');
@@ -68,7 +68,7 @@ function samplePost(req, res) {
     req.logger.warn('sample resource POST called');
     req.audit.logCategory = 'SAMPLE';
 
-    var optionalParameter = req.param('myPostBodyParam');
+    var optionalParameter = req.body.myPostBodyParam;
     if(optionalParameter) {
         return res.status(200).rdkSend({
             message: optionalParameter

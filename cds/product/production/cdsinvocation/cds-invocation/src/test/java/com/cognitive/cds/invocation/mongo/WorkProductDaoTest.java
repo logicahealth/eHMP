@@ -38,12 +38,11 @@ import com.cognitive.cds.invocation.workproduct.model.InvocationInfo;
 import com.cognitive.cds.invocation.workproduct.model.Payload;
 import com.cognitive.cds.invocation.workproduct.model.WorkProductWrapper;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -69,7 +68,7 @@ public class WorkProductDaoTest {
 
     private static MongoDbDao mongoDbDao;
     private static WorkProductDao workProductDao;
-    private static Logger logger = Logger.getLogger(WorkProductDaoTest.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(WorkProductDaoTest.class);
 
     // private static String id;
 
@@ -81,7 +80,7 @@ public class WorkProductDaoTest {
             workProductDao = new WorkProductDao();
             workProductDao.setMongoDbDao(mongoDbDao);
         } catch (Exception e) {
-            logger.log(Level.SEVERE, "Error loading connection properties.  Cannot connect to MongoDB");
+            LOGGER.error("Error loading connection properties.  Cannot connect to MongoDB");
         }
     }
 
@@ -101,7 +100,7 @@ public class WorkProductDaoTest {
         } catch (ParseException pe) {
             pe.printStackTrace();
         }
-        logger.info(id);
+        LOGGER.info(id);
 
         Assert.assertNotNull(id);
         
@@ -140,9 +139,9 @@ public class WorkProductDaoTest {
             // Clean up after test
             workProductDao.deleteWorkProduct(id);
         } catch (JsonProcessingException e) {
-            logger.log(Level.SEVERE, e.getMessage());
+            LOGGER.error( e.getMessage());
         } catch (ParseException e) {
-            logger.log(Level.SEVERE, e.getMessage());
+            LOGGER.error(e.getMessage());
         }
     }
 

@@ -10,8 +10,8 @@ Scenario: Call GetCorrespondingIDs after every search
 #The IDs are DFN, ICN, and EDIPI. None of the patients in MockMVI have all three values.
 #The IDs are logged in the RDK output log file. Please verify that the MockMVI patients return IDs when they are loaded to the coversheet.
 
-Then Log into the RDK server by running command: ssh vagrant@IP_ADDRESS
-And Password: PW
+Then Log into the RDK server by running command: ssh vagrant@IP        
+And Password: vagrant
 And Once you're in the RDK terminal execute the command: tail -f /tmp/rdk_output.log
 Then Log into eHMP-UI
 Then Click the "All Patients" tab at the search patient screen

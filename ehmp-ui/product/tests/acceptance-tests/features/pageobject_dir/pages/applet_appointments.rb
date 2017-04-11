@@ -7,6 +7,8 @@ class PobAppointmentsApplet < PobParentApplet
   element :fld_appointment_data_thead, "[data-appletid='appointments'] table thead"
 
   elements :fld_appointment_table_row, "[data-appletid='appointments'] table tbody tr"
+  elements :fld_appointment_modal_headers, "#modal-body p strong"
+  elements :expanded_appointment_modal_headers, "#data-grid-appointments > thead th"
 
   # *****************  All_Button_Elements  ******************* #
   element :btn_appointments_24hr, "button[id='24hr-range-appointments']"
@@ -32,6 +34,7 @@ class PobAppointmentsApplet < PobParentApplet
     add_empty_table_row appletid_css
     add_generic_error_message appletid_css
     add_empty_gist appletid_css
+    add_expanded_applet_fields appletid_css
     add_toolbar_buttons
   end
 

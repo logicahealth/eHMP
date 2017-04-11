@@ -13,8 +13,9 @@ define([
     "main/components/appletToolbar/appletToolbarView",
     "main/components/views/appletViews/TileSortManager",
     "highcharts",
-    "main/components/views/appletViews/eventsGistView/views/eventsBarGraphConfiguration"
-], function($, _, Backbone, Utils, BaseAppletItem, BaseGistView, eventsGistLayoutTemplate, eventsGistChildTemplate, ResourceService, Messaging, UserDefinedScreens, ToolbarView, TileSortManager, highcharts, EventGistGraph) {
+    "main/components/views/appletViews/eventsGistView/views/eventsBarGraphConfiguration",
+    '_assets/js/tooltipMappings'
+], function($, _, Backbone, Utils, BaseAppletItem, BaseGistView, eventsGistLayoutTemplate, eventsGistChildTemplate, ResourceService, Messaging, UserDefinedScreens, ToolbarView, TileSortManager, highcharts, EventGistGraph, TooltipMappings) {
     'use strict';
 
     var EventGistItem = BaseAppletItem.extend({
@@ -22,15 +23,17 @@ define([
         onDomRefresh: function() {
             //highcharts can't be rendered without the dom being completely loaded.
             //render highcharts
-            var config = this.options.binningOptions;
-            var chartConfig = new EventGistGraph(this.model.get('graphData'));
-            this.chartPointer = this.$('[data-cell-instanceid="graph_' + this.model.get('id') + '"]');
-            if (config) {
-                config.chartWidth = (this.chartPointer).width();
-                config.chartWidth = config.chartWidth === 0 ? 100 : config.chartWidth;
-                chartConfig.series[0].data = Utils.chartDataBinning(this.model.get('graphData'), config);
+            if (this.model.has('graphData')){
+                var config = this.options.binningOptions;
+                var chartConfig = new EventGistGraph(this.model.get('graphData'));
+                this.chartPointer = this.$('[data-cell-instanceid="graph_' + this.model.get('id') + '"]');
+                if (config) {
+                    config.chartWidth = (this.chartPointer).width();
+                    config.chartWidth = config.chartWidth === 0 ? 100 : config.chartWidth;
+                    chartConfig.series[0].data = Utils.chartDataBinning(this.model.get('graphData'), config);
+                }
+                this.chartPointer.highcharts(chartConfig);
             }
-            this.chartPointer.highcharts(chartConfig);
 
             // needed to disable ie11 508 tab focus on svg in gistItem
             this.$el.find('svg').attr('focusable', 'false');
@@ -156,6 +159,15 @@ define([
             this.gistModel = options.gistModel;
             this.model.set('appletID', this.AppletID);
         },
+        onRender: function(){
+            _.each(this.$('.toolbar-508'), function(span) {
+                var tooltipKey = span.innerHTML;
+                span.innerHTML = '( ' + TooltipMappings[tooltipKey] + ' )';
+            });
+        },
+        behaviors: {
+            Tooltip: {}
+        }
     });
 
     var EventGistView = {

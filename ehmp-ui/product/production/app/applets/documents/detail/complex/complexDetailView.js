@@ -3,17 +3,18 @@ define([
     'marionette',
     'underscore',
     'handlebars',
-    'app/applets/documents/debugFlag',
+    'app/applets/documents/appConfig',
     'app/applets/documents/appletHelper',
     'app/applets/documents/detail/addendaView',
     'hbs!app/applets/documents/detail/complex/complexDetailWrapperTemplate',
     'hbs!app/applets/documents/detail/complex/resultsTemplate',
     'hbs!app/applets/documents/detail/complex/resultDocTemplate',
-    'app/applets/documents/detail/dodComplexNoteUtil'
-], function(Backbone, Marionette, _, Handlebars, DEV, appletHelper, AddendaView, complexDetailWrapperTemplate, resultsTemplate, resultDocTemplate, dodComplexNoteUtil) {
+    'app/applets/documents/detail/dodComplexNoteUtil',
+    'app/applets/documents/imaging/views/thumbnailCollectionView'
+], function(Backbone, Marionette, _, Handlebars, appConfig, appletHelper, AddendaView, complexDetailWrapperTemplate, resultsTemplate, resultDocTemplate, dodComplexNoteUtil, ThumbnailCollectionView) {
     'use strict';
 
-    var DEBUG = DEV.flag;
+    var DEBUG = appConfig.debug;
 
     // An item view representing a shortcut link to a child/result document
     var ResultLinkItemView = Backbone.Marionette.ItemView.extend({
@@ -36,6 +37,7 @@ define([
                     model: this.model,
                 }));
         }
+
     });
 
     // A view representing the children/results portion of the detail view (the child/result documents and the corresponding shortcut links)
@@ -103,7 +105,8 @@ define([
         regions: {
             addendaRegion: '.document-detail-addenda-region',
             resultsRegion: '.results-region',
-            childrenRegion: '.children-region'
+            childrenRegion: '.children-region',
+            thumbnailRegion: '.thumbnails-region'
         },
         initialize: function(options) {
             if (this.hasChildDocuments()) {
@@ -114,6 +117,7 @@ define([
                 this.listenToOnce(this.resultDocCollection, 'fetch:success', this.onResultDocsReady);
                 this.listenToOnce(this.resultDocCollection, 'error', this.onResultDocsError);
             }
+
         },
         hasResultDocuments: function() {
             return this.model.get('results') && this.model.get('results').length > 0;
@@ -148,6 +152,37 @@ define([
             return false;
         },
         onResultDocsReady: function() {
+            var self = this;
+            var resultsAry = this.model.get('results');
+            var activitiesAry = this.model.get('activity');
+            var fetchedUids = _.pluck(this.resultDocCollection.models, 'attributes.uid');
+            var embeddedUid, fetchedItem, author, date, matchingActivity;
+            //add embedded document if not found in resultDocCollection
+            _.each(this.model.get('results'), function(res) {
+                if (!_.isUndefined(res.note)) {
+                    embeddedUid = res.uid;
+                    fetchedItem = _.contains(fetchedUids, embeddedUid);
+                    if (!fetchedItem) {
+                        author = "N/A";
+                        date = "N/A";
+                        matchingActivity = activitiesAry.filter(function(obj) {
+                            return obj.resultUid === embeddedUid;
+                        });
+                        if (matchingActivity && matchingActivity.length > 0) {
+                            author = !!matchingActivity[0].enteredBy ? matchingActivity[0].enteredBy : "N/A";
+                            date = !!matchingActivity[0].entered ? matchingActivity[0].entered : "N/A";
+                        }
+                        self.resultDocCollection.add(new Backbone.Model({
+                            localTitle: res.localTitle,
+                            content: res.note,
+                            uid: res.uid,
+                            authorDisplayName: author,
+                            statusDisplayName: "N/A",
+                            entered: date
+                        }));
+                    }
+                }
+            });
             if (this.resultDocCollection.isEmpty()) {
                 // if there were no results, hide the loading view and show nothing
                 //this.resultsRegion.reset();
@@ -168,6 +203,12 @@ define([
                     }));
                 }
             }
+            if (this.model.get('hasImages')) {
+                this.thumbnailRegion.show(new ThumbnailCollectionView({
+                    collection: this.model.get('thumbnails'),
+                }));
+            }
+
             ADK.Messaging.getChannel('search').trigger('documentsLoaded', this.$el);
         },
         onChildDocsReady: function() {
@@ -221,6 +262,27 @@ define([
         onShow: function() {
             if (this.model.get('dodComplexNoteContent')) {
                 dodComplexNoteUtil.showContent.call(this, this.model);
+            }
+        },
+        getNextModal: function(model, view, resultDocCollection, childDocCollection) {
+            var modals = model.collection.models;
+            var next = _.indexOf(modals, model) + 1;
+            var newModel = modals[next];
+            var appletRows = _.filter($('[data-appletid="documents"] tbody tr'), function(item) { return !($(item).hasClass('group-by-header')); });
+            appletRows[next].click();
+        },
+        getPrevModal: function(model, view, resultDocCollection, childDocCollection) {
+            var modals = model.collection.models;
+            var next = _.indexOf(modals, model) - 1;
+            var newMmodel = modals[next];
+            var appletRows = _.filter($('[data-appletid="documents"] tbody tr'), function(item) { return !($(item).hasClass('group-by-header')); });
+            appletRows[next].click();
+        },
+        onBeforeShow:function(){
+            if (this.model.get('hasImages')) {
+                this.thumbnailRegion.show(new ThumbnailCollectionView({
+                    collection: this.model.get('thumbnails'),
+                }));
             }
         }
     });

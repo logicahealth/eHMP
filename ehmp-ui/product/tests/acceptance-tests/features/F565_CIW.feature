@@ -1,4 +1,4 @@
-@F565 @regression @workspace_test @regression @triage
+@F565 @regression @workspace_test @regression @triage @DE6249
 Feature: F565 - Include Concept Invoked Workspaces Menu to Additional Views
 
 Background:
@@ -12,14 +12,14 @@ Background:
     And user closes the user defined work space manager
 
 @US6095 @TC321 @TC738 @US6095_1
- Scenario: 
+ Scenario: User can navigate to user defined workspace from Problems applet after associating a problem
  	When Overview is active
  	And the user has selected All within the global date picker
   	When user clicks on the left hand side of the item "Essential Hypertension" 
   	Then user selects the "Essential Hypertension" CIW icon in Problems Gist
   	Then the user navigated to the user defined workspace "/patient/ciw"
 
-@US6095 @DE4265
+@US6095 @DE4265 
 Scenario: Verify CIW Menu displayed on summary view
   Given the user clicks the Workspace Manager
   Given the user creates a user defined workspace named "udaffilter"
@@ -30,7 +30,7 @@ Scenario: Verify CIW Menu displayed on summary view
   When user clicks on summary row for "Hypertension" in the Problems Applet
   Then a popover toolbar displays the CIW button
 
-@US6095 @DE4265
+@US6095 @DE4265 
 Scenario: Verify CIW Menu displayed on expanded view
   Given the user clicks the Workspace Manager
   Given the user creates a user defined workspace named "udaffilter"

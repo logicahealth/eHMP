@@ -71,7 +71,7 @@ When /^the load is increased by "([^"]*)" requests per second after "([^"]*)" mi
         @p2.distribution= :SpikeDistribution
     
     
-    #LoadGenerator.ipPool "IPADDRESS", "IPADDRESS"  # needed by VirtualBox.
+    #LoadGenerator.ipPool "IP       ", "IP       "  # needed by VirtualBox.
     
     puts "@LocalProjectRoot=#{@LocalProjectRoot}"
     LoadGenerator.resultsDirectory= @LocalProjectRoot + "/product/tests/performance-tests/results"
@@ -103,7 +103,7 @@ When /^the load is increased by "([^"]*)" requests per second after "([^"]*)" mi
         @tr.projectRepoURL= "https://code.vistacore.us/scm/app/ehmp.git"
         @tr.projectRepoFQDN= "code.vistacore.us"
         @tr.gitUserid= ENV['GIT_USER']
-        @tr.gitVsID       NV['GIT_PASSWORD']
+        @tr.gitPassword= ENV['GIT_PASSWORD']
 
         
         # The features directory is relative to the local project root.

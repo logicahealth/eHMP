@@ -1,6 +1,5 @@
 'use strict';
 
-var dd = require('drilldown');
 var rdk = require('../../core/rdk');
 var moment = require('moment');
 var pjds = rdk.utils.pjdsStore;
@@ -144,7 +143,7 @@ function setEhmpUserContext(req, res, next) {
             } else {
                 var resultObj = {};
                 resultObj.data = updatedEHMPUIContext;
-                resultObj.status = dd(response)('statusCode').val;
+                resultObj.status = _.get(response, 'statusCode');
                 res.status(rdk.httpstatus.ok).rdkSend(resultObj);
             }
         });

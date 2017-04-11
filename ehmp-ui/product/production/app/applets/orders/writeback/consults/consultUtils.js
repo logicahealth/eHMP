@@ -3,39 +3,70 @@ define([
     'marionette',
     'underscore',
     'handlebars',
-    'app/applets/orders/writeback/consults/formFields'
-], function(Backbone, Marionette, _, Handlebars, FormFields) {
+    'app/applets/orders/writeback/consults/formFields',
+    'async'
+], function(Backbone, Marionette, _, Handlebars, FormFields, Async) {
     'use strict';
 
     var consultUtils = {
+        urgencyMap: {
+            emergent: ['0', '1', '2', '3'],
+            urgent: ['4', '5', '6'],
+            routine: ['7', '8', '9', '10']
+        },
+        isEmergent: function(urgency) {
+            return _.contains(this.urgencyMap.emergent, urgency);
+        },
+        isUrgent: function(urgency) {
+            return _.contains(this.urgencyMap.urgent, urgency);
+        },
+        isRoutine: function(urgency) {
+            return _.contains(this.urgencyMap.routine, urgency);
+        },
         fetchInitialResources: function() {
+            this.blockUI('Loading...');
+
             var consultName = $.Deferred();
             var conditions = $.Deferred();
+            var facilities = $.Deferred();
 
             var self = this;
             var retrieveProviderList = consultUtils.retrieveProviderList.call(self);
             var retrieveConsultNames = consultUtils.retrieveConsultNames.call(self, consultName);
+            var retrieveFacilities = consultUtils.retrieveFacilities.call(self, true, facilities);
 
-            var fetchOptions = ADK.Messaging.getChannel('problems').request('finalizeConsultOrder');
-            this.problemsCollection = ADK.PatientRecordService.fetchCollection(fetchOptions.fetchOptions);
-            this.listenToOnce(this.problemsCollection, 'sync', function(col, response) {
-                col.each(function(model){
-                    if(!model.has('snomedCode')){
-                        if(model.has('uid')){
-                             model.set('snomedCode' , model.get('uid'));
-                        }
-                       
+            var fetchOptions = $.extend(true, {}, ADK.Messaging.getChannel('problems').request('finalizeConsultOrder').fetchOptions);
+            fetchOptions.viewModel.parse = function(response) {
+                if (!response.snomedCode) {
+                    if (response.uid) {
+                        response.snomedCode = response.uid;
                     }
+                }
+                //convert to title case
+                response.problemText = _.startCase(response.problemText.toLowerCase());
+                return response;
+            };
+            fetchOptions.viewModel.idAttribute = 'problemText';
+
+            this.problemsCollection = ADK.PatientRecordService.fetchCollection(fetchOptions);
+
+            this.listenToOnce(this.problemsCollection, 'sync', function(col, response) {
+                //remove duplicate problem list
+                var list = _.uniq(col.models, function(model) {
+                    return model.get('problemText');
                 });
-                self.ui.condition.trigger('control:picklist:set', [col]);
+
+                self.ui.condition.trigger('control:picklist:set', [list]);
                 conditions.resolve();
             });
 
-            self.blockUI();
 
-            $.when(retrieveConsultNames, retrieveProviderList, conditions).done(function() {
-                self.unBlockUI();
-            });
+            $.when(retrieveProviderList, consultName, conditions, facilities)
+                .done(function() {
+                    self.unBlockUI();
+                });
+
+
 
         },
         retrieveProviderList: function() {
@@ -45,6 +76,11 @@ define([
             this.listenToOnce(people, 'read:success', function(collection, response) {
                 if (response && response.data) {
                     var items = _.sortBy(response.data, 'name');
+
+                    // Replace all the semicolons with colons to build proper urn's
+                    _.map(items, function(obj) {
+                        obj.personID = obj.personID.replace(/;/g, ':');
+                    });
                     self.ui.acceptingProvider.trigger('control:picklist:set', [items]);
                 }
             });
@@ -55,6 +91,8 @@ define([
         },
         retrieveConsultNames: function($deferred) {
             var self = this;
+
+
             var callback = {
                 success: function(collection, response, options) {
                     ADK.Messaging.trigger('retrieveConsultNames:' + self.cid, collection);
@@ -77,60 +115,67 @@ define([
                 }
             };
 
-
             ADK.ResourceService.fetchCollection(fetchOptions);
 
             return $deferred;
-
         },
-        retrieveFacilities: function(withLocation) {
+        retrieveFacilities: function(withLocation, deferred) {
             var self = this;
-            var facilities = new ADK.UIResources.Picklist.Team_Management.Facilities();
             var site = ADK.UserService.getUserSession().toJSON();
 
-            this.listenToOnce(facilities, 'read:success', function(collection, response) {
-                var data = response.data;
-                var isMatch;
+            var fetchOptions = {
+                type: 'GET',
+                resourceTitle: 'authentication-list',
+                cache: true
+            };
+
+            var facilitiesCollection = ADK.ResourceService.fetchCollection(fetchOptions);
 
 
-                isMatch = _.find(data, function(obj) {
-                    var div = _.get(site, 'data.division');
-                    return div === obj.facilityID;
-                });
+            this.listenToOnce(facilitiesCollection, 'sync', function(collection, response, xhr) {
+                if (response.status === 200) {
+                    deferred.resolve();
+                    var data = response.data;
+                    var isMatch;
+
+                    var div = _.get(site, 'division');
+
+                    isMatch = collection.find(function(model) {
+                        return div === model.get('division');
+                    });
 
 
-                self.unBlockUI();
-                self.ui.destinationFacility.trigger('control:picklist:set', [collection]);
+                    self.ui.destinationFacility.trigger('control:picklist:set', [collection]);
 
-                if (isMatch && !self.taskModel && !self.isFromDraft) {
-                    self.model.set('destinationFacility', isMatch.facilityID);
-                    self.ui.destinationFacility.find('select').trigger('change.select2');
-                    return;
+                    // Make sure focus remains on the select component after selecting.
+                    var consultNameSelect = self.$el.find('#select2-consultName-container');
+                    if (!_.isEmpty(consultNameSelect)) {
+                        self.$el.find('#select2-consultName-container').closest('.select2-selection').focus();
+                    }
+
+                    if (isMatch && !self.taskModel && !self.draftActivity) {
+                        self.model.set('destinationFacility', isMatch.get('division'));
+                        self.ui.destinationFacility.find('select').trigger('change.select2');
+                        return;
+                    }
+
+                    if (!withLocation) {
+                        self.model.set('destinationFacility', '');
+                        self.ui.destinationFacility.find('select').trigger('change.select2');
+                    }
+                } else {
+                    var errorView = new ADK.UI.Notification({
+                        title: 'Error',
+                        message: 'Could not retrieve locations for consultation',
+                        type: 'info'
+                    });
+                    errorView.show();
+                    deferred.resolve();
                 }
 
-                if (!withLocation) {
-                    self.model.set('destinationFacility', '');
-                    self.ui.destinationFacility.find('select').trigger('change.select2');
-                }
-
             });
 
-            this.listenToOnce(facilities, 'read:error', function(collection, xhr, options) {
-                self.unBlockUI();
-                var errorView = new ADK.UI.Notification({
-                    title: 'There was an error retrieving locations for consultation',
-                    icon: 'fa-exclamation-triangle',
-                    message: xhr.statusText,
-                    type: 'danger'
-                });
-                errorView.show();
-            });
-
-            this.blockUI();
-
-            facilities.fetch({
-                teamFocus: this.model.get('consultName') || this.model.get('specialty')
-            });
+            return deferred;
 
         },
         retrievePreReqs: function() {
@@ -146,15 +191,14 @@ define([
                         silent: true
                     });
                     if (_.get(obj, 'data.prerequisites.cdsIntent')) {
-                        self.blockUI();
+                        self.blockUI('Loading...');
                         var callback = _.partialRight(_.bind(retrieveOrdersSuccess, self), collection);
 
                         consultUtils.retrieveOrders(_.get(obj, 'data.prerequisites.cdsIntent'), callback, function() {
-                            self.unBlockUI();
+                            self.$el.trigger('tray.reset');
                         });
                     } else {
                         ADK.Messaging.trigger('retrievePreReqs:' + self.cid, collection);
-                        consultUtils.retrieveFacilities.call(self);
                         self.model.unset('cdsIntent');
 
                     }
@@ -197,34 +241,28 @@ define([
                 originalCollection.at(0).set('orders', consultUtils.outputForOrders(collection, response));
                 ADK.Messaging.trigger('retrievePreReqs:' + self.cid, originalCollection);
 
-                consultUtils.retrieveFacilities.call(this); // jshint ignore:line
             }
         },
         outputForOrders: function(collection, response) {
 
             var model = collection.at(0);
             var results = model.get('results');
-            var output = [];
 
-            _.each(results, function(result) {
+            return _.map(results, function(result) {
                 var ien = result.remediation.coding.code;
                 var index = ien.lastIndexOf(':');
                 var detail = result.detail;
                 var dateOfCompletion = detail.issued ? detail.issued : '';
                 var labName = _.get(detail, 'code.text') || detail.comments;
-                var obj = {
+                return consultUtils.augmentPreReqOrder({
                     label: labName,
                     value: result.status,
                     name: labName,
                     status: result.status,
                     statusDate: dateOfCompletion,
                     ien: ien.slice(index + 1)
-                };
-
-                output.push(obj);
+                }, result.remediation);
             });
-
-            return output;
         },
         retrieveOrders: function(intentSet, successCallBack, errorCallBack) {
 
@@ -255,7 +293,7 @@ define([
                         "user": {
                             "entityType": "User",
                             "id": userInfo.site + ";" + userInfo.duz[userInfo.site],
-                            "name": userInfo.lastname + ", " + userInfo.firstName || ''
+                            "name": userInfo.lastname + ", " + userInfo.firstname || ''
                         }
                     },
                     "target": {
@@ -268,20 +306,35 @@ define([
                 },
                 viewModel: {
                     parse: function(response) {
-                        response.results = response.results[0].body.prerequisites;
+                        response.results = _.get(response, 'results[0].body.prerequisites');
                         return response;
                     }
                 },
                 onSuccess: function(collection, response) {
+                    if (_.isUndefined(response.data)) {
+                        fetchOptions.onError.call(this);
+                        return;
+                    }
                     successCallBack.apply(self, arguments);
                 },
                 onError: function(model, response) {
                     errorCallBack(model, response);
-                    var errorView = new ADK.UI.Notification({
-                        title: 'There was an error making the resource call',
-                        icon: 'fa-exclamation-triangle',
-                        message: response.statusText,
-                        type: 'danger'
+                    var errorView = new ADK.UI.Alert({
+                        title: 'Error',
+                        icon: 'fa-exclamation-triangle font-size-18 color-red',
+                        messageView: Backbone.Marionette.ItemView.extend({
+                            template: Handlebars.compile('Unable to proceed at this time due to a system error. Try again later.'),
+                            tagName: 'p'
+                        }),
+                        footerView: Backbone.Marionette.ItemView.extend({
+                            template: Handlebars.compile('{{ui-button "OK" classes="btn-primary btn-sm" title="Press enter to close."}}'),
+                            events: {
+                                'click .btn-primary': function() {
+                                    ADK.UI.Alert.hide();
+                                }
+                            },
+                            tagName: 'span'
+                        })
                     });
                     errorView.show();
 
@@ -292,7 +345,7 @@ define([
 
             // retrieveModel.save();
         },
-        prepareOrdersTobePlaced: function(nameOfFormFunction /*Name of form function to run after orders have been placed*/) {
+        prepareOrdersTobePlaced: function(nameOfFormFunction /*Name of form function to run after orders have been placed*/ ) {
 
             var self = this;
 
@@ -300,122 +353,111 @@ define([
                 'value': 'Order'
             });
 
-            var ordersError = false;
+            var tasks = [];
 
-            var readyToOrder = true;
-            var orderCount = 0;
+            var PostModel = Backbone.Model.extend({
+                url: '/resource/write-health-data/patient/' + ADK.PatientRecordService.getCurrentPatient().toJSON().pid + '/orders/save-draft-lab?',
+                defaults: {
+                    "authorUid": consultUtils.getAuthorUID(),
+                    "data": {
+                        "availableLabTests": "",
+                        "labTestText": "",
+                        "collectionDate": "",
+                        "collectionType": "",
+                        "collectionSample": "",
+                        "specimen": "",
+                        "urgency": "",
+                        "urgencyText": self.model.get('urgency').toUpperCase(),
+                        "notificationDate": "",
+                        "pastDueDate": "",
+                        "collectionTime": "",
+                        "otherCollectionSample": "",
+                        "immediateCollectionDate": "",
+                        "immediateCollectionTime": "",
+                        "collectionDateTimePicklist": "",
+                        "howOften": "",
+                        "howLong": "",
+                        "otherSpecimen": "",
+                        "forTest": "",
+                        "doseDate": "",
+                        "doseTime": "",
+                        "drawDate": "",
+                        "drawTime": "",
+                        "orderComment": "",
+                        "anticoagulant": "",
+                        "sampleDrawnAt": "",
+                        "urineVolume": "",
+                        "additionalComments": "",
+                        "annotation": "",
+                        "problemRelationship": "",
+                        "activity": "",
+                        "isActivityEnabled": ""
+                    },
+                    "displayName": "",
+                    "domain": "ehmp-order",
+                    "ehmpState": "draft",
+                    "patientUid": ADK.PatientRecordService.getCurrentPatient().toJSON().uid,
+                    "subDomain": "laboratory",
+                    "visit": consultUtils.getVisitInfo(),
+                    "uid": "",
+                    referenceId: ""
 
-            this.blockUI();
-
-
-            var interval = setInterval(function() {
-                if (orders.length === orderCount) {
-                    clearInterval(interval);
-
-                    self.unBlockUI();
-
-                    if (ordersError) {
-
-                        self.ordersError();
-
-                        return;
-                    }
-                    self[nameOfFormFunction]();
-
-                } else {
-                    if (readyToOrder) {
-                        readyToOrder = false;
-
-                        var currentOrderToPlace = orders[orderCount];
-
-                        var PostModel = Backbone.Model.extend({
-                            url: '/resource/write-health-data/patient/' + ADK.PatientRecordService.getCurrentPatient().toJSON().pid + '/orders/save-draft-lab?',
-                            defaults: {
-                                "authorUid": consultUtils.getAuthorUID(),
-                                "data": {
-                                    "availableLabTests": currentOrderToPlace.get('ien'),
-                                    "labTestText": currentOrderToPlace.get('label'),
-                                    "collectionDate": "",
-                                    "collectionType": "",
-                                    "collectionSample": "",
-                                    "specimen": "",
-                                    "urgency": "",
-                                    "urgencyText": self.model.get('urgency').toUpperCase(),
-                                    "notificationDate": "",
-                                    "pastDueDate": "",
-                                    "collectionTime": "",
-                                    "otherCollectionSample": "",
-                                    "immediateCollectionDate": "",
-                                    "immediateCollectionTime": "",
-                                    "collectionDateTimePicklist": "",
-                                    "howOften": "",
-                                    "howLong": "",
-                                    "otherSpecimen": "",
-                                    "forTest": "",
-                                    "doseDate": "",
-                                    "doseTime": "",
-                                    "drawDate": "",
-                                    "drawTime": "",
-                                    "orderComment": "",
-                                    "anticoagulant": "",
-                                    "sampleDrawnAt": "",
-                                    "urineVolume": "",
-                                    "additionalComments": "",
-                                    "annotation": "",
-                                    "problemRelationship": "",
-                                    "activity": "",
-                                    "isActivityEnabled": ""
-                                },
-                                "displayName": currentOrderToPlace.get('label'),
-                                "domain": "ehmp-order",
-                                "ehmpState": "draft",
-                                "patientUid": ADK.PatientRecordService.getCurrentPatient().toJSON().uid,
-                                "subDomain": "laboratory",
-                                "visit": consultUtils.getVisitInfo(),
-                                "uid": "",
-                                referenceId: ""
-
-                            }
-                        });
-
-                        var postModel = new PostModel();
-
-                        postModel.save({}, {
-                            success: function(model, resp) {
-                                var uid = resp.data.headers.location;
-                                var index = uid.lastIndexOf('/');
-                                uid = uid.slice(index + 1);
-                                currentOrderToPlace.set({
-                                    'draftOrderUID': uid
-                                }, {
-                                    silent: true
-                                });
-
-                                orderCount++;
-
-                                var confirmationView = new ADK.UI.Notification({
-                                    title: 'Laboratory Draft Order',
-                                    icon: 'fa-exclamation-triangle',
-                                    message: currentOrderToPlace.get('label') + ' Successfully saved',
-                                    type: 'success'
-                                });
-                                confirmationView.show();
-
-                                readyToOrder = true;
-
-                            },
-                            error: function(model, response, options) {
-
-                                orderCount = orders.length;
-                                ordersError = true;
-                            }
-                        });
-
-                    }
                 }
+            });
 
-            }, 100);
+            _.each(orders, function(order) {
+                var updatedDefaultData = $.extend(true, {}, PostModel.prototype.defaults.data, {
+                    "availableLabTests": order.get('ien'),
+                    "labTestText": order.get('label'),
+                });
 
+                var postModel = new PostModel({
+                    "data": updatedDefaultData,
+                    "displayName": order.get('label'),
+                });
+
+
+
+                var task = function(callback) {
+                    postModel.save({}, {
+                        success: function(model, resp) {
+                            var uid = resp.data.headers.location;
+                            var index = uid.lastIndexOf('/');
+                            uid = uid.slice(index + 1);
+                            order.set({
+                                'uid': uid
+                            }, {
+                                silent: true
+                            });
+
+                            var confirmationView = new ADK.UI.Notification({
+                                title: 'Laboratory Draft Order',
+                                icon: 'fa-exclamation-triangle',
+                                message: order.get('label') + ' Successfully saved',
+                                type: 'success'
+                            });
+                            confirmationView.show();
+                            callback(null, resp);
+                        },
+                        error: function(model, resp, options) {
+                            callback(resp);
+                        }
+                    });
+                };
+
+
+                tasks.push(task);
+            });
+
+            Async.parallel(tasks, function(err, results) {
+                if (err) {
+                    self.ordersError();
+                } else {
+                    self[nameOfFormFunction]();
+                }
+            });
+
+            this.blockUI('Beginning workup');
 
 
             //end of prepareOrdersTobePlaced
@@ -455,8 +497,50 @@ define([
             }
 
             return output;
-        }
+        },
+        getLabOrdersUID: function(model) {
+            var value = model.get('value');
+            if (value.match(':comp') || value.match('Passed')) {
 
+                var searchTerm = model.get('label');
+                var fetchOptions = {
+                    resourceTitle: 'patient-record-search-text',
+                    criteria: {
+                        types: 'lab',
+                        query: searchTerm
+                    },
+                    onSuccess: function(collection, response) {
+                        if (collection.length) {
+                            ADK.Messaging.getChannel('consultOrder').trigger('getLabOrdersUID', {
+                                collection: collection,
+                                lab: searchTerm
+                            });
+                        }
+                    }
+                };
+
+                ADK.PatientRecordService.fetchCollection(fetchOptions);
+
+
+            }
+            return;
+        },
+        augmentPreReqOrder: function(preReqOrder, orderRemediation) {
+            if (_.isEmpty(orderRemediation)) {
+                return preReqOrder;
+            }
+            return _.extend(preReqOrder, {
+                domain: orderRemediation.domain,
+                action: orderRemediation.action
+            });
+        },
+        getOrderRemediation: function(order, cdsIntentResults) {
+            var matchingResult = _.find(cdsIntentResults, function(result) {
+                return order.orderName === _.get(result.detail, 'code.text') ||
+                    order.orderName === _.get(result.detail, 'comments');
+            });
+            return _.isEmpty(matchingResult) ? null : matchingResult.remediation;
+        }
     };
 
 

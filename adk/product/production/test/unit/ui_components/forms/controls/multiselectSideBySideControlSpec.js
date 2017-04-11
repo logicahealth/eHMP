@@ -186,83 +186,83 @@ define(["api/Messaging", "jquery", "handlebars", "backbone", "marionette", "main
                 });
                 it("initial render of items are placed in correct regions", function() {
                     //Check the number of rows on each side
-                    expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row')).toHaveLength(3);
-                    expect($testPage.find(selectedRegionTable + '> .body.scrolling-content > .table-row')).toHaveLength(1);
+                    expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row')).toHaveLength(3);
+                    expect($testPage.find(selectedRegionTable + '> .body.auto-overflow-y > .table-row')).toHaveLength(1);
 
                     //Item 01 should be on both sides
                     //First check if it is on the available side
-                    expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row:nth-child(1) .table-cell:nth-child(1)')).toContainText('Item 01');
-                    expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row:nth-child(1) .table-cell:nth-child(2) button')).toContainText('Remove');
+                    expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row:nth-child(1) .table-cell:nth-child(1)')).toContainText('Item 01');
+                    expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row:nth-child(1) .table-cell:nth-child(2) button')).toContainText('Remove');
                     //Check to see if this item is muted color sinice it is already added
-                    expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row:nth-child(1) .table-cell:nth-child(1)')).toHaveClass('color-grey-darkest');
-                    expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row:nth-child(1) .table-cell:nth-child(2) button')).toHaveClass('color-grey-darkest');
+                    expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row:nth-child(1) .table-cell:nth-child(1)')).toHaveClass('color-grey-darkest');
+                    expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row:nth-child(1) .table-cell:nth-child(2) button')).toHaveClass('color-grey-darkest');
                     //second check if it is on the selected side
-                    expect($testPage.find(selectedRegionTable + '> .body.scrolling-content > .table-row:nth-child(1) .table-cell:nth-child(1)')).toContainText('Item 01');
-                    expect($testPage.find(selectedRegionTable + '> .body.scrolling-content > .table-row:nth-child(1) .table-cell:nth-child(2)')).toContainText('Remove');
+                    expect($testPage.find(selectedRegionTable + '> .body.auto-overflow-y > .table-row:nth-child(1) .table-cell:nth-child(1)')).toContainText('Item 01');
+                    expect($testPage.find(selectedRegionTable + '> .body.auto-overflow-y > .table-row:nth-child(1) .table-cell:nth-child(2)')).toContainText('Remove');
 
                     //Item 02 should only be on the available side
-                    expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row:nth-child(2) .table-cell:nth-child(1)')).toContainText('Item 02');
-                    expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row:nth-child(2) .table-cell:nth-child(2) button')).toContainText('Add');
+                    expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row:nth-child(2) .table-cell:nth-child(1)')).toContainText('Item 02');
+                    expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row:nth-child(2) .table-cell:nth-child(2) button')).toContainText('Add');
 
                     //Item 03 should only be on the available side
-                    expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row:nth-child(3) .table-cell:nth-child(1)')).toContainText('Item 03');
-                    expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row:nth-child(3) .table-cell:nth-child(2) button')).toContainText('Add');
+                    expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row:nth-child(3) .table-cell:nth-child(1)')).toContainText('Item 03');
+                    expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row:nth-child(3) .table-cell:nth-child(2) button')).toContainText('Add');
                 });
                 it("clicking 'Add' button adds item to selected the selected side", function() {
                     //Make sure there are the correct number of items unslected
-                    expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row .table-cell button:contains("Add")')).toHaveLength(2);
+                    expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row .table-cell button:contains("Add")')).toHaveLength(2);
 
                     $testPage.find("button[title='Press enter to add Item 03.']").focus().click();
-                    expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row .table-cell button:contains("Add")')).toHaveLength(1);
-                    expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row:nth-child(3) .table-cell:nth-child(2) button')).toContainText('Remove');
-                    expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row')).toHaveLength(3);
+                    expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row .table-cell button:contains("Add")')).toHaveLength(1);
+                    expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row:nth-child(3) .table-cell:nth-child(2) button')).toContainText('Remove');
+                    expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row')).toHaveLength(3);
                 });
                 it("clicking 'Remove' button removes item from selected side", function() {
-                    expect($testPage.find(selectedRegionTable + '> .body.scrolling-content > .table-row')).toHaveLength(2);
-                    expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row .table-cell button:contains("Add")')).toHaveLength(1);
+                    expect($testPage.find(selectedRegionTable + '> .body.auto-overflow-y > .table-row')).toHaveLength(2);
+                    expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row .table-cell button:contains("Add")')).toHaveLength(1);
 
                     $testPage.find("button[title='Press enter to remove Item 01.']").focus().click();
 
-                    expect($testPage.find(selectedRegionTable + '> .body.scrolling-content > .table-row')).toHaveLength(1);
-                    expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row .table-cell button:contains("Add")')).toHaveLength(2);
-                    expect($testPage.find(selectedRegionTable + '> .body.scrolling-content > .table-row:nth-child(1) > .table-cell:nth-child(1)')).toContainText('Item 03');
+                    expect($testPage.find(selectedRegionTable + '> .body.auto-overflow-y > .table-row')).toHaveLength(1);
+                    expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row .table-cell button:contains("Add")')).toHaveLength(2);
+                    expect($testPage.find(selectedRegionTable + '> .body.auto-overflow-y > .table-row:nth-child(1) > .table-cell:nth-child(1)')).toContainText('Item 03');
                 });
                 it("removing all items from selected side leaves 'No Items selected.' text", function() {
-                    expect($testPage.find(selectedRegionTable + '> .body.scrolling-content > .table-row')).toHaveLength(1);
+                    expect($testPage.find(selectedRegionTable + '> .body.auto-overflow-y > .table-row')).toHaveLength(1);
                     $testPage.find("button[title='Press enter to remove Item 03.']").focus().click();
-                    expect($testPage.find(selectedRegionTable + '> .body.scrolling-content > .table-row')).toHaveLength(1);
-                    expect($testPage.find(selectedRegionTable + '> .body.scrolling-content > .table-row .table-cell:nth-child(1)')).toContainText('No Items selected.');
+                    expect($testPage.find(selectedRegionTable + '> .body.auto-overflow-y > .table-row')).toHaveLength(1);
+                    expect($testPage.find(selectedRegionTable + '> .body.auto-overflow-y > .table-row .table-cell:nth-child(1)')).toContainText('No Items selected.');
                 });
                 it("selecting all items from available side leaves all items in a text muted state", function() {
-                    expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row')).toHaveLength(3);
+                    expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row')).toHaveLength(3);
 
                     //Add all Items to the slelected side
                     $testPage.find("button[title='Press enter to add Item 01.']").focus().click();
                     $testPage.find("button[title='Press enter to add Item 02.']").focus().click();
                     $testPage.find("button[title='Press enter to add Item 03.']").focus().click();
-                    expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row')).toHaveLength(3);
-                    expect($testPage.find(selectedRegionTable + '> .body.scrolling-content > .table-row')).toHaveLength(3);
-                    expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row .table-cell:nth-child(2) button:contains("Remove")')).toHaveLength(3);
+                    expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row')).toHaveLength(3);
+                    expect($testPage.find(selectedRegionTable + '> .body.auto-overflow-y > .table-row')).toHaveLength(3);
+                    expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row .table-cell:nth-child(2) button:contains("Remove")')).toHaveLength(3);
 
                     //Remove all Items from the selected side
                     $testPage.find("button[title='Press enter to remove Item 01.']").focus().click();
                     $testPage.find("button[title='Press enter to remove Item 02.']").focus().click();
                     $testPage.find("button[title='Press enter to remove Item 03.']").focus().click();
-                    expect($testPage.find(selectedRegionTable + '> .body.scrolling-content > .table-row')).toHaveLength(1);
-                    expect($testPage.find(selectedRegionTable + '> .body.scrolling-content > .table-row .table-cell:nth-child(1)')).toContainText('No Items selected.');
-                    expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row .table-cell:nth-child(2) button:contains("Add")')).toHaveLength(3);
+                    expect($testPage.find(selectedRegionTable + '> .body.auto-overflow-y > .table-row')).toHaveLength(1);
+                    expect($testPage.find(selectedRegionTable + '> .body.auto-overflow-y > .table-row .table-cell:nth-child(1)')).toContainText('No Items selected.');
+                    expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row .table-cell:nth-child(2) button:contains("Add")')).toHaveLength(3);
                 });
                 it("correct filtering of available items", function(done) {
-                    expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row')).toHaveLength(3);
+                    expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row')).toHaveLength(3);
                     expect($testPage.find(availableRegionTable + '> .container-fluid .msbs-input.row > .control.input-control.form-group span.loading')).toHaveClass('hidden');
                     $testPage.find(availableRegionTable + 'input.filter:text').val('03').trigger('input');
                     expect($testPage.find(availableRegionTable + '> .container-fluid .msbs-input.row > .control.input-control.form-group span.loading')).not.toHaveClass('hidden');
                     expect($testPage.find(availableRegionTable + 'input.filter:text')).toHaveValue('03');
                     setTimeout(function() {
                         expect($testPage.find(availableRegionTable + '> .container-fluid .msbs-input.row > .control.input-control.form-group span.loading')).toHaveClass('hidden');
-                        expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row')).toHaveLength(1);
-                        expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row:nth-child(1) .table-cell:nth-child(1)')).toContainText('Item 03');
-                        expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row:nth-child(1) .table-cell:nth-child(2) button')).toContainText('Add');
+                        expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row')).toHaveLength(1);
+                        expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row:nth-child(1) .table-cell:nth-child(1)')).toContainText('Item 03');
+                        expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row:nth-child(1) .table-cell:nth-child(2) button')).toContainText('Add');
                         done();
                     }, 300);
                 });
@@ -304,83 +304,83 @@ define(["api/Messaging", "jquery", "handlebars", "backbone", "marionette", "main
                 });
                 it("initial render of items are placed in correct regions", function() {
                     //Check the number of rows on each side
-                    expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row')).toHaveLength(3);
-                    expect($testPage.find(selectedRegionTable + '> .body.scrolling-content > .table-row')).toHaveLength(1);
+                    expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row')).toHaveLength(3);
+                    expect($testPage.find(selectedRegionTable + '> .body.auto-overflow-y > .table-row')).toHaveLength(1);
 
                     //Item 01 should be on both sides
                     //First check if it is on the available side
-                    expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row:nth-child(1) .table-cell:nth-child(1)')).toContainText('Item 01');
-                    expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row:nth-child(1) .table-cell:nth-child(2) button')).toContainText('Remove');
+                    expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row:nth-child(1) .table-cell:nth-child(1)')).toContainText('Item 01');
+                    expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row:nth-child(1) .table-cell:nth-child(2) button')).toContainText('Remove');
                     //Check to see if this item is muted color sinice it is already added
-                    expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row:nth-child(1) .table-cell:nth-child(1)')).toHaveClass('color-grey-darkest');
-                    expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row:nth-child(1) .table-cell:nth-child(2) button')).toHaveClass('color-grey-darkest');
+                    expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row:nth-child(1) .table-cell:nth-child(1)')).toHaveClass('color-grey-darkest');
+                    expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row:nth-child(1) .table-cell:nth-child(2) button')).toHaveClass('color-grey-darkest');
                     //second check if it is on the selected side
-                    expect($testPage.find(selectedRegionTable + '> .body.scrolling-content > .table-row:nth-child(1) .table-cell:nth-child(1)')).toContainText('Item 01');
-                    expect($testPage.find(selectedRegionTable + '> .body.scrolling-content > .table-row:nth-child(1) .table-cell:nth-child(2)')).toContainText('Remove');
+                    expect($testPage.find(selectedRegionTable + '> .body.auto-overflow-y > .table-row:nth-child(1) .table-cell:nth-child(1)')).toContainText('Item 01');
+                    expect($testPage.find(selectedRegionTable + '> .body.auto-overflow-y > .table-row:nth-child(1) .table-cell:nth-child(2)')).toContainText('Remove');
 
                     //Item 02 should only be on the available side
-                    expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row:nth-child(2) .table-cell:nth-child(1)')).toContainText('Item 02');
-                    expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row:nth-child(2) .table-cell:nth-child(2) button')).toContainText('Add');
+                    expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row:nth-child(2) .table-cell:nth-child(1)')).toContainText('Item 02');
+                    expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row:nth-child(2) .table-cell:nth-child(2) button')).toContainText('Add');
 
                     //Item 03 should only be on the available side
-                    expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row:nth-child(3) .table-cell:nth-child(1)')).toContainText('Item 03');
-                    expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row:nth-child(3) .table-cell:nth-child(2) button')).toContainText('Add');
+                    expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row:nth-child(3) .table-cell:nth-child(1)')).toContainText('Item 03');
+                    expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row:nth-child(3) .table-cell:nth-child(2) button')).toContainText('Add');
                 });
                 it("clicking 'Add' button adds item to selected the selected side", function() {
                     //Make sure there are the correct number of items unslected
-                    expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row .table-cell button:contains("Add")')).toHaveLength(2);
+                    expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row .table-cell button:contains("Add")')).toHaveLength(2);
 
                     $testPage.find("button[title='Press enter to add Item 03.']").focus().click();
-                    expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row .table-cell button:contains("Add")')).toHaveLength(1);
-                    expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row:nth-child(3) .table-cell:nth-child(2) button')).toContainText('Remove');
-                    expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row')).toHaveLength(3);
+                    expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row .table-cell button:contains("Add")')).toHaveLength(1);
+                    expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row:nth-child(3) .table-cell:nth-child(2) button')).toContainText('Remove');
+                    expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row')).toHaveLength(3);
                 });
                 it("clicking 'Remove' button removes item from selected side", function() {
-                    expect($testPage.find(selectedRegionTable + '> .body.scrolling-content > .table-row')).toHaveLength(2);
-                    expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row .table-cell button:contains("Add")')).toHaveLength(1);
+                    expect($testPage.find(selectedRegionTable + '> .body.auto-overflow-y > .table-row')).toHaveLength(2);
+                    expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row .table-cell button:contains("Add")')).toHaveLength(1);
 
                     $testPage.find("button[title='Press enter to remove Item 01.']").focus().click();
 
-                    expect($testPage.find(selectedRegionTable + '> .body.scrolling-content > .table-row')).toHaveLength(1);
-                    expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row .table-cell button:contains("Add")')).toHaveLength(2);
-                    expect($testPage.find(selectedRegionTable + '> .body.scrolling-content > .table-row:nth-child(1) > .table-cell:nth-child(1)')).toContainText('Item 03');
+                    expect($testPage.find(selectedRegionTable + '> .body.auto-overflow-y > .table-row')).toHaveLength(1);
+                    expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row .table-cell button:contains("Add")')).toHaveLength(2);
+                    expect($testPage.find(selectedRegionTable + '> .body.auto-overflow-y > .table-row:nth-child(1) > .table-cell:nth-child(1)')).toContainText('Item 03');
                 });
                 it("removing all items from selected side leaves 'No Items selected.' text", function() {
-                    expect($testPage.find(selectedRegionTable + '> .body.scrolling-content > .table-row')).toHaveLength(1);
+                    expect($testPage.find(selectedRegionTable + '> .body.auto-overflow-y > .table-row')).toHaveLength(1);
                     $testPage.find("button[title='Press enter to remove Item 03.']").focus().click();
-                    expect($testPage.find(selectedRegionTable + '> .body.scrolling-content > .table-row')).toHaveLength(1);
-                    expect($testPage.find(selectedRegionTable + '> .body.scrolling-content > .table-row .table-cell:nth-child(1)')).toContainText('No Items selected.');
+                    expect($testPage.find(selectedRegionTable + '> .body.auto-overflow-y > .table-row')).toHaveLength(1);
+                    expect($testPage.find(selectedRegionTable + '> .body.auto-overflow-y > .table-row .table-cell:nth-child(1)')).toContainText('No Items selected.');
                 });
                 it("selecting all items from available side leaves all items in a text muted state", function() {
-                    expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row')).toHaveLength(3);
+                    expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row')).toHaveLength(3);
 
                     //Add all Items to the slelected side
                     $testPage.find("button[title='Press enter to add Item 01.']").focus().click();
                     $testPage.find("button[title='Press enter to add Item 02.']").focus().click();
                     $testPage.find("button[title='Press enter to add Item 03.']").focus().click();
-                    expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row')).toHaveLength(3);
-                    expect($testPage.find(selectedRegionTable + '> .body.scrolling-content > .table-row')).toHaveLength(3);
-                    expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row .table-cell:nth-child(2) button:contains("Remove")')).toHaveLength(3);
+                    expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row')).toHaveLength(3);
+                    expect($testPage.find(selectedRegionTable + '> .body.auto-overflow-y > .table-row')).toHaveLength(3);
+                    expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row .table-cell:nth-child(2) button:contains("Remove")')).toHaveLength(3);
 
                     //Remove all Items from the selected side
                     $testPage.find("button[title='Press enter to remove Item 01.']").focus().click();
                     $testPage.find("button[title='Press enter to remove Item 02.']").focus().click();
                     $testPage.find("button[title='Press enter to remove Item 03.']").focus().click();
-                    expect($testPage.find(selectedRegionTable + '> .body.scrolling-content > .table-row')).toHaveLength(1);
-                    expect($testPage.find(selectedRegionTable + '> .body.scrolling-content > .table-row .table-cell:nth-child(1)')).toContainText('No Items selected.');
-                    expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row .table-cell:nth-child(2) button:contains("Add")')).toHaveLength(3);
+                    expect($testPage.find(selectedRegionTable + '> .body.auto-overflow-y > .table-row')).toHaveLength(1);
+                    expect($testPage.find(selectedRegionTable + '> .body.auto-overflow-y > .table-row .table-cell:nth-child(1)')).toContainText('No Items selected.');
+                    expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row .table-cell:nth-child(2) button:contains("Add")')).toHaveLength(3);
                 });
                 it("correct filtering of available items", function(done) {
-                    expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row')).toHaveLength(3);
+                    expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row')).toHaveLength(3);
                     expect($testPage.find(availableRegionTable + '> .container-fluid .msbs-input.row > .control.input-control.form-group span.loading')).toHaveClass('hidden');
                     $testPage.find(availableRegionTable + 'input.filter:text').val('Item 03').trigger('input');
                     expect($testPage.find(availableRegionTable + '> .container-fluid .msbs-input.row > .control.input-control.form-group span.loading')).not.toHaveClass('hidden');
                     expect($testPage.find(availableRegionTable + 'input.filter:text')).toHaveValue('Item 03');
                     setTimeout(function() {
                         expect($testPage.find(availableRegionTable + '> .container-fluid .msbs-input.row > .control.input-control.form-group span.loading')).toHaveClass('hidden');
-                        expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row')).toHaveLength(1);
-                        expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row:nth-child(1) .table-cell:nth-child(1)').text()).toBe('Item 03');
-                        expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row:nth-child(1) .table-cell:nth-child(2) button').text()).toBe('Add');
+                        expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row')).toHaveLength(1);
+                        expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row:nth-child(1) .table-cell:nth-child(1)').text()).toBe('Item 03');
+                        expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row:nth-child(1) .table-cell:nth-child(2) button').text()).toBe('Add');
                         done();
                     }, 500);
                 });
@@ -408,56 +408,56 @@ define(["api/Messaging", "jquery", "handlebars", "backbone", "marionette", "main
                     expect($testPage.find(selectedRegionTable + '> .header.table-row > .table-cell:nth-child(2)')).toContainText("Index");
                 });
                 it("selecting all items from available side leaves all items in a text muted state", function() {
-                    expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row')).toHaveLength(3);
+                    expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row')).toHaveLength(3);
 
                     //Add all Items to the slelected side
                     $testPage.find("button[title='Press enter to add Item 01.']").focus().click();
                     $testPage.find("button[title='Press enter to add Item 02.']").focus().click();
                     $testPage.find("button[title='Press enter to add Item 03.']").focus().click();
-                    expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row')).toHaveLength(3);
-                    expect($testPage.find(selectedRegionTable + '> .body.scrolling-content > .table-row')).toHaveLength(3);
-                    expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row .table-cell:nth-child(2) button:contains("Remove")')).toHaveLength(3);
+                    expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row')).toHaveLength(3);
+                    expect($testPage.find(selectedRegionTable + '> .body.auto-overflow-y > .table-row')).toHaveLength(3);
+                    expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row .table-cell:nth-child(2) button:contains("Remove")')).toHaveLength(3);
                 });
                 it("initial render of items are placed in correct regions", function() {
                     //Check the number of rows on each side
-                    expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row')).toHaveLength(3);
-                    expect($testPage.find(selectedRegionTable + '> .body.scrolling-content > .table-row')).toHaveLength(3);
+                    expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row')).toHaveLength(3);
+                    expect($testPage.find(selectedRegionTable + '> .body.auto-overflow-y > .table-row')).toHaveLength(3);
 
                     //Item 01 should be on both sides
                     //First check if it is on the available side
-                    expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row:nth-child(1) .table-cell:nth-child(1)')).toContainText('Item 01');
-                    expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row:nth-child(1) .table-cell:nth-child(2) button')).toContainText('Remove');
+                    expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row:nth-child(1) .table-cell:nth-child(1)')).toContainText('Item 01');
+                    expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row:nth-child(1) .table-cell:nth-child(2) button')).toContainText('Remove');
                     //Check to see if this item is muted color sinice it is already added
-                    expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row:nth-child(1) .table-cell:nth-child(1)')).toHaveClass('color-grey-darkest');
-                    expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row:nth-child(1) .table-cell:nth-child(2) button')).toHaveClass('color-grey-darkest');
+                    expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row:nth-child(1) .table-cell:nth-child(1)')).toHaveClass('color-grey-darkest');
+                    expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row:nth-child(1) .table-cell:nth-child(2) button')).toHaveClass('color-grey-darkest');
                     //second check if it is on the selected side
-                    expect($testPage.find(selectedRegionTable + '> .body.scrolling-content > .table-row:nth-child(1) .table-cell:nth-child(1)')).toContainText('Item 01');
-                    expect($testPage.find(selectedRegionTable + '> .body.scrolling-content > .table-row:nth-child(1) .table-cell:nth-child(2) input').val()).toBe('1.0');
-                    expect($testPage.find(selectedRegionTable + '> .body.scrolling-content > .table-row:nth-child(1) .table-cell:nth-child(3)')).toContainText('Remove');
+                    expect($testPage.find(selectedRegionTable + '> .body.auto-overflow-y > .table-row:nth-child(1) .table-cell:nth-child(1)')).toContainText('Item 01');
+                    expect($testPage.find(selectedRegionTable + '> .body.auto-overflow-y > .table-row:nth-child(1) .table-cell:nth-child(2) input').val()).toBe('1.0');
+                    expect($testPage.find(selectedRegionTable + '> .body.auto-overflow-y > .table-row:nth-child(1) .table-cell:nth-child(3)')).toContainText('Remove');
 
                     //Item 02 should be on both sides
                     //First check if it is on the available side
-                    expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row:nth-child(2) .table-cell:nth-child(1)')).toContainText('Item 02');
-                    expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row:nth-child(2) .table-cell:nth-child(2) button')).toContainText('Remove');
+                    expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row:nth-child(2) .table-cell:nth-child(1)')).toContainText('Item 02');
+                    expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row:nth-child(2) .table-cell:nth-child(2) button')).toContainText('Remove');
                     //Check to see if this item is muted color sinice it is already added
-                    expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row:nth-child(2) .table-cell:nth-child(1)')).toHaveClass('color-grey-darkest');
-                    expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row:nth-child(2) .table-cell:nth-child(2) button')).toHaveClass('color-grey-darkest');
+                    expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row:nth-child(2) .table-cell:nth-child(1)')).toHaveClass('color-grey-darkest');
+                    expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row:nth-child(2) .table-cell:nth-child(2) button')).toHaveClass('color-grey-darkest');
                     //second check if it is on the selected side
-                    expect($testPage.find(selectedRegionTable + '> .body.scrolling-content > .table-row:nth-child(2) .table-cell:nth-child(1)')).toContainText('Item 02');
-                    expect($testPage.find(selectedRegionTable + '> .body.scrolling-content > .table-row:nth-child(2) .table-cell:nth-child(2) input').val()).toBe('2.0');
-                    expect($testPage.find(selectedRegionTable + '> .body.scrolling-content > .table-row:nth-child(2) .table-cell:nth-child(3)')).toContainText('Remove');
+                    expect($testPage.find(selectedRegionTable + '> .body.auto-overflow-y > .table-row:nth-child(2) .table-cell:nth-child(1)')).toContainText('Item 02');
+                    expect($testPage.find(selectedRegionTable + '> .body.auto-overflow-y > .table-row:nth-child(2) .table-cell:nth-child(2) input').val()).toBe('2.0');
+                    expect($testPage.find(selectedRegionTable + '> .body.auto-overflow-y > .table-row:nth-child(2) .table-cell:nth-child(3)')).toContainText('Remove');
 
                     //Item 03 should be on both sides
                     //First check if it is on the available side
-                    expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row:nth-child(3) .table-cell:nth-child(1)')).toContainText('Item 03');
-                    expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row:nth-child(3) .table-cell:nth-child(2) button')).toContainText('Remove');
+                    expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row:nth-child(3) .table-cell:nth-child(1)')).toContainText('Item 03');
+                    expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row:nth-child(3) .table-cell:nth-child(2) button')).toContainText('Remove');
                     //Check to see if this item is muted color sinice it is already added
-                    expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row:nth-child(3) .table-cell:nth-child(1)')).toHaveClass('color-grey-darkest');
-                    expect($testPage.find(availableRegionTable + '> .body.scrolling-content > .table-row:nth-child(3) .table-cell:nth-child(2) button')).toHaveClass('color-grey-darkest');
+                    expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row:nth-child(3) .table-cell:nth-child(1)')).toHaveClass('color-grey-darkest');
+                    expect($testPage.find(availableRegionTable + '> .body.auto-overflow-y > .table-row:nth-child(3) .table-cell:nth-child(2) button')).toHaveClass('color-grey-darkest');
                     //second check if it is on the selected side
-                    expect($testPage.find(selectedRegionTable + '> .body.scrolling-content > .table-row:nth-child(3) .table-cell:nth-child(1)')).toContainText('Item 03');
-                    expect($testPage.find(selectedRegionTable + '> .body.scrolling-content > .table-row:nth-child(3) .table-cell:nth-child(2) input').val()).toBe('3.0');
-                    expect($testPage.find(selectedRegionTable + '> .body.scrolling-content > .table-row:nth-child(3) .table-cell:nth-child(3)')).toContainText('Remove');
+                    expect($testPage.find(selectedRegionTable + '> .body.auto-overflow-y > .table-row:nth-child(3) .table-cell:nth-child(1)')).toContainText('Item 03');
+                    expect($testPage.find(selectedRegionTable + '> .body.auto-overflow-y > .table-row:nth-child(3) .table-cell:nth-child(2) input').val()).toBe('3.0');
+                    expect($testPage.find(selectedRegionTable + '> .body.auto-overflow-y > .table-row:nth-child(3) .table-cell:nth-child(3)')).toContainText('Remove');
                 });
             });
             describe("with itemCoulmn", function() {

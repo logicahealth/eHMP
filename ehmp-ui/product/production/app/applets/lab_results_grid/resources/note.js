@@ -1,4 +1,6 @@
-define([], function() {
+define([
+    'moment'
+], function(moment) {
     "use strict";
 
     var getDefaultNoteAttributes = function() {

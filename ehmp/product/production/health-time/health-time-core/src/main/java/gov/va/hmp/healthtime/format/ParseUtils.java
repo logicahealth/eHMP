@@ -14,7 +14,7 @@ import java.util.Collection;
 import java.util.Locale;
 
 /**
- * TODO: Complete documentation for ParseUtils
+ * Utility class for parsing out two Digit value from the provided string
  */
 public class ParseUtils {
     static int parseTwoDigits(String text, int position) {

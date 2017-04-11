@@ -23,10 +23,10 @@ default[:mocks][:jmeadows][:artifacts] = {
   "VLERMockDocQuery" => "#{node[:nexus_url]}/nexus/content/repositories/filerepo/gov/va/vlermockdocquery/1.0.8/vlermockdocquery-1.0.8.war",
   "VLERMockDocRetrieve" => "#{node[:nexus_url]}/nexus/content/repositories/filerepo/gov/va/vlermockdocretrieve/1.0.6/vlermockdocretrieve-1.0.6.war",
   "MockJMeadowsPDWS" => "#{node[:nexus_url]}/nexus/content/repositories/filerepo/gov/va/mockjmeadowspdws/1.0.1/mockjmeadowspdws-1.0.1.war",
-  "jMeadows" => "#{node[:nexus_url]}/nexus/content/repositories/filerepo/gov/va/jmeadows/2.3.3.0.2/jmeadows-2.3.3.0.2-development.war",
-  "BHIERelayService" => "#{node[:nexus_url]}/nexus/content/repositories/filerepo/gov/va/bhierelayservice/2.3.3.0.2/bhierelayservice-2.3.3.0.2-development.war",
+  "jMeadows" => "#{node[:nexus_url]}/nexus/content/repositories/filerepo/gov/va/jmeadows/#{node[:jmeadows][:version]}/jmeadows-#{node[:jmeadows][:version]}-development.war",
+  "BHIERelayService" => "#{node[:nexus_url]}/nexus/content/repositories/filerepo/gov/va/bhierelayservice/#{node[:jmeadows][:version]}/bhierelayservice-#{node[:jmeadows][:version]}-development.war",
   "MockDoDAdaptor" => "#{node[:nexus_url]}/nexus/content/repositories/filerepo/gov/va/mockdodadaptor/2.2.13/mockdodadaptor-2.2.13.war",
-  "VistaDataService" => "#{node[:nexus_url]}/nexus/content/repositories/filerepo/gov/va/vistadataservice/2.3.3.0.2/vistadataservice-2.3.3.0.2-development.war"
+  "VistaDataService" => "#{node[:nexus_url]}/nexus/content/repositories/filerepo/gov/va/vistadataservice/#{node[:jmeadows][:version]}/vistadataservice-#{node[:jmeadows][:version]}-development.war"
 }
 default[:mocks][:jmeadows][:bhie_relay_endpoint] = "http://127.0.0.1/BHIERelayService/BHIERelayService?WSDL"
 default[:mocks][:jmeadows][:dod_adaptor_endpoint] = "http://127.0.0.1/MockDoDAdaptor"

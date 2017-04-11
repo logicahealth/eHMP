@@ -13,8 +13,9 @@ define([
     'main/components/applets/baseDisplayApplet/baseDisplayAppletItem',
     'main/components/applets/baseDisplayApplet/baseGistView',
     "main/components/appletToolbar/appletToolbarView",
-    "main/components/views/appletViews/TileSortManager"
-], function($, _, Utils, Backbone, Handlebars, interventionsGistLayoutTemplate, interventionsGistChildTemplate, popoverTemplate, ResourceService, UserService, Messaging, BaseAppletItem, BaseGistView, ToolbarView, TileSortManager) {
+    "main/components/views/appletViews/TileSortManager",
+    '_assets/js/tooltipMappings'
+], function($, _, Utils, Backbone, Handlebars, interventionsGistLayoutTemplate, interventionsGistChildTemplate, popoverTemplate, ResourceService, UserService, Messaging, BaseAppletItem, BaseGistView, ToolbarView, TileSortManager, TooltipMappings) {
     'use strict';
 
     var InterventionsGistItem = BaseAppletItem.extend({
@@ -173,6 +174,12 @@ define([
             this.model.set('appletID', this.AppletID);
             this.childViewContainer = ".gist-item-list";
         },
+        onRender: function(){
+            _.each(this.$('.toolbar-508'), function(span) {
+                var tooltipKey = span.innerHTML;
+                span.innerHTML = '( ' + TooltipMappings[tooltipKey] + ' )';
+            });
+        },
         templateHelpers: function() {
             var self = this;
             return {
@@ -184,6 +191,9 @@ define([
                     return true;
                 }
             };
+        },
+        behaviors: {
+            Tooltip: {}
         }
     });
 

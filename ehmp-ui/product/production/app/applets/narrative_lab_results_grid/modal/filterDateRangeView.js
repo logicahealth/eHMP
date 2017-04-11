@@ -171,9 +171,6 @@ define([
 
             this.model.set('fromDate', fromDate);
             this.model.set('toDate', toDate);
-
-
-            //TODO: Remove this once the new Resource is Created
             this.sharedDateRange.set('fromDate', fromDate);
             this.sharedDateRange.set('toDate', toDate);
 
@@ -193,9 +190,6 @@ define([
             this.sharedDateRange.set('customFromDate', this.model.get('customFromDate'));
             this.sharedDateRange.set('customToDate', this.model.get('customToDate'));
             this.sharedDateRange.set('selectedId', this.model.get('selectedId'));
-            // ADK.SessionStorage.setAppletStorageModel('narrative_lab_results_grid', 'modal_selectedId', this.model.get('selectedId'));
-            // ADK.SessionStorage.setAppletStorageModel('narrative_lab_results_grid', 'modal_customFromDate', this.model.get('customFromDate'));
-            // ADK.SessionStorage.setAppletStorageModel('narrative_lab_results_grid', 'modal_customToDate', this.model.get('customToDate'));
         },
         checkCustomRangeCondition: function() {
             var hasCustomRangeValuesBeenSetCorrectly = true;
@@ -299,8 +293,7 @@ define([
         },
         fetchDateRangeFilteredCollection: function() {
             ADK.PatientRecordService.fetchCollection(this.fetchOptions);
-            this.parentView.leftColumn.show(ADK.Views.Loading.create()); // this.parentView.tableLoadingView);
-            //   this.parentView.chart.show(ADK.Views.Loading.create()); // this.parentView.chartLoadingView);
+            this.parentView.leftColumn.show(ADK.Views.Loading.create());
         },
         setFetchOptions: function(fetchOptions) {
             this.fetchOptions = fetchOptions;

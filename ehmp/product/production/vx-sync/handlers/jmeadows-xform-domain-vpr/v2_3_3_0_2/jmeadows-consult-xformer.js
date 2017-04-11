@@ -6,7 +6,6 @@ var moment = require('moment');
 
 function dodConsultToVPR(dodConsult, edipi){
     var vprConsult = {};
-
     vprConsult.codes = xformUtils.transformCodes(dodConsult.codes);
 
     vprConsult.facilityCode='DOD';
@@ -27,6 +26,9 @@ function dodConsultToVPR(dodConsult, edipi){
     vprConsult.dodComplexNoteUri = dodConsult.complexDataUrl || null;
 
     vprConsult.uid = uidUtils.getUidForDomain('document', 'DOD', edipi, dodConsult.cdrEventId);
+
+    vprConsult.author = dodConsult.provider ? dodConsult.provider.name : null;
+    vprConsult.authorDisplayName = vprConsult.author;
 
     vprConsult.text = [];
 

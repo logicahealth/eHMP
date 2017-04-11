@@ -25,20 +25,21 @@
 package com.cognitive.cds.invocation.mongo;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
+
+import javax.annotation.PostConstruct;
 
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
 import com.cognitive.cds.invocation.model.IntentMapping;
+import com.cognitive.cds.invocation.mongo.exception.CDSDBConnectionException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.BasicDBObject;
-import com.mongodb.MongoClient;
-import com.mongodb.client.FindIterable;
+import com.mongodb.Block;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.result.DeleteResult;
@@ -49,11 +50,13 @@ import com.mongodb.client.result.DeleteResult;
  */
 public class IntentMappingDao {
 
-	private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(IntentMappingDao.class);
+	private static final org.slf4j.Logger LOGGER = org.slf4j.LoggerFactory.getLogger(IntentMappingDao.class);
+	
+	private static final String TABLE = "intent";
+	private static final String COLLECTION = "cdsintent";
 
-	private boolean cacheIntents; // Any life time for cache?
 	private MongoDbDao mongoDbDao;
-	private ObjectMapper mapper = new ObjectMapper();
+	private boolean deployDefaultIntents;
 
 	public MongoDbDao getMongoDbDao() {
 		return mongoDbDao;
@@ -63,29 +66,28 @@ public class IntentMappingDao {
 		this.mongoDbDao = mongoDbDao;
 	}
 
-	public boolean isCacheIntents() {
-		return cacheIntents;
+	public boolean isDeployDefaultIntents() {
+		return deployDefaultIntents;
 	}
 
-	public void setCacheIntents(boolean cacheIntents) {
-		this.cacheIntents = cacheIntents;
+	public void setDeployDefaultIntents(boolean deployDefaultIntents) {
+		this.deployDefaultIntents = deployDefaultIntents;
 	}
 
-	private HashMap<String, IntentMapping> cache = new HashMap<String, IntentMapping>();
 
 	public String createIntent(IntentMapping intentMapping) throws JsonProcessingException {
-		mongoDbDao.setDatabase("intent");
+		ObjectMapper mapper = new ObjectMapper();
 		try {
+			MongoDatabase database = mongoDbDao.getMongoClient().getDatabase(TABLE);
 			ObjectId id = new ObjectId();
 			String json = mapper.writeValueAsString(intentMapping);
 			Document doc = Document.parse(json);
 			doc.put("_id", id);
-			mongoDbDao.getCollection("cdsintent").insertOne(doc);
-
+			database.getCollection(COLLECTION).insertOne(doc);
 			return id.toHexString();
 
 		} catch (Exception e) {
-			logger.error("=======> intentMapping Insert Exception: " + e.toString());
+			LOGGER.error("=======> intentMapping Insert Exception: " + e.toString(),e);
 		}
 		return null;
 	}
@@ -93,74 +95,82 @@ public class IntentMappingDao {
 	public IntentMapping getIntent(String intentName) {
 		IntentMapping im = null;
 
-		if (cache.containsKey(intentName)) {
-			return cache.get(intentName);
+		MongoDatabase database = null;
+		try {
+			database = mongoDbDao.getMongoClient().getDatabase(TABLE);
+		} catch (CDSDBConnectionException e1) {
+			LOGGER.error("========> mongoDbDao.getMongoClient(): " + e1.toString(),e1);
+			return im;
 		}
-
-		mongoDbDao.setDatabase("intent");
-		MongoCollection<Document> collection = mongoDbDao.getCollection("cdsintent");
+		MongoCollection<Document> collection = database.getCollection(COLLECTION);
 
 		Document filter = new Document();
 		filter.put("name", intentName);
 
-		Document obj = collection.find(filter).first();
+		Document document = collection.find(filter).first();
 
-		if (obj != null) {
+		if (document != null) {
 			try {
-				String json = obj.toJson();
+				ObjectMapper mapper = new ObjectMapper();
+				String json = document.toJson();
 				im = mapper.readValue(json, IntentMapping.class);
-				im.setId(im.get_id().toHexString());
 			} catch (IOException e) {
-				logger.error("========> Deserialize: " + e.toString());
+				LOGGER.error("========> Deserialize: " + e.toString(),e);
 			}
-		}
-		if (cacheIntents == true && im != null) {
-			cache.put(intentName, im);
 		}
 		return im;
 	}
 
 	public List<IntentMapping> getAll() {
-		List<IntentMapping> intentList = new ArrayList<IntentMapping>();
-		mongoDbDao.setDatabase("intent");
-		MongoCollection<Document> collection = mongoDbDao.getCollection("cdsintent");
-		FindIterable<Document> docs = collection.find();
-		for (Iterator iterator = docs.iterator(); iterator.hasNext();) {
-			Document obj = (Document) iterator.next();
-			try {
-				String json = obj.toJson();
-				IntentMapping im = mapper.readValue(json, IntentMapping.class);
-				im.setId(im.get_id().toHexString());
-				// we do not need the _id if we set id
-				im.set_id(null);
-				intentList.add(im);
-				if (cacheIntents == true && im != null) {
-					cache.put(im.getName(), im);
-				}
-			} catch (IOException e) {
-				logger.error("========> Deserialize: " + e.toString());
-			}
+		List<IntentMapping> intentList = new ArrayList<>();
+		MongoDatabase database = null;
+		try {
+			database = mongoDbDao.getMongoClient().getDatabase(TABLE);
+		} catch (CDSDBConnectionException e) {
+			LOGGER.error("========> Error retrieving MongoDB connection: " + e.toString(),e);
+			return intentList;
 		}
+		MongoCollection<Document> collection = database.getCollection(COLLECTION);
+		ObjectMapper mapper = new ObjectMapper();
+		collection.find().forEach( (Block<Document>) document -> {
+			String json = document.toJson();
+			try {
+				IntentMapping im = mapper.readValue(json, IntentMapping.class);
+				intentList.add(im);
+			} catch (Exception e) {
+				LOGGER.error("========> Error mapping Document : " + json,e);
+			}
+		});
 
 		return intentList;
 	}
 
-	public DeleteResult deleteIntent(String intentName) throws JsonProcessingException {
-		MongoClient mongo = mongoDbDao.getMongoClient();
-		MongoDatabase db = mongo.getDatabase("intent");
-		MongoCollection<Document> collection = db.getCollection("cdsintent");
+	public DeleteResult deleteIntent(String intentName) {
+		DeleteResult result = DeleteResult.unacknowledged(); //Default delete was unsuccessful
+		try {
+			MongoDatabase database = mongoDbDao.getMongoClient().getDatabase(TABLE);
+			MongoCollection<Document> collection = database.getCollection(COLLECTION);
 
-		BasicDBObject query = new BasicDBObject();
-		query.append("name", intentName);
+			BasicDBObject query = new BasicDBObject();
+			query.append("name", intentName);
 
-		DeleteResult result = collection.deleteOne(query);
+			result = collection.deleteOne(query);
+		} catch (CDSDBConnectionException e) {
+			LOGGER.error("========> Error retrieving MongoDB connection: " + e.toString(),e);
+		}
 		return result;
 	}
 
 	public Document updateIntentMapping(IntentMapping im) throws JsonProcessingException {
-		MongoClient mongo = mongoDbDao.getMongoClient();
-		MongoDatabase db = mongo.getDatabase("intent");
-		MongoCollection<Document> collection = db.getCollection("cdsintent");
+		Document result = null;
+		MongoDatabase database = null;
+		try {
+			database = mongoDbDao.getMongoClient().getDatabase(TABLE);
+		} catch (CDSDBConnectionException e1) {
+			LOGGER.error("========> getMongoClient().getDatabase: " + e1.toString(),e1);
+			return result;
+		}
+		MongoCollection<Document> collection = database.getCollection(COLLECTION);
 
 		Document filter = new Document();
 		if (im.get_id() != null) {
@@ -171,24 +181,53 @@ public class IntentMappingDao {
 			return null;
 		}
 		Document obj = collection.find(filter).first();
-		Document result = null;
 
 		if (obj != null) {
 			try {
+				ObjectMapper mapper = new ObjectMapper();
 				String objectJson = mapper.writeValueAsString(im);
 				Document doc = Document.parse(objectJson);
 				doc.put("_id", im.get_id());
 
 				result = collection.findOneAndReplace(filter, doc);
-				if (cache.containsKey(im.getName())) {
-					cache.put(im.getName(), im);
-				}
 
 			} catch (IOException e) {
-				logger.error("========> Deserialize: " + e.toString());
+				LOGGER.error("========> Deserialize: " + e.toString());
 			}
 		}
 		return result;
 	}
+	
+	
+	@PostConstruct
+	public void init() {
+		LOGGER.debug("\n*****************\n\t Invoking PostConstruct on IntentMappingDao");
+		if(deployDefaultIntents) {
+			ObjectMapper mapper = new ObjectMapper();
+			try {
+				InputStream is = getClass().getClassLoader().getResourceAsStream("intents.json");
+				IntentMapping[] intents = mapper.readValue(is, IntentMapping[].class);
 
+				MongoDatabase database = mongoDbDao.getMongoClient().getDatabase(TABLE);
+				MongoCollection<Document> collection = database.getCollection(COLLECTION);
+
+				for(IntentMapping intent : intents) {
+					Document filter = new Document();
+					// Intent unique id is the name
+					filter.put("name", intent.getName());
+
+					Document deployedIntent = collection.find(filter).first();
+					if(deployedIntent==null) {
+						intent.set_id(new ObjectId());
+						String objectJson = mapper.writeValueAsString(intent);
+						Document doc = Document.parse(objectJson);
+						collection.insertOne(doc);
+						LOGGER.debug("\n*****************\n\t Deploying default intent : "+intent.getName());
+					}
+				}
+			} catch (IOException | CDSDBConnectionException e) {
+				LOGGER.error("Failed to initialize intent!", e);;
+			}
+		}
+	}
 }

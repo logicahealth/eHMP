@@ -32,7 +32,6 @@ import java.nio.file.Paths;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
-import java.util.logging.Level;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -62,7 +61,7 @@ import com.cognitive.cds.invocation.util.FhirUtils;
  */
 public class MockInvokeService implements MockInvokeIface {
 
-    private static final Logger logger = LoggerFactory.getLogger(MockInvokeService.class);
+	 private static final Logger LOGGER = LoggerFactory.getLogger(MockInvokeService.class);
 
     public MockInvokeService() {
 
@@ -89,19 +88,19 @@ public class MockInvokeService implements MockInvokeIface {
 
         // checking Properties deser result.
         if (props != null) {
-            logger.info("PROPS SIZE = " + props.size());
+            LOGGER.info("PROPS SIZE = " + props.size());
             IResource p1 = (IResource) props.get("temperature");
             if (p1 != null)
-                logger.info(p1.getResourceName());
+                LOGGER.info(p1.getResourceName());
         }
 
         // checking dataModel
         if (dataModel != null) {
             if (dataModel.getClass().isAssignableFrom(Bundle.class)) {
-                logger.info("=====> mockInvokeRules: FOUND BUNDLE ");
+                LOGGER.info("=====> mockInvokeRules: FOUND BUNDLE ");
 
             } else if (dataModel.getClass().isAssignableFrom(IResource.class)) {
-                logger.info("=====> mockInvokeRules: FOUND IRESOURCE ");
+                LOGGER.info("=====> mockInvokeRules: FOUND IRESOURCE ");
             }
         }
 
@@ -110,7 +109,7 @@ public class MockInvokeService implements MockInvokeIface {
             invokerResult = buildRealResultBundle(dataModel);
 
         } catch (IOException ex) {
-            java.util.logging.Logger.getLogger(MockInvokeService.class.getName()).log(Level.SEVERE, null, ex);
+            LOGGER.error( ex.getMessage());
         }
 
         return invokerResult;
@@ -118,8 +117,6 @@ public class MockInvokeService implements MockInvokeIface {
 
     @Override
     @POST
-    // @Consumes({"application/xml", "application/json",
-    // "application/x-www-form-urlencoded"})
     @Consumes("application/json")
     @Produces("application/json")
     @Path("/mockbundle")
@@ -127,23 +124,23 @@ public class MockInvokeService implements MockInvokeIface {
 
         ResultBundle invokerResult = null;
 
-        logger.info("IN mockInvokeBundle");
+        LOGGER.info("IN mockInvokeBundle");
 
         try {
 
-            logger.info(dataModel.getClass().getName());
+            LOGGER.info(dataModel.getClass().getName());
 
             // CHECK if Serialized incoming BUndle json to Bundle object
             // correctly.
             if (dataModel.getClass().isAssignableFrom(Bundle.class)) {
-                logger.info("=====> mockInvokeBundle: FOUND BUNDLE ");
+                LOGGER.info("=====> mockInvokeBundle: FOUND BUNDLE ");
             }
 
             // dataModel should be valid HAPI FHIR Bundle.
             invokerResult = buildResultBundle(dataModel);
 
         } catch (IOException ex) {
-            java.util.logging.Logger.getLogger(MockInvokeService.class.getName()).log(Level.SEVERE, null, ex);
+        	 LOGGER.error(ex.getMessage());
         }
 
         return invokerResult;
@@ -179,7 +176,7 @@ public class MockInvokeService implements MockInvokeIface {
         try {
             b = Files.readAllBytes(Paths.get(url.toURI()));
         } catch (URISyntaxException ex) {
-            java.util.logging.Logger.getLogger(MockInvokeService.class.getName()).log(Level.SEVERE, null, ex);
+            LOGGER.error(ex.getMessage());
         }
 
         Bundle bundle = (Bundle) FhirUtils.newJsonParser().parseResource(new String(b, "UTF-8"));
@@ -207,13 +204,13 @@ public class MockInvokeService implements MockInvokeIface {
 
         ResultBundle invokerResult = null;
 
-        logger.info("IN mockInvokeSimple with data=" + data);
+        LOGGER.info("IN mockInvokeSimple with data=" + data);
 
         try {
             invokerResult = setupResultsBundle2_WithBundleBody(false);
 
         } catch (IOException ex) {
-            java.util.logging.Logger.getLogger(MockInvokeService.class.getName()).log(Level.SEVERE, null, ex);
+            LOGGER.error(ex.getMessage());
         }
 
         return invokerResult;
@@ -232,10 +229,10 @@ public class MockInvokeService implements MockInvokeIface {
         try {
             b = Files.readAllBytes(Paths.get(url.toURI()));
         } catch (URISyntaxException ex) {
-            java.util.logging.Logger.getLogger(MockInvokeService.class.getName()).log(Level.SEVERE, null, ex);
+            LOGGER.error(ex.getMessage());
         }
 
-        logger.info("=====> creating a Bundle object ");
+        LOGGER.info("=====> creating a Bundle object ");
         FhirContext hapiFhirCtx = new FhirContext();
         hapiFhirCtx = FhirContext.forDstu2();
         Bundle bundle = (Bundle) hapiFhirCtx.newJsonParser().parseResource(new String(b, "UTF-8"));

@@ -3,7 +3,7 @@ define([
     "moment",
     "crossfilter",
     "app/applets/encounters/appConfig"
-], function(_, Moment, Crossfilter, CONFIG) {
+], function(_, moment, Crossfilter, CONFIG) {
     'use strict';
     // Switch ON/OFF debug info
     var DEBUG = CONFIG.debug;
@@ -236,33 +236,23 @@ define([
           return result;
         },
         showDetailView: function(paramObj, channelName) {
-            //console.log(paramObj);       
-            var channelObject = paramObj;
-            var model = channelObject.model = new Backbone.Model(channelObject.model.get("recent_model"));
-
+            var model = new Backbone.Model(paramObj.model.get('recent_model'));
+            var channelObject = _.extend({}, paramObj, {model: model});
+            var channel = ADK.Messaging.getChannel(channelName);
+            var response = channel.request('detailView', channelObject);
+            var viewDetail = new response.view();
             var modal = new ADK.UI.Modal({
-                view: ADK.Views.Loading.create(),
-                options: {
-                    size: "large",
-                    title: "Loading..."
-                }
-            });
-            modal.show();
-
-            var channel = ADK.Messaging.getChannel(channelName),
-                deferredResponse = channel.request('detailView', channelObject);
-
-            deferredResponse.done(function(response) {
-                var modal = new ADK.UI.Modal({
-                    view: response.view,
+                    view: viewDetail,
                     options: {
                         size: "large",
-                        title: response.title
+                        showLoading: true,
+                        title: function() {
+                            return _.result(response, 'title') || _.result(viewDetail, 'title');
+                        }
                     }
                 });
-                modal.show();
-                $('#mainModal').modal('show');
-            });
+            modal.show();
+
         },
         // Clean up kind/subkind
         clanUpItem: function(item) {
@@ -401,8 +391,38 @@ define([
                 return model.dateTime;
 
         },
-        convertChartDate: function(time) {
-            return moment.utc(time, "YYYYMMDD").valueOf();
+        convertChartDate: function(time){
+            if (time.length < 8) {
+                var repears = 8 - time.length;
+                for (var ind = 0; ind < repears; ind++) {
+                    time = time + "0";
+                }
+            }
+            var utcdatetime = moment.utc(time, "YYYYMMDD");
+            if (!utcdatetime.isValid()){
+                //console.log("Encounters: Invalid date time :", time);
+                var year = time.substr(0,4);
+                var month = time.substr(4,2);
+                var day = time.substr(6,2);
+                var newutcdatetime;
+                if (utcdatetime.invalidAt() === 1) { // incorrect month
+                    month = "01";
+                    newutcdatetime = moment.utc([year,month,day], "YYYYMMDD"); // set month to January
+                    if (newutcdatetime.isValid()){
+                         //console.log("Date time month corrected: ", newutcdatetime.format("YYYYMMDD"));
+                         return newutcdatetime.valueOf();
+                    } else {
+                        if (newutcdatetime.invalidAt() === 2) { // incorrect day
+                           day = "01";
+                           newutcdatetime = moment.utc([year,month,day], "YYYYMMDD"); // set day to 01
+                           //console.log("Date time corrected: ", newutcdatetime.format("YYYYMMDD"));
+                           return newutcdatetime.valueOf();
+                        }
+                      //console.log("Date time is not corrected!!!");
+                    }
+                }
+            }
+            return utcdatetime.valueOf();
         },
         nowChart: function() {
             var tm = moment().format("YYYYMMDDHHmmssSSS");

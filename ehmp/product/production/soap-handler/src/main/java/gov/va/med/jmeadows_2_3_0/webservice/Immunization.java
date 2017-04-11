@@ -16,7 +16,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  * <pre>
  * &lt;complexType name="immunization">
  *   &lt;complexContent>
- *     &lt;extension base="{http://webservice.vds.DNS       /}dataBean">
+ *     &lt;extension base="{http://webservice.vds.med.DNS   /}dataBean">
  *       &lt;sequence>
  *         &lt;element name="dateTime" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/>
  *         &lt;element name="encounterProvider" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -34,7 +34,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "immunization", namespace = "http://webservice.vds.DNS       /", propOrder = {
+@XmlType(name = "immunization", namespace = "http://webservice.vds.med.DNS   /", propOrder = {
     "dateTime",
     "encounterProvider",
     "id",

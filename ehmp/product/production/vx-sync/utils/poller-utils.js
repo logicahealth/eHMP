@@ -93,10 +93,8 @@ function parseErrorProcessorOptions(logger, config) {
         process.exit(0);
     }
 
-    // TODO: if --all-profiles and --profile <option> are both included, then all profiles
-    // will be used, and any explicit single profiles will be on regardless of worker-config.json
-    var allProfileList = _.keys(config['error-processing']);
-    var profiles = _.without(allProfileList, 'jdsGetErrorLimit');
+    var allProfileList = _.keys(config['error-processing']['profiles']);
+    var profiles = removeDisabledProfiles(config, allProfileList);
 
     var ignoreInvalid = parseIgnoreInvalid(argv);
     var autostart = parseAutostart(logger, argv);
@@ -112,8 +110,16 @@ function parseErrorProcessorOptions(logger, config) {
 
     return {
         profiles: profiles,
-        autostart: autostart,
+        autostart: autostart
     };
+}
+
+function removeDisabledProfiles(config, allProfileList) {
+    var profiles = config['error-processing']['profiles'] || {};
+
+    return _.filter(allProfileList, function(name) {
+        return profiles[name] ? profiles[name]['enabled'] : false;
+    });
 }
 
 function findInvalidErrorProfiles(allProfileList, profileList) {
@@ -380,6 +386,7 @@ function parsePollerOptions(logger) {
         .demand(['site'])
         .describe('site <site>', 'The VistaId. This can appear multiple times and all values will be used. Can be a comma-delimited list.')
         .describe('autostart <true|false>', 'If true, automatically starts the poller. Defaults to true.')
+        .string('site') // do not do the auto conversion of site value, always use string type.
         .alias('a', 'autostart')
         .alias('s', 'site')
         .alias('h', 'help')

@@ -46,8 +46,8 @@ class VitalsWriteBack < AllApplets
     add_action(CucumberLabel.new("Expand All"), ClickAction.new, AccessHtmlElement.new(:css, "div.expandCollapseAll > button"))
     add_action(CucumberLabel.new("Pass"), ClickAction.new, AccessHtmlElement.new(:css, "div.facility-name-pass-po > button"))
     add_verify(CucumberLabel.new("Modal Loaded"), VerifyText.new, AccessHtmlElement.new(:css, ".modal-content"))
-    add_action(CucumberLabel.new("Add"), ClickAction.new, AccessHtmlElement.new(:id, "form-add-btn"))
-    add_action(CucumberLabel.new("Cancel"), ClickAction.new, AccessHtmlElement.new(:id, "form-cancel-btn"))
+    add_action(CucumberLabel.new("Add"), ClickAction.new, AccessHtmlElement.new(:css, ".form-add-btn [type='button']"))
+    add_action(CucumberLabel.new("Cancel"), ClickAction.new, AccessHtmlElement.new(:css, ".vitalsConfirmCancel button.right-margin-xs"))
     add_verify(CucumberLabel.new("Growl Alert Msg"), VerifyContainsText.new, AccessHtmlElement.new(:css, ".growl-alert"))
     add_action(CucumberLabel.new("GDF Region"), ClickAction.new, AccessHtmlElement.new(:css, "#date-region-minimized"))
     add_action(CucumberLabel.new("GDF 24 Hours"), ClickAction.new, AccessHtmlElement.new(:css, "[name='24hrRangeGlobal']"))
@@ -259,6 +259,8 @@ end
 Then(/^user adds a new vitals$/) do
   aa = VitalsWriteBack.instance
   expect(aa.perform_action("Vitals Add Button")).to eq(true)
+  @ehmp = AddVitalModal.new
+  @ehmp.wait_until_fld_modal_title_visible
 end
 
 Then(/^user chooses to "([^"]*)" on add vitals modal detail screen$/) do | expand_all |
@@ -292,9 +294,11 @@ end
 
 Then(/^the add vitals detail modal displays "([^"]*)", "([^"]*)" and "([^"]*)" buttons$/) do |pass_btn, accept_btn, cancel_btn|
   aa = VitalsWriteBack.instance
-  expect(aa.am_i_visible?(pass_btn)).to eq(true)
-  expect(aa.am_i_visible?(accept_btn)).to eq(true)
-  expect(aa.am_i_visible?(cancel_btn)).to eq(true)
+  expect(aa.am_i_visible?(pass_btn)).to eq(true), "Pass btn is not visible"
+  # expect(aa.am_i_visible?(accept_btn)).to eq(true), "Accept btn is not visible"
+  expect(aa.get_element(accept_btn).displayed?).to eq(true), "Accept btn is not displayed"
+  expect(aa.get_element(accept_btn).enabled?).to eq(false), "Accept btn is enabled"
+  expect(aa.am_i_visible?(cancel_btn)).to eq(true), "Cancel btn is not visible"
 end
 
 Then(/^the add vitals detail modal displays labels and expanded labels for "([^"]*)"$/) do |vital_type, table|
@@ -487,4 +491,86 @@ Then(/^user closes the new observation window$/) do
       TestSupport.driver.navigate.refresh
     end
   end
+end
+
+Then(/^the add vitals detail modal displays form fields for Blood Pressure$/) do
+  @ehmp = AddVitalModal.new
+  expect(@ehmp).to have_fld_bp_input
+  expect(@ehmp).to have_rbn_bp_unavailable
+  expect(@ehmp).to have_rbn_bp_refused
+  expect(@ehmp).to have_fld_bp_location
+  expect(@ehmp).to have_fld_bp_method
+  expect(@ehmp).to have_fld_bp_cuffsize
+  expect(@ehmp).to have_fld_bp_position
+end
+
+Then(/^the add vitals detail modal displays form fields for Temperature$/) do 
+  @ehmp = AddVitalModal.new
+  expect(@ehmp).to have_fld_temp_input
+  expect(@ehmp).to have_rbn_temp_unavailable
+  expect(@ehmp).to have_rbn_temp_refused
+  expect(@ehmp).to have_fld_temp_location
+  expect(@ehmp).to have_rbn_temp_f
+  expect(@ehmp).to have_rbn_temp_c
+end
+
+Then(/^the add vitals detail modal displays form fields for Pulse$/) do
+  @ehmp = AddVitalModal.new
+  expect(@ehmp).to have_fld_pulse_input
+  expect(@ehmp).to have_rbn_pulse_unavailable
+  expect(@ehmp).to have_rbn_pulse_refused
+  expect(@ehmp).to have_fld_pulse_method
+  expect(@ehmp).to have_fld_pulse_position
+  expect(@ehmp).to have_fld_pulse_site
+  expect(@ehmp).to have_fld_pulse_location
+end
+
+Then(/^the add vitals detail modal displays form fields for Respiration$/) do
+  @ehmp = AddVitalModal.new
+  expect(@ehmp).to have_fld_resp_input
+  expect(@ehmp).to have_rbn_resp_unavailable
+  expect(@ehmp).to have_rbn_resp_refused
+  expect(@ehmp).to have_fld_resp_method
+  expect(@ehmp).to have_fld_resp_position
+end
+
+Then(/^the add vitals detail modal displays form fields for Pulse Oximetry$/) do
+  @ehmp = AddVitalModal.new
+  expect(@ehmp).to have_fld_pulseox_input
+  expect(@ehmp).to have_rbn_pulseox_unavailable
+  expect(@ehmp).to have_rbn_pulseox_refused
+  expect(@ehmp).to have_fld_pulseox_suppox
+  expect(@ehmp).to have_fld_pulseox_method
+end
+
+Then(/^the add vitals detail modal displays form fields for Height$/) do
+  @ehmp = AddVitalModal.new
+  expect(@ehmp).to have_fld_height_input
+  expect(@ehmp).to have_rbn_height_unavailable
+  expect(@ehmp).to have_rbn_height_refused
+  expect(@ehmp).to have_rbn_height_in
+  expect(@ehmp).to have_rbn_height_cm
+  expect(@ehmp).to have_fld_height_quality
+end
+
+Then(/^the add vitals detail modal displays form fields for Circumference\/Girth$/) do
+  @ehmp = AddVitalModal.new
+  expect(@ehmp).to have_fld_cg_input
+  expect(@ehmp).to have_rbn_cg_unavailable
+  expect(@ehmp).to have_rbn_cg_refused
+  expect(@ehmp).to have_rbn_cg_in
+  expect(@ehmp).to have_rbn_cg_cm
+  expect(@ehmp).to have_fld_cg_site
+  expect(@ehmp).to have_fld_cg_location
+end
+
+Then(/^the add vitals detail modal displays form fields for Weight$/) do
+  @ehmp = AddVitalModal.new
+  expect(@ehmp).to have_fld_weight_input
+  expect(@ehmp).to have_rbn_weight_unavailable
+  expect(@ehmp).to have_rbn_weight_refused
+  expect(@ehmp).to have_rbn_weight_lb
+  expect(@ehmp).to have_rbn_weight_kg
+  expect(@ehmp).to have_fld_weight_method
+  expect(@ehmp).to have_fld_weight_quality
 end

@@ -119,10 +119,10 @@ describe('enterprise-sync-request-handler.js', function() {
         'vistaSites': {
             '9E7A': _.defaults(wConfig.vistaSites['9E7A'], {
                 'name': 'panorama',
-                'host': 'IP_ADDRESS',
+                'host': 'IP        ',
                 'port': 9210,
-                'accessCode': 'PW',
-                'verifyCode': 'PW',
+                'accessCode': 'PW    ',
+                'verifyCode': 'PW    !!',
                 'localIP': '127.0.0.1',
                 'localAddress': 'localhost',
                 'connectTimeout': 3000,
@@ -130,10 +130,10 @@ describe('enterprise-sync-request-handler.js', function() {
             }),
             'C877': _.defaults(wConfig.vistaSites.C877, {
                 'name': 'kodak',
-                'host': 'IP_ADDRESS',
+                'host': 'IP        ',
                 'port': 9210,
-                'accessCode': 'PW',
-                'verifyCode': 'PW',
+                'accessCode': 'PW    ',
+                'verifyCode': 'PW    !!',
                 'localIP': '127.0.0.1',
                 'localAddress': 'localhost',
                 'connectTimeout': 3000,
@@ -149,7 +149,7 @@ describe('enterprise-sync-request-handler.js', function() {
         },
         jds: _.defaults(wConfig.jds, {
             protocol: 'http',
-            host: 'IP_ADDRESS',
+            host: 'IP        ',
             port: 9080
         }),
         rules: {

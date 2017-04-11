@@ -20,7 +20,7 @@ var config = {
         },
         "vxsync": {
             "protocol": "http",
-            "host": "IPADDRES",
+            "host": "IP      ",
             "port": "8080",
             "timeout": 300000
         }

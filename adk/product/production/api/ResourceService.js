@@ -19,6 +19,8 @@ define([
     // This number has to be high enough to ensure that there is enough columns to fill the entire screen
     // Otherwise the scroll event can not be triggered.
     var INITIAL_NUMBER_OF_ROWS = 40;
+    //number of rows necessary for the table in a details modal with a chart
+    var MAX_DETAILS_ROWS = 17;
 
     var DEFAULT_CACHE_EXPIRATION = 600; //false - never expires
     Backbone.fetchCache.localStorage = false;
@@ -49,13 +51,13 @@ define([
     //we create cleanup function to clean extraneous properties
     //that we set on the original backbone collection.
     //this cleans up potential closures from calling applets (fetchOptions being main problem).
-    Backbone.Collection.prototype.cleanUp = function(){
+    Backbone.Collection.prototype.cleanUp = function() {
 
         if (this.hasOwnProperty('originalModels')) {
             delete this.originalModels;
         }
 
-        if(this.fetchOptions){
+        if (this.fetchOptions) {
             delete this.fetchOptions;
         }
 
@@ -101,8 +103,8 @@ define([
         }
 
         if (this.collectionParse) {
-            var parsedCollection = new Backbone.Collection(parsedResponse);
-            parsedResponse = this.collectionParse(parsedCollection);
+            this.reset(parsedResponse, {silent:true});
+            parsedResponse = this.collectionParse(this);
         }
         return parsedResponse;
     };
@@ -117,6 +119,7 @@ define([
 
     Backbone.PageableCollection.prototype.parse = function(response) {
         var parsedResponse;
+        var collectionParse = this.collectionParse || _.get(this, 'fetchOptions.collectionConfig.collectionParse');
         if (response.data) {
             if (response.data.items) {
                 parsedResponse = response.data.items;
@@ -127,9 +130,9 @@ define([
             parsedResponse = response;
         }
 
-        if (this.collectionParse) {
-            var parsedCollection = new Backbone.Collection(parsedResponse);
-            parsedResponse = this.collectionParse(parsedCollection);
+        if (collectionParse) {
+            this.reset(parsedResponse, {silent:true});
+            parsedResponse = collectionParse(this);
         }
         return parsedResponse;
     };
@@ -183,6 +186,8 @@ define([
                 }
             }
 
+            var optionalCollectionConfig = _.get(options, 'collectionConfig');
+            if (existingCollection && optionalCollectionConfig) existingCollection.collectionConfig = optionalCollectionConfig;
             if (existingCollection && options.resourceTitle) {
                 if (options.fetchType === 'POST') {
                     existingCollection.url = UrlBuilder.buildUrl(resourceTitle);
@@ -195,12 +200,22 @@ define([
                 createdCollection = existingCollection;
             } else {
                 if (options.pageable === true) {
-                    var pagingConfig = {
-                        mode: 'client',
-                        state: {
-                            pageSize: INITIAL_NUMBER_OF_ROWS
-                        }
-                    };
+                    var pagingConfig;
+                    if (options.detailModalTable === true) {
+                        pagingConfig = {
+                            mode: 'client',
+                            state: {
+                                pageSize: MAX_DETAILS_ROWS
+                            }
+                        };
+                    } else {
+                        pagingConfig = {
+                            mode: 'client',
+                            state: {
+                                pageSize: INITIAL_NUMBER_OF_ROWS
+                            }
+                        };
+                    }
 
                     //override defaults with options
                     _.extend(pagingConfig, options.collectionConfig);
@@ -228,7 +243,12 @@ define([
             var data = '',
                 contentType = '';
             if (options.fetchType === 'POST') {
-                data = JSON.stringify(options.criteria);
+                if (options.pageable) {
+                    data = options.criteria;
+                } else {
+                    data = JSON.stringify(options.criteria);
+                }
+
                 contentType = 'application/json';
             }
 
@@ -247,15 +267,17 @@ define([
                         }
 
                         if (typeof onSuccess == "function") {
-                            collection.trigger('fetchSuccessfull', collection);
                             onSuccess(collection, resp);
                         }
-                        collection.trigger('fetch:success');
+
+                        collection.trigger('fetchSuccessful', collection);
+                        collection.trigger('fetch:success', collection, resp);
+
                         delete collection.xhr;
                     },
                     error: function(collection, resp, options) {
                         setResponseLogId(resp, options);
-                        collection.trigger('fetch:error');
+                        collection.trigger('fetch:error', collection, resp);
                         if (typeof onError == "function") {
                             onError(collection, resp);
                         }
@@ -316,6 +338,13 @@ define([
         clearCache: function(url) {
             var clearUrl = url.url || url;
             Backbone.fetchCache.clearItem(clearUrl);
+        },
+        clearCacheByResourceTitle: function(resourceTitle) {
+            var clearUrl = UrlBuilder.buildUrl(resourceTitle);
+            Backbone.fetchCache._cache = _.omit(Backbone.fetchCache._cache, function(value, key) {
+                return key.indexOf(clearUrl) >= 0;
+            });
+            Backbone.fetchCache.setLocalStorage();
         },
         clearAllCache: function(dominString) {
             if (dominString) {

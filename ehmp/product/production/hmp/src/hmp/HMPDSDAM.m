@@ -1,5 +1,5 @@
-HMPDSDAM ;SLC/MKB,ASMR/RRB - Appointment extract;8/2/11  15:29
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**;Sep 01, 2011;Build 63
+HMPDSDAM ;SLC/MKB,ASMR/RRB,CK - Appointment extract;July 18, 2016 07:20:17
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**2**;Sep 01, 2011;Build 63
  ;Per VA Directive 6402, this routine should not be modified.
  ;
  ; External References          DBIA#
@@ -56,14 +56,7 @@ EN1(DATE,APPT) ; -- return an appointment in APPT("attribute")=value
  . S APPT("clinicStop")=$$AMIS^HMPDVSIT(+$P(X,U,13))
  . S SV=$$GET1^DIQ(44,+HLOC_",",9.5,"I")
  . I SV S APPT("service")=$$SERV(SV)
- . ;find default provider
- . S PRV=+$$GET1^DIQ(44,+HLOC_",",16,"I") I 'PRV D
- .. N HMPP,I,FIRST
- .. D GETS^DIQ(44,+HLOC_",","2600*","I","HMPP")
- .. S FIRST=$O(HMPP(44.1,"")),I=""
- .. F  S I=$O(HMPP(44.1,I)) Q:I=""  I $G(HMPP(44.1,I,.02,"I")) S PRV=$G(HMPP(44.1,I,.01,"I")) Q
- .. I 'PRV,FIRST S PRV=$G(HMPP(44.1,FIRST,.01,"I"))
- . I PRV S APPT("provider")=PRV_U_$P($G(^VA(200,PRV,0)),U) Q  ;ICR 10060 DEE2818 ASF 11/20/15
+ ;DE5209 7/14/2016 CK - remove Appointment Provider
  S APPT("facility")=$$FAC^HMPD(+HLOC)
  S APPT("patientClass")=$S(CLS="I":"IMP",1:"AMB")
  S APPT("serviceCategory")=$S(CLS="I":"I^INPATIENT VISIT",1:"A^AMBULATORY")

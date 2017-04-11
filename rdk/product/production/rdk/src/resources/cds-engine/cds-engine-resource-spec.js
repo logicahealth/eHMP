@@ -4,7 +4,7 @@ var cdsengineResource = require('./cds-engine-resource');
 var engine = require('./cds-engine');
 
 var rdk = require('../../core/rdk');
-var mongo = require('mongoskin');
+var MongoClient = require('mongodb').MongoClient;
 
 var cdsSpecUtil = require('../cds-spec-util/cds-spec-util');
 var mockReqResUtil = cdsSpecUtil.mockReqResUtil;
@@ -104,7 +104,9 @@ describe('CDS Engine Resource', function () {
 
         it('GET responds HTTP Not Found', function() {
 
-            sinon.stub(mongo, 'db').returns(db);
+            sinon.stub(MongoClient, 'connect', function(string, options, callback) {
+                callback(null, db);
+            });
             engine.init(appReference());
 
             //GET w/name, and return a status 404 (not found)
@@ -114,7 +116,9 @@ describe('CDS Engine Resource', function () {
 
         it('POST responds HTTP Bad Request when required parameter missing', function() {
 
-            sinon.stub(mongo, 'db').returns(db);
+            sinon.stub(MongoClient, 'connect', function(string, options, callback) {
+                callback(null, db);
+            });
             engine.init(appReference());
 
             //POST w/o name, required, and returns a 400 (bad request)
@@ -125,7 +129,9 @@ describe('CDS Engine Resource', function () {
 
         it('POST responds HTTP Created', function() {
 
-            sinon.stub(mongo, 'db').returns(db);
+            sinon.stub(MongoClient, 'connect', function(string, options, callback) {
+                callback(null, db);
+            });
             engine.init(appReference());
 
             //POST provide required name - this should create one, and return a status 201 (created)
@@ -136,7 +142,9 @@ describe('CDS Engine Resource', function () {
 
         it('PUT responds HTTP Bad Request when required parameter missing', function() {
 
-            sinon.stub(mongo, 'db').returns(db);
+            sinon.stub(MongoClient, 'connect', function(string, options, callback) {
+                callback(null, db);
+            });
             engine.init(appReference());
 
             //POST w/o name, required, and returns a 400 (bad request)
@@ -147,7 +155,9 @@ describe('CDS Engine Resource', function () {
 
         it('Delete responds HTTP Bad Request when required parameter missing', function() {
 
-            sinon.stub(mongo, 'db').returns(db);
+            sinon.stub(MongoClient, 'connect', function(string, options, callback) {
+                callback(null, db);
+            });
             engine.init(appReference());
 
             //POST w/o name, required, and returns a 400 (bad request)

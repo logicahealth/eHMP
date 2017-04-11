@@ -1,9 +1,9 @@
 <div id="sync-status-modal" class="row">
   <div id="source-list-panel" class="source-list-panel col-xs-3">
     <h5>Source</h5>
-    <ul id="sync-source-sites" role="list">
+    <ul id="sync-source-sites">
     {{#if mySite}}
-      <li role="list-item" data-source="mySite" class="{{#compare selectedSource.sourceName 'mySite'}}selected{{/compare}}">
+      <li data-source="mySite" class="{{#compare selectedSource.sourceName 'mySite'}}selected{{/compare}}">
         <div>
           {{#compare mySite.status 'completed'}}
               {{#if mySite.newDataSince}}
@@ -42,7 +42,7 @@
       </li>
     {{/if}}
     {{#if allVa}}
-     <li role="list-item" data-source="allVa" class="{{#compare selectedSource.sourceName 'allVa'}}selected{{/compare}}">
+     <li data-source="allVa" class="{{#compare selectedSource.sourceName 'allVa'}}selected{{/compare}}">
         <div>
           {{#compare allVa.status 'completed'}}
               {{#if allVa.newDataSince}}
@@ -84,7 +84,7 @@
       </li>
     {{/if}}
     {{#if dod}}
-      <li role="list-item" data-source="dod" class="{{#compare selectedSource.sourceName 'dod'}}selected{{/compare}}">
+      <li data-source="dod" class="{{#compare selectedSource.sourceName 'dod'}}selected{{/compare}}">
         <div>
           {{#compare dod.status 'completed'}}
               <i class="fa fa-check-circle"></i>
@@ -118,7 +118,7 @@
       </li>
     {{/if}}
     {{#if communities}}
-      <li role="list-item" data-source="communities" class="{{#compare selectedSource.sourceName 'communities'}}selected{{/compare}}">
+      <li data-source="communities" class="{{#compare selectedSource.sourceName 'communities'}}selected{{/compare}}">
         <div>
           {{#compare communities.status 'completed'}}
               <i class="fa fa-check-circle"></i>
@@ -165,21 +165,21 @@
     </div>
     <div id="sync-site-detail-header" class="sync-site-detail-header row">
       <h4 class="col-xs-4">{{selectedSource.sourceDisplayName}}</h4>
-      <button type="button" class="force-source-sync btn btn-primary" id="force-source-sync" title="Press enter to refresh data"
+<!--       <button type="button" class="force-source-sync btn btn-primary" id="force-source-sync" title="Press enter to refresh data"
       {{#compare forceSyncStatus 'inProgress'}}
          disabled="disabled"><span><i class="fa fa-spinner fa-spin"></i> Refreshing</span>
       {{/compare}}
       {{#compare forceSyncStatus 'completed'}}
         >Refresh {{selectedSource.sourceDisplayName}}
       {{/compare}}
-      </button>
+      </button> -->
     </div>
     <table>
       <caption class="sr-only">This table represents data for {{selectedSource.sourceDisplayName}} data categorized by {{#compare selectedSource.sourceName 'allVa'}} site, {{/compare}} domain, {{#compare selectedSource.sourceType 'primary' operator='!='}}and{{/compare}} last refresh{{#compare selectedSource.sourceType 'primary'}}, and new data since.{{/compare}}</caption>
       <thead>
         <tr>
           {{#compare selectedSource.sourceName 'allVa'}}
-          <th scope="col" class="sortable renderable site" id="sync-detail-header-site" >
+          <th scope="col" class="sortable renderable site" data-header-instanceid="sync-detail-header-site" >
             <a href="#" role="button" sortable="true" sorttype="alphabetical" sortdirection="none" class="color-grey-darkest">Site
             {{#compare sortColumn 'siteDisplayName'}}
               <i class="fa 
@@ -198,7 +198,7 @@
            </a>
           </th>
           {{/compare}}
-          <th scope="col" class="sortable renderable domain" id="sync-detail-header-domain">
+          <th scope="col" class="sortable renderable domain" data-header-instanceid="sync-detail-header-domain">
             <a href="#" role="button" sortable="true" sorttype="alphabetical" sortdirection="none" class="color-grey-darkest">Domain
             {{#compare sortColumn 'domainDisplayName'}}
               <i class="fa 
@@ -215,7 +215,7 @@
             {{/compare}}
             </a>
           </th>
-          <th scope="col" class="sortable renderable last-synced" id="sync-detail-header-last-synced">
+          <th scope="col" class="sortable renderable last-synced" data-header-instanceid="sync-detail-header-last-synced">
             <a href="#" role="button" sortable="true" sorttype="alphabetical" sortdirection="none" class="color-grey-darkest">Last Refresh
             {{#compare sortColumn 'stampTime'}}
               <i class="fa 
@@ -233,7 +233,7 @@
             </a>
           </th>
           {{#compare selectedSource.sourceType 'primary'}}
-          <th scope="col" class="sortable renderable new-data-since" id="sync-detail-header-new-data-since">
+          <th scope="col" class="sortable renderable new-data-since" data-header-instanceid="sync-detail-header-new-data-since">
             <a href="#" role="button" sortable="true" sorttype="alphabetical" sortdirection="none" class="color-grey-darkest">New Data Since
             {{#compare sortColumn 'newDataSince'}}
               <i class="fa 

@@ -10,6 +10,7 @@
     "lastname": "USER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:9E7A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -25,6 +26,7 @@
     "lastname": "USER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -40,6 +42,7 @@
     "lastname": "USER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:FC2A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -55,6 +58,7 @@
     "lastname": "XIU",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:9E7A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -70,6 +74,7 @@
     "lastname": "XIU",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -85,6 +90,7 @@
     "lastname": "KHAN",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:9E7A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -100,6 +106,7 @@
     "lastname": "KHAN",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -115,6 +122,7 @@
     "lastname": "KEELEY",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:9E7A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -130,6 +138,7 @@
     "lastname": "KEELEY",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -145,6 +154,7 @@
     "lastname": "DAY",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:9E7A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -160,6 +170,7 @@
     "lastname": "DAY",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -175,6 +186,7 @@
     "lastname": "CHAPMAN",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:9E7A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -190,6 +202,7 @@
     "lastname": "CHAPMAN",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -205,6 +218,7 @@
     "lastname": "HILLARY",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:9E7A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -220,6 +234,7 @@
     "lastname": "HILLARY",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -235,6 +250,7 @@
     "lastname": "STUDENT",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:9E7A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -250,6 +266,7 @@
     "lastname": "STUDENT",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -265,6 +282,7 @@
     "lastname": "PROVIDER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -280,6 +298,7 @@
     "lastname": "PROVIDER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -295,6 +314,7 @@
     "lastname": "PHYSICIAN",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -310,6 +330,7 @@
     "lastname": "PHYSICIAN",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -325,6 +346,7 @@
     "lastname": "PHYSICIAN",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -340,6 +362,7 @@
     "lastname": "PHYSICIAN",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -355,6 +378,7 @@
     "lastname": "PHYSICIAN",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -370,6 +394,7 @@
     "lastname": "PHYSICIAN",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -385,6 +410,7 @@
     "lastname": "PHYSICIAN",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -400,6 +426,7 @@
     "lastname": "PHYSICIAN",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -415,6 +442,7 @@
     "lastname": "PHYSICIAN",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -430,6 +458,7 @@
     "lastname": "PHYSICIAN",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -445,6 +474,7 @@
     "lastname": "PHYSICIAN",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -460,6 +490,7 @@
     "lastname": "PHYSICIAN",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -475,6 +506,7 @@
     "lastname": "PHYSICIAN",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -490,6 +522,7 @@
     "lastname": "PHYSICIAN",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -505,6 +538,7 @@
     "lastname": "PHYSICIAN",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -520,6 +554,7 @@
     "lastname": "PHYSICIAN",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -535,6 +570,7 @@
     "lastname": "PHYSICIAN",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -550,6 +586,7 @@
     "lastname": "PHYSICIAN",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -565,6 +602,7 @@
     "lastname": "PHYSICIAN",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -580,6 +618,7 @@
     "lastname": "PHYSICIAN",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -595,6 +634,7 @@
     "lastname": "PHYSICIAN",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -610,6 +650,7 @@
     "lastname": "PHYSICIAN",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -625,6 +666,7 @@
     "lastname": "PHYSICIAN",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -640,6 +682,7 @@
     "lastname": "PHYSICIAN",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -655,6 +698,7 @@
     "lastname": "PHYSICIAN",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -670,6 +714,7 @@
     "lastname": "PHYSICIAN",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -685,6 +730,7 @@
     "lastname": "THERAPIST",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -700,6 +746,7 @@
     "lastname": "THERAPIST",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -715,6 +762,7 @@
     "lastname": "THERAPIST",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -730,6 +778,7 @@
     "lastname": "THERAPIST",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -745,6 +794,7 @@
     "lastname": "THERAPIST",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -760,6 +810,7 @@
     "lastname": "THERAPIST",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -775,6 +826,7 @@
     "lastname": "THERAPIST",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -790,6 +842,7 @@
     "lastname": "THERAPIST",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -805,6 +858,7 @@
     "lastname": "THERAPIST",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -820,6 +874,7 @@
     "lastname": "THERAPIST",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -835,6 +890,7 @@
     "lastname": "THERAPIST",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -850,6 +906,7 @@
     "lastname": "THERAPIST",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -865,6 +922,7 @@
     "lastname": "THERAPIST",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -880,6 +938,7 @@
     "lastname": "THERAPIST",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -895,6 +954,7 @@
     "lastname": "THERAPIST",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -910,6 +970,7 @@
     "lastname": "THERAPIST",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -925,6 +986,7 @@
     "lastname": "THERAPIST",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -940,6 +1002,7 @@
     "lastname": "THERAPIST",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -955,6 +1018,7 @@
     "lastname": "THERAPIST",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -970,6 +1034,7 @@
     "lastname": "THERAPIST",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -985,6 +1050,7 @@
     "lastname": "THERAPIST",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -1000,6 +1066,7 @@
     "lastname": "THERAPIST",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -1015,6 +1082,7 @@
     "lastname": "THERAPIST",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -1030,6 +1098,7 @@
     "lastname": "THERAPIST",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -1045,6 +1114,7 @@
     "lastname": "NURSE",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -1060,6 +1130,7 @@
     "lastname": "NURSE",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -1075,6 +1146,7 @@
     "lastname": "RADIOLOGIST",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -1090,6 +1162,7 @@
     "lastname": "RADIOLOGIST",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -1105,6 +1178,7 @@
     "lastname": "TDNURSE",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -1120,6 +1194,7 @@
     "lastname": "TDNURSE",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -1135,6 +1210,7 @@
     "lastname": "TDNURSE",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -1150,6 +1226,7 @@
     "lastname": "TDNURSE",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -1165,6 +1242,7 @@
     "lastname": "SURGEON",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -1180,6 +1258,7 @@
     "lastname": "SURGEON",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -1195,6 +1274,7 @@
     "lastname": "ANESTHESIOLOGIST",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -1210,6 +1290,7 @@
     "lastname": "ANESTHESIOLOGIST",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -1225,6 +1306,7 @@
     "lastname": "PCMM",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -1240,6 +1322,7 @@
     "lastname": "PCMM",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -1255,6 +1338,7 @@
     "lastname": "PCMM",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -1270,6 +1354,7 @@
     "lastname": "STUDENT",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -1285,6 +1370,7 @@
     "lastname": "STUDENT",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -1300,6 +1386,7 @@
     "lastname": "PROVIDER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -1315,6 +1402,7 @@
     "lastname": "PROVIDER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -1330,6 +1418,7 @@
     "lastname": "PROVIDER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -1345,6 +1434,7 @@
     "lastname": "PROVIDER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -1360,6 +1450,7 @@
     "lastname": "PROVIDER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -1375,6 +1466,7 @@
     "lastname": "PROVIDER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -1390,6 +1482,7 @@
     "lastname": "PROVIDER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -1405,6 +1498,7 @@
     "lastname": "PROVIDER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -1420,6 +1514,7 @@
     "lastname": "PROVIDER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -1435,6 +1530,7 @@
     "lastname": "PROVIDER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -1450,6 +1546,7 @@
     "lastname": "PROVIDER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -1465,6 +1562,7 @@
     "lastname": "PROVIDER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -1480,6 +1578,7 @@
     "lastname": "PROVIDER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -1495,6 +1594,7 @@
     "lastname": "PROVIDER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -1510,6 +1610,7 @@
     "lastname": "PROVIDER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -1525,6 +1626,7 @@
     "lastname": "PROVIDER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -1540,6 +1642,7 @@
     "lastname": "PROVIDER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -1555,6 +1658,7 @@
     "lastname": "PROVIDER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -1570,6 +1674,7 @@
     "lastname": "LABTECH",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -1585,6 +1690,7 @@
     "lastname": "LABTECH",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -1600,6 +1706,7 @@
     "lastname": "PHARMACIST",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -1615,6 +1722,7 @@
     "lastname": "PHARMACIST",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -1630,6 +1738,7 @@
     "lastname": "WARDCLERK",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -1645,6 +1754,7 @@
     "lastname": "WARDCLERK",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -1660,6 +1770,7 @@
     "lastname": "HIMS",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -1675,6 +1786,7 @@
     "lastname": "HIMS",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -1690,6 +1802,7 @@
     "lastname": "HIMS",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -1705,6 +1818,7 @@
     "lastname": "HIMS",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -1720,6 +1834,7 @@
     "lastname": "HIMS",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -1735,6 +1850,7 @@
     "lastname": "HIMS",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -1750,6 +1866,7 @@
     "lastname": "HIMS",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -1765,6 +1882,7 @@
     "lastname": "HIMS",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -1780,6 +1898,7 @@
     "lastname": "HIMS",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -1795,6 +1914,7 @@
     "lastname": "HIMS",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -1810,6 +1930,7 @@
     "lastname": "HIMS",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -1825,6 +1946,7 @@
     "lastname": "HIMS",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -1840,6 +1962,7 @@
     "lastname": "HIMS",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -1855,6 +1978,7 @@
     "lastname": "HIMS",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -1870,6 +1994,7 @@
     "lastname": "HIMS",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -1885,6 +2010,7 @@
     "lastname": "VEHU",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -1900,6 +2026,7 @@
     "lastname": "VEHU",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -1915,6 +2042,7 @@
     "lastname": "VEHU",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -1930,6 +2058,7 @@
     "lastname": "PCMM",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -1945,6 +2074,7 @@
     "lastname": "PCMM",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -1960,6 +2090,7 @@
     "lastname": "PCMM",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -1975,6 +2106,7 @@
     "lastname": "RADTECH",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -1990,6 +2122,7 @@
     "lastname": "RADTECH",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -2005,6 +2138,7 @@
     "lastname": "CHIEF",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -2020,6 +2154,7 @@
     "lastname": "CHIEF",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -2035,6 +2170,7 @@
     "lastname": "CHIEF",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -2050,6 +2186,7 @@
     "lastname": "NURSE",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -2065,6 +2202,7 @@
     "lastname": "NURSE",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -2080,6 +2218,7 @@
     "lastname": "TRANSCRIPTION",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -2095,6 +2234,7 @@
     "lastname": "TRANSCRIPTION",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -2110,6 +2250,7 @@
     "lastname": "EHMP",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -2125,6 +2266,7 @@
     "lastname": "EHMP",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -2140,6 +2282,7 @@
     "lastname": "EHMP",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -2155,6 +2298,7 @@
     "lastname": "EHMP",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -2170,6 +2314,7 @@
     "lastname": "EHMP",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -2185,6 +2330,7 @@
     "lastname": "EHMP",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -2200,6 +2346,7 @@
     "lastname": "EHMP",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -2215,6 +2362,7 @@
     "lastname": "EHMP",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -2230,6 +2378,7 @@
     "lastname": "EHMP",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -2245,6 +2394,7 @@
     "lastname": "EHMP",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -2260,6 +2410,7 @@
     "lastname": "EHMP",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -2275,6 +2426,7 @@
     "lastname": "EHMP",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -2290,6 +2442,7 @@
     "lastname": "EHMP",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -2305,6 +2458,7 @@
     "lastname": "EHMP",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -2320,6 +2474,7 @@
     "lastname": "EHMP",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -2335,6 +2490,7 @@
     "lastname": "EHMP",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -2350,6 +2506,7 @@
     "lastname": "EHMP",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -2365,6 +2522,7 @@
     "lastname": "EHMP",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -2380,6 +2538,7 @@
     "lastname": "EHMP",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -2395,6 +2554,7 @@
     "lastname": "EHMP",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -2410,6 +2570,7 @@
     "lastname": "EHMP",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -2425,6 +2586,7 @@
     "lastname": "EHMP",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -2440,6 +2602,7 @@
     "lastname": "EHMP",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -2455,6 +2618,7 @@
     "lastname": "EHMP",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -2470,6 +2634,7 @@
     "lastname": "EHMP",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -2485,6 +2650,7 @@
     "lastname": "EHMP",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -2500,6 +2666,7 @@
     "lastname": "EHMP",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -2515,6 +2682,7 @@
     "lastname": "EHMP",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -2530,6 +2698,7 @@
     "lastname": "EHMP",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -2545,6 +2714,7 @@
     "lastname": "EHMP",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -2560,6 +2730,7 @@
     "lastname": "NEBEKER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -2575,6 +2746,7 @@
     "lastname": "NEBEKER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -2590,6 +2762,7 @@
     "lastname": "NEBEKER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -2605,6 +2778,7 @@
     "lastname": "ZEBRA",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -2620,6 +2794,7 @@
     "lastname": "ZEBRA",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -2635,6 +2810,7 @@
     "lastname": "ZEBRA",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -2650,6 +2826,7 @@
     "lastname": "ZEBRA",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -2665,6 +2842,7 @@
     "lastname": "ZEBRA",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -2680,6 +2858,7 @@
     "lastname": "ZEBRA",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -2695,6 +2874,7 @@
     "lastname": "ZEBRA",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -2710,6 +2890,7 @@
     "lastname": "ZEBRA",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -2725,6 +2906,7 @@
     "lastname": "ZEBRA",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -2745,6 +2927,7 @@
         ]
     },
     "uid": "urn:va:user:9E7A:10000000278",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0
 }, {
     "createdBy": "urn:va:user:C877:10000000270",
@@ -2763,6 +2946,7 @@
         ]
     },
     "uid": "urn:va:user:C877:10000000278",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0
 }, {
     "createdBy": "urn:va:user:C877:10000000270",
@@ -2781,6 +2965,7 @@
         ]
     },
     "uid": "urn:va:user:FC2A:10000000278",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0
 }, {
     "createdBy": "urn:va:user:C877:10000000270",
@@ -2799,6 +2984,7 @@
         ]
     },
     "uid": "urn:va:user:9E7A:10000000277",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0
 }, {
     "createdBy": "urn:va:user:C877:10000000270",
@@ -2817,6 +3003,7 @@
         ]
     },
     "uid": "urn:va:user:C877:10000000277",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0
 }, {
     "createdBy": "urn:va:user:C877:10000000270",
@@ -2835,6 +3022,7 @@
         ]
     },
     "uid": "urn:va:user:FC2A:10000000277",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0
 }, {
     "createdBy": "urn:va:user:C877:10000000270",
@@ -2853,6 +3041,7 @@
         ]
     },
     "uid": "urn:va:user:9E7A:10000000279",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0
 }, {
     "createdBy": "urn:va:user:C877:10000000270",
@@ -2871,6 +3060,7 @@
         ]
     },
     "uid": "urn:va:user:C877:10000000279",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0
 }, {
     "createdBy": "urn:va:user:C877:10000000270",
@@ -2889,6 +3079,7 @@
         ]
     },
     "uid": "urn:va:user:FC2A:10000000279",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0
 }, {
     "createdBy": "urn:va:user:C877:10000000270",
@@ -2907,6 +3098,7 @@
         ]
     },
     "uid": "urn:va:user:FC2A:10000000263",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0
 }, {
     "createdBy": "urn:va:user:C877:10000000270",
@@ -2925,6 +3117,7 @@
         ]
     },
     "uid": "urn:va:user:C877:10000000263",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0
 }, {
     "createdBy": "urn:va:user:C877:10000000270",
@@ -2943,6 +3136,7 @@
         ]
     },
     "uid": "urn:va:user:9E7A:10000000263",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0
 }, {
     "createdBy": "urn:va:user:C877:10000000270",
@@ -2961,6 +3155,7 @@
         ]
     },
     "uid": "urn:va:user:FC2A:10000000260",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0
 }, {
     "createdBy": "urn:va:user:C877:10000000270",
@@ -2979,6 +3174,7 @@
         ]
     },
     "uid": "urn:va:user:C877:10000000260",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0
 }, {
     "createdBy": "urn:va:user:C877:10000000270",
@@ -2997,6 +3193,7 @@
         ]
     },
     "uid": "urn:va:user:9E7A:10000000260",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0
 }, {
     "createdBy": "urn:va:user:C877:10000000270",
@@ -3015,6 +3212,7 @@
         ]
     },
     "uid": "urn:va:user:FC2A:10000000259",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0
 }, {
     "createdBy": "urn:va:user:C877:10000000270",
@@ -3033,6 +3231,7 @@
         ]
     },
     "uid": "urn:va:user:C877:10000000259",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0
 }, {
     "createdBy": "urn:va:user:C877:10000000270",
@@ -3051,6 +3250,7 @@
         ]
     },
     "uid": "urn:va:user:9E7A:10000000259",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0
 }, {
     "createdBy": "urn:va:user:C877:10000000270",
@@ -3069,6 +3269,7 @@
         ]
     },
     "uid": "urn:va:user:FC2A:10000000256",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0
 }, {
     "createdBy": "urn:va:user:C877:10000000270",
@@ -3087,6 +3288,7 @@
         ]
     },
     "uid": "urn:va:user:C877:10000000256",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0
 }, {
     "createdBy": "urn:va:user:C877:10000000270",
@@ -3105,6 +3307,7 @@
         ]
     },
     "uid": "urn:va:user:9E7A:10000000256",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0
 }, {
     "createdBy": "urn:va:user:C877:10000000270",
@@ -3123,6 +3326,7 @@
         ]
     },
     "uid": "urn:va:user:FC2A:10000000262",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0
 }, {
     "createdBy": "urn:va:user:C877:10000000270",
@@ -3141,6 +3345,7 @@
         ]
     },
     "uid": "urn:va:user:C877:10000000262",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0
 }, {
     "createdBy": "urn:va:user:C877:10000000270",
@@ -3159,6 +3364,7 @@
         ]
     },
     "uid": "urn:va:user:9E7A:10000000262",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0
 }, {
     "createdBy": "urn:va:user:C877:10000000270",
@@ -3177,6 +3383,7 @@
         ]
     },
     "uid": "urn:va:user:FC2A:10000000261",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0
 }, {
     "createdBy": "urn:va:user:C877:10000000270",
@@ -3195,6 +3402,7 @@
         ]
     },
     "uid": "urn:va:user:C877:10000000261",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0
 }, {
     "createdBy": "urn:va:user:C877:10000000270",
@@ -3213,6 +3421,7 @@
         ]
     },
     "uid": "urn:va:user:9E7A:10000000261",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0
 }, {
     "createdBy": "urn:va:user:C877:10000000270",
@@ -3231,6 +3440,7 @@
         ]
     },
     "uid": "urn:va:user:FC2A:10000000258",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0
 }, {
     "createdBy": "urn:va:user:C877:10000000270",
@@ -3249,6 +3459,7 @@
         ]
     },
     "uid": "urn:va:user:C877:10000000258",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0
 }, {
     "createdBy": "urn:va:user:C877:10000000270",
@@ -3267,6 +3478,7 @@
         ]
     },
     "uid": "urn:va:user:9E7A:10000000258",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0
 }, {
     "createdBy": "urn:va:user:C877:10000000270",
@@ -3285,6 +3497,7 @@
         ]
     },
     "uid": "urn:va:user:FC2A:10000000257",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0
 }, {
     "createdBy": "urn:va:user:C877:10000000270",
@@ -3303,6 +3516,7 @@
         ]
     },
     "uid": "urn:va:user:C877:10000000257",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0
 }, {
     "createdBy": "urn:va:user:C877:10000000270",
@@ -3321,6 +3535,7 @@
         ]
     },
     "uid": "urn:va:user:9E7A:10000000257",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0
 }, {
     "createdBy": "urn:va:user:C877:10000000270",
@@ -3339,6 +3554,7 @@
         ]
     },
     "uid": "urn:va:user:FC2A:20181",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0
 }, {
     "createdBy": "urn:va:user:C877:10000000270",
@@ -3357,6 +3573,7 @@
         ]
     },
     "uid": "urn:va:user:C877:20181",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0
 }, {
     "createdBy": "urn:va:user:C877:10000000270",
@@ -3375,6 +3592,7 @@
         ]
     },
     "uid": "urn:va:user:9E7A:20181",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0
 }, {
     "createdBy": "urn:va:user:C877:10000000270",
@@ -3393,6 +3611,7 @@
         ]
     },
     "uid": "urn:va:user:FC2A:20174",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0
 }, {
     "createdBy": "urn:va:user:C877:10000000270",
@@ -3411,6 +3630,7 @@
         ]
     },
     "uid": "urn:va:user:C877:20174",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0
 }, {
     "createdBy": "urn:va:user:C877:10000000270",
@@ -3429,6 +3649,7 @@
         ]
     },
     "uid": "urn:va:user:9E7A:20174",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0
 }, {
     "createdBy": "urn:va:user:C877:10000000270",
@@ -3447,6 +3668,7 @@
         ]
     },
     "uid": "urn:va:user:FC2A:20178",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0
 }, {
     "createdBy": "urn:va:user:C877:10000000270",
@@ -3465,6 +3687,7 @@
         ]
     },
     "uid": "urn:va:user:C877:20178",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0
 }, {
     "createdBy": "urn:va:user:C877:10000000270",
@@ -3483,6 +3706,7 @@
         ]
     },
     "uid": "urn:va:user:9E7A:20178",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0
 }, {
     "createdBy": "urn:va:user:C877:10000000270",
@@ -3501,6 +3725,7 @@
         ]
     },
     "uid": "urn:va:user:FC2A:20213",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0
 }, {
     "createdBy": "urn:va:user:C877:10000000270",
@@ -3519,6 +3744,7 @@
         ]
     },
     "uid": "urn:va:user:C877:20213",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0
 }, {
     "createdBy": "urn:va:user:C877:10000000270",
@@ -3537,6 +3763,7 @@
         ]
     },
     "uid": "urn:va:user:9E7A:20213",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0
 }, {
     "createdBy": "urn:va:user:C877:10000000270",
@@ -3555,6 +3782,7 @@
         ]
     },
     "uid": "urn:va:user:FC2A:20214",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0
 }, {
     "createdBy": "urn:va:user:C877:10000000270",
@@ -3573,6 +3801,7 @@
         ]
     },
     "uid": "urn:va:user:C877:20214",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0
 }, {
     "createdBy": "urn:va:user:C877:10000000270",
@@ -3591,6 +3820,7 @@
         ]
     },
     "uid": "urn:va:user:9E7A:20214",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0
 }, {
     "createdBy": "urn:va:user:C877:10000000270",
@@ -3609,6 +3839,7 @@
         ]
     },
     "uid": "urn:va:user:FC2A:20168",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0
 }, {
     "createdBy": "urn:va:user:C877:10000000270",
@@ -3627,6 +3858,7 @@
         ]
     },
     "uid": "urn:va:user:C877:20168",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0
 }, {
     "createdBy": "urn:va:user:C877:10000000270",
@@ -3645,6 +3877,7 @@
         ]
     },
     "uid": "urn:va:user:9E7A:20168",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0
 }, {
     "uid": "urn:va:user:9E7A:10000000286",
@@ -3658,6 +3891,7 @@
     "lastname": "PROVIDER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:9E7A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -3673,6 +3907,7 @@
     "lastname": "PROVIDER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -3688,6 +3923,7 @@
     "lastname": "PROVIDER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:FC2A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -3703,6 +3939,7 @@
     "lastname": "PROVIDER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:9E7A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -3718,6 +3955,7 @@
     "lastname": "PROVIDER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -3733,6 +3971,7 @@
     "lastname": "PROVIDER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:FC2A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -3748,6 +3987,7 @@
     "lastname": "PROVIDER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:9E7A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -3763,6 +4003,7 @@
     "lastname": "PROVIDER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -3778,6 +4019,7 @@
     "lastname": "PROVIDER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:FC2A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -3793,6 +4035,7 @@
     "lastname": "PROVIDER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:9E7A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -3808,6 +4051,7 @@
     "lastname": "PROVIDER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -3823,6 +4067,7 @@
     "lastname": "PROVIDER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:FC2A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -3838,6 +4083,7 @@
     "lastname": "PROVIDER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:9E7A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -3853,6 +4099,7 @@
     "lastname": "PROVIDER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -3868,6 +4115,7 @@
     "lastname": "PROVIDER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:FC2A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -3883,6 +4131,7 @@
     "lastname": "PROVIDER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:9E7A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -3898,6 +4147,7 @@
     "lastname": "PROVIDER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -3913,6 +4163,7 @@
     "lastname": "PROVIDER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:FC2A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -3928,6 +4179,7 @@
     "lastname": "PROVIDER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:9E7A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -3943,6 +4195,7 @@
     "lastname": "PROVIDER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -3958,6 +4211,7 @@
     "lastname": "PROVIDER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:FC2A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -3973,6 +4227,7 @@
     "lastname": "PROVIDER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:9E7A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -3988,6 +4243,7 @@
     "lastname": "PROVIDER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -4003,6 +4259,7 @@
     "lastname": "PROVIDER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:FC2A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -4018,6 +4275,7 @@
     "lastname": "PROVIDER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:9E7A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -4033,6 +4291,7 @@
     "lastname": "PROVIDER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -4048,6 +4307,7 @@
     "lastname": "PROVIDER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:FC2A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -4063,6 +4323,7 @@
     "lastname": "PROVIDER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:9E7A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -4078,6 +4339,7 @@
     "lastname": "PROVIDER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -4093,6 +4355,7 @@
     "lastname": "PROVIDER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:FC2A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -4108,6 +4371,7 @@
     "lastname": "NURSE",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:9E7A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -4123,6 +4387,7 @@
     "lastname": "NURSE",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -4138,6 +4403,7 @@
     "lastname": "NURSE",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:FC2A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -4153,6 +4419,7 @@
     "lastname": "NURSE",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:9E7A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -4168,6 +4435,7 @@
     "lastname": "NURSE",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -4183,6 +4451,7 @@
     "lastname": "NURSE",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:FC2A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -4198,6 +4467,7 @@
     "lastname": "NURSE",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:9E7A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -4213,6 +4483,7 @@
     "lastname": "NURSE",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -4228,6 +4499,7 @@
     "lastname": "NURSE",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:FC2A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -4243,6 +4515,7 @@
     "lastname": "NURSE",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:9E7A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -4258,6 +4531,7 @@
     "lastname": "NURSE",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -4273,6 +4547,7 @@
     "lastname": "NURSE",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:FC2A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -4288,6 +4563,7 @@
     "lastname": "NURSE",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:9E7A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -4303,6 +4579,7 @@
     "lastname": "NURSE",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -4318,6 +4595,7 @@
     "lastname": "NURSE",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:FC2A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -4333,6 +4611,7 @@
     "lastname": "NURSE",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:9E7A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -4348,6 +4627,7 @@
     "lastname": "NURSE",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -4363,6 +4643,7 @@
     "lastname": "NURSE",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:FC2A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -4378,6 +4659,7 @@
     "lastname": "NURSE",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:9E7A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -4393,6 +4675,7 @@
     "lastname": "NURSE",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -4408,6 +4691,7 @@
     "lastname": "NURSE",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:FC2A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -4423,6 +4707,7 @@
     "lastname": "NURSE",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:9E7A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -4438,6 +4723,7 @@
     "lastname": "NURSE",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -4453,6 +4739,7 @@
     "lastname": "NURSE",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:FC2A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -4468,6 +4755,7 @@
     "lastname": "NURSE",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:9E7A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -4483,6 +4771,7 @@
     "lastname": "NURSE",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -4498,6 +4787,7 @@
     "lastname": "NURSE",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:FC2A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -4513,6 +4803,7 @@
     "lastname": "NURSE",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:9E7A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -4528,6 +4819,7 @@
     "lastname": "NURSE",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -4543,6 +4835,7 @@
     "lastname": "NURSE",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:FC2A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -4558,6 +4851,7 @@
     "lastname": "CLERK",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:9E7A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -4573,6 +4867,7 @@
     "lastname": "CLERK",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -4588,6 +4883,7 @@
     "lastname": "CLERK",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:FC2A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -4603,6 +4899,7 @@
     "lastname": "CLERK",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:9E7A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -4618,6 +4915,7 @@
     "lastname": "CLERK",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -4633,6 +4931,7 @@
     "lastname": "CLERK",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:FC2A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -4648,6 +4947,7 @@
     "lastname": "CLERK",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:9E7A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -4663,6 +4963,7 @@
     "lastname": "CLERK",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -4678,6 +4979,7 @@
     "lastname": "CLERK",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:FC2A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -4693,6 +4995,7 @@
     "lastname": "CLERK",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:9E7A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -4708,6 +5011,7 @@
     "lastname": "CLERK",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -4723,6 +5027,7 @@
     "lastname": "CLERK",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:FC2A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -4738,6 +5043,7 @@
     "lastname": "CLERK",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:9E7A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -4753,6 +5059,7 @@
     "lastname": "CLERK",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -4768,6 +5075,7 @@
     "lastname": "CLERK",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:FC2A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -4783,6 +5091,7 @@
     "lastname": "CLERK",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:9E7A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -4798,6 +5107,7 @@
     "lastname": "CLERK",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -4813,6 +5123,7 @@
     "lastname": "CLERK",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:FC2A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -4828,6 +5139,7 @@
     "lastname": "CLERK",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:9E7A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -4843,6 +5155,7 @@
     "lastname": "CLERK",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -4858,6 +5171,7 @@
     "lastname": "CLERK",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:FC2A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -4873,6 +5187,7 @@
     "lastname": "CLERK",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:9E7A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -4888,6 +5203,7 @@
     "lastname": "CLERK",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -4903,6 +5219,7 @@
     "lastname": "CLERK",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:FC2A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -4918,6 +5235,7 @@
     "lastname": "CLERK",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:9E7A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -4933,6 +5251,7 @@
     "lastname": "CLERK",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -4948,6 +5267,7 @@
     "lastname": "CLERK",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:FC2A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -4963,6 +5283,7 @@
     "lastname": "CLERK",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:9E7A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -4978,6 +5299,7 @@
     "lastname": "CLERK",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -4993,6 +5315,7 @@
     "lastname": "CLERK",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:FC2A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -5008,6 +5331,7 @@
     "lastname": "PROVIDER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:9E7A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -5023,6 +5347,7 @@
     "lastname": "PROVIDER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -5038,6 +5363,7 @@
     "lastname": "PROVIDER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:FC2A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -5053,6 +5379,7 @@
     "lastname": "PROVIDER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:9E7A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -5068,6 +5395,7 @@
     "lastname": "PROVIDER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -5083,6 +5411,7 @@
     "lastname": "PROVIDER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:FC2A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -5098,6 +5427,7 @@
     "lastname": "PROVIDER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:9E7A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -5113,6 +5443,7 @@
     "lastname": "PROVIDER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -5128,6 +5459,7 @@
     "lastname": "PROVIDER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:FC2A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -5143,6 +5475,7 @@
     "lastname": "ANALYST",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:9E7A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -5158,6 +5491,7 @@
     "lastname": "ANALYST",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -5173,6 +5507,7 @@
     "lastname": "ANALYST",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:FC2A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -5188,6 +5523,7 @@
     "lastname": "USER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:9E7A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -5203,6 +5539,7 @@
     "lastname": "USER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -5218,6 +5555,7 @@
     "lastname": "USER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:FC2A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -5233,6 +5571,7 @@
     "lastname": "USER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:9E7A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -5248,6 +5587,7 @@
     "lastname": "USER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -5263,6 +5603,7 @@
     "lastname": "USER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:FC2A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -5278,6 +5619,7 @@
     "lastname": "USER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:9E7A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -5293,6 +5635,7 @@
     "lastname": "USER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -5308,6 +5651,7 @@
     "lastname": "USER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:FC2A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -5323,6 +5667,7 @@
     "lastname": "USER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:9E7A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -5338,6 +5683,7 @@
     "lastname": "USER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -5353,6 +5699,7 @@
     "lastname": "USER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:FC2A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -5368,6 +5715,7 @@
     "lastname": "USER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:9E7A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -5383,6 +5731,7 @@
     "lastname": "USER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -5398,6 +5747,7 @@
     "lastname": "USER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:FC2A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -5413,6 +5763,7 @@
     "lastname": "USER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:9E7A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -5428,6 +5779,7 @@
     "lastname": "USER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -5443,6 +5795,7 @@
     "lastname": "USER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:FC2A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -5458,6 +5811,7 @@
     "lastname": "USER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:9E7A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -5473,6 +5827,7 @@
     "lastname": "USER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -5488,6 +5843,7 @@
     "lastname": "USER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:FC2A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -5503,6 +5859,7 @@
     "lastname": "USER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:9E7A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -5518,6 +5875,7 @@
     "lastname": "USER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:C877:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"
@@ -5533,6 +5891,103 @@
     "lastname": "USER",
     "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
     "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
+    "unsuccessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:FC2A:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:9E7A:10000000334",
+    "permissionSet": {
+        "val": ["read-access", "clinical-analyst"],
+        "modifiedBy": "urn:va:user:9E7A:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "ANALYST",
+    "lastname": "CLINICAL",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
+    "unsuccessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:9E7A:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:C877:10000000334",
+    "permissionSet": {
+        "val": ["read-access", "clinical-analyst"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "ANALYST",
+    "lastname": "CLINICAL",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
+    "unsuccessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:FC2A:10000000334",
+    "permissionSet": {
+        "val": ["read-access", "clinical-analyst"],
+        "modifiedBy": "urn:va:user:FC2A:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "ANALYST",
+    "lastname": "CLINICAL",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
+    "unsuccessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:FC2A:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:9E7A:10000000335",
+    "permissionSet": {
+        "val": ["read-access", "cds-rules-author"],
+        "modifiedBy": "urn:va:user:9E7A:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "CDSRULES",
+    "lastname": "AUTHOR",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
+    "unsuccessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:9E7A:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:C877:10000000335",
+    "permissionSet": {
+        "val": ["read-access", "cds-rules-author"],
+        "modifiedBy": "urn:va:user:C877:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "CDSRULES",
+    "lastname": "AUTHOR",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
+    "unsuccessfulLoginAttemptCount": 0,
+    "createdBy": "urn:va:user:C877:10000000270",
+    "createdTime": "2015-08-19T19:31:41Z"
+}, {
+    "uid": "urn:va:user:FC2A:10000000335",
+    "permissionSet": {
+        "val": ["read-access", "cds-rules-author"],
+        "modifiedBy": "urn:va:user:FC2A:10000000270",
+        "modifiedOn": "2015-08-19T19:31:41Z",
+        "additionalPermissions": []
+    },
+    "firstname": "CDSRULES",
+    "lastname": "AUTHOR",
+    "lastSuccessfulLogin": "2015-08-19T19:31:41Z",
+    "lastUnsuccessfulLogin": "2015-08-19T19:31:41Z",
+    "status": "active",
     "unsuccessfulLoginAttemptCount": 0,
     "createdBy": "urn:va:user:FC2A:10000000270",
     "createdTime": "2015-08-19T19:31:41Z"

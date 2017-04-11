@@ -29,6 +29,11 @@ function suggestSearch(req, res) {
         if (nullchecker.isNullish(reqQuery.query) || reqQuery.query.length < 3) {
             return res.status(rdk.httpstatus.bad_request).rdkSend('Invalid query parameter');
         }
+        // solr throws error if search text does not contains at least one alphanumeric character
+        var regex = new RegExp(/[a-zA-Z0-9]+/);
+        if (!regex.test(reqQuery.query)) {
+            return res.status(rdk.httpstatus.bad_request).rdkSend('Query parameter must contain at least one letter or digit.');
+        }
 
         var escapedQuery = solrSimpleClient.escapeQueryChars(reqQuery.query);
         //Lower case the query to suggest so that we get consistent results,

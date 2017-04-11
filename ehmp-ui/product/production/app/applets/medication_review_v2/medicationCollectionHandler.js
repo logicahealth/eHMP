@@ -1,7 +1,8 @@
 define([
+    "moment",
     "app/applets/medication_review_v2/appletHelper",
     "app/applets/medication_review_v2/medicationCollectionFormatHelper"
-], function(appletHelper, medicationCollectionFormatHelper) {
+], function(moment, appletHelper, medicationCollectionFormatHelper) {
     "use strict";
 
     function getMedicationViewModel() {
@@ -17,7 +18,7 @@ define([
 
     var collectionHandler = {
         initialized: false,
-        fetchAllMeds: function(useGlobalDateFilter, callback) {
+        fetchAllMeds: function(useGlobalDateFilter, collection) {
             var self = this;
             this.useGlobalDateFilter = useGlobalDateFilter;
             var fetchOptions = {
@@ -37,12 +38,13 @@ define([
             };
 
             fetchOptions.onSuccess = function(collection, resp) {
-                if (!_.isUndefined(callback) && typeof callback === 'function') {
-                    callback(collection);
-                }
+                collection.trigger('read:success', collection, resp);
+            };
+            fetchOptions.onError = function(collection, resp) {
+                collection.trigger('read:error', collection, resp);
             };
 
-            return ADK.PatientRecordService.fetchCollection(fetchOptions);
+            return ADK.PatientRecordService.fetchCollection(fetchOptions, collection);
         },
         resetCollections: function(collection) {
             _.each(collection.models, function(model) {

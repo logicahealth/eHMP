@@ -99,7 +99,7 @@ describe('request clinical object', function() {
                     code: 20,
                     name: 'MEDICAL STUDENT'
                 }],
-                routingCode: '[TM:(270)/TR:(19)],[TM:(270)/TR:(20)]'
+                routingCode: '[TM:LM- Test Team 1(270)/TR:CLERK(19)],[TM:LM- Test Team 1(270)/TR:MEDICAL STUDENT(20)]'
             };
 
             validator._validateRequestModel([], json, null, 'active', function(errorMessages) {
@@ -128,7 +128,7 @@ describe('request clinical object', function() {
                     code: 20,
                     name: 'MEDICAL STUDENT'
                 }],
-                routingCode: '[TM:(270)/TR:(19)/PA:(1)],[TM:(270)/TR:(20)/PA:(1)]'
+                routingCode: '[TM:LM- Test Team 1(270)/TR:CLERK(19)/PA:(1)],[TM:LM- Test Team 1(270)/TR:MEDICAL STUDENT(20)/PA:(1)]'
             };
 
             validator._validateRequestModel([], json, null, 'active', function(errorMessages) {
@@ -153,7 +153,7 @@ describe('request clinical object', function() {
                     code: 20,
                     name: 'MEDICAL STUDENT'
                 }],
-                routingCode: '[TM:(270)/TR:(19)/PA:(1)],[TM:(270)/TR:(20)/PA:(1)]'
+                routingCode: '[TM:LM- Test Team 1 - ABC(270)/TR:CLERK(19)/PA:(1)],[TM:LM- Test Team 1 - ABC(270)/TR:MEDICAL STUDENT(20)/PA:(1)]'
             };
 
             validator._validateRequestModel([], json, null, 'active', function(errorMessages) {
@@ -178,7 +178,7 @@ describe('request clinical object', function() {
                     code: 20,
                     name: 'MEDICAL STUDENT'
                 }],
-                routingCode: '[TM:(270)/TR:(19)/PA:(1)],[TM:(270)/TR:(20)/PA:(1)]'
+                routingCode: '[TM:Physical Therapy - KDK floor - KDK(270)/TR:CLERK(19)/PA:(1)],[TM:Physical Therapy - KDK floor - KDK(270)/TR:MEDICAL STUDENT(20)/PA:(1)]'
             };
 
             validator._validateRequestModel([], json, null, 'active', function(errorMessages) {
@@ -263,17 +263,6 @@ describe('request clinical object', function() {
 
                 validator._validateRequestModel([], json, null, 'active', function(errorMessages) {
                     expect(errorMessages[0]).to.be('Latest date is before earliest date');
-                    done();
-                });
-            });
-
-            it('rejects if earliest date is before today', function(done) {
-                json.earliestDate = '20160104120000';
-                json.latestDate = '20160104120000';
-
-
-                validator._validateRequestModel([], json, null, 'active', function(errorMessages) {
-                    expect(errorMessages[0]).to.contain('Earliest date cannot be before today');
                     done();
                 });
             });
@@ -385,7 +374,7 @@ describe('request clinical object', function() {
                                 "processDefinitionId": "Order.Request",
                                 "processInstanceId": "",
                                 "state": "draft",
-                                "initiator": "pu1234",
+                                "initiator": "PW    ",
                                 "timeStamp": "20160420000000",
                                 "urgency": "Urgent",
                                 "assignTo": "Me",

@@ -16,7 +16,7 @@ function getResourceConfig() {
         path: '',
         get: performSearch,
         subsystems: ['patientrecord','jds','solr','jdsSync','authorization'],
-        requiredPermissions: [],
+        requiredPermissions: ['read-patient-record'],
         isPatientCentric: true
     }];
 }

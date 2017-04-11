@@ -3,13 +3,14 @@ define([
         'marionette',
         'underscore',
         'handlebars',
+        'moment',
         'app/applets/task_forms/activities/simple_activity/utils/appletHelper',
         'hbs!app/applets/task_forms/activities/simple_activity/templates/startActivityTemplate',
         'app/applets/task_forms/activities/simple_activity/views/changedActivityHeaderView',
         'app/applets/task_forms/activities/simple_activity/views/changedActivityFooterView',
         'app/applets/task_forms/activities/simple_activity/utils/countdown'
     ],
-    function(Backbone, Marionette, _, Handlebars, AppletHelper, StartActivityTemplate, changedActivityHeaderView, changedActivityFooterView, countdown) {
+    function(Backbone, Marionette, _, Handlebars, moment, AppletHelper, StartActivityTemplate, changedActivityHeaderView, changedActivityFooterView, countdown) {
         "use strict";
 
         var ExampleFormModel = Backbone.Model.extend({
@@ -120,8 +121,8 @@ define([
 
                 if (model.previous('tasktype') && this.firstTime > 0) {
                     new ADK.UI.Alert({
-                        title: 'New Activity Selected!',
-                        icon: 'icon-warning-severe',
+                        title: 'Warning',
+                        icon: 'icon-triangle-exclamation',
                         messageView: changedActivityHeaderView,
                         footerView: changedActivityFooterView.extend({
                             model: model

@@ -92,6 +92,10 @@ define([
         var screenIndex = findScreenIndex(json, workspaceId);
         var screenConfig = json.userDefinedFilters[screenIndex];
         var appletIndex = findAppletIndex(screenConfig, instanceId);
+        if (appletIndex == -1) {
+            console.error('Applet with instanceId: "'+instanceId+'", not found in session for workspaceId: "'+workspaceId+'"');
+            return;
+        }
         var appletConfig = screenConfig.applets[appletIndex];
         var filterIndex = appletConfig.filters.indexOf(filter);
         if (filterIndex > -1) {

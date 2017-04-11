@@ -713,7 +713,8 @@ any data added to them will be ignored outright.  -->
         <field name="lab_result_type" type="string" indexed="false" stored="false"/>
         <field name="specimen" type="string" indexed="false" stored="false"/>
         <!--Lab Query Field-->
-        <field name="group_name" type="string" indexed="false" stored="true" multiValued="false"/>
+        <!--group_name used as criteria for grouped document queries, from UI-->
+        <field name="group_name" type="string" indexed="true" stored="true" multiValued="false"/>
 		<field name="group_uid" type="string" indexed="false" stored="false" multiValued="false"/>
 		<field name="category_code" type="string" indexed="false" stored="false" multiValued="false"/>
 		<field name="category_name" type="string" indexed="false" stored="false" multiValued="false"/>
@@ -821,6 +822,11 @@ any data added to them will be ignored outright.  -->
         <field name="icd_name" type="string" indexed="true" stored="true" multiValued="false"/>
         <!--Problem Query Field-->
         <field name="icd_group" type="string" indexed="true" stored="true" multiValued="false"/>
+        <!--Problem Query Field-->
+        <field name="codes_display" type="text_clinical" indexed="true" stored="true" multiValued="true"/>
+
+
+
 
         <!-- procedure -->
         <field name="procedure_type_name" type="string" indexed="false" stored="false"/>
@@ -995,6 +1001,8 @@ or to add multiple fields to the same field for easier/faster searching.  -->
     <copyField source="administration_comment" dest="all"/>
     <copyField source="prn_reason" dest="all"/>
     <copyField source="problem_text" dest="all"/>
+    <copyField source="codes_display" dest="all"/>
+
     <copyField source="order_name" dest="all"/>
     <copyField source="health_factor_name" dest="all"/>
     <copyField source="tag" dest="all"/>
@@ -1057,6 +1065,7 @@ or to add multiple fields to the same field for easier/faster searching.  -->
     <copyField source="originator_name" dest="phrase"/>
     <copyField source="performer" dest="phrase"/>
     <copyField source="problem_text" dest="phrase"/>
+    <copyField source="codes_display" dest="phrase"/>
     <copyField source="procedure_type" dest="phrase"/>
     <copyField source="order_name" dest="phrase"/>
     <copyField source="health_factor_name" dest="phrase"/>
@@ -1087,6 +1096,7 @@ or to add multiple fields to the same field for easier/faster searching.  -->
     <copyField source="originator_name" dest="spell"/>
     <copyField source="performer" dest="spell"/>
     <copyField source="problem_text" dest="spell"/>
+    <copyField source="codes_display" dest="spell"/>
     <copyField source="order_name" dest="spell"/>
     <copyField source="health_factor_name" dest="spell"/>
 

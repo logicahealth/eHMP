@@ -1,4 +1,4 @@
-HMPEHL7 ;SLC/MJK,ASMR/RRB,BL - HMP HL7 ADT Message Processor ;04/12/2016 16:50:09
+HMPEHL7 ;SLC/MJK,ASMR/RRB,BL - HMP HL7 ADT Message Processor;May 15, 2016 14:15
  ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1**;May 15, 2016;Build 1
  ;Per VA Directive 6402, this routine should not be modified.
  ;

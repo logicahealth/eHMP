@@ -27,7 +27,7 @@ var httpConfig = {
 
 describe('document-retrieval-endpoint.js', function() {
     // disabled for integration VM testing
-    // TODO: fix and reenable
+    // FUTURETODO: fix and reenable
     xit('Config doesn\'t contain test data', function() {
         expect(config.documentStorage.publish.path).not.toMatch(/test/);
     });
@@ -178,7 +178,7 @@ describe('document-retrieval-endpoint.js', function() {
     });
 
     // Can't do this test against the VM, so it is disabled for now
-    // TODO: rewrite meaningfully for VM
+    // FUTURETODO: rewrite meaningfully for VM
     xit('HTML File retrieved', function() {
         var filePath = config.documentStorage.publish.path + '/' + query.dir + '/test.html';
         filePath = path.resolve(filePath);

@@ -47,17 +47,17 @@ define([
                 items: [{
                     control: "input",
                     name: "lastNameValueBulkEdit",
-                    label: "Last Name",
+                    label: "Last name",
                     extraClasses: ["col-xs-3"],
                     srOnlyLabel: false,
-                    title: "Enter the Last Name of the user"
+                    title: "Enter at least three letters of the user's Last Name"
                 }, {
                     control: "input",
                     name: "firstNameValueBulkEdit",
-                    label: "First Name",
+                    label: "First name",
                     extraClasses: ["col-xs-3"],
                     srOnlyLabel: false,
-                    title: "Enter the First Name of the user"
+                    title: "Enter at least three letters of the user's First Name"
                 }, {
                     control: "container",
                     extraClasses: ["col-xs-3", "permission-sets-for-search-picklist"],
@@ -79,7 +79,7 @@ define([
                     extraClasses: ["col-xs-3"],
                     items: [{
                         control: "checkbox",
-                        label: "Include Inactive VistA Users",
+                        label: "Include inactive VistA users",
                         name: "vistaCheckboxValueBulkEdit",
                         title: "Press spacebar to toggle checkbox.",
                     }]
@@ -88,7 +88,7 @@ define([
                     extraClasses: ["col-xs-3"],
                     items: [{
                         control: "checkbox",
-                        label: "Include Inactive eHMP Users",
+                        label: "Include inactive eHMP users",
                         name: "ehmpCheckboxValueBulkEdit",
                         title: "Press spacebar to toggle checkbox.",
                     }]
@@ -138,11 +138,14 @@ define([
                         label: "labelForSideBySide"
                     },
                     detailsPopoverOptions: {
+                        options: {
+                            placement: 'auto left'
+                        },
                         items: [{
                             control: 'container',
                             template: appletUtil.getDetailsTemplate([{
                                 id: 'vistaStatus',
-                                label: 'VistA Status'
+                                label: 'VistA status'
                             }, {
                                 id: 'ehmpStatus',
                                 label: 'eHMP Status',
@@ -195,19 +198,19 @@ define([
                 items: [{
                     control: "radio",
                     name: "editMode",
-                    label: "Select an Action to apply to the selected users above",
+                    label: "Select an action to apply to the selected users above",
                     value: 'add-permission',
                     extraClasses: ['col-xs-12', 'main-search-form'],
                     options: [{
-                        label: "Add Permissions",
+                        label: "Add permissions",
                         value: "add-permissions",
                         title: "Press enter to select add permissions."
                     }, {
-                        label: "Remove Permissions",
+                        label: "Remove permissions",
                         value: "remove-permissions",
                         title: "Press enter to select remove permissions."
                     }, {
-                        label: "Clone Permissions",
+                        label: "Clone permissions",
                         value: "clone-permissions",
                         title: "Press enter to select clone permissions."
                     }]
@@ -284,7 +287,7 @@ define([
                             options: {
                                 minimumInputLength: 0
                             },
-                            label: "Select Permission Set",
+                            label: "Select permission set",
                             title: "Use up and down arrows to view options and then press enter to select",
                         }, {
                             control: "button",
@@ -443,7 +446,7 @@ define([
             name: "permissionSetValueBulkEdit",
             pickList: pickList,
             srOnlyLabel: false,
-            label: "Select Permission Set",
+            label: "Select permission set",
             title: "Use up and down arrows to view options and then press enter to select",
         };
     };
@@ -470,7 +473,7 @@ define([
                 '<div class="alert alert-warning alert-user">' +
                 '<div class="alert-content">' +
                 '<p><strong><i class="fa fa-exclamation-triangle"></i> Cloning User Warning</strong></p>' +
-                '<p><strong>The following users currently have more permissions than what wll be assigned by taking this action.</strong></p>' +
+                '<p><strong>The following users currently have more permissions than what will be assigned by taking this action.</strong></p>' +
                 usersString +
                 '<p><strong>Do you want to proceed?</strong></p>' +
                 '<button type="button" id="cancelActionReturnButton" class="btn btn-default" title="Press enter to cancel action and return to user search.">' +

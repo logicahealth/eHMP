@@ -98,12 +98,12 @@ SETERROR(ERRCODE,MESSAGE) ; set error info into ^TMP("HTTPERR",$J)
  . . S ERRNAME=$G(ERRNAME)_" Lock space available "_$P(LOCKS,",",1)
  . . S ERRNAME=$G(ERRNAME)_" Lock space usable "_$P(LOCKS,",",2)
  . . S ERRNAME=$G(ERRNAME)_" Lock space used "_$P(LOCKS,",",3)
+ I ERRCODE=503 S ERRNAME="Unable to acquire garbage collector lock"
  I '$L($G(ERRNAME)) S ERRNAME="Unknown error"
  ;
  I ERRCODE>500 S HTTPERR=500,TOPMSG="Internal Server Error"  ; M Server Error
  I ERRCODE<500,ERRCODE>400 S HTTPERR=ERRCODE,TOPMSG=ERRNAME  ; Other HTTP Errors
  S NEXTERR=$G(^TMP("HTTPERR",$J,0),0)+1,^TMP("HTTPERR",$J,0)=NEXTERR
- S ^TMP("HTTPERR",$J,1,"apiVersion")="1.0"
  S ^TMP("HTTPERR",$J,1,"error","code")=HTTPERR
  S ^TMP("HTTPERR",$J,1,"error","message")=TOPMSG
  S ^TMP("HTTPERR",$J,1,"error","request")=$G(HTTPREQ("method"))_" "_$G(HTTPREQ("path"))_" "_$G(HTTPREQ("query"))

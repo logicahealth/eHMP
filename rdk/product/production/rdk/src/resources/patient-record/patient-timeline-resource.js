@@ -425,7 +425,7 @@ function mergeResults(allResults, order) {
     for (var i = 0; i < arrPTF.length; i++) {
         if (!_.isUndefined(arrPTF[i].admissionUid)) {
             index = mergedMap[arrPTF[i].admissionUid];
-            if (index){
+            if (!_.isUndefined(index)){
                 if(_.isUndefined(mergedResults[index].dischargeDiagnoses)) {
                     mergedResults[index].dischargeDiagnoses = [];
                 }
@@ -437,7 +437,7 @@ function mergeResults(allResults, order) {
     for (var j = 0; j < arrCPT.length; j++) {
         if (!_.isUndefined(arrCPT[j].encounterUid)) {
             index = mergedMap[arrCPT[j].encounterUid];
-            if (index) {
+            if (!_.isUndefined(index)) {
                 if (_.isUndefined(mergedResults[index].cptInfo)) {
                     mergedResults[index].cptInfo = [];
                 }

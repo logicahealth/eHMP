@@ -78,7 +78,10 @@
         "interval": null,
         "numberOfRefills": "0",
         "comment": "Jane Testing",
-        "priorOrderNumber": null,
+        "priorOrderNumber": {
+          "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13",
+          "id": null
+        },
         "priority": "ROUTINE",
         "quantity": "50",
         "requestedDispenseAmount": "50",

@@ -201,3 +201,51 @@ When(/^user expands the numeric lab result applet from overview$/) do
   expect(@ehmp).to have_btn_applet_expand_view
   @ehmp.btn_applet_expand_view.click
 end
+
+Then(/^the Numeric Lab Results applet header indicates the applet is filtered$/) do
+  @ehmp = PobUDAF.new
+  @ehmp.filtered_applet "lab_results_grid"
+  expect(@ehmp).to have_filtered_applet
+end
+
+Given(/^the user notes the order of the numeric lab results in the Numeric Lab Results Gist$/) do
+  ehmp = PobNumericLabApplet.new
+  ehmp.wait_for_fld_lab_names
+  @default_numeric_lab_gist_order = ehmp.gist_numeric_lab_names_only
+  expect(@default_numeric_lab_gist_order.length).to be > 0
+  p @default_numeric_lab_gist_order
+end
+
+When(/^the user clicks the first row in the Numeric Lab Results Gist applet$/) do
+  ehmp = PobNumericLabApplet.new
+  ehmp.wait_for_fld_lab_names
+  expect(ehmp.fld_lab_names.length).to be > 2, "This test has a prerequestite requirement that the patient used has more then 2 numeric lab results. There are currently only #{ehmp.fld_lab_names.length}"
+  ehmp.fld_lab_names.first.click
+  ehmp.wait_for_fld_toolbar
+  expect(ehmp).to have_fld_toolbar
+end
+
+When(/^user refreshes Numeric Lab Result Gist Applet$/) do
+  ehmp = PobNumericLabApplet.new
+  ehmp.wait_for_btn_applet_refresh
+  expect(ehmp).to have_btn_applet_refresh
+  ehmp.btn_applet_refresh.click
+  ehmp.wait_until_applet_gist_loaded
+  expect(ehmp.applet_gist_loaded?).to eq(true), "Expected the applet to be loaded"
+end
+
+When(/^the user clicks the date control All in the Numeric Lab Results applet$/) do
+  ehmp = PobNumericLabApplet.new
+  ehmp.wait_for_btn_applet_filter_toggle
+  expect(ehmp).to have_btn_applet_filter_toggle
+  ehmp.btn_applet_filter_toggle.click unless ehmp.has_btn_all_range?
+  ehmp.wait_until_btn_all_range_visible
+  expect(ehmp).to have_btn_all_range
+end
+
+Given(/^the Numeric Lab Results Applet displays at least (\d+) row of data$/) do |arg1|
+  ehmp = PobNumericLabApplet.new
+  ehmp.wait_until_applet_summary_loaded
+  expect(ehmp).to_not have_fld_empty_row
+  expect(ehmp.summary_rows.length).to be > 0
+end

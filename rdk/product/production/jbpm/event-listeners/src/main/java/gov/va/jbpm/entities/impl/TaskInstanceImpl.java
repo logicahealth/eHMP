@@ -33,6 +33,7 @@ public class TaskInstanceImpl {
 	private String navigation;
 	private String permission;
 	private String history;
+	private String historyAction;
 	private String assignedTo;
 
 	@Transient
@@ -252,6 +253,20 @@ public class TaskInstanceImpl {
 	public void setHistory(String history) {
 		this.history = history;
 	}
+	
+	/**
+	 * @return the historyAction
+	 */
+	public String getHistoryAction() {
+		return historyAction;
+	}
+
+	/**
+	 * @param historyAction the historyAction to set
+	 */
+	public void setHistoryAction(String historyAction) {
+		this.historyAction = historyAction;
+	}
 
 	/**
 	 * @return the assignedTo
@@ -277,7 +292,8 @@ public class TaskInstanceImpl {
 				+ ", taskName=" + taskName + ", description=" + description + ", priority=" + priority + ", skippable="
 				+ skippable + ", createdOn=" + createdOn + ", statusId=" + statusId + ", statusTimeStamp="
 				+ statusTimeStamp + ", actualOwner=" + actualOwner + ", dueDate=" + dueDate + ", earliestDate="
-				+ earliestDate + ", routes=" + routes + ", definitionId=" + definitionId + ", navigation=" + navigation
-				+ ", permission=" + permission + ", history=" + history + ", assignedTo=" + assignedTo + "]";
+				+ earliestDate + ", definitionId=" + definitionId + ", navigation=" + navigation + ", permission="
+				+ permission + ", history=" + history + ", historyAction=" + historyAction + ", assignedTo="
+				+ assignedTo + ", routes=" + routes + "]";
 	}
 }

@@ -218,8 +218,6 @@ And FHIR date and time conver to Zulu format for Outpatient Medication
        Given a patient with "out-patient medication results" in multiple VistAs
        When the client requests out-patient medication results for that sensitive patient "9E7A;18"
        Then a permanent redirect response is returned
-       When the client breaks glass and repeats a request for out-patient medication results for that patient "9E7A;18"
-       Then a successful response is returned
 
  @F138_5_outpatient_medicationdispense_neg_fhir @fhir @5000000009V082878
  Scenario: Negative scenario.  Client can request Outpatient Medications in FHIR format
@@ -394,12 +392,9 @@ And FHIR date and time conver to Zulu format for Outpatient Medication
        Given a patient with "out-patient medication statement" in multiple VistAs
        When the client requests out-patient medication statement for that sensitive patient "9E7A;18"
        Then a permanent redirect response is returned
-       When the client breaks glass and repeats a request for out-patient medication statement for that patient "9E7A;18"
-       Then a successful response is returned
 
  @F138_10_outpatient_medication_dispense_fhir @fhir @9E7A167 @DE974
  Scenario: Client can request out-patient medication results in FHIR format
  	Given a patient with "out-patient medication results" in multiple VistAs
- #	And a patient with pid "9E7A;167" has been synced through the RDK API
- 	When the client requests "10" out-patient medication results for the patient "9E7A;229" in FHIR format
+ 	When the client requests out-patient medication results for the patient "9E7A;229" in FHIR format
  	Then a successful response is returned

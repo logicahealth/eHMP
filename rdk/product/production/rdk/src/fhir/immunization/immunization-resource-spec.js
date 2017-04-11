@@ -27,7 +27,7 @@ describe('Immunization Conformance Statement', function() {
         it('verifies conformance search parameters are valid', function() {
             expect(builtConformance.searchParam[0].name).to.eql('subject.identifier');
             expect(builtConformance.searchParam[1].name).to.eql('start');
-            expect(builtConformance.searchParam[2].name).to.eql('limit');
+            expect(builtConformance.searchParam[2].name).to.eql('_count');
         });
     });
 });

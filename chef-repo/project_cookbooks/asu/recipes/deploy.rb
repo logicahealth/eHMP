@@ -17,27 +17,45 @@ remote_file node[:asu][:artifact_path] do
   use_conditional_get true
   source node[:asu][:source]
   mode   "0755"
+  notifies :stop, "service[#{node[:asu][:service]}]", :before
   notifies :delete, "directory[#{node[:asu][:home_dir]}]", :immediately
+  notifies :delete, "directory[#{node[:asu][:base_dir]}]", :immediately
 end
 
 directory node[:asu][:home_dir] do
-    recursive true
-    action :create
+  mode '0755'
+  action :create
+  recursive true
 end
 
 execute "extract_artifact" do
   cwd node[:asu][:home_dir]
   command "unzip #{node[:asu][:artifact_path]}"
-  #notifies :restart, "service[#{node[:asu][:service]}]"
   only_if { (Dir.entries(node[:asu][:home_dir]) - %w{ . .. }).empty? }
 end
 
 directory node[:asu][:log_dir] do
+  mode '0755'
   action :create
+  recursive true
 end
 
 directory node[:asu][:config_dir] do
+  mode '0755'
   action :create
+  recursive true
+end
+
+directory node[:asu][:pid_dir] do
+  mode '0755'
+  action :create
+  recursive true
+end
+
+directory node[:asu][:base_dir] do
+  mode '0755'
+  action :create
+  recursive true
 end
 
 jds_node = find_node_by_role("jds", node[:stack])

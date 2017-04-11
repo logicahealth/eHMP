@@ -36,32 +36,32 @@ Scenario: Display of medication summary for outpatient medications
 @F338-8 @f338_4_medication_detail_outpatient_meds @US5421 @DE1421 @DE1564 @DE1983
 Scenario: Display of medication details for outpatient medications
   # Given user is logged into eHMP-UI
-  And user searches for and selects "fourteen,Patient"
+  Given user searches for and selects "fourteen,Patient"
+  And user navigates to Meds Review Applet
+  And "Meds Review" is active
+  And the user has selected All within the global date picker
+  And the Meds Review applet displays at least 1 outpatient medication
+  When the user views the details of an outpatient med
+  Then the detail view displays
+      | header             |
+      | Order History      |
+      | Links              |
+      | Patient Education  |
+
+@f338_9_medication_detail_inpatient_meds @US5421 @DE1421 @DE1564 @DE1983
+Scenario: Display of medication details for inpatient medications
+  # Given user is logged into eHMP-UI
+  And user searches for and selects "Ten,Inpatient"
   When user navigates to Meds Review Applet
   Then "Meds Review" is active
   And the user has selected All within the global date picker
-  #When user expands "Outpatient Meds Group" in Meds Review Applet
-#  Then user selects medication "WARFARIN TAB" in Meds Review Appletd
-  #Then print debug information
-  When the user views the details of an outpatient med
-#  Then user selects from the menu medication review detail icon for "WARFARIN TAB" in Meds Review Applet
-#  And the medication detail header section in Meds Review Applet contains
-#  | field         		| value                     					|
-#  | Med Name_Warfarin   | Warfarin tab 5 MG               				|
-#  | Status_Warfarin     | DISCONTINUED                  				|
-#  | Sig_Warfarin      	| TAKE ONE TABLET BY BY MOUTH EVERY DAY AT 1 PM |
-#  And medication detail description section in Meds Review Applet contains
-#  | field         		| value              				|
-#  | Prescription No.    | 500418              				|
-#  | Supply          	| 30 for 30 days (5 of 5 remaining) |
-#  | Dose/Schedule     	| 5 PO QD-WARF            			|
-#  | Provider        	| VEHU,ONEHUNDRED         			|
-#  | Pharmacist        	| PHARMACIST,THIRTY         		|
-#  | Location        	| VIST CLINIC           			|
-#  | Facility        	| CAMP MASTER           			|
-  And the medication detail fill history section in Meds Review Applet contains
-  |row index| dispensedate  | quantityAnddaysSupplyDispensed | routing | empty  |
-#  | 1   	| 06/04/2006    | 30 For 30 Days                 | Window  |        |
+  And Inpatient Meds Group summary view displays medications
+  When the user views the details of an inpatient med
+  Then the detail view displays
+      | header             |
+      | Order History      |
+      | Links              |
+      | Patient Education  |
 #
 @f338_5_medication_column_default_and_sorting_name @US5903 @DE1479  @triage
 Scenario: Med Review Applet is sorted by the status first and then by name in alpha order.
@@ -103,17 +103,7 @@ Scenario: Display of medication summary for inpatient medications
   | Name  | Sig  | Status/Next |
   And Inpatient Meds Group summary view displays medications
 
-@f338_9_medication_detail_inpatient_meds @US5421 @DE1421 @DE1564 @DE1983
-Scenario: Display of medication details for inpatient medications
-  # Given user is logged into eHMP-UI
-  And user searches for and selects "Ten,Inpatient"
-  When user navigates to Meds Review Applet
-  Then "Meds Review" is active
-  And the user has selected All within the global date picker
-  And Inpatient Meds Group summary view displays medications
-  When the user views the details of an inpatient med
-  Then the detail view displays
-  | Order History Panel  |  Order Detail Panel  |
+
 
 @f338_11_medication_filtering @US5421 @DE2666
 Scenario: Display of medication summary for outpatient medications after searching for a specific string
@@ -122,7 +112,7 @@ Scenario: Display of medication summary for outpatient medications after searchi
   When user navigates to Meds Review Applet
   Then "Meds Review" is active
   And the user has selected All within the global date picker
-  And the user clicks on search filter in Meds Review Applet
+  #And the user clicks on search filter in Meds Review Applet
   And the user filters the Medication Review Applet by text "Aspirin"
   Then the Medication Review table only diplays rows including text "Aspirin"
 

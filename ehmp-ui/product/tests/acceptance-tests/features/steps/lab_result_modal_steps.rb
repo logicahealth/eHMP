@@ -56,3 +56,17 @@ When(/^the user clicks a panel row$/) do
   numeric_lr = NumericPanelLabResults.instance
   expect(numeric_lr.perform_action('First Expanded Panel Row')).to eq(true)
 end
+
+Then(/^the From Date input NOT should have the value "([^"]*)" in the Numeric Lab Results modal$/) do |date_value|
+  ehmp = NumericLabResultsModal.new
+  ehmp.wait_for_fld_from_date
+  expect(ehmp).to have_fld_from_date
+  expect(ehmp.fld_from_date.value).to_not eq(date_value)
+end
+
+Then(/^the To Date input NOT should have the value "([^"]*)" in the Numeric Lab Results modal$/) do |date_value|
+  ehmp = NumericLabResultsModal.new
+  ehmp.wait_for_fld_to_date
+  expect(ehmp).to have_fld_to_date
+  expect(ehmp.fld_to_date.value).to_not eq(date_value)
+end

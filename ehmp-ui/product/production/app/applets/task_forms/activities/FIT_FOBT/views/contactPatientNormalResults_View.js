@@ -3,10 +3,11 @@ define([
         'marionette',
         'underscore',
         'handlebars',
+        'moment',
         'hbs!app/applets/task_forms/activities/FIT_FOBT/templates/followUp_Template',
         'app/applets/task_forms/common/utils/eventHandler'
     ],
-    function(Backbone, Marionette, _, Handlebars, FollowUpTemplate, EventHandler) {
+    function(Backbone, Marionette, _, Handlebars, moment, FollowUpTemplate, EventHandler) {
         "use strict";
 
         var NormalResultsModel = Backbone.Model.extend({

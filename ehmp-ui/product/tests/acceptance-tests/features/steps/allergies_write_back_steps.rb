@@ -17,7 +17,7 @@ class AllergiesWriteBack < AllApplets
     add_action(CucumberLabel.new("Allergy Add Button"), ClickAction.new, AccessHtmlElement.new(:css, "[data-appletid=allergy_grid] .applet-add-button"))
     add_verify(CucumberLabel.new("Allergy Modal Title"), VerifyText.new, AccessHtmlElement.new(:css, '[id="main-workflow-label-Allergies"]'))
     add_verify(CucumberLabel.new("Modal Loaded"), VerifyText.new, AccessHtmlElement.new(:css, ".modal-body"))
-    add_verify(CucumberLabel.new("Growl Alert Msg"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-notify='message']"))
+    add_verify(CucumberLabel.new("Growl Alert Msg"), VerifyContainsText.new, AccessHtmlElement.new(:css, ".notify-message"))
     # form labels
     add_verify(CucumberLabel.new("allergen"), VerifyText.new, AccessHtmlElement.new(:css, "label[for='allergen']"))
     add_verify(CucumberLabel.new("observed"), VerifyText.new, AccessHtmlElement.new(:css, "label[for='allergyType-o']"))
@@ -33,7 +33,7 @@ class AllergiesWriteBack < AllApplets
     add_verify(CucumberLabel.new("date"), VerifyText.new, AccessHtmlElement.new(:xpath, "#{parent_div}::div[contains(@class, 'table-cell') and contains(@class, 'percent-width-25') and contains(string(),'Date')]"))
     add_verify(CucumberLabel.new("time"), VerifyText.new, AccessHtmlElement.new(:xpath, "#{parent_div}::div[contains(@class, 'table-cell') and contains(string(),'Time')]"))
     add_verify(CucumberLabel.new("comments"), VerifyText.new, AccessHtmlElement.new(:css, "label[for='moreInfo']"))
-    add_verify(CucumberLabel.new("verify allergy row"), VerifyText.new, AccessHtmlElement.new(:css, "#data-grid-allergy_grid tr.selectable:nth-child(1) td:nth-child(1)"))
+    add_verify(CucumberLabel.new("verify allergy row"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#data-grid-allergy_grid tr.selectable:nth-child(1) td:nth-child(1)"))
     add_action(CucumberLabel.new("open allergy row"), ClickAction.new, AccessHtmlElement.new(:css, "#data-grid-allergy_grid tr.selectable:nth-child(1) td:nth-child(1)")) 
     add_verify(CucumberLabel.new("facility name"), VerifyText.new, AccessHtmlElement.new(:css, "#facilityName"))    
     # form fields
@@ -112,9 +112,18 @@ Then(/^the user adds "([^"]*)" allergy "([^"]*)"$/) do |allergy_type, allergy_na
   expect(aa.wait_until_action_element_visible("add drowsy", DefaultLogin.wait_time)).to be_true
   expect(aa.wait_until_action_element_visible("allergen search input drop down", DefaultLogin.wait_time)).to be_true
   expect(aa.perform_action("allergen search input drop down")).to eq(true)
-  expect(aa.perform_action("allergen search input box", allergy_name)).to eq(true)
+#  expect(aa.perform_action("allergen search input box", allergy_name)).to eq(true)
+#  expect(aa.wait_until_action_element_visible("select allergen", 30)).to be_true
+#  expect(aa.perform_action("select allergen")).to eq(true)
+  
+  @ehmp.wait_until_fld_pick_list_input_visible
+  expect(@ehmp).to have_fld_pick_list_input
+  @ehmp.fld_pick_list_input.set allergy_name
+  @ehmp.fld_pick_list_input.native.send_keys(:enter)
+  
   expect(aa.wait_until_action_element_visible("select allergen", 30)).to be_true
   expect(aa.perform_action("select allergen")).to eq(true)
+   
   if allergy_type == 'historical'
     expect(aa.perform_action("historical check box")).to eq(true)
   else
@@ -129,7 +138,7 @@ Then(/^the user adds "([^"]*)" allergy "([^"]*)"$/) do |allergy_type, allergy_na
   wait.until { aa.get_element("Add").enabled? }
   wait.until { aa.get_element("Add").displayed? }
   expect(aa.perform_action("Add")).to eq(true)
-  verify_allergy_growl_msg("Allergy successfully submitted")
+  verify_allergy_growl_msg("Allergy Submitted")
 end
 
 def verify_allergy_growl_msg(message)
@@ -154,7 +163,7 @@ def mark_allergy_in_error
   expect(aa.perform_action(entered_error)).to eq(true)
   expect(aa.perform_action('reason input box', 'clearing for automated test')).to eq(true)
   expect(aa.perform_action('submit entered in error')).to eq(true)
-  verify_allergy_growl_msg("Allergy successfully marked entered in error")
+  verify_allergy_growl_msg("Allergy marked as entered in error")
 end
 
 Then(/^user opens allergy row "([^"]*)" and marks as "([^"]*)"$/) do |allergen_name, entered_error|
@@ -166,15 +175,33 @@ Then(/^user opens allergy row "([^"]*)" and marks as "([^"]*)"$/) do |allergen_n
 end
 
 Then(/^patient does not have a "([^"]*)" allergy$/) do |allergy_name|
-  @ehmp = PobAllergiesApplet.new unless @ehmp.is_a? PobAllergiesApplet
-  @ehmp.allergy_pill allergy_name
-  if @ehmp.has_fld_allergy_pill?
-    @ehmp.fld_allergy_pill.click
+  ehmp = PobAllergiesApplet.new
+  ehmp.allergy_pill allergy_name
+  p "Has pill? #{ehmp.has_fld_allergy_pill?}"
+  if ehmp.has_fld_allergy_pill?
+    ehmp.fld_allergy_pill.click
     expect(AllergiesWriteBack.instance.perform_action('Detail View Button')).to eq(true)
     mark_allergy_in_error
   end
-  expect(@ehmp.has_fld_allergy_pill?).to eq(false), "patient should not have an allergy displayed for #{allergy_name}"
+  expect(ehmp.has_fld_allergy_pill?).to eq(false), "patient should not have an allergy displayed for #{allergy_name}"
 end
 
+Given(/^Cover Sheet is active and ready for write back tests$/) do
+  # sleep 5
+  step 'Cover Sheet is active'
+  # check for visiblity of bottom applets, if elements not visible, then refresh
 
-
+  # immunizations, active meds, orders
+  p PobImmunizationsApplet.new.btn_applet_expand_view
+  p PobImmunizationsApplet.new.btn_applet_expand_view.native
+  begin 
+    PobImmunizationsApplet.new.wait_until_btn_applet_expand_view_visible(1)
+    PobAppointmentsApplet.new.wait_until_btn_applet_expand_view_visible(1)
+    PobProblemsApplet.new.wait_until_btn_applet_expand_view_visible(1)
+  rescue
+    p 'all applets not visible, attempt a refresh'
+    #PobCoverSheet.new.load
+    TestSupport.driver.navigate.refresh
+    step 'Cover Sheet is active'
+  end
+end

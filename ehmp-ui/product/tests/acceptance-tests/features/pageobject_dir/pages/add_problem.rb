@@ -1,3 +1,10 @@
+require_relative 'alert.rb'
+
+class AddProblemsDeleteCommentAlert < PobAlert
+  element :btn_restore, '.modal-footer .restore-button'
+  element :btn_okay, '.modal-footer .no-button'
+end
+
 class AddProblemsTrayModal < SitePrism::Page 
   # ****************  first modal **************** #
   element :btn_keep_previous, '#keepProblemBtn'
@@ -62,17 +69,34 @@ class AddProblemsTrayModal < SitePrism::Page
   elements :fld_comment_row_text, '.comment-region .comment-text-region'
   elements :btn_comment_row_edit, '.comment-region .comment-edit-button'
   elements :btn_comment_row_delete, '.comment-region .comment-delete-button'
+  element :txt_comment_edit, 'div.table-row input'
+  element :btn_comment_cancel_edit, 'div.table-row .cancel-edit-comment-button'
+  element :btn_comment_save_edit, 'div.table-row .edit-comment-button'
+
+  element :txt_editable_new_term_request, 'form:not(.hidden) div.editableFreeTxtTxtArea #editableFreeTxtTxtArea'
+  element :txt_editable_new_term_request_length, 'form:not(.hidden) div.editableFreeTxtTxtArea span.char-count-region span'
 
   # *************** free text modal *************** #
   element :btn_free_text_no, '#ftNoBtn'
   element :btn_free_text_yes, '#ftYesBtn'
   element :chk_request_term, 'form:not(.hidden) #requestTermCheckBox'
-  element :fld_icd_code_warning, '.keep-problem-container p:nth-of-type(1) strong'
-  element :fld_use_term_quesiton, '.keep-problem-container p:nth-of-type(2) strong'
+  element :fld_icd_code_warning, 'form:not(.hidden) p:nth-of-type(1) strong'
+  element :fld_use_term_quesiton, 'form:not(.hidden) p:nth-of-type(2) strong'
   element :fld_new_term_request_label, "form:not(.hidden) label[for='freeTxtTxtArea']"
   element :txt_new_term_request, 'form:not(.hidden) div.freeTxtTxtArea #freeTxtTxtArea'
+  element :txt_new_term_request2, 'form:not(.hidden) #editableFreeTxtTxtArea'
   element :txt_new_term_request_length, 'form:not(.hidden) div.freeTxtTxtArea span.char-count-region span'
-  
+
+  def index_of_comment(comment_text)
+    available_comment_text = []
+    fld_comment_row_text.each_with_index do | comment_column, index |
+      available_comment_text.push(comment_column.text)
+      return index if comment_column.text == comment_text
+    end
+    p "available comments: #{available_comment_text}"
+    return -1
+  end
+
   def problem_search_result(problem_result_text)
     self.class.element :fld_search_result, :xpath, "//div[contains(@class, 'problemResults')]/descendant::li[contains(@class, 'tree-leaf')]/descendant::div[contains(string(), '#{problem_result_text}')]"
   end

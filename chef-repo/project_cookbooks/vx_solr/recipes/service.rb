@@ -32,7 +32,7 @@ template '/etc/init.d/solr' do
     :additional_instance_base_port => node[:vx_solr][:service][:additional_instance_base_port],
     :log_file => node[:solr][:log_file]
   )
-  notifies :restart, "service[solr]"
+  notifies :stop, "service[solr]", :before
 end
 
 node.default[:vx_solr][:service][:solr_host] = node[:ipaddress]
@@ -40,7 +40,7 @@ template "#{node[:solr][:dir]}-#{node[:solr][:version]}/bin/solr.in.sh" do
   variables(
     :solr_host => node[:vx_solr][:service][:solr_host]
   )
-  notifies :restart, "service[solr]"
+  notifies :stop, "service[solr]", :before
 end
 
 # create home directories for each additional solr instance
@@ -51,6 +51,7 @@ end
 
   file "#{home_dir}/solr.xml" do
     content ::File.open("#{node[:vx_solr][:server_dir]}/solr/solr.xml").read
+    notifies :stop, "service[solr]", :before
   end
 end
 

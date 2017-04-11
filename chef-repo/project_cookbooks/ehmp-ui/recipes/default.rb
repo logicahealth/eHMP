@@ -44,6 +44,8 @@ end
 
 template "#{dest_dir}/../manifest.json" do
   source 'manifest.json.erb'
+  owner node[:apache][:user]
+  group node[:apache][:group]
   variables(
     :overall_version => node[:ehmp_ui][:manifest][:overall_version],
     :versions => node[:ehmp_ui][:manifest][:versions]

@@ -2,7 +2,7 @@ define([
     "moment",
     "backbone",
     "app/applets/encounters/appConfig"
-], function(Moment, Backbone, CONFIG) {
+], function(moment, Backbone, CONFIG) {
     'use strict';
 
     var gistConfiguration = {
@@ -12,13 +12,13 @@ define([
                     title: 'Visit Type',
                     sortable: true,
                     sortType: 'alphabetical',
-                    key: 'groupName'
+                    key: 'subKind' //'groupName'
                 },
                 itemsInGraphCount: {
                     title: 'Hx Occurrence',
                     sortable: true,
                     sortType: 'numeric',
-                    key: 'encounterCount'
+                    key: 'count' //'encounterCount'
                 },
                 age: {
                     title: 'Last',
@@ -32,13 +32,13 @@ define([
                     title: 'Procedure name',
                     sortable: true,
                     sortType: 'alphabetical',
-                    key: 'groupName'
+                    key: 'subKind'
                 },
                 itemsInGraphCount: {
                     title: 'Hx Occurrence',
                     sortable: true,
                     sortType: 'numeric',
-                    key: 'encounterCount'
+                    key: 'count'
                 },
                 age: {
                     title: 'Last',
@@ -52,13 +52,13 @@ define([
                     title: 'Appointment Type',
                     sortable: true,
                     sortType: 'alphabetical',
-                    key: 'groupName'
+                    key: 'subKind'
                 },
                 itemsInGraphCount: {
                     title: 'Hx Occurrence',
                     sortable: true,
                     sortType: 'numeric',
-                    key: 'encounterCount'
+                    key: 'count'
                 },
                 age: {
                     title: 'Last',
@@ -72,13 +72,13 @@ define([
                     title: 'Diagnosis',//'Location - CLN/WARD',
                     sortable: true,
                     sortType: 'alphabetical',
-                    key: 'groupName'
+                    key: 'subKind'
                 },
                 itemsInGraphCount: {
                     title: 'Hx Occurrence',
                     sortable: true,
                     sortType: 'numeric',
-                    key: 'encounterCount'
+                    key: 'count'
                 },
                 age: {
                     title: 'Last',

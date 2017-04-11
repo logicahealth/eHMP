@@ -6,8 +6,8 @@ var RpcClient = require('vista-js').RpcClient;
 
 var mock_session = {
     user: {
-        username: 'PW',
-        password: 'PW',
+        username: '9E7A;PW    ',
+        password: 'PW    !!',
         duz: {
             '9E7A': '10000000257'
         },
@@ -46,7 +46,8 @@ describe('writebackorder_signOrder:', function() {
                         },
                         locationIEN: 23,
                         patientIEN: 8
-                    }
+                    },
+                    pid: '9E7A;8'
                 },
                 logger: sinon.stub(require('bunyan').createLogger({name: 'sign-order'})),
                 app: {
@@ -59,20 +60,20 @@ describe('writebackorder_signOrder:', function() {
                             '9E7A': {
                                 name: 'PANORAMA',
                                 division: '500',
-                                host: 'IP_ADDRESS',
+                                host: 'IP        ',
                                 port: 9210,
                                 production: false,
-                                accessCode: 'PW',
-                                verifyCode: 'PW'
+                                accessCode: 'PW    ',
+                                verifyCode: 'PW    !!'
                             },
                             'C877': {
                                 name: 'KODAK',
                                 division: '500',
-                                host: 'IP_ADDRESS',
+                                host: 'IP        ',
                                 port: 9210,
                                 production: false,
-                                accessCode: 'PW',
-                                verifyCode: 'PW'
+                                accessCode: 'PW    ',
+                                verifyCode: 'PW    !!'
                             }
                         }
                     }

@@ -2,11 +2,12 @@ define([
     "backbone",
     "marionette",
     "underscore",
-    "app/applets/documents/debugFlag",
+    "app/applets/documents/appConfig",
     'app/applets/documents/appletHelper',
-], function(Backbone, Marionette, _, DEBUG, AppletHelper) {
+    'app/applets/documents/imaging/helpers/thumbnailHelper'
+], function(Backbone, Marionette, _, appConfig, AppletHelper, ThumbnailHelper) {
     "use strict";
-    var ERROR_LOG = DEBUG.errorLog;
+    var ERROR_LOG = appConfig.errorLog;
     var docUtils = {
         // return true if the arrayGroup or any properties contain the docId value
         hasDocIdRecord: function(aGroup, docId) {
@@ -34,16 +35,9 @@ define([
             return text && text.length && text[0];
         },
 
-        getDoc: function (uid, callback) {
-            var modalCollection = ADK.PatientRecordService.createEmptyCollection(docFetchOptions);
-            this.listenToOnce(modalCollection, 'fetch:success', function() {
-                this.stopListening(modalCollection, 'fetch:error');
-                return callback(null, modalCollection.models[0]);
-            });
-            this.listenToOnce(modalCollection, 'fetch:error', function() {
-                this.stopListening(modalCollection, 'fetch:success');
-                return callback('error', null);
-            });
+        getDoc: function (uid, collection) {
+            var modalCollection = collection instanceof Backbone.Collection ? collection : ADK.PatientRecordService.createEmptyCollection(docFetchOptions);
+
             var docFetchOptions = {
                 cache: false,
                 pageable: true,
@@ -56,7 +50,7 @@ define([
                 },
                 criteria:{
                     filter: 'eq(uid, "' +uid+'")'
-                },
+                }
             };
             ADK.PatientRecordService.fetchCollection(docFetchOptions, modalCollection);
         },

@@ -16,7 +16,7 @@ define([
     'main/adk_utils/resizeUtils',
     'api/WorkspaceContextRepository',
     'main/accessibility/components',
-    'main/components/views/notificationsModal'
+    'bowser'
 ], function(
     Backbone,
     Marionette,
@@ -35,7 +35,7 @@ define([
     ResizeUtils,
     WorkspaceContextRepository,
     Accessibility,
-    notificationsModal
+    Bowser
 ) {
     'use strict';
 
@@ -55,20 +55,11 @@ define([
             //ADK.Notifications.watch();
         });
         ResizeUtils.register();
+
+        if (Bowser.msie) {
+            ADKApp.InternetExplorerPolyfills();
+        }
     });
-    // LOOK INTO -------------------------------------------------------
-    Messaging.on('app:logged-in', function(patient) {
-        //ADK.Notifications.watch();
-        var options = {
-            getAllNotifications: true,
-            globalNotificationsCollection: new Backbone.Collection()
-        };
-        notificationsModal.show(options);
-    });
-    // Messaging.on('user:sessionEnd', function() {
-    //     ADK.Notifications.unwatch();
-    // });
-    //------------------------------------------------------------------
 
     ADKApp.commands.setHandler('route:update', function(workspaceId, contextId) {
         var routeString;
@@ -81,8 +72,6 @@ define([
         ADKApp.router.navigate('/' + routeString);
     });
     ADKApp.commands.setHandler('screen:display', function(routeConfig, options) {
-
-        //TODO Find a more elegant approach that utilizes the code already
         _.each([ADKApp.modalRegion, ADKApp.workflowRegion, ADKApp.alertRegion], function(region) {
             if (region.hasView()) {
                 region.currentView.$el.modal('hide');
@@ -97,7 +86,7 @@ define([
         var contextModel = routeConfig.contextModel;
         var workspaceId = workspaceModel.get('id');
         var contextId = contextModel.get('id');
-        var workspaceModule = ADKApp[workspaceId];
+        var workspaceModule = ADKApp.Screens[workspaceId];
         workspaceModule.buildPromise.done(function() {
             ScreenDisplay.createScreen(workspaceModule, workspaceId, contextId, workspaceModel, contextModel, ADKApp, options);
         });
@@ -106,7 +95,9 @@ define([
     Messaging.on('patient:selected', function(patient) {
         SessionStorage.clear(WorkspaceContextRepository.getContext('patient').get('id') + '-appletStorage');
         SessionStorage.delete.sessionModel('globalDate', true);
-        SessionStorage.delete.sessionModel('patient', false, {silent: true});
+        SessionStorage.delete.sessionModel('patient', false, {
+            silent: true
+        });
         SessionStorage.addModel('patient', patient);
     });
 
@@ -151,7 +142,7 @@ define([
                 Navigation.navigate(routeInfo[0]);
             } else {
                 var workspaceId = WorkspaceContextRepository.appDefaultScreen;
-                ADKApp[workspaceId].buildPromise.done(function() {
+                ADKApp.Screens[workspaceId].buildPromise.done(function() {
                     Navigation.navigate(workspaceId);
                 });
             }
@@ -170,8 +161,15 @@ define([
         });
     };
 
+    ADKApp.InternetExplorerPolyfills = function() {
+        //Fix for the known bug in Internet Explorer where the select dropdown is incorrectly sized
+        //Refer to DE6569 for more information
+        $('body').on('mousedown', 'select', function(event) {
+            $(event.target).focus();
+        });
+    };
+
     ADKApp.ScreenPassthrough = {
-        //TODO-Won Take care for each one of these cases. How does it impact the workspace collection?
         setNewDefaultScreen: function(id) {
             return ScreenBuilder.setNewDefaultScreen(id);
         },
@@ -200,7 +198,7 @@ define([
                 }
             }
             var finalFragment = fragment.replace(routeStripper, '');
-            if (this.fragment && this.fragment != finalFragment){
+            if (this.fragment && this.fragment != finalFragment) {
                 this._previousFragment = this.fragment;
             }
             return finalFragment;

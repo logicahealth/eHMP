@@ -15,12 +15,16 @@ define([
 
         //============================= UTILITIES =============================
         var getDefaultQueryParams = function() {
-            if (_.isUndefined(this.patient)) {
+            if (_.isUndefined(this.patient) || _.isUndefined(this.user)) {
                 return {};
             }
 
+            var siteCode = this.user.get('site');
+            var provider = _.get(this.user.get('duz'), siteCode);
+
             return {
-                patientUid: this.patient.get('pid'),
+                patientUid: this.patient.get('uid'),
+                authorUid: 'urn:va:user:' + siteCode + ':' + provider,
                 domain: 'ehmp-order',
                 ehmpState: 'draft'
             };
@@ -65,7 +69,7 @@ define([
 
         //============================ PUBLIC API =============================
         var draftResources = ADK.Resources.Writeback.Collection.extend({
-            resource: 'clinical-object-find',
+            resource: 'orders-find-draft',
             vpr: 'clinical-objects',
             idAttribute: 'uid',
             model: DraftOrder,

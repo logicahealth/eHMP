@@ -27,7 +27,7 @@ public class ConsultClinicalObject implements java.io.Serializable
 
    private java.lang.String referenceId;
 
-   private java.lang.String createdDateTime;
+   private java.lang.String creationDateTime;
 
    private vistacore.order.consult.ConsultClinicalObjectData data;
 
@@ -125,16 +125,6 @@ public class ConsultClinicalObject implements java.io.Serializable
       this.referenceId = referenceId;
    }
 
-   public java.lang.String getCreatedDateTime()
-   {
-      return this.createdDateTime;
-   }
-
-   public void setCreatedDateTime(java.lang.String createdDateTime)
-   {
-      this.createdDateTime = createdDateTime;
-   }
-
    public vistacore.order.consult.ConsultClinicalObjectData getData()
    {
       return this.data;
@@ -145,11 +135,21 @@ public class ConsultClinicalObject implements java.io.Serializable
       this.data = data;
    }
 
+   public java.lang.String getCreationDateTime()
+   {
+      return this.creationDateTime;
+   }
+
+   public void setCreationDateTime(java.lang.String creationDateTime)
+   {
+      this.creationDateTime = creationDateTime;
+   }
+
    public ConsultClinicalObject(java.lang.String uid, java.lang.String patientUid,
          java.lang.String authorUid, java.lang.String domain,
          java.lang.String subDomain, vistacore.order.Visit visit,
          java.lang.String ehmpState, java.lang.String displayName,
-         java.lang.String referenceId, java.lang.String createdDateTime,
+         java.lang.String referenceId, java.lang.String creationDateTime,
          vistacore.order.consult.ConsultClinicalObjectData data)
    {
       this.uid = uid;
@@ -161,7 +161,7 @@ public class ConsultClinicalObject implements java.io.Serializable
       this.ehmpState = ehmpState;
       this.displayName = displayName;
       this.referenceId = referenceId;
-      this.createdDateTime = createdDateTime;
+      this.creationDateTime = creationDateTime;
       this.data = data;
    }
 

@@ -2,14 +2,14 @@ define([
      "backbone",
      "marionette",
      "underscore",
+     "moment",
      "app/applets/patient_search/views/common/searchResultsCollectionView",
      "hbs!app/applets/patient_search/templates/myCPRSList/myCPRSListResultsTemplate"
- ], function(Backbone, Marionette, _, SearchResultsCollectionView, myCPRSListResultsTemplate) {
+ ], function(Backbone, Marionette, _, moment, SearchResultsCollectionView, myCPRSListResultsTemplate) {
     "use strict";
 
     // constants
     var MY_CPRS_LIST = 'myCprsList';
-    var APPOINTMENT_DATE_FORMAT = 'MMDDYYYYHHmmss';
     var MY_SITE = 'mySite';
     var NO_TAB = 'none';
     var NO_RECORD_FOUND_MESSAGE = 'No patient record was found. Verify if search criteria is correct.';
@@ -63,7 +63,12 @@ define([
              var searchOptions = {
                  resourceTitle: 'search-default-search',
                  viewModel: viewModel,
-                 cache: true
+                 cache: true,
+                 collectionConfig: {
+                    comparator: function(patient) {
+                      return [patient.get('appointment'), patient.get('displayName')];
+                    }
+                 }
              };
 
              searchOptions.onError = function(model, resp) {
@@ -94,18 +99,6 @@ define([
                         patientsView.searchApplet.menuView.changePatientSelection(MY_CPRS_LIST);
                         patientsView.searchApplet.model.set({'autoNav':false});
                     }
-                    patientsCollection.comparator = function(collectionA, collectionB) {
-                        var start = moment(collectionA.attributes.appointment, APPOINTMENT_DATE_FORMAT, true);
-                        var end = moment(collectionB.attributes.appointment, APPOINTMENT_DATE_FORMAT, true);
-
-                        if (start.isBefore(end)) {
-                            return -1;
-                        } else if (start.isSame(end)) {
-                            return 0;
-                        } else {
-                            return 1;
-                        }
-                    };
 
                     patientsCollection.sort();
 

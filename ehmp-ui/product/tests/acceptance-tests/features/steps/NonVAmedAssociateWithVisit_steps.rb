@@ -24,13 +24,6 @@ Given(/^the visit information field is not set and the user clicks the change bu
   element.click
 end
 
-Then(/^the user is in the "(.*?)" modal$/) do |applet|
-  con = ModalTest.instance
-  con.wait_until_action_element_visible("appletPath", 60)
-  expect(con.static_dom_element_exists?("appletPath")).to be_true
-  con.perform_action("appletPath", applet)
-end
-
 When(/^the user clicks on the Clinic Apppointments header$/) do
   driver = TestSupport.driver
   element = nil

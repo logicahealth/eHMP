@@ -144,7 +144,7 @@ PtDemographicsUtil.prototype.createPtDemographics = function(originalSyncJob, sy
 
 //----------------------------------------------------------------------------------------
 // This method looks at the given syncJobs to look for any site that is a primary site
-// which would have demographics  And uses that to retreive demographics.  It does not matter
+// which would have demographics  And uses that to retrieve demographics.  It does not matter
 // which one we use.
 //
 // callback: The call back handler to call when this is done.   It has the following
@@ -301,7 +301,7 @@ PtDemographicsUtil.prototype.createPtDemographicsForJobsUsingPid = function(pid,
 };
 
 //-----------------------------------------------------------------------------------------------
-// This method attempts to retreive the demographics for the given primary site pid.  If it
+// This method attempts to retrieve the demographics for the given primary site pid.  If it
 // does not exist, it will retrieve the demographics from the site and then store it in JDS.  If
 // it exists, it will retrieve the one it received.
 //
@@ -473,7 +473,7 @@ PtDemographicsUtil.prototype.retrieveDemographicsFromVistAandStoreInJds = functi
 };
 
 //-------------------------------------------------------------------------------------------------
-// This method attempts to retreive the demographics for the given secondary or VistaHdr site pid.
+// This method attempts to retrieve the demographics for the given secondary or VistaHdr site pid.
 // If it does not exist, it will create the demopgraphics using the given demographics as the basis
 // of the content.
 //

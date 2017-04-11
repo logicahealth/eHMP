@@ -87,5 +87,45 @@ function filterResults(results, filterObject) {
     return results;
 }
 
+/**
+ *  Unescapes special characters from string fields
+ *
+ *  @param items: array of models (objects)
+ *  @param fields: array of field names that should be unescaped (use dot notation for nested objects)
+ *      fields example: [ 'description', 'instanceName', 'navigation.parameters.clinicalObject']
+ *  When no specific fields are provided, every string property (from the first level of the object only!) is unescaped
+ *  @return array of models with unescaped string fields
+ */
+function unescapeSpecialCharacters(items, fields) {
+    var hasFields = _.isArray(fields) && fields.length > 0;
+
+    _.each(items, function(item, index, list) {
+        if (hasFields) {
+            _.each(fields, function(field) {
+                var value = _.get(item, field);
+                if (_.isString(value)) {
+                    _.set(item, field, _.unescape(convertHexEscapeCodes(value)));
+                }
+            });
+        } else {
+            list[index] = _.mapValues(item, function(value, key) {
+                if (_.isString(value)) {
+                    return _.unescape(convertHexEscapeCodes(value));
+                }
+                return value;
+            });
+        }
+    });
+
+    return items;
+}
+
+function convertHexEscapeCodes(str) {
+    return str.replace(/&#x([a-f0-9]{2,3});/i, function(val, hexStr) {
+        return (!_.isEmpty(hexStr) ? ('&#' + parseInt(hexStr, 16) + ';') : val);
+    });
+}
+
+module.exports.unescapeSpecialCharacters = unescapeSpecialCharacters;
 module.exports.sortResults = sortResults;
 module.exports.filterResults = filterResults;

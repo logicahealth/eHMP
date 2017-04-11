@@ -1,13 +1,30 @@
 Then(/^POB user adds a new allergy$/) do
-  @ehmp = PobAllergiesApplet.new
-  @ehmp.wait_until_btn_add_allergy_visible
-  @ehmp.btn_add_allergy.click
+
+  
+  refresh_page = true
+  begin
+    @ehmp = PobAllergiesApplet.new
+    @ehmp.wait_until_btn_add_allergy_visible
+    @ehmp.btn_add_allergy.click
+
+    @ehmp.wait_until_fld_modal_title_visible
+  rescue
+    if refresh_page
+      p 'refreshing the page'
+      refresh_page = false
+      PobCoverSheet.new.load
+      step "Cover Sheet is active"
+      retry
+    else
+      raise
+    end
+  end
 end
 
 Then(/^POB add allergy modal detail title says "(.*?)"$/) do |modal_title|
   @ehmp = PobAllergiesApplet.new
   @ehmp.wait_until_fld_modal_title_visible
-  expect(@ehmp.fld_modal_title).to have_text(modal_title)
+  expect(@ehmp.fld_modal_title.text.upcase).to eq(modal_title.upcase)
 end
 
 Then(/^POB add allergy detail modal displays labels$/) do |table|
@@ -24,7 +41,7 @@ Then(/^POB add allergy detail modal displays Table rows$/) do |table|
   @ehmp.wait_for_fld_modal_table_rows
   table.rows.each do |heading|
     p heading[0]
-    expect(object_exists_in_list(@ehmp.fld_modal_table_rows, "#{heading[0]}")).to eq(true)
+    expect(object_exists_in_list(@ehmp.fld_modal_table_rows, "#{heading[0]}")).to eq(true), "Could not find heading #{heading[0]}"
   end
 end
 
@@ -94,47 +111,97 @@ Then(/^POB user adds historical allergy "(.*?)"$/) do |allergen|
   @ehmp = PobAllergiesApplet.new
   @ehmp.wait_for_fld_historical_check_box
   @ehmp.fld_historical_check_box.click
-  add_allergy(allergen)
+  add_allergy(allergen, "historical")
 end
 
-def add_allergy(allergen)
+Then(/^POB user adds observed allergy "(.*?)"$/) do |allergen|
+  @ehmp = PobAllergiesApplet.new
+  @ehmp.wait_for_fld_observed_check_box
+  @ehmp.fld_historical_check_box.click
+  add_allergy(allergen, "observed")
+end
+
+def add_allergy(allergen, type)
   @ehmp = PobAllergiesApplet.new
   @ehmp.wait_until_fld_allergen_drop_down_visible
   expect(@ehmp).to have_fld_allergen_drop_down
   @ehmp.fld_allergen_drop_down.click
-  @ehmp.wait_until_fld_allergen_search_visible
-  @ehmp.fld_allergen_search.set allergen
-  @ehmp.fld_allergen_search.native.send_keys(:enter)
-  @ehmp.wait_until_fld_allergen_select_visible
-  expect(@ehmp).to have_fld_allergen_select
-  @ehmp.fld_allergen_select.click
+  cc = PobCommonElements.new
+  cc.wait_until_fld_pick_list_input_visible
+  expect(cc).to have_fld_pick_list_input
+  cc.fld_pick_list_input.set allergen
+  #cc.fld_pick_list_input.native.send_keys(:return)
+  max_attempt = 4
+  begin
+    @ehmp.wait_until_fld_select_allergen_visible
+    @ehmp.fld_select_allergen.click
+  rescue Exception => e
+    max_attempt = max_attempt - 1
+    raise e if max_attempt <= 0
+    retry if max_attempt > 0
+  end
   expect(@ehmp.fld_allergen_drop_down).to have_text(allergen)
   @ehmp.wait_until_fld_nature_of_reaction_drop_down_visible
-  @ehmp.fld_nature_of_reaction_drop_down "Allergy"
+  @ehmp.fld_nature_of_reaction_drop_down.select "Allergy"
+  
+  if type == "observed"
+    @ehmp.wait_until_fld_severity_drop_down_visible
+    @ehmp.fld_severity_drop_down.select "Severe"
+    @ehmp.wait_until_btn_anxiety_visible
+    expect(@ehmp).to have_btn_anxiety
+    @ehmp.btn_anxiety.click
+
+    @ehmp = PobAllergiesApplet.new
+    @ehmp.wait_for_fld_selected_second_symptom
+    expect(@ehmp).to have_fld_selected_second_symptom
+
+    rows = @ehmp.fld_selected_symptom
+    expect(rows.length > 1).to eq(true), "this test needs at least 1 row, found only #{rows.length}"
+  end
+  
   @ehmp.wait_until_btn_confirm_add_allergy_visible
+  wait = Selenium::WebDriver::Wait.new(:timeout => 5)
+  wait.until { @ehmp.btn_confirm_add_allergy.disabled? != true }  
   expect(@ehmp).to have_btn_confirm_add_allergy
   @ehmp.btn_confirm_add_allergy.click
+  
+  verify_and_close_growl_alert_pop_up("Allergy Submitted")
 end
 
-When(/^POB user expands the Allergies Applet$/) do
-  pending # express the regexp above with the code you wish you had
+Then(/^the allergy detail modal displays expected elements$/) do
+  @ehmp = AllergyWritebackModal.new
+  @ehmp.wait_until_fld_allergen_label_visible
+  @ehmp.wait_until_fld_observed_label_visible
+  expect(@ehmp).to have_fld_allergen_label, "Did not have expected allergen label"
+
+  expect(@ehmp).to have_fld_historical_label
+  expect(@ehmp.fld_historical_label.text.upcase).to eq('HISTORICAL')
+  expect(@ehmp).to have_rdb_historical_check_box
+
+  expect(@ehmp).to have_fld_observed_label
+  expect(@ehmp.fld_observed_label.text.upcase).to eq('OBSERVED')
+  expect(@ehmp).to have_rdb_observed_check_box
+
+  expect(@ehmp).to have_fld_reaction_date_label
+  expect(@ehmp).to have_fld_reaction_date
+  expect(@ehmp.fld_reaction_date.disabled?).to eq(true)
+
+  expect(@ehmp).to have_fld_reaction_time_label
+  expect(@ehmp).to have_fld_reaction_time
+  expect(@ehmp.fld_reaction_time.disabled?).to eq(true)
+
+  expect(@ehmp).to have_fld_severity_label
+  expect(@ehmp).to have_fld_severity
+  expect(@ehmp.fld_severity.disabled?).to eq(true)
+
+  expect(@ehmp).to have_fld_nature_of_reaction_label
+  expect(@ehmp).to have_fld_nature_of_reaction
+  expect(@ehmp.fld_nature_of_reaction.disabled?).to eq(true)
+
+  expect(@ehmp).to have_fld_sign_symptom_label
+  expect(@ehmp).to have_fld_sign_symptom_filter
+  expect(@ehmp.fld_sign_symtptom_options.length).to be > 0
+
+  expect(@ehmp).to have_fld_comment_label
+  expect(@ehmp).to have_fld_comment
 end
-
-Then(/^POB expanded Allergies Applet is displayed$/) do
-  pending # express the regexp above with the code you wish you had
-end
-
-Then(/^POB Allergies Applet expand view contains data rows$/) do
-  pending # express the regexp above with the code you wish you had
-end
-
-Then(/^POB user verifies the above "(.*?)" allergy is added to patient record$/) do |arg1|
-  pending # express the regexp above with the code you wish you had
-end
-
-Then(/^POB user opens allergy row "(.*?)" and marks as "(.*?)"$/) do |arg1, arg2|
-  pending # express the regexp above with the code you wish you had
-end
-
-
-

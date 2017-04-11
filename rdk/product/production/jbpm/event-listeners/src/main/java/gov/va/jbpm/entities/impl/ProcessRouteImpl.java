@@ -27,9 +27,20 @@ public class ProcessRouteImpl extends BaseRoute {
 	
 	public ProcessRouteImpl(Long taskInstanceId, BaseRoute baseRoute) {
 		
-		this(taskInstanceId, baseRoute.facility, baseRoute.team, baseRoute.teamFocus, baseRoute.teamType, baseRoute.teamRole, baseRoute.userId, baseRoute.patientAssignment);	
+		this(taskInstanceId,
+				baseRoute != null ? baseRoute.facility : null,
+				baseRoute != null ? baseRoute.team : null,
+				baseRoute != null ? baseRoute.teamFocus : null,
+				baseRoute != null ? baseRoute.teamType : null,
+				baseRoute != null ? baseRoute.teamRole : null,
+				baseRoute != null ? baseRoute.userId : null,
+				baseRoute != null ? baseRoute.patientAssignment : null);	
 	}
 	
+	//JPA Entities are required to have a default (empty) constructor.
+	public ProcessRouteImpl() {
+		super();
+	}
 
 	/**
 	 * @return the processInstanceId

@@ -7,7 +7,7 @@ define([
             resourceTitle: 'tasks-update',
             fetchType: 'POST',
             criteria: {
-                deploymentid: taskModel.get('DEPLOYMENTID'),
+                deploymentId: taskModel.get('DEPLOYMENTID'),
                 processDefId: taskModel.get('PROCESSID'),
                 taskid: String(taskModel.get('TASKID')),
                 state: state,

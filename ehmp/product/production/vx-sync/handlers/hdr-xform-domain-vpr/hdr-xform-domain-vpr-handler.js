@@ -26,7 +26,7 @@ function handle(log, config, environment, job, handlerCallback) {
 
     if (_.isUndefined(job.record) || _.isUndefined(job.record.data) || ! _.isArray(job.record.data.items) || job.record.data.items.length < 1 || _.isUndefined(job.record.data.items[0].uid)) {
         log.error('hdr-xform-domain-vpr-handler: expected an HDR job with valid UID');
-        // @TODO, figure out root cause of this problem.
+        // @FUTURETODO, figure out root cause of this problem.
         return setTimeout(handlerCallback, 0, null, errorUtil.createFatal('No Valid Data Found'));
     }
 
@@ -65,7 +65,7 @@ function handle(log, config, environment, job, handlerCallback) {
             log.error('hdr-xform-domain-vpr-handler.handle: Received error while attempting to store metaStamp for pid: %s.  Error: %s;  Response: %j; metaStamp:[%j]', job.patientIdentifier.value, error, response, domainMetastamp);
             error = errorUtil.createTransient('Unable to store metastamp', error);
 
-            // TODO:   Push this to an error message location.  We do not want to error out the entire set of messages for one problem.
+            // FUTURETODO:   Push this to an error message location.  We do not want to error out the entire set of messages for one problem.
             //--------------------------------------------------------------------------------------------------------------------------
             return handlerCallback(null, 'FailedJdsError');
         }
@@ -73,7 +73,7 @@ function handle(log, config, environment, job, handlerCallback) {
         if (!response) {
             log.error('hdr-xform-domain-vpr-handler.handle:  Failed to store metaStamp for pid: %s - no response returned.  Error: %s;  Response: %j; metaStamp:[%j]', job.patientIdentifier.value, error, response, domainMetastamp);
 
-            // TODO:   Push this to an error message location.  We do not want to error out the entire set of messages for one problem.
+            // FUTURETODO:   Push this to an error message location.  We do not want to error out the entire set of messages for one problem.
             //--------------------------------------------------------------------------------------------------------------------------
             // return callback(util.format('Failed to store metaStamp for pid: %s - no response returned.  Error: %s;  Response: %j; metaStamp:[%j]', syncStartJob.pid, error, response, syncStartJob.metaStamp), null);
 
@@ -83,7 +83,7 @@ function handle(log, config, environment, job, handlerCallback) {
         if (response.statusCode !== 200) {
             log.error('hdr-xform-domain-vpr-handler.handle:  Failed to store metaStamp for pid: %s - incorrect status code returned. Error: %s;  Response: %j; metaStamp:[%j]', job.patientIdentifier.value, error, response, domainMetastamp);
 
-            // TODO:   Push this to an error message location.  We do not want to error out the entire set of messages for one problem.
+            // FUTURETODO:   Push this to an error message location.  We do not want to error out the entire set of messages for one problem.
             //--------------------------------------------------------------------------------------------------------------------------
             // return callback(util.format('Failed to store metaStamp for pid: %s - incorrect status code returned.  Error: %s;  Response: %j; metaStamp:[%j]', syncStartJob.pid, error, response, syncStartJob.metaStamp), null);
 
@@ -110,7 +110,7 @@ function handle(log, config, environment, job, handlerCallback) {
             if (error) {
                 log.error('hdr-xform-domain-vpr-handler.handle:  Failed to publish jobs.  error: %s; response: %s; jobs: %j', error, response, jobsToPublish);
 
-                // TODO:   Push this to an error message location.  We do not want to error out the entire set of messages for one problem.
+                // FUTURETODO:   Push this to an error message location.  We do not want to error out the entire set of messages for one problem.
                 //--------------------------------------------------------------------------------------------------------------------------
                 return handlerCallback(null, 'FailedToPublishJobs');
             }

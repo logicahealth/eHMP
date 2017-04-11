@@ -1,0 +1,55 @@
+<div class="row">
+    <div class="col-xs-8">
+        <h5 class="font-size-16">{{ consultName }}</h5>
+    </div>
+    <div class="col-xs-4 text-right">
+        <span class="btn btn-icon" data-toggle="tooltip" title="{{#if instructions}} {{instructions}} {{else}} No Information {{/if}}">
+            <i class="fa fa-info-circle font-size-16"></i>
+        </span>
+        <span class="sr-only">{{#if instructions}} {{instructions}} {{else}} No Information {{/if}}</span>
+        <h5 class="text-uppercase font-size-16 inline-display">{{ state }}<br />
+            <small class="color-pure-black"><strong>{{ subState }}</strong></small>
+        </h5>
+    </div>
+</div>
+
+<div class="task-specific">
+    <h5 class="bottom-margin-sm bottom-border-grey-light">Consult Details<span id="consult-urgency" class="left-padding-sm font-size-18">
+        {{#if showUrgency}}
+        <span class="label applet-badges {{ urgencyTag }}">{{ urgency }}</span>
+        {{/if}}
+        </span></h5>
+    <div class="row left-padding-xs">
+        <div class="col-xs-6">
+            <p><strong>Ordering Provider</strong><br />
+            {{ orderingProvider.displayName }}</p>
+        </div>
+        <div class="col-xs-6">
+            <p><strong>Location Requested</strong><br />
+            {{ destinationFacility.name }}</p>
+        </div>
+    </div>
+    <div class="row left-padding-xs top-margin-md">
+        <div class="col-xs-6">
+            <p><strong>Earliest date</strong><br />
+            {{ earliestDate }}</p>
+        </div>
+        <div class="col-xs-6">
+            <p><strong>Latest date</strong><br />
+            {{ latestDate }}</p>
+        </div>
+    </div>
+    <div class="top-padding-lg">
+        <h5 class="bottom-margin-sm bottom-border-grey-light">Reason for request</h5>
+        <div class="bottom-padding-md left-padding-xs right-padding-xs">
+            <p><strong>Request</strong><br />
+            {{ requestReason}}</p>
+        </div>
+        {{#if isComment}}
+        <div class="bottom-padding-md left-padding-xs right-padding-xs">
+            <p><strong>Comment</strong><br />
+            {{ requestComment }}</p>
+        </div>
+        {{/if}}
+    </div>
+</div>

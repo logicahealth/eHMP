@@ -403,9 +403,8 @@ define([
                     }
                     if (!formAuto && !formSign) {
                         var saveAlertView = new ADK.UI.Notification({
-                            title: 'Addendum Saved',
-                            icon: 'fa-check',
-                            message: 'Addendum successfully saved with no errors.',
+                            title: 'Success',
+                            message: 'Addendum Saved',
                             type: 'success'
                         });
                         saveAlertView.show();
@@ -427,7 +426,7 @@ define([
                 return;
          // } else if (ADK.Messaging.request('get:adkApp:region', 'alertRegion').hasView()) { --- we concluded not to check for errors on autosave while modals exist (see discussion in DE5084)
             } else {
-                if (this.model.get("_isFormChanged")){
+                if (this.model.get("_isFormChanged") && this.model.isValid()){
                     var formSign = false;
                     var formClose = false;
                     var formSilent = true;
@@ -454,26 +453,6 @@ define([
                 this.saveAddendum(false, closeForm);
             }
             return false;
-        },
-        onDeleteNewForm: function() {
-            var self = this;
-            // new note form, data has been changed
-            if (this.isAutosaved) {
-                this.deleteAddendum();
-            } else {
-                var input = {
-                    message: "This addendum cannot be retrieved once it is deleted. Select No to return back to the form, or Yes to proceed with deleting.",
-                    title: "Delete Addendum",
-                    title_icon: "icon-delete",
-                    yes_callback: function() { // close new note form
-                        self.workflow.close();
-                        notesChannel.trigger('addendum:deleted', self.model);
-                    },
-                    no_callback: function() {}
-                };
-                var cancelConfirmationView = new ConfirmationView(input);
-                cancelConfirmationView.showModal();
-            }
         },
         deleteAddendum: function(event) {
             this.disableButtons();
@@ -539,19 +518,36 @@ define([
             }
         },
 
-        disableButtons: function() {
+        disableButtons: function(showLoader,loaderMessage) {
+            if (_.isUndefined(showLoader)){
+                showLoader = true;
+            }
+            if (_.isUndefined(loaderMessage)){
+                loaderMessage = 'Loading';
+            }
             this.ui.previewButton.trigger('control:disabled', true);
             this.ui.closeButton.trigger('control:disabled', true);
             this.ui.signButton.trigger('control:disabled', true);
             this.ui.deleteButton.trigger('control:disabled', true);
             this.$el.closest('.workflow-container').find('.workflow-header .close').attr('disabled', 'disabled');
+            if (showLoader){
+                this.$el.trigger('tray.loaderShow',{
+                    loadingString:loaderMessage
+                });
+            }
         },
-        enableButtons: function() {
+        enableButtons: function(hideLoader) {
+            if (_.isUndefined(hideLoader)){
+                hideLoader = true;
+            }
             this.ui.previewButton.trigger('control:disabled', false);
             this.ui.closeButton.trigger('control:disabled', false);
             this.ui.signButton.trigger('control:disabled', false);
             this.ui.deleteButton.trigger('control:disabled', false);
             this.$el.closest('.workflow-container').find('.workflow-header .close').removeAttr('disabled');
+            if (hideLoader){
+                this.$el.trigger('tray.loaderHide');
+            }
         },
         onBeforeDestroy: function() {
             this.unregisterChecks();

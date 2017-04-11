@@ -4,10 +4,9 @@ define([
     'marionette',
     'underscore',
     'handlebars',
-    'app/applets/task_forms/activities/consults/eventHandler',
     'hbs!app/applets/task_forms/common/templates/activityOverview_Template'
 ],
-function(Backbone, Marionette, _, Handlebars, EventHandler, ActivityOverviewTemplate) {
+function(Backbone, Marionette, _, Handlebars, ActivityOverviewTemplate) {
     "use strict";
 
     return Backbone.Marionette.LayoutView.extend({

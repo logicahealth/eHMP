@@ -40,7 +40,7 @@ function dodLabToVPR(dodLab, edipi) {
 
     vprLab.categoryName = labTypeToCategoryName[vprLab.labType] || '';
 
-    //TODO: figure out timezone adjustments...
+    //FUTURETODO: figure out timezone adjustments...
     if (dodLab.orderDate) {
         vprLab.observed = moment(dodLab.orderDate, 'x').format('YYYYMMDDHHmmss');
     }
@@ -144,8 +144,8 @@ function getVPRDocument(vprLab) {
         documentTypeName: 'Laboratory Report',
         author: '',
         authorDisplayName: '',
-        status: 'completed',
-        statusName: 'completed',
+        status: vprLab.statusName,
+        statusName: vprLab.statusName,
         facilityName: 'DOD',
         facilityCode: 'DOD',
         pid: vprLab.pid,

@@ -151,7 +151,7 @@ class SeleniumCommand
     wait_until_page_loaded()
     sleep 1
   # wait_until_a_element_displayed()
-  # // ToDo Check if new window open, run the step in the new window.
+  # // FUTUREToDo Check if new window open, run the step in the new window.
   # switch_to_new_win_pop_up()
   end
 
@@ -168,7 +168,7 @@ class SeleniumCommand
     element.click
 
   # wait_until_a_element_displayed()
-  # // ToDo Check if new window open, run the step in the new window.
+  # // FUTUREToDo Check if new window open, run the step in the new window.
   # switch_to_new_win_pop_up()
   end
 

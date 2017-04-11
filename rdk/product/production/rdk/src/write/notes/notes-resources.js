@@ -20,7 +20,7 @@ module.exports.getResourceConfig = function(app) {
             operationalDataCheck: false,
             synchronize: false
         },
-        requiredPermissions: [],
+        requiredPermissions: ['sign-note'],
         requiredASUActions: ['ENTRY'],
         isPatientCentric: true
     }, {
@@ -31,7 +31,7 @@ module.exports.getResourceConfig = function(app) {
             operationalDataCheck: false,
             synchronize: false
         },
-        requiredPermissions: [],
+        requiredPermissions: ['sign-note-addendum'],
         requiredASUActions: [],
         isPatientCentric: true
     }, {
@@ -42,7 +42,7 @@ module.exports.getResourceConfig = function(app) {
             operationalDataCheck: false,
             synchronize: false
         },
-        requiredPermissions: [],
+        requiredPermissions: ['sign-note'],
         requiredASUActions: ['EDIT RECORD'],
         isPatientCentric: true
     }, {
@@ -53,7 +53,7 @@ module.exports.getResourceConfig = function(app) {
             operationalDataCheck: false,
             synchronize: false
         },
-        requiredPermissions: [],
+        requiredPermissions: ['sign-note-addendum'],
         requiredASUActions: ['EDIT RECORD'],
         isPatientCentric: true
     }, {
@@ -64,7 +64,7 @@ module.exports.getResourceConfig = function(app) {
             operationalDataCheck: false,
             synchronize: false
         },
-        requiredPermissions: [],
+        requiredPermissions: ['sign-note'],
         requiredASUActions: [],
         isPatientCentric: true,
     }, {
@@ -75,7 +75,7 @@ module.exports.getResourceConfig = function(app) {
             operationalDataCheck: false,
             synchronize: false
         },
-        requiredPermissions: [],
+        requiredPermissions: ['sign-note'],
         requiredASUActions: ['SIGNATURE'],
         isPatientCentric: true
     },{
@@ -86,7 +86,7 @@ module.exports.getResourceConfig = function(app) {
             operationalDataCheck: false,
             synchronize: false
         },
-        requiredPermissions: [],
+        requiredPermissions: ['sign-note-addendum'],
         requiredASUActions: ['SIGNATURE'],
         isPatientCentric: true
     }, {
@@ -97,7 +97,7 @@ module.exports.getResourceConfig = function(app) {
             operationalDataCheck: false,
             synchronize: false
         },
-        requiredPermissions: [],
+        requiredPermissions: ['sign-note-addendum'],
         requiredASUActions: [],
         isPatientCentric: true,
     }];
@@ -165,6 +165,7 @@ function signNotes(req, res) {
     var tasks = [
         validateNote.sign,
         writeNoteToVista.validateSignature,
+        writeNoteToPjds.preSignNotes,
         writeNoteTask.getDefinitions,
         writeNoteTask.getOpenConsultsForNoteUid.bind(null, req),
         writeNoteTask.completeConsults.bind(null, req), // Binding for getGenericJbpmConfig()

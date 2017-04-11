@@ -1,10 +1,8 @@
-/*jslint node: true */
 'use strict';
 
 var _ = require('lodash');
 var async = require('async');
 var validate = require('./../utils/validation-util');
-var dd = require('drilldown');
 
 var fetchIndividualPickList = require('../pick-list-resources').fetchIndividualPickList;
 
@@ -21,7 +19,7 @@ function defaultCompare(a, b) {
 }
 
 function getLowerCaseName(item) {
-    return dd(item)('name').exists ? item.name.toLowerCase() : '';
+    return _.get(item, 'name') ? item.name.toLowerCase() : '';
 }
 
 function checkSubtype(subtype, toCheckFor) {

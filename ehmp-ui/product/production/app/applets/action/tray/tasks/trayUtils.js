@@ -1,7 +1,7 @@
 define([
-    'main/ADK',
+    'moment',
     'app/applets/action/tray/tasks/resource'
-], function(ADK, TaskResource) {
+], function(moment, TaskResource) {
     'use strict';
 
     // ============================== Constants ===============================
@@ -29,7 +29,7 @@ define([
     var getTaskItemLabel = function(item) {
         var taskName = item.taskName || '';
         var instanceName = item.instanceName || '';
-        var itemLabel = _.unescape(_.trim((taskName + ' - ' +  instanceName), ' -'));
+        var itemLabel = _.trim((taskName + ' - ' +  instanceName), ' -');
         return (!_.isEmpty(itemLabel) ? itemLabel : 'Unknown Task');
     };
 
@@ -45,7 +45,7 @@ define([
         }
 
         var userSession = ADK.UserService.getUserSession();
-        var userId = userSession.get('duz')[userSession.get('site')];
+        var userId = userSession.get('site') + ';' + userSession.get('duz')[userSession.get('site')];
         var userIdExists = _.contains(user, userId);
 
         if (_.isEmpty(ehmp) && userIdExists) {
@@ -80,7 +80,7 @@ define([
         this.collection.add({
             id: 'task_items',
             groupId: 'task_items',
-            groupLabel: 'My Tasks (' + collection.length + ')',
+            groupLabel: 'My Tasks (' + taskGroupCollection.length + ')',
             items: new Backbone.Collection(taskGroupCollection, {
                 comparator: taskComparator
             })

@@ -3,7 +3,6 @@
 var _ = require('lodash');
 var async = require('async');
 var moment = require('moment');
-var dd = require('drilldown');
 
 var rpcClientFactory = require('../core/rpc-client-factory');
 var filemanDateUtil = require('../../utils/fileman-date-converter');
@@ -13,6 +12,7 @@ var handleIncomingComments = require('./utils').handleIncomingComments;
 var handleOriginalComments = require('./utils').handleOriginalComments;
 var getOriginalCommentIndeces = require('./utils').getOriginalCommentIndeces;
 var retrieveSettings = require('./utils').retrieveSettings;
+var nullchecker = require('../../core/rdk').utils.nullchecker;
 
 var BAD_ADD_RESPONSE = require('./utils').BAD_ADD_RESPONSE;
 
@@ -202,7 +202,7 @@ function getProblemJSONRPC(logger, model, rpcClient, input, callback) {
             return callback(e);
         }
 
-        var problems = dd(parsedResponse)('data')('items').val;
+        var problems = _.get(parsedResponse, 'data.items');
 
         if (_.isEmpty(problems)) {
             return callback('malformed response');
@@ -221,6 +221,10 @@ function getProblemJSONRPC(logger, model, rpcClient, input, callback) {
 function callRpcFunctions(writebackContext, siteId, rpcClient, passedInCallback) {
     var logger = writebackContext.logger;
     var model = writebackContext.model;
+    model.dfn = writebackContext.interceptorResults.patientIdentifiers.dfn;
+    if (nullchecker.isNullish(model.dfn)) {
+        return passedInCallback('Missing required patient identifiers');
+    }
 
     var getProblem = retrieveExistingProblem.bind(null, logger, siteId, model, rpcClient);
     var update = updateProblemRPC.bind(null, logger, siteId, model, rpcClient);

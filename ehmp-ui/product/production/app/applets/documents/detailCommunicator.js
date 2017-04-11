@@ -1,10 +1,12 @@
 define([
     'app/applets/documents/appletHelper',
     'app/applets/documents/docDetailsDisplayer',
-    "app/applets/documents/debugFlag"
-], function(AppletHelper, DocDetailsDisplayer, DEBUG) {
+    "app/applets/documents/appConfig",
+    'app/applets/documents/imaging/helpers/thumbnailHelper'
+], function(AppletHelper, DocDetailsDisplayer, appConfig, ThumbnailHelper) {
     "use strict";
-    var ERROR_LOG = DEBUG.errorLog;
+    var ERROR_LOG = appConfig.errorLog;
+
     var detailCommunicator = {
 
         initialize: function(appletId) {
@@ -12,12 +14,9 @@ define([
             var channel = ADK.Messaging.getChannel(appletId);
             channel.reply('detailView', function(params) {
 
-                var pid = params.patient.icn || params.patient.pid;
-                var response = $.Deferred();
-
                 var fetchOptions = {
                     criteria: {
-                        filter: 'or(eq("uid","' + params.uid + '"),eq("results[].uid","' + params.uid + '"))'
+                        "uid": params.uid
                     },
                     patient: ADK.PatientRecordService.getCurrentPatient(),
                     resourceTitle: 'patient-record-document-view',
@@ -25,69 +24,74 @@ define([
                         parse: AppletHelper.parseDocResponse
                     },
                     onError: function(model, resp) {
-                        if (ERROR_LOG) {
-                            response.reject(resp);
-                        }
+                        if (ERROR_LOG) console.log("Documents detail communicator fetch Error");
+                    },
+                    onSuccess: function(collection) {
+                        collection.trigger('patient-record-document-view:success', collection);
                     },
                     cache: true
                 };
-                var data = ADK.PatientRecordService.fetchCollection(fetchOptions);
 
-                data.on('sync', function() {
-                    var detailModel = data.first();
-                    if (detailModel) {
-                        var docType = detailModel.get('kind');
-                        var resultDocCollection = AppletHelper.getResultsFromUid(detailModel);
-                        var childDocCollection = AppletHelper.getChildDocs(detailModel);
-                        var deferredViewResponse = DocDetailsDisplayer.getView(detailModel, docType, resultDocCollection, childDocCollection);
+                var uidFetchOptions = {
+                    criteria: {
+                        uid: params.uid
+                    },
+                    patient: ADK.PatientRecordService.getCurrentPatient(),
+                    resourceTitle: 'uid',
+                    viewModel: {
+                        parse: AppletHelper.parseDocResponse
+                    },
+                    onError: function(model, response) {
+                        if (ERROR_LOG) console.log("Documents detail communicator fetch Error");
+                    },
+                    onSuccess: function(collection) {
+                        collection.trigger('uid:success', collection);
+                    },
+                    cache: true
+                };
 
-                        deferredViewResponse.done(function(results) {
-                            results.title = results.title || DocDetailsDisplayer.getTitle(detailModel, docType);
-                            response.resolve(results);
-                        });
-                        deferredViewResponse.fail(function(results) {
-                            response.reject(results);
-                        });
-                    } else {
-                        // we didn't find the document in document-view, so check in the uid resource
-                        var uidFetchOptions = {
-                            criteria: {
-                                uid: params.uid
+                var detailModel = params.model;
+                if (detailModel) {
+                    var docType = detailModel.get('kind');
+                    var resultDocCollection = new AppletHelper.ResultsDocCollection();
+                    var childDocCollection = new AppletHelper.ChildDocCollection();
+                    var collection = new Backbone.Collection();
+
+                    var response = DocDetailsDisplayer.getView(detailModel, docType, resultDocCollection, childDocCollection, collection);
+                    var view = response.view;
+                    response.view = view.extend({
+                        collectionEvents: _.extend(view.prototype.collectionEvents, {
+                            'patient-record-document-view:success': function(collection) {
+                                if(this.collection.isEmpty()) {
+                                    return ADK.PatientRecordService.fetchCollection(uidFetchOptions, collection);
+                                }
+                                this.collection.trigger('read:success', collection);
                             },
-                            patient: ADK.PatientRecordService.getCurrentPatient(),
-                            resourceTitle: 'uid',
-                            viewModel: {
-                                parse: AppletHelper.parseDocResponse
+                            'uid:success': function(collection) {
+                                this.collection.trigger('read:success', collection);
                             },
-                            onError: function(model, response) {
-                                if (ERROR_LOG) console.log("Documents detail communicator fetch Error");
-                            },
-                            cache: true
-                        };
-                        uidFetchOptions.onSuccess = function(uidData) {
-                            var uidDetailModel = uidData.first();
+                            'read:success': function(collection) {
+                                //the model may have been a stub, if the collection has fetchOptions.resourceTitle, it's been fetched
+                                var model = collection.first();
+                                if (model) this.model.set(model.toJSON());
+                                if (!_.has(this.resultDocCollection, 'fetchOptions.resourceTitle'))
+                                    AppletHelper.getResultsFromUid(this.model, resultDocCollection);
+                                if (!_.has(this.childDocCollection, 'fetchOptions.resourceTitle'))
+                                    AppletHelper.getChildDocs(this.model, childDocCollection);
+                            }
+                        }),
+                        onShow: function() {
+                            if (this.collection.isEmpty()) ADK.PatientRecordService.fetchCollection(fetchOptions, collection);
+                            //if the model has enough data try to get the results immediately
+                            AppletHelper.getResultsFromUid(detailModel, resultDocCollection);
+                            AppletHelper.getChildDocs(detailModel, childDocCollection);
+                        }
+                    });
 
-                            var docType = uidDetailModel.get('kind');
-                            var resultDocCollection = AppletHelper.getResultsFromUid(uidDetailModel);
-                            var childDocCollection = AppletHelper.getChildDocs(uidDetailModel);
-                            var deferredViewResponse = DocDetailsDisplayer.getView(uidDetailModel, docType, resultDocCollection, childDocCollection);
+                    return response;
+                }
 
-                            deferredViewResponse.done(function(results) {
-                                results.title = results.title || DocDetailsDisplayer.getTitle(uidDetailModel, docType);
-                                response.resolve(results);
-                            });
-                            deferredViewResponse.fail(function(results) {
-                                response.reject(results);
-                            });
-                        };
-                        uidFetchOptions.onError = function(collection, error) {
-                            response.reject('Unable to fetch document with uid "' + params.uid + '": ' + error.statusText);
-                        };
-                        ADK.PatientRecordService.fetchCollection(uidFetchOptions);
-                    }
-                }, this);
-
-                return response.promise();
+                return null;
             });
         }
     };

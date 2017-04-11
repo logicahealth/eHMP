@@ -20,8 +20,8 @@ class NarrativeLabResults < AllApplets
     # HEADERS
     add_verify(CucumberLabel.new("Date"), VerifyText.new, AccessHtmlElement.new(:css, "[data-header-instanceid=narrative_lab_results_grid-observed]"))
     add_verify(CucumberLabel.new("Description"), VerifyText.new, AccessHtmlElement.new(:css, "[data-header-instanceid=narrative_lab_results_grid-description]"))
-    add_verify(CucumberLabel.new("Type"), VerifyText.new, AccessHtmlElement.new(:css, "[data-header-instanceid=narrative_lab_results_grid-type]"))
-    add_verify(CucumberLabel.new("Author or Verifier"), VerifyText.new, AccessHtmlElement.new(:css, "[data-header-instanceid=narrative_lab_results_grid-author]"))
+    add_verify(CucumberLabel.new("Type"), VerifyText.new, AccessHtmlElement.new(:css, "[data-header-instanceid=narrative_lab_results_grid-typeName]"))
+    add_verify(CucumberLabel.new("Author/Verifier"), VerifyText.new, AccessHtmlElement.new(:css, "[data-header-instanceid=narrative_lab_results_grid-author]"))
     add_verify(CucumberLabel.new("Facility"), VerifyText.new, AccessHtmlElement.new(:css, "[data-header-instanceid=narrative_lab_results_grid-facilityMoniker]"))
 
     row_count = AccessHtmlElement.new(:css, "#{appletid_css} table tr.selectable")

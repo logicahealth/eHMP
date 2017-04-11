@@ -10,6 +10,7 @@ var nullChecker = require('../../utils/nullchecker');
 var rdk = require('../../core/rdk');
 var locationUtil = rdk.utils.locationUtil;
 var paramUtil = require('../../utils/param-converter');
+var nullchecker = rdk.utils.nullchecker;
 
 function getVitals(model) {
     var vitals = [];
@@ -102,6 +103,10 @@ function adjustContextForFailure(writebackContext) {
 function create (writebackContext, passedInCallback) {
     var logger = writebackContext.logger;
     var model = writebackContext.model;
+    model.dfn = writebackContext.interceptorResults.patientIdentifiers.dfn;
+    if (nullchecker.isNullish(model.dfn)) {
+        return passedInCallback('Missing required patient identifiers');
+    }
     var context = writebackContext.vistaConfig.context;
     var vitals = getVitals(model);
 
@@ -200,6 +205,11 @@ function addVital(writebackContext, rpcClient, vital, callback) {
 
     var model = writebackContext.model;
     var rpcDelimitedStr = convertVitalToRpcString(vital);
+
+    model.dfn = writebackContext.interceptorResults.patientIdentifiers.dfn;
+    if (nullchecker.isNullish(model.dfn)) {
+        return callback('Missing required patient identifiers');
+    }
 
     logger.debug({rpcDelimitedStr: rpcDelimitedStr});
 

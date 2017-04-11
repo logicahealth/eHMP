@@ -33,9 +33,14 @@ import java.io.Serializable;
  *
  */
 public class AuthRequest implements Serializable {
-    private String site;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private String site;
     private String accessCode;
     private String verifyCode;
+    private String division;
 
     public String getSite() {
         return site;
@@ -60,4 +65,12 @@ public class AuthRequest implements Serializable {
     public void setVerifyCode(String verifyCode) {
         this.verifyCode = verifyCode;
     }
+
+	public String getDivision() {
+		return division;
+	}
+
+	public void setDivision(String division) {
+		this.division = division;
+	}
 }

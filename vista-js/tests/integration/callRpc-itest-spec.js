@@ -11,10 +11,10 @@ var wConfig = require('./config');
 var callRpc = require('../../src/RpcClient').RpcClient.callRpc;
 
 var config = _.defaults(wConfig.vistaSites['9E7A'], {
-	host: 'IP_ADDRESS',
+	host: 'IP        ',
 	port: 9210,
-	accessCode: 'PW',
-	verifyCode: 'PW',
+	accessCode: 'PW    ',
+	verifyCode: 'PW    !!',
 	context: 'HMP SYNCHRONIZATION CONTEXT',
 	localIP: '127.0.0.1',
 	localAddress: 'localhost',
@@ -24,7 +24,7 @@ var config = _.defaults(wConfig.vistaSites['9E7A'], {
 
 describe('verify RpcClient.callRpc() against Panorama', function() {
 	describe('verify correct config info yields good result', function() {
-		it('verified', function() {
+		xit('verified', function() {
 			var testError;
 			var testResult;
 			var called = false;

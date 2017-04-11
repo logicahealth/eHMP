@@ -20,7 +20,6 @@ module.exports.standardRPCCall = function(logger, configuration, rpcName, parame
     callback = arguments[arguments.length - 1];
     parse = arguments[arguments.length - 2];
 
-    //The following code is a close duplication of the code in VistaJS.callRpc for validation.
     if (!rpcName) {
         logger.error('rpc-util.standardRPCCall error no rpcName parameter was passed to standardRPCCall()');
         return callback('no rpc parameter was passed to standardRPCCall()');
@@ -62,7 +61,6 @@ module.exports.standardRPCCall = function(logger, configuration, rpcName, parame
     });
 
     logger.debug('rpc-util.standardRPCCall RPC (' + rpcName + '): params flattened and filtered: ' + JSON.stringify(params, null, 2));
-    //End the following code is a close duplication of the code in VistaJS.callRpc for validation.
 
     var rpcClient = rpcClientFactory.getClient(logger, configuration);
 

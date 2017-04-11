@@ -8,11 +8,11 @@ var async = require('async');
 var detailWritebackContext = {
     pid: '9E7A;100615',
     vistaConfig: {
-        host: 'IP_ADDRESS',
+        host: 'IP        ',
         port: 9210,
-        accessCode: 'PW',
-        verifyCode: 'PW',
-        localIP: 'IPADDRES',
+        accessCode: 'PW    ',
+        verifyCode: 'PW    !!',
+        localIP: 'IP      ',
         localAddress: 'localhost',
         noReconnect: true
     },
@@ -24,11 +24,11 @@ var detailWritebackContext = {
 var saveWritebackContext = {
     pid: '9E7A;100615',
     vistaConfig: {
-        host: 'IP_ADDRESS',
+        host: 'IP        ',
         port: 9210,
-        accessCode: 'PW',
-        verifyCode: 'PW',
-        localIP: 'IPADDRES',
+        accessCode: 'PW    ',
+        verifyCode: 'PW    !!',
+        localIP: 'IP      ',
         localAddress: 'localhost'
     },
     model: {

@@ -22,12 +22,12 @@ describe('Asu test', function() {
         nock.cleanAll();
         nock.disableNetConnect();
 
-        nock('http://IP_ADDRESS:PORT')
+        nock('http://IP             ')
             .get('/data/find/asu-class?filter=eq(%22name%22,%22USER%22)')
             .reply(200,
             defaultUserClassResult);
 
-        nock('http://IPADDRESS:POR')
+        nock('http://IP           ')
             .post('/asu/rules/getDocPermissions')
             .reply(200,
             '[{"actionName": "VIEW","hasPermission": true},{"actionName": "EDIT RECORD","hasPermission": false}]');
@@ -42,9 +42,9 @@ describe('Asu test', function() {
         req.app.config = {};
         req.session = {};
         req.app.config.vxSyncServer = {};
-        req.app.config.vxSyncServer.baseUrl = 'http://IPADDRESS:POR';
+        req.app.config.vxSyncServer.baseUrl = 'http://IP           ';
         req.app.config.jdsServer = {};
-        req.app.config.jdsServer.baseUrl = 'http://IP_ADDRESS:PORT';
+        req.app.config.jdsServer.baseUrl = 'http://IP             ';
         asu_process.getDefaultUserClass(req, function (error, response, body) {
             done();
             expect(body).to.eql(defaultUserClassResult);
@@ -60,11 +60,11 @@ describe('Asu test', function() {
         req.app.config = {};
         req.session = {};
         req.app.config.asuServer = {};
-        req.app.config.asuServer.baseUrl = 'http://IPADDRESS:POR';
+        req.app.config.asuServer.baseUrl = 'http://IP           ';
         req.app.config.vxSyncServer = {};
-        req.app.config.vxSyncServer.baseUrl = 'http://IPADDRESS:POR';
+        req.app.config.vxSyncServer.baseUrl = 'http://IP           ';
         req.app.config.jdsServer = {};
-        req.app.config.jdsServer.baseUrl = 'http://IP_ADDRESS:PORT';
+        req.app.config.jdsServer.baseUrl = 'http://IP             ';
         mock = sinon.spy(asu_process, 'getAsuPermission');
         asu_process.getAsuPermissionForActionNames(req, JSON.parse(details), function (asuError, asuResult) {
             done();

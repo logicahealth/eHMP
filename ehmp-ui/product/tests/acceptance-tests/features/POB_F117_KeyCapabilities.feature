@@ -12,15 +12,15 @@ Feature: F117 provides cross cutting UI concerns including: displaying the curre
 
   Scenario: Verify current patient identifying traits
     # Given user is logged into eHMP-UI
-    And user searches for and selects "Ten,Patient"
+    And user searches for and selects "Eight,Patient"
     And Overview is active
     When the user has selected All within the global date picker
-    Then POB "Ten,Patient" information is displayed in overview
+    Then POB "Eight,Patient" information is displayed in overview
       | field       | value         |
       | DOB         | 04/07/1935    |
       #| Age         | 79y           |
       | Gender      | Male          |
-      | SSN         | ***-**-0010   |
+      | SSN         | ***-**-0008   |
     And "Bottom Region" contains "eHMP version"
 #    And POB Bottom Region contains "eHMP version"
     And POB the user clicks the Patient Selection Button

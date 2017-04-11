@@ -18,7 +18,7 @@ exports.getResourceConfig = function() {
         name: 'cds-advice-read-status',
         path: '/read-status',
         put: require('./get-cds-advice-list').setReadStatus,
-        requiredPermissions: [],
+        requiredPermissions: ['read-clinical-reminder'],
         isPatientCentric: false
     }];
 };

@@ -10,6 +10,13 @@ var patientSearchResource = require('./patient-search-resource');
 
 module.exports = performPatientSearch;
 
+/**
+ * Retrieves patient information for any patients that
+ * match on a given full or partial name.
+ *
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ */
 function performPatientSearch(req, res) {
     req.logger.debug('full-name.performPatientSearch entering method');
     var fullName = req.param('name.full');
@@ -71,6 +78,12 @@ function performPatientSearch(req, res) {
     });
 }
 
+/**
+ * Transforms a name into a format that is valid for JDS searches.
+ *
+ * @param {string} fullName - The name to format.
+ * @return {string} result - The name in a JDS searchable format.
+ */
 function jdsNameWorkaround(fullName) {
     // DE274: JDS stores patient names without spaces between family and given name.
     // Get rid of spaces after commas to address this.

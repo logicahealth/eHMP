@@ -1,6 +1,6 @@
 define([
-    'main/ADK'
-], function(ADK) {
+    'moment'
+], function(moment) {
     'use strict';
 
     // ============================== Constants ===============================

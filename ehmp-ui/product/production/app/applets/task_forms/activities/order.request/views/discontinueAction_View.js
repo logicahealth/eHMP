@@ -13,7 +13,7 @@ define([
         });
 
         var ErrorFooterView = Backbone.Marionette.ItemView.extend({
-            template: Handlebars.compile('{{ui-button "OK" classes="btn-primary" title="Click button to close modal"}}'),
+            template: Handlebars.compile('{{ui-button "OK" classes="btn-primary btn-sm" title="Press enter to close"}}'),
             events: {
                 'click .btn-primary': function() {
                     ADK.UI.Alert.hide();
@@ -102,12 +102,21 @@ define([
                                     saveAlertView.show();
                                     ADK.UI.Workflow.hide();
                                     ADK.UI.Modal.hide();
+                                    // close the response form if it is open
+                                    var TrayView = ADK.Messaging.request("tray:writeback:actions:trayView");
+                                    if (TrayView) {
+                                        TrayView.$el.trigger('tray.reset');
+                                    }
+                                    // refresh the list of active tasks
+                                    ADK.Messaging.getChannel('tray-tasks').trigger('action:refresh');
+                                    // refresh the tasks and activities applets
+                                    ADK.Messaging.getChannel('activities').trigger('create:success');
                                     ADK.Messaging.getChannel('task_forms').request('activity_detail', {processId: self.model.get('processInstanceId')});
                                 },
                                 error: function(){
                                     var errorAlertView = new ADK.UI.Alert({
-                                        title: 'Save Failed (System Error)',
-                                        icon: 'icon-error',
+                                        title: 'Error',
+                                        icon: 'icon-circle-exclamation',
                                         messageView: ErrorMessageView,
                                         footerView: ErrorFooterView
                                     });

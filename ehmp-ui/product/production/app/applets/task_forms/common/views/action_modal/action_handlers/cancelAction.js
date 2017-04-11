@@ -1,6 +1,7 @@
 define([
+    'underscore',
     'app/applets/task_forms/common/views/action_modal/currentAppointment'
-], function(CurrentAppointment) {
+], function(_, CurrentAppointment) {
     'use strict';
 
     function createBodyView(model) {
@@ -57,10 +58,10 @@ define([
          *
          * Reference: https://wiki.vistacore.us/display/VACORE/Consult+Clinical+Object+Data+Specification
          */
-        var currentAppt = _.last(dd(model.get('clinicalObject'))('data')('appointments').val);
+        var currentAppt = _.last(_.get(model.get('clinicalObject'), 'data.appointments'));
 
         // Appt. Status: https://wiki.vistacore.us/pages/viewpage.action?pageId=15991103#ConsultAppointment(DataSpecification)-AppointmentStatus
-        if (dd(currentAppt)('status')('id').val === '2' /*scheduled*/ ) {
+        if (_.get(currentAppt, 'status.id') === '2' /*scheduled*/ ) {
             BodyView.items.push(CurrentAppointment.createView(model));
         }
         BodyView.items = BodyView.items.concat(CancellationReasonControls);

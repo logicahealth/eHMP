@@ -1,10 +1,10 @@
 define([
     'underscore',
+    'handlebars',
     'app/applets/vitals/util',
-    'hbs!app/applets/vitals/list/observedTemplate',
     'hbs!app/applets/vitalsObservationList/templates/vitalsObservationListBodyTemplate',
     'app/applets/vitalsObservationList/views/vitalsObservationListFooterView'
-], function(_, Util, observedDateTemplate, vitalsObservationListBodyTemplate, vitalsObservationListFooterView) {
+], function(_, Handlebars, Util, vitalsObservationListBodyTemplate, vitalsObservationListFooterView) {
     "use strict";
 
     var APPLET_EMPTY_TEXT = 'No Records Found';
@@ -21,7 +21,7 @@ define([
     dataGridOptions.columns = [{
         name: 'observedFormatted',
         label: 'Date',
-        template: observedDateTemplate,
+        template: Handlebars.compile('{{observedFormatted}}'),
         cell: 'handlebars',
         sortable: true,
     }];

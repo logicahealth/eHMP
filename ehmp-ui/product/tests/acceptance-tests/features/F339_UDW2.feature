@@ -83,7 +83,7 @@ Scenario: Delete alert should appear on any workspace being deleted - Cancel
     And the user creates a user defined workspace named "testdelete"
     And the user defined workspace name "testdelete" is listed
     When the user attempts to delete the user defined workspace named "testdelete"
-    Then an alert with the title "Delete Workspace" displays
+    Then an alert with the title "Delete" displays
     When the user chooses to cancel the Delete Workspace action
     Then the alert closes
     And the user defined workspace name "testdelete" is listed
@@ -99,13 +99,13 @@ Scenario: Delete alert should appear on any workspace being deleted - Delete
     Then the user deletes all user defined workspaces
     And the user creates a user defined workspace named "testdelete"
     When the user attempts to delete the user defined workspace named "testdelete"
-    Then an alert with the title "Delete Workspace" displays
+    Then an alert with the title "Delete" displays
     When the user chooses to complete the Delete Workspace action
     Then the user defined workspace named "testdelete" is not listed
 
 @US5023
 Scenario: Workspace title needs to accommodate 30 characters
-    And user searches for and selects "Eight,Patient"
+    And user searches for and selects "BCMA,EIGHT"
     Then Overview is active
     When the user clicks the Workspace Manager
     And the Workspace Manager is displayed
@@ -113,10 +113,10 @@ Scenario: Workspace title needs to accommodate 30 characters
     When the user creates a user defined workspace and sets the title to a string of length 30
     Then the user defined workspace name is listed
 
-@US4514
+@US4514 @DE5904
 Scenario: UDW:  Deleting an active work space
     # Given user is logged into eHMP-UI
-    And user searches for and selects "Eight,Patient"
+    And user searches for and selects "BCMA,EIGHT"
     Then Overview is active
     When the user clicks the Workspace Manager
     And the Workspace Manager is displayed
@@ -124,16 +124,26 @@ Scenario: UDW:  Deleting an active work space
     And the user creates a user defined workspace named "testdeleteactive"
     And the user defined workspace name "testdeleteactive" is listed
     When the user sets the "testdeleteactive" as the active workspace 
+
+    # # Test fails (only in phantomjs) if 'user' deletes workspace without navigating to it at least once
+    # When the user customizes the "testdeleteactive" workspace
+    # And the user adds an summary "lab_results_grid" applet to the user defined workspace
+    # And the user selects done to complete customizing the user defined workspace
+    # Then the "TESTDELETEACTIVE" screen is active
+    # When the user clicks the Workspace Manager
+    # And the Workspace Manager is displayed
+
     When the user attempts to delete the user defined workspace named "testdeleteactive"
-    Then an alert with the title "Delete Workspace" displays
+    Then an alert with the title "Delete" displays
     When the user chooses to complete the Delete Workspace action
     Then the user defined workspace named "testdelete" is not listed
     And the workspace named "summary" is the active workspace
+    And the user closes the workspace manager to save workspace updates
 
-@US4444
+@US4444 
 Scenario: UDW:  Gridsterize Pre-defined Workspaces
     # Given user is logged into eHMP-UI
-    And user searches for and selects "Eight,Patient"
+    And user searches for and selects "BCMA,EIGHT"
     Then Overview is active
     When the user clicks the Workspace Manager
     Then the Workspace Manager is displayed

@@ -2,7 +2,7 @@ define([
     'moment',
     'pattern-fill',
     'grouped_categories'
-], function() {
+], function(moment) {
     "use strict";
 
     (function(H) {

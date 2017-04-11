@@ -100,31 +100,6 @@ define(['backbone', 'jasminejquery', 'app/applets/immunizations/writeback/utils/
             });
         });
 
-        describe('Parse utility function for getting ordering providers', function(){
-            it('Getting ordering providers with no response should give empty array', function(){
-                expect(ParseUtil.getOrderingProviderList({})).toEqual([]);
-            });
-
-            it('Getting ordering provider with valid response', function(){
-                var response = {
-                    data: {
-                        items:
-                            [
-                                {
-                                    name: 'PROGRAMMER,ONE',
-                                    uid: 'urn:va:provider:9E7A:1234'
-                                }
-                            ]
-                    }
-                };
-
-                var orderingProviders = ParseUtil.getOrderingProviderList(response);
-                expect(orderingProviders.length).toEqual(1);
-                expect(orderingProviders[0].label).toEqual('PROGRAMMER,ONE');
-                expect(orderingProviders[0].value).toEqual('urn:va:provider:9E7A:1234');
-            });
-        });
-
         describe('Parse utility function for getting series list', function(){
             it('Getting list with no max series value should give default list', function(){
                 var seriesList = ParseUtil.getSeriesList('');

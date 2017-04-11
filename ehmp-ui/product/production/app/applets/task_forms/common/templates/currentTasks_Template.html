@@ -1,32 +1,47 @@
 <div class="row">
     <div class="col-xs-12">
-        <h5 class="bottom-border-grey">Current Tasks</h5>
+        <h5 class="bottom-border-grey top-margin-lg">Current Tasks</h5>
     </div>
 </div>
 {{#if tasks}}
-<table class="table table-hover activity-detail-task-table">
-    <caption class="sr-only">This table represents tasks for this activity categorized by priority, due date, and title.</caption>
-    <thead>
-        <tr>
-            <th class="renderable" scope="col"><span class="sr-only">Status</span></th>
-            <th class="renderable" scope="col" col-name="observed">Priority</th>
-            <th class="renderable" scope="col" col-name="typeName">Due</th>
-            <th class="renderable" scope="col" col-name="flag">Title</th>
-        </tr>
-    </thead>
-    <tbody>
-        {{#each tasks}}
-        <tr data-taskid="{{TASKID}}">
-            <td>{{#ifExp dueTextValue "!==" 1}} {{#if ACTIVE}}<i class="icon-action-arrow color-primary-dark"><span class="sr-only">This activity has an action</span></i> {{/if}} {{/ifExp}}</td>
-            <td>{{priorityFormatted}}</td>
-            <td>{{dueText}}</td>
-            <td>{{TASKNAME}}</td>
-        </tr>
-        {{/each}}
-        {{else}}
-        <tr>
-            <td col-span="4">None</td>
-        </tr>
-    </tbody>
-</table>
+<div class="faux-table-container activity-detail-task-table">
+    <div class="sr-only">This table represents tasks for this activity categorized by priority, due status, and title.</div>
+    <div class="faux-table">
+        <div class="header table-row bottom-border-grey">
+            <div class="table-cell flex-width-1 right-border-no left-border-grey">
+                <div><span class="sr-only">Status</span></div>
+            </div>
+            <div class="table-cell flex-width-6 left-border-no right-border-grey">
+                <div><span class="color-primary font-size-12"><strong>Priority</strong></span></div>
+            </div>
+            <div class="table-cell flex-width-3 right-border-grey">
+                <div><span class="color-primary font-size-12"><strong>Due</strong></span></div>
+            </div>
+            <div class="table-cell flex-width-6 right-border-grey">
+                <div><span class="color-primary font-size-12"><strong>Title</strong></span></div>
+            </div>
+        </div>
+        <div class="body">
+            {{#each tasks}}
+            <a href="#" class="table-row" data-taskid="{{TASKID}}" title="Press enter to view task">
+                <div class="table-cell flex-width-1 left-border-grey">
+                    <span>{{#unless ../readOnly}}{{#ifExp dueTextValue "!==" 1}} {{#if ACTIVE}}<i class="icon-action-arrow color-primary-dark"><span class="sr-only">This activity has an action</span></i> {{/if}} {{/ifExp}}{{/unless}}</span>
+                </div>
+                <div class="table-cell flex-width-6">
+                    <span>{{priorityFormatted}}</span>
+                </div>
+                <div class="table-cell flex-width-3">
+                    <span>{{dueText}}</span>
+                </div>
+                <div class="table-cell flex-width-6 right-border-grey">
+                    <span>{{TASKNAME}}</span>
+                </div>
+            </a>
+            {{/each}} {{else}}
+            <div class="table-cell">
+                <span>None</span>
+            </div>
+        </div>
+    </div>
+</div>
 {{/if}}

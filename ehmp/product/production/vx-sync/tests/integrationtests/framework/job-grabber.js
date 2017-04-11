@@ -9,10 +9,10 @@ var BeanstalkClient = require(global.VX_JOBFRAMEWORK).BeanstalkClient;
 
 
 var defaultConfig = {
-	host: '127.0.0.1',
-	port: 5000,
-	tubenames: ['vx-sync'],
-	reserveTimeout: 0
+    host: '127.0.0.1',
+    port: 5000,
+    tubenames: ['vx-sync'],
+    reserveTimeout: 0
 };
 
 /*
@@ -44,69 +44,71 @@ first parameter with the second parameter having the value of an array containin
 any jobs grabbed before the error occurred.
 */
 function grabJobsFromTubes(logger, host, port, tubenames, reserveTimeout, callback) {
-	logger.debug('job-grabber.grabJobsFromTubes() %s:%s [%s]', host, port, tubenames);
+    logger.debug('job-grabber.grabJobsFromTubes() %s:%s [%s]', host, port, tubenames);
 
-	var config = {};
+    var config = {};
 
-	if(arguments.length === 2) {
-		config = {};
-		callback = arguments[1];
-	} else if(arguments.length === 3) {
-		config = arguments[1];
-		callback = arguments[2];
-	} else {
-		config = {};
+    if (arguments.length === 2) {
+        config = {};
+        callback = arguments[1];
+    } else if (arguments.length === 3) {
+        config = arguments[1];
+        callback = arguments[2];
+    } else {
+        config = {};
 
-		if(host) {
-			config.host = host;
-		}
+        if (host) {
+            config.host = host;
+        }
 
-		if(port) {
-			config.port = port;
-		}
+        if (port) {
+            config.port = port;
+        }
 
-		if(tubenames) {
-			config.tubenames = tubenames;
-		}
+        if (tubenames) {
+            config.tubenames = tubenames;
+        }
 
-		if(reserveTimeout || reserveTimeout === 0) {
-			config.reserveTimeout = reserveTimeout;
-		}
-	}
+        if (reserveTimeout || reserveTimeout === 0) {
+            config.reserveTimeout = reserveTimeout;
+        }
+    }
 
-	config = _.defaults(config, defaultConfig);
+    config = _.defaults(config, defaultConfig);
 
-	if (!_.isArray(config.tubenames)) {
-		config.tubenames = [config.tubenames];
-	}
+    if (!_.isArray(config.tubenames)) {
+        config.tubenames = [config.tubenames];
+    }
 
-	var client = new BeanstalkClient(logger, config.host, config.port);
+    var client = new BeanstalkClient(logger, config.host, config.port);
 
-	client.connect(function(error) {
-		if (error) {
-			logger.warn('job-grabber.grabJobsFromTubes() Unable to connect to beanstalk. ERROR: %j', error);
-			return callback(error);
-		}
+    client.connect(function(error) {
+        if (error) {
+            logger.warn('job-grabber.grabJobsFromTubes() Unable to connect to beanstalk. ERROR: %j', error);
+            return callback(error);
+        }
 
-		client.on('error', function(error) {
-			logger.warn('error with connection. ERROR: %j', error);
-			client.end();
-			callback(error);
-		});
+        client.on('error', function(error) {
+            logger.warn('error with connection. ERROR: %j', error);
+            client.end();
+            callback(error);
+        });
 
         return processTubes(client, logger, config.tubenames, callback);
-	});
+    });
 }
+
 function processTubes(client, logger, tubenames, callback) {
     var previousTubeName = null;
-    var results =[];
+    var results = [];
 
     async.eachSeries(tubenames,
         function(tubename, eachCallback) {
             async.series([
                     watchTube.bind(null, client, logger, tubename),
                     ignoreTube.bind(null, client, logger, previousTubeName),
-                    retrieveJobs.bind(null, client, logger, tubename)],
+                    retrieveJobs.bind(null, client, logger, tubename)
+                ],
                 function(error, result) {
                     if (error) {
                         logger.warn('job-grabber.processTubes() Unable to process tubes. ERROR: %j', error);
@@ -119,8 +121,7 @@ function processTubes(client, logger, tubenames, callback) {
 
                     previousTubeName = tubename;
                     setTimeout(eachCallback, 0);
-                }
-            )
+                });
         },
         function(error) {
             client.end();
@@ -157,11 +158,16 @@ function ignoreTube(client, logger, tubename, callback) {
 function retrieveJobs(client, logger, tubename, callback) {
     var done = true;
 
-    var result = {tubename: tubename, jobs: []};
+    var result = {
+        tubename: tubename,
+        jobs: []
+    };
 
     async.whilst(
-        function () { return done; },
-        function (loopCallback) {
+        function() {
+            return done;
+        },
+        function(loopCallback) {
             client.reserve_with_timeout(0, function(error, beanstalkJobId, beanstalkJobPayload) {
                 if (error && error !== 'TIMED_OUT' && error !== 'DEADLINE_SOON') {
                     logger.warn('job-grabber.retrieveJobs(): Error trying to retrieve message from tube. ERROR: %j', error);
@@ -190,22 +196,22 @@ function retrieveJobs(client, logger, tubename, callback) {
                 });
             });
         },
-        function (error) {
+        function(error) {
             return setTimeout(callback, 0, error, result);
         }
     );
 }
 
 function parseJob(payload) {
-	var job = payload.toString();
+    var job = payload.toString();
 
-	try {
-		job = JSON.parse(job);
-	} catch (error) {
-		// do nothing and accept default
-	}
+    try {
+        job = JSON.parse(job);
+    } catch (error) {
+        // do nothing and accept default
+    }
 
-	return job;
+    return job;
 }
 
 module.exports = grabJobsFromTubes;

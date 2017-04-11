@@ -103,31 +103,21 @@ When(/^the client requests medication for the patient "(.*?)" in RDK format$/) d
 end
 
 When(/^the client requests labs for the patient "(.*?)" in FHIR format$/) do |pid|
-  temp = RDKQuery.new('diagnosticreport-diagnosticreport')
-  temp.add_parameter("subject.identifier", pid)
-  temp.add_parameter("domain", "lab")
-  temp.add_acknowledge("true")
-  p temp.path
-  @response = HTTPartyRDK.get(temp.path)
+  temp = QueryRDKCDSfhir.new
+  path = temp.path + "/patient/#{pid}/diagnosticreport?domain=lab"
+  @response = HTTPartyRDK.get(path)
 end
 
 When(/^the client requests "(.*?)" labs for the patient "(.*?)" in FHIR format$/) do |limit, pid|
-  temp = RDKQuery.new('diagnosticreport-diagnosticreport')
-  temp.add_parameter("subject.identifier", pid)
-  temp.add_parameter("domain", "lab")
-  temp.add_acknowledge("true")
-  temp.add_parameter("_count", limit)
-  p temp.path
-  @response = HTTPartyRDK.get(temp.path)
+  temp = QueryRDKCDSfhir.new
+  path = temp.path + "/patient/#{pid}/diagnosticreport?domain=lab&_count=#{limit}"
+  @response = HTTPartyRDK.get(path)
 end
 
 When(/^the client requests radiology report results for the patient "(.*?)" in FHIR format$/) do |pid|
-  temp = RDKQuery.new('diagnosticreport-diagnosticreport')
-  temp.add_parameter("subject.identifier", pid)
-  temp.add_parameter("domain", "rad")
-  temp.add_acknowledge("true")
-  p temp.path
-  @response = HTTPartyRDK.get(temp.path)
+  temp = QueryRDKCDSfhir.new
+  path = temp.path + "/patient/#{pid}/diagnosticreport?domain=rad"
+  @response = HTTPartyRDK.get(path)
 end
 
 When(/^the client requests "(.*?)" radiology report results for the patient "(.*?)" in FHIR format$/) do |limit, pid|
@@ -141,35 +131,27 @@ When(/^the client requests "(.*?)" radiology report results for the patient "(.*
 end
 
 When(/^the client requests radiology report results for the patient "(.*?)" in FHIR format with no domain param$/) do |pid|
-  temp = RDKQuery.new('diagnosticreport-diagnosticreport')
-  temp.add_parameter("subject.identifier", pid)
-  temp.add_acknowledge("true")
-  p temp.path
-  @response = HTTPartyRDK.get(temp.path)
+  temp = QueryRDKCDSfhir.new
+  path = temp.path + "/patient/#{pid}/diagnosticreport?domain=lab"
+  @response = HTTPartyRDK.get(path)
 end
 
 When(/^the client requests out-patient medication results for the patient "(.*?)" in FHIR format$/) do |pid|
-  temp = RDKQuery.new('medicationdispense-getMedicationDispense')
-  temp.add_parameter("subject.identifier", pid)
-  temp.add_acknowledge("true")
-  p temp.path
-  @response = HTTPartyRDK.get(temp.path)
+  temp = QueryRDKCDSfhir.new
+  path = temp.path + "/medicationdispense?subject.identifier=#{pid}"
+  @response = HTTPartyRDK.get(path)
 end
 
 When(/^the client requests in-patient medication results for the patient "(.*?)" in FHIR format$/)  do |pid|
-  temp = RDKQuery.new('medicationadministration-medicationAdministration')
-  temp.add_parameter("subject.identifier", pid)
-  temp.add_acknowledge("true")
-  p temp.path
-  @response = HTTPartyRDK.get(temp.path)
+  temp = QueryRDKCDSfhir.new
+  path = temp.path + "/medicationadministration?subject.identifier=#{pid}"
+  @response = HTTPartyRDK.get(path)
 end
 
 When(/^the client requests out-patient medication statement for the patient "(.*?)" in FHIR format$/) do |pid|
-  temp = RDKQuery.new('medicationdstatement-getMedicationStatement')
-  temp.add_parameter("subject.identifier", pid)
-  temp.add_acknowledge("true")
-  p temp.path
-  @response = HTTPartyRDK.get(temp.path)
+  temp = QueryRDKCDSfhir.new
+  path = temp.path + "/medicationstatement?subject.identifier=#{pid}"
+  @response = HTTPartyRDK.get(path)
 end
 
 When(/^the client requests "(.*?)" out-patient medication results for the patient "(.*?)" in FHIR format$/) do |limit, pid|
@@ -182,10 +164,18 @@ When(/^the client requests "(.*?)" out-patient medication results for the patien
 end
 
 When(/^the client requests "(.*?)" in-patient medication results for the patient "(.*?)" in FHIR format$/)  do |limit, pid|
-  temp = RDKQuery.new('medicationadministration-medicationAdministration')
-  temp.add_parameter("subject.identifier", pid)
-  temp.add_acknowledge("true")
-  temp.add_parameter("limit", limit)
-  p temp.path
-  @response = HTTPartyRDK.get(temp.path)
+  temp = QueryRDKCDSfhir.new
+  path = temp.path + "/medicationadministration?subject.identifier=" + "#{pid}" + "&_count=" + "#{limit}"
+  type = { "Content-Type" => "application/json" }
+  @response = HTTPartyRDK.get(path)
+  json = JSON.parse(@response.body)
+  i = 0
+  while i < json["entry"].size
+    @medicationadministration = json["entry"][i]["resource"]["resourceType"]
+    expect(@medicationadministration.include? "MedicationAdministration").to eq(true)
+    p @medicationadministration
+    i += 1
+  end
+  p i
+  expect(i).to eq(limit.to_i)
 end

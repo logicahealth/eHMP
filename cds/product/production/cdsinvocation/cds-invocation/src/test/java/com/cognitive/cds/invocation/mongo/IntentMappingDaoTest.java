@@ -30,12 +30,12 @@ import com.cognitive.cds.invocation.execution.model.Remediation;
 import com.cognitive.cds.invocation.model.IntentMapping;
 import com.cognitive.cds.invocation.model.InvocationMapping;
 import com.cognitive.cds.invocation.model.Rule;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -56,23 +56,25 @@ public class IntentMappingDaoTest {
 
 	private static MongoDbDao mongoDbDao;
 	private static IntentMappingDao intentMappingDao;
-	private static Logger logger = Logger.getLogger(IntentMappingDaoTest.class.getName());
+	private static ApplicationContext context;
+	private static final Logger LOGGER = LoggerFactory.getLogger(IntentMappingDaoTest.class);
+	
 
 	@BeforeClass
 	public static void beforeClass() {
 		try {
-			ApplicationContext context = new ClassPathXmlApplicationContext("classpath:mongodb-dao-context.xml");
+			context = new ClassPathXmlApplicationContext("classpath:mongodb-dao-context.xml");
 			mongoDbDao = (MongoDbDao) context.getBean("mongoDbDao");
 			intentMappingDao = new IntentMappingDao();
 			intentMappingDao.setMongoDbDao(mongoDbDao);
 		} catch (Exception e) {
-			logger.log(Level.SEVERE, "Error loading connection properties.  Cannot connect to MongoDB");
+			LOGGER.error("Error loading connection properties.  Cannot connect to MongoDB");
 		}
 	}
 
 	@Ignore("a service integration test")
 	@Test
-	public void testCreateIntentMapping() {
+	public void testCreateIntentMapping() throws JsonProcessingException {
 		String id = new String();
 		IntentMapping im = createIntentMappingObject();
 		try {
@@ -80,29 +82,22 @@ public class IntentMappingDaoTest {
 		} catch (JsonProcessingException jpe) {
 			jpe.printStackTrace();
 		}
-		logger.info(id);
+		LOGGER.info(id);
 
 		Assert.assertNotNull(id);
 
 		String savedIntent = intentMappingDao.getIntent(im.getName()).getName();
 		Assert.assertNotNull(savedIntent);
 
-		// Clean up after the test
-		try {
-			intentMappingDao.deleteIntent(savedIntent);
-		} catch (JsonProcessingException e) {
-			e.printStackTrace();
-		}
+		intentMappingDao.deleteIntent(savedIntent);
 	}
 
 	@Ignore("a service integration test")
 	@Test
 	public void testUpdateIntentMapping() {
-		String id = new String();
 		IntentMapping im = null;
 		try {
 			im = createIntentMappingObject();
-			id = intentMappingDao.createIntent(im);
 			IntentMapping imNew = intentMappingDao.getIntent(im.getName());
 			im.set_id(imNew.get_id());
 			im.setName("Hypertension");
@@ -112,21 +107,19 @@ public class IntentMappingDaoTest {
 			// Clean up after test
 			intentMappingDao.deleteIntent(im.getName());
 		} catch (JsonProcessingException e) {
-			logger.log(Level.SEVERE, e.getMessage());
+			LOGGER.error(e.getMessage());
 		}
 	}
 	
 	@Ignore("a service integration test")
 	@Test
 	public void testGetAll() {
-		String id = new String();
-		IntentMapping im = null;
 		System.out.println(intentMappingDao.getAll());
 	}
 	
 	@Ignore("a service integration test")
 	@Test
-	public void testCreateIntentMappingWithRemediation() {
+	public void testCreateIntentMappingWithRemediation() throws JsonProcessingException {
 		String id = new String();
 		IntentMapping im = createIntentMappingWithRemediationObject();
 		try {
@@ -134,19 +127,14 @@ public class IntentMappingDaoTest {
 		} catch (JsonProcessingException jpe) {
 			jpe.printStackTrace();
 		}
-		logger.info(id);
+		LOGGER.info(id);
 
 		Assert.assertNotNull(id);
 
 		String savedIntent = intentMappingDao.getIntent(im.getName()).getName();
 		Assert.assertNotNull(savedIntent);
 
-		// Clean up after the test
-		try {
-			intentMappingDao.deleteIntent(savedIntent);
-		} catch (JsonProcessingException e) {
-			e.printStackTrace();
-		}
+		intentMappingDao.deleteIntent(savedIntent);
 	}
 
 

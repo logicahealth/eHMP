@@ -36,7 +36,7 @@ function getResourceConfig() {
                 return true;
             }
         ],
-        requiredPermissions: [],
+        requiredPermissions: ['read-vler-toc'],
         isPatientCentric: true,
     }];
 }

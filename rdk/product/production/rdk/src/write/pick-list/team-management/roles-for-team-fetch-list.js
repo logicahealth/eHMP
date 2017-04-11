@@ -20,7 +20,7 @@ module.exports.fetch = function(logger, configuration, callback, params) {
 
     var bindVars = [teamID];
 
-    logger.debug("roles picklist: query = " + query);
+    logger.trace("roles picklist: query = " + query);
     pcmm.doQueryWithParams(pcmmDbConfig, query, bindVars, function(err, rows) {
         logger.trace({err: err, rows: rows}, 'roles picklist');
         if (err) {

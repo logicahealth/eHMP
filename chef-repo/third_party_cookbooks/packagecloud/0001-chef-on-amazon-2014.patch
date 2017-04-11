@@ -29,7 +29,7 @@ index a389d99..fbebe56 100644
 +  driver_plugin: ec2
 +  driver_config:
 +    image_id: ami-b5a7ea85
-+    usernamne       UN
++    username: ec2-user
 +    aws_access_key_id: <%= ENV['AWS_ACCESS_KEY_ID'] %>
 +    aws_secret_access_key: <%= ENV['AWS_SECRET_ACCESS_KEY'] %>
 +    aws_ssh_key_id: <%= ENV['AWS_KEYPAIR_NAME'] %>

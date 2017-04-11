@@ -9,6 +9,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -108,6 +109,8 @@ public class VlerDocumentUtil {
             Source xslStreamSource = new StreamSource(xsl.openStream(), xsl.toString());
 
             TransformerFactory factory = TransformerFactory.newInstance();
+			factory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+
             Transformer transformer = factory.newTransformer(xslStreamSource);
 
             outputWriter = new StringWriter();
@@ -120,7 +123,9 @@ public class VlerDocumentUtil {
             throw new VlerDocumentUtilException("An error occurred while transforming XML.", e);
         } finally {
             try {
-                outputWriter.close();
+                if (outputWriter != null) {
+                    outputWriter.close();
+                }
             }catch (IOException ie) {
                 throw new VlerDocumentUtilException("An error occurred while closing writer", ie);
             }
@@ -139,9 +144,10 @@ public class VlerDocumentUtil {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 
             DocumentBuilder builder = factory.newDocumentBuilder();
+            factory.setFeature("http://xml.org/sax/features/validation", true);
             factory.setFeature("http://xml.org/sax/features/external-general-entities", false);
             factory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
-            
+
             InputSource is = new InputSource(new ByteArrayInputStream(xmlDocumentBytes));
 
             return builder.parse(is);

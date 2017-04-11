@@ -1,6 +1,6 @@
 'use strict';
 var rdk = require('../../core/rdk');
-var dd = require('drilldown');
+var _ = require('lodash');
 var fs = require('fs');
 var http = rdk.utils.http;
 var patientPhotoResource = require('./patient-photo-resource');
@@ -74,7 +74,7 @@ describe('Patient Photo Resource Test', function() {
             app: {
                 config: {
                     vhic: {
-                        baseUrl: 'http://IP_ADDRESS/vhicSend',
+                        baseUrl: 'http://IP        /vhicSend',
                         search: {
                             path: 'cardi-id'
                         }
@@ -84,8 +84,8 @@ describe('Patient Photo Resource Test', function() {
                     },
                     vistaSites: {
                         '9E7A': {
-                            accessCode: 'PW',
-                            verifyCode: 'pu1234!!'
+                            accessCode: 'PW    ',
+                            verifyCode: 'PW    !!'
                         }
                     }
                 }
@@ -152,7 +152,7 @@ describe('Patient Photo Resource Test', function() {
             app: {
                 config: {
                     vhic: {
-                        baseUrl: 'http://IP_ADDRESS/vhicSend',
+                        baseUrl: 'http://IP        /vhicSend',
                         search: {
                             path: 'cardi-id'
                         }
@@ -162,8 +162,8 @@ describe('Patient Photo Resource Test', function() {
                     },
                     vistaSites: {
                         '9E7A': {
-                            accessCode: 'PW',
-                            verifyCode: 'PW'
+                            accessCode: 'PW    ',
+                            verifyCode: 'PW    !!'
                         }
                     }
                 }
@@ -231,7 +231,7 @@ describe('Patient Photo Resource Test', function() {
             app: {
                 config: {
                     vhic: {
-                        baseUrl: 'http://IP_ADDRESS/vhicSend',
+                        baseUrl: 'http://IP        /vhicSend',
                         search: {
                             path: 'cardi-id'
                         }
@@ -241,8 +241,8 @@ describe('Patient Photo Resource Test', function() {
                     },
                     vistaSites: {
                         '9E7A': {
-                            accessCode: 'PW',
-                            verifyCode: 'PW'
+                            accessCode: 'PW    ',
+                            verifyCode: 'PW    !!'
                         }
                     }
                 }
@@ -300,20 +300,15 @@ describe('Patient Photo Resource Test', function() {
 
     describe('getVHICHttpConfig', function() {
         var req;
-        var certificateHeader = /^-+BEGIN.*?(KEY|CERTIFICATE)-+/;
-        var certificateContents = new Buffer('-----BEGIN CERTIFICATE-----\nfoo\n-----END CERTIFICATE-----\n');
         beforeEach(function() {
             req = {};
-            dd(req)('app')('config')('vhic')('search')('path').set('/vhic');
-            dd(req)('app')('config')('vhic')('baseUrl').set('https://localhost:8896');
-            dd(req)('app')('config')('logger').set(
+            _.set(req, 'app.config.vhic.search.path', '/vhic');
+            _.set(req, 'app.config.vhic.baseUrl', 'https://localhost:8896');
+            _.set(req, 'app.config.logger',
                 sinon.stub(bunyan.createLogger({
                     name: 'patient-photo-resource-spec.js'
                 }))
             );
-            sinon.stub(fs, 'readFileSync', function() {
-                return certificateContents;
-            });
         });
         it('creates a config object', function() {
             var config = patientPhotoResource._getVHICHttpConfig(req);
@@ -328,32 +323,6 @@ describe('Patient Photo Resource Test', function() {
                     'Content-Type': 'text/xml; charset=utf-8'
                 }
             });
-        });
-        it('replaces key path with key contents', function() {
-            dd(req)('app')('config')('vhic')('agentOptions')('key').set('/foo/foo.key');
-            var config = patientPhotoResource._getVHICHttpConfig(req);
-            expect(config.agentOptions.key).to.match(certificateHeader);
-        });
-        it('replaces crt path with key contents', function() {
-            dd(req)('app')('config')('vhic')('agentOptions')('cert').set('/foo/foo.crt');
-            var config = patientPhotoResource._getVHICHttpConfig(req);
-            expect(config.agentOptions.cert).to.match(certificateHeader);
-        });
-        it('replaces ca path with key contents', function() {
-            dd(req)('app')('config')('vhic')('agentOptions')('ca').set('/foo/foo.cer');
-            var config = patientPhotoResource._getVHICHttpConfig(req);
-            expect(config.agentOptions.ca).to.match(certificateHeader);
-        });
-        it('replaces ca array with key contents', function() {
-            dd(req)('app')('config')('vhic')('agentOptions')('ca').set([
-                '/foo/foo.cer',
-                '/foo/bar.cer',
-                '/foo/baz.cer'
-            ]);
-            var config = patientPhotoResource._getVHICHttpConfig(req);
-            expect(config.agentOptions.ca[0]).to.match(certificateHeader);
-            expect(config.agentOptions.ca[1]).to.match(certificateHeader);
-            expect(config.agentOptions.ca[2]).to.match(certificateHeader);
         });
     });
 

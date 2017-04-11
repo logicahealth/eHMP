@@ -2,9 +2,8 @@ define([
     'backbone',
     'app/applets/appointments/util',
     'app/applets/appointments/modal/modalView',
-    'app/applets/appointments/modal/modalHeaderView',
     'app/applets/appointments/toolBar/toolBarView',
-], function(Backbone, Util, ModalView, modalHeader, ToolBarView) {
+], function(Backbone, Util, ModalView, ToolBarView) {
     'use strict';
     //Data Grid Columns
     var displayNameCol;
@@ -51,29 +50,20 @@ define([
         hoverTip: 'visits_location'
     };
     var statusCol = {
-        name: 'appointmentStatus',
+        name: 'status',
         label: 'Status',
-        flexWidth: 'flex-width-1_5',
-        cell: Backgrid.StringCell.extend ({
-            className: 'string-cell flex-width-1_5'
-        }),
-        hoverTip: 'visits_status'
-    };
-    var providerCol = {
-        name: 'providerDisplayName',
-        label: 'Provider',
         flexWidth: 'flex-width-2',
         cell: Backgrid.StringCell.extend ({
             className: 'string-cell flex-width-2'
         }),
-        hoverTip: 'visits_provider'
+        hoverTip: 'visits_status'
     };
     var facilityCol = {
         name: 'facilityMoniker',
         label: 'Facility',
-        flexWidth: 'flex-width-2',
+        flexWidth: 'flex-width-1_5',
         cell: Backgrid.StringCell.extend ({
-            className: 'string-cell flex-width-2'
+            className: 'string-cell flex-width-1_5'
         }),
         hoverTip: 'visits_facility'
     };
@@ -100,13 +90,12 @@ define([
 
     var summaryColumns = [dateTimeCol, categoryCol, locationCol, statusCol, facilityCol];
 
-    var fullScreenColumns = [dateTimeColFull, categoryCol, locationCol, statusCol, typeCol, providerCol, reasonCol, facilityCol];
+    var fullScreenColumns = [dateTimeColFull, categoryCol, locationCol, statusCol, typeCol, reasonCol, facilityCol];
 
     //Collection fetchOptions
     var fetchOptions = {
         pageable: true,
         resourceTitle: 'patient-record-appointment',
-        // resourceTitle: 'visits-appointments',
         cache: true,
         criteria: {
             filter: 'and(ne(categoryName,"Admission"),ne(locationOos,true))'
@@ -115,9 +104,9 @@ define([
             parse: function(response) {
                 response = Util.getDateTimeFormatted(response);
                 response = Util.getFacilityColor(response);
-                response = Util.getProviderDisplayName(response);
                 response = Util.getFormattedDisplayTypeName(response);
                 response = Util.getFormattedDecription(response);
+                response = Util.getFormattedStatus(response);
                 if (response.reason && !response.reasonName) {
                     response.reasonName = response.reason;
                 }
@@ -180,7 +169,7 @@ define([
                 siteMenuItems: siteMenuItems,
                 instanceId : instanceId
             });
-
+            dataGridOptions.filterFields = _.pluck(fullScreenColumns, 'name');
             if (this.columnsViewType === "expanded") {
                 dataGridOptions.columns = fullScreenColumns;
                 this.isFullscreen = true;
@@ -228,7 +217,7 @@ define([
 
             //Row click event handler
             dataGridOptions.onClickRow = function(model, event) {
-                self.onClickRowHandler(model, event, dataGridOptions.collection);
+                self.getDetailsModal(model, event);
             };
 
 
@@ -266,25 +255,21 @@ define([
         onRender: function() {
             _super.onRender.apply(this, arguments);
         },
-        onClickRowHandler: function(model, event, collection) {
-            //event.preventDefault();
+        getDetailsModal: function(model, event) {
             var view = new ModalView({
                 model: model,
-                collection: collection
             });
 
             var modalOptions = {
                 'title': Util.getModalTitle(model),
                 'size': 'normal',
-                'headerView': modalHeader.extend({
-                    model: model,
-                    theView: view
-                })
+                'nextPreviousCollection': this.dataGridOptions.collection
             };
 
             var modal = new ADK.UI.Modal({
                 view: view,
-                options: modalOptions
+                options: modalOptions,
+                callbackView: this,
             });
             modal.show();
         }

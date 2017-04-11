@@ -597,13 +597,13 @@
         "negationInd": false,
         "problem": [
           {
-            "display": "headache associated with menstrual cycle",
+            "display": "headache associated with exercise",
             "primary": true,
             "code": "56",
             "system": "2.16.840.1.113883.6.26"
           },
           {
-            "display": "headache associated with menstrual cycle",
+            "display": "headache associated with exercise",
             "primary": false,
             "code": "346.40",
             "system": "2.16.840.1.113883.6.103"

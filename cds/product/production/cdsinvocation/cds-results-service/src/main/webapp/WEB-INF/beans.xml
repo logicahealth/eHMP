@@ -3,12 +3,14 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:cxf="http://cxf.apache.org/core"
 	xmlns:jaxws="http://cxf.apache.org/jaxws" xmlns:jaxrs="http://cxf.apache.org/jaxrs"
 	xmlns:context="http://www.springframework.org/schema/context" xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:util="http://www.springframework.org/schema/util"
 	xsi:schemaLocation="
 	http://cxf.apache.org/core http://cxf.apache.org/schemas/core.xsd
 	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 	http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd
 	http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd
-        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 
 	<context:annotation-config />
 	<import resource="classpath:META-INF/cxf/cxf.xml" />
@@ -24,8 +26,6 @@
 	<bean
 		class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor" />
 
-	<!-- bean class="org.springframework.web.context.support.ServletContextPropertyPlaceholderConfigurer"/ -->
-	<!-- bean class="org.springframework.beans.factory.config.PreferencesPlaceholderConfigurer"/ -->
 
 	<bean
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
@@ -33,7 +33,6 @@
 		<property name="locations">
 			<list>
 				 <value>classpath:cds-results-service.properties</value>
-                <value>file:${catalina.home}/shared/classes/cds-results-service.properties</value>
 			</list>
 		</property>
 	</bean>
@@ -44,9 +43,13 @@
 	</bean>
 
 	<!-- Add as a bean reference for Mongo DB access -->
-	<bean id="mongoDbDao" class="com.cognitive.cds.invocation.mongo.MongoDbDao">
-		<constructor-arg name="mongoDbUrl" value="${mongo-db-url}" />
-	</bean>
+     <bean id="mongoDbDao" class="com.cognitive.cds.invocation.mongo.MongoDbDao" >
+		<property name="mongo_host" value="${mongo_host}" />
+		<property name="mongo_port" value="${mongo_port}" />
+		<property name="mongo_username" value="${mongo_username}" />
+		<property name="mongo_password" value="${mongo_password}" />
+		<property name="mongo_connectionsPerHost" value="${mongo_connectionsPerHost}" />
+    </bean>
 
     <!-- Add as a bean reference for CRS access -->
     <bean id="crsClient" class="com.cognitive.cds.invocation.crs.CRSClient">
@@ -116,6 +119,7 @@
 
 	<bean id="intentLookup" class="com.cognitive.cds.invocation.mongo.IntentMappingDao">
 		<property name="mongoDbDao" ref="mongoDbDao" />
+		<property name="deployDefaultIntents" value="${deployDefaultIntents:true}" />
 	</bean>
 
 	<bean id="engineInfoDao" class="com.cognitive.cds.invocation.mongo.EngineInfoDao">
@@ -276,8 +280,8 @@
 									<property name="dataQueries">
                                         <list>
                                             <value>patient/##SUBJECT.ID##</value>
-                                            <value>patient/##SUBJECT.ID##/observation?code=8302-2&amp;_sort:dsc=date&amp;_count=1&amp;_tag=vital-signs</value>
-                                            <value>patient/##SUBJECT.ID##/observation?code=29463-7&amp;_sort:dsc=date&amp;_count=1&amp;_tag=vital-signs</value>
+                                            <value>patient/##SUBJECT.ID##/observation?code=8302-2&amp;_sort:desc=date&amp;_count=1&amp;_tag=vital-signs</value>
+                                            <value>patient/##SUBJECT.ID##/observation?code=29463-7&amp;_sort:desc=date&amp;_count=1&amp;_tag=vital-signs</value>
                                         </list>
 									</property>
 								</bean>
@@ -346,84 +350,7 @@
 						</property>
 					</bean>
 				</entry>
-				<entry key="RheumatologyConsultScreen">
-					<bean class="com.cognitive.cds.invocation.model.IntentMapping">
-						<property name="invocations">
-							<list>
-								<bean class="com.cognitive.cds.invocation.model.InvocationMapping">
-									<property name="engineName" value="OpenCDS"></property>
-									<property name="rules">
-										<list>
-											<bean class="com.cognitive.cds.invocation.model.Rule">
-												<property name="id" value="rheumatologyConsultScreen" />
-												<property name="properties">
-													<props>
-														<prop key="scopingEntityId">com.cognitive</prop>
-														<prop key="businessId">rheumatologyConsultScreen</prop>
-														<prop key="version">1.0.0</prop>
-													</props>
-												</property>
-											</bean>
-										</list>
-									</property>
-									<property name="dataQueries"> 
-									<list>  
-										<value>patient/##SUBJECT.ID##/diagnosticreport?domain=lab&amp;date=##dateGreaterThanOrEqual-90d##</value>
-									</list> 
-									</property>
-									<property name="crsResolverRequired">
-								        <value type="java.lang.Boolean">true</value>
-									</property>
-									<property name="prerequisites"> 
-									<list>  
-                                        <bean class="com.cognitive.cds.invocation.execution.model.Prerequisite">
-                                            <!-- isA.sparql points to representation of the defined parametric query -->
-                                            <property name="domain" value="lab" />
-                                            <property name="display" value="CRP" />
-                                            <property name="valueSetQuery" value="valueSet.sparql" />
-                                            <property name="remediationQuery" value="orderable.sparql" />
-                                            <property name="status" value="active" />
-                                            <property name="coding">
-                                                <bean class="com.cognitive.cds.invocation.execution.model.Coding" >
-                                                    <property name="code" value="55235003"  />
-                                                    <property name="system" value="http://snomed.org" />
-                                                    <property name="display" value="C Reactive Protein" />
-                                                </bean>
-                                            </property>
-                                            <property name="remediation">
-                                                <bean class="com.cognitive.cds.invocation.execution.model.Remediation" >
-                                                    <property name="domain" value="lab"  />
-                                                    <property name="action" value="order" />
-                                                </bean>
-                                            </property>
-                                        </bean> 
-                                        <bean class="com.cognitive.cds.invocation.execution.model.Prerequisite">
-                                            <property name="domain" value="lab" />
-                                            <property name="display" value="RF" />
-                                            <property name="valueSetQuery" value="valueSet.sparql" />
-                                            <property name="remediationQuery" value="orderable.sparql" />
-                                            <property name="status" value="active" />
-                                            <property name="coding">
-                                                <bean class="com.cognitive.cds.invocation.execution.model.Coding" >
-                                                    <property name="code" value="415301001"  />
-                                                    <property name="system" value="http://snomed.org" />
-                                                    <property name="display" value="Rheumatoid Factor" />
-                                                </bean>
-                                            </property>
-                                            <property name="remediation">
-                                                <bean class="com.cognitive.cds.invocation.execution.model.Remediation" >
-                                                    <property name="domain" value="lab"  />
-                                                    <property name="action" value="order" />
-                                                </bean>
-                                            </property>
-                                        </bean>
-									</list> 
-									</property>
-								</bean>
-							</list>
-						</property>
-					</bean>
-				</entry>
+				
 				<entry key="HTN">
 					<bean class="com.cognitive.cds.invocation.model.IntentMapping">
 						<property name="invocations">
@@ -479,7 +406,7 @@
 									<property name="dataQueries">
 										<list>
 											<value>patient/##SUBJECT.ID##</value>
-                                            <value>patient/##SUBJECT.ID##/observation?_tag=social-history</value>
+                                            <!--  value>patient/##SUBJECT.ID##/observation?_tag=social-history</value -->
 										</list>
 									</property>
 								</bean>

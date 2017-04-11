@@ -24,7 +24,6 @@ Scenario: Client request sync for patient and get all domain records in Mock HDR
       | Image        |     true     |
       | Procedure    |     true     |
       | Immunization |     true     |
-      | Factor       |     true     |
       
 
 @count_vler

@@ -36,7 +36,7 @@ First, find Clinical Object in pJDS.  If not found, create new Clinical Object. 
             {
               "data": {
                 "status": 200,
-                "data": "http://IP_ADDRESS:PORT/clinicobj/urn:va:ehmp-note:9E7A:100615:67f4ce62-8f0f-4c89-9ec0-4ad83a3645ef"
+                "data": "http://IP             /clinicobj/urn:va:ehmp-note:9E7A:100615:67f4ce62-8f0f-4c89-9ec0-4ad83a3645ef"
               },
               "status": 200
             }

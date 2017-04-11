@@ -2,7 +2,7 @@ define([], function() {
 
     var Specimen = ADK.Resources.Picklist.Model.extend({
         idAttribute: function() {
-            this.get('ien') + ':' + this.get('name');
+            return this.get('ien') + ':' + this.get('name');
         }, //primary key--must be unique
         label: 'name',
         value: 'ien',
@@ -14,7 +14,7 @@ define([], function() {
     });
 
     var Specimens = ADK.Resources.Picklist.Collection.extend({
-        type: 'lab-order-specimens',
+        resource: 'write-pick-list-lab-order-specimens',
         model: Specimen,
     });
 

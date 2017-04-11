@@ -1,10 +1,8 @@
 <div class="pull-left">
-{{#hasPermission 'remove-patient-problem'}}
-    {{#if siteCodeMatches}}
-    	{{ui-button "Remove" classes="btn btn-danger btn-sm" title="Press enter to remove" id="deleteBtn"}}
-    {{else}}
-    	<p><strong>Only data originating in your facility may be edited.</strong></p>
-    {{/if}}
+{{#hasPermission 'edit-condition-problem'}}
+    {{#unless siteCodeMatches}}
+    	<p class="color-pure-black"><strong>Only data originating in your facility may be edited.</strong></p>
+    {{/unless}}
 {{/hasPermission}}
 </div>
 <div class="pull-right">

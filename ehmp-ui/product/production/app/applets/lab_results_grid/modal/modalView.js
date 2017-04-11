@@ -8,29 +8,24 @@ define([
     "handlebars",
     "highcharts",
     "app/applets/lab_results_grid/appletHelpers",
-    "hbs!app/applets/lab_results_grid/list/dateTemplate",
-    "hbs!app/applets/lab_results_grid/list/resultTemplate",
-    "hbs!app/applets/lab_results_grid/list/siteTemplate",
     "hbs!app/applets/lab_results_grid/list/flagTemplate",
     "hbs!app/applets/lab_results_grid/modal/modalTemplate",
-    // "hbs!app/applets/lab_results_grid/modal/totalTestsTemplate",
     "app/applets/lab_results_grid/modal/filterDateRangeView"
-], function($, InputMask, moment, Backbone, Marionette, _, Handlebars, Highcharts, AppletHelper, dateTemplate, resultTemplate, siteTemplate, flagTemplate, modalTemplate, FilterDateRangeView) {
+], function($, InputMask, moment, Backbone, Marionette, _, Handlebars, Highcharts, AppletHelper, flagTemplate, modalTemplate, FilterDateRangeView) {
     'use strict';
 
-    var currentModel, currentCollection, gridOptions = {},
+    var gridOptions = {},
         columns, DataGridCollection, chartOptions, Chart, categories, data = {},
         low, high,
         TotalTestModel = [],
         dataCollection;
-
 
     DataGridCollection = Backbone.Collection.extend({});
 
     columns = [{
         name: "observed",
         label: "Date",
-        template: dateTemplate,
+        template: Handlebars.compile('{{formatDate observed "MM/DD/YYYY - HH:mm"}}'),
         cell: "handlebars",
         sortable: false
     }, {
@@ -42,13 +37,13 @@ define([
     }, {
         name: "result",
         label: "Result",
-        template: resultTemplate,
+        template: Handlebars.compile('{{result}} {{units}}'),
         cell: "handlebars",
         sortable: false
     }, {
         name: "facilityMoniker",
         label: "Facility",
-        template: siteTemplate,
+        template: Handlebars.compile('{{facilityMoniker}}'),
         cell: "handlebars",
         sortable: false
     }];
@@ -77,7 +72,7 @@ define([
         sharedDateRange = new DateRangeModel();
     };
 
-    // TODO - May have to make ChartView a composite view for cycling through panel results
+    // FUTURE-TODO - May have to make ChartView a composite view for cycling through panel results
     var ChartView = Backbone.Marionette.ItemView.extend({
         template: '<div></div>',
         id: 'chartContainer',
@@ -254,7 +249,7 @@ define([
                     zIndex: 9999
                 },
                 useHTML: true,
-                xDateFormat: "%m/%d/%Y %H:%M"
+                xDateFormat: "%m/%d/%Y - %H:%M"
             };
 
             this.chartOptions.series[1] = {
@@ -331,54 +326,16 @@ define([
 
         template: modalTemplate,
         fetchOptions: {},
-
-        initialize: function(options) {
-            var self = this;
-            this.tableLoadingView = ADK.Views.Loading.create();
-            this.chartLoadingView = ADK.Views.Loading.create();
-            this.isFromPanel = options.isFromPanel;
-            this.isFromNonPanel = options.isFromNonPanel;
-
-            this.fullScreen = options.fullScreen;
-            dataCollection = options.gridCollection;
-
-            if (this.showNavHeader) {
-                this.model.attributes.navHeader = true;
-            }
-
-            // Fetch patientrecord data from RDK
-            this.fetchOptions.resourceTitle = "patient-record-lab";
-
-            this.fetchOptions.criteria = {
-                pid: this.model.attributes.pid, // "10108V420871"
-            };
-
-            //Establish filter
-            if (this.model.attributes.facilityCode === 'DOD' && self.model.attributes.codes[0].code) {
-                this.fetchOptions.criteria.filter = 'eq("codes[].code",' + self.model.attributes.codes[0].code + ')';
-            } else {
-                this.fetchOptions.criteria.filter = 'eq(typeName,"' + self.model.attributes.typeName + '"), eq(specimen,"' + self.model.attributes.specimen + '")';
-            }
-
-
-            this.fetchOptions.criteria.filterHold = this.fetchOptions.criteria.filter;
-
-            this.fetchOptions.viewModel = {
-                parse: AppletHelper.parseLabResponse
-            };
-
-
-            this.fetchOptions.pageable = true;
-            this.fetchOptions.cache = false;
-
-            gridOptions.appletConfig.gridTitle = 'This table represents the selected numeric lab result, ' + this.model.attributes.qualifiedName;
-
-            this.fetchOptions.onSuccess = function(collection, response) {
-                self.collection = collection;
+        modelEvents: {
+            'change': 'render'
+        },
+        dataGridCollectionEvents: {
+            'fetch:success': function(collection, response) {
+                var self = this;
 
                 self.$el.find('.lab-results-next, .lab-results-prev').attr('disabled', false);
 
-                var tempCollection = self.collection.fullCollection.pluck('result');
+                var tempCollection = collection.fullCollection.pluck('result');
 
 
                 tempCollection = _.map(tempCollection, function(num) {
@@ -395,7 +352,7 @@ define([
                     self.chart.reset();
                 }
 
-                if (collection.length !== 0 && (tempCollection.length !== self.collection.fullCollection.length)) {
+                if (collection.length !== 0 && (tempCollection.length !== collection.fullCollection.length)) {
                     self.$('#lrDataTableView').removeClass('col-md-12').addClass('col-md-5');
                     self.$('#lrGraph').removeClass('hidden');
                     if (!_.isEmpty(self.chart)) {
@@ -403,7 +360,7 @@ define([
                             chartOptions: AppletHelper.chartOptions,
                             model: self.model,
                             data: data,
-                            collection: self.collection
+                            collection: collection
                         }));
                     }
                 } else {
@@ -411,37 +368,96 @@ define([
                     self.$('#lrGraph').addClass('hidden');
                 }
 
-                gridOptions.collection = self.collection;
                 gridOptions.filterDateRangeEnabled = true;
 
-                currentModel = options.model;
-                self.model = options.model;
-                currentCollection = options.collection;
-
                 totalTestModel.set({
-                    totalTests: gridOptions.collection.fullCollection.length
+                    totalTests: collection.fullCollection.length
                 });
 
-                self.dataGrid = ADK.Views.DataGrid.create(gridOptions);
+                self.dataGrid = ADK.Views.DataGrid.create(_.extend({
+                    collection: collection
+                }, gridOptions));
 
                 if (self.leftColumn !== undefined && self.leftColumn !== null) {
                     self.leftColumn.reset();
                     self.leftColumn.show(self.dataGrid);
                 }
 
-                gridOptions.collection = self.collection;
+                var collectionsPageSize = _.get(collection, 'state.pageSize', null);
                 if (collection.length !== 0) {
-
-                    self.paginatorView = ADK.Views.Paginator.create({
-                        collection: gridOptions.collection,
-                        windowSize: 4
-                    });
-                    self.$('.js-backgrid').append(self.paginatorView.render().el);
+                    if (collection.fullCollection.length <= collectionsPageSize) {
+                        self.$('.js-backgrid').append('<div class="backgrid-paginator"></div>');
+                    } else {
+                        self.paginatorView = ADK.Views.Paginator.create({
+                            collection: gridOptions.collection,
+                            windowSize: 4
+                        });
+                        self.$('.js-backgrid').append(self.paginatorView.render().el);
+                    }
                 } else {
                     $('#data-grid-lab_results_grid-modalView').find('tbody').append($('<tr><td>No Records Found</td></tr>'));
                 }
 
-            }; // end of onSuccess
+            }
+        },
+        collectionEvents: {
+            'fetch:success': function(collection) {
+                var attrs = _.get(collection.at(0), 'attributes');
+                if(attrs) {
+                    this.model.set(attrs);
+                    this.configureFetchOptions();
+                    ADK.PatientRecordService.fetchCollection(this.fetchOptions, this.dataCollection);
+                }
+            }
+        },
+        childEvents: {
+            'data:collection:fetch': function() {
+                ADK.PatientRecordService.fetchCollection(this.fetchOptions, this.dataCollection);
+                this.leftColumn.show(ADK.Views.Loading.create());
+            }
+        },
+        initialize: function(options) {
+            this.isFromPanel = options.isFromPanel;
+            this.isFromNonPanel = options.isFromNonPanel;
+
+            this.fullScreen = options.fullScreen;
+
+            if (this.showNavHeader) {
+                this.model.set('navHeader', true);
+            }
+
+            this.configureFetchOptions();
+            this.dataCollection = ADK.PatientRecordService.createEmptyCollection(this.fetchOptions);
+            this.bindEntityEvents(this.dataCollection, this.dataGridCollectionEvents);
+        },
+        configureFetchOptions: function() {
+            // Fetch patientrecord data from RDK
+            this.fetchOptions.resourceTitle = "patient-record-lab";
+
+            this.fetchOptions.criteria = {
+                pid: this.model.get('pid')
+            };
+
+            //Establish filter
+            if (this.model.get('facilityCode') === 'DOD' && this.model.has('codes') && this.model.get('codes')[0].code) {
+                this.fetchOptions.criteria.filter = 'eq("codes[].code",' + this.model.get('codes')[0].code + ')';
+            } else {
+                this.fetchOptions.criteria.filter = 'eq(typeName,"' + this.model.get('typeName') + '"), eq(specimen,"' + this.model.get('specimen') + '")';
+            }
+
+
+            this.fetchOptions.criteria.filterHold = this.fetchOptions.criteria.filter;
+
+            this.fetchOptions.viewModel = {
+                parse: AppletHelper.parseLabResponse
+            };
+
+
+            this.fetchOptions.pageable = true;
+            this.fetchOptions.cache = false;
+
+            gridOptions.appletConfig.gridTitle = 'This table represents the selected numeric lab result, ' + this.model.attributes.qualifiedName;
+
         },
         regions: {
             leftColumn: '.js-backgrid',
@@ -466,22 +482,28 @@ define([
 
             var filterDateRangeView = new FilterDateRangeView({
                 model: dateRange,
-                parentView: this,
                 fullScreen: this.fullScreen
             });
             filterDateRangeView.setFetchOptions(this.fetchOptions);
             filterDateRangeView.setSharedDateRange(sharedDateRange);
 
             this.dateRangeFilter.show(filterDateRangeView);
-            this.leftColumn.show(this.tableLoadingView);
-            this.chart.show(this.chartLoadingView);
+            this.leftColumn.show(ADK.Views.Loading.create());
+            this.chart.show(ADK.Views.Loading.create());
 
-            // this.totalTests.reset();
             this.totalTests.show(new TotalView({
                 model: totalTestModel
             }));
 
-            self.collection = ADK.PatientRecordService.fetchCollection(this.fetchOptions);
+            if (this.collection.isEmpty() && !_.isEmpty(this.collection.fetchOptions)) {
+                ADK.PatientRecordService.fetchCollection(this.collection.fetchOptions, this.collection);
+                return;
+            } else if (this.dataCollection.isEmpty() && !this.dataCollection.xhr) {
+                ADK.PatientRecordService.fetchCollection(this.fetchOptions, this.dataCollection);
+            }
+        },
+        onDestroy: function() {
+            this.unbindEntityEvents(this.dataCollection, this.dataGridCollectionEvents);
         }
     });
 

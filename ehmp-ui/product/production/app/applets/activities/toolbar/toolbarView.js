@@ -10,7 +10,6 @@ define([
         initialize: function(options) {
             this.instanceId = options.instanceId;
             this.viewType = options.viewType;
-            this.collection = options.collection;
             this.parentWorkspace = options.parentWorkspace;
             this.expandedAppletId = options.expandedAppletId;
             this.sharedModel = options.sharedModel;
@@ -27,12 +26,15 @@ define([
 
             if(this.contextViewType === 'patient'){
                 primaryMenuItems.add(new Backbone.Model({name: 'Activities Related to Me', value: 'intendedForAndCreatedByMe'}));
-                primaryMenuItems.add(new Backbone.Model({name: 'All Activities', value: 'none'}));
             } else {
-                primaryMenuItems.add(new Backbone.Model({name: 'All Activities Related to Me', value: 'none'}));
+                primaryMenuItems.add(new Backbone.Model({name: 'All Activities Related to Me', value: 'intendedForAndCreatedByMe'}));
             }
             primaryMenuItems.add(new Backbone.Model({name: 'Intended for Me or My Team(s)', value: 'intendedForMe'}));
             primaryMenuItems.add(new Backbone.Model({name: 'Created by Me', value: 'me'}));
+
+            if(this.contextViewType === 'patient'){
+                primaryMenuItems.add(new Backbone.Model({name: 'All Activities', value: 'none'}));
+            }
 
             if(this.viewType === 'expanded'){
                 secondaryMenuItems.add(new Backbone.Model({name: 'Open', value: 'open'}));

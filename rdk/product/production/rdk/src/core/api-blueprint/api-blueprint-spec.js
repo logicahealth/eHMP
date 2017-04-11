@@ -200,6 +200,24 @@ describe('API Blueprint matchAction', function() {
         actual.must.eql(expected);
     });
 
+    it('should succeed when there is a trailing slash and none is specified', function() {
+        stubAction('/some/url');
+        var expected = expectAction('/some/url');
+
+        var actual = apiBlueprint.matchAction(jsonDocs, '/some/url/', 'GET');
+
+        actual.must.eql(expected);
+    });
+
+    it('should succeed when there is no trailing slash but one is specified', function() {
+        stubAction('/some/url/');
+        var expected = expectAction('/some/url/');
+
+        var actual = apiBlueprint.matchAction(jsonDocs, '/some/url', 'GET');
+
+        actual.must.eql(expected);
+    });
+
     it('should not set a paramType on parameters that aren\'t in the uriTemplate', function() {
         stubAction('/some/url', {name: 'q1'});
         var expected = expectAction('/some/url', {name: 'q1', paramType: undefined, explode: undefined});

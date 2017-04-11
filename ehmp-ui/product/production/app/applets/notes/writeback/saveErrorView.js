@@ -28,7 +28,7 @@ define([
         showModal: function(fClose) {
             var errorAlertView = new ADK.UI.Alert({
                 title: 'Error',
-                icon: 'icon-error',
+                icon: 'icon-circle-exclamation',
                 messageView: BodyView,
                 footerView: FooterView.extend({
                     triggerSave: fClose

@@ -4,8 +4,8 @@ var _ = require('lodash');
 var request = require('request');
 var nullUtil = require(global.VX_UTILS + 'null-utils');
 var errorUtil = require(global.VX_UTILS + 'error');
-var jobUtil = require(global.VX_UTILS + 'osync-job-utils');
-var jdsUtil = require(global.VX_UTILS + 'jds-utils');
+var jobUtil = require(global.OSYNC_UTILS + 'osync-job-utils');
+var jdsUtil = require(global.OSYNC_UTILS + 'jds-utils');
 
 /**
  * Takes a job and validates all of the fields of that job to make sure it's a valid one.<br/>

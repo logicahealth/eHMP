@@ -17,6 +17,13 @@ class NumericLabResultsModal < SitePrism::Page
   element :fld_total_tests_label, '[id=lrDataTableView] [id=totalTests]'
   element :fld_total_tests, '[id=lrDataTableView] [id=totalTests] span'
 
+  elements :graph_points, "#modal-body .highcharts-markers path"
+  elements :graph_date_labels, "#modal-body #chartContainer .highcharts-axis-labels text[text-anchor=end] tspan"
+
+  element :fld_from_date, '#filterFromDate'
+  element :fld_to_date, '#filterToDate'
+  element :btn_filter_apply, '#customRangeApply'
+
   def date_column_correct_format?
     helper = HelperMethods.new
     tbl_date_columns.each do | date_element |

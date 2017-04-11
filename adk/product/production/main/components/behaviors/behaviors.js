@@ -8,8 +8,9 @@ define([
     'main/components/behaviors/floatingDialog',
     'main/components/behaviors/floatingToolbar',
     'main/components/behaviors/crs',
-    'main/components/behaviors/flexContainer'
-], function(Backbone, Marionette, Tooltip, Popover, ListNav, KeySelect, FloatingDialog, FloatingToolbar, CRS, FlexContainer) {
+    'main/components/behaviors/flexContainer',
+    'main/components/behaviors/zIndex'
+], function(Backbone, Marionette, Tooltip, Popover, ListNav, KeySelect, FloatingDialog, FloatingToolbar, CRS, FlexContainer, ZIndex) {
     "use strict";
 
     //define new behaviors here
@@ -21,7 +22,8 @@ define([
         FloatingDialog: FloatingDialog,
         FloatingToolbar: FloatingToolbar,
         CRS: CRS,
-        FlexContainer: FlexContainer
+        FlexContainer: FlexContainer,
+        ZIndex: ZIndex
     };
 
     Backbone.Marionette.Behaviors.behaviorsLookup = function() {

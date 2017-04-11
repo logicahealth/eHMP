@@ -2,7 +2,7 @@
 
 ## Cds metrics cds metrics [{{{path}}}]
 
-### Get [GET {{{path}}}/metrics{?metricId}{&startPeriod}{&endPeriod}{&granularity}{&origin}{&invocationType}]
+### Get [GET {{{path}}}/metrics{?metricId}{&startPeriod}{&endPeriod}{&granularity}{&origin*}{&invocationType*}]
 
 Get Metrics
 
@@ -14,13 +14,13 @@ Returns a list of metric data points. Points will contain a sequence of values o
 
     + metricId (string, required) - metricId of metric
 
-    + startPeriod (long, required) - startPeriod the beggining range of when a queried metric is captured (Unix time in milliseconds)
+    + startPeriod (number, required) - startPeriod the begining range of when a queried metric is captured; Unix time in milliseconds
 
-    + endPeriod (long, optional) - endPeriod the end range of when a queried metric is captured (Unix time in milliseconds)
+    + endPeriod (number, optional) - endPeriod the end range of when a queried metric is captured; Unix time in milliseconds
 
-    + granularity (long, optional) - granularity the length of time in milliseconds in which metrics are aggregated
+    + granularity (number, optional) - granularity the length of time in milliseconds in which metrics are aggregated
 
-    + origin (array[string], optional) - Used to filter by using the name of the source from where a metric originated
+    + origin (string, optional) - Used to filter by using the name of the source from where a metric originated
 
     + invocationType (enum[string], optional) - describes how a metric is generated
 
@@ -111,7 +111,7 @@ Gets a list of dashboards that were saved by an associated user. A dashboard is 
 
 + Parameters
 
-    + userIdParam (string, required) - userIdParam for whom we are showing dashboards.
+    + userIdParam (string, required) - user id for whom we are showing dashboards.
 
 + Response 200 (application/json)
 

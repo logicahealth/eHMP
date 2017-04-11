@@ -27,7 +27,7 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="street1" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="street2" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="street3" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="telcoms" type="{http://webservice.vds.DNS       /}telecom" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="telcoms" type="{http://webservice.vds.med.DNS   /}telecom" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -37,7 +37,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "person", namespace = "http://webservice.vds.DNS       /", propOrder = {
+@XmlType(name = "person", namespace = "http://webservice.vds.med.DNS   /", propOrder = {
     "city",
     "name",
     "postalCode",

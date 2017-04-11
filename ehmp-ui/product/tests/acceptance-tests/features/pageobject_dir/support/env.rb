@@ -7,7 +7,7 @@ require 'capybara/rspec/matchers'
 require_relative '../../steps/helper/DefaultLogin'
 
 Capybara.default_wait_time = 15
-Capybara.app_host = ENV.keys.include?('EHMPUI_IP') ? ENV['EHMPUI_IP'] : "https://IP_ADDRESS"
+Capybara.app_host = ENV.keys.include?('EHMPUI_IP') ? ENV['EHMPUI_IP'] : "https://IP        "
 
 World(Capybara::DSL)
 World(Capybara::RSpecMatchers)
@@ -97,7 +97,7 @@ After do |scenario|
     close_any_open_modals #if scenario.source_tag_names.include? '@modal_test'
     step 'POB log me out'
   elsif scenario.test_steps.map(&:name).index { |s| s =~ DefaultLogin.login_step } and DefaultLogin.logged_in
-
+    TestSupport.driver.execute_script("ADK.Checks._checkCollection.reset();")
     close_any_open_modals #if scenario.source_tag_names.include? '@modal_test'
     step 'POB log me out'
   elsif DefaultLogin.logged_in

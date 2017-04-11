@@ -384,13 +384,15 @@
 :[Response 500]({{{common}}}/responses/500.md)
 
 
-### Patientlist status [GET {{{path}}}/list/status{?id}{&name}]
+### Patientlist status [GET {{{path}}}/list/status{?type}{&value}]
 
 + Parameters
 
-    + id (string, optional) -  id
+    + type (string, required) -  type of patient id
 
-    + name (string, optional) - name of Patientlist
+    + value (string, required) - patient id
+
+        Pattern: `^([0-9]+)$|^([a-zA-Z0-9]+);([a-zA-Z0-9]+)$|^([0-9]+)V([0-9]+)$`
 
 
 + Response 200 (application/json)

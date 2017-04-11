@@ -6,11 +6,12 @@ define([
 
     var launchResponseTrayForm = function(options) {
         var paramsForModel = {};
-        if (options && options.model && options.model.get('taskVariables') && options.model.get('taskVariables').requestActivity) {
-            paramsForModel = options.model.get('taskVariables').requestActivity;
-            paramsForModel.taskId = options.taskId;
-            paramsForModel.taskStatus = options.model.get('status');
+        if (options && options.formModel && options.formModel.get('requestActivity')) {
+            paramsForModel = options.formModel.get('requestActivity');
+            paramsForModel.taskId = options.formModel.get('taskId');
+            paramsForModel.taskStatus = options.formModel.get('status');
         }
+
         var formModel = new ResponseFormModel(paramsForModel);
 
         var formTitle = 'request - response';

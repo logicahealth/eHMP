@@ -59,76 +59,6 @@ class AddNonVAMedsTest < AccessBrowserV2
   end
 end
 
-Then(/^the Med Review is active$/) do
-  browser_access = AddNonVAMedsTest.instance
-  expect(browser_access.wait_until_element_present("Med Review button")).to be_true
-  expect(browser_access.perform_verification("Med Review button", "active")).to be_true
-end
-
-Then(/^the Non-VA Med list contains: "(.*?)"$/) do |element|
-  con = AddNonVAMedsTest.instance
-  driver = TestSupport.driver
-  con.wait_until_action_element_visible("Haloperidol", DefaultLogin.wait_time)
-  expect(con.static_dom_element_exists?("Haloperidol")).to be_true
-  expect(con.perform_verification("Haloperidol", element)).to be_true
-end
-
-Then(/^the Non-VA Med list does not contains: "(.*?)"$/) do |element|
-  con = AddNonVAMedsTest.instance
-  driver = TestSupport.driver
-  con.wait_until_action_element_visible("GEFITINIB", DefaultLogin.wait_time)
-  expect(con.static_dom_element_exists?("GEFITINIB")).to be_true
-  expect(con.perform_verification("GEFITINIB", element)).to be_true
-end
-
-Given(/^the user Selects "([^"]*)"$/) do |element|
-  con = AddNonVAMedsTest.instance
-  driver = TestSupport.driver
-  con.wait_until_action_element_visible("Non-VA", DefaultLogin.wait_time)
-  expect(con.static_dom_element_exists?("Non-VA")).to be_true
-  con.perform_action("Non-VA", element)
-  con.wait_until_action_element_visible("Haloperidol", DefaultLogin.wait_time)
-end
-
-Then(/^the Med user Selects "([^"]*)"$/) do |element|
-  con = AddNonVAMedsTest.instance
-  driver = TestSupport.driver
-  #sleep 3
-  con.wait_until_action_element_visible("Meds Review", DefaultLogin.wait_time)
-  expect(con.static_dom_element_exists?("Meds Review")).to be_true
-  con.perform_action("Meds Review", element)
-end
-
-Then(/^the search modal title reads "(.*?)"$/) do |title|
-  con = AddNonVAMedsTest.instance
-  driver = TestSupport.driver
-  con.wait_until_action_element_visible("SearchModalTitle", 60)
-  expect(con.static_dom_element_exists?("SearchModalTitle")).to be_true
-  expect(con.perform_verification("SearchModalTitle", title)).to be_true
-end
-Then(/^the add modal title reads "(.*?)"$/) do |title|
-  con = AddNonVAMedsTest.instance
-  driver = TestSupport.driver
-  con.wait_until_action_element_visible("AddModalTitle", 60)
-  expect(con.static_dom_element_exists?("AddModalTitle")).to be_true
-  expect(con.perform_verification("AddModalTitle", title)).to be_true
-end
-Then(/^the disc modal title reads "(.*?)"$/) do |title|
-  con = AddNonVAMedsTest.instance
-  driver = TestSupport.driver
-  con.wait_until_action_element_visible("DiscModalTitle", 60)
-  expect(con.static_dom_element_exists?("DiscModalTitle")).to be_true
-  expect(con.perform_verification("DiscModalTitle", title)).to be_true
-end
-
-Then(/^the modal contains the Med search input/) do
-  con = AddNonVAMedsTest.instance
-  driver = TestSupport.driver
-  con.wait_until_action_element_visible("MedsSearchInput", DefaultLogin.wait_time)
-  expect(con.static_dom_element_exists?("MedsSearchInput")).to be_true
-  expect(con.perform_verification("MedsSearchInput", "Lookup Non-VA Medication")).to be_true
-end
-
 Given(/^the user enters in the Med Search "([^"]*)"$/) do |element|
   con = AddNonVAMedsTest.instance
   driver = TestSupport.driver
@@ -143,22 +73,6 @@ Then(/^the Med search results populate "([^"]*)"$/) do |element|
   con.wait_until_action_element_visible("MedSearchList", 60)
   expect(con.static_dom_element_exists?("MedSearchList")).to be_true
   expect(con.perform_verification("MedSearchList", element)).to be_true
-end
-
-Then(/^the Med1 search results populate "([^"]*)"$/) do |element|
-  con = AddNonVAMedsTest.instance
-  driver = TestSupport.driver
-  con.wait_until_action_element_visible("MedSearchList1", 60)
-  expect(con.static_dom_element_exists?("MedSearchList1")).to be_true
-  expect(con.perform_verification("MedSearchList1", element)).to be_true
-end
-
-Then(/^the Med2 search results populate "([^"]*)"$/) do |element|
-  con = AddNonVAMedsTest.instance
-  driver = TestSupport.driver
-  con.wait_until_action_element_visible("MedSearchList2", 60)
-  expect(con.static_dom_element_exists?("MedSearchList2")).to be_true
-  expect(con.perform_verification("MedSearchList2", element)).to be_true
 end
 
 Given(/^the user selects "(.*?)" check box$/) do |element|
@@ -186,14 +100,6 @@ Given(/^the user selects Med "([^"]*)"$/) do |element|
   con.wait_until_element_present("dosages", DefaultLogin.wait_time)
 end
 
-Given(/^the user selects Med1 "([^"]*)"$/) do |element|
-  con = AddNonVAMedsTest.instance
-  driver = TestSupport.driver
-  con.wait_until_action_element_visible("MedSearchList1", DefaultLogin.wait_time)
-  expect(con.static_dom_element_exists?("MedSearchList1")).to be_true
-  con.perform_action("MedSearchList1", element)
-end
-
 Given(/^the user has selected a dosage "(.*?)"$/) do |dose|
   con = AddNonVAMedsTest.instance
   con.wait_until_action_element_visible("dosage", DefaultLogin.wait_time)
@@ -215,83 +121,11 @@ Given(/^the user has selected a schedule "(.*?)"$/) do |schedule|
   con.perform_action("schedule", schedule)
 end
 
-Given(/^the user has entered a start date "(.*?)"$/) do |startDate|
-  con = AddNonVAMedsTest.instance
-  con.wait_until_action_element_visible("startDate", DefaultLogin.wait_time)
-  expect(con.static_dom_element_exists?("startDate")).to be_true
-  con.perform_action("startDate", startDate)
-end
-
-Then(/^the preview contains text "(.*?)"$/) do |element|
-  con = AddNonVAMedsTest.instance
-  con.wait_until_action_element_visible("modal", DefaultLogin.wait_time)
-  expect(con.static_dom_element_exists?("modal")).to be_true
-  con.perform_action("modal")
-  driver = TestSupport.driver
-  con.wait_until_action_element_visible("Preview", DefaultLogin.wait_time)
-  expect(con.static_dom_element_exists?("Preview")).to be_true
-  expect(con.perform_verification("Preview", element)).to be_true
-end
-
-Then(/^the Date Error message dispalys: "(.*?)"$/) do |element|
-  con = AddNonVAMedsTest.instance
-  con.wait_until_action_element_visible("modal", DefaultLogin.wait_time)
-  expect(con.static_dom_element_exists?("modal")).to be_true
-  con.perform_action("modal")
-  driver = TestSupport.driver
-  con.wait_until_action_element_visible("DateError", DefaultLogin.wait_time)
-  expect(con.static_dom_element_exists?("DateError")).to be_true
-  expect(con.perform_verification("DateError", element)).to be_true
-end
-
 Then(/^the user entered comments: "(.*?)"$/) do |element|
   con = AddNonVAMedsTest.instance
   con.wait_until_action_element_visible("comments", DefaultLogin.wait_time)
   expect(con.static_dom_element_exists?("comments")).to be_true
   con.perform_action("comments", element)
-end
-
-When(/^the Med user clicks "([^"]*)"$/) do |element|
-  con = AddNonVAMedsTest.instance
-  driver = TestSupport.driver
-  con.wait_until_action_element_visible(element, DefaultLogin.wait_time)
-  #sleep 1
-  expect(con.static_dom_element_exists?(element)).to be_true
-  con.perform_action(element, "")
-  con.wait_until_action_element_invisible("mainModal")
-end
-
-class NonVAmedVisits < AccessBrowserV2
-  include Singleton
-  def initialize
-    super
-    add_action(CucumberLabel.new("SelectChangeVisit"), ClickAction.new, AccessHtmlElement.new(:css, "#patientDemographic-visitInfo [type=button]"))
-    add_action(CucumberLabel.new("ClickChangeVisitButton"), ClickAction.new, AccessHtmlElement.new(:id, "visit-tab-appts"))
-    add_action(CucumberLabel.new("ClickVisit"), ClickAction.new, AccessHtmlElement.new(:id, "urn:va:appointment:9E7A:271:A;3000521.09;23")) #{}"urn:va:appointment:9E7A:271:A;3000521.09;23"))
-    add_action(CucumberLabel.new("ClickSetVisit"), ClickAction.new, AccessHtmlElement.new(:id, "setVisitBtn"))
-  end
-end
-
-Then(/^the Non VA Med user selects a visit$/) do
-  con = NonVAmedVisits.instance
-  driver = TestSupport.driver
-
-  con.wait_until_action_element_visible("SelectChangeVisit", 60)
-  expect(con.static_dom_element_exists?("SelectChangeVisit")).to be_true
-  con.perform_action("SelectChangeVisit")
-
-  con.wait_until_action_element_visible("ClickChangeVisitButton", 60)
-  expect(con.static_dom_element_exists?("ClickChangeVisitButton")).to be_true
-  con.perform_action("ClickChangeVisitButton")
-
-  con.wait_until_action_element_visible("ClickVisit", 60)
-  expect(con.static_dom_element_exists?("ClickVisit")).to be_true
-  con.perform_action("ClickVisit")
-
-  con.wait_until_action_element_visible("ClickSetVisit", 60)
-  expect(con.static_dom_element_exists?("ClickSetVisit")).to be_true
-  con.perform_action("ClickSetVisit")
-  con.wait_until_action_element_invisible("mainModalDialog", DefaultLogin.wait_time)
 end
 
 Then(/^the Med user expands Non-VA med panel$/) do

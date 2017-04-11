@@ -19,12 +19,12 @@ import javax.xml.datatype.XMLGregorianCalendar;
  * <pre>
  * &lt;complexType name="problemDetail">
  *   &lt;complexContent>
- *     &lt;extension base="{http://webservice.vds.DNS       /}problem">
+ *     &lt;extension base="{http://webservice.vds.med.DNS   /}problem">
  *       &lt;sequence>
  *         &lt;element name="detailText" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="enteredBy" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="enteredDate" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/>
- *         &lt;element name="notes" type="{http://webservice.vds.DNS       /}problemNote" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="notes" type="{http://webservice.vds.med.DNS   /}problemNote" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element name="recordedBy" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/extension>
@@ -35,7 +35,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "problemDetail", namespace = "http://webservice.vds.DNS       /", propOrder = {
+@XmlType(name = "problemDetail", namespace = "http://webservice.vds.med.DNS   /", propOrder = {
     "detailText",
     "enteredBy",
     "enteredDate",

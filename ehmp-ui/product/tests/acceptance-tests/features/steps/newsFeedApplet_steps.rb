@@ -364,9 +364,9 @@ Then(/^the date\/time collapses and shows "(.*?)" result for "(.*?)" in the news
 end
 
 Then(/^the default sorting by Date\/Time is in descending in Newsfeed Applet$/) do
-  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultLogin.wait_time * 2)
-  wait.until { VerifyTableValue.verify_date_time_sort_selectable('content-region #data-grid-newsfeed', 1, true) }
-  # expect(VerifyTableValue.verify_date_sort_selectable('data-grid-newsfeed', 1, true, "%m/%d/%Y - %H:%M")).to eq(true)
+  timeline = PobTimeline.new
+  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_wait_time)
+  wait.until { timeline.verify_date_time_sort_selectable(true) == true }
 end
 
 When(/^user clicks on "(.*?)" column header in Newsfeed Applet$/) do |groupBy|
@@ -377,16 +377,9 @@ When(/^user clicks on "(.*?)" column header in Newsfeed Applet$/) do |groupBy|
 end
 
 Then(/^the sorting by Date\/Time is in ascending in Newsfeed Applet$/) do
-  expect(true).to be_true
-  aa = NewsFeedGroup.instance
-  cc = NewsFeedApplet.instance
-  driver = TestSupport.driver
-  expect(cc.wait_until_xpath_count_greater_than("Number of Newsfeed Applet Rows", 8)).to be_true
-  #//*[@data-instanceid='newsfeed']/
-  element_first = driver.find_element(:xpath, "//*[@data-instanceid='newsfeed']/descendant::*[@id='data-grid-newsfeed']/tbody/tr[1]/descendant::td")
-  element_last = driver.find_element(:xpath, "//*[@data-instanceid='newsfeed']/descendant::*[@id='data-grid-newsfeed']/tbody/tr[6]/descendant::td")
-  expect(aa.perform_verification("row_last", element_first.text)).to be_true
-  expect(aa.perform_verification("row_first", element_last.text)).to be_true
+  timeline = PobTimeline.new
+  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_wait_time)
+  wait.until { timeline.verify_date_time_sort_selectable(false) == true }
 end
 
 Then(/^the user sees title "(.*?)", "(.*?)" in Newsfeed Applet$/) do |title1, title2|
@@ -542,11 +535,17 @@ Then(/^the NewsFeed Applet table contains rows of type "([^"]*)"$/) do |arg1|
 end
 
 When(/^the NewsFeed Applet table contains data rows$/) do
-  compare_item_counts("#data-grid-newsfeed tr")
+  newsfeed = PobTimeline.new
+
+  expect(newsfeed).to_not have_fld_empty_row
+  compare_item_counts("[data-instanceid='newsfeed'] tbody tr")
 end
 
 When(/^user refreshes Timeline Applet$/) do
-  applet_refresh_action("newsfeed")
+  newsfeed = PobTimeline.new
+  newsfeed.wait_for_btn_applet_refresh
+  expect(newsfeed).to have_btn_applet_refresh
+  newsfeed.btn_applet_refresh.click
 end
 
 Then(/^the message on the Timline Applet does not say "(.*?)"$/) do |message_text|

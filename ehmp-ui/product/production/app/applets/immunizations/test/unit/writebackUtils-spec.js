@@ -81,7 +81,7 @@ define(['backbone', 'jasminejquery', 'app/applets/immunizations/writeback/utils/
                 formModel.set('administrationDateHistorical', '10/18/2015');
                 formModel.set('immunizationType', '21');
                 formModel.set('series', 'B');
-                formModel.set('orderedByAdministered', 'uid:provider:9E7A:1234');
+                formModel.set('orderedByAdministered', '1234;ONE PROVIDER');
                 formModel.set('routeOfAdministration', 'TEST ROUTE;1');
                 formModel.set('dosage', '33');
                 formModel.set('cvxCode', '789654');
@@ -127,14 +127,10 @@ define(['backbone', 'jasminejquery', 'app/applets/immunizations/writeback/utils/
                 formModel.set('immunizationNarrative', 'HEP A-HEP B');
                 formModel.set('anatomicLocation', 'TEST LOCATION;3');
                 formModel.set('comments', 'Test comments');
-                formModel.set('lotNumberHistorical', 'EHMP00001');
-                formModel.set('manufacturerHistorical', 'ABBOTT LABORATORIES');
                 formModel.set('visDateOffered', '10/31/2015');
-                formModel.set('expirationDateHistorical', '12/31/2017');
                 formModel.set('informationSource', 'From patient recall;3');
                 formModel.set('administeredLocation', 'Walgreens');
                 formModel.set('administrationDateHistorical', '10/18/2015');
-                formModel.set('orderedByHistorical', 'Walgreens Pharmacist');
 
                 var immunizationModel = WritebackUtil.buildSaveImmunizationModel(formModel, getPatient(true, true, false, true), new Backbone.Model());
 
@@ -145,7 +141,7 @@ define(['backbone', 'jasminejquery', 'app/applets/immunizations/writeback/utils/
                 expect(immunizationModel.get('cvxCode')).toEqual('789654');
                 expect(immunizationModel.get('immunizationNarrative')).toEqual('HEP A-HEP B');
                 expect(immunizationModel.get('adminSite')).toEqual('TEST LOCATION;3');
-                expect(immunizationModel.get('comment')).toEqual('Test comments - Lot Number: EHMP00001, Manufacturer: ABBOTT LABORATORIES, Expiration Date: 12/31/2017, Ordering Provider: Walgreens Pharmacist');
+                expect(immunizationModel.get('comment')).toEqual('Test comments');
                 expect(immunizationModel.get('informationSource')).toEqual('From patient recall;3');
                 expect(immunizationModel.get('encounterServiceCategory')).toEqual('E');
                 expect(immunizationModel.get('encounterDateTime')).toEqual('20151018');

@@ -1,4 +1,9 @@
-define(['backbone', 'underscore', 'handlebars'], function(Backbone, _, Handlebars) {
+define([
+    'backbone',
+    'underscore',
+    'handlebars',
+    'moment'
+], function(Backbone, _, Handlebars, moment) {
     "use strict";
 
     var writebackUtils = {};
@@ -33,8 +38,7 @@ define(['backbone', 'underscore', 'handlebars'], function(Backbone, _, Handlebar
             tagName: 'p'
         });
 
-        var CancelFooterView = Backbone.Marionette.ItemView.extend({
-            template: Handlebars.compile('{{ui-button "No" classes="btn-default" title="Press enter to cancel."}}{{ui-button "Yes" classes="btn-primary" title="Press enter to continue."}}'),
+        var FooterView = Backbone.Marionette.ItemView.extend({
             events: {
                 'click .btn-primary': function () {
                     ADK.UI.Alert.hide();
@@ -54,17 +58,21 @@ define(['backbone', 'underscore', 'handlebars'], function(Backbone, _, Handlebar
                 var alertView;
                 if(workflow.model.get('currentIndex') === 0 && workflow.model.get('steps').length > 1){
                      alertView = new ADK.UI.Alert({
-                        title: 'Cancel',
-                        icon: 'icon-cancel',
+                        title: 'Delete',
+                        icon: 'icon-triangle-exclamation',
                         messageView: VisitMessageView,
-                        footerView: CancelFooterView
+                        footerView: FooterView.extend({
+                            template: Handlebars.compile('{{ui-button "No" classes="btn-default btn-sm" title="Press enter to go back."}}{{ui-button "Yes" classes="btn-primary btn-sm" title="Press enter to delete."}}')
+                        })
                     });
                 }else {
                     alertView = new ADK.UI.Alert({
                         title: 'Cancel',
-                        icon: 'icon-cancel',
+                        icon: 'icon-triangle-exclamation',
                         messageView: WritebackMessageView,
-                        footerView: CancelFooterView
+                        footerView: FooterView.extend({
+                            template: Handlebars.compile('{{ui-button "No" classes="btn-default btn-sm" title="Press enter to go back."}}{{ui-button "Yes" classes="btn-primary btn-sm" title="Press enter to cancel."}}')
+                        })
                     });
                 }
 

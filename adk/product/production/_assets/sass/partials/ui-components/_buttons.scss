@@ -100,19 +100,30 @@
 // Date Ranger Filter buttons
 .btn-date-range {
     margin-right: 20px;
-    .btn-default {
+
+    .btn-group-xs .btn {
+        padding: 4px 6px;
         text-transform: none;
     }
+    .btn {
+        padding: 4px 6px;
+    }
     label {
-        margin: 0 5px 0 10px
+        margin: 0 3px 0 6px
     }
     .input-group-addon {
-        padding: 5px 10px;
+        padding: 0px 6px;
+        .fa-calendar {
+            font-size: 13px;
+        }
     }
-    input {
-        max-width: 85px;
-        &.input-sm {
-            height: 28px;
+    .input-group.date {
+        input {
+            &.input-sm {
+                height: 25px;
+                padding: 0 0 0 3px;
+                width: 71px;
+            }
         }
     }
 }

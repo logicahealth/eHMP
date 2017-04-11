@@ -62,10 +62,10 @@ define(['jquery', 'backbone', 'marionette', 'jasminejquery', 'testUtil', 'app/ap
                 expect(response.result).toEqual('aaa');
             });
 
-            it("Test noVitlasNoRecord", function() {
+            it("Test noVitalsNoRecord", function() {
                 response.result = '';
-                response = Util.noVitlasNoRecord(response);
-                expect(response.result).toEqual("No record");
+                response = Util.noVitalsNoRecord(response);
+                expect(response.result).toEqual("No Records Found");
             });
         });
 
@@ -95,9 +95,9 @@ define(['jquery', 'backbone', 'marionette', 'jasminejquery', 'testUtil', 'app/ap
                 resultColl = Util.setNoRecords(resultColl, recordTypes, knownTypes);
 
                 expect(resultColl[0]).toEqual("notEmpty");
-                expect(resultColl[1].summary).toEqual("No Record");
+                expect(resultColl[1].summary).toEqual("No Records Found");
                 expect(resultColl[2]).toEqual("notEmpty");
-                expect(resultColl[3].summary).toEqual("No Record");
+                expect(resultColl[3].summary).toEqual("No Records Found");
                 expect(resultColl[4]).toEqual("notEmpty");
             });
 

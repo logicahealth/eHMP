@@ -77,7 +77,7 @@ Given(/^a patient with id "(.*?)" has not been synced$/) do |patientId|
   base_url = ENV.keys.include?('LEIPR_IP') ? 'https://' + ENV['LEIPR_IP'] : 'https://IPADDRES'
   database_ip = ENV['DATABASE_IP'] || 'IPADDRES'
   database_port = ENV['DATABASE_PORT'] || '27017'
-  auth = { :VsID        "UN", :VsID        "PW" }
+  auth = { :username =>       "PW        ", :password =>       "PW" }
 
   url_path = "/admin/clear-cache?patientId=#{patientId}"
   full_path = "#{base_url}#{url_path}"
@@ -111,7 +111,7 @@ Given(/^a patient with id "(.*?)" has been synced$/) do |patientId|
   base_url = ENV.keys.include?('LEIPR_IP') ? 'https://' + ENV['LEIPR_IP'] : 'https://IPADDRES'
   database_ip = ENV['DATABASE_IP'] || 'IPADDRES'
   database_port = ENV['DATABASE_PORT'] || '27017'
-  auth = { :VsID        "UN", :VsID        "PW" }
+  auth = { :username =>       "PW        ", :password =>       "PW" }
 
   short_path = "/patient-resource-directory?patientId=#{patientId}"
   patient_resource_directory_path = "#{base_url}#{short_path}"

@@ -10,8 +10,8 @@ import java.sql.*;
 import java.util.*;
 
 /**
- * TODO: Add more metadata to the database build part: build date, build by/machine/etc, more metadata from UMLS about source (full name, desc, version, etc)
- * TODO: IS there a way to ensure that the database is not in recovery mode?  That really slows down the startup/shutdown process.
+ * FUTURETODO: Add more metadata to the database build part: build date, build by/machine/etc, more metadata from UMLS about source (full name, desc, version, etc)
+ * FUTURETODO: IS there a way to ensure that the database is not in recovery mode?  That really slows down the startup/shutdown process.
  * @author brian
  */
 public class H2TermDataSource extends AbstractTermDataSource implements ITermDataSource//, IHealthCheck
@@ -210,6 +210,11 @@ public class H2TermDataSource extends AbstractTermDataSource implements ITermDat
 	@SuppressWarnings("unchecked")
 	@Override
 	public synchronized Map<String, Object> getConceptData(String urn) {
+
+        if (!urn.matches("urn:.{0,}:.{0,}")) {
+            throw new RuntimeException("Cannot get concept data. Invalid urn.");
+        }
+
 		String json = getConceptJSON(urn);
 		if (json == null) return null;
 		

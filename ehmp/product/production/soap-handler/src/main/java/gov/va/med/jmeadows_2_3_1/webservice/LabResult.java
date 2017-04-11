@@ -16,7 +16,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  * <pre>
  * &lt;complexType name="labResult">
  *   &lt;complexContent>
- *     &lt;extension base="{http://webservice.vds.DNS       /}dataBean">
+ *     &lt;extension base="{http://webservice.vds.med.DNS   /}dataBean">
  *       &lt;sequence>
  *         &lt;element name="accession" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="accessionComment" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -36,7 +36,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *         &lt;element name="performingLabStreet2" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="performingLabStreet3" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="printName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="provider" type="{http://webservice.vds.DNS       /}provider" minOccurs="0"/>
+ *         &lt;element name="provider" type="{http://webservice.vds.med.DNS   /}provider" minOccurs="0"/>
  *         &lt;element name="quantity" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="referenceRange" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="requestingLocation" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -60,7 +60,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "labResult", namespace = "http://webservice.vds.DNS       /", propOrder = {
+@XmlType(name = "labResult", namespace = "http://webservice.vds.med.DNS   /", propOrder = {
     "accession",
     "accessionComment",
     "collectedDate",

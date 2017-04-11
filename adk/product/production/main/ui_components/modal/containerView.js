@@ -21,7 +21,12 @@ define([
     });
 
     var ModalContainerView = Backbone.Marionette.LayoutView.extend({
-        template: Handlebars.compile('<div id="mainModalDialog" class="modal-dialog{{#if extraClasses}} {{extraClasses}}{{/if}} {{sizeClass}} {{draggable}}" aria-live="assertive"></div>'),
+        behaviors: {
+            ZIndex: {
+                eventString: 'show.bs.modal'
+            }
+        },
+        template: Handlebars.compile('<div id="mainModalDialog" tabindex="-1" class="modal-dialog{{#if extraClasses}} {{extraClasses}}{{/if}} {{sizeClass}} {{draggable}}" aria-live="assertive"></div>'),
         initialize: function(options) {
             this.resetOptions(options, true);
         },
@@ -34,8 +39,6 @@ define([
 
                 if (this.model.get('draggable')) {
                     this.stopListening(Utils.resize.dimensions.viewport, 'change:width', this.adjustWidth);
-                    // TODO revisit this logic
-                    // this.$el.draggable('destroy');
                 }
                 this.model.clear();
             }
@@ -51,6 +54,10 @@ define([
                 this.model.set('backdrop', modalOptions.backdrop);
             }
 
+            //  clear modal classes
+            this.$('.modal-dialog').removeClass().addClass('modal-dialog');
+            this.$el.closest('.modal').css('height', '');
+
             if (modalOptions.size === 'small') {
                 this.model.set('sizeClass', 'modal-sm');
             } else if (modalOptions.size === 'large') {
@@ -58,11 +65,15 @@ define([
             } else if (modalOptions.size === 'xlarge') {
                 this.model.set('sizeClass', 'modal-xl');
             }
+            if (this.model.get('sizeClass')) {
+                this.$('.modal-dialog').addClass(this.model.get('sizeClass'));
+            }
 
             if (modalOptions.draggable === true) {
                 this.model.set('draggable', 'draggable');
                 this.model.set('backdrop', false);
                 this.listenTo(Utils.resize.dimensions.viewport, 'change:width', this.adjustWidth);
+                this.$('.modal-dialog').addClass(this.model.get('draggable'));
             }
 
             if(_.isArray(modalOptions.wrapperClasses)){
@@ -70,14 +81,16 @@ define([
             } else if (_.isString(modalOptions.wrapperClasses)){
                 this.model.set('extraClasses', modalOptions.wrapperClasses);
             }
+            this.$('.modal-dialog').addClass(this.model.get('extraClasses'));
 
             this.modalLayoutView = modalView;
         },
         className: 'modal',
         attributes: {
+            'id': 'mainModal',
             'role': 'dialog',
-            'tabindex': '-1',
-            'id': 'mainModal'
+            'aria-label':'', //intentionally left empty so that JAWS doesn't repeat itself
+            'aria-describedby':'modal-content'
         },
         regions: {
             modalDialogRegion: '#mainModalDialog'
@@ -106,7 +119,10 @@ define([
                         top: $('.navbar-fixed-top').height(),
                         left: $(window).width()/2-modalRect.width/2
                     });
-                    if (self.$el.offset().left < patientInfoBarWidth) {
+                },
+                adjustLeftBoundaryPosition: function() {
+                    if (self.$el.offset().left < patientInfoBarWidth ||
+                        self.model.get('sizeClass') == 'modal-xl') {
                         self.$el.offset({left: patientInfoBarWidth});
                     }
                 }
@@ -120,18 +136,14 @@ define([
             'show.bs.modal': function(e) {
                 if (this.$el.hasClass('in')) {
                     this.adjustModal().draggableSize();
+                    this.adjustModal().adjustLeftBoundaryPosition();
                 }
             },
             'shown.bs.modal': function(e) {
-                if ($('.modal:visible').length >= 1) {
-                    var zIndex = Math.max.apply(null, Array.prototype.map.call($('.modal:visible'), function(el) {
-                        return +el.style.zIndex;
-                    })) + 1111;
-                    this.$el.css('z-index', zIndex);
-                }
                 if (this.options.view.modalOptions.draggable === true) {
                     this.adjustModal().draggableSize();
                     this.adjustModal().centerPosition();
+                    this.adjustModal().adjustLeftBoundaryPosition();
                     var leftContainment = 0;
                     var $leftSideBar = $('.patient-info-bar');
                     if (!_.isEmpty($leftSideBar)){
@@ -152,6 +164,7 @@ define([
                         cursor: 'move'
                     });
                 }
+                this.$el.find('#mainModalDialog').focus();
             },
             'focusin.bs.modal': function(e) {
                 e.stopPropagation();

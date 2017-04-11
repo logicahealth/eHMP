@@ -6,13 +6,15 @@ define([
 ], function(Backbone, Marionette, _, Util) {
     "use strict";
     Util.getOnsetFormatted = function(response) {
-        if (response.onset) {
-            if (response.onset.toString().length == 4) {
-                response.onsetFormatted = ADK.utils.formatDate(response.onset, 'YYYY');
-            } else if(response.onset.toString().length == 6){
-                response.onsetFormatted = ADK.utils.formatDate(response.onset, 'MM/YYYY');
+        if (!_.isUndefined(response.onset)) {
+            var onset = response.onset.replace(/0000$/,"").replace(/00$/,"");
+
+            if (onset.length == 4) { //
+                response.onsetFormatted = ADK.utils.formatDate(onset, 'YYYY');
+            } else if(onset.length == 6){
+                response.onsetFormatted = ADK.utils.formatDate(onset, 'MM/YYYY');
             } else {
-                response.onsetFormatted = ADK.utils.formatDate(response.onset);
+                response.onsetFormatted = ADK.utils.formatDate(onset);
             }
         } else {
             response.onset = "";
@@ -35,7 +37,7 @@ define([
     };
 
     Util.getModalTitle = function(model) {
-        return model.get('problemText');
+        return !_.isUndefined(model.get('groupName')) ? model.get('groupName') : model.get('problemText');
     };
     return Util;
 });

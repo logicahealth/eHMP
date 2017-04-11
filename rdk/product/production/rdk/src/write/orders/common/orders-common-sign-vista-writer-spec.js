@@ -10,7 +10,7 @@ describe('Checks the sign order parameters', function () {
             "dfn": "100615",
             "provider": "10000000231",
             "location": "285",
-            "eSig": "mx1234!!",
+            "eSig": "PW    !!",
             "orderList": [{
                 'orderId': "38979;1",
                 'orderDetailHash': "foobar"
@@ -36,7 +36,7 @@ describe('Checks the validate signature parameters', function () {
             "dfn": "100615",
             "provider": "10000000231",
             "location": "285",
-            "eSig": "mx1234!!"
+            "eSig": "PW    !!"
         };
         var parameters = signVistaWriter._getValidateSignatureParameters(model);
         expect(parameters).to.be.truthy();

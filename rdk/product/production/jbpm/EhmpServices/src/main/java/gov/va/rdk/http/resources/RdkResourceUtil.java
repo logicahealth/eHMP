@@ -3,7 +3,11 @@ package gov.va.rdk.http.resources;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.net.URI;
+import java.net.URL;
 import java.nio.file.Paths;
+import java.security.CodeSource;
+import java.security.ProtectionDomain;
 import java.util.Collection;
 import java.util.Properties;
 
@@ -57,12 +61,15 @@ public abstract class RdkResourceUtil {
 	private boolean establishSession() throws EhmpServicesException {
 		String resourceUrl = getRDKUrl(RDK_FETCHSERVER_CONFIG) + AUTHENTICATION_RESOURCE;
 		Logging.debug("establishSession Establishing Session from: " + resourceUrl);
+		
 		try {
 			HttpEntity<String> request = new HttpEntity<String>(addJbpmAuthenticationHeader());
 			Logging.debug("establishSession Connecting to: " + resourceUrl);
+			
 			ResponseEntity<String> result = getRestTemplate().exchange(resourceUrl, HttpMethod.POST, request, String.class);
 			HttpStatus resultStatus = result.getStatusCode();
 			Logging.debug("establishSession resultStatus is: " + resultStatus);
+			
 			if (resultStatus.is2xxSuccessful()) {
 				Collection<String> cookies = result.getHeaders().get("Set-Cookie");
 				
@@ -134,10 +141,11 @@ public abstract class RdkResourceUtil {
 		FileInputStream file = null;
 
 		try {
-			tempFile = new File(ClinicalObjectWriteHandler.class.getProtectionDomain()
-					.getCodeSource().getLocation().toURI().getPath());
+			String path = getPath();
+			tempFile = new File(path);
 			propertiesPath = tempFile.getParent();
 			String filename = "";
+			
 			try {
 				filename = Paths.get(propertiesPath, configFile).toString();
 				file = new FileInputStream(filename);
@@ -151,7 +159,9 @@ public abstract class RdkResourceUtil {
 				Logging.warn(warningMsg);
 				file = new FileInputStream(filename);
 			}
+			
 			prop.load(file);
+			
 			rdkResourceEndpoint = prop.getProperty("RDK-Protocol") + "://"
 					+ prop.getProperty("RDK-IP") + ":"
 					+ prop.getProperty("RDK-Port") + "/";
@@ -169,6 +179,35 @@ public abstract class RdkResourceUtil {
 		}
 
 		return rdkResourceEndpoint;
+	}
+
+	private String getPath() throws EhmpServicesException {
+		ProtectionDomain protectionDomain = ClinicalObjectWriteHandler.class.getProtectionDomain();
+		if (protectionDomain == null)
+			throw new EhmpServicesException(HttpStatus.INTERNAL_SERVER_ERROR, "protectionDomain was null");
+		
+		CodeSource codeSource = protectionDomain.getCodeSource();
+		if (codeSource == null)
+			throw new EhmpServicesException(HttpStatus.INTERNAL_SERVER_ERROR, "codeSource was null");
+		
+		URL location = codeSource.getLocation();
+		if (location == null)
+			throw new EhmpServicesException(HttpStatus.INTERNAL_SERVER_ERROR, "location was null");
+		
+		URI uri = null;
+		try {
+			uri = location.toURI();
+		} catch (Exception e) {
+			throw new EhmpServicesException(HttpStatus.INTERNAL_SERVER_ERROR, "uri was invalid");
+		}
+		if (uri == null)
+			throw new EhmpServicesException(HttpStatus.INTERNAL_SERVER_ERROR, "uri was null");
+		
+		String path = uri.getPath();
+		if (path == null)
+			throw new EhmpServicesException(HttpStatus.INTERNAL_SERVER_ERROR, "path was null");
+		
+		return path;
 	}
 	
 	/**
@@ -207,8 +246,8 @@ public abstract class RdkResourceUtil {
 	 */
 	private String invokeResource(String resourceUrl, HttpMethod httpMethod, String jsonBody, boolean isRetry) throws EhmpServicesException {
 		Logging.debug("invokeResource " + (isRetry ? "(retry) " : "") + "Invoking a " + httpMethod + " on the resource: " + resourceUrl);
-		Logging.debug("invokeResource " + (isRetry ? "(retry) " : "") + "jsonBody: " + jsonBody);
-		Logging.debug("invokeResource " + (isRetry ? "(retry) " : "") + "isRetry: " + isRetry);
+//		Logging.debug("invokeResource " + (isRetry ? "(retry) " : "") + "jsonBody: " + jsonBody);
+//		Logging.debug("invokeResource " + (isRetry ? "(retry) " : "") + "isRetry: " + isRetry);
 		String response = "";
 
 		if (sessionId == null || jwt == null) {
@@ -232,9 +271,9 @@ public abstract class RdkResourceUtil {
 			headers.set("Content-Type", "application/json");
 			HttpEntity<String> request = null;
 			
-			Logging.debug("invokeResource " + (isRetry ? "(retry) " : "") + "Cookie: " + rdkSessionCookieId.concat("=").concat(sessionId));
-			Logging.debug("invokeResource " + (isRetry ? "(retry) " : "") + "Authorization: " + RDK_JWT_PREPEND.concat(jwt));
-			Logging.debug("invokeResource " + (isRetry ? "(retry) " : "") + "Content-Type: " + "application/json");
+//			Logging.debug("invokeResource " + (isRetry ? "(retry) " : "") + "Cookie: " + rdkSessionCookieId.concat("=").concat(sessionId));
+//			Logging.debug("invokeResource " + (isRetry ? "(retry) " : "") + "Authorization: " + RDK_JWT_PREPEND.concat(jwt));
+//			Logging.debug("invokeResource " + (isRetry ? "(retry) " : "") + "Content-Type: " + "application/json");
 			
 			if ((httpMethod == HttpMethod.POST || httpMethod == HttpMethod.PUT) && jsonBody != null) {
 				request = new HttpEntity<String>(jsonBody, headers);
@@ -242,10 +281,14 @@ public abstract class RdkResourceUtil {
 			else {
 				request = new HttpEntity<String>(headers);
 			}
-			Logging.debug("invokeResource " + (isRetry ? "(retry) " : "") + "Submitting to the URL: " + resourceUrl);
+			
+//			Logging.debug("invokeResource " + (isRetry ? "(retry) " : "") + "Submitting to the URL: " + resourceUrl);
+			
 			result = getRestTemplate().exchange(resourceUrl, httpMethod, request, String.class);
 			resultStatus = result.getStatusCode();
-			Logging.debug("invokeResource " + (isRetry ? "(retry) " : "") + "resultStatus is: " + resultStatus);
+			
+//			Logging.debug("invokeResource " + (isRetry ? "(retry) " : "") + "resultStatus is: " + resultStatus);
+			
 			if (resultStatus.is2xxSuccessful()) {				
 				response = result.getBody();
 			}
@@ -258,7 +301,7 @@ public abstract class RdkResourceUtil {
 				// do this only once to avoid an infinite loop
 				sessionId = null;
 				jwt = null;
-				Logging.info("invokeResource received an Unauthorized status, going to establish a new session and invoke again");
+//				Logging.info("invokeResource received an Unauthorized status, going to establish a new session and invoke again");
 				return invokeResource(resourceUrl, httpMethod, jsonBody, true);
 			} else if (resultStatus.equals(HttpStatus.UNAUTHORIZED)) {
 				throw new EhmpServicesException(resultStatus, "HttpAuthorizationException (Caused by HttpClientErrorException " + HttpStatus.UNAUTHORIZED + "): " + hce.getMessage(), hce);

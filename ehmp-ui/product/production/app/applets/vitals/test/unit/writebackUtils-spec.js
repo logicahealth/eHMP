@@ -4,7 +4,7 @@
 'use strict';
 
 define(['jquery', 'backbone', 'marionette', 'jasminejquery', 'moment', 'testUtil', 'app/applets/vitals/writeback/writebackUtils'],
-    function ($, Backbone, Marionette, Jasmine, Moment, testUtil, WritebackUtil) {
+    function ($, Backbone, Marionette, Jasmine, moment, testUtil, WritebackUtil) {
         function getModel(date, time){
             var model = new Backbone.Model();
             model.set('dateTakenInput', date);
@@ -53,7 +53,7 @@ define(['jquery', 'backbone', 'marionette', 'jasminejquery', 'moment', 'testUtil
             });
 
             it('should validate patient pass', function(){
-                var saveVitalsModel = new Backbone.Model();                
+                var saveVitalsModel = new Backbone.Model();
                 var model = getModel('12/01/2014');
                 model.set('facility-name-pass-po', true);
                 var vitalsModel = WritebackUtil.buildSaveVitalsModel(model, true, getIENMap(), getUser(), getCurrentPatient(), saveVitalsModel);
@@ -113,7 +113,7 @@ define(['jquery', 'backbone', 'marionette', 'jasminejquery', 'moment', 'testUtil
             });
 
             it('should validate patient unavailable on all vitals', function(){
-                var saveVitalsModel = new Backbone.Model();                
+                var saveVitalsModel = new Backbone.Model();
                 var model = getModel('12/01/2014');
                 model.set('bp-radio-po', 'Unavailable');
                 model.set('pulse-radio-po', 'Unavailable');

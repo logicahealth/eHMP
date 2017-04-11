@@ -38,7 +38,9 @@ Scenario: User views the immunization gist modal pop-up
     Then the modal is displayed
     And the modal's title is "PNEUMOCOCCAL"
 
-@F281_4_immunizationGistDisplay @US3382 @debug @DE2278
+
+
+@F281_4_immunizationGistDisplay @US3382 @DE2278
 Scenario: View Immunization Applet Single Page by clicking on Expand View
   # Given user is logged into eHMP-UI
   And user searches for and selects "FORTYSIX,PATIENT"
@@ -46,20 +48,17 @@ Scenario: View Immunization Applet Single Page by clicking on Expand View
   And user sees Immunizations Gist
   When the user clicks the control "Expand View" in the "Immunization Gist applet"
   Then the immunization gist applet title is "IMMUNIZATIONS"
-  And the "Immunization Gist Applet" table contains headers
-    | Vaccine Name | Standardized Name | Reaction | Series | Repeat Contraindicated | Date | Facility | |
-  And the "Immunization Gist Applet" table contains rows
-    | Vaccine Name                          | Standardized Name 								 | Reaction | Series   | Repeat Contraindicated | Date 		| Facility |
-    | PNEUMOCOCCAL                          | pneumococcal polysaccharide vaccine, 23 valent	| 		   |          | No				       | 04/04/2000	| NJS	   |
-    | HEP B, ADULT                          |                                                   | NONE     | COMPLETE | No                     | 10/15/1998 | TST1     |
-    | HEP B, ADULT                          |                                                   | NONE     | COMPLETE | No                     | 10/15/1998 | TST2     |
-    | INFLUENZA (HISTORICAL)                | influenza virus vaccine, unspecified formulation  |          |          | No                     | 10/01/1997 | TST1     |
-    | INFLUENZA (HISTORICAL)                | influenza virus vaccine, unspecified formulation  |          |          | No                     | 10/01/1997 | TST2     |  
-    | DTP                                   | diphtheria, tetanus toxoids and pertussis vaccine | NONE     | COMPLETE | No                     | 06/21/1997 | TST1     | 
-    | DTP                                   | diphtheria, tetanus toxoids and pertussis vaccine | NONE     | COMPLETE | No                     | 06/21/1997 | TST2     | 
-    | PNEUMOCOCCAL, UNSPECIFIED FORMULATION | pneumococcal polysaccharide vaccine, 23 valent    | NONE     | COMPLETE | No                     | 01/31/1994 | TST1     |
-    | PNEUMOCOCCAL, UNSPECIFIED FORMULATION | pneumococcal polysaccharide vaccine, 23 valent    | NONE     | COMPLETE | No                     | 01/31/1994 | TST2     |
+  And the Immunization Expanded applet table contains headers
+  | header |
+   | Vaccine Name |
+   | Standardized Name |
+   | Reaction |
+   | Series |
+   | Repeat Contraindicated |
+   | Administered Date |
+   | Facility |
 
+  And the Immunization Applet contains data rows
 
 @F281_5_immunizationGist_filter_capability @US3669 @DE3299
 Scenario: Immunization Applet Gist - filter immunization

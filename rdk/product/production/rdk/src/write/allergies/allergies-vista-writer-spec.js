@@ -71,7 +71,6 @@ describe('Allergies write-back writer', function() {
 
             var payload = {
                 "allergyName": "AMPICILLIN^79;PSNDF(50.6,",
-                "dfn": "140",
                 "natureOfReaction": "A^ALLERGY",
                 "comment": "This is a test comment",
                 "severity": "1",
@@ -95,7 +94,12 @@ describe('Allergies write-back writer', function() {
             var writebackContext = {
                 logger: logger,
                 vistaConfig: {},
-                model: payload
+                model: payload,
+                interceptorResults: {
+                    patientIdentifiers:{
+                        dfn: 140
+                    }
+                }
             };
 
             var expectedResult = {};
@@ -121,7 +125,6 @@ describe('Allergies write-back writer', function() {
 
             var payload = {
                 "allergyName": "AMPICILLIN^79;PSNDF(50.6,",
-                "dfn": "140",
                 "enteredBy": "3",
                 "natureOfReaction": "A^ALLERGY",
                 "comment": "This is a test comment",
@@ -146,7 +149,12 @@ describe('Allergies write-back writer', function() {
             var writebackContext = {
                 logger: logger,
                 vistaConfig: {},
-                model: payload
+                model: payload,
+                interceptorResults: {
+                    patientIdentifiers:{
+                        dfn: 140
+                    }
+                }
             };
 
             var expectedResult = {};
@@ -171,7 +179,6 @@ describe('Allergies write-back writer', function() {
         it('should create an allergy with two symptom', function(done) {
             var payload = {
                 "allergyName": "PEANUT OIL^106;GMRD(120.82,",
-                "dfn": "140",
                 "enteredBy":"3",
                 "natureOfReaction": "A^ALLERGY",
                 "comment": "This is a test comment",
@@ -204,7 +211,12 @@ describe('Allergies write-back writer', function() {
             var writebackContext = {
                 logger: logger,
                 vistaConfig: {},
-                model: payload
+                model: payload,
+                interceptorResults: {
+                    patientIdentifiers:{
+                        dfn: 140
+                    }
+                }
             };
 
 
@@ -230,7 +242,6 @@ describe('Allergies write-back writer', function() {
 
             var payload = {
                 "allergyName": "AMPICILLIN^79;PSNDF(50.6,",
-                "dfn": "140",
                 "enteredBy":"3",
                 "natureOfReaction": "A^ALLERGY",
                 "comment": "This is a test comment",
@@ -255,7 +266,12 @@ describe('Allergies write-back writer', function() {
             var writebackContext = {
                 logger: logger,
                 vistaConfig: {},
-                model: payload
+                model: payload,
+                interceptorResults: {
+                    patientIdentifiers:{
+                        dfn: 140
+                    }
+                }
             };
 
             var expectedResult = {};

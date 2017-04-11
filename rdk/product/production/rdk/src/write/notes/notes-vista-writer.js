@@ -24,7 +24,11 @@ module.exports.createNotes = function(writebackContext, callback) {
         error: 'Failed to create these notes in VistA.',
         notes: []
     };
-    var pid = _.last(writebackContext.pid.split(';'));
+    var pid = writebackContext.interceptorResults.patientIdentifiers.dfn;
+
+    if(nullchecker.isNullish(pid)){
+        return callback('Missing required patient identifiers');
+    }
 
     rpcClientFactory.getRpcClient(writebackContext, null, function(err, rpcClient) {
         if (err) {
@@ -34,7 +38,7 @@ module.exports.createNotes = function(writebackContext, callback) {
         async.each(writebackContext.model.signItems, function(note, cb) {
             rpcClient.execute(
                 rpcName,
-                getNoteParams(note),
+                getNoteParams(pid, note),
                 function(err, response) {
                     if (err || response.indexOf('^') > -1) {
                         errorObject.notes.push({
@@ -63,7 +67,6 @@ module.exports.createNotes = function(writebackContext, callback) {
                         errorObject.error = 'Failed to write any of the notes in VistA.';
                         return callback(errorObject);
                     }
-                    // TODO: handle partial success
                 }
                 return callback(null);
             }
@@ -79,7 +82,11 @@ module.exports.createAddendum = function(writebackContext, callback) {
         error: 'Failed to create note addendum in VistA.',
         addendum: []
     };
-    var pid = _.last(writebackContext.pid.split(';'));
+    var pid = writebackContext.interceptorResults.patientIdentifiers.dfn;
+
+    if(nullchecker.isNullish(pid)){
+        return callback('Missing required patient identifiers');
+    }
     rpcClientFactory.getRpcClient(writebackContext, null, function(err, rpcClient) {
         if (err) {
             return callback(err);
@@ -117,7 +124,6 @@ module.exports.createAddendum = function(writebackContext, callback) {
                         errorObject.error = 'Failed to write note addendum in VistA.';
                         return callback(errorObject);
                     }
-                    // TODO: handle partial success
                 }
                 return callback(null);
             }
@@ -169,8 +175,12 @@ function deleteVprAddendum(writebackContext, callback) {
 
     var rpcName = 'HMP GET PATIENT DATA JSON';
 
+    if(nullchecker.isNullish(writebackContext.interceptorResults.patientIdentifiers.dfn)){
+        return callback('Missing required patient identifiers');
+    }
+
     var rpcParams = {
-        '"patientId"': writebackContext.model.dfn,
+        '"patientId"': writebackContext.interceptorResults.patientIdentifiers.dfn,
         '"domain"': 'document',
         '"uid"': writebackContext.deletedAddendums[0].parentUid
     };
@@ -210,10 +220,14 @@ module.exports.setVpr = function(writebackContext, callback) {
 
     var rpcName = 'HMP GET PATIENT DATA JSON';
 
-    // TODO: These params will only get the first note in the array.
+    if(nullchecker.isNullish(writebackContext.interceptorResults.patientIdentifiers.dfn)){
+        return callback('Missing required patient identifiers');
+    }
+
+    // FUTURE-TODO: These params will only get the first note in the array.
     // Update this for multi-sign. - maybe use GMV GET CURRENT TIME or a loop
     var rpcParams = {
-        '"patientId"': writebackContext.model.dfn,
+        '"patientId"': writebackContext.interceptorResults.patientIdentifiers.dfn,
         '"domain"': 'document',
         '"uid"': writebackContext.signedNotes[0].uid
     };
@@ -252,10 +266,14 @@ module.exports.setVprAddendum = function(writebackContext, callback) {
 
     var rpcName = 'HMP GET PATIENT DATA JSON';
 
-    // TODO: These params will only get the first note in the array.
+    if(nullchecker.isNullish(writebackContext.interceptorResults.patientIdentifiers.dfn)){
+        return callback('Missing required patient identifiers');
+    }
+
+    // FUTURE-TODO: These params will only get the first note in the array.
     // Update this for multi-sign. - maybe use GMV GET CURRENT TIME or a loop
     var rpcParams = {
-        '"patientId"': writebackContext.model.dfn,
+        '"patientId"': writebackContext.interceptorResults.patientIdentifiers.dfn,
         '"domain"': 'document',
         '"uid"': writebackContext.signedAddendums[0].parentUid
     };
@@ -338,8 +356,8 @@ module.exports.signNotes = function(writebackContext, callback) {
 
         var signer = {
             signerUid: writebackContext.duz && writebackContext.duz[writebackContext.siteHash],
-            signer: writebackContext.model.signItems[0].authorDisplayName, //will need to change for additional signers and co-signers
-            signerDisplayName: writebackContext.model.signItems[0].authorDisplayName //will need to change for additional signers and co-signers
+            signer: writebackContext.model.signItems[0].authorDisplayName, //FUTURE-TODO: will need to change for additional signers and co-signers
+            signerDisplayName: writebackContext.model.signItems[0].authorDisplayName //FUTURE-TODO: will need to change for additional signers and co-signers
         };
 
         _.each(writebackContext.signedNotes, function(item) {
@@ -428,8 +446,8 @@ module.exports.signAddendum = function(writebackContext, callback) {
         } else {
             var signer = {
                 signerUid: writebackContext.duz && writebackContext.duz[writebackContext.siteHash],
-                signer: writebackContext.model.signItems[0].authorDisplayName, //will need to change for additional signers and co-signers
-                signerDisplayName: writebackContext.model.signItems[0].authorDisplayName //will need to change for additional signers and co-signers
+                signer: writebackContext.model.signItems[0].authorDisplayName, //FUTURE-TODO: will need to change for additional signers and co-signers
+                signerDisplayName: writebackContext.model.signItems[0].authorDisplayName //FUTURE-TODO: will need to change for additional signers and co-signers
             };
 
             _.each(writebackContext.signedAddendums, function(item) {
@@ -609,14 +627,13 @@ function signAddendum(writebackContext, addendum, cb) {
     });
 }
 
-function getNoteParams(model) {
+function getNoteParams(pid, model) {
     var vistaNote = [];
     var noteObj = {};
-    var split = model.pid.split(';');
     var encounter = encounterObj(model);
 
-    vistaNote.push(_.last(split)); // Patient dfn
-    split = model.documentDefUid.split(':');
+    vistaNote.push(pid); // Patient dfn
+    var split = model.documentDefUid.split(':');
     vistaNote.push(_.last(split)); // Document Type (title)
     vistaNote.push('', '', ''); // unused (VDT - visit DT/ VLOC - vistit location/ VSIT - pointer to visit file.
     split = model.authorUid.split(':');

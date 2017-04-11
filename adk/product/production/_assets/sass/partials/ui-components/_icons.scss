@@ -98,7 +98,7 @@
 
 // this is a compendium of icon classes to be used in the alerts within the application
 
-.icon-warning, .icon-cancel {
+.icon-triangle-exclamation {
     &:before {
         content: "\f071";
         font-family: FontAwesome;
@@ -106,20 +106,12 @@
     color: $orange-dark;
     font-size: 18px;
 }
-.icon-warning-severe, .icon-delete {
-    &:before {
-        content: "\f071";
-        font-family: FontAwesome;
-    }
-    color: $red;
-    font-size: 18px;
-}
-.icon-error {
+.icon-circle-exclamation {
     &:before{
         content: "\f06a";
         font-family: FontAwesome;
     }
-    color: $red;
+    color: $red-dark;
     font-size: 18px;
 }
 .icon-information {

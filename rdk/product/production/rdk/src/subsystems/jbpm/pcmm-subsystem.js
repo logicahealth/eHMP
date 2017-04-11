@@ -4,10 +4,11 @@ var _ = require('lodash');
 
 var rdk = require('../../core/rdk');
 var db = rdk.utils.pooledJbpmDatabase;
+var oracledb = require('oracledb');
 
-function getSubsystemConfig(app) {
+function getSubsystemConfig(app, logger) {
     return {
-        healthcheck: app.subsystems.jbpm.getHealthcheck(app)
+        healthcheck: app.subsystems.jbpm.getHealthcheck(app, logger)
     };
 }
 module.exports.getSubsystemConfig = getSubsystemConfig;
@@ -46,44 +47,85 @@ function validate(typeJson, instanceJson, appConfig, cb, errors) {
         return cb(true);
     }
 
-    var fieldParameters = _.map(typeJson.fields, function(field) {
-        return field.inDatabase;
-    });
+    var query = '';
 
-    var query = 'SELECT ' + JSON.stringify(fieldParameters).replace(/(\[|\]|"|')/g, '') + ' FROM ' + typeJson.table + ' WHERE ' + typeJson.fields[0].inDatabase + ' = \'' + _.get(instanceJson, typeJson.fields[0].inJson) + '\'';
+    //If validating Team Role, use Validate Role SP, otherwise if validating
+    //the team name, use the Validate Team SP
+    if (typeJson.table === 'PCMM.PCM_STD_TEAM_ROLE') {
+        query = 'BEGIN PCMM.VALIDATE_ROLE(:instance_id,:pcmm_recordset); END; ';
+    } else if (typeJson.table === 'PCMM.TEAM') {
+        query = 'BEGIN PCMM.VALIDATE_TEAM(:instance_id,:pcmm_recordset); END; ';
+    }
+
+    var bindVars = {
+        instance_id: _.get(instanceJson, typeJson.fields[0].inJson),
+        pcmm_recordset: {
+            type: oracledb.CURSOR,
+            dir: oracledb.BIND_OUT
+        }
+    };
 
     var success = false;
-    doQuery(appConfig.jbpm.activityDatabase, query, function(err, rows) {
-        if (err) {
-            if (errors) {
-                errors.push(err);
-            }
-            cb(false, false);
-            return;
-        }
-        if (!rows || !_.isArray(rows)) {
-            if (errors) {
-                errors.push('bad rows response (but no error code)');
-            }
-            cb(false, false);
-            return;
-        }
 
-        success = _.some(rows, function(row) {
-            if (typeJson.fields.length === 1) {
-                return true;
-            }
+    //We only ever need to check that the selected team/role exists in the database
+    var MAX_ROWS = 1;
 
-            for (var i = 1; i < typeJson.fields.length; i++) {
-                if (_.trim(_.get(row, typeJson.fields[i].inDatabase)) !== _.trim(_.get(instanceJson, typeJson.fields[i].inJson))) {
-                    return false;
+    oracledb.getConnection(
+        appConfig.jbpm.activityDatabase,
+        function(err, connection) {
+            if (err) {
+                errors.push('error getting database connection');
+                return;
+            }
+            connection.execute(query, bindVars, function(err, result) {
+                if (err) {
+                    errors.push('error executing database query');
+                    doRelease(connection);
+                    return;
                 }
-            }
-
-            return true;
+                fetchRowsFromRS(connection, result.outBinds.pcmm_recordset, MAX_ROWS, cb);
+            });
         });
 
-        cb(false, success);
-    });
+    function fetchRowsFromRS(connection, resultSet, numRows, cb) {
+
+        resultSet.getRows(numRows, function(err, rows) {
+
+            //go ahead and close the connection since we only care about whether the row exists
+            doClose(connection, resultSet);
+            if (err) {
+                errors.push('An error occurred getting the rows from the dataset');
+                return cb(false, false);
+            }
+
+            if (rows.length > 0) {
+                return cb(false, true);
+            } else {
+                return cb(false, false);
+            }
+        });
+
+    }
+
+    function doRelease(connection) {
+        connection.release(
+            function(err) {
+                if (err) {
+                    errors.push('error occurred releasing database connection');
+                }
+            });
+    }
+
+    function doClose(connection, resultSet) {
+        resultSet.close(
+            function(err) {
+                if (err) {
+                    errors.push('error occurred closing database connection');
+                }
+                doRelease(connection);
+            });
+    }
+
 }
+
 module.exports.validate = validate;

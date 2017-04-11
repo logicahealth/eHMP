@@ -4,7 +4,6 @@ require('../../../env-setup');
 
 var util = require('util');
 var _ = require('underscore');
-var async = require('async');
 
 var val = require(global.VX_UTILS + 'object-utils').getProperty;
 var queueConfig = require(global.VX_JOBFRAMEWORK).QueueConfig;
@@ -28,7 +27,7 @@ for your handler. Note that you should NOT include the beanstalk publisher
 properties, but may include a beanstalkConfig object for the queue-config factory,
 or if none is provided the default will be used.
 
-host: the server where beanstalk is running. This will usually be 'IPADDRES' or '127.0.0.1'.
+host: the server where beanstalk is running. This will usually be 'IP      ' or '127.0.0.1'.
 
 port: the port on which beanstalk is running. This will usually be 5000.
 
@@ -110,7 +109,7 @@ function testHandler(handler, logger, config, environment, host, port, tubePrefi
 
             var cleared = false;
 
-            grabJobs(logger, host, port, tubenames, 0, function(error) {
+            grabJobs(logger, host, port, tubenames, 0, function() {
                 cleared = true;
                 logger.debug('handler-test-framework: **** clearTube callback was called.');
             });
@@ -120,7 +119,9 @@ function testHandler(handler, logger, config, environment, host, port, tubePrefi
                 logger.debug('handler-test-framework: **** clearTube callback was called.');
             });
 
-            waitsFor(function() { return cleared; }, 'clear jobs timed out', waitTimeout);
+            waitsFor(function() {
+                return cleared;
+            }, 'clear jobs timed out', waitTimeout);
 
             runs(function() {
                 logger.debug('handler-test-framework: **** test complete.');
@@ -144,12 +145,16 @@ function testHandler(handler, logger, config, environment, host, port, tubePrefi
                 });
             }, function() {});
 
-            waitsFor(function() { return called; }, 'beanstalk jobs returned', waitTimeout);
+            waitsFor(function() {
+                return called;
+            }, 'beanstalk jobs returned', waitTimeout);
 
             runs(function() {
                 expect(calledError).toBeNull();
 
-                var resultJobTypes = _.chain(calledResult).map(function(result) { return result.jobs; }).flatten().pluck('type').value();
+                var resultJobTypes = _.chain(calledResult).map(function(result) {
+                    return result.jobs;
+                }).flatten().pluck('type').value();
 
                 expect(val(resultJobTypes, 'length')).toBe(jobTypes.length);
                 _.each(jobTypes, function(match) {
@@ -232,7 +237,6 @@ function getBeanstalkConfig(config, host, port, defaultTubename) {
                 'hdr-sync-document-request': {},
                 'hdr-sync-education-request': {},
                 'hdr-sync-exam-request': {},
-                'hdr-sync-factor-request': {},
                 'hdr-sync-image-request': {},
                 'hdr-sync-immunization-request': {},
                 'hdr-sync-lab-request': {},
@@ -270,7 +274,6 @@ function getBeanstalkConfig(config, host, port, defaultTubename) {
                 'hdr-xform-document-vpr': {},
                 'hdr-xform-education-vpr': {},
                 'hdr-xform-exam-vpr': {},
-                'hdr-xform-factor-vpr': {},
                 'hdr-xform-image-vpr': {},
                 'hdr-xform-immunization-vpr': {},
                 'hdr-xform-lab-vpr': {},
@@ -311,20 +314,20 @@ function updateTubenames(beanstalkConfig) {
 
 function getTubenames(beanstalkConfig, jobTypes) {
     var tubenames = _.chain(jobTypes)
-                        .map(function(jobType) {
-                            if (!_.isUndefined(beanstalkConfig.jobTypes[jobType]) && _.isArray(beanstalkConfig.jobTypes[jobType].tubeDetails)) {
-                                var baseTubename = beanstalkConfig.jobTypes[jobType].tubename;
-                                return _.map(_.range(beanstalkConfig.jobTypes[jobType].tubeDetails.length), function(num) {
-                                    return baseTubename + (num + 1);
-                                });
-                            } else {
-                                return beanstalkConfig.jobTypes[jobType] ? beanstalkConfig.jobTypes[jobType].tubename : undefined;
-                            }
-                        })
-                        .compact()
-                        .flatten()
-                        .uniq()
-                        .value();
+        .map(function(jobType) {
+            if (!_.isUndefined(beanstalkConfig.jobTypes[jobType]) && _.isArray(beanstalkConfig.jobTypes[jobType].tubeDetails)) {
+                var baseTubename = beanstalkConfig.jobTypes[jobType].tubename;
+                return _.map(_.range(beanstalkConfig.jobTypes[jobType].tubeDetails.length), function(num) {
+                    return baseTubename + (num + 1);
+                });
+            } else {
+                return beanstalkConfig.jobTypes[jobType] ? beanstalkConfig.jobTypes[jobType].tubename : undefined;
+            }
+        })
+        .compact()
+        .flatten()
+        .uniq()
+        .value();
 
     return tubenames.length > 0 ? tubenames : [beanstalkConfig.repoDefaults.tubename];
 }
@@ -340,7 +343,9 @@ function clearTubes(logger, host, port, tubenames, callback) {
         calledError = error;
     });
 
-    waitsFor(function() { return called; }, 'should be called', 2000);
+    waitsFor(function() {
+        return called;
+    }, 'should be called', 2000);
 
     runs(function() {
         expect(calledError).toBeNull();

@@ -8,7 +8,6 @@ HMPIDX ;SLC/MKB,ASMR/RRB,SRG - Create HMP triggers;Feb 01, 2016 14:22:27
  ;  CREIXN^DDMOD - ICR 2916
  ;  EN^XPAR - ICR 2263
  ;
- ;
 EN ; -- create index triggers
  ; Other indexes are created in HMP 2.0 PREREQUISITE BUNDLE patches
  ; Problems -- GMPL*2*36 provides protocol event
@@ -22,7 +21,7 @@ EN ; -- create index triggers
  ;
 GMRV ; -- create AHMP index on GMRV Measurement file #120.5
  ; DE3640: quit if index already exists, as deletion of old index by DIKCR will take a long time
- Q:$O(^DD("IX","BB",120.5,"AHMP",0))  ;update
+ Q:$O(^DD("IX","BB",120.5,"AHMP",0))
  N HMPX,HMPY
  S HMPX("FILE")=120.5,HMPX("NAME")="AHMP"
  S HMPX("TYPE")="MU",HMPX("USE")="A"

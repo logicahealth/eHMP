@@ -79,14 +79,3 @@ vista_mumps_block "Reset all subscriptions on deploy" do
   not_if { node[:vista][:no_reset] }
 end
 
-26.times do |i|
-  alph = ("a".."z").to_a
-
-  number = alph[i]
-  vista_patient "Create a patient" do
-    name "PANORAMA,#{number}"
-    sex "MALE"
-    dob "01/01/1962"
-    not_if { node[:vista][:no_reset] }
-  end
-end

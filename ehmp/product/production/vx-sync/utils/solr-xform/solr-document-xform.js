@@ -79,7 +79,7 @@ function setDomainSpecificFields(solrRecord, vprRecord) {
     //national title???
 
     //Manually add document_entered (comes from 'entered', not 'documentEntered')
-    //TODO: fix this in solrXformUtil
+    //FUTURETODO: fix this in solrXformUtil
     solrXformUtil.setStringFromSimple(solrRecord, 'document_entered', vprRecord, 'entered');
     //Erase 'entered' because it will conflict with reference_date_time when SOLR tries to add the 'datetime' field
     delete solrRecord.entered;

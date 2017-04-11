@@ -1,7 +1,5 @@
 'use strict';
 
-// TODO: rename to text.js or searchText.js? Makes sense in directory context, but not by filename alone
-
 var rdk = require('../../../core/rdk');
 var util = require('util');
 var querystring = require('querystring');
@@ -28,7 +26,6 @@ module.exports._buildSpecializedSolrQuery = buildSpecializedSolrQuery;
  * String pid     required
  * String query   required
  * String[] types optional
- * String range   optional
  *
  * @param req
  * @param res
@@ -42,7 +39,6 @@ function performTextSearch(req, res, next) {
     //    _dc       // "search identifier", currently timestamp, can by anything though
     //    format    // only accepts json
     //    domains   // solr "fq=domain:type" --- there can be multiple 'types' parameters
-    //    range     // always blank? TODO
     //    query     // solr "q=*query*"
     //    pid       // solr "fq=pid:(11111)"
     //    page      // unused
@@ -51,115 +47,77 @@ function performTextSearch(req, res, next) {
 
     var reqQuery = req.query;
     var specializedSolrQueryStrings = [];
-    var facetMap = solrSimpleClient.generateFacetMap();
     var domains;
-    async.series({
-            currentPatient: function(cb) {
-                req.app.subsystems.jdsSync.getPatientAllSites(reqQuery.pid, req, cb);
-            }
-        },
-        function(error, response) {
-            error = error || response.currentPatient.data.error;
-            if (error) {
-                req.logger.error(error);
-                return res.status(_.isNumber(error.code) ? error.code : 500).rdkSend(error.message || error);
-            }
+    var patientPIDList = [];
 
-            var patientPIDList = [];
+    _.each(req.interceptorResults.patientIdentifiers.allSites, function(pid){
+        patientPIDList.push(pid);
+    });
 
-            _.each(req.interceptorResults.patientIdentifiers.allSites, function(pid){
-                patientPIDList.push(pid);
-            });
-            
-            var allPids = patientPIDList.join(' OR ');
-            req.logger.debug('reqQuery.pidJoinedList: ' + allPids);
-            reqQuery.pidJoinedList = allPids;
-            if (allPids.indexOf('OR') !== -1) {
-                reqQuery.pidJoinedList = '(' + reqQuery.pidJoinedList + ')';
-            }
-            req.logger.debug('reqQuery.pidJoinedList: ' + reqQuery.pidJoinedList);
+    var allPids = patientPIDList.join(' OR ');
+    req.logger.debug('reqQuery.pidJoinedList: ' + allPids);
+    reqQuery.pidJoinedList = allPids;
+    if (allPids.indexOf('OR') !== -1) {
+        reqQuery.pidJoinedList = '(' + reqQuery.pidJoinedList + ')';
+    }
+    req.logger.debug('reqQuery.pidJoinedList: ' + reqQuery.pidJoinedList);
 
+    req.audit.patientId = reqQuery.pid;
+    req.audit.patientPidList = reqQuery.pidJoinedList;
+    req.audit.logCategory = 'SEARCH';
+    auditUtil.addAdditionalMessage(req, 'searchCriteriaQuery', util.format('query=%s', reqQuery.query));
+    auditUtil.addAdditionalMessage(req, 'searchCriteriaDomain', util.format(util.format('domains=%s', reqQuery.domains)));
 
-            // TODO: make this more elegant
-            req.audit.patientId = reqQuery.pid;
-            req.audit.patientPidList = reqQuery.pidJoinedList;
-            req.audit.logCategory = 'SEARCH';
-            auditUtil.addAdditionalMessage(req, 'searchCriteriaQuery', util.format('query=%s', reqQuery.query));
-            auditUtil.addAdditionalMessage(req, 'searchCriteriaDomain', util.format(util.format('domains=%s', reqQuery.domains)));
+    if (nullchecker.isNullish(reqQuery.pid)) {
+        // require searchText and pid
+        return res.status(400).rdkSend('Missing pid parameter');
+    }
+    if (nullchecker.isNullish(reqQuery.query)) {
+        return res.status(400).rdkSend('Missing query parameter');
+    }
 
-            if (nullchecker.isNullish(reqQuery.pid)) {
-                // require searchText and pid
-                return res.status(400).rdkSend('Missing pid parameter');
-            }
-            if (nullchecker.isNullish(reqQuery.query)) {
-                return res.status(400).rdkSend('Missing query parameter');
-            }
-
-            req.logger.info('performing search using query [%s] on domain [%s]', reqQuery.query, reqQuery.domains);
+    req.logger.info({ query: reqQuery.query, domain: reqQuery.domains }, 'performing text search');
 
 
 
-            if (nullchecker.isNullish(reqQuery.types)) {
-                // manually set all the domains to search because HMP needs specialized queries
-                domains = [
-                    'default',
+    if (nullchecker.isNullish(reqQuery.types)) {
+        // manually set all the domains to search because HMP needs specialized queries
+        domains = [
+            'default',
 
-                    // TODO: incorporate these as default
-                    //            cpt obs encounter procedure allergy immunization mh roadtrip auxiliary pov skin diagnosis ptf exam education treatment
+            // FUTURE-TODO: incorporate these as default
+            //            cpt obs encounter procedure allergy immunization mh roadtrip auxiliary pov skin diagnosis ptf exam education treatment
 
-                    'med',
-                    'order',
-                    'document',
-                    'vital',
-                    'lab',
-                    'problem'
-                ];
-            } else {
-                var types = reqQuery.types;
-                if (!_.isArray(types)) {
-                    types = types.split(',');
-                }
-                _.each(types, function(type, index) {
-                    types[index] = type.trim();
-                });
-                domains = [].concat(types);
-            }
-
-
-            // var facetMap = solrSimpleClient.generateFacetMap();
-            //var specializedSolrQueryStrings = [];
-            _.each(domains, function(domain) {
-                var specializedSolrQuery = buildSpecializedSolrQuery(reqQuery, facetMap, domain);
-                if (!specializedSolrQuery) {
-                    return res.status(400).rdkSend('Unknown type ' + domain);
-                }
-                specializedSolrQueryStrings.push(specializedSolrQuery);
-            });
-            executeAndTransformSolrQuerys(specializedSolrQueryStrings, res, req, reqQuery, facetMap, domains);
+            'med',
+            'order',
+            'document',
+            'vital',
+            'lab',
+            'problem'
+        ];
+    } else {
+        var types = reqQuery.types;
+        if (!_.isArray(types)) {
+            types = types.split(',');
         }
-    );
-    // async.map(specializedSolrQueryStrings,
-    //     function(item, callback) {
-    //         console.log('solr--------- : ' + item);
-    //         solrSimpleClient.executeSolrQuery(item, 'select', req, function(err, result) {
-    //             callback(err, result);
-    //         });
-    //     },
-    //     function(err, results) {
-    //         if (err) {
-    //             res.status(500).rdkSend('The search could not be completed\n' + err.stack);
-    //             return;
-    //         }
-    //         var hmpEmulatedResponseObject = hmpSolrResponseTransformer.addSpecializedResultsToResponse(results, reqQuery, facetMap, domains);
-    //         hmpEmulatedResponseObject.params = reqQuery;
-    //         hmpEmulatedResponseObject.method = req.route.stack[0].method.toUpperCase() + ' ' + req.route.path;
+        _.each(types, function(type, index) {
+            types[index] = type.trim();
+        });
+        domains = [].concat(types);
+    }
 
-    //         res.rdkSend(hmpEmulatedResponseObject);
-    //     }
-    // );
+
+    _.each(domains, function(domain) {
+        var specializedSolrQuery = buildSpecializedSolrQuery(reqQuery, domain);
+        if (!specializedSolrQuery) {
+            return res.status(400).rdkSend('Unknown type ' + domain);
+        }
+        specializedSolrQueryStrings.push(specializedSolrQuery);
+    });
+    executeAndTransformSolrQuerys(specializedSolrQueryStrings, res, req, reqQuery);
 }
 
-function executeAndTransformSolrQuerys(specializedSolrQueryStrings, res, req, reqQuery, facetMap, domains) {
+function executeAndTransformSolrQuerys(specializedSolrQueryStrings, res, req, reqQuery) {
     async.map(specializedSolrQueryStrings,
         function(item, callback) {
             solrSimpleClient.executeSolrQuery(item, 'select', req, function(err, result) {
@@ -171,7 +129,7 @@ function executeAndTransformSolrQuerys(specializedSolrQueryStrings, res, req, re
                 res.status(500).rdkSend('The search could not be completed\n' + err.stack);
                 return;
             }
-            var hmpEmulatedResponseObject = hmpSolrResponseTransformer.addSpecializedResultsToResponse(results, reqQuery, facetMap, domains);
+            var hmpEmulatedResponseObject = hmpSolrResponseTransformer.addSpecializedResultsToResponse(results, reqQuery);
             if (hmpEmulatedResponseObject.error) {
                 req.logger.error(hmpEmulatedResponseObject, 'Error in addSpecializedResultsToResponse');
                 return res.status(500).rdkSend(hmpEmulatedResponseObject.error);
@@ -244,17 +202,13 @@ function getFilterQueryForDomain(domain) {
 /**
  *
  * @param reqQuery
- * @param facetMap
  * @param domain
  * @param queryParameters
  * @returns {*}
  */
-function buildSolrQuery(reqQuery, facetMap, domain, queryParameters) {
+function buildSolrQuery(reqQuery, domain, queryParameters) {
     if (!reqQuery || !reqQuery.pid) {
         return new Error('pid must be specified');
-    }
-    if (!facetMap) {
-        return new Error('facetMap must be provided');
     }
     queryParameters = queryParameters || {};
     domain = domain || '*:*';
@@ -280,12 +234,12 @@ function buildSolrQuery(reqQuery, facetMap, domain, queryParameters) {
         start: start,
         rows: limit,
         wt: 'json',
-        facet: 'true',
-        'facet.query': Object.keys(facetMap),
-        'facet.mincount': '1',
-        'facet.field': '{!ex=domain}domain',
         synonyms: 'true',
         defType: 'synonym_edismax',
+        hl: 'true',
+        'hl.fl': ['summary', 'kind', 'facility_name'],
+        'hl.fragsize': 45,
+        'hl.snippets': 5
     };
 
     _.each(Object.keys(defaultQueryParameters), function(queryParameterType) {
@@ -310,10 +264,6 @@ function buildSolrQuery(reqQuery, facetMap, domain, queryParameters) {
         }
     });
 
-    //    if (reqQuery.indexOf('range') >= 0) {
-    //
-    //    }  // FIXME
-
     var compiledQueryParameters = solrSimpleClient.compileQueryParameters(queryParameters);
     var solrQueryString = querystring.stringify(compiledQueryParameters);
     return solrQueryString;
@@ -323,11 +273,10 @@ function buildSolrQuery(reqQuery, facetMap, domain, queryParameters) {
  * Perform domain-specific solr queries
  *
  * @param reqQuery
- * @param facetMap
  * @param domain
  * @returns {*}
  */
-function buildSpecializedSolrQuery(reqQuery, facetMap, domain) {
+function buildSpecializedSolrQuery(reqQuery, domain) {
     var buildSpecializedSolrQueryDispatch = {
         med: buildMedQuery,
         order: buildOrderQuery,
@@ -349,18 +298,18 @@ function buildSpecializedSolrQuery(reqQuery, facetMap, domain) {
 
     domain = domain.toLowerCase();
     if (buildSpecializedSolrQueryDispatch[domain]) {
-        var specializedSolrQuery = buildSpecializedSolrQueryDispatch[domain](reqQuery, facetMap, domain);
+        var specializedSolrQuery = buildSpecializedSolrQueryDispatch[domain](reqQuery, domain);
         return specializedSolrQuery;
     }
     return undefined;
 }
 
-function buildDefaultQuery(reqQuery, facetMap, domain) {
-    var queryString = buildSolrQuery(reqQuery, facetMap, domain);
+function buildDefaultQuery(reqQuery, domain) {
+    var queryString = buildSolrQuery(reqQuery, domain);
     return queryString;
 }
 
-function buildMedQuery(reqQuery, facetMap, domain) {
+function buildMedQuery(reqQuery, domain) {
     var queryParameters = {
         sort: 'overall_stop desc',
         fl: [
@@ -372,20 +321,18 @@ function buildMedQuery(reqQuery, facetMap, domain) {
         ],
         group: 'true',
         'group.field': 'qualified_name',
-        hl: 'true',
         'hl.fl': [
             'administration_comment',
             'prn_reason'
         ],
         'hl.fragsize': 72,
-        'hl.snippets': 5,
         'q.op': 'AND'
     };
-    var solrQueryString = buildSolrQuery(reqQuery, facetMap, domain, queryParameters);
+    var solrQueryString = buildSolrQuery(reqQuery, domain, queryParameters);
     return solrQueryString;
 }
 
-function buildOrderQuery(reqQuery, facetMap, domain) {
+function buildOrderQuery(reqQuery, domain) {
     var queryParameters = {
         fq: [
             'service:(LR OR GMRC OR RA OR FH OR UBEC OR "OR")',
@@ -395,18 +342,15 @@ function buildOrderQuery(reqQuery, facetMap, domain) {
             'service',
             'status_name'
         ],
-        hl: 'true',
         'hl.fl': [
             'content'
-        ],
-        'hl.fragsize': 45,
-        'hl.snippets': 5
+        ]
     };
-    var solrQueryString = buildSolrQuery(reqQuery, facetMap, domain, queryParameters);
+    var solrQueryString = buildSolrQuery(reqQuery, domain, queryParameters);
     return solrQueryString;
 }
 
-function buildDocumentQuery(reqQuery, facetMap, domain) {
+function buildDocumentQuery(reqQuery, domain) {
     var queryParameters = {
         fl: [
             'local_title',
@@ -419,29 +363,26 @@ function buildDocumentQuery(reqQuery, facetMap, domain) {
             'attending_uid'
         ],
         sort: 'reference_date_time desc',
-        hl: 'true',
         'hl.fl': [
             'body',
             'subject'
-        ],
-        'hl.fragsize': 45,
-        'hl.snippets': 5
+        ]
     };
-    var solrQueryString = buildSolrQuery(reqQuery, facetMap, domain, queryParameters);
+    var solrQueryString = buildSolrQuery(reqQuery, domain, queryParameters);
     return solrQueryString;
 }
 
-function buildVitalQuery(reqQuery, facetMap, domain) {
+function buildVitalQuery(reqQuery, domain) {
     var queryParameters = {
         sort: 'observed desc',
         group: 'true',
         'group.field': 'qualified_name'
     };
-    var solrQueryString = buildSolrQuery(reqQuery, facetMap, domain, queryParameters);
+    var solrQueryString = buildSolrQuery(reqQuery, domain, queryParameters);
     return solrQueryString;
 }
 
-function buildLabQuery(reqQuery, facetMap, domain) {
+function buildLabQuery(reqQuery, domain) {
     domain = 'result';
     var queryParameters = {
         fl: [
@@ -455,18 +396,15 @@ function buildLabQuery(reqQuery, facetMap, domain) {
         sort: 'observed desc',
         group: 'true',
         'group.field': 'qualified_name_units',
-        hl: 'true',
         'hl.fl': [
             'comment'
-        ],
-        'hl.fragsize': 45,
-        'hl.snippets': 5
+        ]
     };
-    var solrQueryString = buildSolrQuery(reqQuery, facetMap, domain, queryParameters);
+    var solrQueryString = buildSolrQuery(reqQuery, domain, queryParameters);
     return solrQueryString;
 }
 
-function buildProblemQuery(reqQuery, facetMap, domain) {
+function buildProblemQuery(reqQuery, domain) {
     var queryParameters = {
         fq: ['-removed:true'],
         fl: [
@@ -481,6 +419,6 @@ function buildProblemQuery(reqQuery, facetMap, domain) {
         group: 'true',
         'group.field': 'icd_code'
     };
-    var solrQueryString = buildSolrQuery(reqQuery, facetMap, domain, queryParameters);
+    var solrQueryString = buildSolrQuery(reqQuery, domain, queryParameters);
     return solrQueryString;
 }

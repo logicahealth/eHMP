@@ -16,7 +16,7 @@ module.exports.getResourceConfig = function() {
             synchronize: false,
             convertPid: true
         },
-        requiredPermissions: [],
+        requiredPermissions: ['edit-military-history'],
         isPatientCentric: true,
         subsystems: []
     }, {
@@ -27,7 +27,7 @@ module.exports.getResourceConfig = function() {
             synchronize: false,
             convertPid: true
         },
-        requiredPermissions: [],
+        requiredPermissions: ['read-military-history'],
         isPatientCentric: true,
         subsystems: []
     }];

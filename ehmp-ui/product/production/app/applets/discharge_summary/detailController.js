@@ -26,24 +26,31 @@ define([
                         cache: true
                     };
 
-                    var data = ADK.PatientRecordService.fetchCollection(fetchOptions);
-                    data.on('sync', function() {
-                        var detailModel = data.first();
-                        response.resolve({
-                            view: new ModalView({
-                                model: detailModel
-                            })
-                        });
-                    }, this);
+                    var data = ADK.PatientRecordService.createEmptyCollection(fetchOptions);
+
+                    return {
+                        view: ModalView.extend({
+                            model: new Backbone.Model(),
+                            collection: data,
+                            collectionEvents: {
+                                'sync': function() {
+                                    var model = collection.first();
+                                    if (model) this.model.set(model.toJSON());
+                                }
+                            },
+                            onBeforeShow: function() {
+                                ADK.PatientRecordService.fetchCollection(fetchOptions, this.collection);
+                            }
+                        })
+                    };
                 } else {
-                    response.resolve({
-                        view: new ModalView({
+                    return {
+                        view: ModalView.extend({
                             model: params.model
                         })
-                    });
-                }
+                    };
 
-                return response.promise();
+                }
             });
         }
     };

@@ -27,13 +27,13 @@ package com.cognitive.cds.invocation.mongo;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -45,9 +45,8 @@ public class EngineInfoDaoTest {
 
     private static MongoDbDao mongoDbDao;
     private static EngineInfoDao engineInfoDao;
-    private static Logger logger = Logger.getLogger(EngineInfoDaoTest.class
-	    .getName());
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(EngineInfoDaoTest.class);
+   
     String engineName = "EngineOne";
     String engineType = "MockEngine";
     String engineName2 = "OpenCDSDb";
@@ -67,8 +66,7 @@ public class EngineInfoDaoTest {
 	    engineInfoDao.setMongoDbDao(mongoDbDao);
 	    engineInfoDao.setCacheEngines(false);
 	} catch (Exception e) {
-	    logger.log(Level.SEVERE,
-		    "Error loading connection properties.  Cannot connect to MongoDB");
+	    LOGGER.error("Error loading connection properties.  Cannot connect to MongoDB");
 	}
     }
 

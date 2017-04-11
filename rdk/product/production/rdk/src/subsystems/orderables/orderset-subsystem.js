@@ -2,7 +2,6 @@
 
 var rdk = require('../../core/rdk');
 var _ = require('lodash');
-var dd = require('drilldown');
 var pjds = rdk.utils.pjdsStore;
 
 var ORDER_SET_STORE = 'ordersets';
@@ -14,9 +13,9 @@ var SCOPE = {
 module.exports.constants = {};
 module.exports.constants.ORDER_SET_STORE = ORDER_SET_STORE;
 module.exports.constants.SCOPE = SCOPE;
-module.exports.getSubsystemConfig = function(app) {
+module.exports.getSubsystemConfig = function(app, logger) {
     return {
-        healthcheck: pjds.createHealthcheck(ORDER_SET_STORE, app)
+        healthcheck: pjds.createHealthcheck(ORDER_SET_STORE, app, logger)
     };
 };
 
@@ -168,7 +167,7 @@ function search(req, res, name, siteId, userId, callback) {
         if (error) {
             return callback(error, null);
         }
-        if (dd(result)('data')('items').exists) {
+        if (_.get(result, 'data.items')) {
             result.data.items = _.map(result.data.items, shallowOrderSetProjection);
         }
         return callback(null, result);
@@ -196,7 +195,7 @@ function getOrderSet(req, res, uid, callback) {
             error.statusCode = (result || {}).statusCode;
             return callback(error, null);
         }
-        if (dd(result)('error').exists) {
+        if (_.get(result, 'error')) {
             return callback('OrderSet with uid: ' + uid + ' was not found.', null);
         }
         return callback(null, result);

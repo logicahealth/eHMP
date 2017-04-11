@@ -91,10 +91,10 @@ define([
          *
          * Reference: https://wiki.vistacore.us/display/VACORE/Consult+Clinical+Object+Data+Specification
          */
-        var currentAppt = _.last(dd(model.get('clinicalObject'))('data')('appointments').val);
+        var currentAppt = _.last(_.get(model.get('clinicalObject'), 'data.appointments'));
 
         // Appt. Status: https://wiki.vistacore.us/pages/viewpage.action?pageId=15991103#ConsultAppointment(DataSpecification)-AppointmentStatus
-        if (dd(currentAppt)('status')('id').val === '2' /*scheduled*/ ) {
+        if (_.get(currentAppt, 'status.id') === '2' /*scheduled*/ ) {
             BodyView.items.push(CurrentAppointment.createView(model));
         }
         BodyView.items.push(NewAppointment);
@@ -104,9 +104,7 @@ define([
     }
 
     function fetchPickList(type, criteria, itemParser, callback) {
-        var url = ADK.ResourceService.buildUrl('write-pick-list', _.extend(criteria || {}, {
-            type: type
-        }));
+        var url = ADK.ResourceService.buildUrl('write-pick-list-' + type, criteria);
         var urlFetch = new Backbone.Collection();
         urlFetch.url = url;
         urlFetch.fetch({
@@ -188,7 +186,7 @@ define([
     }
 
     function fetchData(model, onError, onSuccess) {
-        var facilityCode = dd(model.get('clinicalObject'))('data')('order')('facility')('code').val;
+        var facilityCode = _.get(model.get('clinicalObject'), 'data.order.facility.code');
 
         async.parallel([getClinicsForFacility(facilityCode), getProviders],
             function(err, results) {
@@ -218,7 +216,7 @@ define([
 
             // signalBody is used by actionModal_View as payload to the activities/signal resource
             model.set('signalBody', {
-                actionText: 'scheduled',
+                actionText: 'Reschedule',
                 scheduledDate: model.get('scheduledDate'),
                 clinic: {
                     code: clinicModel.get('value'),

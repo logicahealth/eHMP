@@ -11,6 +11,13 @@
         width: 48%;
         margin-top: 2px;
     }
+    .a-table, .b-table {
+        tbody {
+            tr:focus {
+                background-color: $primary-lightest;
+            }
+        }
+    }
     .a-table td,
     .b-table td {
         padding: 2px 5px
@@ -24,12 +31,38 @@
     .gist-item .table-row {
         min-height: 21px;
     }
-    .vitals-full & {
-        .panel-body {
-            overflow-y: auto;
-            .grid-container {
-                height: calc(100% - 82px);
-            }
+    .grid-container .gist-item-list .gist-item .selectable.flex-width-2 {
+        padding-right: 0px;
+    }
+    .faux-table .table-row .table-cell {
+        padding-right: 0px;
+    }
+}
+
+[data-tray-width-scale="0.33"] {
+    .collapsibleContainerHeaderRegion {
+        .radio-inline:nth-child(3) {
+            padding-left: 12px;
+        }
+    }
+    .temperatureInputValue {
+        .col-xs-4 {
+            padding: 0px 6px !important;
+        }
+    }
+    .pain-value-po {
+        .help-block {
+            width: 187px;
+        }
+    }
+    .pain-radio-po {
+        .radio-inline:nth-child(3) {
+            padding-left: 12px;
+        }
+    }
+    .circumValue {
+        label {
+            text-transform: capitalize !important;
         }
     }
 }

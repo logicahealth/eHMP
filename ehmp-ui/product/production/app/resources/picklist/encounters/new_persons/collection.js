@@ -3,7 +3,7 @@ define([], function() {
     var NewPerson = ADK.Resources.Picklist.Model.extend({
         idAttribute: 'code',
         label: 'name',
-        value: function(){
+        value: function() {
             return this.get('code') + ';' + this.get('name');
         },
         childParse: 'false',
@@ -14,7 +14,7 @@ define([], function() {
     });
 
     var NewPersons = ADK.Resources.Picklist.Collection.extend({
-        type: 'new-persons',
+        resource: 'write-pick-list-new-persons',
         model: NewPerson,
     });
 

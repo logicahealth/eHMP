@@ -20,7 +20,7 @@ module.exports.getResourceConfig = function() {
             operationalDataCheck: false,
             synchronize: false
         },
-        requiredPermissions: [],
+        requiredPermissions: ['read-patient-record'],
         isPatientCentric: false,
         subsystems: ['mvi']
     }, {
@@ -31,7 +31,7 @@ module.exports.getResourceConfig = function() {
             operationalDataCheck: false,
             synchronize: false
         },
-        requiredPermissions: [],
+        requiredPermissions: ['read-patient-record'],
         isPatientCentric: false,
         subsystems: ['mvi']
     }, {

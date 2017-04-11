@@ -16,5 +16,5 @@ yum_package "unzip"
 yum_package "expect"
 
 include_recipe "mocks::glassfish"
-include_recipe "mocks::jmeadows"
+include_recipe "mocks::jmeadows" if node[:mocks][:include_jmeadows]
 include_recipe "mocks::correlated_ids"

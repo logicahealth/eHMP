@@ -2,9 +2,8 @@ define([
     "backbone",
     "marionette",
     "underscore",
-    "app/applets/task_forms/activities/consults/eventHandler",
     "hbs!app/applets/task_forms/common/templates/activityOverviewFooter_Template"
-], function(Backbone, Marionette, _, EventHandler, ActivityOverviewFooterTemplate) {
+], function(Backbone, Marionette, _, ActivityOverviewFooterTemplate) {
     'use strict';
     return Backbone.Marionette.ItemView.extend({
         template: ActivityOverviewFooterTemplate,

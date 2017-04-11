@@ -6,6 +6,19 @@ Feature: F144 - eHMP Viewer GUI - Numeric Lab Results
 Background:
   Given user is logged into eHMP-UI
 
+@f144_numeric_lab_results_microbiology @DE377 @future @obe
+Scenario: Numeric Lab Results Applet - Ensure results for Microbiology labs are being shown.
+  Given user searches for and selects "Zzzretfourthirtytwo,Patient"
+  Then Cover Sheet is active
+  When the user clicks the control "Expand View" in the "Numeric Lab Results applet"
+  When the user clicks the date control "All" in the "Numeric Lab Results applet"
+  When the user enters "Blood+Culture" into the "Numeric Lab Results Filter Field"
+  #And the user inputs "Blood+Culture" in the "Text Filter" control in the "Numeric Lab Results applet"
+  And the user waits for 5 seconds
+  Then the "Numeric Lab Results Applet" table contains 1 rows
+  And the "Numeric Lab Results Applet" table contains rows
+    | Date             | Lab Test                     | Flag | Result      | Unit | Ref Range | Facility |
+    | 01/03/1994 - 07:00 | BLOOD CULTURE SET #1 - BLOOD |      | View Report |      |           | TST1     |
 
 # after discussion email with product owners and tech leads for andromeda, venus tests tagged f144_numeric_lab_results_flickering are being retired 
 @f144_numeric_lab_results_flickering @US2649 @TA8610a

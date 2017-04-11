@@ -1,7 +1,13 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-xs-7">
-            <h4 class="modal-title" id="mainModalLabel">{{problemText}}</h4>
+            <h4 class="modal-title" id="mainModalLabel">
+               {{#if standardizedDescription}}
+                    {{standardizedDescription}}
+                {{else}}
+                    {{problemText}}
+                {{/if}}
+            </h4>
         </div>
         <div class="col-xs-5 text-right top-margin-sm">
             <button type="button" class="btn btn-default btn-xs right-margin-xs" id="ccdPrevious" title="Press enter to load previous condition.">

@@ -1,17 +1,19 @@
-<span class="bold-font left-padding-sm">Viewing
-	{{#compare selectedId "custom-range-apply-lab_results_grid-modal" }}
-		{{#if fromDate}}
-			{{customFromDate}}
-			to
-			{{customToDate}}
-		{{/if}}
-	{{else}}
-		{{#if fromDate}}
-			{{fromDate}}
-			to
-			{{toDate}}
-		{{/if}}
-	{{/compare}}
+<p class="left-padding-no bottom-margin-no transform-text-uppercase">
+	<strong>Viewing:
+		{{#compare selectedId "custom-range-apply-lab_results_grid-modal" }}
+			{{#if fromDate}}
+				{{customFromDate}}
+					to
+				{{customToDate}}
+			{{/if}}
+		{{else}}
+			{{#if fromDate}}
+				{{fromDate}}
+					to
+				{{toDate}}
+			{{/if}}
+		{{/compare}}
 
-{{#unless fromDate}}All{{/unless}}
-</span>
+		{{#unless fromDate}}All{{/unless}}
+	</strong>
+</p>

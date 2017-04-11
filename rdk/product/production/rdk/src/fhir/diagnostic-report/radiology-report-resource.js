@@ -9,7 +9,7 @@ var ra = require('../common/entities/radiology-objects.js'),
 
 function getResourceConfig() {
     return [{
-        name: 'radiologyreport',
+        name: 'fhir-radiology-report',
         path: '',
         get: getRadiologyReport,
         interceptors: {

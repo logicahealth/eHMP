@@ -17,7 +17,7 @@ function getResourceConfig(app) {
             jdsFilter: true,
             convertPid: true
         },
-        requiredPermissions: [],
+        requiredPermissions: ['read-order'],
         isPatientCentric: true
     }];
 }
@@ -65,6 +65,7 @@ function getOrders(req, res) {
         if (err) {
             return res.status(500).rdkSend(err);
         }
+        parseJdsOrders(jdsResponse);
         // Process the clinical object subsystem.
         clinicalObjectSubsystem.find(req.logger, req.app.config, pjdsFilter, loadReference, function(err, pjdsResponse) {
             if (pjdsResponse && !_.isEmpty(pjdsResponse.items)) {
@@ -120,6 +121,68 @@ function getOrders(req, res) {
 
             return res.status(200).rdkSend(ehmpJdsOrders);
         });
+    });
+}
+
+function parseJdsOrders(jdsResponse) {
+    _.each(jdsResponse.body.data.items, function(order) {
+        //Get Signers
+        var clinicians = order.clinicians;
+        _.each(clinicians, function(clinician) {
+            switch (clinician.role) {
+                case 'S':
+                    order.provider = clinician.name;
+                    break;
+                case 'N':
+                    order.nurse = clinician.name;
+                    break;
+                case 'C':
+                    order.clerk = clinician.name;
+                    break;
+                case 'R':
+                    order.chart = clinician.name;
+                    break;
+            }
+        });
+
+        //Split Long Summary Text
+        if (order.summary && order.summary.length > 160) {
+            order.shortSummary = order.summary.substr(0, 160);
+            order.longSummary = true;
+        } else {
+            order.shortSummary = order.summary;
+            order.longSummary = false;
+        }
+
+        //Get Orders Flag
+        order.isFlagged = '';
+        if (order.orderFlags) {
+            if (_.size(order.orderFlags) > 0) {
+                var orderFlagsCol = order.orderFlags;
+                var lastElement = _.last(orderFlagsCol);
+                if (lastElement.orderFlaggedBy) {
+                    order.isFlagged = '1';
+                }
+            }
+        }
+
+        //Mark discontinued orders
+        if (order.statusName === 'DISCONTINUED') {
+            order.isDiscontinuedOrder = true;
+        }
+
+        //Re-label Text Orders
+        if (order.service === 'OR') {
+            order.kind = 'Text Order';
+        }
+        //Update Status Name
+        if (order.statusName) {
+            var lStatusName = order.statusName.toLowerCase();
+            order.statusName = _.capitalize(lStatusName);
+            if (lStatusName === 'complete' || lStatusName === 'completed') {
+                order.statusName = 'Completed';
+            }
+        }
     });
 }
 

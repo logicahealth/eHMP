@@ -26,7 +26,7 @@ define([
 
     var RightNavigationItemCollectionView = LeftNavigationItemCollectionView.extend({
         itemGroupName: 'patient-right',
-        className: 'flex-display flex-align-center'
+        className: 'flex-display flex-align-center flex-justify-content-end'
     });
 
     var PatientInformationCollectionView = Backbone.Marionette.CollectionView.extend({
@@ -106,7 +106,7 @@ define([
     });
 
     var LayoutView = Backbone.Marionette.LayoutView.extend({
-        className: "container-fluid full-height",
+        className: "container-fluid percent-height-100",
         template: LayoutTemplate,
         ui: {
             LeftNavigationBarContainer: '.context-navigation-bar.left',

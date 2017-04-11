@@ -3,7 +3,7 @@ Feature: F361 FHIR Domain - AllergyIntolerance
 @F361-allergies @US5960 @DE3161
  Scenario: Client can request Allergy in FHIR format
      Given a patient with "allergyintolerance" in multiple VistAs
-     When the client requests "allergyIntolerance-allergyintolerances" for the patient "9E7A;100022"
+     When the client requests allergyintolerance for the patient "9E7A;100022"
      Then a successful response is returned
      And the FHIR results contain "allergyintolerance"
      	   | field 										      | value 								|

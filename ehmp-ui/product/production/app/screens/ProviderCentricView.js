@@ -23,7 +23,7 @@ define([], function() {
             "dataMinSizeY": "12",
             "dataMaxSizeX": "4",
             "dataMaxSizeY": "12",
-            "viewType": "recent-patients"
+            "viewType": "summary"
         }, {
             "id": "todo_list",
             "title": "Tasks",

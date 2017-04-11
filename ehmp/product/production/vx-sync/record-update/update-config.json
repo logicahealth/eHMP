@@ -33,5 +33,6 @@
               "port": 5000
           }
         }
-	}
+	},
+	"utilityLogLevel": "info"
 }

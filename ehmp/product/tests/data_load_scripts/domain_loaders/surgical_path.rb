@@ -2,7 +2,7 @@ require 'greenletters'
 
 # options
 #------------------------------------
-serve_ip = "IP_ADDRESS"
+serve_ip = "IP        "
 path_amount = 10
 # patient_id = 100841 #alpha test
 patient_name = "alphatest"

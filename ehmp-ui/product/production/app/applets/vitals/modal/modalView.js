@@ -6,39 +6,48 @@ define([
     "underscore",
     "highcharts",
     'handlebars',
+    'moment',
     'app/applets/vitals/util',
     "app/applets/vitals/appletHelpers",
-    "hbs!app/applets/vitals/list/dateTemplate",
     "app/applets/vitals/modal/filterDateRangeView",
-    'hbs!app/applets/vitals/list/resultTemplate',
     "hbs!app/applets/vitals/modal/modalTemplate",
     'hbs!app/applets/vitals/modal/detailsFooterTemplate',
     "app/applets/vitals/modal/modalHeaderView"
-], function($, InputMask, Backbone, Marionette, _, Highcharts, Handlebars, Util, AppletHelper, dateTemplate, FilterDateRangeView, resultTemplate, modalTemplate, detailsFooterTemplate, modalHeader) {
+], function($,
+    InputMask,
+    Backbone,
+    Marionette,
+    _,
+    Highcharts,
+    Handlebars,
+    moment,
+    Util,
+    AppletHelper,
+    FilterDateRangeView,
+    modalTemplate,
+    detailsFooterTemplate,
+    modalHeader
+) {
     'use strict';
 
-    var currentModel, currentCollection, gridOptions = {},
-        columns, mockData2, DataGridView, DataGridCollection, chartOptions, Chart, categories, data, fetchCollection = {},
+    var gridOptions = {},
+        columns, mockData2, DataGridView, DataGridCollection, chartOptions, Chart, categories, data,
         low, high;
     var TotalTestModel;
-    var trsForShowingModal = [],
-        modals = [],
-        panelModals = [],
-        modalDisplayName, isGraphable, typeName,
-        dataCollection;
+    var isGraphable;
 
     DataGridCollection = Backbone.Collection.extend({});
 
     columns = [{
         name: "observed",
         label: "Date",
-        template: dateTemplate,
+        template: Handlebars.compile('{{formatDate observed}}'),
         cell: "handlebars",
         sortable: false
     }, {
         name: "resultUnitsMetricResultUnits",
         label: "Result",
-        template: resultTemplate,
+        template: Handlebars.compile('{{resultUnits}}{{#if metricResult}}<span class="color-grey-darker">({{metricResultUnits}})</span>{{/if}}'),
         cell: "handlebars",
         sortable: false
     }, {
@@ -82,28 +91,21 @@ define([
         return response;
     }
 
-    function setisGraphable(e) {
-        isGraphable = e.length > 0;
-    }
-
-    function getisGraphable(e) {
-        return isGraphable;
-    }
-
     var ChartView = Backbone.Marionette.ItemView.extend({
         template: '<div></div>',
         id: 'chart-container',
         initialize: function(options) {
             var self = this;
-            this.collection = options.collection;
             this.first = this.collection.first();
-            this.chartOptions = $.extend(true, {}, options.chartOptions);
-            this.fullCollection = this.collection.fullCollection;
+            this.chartOptions = _.clone(options.chartOptions, {
+                deep: true
+            });
+            this.fullCollection = this.collection.clone();
 
             low = this.fullCollection.pluck('low');
             high = this.fullCollection.pluck('high');
 
-            if (modalDisplayName !== 'BP') {
+            if (this.modalDisplayName !== 'BP') {
                 low = _.map(low, function(num) {
                     return parseFloat(num);
                 });
@@ -147,13 +149,13 @@ define([
             var bpSystolicData = [];
             var cleanData = [];
             _.each(data, function(e, i) {
-                if (modalDisplayName !== 'BP') {
+                if (this.modalDisplayName !== 'BP') {
                     if (_.isNaN(data[i] * 1)) {
                         cleanData.push(null);
                     } else {
-                        if (modalDisplayName === 'PN' && e === '99') {
+                        if (this.modalDisplayName === 'PN' && e === '99') {
                             cleanData.push(null);
-                        } else if (modalDisplayName !== 'HT') {
+                        } else if (this.modalDisplayName !== 'HT') {
                             cleanData.push(data[i] * 1);
                         } else {
                             if (units[i] !== 'in' && units[i] !== 'inches') {
@@ -183,16 +185,16 @@ define([
                         cleanData.push(null);
                     }
                 }
-            });
+            }, this);
 
             var highLow = [];
 
             //Parsing out bad data
-            if (modalDisplayName !== 'WT' && modalDisplayName !== 'HT' && modalDisplayName !== 'PN' && modalDisplayName !== 'BMI') {
+            if (this.modalDisplayName !== 'WT' && this.modalDisplayName !== 'HT' && this.modalDisplayName !== 'PN' && this.modalDisplayName !== 'BMI') {
                 _.each(cleanData, function(e, i) {
                     var dataNumber = parseFloat(cleanData[i]);
 
-                    if (modalDisplayName == 'BP') {
+                    if (this.modalDisplayName == 'BP') {
                         var bpDataNumber = parseFloat(bpDiatolicData[i]);
                         if (bpDataNumber !== undefined && !isNaN(bpDataNumber) &&
                             dataNumber !== undefined && !isNaN(dataNumber)) {
@@ -213,7 +215,7 @@ define([
                             }
                         }
                     }
-                });
+                }, this);
             }
 
             //Reverse the graph so that the x and y line up
@@ -231,15 +233,15 @@ define([
                 }
             });
             //If there is chartable data show the chart
-            if (modalDisplayName !== 'BP') {
-                setisGraphable(onlyNumData);
+            if (this.modalDisplayName !== 'BP') {
+                this.setisGraphable(onlyNumData);
             } else {
-                setisGraphable(bpSystolicData);
+                this.setisGraphable(bpSystolicData);
             }
 
             this.chartOptions.series[0].data = [];
 
-            if (modalDisplayName !== 'BP') {
+            if (this.modalDisplayName !== 'BP') {
                 _.forEach(data, function(e, i) {
                     self.chartOptions.series[0].data.push({
                         y: data[i],
@@ -288,16 +290,16 @@ define([
             this.chartOptions.xAxis.categories = categories;
             this.chartOptions.series[0].zIndex = 1;
             this.chartOptions.yAxis.title.text = this.first.get('units');
-            if (modalDisplayName == 'BP') {
+            if (this.modalDisplayName == 'BP') {
                 this.chartOptions.series[0].name = 'SBP';
-            } else if (modalDisplayName == 'WT') {
+            } else if (this.modalDisplayName == 'WT') {
                 this.chartOptions.series[0].name = 'Weight';
             } else {
-                this.chartOptions.series[0].name = typeName;
+                this.chartOptions.series[0].name = this.typeName;
             }
 
             var graphUnits = [];
-            if (modalDisplayName !== 'BMI') {
+            if (this.modalDisplayName !== 'BMI') {
                 graphUnits = this.first.get('units');
             }
 
@@ -320,7 +322,7 @@ define([
                 this.chartOptions.series[1].data = [];
             }
 
-            if (modalDisplayName == 'BP') {
+            if (this.modalDisplayName == 'BP') {
                 this.chartOptions.series[1] = {
                     name: 'DBP',
                     data: bpDiatolicData,
@@ -358,14 +360,14 @@ define([
                 };
             }
         },
-        onShow: function() {
+        onDomRefresh: function() {
             Chart = new Highcharts.Chart(this.chartOptions);
             this.$el.find('svg').attr('focusable', false);
             this.$el.find('svg').attr('aria-hidden', true);
-
-            var $tableView = this.$('#lrDataTableView');
-            $tableView.on('mouseover', '#data-grid-vitals-modalView tbody tr', this.highLightChartPoint);
-            $tableView.on('mouseout', '#data-grid-vitals-modalView tbody tr', this.removeCrosshair);
+        },
+        events: {
+            'mouseover #data-grid-vitals-modalView tbody tr': 'highLightChartPoint',
+            'mouseout #data-grid-vitals-modalView tbody tr': 'removeCrosshair'
         },
         onBeforeDestroy: function() {
             $('body').off('.modalChart');
@@ -383,7 +385,7 @@ define([
                         $td3 = $this.find('td:eq(1)'),
                         $td1 = $this.find('td:eq(0)'),
                         index, points = [];
-                    if (modalDisplayName !== 'BP') {
+                    if (this.modalDisplayName !== 'BP') {
                         var result = $this.data('model').get('result') * 1,
                             high = $this.data('model').get('high') * 1,
                             low = $this.data('model').get('low') * 1,
@@ -477,51 +479,25 @@ define([
     var ModalView = Backbone.Marionette.LayoutView.extend({
         template: modalTemplate,
         fetchOptions: {},
-        initialize: function(options) {
-            // Fetch patientrecord data from RDK
-            this.loadingView = ADK.Views.Loading.create();
-            this.loadingView2 = ADK.Views.Loading.create();
-            dataCollection = options.gridCollection;
-            this.fullScreen = options.fullScreen;
-            this.instanceId = options.instanceId;
-            this.getModals();
-
-            if (this.showNavHeader) {
-                this.model.attributes.navHeader = true;
+        totalTestModel: new TotalTestModel(),
+        modelEvents: {
+            'change': 'render'
+        },
+        modelFetchCollectionEvents: {
+            'fetch:success': function(collection, resp) {
+                this.model.set(_.get(collection.first(), 'attributes'));
+            },
+            'fetch:error': function(colleciton, resp) {
+                this.collection.trigger('fetch:error', collection, resp);
             }
+        },
+        collectionEvents: {
+            'fetch:success': function(collection, resp) {
+                var self = this;
 
-            this.fetchOptions.resourceTitle = "patient-record-vital";
-            var fetchName = this.model.attributes.typeName;
-            if (this.model.attributes.typeName.indexOf("Blood") >= 0) fetchName = 'Blood Pressure';
-            this.fetchOptions.criteria = {
-                typeName: fetchName,
-                pid: this.model.attributes.pid,
-                filter: 'ne(result,Pass)'
-            };
-
-            typeName = fetchName;
-            this.model.attributes.modalTitleName = Util.getVitalLongName(typeName);
-            if (!_.isUndefined(this.model.get('displayName')) && this.model.get('displayName').indexOf("BP") >= 0) {
-                modalDisplayName = 'BP';
-            } else {
-                modalDisplayName = this.model.get('displayName');
-            }
-
-            var self = this;
-
-            this.fetchOptions.collectionConfig = {
-                collectionParse: self.filterCollection
-            };
-
-            this.fetchOptions.pageable = true;
-
-            gridOptions.appletConfig.gridTitle = 'This table represents the selected vitals, ' + this.model.attributes.modalTitleName;
-
-            this.fetchOptions.onSuccess = function(collection, response) {
-                self.collection = collection;
                 self.$el.find('.vitals-next, .vitals-prev').attr('disabled', false);
 
-                _.each(self.collection.fullCollection.models, function(element, index, list) {
+                _.each(collection.fullCollection.models, function(element, index, list) {
                     element.set('index', index);
                 });
 
@@ -537,94 +513,233 @@ define([
                     self.chart.reset();
                 }
 
-                if (collection.length !== 0) {
-                    var vitalsChart = new ChartView({
-                        chartOptions: $.extend(true, {}, AppletHelper.chartOptions),
-                        model: self.model,
-                        data: data,
-                        collection: self.collection
-                    });
-                    if (getisGraphable()) {
-                        self.$('#lrDataTableView').removeClass('col-md-12').addClass('col-md-5');
-                        self.$('#lrGraph').removeClass('hidden');
-                        if (self.chart !== undefined && self.chart !== null) {
-                            self.chart.show(vitalsChart);
-                        }
-                    } else {
-                        self.$('#lrDataTableView').removeClass('col-md-5').addClass('col-md-12');
-                        self.$('#lrGraph').addClass('hidden');
+                this.gridOptions.collection = collection;
+                this.gridOptions.filterDateRangeEnabled = true;
+
+                this.totalTestModel.set({
+                    totalTests: this.gridOptions.collection.fullCollection.length
+                });
+
+                if (!this.chart.hasView()) this.postProcess();
+            },
+            'fetch:error': function(collection, resp) {
+                var errorModel = new Backbone.Model(resp);
+                this.leftColumn.show(ADK.Views.Error.create({
+                    model: errorModel
+                }));
+                this.chart.show(ADK.Views.Error.create({
+                    model: errorModel
+                }));
+            }
+        },
+        setisGraphable: function(e) {
+            this.isGraphable = e.length > 0;
+        },
+        getisGraphable: function(e) {
+            return this.isGraphable;
+        },
+        postProcess: function() {
+            var collection = this.collection;
+            var self = this;
+
+            if (collection.length !== 0) {
+                var Chart = ChartView.extend({
+                    setisGraphable: _.bind(this.setisGraphable, this),
+                    modalDisplayName: this.modalDisplayName,
+                    typeName: this.typeName,
+                });
+                var vitalsChart = new Chart({
+                    chartOptions: $.extend(true, {}, _.clone(AppletHelper.chartOptions)),
+                    model: self.model,
+                    data: data,
+                    collection: collection,
+                });
+                if (this.getisGraphable()) {
+                    self.$('#lrDataTableView').removeClass('col-md-12').addClass('col-md-5');
+                    self.$('#lrGraph').removeClass('hidden');
+                    if (self.chart !== undefined && self.chart !== null) {
+                        self.chart.show(vitalsChart);
                     }
                 } else {
                     self.$('#lrDataTableView').removeClass('col-md-5').addClass('col-md-12');
                     self.$('#lrGraph').addClass('hidden');
                 }
 
-                gridOptions.collection = self.collection;
-                gridOptions.filterDateRangeEnabled = true;
-
-                currentModel = options.model;
-                self.model = options.model;
-                currentCollection = options.collection;
-
-                totalTestModel.set({
-                    totalTests: gridOptions.collection.fullCollection.length
-                });
-
-                self.dataGrid = ADK.Views.DataGrid.create(gridOptions);
+                self.dataGrid = ADK.Views.DataGrid.create(this.gridOptions);
 
                 if (self.leftColumn !== undefined && self.leftColumn !== null) {
                     self.leftColumn.reset();
                     self.leftColumn.show(self.dataGrid);
                 }
-
-                gridOptions.collection = self.collection;
-                if (collection.length !== 0) {
-
+                var collectionsPageSize = _.get(collection, 'state.pageSize', null);
+                if (collection.fullCollection.length <= collectionsPageSize) {
+                    self.$('.js-backgrid').append('<div class="backgrid-paginator"></div>');
+                } else {
                     self.paginatorView = ADK.Views.Paginator.create({
-                        collection: gridOptions.collection,
+                        collection: this.gridOptions.collection,
                         windowSize: 4
                     });
                     self.$('.js-backgrid').append(self.paginatorView.render().el);
-                } else {
-                    //this should just be set on gridOptions.emptyText and shouldn't 
-                    //need to do any DOM manipulation for this
-                    $('#data-grid-vitals-modalView').find('tbody').append($('<tr><td>No Records Found</td></tr>'));
                 }
+            } else {
+                self.$('#lrDataTableView').removeClass('col-md-5').addClass('col-md-12');
+                self.$('#lrGraph').addClass('hidden');
+                self.dataGrid = ADK.Views.DataGrid.create(this.gridOptions);
+
+                if (self.leftColumn !== undefined && self.leftColumn !== null) {
+                    self.leftColumn.show(self.dataGrid);
+                }
+                //this should just be set on gridOptions.emptyText and shouldn't
+                //need to do any DOM manipulation for this
+                $('#data-grid-vitals-modalView').find('tbody').append($('<tr><td>No Records Found</td></tr>'));
+            }
+        },
+        initialize: function(options) {
+            // Fetch patientrecord data from RDK
+            this.dataCollection = options.gridCollection;
+            this.fullScreen = options.fullScreen;
+            this.instanceId = options.instanceId;
+            this.getModals();
+            this.gridOptions = _.clone(gridOptions);
+
+            if (this.showNavHeader) {
+                this.model.attributes.navHeader = true;
+            }
+
+            this.fetchOptions.resourceTitle = "patient-record-vital";
+
+            this.fetchOptions.collectionConfig = {
+                collectionParse: _.bind(this.filterCollection, this)
             };
 
-            this.fetchOptions.onError = function(resp) {
-              var errorModel = new Backbone.Model(resp);
-              self.leftColumn.show(ADK.Views.Error.create({
-                model: errorModel
-              }));
-              self.chart.show(ADK.Views.Error.create({
-                model: errorModel
-              }));
+            this.fetchOptions.pageable = true;
+
+            if (!this.collection) this.collection = ADK.PatientRecordService.createEmptyCollection(this.fetchOptions);
+        },
+        prepareData: function() {
+            if (!this.model.get('typeName')) {
+                var fetchOptions = {
+                    criteria: {
+                        "uid": this.model.get('uid')
+                    },
+                    patient: ADK.PatientRecordService.getCurrentPatient(),
+                    resourceTitle: 'patient-record-vital'
+                };
+                this.modelFetchCollection = ADK.PatientRecordService.createEmptyCollection(fetchOptions);
+                this.bindEntityEvents(this.modelFetchCollection, this.modelFetchCollectionEvents);
+                ADK.PatientRecordService.fetchCollection(fetchOptions, this.modelFetchCollection);
+                return;
+            }
+
+            var vitalsTitle;
+            if (this.model.get('typeName') === 'Blood Pressure Systolic' || this.model.get('typeName') === 'Blood Pressure Diastolic') {
+                vitalsTitle = 'Blood Pressure';
+            } else {
+                vitalsTitle = this.model.get('typeName');
+            }
+            this.modalTitle = vitalsTitle;
+            this.fetchName = this.model.get('typeName');
+
+            this.typeName = this.fetchName;
+            this.model.set('modalTitleName', Util.getVitalLongName(this.typeName), {
+                silent: true
+            });
+            if (!_.isUndefined(this.model.get('displayName')) && this.model.get('displayName').indexOf("BP") >= 0) {
+                this.modalDisplayName = 'BP';
+            } else {
+                this.modalDisplayName = this.model.get('displayName');
+            }
+            this.gridOptions.appletConfig.gridTitle = 'This table represents the selected vitals, ' + this.model.get('modalTitleName');
+
+
+            if (this.model.get('typeName').indexOf("Blood") >= 0) this.fetchName = 'Blood Pressure';
+            this.fetchOptions.criteria = {
+                typeName: this.fetchName,
+                pid: this.model.attributes.pid,
+                filter: 'ne(result,Pass)',
             };
+
+            var dateRange;
+
+            if (sharedDateRange === undefined || sharedDateRange === null) {
+                this.resetSharedModalDateRangeOptions();
+            }
+
+            if (sharedDateRange !== undefined && sharedDateRange !== null &&
+                sharedDateRange.get('preSelectedDateRange') !== undefined &&
+                sharedDateRange.get('preSelectedDateRange') !== null) {
+                dateRange = sharedDateRange.clone();
+            } else {
+                dateRange = new DateRangeModel();
+            }
+
+            new DateRangeModel();
+            var filterDateRangeView = new FilterDateRangeView({
+                model: dateRange,
+                collection: this.collection,
+                parentView: this,
+                fullScreen: this.fullScreen
+            });
+            filterDateRangeView.setFetchOptions(this.fetchOptions);
+            filterDateRangeView.setSharedDateRange(sharedDateRange);
+
+            this.dateRangeFilter.show(filterDateRangeView);
+
+            this.leftColumn.show(ADK.Views.Loading.create());
+
+            if (this.getisGraphable()) {
+                this.chart.show(ADK.Views.Loading.create());
+            }
+
+            this.totalTests.show(new TotalView({
+                model: this.totalTestModel
+            }));
+
+            ADK.PatientRecordService.fetchCollection(this.fetchOptions, this.collection);
         },
         events: {
             'click .vitals-next': 'getNextModal',
-            'click .vitals-prev': 'getPrevModal'
-        },
-        getNextModal: function(id) {
-            var next = _.indexOf(modals, this.model) + 1;
-            if (next >= modals.length) {
-                next = 0;
+            'click .vitals-prev': 'getPrevModal',
+            'shown.modal-body': function() {
+                var Chart = ChartView.extend({
+                    setisGraphable: _.bind(this.setisGraphable, this),
+                    modalDisplayName: this.modalDisplayName,
+                    typeName: this.typeName,
+                });
+                var vitalsChart = new Chart({
+                    chartOptions: $.extend(true, {}, _.clone(AppletHelper.chartOptions)),
+                    model: this.model,
+                    data: data,
+                    collection: this.collection,
+                });
+                this.chart.show(vitalsChart);
             }
-            var model = modals[next];
-            this.setNextPrevModal(model, id);
         },
-        getPrevModal: function(id) {
-            var next = _.indexOf(modals, this.model) - 1;
+        onAttach: function() {
+            this.checkIfModalIsEnd();
+        },
+        checkIfModalIsEnd: function() {
+            var next = _.indexOf(this.modals, this.model) + 1;
+            if (next >= this.modals.length) {
+                this.$el.closest('.modal').find('#vitalsNext').attr('disabled', true);
+            }
+
+            next = _.indexOf(this.modals, this.model) - 1;
             if (next < 0) {
-                next = modals.length - 1;
+                this.$el.closest('.modal').find('#vitalsPrevious').attr('disabled', true);
             }
-            var model = modals[next];
-
-            this.setNextPrevModal(model, id);
         },
-        setNextPrevModal: function(model, id) {
-
+        getNextModal: function() {
+            var next = _.indexOf(this.modals, this.model) + 1;
+            var model = this.modals[next];
+            this.setNextPrevModal(model);
+        },
+        getPrevModal: function() {
+            var next = _.indexOf(this.modals, this.model) - 1;
+            var model = this.modals[next];
+            this.setNextPrevModal(model);
+        },
+        setNextPrevModal: function(model) {
             if (this.showNavHeader) {
                 model.attributes.navHeader = true;
             }
@@ -646,7 +761,7 @@ define([
 
             var view = new ModalView({
                 model: model,
-                gridCollection: dataCollection,
+                gridCollection: this.dataCollection,
                 navHeader: this.showNavHeader,
                 fullScreen: this.fullScreen
             });
@@ -676,7 +791,7 @@ define([
                     enteredInError: function(event) {
                         var vitalEnteredInErrorChannel = ADK.Messaging.getChannel('vitalsEiE');
                         vitalEnteredInErrorChannel.trigger('vitalsEiE:clicked', event, {
-                            'collection': dataCollection.models,
+                            'collection': this.dataCollection.models,
                             'title': model.attributes.observedFormatted,
                             'checked': model.attributes.localId
                         });
@@ -690,29 +805,28 @@ define([
                 options: modalOptions
             });
             modal.show();
-            modal.$el.closest('.modal').find('#' + id).focus();
+            modal.$el.closest('.modal').focus();
         },
         getModals: function() {
-            modals = [];
-            panelModals = [];
-            if (dataCollection !== undefined) {
-                _.each(dataCollection.models, function(m, key) {
+            this.modals = [];
+            if (this.dataCollection !== undefined) {
+                _.each(this.dataCollection.models, function(m, key) {
 
                     if (m.get('vitals')) {
-                        var outterIndex = dataCollection.indexOf(m);
+                        var outterIndex = this.dataCollection.indexOf(m);
                         _.each(m.get('vitals').models, function(m2, key) {
                             m2.set({
                                 'inAPanel': true,
                                 'parentIndex': outterIndex,
                                 'parentModel': m
                             });
-                            modals.push(m2);
+                            this.modals.push(m2);
 
                         });
                     } else {
-                        modals.push(m);
+                        this.modals.push(m);
                     }
-                });
+                }, this);
             }
         },
 
@@ -726,41 +840,13 @@ define([
             sharedDateRange = new DateRangeModel();
         },
         onRender: function() {
-            var dateRange;
-
-            if (sharedDateRange === undefined || sharedDateRange === null) {
-                this.resetSharedModalDateRangeOptions();
+            if (_.isFunction(_.get(this, 'collection.isEmpty')) && this.collection.isEmpty())
+                this.prepareData();
+        },
+        onDestroy: function() {
+            if (this.modelFetchCollection) {
+                this.unbindEntityEvents(this.modelFetchCollection, this.modelFetchCollectionEvents);
             }
-
-            if (sharedDateRange !== undefined && sharedDateRange !== null &&
-                sharedDateRange.get('preSelectedDateRange') !== undefined &&
-                sharedDateRange.get('preSelectedDateRange') !== null) {
-                dateRange = sharedDateRange.clone();
-            } else {
-                dateRange = new DateRangeModel();
-            }
-
-            new DateRangeModel();
-            var filterDateRangeView = new FilterDateRangeView({
-                model: dateRange,
-                parentView: this,
-                fullScreen: this.fullScreen
-            });
-            filterDateRangeView.setFetchOptions(this.fetchOptions);
-            filterDateRangeView.setSharedDateRange(sharedDateRange);
-
-            this.dateRangeFilter.show(filterDateRangeView);
-
-            this.leftColumn.show(this.loadingView);
-            if (getisGraphable()) {
-                this.chart.show(this.loadingView2);
-            }
-
-            this.totalTests.show(new TotalView({
-                model: totalTestModel
-            }));
-
-            self.collection = ADK.PatientRecordService.fetchCollection(this.fetchOptions);
         },
         filterCollection: function(coll) {
             coll.models.forEach(function(model) {
@@ -775,7 +861,7 @@ define([
             });
 
             var newColl = new Backbone.Collection(coll.where({
-                displayName: modalDisplayName
+                displayName: this.modalDisplayName
             }));
 
             var toDateMoment = moment(sharedDateRange.attributes.toDate).format("YYYYMMDD");

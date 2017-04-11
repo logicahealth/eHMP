@@ -417,7 +417,7 @@ var exampleView = Backbone.Marionette.ItemView.extend({
             icon: "fa-check", // only matters if type: "basic"
             message: SimpleAlertItemView,
             type: "basic",
-            autoClose: false, // prevents from closing automatically after 10 seconds
+            autoClose: false, // prevents from closing automatically after 5 seconds
             onClick: function () { // an optional callback function to be invoked on click event
                 ADK.Messaging.getChannel('notification-demo').trigger('alert-dropdown.show'); 
             }
@@ -434,7 +434,7 @@ The following are the available options to pass to the _ADK.UI.Notification_ con
 |                                  | **icon**        | string                     | font awesome class to use on the icon<br />**Note**: only used if _type_ is `"basic"`, otherwise will be determined by _type_ <br />**Example**: `icon: "fa-info"` |
 |                                  | **message**        | string                     | message to be displayed in the "body" of the notification<br />**Example**: `message: "This is an example of notification text"` |
 |                                  | **type**        | string                     | determines color and icon of notification (specifying _"basic"_ will allow icon to be specified) <br />**Options**: _"basic"_(default), _"success"_, _"info"_, _"warning"_, and _"danger"_<br />**Example**: `type: "success"`|
-|                                  | **autoClose**  | boolean  | If true, growl alert disappears after 10 seconds. If false, growl alert becomes sticky where the sticky growl alert remains unique on the screen by preventing another sticky growl alert with same message from being displayed.<br />**default**: `autoClose: true` |
+|                                  | **autoClose**  | boolean  | If true, growl alert disappears after 5 seconds. If false, growl alert becomes sticky where the sticky growl alert remains unique on the screen by preventing another sticky growl alert with same message from being displayed.<br />**default**: `autoClose: true` |
 |                                  | **onClick**  | function |  a callback function to be invoked on click event that closes growl alert.<br /> |
 
 

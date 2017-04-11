@@ -36,7 +36,7 @@ class PatientSearch < AccessBrowserV2
 
     add_action(CucumberLabel.new("clinics"), ClickAction.new, AccessHtmlElement.new(:id, "clinics"))
     add_action(CucumberLabel.new("patientSearchKeyword"), SendKeysAndEnterAction.new, AccessHtmlElement.new(:css, "#patient-search-main .smallColumn input.form-control")) #this doesn't exist anymore
-    add_action(CucumberLabel.new("wardKeyword"), SendKeysAndEnterAction.new, AccessHtmlElement.new(:css, "#wardFilter"))
+    add_action(CucumberLabel.new("wardKeyword"), SendKeysAction.new, AccessHtmlElement.new(:css, "#wardFilter"))
     add_action(CucumberLabel.new("locationDisplayName"), ClickAction.new, AccessHtmlElement.new(:css, ".locationDisplayName"))
     add_action(CucumberLabel.new("patientFilterInput"), SendKeysAndEnterAction.new, AccessHtmlElement.new(:id, "patientFilterInput")) #this soesn't exist anymore
     add_action(CucumberLabel.new("Ward"), ClickAction.new, AccessHtmlElement.new(:id, "wards"))
@@ -511,6 +511,16 @@ When(/^the user clears though the Confirm Flag$/) do
   wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
   wait.until { patient_search.static_dom_element_exists?("Confirm Flag") == true }
   expect(patient_search.perform_action("Confirm Flag")).to be_true
+
+  wait.until { patient_search.static_dom_element_exists?("patient demographic") == true }
+end
+
+Then(/^the user confirms nationwide search patient selection$/) do
+  patient_search= PatientSearch.instance
+  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
+  expect(patient_search.wait_until_action_element_visible("Confirm", DefaultLogin.wait_time)).to be_true
+  expect(patient_search.perform_action("Confirm")).to be_true
+  wait.until { patient_search.static_dom_element_exists?("patient demographic") == true }
 end
 
 Then(/^the user confirms patient "(.*?)"$/) do |arg1|

@@ -1,5 +1,4 @@
-define([
-], function() {
+define([], function() {
     'use strict';
 
     var Person = ADK.Resources.Picklist.Model.extend({
@@ -14,7 +13,7 @@ define([
     });
 
     var People = ADK.Resources.Picklist.Collection.extend({
-        type: 'people-for-facility',
+        resource: 'write-pick-list-people-for-facility',
         model: Person,
         params: function(method, options) {
             return {

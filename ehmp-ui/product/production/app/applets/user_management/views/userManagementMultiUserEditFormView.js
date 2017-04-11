@@ -31,7 +31,6 @@ define([
                     } else {
                         self.setPaging();
                     }
-
                 });
             this.listenTo(this.searchedUsersCollection, 'showAlert', function(model) {
                 self.showAlert(model.get('icon'), model.get('type'), model.get('title'), model.get('message'));
@@ -41,6 +40,9 @@ define([
             });
             this.listenTo(this.searchedUsersCollection, 'On Error', function(response) {
                 self.onError(response);
+            });
+            this.listenTo(this.searchedUsersCollection, 'enable-form', function() {
+                self.enableForm();
             });
         },
         cleanSearchResults: function(collection) {
@@ -132,7 +134,6 @@ define([
             } else {
                 this.setPaging();
             }
-
         },
         onError: function(response) {
             var errorMessage = JSON.parse(response.responseText).message;
@@ -170,8 +171,8 @@ define([
             "permissionSetsForSearchPicklist": ".permission-sets-for-search-picklist",
             "additionalPermissionsPickList": ".additional-permissions-pickList",
             "disableOnWarningControls": ".disable-on-warning",
-            "clearPermissionSetsButton":"#clear-permission-sets-button",
-            "clearPermissionsButton":"#clear-permissions-button",
+            "clearPermissionSetsButton": "#clear-permission-sets-button",
+            "clearPermissionsButton": "#clear-permissions-button",
             /*footer view controls*/
             'backButtonControl': '#back-button',
             'editUsersButton': '#edit-users-button',
@@ -258,7 +259,7 @@ define([
             this.ui.editUsersAdditionalPermissions.trigger('control:hidden', false);
             this.updateSelectedUsersTable(selectedUsers);
             if (this.model.get('editMode') === 'clone-permissions') {
-                appletUtil.appletAlert.warning(this.searchedUsersCollection, 'Cloning User Warning', 'All existing permission sets and permissions will be replaced for all selected users.', true);
+                appletUtil.appletAlert.warning(this.searchedUsersCollection, 'Cloning User Warning', 'All existing Permission Sets and Additional Individual Permissions will be replaced for all selected users.', true);
                 this.ui.editUsersCloneUsersSelect.trigger('control:hidden', false);
                 this.ui.removeFromClone.trigger('control:hidden', true);
                 this.ui.selectedUserTemplatePermissionSets.trigger('control:hidden', false);
@@ -351,7 +352,7 @@ define([
                 this.onSelectUserTemplate();
                 var newPicklist = new Backbone.Collection(this.getSelectedUsers());
                 this.ui.editUsersCloneUsersSelect.trigger('control:picklist:set', newPicklist);
-                this.model.set('editUsersCloneUsersSelect','');
+                this.model.set('editUsersCloneUsersSelect', '');
                 this.onChangeEditUsersAdditionalPermissions();
                 this.onChangeEditUsersPermissionSets();
                 this.updateEditUsersSelectedUsersTextArea();
@@ -491,20 +492,20 @@ define([
             'change:editUsersAdditionalPermissions': 'onChangeEditUsersAdditionalPermissions',
             'change:editUsersPermissionSets': 'onChangeEditUsersPermissionSets'
         },
-        onChangeEditUsersAdditionalPermissions: function(){
+        onChangeEditUsersAdditionalPermissions: function() {
             this.ui.clearPermissionsButton = this.$el.find('#clear-permissions-button');
-            if(this.model.get('editUsersAdditionalPermissions') === null || this.model.get('editUsersAdditionalPermissions') === [] || this.model.get('editUsersAdditionalPermissions').length === 0){
+            if (this.model.get('editUsersAdditionalPermissions') === null || this.model.get('editUsersAdditionalPermissions') === [] || this.model.get('editUsersAdditionalPermissions').length === 0) {
                 this.ui.clearPermissionsButton.trigger('control:disabled', true);
-            }else{
+            } else {
                 this.ui.clearPermissionsButton.trigger('control:disabled', false);
             }
             this.ui.clearPermissionsButton = this.$el.find('#clear-permissions-button');
         },
-        onChangeEditUsersPermissionSets: function(){
+        onChangeEditUsersPermissionSets: function() {
             this.ui.clearPermissionSetsButton = this.$el.find('#clear-permission-sets-button');
-            if(this.model.get('editUsersPermissionSets') === null || this.model.get('editUsersPermissionSets') === [] || this.model.get('editUsersPermissionSets').length === 0){
+            if (this.model.get('editUsersPermissionSets') === null || this.model.get('editUsersPermissionSets') === [] || this.model.get('editUsersPermissionSets').length === 0) {
                 this.ui.clearPermissionSetsButton.trigger('control:disabled', true);
-            }else{
+            } else {
                 this.ui.clearPermissionSetsButton.trigger('control:disabled', false);
             }
             this.ui.clearPermissionSetsButton = this.$el.find('#clear-permission-sets-button');
@@ -515,15 +516,22 @@ define([
         saveSelectforms: function() {
             if (this.model.get('editUsersPermissionSets') !== null) {
                 this['editUsersPermissionSets-' + this.previousEditMode] = this.model.get('editUsersPermissionSets');
-                this['editUsersAdditionalPermissions-' + this.previousEditMode] = this.model.get('editUsersAdditionalPermissions');
-                this.model.set('editUsersPermissionSets', []);
-                this.model.set('editUsersAdditionalPermissions', []);
+            } else {
+                this['editUsersPermissionSets-' + this.previousEditMode] = [];
             }
+
+            if (this.model.get('editUsersAdditionalPermissions') !== null) {
+                this['editUsersAdditionalPermissions-' + this.previousEditMode] = this.model.get('editUsersAdditionalPermissions');
+            } else {
+                this['editUsersAdditionalPermissions-' + this.previousEditMode] = [];
+            }
+            this.model.set('editUsersPermissionSets', []);
+            this.model.set('editUsersAdditionalPermissions', []);
         },
         onChangeEditMode: function() {
             this.enableDisableEditUsersButton();
             if (this.model.get('editMode') === 'clone-permissions') {
-                appletUtil.appletAlert.warning(this.searchedUsersCollection, 'Cloning User Warning', 'All existing permission sets and permissions will be replaced for all selected users. Include the user you would like to clone from in the list of selected users.', true);
+                appletUtil.appletAlert.warning(this.searchedUsersCollection, 'Cloning User Warning', 'All existing Permission Sets and Additional Individual Permissions will be replaced for all selected users. Include the user you would like to clone from in the list of selected users.', true);
             }
             this.saveSelectforms();
         },
@@ -707,7 +715,7 @@ define([
                 onError: function(error, response) {
                     var alertMessage = 'An error occurred while updating user permissions. ' +
                         'Try again. If problem persists, contact the Help Desk for assistance.';
-                    appletUtil.appletAlert.warning(self.searchedUsersCollection, 'Error Editing Permission Sets', alertMessage);
+                    appletUtil.appletAlert.warning(self.searchedUsersCollection, 'Error Editing Permissions', alertMessage);
                 }
             };
             ADK.ResourceService.fetchCollection(editUsersFetchOptions);

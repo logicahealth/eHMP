@@ -6,9 +6,10 @@ var definition = require('./definition');
 var patientlist = require('./patient-list');
 
 var rdk = require('../../core/rdk');
-var mongo = require('mongoskin');
+var MongoClient = require('mongodb').MongoClient;
 
 var cdsSpecUtil = require('../cds-spec-util/cds-spec-util');
+var cdsSubsystem = require('../../subsystems/cds/cds-subsystem');
 var mockReqResUtil = cdsSpecUtil.mockReqResUtil;
 var appReference = cdsSpecUtil.createAppReference;
 
@@ -48,7 +49,7 @@ function createPatientlistJson(name) {
             'expression': '{eq: [ {or: [\'A.A\',\'B.B\'], {} ]}',
             'date': '2015-03-10T12:54:56.899Z',
             'scope': 'private',
-            'owner': '9E7A;pu1234'
+            'owner': '9E7A;PW    '
         }
     };
     //making these optional for required parameter testing...
@@ -220,13 +221,18 @@ describe('CDS Patient List Resource', function() {
             }
 
         });
+        sinon.stub(cdsSubsystem, 'getCDSDB', function(dbName, init, callback) {
+            callback(null, db);
+        });
     });
 
     // Criteria tests
     describe('Criteria endpoint HTTP response codes', function() {
         it('GET responds HTTP Not Found', function() {
 
-            sinon.stub(mongo, 'db').returns(db);
+            sinon.stub(MongoClient, 'connect', function(string, options, callback) {
+                callback(null, db);
+            });
             criteria.init(appReference());
 
             //GET w/name, and return a status 404 (not found)
@@ -236,7 +242,9 @@ describe('CDS Patient List Resource', function() {
 
         it('POST responds HTTP Bad Request when required parameter missing', function() {
 
-            sinon.stub(mongo, 'db').returns(db);
+            sinon.stub(MongoClient, 'connect', function(string, options, callback) {
+                callback(null, db);
+            });
             criteria.init(appReference());
 
             //POST w/o name, required, and returns a 400 (bad request)
@@ -247,7 +255,9 @@ describe('CDS Patient List Resource', function() {
 
         it('POST responds HTTP Conflict', function() {
 
-            sinon.stub(mongo, 'db').returns(db);
+            sinon.stub(MongoClient, 'connect', function(string, options, callback) {
+                callback(null, db);
+            });
             criteria.init(appReference());
 
             //POST provide required name - this should create one, and return a status 201 (created)
@@ -259,7 +269,9 @@ describe('CDS Patient List Resource', function() {
 
         it('POST responds HTTP Created', function() {
 
-            sinon.stub(mongo, 'db').returns(db);
+            sinon.stub(MongoClient, 'connect', function(string, options, callback) {
+                callback(null, db);
+            });
             criteria.init(appReference());
 
             //POST provide required name - this should create one, and return a status 201 (created)
@@ -271,7 +283,9 @@ describe('CDS Patient List Resource', function() {
 
         it('DELETE responds HTTP Bad Request when required parameter missing', function() {
 
-            sinon.stub(mongo, 'db').returns(db);
+            sinon.stub(MongoClient, 'connect', function(string, options, callback) {
+                callback(null, db);
+            });
             criteria.init(appReference());
 
             //POST w/o name, required, and returns a 400 (bad request)
@@ -285,7 +299,9 @@ describe('CDS Patient List Resource', function() {
     describe('Definition endpoint HTTP response codes', function() {
         it('GET responds HTTP Not Found', function() {
 
-            sinon.stub(mongo, 'db').returns(db);
+            sinon.stub(MongoClient, 'connect', function(string, options, callback) {
+                callback(null, db);
+            });
             definition.init(appReference());
 
             //GET w/name, and return a status 404 (not found)
@@ -295,7 +311,9 @@ describe('CDS Patient List Resource', function() {
 
         it('POST responds HTTP Bad Request when required parameter missing', function() {
 
-            sinon.stub(mongo, 'db').returns(db);
+            sinon.stub(MongoClient, 'connect', function(string, options, callback) {
+                callback(null, db);
+            });
             definition.init(appReference());
 
             //POST w/o name, required, and returns a 400 (bad request)
@@ -306,7 +324,9 @@ describe('CDS Patient List Resource', function() {
 
         it('POST responds HTTP Conflict', function() {
 
-            sinon.stub(mongo, 'db').returns(db);
+            sinon.stub(MongoClient, 'connect', function(string, options, callback) {
+                callback(null, db);
+            });
             definition.init(appReference());
 
             //POST provide required name - this should create one, and return a status 201 (created)
@@ -318,7 +338,9 @@ describe('CDS Patient List Resource', function() {
 
         it('POST responds HTTP Created', function() {
 
-            sinon.stub(mongo, 'db').returns(db);
+            sinon.stub(MongoClient, 'connect', function(string, options, callback) {
+                callback(null, db);
+            });
             definition.init(appReference());
 
             //POST provide required name - this should create one, and return a status 201 (created)
@@ -330,7 +352,9 @@ describe('CDS Patient List Resource', function() {
 
         it('DELETE responds HTTP Bad Request when required parameter missing', function() {
 
-            sinon.stub(mongo, 'db').returns(db);
+            sinon.stub(MongoClient, 'connect', function(string, options, callback) {
+                callback(null, db);
+            });
             definition.init(appReference());
 
             //POST w/o name, required, and returns a 400 (bad request)
@@ -341,7 +365,9 @@ describe('CDS Patient List Resource', function() {
 
         it('COPY responds HTTP Bad Request when required parameter missing', function() {
 
-            sinon.stub(mongo, 'db').returns(db);
+            sinon.stub(MongoClient, 'connect', function(string, options, callback) {
+                callback(null, db);
+            });
             definition.init(appReference());
 
             //POST w/o name, required, and returns a 400 (bad request)
@@ -351,7 +377,9 @@ describe('CDS Patient List Resource', function() {
         });
         it('COPY responds HTTP Not Found when source missing', function() {
 
-            sinon.stub(mongo, 'db').returns(db);
+            sinon.stub(MongoClient, 'connect', function(string, options, callback) {
+                callback(null, db);
+            });
             definition.init(appReference());
 
             //POST no source, returns a 404 (not found)
@@ -364,7 +392,9 @@ describe('CDS Patient List Resource', function() {
         });
         it('COPY responds HTTP Conflict when destination exists', function() {
 
-            sinon.stub(mongo, 'db').returns(db);
+            sinon.stub(MongoClient, 'connect', function(string, options, callback) {
+                callback(null, db);
+            });
             definition.init(appReference());
 
             //POST no source, returns a 404 (not found)
@@ -381,7 +411,9 @@ describe('CDS Patient List Resource', function() {
     describe('Patient-list endpoint HTTP response codes', function() {
         it('GET responds HTTP Not Found', function() {
 
-            sinon.stub(mongo, 'db').returns(db);
+            sinon.stub(MongoClient, 'connect', function(string, options, callback) {
+                callback(null, db);
+            });
             patientlist.init(appReference());
 
             //GET w/name, and return a status 404 (not found)
@@ -391,7 +423,9 @@ describe('CDS Patient List Resource', function() {
 
         it('POST responds HTTP Bad Request when required parameter missing', function() {
 
-            sinon.stub(mongo, 'db').returns(db);
+            sinon.stub(MongoClient, 'connect', function(string, options, callback) {
+                callback(null, db);
+            });
             patientlist.init(appReference());
 
             //POST w/o name, required, and returns a 400 (bad request)
@@ -402,7 +436,9 @@ describe('CDS Patient List Resource', function() {
 
         it('POST responds HTTP Conflict', function() {
 
-            sinon.stub(mongo, 'db').returns(db);
+            sinon.stub(MongoClient, 'connect', function(string, options, callback) {
+                callback(null, db);
+            });
             patientlist.init(appReference());
 
             //POST provide required name - echo - exists
@@ -414,7 +450,9 @@ describe('CDS Patient List Resource', function() {
 
         it('POST responds HTTP Created', function() {
 
-            sinon.stub(mongo, 'db').returns(db);
+            sinon.stub(MongoClient, 'connect', function(string, options, callback) {
+                callback(null, db);
+            });
             patientlist.init(appReference());
 
             //POST provide required name - this should create one, and return a status 201 (created)
@@ -426,7 +464,9 @@ describe('CDS Patient List Resource', function() {
 
         it('DELETE responds HTTP Bad Request when required parameter missing', function() {
 
-            sinon.stub(mongo, 'db').returns(db);
+            sinon.stub(MongoClient, 'connect', function(string, options, callback) {
+                callback(null, db);
+            });
             patientlist.init(appReference());
 
             //POST w/o name, required, and returns a 400 (bad request)
@@ -437,7 +477,9 @@ describe('CDS Patient List Resource', function() {
 
         it('COPY responds HTTP Bad Request when required parameter missing', function() {
 
-            sinon.stub(mongo, 'db').returns(db);
+            sinon.stub(MongoClient, 'connect', function(string, options, callback) {
+                callback(null, db);
+            });
             patientlist.init(appReference());
 
             //POST w/o name, required, and returns a 400 (bad request)
@@ -447,7 +489,9 @@ describe('CDS Patient List Resource', function() {
         });
         it('COPY responds HTTP Not Found when source missing', function() {
 
-            sinon.stub(mongo, 'db').returns(db);
+            sinon.stub(MongoClient, 'connect', function(string, options, callback) {
+                callback(null, db);
+            });
             patientlist.init(appReference());
 
             //POST no source, returns a 404 (not found)
@@ -460,7 +504,9 @@ describe('CDS Patient List Resource', function() {
         });
         it('COPY responds HTTP Conflict when destination exists', function() {
 
-            sinon.stub(mongo, 'db').returns(db);
+            sinon.stub(MongoClient, 'connect', function(string, options, callback) {
+                callback(null, db);
+            });
             patientlist.init(appReference());
 
             //POST no source, returns a 404 (not found)

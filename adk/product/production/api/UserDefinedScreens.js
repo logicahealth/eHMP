@@ -15,7 +15,6 @@ define([
     'use strict';
 
     var UserDefinedScreens = {};
-    var id;
     var ScreensManifest = Messaging.request('ScreensManifest');
     var AppletsManifest = Messaging.request('AppletsManifest');
     var PreDefinedScreens = Messaging.request('PreDefinedScreens');
@@ -25,12 +24,14 @@ define([
         var appletConfig = _.find(AppletsManifest.applets, function(applet) {
             return applet.id === id;
         });
-        if (_.isUndefined(appletConfig)) {
+
+        if (_.isEmpty(appletConfig)) {
             appletConfig = {
                 id: id,
                 title: 'Title undefined'
             };
         }
+
         return _.clone(appletConfig);
     };
 
@@ -45,6 +46,7 @@ define([
         };
         var applets = [];
         divs.each(function() {
+            var titleText;
             var $appletEl = $(this).find('[data-appletid]');
             var applet = {};
             var id;
@@ -64,12 +66,11 @@ define([
                     applet.dataMaxSizeX = $(this).attr('data-max-sizex');
                     applet.dataMaxSizeY = $(this).attr('data-max-sizey');
                     applet.viewType = $(this).attr('data-view-type');
-                    var titleText = $('.panel-title-label', this).text() || applet.title;
+                    titleText = $('.panel-title-label', this).text() || applet.title;
                     applet.title = titleText.trim();
                     applet.filterName = $(this).attr('data-filter-name');
                     applets.push(applet);
                 }
-
             } else {
                 id = $(this).attr('data-appletid');
                 if (!_.isUndefined(id)) {
@@ -95,24 +96,23 @@ define([
                         viewType = $(this).attr('data-view-type') || $('.options-box').attr('data-viewtype');
                     }
                     applet.viewType = viewType;
-                    var titleText = $('.applet-title', this).text() || applet.title;
+                    titleText = $('.applet-title', this).text() || applet.title;
                     applet.title = titleText.trim();
                     applet.filterName = $(this).attr('data-filter-name');
                     applets.push(applet);
                 }
-
             }
-
-
         });
         screen.applets = applets;
         return screen;
     };
 
     UserDefinedScreens.setAppletDataAttribute = function(currentApplet) {
+        var size, minSize, maxSize;
         var appletManifestObject = _.find(AppletsManifest.applets, function(item) {
             return item.id === currentApplet.id;
         });
+
         var isAppletInManifest = !_.isEmpty(appletManifestObject);
         if (isAppletInManifest) {
             var permissions = appletManifestObject.permissions || [];
@@ -126,28 +126,19 @@ define([
             currentApplet.notFound = true;
         }
 
-        if (_.isUndefined(currentApplet.dataSizeX)) currentApplet.dataSizeX = 4;
-        if (_.isUndefined(currentApplet.dataSizeY)) currentApplet.dataSizeY = 4;
-        if (currentApplet.viewType === 'expanded') {
-            if (_.isUndefined(currentApplet.dataSizeX))
-                currentApplet.dataSizeX = 8;
-            currentApplet.dataMinSizeX = 8;
-            currentApplet.dataMaxSizeX = 12;
-            currentApplet.dataMinSizeY = 4;
-            currentApplet.dataMaxSizeY = 12;
-        } else if (currentApplet.viewType === 'gist') {
-            currentApplet.dataMinSizeX = 4;
-            currentApplet.dataMaxSizeX = 8;
-            currentApplet.dataMinSizeY = 3;
-            currentApplet.dataMaxSizeY = 12;
-
-        } else {
-            //summary view or default
-            currentApplet.dataMinSizeX = 4;
-            currentApplet.dataMaxSizeX = 8;
-            currentApplet.dataMinSizeY = 4;
-            currentApplet.dataMaxSizeY = 12;
+        // Infer size by viewType iff its sizes are not already set in the applet's configuration
+        if (!currentApplet.viewType) {
+            currentApplet.viewType = 'summary'; 
         }
+        size = ADK.utils.getViewTypeSize(currentApplet.viewType);
+        minSize = ADK.utils.getViewTypeMinSize(currentApplet.viewType);
+        maxSize = ADK.utils.getViewTypeMaxSize(currentApplet.viewType);
+        currentApplet.dataSizeX = currentApplet.dataSizeX || size.x;
+        currentApplet.dataSizeY = currentApplet.dataSizeY || size.y;
+        currentApplet.dataMinSizeX = currentApplet.dataMinSizeX || minSize.x;
+        currentApplet.dataMinSizeY = currentApplet.dataMinSizeY || minSize.y;
+        currentApplet.dataMaxSizeX = currentApplet.dataMaxSizeX || maxSize.x;
+        currentApplet.dataMaxSizeY = currentApplet.dataMaxSizeY || maxSize.y;
     };
 
     UserDefinedScreens.getGridsterTemplate = function(screenModule) {
@@ -197,6 +188,7 @@ define([
             return type;
         }
     }
+
     UserDefinedScreens.getGridsterTemplateForEditor = function(screenModule) {
         var deferred = new $.Deferred();
         UserDefinedScreens.updateScreenModuleFromStorage(screenModule).done(function() {
@@ -221,20 +213,19 @@ define([
                         '"><i class="fa fa-cog"></i></button><br><h5 class="applet-title all-margin-no all-padding-no">' + currentApplet.title + '</h5>' +
                         (currentApplet.notFound ? '<span class="text-warning">Applet Not Found</span>' : currentApplet.noPermission ? '<span class="text-danger">Permission Denied</span>' : '<span class="right-padding-lg">' + _.capitalize(getViewTypeDisplay(currentApplet.viewType)) + '</span>');
                 }
-
             });
+
             template += '</ul></div>';
             deferred.resolve(template);
         });
+
         return deferred;
-
-
     };
 
     UserDefinedScreens.getGridsterTemplateForPreview = function(screenModule) {
         var template = '<div id="gridsterPreview" class="gridster"><ul>';
         _.each(screenModule.applets, function(currentApplet) {
-            if (currentApplet.region.toLowerCase() != 'none') {
+            if (currentApplet.region.toLowerCase() !== 'none') {
                 UserDefinedScreens.setAppletDataAttribute(currentApplet);
                 template += '<li' +
                     ' data-row="' + currentApplet.dataRow +
@@ -279,13 +270,11 @@ define([
                 if (callback) callback(response);
             }
         });
-
     };
 
     UserDefinedScreens.saveGridsterConfig = function(gridsterAppletJson, key, callback) {
         UserDefinedScreens.saveConfigToJDS(gridsterAppletJson, key, callback);
         UserDefinedScreens.saveGridsterConfigToSession(gridsterAppletJson, key);
-
     };
 
     UserDefinedScreens.saveGridsterConfigToSession = function(gridsterAppletJson, screenId) {
@@ -356,7 +345,7 @@ define([
         fetchOptions.onSuccess = function(response) {
             if (response.length > 0) {
                 deferred.resolve(response.at(0));
-                if (userSession.get('status') === 'loggedin') {
+                if (userSession.get('status') === UserService.STATUS.LOGGEDIN) {
                     self.saveUserConfigToSession(response.at(0));
                 }
             } else {
@@ -390,7 +379,6 @@ define([
         }).fail(function() {
             //console.log('Error in saving clone of workspace ' + origId);
         });
-
     };
 
     UserDefinedScreens.cloneUDScreenToSession = function(origId, cloneId) {
@@ -471,140 +459,157 @@ define([
         });
     };
 
-    UserDefinedScreens.getScreensConfig = function() {
-        var self = this;
-        var promise = UserDefinedScreens.getConfig(USER_SCREENS_CONFIG);
-        var deferred = new $.Deferred();
-        var WORKSPACE_CONTEXT = 'patient';
-        var filterScreensOnHasPermission = function(screens) {
-            var provisionedScreens = [];
-            var hasPermission = function(screen) {
-                if (!_.isUndefined(screen) && !_.isUndefined(screen.requiredPermissions)) {
-                    var hasPermission = true;
-                    _.each(screen.requiredPermissions, function(permission) {
-                        if (!UserService.hasPermission(permission)) {
-                            hasPermission = false;
-                        }
-                    });
-                    return hasPermission;
-                }
-                return true;
-            };
-            _.each(screens, function(screen) {
-                if (_.isUndefined(screen.requiredPermissions) || hasPermission(screen)) {
-                    provisionedScreens.push(screen);
+    var filterScreensOnHasPermission = function(screens) {
+        var provisionedScreens = [];
+        var hasPermission = function(screen) {
+            var hasPermission = true;
+            _.each(screen.requiredPermissions, function(permission) {
+                if (!UserService.hasPermission(permission)) {
+                    hasPermission = false;
+                    return false;
                 }
             });
-            return provisionedScreens;
+            return hasPermission;
         };
-        promise.done(function(screenConfig) {
-            var provissionedScreens = filterScreensOnHasPermission(PreDefinedScreens.screens);
-            var pdScreens = _.clone(provissionedScreens);
+
+        _.each(screens, function(screen) {
+            if (_.isEmpty(screen.requiredPermissions) || hasPermission(screen)) {
+                provisionedScreens.push(screen);
+            }
+        });
+        return provisionedScreens;
+    };
+
+    UserDefinedScreens.getScreensConfig = function() {
+        var deferred = new $.Deferred();
+
+        UserDefinedScreens.getConfig(USER_SCREENS_CONFIG).done(function(screenConfig) {
+            var provisionedPreDefinedScreens = filterScreensOnHasPermission(PreDefinedScreens.screens);
             var screensConfigOrig = screenConfig.toJSON();
-            if (!screensConfigOrig.userScreensConfig) screensConfigOrig.userScreensConfig = {
-                screens: []
-            };
+            if (!screensConfigOrig.userScreensConfig) {
+                screensConfigOrig.userScreensConfig = {
+                    screens: []
+                };
+            }
             screenConfig = screensConfigOrig.userScreensConfig ? screensConfigOrig.userScreensConfig : screensConfigOrig;
-            var userDefaultScreen = WorkspaceContextRepository.getDefaultScreenOfContext(WORKSPACE_CONTEXT);
             if (_.isEmpty(screenConfig)) {
                 screenConfig = {
                     screens: []
                 };
+            } else {
+                var filteredUserScreens = filterScreensOnHasPermission(screenConfig.screens);
+                if (filteredUserScreens.length < screenConfig.screens.length) {
+                    screenConfig.screens = filteredUserScreens;
+                }
             }
-            var userDefined = false;
-            _.each(screenConfig.screens, function(screen) {
-                if (!screen) {
-                    return;
+
+            var isLoggedIn = UserService.getUserSession().get('status') === UserService.STATUS.LOGGEDIN;
+            var currentContextId = WorkspaceContextRepository.currentContextId;
+            var contextDefaultScreen = WorkspaceContextRepository.currentContextDefaultScreen;
+            var hasScreenConfigChanged = false;
+            var user, preferences, defaultScreen, initialDefaultScreen;
+            if (isLoggedIn) {
+                user = ADK.UserService.getUserSession();
+                if (!user.get('preferences')) {
+                    user.set('preferences', {defaultScreen: {}});
                 }
-                userDefined = !screen.predefined;
-                if (userDefined) {
-                    if (screen.defaultScreen) {
-                        userDefaultScreen = screen.id;
+                preferences = user.get('preferences');
+                if (!preferences.defaultScreen) {
+                    _.set(preferences, 'defaultScreen', {});
+                }
+                defaultScreen = preferences.defaultScreen;
+                initialDefaultScreen = defaultScreen[currentContextId];
+            }
+
+            // Sanitize current screens
+            screenConfig.screens = _.filter(screenConfig.screens, function(userScreen) {
+                if (_.isEmpty(userScreen)) {
+                    hasScreenConfigChanged = true;
+                    return false;
+                }
+
+                if (userScreen.predefined) {
+                    var matchingIdScreen = _.find(provisionedPreDefinedScreens, function(predefinedScreen) {
+                        return predefinedScreen.id === userScreen.id;
+                    });
+
+                    if (!_.isEmpty(matchingIdScreen) && userScreen.title !== matchingIdScreen.title) {
+                        userScreen.title = matchingIdScreen.title;
+                        hasScreenConfigChanged = true;
                     }
                 }
-                // remove existing predefined screen records from our screensConfig if they are not found in the predefined screens file
-                else {
-                    var result = $.grep(pdScreens, function(item) {
-                        return item.id === screen.id;
-                    });
-                    if (result.length === 0) {
-                        screenConfig.screens = _.without(screenConfig.screens, screen);
-                    } else {
-                        screen.title = result[0].title;
-                    }
-                    //remove duplicate screen
-                    var duplicates = $.grep(screenConfig.screens, function(item) {
-                        return item.id === screen.id;
-                    });
-                    if (duplicates.length > 1) {
-                        for (var i = 1; i < duplicates.length; i++) {
-                            screenConfig.screens = _.without(screenConfig.screens, duplicates[i]);
+
+                // NOTE: DO NOT DELETE THE CURRENT DEFAULTSCREEN PROPERTY ON SCREEN
+                // if (userScreen.defaultScreen) {
+                //     delete userScreen.defaultScreen;
+                //     hasScreenConfigChanged = true;
+                // }
+
+                return true;
+            });
+
+            var navigateToDefaultScreen = false;
+            // Add missing predefined screens
+            _.each(provisionedPreDefinedScreens, function(predefinedScreen) {
+                var matchingTitleScreens = _.filter(screenConfig.screens, function(userScreen) {
+                    return predefinedScreen.title === userScreen.title;
+                });
+
+                if (_.isEmpty(matchingTitleScreens)) {
+                    screenConfig.screens.push(predefinedScreen);
+                    hasScreenConfigChanged = true;
+                } else {
+                    _.each(matchingTitleScreens, function(matchingScreen) {
+                        if (matchingScreen.id !== predefinedScreen.id) {
+                            // Replace screen
+                            hasScreenConfigChanged = true;
+
+                            if (isLoggedIn && defaultScreen[currentContextId] === matchingScreen.id) {
+                                defaultScreen[currentContextId] = predefinedScreen.id;
+                            }
+
+                            screenConfig.screens = _.without(screenConfig.screens, matchingScreen);
+                            screenConfig.screens.push(predefinedScreen);
+                            UserDefinedScreens.saveGridsterConfig({}, matchingScreen.id);
+
+                            if (!navigateToDefaultScreen && Backbone.history.fragment === matchingScreen.id) {
+                                navigateToDefaultScreen = true;
+                            }
                         }
-                    }
+                    });
                 }
             });
-            _.each(pdScreens, function(screen) {
-                var containScreen = _.filter(screenConfig.screens, function(s) {
-                    if (!s || !screen) {
-                        return;
-                    }
-                    if (s.title === screen.title) {
-                        if (s.id === screen.id) { // NOT SURE THIS SHOULD BE AN IF-ELSE HERE
-                            //both the id and title must match
-                            return s.id === screen.id;
-                        } else {
-                            //if a predefined screen is somehow duplicated, but the id's dont match, remove the duplicate screen
-                            console.warn('Removing duplicate predefined screen: ' + s.title);
-                            //removing it from the pJDS screenCOnfig locally
-                            screenConfig.screens = _.without(screenConfig.screens, s);
-                            // saving it as an empty object
-                            UserDefinedScreens.saveGridsterConfig({}, s.id);
-                            if (s.defaultScreen === true) {
-                                // going through all the screens and marking overview as the default screen again
-                                var resetDefault = _.map(screenConfig.screens, function(screen) {
-                                    screen.defaultScreen = false;
-                                    return screen;
-                                });
-                                screenConfig.screens = resetDefault;
-                            }
-                            // Save the screens back to pJDS and locally in session storage
-                            UserDefinedScreens.saveScreensConfig(screenConfig);
-                            // now that the screen has been deleted if that is the screen we are on go to the default screen of your current context
-                            // if we are trying to delete the screen that we came from, go back to the predefined default screen.
-                            if (Backbone.history.fragment === s.id) {
-                                Navigation.navigate(WorkspaceContextRepository.currentContextDefaultScreen, {
-                                    route: {
-                                        trigger: false
-                                    }
-                                });
-                            }
-                        }
+
+            if (isLoggedIn) {
+                if (initialDefaultScreen !== defaultScreen[currentContextId]) {
+                    UserService.savePreferences();
+                    user.trigger('change:preferences:defaultScreen');
+                }
+            }
+
+            if (hasScreenConfigChanged) {
+                // UserService.setUserSession(user);
+                // Save the screens back to pJDS and locally in session storage
+                UserDefinedScreens.saveScreensConfig(screenConfig);
+            }
+
+            if (navigateToDefaultScreen) {
+                Navigation.navigate(WorkspaceContextRepository.currentContextDefaultScreen, {
+                    route: {
+                        trigger: false
                     }
                 });
-                // if the predefined screen was in the screen config from pJDS and it is marked as default
-                // then change the userDefaultScreen locally
-                if (containScreen.length > 0 && screen) {
-                    if (containScreen[0].defaultScreen === true) {
-                        userDefaultScreen = screen.id;
-                    }
-                } else if (containScreen.length < 1 && screen) {
-                    // if the predefined screen was not in the screen config from pJDS
-                    // then add it to the local screen config array
-                    screenConfig.screens.push(screen);
-                    // check to see if the screen is marked as default and if it is then change the userDefaultScreen locally
-                    if (screen.defaultScreen === true) {
-                        userDefaultScreen = screen.id;
-                    }
-                }
-            });
-            // Sets user customized screen as default screen
-            WorkspaceContextRepository.setDefaultScreenOfContext(WORKSPACE_CONTEXT, userDefaultScreen);
-            // if there is a user than save the updated screen config into session
-            if (UserService.getUserSession().get('status') === 'loggedin') {
-                self.saveUserConfigToSession(screensConfigOrig);
             }
+
+            // if there is a user than save the updated screen config into session
+            if (isLoggedIn) {
+                WorkspaceContextRepository.currentContextDefaultScreen = defaultScreen[currentContextId] || contextDefaultScreen;
+                UserDefinedScreens.saveUserConfigToSession(screensConfigOrig);
+            }
+
             deferred.resolve(screenConfig);
         });
+
         return deferred;
     };
 
@@ -646,7 +651,6 @@ define([
     };
 
     function getId() {
-
         var patient = PatientRecordService.getCurrentPatient();
         var id;
 
@@ -660,7 +664,6 @@ define([
         }
 
         return id;
-
     }
 
     UserDefinedScreens.saveScrollPositionToSession = function(value) {
@@ -762,8 +765,8 @@ define([
         if (json.userDefinedGraphs[screenIndex].applets[appletIndex].graphs.length === 0) {
             json.userDefinedGraphs[screenIndex].applets.splice(appletIndex, 1);
         }
-        UserDefinedScreens.saveUserConfigToSession(json);
 
+        UserDefinedScreens.saveUserConfigToSession(json);
     };
 
     //remove all stacked graphs for one applet from session
@@ -787,7 +790,6 @@ define([
         if (appletIndex === -1) return;
         json.userDefinedGraphs[screenIndex].applets.splice(appletIndex, 1);
         UserDefinedScreens.saveUserConfigToSession(json);
-
     };
 
     //add one stacked graph to session
@@ -835,7 +837,6 @@ define([
         });
 
         UserDefinedScreens.saveUserConfigToSession(json);
-
     };
 
     UserDefinedScreens.reorderStackedGraphsInSession = function(screenId, appletInstanceId, newGraphsArray) {
@@ -923,6 +924,7 @@ define([
     UserDefinedScreens.removeOneScreenFromSession = function(screenId) {
         WorkspaceFilters.removeAllFiltersForOneScreenFromSession(screenId);
         UserDefinedScreens.removeAllStackedGraphForOneScreenFromSession(screenId);
+        ADK.TileSortManager.removeAllSortsForOneScreenFromSession(screenId);
     };
 
     //remove all stacked graphs for screen from session

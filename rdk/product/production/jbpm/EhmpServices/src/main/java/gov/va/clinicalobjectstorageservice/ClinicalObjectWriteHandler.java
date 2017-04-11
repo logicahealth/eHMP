@@ -15,6 +15,7 @@ import com.google.gson.JsonParser;
 
 import gov.va.clinicalobjectstorageservice.util.ResourceUtil;
 import gov.va.ehmp.services.exception.EhmpServicesException;
+import gov.va.ehmp.services.exception.ErrorResponseUtil;
 import gov.va.ehmp.services.utils.Logging;
 import gov.va.kie.utils.WorkItemUtil;
 
@@ -36,13 +37,9 @@ public class ClinicalObjectWriteHandler implements WorkItemHandler, Closeable, C
 		String response = null;
 		try {
 			Logging.info("Entering ClinicalObjectWriteHandler.executeWorkItem");
-			String pId  = WorkItemUtil.extractStringParam(workItem, "pid");
-			String jsonObject = WorkItemUtil.extractStringParam(workItem,"clinicalObject");
-			String uId = null;
-			
-			if (workItem != null && workItem.getParameter("uid") != null) {
-				uId = WorkItemUtil.extractStringParam(workItem,"uid");				
-			}			
+			String pId  = WorkItemUtil.extractRequiredStringParam(workItem, "pid");
+			String jsonObject = WorkItemUtil.extractRequiredStringParam(workItem,"clinicalObject");
+			String uId = WorkItemUtil.extractOptionalStringParam(workItem,"uid");
 			
 			Logging.debug("ClinicalObjectWriteHandler.executeWorkItem pId = " + pId + ", uId = " + uId);
 			Logging.debug("ClinicalObjectWriteHandler.executeWorkItem jsonObject = " + jsonObject);
@@ -63,6 +60,9 @@ public class ClinicalObjectWriteHandler implements WorkItemHandler, Closeable, C
 			Logging.debug("ClinicalObjectWriteHandler.executeWorkItem response = " + response);
 		} catch (EhmpServicesException e) {
 			response = e.toJsonString();
+		} catch (Exception e) {
+			Logging.error("ClinicalObjectWriteHandler.executeWorkItem: An unexpected condition has happened: " + e.getMessage());
+			response = ErrorResponseUtil.create(HttpStatus.INTERNAL_SERVER_ERROR, "ClinicalObjectWriteHandler.executeWorkItem: An unexpected condition has happened: ", e.getMessage());
 		}
 		
 		WorkItemUtil.completeWorkItem(workItem, manager, response);

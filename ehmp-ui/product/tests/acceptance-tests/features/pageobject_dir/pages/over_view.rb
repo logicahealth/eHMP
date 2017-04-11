@@ -5,8 +5,8 @@ require 'workspace_navigation.rb'
 require 'tray_sidebar_section.rb'
 
 class PobOverView < SitePrism::Page
-  set_url '/#overview'
-  set_url_matcher(/\/#overview$/)
+  set_url '/#/patient/overview'
+  set_url_matcher(/\/#\/patient\/overview$/)
   # *****************  All_Form_Elements  ******************* #
   # *****************  All_Logo_Elements  ******************* #
   # *****************  All_Field_Elements  ******************* #
@@ -35,6 +35,7 @@ class PobOverView < SitePrism::Page
   elements :fld_immunization_gist_items, "div[id^='pill-gist-popover-urn:va:immunization']"
   elements :fld_lab_results_age_rows, "#grid-panel-lab_results_grid .table-cell.flex-width-0_5.text-center"
   elements :fld_cwad_details, "div.demographic-group-wrapper"
+  elements :fld_cwad_visible_titles, "div[aria-hidden='false'] .cwad-title"
 
   # *****************  All_Button_Elements  ******************* #
   element :btn_patient_search, "#patientSearchButton"

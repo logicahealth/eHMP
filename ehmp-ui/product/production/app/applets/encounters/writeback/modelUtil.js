@@ -19,16 +19,15 @@ define([
         COMBAT_VETERAN = 'combat-vet',
         SHIPBOARD_HAZARD_DEFENSE = 'shad';
     var ENCOUNTER_FORM_ERROR_MSG = '<h3>There was an error retrieving the encounter form. Try again in a couple of minutes.</h3>';
-    var ENCOUNTER_FORM_ERROR_TITLE = 'Encounter Form Error';
-    var ENCOUNTER_FORM_ERROR_ICON = 'icon-error';
+    var ENCOUNTER_FORM_ERROR_TITLE = 'Error';
+    var ENCOUNTER_FORM_ERROR_ICON = 'icon-circle-exclamation';
     var ENCOUNTER_FORM_ERROR_NO_RESOURCE_RESPONSE = 'No response was received from the resource server. Contact your System Administrator for assistance.';
     var OTHER_DIAGNOSIS = 'OTHER DIAGNOSES',
         OTHER_PROCEDURES = 'OTHER PROCEDURES',
         CPT_CODES = 'cptCodes';
     var util = {
         retrieveDiagnosisTree: function(form, searchString, context) {
-            var url = ADK.ResourceService.buildUrl('write-pick-list', {
-                type: 'progress-notes-titles-icd-10',
+            var url = ADK.ResourceService.buildUrl('write-pick-list-progress-notes-titles-icd-10', {
                 site: ADK.UserService.getUserSession().get('site'),
                 searchString: searchString
             });
@@ -56,7 +55,7 @@ define([
                     /** SUCCESS: Now let's populate the model **/
                     var ary = resp.data;
                     if (ary.serviceConnected === 'NO') {
-                        model.set('ratedDisabilities', "<li>"+ary.disability+"</li>");
+                        model.set('ratedDisabilities', "<li>" + ary.disability + "</li>");
                     } else {
                         model.set('serviceConnected', ary.scPercent + '%');
                         var tempString = '';
@@ -319,26 +318,26 @@ define([
             }
         },
         /**
-        *   Calculates the delta between the initial encounter form data and any
-        *   changes the user has made to the encounter form since opening it.
-        *   Returns an array of two Visit Type Section objects: the first object
-        *   represents the data to remove from the form, the second object
-        *   represents the data to add to the form. Returns an empty array if
-        *   no changes were made to the Visit Type Section.
-        *
-        *   Terminology:
-        *       Visit Type Section: The group of data on the encounter form that is
-        *           comprised of Visit Categories, Visit Types, and Visit Type Modifiers.
-        *       Visit Category: the first column in the Visit Type Section that
-        *           represents the broad categories a visit can be grouped in.
-        *           Ex: Audiology, Dental, Medical
-        *       Visit Type: the subcategories of a particular Visit Category.
-        *           Ex: C&P F-T-F Visit, C&P Telehealth Visit, C&P ACE Chart Review
-        *       Visit Type Modifiers: attributes that can be applied to a particular
-        *           Visit Type.
-        *           Ex: Opt Out Phys/Pract Emerg Or Urgent Service, Actual
-        *           Item/Service Ordered
-        */
+         *   Calculates the delta between the initial encounter form data and any
+         *   changes the user has made to the encounter form since opening it.
+         *   Returns an array of two Visit Type Section objects: the first object
+         *   represents the data to remove from the form, the second object
+         *   represents the data to add to the form. Returns an empty array if
+         *   no changes were made to the Visit Type Section.
+         *
+         *   Terminology:
+         *       Visit Type Section: The group of data on the encounter form that is
+         *           comprised of Visit Categories, Visit Types, and Visit Type Modifiers.
+         *       Visit Category: the first column in the Visit Type Section that
+         *           represents the broad categories a visit can be grouped in.
+         *           Ex: Audiology, Dental, Medical
+         *       Visit Type: the subcategories of a particular Visit Category.
+         *           Ex: C&P F-T-F Visit, C&P Telehealth Visit, C&P ACE Chart Review
+         *       Visit Type Modifiers: attributes that can be applied to a particular
+         *           Visit Type.
+         *           Ex: Opt Out Phys/Pract Emerg Or Urgent Service, Actual
+         *           Item/Service Ordered
+         */
         createVisitTypeData: function(model) {
             var visitTypeSection = [];
             var visitCategoryChanged = false;
@@ -693,7 +692,7 @@ define([
                 ].join('\n'))
             });
             var SimpleAlertFooterItemView = Backbone.Marionette.ItemView.extend({
-                template: Handlebars.compile(['{{ui-button "OK" classes="btn-primary alert-continue" title="Press enter to continue."}}'].join('\n')),
+                template: Handlebars.compile(['{{ui-button "OK" classes="btn-primary alert-continue btn-sm" title="Press enter to close."}}'].join('\n')),
                 events: {
                     'click button': function() {
                         ADK.UI.Alert.hide();

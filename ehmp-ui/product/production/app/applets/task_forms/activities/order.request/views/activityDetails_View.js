@@ -13,17 +13,34 @@ define([
             initialize: function(){
                 Utils.setRequest(this.model);
 
-                var self = this;
-                this.facilities = new ADK.UIResources.Picklist.Team_Management.Facilities();
-                this.listenToOnce(this.facilities, 'read:success', function(collection, response) {
-                    self.model.set('createdAtFacilityName', Utils.getCreatedAtFacilityName(self.model.get('facilityRequestDivisionId'), collection));
-                    self.stopListening(this.collection, 'fetch:error');
-                    self.render();
+                var fetchOptions = {
+                    type: 'GET',
+                    resourceTitle: 'authentication-list',
+                    cache: true,
+                    viewModel: {
+                        parse: function(response) {
+                            return {
+                                facilityID: response.division,
+                                vistaName: response.name
+                            };
+                        }
+                    }
+                };
+
+                var facilityId = this.model.get('facilityRequestDivisionId');
+                var facilitiesCollection = ADK.ResourceService.fetchCollection(fetchOptions);
+                this.listenToOnce(facilitiesCollection, 'sync', function(collection, response) {
+                    if (response.status === 200) {
+                        if(!_.isUndefined(facilityId)){
+                            var facility = collection.findWhere({facilityID: facilityId});
+
+                            if(!_.isUndefined(facility)){
+                                this.model.set('createdAtFacilityName', facility.get('vistaName'));
+                                this.render();
+                            }
+                        }
+                    }
                 });
-                this.listenToOnce(this.facilities, 'read:error', function(){
-                    self.stopListening(this.collection, 'fetch:success');
-                });
-                this.facilities.fetch();
             }
         });
     });

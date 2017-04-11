@@ -1,4 +1,3 @@
-/*jslint node: true */
 'use strict';
 
 var _ = require('lodash');
@@ -20,7 +19,7 @@ module.exports.getResourceConfig = function() {
         interceptors: {
             synchronize: false
         },
-        requiredPermissions: [],
+        requiredPermissions: ['sign-note'],
         requiredASUActions: ['ENTRY'],
         isPatientCentric: false,
         subsystems: ['jds', 'jdsSync', 'authorization']
@@ -33,16 +32,14 @@ function getUserLastTitle(req, res) {
     logger.debug({user: user}, 'user');
     var user = req.session.user;
     var userUid = 'urn:va:user:' + user.site + ':' + user.duz[user.site];
-    var jdsResource = '/vpr/all/index/document-author';
+    var jdsResource = '/vpr/all/index/document-author?range=' +userUid;
     var jdsQuery = {
-        //order: 'lastUpdateTime desc',
         filter: jdsFilter.build([
-            ['eq', 'authorUid', userUid],
             ['eq', 'documentClass', 'PROGRESS NOTES'],
             ['not', ['exists', 'parentUid']]
         ])
     };
-    var jdsPath = jdsResource + '?' + querystring.stringify(jdsQuery);
+    var jdsPath = jdsResource + '&' + querystring.stringify(jdsQuery);
 
     var options = _.extend({}, req.app.config.jdsServer, {
         url: jdsPath,

@@ -15,7 +15,7 @@ define([
             '{{#if value}}',
             '<div class="alert alert-{{#if type}}{{type}}{{else}}info{{/if}}' +
             '{{#if dismissible}} alert-dismissible{{/if}}' +
-            ' alert-user">' +
+            ' alert-user all-margin-no top-margin-sm bottom-margin-sm">' +
             '{{#if dismissible}}' +
             '<button type="button" class="close" title="Press enter to close this alert.">',
             '<span aria-hidden="true">&times;</span>',

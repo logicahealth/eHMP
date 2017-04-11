@@ -106,18 +106,7 @@ Scenario: Client can request clinical notes results in FHIR format
       | resource.extension.url          | http://vistacore.us/fhir/extensions/composition#isInterdisciplinary  |
       | resource.extension.valueBoolean | false                                                                |
 
-@F138_4_fhir_clinicalnote @fhir @9E7A18 @US8574 
-Scenario: Client can break the glass when requesting clinical notes in FHIR format for a sensitive patient
-      Given a patient with "clinical notes" in multiple VistAs
-      When the client requests clinical notes for that sensitive patient "9E7A;18"
-      Then a permanent redirect response is returned
-      When the client breaks glass and repeats a request for clinical notes for that patient "9E7A;18"
-      Then a successful response is returned
-      And the FHIR results contain "cinical notes"
-      | name                                | value                                     |
-      | resource.resourceType               | Composition                               |
-
-@F138_5_fhir_clinicalnote @fhir @9E7A100184 @US8574 
+@F138_4_fhir_clinicalnote @fhir @9E7A100184 @US8574 
 Scenario: Negativ scenario. Client can request clinical notes results in FHIR format
       Given a patient with "no clinical notes" in multiple VistAs
       When the client requests clinical notes for the patient "9E7A;253" in FHIR format
@@ -126,7 +115,7 @@ Scenario: Negativ scenario. Client can request clinical notes results in FHIR fo
       | name                                | value                                     |
       | resource.resourceType               | Composition                               |
 
-@F138_6_fhir_clinicalnote @fhir @9E7A301 @DE974 @US8574 
+@F138_5_fhir_clinicalnote @fhir @9E7A301 @DE974 @US8574 
 Scenario: Client can request clinical notes results in FHIR format
       Given a patient with "clinical notes" in multiple VistAs
       When the client requests "10" clinical notes for the patient "9E7A;301" in FHIR format

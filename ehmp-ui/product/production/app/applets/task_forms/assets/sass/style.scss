@@ -1,16 +1,38 @@
-[data-appletid="task_list"] {
+[data-appletid="task_list"] {}
 
-}
 #nameStatusRegion {
-	position: relative;
-	top: -15px;
-}
-#consultAction {
-	left: -186%; //temp solution TT//
+    position: relative;
+    top: -15px;
 }
 
 .request-activity-footer .menu-item-width-120 {
-	width: 120px !important;
+    width: 120px !important;
     max-width: 120px !important;
     min-width: 120px !important;
+}
+
+#activityHistoryRegion {
+    .col-xs-2.text-right {
+        padding-top: 7px;
+    }
+}
+
+.activity-detail-task-table {
+    &.faux-table-container {
+    	margin: 15px 0;
+        .header {
+            &.table-row {
+                .table-cell {
+                	border-top: 1px solid $grey;
+                	padding: 2px 8px;
+                }
+            }
+        }
+        .body {
+        	.table-cell {
+        		border-bottom: 1px solid $grey;
+        		padding: 2px 8px;
+        	}
+        }
+    }
 }

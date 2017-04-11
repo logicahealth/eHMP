@@ -30,6 +30,11 @@ function dodProblemToVPR(dodRecord, edipi) {
 
 	vprProblems.providerName = dodRecord.enteredBy;
 	vprProblems.providerDisplayName = dodRecord.enteredBy;
+	vprProblems.enteredBy = dodRecord.enteredBy;
+
+	if (!_.isNull(dodRecord.responsibleProvider) && !_.isUndefined(dodRecord.responsibleProvider)) {
+		vprProblems.responsibleProvider = dodRecord.responsibleProvider;
+	}
 
 	vprProblems.icdCode = dodRecord.icdCode;
 

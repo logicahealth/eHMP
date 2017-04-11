@@ -41,6 +41,18 @@ function dodAllergyToVPR(dodAllergy, edipi) {
 
     var commentList = [];
 
+    if (!_.isEmpty(dodAllergy.provider)) {
+        vprAllergy.originatorName = dodAllergy.provider.name;
+    }
+
+    if (!_.isEmpty(dodAllergy.reactions)) {
+        vprAllergy.reactions = _.map(dodAllergy.reactions, function(reaction) {
+            return {
+                'name': reaction.display
+            };
+        });
+    }
+
     if (!_.isArray(dodAllergy.comment)) {
         commentList[0] = dodAllergy.comment;
     } else {

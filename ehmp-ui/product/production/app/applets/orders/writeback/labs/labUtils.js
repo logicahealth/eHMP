@@ -4,7 +4,7 @@ define([
     "underscore",
     "moment",
     'app/applets/orders/writeback/labs/formUtils'
-], function(Backbone, Marionette, _, Moment, FormUtils) {
+], function(Backbone, Marionette, _, moment, FormUtils) {
     "use strict";
 
     var SERVER_SIDE_ERROR_ACTIONS = {
@@ -37,6 +37,7 @@ define([
             errorType = errorType || 'generic';
             var action = SERVER_SIDE_ERROR_ACTIONS[errorType] || SERVER_SIDE_ERROR_ACTIONS.generic;
             return ('Unable to ' + action + ' at this time due to a system error. Try again later.');
+            
         },
         processExistingLabOrder: function(form) {
             var existingOrder = form.model.get('existingOrder');
@@ -158,9 +159,11 @@ define([
             });
 
             var attributeLoadingOrder = ["collectionSample", "otherCollectionSample", "specimen", "otherSpecimen"];
-            //set specific attributes in order
-            _.each(attributeLoadingOrder, function(attribute){
-                form.model.set(attribute, attributes[attribute]);
+            //set specific attributes in order if the value exists in the saved draft object
+            _.each(attributeLoadingOrder, function(orderDependentAttribute) {
+                if (_.has(attributes, orderDependentAttribute)) {
+                    form.model.set(orderDependentAttribute, attributes[orderDependentAttribute]);
+                }
             });
             var remainingAttributes = _.omit(attributes, attributeLoadingOrder);
             form.model.set(remainingAttributes);
@@ -248,17 +251,22 @@ define([
             this.ui.availableLabTests.trigger('control:disabled', true);
 
             var orderableItems = new ADK.UIResources.Picklist.Lab_Orders.OrderableItems();
-
             this.listenTo(orderableItems, 'read:success', function(collection) {
                 this.ui.availableLabTests.trigger('control:picklist:set', [collection.toPicklist()]);
                 if (!this.model.get('orderId')) {
                     this.ui.availableLabTests.trigger('control:disabled', false);
                 }
                 this.model.set('orderable-items-loaded', true);
+
+                // Hide the form progress indicator only if this is a 'new' lab order, otherwise, the lab form will be
+                // exposed before it is ready. An order is 'new' if it doesn't have a draft ID or an assigned test IEN.
+                var isNewLabOrder = _.isEmpty(_.get(this.model.get('draft'), 'id')) && _.isEmpty(this.model.get('availableLabTests'));
+                isNewLabOrder && this.hideInProgress();
             });
 
             this.listenTo(orderableItems, 'read:error', function(collection) {
                 this.model.set('serverSideError', 'pick-list');
+                this.hideInProgress();
             });
 
             orderableItems.fetch();
@@ -465,6 +473,8 @@ define([
                 this.hideInProgress();
                 this.enableInputFields(true);
                 this.enableFooterButtons(true);
+                // Make sure focus remains on the select component after selecting an available test.
+                this.$el.find('#select2-availableLabTests-container').closest('.select2-selection').focus();
             });
 
             this.listenTo(orderableItems, 'read:error', function(collection) {

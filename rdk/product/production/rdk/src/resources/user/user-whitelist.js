@@ -1,6 +1,5 @@
 'use strict';
 
-
 var _ = require('lodash');
 var _str = require('underscore.string');
 
@@ -10,6 +9,7 @@ var sessionWhitelist = [
     //'dgRecordAccess',
     //'dgSecurityOfficer',
     //'dgSensitiveAccess',
+    'uid',
     'disabled',
     'divisionSelect',
     'duz',
@@ -18,6 +18,7 @@ var sessionWhitelist = [
     //'username',
     'firstname',
     'lastname',
+    'preferences',
     'permissions',
     'pcmm',
     'requiresReset',
@@ -47,7 +48,6 @@ var userListWhitelist = [
     'has_paging_data',
     'exactMatchCount'
 ];
-
 
 var UserUtil = {
     sessionWhitelist: {

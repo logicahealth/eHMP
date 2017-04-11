@@ -20,7 +20,7 @@ function dodRadiologyToVPR(dodRadiology, edipi){
         vprImage.locationName = imageLocation;
     }
 
-    vprImage.statusName = reportTextData.status || 'Not Available';
+    vprImage.statusName = reportTextData['Status'] || 'Not Available';
 
     vprImage.name = dodRadiology.study;
     vprImage.typeName = 'RADIOLOGIC EXAMINATION' + dodRadiology.study;

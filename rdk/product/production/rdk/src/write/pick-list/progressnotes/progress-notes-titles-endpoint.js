@@ -1,11 +1,10 @@
 'use strict';
 var _ = require('lodash');
+var querystring = require('querystring');
+var jdsFilter = require('jds-filter');
 var nullUtil = require('../../core/null-utils');
-var pickListInMemoryRpcCall = require('../pick-list-in-memory-rpc-call');
 var async = require('async');
 var validate = require('./../utils/validation-util');
-var pickListConfig = require('../config/pick-list-config-in-memory-rpc-call').pickListConfig;
-var dbList = require('../pick-list-db');
 var rdk = require('../../../core/rdk');
 var http = rdk.utils.http;
 
@@ -15,9 +14,6 @@ var interceptors = {
 };
 
 var asuProcess = require('../../../subsystems/asu/asu-process');
-var loading = [];
-
-
 
 /**
  * If "userClassUid && roleNames && docStatus && actionNames && site" do NOT exist, this just returns.
@@ -29,104 +25,102 @@ var loading = [];
  */
 function asuFilter(logger, configuration, userClassUid, roleNames, docStatus, actionNames, site, progressNotes, finished) {
     var httpConfig = {
-        'timeout': 30000,
-        'url': '/asu/rules/getDocPermissions',
-        'port': 9000
+        'url': '/asu/rules/getMultiDocPermissions'
     };
 
     userClassUid = _.isArray(userClassUid) ? userClassUid : [userClassUid];
-    var docDefUid = 'urn:va:doc-def:' + site + ':';
     roleNames = _.isArray(roleNames) ? roleNames : ((roleNames === null || roleNames === undefined) ? [] : [roleNames]);
     actionNames = _.isArray(actionNames) ? actionNames : [actionNames];
     logger.debug('progress-notes-titles-endpoint.asuFilter userClassUid=\'' + userClassUid + '\', roleNames=\'' + roleNames + '\', docStatus=\'' + docStatus + '\', actionNames=\'' + actionNames + '\', site=\'' + site + '\'');
 
-    httpConfig.baseUrl = configuration.vxSyncServer.baseUrl.replace(/:\d{4}$/, ':' + httpConfig.port);
+    httpConfig.baseUrl = configuration.asuServer.baseUrl;
+    httpConfig.timeout = configuration.asuServer.timeout;
     httpConfig.logger = logger;
 
+    var jsonParams = [];
+    var httpBody = {
+        'documents': jsonParams
+    };
+
     //Iterate through all of the progress notes we got back from the RPC.
-    async.mapSeries(progressNotes, function(progressNote, callback) {
-        var jsonParams = {
+    _.each(progressNotes, function(progressNoteTitle) {
+        jsonParams.push({
             'userClassUids': userClassUid,
-            'docDefUid': docDefUid + progressNote.ien,
+            'docDefUid': progressNoteTitle.documentDefUid,
             'docStatus': docStatus,
             'roleNames': roleNames,
             'actionNames': actionNames
-        };
-
-        //Call ASU Rules on each one of them and populate a flag saying whether it was approved or not.
-        //console.log(JSON.stringify(jsonParams, null, 2));
-        asuProcess.evaluate(jsonParams, null, httpConfig, null, logger, function (error, asuResponses) {
-            if (error) {
-                logger.error({error: error}, 'progress-notes-titles-endpoint.asuFilter progress-notes-titles-endpoint ERROR asuProcess.evaluate error occurred');
-                return callback('progress-notes-titles-endpoint.asuFilter progress-notes-titles-endpoint ERROR asuProcess.evaluate error occurred: ' + error);
-            }
-            if (typeof asuResponses !== 'object') {
-                logger.error('progress-notes-titles-endpoint.asuFilter progress-notes-titles-endpoint ERROR asuProcess.evaluate did not return a JSON String: ' + asuResponses);
-                return callback('progress-notes-titles-endpoint.asuFilter progress-notes-titles-endpoint asuProcess.evaluate did not return a JSON String: ' + asuResponses);
-            }
-
-            var asuApproved = false;
-            var myErrorMessage = undefined;
-            _.each(asuResponses, function (asuResponse) {
-                if (asuResponse.hasPermission === false) {
-                    asuApproved = false;
-                    return false;
-                }
-                else if (asuResponse.hasPermission === true) {
-                    asuApproved = true;
-                }
-                else {
-                    myErrorMessage = 'progress-notes-titles-endpoint.asuFilter ERROR asuProcess.evaluate.asuResponse didn\'t include a hasPermission: ' + JSON.stringify(asuResponse);
-                    asuApproved = undefined;
-                    return false;
-                }
-            });
-
-            //progressNote.userClassUid = userClassUid;
-            //progressNote.docDefUid = 'urn:va:doc-def:' + site + ':' + progressNote.ien;
-            //progressNote.docStatus = docStatus;
-            //progressNote.roleNames = roleNames;
-            //progressNote.actionNames = actionNames;
-            //
-            //progressNote.response = asuResponses;
-            progressNote.asuApproved = asuApproved;
-            callback(myErrorMessage);
         });
-    }, function(err) {
-        logger.debug('progress-notes-titles-endpoint.asuFilter asu approved finished calling asu');
-        if (err) {
-            logger.error({error: err}, 'progress-notes-titles-endpoint.asuFilter ERROR asu error occurred');
-            return finished(err);
+    });
+
+    //Call ASU Rules on each one of them and populate a flag saying whether it was approved or not.
+    //console.log(JSON.stringify(jsonParams, null, 2));
+    asuProcess.evaluate(httpBody, null, httpConfig, null, logger, function(error, asuResponses) {
+        if (error) {
+            logger.error({
+                error: error
+            }, 'progress-notes-titles-endpoint.asuFilter progress-notes-titles-endpoint ERROR asuProcess.evaluate error occurred');
+            return finished('progress-notes-titles-endpoint.asuFilter progress-notes-titles-endpoint ERROR asuProcess.evaluate error occurred: ' + error);
+        }
+        if (typeof asuResponses !== 'object') {
+            logger.error('progress-notes-titles-endpoint.asuFilter progress-notes-titles-endpoint ERROR asuProcess.evaluate did not return a JSON String: ' + asuResponses);
+            return finished('progress-notes-titles-endpoint.asuFilter progress-notes-titles-endpoint asuProcess.evaluate did not return a JSON String: ' + asuResponses);
+        }
+
+        if (asuResponses.length !== progressNotes.length) {
+            logger.error('progress-notes-titles-endpoint.asuFilter progress-notes-titles-endpoint ERROR asuProcess.evaluate asuResponses length does not match progressNotes length');
+            return finished('progress-notes-titles-endpoint.asuFilter progress-notes-titles-endpoint ERROR asuProcess.evaluate asuResponses length does not match progressNotes length');
+        }
+
+        var asuApproved = false;
+        var myErrorMessage;
+
+        _.each(asuResponses, function(asuResponse, index) {
+            if (asuResponse[0].hasPermission === false) {
+                asuApproved = false;
+                progressNotes[index].asuApproved = asuApproved;
+            } else if (asuResponse[0].hasPermission === true) {
+                asuApproved = true;
+                progressNotes[index].asuApproved = asuApproved;
+            } else {
+                myErrorMessage = 'progress-notes-titles-endpoint.asuFilter ERROR asuProcess.evaluate.asuResponse didn\'t include a hasPermission: ' + JSON.stringify(asuResponse);
+                asuApproved = undefined;
+                progressNotes[index].asuApproved = asuApproved;
+                return false;
+            }
+        });
+
+        if (myErrorMessage) {
+            return finished(myErrorMessage);
         }
 
         //Now that we know what was approved (flag that was set), filter out anything that isn't approved.
         async.filterSeries(progressNotes, function(item, callback) {
-                logger.debug('progress-notes-titles-endpoint.asuFilter asu approved for ien ' + item.ien + ' is: ' + item.asuApproved);
+                logger.debug('progress-notes-titles-endpoint.asuFilter asu approved for docDefUid ' + item.documentDefUid + ' is: ' + item.asuApproved);
                 if (item.asuApproved === true) {
-                    async.setImmediate(function () {
+                    async.setImmediate(function() {
                         return callback(true);
                     });
-                }
-                else {
-                    async.setImmediate(function () {
+                } else {
+                    async.setImmediate(function() {
                         return callback(false);
                     });
                 }
             },
             function(fieldResults) {
                 logger.debug('progress-notes-titles-endpoint.asuFilter FINISHED FILTERING asu approved');
-                finished(err, fieldResults);
+                return finished(error, fieldResults);
             });
     });
 }
 module.exports._asuFilter = asuFilter;
 
-module.exports.getResourceConfig = function(/*app*/) {
+module.exports.getResourceConfig = function( /*app*/ ) {
     var resourceConfig = [{
         name: 'progress-notes-titles-asu-filtered',
         path: '',
         interceptors: interceptors,
-        requiredPermissions: [],
+        requiredPermissions: ['sign-note'],
         isPatientCentric: false,
         get: fetchProgressNotes
     }];
@@ -143,12 +137,10 @@ var serverSend = function(res, error, json, statusCode, headers) {
                 });
             }
             res.status(statusCode).rdkSend(error);
-        }
-        else {
+        } else {
             res.status(500).rdkSend(error);
         }
-    }
-    else {
+    } else {
         res.status(200).rdkSend(json);
     }
 };
@@ -165,35 +157,7 @@ function getDefaultUserClass(req, callback) {
     http.get(options, callback);
 }
 
-function updateDatabase(req, query, progressNotes, error, callback) {
-    dbList.updateDatabase(req.logger, query, new Date(), progressNotes, function (dbError, dbDataUpdated) {
-        if (dbError) {
-            req.logger.error({error: error}, 'progress-notes-titles-endpoint...updateDatabase ERROR from asuFilter');
-            return callback(dbError);
-        }
-
-        req.logger.debug('progress-notes-titles-endpoint.fetchProgressNotes SUCCESSFULLY UPDATED DB');
-        loading.splice(loading.indexOf(JSON.stringify(query)), 1); //Remove this entry from our list of things being loaded.
-        return callback(null, dbDataUpdated);
-    });
-}
-
-function asuFilterAndUpdateDB(req, userClassUid, roleNames, docStatus, actionNames, site, retValue, query, callback) {
-    req.logger.debug('progress-notes-titles-endpoint...asuFilterAndUpdateDB');
-
-    asuFilter(req.logger, req.app.config, userClassUid, roleNames, docStatus, actionNames, site, retValue, function (error, progressNotes) {
-        if (error) {
-            req.logger.error({error: error}, 'progress-notes-titles-endpoint...asuFilter ERROR from asuFilter');
-            return callback(error);
-        }
-
-        req.logger.debug('progress-notes-titles-endpoint...asuFilter SUCCESSFULLY FILTERED');
-
-        return updateDatabase(req, query, progressNotes, error, callback);
-    });
-}
 function fetchProgressNotes(req, res) {
-    var type = 'progress-notes-titles-asu-filtered';
     var site = req.session.user.site;
     var roleNames = req.param('roleNames');
     var docStatus = req.param('docStatus');
@@ -216,42 +180,30 @@ function fetchProgressNotes(req, res) {
         return serverSend(res, 'docStatus & actionNames are required');
     }
 
-    var i = _.indexOf(_.pluck(pickListConfig, 'name'), 'progress-notes-titles');
-    if (i === -1) {
-        req.logger.debug('progress-notes-titles-endpoint.fetchProgressNotes Couldn\'t find progress-notes-titles in the configuration');
-        return serverSend(res, 'Couldn\'t find ' + type + ' in the configuration');
-    }
-
-    getDefaultUserClass(req,function(errorDUC, response, body) {
+    getDefaultUserClass(req, function(errorDUC, response, body) {
         var errorStatus = (response || {}).statusCode || 500;
         if (errorDUC) {
-            req.logger.debug({error: errorDUC}, 'progress-notes-titles-endpoint...getDefaultUserClass ERROR Could not obtain default user class');
+            req.logger.debug({
+                error: errorDUC
+            }, 'progress-notes-titles-endpoint...getDefaultUserClass ERROR Could not obtain default user class');
             return serverSend(res, 'progress-notes-titles-endpoint...getDefaultUserClass ERROR Could not obtain default user class: ' + errorDUC, null, errorStatus);
         }
         try {
-            req.logger.debug({parsing: body});
+            req.logger.debug({
+                parsing: body
+            });
             body = JSON.parse(body);
         } catch (e) {
-            req.logger.error({error: e}, 'progress-notes-titles-endpoint...getDefaultUserClass ERROR parsing data');
+            req.logger.error({
+                error: e
+            }, 'progress-notes-titles-endpoint...getDefaultUserClass ERROR parsing data');
             return serverSend(res, 'progress-notes-titles-endpoint...getDefaultUserClass ERROR parsing data: ' + e, null, errorStatus);
         }
 
         if (body && body.data && body.data.items) {
-            _.each(body.data.items, function (item) {
+            _.each(body.data.items, function(item) {
                 userClassUid.push(item.uid);
             });
-        }
-
-
-        var query = {
-            'pickList': type,
-            'site': site,
-            'docStatus': docStatus,
-            'actionNames': actionNames,
-            'userClassUid': userClassUid.join('_')
-        };
-        if (roleNames) {
-            query.roleNames = roleNames;
         }
 
         if (roleNames) {
@@ -261,44 +213,80 @@ function fetchProgressNotes(req, res) {
             actionNames = actionNames.split(',');
         }
 
+        getDocDef(req, function(err, retValue) {
+            if (err) {
+                req.logger.error({
+                    error: err
+                }, 'progress-notes-titles-endpoint...jds call ERROR');
 
-
-        dbList.retrieveDataFromDB(req.logger, pickListConfig[i].asuDataNeedsRefreshAfterMinutes, query, function(errorDB, dbData) {
-            if (errorDB) {
-                req.logger.debug({error: errorDB}, 'progress-notes-titles-endpoint...retrieveDataFromDB Data didn\'t exist in db yet');
-                return serverSend(res, errorDB);
+                return serverSend(res, err);
             }
 
-
-
-            if (_.includes(loading, JSON.stringify(query))) {
-                req.logger.info('progress-notes-titles-endpoint...retrieveDataFromDB: Pick list (progress-notes-titles-asu-filtered) is still being retrieved.  Try again after \'' + pickListConfig[i].asuLargePickListRetry + '\' seconds.');
-                return serverSend(res, 'Pick list (progress-notes-titles-asu-filtered) is still being retrieved.  See Retry-After seconds (in the header) for the length of time to wait.', null, 202, {'Retry-After': pickListConfig[i].asuLargePickListRetry});
-            }
-
-            if (dbData.status === dbList.REFRESH_STATE_NORMAL) {
-                return serverSend(res, null, dbData);
-            }
-
-            if (dbData.status === dbList.REFRESH_STATE_STALE) {
-                //No return statement as after notifying the user we want to execute the steps below.
-                serverSend(res, null, dbData);
-            }
-
-            pickListInMemoryRpcCall.inMemoryRpcCall(req, site, 'progress-notes-titles', function(err, retValue, statusCode, headers) {
+            asuFilter(req.logger, req.app.config, userClassUid, roleNames, docStatus, actionNames, site, retValue, function(error, progressNotes) {
                 if (err) {
-                    req.logger.error({error: err}, 'progress-notes-titles-endpoint...inMemoryRpcCall ERROR');
-
                     return serverSend(res, err);
                 }
-
-                asuFilterAndUpdateDB(req, userClassUid, roleNames, docStatus, actionNames, site, retValue, query, function(err, data) {
-                    if (err) {
-                        return serverSend(res, err);
-                    }
-                    return serverSend(res, null, data);
-                });
+                return serverSend(res, null, progressNotes);
             });
         });
     });
+}
+
+function getDocDef(req, callback) {
+    var site = req.session.user.site;
+    var filter = [
+        'and', ['eq', 'statusName', 'ACTIVE'],
+        ['like', 'uid', 'urn:va:doc-def:' + site + ':%'],
+        ['ne', 'typeName', 'OBJECT'],
+        ['ne', 'typeName', 'COMPONENT']
+    ];
+    var filterString = jdsFilter.build(filter);
+    var queryObject = {
+        filter: filterString
+    };
+
+    var options = _.extend({}, req.app.config.jdsServer, {
+        url: '/data/find/doc-def?' + querystring.stringify(queryObject),
+        logger: req.logger,
+        json: true,
+        timeout: 120000
+    });
+
+    http.get(options, function(err, response, responseBody) {
+        if (_.has(responseBody, 'error')) {
+            return callback(new Error(responseBody.error), responseBody, response.statusCode);
+        }
+        if (!_.has(responseBody, 'data')) {
+            return callback(new Error('Missing data in JDS response.'), responseBody, response.statusCode);
+        }
+        if (_.isEmpty(_.get(responseBody, 'data.items'))) {
+            return callback(new Error('No items in JDS response.'), responseBody, response.statusCode);
+        }
+        return parseTitles(req, responseBody.data.items, callback);
+    });
+}
+
+function parseTitles(req, data, callback) {
+    var retVal = [];
+    var notesClass = _.find(data, 'name', 'PROGRESS NOTES');
+    var whiteList = _.filter(notesClass.item, function(item) {
+        return item.name !== 'CONSULTS';
+    });
+    whiteList = whiteList.concat(_.find(data, 'name', 'ADDENDUM').item);
+
+    var i = 0;
+    while (i < whiteList.length) {
+        var item = _.find(data, 'uid', whiteList[i].uid);
+        if (item && item.typeName === 'TITLE') {
+            retVal.push({
+                documentDefUid: item.uid,
+                name: item.name,
+                localTitle: item.displayName
+            });
+        } else if (item && item.item) {
+            whiteList = whiteList.concat(item.item);
+        } //else, we couldn't find it. this doc-def is inactive.
+        i++;
+    }
+    return callback(null, retVal);
 }

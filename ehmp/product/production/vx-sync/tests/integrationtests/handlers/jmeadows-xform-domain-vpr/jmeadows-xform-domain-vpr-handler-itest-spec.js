@@ -24,7 +24,7 @@ var realConfig = JSON.parse(JSON.stringify(wConfig));            // Make sure we
 var config = {
     jds: _.defaults(realConfig.jds, {
         protocol: 'http',
-        host: 'IP_ADDRESS',
+        host: 'IP        ',
         port: 9080
     })
 };

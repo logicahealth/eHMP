@@ -1,6 +1,5 @@
 'use strict';
 
-var dd = require('drilldown');
 var rdk = require('../../core/rdk');
 var moment = require('moment');
 var pjds = rdk.utils.pjdsStore;
@@ -84,12 +83,12 @@ function editPermissionSet(req, res, next) {
         pjdsOptions.data.permissionSet = updatedPermissionSets;
         pjds.put(req, res, pjdsOptions, function(error, response) {
             if (error) {
-                var statusCode = dd(response)('statusCode').val || rdk.httpstatus.bad_request;
+                var statusCode = _.get(response, 'statusCode') || rdk.httpstatus.bad_request;
                 res.status(statusCode).rdkSend(error.message);
             } else {
                 var resultObj = {};
                 resultObj.data = pjdsOptions.data.permissionSet;
-                resultObj.statusCode = dd(response)('statusCode').val;
+                resultObj.statusCode = _.get(response, 'statusCode');
                 res.status(rdk.httpstatus.ok).rdkSend(resultObj);
             }
         });

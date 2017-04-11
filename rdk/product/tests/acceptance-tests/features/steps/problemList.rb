@@ -82,8 +82,8 @@ Then(/^the results contain a problemText with the written value$/) do
   end
 end
 
-#http://IP_ADDRESS:PORT/vpr/all/find/problem?filter=like(problemText, "YourKeyWordToCheckFor%25")
-#http://IP_ADDRESS:PORT/vpr/all/find/problem?filter=like(problemText, \"ATOZ%25\")"
+#http://IP             /vpr/all/find/problem?filter=like(problemText, "YourKeyWordToCheckFor%25")
+#http://IP             /vpr/all/find/problem?filter=like(problemText, \"ATOZ%25\")"
 #@US2679_Problem_List_Search
 When(/^the client searches for problems with search criteria "(.*?)" in VPR format from RDK API$/) do |arg1|
   urlpath = QueryGenericRDK.new("problems")
@@ -113,16 +113,6 @@ When(/^the client posts data "(.*?)" using postman$/) do |arg1|
   #puts @response.code  
 end
 
-When(/^the client checks in Vista$/) do
-  app_path = QueryGenericVISTA.new("rambler").path
-  app_path = app_path.concat("#{'9000011-499'}")
-  p app_path
-  SeleniumCommand.navigate_to_url(app_path)
-  p "loading web page"
-  sleep(10)
-  @driver = SeleniumCommand.driver
-end
-
 Then(/^the results contain the problemText with the written value "(.*?)"$/) do |arg1|
   pelem =  @driver.find_elements(:css, "#results>dl>dd>a") 
   # @response = HTTPartyRDK.get_with_authorization(app_path)
@@ -142,8 +132,8 @@ When(/^the client runs data "(.*?)" using postman$/) do |arg1|
   }
   request = jsonreq.to_json
   urlobj = QueryGenericRDK.new("problems")
-  urlobj.add_parameter("accessCode", "pu1234")
-  urlobj.add_parameter("verifyCode", "pu1234!!")
+  urlobj.add_parameter("accessCode", "PW    ")
+  urlobj.add_parameter("verifyCode", "PW    !!")
   urlobj.add_parameter("site", "9E7A")
   url = urlobj.path
   p url

@@ -29,12 +29,13 @@ Branch names should be all lowercase letters with dash-separated words.
 
 Branch naming conventions:
  * for new functionality:
-    * `us0001-short-description`  
-    * where us0001 is the user story ID, if applicable
+    * `r2.0-stories/us0001-short-description`  
+    * where r2.0 is the target version and us0001 is the user story ID, if applicable
  * for bug fixes:
-    * `master-de0001-short-description`
-    * where `master` is the branch that the defect was created for (`r1.2`, for example) and `de0001` is the defect ID, if applicable
+    * `r2.0-defects/de0001-short-description`  
+    * where `r2.0` is the version that the defect was created for and `de0001` is the defect ID, if applicable
 
+Keep the short description short - it only needs to be enough to remind people that know about the branch what it's for.
 
 ### Commits
 

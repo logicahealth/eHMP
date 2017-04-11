@@ -6,37 +6,37 @@
 	        </div>
 			<div class="col-xs-3">
 				<p>
-					<span data-detail-label="facility"><strong>Facility</strong></span><br />
+					<span data-detail-label="facility"><strong>Facility:</strong></span><br />
 					<span data-detail="facility">{{facilityName}}</span>
 				</p>
 			</div>
 			<div class="col-xs-3">
 				<p>
 					{{#if interdisciplinaryBool}}
-					<span data-detail-label="author"><strong>Author</strong></span><br />
+					<span data-detail-label="author"><strong>Author:</strong></span><br />
 					<span data-detail="author">{{authorDisplayName}}</span>
 					{{else}}
-					<span data-detail-label="type"><strong>Type</strong></span><br />
+					<span data-detail-label="type"><strong>Type:</strong></span><br />
 					<span data-detail="type">{{kind}}</span>
 					{{/if}}
 				</p>
 			</div>
 			<div class="col-xs-3">
 				<p>
-					<span data-detail-label="status"><strong>Status</strong></span><br />
+					<span data-detail-label="status"><strong>Status:</strong></span><br />
 					<span class="{{statusClass}}" data-detail="status">{{statusName}}</span>
 				</p>
 			</div>
 			<div class="col-xs-3">
 				<p>
-					<span data-detail-label="date-time"><strong>Date/Time</strong></span><br />
+					<span data-detail-label="date-time"><strong>Date/Time:</strong></span><br />
 					<span data-detail="date-time">{{dateTimeDisplay}}</span>
 				</p>
 			</div>
 			{{#if surgeryBool}}
 			<div class="col-xs-3">
 				<p>
-					<span data-detail-label="providers"><strong>Providers</strong></span><br />
+					<span data-detail-label="providers"><strong>Providers:</strong></span><br />
 					{{#each providers}}
 					<span data-detail="providers">{{providerDisplayName}}</span>
 					{{/each}}
@@ -47,7 +47,7 @@
 			{{#if imagingBool}} {{#if providers}}
 			<div class="col-xs-3">
 				<p>
-					<span data-detail-label="providers"><strong>Providers</strong></span><br />
+					<span data-detail-label="providers"><strong>Providers:</strong></span><br />
 					{{#each providers}}
 					<span data-detail="providers">{{providerDisplayName}}</span>
 					{{/each}}
@@ -55,15 +55,15 @@
 			</div>
 			{{/if}} {{/if}}
 		</div>
-		{{#if orderUid}}
+		{{#if orderableBool}}
 		<div class="row top-margin-sm">
 			<div class="col-xs-12">
-				<h5 class="bottom-border-grey-dark">Order Information</h5>
+				<h5 class="bottom-border-grey-dark">Order information</h5>
 			</div>
 			{{#if service}}
 			<div class="col-xs-3">
 				<p>
-					<span><strong>To Service</strong></span><br />
+					<span><strong>To service:</strong></span><br />
 					<span>{{service}}</span>
 				</p>
 			</div>
@@ -71,23 +71,23 @@
 			{{#if fromService}}
 			<div class="col-xs-3">
 				<p>
-					<span><strong>From Service</strong></span><br />
+					<span><strong>From service:</strong></span><br />
 					<span>{{fromService}}</span>
 				</p>
 			</div>
 			{{/if}}
-			{{#if providerName}}
+			{{#if requestingProviderName}}
 			<div class="col-xs-3">
 				<p>
-					<span><strong>Requesting Provider</strong></span><br />
-					<span>{{providerName}}</span>
+					<span><strong>Requesting provider:</strong></span><br />
+					<span>{{requestingProviderName}}</span>
 				</p>
 			</div>
 			{{/if}}
 			{{#if place}}
 			<div class="col-xs-3">
 				<p>
-					<span><strong>Place</strong></span><br />
+					<span><strong>Place:</strong></span><br />
 					<span>{{place}}</span>
 				</p>
 			</div>
@@ -95,7 +95,7 @@
 			{{#if urgency}}
 			<div class="col-xs-3">
 				<p>
-					<span><strong>Urgency</strong></span><br />
+					<span><strong>Urgency:</strong></span><br />
 					<span>{{urgency}}</span>
 				</p>
 			</div>
@@ -103,7 +103,7 @@
 			{{#if orderName}}
 			<div class="col-xs-3">
 				<p>
-					<span><strong>Orderable Item</strong></span><br />
+					<span><strong>Orderable item:</strong></span><br />
 					<span>{{orderName}}</span>
 				</p>
 			</div>
@@ -111,7 +111,7 @@
 			{{#if consultProcedure}}
 			<div class="col-xs-3">
 				<p>
-					<span><strong>Procedure</strong></span><br />
+					<span><strong>Procedure:</strong></span><br />
 					<span>{{consultProcedure}}</span>
 				</p>
 			</div>
@@ -119,7 +119,7 @@
 			{{#if reason}}
 			<div class="col-xs-3">
 				<p>
-					<span><strong>Reason</strong></span><br />
+					<span><strong>Reason:</strong></span><br />
 					<span>{{reason}}</span>
 				</p>
 			</div>
@@ -127,7 +127,7 @@
 			{{#if resultsTitle}}
 			<div class="col-xs-3">
 				<p>
-					<span><strong>Local Title</strong></span><br />
+					<span><strong>Local title:</strong></span><br />
 					<span>{{resultsTitle}}</span>
 				</p>
 			</div>
@@ -140,6 +140,12 @@
 	{{/if}}
 	<div class="document-detail-addenda-region"></div>
 	<div class="results-region"></div>
+	{{#if hasImages}}
+	<div class="row">
+		<div class="col-xs-12 top-margin-sm thumbnails-region">
+		</div>
+	</div>
+	{{/if}}
 	<div class="children-region"></div>
 	{{#if activity}}
 	<div class="row top-margin-sm">
@@ -154,6 +160,7 @@
 		                <th scope="col">Date/Time</th>
 		                <th scope="col">Name</th>
 		                <th scope="col">Responsible</th>
+		                <th scope="col">Note</th>
 		            </tr>
 		        </thead>
 		        <tbody>
@@ -162,6 +169,11 @@
 		                <td>{{formatDate dateTime "MM/DD/YYYY - HH:mm"}}</td>
 		                <td>{{name}}</td>
 		                <td>{{responsible}}</td>
+		                {{#if note}}
+						<td>{{note}}</td>
+						{{else}}
+						<td></td>
+						{{/if}}
 		            </tr>
 		            {{/each}}
 		        </tbody>
@@ -170,3 +182,4 @@
 	</div>
 	{{/if}}
 </div>
+

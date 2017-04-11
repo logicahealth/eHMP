@@ -39,7 +39,7 @@ define(["jquery", "backbone", "marionette", "main/ui_components/components", "ap
             });
             it("has required sr-only tag", function() {
                 expect($form.find('p')).toHaveClass('sr-only');
-                expect($form.find('p')).toHaveText('* indicates a required field.');
+                expect($form.find('p')).toHaveText('* indicates a required field. Tab to enter form.');
             });
         });
 

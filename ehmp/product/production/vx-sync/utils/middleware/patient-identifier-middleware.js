@@ -145,7 +145,8 @@ var resolveJPID = function(req, res, next) {
         }
 
         self.log.debug('patient-identifier-middleware.resolveJPID(): No JPID found for this PID: %s. Now trying to look up corresponding ids', inspect(patientIdentifier));
-        self.mviClient.lookup(patientIdentifier, function(error, result) {
+        var demographics = req.body ? req.body.demographics : null;
+        self.mviClient.lookupWithDemographics(patientIdentifier, demographics, function(error, result) {
             self.log.trace('patient-identifier-middleware.resolveJPID(): corresponding ids lookup finished for %s', inspect(patientIdentifier));
             if (error) {
                 errorMessage = format('patient-identifier-middleware.resolveJPID(): Problem encountered when attempting to get corresponding ids for %s. Error: %s', inspect(patientIdentifier), inspect(error));

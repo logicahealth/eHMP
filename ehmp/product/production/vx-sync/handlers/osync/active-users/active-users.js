@@ -1,70 +1,78 @@
 'use strict';
 
-var _ = require('lodash');
-var moment = require('moment');
+var _ = require('underscore');
+var async = require('async');
 
+var activeUserUserScreenRetriever = require(global.OSYNC_UTILS + 'active-user-userscreen-retriever');
+var activeUserUserRetriever = require(global.OSYNC_UTILS + 'active-user-retriever');
 var nullUtil = require(global.VX_UTILS + 'null-utils');
-var jobUtil = require(global.VX_UTILS + 'osync-job-utils');
-var jdsUtil = require(global.VX_UTILS + 'jds-utils');
-var users_list_screen_id = 'osyncusers';
+var jobUtil = require(global.OSYNC_UTILS + 'osync-job-utils');
 
 function handle(log, config, environment, job, handlerCallback) {
     log.debug('active-users.handle : received request to save ' + JSON.stringify(job));
 
     if (nullUtil.isNullish(job.type) || job.type !== 'active-users') {
         log.debug('active-users.handle: No Job type or incorrect job type received');
-        return;
+        return handlerCallback();
     }
 
-    jdsUtil.getFromJDS(log, config, users_list_screen_id, function(error, response) {
-        var responseBody = response.body;
-        log.debug('active-users.handle: responseBody = ' + responseBody);
-        var activeUsers = JSON.parse(responseBody).users;
-        log.debug('active-users.handle: activeUsers = ' + JSON.stringify(activeUsers)); 
+    async.parallel([
+            function(callback){
+                activeUserUserRetriever.getAllActiveUsers(log, config, function (error, result) {
+                    if (error) {
+                        log.error('active-users.handle: Error retrieving active user lists from active user generic data store in JDS.');
+                        return callback(null, []);
+                    }
 
-        if (_.isUndefined(activeUsers)) {
-            log.debug('active-users.handle: No users in JDS to process');
-            return handlerCallback();
-        }
+                    if (_.isUndefined(result) || result.length === 0) {
+                        log.debug('active-users.handle: No active users found in active user generic data store in JDS.');
+                        return callback(null, []);
+                    }
 
-        var result = filterForActiveUsers(log, config, activeUsers, moment());
-        job.source = 'active-users';
-        job.users = result;
+                    return callback(null, result);
 
-        var jobToPublish = jobUtil.createPatientListJob(log, config, environment, job);
-        log.debug('active-users.handle: ' + jobToPublish.toString());
+                });
+            },
+            function(callback){
+                if (_.isUndefined(config.mixedEnvironmentMode) || !config.mixedEnvironmentMode) {
+                    log.debug('active-user.handle: No work to be done. Not in mixed environment mode.');
+                    return callback(null, []);
+                }
 
-        environment.publisherRouter.publish(jobToPublish, handlerCallback);
-    });
+                activeUserUserScreenRetriever.getAllActiveUsers(log, config, function (error, result) {
+                    if (error) {
+                        log.error('active-users.handle: Error retrieving active user lists from active user user screen in JDS.');
+                        return callback(null, []);
+                    }
+
+                    if (_.isUndefined(result) || result.length === 0) {
+                        log.debug('active-users.handle: No active users found in active user user screen in JDS.');
+                        return callback(null, []);
+                    }
+
+                    return callback(null, result);
+                });
+            }
+        ],
+        function(err, results){
+            if (_.isEmpty(results[1])) {
+                job.users = results[0];
+            } else {
+                job.users = mergeUsers(results[0], results[1]);
+            }
+
+            job.source = 'active-users';
+
+            var jobToPublish = jobUtil.createPatientListJob(log, config, environment, job);
+            log.debug('active-users.handle: ' + jobToPublish.toString());
+
+            environment.publisherRouter.publish(jobToPublish, handlerCallback);
+        });
 }
 
-function filterForActiveUsers(log, config, usersList, now) {
-    log.debug('filterForActiveUsers called');
-
-    now = typeof now !== 'undefined' ? now : moment();
-    var active_user_threshold = config.activeUserThresholdDays ? config.activeUserThresholdDays : 30;
-
-    return _.filter(usersList, function(user) {
-        if (!user.lastlogin) {
-            return false;
-        }
-
-        if (user.duz) {
-            log.debug('checking ' + JSON.stringify(user.duz) + ' for user blacklist.');
-            var blacklisted = _.some(_.keys(user.duz), function(site) {
-                if (config.vistaSites[site] && config.vistaSites[site].inactiveUsers) {
-                    return _.contains(config.vistaSites[site].inactiveUsers, user.duz[site]);
-                }
-                return false;
-            });
-            if (blacklisted) {
-                return false;
-            }
-        }
-
-        return now.diff(moment(user.lastlogin.substring(0, 10)), 'days') <= active_user_threshold;
-    });
+function mergeUsers(genericDataStoreUsers, userScreenUsers) {
+    return _.uniq(_.union(genericDataStoreUsers, userScreenUsers), false, _.property('uid'))
 }
 
 module.exports = handle;
-module.exports._filterForActiveUsers = filterForActiveUsers;
+

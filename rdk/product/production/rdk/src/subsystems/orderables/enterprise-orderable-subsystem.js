@@ -2,13 +2,12 @@
 
 var rdk = require('../../core/rdk');
 var _ = require('lodash');
-var dd = require('drilldown');
 var pjds = rdk.utils.pjdsStore;
 
 var dataStore = 'entordrbls';
-module.exports.getSubsystemConfig = function(app) {
+module.exports.getSubsystemConfig = function(app, logger) {
     return {
-        healthcheck: pjds.createHealthcheck(dataStore, app)
+        healthcheck: pjds.createHealthcheck(dataStore, app, logger)
     };
 };
 
@@ -115,7 +114,7 @@ function _get(req, res, uid, callback) {
             error.statusCode = (result || {}).statusCode;
             return callback(error, null);
         }
-        if (dd(result)('error').exists) {
+        if (_.get(result, 'error')) {
             return callback('EnterpriseOrderable with uid: ' + uid + ' was not found.', null);
         }
         return callback(null, result);
@@ -231,7 +230,7 @@ function getEnterpriseOrderable(req, res, uid, callback) {
         if (error) {
             return callback(error, null);
         }
-        if (dd(result)('error').exists) {
+        if (_.get(result, 'error')) {
             return callback('EnterpriseOrderable with uid: ' + uid + ' was not found.', null);
         }
         return callback(null, result);

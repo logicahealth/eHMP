@@ -1217,7 +1217,7 @@
 
         this.drag_api.set_limits(this.cols * this.min_widget_width);
 
-        return $w.fadeIn();
+        return $w.show();
     };
 
 
@@ -1587,7 +1587,7 @@
 
         this.remove_from_gridmap(wgd);
 
-        $el.fadeOut($.proxy(function() {
+        $el.hide(0, $.proxy(function() {
             $el.remove();
 
             if (!silent) {
@@ -2282,11 +2282,7 @@
      */
     fn.on_stop_resize = function(event, ui) {
         this.$resized_widget
-            .removeClass('resizing')
-            .css({
-                'width': '',
-                'height': ''
-            });
+            .removeClass('resizing');
 
         delay($.proxy(function() {
             this.$resize_preview_holder
@@ -2390,8 +2386,11 @@
         if (size_x !== this.resize_last_sizex ||
             size_y !== this.resize_last_sizey) {
 
+            if (size_x % 2 === 1) size_x++;  // snap widgets to even number column sizes
+
             this.resize_widget(this.$resized_widget, size_x, size_y);
             this.set_dom_grid_width(this.cols);
+
 
             this.$resize_preview_holder.css({
                 'width': '',

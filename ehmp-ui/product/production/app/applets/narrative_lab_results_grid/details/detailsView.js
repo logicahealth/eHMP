@@ -9,8 +9,6 @@ define([
 ], function(Backbone, Marionette, _, labDetailsTemplate, panelDetailsTemplate, panelDetailsTableTemplate, singleLabResultView) {
     'use strict';
 
-    var currentModel, currentCollection, panelTableView;
-
     var PanelTableView = Backbone.Marionette.CompositeView.extend({
         template: panelDetailsTableTemplate,
         childView: singleLabResultView,
@@ -27,21 +25,20 @@ define([
     return Backbone.Marionette.LayoutView.extend({
 
         initialize: function(options) {
-            currentModel = options.model;
-            currentCollection = options.collection;
-            currentModel.collection = currentModel.attributes.labs;
+            this.currentModel = options.model;
+            this.currentModel.collection = this.currentModel.get('labs');
             var isFullscreen = options.model.get('isFullscreen') || false;
 
-            if (currentModel.attributes.type === 'panel') {
+            if (this.currentModel.attributes.type === 'panel') {
                 this.panelTableView = new PanelTableView({
-                    collection: currentModel.attributes.labs,
+                    collection: this.currentModel.attributes.labs,
                     gridCollection: options.collection,
                     isFullscreen: isFullscreen
                 });
             }
         },
         getTemplate: function() {
-            if (currentModel.attributes.type === 'panel') {
+            if (this.currentModel.attributes.type === 'panel') {
                 return panelDetailsTemplate;
             } else {
                 return labDetailsTemplate;
@@ -57,7 +54,7 @@ define([
             }
         },
         onRender: function() {
-            if (currentModel.attributes.type === 'panel') {
+            if (this.currentModel.attributes.type === 'panel') {
                 this.labsListRegion.show(this.panelTableView);
             }
         }

@@ -8,8 +8,7 @@ function getResourceConfig(app) {
         name: 'shortcuts-get-list',
         path: '',
         get: getShortcuts,
-        //permissions need to be set once scope is figured out for this applet
-        requiredPermissions: [],
+        requiredPermissions: ['read-patient-record'],
         isPatientCentric: false,
         subsystems: []
     }];

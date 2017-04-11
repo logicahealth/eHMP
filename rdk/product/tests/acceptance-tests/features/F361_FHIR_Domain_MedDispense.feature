@@ -4,7 +4,7 @@ Feature: F361 FHIR Domain - MedicationDispense
  Scenario: Client can request Medication Dispense in FHIR format
      Given a patient with "medicationdispense" in multiple VistAs
      #And a patient with pid "10107V395912" has been synced through the RDK API
- 	 When the client requests "medicationdispense-getMedicationDispense" for the patient "9E7A;229"
+ 	 When the client requests medicationdispense for the patient "9E7A;229"
      Then a successful response is returned
      And the FHIR results contain "medicationdispense"
      	 | field 								       | value 				 |

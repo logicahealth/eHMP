@@ -1,8 +1,8 @@
 # Group FHIR
 
-## Condition get Problems [{{{path}}}]
+## Condition - Problems [{{{path}}}]
 
-### Fhir patient condition [GET {{{path}}}{?limit}{&date-asserted}{&onset}]
+### Get [GET {{{path}}}{?_count}{&date-asserted}{&onset}{&_sort}]
 
 Converts a vpr 'Problem' resource into a FHIR 'Condition' resource.
 
@@ -10,11 +10,37 @@ Converts a vpr 'Problem' resource into a FHIR 'Condition' resource.
 
     :[id]({{{common}}}/parameters/fhir.id.md)
 
-    :[limit]({{{common}}}/parameters/limit.md)
+    :[_count]({{{common}}}/parameters/count.md)
 
-    + date-asserted (string, optional) - date-asserted date/time (e.g. date-asserted=>2015/01/15)
+    + `date-asserted`: `>2015/01/15` (string, optional) - date-asserted date/time
 
-    + onset (string, optional) - onset date/time (e.g. onset=>2015/01/15)
+    + onset: `>2015/01/15` (string, optional) - onset date/time
+
+    + _sort (string, optional) - Sort criteria. Ascending order by default.
+
+        Pattern: `(asserter|code|date-asserted|onset|patient):(asc|desc)`
+
++ Response 200 (application/json)
+
+:[Response 400]({{{common}}}/responses/400.md)
+
+:[Response 404]({{{common}}}/responses/404.md)
+
+:[Response 500]({{{common}}}/responses/500.md)
+
+### Get [POST {{{path}}}/_search{?_count}{&date-asserted}{&onset}]
+
+Converts a vpr 'Problem' resource into a FHIR 'Condition' resource.
+
++ Parameters
+
+    :[id]({{{common}}}/parameters/fhir.id.md)
+
+    :[_count]({{{common}}}/parameters/count.md)
+
+    + `date-asserted`: `>2015/01/15` (string, optional) - date-asserted date/time
+
+    + onset: `>2015/01/15` (string, optional) - onset date/time
 
 
 + Response 200 (application/json)
@@ -24,4 +50,5 @@ Converts a vpr 'Problem' resource into a FHIR 'Condition' resource.
 :[Response 404]({{{common}}}/responses/404.md)
 
 :[Response 500]({{{common}}}/responses/500.md)
+
 

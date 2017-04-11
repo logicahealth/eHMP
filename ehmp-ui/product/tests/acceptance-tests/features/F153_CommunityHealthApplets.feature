@@ -19,7 +19,7 @@ Scenario: Community Health Sorting - Authoring Institution
     When user clicks on the column header "Authoring Institution" in CHS Gist
     Then Authoring Institution column is sorted in "descending" order in CHS Gist
 
-@US2113_expand @DE4084 
+@US2113_expand @DE4084 @debug @DE6976
 Scenario: User will be able to expand and minimize community health sumamry
   When the user clicks the Community Health Summary Expand Button
   Then the Expanded Community Health Summary applet displays
@@ -27,10 +27,7 @@ Scenario: User will be able to expand and minimize community health sumamry
   When the user clicks the Community Health Summary Minimize Button
   Then the user returns to the coversheet
 
-#@US2113_Filter
-#Scenario: User will be able to filter
-
-@US2113_detail @debug
+@US2113_detail
 Scenario: User will be able to view details
   When the user views the details for the first Community Health Summary
   Then the modal is displayed

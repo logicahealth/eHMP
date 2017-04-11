@@ -7,7 +7,8 @@ Background:
     # Given user is logged into eHMP-UI
     When user searches for and selects "Eight,Patient"
     #Then Overview is active
-    Then Cover Sheet is active
+    #Then Cover Sheet is active
+    Then Summary View is active
 
 @US3584_cwad_crisisnotes @DE979 @DE1045 @crisis
 Scenario: The user should be able to view Crisis Notes details

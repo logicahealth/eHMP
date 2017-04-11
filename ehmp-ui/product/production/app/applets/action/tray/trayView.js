@@ -3,6 +3,7 @@ define([
     'handlebars',
     'backbone',
     'marionette',
+    'moment',
     'app/applets/ordersearch/tray/trayView',
     'app/applets/action/tray/draftCollection',
     'app/applets/orders/tray/labs/trayUtils',
@@ -12,7 +13,7 @@ define([
     'app/applets/orders/taskNavigation',
     'app/applets/action/tray/actionItemTemplate',
     'hbs!app/applets/action/tray/emptyViewTemplate'
-], function(_, Handlebars, Backbone, Marionette, OrderSearchView, DraftCollection, LabOrderTrayUtils, OrderEntryUtils, RequestTrayUtils, TaskTrayUtils, OrdersTaskNavigation, ActionItemTemplate, EmptyViewTemplate) {
+], function(_, Handlebars, Backbone, Marionette, moment, OrderSearchView, DraftCollection, LabOrderTrayUtils, OrderEntryUtils, RequestTrayUtils, TaskTrayUtils, OrdersTaskNavigation, ActionItemTemplate, EmptyViewTemplate) {
 
     'use strict';
 
@@ -108,8 +109,8 @@ define([
             this.requestCompleteEvt = 'request.complete';
             this.eventChannel = ADK.Messaging.getChannel('tray-drafts');
 
-            this.listenTo(this.draftOrdersCollection, 'read:success', this.addToDraftGroupCollection);
-            this.listenTo(this.draftActivityCollection, 'read:success', this.addToDraftGroupCollection);
+            this.listenToOnce(this.draftOrdersCollection, 'read:success', this.addToDraftGroupCollection);
+            this.listenToOnce(this.draftActivityCollection, 'read:success', this.addToDraftGroupCollection);
 
             this.listenTo(this.draftOrdersCollection, 'read:error', this.handleDraftRequestError);
             this.listenTo(this.draftActivityCollection, 'read:error', this.handleDraftRequestError);
@@ -163,6 +164,10 @@ define([
             collection.each(function(model) {
 
                 var item = model.pick('uid', 'displayName', 'creationDateTime', 'domain', 'subDomain');
+                var consultActivity = {
+                    deploymentId: _.get(model.attributes, ['data', 'attributes', 'activity', 'deploymentId']),
+                    processInstanceId: _.get(model.attributes, ['data', 'attributes', 'activity', 'processInstanceId'])
+                };
 
                 var createdDateUTCStr = item.creationDateTime;
 
@@ -178,7 +183,8 @@ define([
                     itemDateTime: createdMomentLocalStr,
                     itemIconCls: this.getItemIconCls(item),
                     domain: item.domain,
-                    subdomain: item.subDomain
+                    subdomain: item.subDomain,
+                    consultActivity: consultActivity
                 });
             }, this);
 
@@ -195,10 +201,8 @@ define([
                 domainsComplete: this.domainsComplete
             });
 
-            console.log('There was an error retrieving some of your drafts.');
         },
         getItemIconCls: function(item) {
-
             var iconCls;
 
             if (item.domain === DOMAIN_ORDER) {
@@ -247,7 +251,9 @@ define([
                         LabOrderTrayUtils.launchDraftLabOrderForm(model.get('itemUid'));
                     } else if ((domain === DOMAIN_ACTIVITY) && (subdomain === SUBDOMAIN_CONSULT)) {
                         OrderEntryUtils.launchOrderEntryForm({
-                            'draftUid': model.get('itemUid')
+                            'draftUid': model.get('itemUid'),
+                            deploymentId: model.get('consultActivity').deploymentId,
+                            processInstanceId: model.get('consultActivity').processInstanceId
                         });
                     } else if ((domain === DOMAIN_ACTIVITY) && (subdomain === SUBDOMAIN_REQUEST)) {
                         RequestTrayUtils.launchDraftRequestForm(model.get('itemUid'));

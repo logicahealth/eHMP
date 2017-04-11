@@ -5,13 +5,14 @@ define([
     "marionette",
     "underscore",
     "highcharts",
+    "moment",
     'app/applets/vitals/util',
     "app/applets/vitals/appletHelpers",
     "hbs!app/applets/vitals/modal/modalTemplate",
     'hbs!app/applets/vitals/modal/detailsFooterTemplate',
     "app/applets/vitals/modal/modalHeaderView",
     'hbs!app/applets/vitals/templates/tooltip'
-], function($, InputMask, Backbone, Marionette, _, Highcharts, Util, AppletHelper, modalTemplate, detailsFooterTemplate, modalHeader, tooltip) {
+], function($, InputMask, Backbone, Marionette, _, Highcharts, moment, Util, AppletHelper, modalTemplate, detailsFooterTemplate, modalHeader, tooltip) {
     'use strict';
 
     var sharedDateRange,

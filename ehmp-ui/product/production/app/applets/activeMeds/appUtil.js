@@ -1,6 +1,6 @@
 define([
     "moment",
-], function(Moment) {
+], function(moment) {
     'use strict';
 
     var appHelper = {

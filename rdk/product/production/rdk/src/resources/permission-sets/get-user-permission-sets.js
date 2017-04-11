@@ -1,5 +1,4 @@
 'use strict';
-var dd = require('drilldown');
 var rdk = require('../../core/rdk');
 var pjds = rdk.utils.pjdsStore;
 var _ = require('lodash');
@@ -25,7 +24,7 @@ function getUserPermissionSets(req, res, next) {
             var data = response.data;
             var resultObj = {};
             resultObj.data = data.permissionSet;
-            resultObj.statusCode = dd(response)('statusCode').val;
+            resultObj.statusCode = _.get(response, 'statusCode');
             res.status(rdk.httpstatus.ok).rdkSend(resultObj);
         }
     });

@@ -10,7 +10,7 @@ var buildOrderObject = function(ehmpState, referenceId, domain, subDomain){
         pid: '9E7A;3',
         model: {
             patientUid: 'urn:va:patient:9E7A:3:3',
-            authorUid: 'mx1234',
+            authorUid: 'PW    ',
             domain: domain,
             subDomain: subDomain,
             ehmpState: ehmpState,
@@ -35,11 +35,11 @@ var buildOrderObject = function(ehmpState, referenceId, domain, subDomain){
 
 //THIS SHOULD CHANGE ONCE WE SET THE CORRECT ENDPOINT!!
 var endpoint = 'clinicobj';
-var testEndpoint = 'http://IP_ADDRESS:PORT';
+var testEndpoint = 'http://IP             ';
 
 var appConfig = {
     generalPurposeJdsServer: {
-        baseUrl: 'http://IP_ADDRESS:PORT'
+        baseUrl: 'http://IP             '
     }
 };
 

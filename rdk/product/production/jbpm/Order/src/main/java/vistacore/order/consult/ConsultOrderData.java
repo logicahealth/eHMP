@@ -39,15 +39,17 @@ public class ConsultOrderData implements java.io.Serializable
 
    private vistacore.order.Visit visit;
 
-   private Orderable orderable;
-
+   private String orderable;
+   
    private java.lang.String executionUserId;
 
    private java.lang.String executionUserName;
 
    private java.lang.String executionDateTime;
+   
+   private String cdsIntentResult;
 
-   private CdsIntentResult cdsIntentResult;
+   private java.lang.String orderResultComment;
 
    public ConsultOrderData()
    {
@@ -226,25 +228,32 @@ public class ConsultOrderData implements java.io.Serializable
       this.executionDateTime = executionDateTime;
    }
 
-   public vistacore.order.consult.CdsIntentResult getCdsIntentResult()
-   {
-      return this.cdsIntentResult;
+   public String getCdsIntentResult() {
+	   return cdsIntentResult;
+   }
+	
+   public void setCdsIntentResult(String cdsIntentResult) {
+	   this.cdsIntentResult = cdsIntentResult;
    }
 
-   public void setCdsIntentResult(
-         vistacore.order.consult.CdsIntentResult cdsIntentResult)
-   {
-      this.cdsIntentResult = cdsIntentResult;
-   }
-
-   public vistacore.order.consult.Orderable getOrderable()
+   public String getOrderable()
    {
       return this.orderable;
    }
 
-   public void setOrderable(vistacore.order.consult.Orderable orderable)
+   public void setOrderable(String orderable)
    {
       this.orderable = orderable;
+   }
+
+   public java.lang.String getOrderResultComment()
+   {
+      return this.orderResultComment;
+   }
+
+   public void setOrderResultComment(java.lang.String orderResultComment)
+   {
+      this.orderResultComment = orderResultComment;
    }
 
    public ConsultOrderData(
@@ -260,10 +269,11 @@ public class ConsultOrderData implements java.io.Serializable
          java.lang.String action, java.lang.String consultName,
          java.util.List<vistacore.order.consult.Condition> conditions,
          vistacore.order.Facility facility, vistacore.order.Visit visit,
-         vistacore.order.consult.Orderable orderable,
+         String orderable,
          java.lang.String executionUserId, java.lang.String executionUserName,
          java.lang.String executionDateTime,
-         vistacore.order.consult.CdsIntentResult cdsIntentResult)
+         String cdsIntentResult,
+         java.lang.String orderResultComment)
    {
       this.urgency = urgency;
       this.earliestDate = earliestDate;
@@ -284,6 +294,7 @@ public class ConsultOrderData implements java.io.Serializable
       this.executionUserName = executionUserName;
       this.executionDateTime = executionDateTime;
       this.cdsIntentResult = cdsIntentResult;
+      this.orderResultComment = orderResultComment;
    }
 
 }

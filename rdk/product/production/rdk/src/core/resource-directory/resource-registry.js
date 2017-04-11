@@ -2,23 +2,20 @@
 
 var _ = require('lodash');
 
-function ResourceRegistry(useRelativeHref) {
+function ResourceRegistry() {
     if (!(this instanceof ResourceRegistry)) {
         return new ResourceRegistry();
     }
 
     var resourceRegistry = this;
     var registry = [];
-    resourceRegistry.useRelativeHref = useRelativeHref;
 
     resourceRegistry.healthcheck = {};
 
     resourceRegistry.register = function(resourceDefinition) {
-        //todo: need to check to see that definition is valid
         if (!resourceDefinition.title) {
             throw new Error('resourceDefinition requires title');
         }
-
         if (!resourceDefinition.path) {
             throw new Error('resourceDefinition requires path');
         }

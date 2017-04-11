@@ -10,16 +10,16 @@ require "PatientPickerDomElements.rb"
 class TestClients
   @@users = {}
 
-  @@users["9E7A;pu1234"] = "pu1234!!"
-  @@users["C877;pu1234"] = "pu1234!!"
-  @@users["9E7A;pr12345"] = "pr12345!!"
-  @@users["UnauthorizedUser"] = "pa55w0rd"
-  @@users["AuditLogUser"] = "xx1234!!"
-  @@users["9E7A;lu1234"] = "lu1234!!"
-  @@users["9E7A;1tdnurse"] = "tdnurse1"
-  @@users["9E7A;xx1234"] = "baduser"
-  @@users["9E7A;mx1234"] = "mx1234!!"
-  @@users["C877;mx1234"] = "mx1234!!"
+  @@users["UN"] = "PW"
+  @@users["UN"] = "PW"
+  @@users["UN"] = "PW"
+  @@users["UN"] = "PW"
+  @@users["UN"] = "PW"
+  @@users["UN"] = "PW"
+  @@users["UN"] = "PW"
+  @@users["UN"] = "PW"
+  @@users["UN"] = "PW"
+  @@users["UN"] = "PW"
   @@users["9E7A;nurse18"] = "eigh18!!"
   def self.password_for(username)
     return @@users[username]
@@ -28,7 +28,7 @@ end
 
 class HTTPartyWithBasicAuth
   include HTTParty
-  @@auth = { :accessCode => "pu1234", :verifyCode => "pu1234!!", :site => "9E7A" }
+  @@auth = { :accessCode => "PW    ", :verifyCode => "PW    !!", :site => "9E7A", :division => "500" }
 #remove this site before doing things
   @@site = nil
   @@time_start = Time.new
@@ -74,7 +74,7 @@ class HTTPartyWithBasicAuth
   #General login function to allow for cookie and jwt token storage
   def self.acquire_tokens(auth_details = {})
     default_auth = auth
-    payload = { :accessCode => default_auth[:accessCode], :verifyCode => default_auth[:verifyCode], :site => default_auth[:site] }.merge(auth_details).to_json
+    payload = { :accessCode => default_auth[:accessCode], :verifyCode => default_auth[:verifyCode], :site => default_auth[:site], :division => default_auth[:division] }.merge(auth_details).to_json
 
     authentication_path = RDKQuery.new('authentication-authentication').path
     @response = HTTParty.post(authentication_path, :body => payload, :headers => { 'Content-Type' => 'application/json' }, :timeout => @@time_out_time, :verify => false)

@@ -1,4 +1,4 @@
-HMPUTIL1 ;SLC/AGP,ASMR/RRB,CPC - HMP utilities routine ; 05/10/16 7:25pm
+HMPUTIL1 ;SLC/AGP,ASMR/RRB,CPC - HMP utilities routine ;May 15, 2016 14:15
  ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1**;May 15, 2016;Build 1
  ;Per VA Directive 6402, this routine should not be modified.
  ;
@@ -75,6 +75,7 @@ ADHOC(HMPDMINP,HMPFCNT,DFN) ; Add syncStart metastamp and syncStatus to unsolici
  S @HMPA4JSN@("collection")=$S(DFN="OPD":"OPDsyncStart",1:"syncStart")
  I DFN="OPD" S @HMPA4JSN@("systemId")=$P(HMPID,";") ; set systemId for OPD
  S X="" F  S X=$O(HMPID(X)) Q:X=""  S @HMPA4JSN@(X)=HMPID(X)  ; add pid, systemId, localId, icn
+ ;
  ;DE4307 - if stamptime still doesn't exist then get from freshness
  I '+HMPDAT("STAMPTIME"),+$G(FILTER("freshnessDateTime")) S HMPDAT("STAMPTIME")=$$JSONDT^HMPUTILS(FILTER("freshnessDateTime"))
  ; build metastamp components
@@ -83,7 +84,7 @@ ADHOC(HMPDMINP,HMPFCNT,DFN) ; Add syncStart metastamp and syncStatus to unsolici
  S @HMPA4JSN@(SUB,"stampTime")=HMPDAT("STAMPTIME")
  ;
  S SUB(1)="sourceMetaStamp",X=""
- F  S X=$O(HMPID(X)) Q:X=""  S @HMPA4JSN@(SUB,SUB(1),HMPJSNSY,X)=HMPID(X)  ; add pid, systemId, localId, icn ;cpc;de4757 use stringed version of system
+ F  S X=$O(HMPID(X)) Q:X=""  S @HMPA4JSN@(SUB,SUB(1),HMPJSNSY,X)=HMPID(X)  ; add pid, systemId, localId, icn ;de4757 use stringed version of system
  S @HMPA4JSN@(SUB,SUB(1),HMPJSNSY,"stampTime")=HMPDAT("STAMPTIME")
  ;
  S SUB(2)="domainMetaStamp"

@@ -145,6 +145,22 @@ Then(/^the Documents Expanded applet is displayed$/) do
   wait.until { docs.applet_grid_loaded }
 end
 
+Then(/^the Reports Summary applet is displayed$/) do
+  reports = ReportsGistContainer.instance
+  verify_applet_exists(reports.appletid)
+  verify_applet_view_type('summary', reports.appletid)
+  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
+  wait.until { reports.applet_grid_loaded }
+end
+
+Then(/^the Clinical Reminders Summary applet is displayed$/) do
+  clinical_reminders = ClinicalReminders.instance
+  verify_applet_exists(clinical_reminders.appletid)
+  verify_applet_view_type('summary', clinical_reminders.appletid)
+  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
+  wait.until { clinical_reminders.applet_loaded? }
+end
+
 Then(/^the Timeline Summary applet is displayed$/) do
   # newsfeed/timeline is special because there are 2 applets on the screen with data-appletid=newsfeed, so tests need a different way 
   # to check 

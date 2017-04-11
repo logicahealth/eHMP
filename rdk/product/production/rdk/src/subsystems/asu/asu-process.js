@@ -4,7 +4,6 @@ var rdk = require('../../core/rdk');
 var _ = require('lodash');
 var async = require('async');
 var S = require('string');
-var dd = require('drilldown');
 var http = rdk.utils.http;
 var nullchecker = require('../../utils/nullchecker');
 
@@ -70,117 +69,98 @@ function getDefaultUserClass(req, callback) {
 
 function extractRolesFromTextSearch(logger, documentDetails, userDetails) {
     var extractedRoles = [];
+    var isAuthor = false;
+    var isSigner = false;
+    var isCosigner = false;
+    var isAttending = false;
 
-    _.each(dd(documentDetails)('data')('items').val, function (item) {
-        var currentUserUid = 'urn:va:user:' + userDetails.site + ':' + userDetails.duz[userDetails.site];
+    var currentUserUid = 'urn:va:user:' + userDetails.site + ':' + userDetails.duz[userDetails.site];
 
-        if (item.authorUid === currentUserUid) {
+    _.each(_.get(documentDetails, 'data.items'), function (item) {
+
+        if (!isAuthor && item.authorUid === currentUserUid) {
             extractedRoles.push('AUTHOR/DICTATOR');
+            isAuthor = true;
         }
-        if (item.signerUid === currentUserUid) {
+        if (!isSigner && item.signerUid === currentUserUid) {
             extractedRoles.push('SIGNER');
+            isSigner = true;
         }
-        if (item.cosignerUid === currentUserUid) {
+        if (!isCosigner && item.cosignerUid === currentUserUid) {
             extractedRoles.push('COSIGNER');
+            isCosigner = true;
         }
-        if (item.attendingUid === currentUserUid) {
+        if (!isAttending && item.attendingUid === currentUserUid) {
             extractedRoles.push('ATTENDING PHYSICIAN');
+            isAttending = true;
         }
     });
     return extractedRoles;
 }
 
+var POSSIBLE_ROLES = {
+    'AUTHOR/DICTATOR': 'AUTHOR/DICTATOR',
+    'Author (Dictator)': 'AUTHOR/DICTATOR',
+    AU: 'AUTHOR/DICTATOR',
+    'ATTENDING PHYSICIAN': 'ATTENDING PHYSICIAN',
+    'Attending Physician': 'ATTENDING PHYSICIAN',
+    ATT: 'ATTENDING PHYSICIAN',
+    TRANSCRIBER: 'TRANSCRIBER',
+    Transcriber: 'TRANSCRIBER',
+    TR: 'TRANSCRIBER',
+    'EXPECTED COSIGNER': 'EXPECTED COSIGNER',
+    'Expected Cosigner': 'EXPECTED COSIGNER',
+    EC: 'EXPECTED COSIGNER',
+    'EXPECTED SIGNER': 'EXPECTED SIGNER',
+    'Expected Signer': 'EXPECTED SIGNER',
+    ES: 'EXPECTED SIGNER',
+    SURROGATE: 'SURROGATE',
+    Surrogate: 'SURROGATE',
+    SUR: 'SURROGATE',
+    'ADDITIONAL SIGNER': 'ADDITIONAL SIGNER',
+    'Additional Signer': 'ADDITIONAL SIGNER',
+    X: 'ADDITIONAL SIGNER',
+    COMPLETER: 'COMPLETER',
+    Completer: 'COMPLETER',
+    CP: 'COMPLETER',
+    INTERPRETER: 'INTERPRETER',
+    Interpreter: 'INTERPRETER',
+    IN: 'INTERPRETER',
+    ENTERER: 'ENTERER',
+    Enterer: 'ENTERER',
+    E: 'ENTERER',
+    SIGNER: 'SIGNER',
+    Signer: 'SIGNER',
+    S: 'SIGNER',
+    COSIGNER: 'COSIGNER',
+    Cosigner: 'COSIGNER',
+    C: 'COSIGNER'
+};
+
 //populate the parameters that needs to passed to the ASU java end point.
 function populateEndPointInput(documentDetails, logger, userDetails) {
-
     var result = {};
     var extractedRoles = [];
 
-    var possibleRoles = {
-        'AUTHOR/DICTATOR': [
-            'AUTHOR/DICTATOR',
-            'Author (Dictator)',
-            'AU'
-        ],
-        'ATTENDING PHYSICIAN': [
-            'ATTENDING PHYSICIAN',
-            'Attending Physician',
-            'ATT'
-        ],
-        'TRANSCRIBER': [
-            'TRANSCRIBER',
-            'Transcriber',
-            'TR'
-        ],
-        'EXPECTED COSIGNER': [
-            'EXPECTED COSIGNER',
-            'Expected Cosigner',
-            'EC'
-        ],
-        'EXPECTED SIGNER': [
-            'EXPECTED SIGNER',
-            'Expected Signer',
-            'ES'
-        ],
-        'SURROGATE': [
-            'SURROGATE',
-            'Surrogate',
-            'SUR'
-        ],
-        'ADDITIONAL SIGNER': [
-            'ADDITIONAL SIGNER',
-            'Additional Signer',
-            'X'
-        ],
-        'COMPLETER': [
-            'COMPLETER',
-            'Completer',
-            'CP'
-        ],
-        'INTERPRETER': [
-            'INTERPRETER',
-            'Interpreter',
-            'IN'
-        ],
-        'ENTERER': [
-            'ENTERER',
-            'Enterer',
-            'E'
-        ],
-        'SIGNER': [
-            'SIGNER',
-            'Signer',
-            'S'
-        ],
-        'COSIGNER': [
-            'COSIGNER',
-            'Cosigner',
-            'C'
-        ]
-    };
-
-    if (!_.isEmpty(dd(documentDetails)('data')('items').val)) {
+    if (!_.isEmpty(_.get(documentDetails, 'data.items'))) {
+        var currentUserUid = 'urn:va:user:' + userDetails.site + ':' + userDetails.duz[userDetails.site];
         _.each(documentDetails.data.items[0].clinicians, function (item) {
-            _.each(possibleRoles, function (value, key) {
-                if (_.include(value, item.role)) {
-                    var currentUserUid = 'urn:va:user:' + userDetails.site + ':' + userDetails.duz[userDetails.site];
-                    if (item.uid === currentUserUid) {
-                        extractedRoles.push(key);
-                    }
-                }
-            });
+            var role = _.get(item, 'role');
+            if(role && POSSIBLE_ROLES.hasOwnProperty(role) && item.uid === currentUserUid) {
+                extractedRoles.push(POSSIBLE_ROLES[role]);
+            }
         });
+
         if (_.isEmpty(extractedRoles)) {
             extractedRoles = extractRolesFromTextSearch(logger, documentDetails, userDetails);
         }
         extractedRoles = _.uniq(extractedRoles);
-    }
-    else {
+    } else {
          logger.debug({items:documentDetails.data.items},'ASU No roles found ');
     }
     result.userClassUids = _.pluck(userDetails.vistaUserClass, 'uid');
 
-    if (!_.isEmpty(dd(documentDetails)('data')('items').val)) {
+    if (!_.isEmpty(_.get(documentDetails, 'data.items'))) {
         result.docDefUid = documentDetails.data.items[0].documentDefUid;
         result.docStatus = documentDetails.data.items[0].status;
     }
@@ -236,7 +216,7 @@ function getAsuPermission(req, documentDetails, callback) {
             });
         }
     }, function (error, response) {
-        if (!_.isUndefined(error)) {
+        if (error) {
             logger.debug(error,'asu-process.getAsuPermission Got an error fetching default USER class from JDS');
             return callback(error, null);
         }
@@ -289,12 +269,11 @@ function getAsuPermissionForActionNames(req, details, callback) {
 
     var httpConfig = _.extend({}, req.app.config.asuServer, {
         url: '/asu/rules/getDocPermissions',
-        logger: req.logger,
         json: true
     });
     logger.debug({httpConfig:httpConfig}, 'asu-process.getAsuPermissionForActionNames httpConfig');
 
-    if (_.isEmpty(dd(details)('data')('items').val)) {
+    if (_.isEmpty(_.get(details, 'data.items'))) {
         return callback('Document details cannot be empty.');
     }
 
@@ -322,7 +301,7 @@ function getAsuPermissionForActionNames(req, details, callback) {
             });
         }
     }, function (error, response) {
-        if (!_.isUndefined(error)) {
+        if (error) {
             logger.debug(error,'asuProcess.getAsuPermissionForActionNames: Got an error fetching default USER class from JDS');
             return callback(error, null);
         }
@@ -340,16 +319,19 @@ function getAsuPermissionForActionNames(req, details, callback) {
         }
         _.each(items, function (item) {
             var add = false;
-            if (S(item.uid).contains(userDetails.site)) {
+
+            if (item.uid.indexOf(userDetails.site) > -1) {
                 add = true;
             } else {
                 _.each(sites, function (site) {
-                    if (S(item.uid).contains(site)) {
+                    if (item.uid.indexOf(site) > -1) {
                         add = true;
+                        return false;
                     }
                 });
             }
-            if (!_.contains(result.userClassUids, item.uid) && add) {
+
+            if (add && !_.contains(result.userClassUids, item.uid)) {
                 result.userClassUids.push(item.uid);
             }
         });
@@ -382,7 +364,7 @@ function getPermission(req, details, items, callback) {
     logger.debug({details: details}, 'asu-process.getPermission details');
     logger.debug({userDetails: userDetails}, 'asu-process.getPermission userDetails');
 
-    if (_.isEmpty(dd(details)('data')('items').val)) {
+    if (_.isEmpty(_.get(details, 'data.items'))) {
         return callback('Document details cannot be empty.');
     }
 
@@ -408,16 +390,19 @@ function getPermission(req, details, items, callback) {
 
     _.each(items, function (item) {
         var add = false;
-        if (S(item.uid).contains(userDetails.site)) {
+
+        if (item.uid.indexOf(userDetails.site) > -1) {
             add = true;
         } else {
             _.each(sites, function (site) {
-                if (S(item.uid).contains(site)) {
-                    add = true;
-                }
+               if (item.uid.indexOf(site) > -1) {
+                   add = true;
+                   return false;
+               }
             });
         }
-        if (!_.contains(result.userClassUids, item.uid) && add) {
+
+        if (add && !_.contains(result.userClassUids, item.uid)) {
             result.userClassUids.push(item.uid);
         }
     });

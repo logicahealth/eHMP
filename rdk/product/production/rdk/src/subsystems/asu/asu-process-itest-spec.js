@@ -35,7 +35,7 @@ describe('Asu test', function () {
             'url': '/asu/rules/getDocPermissions',
             'port': 9000
         };
-        httpConfig.baseUrl = 'http://IPADDRESS:POR'.replace(/:\d{4}$/, ':' + httpConfig.port);
+        httpConfig.baseUrl = 'http://IP           '.replace(/:\d{4}$/, ':' + httpConfig.port);
         httpConfig.logger = logger;
 
         var expectedResponse = '[{"actionName":"VIEW","hasPermission":true},{"actionName":"EDIT RECORD","hasPermission":false},{"actionName":"PRINT RECORD","hasPermission":true}]';

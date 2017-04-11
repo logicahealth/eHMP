@@ -1,7 +1,6 @@
 'use strict';
 
 var _ = require('lodash');
-var dd = require('drilldown');
 var util = require('util');
 var ajv = require('ajv');
 var apiBlueprint = require('../core/rdk').apiBlueprint;
@@ -12,7 +11,7 @@ var apiBlueprint = require('../core/rdk').apiBlueprint;
  * Successful requests get parsed parameters under req.parsedParams.
  */
 module.exports = function(req, res, next) {
-    if (dd(req)('_resourceConfigItem')('undocumented').val) {
+    if (_.get(req, '_resourceConfigItem.undocumented')) {
         return next();
     }
 

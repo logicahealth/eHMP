@@ -5,7 +5,7 @@ define([
 ], function(Backbone, Marionette, Messaging) {
     "use strict";
 
-    var LayoutView = Backbone.Marionette.LayoutView.extend({
+    var ControllerView = Backbone.Marionette.LayoutView.extend({
         component: 'dialog',
         events: function() {
             var events = {};
@@ -17,6 +17,13 @@ define([
             events['after:show' + component] = function(e) {
                 this.DialogRegion.$el.addClass(component + '-open');
                 this.$el.addClass(component + '-active');
+                if (component === "toolbar") {
+                    if(this.$el.prop("tagName") === "LI") {
+                        this.$('.gist-item').addClass('background-color-primary-lighter');
+                    } else {
+                        this.$el.addClass('background-color-primary-lighter');
+                    }
+                }
                 this.trigger('after:show' + component, e, this);
             };
             events['before:hide' + component] = function(e) {
@@ -25,6 +32,13 @@ define([
             events['after:hide' + component] = function(e) {
                 this.DialogRegion.$el.removeClass(component + '-open');
                 this.$el.removeClass(component + '-active');
+                if (component === "toolbar") {
+                    if(this.$el.prop("tagName") === "LI") {
+                        this.$('.gist-item').removeClass('background-color-primary-lighter');
+                    } else {
+                        this.$el.removeClass('background-color-primary-lighter');
+                    }
+                }
                 this.trigger('after:hide' + component, e, this);
             };
             return events;
@@ -176,7 +190,7 @@ define([
                 component = this.getOption('component');
 
             if (this.getOption('DialogContainer')) {
-                DialogContainer = LayoutView.extend({
+                DialogContainer = ControllerView.extend({
                     el: this.el,
                     regions: {
                         'DialogRegion': this.getOption('DialogContainer')
@@ -184,11 +198,10 @@ define([
                     'keyHandler': _.bind(this.keyHandler, this)
                 });
             } else {
-                DialogContainer = LayoutView.extend({
+                DialogContainer = ControllerView.extend({
                     el: this.el,
                     regions: {
                         'DialogRegion': Backbone.Marionette.Region.extend({
-                            //el puts it anywhere in the DOM
                             'el': 'body',
                             attachHtml: function(view) {
                                 this.el.appendChild(view.el);
@@ -245,13 +258,13 @@ define([
                 $(document).off(this.eventString(), 'body');
             });
 
-            this.listenTo(view, LayoutView.prototype.dialogEventString, this.modalActive);
+            this.listenTo(view, ControllerView.prototype.dialogEventString, this.modalActive);
 
-            //There are inconsistent methods for opening up a workflow modal. 
+            //There are inconsistent methods for opening up a workflow modal.
             //This messaging is so all click handling persists as intended, regardless of how the modal is opened:
             this.listenTo(Messaging.getChannel('toolbar'), 'open:worflow:modal', function(el) {
                 this.preventFocusoutClose = true;
-                
+
                 $('#workflow-region').one('hidden.bs.modal.' + this.view.cid, _.bind(function() {
                     delete this.preventFocusoutClose;
                 }, this));

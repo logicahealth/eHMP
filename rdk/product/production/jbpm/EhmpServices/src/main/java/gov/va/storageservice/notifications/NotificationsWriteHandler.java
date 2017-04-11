@@ -14,6 +14,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import gov.va.ehmp.services.exception.EhmpServicesException;
+import gov.va.ehmp.services.exception.ErrorResponseUtil;
 import gov.va.ehmp.services.utils.Logging;
 import gov.va.kie.utils.WorkItemUtil;
 import gov.va.storageservice.notifications.util.ResourceUtil;
@@ -29,7 +30,7 @@ public class NotificationsWriteHandler implements WorkItemHandler, Closeable, Ca
 	}
 	
 	/**
-	 * Posts the notification (contained in a parameter of the WorkItem called 'notification')
+	 * Posts/Resolves the notification (contained in a parameter of the WorkItem called 'notification')
 	 * to the Notifications API and then completes the WorkItem (the response is contained in ServiceResponse).
 	 */
 	public void executeWorkItem(WorkItem workItem, WorkItemManager manager) {
@@ -37,16 +38,25 @@ public class NotificationsWriteHandler implements WorkItemHandler, Closeable, Ca
 		
 		try {
 			Logging.info("Entering NotificationsWriteHandler.executeWorkItem");
-			String notification = WorkItemUtil.extractStringParam(workItem, "notification");
-			Logging.debug("NotificationsWriteHandler.executeWorkItem notification = " + notification);
 			
+			String result = null;
 			ResourceUtil resUtil = new ResourceUtil();
-			String result = resUtil.invokePostResource(notification);
+			String notification = WorkItemUtil.extractRequiredStringParam(workItem, "notification");
+			Object notificationId = workItem.getParameter("notificationId");
+			
+			Logging.debug("NotificationsWriteHandler.executeWorkItem with notification = " + notification);
+			result = resUtil.invokePostResource(notificationId, notification);
+			
 			Logging.debug("NotificationsWriteHandler.executeWorkItem result = " + result);
+			
 			response = transformResult(result);
+			
 			Logging.debug("NotificationsWriteHandler.executeWorkItem response = " + response);
 		} catch (EhmpServicesException e) {
 			response = e.toJsonString();
+		} catch (Exception e) {
+			Logging.error("NotificationsWriteHandler.executeWorkItem: An unexpected condition has happened: " + e.getMessage());
+			response = ErrorResponseUtil.create(HttpStatus.INTERNAL_SERVER_ERROR, "NotificationsWriteHandler.executeWorkItem: An unexpected condition has happened: ", e.getMessage());
 		}
 		
 		WorkItemUtil.completeWorkItem(workItem, manager, response);

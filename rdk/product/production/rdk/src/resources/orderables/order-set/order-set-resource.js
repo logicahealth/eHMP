@@ -5,35 +5,35 @@ module.exports.getResourceConfig = function() {
         name: 'orderset-create',
         path: '',
         post: create,
-        requiredPermissions: [], // TODO: Add OrderSet specific permissions
+        requiredPermissions: ['add-order-set'], // FUTURE-TODO: Add OrderSet specific permissions
         isPatientCentric: false,
         subsystems: ['pjds', 'orderset']
     }, {
         name: 'orderset-update',
         path: '/:uid',
         put: update,
-        requiredPermissions: [], // TODO: Add OrderSet specific permissions
+        requiredPermissions: ['edit-order-set'], // FUTURE-TODO: Add OrderSet specific permissions
         isPatientCentric: false,
         subsystems: ['pjds', 'orderset']
     }, {
         name: 'orderset-get-by-uid',
         path: '/:uid',
         get: getByUid,
-        requiredPermissions: [], // TODO: Add OrderSet specific permissions
+        requiredPermissions: ['read-order-set'], // FUTURE-TODO: Add OrderSet specific permissions
         isPatientCentric: false,
         subsystems: ['pjds', 'orderset']
     }, {
         name: 'orderset-search',
         path: '',
         get: search,
-        requiredPermissions: [], // TODO: Add OrderSet specific permissions
+        requiredPermissions: ['read-order-set'], // FUTURE-TODO: Add OrderSet specific permissions
         isPatientCentric: false,
         subsystems: ['pjds', 'orderset']
     }, {
         name: 'orderset-delete',
         path: '/:uid',
         delete: callDelete,
-        requiredPermissions: [], // TODO: Add OrderSet specific permissions
+        requiredPermissions: ['delete-order-set'], // FUTURE-TODO: Add OrderSet specific permissions
         isPatientCentric: false,
         subsystems: ['pjds', 'orderset']
     }];

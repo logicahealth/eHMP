@@ -90,7 +90,7 @@ describe('operational-sync-endpoint-handler integration test', function() {
             },
             jds: _.defaults(wConfig.jds, {
                 protocol: 'http',
-                host: 'IP_ADDRESS',
+                host: 'IP        ',
                 port: 9080
             })
         };
@@ -276,7 +276,7 @@ describe('operational-sync-endpoint-handler integration test', function() {
         var config = {
             jds: _.defaults(wConfig.jds, {
                 protocol: 'http',
-                host: 'IP_ADDRESS',
+                host: 'IP        ',
                 port: 9080
             })
         };

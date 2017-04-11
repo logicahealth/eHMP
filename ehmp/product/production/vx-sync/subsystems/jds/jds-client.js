@@ -95,6 +95,31 @@ JdsClient.prototype.getSyncStatus = function(patientIdentifier, callback) {
     this.execute(path, null, 'GET', metricsObj, callback);
 };
 
+JdsClient.prototype.getSimpleSyncStatus = function(patientIdentifier, callback) {
+    this.log.debug('Jds-client.getSimpleSyncStatus()');
+    this.log.debug(inspect(patientIdentifier));
+    var metricsObj = {
+        'subsystem': 'JDS',
+        'action': 'getSimpleSyncStatus',
+        'pid': patientIdentifier.value,
+        'process': uuid.v4(),
+        'timer': 'start'
+    };
+    this.metrics.debug('JDS Get Simple Sync Status', metricsObj);
+
+    var args = _.toArray(arguments);
+    callback = args.pop();
+
+
+    var path = '/sync/combinedstat/' + patientIdentifier.value;
+
+    if (arguments.length > 2) {
+        path += arguments[1].filter;
+    }
+
+    this.execute(path, null, 'GET', metricsObj, callback);
+};
+
 JdsClient.prototype.clearSyncStatus = function(callback) {
     this.log.debug('Jds-client.clearSyncStatus()');
     var metricsObj = {
@@ -971,7 +996,7 @@ JdsClient.prototype.execute = function(path, dataToPost, method, metricsObj, cal
         }
 
         var responseWithoutPwd = objUtil.removeProperty(objUtil.removeProperty(json, 'accessCode'), 'verifyCode');
-        self.log.debug('jds-client.execute(): JDS response is for the caller to handle', responseWithoutPwd);
+        self.log.debug('jds-client.execute(): JDS response is for the caller to handle %j', responseWithoutPwd);
         self.metrics.debug('JDS Execute complete', metricsObj);
         callback(null, response, json);
     });

@@ -16,7 +16,7 @@ class ImmunizationWriteBack < AllApplets
     add_action(CucumberLabel.new("Select Lab Test"), SendKeysAction.new, AccessHtmlElement.new(:css, ".tt-suggestions.tt-suggestion:nth-child(2)"))
     add_verify(CucumberLabel.new("Add Immunization Modal Title"), VerifyText.new, AccessHtmlElement.new(:css, '#main-workflow-label-Enter-Immunization'))
     add_verify(CucumberLabel.new("Modal Loaded"), VerifyText.new, AccessHtmlElement.new(:css, ".modal-content"))
-    add_verify(CucumberLabel.new("Growl Alert"), VerifyContainsText.new, AccessHtmlElement.new(:css, ".growl-alert"))
+    add_verify(CucumberLabel.new("Growl Alert"), VerifyContainsText.new, AccessHtmlElement.new(:css, ".notify-message"))
     add_verify(CucumberLabel.new("Verify add immunization"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-infobutton='MUMPS']"))
     
     #Labels
@@ -31,7 +31,7 @@ class ImmunizationWriteBack < AllApplets
     add_verify(CucumberLabel.new("administration date"), VerifyText.new, AccessHtmlElement.new(:css, ".administrationDate"))
     add_verify(CucumberLabel.new("administered by"), VerifyText.new, AccessHtmlElement.new(:css, "label[for='administeredBy']"))
     add_verify(CucumberLabel.new("administered location"), VerifyText.new, AccessHtmlElement.new(:css, "label[for='administeredLocation']"))
-    add_verify(CucumberLabel.new("ordering provider"), VerifyText.new, AccessHtmlElement.new(:css, "label[for='orderedBy']"))
+    add_verify(CucumberLabel.new("ordering provider"), VerifyText.new, AccessHtmlElement.new(:css, "label[for='orderedByAdministered']"))
     add_verify(CucumberLabel.new("route of administration"), VerifyText.new, AccessHtmlElement.new(:css, "label[for='routeOfAdministration']"))
     add_verify(CucumberLabel.new("anatomic location"), VerifyText.new, AccessHtmlElement.new(:css, "label[for='anatomicLocation']"))
     add_verify(CucumberLabel.new("dosage/unit"), VerifyText.new, AccessHtmlElement.new(:css, "label[for='dosage']"))
@@ -41,7 +41,7 @@ class ImmunizationWriteBack < AllApplets
     #buttons
     add_action(CucumberLabel.new("Add"), ClickAction.new, AccessHtmlElement.new(:css, ".modal-footer .addBtn"))
     add_action(CucumberLabel.new("Disabled Add"), ClickAction.new, AccessHtmlElement.new(:css, ".modal-footer .addBtn [disabled]"))
-    add_action(CucumberLabel.new("Cancel"), ClickAction.new, AccessHtmlElement.new(:css, ".modal-footer #form-cancel-btn"))
+    add_action(CucumberLabel.new("Cancel"), ClickAction.new, AccessHtmlElement.new(:css, ".immunizationsConfirmCancel button[data-original-title='Warning']"))
       
     #form fields
     add_action(CucumberLabel.new("administered radio button"), ClickAction.new, AccessHtmlElement.new(:css, "#administeredHistorical-administered"))
@@ -60,7 +60,7 @@ class ImmunizationWriteBack < AllApplets
     add_action(CucumberLabel.new("historical admin date input"), SendKeysAndTabAction.new, AccessHtmlElement.new(:css, "#administrationDateHistorical"))
     add_action(CucumberLabel.new("administered by input box"), SendKeysAction.new, AccessHtmlElement.new(:css, "#administeredBy"))
     add_action(CucumberLabel.new("administered location input box"), SendKeysAction.new, AccessHtmlElement.new(:css, "#administeredLocation"))
-    add_action(CucumberLabel.new("ordering provider input box"), SendKeysAction.new, AccessHtmlElement.new(:css, "#orderedBy"))
+    add_action(CucumberLabel.new("ordering provider input box"), SendKeysAction.new, AccessHtmlElement.new(:css, "#orderedByAdministered"))
     add_action(CucumberLabel.new("route of administration drop down"), ComboSelectAction.new, AccessHtmlElement.new(:css, "#routeOfAdministration"))
     add_action(CucumberLabel.new("anatomic location drop down"), ComboSelectAction.new, AccessHtmlElement.new(:css, "#anatomicLocation"))
     add_action(CucumberLabel.new("dosage/unit input box"), SendKeysAndTabAction.new, AccessHtmlElement.new(:css, "#dosage"))
@@ -90,10 +90,23 @@ end
 
 Then(/^user adds a new immunization$/) do
   aa = ImmunizationWriteBack.instance
-  expect(aa.perform_action("Immunization Add Button")).to eq(true)
-  # expect(aa.wait_until_action_element_visible("Modal Loaded", DefaultLogin.wait_time)).to be_true
-  @ehmp = PobCommonElements.new
-  @ehmp.wait_until_fld_modal_body_visible
+  refresh_page = true
+  begin
+    expect(aa.perform_action("Immunization Add Button")).to eq(true)
+    # expect(aa.wait_until_action_element_visible("Modal Loaded", DefaultLogin.wait_time)).to be_true
+    @ehmp = PobCommonElements.new
+    @ehmp.wait_until_fld_modal_body_visible
+  rescue
+    if refresh_page
+      p 'refreshing the page'
+      refresh_page = false
+      PobCoverSheet.new.load
+      step "Cover Sheet is active"
+      retry
+    else
+      raise
+    end
+  end
 end
 
 Then(/^add immunization modal detail title says "([^"]*)"$/) do |modal_title|
@@ -120,7 +133,7 @@ Then(/^add immunization detail modal displays disabled fields$/) do |table|
   aa = ImmunizationWriteBack.instance
   # expect(aa.wait_until_action_element_visible("Modal Loaded", DefaultLogin.wait_time)).to be_true
   table.rows.each do | row |
-    #p row[0]
+    p row[0]
     expect(aa.get_element(row[0]).displayed?).to eq(true), "Immunization form field '#{row[0]}' is not displayed"
     expect(aa.get_element(row[0]).enabled?).to eq(false), "Immunization form field '#{row[0]}' is enabled"
   end
@@ -172,7 +185,7 @@ Then(/^the user adds the administered immunization "([^"]*)"$/) do |immunization
   aa.add_action(CucumberLabel.new("select an immunization"), ClickAction.new, AccessHtmlElement.new(:xpath, "//li[contains(@class, 'select2-results__option') and contains(string(), '#{immunization_type}')]"))
   expect(aa.perform_action("select an immunization")).to eq(true)
 
-  expect(aa.perform_action("lot number drop down", "Z79YG")).to eq(true)
+  expect(aa.perform_action("lot number drop down", "I90FV")).to eq(true)
   expect(aa.perform_action("route drop down", "INTRAMUSCULAR")).to eq(true)
   expect(aa.perform_action("anatomic location drop down", "LEFT ARM")).to eq(true)
   expect(aa.perform_action("dosage/unit input box", "150")).to eq(true)

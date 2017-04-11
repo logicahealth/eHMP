@@ -22,13 +22,15 @@ dependencies {
     compile group: 'org.springframework.security', name: 'spring-security-core', version: property('springSecurityVersion')
     testCompile group: 'org.springframework', name: 'spring-test', version: property('springVersion')
     compile group: 'javax.servlet', name: 'javax.servlet-api', version:'3.1.0'
-    compile group: 'org.slf4j', name: 'slf4j-log4j12', version: property('slf4jVersion')
     compile project(':production:cdsinvocation:cds-invocation')
     testCompile group: 'junit', name: 'junit', version: property('junitVersion')
 }
 
 war {
     baseName = 'cdsinvocation-results'
+	rootSpec.exclude('**/cds-results-service.properties')
+	rootSpec.exclude('**/cds-results-log4j2.xml')
+	rootSpec.exclude('**/certs/')
 }
 
 

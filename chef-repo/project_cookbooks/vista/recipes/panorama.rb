@@ -28,8 +28,8 @@ end
 vista_new_person "create_leipr_proxy_user" do
   log node[:vista][:chef_log]
   action :create
-  access_code "lu1234"
-  verify_code "lu1234!!"
+  access_code "PW    "
+  verify_code "PW    !!"
   full_name "User,LEIPR"
   initial "LU"
   keys ["XUPROGMODE", "XUPROG"]
@@ -41,8 +41,8 @@ persona_users = [
   # example of dynamic user
   # {
   #   # Proxy user, but also used for end-user testing
-  #   :access_code => 'pu1234',
-  #   :verify_code => 'pu1234!!',
+  #   :access_code => 'PW    ',
+  #   :verify_code => 'PW    !!',
   #   :full_name => 'User,Panorama',
   #   :ssn => '666441233',
   #   :initial => 'PU',

@@ -21,7 +21,7 @@ var getResourceConfig = function() {
             path: domain.name,
             get: performSearchByType.bind(null, domain.index, domain.name),
             subsystems: ['patientrecord','jds', 'solr','jdsSync','authorization'],
-            requiredPermissions: [],
+            requiredPermissions: ['read-patient-record'],
             isPatientCentric: true
         };
     });
@@ -109,7 +109,8 @@ function performSearchByType(index, name, req, res) {
     httpUtil.get(options,
         function(err, response, data) {
             if (!nullchecker.isNullish(err)) {
-                res.status(500).rdkSend('500'); // TODO respond with real error
+                req.logger.error(err, 'Error searching by type');
+                res.status(500).rdkSend('Error searching by type; the error has been logged');
                 return;
             }
             jdsStatusCode = response.statusCode;

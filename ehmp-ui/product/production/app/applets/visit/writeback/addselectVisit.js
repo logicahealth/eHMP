@@ -4,9 +4,10 @@ define([
     'jquery',
     'handlebars',
     'moment',
+    'underscore',
     '../collectionHandler',
     'app/applets/encounters/writeback/saveUtil'
-], function(Backbone, Marionette, $, Handlebars, moment, collectionHandler, saveUtil) {
+], function(Backbone, Marionette, $, Handlebars, moment, _, collectionHandler, saveUtil) {
     "use strict";
 
     var appointmentsArray = new Backbone.Collection([{}]);
@@ -35,7 +36,7 @@ define([
     var RECENTLY_USED_LOCATIONS_TEXT = 'Recently Used Locations';
     var NUM_RECENT_PROVIDERS = 5;
     var ALL_PROVIDERS_TEXT = 'All Providers';
-    var PROVIDERS_ERROR_MSG = '<h3>There was an error retrieving the providers list.</h3>';
+    var PROVIDERS_ERROR_MSG = '<p class="font-size-13"><strong>There was an error retrieving the providers list.</strong></p>';
     var RECENTLY_USED_PROVIDERS_TEXT = 'Recently Used Providers';
     var LOADING_ELEMENT = '<i class="loading fa fa-spinner fa-spin visit-loading"></i>';
     var ENCOUNTER_FORM = 'Encounter Form';
@@ -43,10 +44,10 @@ define([
     // *********************************************** CONTAINERS ****************************************
     var selectEncounterProviderContainer = {
         control: 'container',
-        extraClasses: ['row select-encounter-container', 'top-margin-md'],
+        extraClasses: ['row', 'select-encounter-container', 'top-margin-md'],
         items: [{
             control: 'container',
-            extraClasses: ['col-xs-6 select-encounter-provider', 'top-margin-sm'],
+            extraClasses: ['col-xs-12', 'select-encounter-provider', 'top-margin-sm'],
             template: LOADING_ELEMENT,
             items: [{
                 control: 'select',
@@ -55,6 +56,7 @@ define([
                 name: 'selectEncounterProvider',
                 placeholder: 'Wait while the list is loading.',
                 disabled: true,
+                required: true,
                 pickList: [],
                 showFilter: true,
                 groupEnabled: true,
@@ -130,7 +132,7 @@ define([
             items: [{
                 control: 'container',
                 extraClasses: ['col-xs-12'],
-                template: '<p>Viewing {{clinicAppointmentsFromDate}} to {{clinicAppointmentsThroughDate}}<p>'
+                template: '<p>Viewing <strong>{{clinicAppointmentsFromDate}}</strong> to <strong>{{clinicAppointmentsThroughDate}}</strong><p>'
             }]
         }, {
             control: 'container',
@@ -162,7 +164,7 @@ define([
             items: [{
                 control: 'container',
                 extraClasses: ['col-xs-12'],
-                template: '<p>Recent admissions (up to the last 5)</p>'
+                template: '<p class="top-padding-sm bottom-padding-sm">Recent admissions (up to the last 5)</p>'
             }]
         }, {
             control: 'container',
@@ -198,10 +200,10 @@ define([
             }]
         }, {
             control: 'container',
-            extraClasses: ['row select-location-container'],
+            extraClasses: ['row', 'select-location-container'],
             items: [{
                 control: 'container',
-                extraClasses: ['col-xs-6', 'encounter-set'],
+                extraClasses: ['col-xs-12', 'encounter-set'],
                 template: LOADING_ELEMENT,
                 items: [{
                     control: 'select',
@@ -209,6 +211,7 @@ define([
                     srOnlyLabel: false,
                     name: 'selectNewEncounterLocation',
                     disabled: true,
+                    required: true,
                     pickList: [],
                     showFilter: true,
                     groupEnabled: true,
@@ -274,48 +277,63 @@ define([
                         }
                     }
                 }]
-            }, {
+            }]
+        }, {
+            control: 'container',
+            extraClasses: ['row'],
+            items: [{
                 control: 'container',
-                extraClasses: ['col-xs-6', 'encounter-set'],
+                extraClasses: ['col-xs-12', 'all-padding-no'],
                 items: [{
                     control: 'container',
-                    extraClasses: ['col-xs-6'],
+                    extraClasses: ['col-xs-6', 'encounter-set'],
                     items: [{
                         control: 'datepicker',
                         name: 'newVisitDate',
+                        flexible: true,
+                        minPrecision: 'day',
                         srOnlyLabel: false,
-                        label: 'Date'
+                        required: true,
+                        disabled: true,
+                        label: 'Date',
+                        startDate: moment().subtract(100, 'y')
                     }]
                 }, {
                     control: 'container',
-                    extraClasses: ['col-xs-6'],
+                    extraClasses: ['col-xs-6', 'encounter-set'],
                     items: [{
                         control: 'timepicker',
                         placeholder: 'HH:MM',
                         name: 'newVisitTime',
                         srOnlyLabel: false,
+                        required: true,
+                        disabled: true,
                         label: 'Time of Visit'
                     }]
-                }, {
-                    control: 'container',
-                    extraClasses: ['col-xs-12', 'left-padding-no'],
-                    items: [{
-                        control: 'alertBanner',
-                        name: 'newVisitDateTimeWarning',
-                        type: 'info'
-                    }]
-                }, {
-                    control: 'container',
-                    extraClasses: ['row'],
-                    items: [{
-                        control: 'container',
-                        extraClasses: ['col-xs-12', 'right-padding-xl'],
-                        items: [{
-                            control: 'checkbox',
-                            name: 'isHistorical',
-                            label: 'Historical Visit: a visit that occurred at some time in the past or at some other location (possibly non-VA) but is not used for workload credit.'
-                        }]
-                    }]
+                }]
+            }]
+        }, {
+            control: 'container',
+            extraClasses: ['row', 'top-margin-md'],
+            items: [{
+                control: 'container',
+                extraClasses: ['col-xs-12'],
+                items: [{
+                    control: 'alertBanner',
+                    name: 'newVisitDateTimeWarning',
+                    type: 'info'
+                }]
+            }]
+        }, {
+            control: 'container',
+            extraClasses: ['row'],
+            items: [{
+                control: 'container',
+                extraClasses: ['col-xs-12'],
+                items: [{
+                    control: 'checkbox',
+                    name: 'isHistorical',
+                    label: 'Historical Visit: a visit that occurred at some time in the past or at some other location (possibly non-VA) but is not used for workload credit.'
                 }]
             }]
         }]
@@ -353,17 +371,21 @@ define([
         extraClasses: ['modal-footer'],
         items: [{
             control: 'container',
-            extraClasses: ['form-group'],
-            items: [{
-                control: 'button',
-                type: 'submit',
-                id: 'cancel-btn',
+            extraClasses: ['form-group','display-flex','valign-bottom'],
+            items: [
+            {
+                control: 'popover',
+                behaviors: {
+                    Confirmation: {
+                        title: 'Warning',
+                        eventToTrigger: 'encounter-confirm-cancel'
+                    }
+                },
                 label: 'Cancel',
-                title: 'Press enter to cancel.',
-                disabled: false,
-                extraClasses: ['btn-default', 'btn-sm'],
-                name: 'cancel'
-            }, {
+                name: 'encounterConfirmCancel',
+                extraClasses: ['btn-default', 'btn-sm','right-margin-xs']
+            },
+            {
                 control: 'button',
                 type: 'submit',
                 id: 'viewEncounters-btn',
@@ -376,51 +398,6 @@ define([
         }]
     }];
     // *********************************************** END OF FIELDS ********************************************
-    // *********************************************** FOOTER VIEW **********************************************
-    var FooterView = Backbone.Marionette.ItemView.extend({
-        encounter_title: ENCOUNTER_FORM,
-        template: Handlebars.compile('{{ui-button "No" classes="btn-default" title="Press enter to go back."}}{{ui-button "Yes" classes="btn-primary" title="Press enter to cancel."}}'),
-        events: {
-            'click .btn-primary': function() {
-                var footerOptions = this.getOption('footerOptions');
-                if (_.isFunction(footerOptions.onClose)) {
-                    _.bind(footerOptions.onClose, footerOptions.workflow)();
-                }
-                ADK.UI.Alert.hide();
-
-                //--- Remove if ENABLING encounter form.
-                ADK.UI.Workflow.hide();
-                if (!_.isUndefined(footerOptions.workflow)) {
-                    footerOptions.workflow.close();
-                }
-                ADK.Messaging.getChannel('encountersWritebackTray').trigger('encounter:context:cancel', footerOptions);
-                //--- end Remove
-
-                /* Removed in order to Disable Encounter Form:
-                if (footerOptions.inTray && _.includes(footerOptions.workflow.model.get('title'), this.encounter_title)) {
-                    // Trigger the change encounter cancellation.
-                    ADK.Messaging.getChannel('encountersWritebackTray').trigger('encounter:context:cancel', footerOptions);
-                } else {
-                    ADK.UI.Workflow.hide();
-                    if (!_.isUndefined(footerOptions.workflow)) {
-                        footerOptions.workflow.close();
-                    }
-                }
-                */
-            },
-            'click .btn-default': function() {
-                ADK.UI.Alert.hide();
-            }
-        },
-        tagName: 'span'
-    });
-    // *********************************************** END OF FOOTER VIEW ***************************************
-    // *********************************************** ALERT MESSAGE VIEWS **************************************
-    var DeleteMessageView = Backbone.Marionette.ItemView.extend({
-        template: Handlebars.compile('All unsaved changes will be lost. Are you sure you want to cancel?'),
-        tagName: 'p'
-    });
-    // *********************************************** END OF ALERT MESSAGE VIEWS *******************************
     // *********************************************** FORM VIEW ************************************************
     var formView = ADK.UI.Form.extend({
         inTray: null,
@@ -432,26 +409,29 @@ define([
             'encountersButton': '#viewEncounters-btn',
             'newVisitDateTimeWarning': '.newVisitDateTimeWarning',
             'providerLoading': '.select-encounter-container',
-            'locationLoading': '.select-location-container'
+            'locationLoading': '.select-location-container',
+            'newVisitFields': '.selectNewEncounterLocation, .newVisitDate, .newVisitTime'
         },
         fields: formFields,
         events: {
             'submit': 'submitForm',
-            'click #cancel-btn': function(e) {
-                e.preventDefault();
-                var deleteAlertView = new ADK.UI.Alert({
-                    title: 'Cancel',
-                    icon: 'icon-cancel',
-                    messageView: DeleteMessageView,
-                    footerView: FooterView,
-                    footerOptions: {
-                        workflow: this.workflow,
-                        inTray: this._inTray,
-                        onClose: this.onClose,
-                        form: this
-                    }
-                });
-                deleteAlertView.show();
+            'encounter-confirm-cancel':function(e){
+                var footerOptions = {
+                    workflow: this.workflow,
+                    inTray: this._inTray,
+                    onClose: this.onClose,
+                    form: this
+                };
+                if (_.isFunction(footerOptions.onClose)) {
+                    _.bind(footerOptions.onClose, footerOptions.workflow)();
+                }
+
+                //--- Remove if ENABLING encounter form.
+                ADK.UI.Workflow.hide();
+                if (!_.isUndefined(footerOptions.workflow)) {
+                    footerOptions.workflow.close();
+                }
+                ADK.Messaging.getChannel('encountersWritebackTray').trigger('encounter:context:cancel', footerOptions);
             },
             'click @ui.encountersButtons': function(e) {
                 e.preventDefault();
@@ -462,7 +442,7 @@ define([
         modelEvents: {
             'change:newVisitDate': 'validateNewVisitDateTime',
             'change:newVisitTime': 'validateNewVisitDateTime',
-            'change:selectEncounterProvider': 'setNewEncounterProvider',
+            'change:selectEncounterProvider': 'validateForm',
             'change:admissionsModel': 'setAdmission',
             'change:appointmentsModel': 'setAppointment',
             'change:selectNewEncounterLocation': 'setNewEncounterLocation'
@@ -473,19 +453,19 @@ define([
             var currentPatient = ADK.PatientRecordService.getCurrentPatient();
             var isInpatient = (currentPatient.patientStatusClass() === 'Inpatient') ? '1' : '0';
             e.preventDefault();
-            if (!this.model.isValid()) this.model.set('formStatus', {
+            if (!this.dateValidation()) this.model.set('formStatus', {
                 status: 'error',
                 message: self.model.validationError
             });
             else {
                 this.$el.trigger('tray.loaderShow', {
-                    loadingString:'Setting encounter'
+                    loadingString: 'Setting encounter'
                 });
                 ADK.Checks.run('visit-context', _.bind(function() {
                     this.model.unset('formStatus');
                     var PatientModel = ADK.PatientRecordService.getCurrentPatient();
                     var visit = this.model.get('visit');
-                    var saveAlertView = new ADK.UI.Notification({
+                    var setEncounterAlertView = new ADK.UI.Notification({
                         title: 'Encounter context',
                         icon: 'fa-check',
                         type: 'success',
@@ -505,9 +485,10 @@ define([
                         visit.set('formattedDateTime', formateddatetime);
                         visit.set('isHistorical', this.model.get('isHistorical'));
                     }
+                    this.setMostRecentLocationsAndProviders(this.model);
                     if (locationUid) {
                         var isHistorical = false;
-                        var locName = visit.get("locationDisplayName") || '';
+                        var locName = !_.isUndefined(visit) ? visit.get("locationDisplayName") : '';
                         if (this.model.get('visit').newVisit && this.model.get('visit').newVisit.isHistorical) {
                             isHistorical = true;
                         }
@@ -515,17 +496,16 @@ define([
                         self.setServiceCategory(serviceCategory, self.model);
                         self.stopListening(ADK.Messaging.getChannel('visit'), 'context:set');
                         ADK.Messaging.getChannel('visit').trigger('context:set');
+                        setEncounterAlertView.show();
                         //check if we're in a workflow
                         //check if we're the last step in the flow
-                        if (self.isLastStep()) {
-                            if (self._inTray) {
-                                self.$el.trigger('tray.loaderHide');
-                                self.$el.trigger('tray.hide');
-                                self.workflow.close();
-                                self.preloadEncounter();
-                            }
-                            ADK.UI.Workflow.hide();
-                        } else {
+
+                        if (self._inTray) {
+                            self.$el.trigger('tray.loaderHide');
+                            ///Uncomment this line if encounter form is re-enabled 
+                            //self.preloadEncounter();
+                        }
+                        if (!self.isLastStep()) {
                             // *** Uncomment this block if encounter form is re-enabled
                             // Reset encounter form done loading indicator.
                             // ADK.Messaging.getChannel('encountersWritebackTray').trigger('encounter:fetch');
@@ -533,7 +513,7 @@ define([
                             // ADK.Messaging.getChannel('encountersWritebackTray').trigger('encounter:variable:get', function(encounterVars) {
                             //     if (encounterVars.closeOnSet && self._inTray) {
                             //         // Use the encounter channel to animate the growl alert after the tray is done hidding.
-                            //         ADK.Messaging.getChannel('encountersWritebackTray').trigger('encounter:context:alert', saveAlertView);
+                            //         ADK.Messaging.getChannel('encountersWritebackTray').trigger('encounter:context:alert', setEncounterAlertView);
                             //         self.$el.trigger('tray.hide');
                             //     }
                             // });
@@ -550,10 +530,33 @@ define([
                             // });
                             // Close the encounter workflow after setting so we can resume our external workflow.
                             self.workflow.goToNext();
+                        } else {
+                            self.$el.trigger('tray.hide');
+                            self.workflow.close();
+                            ADK.UI.Workflow.hide();
                         }
                     }
                 }, this));
             }
+        },
+        dateValidation: function() {
+            
+            if (!this.model.get('_newVisitDate').get('day')) {
+                this.model.errorModel.set({
+                    newVisitDate: 'Date must be in MM/DD/YYYY format'
+                });
+                return false;
+            }            
+            var earliestDate = moment().subtract(100, 'y');
+            var latestDate = moment().add(100, 'y');
+            var visitDate = moment(this.model.get('newVisitDate'), "MM/DD/YYYY", true);
+            if (!visitDate.isBetween(earliestDate, latestDate)) {
+                this.model.errorModel.set({
+                    newVisitDate: 'Date must be beween ' + earliestDate.format('L') + ' and ' + latestDate.format('L')
+                });
+                return false;
+            }
+            return true;
         },
         preloadEncounter: function() {
             ADK.Messaging.getChannel('encountersWritebackTray').trigger('encounter:promise:new');
@@ -580,15 +583,18 @@ define([
                 if (this.previousTab.indexOf('Hospital-Admissions-tab-panel') < 0) {
                     this.refreshProviderPicklist();
                 }
+                this.ui.newVisitFields.trigger('control:disabled', true);
                 this.setAppointment(this.model);
             } else if (this.currentTab.indexOf('Hospital-Admissions-tab-panel') >= 0) {
                 if (this.previousTab.indexOf('Clinic-Appointments-tab-panel') < 0) {
                     this.refreshProviderPicklist();
                 }
+                this.ui.newVisitFields.trigger('control:disabled', true);
                 this.setAdmission(this.model);
             } else if (this.currentTab.indexOf('New-Visit-tab-panel') >= 0) {
                 this.validateNewVisitDateTime();
                 this.setNewEncounterLocation(this.model);
+                this.ui.newVisitFields.trigger('control:disabled', false);
             }
         },
         refreshProviderPicklist: function(newVisitDateTime) {
@@ -601,9 +607,6 @@ define([
             self.$el.find(self.ui.selectEncounterProvider.selector).trigger('control:disabled', true);
             if (this.LOADING_ELEMENT_JQUERY) {
                 this.LOADING_ELEMENT_JQUERY.appendTo(self.$el.find('.select-encounter-provider'));
-                this.$el.trigger('tray.loaderShow',{
-                    loadingString:'Loading providers'
-                });
             }
             //Keep track of the tab we're on to preserve the correct call
             var currTab = self.currentTab;
@@ -639,7 +642,7 @@ define([
                     self.validateForm();
                     self.$el.find(self.ui.selectEncounterProvider.selector).trigger('control:disabled', false);
                     cachedData.providers.set(collection.models);
-                //If this isn't the corresponding response, either the correct response has already returned or we're still waiting on it.
+                    //If this isn't the corresponding response, either the correct response has already returned or we're still waiting on it.
                 } else if (!self.isDestroyed && !_.isUndefined(response) && isCorrespondingResponse) {
                     //Keep user from being able to press set
                     self.model.unset('selectEncounterProvider');
@@ -652,7 +655,7 @@ define([
                         ].join('\n'))
                     });
                     var SimpleAlertFooterItemView = Backbone.Marionette.ItemView.extend({
-                        template: Handlebars.compile(['{{ui-button "OK" classes="btn-primary alert-continue" title="Press enter to continue."}}'].join('\n')),
+                        template: Handlebars.compile(['{{ui-button "OK" classes="btn-primary alert-continue btn-sm" title="Press enter to close."}}'].join('\n')),
                         events: {
                             'click button': function() {
                                 ADK.UI.Alert.hide();
@@ -660,8 +663,8 @@ define([
                         }
                     });
                     var alertView = new ADK.UI.Alert({
-                        title: 'Provider Error',
-                        icon: 'icon-error',
+                        title: 'Error',
+                        icon: 'icon-circle-exclamation',
                         messageView: SimpleAlertItemView,
                         footerView: SimpleAlertFooterItemView
                     });
@@ -673,7 +676,6 @@ define([
                 if (_.isObject(self.ui.providerLoading) && $(self.ui.providerLoading.selector)) {
                     self.LOADING_ELEMENT_JQUERY = $(self.ui.providerLoading.selector).find('.loading');
                     self.LOADING_ELEMENT_JQUERY.detach();
-                    self.$el.trigger('tray.loaderHide');
                 }
             });
         },
@@ -792,14 +794,25 @@ define([
                 this.model.newVisit.unset('locationUid');
                 this.model.newVisit.unset('serviceCategory');
             }
+            this.model.set('visit', this.model.newVisit);
+            this.validateForm();
+        },
+        setMostRecentLocationsAndProviders: function(model) {
+            var locationUid = model.get('selectNewEncounterLocation');
+            var locationDisplayName = model.get('_labelsForSelectedValues').get('selectNewEncounterLocation');
+            var providerCode = model.get('selectEncounterProvider');
+            var providerName = model.get('_labelsForSelectedValues').get('selectEncounterProvider');
+            var locationNew = false;
+            var providerNew = false;
+            var recentLocations = ADK.UserService.getUserSession().get('recentlySelected');
             // If location UID and location name are defined
             if (locationUid && locationDisplayName) {
+                locationNew = true;
                 var selectedLocation = {
                     'value': locationUid,
                     'label': locationDisplayName
                 };
                 var locationIndex = -1;
-                var recentLocations = ADK.UserService.getUserSession().get('recentlySelected');
                 // Check the user session first for existing list of recent locations.
                 if (!_.isUndefined(recentLocations)) {
                     if (recentLocations instanceof Backbone.Model) {
@@ -808,6 +821,7 @@ define([
                         this.locationsQueue = recentLocations.locations;
                     }
                 }
+
                 // Check to see if the selected location is already in the queue. If it is, grab its index.
                 _.each(this.locationsQueue, function(queueElement, queueIndex) {
                     if (queueElement.value === locationUid) {
@@ -829,16 +843,48 @@ define([
                         this.locationsQueue.unshift(selectedLocation);
                     }
                 }
-                var self = this;
-                var updatedLocations = [{
-                    group: RECENTLY_USED_LOCATIONS_TEXT,
-                    pickList: this.locationsQueue
-                }, {
-                    group: ALL_LOCATIONS_TEXT,
-                    pickList: collectionHandler.locationsParser(cachedData.locations.models)[0].pickList
-                }];
-                self.updatelocationsPickList(self, updatedLocations);
-                // Add selected location to the "recently selected" session object
+            }
+            // If provider code and provider name are defined
+            if (providerCode && providerName) {
+                providerNew = true;
+                var selectedProvider = {
+                    'value': providerCode,
+                    'label': providerName
+                };
+                var providerIndex = -1;
+
+                if (!_.isUndefined(recentLocations)) {
+                    if (recentLocations instanceof Backbone.Model) {
+                        this.providersQueue = recentLocations.get('providers');
+                    } else if (!_.isUndefined(recentLocations.providers)) {
+                        this.providersQueue = recentLocations.providers;
+                    }
+                }
+
+                // Check to see if the selected provider is already in the queue. If it is, grab its index.
+                _.each(this.providersQueue, function(queueElement, queueIndex) {
+                    if (queueElement.value === providerCode) {
+                        providerIndex = queueIndex;
+                    }
+                });
+                // If the selected provider is already in the queue,
+                // remove the original item and add the provider to the top,
+                // otherwise just add the selected provider to the top
+                if (providerIndex >= 0) {
+                    this.providersQueue.splice(providerIndex, 1);
+                    this.providersQueue.unshift(selectedProvider);
+                } else {
+                    if (this.providersQueue.length < NUM_RECENT_PROVIDERS) {
+                        // Add to the beginning of the array
+                        this.providersQueue.unshift(selectedProvider);
+                    } else {
+                        this.providersQueue.pop();
+                        this.providersQueue.unshift(selectedProvider);
+                    }
+                }
+            }
+            // Add recent queues to the "recently selected" session object if we've had to update them.
+            if (locationNew || providerNew) {
                 var recentlySelected = new Backbone.Model({
                     locations: this.locationsQueue,
                     providers: this.providersQueue
@@ -846,8 +892,6 @@ define([
                 var userModel = ADK.UserService.getUserSession();
                 userModel.set('recentlySelected', recentlySelected);
             }
-            this.model.set('visit', this.model.newVisit);
-            this.validateForm();
         },
         setServiceCategory: function(serviceCategory, original) {
             original.get('visit').set('serviceCategory', serviceCategory);
@@ -882,56 +926,6 @@ define([
                 model.get('visit').set('selectedProvider', {});
             }
         },
-        setNewEncounterProvider: function(model) {
-            var providerCode = model.get('selectEncounterProvider');
-            var providerName = model.get('_labelsForSelectedValues').get('selectEncounterProvider');
-            // If provider code and provider name are defined
-            if (providerCode && providerName) {
-                var selectedProvider = {
-                    'value': providerCode,
-                    'label': providerName
-                };
-                var providerIndex = -1;
-                // Check to see if the selected provider is already in the queue. If it is, grab its index.
-                _.each(this.providersQueue, function(queueElement, queueIndex) {
-                    if (queueElement.value === providerCode) {
-                        providerIndex = queueIndex;
-                    }
-                });
-                // If the selected provider is already in the queue,
-                // remove the original item and add the provider to the top,
-                // otherwise just add the selected provider to the top
-                if (providerIndex >= 0) {
-                    this.providersQueue.splice(providerIndex, 1);
-                    this.providersQueue.unshift(selectedProvider);
-                } else {
-                    if (this.providersQueue.length < NUM_RECENT_PROVIDERS) {
-                        // Add to the beginning of the array
-                        this.providersQueue.unshift(selectedProvider);
-                    } else {
-                        this.providersQueue.pop();
-                        this.providersQueue.unshift(selectedProvider);
-                    }
-                }
-                var self = this;
-                var updatedProviders = [{
-                    group: RECENTLY_USED_PROVIDERS_TEXT,
-                    pickList: this.providersQueue
-                }, {
-                    group: ALL_PROVIDERS_TEXT,
-                    pickList: collectionHandler.providerParser(cachedData.providers.models)[0].pickList
-                }];
-                self.updateprovidersPickList(self, updatedProviders);
-                // Add selected provider to the "recently selected" session object
-                var recentlySelected = new Backbone.Model({
-                    locations: this.locationsQueue,
-                    providers: this.providersQueue
-                });
-                var userModel = ADK.UserService.getUserSession();
-                userModel.set('recentlySelected', recentlySelected);
-            }
-            this.validateForm();
-        },
         setDatesAppointments: function(fromDate, toDate) {
             //filter the collection
             var filteredCollection = collectionHandler.collectionDateFilter(cachedData.appointments, fromDate, toDate);
@@ -944,14 +938,14 @@ define([
         },
         currentTab: 'Clinic-Appointments-tab-panel', //initial value
         previousTab: 'Clinic-Appointments-tab-panel',
-        loadVisits: function(self){
+        loadVisits: function(self) {
             //Clear out old results
             appointmentsArray.reset();
             admissionsArray.reset();
             //Put up loader
             self.onAttach();
-            self.$el.trigger('tray.loaderShow',{
-                loadingString:'Loading encounter locations'
+            self.$el.trigger('tray.loaderShow', {
+                loadingString: 'Loading'
             });
             // appointments
             var criteria = ADK.SessionStorage.get.sessionModel('user', 'SessionStorage');
@@ -968,39 +962,42 @@ define([
                 toDate: toDate,
                 site: site
             };
-            collectionHandler.getAppointments(appointmentsCriteria, function(collection) {
-                var appts = collectionHandler.appointmentsParser(collection);
-                var contextVisit = self.model.get('contextVisit');
-                if (contextVisit && contextVisit.get('formattedDateTime')) {
-                    contextVisit = appts.where({
-                        formattedDateTime: contextVisit.get('formattedDateTime')
-                    })[0];
+            if (!_.has(this, "apptsCollection.xhr") || !_.isFunction(_.get(this, "apptsCollection.xhr.state", null)) || this.apptsCollection.xhr.state() !== "pending") {
+                self.apptsCollection = collectionHandler.getAppointments(appointmentsCriteria, function(collection) {
+                    var appts = collectionHandler.appointmentsParser(collection);
+                    var contextVisit = self.model.get('contextVisit');
                     if (contextVisit && contextVisit.get('formattedDateTime')) {
-                        self.model.set('appointmentsModel', contextVisit);
-                        self.model.set('preSelectSRText', 'Appointment ' + contextVisit.get('formattedDateTime') + ' ' + contextVisit.get('locationDisplayName') + ' ' + contextVisit.get('facilityDisplay') + ' pre-selected from current Encounter.');
+                        contextVisit = appts.where({
+                            formattedDateTime: contextVisit.get('formattedDateTime')
+                        })[0];
+                        if (contextVisit && contextVisit.get('formattedDateTime')) {
+                            self.model.set('appointmentsModel', contextVisit);
+                            self.model.set('preSelectSRText', 'Appointment ' + contextVisit.get('formattedDateTime') + ' ' + contextVisit.get('locationDisplayName') + ' ' + contextVisit.get('facilityDisplay') + ' pre-selected from current Encounter.');
+                        }
                     }
-                }
-                cachedData.appointments.set(appts.models);
-                appointmentsArray.set(appts.models);
-                if (collection.length > 0) {
-                    self.setDatesAppointments(fromDate, toDate);
-                } else {
-                    self.$el.find('#selectableTableAppointments').trigger('control:loading', false);
-                    self.$el.trigger('tray.loaderHide');
-                }
-            });
+                    cachedData.appointments.set(appts.models);
+                    appointmentsArray.set(appts.models);
+                    if (collection.length > 0) {
+                        self.setDatesAppointments(fromDate, toDate);
+                    }
+                        self.$el.find('#selectableTableAppointments').trigger('control:loading', false);
+                        self.$el.trigger('tray.loaderHide');
+                });
+            }
             // admissions
-            collectionHandler.getAdmissions(function(collection) {
-                var admissions = collectionHandler.admissionsParser(collection);
-                cachedData.admissions.set(admissions.models);
-                admissionsArray.set(admissions.models);
-                if (collection.length > 0) {
-                    self.setDatesHospital(collection);
-                } else {
-                    self.$el.find('#selectableTableAdmissions').trigger('control:loading', false);
-                    self.$el.trigger('tray.loaderHide');
-                }
-            });
+            if (!_.has(this, "admissionCollection.xhr") || !_.isFunction(_.get(this, "admissionCollection.xhr.state", null)) || this.admissionCollection.xhr.state() !== "pending") {
+                self.admissionCollection = collectionHandler.getAdmissions(function(collection) {
+                    var admissions = collectionHandler.admissionsParser(collection);
+                    cachedData.admissions.set(admissions.models);
+                    admissionsArray.set(admissions.models);
+                    if (collection.length > 0) {
+                        self.setDatesHospital(collection);
+                    } else {
+                        self.$el.find('#selectableTableAdmissions').trigger('control:loading', false);
+                        self.$el.trigger('tray.loaderHide');
+                    }
+                });
+            }
         },
         initialize: function(form) {
             this._inTray = _.isBoolean(this.inTray) ? this.inTray : false;
@@ -1062,7 +1059,6 @@ define([
                         self.locationsQueue = [];
                         self.updatelocationsPickList(self, parsedCollection);
                     }
-                    self.$el.find(self.ui.selectNewEncounterLocation.selector).trigger('control:disabled', false);
                     cachedData.locations.set(collection.models);
                 }
                 // Clear loading spinner
@@ -1070,13 +1066,16 @@ define([
                     $(self.ui.locationLoading.selector).find('.loading').detach();
                 }
             });
-            this.listenTo(self.workflow.parentViewInstance.TrayView, 'tray.show', function(){
-                if(self.workflow.model.get('currentIndex') === self.viewIndex){
+            this.listenTo(self.workflow.parentViewInstance.TrayView, 'tray.show', function() {
+                if (self.workflow.model.get('currentIndex') === self.viewIndex) {
                     self.loadVisits(self);
                 }
             });
+            if (_.isUndefined(self.workflow.parentViewInstance.TrayView) && self.workflow.model.get('currentIndex') === self.viewIndex) {
+                self.loadVisits(self);
+            }
         },
-        onDestroy: function(){
+        onDestroy: function() {
             this.stopListening();
         },
         onAttach: function() {

@@ -6,7 +6,6 @@ define([
     'app/applets/patient_sync_status/views/detailsModalView',
     'app/applets/patient_sync_status/views/detailsModalFooterView',
     'hbs!app/applets/patient_sync_status/templates/footerSummaryTemplate',
-    'hbs!app/applets/patient_sync_status/templates/detailsModalTemplate'
 ], function(
     Backbone,
     Marionette,
@@ -14,13 +13,18 @@ define([
     moment,
     DetailsModalView,
     DetailsModalFooterView,
-    FooterSummaryTemplate,
-    DetailsModalTemplate
+    FooterSummaryTemplate
 ) {
     'use strict';
+    var VX_SYNC_BASIS_PATIENT_DOMAIN_STAMPTIME = 16051105010000;
 
     var FooterSuammryView = Backbone.Marionette.ItemView.extend({
         template: FooterSummaryTemplate,
+        templateHelpers: {
+            facility: function () {
+                return ADK.UserService.getUserSession().get('facility');
+            }
+        },
         behaviors: {
             Tooltip: {}
         },
@@ -100,10 +104,8 @@ define([
         },
         changeInWorkspace: function(model) {
             if (model.get('context') === 'patient' && model.get('workspace') !== 'patient-search-screen') {
-                // this.fetchDataStatus(true);
+                this.updatePatientSyncStatus(true);
                 this.startAutoPolling();
-            } else {
-                this.model.unset('syncStatus');
             }
         },
         onDomRefresh: function() {
@@ -140,12 +142,19 @@ define([
             }
         },
         modelEvents: {
-            'change:syncStatus': 'render'
+            'change:syncStatus': 'render',
+            'change:latestSourceStampTime': 'refreshCurrentPatient'
         },
         events: {
             'click @ui.refreshButton': 'refreshStatus',
             'keypress @ui.refreshButton': 'refreshStatus',
             'click @ui.syncDetailsButton': 'showSyncModal'
+        },
+        refreshCurrentPatient: function() {
+            var currentPatient = ADK.PatientRecordService.getCurrentPatient();
+            if (currentPatient.has('pid') && ADK.ADKApp.currentScreen.patientRequired === true) {
+                ADK.PatientRecordService.refreshCurrentPatient();
+            }
         },
         showSyncModal: function(event) {
             event.preventDefault(); //prevent the page from jumping back to the top
@@ -188,7 +197,7 @@ define([
         },
         updatePatientSyncStatus: function(refresh) {
             var patient = ADK.PatientRecordService.getCurrentPatient();
-            if (patient.get('pid') && ADK.ADKApp.currentScreen.patientRequired === true) {
+            if (patient.get('pid') && ADK.ADKApp.currentScreen.patientRequired === true || refresh) {
                 var curPatient = patient.get('icn') || patient.get('pid');
 
                 if (curPatient !== this.curPatient) {
@@ -270,6 +279,7 @@ define([
                 self.model.set('syncStatus', stats);
             };
             fetchOptions.onSuccess = function(collection, resp) {
+                self.model.set('latestSourceStampTime', _.get(resp, 'data.latestSourceStampTime', ''));
                 self._lock -= 1;
                 var currentSiteCode = ADK.UserService.getUserSession().get('site');
                 var statusObject = resp.data;
@@ -312,7 +322,7 @@ define([
                     } else {
                         allVA.completed = _.every(_.pluck(allVASite, 'isSyncCompleted'));
                         if (allVA.completed && statusObject.HDR) {
-                            allVA.timeStamp = self.getSecondarySiteTimeSince(statusObject.HDR.completedStamp.toString());
+                            allVA.timeStamp = self.setSecondarySiteLastUpdateTimeStamp(statusObject.HDR.completedStamp);
                         }
                     }
                     allVA.hoverTip = ADK.utils.tooltipMappings.patientSync_allVA;
@@ -321,8 +331,7 @@ define([
                 if (statusObject.DOD) {
                     var dodStat = statusObject.DOD;
                     var isComplete = dodStat.hasError ? 'error' : dodStat.isSyncCompleted;
-                    var timeStamp = dodStat.completedStamp ? self.getSecondarySiteTimeSince(dodStat.completedStamp.toString()) :
-                        moment().format('MM/DD/YYYY HH:mm');
+                    var timeStamp = self.setSecondarySiteLastUpdateTimeStamp(dodStat.completedStamp);
                     stats.push({
                         title: 'DoD',
                         screenReaderTitle: 'Department of Defense',
@@ -334,8 +343,7 @@ define([
                 if (statusObject.VLER) {
                     var vlerStat = statusObject.VLER;
                     var isVlerComplete = vlerStat.hasError ? 'error' : vlerStat.isSyncCompleted;
-                    var vlerTimeStamp = vlerStat.completedStamp ? self.getSecondarySiteTimeSince(vlerStat.completedStamp.toString()) :
-                        moment().format('MM/DD/YYYY HH:mm');
+                    var vlerTimeStamp = self.setSecondarySiteLastUpdateTimeStamp(vlerStat.completedStamp);
                     stats.push({
                         title: 'Communities',
                         screenReaderTitle: 'Communities',
@@ -358,9 +366,6 @@ define([
                     if (!_.isEqual(newInterval, self.timeInterval)) {
                         self.resetTimeInterval(newInterval);
                     }
-                    if (statusObject.allSites) {
-                        ADK.PatientRecordService.refreshCurrentPatient();
-                    }
                 }
                 self.syncCompleted = statusObject.allSites;
                 if (statusObject.allSites) {
@@ -370,6 +375,19 @@ define([
                 }
             };
             ADK.PatientRecordService.fetchCollection(fetchOptions);
+        },
+        /**
+            This function will set the correct last update timestamp for all secondary sites.
+            it will return empty if the stamptime is either undefined or equals vxsync basis timestamp.
+        **/
+        setSecondarySiteLastUpdateTimeStamp: function(stampTime) {
+            var self = this;
+            if (_.isUndefined(stampTime) ||
+                stampTime === VX_SYNC_BASIS_PATIENT_DOMAIN_STAMPTIME ||
+                stampTime === VX_SYNC_BASIS_PATIENT_DOMAIN_STAMPTIME.toString()) {
+                return '';
+            }
+            return self.getSecondarySiteTimeSince(stampTime.toString());
         },
         updateSyncStats: function(stats) {
             var self = this;

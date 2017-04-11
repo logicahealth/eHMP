@@ -6,14 +6,17 @@ require "rubygems"
 require "nexus_cli"
 require "net/ssh"
 require "net/scp"
+require File.expand_path('../../tests/knife-helper.rb', File.dirname(__FILE__))
 
-task :pull_cache, :vista_ip, :username, :ssh_key do |t, args|
-  puts "INFO:  Pulling the cache.dat zip from #{args[:vista_ip]}"
-  username = args[:username].nil? ? "ec2-user" : args[:username]
-  ssh_key = args[:ssh_key].nil? ? "#{ENV['WORKSPACE']}/.chef/keys/vagrantaws_123139250088" : args[:ssh_key]
+task :pull_cache, :driver do |t, args|
+  puts "INFO: Pulling the cache.dat zip from vista-kodak-#{ENV['JOB_NAME']}"
+  key = knife_search_for_key_name("vista-kodak", args[:driver])
+  user = args[:driver] == "aws" ? "PW      " : "vagrant"
+  ip = knife_search_for_ip("vista-kodak")
+
   mkdir File.expand_path("vista", File.dirname(__FILE__)) unless Dir.exist? File.expand_path("vista", File.dirname(__FILE__))
   tmp_zip_path = "/tmp/vista.zip"
-	ssh = Net::SSH.start( args[:vista_ip], username, :keys => ssh_key )
+	ssh = Net::SSH.start( ip, user, :keys => key )
   ssh.exec!('sudo ccontrol stop CACHE quietly') do |ch, stream, line|
     puts line
   end
@@ -65,4 +68,3 @@ def check_artifact_does_not_exist(nexus_remote, coordinates)
 	end
 	raise "\n\n\nArtifact already exists at #{coordinates}; not uploading\n\n\n\n"
 end
-

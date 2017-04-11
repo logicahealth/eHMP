@@ -2,12 +2,8 @@ define([
     "backbone",
     "marionette",
     'underscore',
-    "hbs!app/applets/narrative_lab_results_grid/list/dateTemplate",
-    "hbs!app/applets/narrative_lab_results_grid/list/siteTemplate",
-    "hbs!app/applets/narrative_lab_results_grid/list/descriptionTemplate",
-    "hbs!app/applets/narrative_lab_results_grid/list/authorTemplate",
-    "hbs!app/applets/narrative_lab_results_grid/list/typeTemplate"
-], function(Backbone, Marionette, _, dateTemplate, siteTemplate, descriptionTemplate, authorTemplate, typeTemplate) {
+    'handlebars',
+], function(Backbone, Marionette, _, Handlebars) {
     "use strict";
 
     return {
@@ -16,45 +12,45 @@ define([
             return {
                 name: "observed",
                 label: "Date",
-                template: dateTemplate,
+                template: Handlebars.compile('{{formatDate observed "MM/DD/YYYY - HH:mm"}}'),
                 cell: "handlebars",
-                hoverTip: 'labresults_date'
+                hoverTip: 'narrativelab_date'
             };
         },
         facilityCol: function(){
             return {
                 name: "facilityMoniker",
                 label: "Facility",
-                template: siteTemplate,
+                template: Handlebars.compile('{{facilityMoniker}}'),
                 cell: "handlebars",
-                hoverTip: 'labresults_facility'
+                hoverTip: 'narrativelab_facility'
             };
         },
         descriptionCol: function(){
             return {
                 name: "description",
                 label: "Description",
-                template: descriptionTemplate,
+                template: Handlebars.compile('{{description}}'),
                 cell: "handlebars",
-                hoverTip: 'labresults_description'
+                hoverTip: 'narrativelab_description'
             };
         },
         authorCol: function(){
             return {
                 name: "author",
-                label: "Author or Verifier",
-                template: authorTemplate,
+                label: "Author/Verifier",
+                template: Handlebars.compile('None'),
                 cell: "handlebars",
-                hoverTip: 'labresults_author'
+                hoverTip: 'narrativelab_author'
             };
         },
         typeCol: function(){
             return {
-                name: "type",
+                name: "typeName",
                 label: "Type",
-                template: typeTemplate,
+                template: Handlebars.compile('{{typeName}}'),
                 cell: "handlebars",
-                hoverTip: 'labresults_type'
+                hoverTip: 'narrativelab_type'
             };
         }
     };

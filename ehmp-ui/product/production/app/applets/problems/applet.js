@@ -79,25 +79,26 @@ define([
         }, {
             name: 'facilityMoniker',
             label: 'Facility',
-            cell: 'string',
+            cell: 'handlebars',
             sortType: 'cycle',
-            hoverTip: 'conditions_facility'
+            hoverTip: 'conditions_facility',
+            template: Handlebars.compile(['<span class="facilityName">{{#if facilityMoniker}}',
+                '{{facilityMoniker}}{{else if facilityCode}}{{facilityCode}}',
+                '{{else}}{{facNameTruncated}}{{/if}}</span>'
+            ].join("\n"))
         }, {
             name: 'comments',
             label: '',
             flexWidth: 'flex-width-0_5 ',
             sortable: false,
             srOnlyLabel: 'Comments',
-            cell: Backgrid.HandlebarsCell.extend ({
+            cell: Backgrid.HandlebarsCell.extend({
                 className: 'handlebars-cell flex-width-0_5'
             }),
             template: Handlebars.compile([
                 '{{#if commentBubble}}',
                 '<i class="fa fa-comment"></i>',
                 '<span class="sr-only">Comments</span>',
-                '{{else}}',
-                '<i class="fa fa-transparent-comment"></i>',
-                '<span class="sr-only">No Comments</span>',
                 '{{/if}}'
             ].join("\n"))
         }]);
@@ -132,10 +133,15 @@ define([
             response = Util.getStatusName(response);
             response[crsUtil.crsAttributes.CRSDOMAIN] = crsUtil.domain.PROBLEM;
             response.applet_id = 'problems';
+            response.facNameTruncated = response.facilityName.substring(0, 3);
+            response.enteredBy = response.enteredBy;
+            response.recordedBy = response.recordedBy;
+            response.recordedOn = response.recordedOn;
 
             return response;
         }
     };
+
     //Collection fetchOptions
     var fetchOptions = {
         resourceTitle: 'patient-record-problem',
@@ -155,7 +161,7 @@ define([
             dataGridOptions.filterEnabled = true;
             dataGridOptions.enableModal = true;
             dataGridOptions.tblRowSelector = '#data-grid-' + this.options.appletConfig.instanceId + ' tbody tr';
-            //dataGridOptions.filterFields = ['summary']; //Defaults to all columns
+            dataGridOptions.filterFields = _.pluck(fullScreenColumns, 'name'); //Defaults to all columns
             if (this.columnsViewType === "expanded") {
                 dataGridOptions.columns = fullScreenColumns;
             } else if (this.columnsViewType === "summary") {
@@ -164,11 +170,10 @@ define([
                 dataGridOptions.summaryColumns = summaryColumns;
                 dataGridOptions.fullScreenColumns = fullScreenColumns;
             }
-            this.fetchOptions = fetchOptions;
             var self = this;
-
-            self.getExposure();
-
+            var patientExposure = ADK.PatientRecordService.getCurrentPatient().get('exposure') || [];
+            self.exposure = Util.parseExposure(patientExposure);
+            this.fetchOptions = fetchOptions;
             dataGridOptions.toolbarOptions = {
                 buttonTypes: ['infobutton', 'detailsviewbutton']
             };
@@ -177,7 +182,7 @@ define([
                 dataGridOptions.toolbarOptions.disableNonLocal = true;
             }
             dataGridOptions.toolbarOptions.buttonTypes.push('crsbutton');
-            
+
             dataGridOptions.showLinksButton = true;
             dataGridOptions.toolbarOptions.buttonTypes.push('submenubutton');
 
@@ -189,8 +194,8 @@ define([
 
             dataGridOptions.collection = ADK.PatientRecordService.fetchCollection(this.fetchOptions);
 
-            this.listenTo(dataGridOptions.collection, 'sync', function(collection){
-                collection.each(function(model){
+            this.listenTo(dataGridOptions.collection, 'sync', function(collection) {
+                collection.each(function(model) {
                     model.set('instanceId', self.options.appletConfig.instanceId);
                 });
             });
@@ -198,11 +203,15 @@ define([
             dataGridOptions.collection.comparator = function(a, b) {
                 var statusNameA = a.get('statusName') || '';
                 var statusNameB = b.get('statusName') || '';
-                if (statusNameB.localeCompare(statusNameA) !== 0) {
+                if (!_.isEqual(statusNameA, statusNameB)) {
                     return -statusNameB.localeCompare(statusNameA);
+                } else {
+                    var uidA = a.get('uid') || '';
+                    var uidB = b.get('uid') || '';
+                    return uidA.localeCompare(uidB);
                 }
             };
-           this.listenTo(problemChannel, 'detailView', function(channelObject) {
+            this.listenTo(problemChannel, 'detailView', function(channelObject) {
                 var model = channelObject.model;
                 model.attributes.exposure = self.exposure;
                 var view = new ModalView({
@@ -239,7 +248,7 @@ define([
 
             this.listenTo(ADK.Messaging.getChannel('problems'), 'editView', function(channelObj) {
                 var existingProblemModel = channelObj.model;
-                if(existingProblemModel.get('instanceId') === self.options.appletConfig.instanceId){
+                if (existingProblemModel.get('instanceId') === self.options.appletConfig.instanceId) {
                     ADK.UI.Modal.hide();
                     WorkflowUtils.startEditProblemsWorkflow(AddEditProblemsView, existingProblemModel);
                 }
@@ -257,19 +266,6 @@ define([
         },
         onDestroy: function() {
             ADK.utils.crsUtil.removeStyle(this);
-        },
-        exposure: '',
-        getExposure: function() {
-            var self = this;
-            var demographics = ADK.PatientRecordService.fetchCollection({
-                resourceTitle: "patient-record-patient",
-                onSuccess: function() {
-                    if (demographics.models && demographics.models[0] && demographics.models[0].attributes) {
-                        var exposure = demographics.models[0].attributes.exposure || [];
-                        self.exposure = Util.parseExposure(exposure);
-                    }
-                }
-            });
         }
     });
 
@@ -285,28 +281,24 @@ define([
             viewModel: viewParseModel
         };
 
-        var response = $.Deferred();
+        var data = ADK.PatientRecordService.createEmptyCollection(fetchOptions);
+        var detailModel = params.model.clone();
+        return {
+            view: ModalView.extend({
+                model: detailModel,
+                collection: data
+            }),
+            title: _.bind(function() {
+                return Util.getModalTitle(this) || "Loading";
+            }, detailModel),
+            footerView: modalFooter.extend({
+                model: detailModel
+            })
+        };
 
-        var data = ADK.PatientRecordService.fetchCollection(fetchOptions);
-        data.on('sync', function() {
-            var detailModel = data.first();
-            response.resolve({
-                view: new ModalView({
-                    model: detailModel,
-                    collection: data
-                }),
-                title: Util.getModalTitle(detailModel),
-                footerView: modalFooter.extend({
-                    model: detailModel
-                })
-
-            });
-        }, this);
-
-        return response.promise();
     });
 
-    channel.reply('finalizeConsultOrder', function(){
+    channel.reply('finalizeConsultOrder', function() {
         return {
             fetchOptions: fetchOptions
         };

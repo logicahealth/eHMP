@@ -112,7 +112,7 @@ module.exports.createAppReference = function() {
             cds: cds
         }
     };
-    cds.getSubsystemConfig(appReference);
+    cds.getSubsystemConfig(appReference, appReference.logger);
     return appReference;
 };
 

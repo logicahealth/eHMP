@@ -1,11 +1,13 @@
-define([], function() {
+define([
+    'moment'
+], function(moment) {
     "use strict";
 
     var ValidationUtil = {
         validateHistorical: function(model, result){
             var patient = ADK.PatientRecordService.getCurrentPatient();
             var pid = patient.get("pid");
-           
+
             var heightInput = model.get('heightInputValue');
             var weightInput = model.get('weightInputValue');
 
@@ -16,12 +18,12 @@ define([], function() {
 
             var siteCode = ADK.UserService.getUserSession().get('site');
             var vitalsRuleURL = ADK.ResourceService.buildUrl('vitals-vitalsRule');
-            
+
             var data = { 'site': siteCode, 'pid': pid };
-          
+
             var enteredHeight;
             var enteredWeight;
-            
+
             if(heightInput){
                 var heightUnits = heightInput.substring(heightInput.length - 2, heightInput.length);
                 var height = Number(heightInput.substring(0, heightInput.length - 2));
@@ -37,12 +39,11 @@ define([], function() {
                 var weight  = Number(weightInput.substring(0, weightInput.length - 2));
                 enteredWeight = weight;
                 if(weightUnits === 'kg'){
-                    
+
                     weight = weight * 2.20462;
                 }
                 data.weight = { 'value': weight, 'units' : 'lb', 'enteredWeight': enteredWeight, 'enteredUnits' : weightUnits };
             }
-            
 
             var temperatureInput = model.get('temperatureInputValue');
             if (temperatureInput){
@@ -50,35 +51,34 @@ define([], function() {
                 var temperature = Number(temperatureInput.substring(0, temperatureInput.length - 1));
                 data.temperature = { 'value': temperature, 'units' : temperatureUnits };
             }
-            
+
             var circumferencegirthInput = model.get('circumferencegirth');
             if (circumferencegirthInput){
                 var circumferencegirthUnits = circumferencegirthInput.substring(circumferencegirthInput.length - 2, circumferencegirthInput.length);
                 var circumferencegirth = Number(circumferencegirthInput.substring(0, circumferencegirthInput.length - 2));
                 data.circumferencegirth = { 'value': circumferencegirth, 'units' : circumferencegirthUnits };
             }
-            
+
             if (model.get('bpInputValue')) {
-                data.bloodpressure = { 'value': model.get('bpInputValue') };  
-            } 
-            
+                data.bloodpressure = { 'value': model.get('bpInputValue') };
+            }
+
             if (model.get('respirationInputValue')) {
                 data.respiration = { 'value': Number(model.get('respirationInputValue')), 'units': '/min' };
             }
-            
+
             if (model.get('pulseInputValue')) {
                 data.pulse = { 'value': Number(model.get('pulseInputValue')), 'units': '/min' };
             }
-            
+
             if (model.get('pain-value-po')) {
                 data.pain = { 'value': Number(model.get('pain-value-po'))};
             }
-            
+
             if (model.get('O2InputValue')) {
-                data.pulseoximetry = { 'value': Number(model.get('02InputValue')), 'units': '%' };
+                data.pulseoximetry = { 'value': Number(model.get('O2InputValue')), 'units': '%' };
             }
-            
-            
+
             var params = {
                 url: vitalsRuleURL,
                 type: 'POST',
@@ -89,7 +89,7 @@ define([], function() {
             };
 
             var cdsRequest = $.ajax(params);
-         
+
             var heightSnowMed = '8302-2';
             var weightSnowMed = '29463-7';
             var self = this;
@@ -129,15 +129,14 @@ define([], function() {
                                 });
                             }
                     });
-                 
-                    var showRulesMessage = false;
-                    if(!_.isEmpty( previousHeightValue) || !_.isEmpty(previousWeightValue) ){
-                        showRulesMessage = true;
+
+                    if(!_.isEmpty( previousHeightValue) || !_.isEmpty(previousWeightValue) ){                       
+                        var warningMessagesHTML = self.buildWarningMessage(data, heightError, previousHeightValue, weightError, previousWeightValue);
+                        result(true, warningMessagesHTML);  
+                        return;                      
                     }
 
-                    var warningMessagesHTML = self.buildWarningMessage(data, heightError, previousHeightValue, weightError, previousWeightValue);
-
-                    result(showRulesMessage, warningMessagesHTML);
+                    result();
                 }
             });
 
@@ -158,29 +157,80 @@ define([], function() {
 
             return true;
         },
-        buildWarningMessage: function(data, heightError, previousHeightValue, weightError, previousWeightValue){
+        buildWarningMessage: function(data, heightError, previousHeightObj, weightError, previousWeightObj){
 
             var warningMessagesHTML = 'Warnings Exist: <ul>';
-            if(!_.isEmpty( heightError )){
-                warningMessagesHTML +=  '<li>' +  _.first(_.first(heightError).body.payload).contentString + ' </br>Just Entered: ' + data.height.enteredHeight + data.height.enteredUnits + ' in ' +
+
+            if(!_.isEmpty( heightError ) && !_.isUndefined(data.height) && !_.isEmpty( previousHeightObj ) ){
+
+                var currentHeightUnit = data.height.enteredUnits;
+                var currentHeightValue = data.height.enteredHeight;
+                var previousHeightUnit = _.first(previousHeightObj).body.valueQuantity.units;
+                var previousHeightValue = _.first(previousHeightObj).body.valueQuantity.value;
+
+                warningMessagesHTML +=  '<li>' +  _.first(_.first(heightError).body.payload).contentString + ' </br>Just Entered: ' + currentHeightValue.toFixed(2) + currentHeightUnit + ' in ' +
                                         moment().format('MM/DD/YYYY h:mm a');
-                if(!_.isEmpty( previousHeightValue )){
-                    warningMessagesHTML +=  '</br>Previous Value: ' + _.first(previousHeightValue).body.valueQuantity.value + _.first(previousHeightValue).body.valueQuantity.units + ' in ' +
-                                            moment(_.first(previousHeightValue).body.issued).format('MM/DD/YYYY h:mm a');
-                }
+                   
+                if (currentHeightUnit !== previousHeightUnit) {
+                    if (currentHeightUnit === 'cm') {
+                        previousHeightValue = this.inchToCm(previousHeightValue);
+                        previousHeightUnit = 'cm';
+                    } else {
+                        previousHeightValue = this.cmToInch(previousHeightValue);
+                        previousHeightUnit = 'in';
+                    }
+                }                    
+                warningMessagesHTML +=  '</br>Previous Value: ' + previousHeightValue.toFixed(2) + previousHeightUnit + ' in ' +
+                                            moment(_.first(previousHeightObj).body.issued).format('MM/DD/YYYY h:mm a');
                 warningMessagesHTML +=  '</li>';
             }
 
-            if(!_.isEmpty( previousWeightValue )){
-                warningMessagesHTML +=  '<li>The new weight value differs by 20% or more from previous values.</br>Just Entered: ' + data.weight.enteredWeight + data.weight.enteredUnits + ' in ' +
+            if(!_.isEmpty( weightError ) && !_.isEmpty( previousWeightObj ) && !_.isUndefined(data.weight) ){
+
+                var currentWeightUnit = data.weight.enteredUnits;
+                var currentWeightValue = data.weight.enteredWeight;
+                var previousWeightUnit = _.first(previousWeightObj).body.valueQuantity.units;
+                var previousWeightValue = _.first(previousWeightObj).body.valueQuantity.value;
+
+                if (currentWeightUnit !== previousWeightUnit) {
+                    if (currentWeightUnit === 'kg') {
+                        previousWeightValue = this.poundsToKg(previousWeightValue);
+                        previousWeightUnit = 'kg';
+                    } else {
+                        previousWeightValue = this.kgToPounds(previousWeightValue);
+                        previousWeightUnit = 'lb';
+                    }
+                }
+
+                warningMessagesHTML +=  '<li>The new weight value differs by 20% or more from previous values.</br>Just Entered: ' + currentWeightValue.toFixed(2) + currentWeightUnit + ' in ' +
                                         moment().format('MM/DD/YYYY h:mm a') +
-                                        '</br>Previous Value: ' + _.first(previousWeightValue).body.valueQuantity.value + _.first(previousWeightValue).body.valueQuantity.units + ' in ' +
-                                        moment(_.first(previousWeightValue).body.issued).format('MM/DD/YYYY h:mm a') + '</li>';
+                                        '</br>Previous Value: ' + previousWeightValue.toFixed(2) + previousWeightUnit + ' in ' +
+                                        moment(_.first(previousWeightObj).body.issued).format('MM/DD/YYYY h:mm a') + '</li>';
             }
 
             warningMessagesHTML += '</ul> Check to ensure you have entered data for the correct patient\'s chart and in the correct units of measure. Do you want to save the new value?';
 
             return warningMessagesHTML;
+        },
+        cmToInch: function(length) {
+            if (_.isNumber(length)) {
+                return (length * 0.393701);
+            }
+        },
+        inchToCm: function(length) {
+            if (_.isNumber(length)) {
+                return (length * 2.54);
+            }
+        },
+        poundsToKg: function(mass) {
+            if (_.isNumber(mass)) {
+                return (mass * 0.453592);
+            }
+        },
+        kgToPounds: function(mass) {
+            if (_.isNumber(mass)) {
+                return (mass * 2.20462);
+            }
         },
         validateModel: function(model){
             model.errorModel.clear();
@@ -244,14 +294,14 @@ define([], function() {
                 if(bpValues.length == 3){
                     diastolic = bpValues[2];
                     if(Number(intermediate) < 0 || Number(intermediate) > 300){
-                        model.errorModel.set({bpInputValue: 'Blood Pressure Intermediate value must be a number between 0 and 300'});
+                        model.errorModel.set({bpInputValue: 'Blood pressure intermediate value must be a number between 0 and 300'});
                     }
                 }
                 if(Number(systolic) < 0 || Number(systolic) > 300){
-                    model.errorModel.set({bpInputValue: 'Blood Pressure Systolic value must be a number between 0 and 300'});
+                    model.errorModel.set({bpInputValue: 'Blood pressure systolic value must be a number between 0 and 300'});
                 }
                 if(Number(diastolic) < 0 || Number(diastolic) > 300){
-                    model.errorModel.set({bpInputValue: 'Blood Pressure Diastolic value must be a number between 0 and 300'});
+                    model.errorModel.set({bpInputValue: 'Blood pressure diastolic value must be a number between 0 and 300'});
                 }
 
             }
@@ -340,13 +390,13 @@ define([], function() {
         validateO2Fields: function(model, value){
             if(value){
                 if(!ValidationUtil.validWholeNumber(value)){
-                    model.errorModel.set({O2InputValue: 'O2 Concentration must be a whole numeric value'});
+                    model.errorModel.set({O2InputValue: 'O2 concentration must be a whole numeric value'});
                     return;
                 }
 
                 var numberValue = Number(value);
                 if(numberValue < 21 || numberValue > 100){
-                    model.errorModel.set({O2InputValue: 'O2 Concentration must be between 21 and 100'});
+                    model.errorModel.set({O2InputValue: 'O2 concentration must be between 21 and 100'});
                 }
             }
         },
@@ -380,18 +430,23 @@ define([], function() {
 
                     if(measured.isAfter(today)){
                         if(measured.isSame(today, 'day')){
-                            model.errorModel.set({'time-taken': 'Measured Date/Time must be in the past.'});
+                            model.errorModel.set({'time-taken': 'Measured date/time must be in the past.'});
                         }else {
-                            model.errorModel.set({'dateTakenInput': 'Measured Date/Time must be in the past.'});
+                            model.errorModel.set({'dateTakenInput': 'Measured date/time must be in the past.'});
                         }
                     }
                 } else {
                     var dateMeasured = moment(dateValue, 'MM/DD/YYYY');
 
                     if(dateMeasured.isAfter(today)){
-                        model.errorModel.set({'dateTakenInput': 'Measured Date/Time must be in the past.'});
+                        model.errorModel.set({'dateTakenInput': 'Measured date/time must be in the past'});
                     }
                 }
+            } else {
+                model.errorModel.set({
+                    dateTakenInput: 'Enter a date'
+                });
+                return false;
             }
         },
         validDecimal: function(value){

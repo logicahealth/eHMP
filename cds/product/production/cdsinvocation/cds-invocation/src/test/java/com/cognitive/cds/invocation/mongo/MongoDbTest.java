@@ -24,17 +24,18 @@
  */
 package com.cognitive.cds.invocation.mongo;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import org.bson.Document;
 import org.junit.Assert;
 import org.junit.BeforeClass;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import com.cognitive.cds.invocation.mongo.exception.CDSDBConnectionException;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
+import com.mongodb.client.MongoDatabase;
 
 /**
  * These are Integration tests. You can uncomment these tests to verify locally,
@@ -45,34 +46,32 @@ import com.mongodb.client.MongoCursor;
  */
 public class MongoDbTest {
 
-	private static MongoDbDao mongoDbDao;
 	private MongoCollection<Document> collection;
-	private static Logger logger = Logger
-			.getLogger(MongoDbTest.class.getName());
+	private static ApplicationContext context;
+	private static MongoDbDao mongoDbDao;
+	private static final Logger LOGGER = LoggerFactory.getLogger(MongoDbTest.class);
 
+	
 	@BeforeClass
 	public static void beforeClass() {
 		try {
-			ApplicationContext context = new ClassPathXmlApplicationContext(
-					"classpath:mongodb-dao-context.xml");
-			mongoDbDao = (MongoDbDao) context.getBean("mongoDbDao");
+			context = new ClassPathXmlApplicationContext("classpath:mongodb-dao-context.xml");
+			mongoDbDao = (MongoDbDao)context.getBean("mongoDbDao");
 		} catch (Exception e) {
-			logger.log(Level.SEVERE,
-					"Error loading connection properties.  Cannot connect to MongoDB");
+			LOGGER.error("Error loading connection properties.  Cannot connect to MongoDB");
 		}
 	}
 
 	// Commenting the main test case out due to bootstrapping issue. This test
 	// needs to be run after Mongo has been seeded
 	// @Test
-	public void testConnection() {
+	public void testConnection() throws CDSDBConnectionException {
 
 		// Definitions are hard coded. A value should always be present
-		mongoDbDao.setDatabase("metric");
-		MongoCollection<Document> collection = mongoDbDao
-				.getCollection("definitions");
+		 MongoDatabase mongodb = mongoDbDao.getMongoClient().getDatabase("metric");
+		 MongoCollection<Document> collection = mongodb.getCollection("definitions");
 
-		logger.log(Level.INFO, "Definitions Count: " + collection.count());
+		LOGGER.info("Definitions Count: " + collection.count());
 
 		// A collection of size 0 means the Mongo instance in this environment
 		// has not been seeded correctly
@@ -80,33 +79,32 @@ public class MongoDbTest {
 	}
 
 	// @Test
-	public void testObservationAndCallMetricsCount() {
+	public void testObservationAndCallMetricsCount() throws CDSDBConnectionException {
 
 		// Definitions are hard coded. A value should always be present
-		mongoDbDao.setDatabase("metric");
-		MongoCollection<Document> collection = mongoDbDao
-				.getCollection("observation");
+		MongoDatabase mongodb = mongoDbDao.getMongoClient().getDatabase("metric");
+		MongoCollection<Document> collection = mongodb.getCollection("observation");
 
-		logger.log(Level.INFO, "Observation Count: " + collection.count());
+		LOGGER.info("Observation Count: " + collection.count());
 
 		// A collection of size 0 means the Mongo instance in this environment
 		// has not been seeded correctly
 		Assert.assertTrue(collection.count() > 0);
 
-		collection = mongoDbDao.getCollection("callMetric");
+		collection = mongodb.getCollection("callMetric");
 
 		// logger.log(Level.INFO, "CallMetric Count: " + collection.count());
 
-		collection = mongoDbDao.getCollection("metrics");
+		collection = mongodb.getCollection("metrics");
 
-		logger.log(Level.INFO, "metrics Count: " + collection.count());
+		LOGGER.info("metrics Count: " + collection.count());
 	}
 
 	// @Test
 	// Comment this out for now because it creates groups without deleteing them
-	public void testCreateGroup() {
-		mongoDbDao.setDatabase("metric");
-		collection = mongoDbDao.getCollection("groups");
+	public void testCreateGroup() throws CDSDBConnectionException {
+		MongoDatabase mongodb = mongoDbDao.getMongoClient().getDatabase("metric");
+		collection = mongodb.getCollection("groups");
 
 		MongoCursor<Document> cursor = collection.find().iterator();
 		try {
@@ -123,7 +121,7 @@ public class MongoDbTest {
 		Document d = Document.parse(group);
 
 		collection.insertOne(d);
-		collection = mongoDbDao.getCollection("groups");
+		collection = mongodb.getCollection("groups");
 
 		Assert.assertTrue(collection.count() == count + 1);
 

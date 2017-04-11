@@ -1,0 +1,65 @@
+{
+    "200": {
+        "1000": "OK"
+    },
+    "201": {
+        "1000": "Created"
+    },
+    "202": {
+        "1000": "Accepted"
+    },
+    "204": {
+        "1000": "No Content"
+    },
+    "301": {
+        "1000": "Moved Permanently"
+    },
+    "303": {
+        "1000": "See Other"
+    },
+    "304": {
+        "1000": "Not Modified"
+    },
+    "307": {
+        "1000": "Temporary Redirect"
+    },
+    "308": {
+        "1000": "Permanent Redirect"
+    },
+    "400": {
+        "1000": "Bad Request"
+    },
+    "401": {
+        "1000": "Unauthorized"
+    },
+    "403": {
+        "1000": "Forbidden"
+    },
+    "404": {
+        "1000": "Not Found"
+    },
+    "406": {
+        "1000": "Not Acceptable"
+    },
+    "409": {
+        "1000": "Conflict"
+    },
+    "410": {
+        "1000": "Gone"
+    },
+    "412": {
+        "1000": "Precondition Failed"
+    },
+    "415": {
+        "1000": "Unsupported Media Type"
+    },
+    "500": {
+        "1000": "Internal Server Error"
+    },
+    "502": {
+        "1000": "Bad Gateway"
+    },
+    "503": {
+        "1000": "Service Unavailable"
+    }
+}

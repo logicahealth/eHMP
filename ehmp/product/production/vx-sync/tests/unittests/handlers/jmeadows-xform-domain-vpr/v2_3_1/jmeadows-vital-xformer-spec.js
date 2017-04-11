@@ -27,6 +27,7 @@ describe('jmeadows-vitals-xformer', function() {
     var sampleVPRVital = {
         codes: [ { code : '55284-4', display : 'Blood pressure systolic and diastolic', system : 'http://loinc.org' } ],
         observed: '20140110171024',
+        resulted: '20140110171024',
         typeName: 'BLOOD PRESSURE',
         result: '110/40',
         units: 'mmHg',
@@ -39,6 +40,7 @@ describe('jmeadows-vitals-xformer', function() {
         var vprData = xformer(sampleDODVital, mockEdipi);
         expect(vprData.codes).toEqual(sampleVPRVital.codes);
         expect(vprData.observed).toBeDefined();
+        expect(vprData.resulted).toBeDefined();
         expect(vprData.typeName).toEqual(sampleVPRVital.typeName);
         expect(vprData.result).toEqual(sampleVPRVital.result);
         expect(vprData.units).toEqual(sampleVPRVital.units);

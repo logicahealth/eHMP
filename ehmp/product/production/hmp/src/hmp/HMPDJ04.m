@@ -1,5 +1,5 @@
-HMPDJ04 ;SLC/MKB,ASMR/RRB/ASF/PB - Appointments,Visits;May 24, 2016 15:21:17
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;*1*;Sep 01, 2011;Build 63
+HMPDJ04 ;SLC/MKB,ASMR/RRB,ASF,PB - Appointments,Visits;May 24, 2016 15:21:17
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**2**;Sep 01, 2011;Build 24
  ;Per VA Directive 6402, this routine should not be modified.
  ;
  ; External References          DBIA#
@@ -11,7 +11,7 @@ HMPDJ04 ;SLC/MKB,ASMR/RRB/ASF/PB - Appointments,Visits;May 24, 2016 15:21:17
  ; ^VA(200                      10060
  ; DIQ                           2056
  ; ICPTCOD                       1995
- ; PXAPI,^TMP("PXKENC"           1894
+ ; ENCEVENT^PXKENC               1894  ;DE6363 - JD - 8/23/16
  ; SDAMA301                      4433
  ; XLFDT                        10103
  ; XUAF4                         2171
@@ -47,14 +47,7 @@ SDAM1 ; -- appointment ^TMP($J,"SDAMA301",DFN,HMPDT)
  . S:$L(X) APPT("stopCodeUid")="urn:va:stop-code:"_$P(X,U),APPT("stopCodeName")=$P(X,U,2)
  . S SV=$$GET1^DIQ(44,+HLOC_",",9.5,"I")
  . I SV S APPT("service")=$$SERV^HMPDSDAM(SV)
- . ;find default provider
- . S:'$G(PRV) PRV=+$$GET1^DIQ(44,+HLOC_",",16,"I") I 'PRV D
- .. N HMPP,I,FIRST
- .. D GETS^DIQ(44,+HLOC_",","2600*","I","HMPP")
- .. S FIRST=$O(HMPP(44.1,"")),I=""
- .. F  S I=$O(HMPP(44.1,I)) Q:I=""  I $G(HMPP(44.1,I,.02,"I")) S PRV=$G(HMPP(44.1,I,.01,"I")) Q
- .. I 'PRV,FIRST S PRV=$G(HMPP(44.1,FIRST,.01,"I"))
- I $G(PRV) S APPT("providers",1,"providerUid")=$$SETUID^HMPUTILS("user",,PRV),APPT("providers",1,"providerName")=$$GET1^DIQ(200,PRV_",",.01)  ;DE2818
+ ;DE5209 7/14/2016 CK - remove Appointment Provider
  S APPT("patientClassCode")="urn:va:patient-class:"_$S(CLS="I":"IMP",1:"AMB")
  S APPT("patientClassName")=$S(CLS="I":"Inpatient",1:"Ambulatory")
  S APPT("categoryCode")="urn:va:encounter-category:OV",APPT("categoryName")="Outpatient Visit"
@@ -80,7 +73,7 @@ DGS1(IFN) ; -- scheduled admission
  N ADM,X0,DATE,HLOC,FAC,SV,X
  S X0=$G(^DGS(41.1,+$G(IFN),0)) Q:X0=""  ;deleted (DE2818, ICR 3796)
  ;
- S DATE=+$P(X0,U,2),HLOC=+$G(^DIC(42,+$P(X0,U,8),44))
+ S DATE=+$P(X0,U,2),HLOC=+$$GET1^DIQ(42,+$P(X0,U,8)_",",.01)  ;DE2818, ICR 10039
  S X="H;"_DATE,ADM("localId")=X,ADM("uid")=$$SETUID^HMPUTILS("appointment",DFN,X)
  S ADM("dateTime")=$$JSONDT^HMPUTILS(DATE)
  S FAC=$$FAC^HMPD(+HLOC) D FACILITY^HMPUTILS(FAC,"ADM") I HLOC D
@@ -165,9 +158,9 @@ VSIT1(ID) ; -- visit
 CPT(VISIT) ; -- Return CPT code of encounter type
  ;DE2818 - Change to use API and not directly access the global
  N DA,Y S Y=""
- ;DE2818, ICR 2048 for ^AUPNVCPT references
- S DA=0 F  S DA=$O(^AUPNVCPT("AD",VISIT,DA)) Q:DA<1  D  Q:$L(Y)
- . D ENCEVENT^PXAPI(VISIT,1)
+ ;DE4198 - remove use of ^AUPNVCPT
+ D ENCEVENT^PXKENC(VISIT,1)  ;ICR 1894
+ S DA=0 F  S DA=$O(^TMP("PXKENC",$J,VISIT,"CPT",DA)) Q:DA<1  D  Q:$L(Y)
  . I +$G(^TMP("PXKENC",$J,VISIT,"CPT",DA,0))?1"992"2N S Y=+$G(^TMP("PXKENC",$J,VISIT,"CPT",DA,0))
  Q Y
  ;

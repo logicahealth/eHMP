@@ -1,7 +1,8 @@
 define([
     'backbone',
-    'marionette'
-], function(Backbone, Marionette) {
+    'marionette',
+    'moment'
+], function(Backbone, Marionette, moment) {
     'use strict';
 
     var graphingGroupModel = Backbone.Model.extend({

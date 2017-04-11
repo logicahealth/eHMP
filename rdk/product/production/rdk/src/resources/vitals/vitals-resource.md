@@ -159,7 +159,7 @@ Validate the difference between previous and current vital measurements
                         "type": "object",
                         "properties": {
                             "value": {
-                                "type": "string"
+                                "type": ["number", "string"]
                             },
                             "units": {
                                 "type": "string"
@@ -174,7 +174,7 @@ Validate the difference between previous and current vital measurements
                         "type": "object",
                         "properties": {
                             "value": {
-                                "type": "string"
+                                "type": ["number", "string"]
                             },
                             "units": {
                                 "type": "string"
@@ -189,7 +189,7 @@ Validate the difference between previous and current vital measurements
                         "type": "object",
                         "properties": {
                             "value": {
-                                "type": "string"
+                                "type": ["number", "string"]
                             }
                         },
                         "required": [
@@ -200,7 +200,7 @@ Validate the difference between previous and current vital measurements
                         "type": "object",
                         "properties": {
                             "value": {
-                                "type": "string"
+                                "type": ["number", "string"]
                             },
                             "units": {
                                 "type": "string"
@@ -215,7 +215,7 @@ Validate the difference between previous and current vital measurements
                         "type": "object",
                         "properties": {
                             "value": {
-                                "type": "string"
+                                "type": ["number", "string"]
                             },
                             "units": {
                                 "type": "string"
@@ -230,7 +230,7 @@ Validate the difference between previous and current vital measurements
                         "type": "object",
                         "properties": {
                             "value": {
-                                "type": "string"
+                                "type": ["number", "string"]
                             },
                             "units": {
                                 "type": "string"
@@ -245,7 +245,7 @@ Validate the difference between previous and current vital measurements
                         "type": "object",
                         "properties": {
                             "value": {
-                                "type": "string"
+                                "type": ["number", "string"]
                             },
                             "units": {
                                 "type": "string"
@@ -260,7 +260,7 @@ Validate the difference between previous and current vital measurements
                         "type": "object",
                         "properties": {
                             "value": {
-                                "type": "string"
+                                "type": ["number", "string"]
                             },
                             "units": {
                                 "type": "string"
@@ -284,4 +284,3 @@ Validate the difference between previous and current vital measurements
 :[Response 404]({{{common}}}/responses/404.md)
 
 :[Response 500]({{{common}}}/responses/500.md)
-

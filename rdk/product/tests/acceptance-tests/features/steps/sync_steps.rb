@@ -54,12 +54,9 @@ def contains_expected_error_code
     end
   end
   if json_verify.defined?(["error.code"], json)
-
-    #p "error code: #{json["error"]["code"]}"
     return (json["error"]["code"] == 404)
   end
   p json_verify.error_message
-  #p json
   p "returning false"
   return false
 end
@@ -69,7 +66,7 @@ Then(/^a Not Found response is returned$/) do
   p "response code"
   p @response.code
   expect(@response.code).to eq(404), "response code was #{@response.code}: response body #{@response.body}"
-  expect(contains_expected_error_code).to be_true
+  expect(contains_expected_error_code).to eq(true), "expected error code was #{contains_expected_error_code}"
 end
 
 Given(/^a patient with pid "(.*?)" has not been synced through the RDK API$/) do |pid|

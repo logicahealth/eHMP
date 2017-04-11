@@ -5,7 +5,7 @@ define([
 ], function(Backbone, Marionette, Handlebars) {
 	'use strict';
     var ErrorFooterView = Backbone.Marionette.ItemView.extend({
-        template: Handlebars.compile('{{ui-button "OK" classes="btn-primary" title="Press enter to close."}}'),
+        template: Handlebars.compile('{{ui-button "OK" classes="btn-primary btn-sm" title="Press enter to close."}}'),
         events: {
             'click .btn-primary': function() {
                 ADK.UI.Alert.hide();

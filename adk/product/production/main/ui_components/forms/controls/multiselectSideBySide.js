@@ -89,12 +89,13 @@ define([
             if (this.enablePopovers) {
                 var self = this;
                 var popoverTitle = 'Details for ' + this.model.get(this.attributeMapping.label);
+                var popoverPlacement = _.get(this.field.get('detailsPopoverOptions'), 'options.placement', 'auto top');
                 var popoverContainer = this.$el.closest('.modal-body, form');
                 var detailsPopoverOptions = this.field.get('detailsPopoverOptions') || {};
                 var detailsPopoverField = new PuppetForm.Field(_.defaults(_.defaults({
                     title: popoverTitle,
                     options: {
-                        placement: 'auto top',
+                        placement: popoverPlacement,
                         trigger: 'manual',
                         container: popoverContainer,
                         viewport: popoverContainer
@@ -162,7 +163,7 @@ define([
             '{{/each}}',
             '<div class="table-cell pixel-width-57 text-center"></div>',
             '</div>',
-            '<div class="body scrolling-content"></div>'
+            '<div class="body auto-overflow-y"></div>'
         ].join("\n")),
         emptyView: Backbone.Marionette.ItemView.extend({
             className: 'table-row all-border-no',
@@ -257,16 +258,27 @@ define([
         }
     });
     var AvailableRowItemView = Backbone.Marionette.LayoutView.extend({
-        template: Handlebars.compile(['<div class="table-cell{{#if value}} color-grey-darkest{{/if}}">{{label}}</div>' +
+        template: Handlebars.compile([
+            '<div class="table-cell{{#if value}} color-grey-darkest{{/if}}">{{label}}</div>' +
             '{{#if enablePopovers}}' +
             '<div class="table-cell pixel-width-57 text-right details-popover-region">' +
             '</div>' +
             '{{/if}}' +
             '<div class="table-cell pixel-width-57 text-right">' +
-            '<button tabindex="-1" type="button" class="btn btn-link add-remove-btn all-padding-no checked-{{value}}{{#if value}} color-grey-darkest{{/if}}" title="Press enter to {{#if value}}remove{{else}}add{{/if}} {{label}}.">{{#if value}}Remove{{else}}Add{{/if}}</button>' +
+            '<button tabindex="-1" type="button" ' +
+                'class="btn btn-link add-remove-btn all-padding-no checked-{{value}}' +'{{#if value}} color-grey-darkest{{/if}}" ' +
+                'title="Press enter to {{#if value}}remove{{else}}add{{/if}} {{label}}.">{{#if value}}Remove{{else}}Add{{/if}}' +
+            '</button>' +
             '</div>'
         ].join("\n")),
         className: 'table-row',
+        attributes: function(){
+            return {
+                'role': 'option',
+                'id': this.cid,
+                'aria-selected': this.model.get('booleanValue')
+            };
+        },
         events: {
             "click .add-remove-btn": "onChange",
             'focusout .popover-control button': 'hidePopovers'
@@ -300,25 +312,26 @@ define([
         buildPopover: function() {
             if (this.enablePopovers) {
                 var self = this;
-                var popoverTitle = 'Press enter to view details for ' + this.model.get(this.attributeMapping.label) + ' ';
+                var popoverTitle = 'Details for ' + this.model.get(this.attributeMapping.label) + ' ';
                 var extraClasses = ['btn-link'];
                 if (this.model.get(this.attributeMapping.value) === true) {
                     extraClasses = ['btn-link', 'color-grey-darker'];
                 }
+                var popoverPlacement = _.get(this.field.get('detailsPopoverOptions'), 'options.placement', 'auto top');
                 var popoverContainer = this.$el.closest('.modal-body, form');
                 var detailsPopoverOptions = this.field.get('detailsPopoverOptions') || {};
                 var detailsPopoverField = new PuppetForm.Field(_.defaults(_.defaults({
                     extraClasses: extraClasses,
                     title: popoverTitle,
                     options: {
-                        placement: 'auto top',
+                        placement: popoverPlacement,
                         trigger: 'manual',
                         container: popoverContainer,
                         viewport: popoverContainer
                     }
                 }, detailsPopoverOptions), {
                     control: 'popover',
-                    label: popoverTitle,
+                    label: 'Press enter to view details and then press T to access the table.',
                     srOnlyLabel: true,
                     name: 'detailsPopoverValue',
                     icon: 'fa-file-text-o',
@@ -382,6 +395,10 @@ define([
                     label: attributes[this.attributeMapping.label],
                     itemIndex: this.itemIndex
                 };
+
+            if (!_.isUndefined(model.get('booleanValue')) && this.$el.attr('aria-selected') !== model.get('booleanValue').toString()) {
+                this.$el.attr('aria-selected', model.get('booleanValue'));
+            }
             return data;
         }
     });
@@ -390,10 +407,10 @@ define([
             "TableBody": ".body:first",
             "FilterInput": ".filter"
         },
-        className: "faux-table background-color-pure-white",
         attributes: {
             'role': 'application'
         },
+        className: "faux-table background-color-pure-white",
         template: Handlebars.compile([
             '<div class="header table-row right-padding-md top-padding-xs bottom-padding-xs">',
             '<div class="table-cell">{{#if itemColumn.columnTitle}}{{itemColumn.columnTitle}}{{else}}Available {{#unless srOnlyLabel}}{{label}}{{/unless}}{{/if}}</div>', '<div class="table-cell pixel-width-57 text-center"></div>',
@@ -403,7 +420,9 @@ define([
             '<div class="control input-control form-group bottom-margin-no">',
             '<label for="available-{{clean-for-id label}}-modifiers-filter-results" class="sr-only">Available {{label}} Filter</label>',
             '<i class="fa fa-filter"></i>',
-            '<input id="available-{{clean-for-id label}}-modifiers-filter-results" type="text" class="form-control input-sm filter" name="available-{{clean-for-id label}}-filter" title="Enter text to filter the {{#if itemColumn.columnTitle}}{{itemColumn.columnTitle}}{{else}}Available {{label}}{{/if}}. Use the up and down arrow keys to cycle through the list of {{#if itemColumn.columnTitle}}{{itemColumn.columnTitle}}{{else}}available {{label}}{{/if}}.{{#if detailsPopoverOptions}} Use the right arrow key to view details.{{/if}}" placeholder="Filter {{label}}"/>',
+            '<input id="available-{{clean-for-id label}}-modifiers-filter-results" type="text" class="form-control input-sm filter" placeholder="Filter {{label}}" ',
+                'role="combobox" aria-owns="{{listboxId}}" aria-expanded="true" aria-autocomplete="list" aria-activedescendant="" name="available-{{clean-for-id label}}-filter" ',
+                'title="Enter text to filter the {{#if itemColumn.columnTitle}}{{itemColumn.columnTitle}}{{else}}Available {{label}}{{/if}}. Use the up and down arrow keys to cycle through the list of {{#if itemColumn.columnTitle}}{{itemColumn.columnTitle}}{{else}}available {{label}}{{/if}}.{{#if detailsPopoverOptions}} Use the right arrow key to view details.{{/if}}"/>',
             '<button class="clear-input hidden btn btn-icon btn-sm color-grey-darkest" type="button" title="Press enter to clear text">',
             '<i class="fa fa-times"></i>',
             '</button>',
@@ -411,7 +430,7 @@ define([
             '</div>',
             '</div>',
             '</div>',
-            '<div class="body scrolling-content"></div>'
+            '<div id="{{listboxId}}" class="body auto-overflow-y" role="listbox" aria-labelledby="available-{{clean-for-id label}}-modifiers-filter-results" aria-multiselectable="true"></div>'
         ].join("\n")),
         childEvents: {
             'details:popover:clicked': function(child, clickedPopover) {
@@ -434,6 +453,9 @@ define([
         },
         emptyView: Backbone.Marionette.ItemView.extend({
             className: 'table-row all-border-no',
+            attributes: {
+                'role': 'option'
+            },
             template: Handlebars.compile([
                 '<div class="table-cell">No {{label}} found.</div>',
                 '<div class="table-cell pixel-width-57 text-right"></div>'
@@ -448,6 +470,7 @@ define([
             this.ui.TableBody.off('scroll');
         },
         onKeydownEvent: function(event, triggeredFromPopover) {
+            if (event.which === 9) return;
             var isAltOrCtrl = (event.altKey || event.ctrlKey);
             var accessPopoverContent = (triggeredFromPopover && event.keyCode === SPACE_BAR);
             if (event.type === 'keydown') {
@@ -481,6 +504,7 @@ define([
                         if (triggeredFromPopover && !isAltOrCtrl) {
                             this.ui.FilterInput.focus();
                         } else {
+                            this.$el.find('.popover-control').find('button').trigger('control:popover:hidden', true);
                             this.toggleDetailsPopoverOnSelectedRow();
                         }
                     }
@@ -555,6 +579,7 @@ define([
                 if (!this.enablePopovers || (this.enablePopovers && this.useRightKeyForFilterNavigation)) {
                     this._currentRowId = -1;
                     this.$('.active').removeClass('active');
+                    this.$('input.filter').attr('aria-activedescendant', '');
                 }
             },
             'click .clear-input': function(event) {
@@ -604,7 +629,11 @@ define([
             this.$('.active').removeClass('active');
             if (_.isNumber(indexToSelect)) {
                 var modelToChange = this.collection.at(indexToSelect);
-                this.scrollElementIntoView(this.children.findByModel(modelToChange).$el.addClass('active')[0]);
+                var elementToChange = this.children.findByModel(modelToChange);
+
+                this.scrollElementIntoView(elementToChange.$el.addClass('active')[0]);
+                this.$('input.filter').attr('aria-activedescendant', elementToChange.$el.attr('id'));
+
                 var actionVerb = modelToChange.get(this.attributeMapping.value) ? ' remove from the ' : ' add to the ',
                     itemColumnTitle = this.model.get('itemColumn') || {};
                 itemColumnTitle = itemColumnTitle.columnTitle || 'selected ' + this.model.get('label');
@@ -672,6 +701,7 @@ define([
             this.model = options.field;
             this.enablePopovers = !_.isUndefined(this.model.get('detailsPopoverOptions'));
             this.attributeMapping = options.attributeMapping;
+            this.options.field.set('listboxId', this.cid + '-listbox');
             this._orginialCollection = options._orginialCollection;
             this._inputEvent = null;
             this._lastInputString = "";
@@ -758,10 +788,6 @@ define([
                 this.model.trigger('change', this.model);
             }, this);
             this.updateCount();
-
-            // _.each(options.field.get('additionalColumns'), function(item) {
-            //     this.stopListening(this.collection, 'change:' + item.name);
-            // }, this);
 
             this.model.set(this.getComponentInstanceName(), this.collection);
         },

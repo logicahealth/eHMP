@@ -20,8 +20,8 @@ import java.util.Set;
  * should it be paged to disk? 4) Lazy/Eager loading: Should the data set be
  * loaded all at once at the beginning? Or gradually as needed?
  * 
- * TODO: Should this interface be broken down into two seperate interfaces?
- * (Probably) TODO: CodeSystem needs an object and a registry.
+ * FUTURETODO: Should this interface be broken down into two seperate interfaces?
+ * (Probably) FUTURETODO: CodeSystem needs an object and a registry.
  * 
  */
 public interface ITermDataSource extends Iterable<String>, Closeable {

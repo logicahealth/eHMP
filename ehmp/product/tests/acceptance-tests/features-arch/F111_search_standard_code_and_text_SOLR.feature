@@ -16,7 +16,7 @@ Then the solar search results contains "<total_items>"
       | text      		| total_items |
       | lab       		| 408         |
       | med       		| 387         |
-#      | %2234109-9%22 	| 9           | TODO: LOINC codes are not yet available in Documents (Owner: Les Westberg) 
+#      | %2234109-9%22 	| 9           | FUTURE-TODO: LOINC codes are not yet available in Documents (Owner: Les Westberg) 
       
       
  @search_standard_code_2 @VPR @debug

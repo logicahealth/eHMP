@@ -1,11 +1,11 @@
 define([
-    'main/ADK',
+    'moment',
     'app/applets/lab_results_grid/modal/noteViewFields',
     'app/applets/lab_results_grid/resources/note'
-], function(ADK, NoteViewFields, LabResultNote) {
+], function(moment, NoteViewFields, LabResultNote) {
     "use strict";
 
-    var NOTE_ATTRIBUTES = ['displayName', 'specimen', 'observed', 'interpretationName', 'result', 'units'];
+    var NOTE_ATTRIBUTES = ['typeName', 'specimen', 'observed', 'interpretationName', 'result', 'units'];
     var INTERPRETATION_MAP = {
         'High': 'High',
         'High alert': 'Critically High',
@@ -94,9 +94,8 @@ define([
         onSaveSuccess: function() {
             ADK.UI.Workflow.hide();
             var successGrowl = new ADK.UI.Notification({
-                title: 'Numeric Lab Result Note',
-                icon: 'fa-check',
-                message: 'Successfully created note object',
+                title: 'Success',
+                message: 'Numeric lab result note created',
                 type: "success"
             });
             successGrowl.show();

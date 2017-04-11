@@ -11,49 +11,64 @@ action :execute do
 
   require 'greenletters'
 
-  ruby_block "key_block:execute:#{new_resource.command.hash}" do
+  ruby_block "key_block:execute:keyblock" do
     block do
       begin
 
-        shell = Greenletters::Process.new("sh", :transcript => new_resource.log, :timeout => node[:jds][:shell_timeout_seconds])
+        shell = Greenletters::Process.new(node[:jds][:shell], :transcript => new_resource.log, :timeout => node[:jds][:shell_timeout_seconds])
 
-        # start the shell, set up cache environment and start cache shell
+        # start the shell
         shell.start!
-        shell.wait_for(:output, /sh-[0-9\.]+#/) do | process, match |
-          process.write("#{node[:jds][:session]}\n")
+
+        # Start Cache session
+        shell.wait_for(:output, node[:jds][:shell_prompt]) do | process, match |
+          process.write("#{node[:jds][:session]}\r")
+        end
+
+        # Login
+        if new_resource.cache_username != nil
+          shell.wait_for(:output, /Username/) do | process, match |
+            process.write("#{new_resource.cache_username}\r")
+          end
+        end
+
+        if new_resource.cache_password != nil
+          shell.wait_for(:output, /Password/) do | process, match |
+            process.write("#{new_resource.cache_password}\r")
+          end
         end
 
         # Change namespace
         shell.wait_for(:output, /USER>/) do | process, match |
-          process.write("ZN \"%SYS\"\n")
+          process.write("ZN \"%SYS\"\r")
         end
 
         shell.wait_for(:output, /%SYS>/) do | process, match |
-          process.write("D ^SECURITY\n")
+          process.write("D ^SECURITY\r")
           Chef::Log.info("Activate encryption key - Started SECURITY routine")
         end
 
         shell.wait_for(:output, /Option\?/) do | process, match |
-          process.write("11\n")
+          process.write("11\r")
           Chef::Log.info("Seleced \"11\) Encryption key setup\"")
         end
 
         shell.wait_for(:output, /Select option:/) do | process, match |
-          process.write("3\n")
+          process.write("3\r")
           Chef::Log.info("Selected \"3\) Database encryption\"")
         end
 
         shell.wait_for(:output, /Select option:/) do | process, match |
-          process.write("1\n")
+          process.write("1\r")
         end
         shell.wait_for(:output, /Database encryption key file:/) do | process, match |
-          process.write("#{node[:jds][:cache_mgr_dir]}/#{node[:jds][:cache_key_file]}\n")
+          process.write("#{node[:jds][:cache_mgr_dir]}/#{node[:jds][:cache_key_file]}\r")
         end
         shell.wait_for(:output, /Username:/) do | process, match |
-          process.write("#{node[:jds][:cache_key_user]}\n")
+          process.write("#{node[:jds][:cache_key_user]}\r")
         end
         shell.wait_for(:output, /Password:/) do | process, match |
-          process.write("#{node[:jds][:cache_key_pw]}\n")
+          process.write("#{node[:jds][:cache_key_pw]}\r")
           Chef::Log.info("Entered password")
         end
         shell.wait_for(:output, /Database encryption key activated./) do | process, match |
@@ -61,27 +76,27 @@ action :execute do
         end
 
         shell.wait_for(:output, /Select option:/) do | process, match |
-          process.write("4\n")
+          process.write("4\r")
           Chef::Log.info("Selected \"4) Configure Cache startup options\"")
         end
         shell.wait_for(:output, /Option:/) do | process, match |
-          process.write("3\n")
+          process.write("3\r")
           Chef::Log.info("Seleced \"3) Unattended database encryption key activation at startup\"")
         end
         shell.wait_for(:output, /Unattended activation key file:/) do | process, match |
-          process.write("#{node[:jds][:cache_mgr_dir]}/#{node[:jds][:cache_key_file]}\n")
+          process.write("#{node[:jds][:cache_mgr_dir]}/#{node[:jds][:cache_key_file]}\r")
         end
         shell.wait_for(:output, /Encrypt journal files\?/) do | process, match |
-          process.write("Yes\n")
+          process.write("Yes\r")
         end
         shell.wait_for(:output, /Encrypt CacheTemp\?/) do | process, match |
-          process.write("Yes\n")
+          process.write("Yes\r")
         end
         shell.wait_for(:output, /Username:/) do | process, match |
-          process.write("#{node[:jds][:cache_key_user]}\n")
+          process.write("#{node[:jds][:cache_key_user]}\r")
         end
         shell.wait_for(:output, /Password:/) do | process, match |
-          process.write("#{node[:jds][:cache_key_pw]}\n")
+          process.write("#{node[:jds][:cache_key_pw]}\r")
         end
 
         shell.wait_for(:output, /Key file is now enabled for unattended database encryption key activation at startup./) do | process, match |
@@ -89,39 +104,39 @@ action :execute do
         end
 
         shell.wait_for(:output, /Option:/) do | process, match |
-          process.write("4\n")
+          process.write("4\r")
         end
         shell.wait_for(:output, /Unattended database encryption key activation at startup:/) do | process, match |
           Chef::Log.info(:output)
         end
 
         shell.wait_for(:output, /Option:/) do | process, match |
-          process.write("^\n")
+          process.write("^\r")
           Chef::Log.info("Finished with \"Configure Cache startup options\"")
         end
 
         shell.wait_for(:output, /Select option:/) do | process, match |
-          process.write("^\n")
+          process.write("^\r")
           Chef::Log.info("Finished with \"Database encryption\"")
         end
 
         shell.wait_for(:output, /Select option:/) do | process, match |
-          process.write("^\n")
+          process.write("^\r")
           Chef::Log.info("Finished with \"Encryption key setup\"")
         end
 
         shell.wait_for(:output, /Option\?/) do | process, match |
-          process.write("14\n")
+          process.write("14\r")
           Chef::Log.info("Exiting SECURITY routine")
         end
 
         shell.wait_for(:output, /%SYS>/) do | process, match |
-          process.write("h\n")
+          process.write("h\r")
           Chef::Log.info("Exiting csession")
         end
 
-        shell.wait_for(:output, /sh-[0-9\.]+#/) do | process, match |
-          process.write("exit\n")
+        shell.wait_for(:output, node[:jds][:shell_prompt]) do | process, match |
+          process.write("exit\r")
         end
 
         shell.wait_for(:exit)
@@ -129,6 +144,6 @@ action :execute do
         Chef::Log.error("Key configuration aborted due to unexpected output.")
         Chef::Log.error(e.message)
       end
-    end # end block
-  end # end ruby_block
+    end
+  end
 end

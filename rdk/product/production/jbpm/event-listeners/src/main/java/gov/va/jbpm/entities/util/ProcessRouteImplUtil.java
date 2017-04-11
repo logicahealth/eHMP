@@ -5,17 +5,21 @@ import java.util.List;
 
 import gov.va.jbpm.entities.impl.BaseRoute;
 import gov.va.jbpm.entities.impl.ProcessRouteImpl;
+import gov.va.jbpm.exception.EventListenerException;
+import gov.va.jbpm.utils.Logging;
 
 public class ProcessRouteImplUtil {
-	public static List<ProcessRouteImpl> create(long processInstanceId, String assignedTo) {
-		
-		List<ProcessRouteImpl> taskRouteImplList = new ArrayList<ProcessRouteImpl>();
+	public static List<ProcessRouteImpl> create(long processInstanceId, String assignedTo) throws EventListenerException {
+		Logging.debug("Entering ProcessRouteImplUtil.create");
+		List<ProcessRouteImpl> processRouteImplList = new ArrayList<ProcessRouteImpl>();
 				
 		List<BaseRoute> baseRouteList = BaseRouteUtil.create(assignedTo);
+		
 		for(BaseRoute baseRoute : baseRouteList) {
-			taskRouteImplList.add(new ProcessRouteImpl(processInstanceId, baseRoute));
+			ProcessRouteImpl processRouteImpl = new ProcessRouteImpl(processInstanceId, baseRoute);
+			processRouteImplList.add(processRouteImpl);
 		}
 	
-		return taskRouteImplList;
+		return processRouteImplList;
 	}
 }

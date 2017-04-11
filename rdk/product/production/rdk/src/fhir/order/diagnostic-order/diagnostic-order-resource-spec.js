@@ -305,7 +305,7 @@ describe('Condition FHIR conformance', function() {
 
     it('conformance data searchParam is returned', function() {
 
-        expect(conformanceData.searchParam.length).to.equal(4);
+        expect(conformanceData.searchParam.length).to.equal(5);
 
         expect(conformanceData.searchParam[0].name).to.equal('subject.identifier');
         expect(conformanceData.searchParam[0].type).to.equal('string');

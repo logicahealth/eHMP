@@ -4,7 +4,6 @@ var util = require('util');
 var querystring = require('querystring');
 var _ = require('lodash');
 var async = require('async');
-var dd = require('drilldown');
 var rdk = require('../../../core/rdk');
 var jdsFilter = require('jds-filter');
 var httpUtil = rdk.utils.http;
@@ -54,12 +53,11 @@ function getTrendDetail(req, res) {
     async.waterfall(
         [
             function(callback) {
-                getUid(req, pid, uid, callback);
+                req.app.subsystems.jds.getByUid(req, pid, uid, function (error, data, statusCode) {
+                    callback(error, data);
+                });
             },
             function(data, callback) {
-                if (data.error) {
-                    return callback(data.error);
-                }
                 var jdsPath = detailDomains[domain](pid, data);
                 var options = _.extend({}, req.app.config.jdsServer, {
                     url: jdsPath,
@@ -68,7 +66,7 @@ function getTrendDetail(req, res) {
                 });
                 httpUtil.get(options, function(error, resp, data) {
                     var response = {};
-                    response.statusCode = dd(resp)('statusCode').val;
+                    response.statusCode = _.get(resp, 'statusCode');
                     response.data = data;
                     callback(error, response);
                 });
@@ -84,31 +82,9 @@ function getTrendDetail(req, res) {
     );
 }
 
-function getUid(req, pid, uid, cb) {
-    // TODO replace with subsystem after subsystems are ready
-
-    var options = _.extend({}, req.app.config.jdsServer, {
-        url: '/vpr/' + pid + '/' + uid,
-        logger: req.logger,
-        json: true
-    });
-
-    // var jdsStatusCode;
-    httpUtil.get(options,
-        function(err, response, data) {
-            if (!nullchecker.isNullish(err)) {
-                return cb(err);
-            }
-            cb(null, data);
-            //jdsStatusCode = response.statusCode;
-            //res.set('Content-Type', 'application/json').status(jdsStatusCode).rdkSend(data);
-        }
-    );
-}
-
 function buildMedDetailPath(pid, uidData) {
     // qualifiedName
-    var qualifiedName = dd(uidData)('data')('items')('0')('qualifiedName').val || null;
+    var qualifiedName = _.get(uidData, 'data.items[0].qualifiedName') || null;
     var jdsResource = '/vpr/' + pid + '/index/medication';
     var jdsFilterString = jdsFilter.build([
         ['eq', 'qualifiedName', qualifiedName]
@@ -123,7 +99,7 @@ function buildMedDetailPath(pid, uidData) {
 
 function buildDocumentDetailPath(pid, uidData) {
     // localTitle
-    var qualifiedName = dd(uidData)('data')('items')('0')('qualifiedName').val || null;
+    var qualifiedName = _.get(uidData, 'data.items[0].qualifiedName') || null;
     var jdsResource = '/vpr/' + pid + '/index/document';
     var jdsFilterString = jdsFilter.build([
         ['eq', 'qualifiedName', qualifiedName]

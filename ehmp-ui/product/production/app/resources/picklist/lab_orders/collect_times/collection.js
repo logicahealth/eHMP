@@ -5,7 +5,7 @@ define([], function() {
     });
 
     var collectTimes = ADK.Resources.Picklist.Collection.extend({
-        type: 'lab-collect-times',
+        resource: 'write-pick-list-lab-collect-times',
         model: CollectTimes
     });
 

@@ -242,10 +242,5 @@ Then(/^the problem is added in the Active Problem list$/) do
   end
 end
 
-##########################################################
-# Added to support:
-#    @US1893_AddProblem_ErrorCheck @chahn
-#    Scenario: Error check on Add problem modal
-#
 
 

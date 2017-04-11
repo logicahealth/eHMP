@@ -1,17 +1,30 @@
 <div id="patientDemographic">
+    <div class="patient-demographic-help">
+        {{{helpIconLink 'patient_demographic'}}}
+    </div>
     <div class="toggle-details profile-img{{#if ccowConnected}} ccow-connected{{else}} warning{{/if}}" aria-hidden="true">
         {{#if patientImage}}
         <img src='{{patientImage}}' width="120" height="120" alt="Patient Image" title="{{displayName}} Image" /> {{else}}
         <div class="loading"><i class='fa fa-spinner fa-spin'></i> <span class="sr-only"> Retrieving patient image...</span></div>
         {{/if}}
     </div>
-     <span id="ccowStatus" class="pull-right {{#if ccowConnected}} icon-ccow-connected icon-ccow-connected-border{{else}} icon-ccow-disconnected icon-ccow-disconnected-border  {{vaultAvailable}}{{/if}}" aria-hidden="true">
-             {{#if ccowConnected}} <span class="fa fa-link color-pure-white font-size-18" data-toggle="tooltip" data-html="true" title="{{ccowTooltip}}" data-placement="auto top" data-trigger="hover focus" data-container="body"><span class="sr-only">This patient is connected to clincal link</span></span>
-             {{else}}<span class="fa fa-chain-broken color-pure-white font-size-18" data-toggle="tooltip" data-html="true" title="{{ccowTooltip}}" data-placement="auto top" data-trigger="hover focus" data-container="body"><span class="sr-only">This patient is disconnected from clinical link</span></span>{{/if}}
+    <span id="ccowStatus" class="pull-right {{#if ccowConnected}} icon-ccow-connected icon-ccow-connected-border{{else}} icon-ccow-disconnected icon-ccow-disconnected-border  {{vaultAvailable}}{{/if}}" aria-hidden="true">
+    {{#if ccowConnected}}
+    <span class="fa fa-link color-pure-white font-size-18" data-toggle="tooltip" data-html="true" title="{{ccowTooltip}}" data-placement="auto top" data-trigger="hover focus" data-container="body">
+        <span class="sr-only">This patient is connected to clinical link</span>
+    </span>
+    {{else}}
+    <span class="fa fa-chain-broken color-pure-white font-size-18" data-toggle="tooltip" data-html="true" title="{{ccowTooltip}}" data-placement="auto top" data-trigger="hover focus" data-container="body">
+    <span class="sr-only">This patient is disconnected from clinical link</span>
+    </span>
+    {{/if}}
     </span>
     <div class="patient-info toggle-details">
         <h2>
             <span class="sr-only">Patient's Name: </span>{{displayName}}<br aria-hidden="true" />
+            {{#if sensitive}}
+            <span class="sr-only">Sensitive info: </span><span class="small background-color-pure-white color-red all-padding-xs inline-block-display top-margin-xs bottom-margin-no sensitive-patient">*SENSITIVE*</span>
+            {{/if}}
             <span class="sr-only">Type of care: </span><span class="small">{{getPatientStatusClassInfo}}</span>
         </h2>
         <p>
@@ -21,8 +34,10 @@
             <strong aria-hidden="true">SSN: </strong>
             <span class="sr-only">Social Security Number</span>{{formatSSN ssn false}}
             <br />
-            <strong>Gender:</strong> {{genderName}}
-            {{#if roomBed}}<br /><strong>Room-Bed:</strong> {{roomBed}}{{/if}}
+            <strong>Gender:</strong> {{genderName}} 
+            {{#if roomBed}}
+            <br /><strong>Room-Bed:</strong> {{roomBed}} 
+            {{/if}}
         </p>
     </div>
     <div id="patient-header-demographic-details"></div>

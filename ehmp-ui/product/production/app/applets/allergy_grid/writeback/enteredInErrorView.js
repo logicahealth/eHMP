@@ -58,7 +58,7 @@ define([
                         label: "Reason",
                         rows: 10,
                         required: false,
-                        maxlength: 255
+                        maxlength: 200
                     }]
                 }]
             };
@@ -69,7 +69,7 @@ define([
             });
 
             var ErrorFooterView = Backbone.Marionette.ItemView.extend({
-                template: Handlebars.compile('{{ui-button "OK" classes="btn-primary" title="Press enter to close."}}'),
+                template: Handlebars.compile('{{ui-button "OK" classes="btn-primary btn-sm" title="Press enter to close."}}'),
                 events: {
                     'click .btn-primary': function() {
                         ADK.Checks.unregister('allergy-eie-form-id');
@@ -153,7 +153,7 @@ define([
                         e.preventDefault();
                         var cancelAlertView = new ADK.UI.Alert({
                             title: 'Cancel',
-                            icon: 'icon-cancel',
+                            icon: 'icon-triangle-exclamation',
                             messageView: CancelMessageView,
                             footerView: FooterView,
                             workflow: this.workflow
@@ -176,9 +176,9 @@ define([
                         eieModel.enteredInError({
                             success: function() {
                                 var saveSuccessAlertView = new ADK.UI.Notification({
-                                    title: 'Allergy Entered in Error Submitted',
-                                    icon: 'fa-check',
-                                    message: 'Allergy successfully marked entered in error.'
+                                    title: 'Success',
+                                    type: 'success',
+                                    message: 'Allergy marked as entered in error'
                                 });
                                 saveSuccessAlertView.show();
                                 ADK.Checks.unregister('allergy-eie-form-id');
@@ -192,8 +192,8 @@ define([
                             },
                             error: function(model, error) {
                                 var errorAlertView = new ADK.UI.Alert({
-                                    title: 'Save Failed (System Error)',
-                                    icon: 'icon-error',
+                                    title: 'Error',
+                                    icon: 'icon-circle-exclamation',
                                     messageView: ErrorMessageView,
                                     footerView: ErrorFooterView
                                 });

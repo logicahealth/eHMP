@@ -1,9 +1,9 @@
 class AuditTestUsers
   @@users = {}
 
-  @@users["B362;pu1234"] = "pu1234!!"
-  @@users["UnauthorizedUser"] = "pa55w0rd"
-  @@users["AuditLogTester"] = "xx1234!!"
+  @@users["PW         "] = "PW    !!"
+  @@users["UnauthorizedUser"] = "PW      "
+  @@users["AuditLogTester"] = "PW    !!"
 
   def self.password_for(username)
     return @@users[username]
@@ -85,6 +85,6 @@ Given(/^the rdk audit logs are cleared$/) do
 end
 
 if __FILE__ == $PROGRAM_NAME
-  p AuditTestUsers.password_for("B362;pu1234")
+  p AuditTestUsers.password_for("PW         ")
   p AuditTestUsers.password_for("badname")
 end

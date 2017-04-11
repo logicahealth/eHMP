@@ -1,6 +1,7 @@
 define([
     "backbone",
-], function(Backbone) {
+    "moment"
+], function(Backbone, moment) {
     "use strict";
 
     var writebackUtils = {

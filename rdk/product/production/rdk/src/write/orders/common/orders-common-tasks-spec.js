@@ -18,8 +18,10 @@ describe('write-back orders common tasks', function() {
         expect(signLabOrdersTasks).not.to.be.undefined();
         var saveDraftLabOrderTasks = getCommonOrderTasks('saveDraftLabOrder', {});
         expect(saveDraftLabOrderTasks).not.to.be.undefined();
-        var findDraftLabOrderTasks = getCommonOrderTasks('findDraftLabOrders', {});
-        expect(findDraftLabOrderTasks).not.to.be.undefined();
+        var findDraftOrderTasks = getCommonOrderTasks('findDraftOrders', {});
+        expect(findDraftOrderTasks).not.to.be.undefined();
+        var readDraftOrderTasks = getCommonOrderTasks('readDraftOrder', {});
+        expect(readDraftOrderTasks).not.to.be.undefined();
     });
 
     it('tests that getCommonOrderTasks returns undefined tasks', function() {

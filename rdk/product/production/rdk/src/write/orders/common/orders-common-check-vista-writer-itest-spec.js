@@ -7,11 +7,11 @@ var rpcClientFactory = require('./../../core/rpc-client-factory');
 var saveWritebackContext = {
     pid: '9E7A;100615',
     vistaConfig: {
-        host: 'IP_ADDRESS',
+        host: 'IP        ',
         port: 9210,
-        accessCode: 'PW',
-        verifyCode: 'PW',
-        localIP: 'IPADDRES',
+        accessCode: 'PW    ',
+        verifyCode: 'PW    !!',
+        localIP: 'IP      ',
         localAddress: 'localhost',
         noReconnect: true
     },
@@ -54,6 +54,10 @@ var saveWritebackContext = {
         'localId': '12519',
         'uid': 'urn:va:order:9E7A:100615:12519',
         'kind': 'Laboratory'
+    },
+    interceptorResults: {
+        patientIdentifiers: {
+        }
     },
     logger: sinon.stub(require('bunyan').createLogger({name: 'check-vista-writer'}))
 };

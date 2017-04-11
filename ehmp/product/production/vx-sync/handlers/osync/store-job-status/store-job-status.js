@@ -5,8 +5,8 @@ require('../../../env-setup');
 var _ = require('lodash');
 var moment = require('moment');
 var nullUtil = require(global.VX_UTILS + 'null-utils');
-var jobUtil = require(global.VX_UTILS + 'osync-job-utils');
-var jdsUtil = require(global.VX_UTILS + 'jds-utils');
+var jobUtil = require(global.OSYNC_UTILS + 'osync-job-utils');
+var jdsUtil = require(global.OSYNC_UTILS + 'jds-utils');
 
 function handle(log, config, environment, job, handlerCallback) {
     log.debug('store-job-status.handle : received request to save ' + JSON.stringify(job));

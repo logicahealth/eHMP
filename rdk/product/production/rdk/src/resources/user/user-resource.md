@@ -126,3 +126,62 @@ Get the list current patients of the current user
 
 :[Response 500]({{{common}}}/responses/500.md)
 
+### Info [GET {{{path}}}/info/byUid{?uid}]
+
+Get user info by user Uid
+
++ Parameters
+
+    :[uid]({{{common}}}/parameters/uid.md)
+
++ Response 200 (application/json)
+
+    + Body
+
+            {
+                "data": {
+                    "name": "Doe,John",
+                    "uid": "userUid"
+                },
+                "status": 200
+            }
+
+    + Schema
+
+            :[Schema]({{{common}}}/schemas/user_infobyUid-GET-200.jsonschema)
+
+### Set Preferences [PUT {{{path}}}/set-preferences]
+
+Set preferences of the current user
+
++ Request JSON Message (application/json)
+
+    + Body
+
+            {
+                "preferences": {
+                    "defaultWorkspace": "document"
+                }
+            }
+
+    + Schema
+
+            :[Schema]({{{common}}}/schemas/user_set-preferences-PUT-request.jsonschema)
+
++ Response 200 (application/json)
+
+    + Body
+
+            {
+                "status": 200
+            }
+
+    + Schema
+
+            :[Schema]({{{common}}}/schemas/user_set-preferences-PUT-200.jsonschema)
+
+:[Response 400]({{{common}}}/responses/400.md)
+
+:[Response 404]({{{common}}}/responses/404.md)
+
+:[Response 500]({{{common}}}/responses/500.md)

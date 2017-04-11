@@ -24,7 +24,6 @@
  */
 package com.cognitive.cds.engine.agent;
 
-import java.util.logging.Logger;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -32,6 +31,8 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -40,7 +41,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @ContextConfiguration(locations = {"classpath:Test-Beans.xml"})
 public class EngineAgentTest {
 
-	private static Logger logger = Logger.getLogger(EngineAgentTest.class.getName());
+	private static final Logger LOGGER = LoggerFactory.getLogger(EngineAgentTest.class);
 	@Autowired
 	private EngineAgent engineAgent;
 
@@ -69,7 +70,7 @@ public class EngineAgentTest {
 	@Ignore("This is really a servce integration test")
 	@Test
 	public void attemptEngineRegistration() {
-		logger.info("attemptEngineRegistration");
+		LOGGER.info("attemptEngineRegistration");
 		engineAgent.attemptEngineRegistration();
 
 	}
@@ -80,7 +81,7 @@ public class EngineAgentTest {
 	@Ignore("This is really a servce integration test")
 	@Test
 	public void attemptEngineDeregistration() {
-		logger.info("attemptEngineDeregistration");
+		LOGGER.info("attemptEngineDeregistration");
 		engineAgent.attemptEngineDeregistration();
 	}
 }

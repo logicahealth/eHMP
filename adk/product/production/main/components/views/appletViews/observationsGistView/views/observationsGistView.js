@@ -11,8 +11,9 @@ define('main/components/views/appletViews/observationsGistView/views/observation
     "main/components/appletToolbar/appletToolbarView",
     "main/components/views/appletViews/TileSortManager",
     "main/components/applets/baseDisplayApplet/baseDisplayAppletItem",
-    "main/components/applets/baseDisplayApplet/baseGistView"
-], function($, _, Backbone, Utils, observationsGistLayoutTemplate, observationsGistChildTemplate, popoverTemplate, ResourceService, Messaging, ToolbarView, TileSortManager, BaseAppletItem, BaseGistView) {
+    "main/components/applets/baseDisplayApplet/baseGistView",
+    '_assets/js/tooltipMappings'
+], function($, _, Backbone, Utils, observationsGistLayoutTemplate, observationsGistChildTemplate, popoverTemplate, ResourceService, Messaging, ToolbarView, TileSortManager, BaseAppletItem, BaseGistView, TooltipMappings) {
     'use strict';
 
     var ObservationsGistItem = BaseAppletItem.extend({
@@ -39,8 +40,11 @@ define('main/components/views/appletViews/observationsGistView/views/observation
                 buttonTypes.unshift('tilesortbutton');
             }
 
+            var toolbarButtonsDisabled = this.model.get('resultUnitsMetricResultUnits') === 'No Records Found';
             this.toolbarOptions = {
-                buttonTypes: buttonTypes
+                buttonTypes: buttonTypes,
+                quickLooksDisabled: toolbarButtonsDisabled,
+                detailsViewDisabled: toolbarButtonsDisabled
             };
             if (this.model.get('displayName')) {
                 this.$el.attr('data-row-instanceid', this.model.get('displayName'));
@@ -91,6 +95,12 @@ define('main/components/views/appletViews/observationsGistView/views/observation
             this.model.set('AppletID', this.AppletID);
             this.childViewContainer = ".gist-item-list";
         },
+        onRender: function(){
+            _.each(this.$('.toolbar-508'), function(span) {
+                var tooltipKey = span.innerHTML;
+                span.innerHTML = '( ' + TooltipMappings[tooltipKey] + ' )';
+            });
+        }
     });
 
     var ObservationsGistView = {

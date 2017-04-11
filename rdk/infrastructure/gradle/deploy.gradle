@@ -24,7 +24,6 @@ def projectInfoCollection = [
     taskNamePart : 'jbpm',
     dependsOn : [
       ":production:jbpm:FITLabProject:build",
-      ":production:jbpm:VistaTasks:build",
       ":production:jbpm:General_Medicine:build",
       ":production:jbpm:Order:build",
       ":production:jbpm:Activity:build",
@@ -42,7 +41,6 @@ def projectInfoCollection = [
     testDeploy : true,
     vagrantEnvVarsLocal : [
       "DEV_DEPLOY": "true",
-      "JBPM_PROJECTS_LOCAL_FILE_1": "${-> project(':production:jbpm:VistaTasks').jar.outputs.files.singleFile.getCanonicalPath()}",
       "JBPM_PROJECTS_LOCAL_FILE_2": "${-> project(':production:jbpm:FITLabProject').jar.outputs.files.singleFile.getCanonicalPath()}",
       "JBPM_PROJECTS_LOCAL_FILE_3": "${-> project(':production:jbpm:General_Medicine').jar.outputs.files.singleFile.getCanonicalPath()}",
       "JBPM_PROJECTS_LOCAL_FILE_4": "${-> project(':production:jbpm:Order').jar.outputs.files.singleFile.getCanonicalPath()}",
@@ -56,7 +54,6 @@ def projectInfoCollection = [
       "JBPM_SQL_CONFIG_LOCAL_FILE": "${-> project(':production:jbpm:sql_config').tarSQLConfig.outputs.files.singleFile.getCanonicalPath()}"
     ],
     vagrantEnvVarsVersion : [
-      'JBPM_VISTATASKS_VERSION' : "${-> chooseStableBuild('rdk','acceptance-test','JBPM_VISTATASKS_VERSION')}",
       'JBPM_FITLABPROJECT_VERSION' : "${-> chooseStableBuild('rdk','acceptance-test','JBPM_FITLABPROJECT_VERSION')}",
       'JBPM_GENERAL_MEDICINE_VERSION' : "${-> chooseStableBuild('rdk','acceptance-test','JBPM_GENERAL_MEDICINE_VERSION')}",
       'JBPM_ORDER_VERSION' : "${-> chooseStableBuild('rdk','acceptance-test','JBPM_ORDER_VERSION')}",

@@ -2,7 +2,7 @@
 Feature: Health Summaries (VistA Web Health Exchange)
 
 Background:
-  Given POB user is logged into EHMP-UI with facility as  "KODAK" accesscode as  "pu1234" verifycode as  "pu1234!!"
+  Given POB user is logged into EHMP-UI with facility as  "KODAK" accesscode as  "PW    " verifycode as  "PW    !!"
   Then staff view screen is displayed
   Then Navigate to Patient Search Screen
   Then the patient search screen is displayed

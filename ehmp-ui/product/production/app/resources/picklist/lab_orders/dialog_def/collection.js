@@ -24,12 +24,12 @@ define([], function() {
     });
 
     var orderDef = ADK.Resources.Picklist.Collection.extend({
-        type: 'lab-order-dialog-def',
+        resource: 'write-pick-list-lab-order-dialog-def',
         model: OrderDefGroup,
         params: function(method, options) {
             return { //allergies.fetch({'searchString': 'ABC'})
                 site: ADK.UserService.getUserSession().get('site'),
-                 location: options.location
+                location: options.location
             };
         }
     });

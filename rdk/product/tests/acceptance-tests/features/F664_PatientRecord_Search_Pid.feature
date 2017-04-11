@@ -46,7 +46,7 @@ Scenario: Search Pid with non-existing pid
   When the client searches for pid where pid is "33333V999999"
   Then a internal server error response or a bad request response is returned
 
-@F664_PatientRecord_Search_Pid_Scenario_5 @de4179 @debug @de1862
+@F664_PatientRecord_Search_Pid_Scenario_5 @de4179 @de1862
 Scenario Outline: When a user searches for ICNONLY, patient and gets  1 results
   When the client requests global patient search with lname "<lastname>" and fname "<firstname>" and ssn "<ssnumber>" and dob "<dobirth>" and Content-Type "<contenttype>"
   Then a successful response is returned

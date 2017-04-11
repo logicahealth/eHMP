@@ -5,7 +5,6 @@ var _ = require('lodash');
 var httpUtil = rdk.utils.http;
 var nullChecker = require('../../utils/nullchecker');
 var uds = require('./user-defined-screens-resource');
-var dd = require('drilldown');
 var nullchecker = rdk.utils.nullchecker;
 
 var USER_SCREENS_CONFIG = 'UserScreensConfig';
@@ -14,7 +13,6 @@ var interceptors = {
     operationalDataCheck: false,
     synchronize: false
 };
-var permissions = [];
 var healthcheck = {
     dependencies: ['jdsSync']
 };
@@ -26,7 +24,7 @@ function getResourceConfig() {
         post: createSorting,
         interceptors: interceptors,
         healthcheck: healthcheck,
-        requiredPermissions: permissions,
+        requiredPermissions: ['access-general-ehmp'],
         isPatientCentric: false
     }, {
         name: 'user-defined-sort',
@@ -34,7 +32,7 @@ function getResourceConfig() {
         delete: removeSort,
         interceptors: interceptors,
         healthcheck: healthcheck,
-        requiredPermissions: permissions,
+        requiredPermissions: ['access-general-ehmp'],
         isPatientCentric: false
     }];
 }
@@ -72,7 +70,7 @@ function createSorting(req, res) {
         var sortData = {};
         var found;
 
-        userDefinedSortData = dd(data)('userDefinedSorts').val;
+        userDefinedSortData = _.get(data, 'userDefinedSorts');
 
         if(_.isObject(userDefinedSortData)) {
             for (count = 0; count < userDefinedSortData.length; count++) {
@@ -214,7 +212,7 @@ function removeSort(req, res) {
             return res.status(rdk.httpstatus.internal_server_error).rdkSend(err);
         }
 
-        userDefinedSortData = dd(data)('userDefinedSorts').val;
+        userDefinedSortData = _.get(data, 'userDefinedSorts');
         var sortData = {};
         var count = 0;
 
@@ -352,8 +350,8 @@ function getInstanceIdParameter(req) {
 function createScreenIdFromRequest(req, screenType) {
     var uid;
     var userSession = req.session.user;
-    var site = dd(userSession)('site').val;
-    var ien = dd(userSession)('duz')(site).val;
+    var site = _.get(userSession, 'site');
+    var ien = _.get(userSession, ['duz', site]);
 
     if(!_.isUndefined(site) && !_.isUndefined(ien)) {
         uid = site.concat(';').concat(ien);

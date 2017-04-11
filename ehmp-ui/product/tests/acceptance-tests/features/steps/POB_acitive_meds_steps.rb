@@ -46,3 +46,30 @@ When(/^user opens the first medication row$/) do
   @ehmp.wait_until_fld_med_item_visible
   @ehmp.fld_med_item.click
 end
+
+Then(/^the user sorts the Medication Gist by column Medication$/) do
+  @ehmp = PobActiveRecentMedApplet.new
+  @ehmp.wait_until_fld_active_meds_name_header_visible
+  expect(@ehmp).to have_fld_active_meds_name_header
+  @ehmp.fld_active_meds_name_header.click  
+end
+
+Then(/^the Medication Gist is sorted in alphabetic order based on Medication$/) do
+  @ehmp = PobActiveRecentMedApplet.new
+  @ehmp.wait_for_fld_gist_med_names
+    
+  column_values = @ehmp.fld_gist_med_names
+  expect(column_values.length).to be > 2
+  is_ascending = ascending? column_values
+  expect(is_ascending).to be(true), "Values are not in Alphabetical Order: #{print_all_value_from_list_elements(column_values) if is_ascending == false}"
+end
+
+Then(/^the Medication Gist is sorted in reverse alphabetic order based on Medication$/) do
+  @ehmp = PobActiveRecentMedApplet.new
+  @ehmp.wait_for_fld_gist_med_names
+  
+  column_values = @ehmp.fld_gist_med_names
+  expect(column_values.length).to be > 2
+  is_descending = descending? column_values
+  expect(is_descending).to be(true), "Values are not in reverse Alphabetical Order: #{print_all_value_from_list_elements(column_values) if is_descending == false}"
+end

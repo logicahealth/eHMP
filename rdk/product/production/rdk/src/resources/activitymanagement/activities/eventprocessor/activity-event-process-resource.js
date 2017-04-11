@@ -11,7 +11,6 @@ var async = require('async');
 var moment = require('moment');
 var activityDb = require('../../../../subsystems/jbpm/jbpm-subsystem');
 var handlebars = require('handlebars').create();
-var dd = require('drilldown');
 
 handlebars.registerHelper('obj', function(context) {
     return JSON.stringify(context);
@@ -110,13 +109,21 @@ function fillInDefinitions(formattedResponse, queryResponse, logger, callback) {
 }
 
 function startActivityEvent(req, res) {
+
     req.audit.dataDomain = 'ActivityEvent';
     req.audit.logCategory = 'START_ACTIVITY_EVENT';
-    var rawEventRequest = req.body;
-    if (typeof rawEventRequest !== 'object') {
-        var reqError = new Error('Invalid request body');
-        req.logger.error(reqError);
+    var rawEventRequest = _.get(req, 'body' , null);
+    if (rawEventRequest === null || typeof rawEventRequest !== 'object') {
+        var reqError = new Error('201 - Invalid request body');
+        req.logger.debug(reqError);
         return res.status(rdk.httpstatus.bad_request).rdkSend(reqError.message);
+    }
+
+    var activityDatabaseConfig = _.get(req, 'app.config.jbpm.activityDatabase' , null);
+    if (!activityDatabaseConfig || typeof activityDatabaseConfig !== 'object' || !activityDatabaseConfig.hasOwnProperty('user') || !activityDatabaseConfig.hasOwnProperty('password') || !activityDatabaseConfig.hasOwnProperty('connectString')) {
+        var configError = new Error('210 - Invalid request configuration');
+        req.logger.debug(configError); //will be logged out by caller - put stacktrace in debug
+        return res.status(rdk.httpstatus.bad_request).rdkSend(configError.message);
     }
 
     req.logger.trace('Raw Event Request - Received in AEP', rawEventRequest);
@@ -127,6 +134,7 @@ function startActivityEvent(req, res) {
         return res.status(rdk.httpstatus.ok).rdkSend('No matches');
     }
 
+    var bindVars = [];
     var simpleMatchFields = [];
     var simpleMatchValues = [];
     _.each(eventRequest, function(value, key) {
@@ -138,34 +146,58 @@ function startActivityEvent(req, res) {
 
     var query;
 
+
     if (simpleMatchFields.length > 0 && simpleMatchFields.length === simpleMatchValues.length) {
         query = 'SELECT EMA.SIGNAL_NAME, DBMS_LOB.substr(EMA.SIGNAL_CONTENT, 3000) AS SIGNAL_CONTENT, EMA.EVENT_MTCH_DEF_ID, EMA.EVENT_MTCH_VERSION, EMA.EVENT_MTCH_INST_ID, EVL.EVENT_ACTION_SCOPE, EVL.NAME, EVL.LISTENER_ID, EVL.API_VERSION, PI.DEPLOYMENTID AS INSTANCEDEPLOYMENTID ';
         query += 'FROM "ACTIVITYDB"."EVENT_MATCH_CRITERIA" EMC INNER JOIN "ACTIVITYDB"."AM_EVENTLISTENER" EVL ON EVL.EVENT_MTCH_CRITERIA_ID = EMC.ID INNER JOIN "ACTIVITYDB"."EVENT_MATCH_ACTION" EMA ON EVL.EVENT_MTCH_ACTION_ID = EMA.ID LEFT JOIN "ACTIVITYDB"."AM_PROCESSINSTANCE" PI ON EMA.EVENT_MTCH_INST_ID = PI.PROCESSINSTANCEID ';
         query += 'WHERE EMC.ID IN (SELECT CID FROM (SELECT CID, COUNT(CID) AS ACTUAL_COUNT, (SELECT COUNT(*) FROM activitydb.SIMPLE_MATCH SM0 WHERE SM0.EVENT_MTCH_CRI_ID = CID) AS MAX_COUNT FROM (';
+
         for (var i = 0; i < simpleMatchFields.length; i++) {
             if (i > 0) {
                 query += ' UNION ALL ';
             }
-            query += 'SELECT DISTINCT SM.EVENT_MTCH_CRI_ID AS CID FROM activitydb.SIMPLE_MATCH SM WHERE LOWER(SM.MATCHFIELD) = ' + (simpleMatchFields[i] ? '\'' + simpleMatchFields[i].toLowerCase() + '\'' : 'null') + ' AND (\',\' || RTRIM(LOWER(SM.MATCHVALUE)) || \',\') LIKE ' + (simpleMatchValues[i] ? '\'%,' + simpleMatchValues[i].toLowerCase() + ',%\'' : 'null');
+
+            query += 'SELECT DISTINCT SM.EVENT_MTCH_CRI_ID AS CID FROM activitydb.SIMPLE_MATCH SM WHERE LOWER(SM.MATCHFIELD) = ';
+
+            if(simpleMatchFields[i]) {
+                query += ':matchfld' + (i+1);
+                bindVars.push(simpleMatchFields[i].toLowerCase());
+            } else {
+                query += 'null';
+            }
+
+            query += ' AND (\',\' || RTRIM(LOWER(SM.MATCHVALUE)) || \',\') LIKE ';
+
+            if(simpleMatchValues[i]) {
+                bindVars.push(simpleMatchValues[i].toLowerCase());
+                query += '\'%,\'||:matchval' + (i+1) + '||\',%\'';
+            } else {
+                query += 'null';
+            }
         }
         query += ') GROUP BY CID)';
         query += ' WHERE ACTUAL_COUNT = MAX_COUNT';
         query += ')';
     } else {
-        var matchError = new Error('Invalid request body');
+        var matchError = new Error('202 - Invalid request body');
         req.logger.error(matchError);
         return res.status(rdk.httpstatus.bad_request).rdkSend(matchError.message);
     }
 
     req.logger.debug('activity-event-process-resource:startActivityEvent matchQuery %s', query);
 
-    //Sample generated query:
-    //SELECT EMA.SIGNAL_NAME, DBMS_LOB.substr(EMA.SIGNAL_CONTENT, 3000) AS SIGNAL_CONTENT, EMA.EVENT_MTCH_DEF_ID, EMA.EVENT_MTCH_VERSION, EMA.EVENT_MTCH_INST_ID, EVL.EVENT_ACTION_SCOPE, EVL.NAME, EVL.LISTENER_ID, EVL.API_VERSION, PI.DEPLOYMENTID AS INSTANCEDEPLOYMENTID FROM "ACTIVITYDB"."EVENT_MATCH_CRITERIA" EMC INNER JOIN "ACTIVITYDB"."AM_EVENTLISTENER" EVL ON EVL.EVENT_MTCH_CRITERIA_ID = EMC.ID INNER JOIN "ACTIVITYDB"."EVENT_MATCH_ACTION" EMA ON EVL.EVENT_MTCH_ACTION_ID = EMA.ID LEFT JOIN "ACTIVITYDB"."AM_PROCESSINSTANCE" PI ON EMA.EVENT_MTCH_INST_ID = PI.PROCESSINSTANCEID WHERE EMC.ID IN (SELECT CID FROM (SELECT CID, COUNT(CID) AS ACTUAL_COUNT, (SELECT COUNT(*) FROM activitydb.SIMPLE_MATCH SM0 WHERE SM0.EVENT_MTCH_CRI_ID = CID) AS MAX_COUNT FROM (SELECT DISTINCT SM.EVENT_MTCH_CRI_ID AS CID FROM activitydb.SIMPLE_MATCH SM WHERE LOWER(SM.MATCHFIELD) = 'domain' AND LOWER(SM.MATCHVALUE) = 'ehmp-order' UNION ALL SELECT DISTINCT SM.EVENT_MTCH_CRI_ID AS CID FROM activitydb.SIMPLE_MATCH SM WHERE LOWER(SM.MATCHFIELD) = 'subdomain' AND LOWER(SM.MATCHVALUE) = 'laboratory' UNION ALL SELECT DISTINCT SM.EVENT_MTCH_CRI_ID AS CID FROM activitydb.SIMPLE_MATCH SM WHERE LOWER(SM.MATCHFIELD) = 'uid' AND LOWER(SM.MATCHVALUE) = 'urn:va:patient:9e7a:3:3432423427' UNION ALL SELECT DISTINCT SM.EVENT_MTCH_CRI_ID AS CID FROM activitydb.SIMPLE_MATCH SM WHERE LOWER(SM.MATCHFIELD) = 'ehmpstate' AND LOWER(SM.MATCHVALUE) = 'active' UNION ALL SELECT DISTINCT SM.EVENT_MTCH_CRI_ID AS CID FROM activitydb.SIMPLE_MATCH SM WHERE LOWER(SM.MATCHFIELD) = 'referenceid' AND LOWER(SM.MATCHVALUE) = 'urn:va:order:9e7a:3:40988' UNION ALL SELECT DISTINCT SM.EVENT_MTCH_CRI_ID AS CID FROM activitydb.SIMPLE_MATCH SM WHERE LOWER(SM.MATCHFIELD) = 'patientuid' AND LOWER(SM.MATCHVALUE) = 'urn:va:patient:9e7a:3:3' UNION ALL SELECT DISTINCT SM.EVENT_MTCH_CRI_ID AS CID FROM activitydb.SIMPLE_MATCH SM WHERE LOWER(SM.MATCHFIELD) = 'icn' AND LOWER(SM.MATCHVALUE) = null) GROUP BY CID) WHERE ACTUAL_COUNT = MAX_COUNT)
-
     var cb = function(err, rawQueryResponse) {
         if (err) {
             req.logger.error(err);
-            res.status(rdk.httpstatus.internal_server_error).rdkSend(err);
+            var status;
+            if (err instanceof activityDb.ConnectionError) {
+                status = rdk.httpstatus.service_unavailable;
+                err.message = '101 - ' + err.message;
+            } else {
+                status = rdk.httpstatus.internal_server_error;
+                err.message = '203 - ' + err.message;
+            }
+            return res.status(status).rdkSend(err);
         }
 
         if (_.size(rawQueryResponse) === 0) {
@@ -181,9 +213,10 @@ function startActivityEvent(req, res) {
             getProcessDefinitions = function(dpCallback) {
                 activitiesResource.doProcessDefinitionsFetch(activitiesResource.getDefinitionsFetchConfig(req), function(err, formattedResponse) {
                     if (err) {
+                        err.message = '102 - ' + err.message;
                         req.logger.error(err);
                         processDefinitionsCache = {};
-                        dpCallback(err);
+                        return dpCallback(err);
                     }
                     processDefinitionsCache = formattedResponse;
                     req.logger.trace('Got deployments from JBPM', processDefinitionsCache.data.items);
@@ -230,10 +263,11 @@ function startActivityEvent(req, res) {
                                 instantiationSignalContent = JSON.parse(instantiationSignalContent);
                             } catch (e) {
                                 dataError = e;
+                                dataError.message = '204 - ' + e.message;
                             }
 
                         } else if (!dataError) {
-                            dataError = new Error('Unable to find required instantiation signal field: LISTENER_ID');
+                            dataError = new Error('205 - Unable to find required instantiation signal field: LISTENER_ID');
                         }
 
                         if (nullchecker.isNotNullish(instantiationSignalContent) && nullchecker.isNotNullish(deploymentId) && nullchecker.isNotNullish(processInstanceId) && !dataError) {
@@ -245,8 +279,13 @@ function startActivityEvent(req, res) {
                             var createAsyncInstantiationSignal = function(asyncCallback) {
 
                                 //check processed_event_state to make sure it hasn't already been done
-                                checkIfInstantiated(eventListener.LISTENER_ID, eventRequest, req.logger, req.app.config.jbpm.activityDatabase, function(err, isInsantiated) {
+                                checkIfInstantiated(eventListener.LISTENER_ID, eventRequest, req.logger, activityDatabaseConfig, function(err, isInsantiated) {
                                     if (err) {
+                                        if (err instanceof activityDb.ConnectionError) {
+                                            err.message = '103 - ' + err.message;
+                                        } else {
+                                            err.message = '206 - ' + err.message;
+                                        }
                                         return asyncCallback(err);
                                     }
 
@@ -255,6 +294,7 @@ function startActivityEvent(req, res) {
                                     } else {
                                         var signalCallback = function(err, signalResult) {
                                             if (err) {
+                                                err.message = '104 - ' + err.message;
                                                 return asyncCallback(err);
                                             }
 
@@ -274,7 +314,7 @@ function startActivityEvent(req, res) {
                             asyncObject[asyncObjectKey] = createAsyncInstantiationSignal;
 
                         } else if (!dataError) {
-                            dataError = new Error('Missing required instantiation signal field(s)');
+                            dataError = new Error('207 - Missing required instantiation signal field(s)');
                         }
                     } else {
                         //Create a process if one not already created
@@ -286,7 +326,7 @@ function startActivityEvent(req, res) {
                             createAsyncProcess = function(asyncCallback) {
 
                                 //check processed_event_state to make sure it hasn't already been done
-                                checkIfInstantiated(eventListener.LISTENER_ID, dd(eventRequest)('uid').val || null, req.logger, req.app.config.jbpm.activityDatabase, function(err, isInsantiated) {
+                                checkIfInstantiated(eventListener.LISTENER_ID, _.get(eventRequest, 'uid') || null, req.logger, activityDatabaseConfig, function(err, isInsantiated) {
                                     if (err) {
                                         return asyncCallback(err);
                                     }
@@ -296,6 +336,7 @@ function startActivityEvent(req, res) {
                                     } else {
                                         activitiesResource.doStartProcess(getGenericJbpmConfig(req), deploymentId, processDefId, eventRequest, function(err, response) {
                                             if (err) {
+                                                err.message = '104 - ' + err.message;
                                                 return asyncCallback(err);
                                             }
 
@@ -308,7 +349,7 @@ function startActivityEvent(req, res) {
                             asyncObject[asyncObjectKey] = createAsyncProcess;
 
                         } else if (!dataError) {
-                            dataError = new Error('Missing required process instantiation field: LISTENER_ID');
+                            dataError = new Error('207 - Missing required process instantiation field: LISTENER_ID');
                         }
                     }
 
@@ -347,6 +388,7 @@ function startActivityEvent(req, res) {
 
                                 var signalCallback = function(err, signalResult) {
                                     if (err) {
+                                        err.message = '104 - ' + err.message;
                                         return asyncCallback(err);
                                     }
                                     return asyncCallback(null, signalResult);
@@ -359,13 +401,13 @@ function startActivityEvent(req, res) {
                             asyncObject[asyncObjectKey] = createAsyncRawSignal;
                         }
                     } else if (!dataError) {
-                        dataError = new Error('Missing required signal field(s)');
+                        dataError = new Error('207 - Missing required signal field(s)');
                     }
                 } else if (action === 'all') {
                     //No idea what this is supposed to do...
-                    dataError = new Error('Unimplemented EVENT_ACTION_SCOPE value');
+                    dataError = new Error('208 - Unimplemented EVENT_ACTION_SCOPE value');
                 } else {
-                    dataError = new Error('Invalid EVENT_ACTION_SCOPE value');
+                    dataError = new Error('209 - Invalid EVENT_ACTION_SCOPE value');
                 }
 
                 if (dataError) {
@@ -379,13 +421,13 @@ function startActivityEvent(req, res) {
                     req.logger.error(err);
                     return res.status(rdk.httpstatus.bad_request).rdkSend(err);
                 }
-                return res.rdkSend(asyncResults);
+                return res.status(rdk.httpstatus.ok).rdkSend(asyncResults);
             });
 
         });
     };
 
-    activityDb.doQuery(req, req.app.config.jbpm.activityDatabase, query, cb);
+    activityDb.doQueryWithParams(req, activityDatabaseConfig, query, bindVars, cb);
 }
 
 function flattenAndFilter(eventRequest) {

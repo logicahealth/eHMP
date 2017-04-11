@@ -29,12 +29,7 @@ allprojects  {
         }
     }
 
-    // TODO find out which one is correct. groupId or group? version?
     ext.set('groupId', 'us.vistacore.adk')
-    group = 'us.vistacore.adk'
-    // how to set project version?
-    version = '0.7-S51-SNAPSHOT'
-
     ext.set('repoCommitCount', '0.0.0.0')
     ext.set('commitCountDir', projectDir)
 

@@ -2,13 +2,13 @@ require 'vistarpc4r'
 
 # options
 #------------------------------------
-serve_ip = "IP_ADDRESS"
+serve_ip = "IP        "
 allergy_amount = 212 # up to 212
 patient_id = "100841" # alpha test
 #------------------------------------
 
 
-broker = VistaRPC4r::RPCBrokerConnection.new(serve_ip, 9210, "lu1234", "lu1234!!", false)
+broker = VistaRPC4r::RPCBrokerConnection.new(serve_ip, 9210, "PW    ", "PW    !!", false)
 broker.connect
 broker.setContext('OR CPRS GUI CHART')
 

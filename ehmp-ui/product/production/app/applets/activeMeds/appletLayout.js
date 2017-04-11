@@ -18,6 +18,8 @@ define([
                     var crsUtil = ADK.utils.crsUtil;
                     response.name = name.concat(sig);
                     response[crsUtil.crsAttributes.CRSDOMAIN] = crsUtil.domain.MEDICATION;
+                    response.applet_id = 'activeMeds';
+                    response.infobuttonContext ='MLREV';
                     return response;
                 }
             }
@@ -46,14 +48,10 @@ define([
         }]
     };
 
-    var filterFields = _.pluck(summaryConfiguration.summaryColumns, 'name');
-    filterFields.push('drugClassName');
-
     var AppletLayoutView = ADK.Applets.BaseGridApplet.extend({
         initialize: function(options) {
             this._super = ADK.Applets.BaseGridApplet.prototype;
-            var self = this,
-                patientType = ADK.PatientRecordService.getCurrentPatient().patientStatusClass(),
+            var patientType = ADK.PatientRecordService.getCurrentPatient().patientStatusClass(),
                 viewType = 'summary';
 
             if (options.appletConfig.viewType !== undefined) {
@@ -62,6 +60,7 @@ define([
 
             this.appletOptions = {
                 filterEnabled: true, // removed for demo purposes due to it not working well with the timeline
+                filterFields: ['normalizedName', 'age', 'totalFillsRemaining', 'sig', 'drugClassName'],
                 summaryColumns: summaryConfiguration.summaryColumns,
                 appletConfiguration: summaryConfiguration,
                 enableModal: true,
@@ -80,10 +79,6 @@ define([
 
             };
 
-            this.appletOptions.collection.on('sync', function(collection) {
-                self.shadowCollection = collection.clone();
-            });
-
             this.listenTo(this.appletOptions.collection, 'customfilter', this.onCustomFilter);
             this.listenTo(this.appletOptions.collection, 'clear_customfilter', this.onClearCustomFilter);
 
@@ -98,22 +93,19 @@ define([
         },
         onCustomFilter: function(search) {
             var self = this;
-            if (self.shadowCollection === undefined) {
-                return;
-            }
 
-            var filtered = self.shadowCollection.filter(function(item) {
+            var filtered = _.filter(this.appletOptions.collection.originalModels,function(item) {
                 var filterString = '';
-                _.each(filterFields, function(field) {
+                _.each(self.appletOptions.filterFields, function(field) {
                     if (field === 'drugClassName') {
-                        var productLength = item.get('products') !== undefined ? item.get('products').length : 0;
+                        var productLength = item.products !== undefined ? item.products.length : 0;
                         for (var i = 0; i < productLength; i++) {
-                            if (item.get('products')[i].drugClassName !== undefined) {
-                                filterString = filterString + ' ' + item.get('products')[i].drugClassName;
+                            if (item.products[i].drugClassName !== undefined) {
+                                filterString = filterString + ' ' + item.products[i].drugClassName;
                             }
                         }
                     } else {
-                        filterString = filterString + ' ' + item.get(field);
+                        filterString = filterString + ' ' + item[field];
                     }
 
                 });
@@ -123,18 +115,21 @@ define([
                     return true;
                 }
             });
-            var filteredCollection = new Backbone.Collection();
-            filteredCollection.reset(filtered);
-            this.appletOptions.collection.reset(filteredCollection.models);
+
+            this.appletOptions.collection.reset(filtered);
         },
         onClearCustomFilter: function(search) {
-            this.appletOptions.collection.reset(this.shadowCollection.models);
+            this.appletOptions.collection.reset(this.appletOptions.collection.originalModels);
             if (search) {
                 this.onCustomFilter(search);
             }
         },
         onRender: function() {
             this._super.onRender.apply(this, arguments);
+        },
+        refresh: function() {
+            ADK.ResourceService.clearCacheByResourceTitle('patient-record-med');
+            this._super.refresh.apply(this, arguments);
         }
     });
 

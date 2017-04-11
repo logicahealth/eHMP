@@ -7,7 +7,7 @@ Background:
   And user searches for and selects "Eight,Patient"
   Then Cover Sheet is active
 
-@detail_next_previous
+@detail_next_previous @DE5921 @DE6551
 Scenario: Verify user can step through the problems using the next button / previous button
   Given the Problems applet displays
   And the problems applet displays at least 3 problem rows
@@ -17,7 +17,7 @@ Scenario: Verify user can step through the problems using the next button / prev
   And the user can step through the problems using the next button
   And the user can step through the problems using the previous button
 
-@US2411a
+@US2411a @DE5921
 Scenario: User uses the active problems coversheet to view modal
     When the Problems applet displays
     And the user views a problem applet row's details
@@ -63,7 +63,7 @@ Scenario: User views the expanded Active Problems
 	 | Facility | 
 	 | Comments | 
 
-@US2411c 
+@US2411c @DE5921
 Scenario: User uses the active problems expanded to view modal
   When the user clicks the Problems Expand Button
   When the Problems applet displays
@@ -121,4 +121,12 @@ Scenario: Verify Problems applet expanded view has info button toolbar
   And user navigates to problems expanded view 
   When user opens the first problems row
   Then problems info button is displayed
+  
+@f144_problems_modal_details_expand_view @DE5921 @DE6551
+Scenario: User views the problems gist modal pop-up from expand view
+    When the user clicks the Problems Expand Button
+    Then the expanded Problems Applet is displayed
+    And the user views a problem applet row's details
+    Then the modal is displayed
+    And the modal's title is "Diabetes Mellitus Type II or unspecified"
 	

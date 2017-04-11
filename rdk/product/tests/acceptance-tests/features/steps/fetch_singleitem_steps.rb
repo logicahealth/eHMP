@@ -64,9 +64,15 @@ Then(/^the response contains error message$/) do |table|
   search_json(result_array, table)
 end
 
-Then(/^the authentication response contains error message$/) do |table|
+And(/^the authentication response contains error message$/) do |table|
   @json_object = JSON.parse(@response.body)
-  result_array = [@json_object]
-  search_json(result_array, table)
+  result_array = @json_object["data"]
+  search_json([result_array], table)
+end
+
+And(/^the response contains$/) do |table|
+  @json_object = JSON.parse(@response.body)
+  result_array = @json_object["data"]
+  search_json([result_array], table)
 end
 

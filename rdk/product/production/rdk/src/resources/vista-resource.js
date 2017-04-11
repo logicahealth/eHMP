@@ -1,4 +1,3 @@
-/*jslint node: true*/
 'use strict';
 
 var rdk = require('../core/rdk');
@@ -26,7 +25,7 @@ function runRpc(req, res) {
 
     var json = JSON.parse(req.param('payload'));
 
-    var vistaConfig = getVistaRpcConfiguration(req.app.config, req.session.user.site, req.session.user);
+    var vistaConfig = getVistaRpcConfiguration(req.app.config, req.session.user);
 
     RpcClient.callRpc(req.logger, vistaConfig, json.rpc, json.params, function(error, response) {
         if (!error) {

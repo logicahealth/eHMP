@@ -2,20 +2,19 @@
 	<div class="header table-row" role="row">
         <div class="flex-width-1" role="presentation">
             <div aria-sort="none" role="gridcell" class="table-cell flex-width-2">
-                <div>
-                    <a href="#" data-header-instanceid="name-header"
-                         role="button"
-                         class="{{#if gistHeaders.name.sortable}}selectable{{/if}}"
-                         sortable="{{gistHeaders.name.sortable}}"
-                         sortType="{{gistHeaders.name.sortType}}"
-                         sortDirection="none"
-                         sortKey="{{gistHeaders.name.key}}"
-                         tooltip-data-key="{{gistHeaders.name.hoverTip}}">
-                        {{gistHeaders.name.title}}
-                        <i sortArrow="headerDirectionalIndicator" class="sort-caret fa color-primary"></i>
-                        <span class="sr-only">Press enter to sort.</span>
-                    </a>
-                </div>
+                <a href="#" data-header-instanceid="name-header"
+                     role="button"
+                     class="{{#if gistHeaders.name.sortable}}selectable{{/if}}"
+                     sortable="{{gistHeaders.name.sortable}}"
+                     sortType="{{gistHeaders.name.sortType}}"
+                     sortDirection="none"
+                     sortKey="{{gistHeaders.name.key}}"
+                     tooltip-data-key="{{gistHeaders.name.hoverTip}}">
+                    {{gistHeaders.name.title}}
+                    <i sortArrow="headerDirectionalIndicator" class="sort-caret fa color-primary"></i>
+                    <span class="sr-only toolbar-508">{{gistHeaders.name.hoverTip}}</span>
+                    <span class="sr-only sort-span">Press enter to sort</span>
+                </a>
             </div>
             {{#if gistHeaders.acuityName.title}}
             <div aria-sort="none" role="gridcell" class="table-cell">
@@ -29,7 +28,8 @@
                      tooltip-data-key="{{gistHeaders.acuityName.hoverTip}}">
                     {{gistHeaders.acuityName.title}}
                     <i sortArrow="headerDirectionalIndicator" class="sort-caret fa color-primary"></i>
-                    <span class="sr-only">Press enter to sort.</span>
+                    <span class="sr-only toolbar-508">{{gistHeaders.acuityName.hoverTip}}</span>
+                    <span class="sr-only sort-span">Press enter to sort</span>
                 </a>
             </div>
             {{/if}}
@@ -47,7 +47,8 @@
                      tooltip-data-key="{{gistHeaders.age.hoverTip}}">
                     {{gistHeaders.age.title}}
                     <i sortArrow="headerDirectionalIndicator" class="sort-caret fa color-primary"></i>
-                    <span class="sr-only">Press enter to sort.</span>
+                    <span class="sr-only toolbar-508">{{gistHeaders.age.hoverTip}}</span>
+                    <span class="sr-only sort-span">Press enter to sort</span>
                 </a>
             </div>
             <div aria-sort="none" role="gridcell" class="table-cell flex-width-3_5">
@@ -61,14 +62,15 @@
                      tooltip-data-key="{{gistHeaders.itemsInGraphCount.hoverTip}}">
                     {{gistHeaders.itemsInGraphCount.title}}
                     <i sortArrow="headerDirectionalIndicator" class="sort-caret fa color-primary"></i>
-                    <span class="sr-only">Press enter to sort.</span>
+                    <span class="sr-only toolbar-508">{{gistHeaders.itemsInGraphCount.hoverTip}}</span>
+                    <span class="sr-only sort-span">Press enter to sort</span>
                 </a>
             </div>
             <div role="gridcell" data-header-instanceid="graph-header">
                 {{gistHeaders.graph.title}}
-                <span class="sr-only">Graph. Not a sortable column.</span>
+                <span class="sr-only">This is a graph and is not sortable</span>
             </div>
         </div>
 	</div>
-	<div class="gist-item-list body scrolling-content" role="rowgroup"></div>
+	<div class="gist-item-list body auto-overflow-y" role="rowgroup"></div>
 </div>

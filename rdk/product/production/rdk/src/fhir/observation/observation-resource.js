@@ -1,4 +1,5 @@
 'use strict';
+//Code was commented out, not removed, for possible reuse at a later date if health factors, aka social-history, are syncd.
 var rdk = require('../../core/rdk');
 var _ = require('lodash');
 var async = require('async');
@@ -6,7 +7,9 @@ var nullchecker = rdk.utils.nullchecker;
 var helpers = require('../common/utils/helpers.js');
 var fhirUtils = require('../common/utils/fhir-converter');
 var vitals = require('./vitals/vitals-resource');
-var healthFactors = require('./health-factors/health-factors');
+////No-Health-Factors ++
+//var healthFactors = require('./health-factors/health-factors');
+////No-Health-Factors --
 var fhirToJDSSearch = require('../common/utils/fhir-to-jds-search');
 var fhirResource = require('../common/entities/fhir-resource');
 var observationUtils = require('./observation-utils');
@@ -27,7 +30,23 @@ var fhirToJDSAttrMap = [{
     definition: 'http://www.hl7.org/FHIR/2015May/datatypes.html#string',
     description: 'What action is being ordered - a tokenized value containing a single field, or 2 pipe separated fields called \'system\' and \'code\'.  The system field (left side of pipe) and pipe is optional and may be omitted. If the system field is empty and the pipe is included, it is implied that the field should not exist in the results.  Multiple codes can be specified, by joining with a comma, which signifies an OR clause.  (Valid examples: [code=8310-5] [code=http://loinc.org|8310-5] [code=9279-1,8310-5] [code=http://loinc.org|9279-1,8310-5] [code=http://loinc.org|9279-1,http://loinc.org|8310-5] [code=|8310-5] [code=8310-5,|9279-1])',
     searchable: true
+},{
+    //this is effectively a searchable attribute, and is added here for conformance.
+    fhirName: '_tag',
+    vprName: '',
+    dataType: 'string',
+    definition: 'http://www.hl7.org/FHIR/2015May/datatypes.html#string',
+    description: 'To specify a specific subset, use either vital-signs or social-history. (social-history is currently not implemented.)' ,
+    searchable: true
+},{
+    fhirName: '_sort',
+    vprName: '',
+    dataType: 'string',
+    definition: 'http://hl7.org/FHIR/2015May/datatypes.html#string',
+    description: 'Sort criteria. Ascending order by default, order is specified with the following variants:  _sort:asc (ascending), _sort:desc (descending). Supported sort properties: date, identifier, patient, performer, subject, value-quantity.',
+    searchable: true
 }];
+confUtils.addCountAttribute(fhirToJDSAttrMap); //adding the _count attribute that is common to (almost) all endpoints.
 
 // Issue call to Conformance registration
 conformance.register(confUtils.domains.OBSERVATION, createObservationConformanceData());
@@ -48,14 +67,21 @@ var TAGS = {
 
 function getResourceConfig() {
     return [{
-        name: 'vitals-observation',
+        name: 'fhir-vitals-observation',
         path: '',
         get: getObservation,
         subsystems: ['patientrecord', 'jds', 'solr', 'jdsSync', 'authorization'],
-        interceptors: {
-            fhirPid: true
-        },
-        requiredPermissions: [],
+        interceptors: { fhirPid: true },
+        requiredPermissions: ['read-fhir'],
+        isPatientCentric: true,
+        permitResponseFormat: true
+    },{
+        name: 'fhir-vitals-observation-search',
+        path: '_search',
+        post: getObservation,
+        subsystems: ['patientrecord', 'jds', 'solr', 'jdsSync', 'authorization'],
+        interceptors: { fhirPid: true },
+        requiredPermissions: ['read-fhir'],
         isPatientCentric: true,
         permitResponseFormat: true
     }];
@@ -72,58 +98,62 @@ function limitFHIRResultByCount(fhirBundle, countStr) {
  * @api {get} /fhir/patient/{id}/observation Get Observation
  * @apiName getObservation
  * @apiGroup Observation
+ * @apiParam {String} id The patient id
  * @apiParam {Number} [_count] The number of results to show.
  * @apiParam {String} [code] a tokenized value containing a single field, or 2 pipe separated fields called 'system' and 'code'.  The system field (left side of pipe) and pipe is optional and may be omitted. If the system field is empty and the pipe is included, it is implied that the field should not exist in the results.  Multiple codes can be specified, by joining with a comma, which signifies an OR clause.  (Valid examples: [code=8310-5] [code=http://loinc.org|8310-5] [code=9279-1,8310-5] [code=http://loinc.org|9279-1,8310-5] [code=http://loinc.org|9279-1,http://loinc.org|8310-5] [code=|8310-5] [code=8310-5,|9279-1] @see http://www.hl7.org/FHIR/2015May/search.html#token
  * @apiParam {String} [date] Obtained date/time. The prefixes >, >=, <=, < and != may be used on the parameter value (e.g. date=>2015-01-15). The following date formats are permitted: yyyy-mm-ddThh:mm:ss (exact date search), yyyy-mm-dd (within given day), yyyy-mm (within given month), yyyy (within given year). A single date parameter can be used for an exact date search (e.g. date=2015-01-26T08:30:00) or an implicit range (e.g. date=2015-01, searches all dates in January 2015). Two date parameters can be used to specify an explicitly bounded range. When using a pair of date parameters, the parameters should bind both ends of the range. One should have a less-than operator (<, <=) while the other a greater-than operator (>, >=). Consult the <a href="http://www.hl7.org/FHIR/2015May/search.html#date">FHIR DSTU2 API</a> documentation for more information.
+ * @apiParam {String} [_tag] To specify a specific subset, either vital-signs
  * @apiParam {String} [_sort] Sort criteria. Ascending order by default, order is specified with the following variants:  _sort:asc (ascending), _sort:desc (descending). Supported sort properties: date, identifier, patient, performer, subject, value-quantity.
+ * @apiParam {String} [_sort:desc] Descending sort criteria. Order is specified with the following variants:  _sort:asc (ascending), _sort:desc (descending). Supported sort properties: date, identifier, patient, performer, subject, value-quantity.
+ * @apiParam {String} [_sort:asc] Ascending sort criteria. Order is specified with the following variants:  _sort:asc (ascending), _sort:desc (descending). Supported sort properties: date, identifier, patient, performer, subject, value-quantity.
  *
  * @apiDescription Converts a vpr \'vitals\' resource into a FHIR \'observation\' resource.
  *
  * @apiExample {js} Request Examples:
  *      // Limiting results count
- *      http://IPADDRESS:POR/resource/fhir/patient/9E7A;253/observation?_count=1
+ *      http://IP           /resource/fhir/patient/9E7A;253/observation?_count=1
  *
  *      // Exact date search
- *      http://IPADDRESS:POR/resource/fhir/patient/9E7A;253/observation?date=2015-01-26T13:45:00
+ *      http://IP           /resource/fhir/patient/9E7A;253/observation?date=2015-01-26T13:45:00
  *
  *      // Observations on a day
- *      http://IPADDRESS:POR/resource/fhir/patient/9E7A;253/observation?date=2015-01-26
+ *      http://IP           /resource/fhir/patient/9E7A;253/observation?date=2015-01-26
  *
  *      // Observations on a month
- *      http://IPADDRESS:POR/resource/fhir/patient/9E7A;253/observation?date=2015-01
+ *      http://IP           /resource/fhir/patient/9E7A;253/observation?date=2015-01
  *
  *      // Observations on a year
- *      http://IPADDRESS:POR/resource/fhir/patient/9E7A;253/observation?date=2015
+ *      http://IP           /resource/fhir/patient/9E7A;253/observation?date=2015
  *
  *      // Observations outside a date range (e.g. observations not occuring on January 2015)
- *      http://IPADDRESS:POR/resource/fhir/patient/9E7A;253/observation?date=!=2015-01
+ *      http://IP           /resource/fhir/patient/9E7A;253/observation?date=!=2015-01
  *
  *      // Explicit date range
- *      http://IPADDRESS:POR/resource/fhir/patient/9E7A;253/observation?date=>=2014-06&date=<=2014-09-20
+ *      http://IP           /resource/fhir/patient/9E7A;253/observation?date=>=2014-06&date=<=2014-09-20
  *
  *      // Observations of a particular code
- *      http://IPADDRESS:POR/resource/fhir/patient/9E7A;253/observation?code=9279-1
+ *      http://IP           /resource/fhir/patient/9E7A;253/observation?code=9279-1
  *
  *      // Observations of a particular code and system
- *      http://IPADDRESS:POR/resource/fhir/patient/9E7A;253/observation?code=http://loinc.org|9279-1
+ *      http://IP           /resource/fhir/patient/9E7A;253/observation?code=http://loinc.org|9279-1
  *
  *      // Observations sorted by date (sorts by Observation.appliesDateTime)
- *      http://IPADDRESS:POR/resource/fhir/patient/9E7A;253/observation?_sort=date
+ *      http://IP           /resource/fhir/patient/9E7A;253/observation?_sort=date
  *
  *      // Observations sorted by identifier (sorts by Observation.identifier.value)
- *      http://IPADDRESS:POR/resource/fhir/patient/9E7A;253/observation?_sort=identifier
+ *      http://IP           /resource/fhir/patient/9E7A;253/observation?_sort=identifier
  *
  *      // Observations sorted by performer (sorts by Observation.performer.display)
- *      http://IPADDRESS:POR/resource/fhir/patient/9E7A;253/observation?_sort=performer
+ *      http://IP           /resource/fhir/patient/9E7A;253/observation?_sort=performer
  *
  *      // Observations sorted by subject (sorts by Observation.subject.reference)
- *      http://IPADDRESS:POR/resource/fhir/patient/9E7A;253/observation?_sort=subject
+ *      http://IP           /resource/fhir/patient/9E7A;253/observation?_sort=subject
  *
  *      // Observations sorted by value-quantity (sorts by Observation.valueQuantity.value)
- *      http://IPADDRESS:POR/resource/fhir/patient/9E7A;253/observation?_sort=value-quantity
+ *      http://IP           /resource/fhir/patient/9E7A;253/observation?_sort=value-quantity
  *
  *      // Observations sorted by value-quantity in descending order
- *      http://IPADDRESS:POR/resource/fhir/patient/9E7A;253/observation?_sort:desc=value-quantity
+ *      http://IP           /resource/fhir/patient/9E7A;253/observation?_sort:desc=value-quantity
  *
  * @apiSuccess {json} data Json object conforming to the <a href="http://www.hl7.org/FHIR/2015May/observation.html">Observation FHIR DTSU2 specification</a>.
  * @apiSuccessExample Success-Response:
@@ -135,7 +165,7 @@ function limitFHIRResultByCount(fhirBundle, countStr) {
  *     "link": [
  *         {
  *             "rel": "self",
- *             "href": "http://IPADDRES/resource/fhir/patient/9E7A;253/observation?date=%3E2015-01-26T01:20:00Z&code=http://loinc.org|8310-5&_count=1"
+ *             "href": "http://IP      /resource/fhir/patient/9E7A;253/observation?date=%3E2015-01-26T01:20:00Z&code=http://loinc.org|8310-5&_count=1"
  *         }
  *     ],
  *     "meta": {
@@ -289,20 +319,23 @@ function fetchObservations(req, res) {
             });
         });
     }
-    if (!params._tag || params._tag === TAGS.HEALTH_FACTORS) {
-        asyncTasks.push(function(callback) {
-            healthFactors.getHealthFactors(config, logger, pid, params, function(error, body) {
-                var errorLog = processJDSError(logger, pid, error, body, 'Observation::getHealthFactors: ');
-                if (errorLog) {
-                    return callback(errorLog);
-                }
-                return callback(null, {
-                    fhirItems: healthFactors.convertToFHIRObservations(body.data.items, req),
-                    total: body.data.totalItems
-                });
-            });
-        });
-    }
+//// No-Health-Factors ++
+// NO Health-Factors
+//    if (!params._tag || params._tag === TAGS.HEALTH_FACTORS) {
+//        asyncTasks.push(function(callback) {
+//            healthFactors.getHealthFactors(config, logger, pid, params, function(error, body) {
+//                var errorLog = processJDSError(logger, pid, error, body, 'Observation::getHealthFactors: ');
+//                if (errorLog) {
+//                    return callback(errorLog);
+//                }
+//                return callback(null, {
+//                    fhirItems: healthFactors.convertToFHIRObservations(body.data.items, req),
+//                    total: body.data.totalItems
+//                });
+//            });
+//        });
+//    }
+//// No-Health-Factors --
 
     // make parallel requests and handle results
     async.parallel(asyncTasks, function(err, fhirResults) {
@@ -351,8 +384,13 @@ function wrapInFhirBundle(fhirResults, total, req) {
 }
 
 function validateParams(params, onSuccess, onError) {
-    if (nullchecker.isNotNullish(params._tag) && !_.includes([TAGS.HEALTH_FACTORS, TAGS.VITALS], params._tag)) {
-        return onError(['Unsupported _tag criteria. Supported attributes are: ' + TAGS.VITALS + ' and ' + TAGS.HEALTH_FACTORS + '.']);
+////No-Health-Factors ++
+//    if (nullchecker.isNotNullish(params._tag) && !_.includes([TAGS.HEALTH_FACTORS, TAGS.VITALS], params._tag)) {
+//      return onError(['Unsupported _tag criteria. Supported attributes are: ' + TAGS.VITALS + ' and ' + TAGS.HEALTH_FACTORS + '.']);
+//}
+////No-Health-Factors --
+    if (nullchecker.isNotNullish(params._tag) && !_.includes([TAGS.VITALS], params._tag)) {
+        return onError(['Unsupported _tag criteria. Supported attributes are: ' + TAGS.VITALS + '.']);
     }
 
     // check common parameters
@@ -365,7 +403,7 @@ function validateParams(params, onSuccess, onError) {
                 onError(['Unsupported _sort criteria. Supported attributes are: date, identifier, patient, performer, subject and value-quantity']);
             }
         }, onError);
-        // TODO: add validation for code param
+        // Future TODO: add validation for code param
     }, onError);
 }
 

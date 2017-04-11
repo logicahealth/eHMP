@@ -73,7 +73,7 @@ var sampleDodMedication = {
   'refills' : '0',
   'sigCode' : 'TAKE 1 TABLET DAILY #30 RF0',
   'stopDate' : 1370984760000,
-  'rxnumber' : '130512-00010'
+  'rxNumber' : '130512-00010'
 };
 
 
@@ -91,7 +91,7 @@ var sampleDodMedication = {
       productFormName: 'ASTEMIZOLE, 10 MG, TABLET, ORAL',
       productFormCode: '2157553059',
       name: 'ASTEMIZOLE, 10 MG, TABLET, ORAL',
-      facilityName: 'DOD',
+      facilityName: '4th Medical Group/0090',
       facilityCode: 'DOD',
       sig: 'TAKE 1 TABLET DAILY #30 RF0',
       uid: 'urn:va:med:DOD:00000099:1000001023',
@@ -105,7 +105,9 @@ var sampleDodMedication = {
            dispensingPharmacy: 'PROVIDER ORDER ENTER' } ],
       products: [ { suppliedName: 'ASTEMIZOLE, 10 MG, TABLET, ORAL' } ],
       orders:
-       [ { daysSupply: '30',
+       [ { locationName: '4th Medical Group/0090',
+           orderUid: '130512-00010',
+           daysSupply: '30',
            quantityOrdered: '30',
            fillsRemaining: '0',
            providerName: 'SJF, FIVE' } ]

@@ -14,6 +14,7 @@ class PobGlobalDateFilter < SitePrism::Page
   element :btn_date_region_minimized, "#date-region-minimized"
   element :fld_from_date, "#filterFromDateGlobal"
   element :fld_to_date, "#filterToDateGlobal"
+  element :fld_date_range_chosen, "#date-region-minimized span"
 
   element :fld_empty_row, "#data-grid-newsfeed-gdt tr.empty"
   elements :fld_rows, "#data-grid-newsfeed-gdt tbody tr.selectable"

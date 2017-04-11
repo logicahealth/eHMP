@@ -64,7 +64,7 @@ function handle(log, config, environment, job, handlerCallback) {
                         if (error) {
                             log.error('vler-to-vpr-xform-handler.handle:  Failed to publish jobs.  error: %s; response: %s; jobs: %j', error, response, jobsToPublish);
 
-                            // TODO:   Push this to an error message location.  We do not want to error out the entire set of messages for one problem.
+                            // FUTURETODO:   Push this to an error message location.  We do not want to error out the entire set of messages for one problem.
                             //--------------------------------------------------------------------------------------------------------------------------
                             return handlerCallback(null, 'FailedToPublishJobs');
                         }

@@ -77,7 +77,10 @@ var mapMedicationDataRecord = function (v2DataRecord) {
     v4DataRecord.interval = maputil.nullInsteadOfEmptyString(v2MedicationOrder.IntervalTimeInterval);
     v4DataRecord.numberOfRefills = maputil.nullInsteadOfEmptyString(v2MedicationOrder.NumberOfRefills);
     v4DataRecord.comment = maputil.nullInsteadOfEmptyString(v2MedicationOrder.OrderComment);
-    v4DataRecord.priorOrderNumber = maputil.nullInsteadOfEmptyOneElementObject(v2MedicationOrder.PriorOrderNumber, "id");
+    v4DataRecord.priorOrderNumber = {assigningAuthority: maputil.nullInsteadOfEmptyString(v2DataRecord.RepositoryId), 
+    		id: maputil.nullInsteadOfEmptyOneElementObject(v2MedicationOrder.PriorOrderNumber, "id")};
+    	
+    	
     v4DataRecord.priority = maputil.nullInsteadOfEmptyString(v2MedicationOrder.Priority);
     v4DataRecord.quantity = maputil.nullInsteadOfEmptyString(v2MedicationOrder.Quantity);
     v4DataRecord.requestedDispenseAmount = maputil.nullInsteadOfEmptyString(v2MedicationOrder.RequestedDispenseAmount);

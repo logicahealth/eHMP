@@ -205,6 +205,7 @@
       }
 
       if (!opts.prefill) {
+        this.trigger('request', this, this.parse(attributes, opts), opts);
         return deferred;
       }
     }
@@ -305,6 +306,7 @@
       }
 
       if (!opts.prefill) {
+        this.trigger('request', this, this.parse(attributes, opts), opts);
         return deferred;
       }
     }

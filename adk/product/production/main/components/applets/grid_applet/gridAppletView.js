@@ -10,13 +10,12 @@ define([
     'main/components/views/errorView',
     'main/components/applets/grid_applet/views/filterDateRangeView',
     'hbs!main/components/applets/grid_applet/templates/containerTemplate',
-    'main/adk_utils/crsUtil'
-], function($, _, utils, DataGrid, CollectionFilter, ResourceService, SessionStorage, LoadingView, ErrorView, FilterDateRangeView, containerTemplate, CrsUtil) {
+    'main/adk_utils/crsUtil',
+    '/main/components/behaviors/tooltip.js'
+], function($, _, utils, DataGrid, CollectionFilter, ResourceService, SessionStorage, LoadingView, ErrorView, FilterDateRangeView, containerTemplate, CrsUtil, Tooltip) {
     'use strict';
 
     var SCROLL_TRIGGERPOINT = 40;
-    var SCROLL_ADDITIONAL_ROWS = 100;
-    var INITIAL_NUMBER_OF_ROWS = 30;
 
     function markInfobuttonData(that) {
         if (that.dataGridOptions.collection.length > 0 && !_.isUndefined(that.dataGridOptions.tblRowSelector)) {
@@ -26,8 +25,7 @@ define([
         }
     }
 
-    var GridAppletView = Backbone.Marionette.LayoutView.extend({
-
+    var GridAppletViewBase = Backbone.Marionette.LayoutView.extend({
         initialize: function(options) {
             if (this.options.appletConfig && _.isUndefined(this.options.appletConfig.instanceId)) {
                 this.options.appletConfig.instanceId = this.options.appletConfig.id;
@@ -277,8 +275,6 @@ define([
         },
         onShow: function() {
             this.showFilterView();
-
-            //TODO: move fetch data for grid to this section
         },
         template: containerTemplate,
         regions: {
@@ -292,7 +288,8 @@ define([
             'add': 'onClickAdd'
         },
         ui: {
-            'GroupHeader': 'tr.group-by-header'
+            'GroupHeader': 'tr.group-by-header',
+            '$tooltip': '[tooltip-data-key], [data-toggle=tooltip]'
         },
         events: {
             'click @ui.GroupHeader': 'fetchRowsOnClick'
@@ -368,7 +365,6 @@ define([
                     this.dataGridView.collection = this.dataGridOptions.collection;
                 }
             } else {
-                //TODO: find a way to bind datagridview collection to the dataGridView's collection
                 if (this.dataGridView instanceof Backbone.Marionette.View && this.dataGridView.collection) {
                     if (this.dataGridView.collection !== this.dataGridOptions.collection) {
                         this.dataGridView.collection = this.dataGridOptions.collection.models;
@@ -413,13 +409,10 @@ define([
                 });
                 elementToScroll.trigger("scroll.infinite");
             }
-
-            var i;
-            _.each(this.dataGridOptions.columns, function(column, index) {
-                i = index + 1;
-                $(applet).find('thead th:nth-child(' + i + ') a').attr('tooltip-data-key', column.hoverTip);
-            });
+            this.bindUIElements();
+            Tooltip.prototype.onRender.call(this);
         },
+        buildConfig: Tooltip.prototype.buildConfig,
         configureDataInfoButton: function() {
             if (this.dataGridOptions.collection.length > 0 && !_.isUndefined(this.dataGridOptions.tblRowSelector)) {
                 _.each(this.$(this.dataGridOptions.tblRowSelector), function(el) {
@@ -606,8 +599,7 @@ define([
 
     //DE3878: Applets extending BaseGridApplet not running base destroy methods
     //this piece will insure any methods defined here are run on both the base and extended view.
-    var Orig = GridAppletView,
-        Modified = Orig.extend({
+    var GridAppletView = GridAppletViewBase.extend({
             constructor: function() {
                 if (!this.options) this.options = {};
                 var args = Array.prototype.slice.call(arguments),
@@ -616,22 +608,21 @@ define([
 
                 this.onDestroy = function() {
                     var args = Array.prototype.slice.call(arguments);
-                    Orig.prototype.onDestroy.apply(this, args);
-                    if (Orig.prototype.onDestroy === onDestroy) return;
+                    GridAppletViewBase.prototype.onDestroy.apply(this, args);
+                    if (GridAppletViewBase.prototype.onDestroy === onDestroy) return;
                     onDestroy.apply(this, args);
                 };
 
                 this.onBeforeDestroy = function() {
                     var args = Array.prototype.slice.call(arguments);
-                    Orig.prototype.onBeforeDestroy.apply(this, args);
-                    if (Orig.prototype.onBeforeDestroy === onBeforeDestroy) return;
+                    GridAppletViewBase.prototype.onBeforeDestroy.apply(this, args);
+                    if (GridAppletViewBase.prototype.onBeforeDestroy === onBeforeDestroy) return;
                     onBeforeDestroy.apply(this, args);
                 };
 
-                Orig.prototype.constructor.apply(this, args);
+                GridAppletViewBase.prototype.constructor.apply(this, args);
             }
         });
-    GridAppletView = Modified;
 
     return GridAppletView;
 

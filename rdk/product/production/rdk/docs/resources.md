@@ -40,7 +40,7 @@ The resource server will register the configuration of the resource with the sys
  * What path to mount the resource on
  * What name to identify the resource by
  * [Middleware](middleware.md) the resource needs
- * [Documentation](#Document-the-resource) of how the resource should be used
+ * [Documentation](#Developing-a-Resource-Document-the-resource) of how the resource should be used
  * [Subsystems](subsystems.md) the resource depends on
  * Restrictions on permissions for accessing the resource
 
@@ -50,15 +50,15 @@ Resources provide configuration through an exported function called `getResource
 A configuration object may contain the following fields:
  * `name`: the name used to identify a resource, which must be only lowercase letters and spaces. This name will the title of the resource in the resource directory.
  * `path`: a mountpoint relative to the parent of the resource.
- * `interceptors`: an object which enables or disables cross-cutting middleware methods to be run prior to the resource handler.
- * `outerceptors`: an array of response transformers. Not commonly included in resource configurations.
+ * `interceptors`: middleware which runs before a request handler
+ * `outerceptors`: middleware which runs after a request handler and before sending the response
  * `get`, `put`, `post`, `delete`: for any of these (lowercase) HTTP verbs, specify the function to handle the request
    * **required**, set the verb as the key and the function as the value
  * `healthcheck`: one or multiple healthchecks to run when the system needs to determine if the resource is healthy.
  * `subsystems`: an array of subsystems which the resource depends on.
  * `requiredPermissions`: an array of permissions that a user must have to access the resource
     * **required**, may be an empty array if all authenticated users are allowed to access a resource
- * `isPatientCentric` : a boolean used to run the sensative patient, break-the-glass policy
+ * `isPatientCentric` : a boolean used to run the sensitive patient, break-the-glass policy
     * **required**, set to true unless the resource does not have anything to do with patient data.
  * `bypassCsrf` : a boolean used to allow the resource to be open to a call that doesn't have a trusted token given to it from the resource server itself. It defaults to false and generally this should NEVER be set to true without an architectural decision.
 
@@ -129,13 +129,16 @@ Examples:
 ::: side-note
 Most resources should have the following interceptors enabled:
  * audit (enabled by default)
- * convert-pid (enabled by default)
- * metrics (enabled by default)
  * authentication (enabled by default)
- * pep (can not be disabled)
+ * validatePid (enabled by default)
+ * assignRequestSite (enabled by default)
  * synchronize (enabled by default)
+ * convert-pid (enabled by default)
+ * pep (can not be disabled)
+ * metrics (enabled by default)
+ * subsystemCheck (enabled by default)
+ * operationalDataCheck (enabled by default)
  * validateRequestParameters (enabled by default)
- * operationalDataCheck
 
 Some of these interceptors are vital to security. See descriptions of these interceptors in the [middleware](middleware.md#Available-interceptors) document.
 :::
@@ -235,4 +238,4 @@ app.register('/family-path', ROOT + '/src/resources/(functionality)/(functionali
 
 <br />
 ---
-Next: [Subsystems](subsystems.md)
+Next: [Utilities](utils.md)

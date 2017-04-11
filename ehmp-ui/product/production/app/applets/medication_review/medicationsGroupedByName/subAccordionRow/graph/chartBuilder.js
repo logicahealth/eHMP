@@ -1,4 +1,4 @@
-define(['moment'], function() {
+define(['moment'], function(moment) {
     'use strict';
     var green = 'rgba(153, 207, 3, 0.5)';
     var grey = 'rgba(215, 215, 215, 1)';

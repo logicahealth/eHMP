@@ -159,9 +159,7 @@ define([
     var typeAheadControlDefinitionWithFetchEnabled = _.defaults({
         name: 'typeAhead9',
         label: 'typeahead (fetch)',
-        //pickList: new Backbone.Collection(statesCollectionWithCustomAttributeMapping),
         pickList: null,
-        fetchFunction: mockFetchForTypeahead,
         attributeMapping: {
             label: 'description',
             value: 'code'
@@ -174,32 +172,6 @@ define([
     });
 
     var formModelCleanSlate = new Backbone.Model();
-
-    function doAsync() {
-        var deferredObject = $.Deferred();
-
-        setTimeout(function() {
-            deferredObject.resolve();
-        }, 1000);
-
-        return deferredObject.promise();
-    }
-
-    function mockFetchForTypeahead(input, setPickList, needMoreInput, onFetchError) {
-        var promise = doAsync();
-
-        promise.done(function () {
-            if (input.length < 0) {
-                needMoreInput(input);
-            } else {
-                setPickList({pickList: statesArray, input: input});
-            }
-        });
-
-        promise.fail(function () {
-            onFetchError(input);
-        });
-    };
 
     describe('A typeahead', function() {
         afterEach(function() {
@@ -264,7 +236,7 @@ define([
             });
         });
 
-        describe('fetch', function() {
+        describe('Fetch setup', function() {
             beforeEach(function() {
                 form = new UI.Form({
                     model: formModelCleanSlate,
@@ -283,20 +255,6 @@ define([
                 expect($form.find('span.twitter-typeahead').length).toBe(1);
                 expect($form.find('span.tt-dropdown-menu').length).toBe(1);
             });
-            //
-            //it('contains a title on the input field', function() {
-            //    expect($form.find('input').attr('title')).toBe('This is a typeahead');
-            //});
-            //
-            //it('open and close typeahead suggestion', function() {
-            //    $form.find('#typeAhead9').focus();
-            //    $form.find('#typeAhead9').typeahead('val', 'Ma');
-            //    expect($form.find('span.tt-dropdown-menu')).toBeVisible();
-            //    expect($form.find('div.tt-suggestion').length).toBe(3);
-            //
-            //    $form.find('#typeAhead9').blur();
-            //    expect($form.find('span.tt-dropdown-menu')).toBeHidden();
-            //});
 
             it('contains correct wrapper', function() {
                 expect($form.find('.control').length).toBe(1);
@@ -312,20 +270,63 @@ define([
                 expect($form.find('input').length).toBe(1);
                 expect($form.find('input')).toHaveAttr('title', 'This is a typeahead');
             });
+        });
 
-            //TODO manual testing is working. It's just that this testcase doesn't work properly anymore. This is not a showstopper for now.
-            xit('enables typeahead filter', function () {
-                var $typeahead = $form.find('span.twitter-typeahead');
+        describe('Fetch run', function() {
+            var originalTimeout;
+            beforeEach(function () {
+                originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
+                jasmine.DEFAULT_TIMEOUT_INTERVAL = 2000;
+            });
+
+            it('successful dynamic fetching', function(done) {
+                function doAsync() {
+                    var deferredObject = $.Deferred();
+
+                    setTimeout(function() {
+                        deferredObject.resolve();
+                    }, 1000);
+
+                    return deferredObject.promise();
+                }
+
+                typeAheadControlDefinitionWithFetchEnabled.fetchFunction = function (input, setPickList, needMoreInput, onFetchError) {
+                    var promise = doAsync();
+
+                    promise.done(function () {
+                        if (input.length < 0) {
+                            needMoreInput(input);
+                        } else {
+                            setPickList({pickList: statesArray, input: input});
+                        }
+
+                        expect(statesArray.length).toBe(11);
+                        done();
+                    });
+
+                    promise.fail(function () {
+                        onFetchError(input);
+                    });
+                };
+
+                form = new UI.Form({
+                    model: formModelCleanSlate,
+                    fields: [typeAheadControlDefinitionWithFetchEnabled]
+                });
+
+                $form = form.render().$el;
+                $('body').append($form);
 
                 var evt = $.Event('keydown');
                 evt.keyCode = evt.which = 40; // downarrow
                 $form.find('input').trigger(evt); // Opens the dropdown
 
                 expect($form.find('span.tt-dropdown-menu button.btn').length).toBe(1);
-                $form.find('span.tt-dropdown-menu button.btn').click();
-                $form.find('input').trigger(evt); // Opens the dropdown
-                expect($form.find('span.tt-dropdown-menu')).toBeVisible();
-                expect($form.find('div.tt-suggestion').length).toBe(11);
+                $form.find('span.tt-dropdown-menu button.btn-link')[0].click();
+            });
+
+            afterEach(function() {
+                jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout;
             });
         });
 

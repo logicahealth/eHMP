@@ -3,6 +3,7 @@ package us.vistacore.vxsync.mvi;
 import java.io.ByteArrayOutputStream;
 import java.io.StringWriter;
 
+import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -14,6 +15,7 @@ import javax.xml.soap.SOAPConnectionFactory;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
 import javax.xml.transform.OutputKeys;
+import javax.xml.XMLConstants;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
@@ -22,6 +24,7 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.hl7.v3.PRPAIN201309UV02;
 import org.hl7.v3.PRPAIN201310UV02;
+import org.hl7.v3.PRPAIN201305UV02;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -44,36 +47,40 @@ public class MviSoapConnection {
 			LOG.error("Unable to create MVI Connection Factory", e);
 		}
 	}
-	
+
 	public static void setConfiguration(MviConfiguration config) {
 		LOG.debug("MVI configuration set");
 		MviSoapConnection.config = config;
 	}
-	
+	public String send1305Message(PRPAIN201305UV02 message, boolean debug) {
+		LOG.debug("Starting send1305Message");
+		return sendHl7Message(message, "PRPA_IN201306UV02", debug);
+	}
 	public String send1309Message(PRPAIN201309UV02 message, boolean debug) {
 		LOG.debug("Starting send1309Message");
+		return sendHl7Message(message, "PRPA_IN201310UV02", debug);
+	}
+	private String sendHl7Message(Object message, String resultPattern, boolean debug) {
+
 		SOAPMessage request = makeSOAPMessage(message);
 		LOG.debug("SOAP body built");
 		if (debug) {
-			try {
-				ByteArrayOutputStream reqStream = new ByteArrayOutputStream();
-				request.writeTo(reqStream);
-				LOG.warn(new String(reqStream.toByteArray()));
-			} catch (Exception e) {
-				LOG.error("Unable to parse SOAP request", e);
+			String outSoapMsg = prettyPrintSOAPMessage(request);
+			if (outSoapMsg != null) {
+				LOG.info(outSoapMsg);
 			}
 		}
 		try {
 			LOG.debug("Making connection to MVI");
-			SOAPConnection connection = factory.createConnection(); 
-			
+			SOAPConnection connection = factory.createConnection();
+
             LOG.debug("Invoking MVI call to " + getMviUri());
 			SOAPMessage response = connection.call(request, getMviUri());
 			if (debug) {
 				try {
 					ByteArrayOutputStream resStream = new ByteArrayOutputStream();
 					response.writeTo(resStream);
-					LOG.warn(new String(resStream.toByteArray()));
+					LOG.warn(new String(resStream.toByteArray(), "UTF-8"));
 				} catch (Exception e) {
 					LOG.error("Unable to parse SOAP response", e);
 				}
@@ -82,8 +89,9 @@ public class MviSoapConnection {
 			Node responseBody = null;
 			for(int i = 0; i < children.getLength(); i++) {
 				Node currentNode = children.item(i);
-				if("PRPA_IN201310UV02".equals(currentNode.getLocalName())) {
+				if(resultPattern.equals(currentNode.getLocalName())) {
 					responseBody = currentNode;
+					LOG.debug("Find the result pattern");
 					break;
 				}
 			}
@@ -92,10 +100,10 @@ public class MviSoapConnection {
 		} catch (UnsupportedOperationException | SOAPException e) {
 			LOG.error("Unable to successfully communicate with MVI",e);
 		}
-		
+
 		return null;
 	}
-	
+
 	private String getMviUri() {
 		if(url == null) {
             url = String.format("%s://%s:%s%s", config.getProtocol(), config.getHost(), config.getPort(), config.getPath());
@@ -113,8 +121,8 @@ public class MviSoapConnection {
 		}
 		return null;
 	}
-	
-	private SOAPMessage makeSOAPMessage(Object message) {
+
+	SOAPMessage makeSOAPMessage(Object message) {
 		LOG.debug("Converting POJO into SOAP message");
 		try{
 			Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
@@ -135,11 +143,32 @@ public class MviSoapConnection {
 		}
 		return null;
 	}
-	
+
+	String prettyPrintSOAPMessage(SOAPMessage soapMessage) {
+		try {
+			TransformerFactory tf = TransformerFactory.newInstance();
+			tf.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+			tf.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "");
+			Transformer t = tf.newTransformer();
+			t.setOutputProperty(OutputKeys.INDENT, "yes");
+ 			t.setOutputProperty("{http://xml.apache.org/xslt}indent-amount","2");
+			ByteArrayOutputStream reqStream = new ByteArrayOutputStream();
+ 			t.transform(soapMessage.getSOAPPart().getContent(), new StreamResult(reqStream));
+ 			return reqStream.toString();
+		} catch (Exception e) {
+			LOG.error("Unable to parse SOAP request", e);
+			return null;
+		}
+	}
+
 	private String nodeToString(Node node) {
 		  StringWriter sw = new StringWriter();
 		  try {
-		    Transformer t = TransformerFactory.newInstance().newTransformer();
+			TransformerFactory tf = TransformerFactory.newInstance();
+			tf.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+			tf.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "");
+			
+		    Transformer t = tf.newTransformer();
 		    t.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
 		    t.transform(new DOMSource(node), new StreamResult(sw));
 		  } catch (TransformerException te) {

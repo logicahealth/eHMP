@@ -49,6 +49,7 @@ end
 
 When(/^POB user adds administered immunization "([^"]*)"$/) do |immunization_type|
   @ehmp = PobImmunizationsApplet.new
+  cmele = PobCommonElements.new
   
   @ehmp.wait_until_chk_administered_visible
   expect(@ehmp).to have_chk_administered
@@ -57,14 +58,22 @@ When(/^POB user adds administered immunization "([^"]*)"$/) do |immunization_typ
   @ehmp.wait_until_ddl_immunization_type_visible
   expect(@ehmp).to have_ddl_immunization_type
   @ehmp.ddl_immunization_type.click
+   
+  cmele.wait_until_fld_pick_list_input_visible
+  expect(cmele).to have_fld_pick_list_input
+  cmele.fld_pick_list_input.set immunization_type
+  @ehmp.wait_until_fld_immunization_results_visible
+  cmele.fld_pick_list_input.native.send_keys(:enter)
   
-  @ehmp = PobCommonElements.new
-  @ehmp.wait_until_fld_pick_list_input_visible
-  expect(@ehmp).to have_fld_pick_list_input
-  @ehmp.fld_pick_list_input.set immunization_type
-  @ehmp.fld_pick_list_input.native.send_keys(:enter)
+  @ehmp.wait_until_ddl_ordered_by_visible
+  expect(@ehmp).to have_ddl_ordered_by
+  @ehmp.ddl_ordered_by.click
+  
+  cmele.wait_until_fld_pick_list_input_visible
+  expect(cmele).to have_fld_pick_list_input
+  cmele.fld_pick_list_input.set "User,Panorama"
+  cmele.fld_pick_list_input.native.send_keys(:enter)
  
-  @ehmp = PobImmunizationsApplet.new
   @ehmp.wait_until_ddl_lot_number_visible
   @ehmp.ddl_lot_number.select "EHMP00012"
   
@@ -105,13 +114,14 @@ When(/^POB user adds administered immunization "([^"]*)"$/) do |immunization_typ
   expect(@ehmp).to have_btn_addBtn
   @ehmp.btn_addBtn.click
   
-  verify_and_close_growl_alert_pop_up("Immunization saved successfully")
+  verify_and_close_growl_alert_pop_up("Immunization Submitted")
   
   PobImmunizationsApplet.new.wait_until_btn_addBtn_invisible(30)
 end
 
 When(/^POB user adds historical immunization "([^"]*)"$/) do |immunization_type|
   @ehmp = PobImmunizationsApplet.new
+  cmele = PobCommonElements.new
   
   @ehmp.wait_until_chk_historical_visible
   expect(@ehmp).to have_chk_historical
@@ -121,13 +131,12 @@ When(/^POB user adds historical immunization "([^"]*)"$/) do |immunization_type|
   expect(@ehmp).to have_ddl_immunization_type
   @ehmp.ddl_immunization_type.click
   
-  @ehmp = PobCommonElements.new
-  @ehmp.wait_until_fld_pick_list_input_visible
-  expect(@ehmp).to have_fld_pick_list_input
-  @ehmp.fld_pick_list_input.set immunization_type
-  @ehmp.fld_pick_list_input.native.send_keys(:enter)
+  cmele.wait_until_fld_pick_list_input_visible
+  expect(cmele).to have_fld_pick_list_input
+  cmele.fld_pick_list_input.set immunization_type
+  @ehmp.wait_until_fld_immunization_results_visible
+  cmele.fld_pick_list_input.native.send_keys(:return)
   
-  @ehmp = PobImmunizationsApplet.new
   @ehmp.wait_until_fld_administered_date_input_visible
   @ehmp.fld_administered_date_input.set Time.new.strftime("%m/%d/%Y")
   @ehmp.fld_administered_date_input.native.send_keys(:enter)
@@ -145,7 +154,7 @@ When(/^POB user adds historical immunization "([^"]*)"$/) do |immunization_type|
   expect(@ehmp).to have_btn_addBtn
   @ehmp.btn_addBtn.click
   
-  verify_and_close_growl_alert_pop_up("Immunization saved successfully")
+  verify_and_close_growl_alert_pop_up("Immunization Submitted")
   
   PobImmunizationsApplet.new.wait_until_btn_addBtn_invisible(30)
 end

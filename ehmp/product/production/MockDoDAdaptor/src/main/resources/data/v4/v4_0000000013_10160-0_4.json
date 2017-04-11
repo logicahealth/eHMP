@@ -47,6 +47,7 @@
         "prescription": "O",
         "active": false,
         "comment": "^O^\nNONE",
+        "careSetting": "O",
         "dispensingPharmacy": {
           "name": "PROVIDER ORDER ENTER"
         },
@@ -86,21 +87,38 @@
               "end": "2013-05-12T21:07:00"
             },
             "fillNumber": "0",
-            "quantity": "30",
-            "units": [
-              {
-                "display": "mg",
-                "primary": true
-              }
-            ]
+            "quantity": {
+              "raw": "30",
+              "value": 30,
+              "units": [
+                {
+                  "display": "mg",
+                  "primary": true
+                }
+              ]
+            }
           }
         ],
-        "drug": [
+        "drugs": [
           {
-            "display": "ASTEMIZOLE, 10 MG, TABLET, ORAL",
-            "code": "3000268019",
-            "system": "2.16.840.1.113883.3.42.126.100001.16",
-            "primary": true
+            "drug": [
+              {
+                "display": "ASTEMIZOLE, 10 MG, TABLET, ORAL",
+                "code": "3000268019",
+                "system": "2.16.840.1.113883.3.42.126.100001.16",
+                "primary": true
+              }
+            ],
+            "dosage": {
+              "raw": "30",
+              "value": 30,
+              "units": [
+                {
+                  "display": "mg",
+                  "primary": true
+                }
+              ]
+            }
           }
         ],
         "numberOfRefills": 0,
@@ -108,7 +126,16 @@
           "name": "SJF, FIVE",
           "primary": true
         },
-        "quantity": "30",
+        "quantity": {
+          "raw": "30",
+          "value": 30,
+          "units": [
+            {
+              "display": "mg",
+              "primary": true
+            }
+          ]
+        },
         "refillsRemaining": 0,
         "rxNumber": {
           "id": "130512-00010"
@@ -120,13 +147,7 @@
             "primary": true
           }
         ],
-        "daysSupply": 30,
-        "units": [
-          {
-            "display": "mg",
-            "primary": true
-          }
-        ]
+        "daysSupply": 30
       },
       {
         "repository": {
@@ -161,6 +182,7 @@
         "prescription": "O",
         "active": false,
         "comment": "^O^\nNONE",
+        "careSetting": "O",
         "dispensingPharmacy": {
           "name": "PROVIDER ORDER ENTER"
         },
@@ -200,21 +222,38 @@
               "end": "2013-05-12T21:06:00"
             },
             "fillNumber": "0",
-            "quantity": "7",
-            "units": [
-              {
-                "display": "mg",
-                "primary": true
-              }
-            ]
+            "quantity": {
+              "raw": "7",
+              "value": 7,
+              "units": [
+                {
+                  "display": "mg",
+                  "primary": true
+                }
+              ]
+            }
           }
         ],
-        "drug": [
+        "drugs": [
           {
-            "display": "ACETAMINOPHEN, 325 MG, TABLET, ORAL",
-            "code": "3000261885",
-            "system": "2.16.840.1.113883.3.42.126.100001.16",
-            "primary": true
+            "drug": [
+              {
+                "display": "ACETAMINOPHEN, 325 MG, TABLET, ORAL",
+                "code": "3000261885",
+                "system": "2.16.840.1.113883.3.42.126.100001.16",
+                "primary": true
+              }
+            ],
+            "dosage": {
+              "raw": "7",
+              "value": 7,
+              "units": [
+                {
+                  "display": "mg",
+                  "primary": true
+                }
+              ]
+            }
           }
         ],
         "numberOfRefills": 0,
@@ -222,7 +261,16 @@
           "name": "SJF, FIVE",
           "primary": true
         },
-        "quantity": "7",
+        "quantity": {
+          "raw": "7",
+          "value": 7,
+          "units": [
+            {
+              "display": "mg",
+              "primary": true
+            }
+          ]
+        },
         "refillsRemaining": 0,
         "rxNumber": {
           "id": "130512-00008"
@@ -234,13 +282,7 @@
             "primary": true
           }
         ],
-        "daysSupply": 30,
-        "units": [
-          {
-            "display": "mg",
-            "primary": true
-          }
-        ]
+        "daysSupply": 30
       },
       {
         "repository": {
@@ -275,6 +317,7 @@
         "prescription": "O",
         "active": false,
         "comment": "^O^\nNONE",
+        "careSetting": "O",
         "dispensingPharmacy": {
           "name": "PROVIDER ORDER ENTER"
         },
@@ -314,21 +357,38 @@
               "end": "2013-05-12T21:06:00"
             },
             "fillNumber": "0",
-            "quantity": "60",
-            "units": [
-              {
-                "display": "mg",
-                "primary": true
-              }
-            ]
+            "quantity": {
+              "raw": "60",
+              "value": 60,
+              "units": [
+                {
+                  "display": "mg",
+                  "primary": true
+                }
+              ]
+            }
           }
         ],
-        "drug": [
+        "drugs": [
           {
-            "display": "IBUPROFEN, 800 MG, TABLET, ORAL",
-            "code": "3000265540",
-            "system": "2.16.840.1.113883.3.42.126.100001.16",
-            "primary": true
+            "drug": [
+              {
+                "display": "IBUPROFEN, 800 MG, TABLET, ORAL",
+                "code": "3000265540",
+                "system": "2.16.840.1.113883.3.42.126.100001.16",
+                "primary": true
+              }
+            ],
+            "dosage": {
+              "raw": "60",
+              "value": 60,
+              "units": [
+                {
+                  "display": "mg",
+                  "primary": true
+                }
+              ]
+            }
           }
         ],
         "numberOfRefills": 0,
@@ -336,7 +396,16 @@
           "name": "SJF, FIVE",
           "primary": true
         },
-        "quantity": "60",
+        "quantity": {
+          "raw": "60",
+          "value": 60,
+          "units": [
+            {
+              "display": "mg",
+              "primary": true
+            }
+          ]
+        },
         "refillsRemaining": 0,
         "rxNumber": {
           "id": "130512-00009"
@@ -348,13 +417,7 @@
             "primary": true
           }
         ],
-        "daysSupply": 30,
-        "units": [
-          {
-            "display": "mg",
-            "primary": true
-          }
-        ]
+        "daysSupply": 30
       },
       {
         "repository": {
@@ -389,6 +452,7 @@
         "prescription": "O",
         "active": false,
         "comment": "^O^\nNONE",
+        "careSetting": "O",
         "dispensingPharmacy": {
           "name": "PROVIDER ORDER ENTER"
         },
@@ -428,21 +492,38 @@
               "end": "2013-05-01T18:08:00"
             },
             "fillNumber": "0",
-            "quantity": "1",
-            "units": [
-              {
-                "display": "mg/mL",
-                "primary": true
-              }
-            ]
+            "quantity": {
+              "raw": "1",
+              "value": 1,
+              "units": [
+                {
+                  "display": "mg/mL",
+                  "primary": true
+                }
+              ]
+            }
           }
         ],
-        "drug": [
+        "drugs": [
           {
-            "display": "Acetaminophen 100mg/mL, Solution, Oral, 0.8mL",
-            "code": "15479451",
-            "system": "2.16.840.1.113883.3.42.126.100001.16",
-            "primary": true
+            "drug": [
+              {
+                "display": "Acetaminophen 100mg/mL, Solution, Oral, 0.8mL",
+                "code": "15479451",
+                "system": "2.16.840.1.113883.3.42.126.100001.16",
+                "primary": true
+              }
+            ],
+            "dosage": {
+              "raw": "1",
+              "value": 1,
+              "units": [
+                {
+                  "display": "mg/mL",
+                  "primary": true
+                }
+              ]
+            }
           }
         ],
         "numberOfRefills": 0,
@@ -450,7 +531,16 @@
           "name": "SJF, FIVE",
           "primary": true
         },
-        "quantity": "1",
+        "quantity": {
+          "raw": "1",
+          "value": 1,
+          "units": [
+            {
+              "display": "mg/mL",
+              "primary": true
+            }
+          ]
+        },
         "refillsRemaining": 0,
         "rxNumber": {
           "id": "130501-00006"
@@ -462,13 +552,7 @@
             "primary": true
           }
         ],
-        "daysSupply": 30,
-        "units": [
-          {
-            "display": "mg/mL",
-            "primary": true
-          }
-        ]
+        "daysSupply": 30
       }
     ]
   }

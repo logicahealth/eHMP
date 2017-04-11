@@ -85,8 +85,12 @@ When(/^the user views the details for the first Community Health Summary$/) do
 end
 
 Then(/^the Community Health Summary View detail view displays$/) do
-  comm_health = CommunityHealthSummariesCoverSheet.instance
-  expect(comm_health.wait_until_action_element_visible('ccdContent', 60)).to eq(true)
+  @ehmp = PobCommunityHealthApplet.new
+  @ehmp.wait_for_fld_patient_identifier
+  expect(@ehmp).to have_btn_next
+  expect(@ehmp).to have_btn_previous
+  expect(@ehmp).to have_fld_patient_identifier
+  expect(@ehmp).to have_fld_details
 end
 
 When(/^the Community Health Summary Applet contains data rows$/) do

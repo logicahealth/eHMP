@@ -118,9 +118,11 @@ Then(/^the message on the Problems Applet does not say "(.*?)"$/) do |message_te
 end
 
 Given(/^the user navigates to expanded problems applet$/) do
-  navigate_in_ehmp "#/patient/problems-full"
+  @ehmp = PobProblemsApplet.new
+  @ehmp.load
+
   wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
-  wait.until { @active_problems.applet_grid_loaded }
+  wait.until { applet_grid_loaded('#data-grid-problems tr.empty', @ehmp.fld_all_problems_expanded_view) }
 
   @active_problems.clear_filter('grid-filter-button-problems')
 end

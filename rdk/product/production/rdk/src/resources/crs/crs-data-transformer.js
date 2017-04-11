@@ -1,7 +1,6 @@
 'use strict';
 
 var _ = require('lodash');
-var dd = require('drilldown');
 
 var CONCEPT_DOMAINS = {
     MEDICATION: 'Medication',
@@ -21,11 +20,11 @@ var ConceptDomainMap = {
 };
 
 function getSystemByGraphName(graphName) {
-    return dd(ConceptDomainMap[graphName])('system').val;
+    return _.get(ConceptDomainMap[graphName], 'system');
 }
 
 function getDomainByGraphName(graphName) {
-    return dd(ConceptDomainMap[graphName])('domain').val;
+    return _.get(ConceptDomainMap[graphName], 'domain');
 }
 
 function getGraphName(uri) {
@@ -54,7 +53,7 @@ function getCode(uri) {
 
 function getConceptDomain(item) {
     // If item is tagged as Vital then it is vital, there's nothing more to check.
-    if (dd(item)('isvital')('value').val === 'true') {
+    if (_.get(item, 'isvital.value') === 'true') {
         return CONCEPT_DOMAINS.VITAL;
     }
 
@@ -107,7 +106,7 @@ function formatSystemGroups(items) {
         var code = getCode(uri);
         var formattedCode = {
             code: code,
-            display: dd(item)('targetConceptLabel')('value').val
+            display: _.get(item, 'targetConceptLabel.value')
         };
         if (_.isArray(systemCodes[system])) {
             systemCodes[system].push(formattedCode);

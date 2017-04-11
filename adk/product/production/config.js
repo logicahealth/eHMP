@@ -14,7 +14,7 @@ require(['requirePlugins'], function() {
                 paths: {
                     "async": "_assets/libs/bower/async/async",
                     "backbone": "_assets/libs/bower/backbone/backbone",
-                    "backbone.paginator": "_assets/libs/bower/backbone/backbone.paginator/backbone.paginator",
+                    "backbone.paginator": "_assets/libs/custom/backbone.paginator/backbone.paginator",
                     "backbone.radio": "_assets/libs/bower/backbone/backbone.radio/backbone.radio",
                     "sessionstorage": "_assets/libs/bower/backbone/backbone-sessionStorage/backbone.sessionStorage",
                     "backbone-sorted-collection": "_assets/libs/bower/backbone/backbone-sorted-collection/backbone-sorted-collection",
@@ -30,6 +30,7 @@ require(['requirePlugins'], function() {
                     "grouped_categories": "_assets/libs/bower/grouped_categories/grouped-categories",
                     "jasmine": "_assets/libs/bower/jasmine/jasmine",
                     "jasmine-html": "_assets/libs/bower/jasmine/jasmine-html",
+                    "jsondiffpatch": "_assets/libs/bower/jsondiffpatch/jsondiffpatch-full.min",
                     "jquery": "_assets/libs/bower/jquery/jquery.min",
                     "moment": "_assets/libs/bower/moment/moment.min",
                     "underscore": "_assets/libs/bower/lodash/lodash.min", // code requires lodash instead of backbone's underscore
@@ -42,9 +43,9 @@ require(['requirePlugins'], function() {
                     "jquery-ui/widget": "_assets/libs/bower/jquery-ui/widget",
                     "jquery-ui/draggable": "_assets/libs/bower/jquery-ui/draggable",
 
-                    "mousewheel": "_assets/libs/bower/jScrollPane/jquery.mousewheel",
-                    "mwheelIntent": "_assets/libs/bower/jScrollPane/mwheelIntent",
-                    "jScrollPane": "_assets/libs/bower/jScrollPane/jquery.jscrollpane.min",
+                    "mousewheel": "_assets/libs/custom/jScrollPane/jquery.mousewheel",
+                    "mwheelIntent": "_assets/libs/custom/jScrollPane/mwheelIntent",
+                    "jScrollPane": "_assets/libs/custom/jScrollPane/jquery.jscrollpane",
 
                     // Require Plugins
                     "text": "_assets/libs/bower/requirejs-text/text",
@@ -61,7 +62,7 @@ require(['requirePlugins'], function() {
                     "backgrid": "_assets/libs/bower/backgrid/backgrid.min",
                     "bootstrap": "_assets/libs/bower/bootstrap/bootstrap.min",
                     "bootstrap-timepicker": "_assets/libs/custom/bootstrap/bootstrap-timepicker/bootstrap-timepicker",
-                    "gridster": "_assets/libs/custom/gridster/jquery.gridster.min",
+                    "gridster": "_assets/libs/custom/gridster/jquery.gridster",
                     "nouislider": "_assets/libs/bower/nouislider/jquery.nouislider.all.min",
                     "bootstrap-notify": "_assets/libs/custom/bootstrap/remarkable-bootstrap-notify/bootstrap-notify",
 
@@ -95,6 +96,7 @@ require(['requirePlugins'], function() {
                     "jquery.formparams": "_assets/libs/custom/jquery/plugins/jquery.formparams",
                     "jquery-datatable": "_assets/libs/custom/jquery/jquery-datatable/jquery.dataTables.min",
                     "jquery-scroll": "_assets/libs/custom/jquery/jquery-scroll/jquery.scrollstart.scrollstop",
+                    "jquery.scrollTo": "_assets/libs/bower/jquery.scrollTo/jquery.scrollTo",
 
                     "marionette": "_assets/libs/custom/marionette/backbone.marionette-2.4.3-custom.min",
 

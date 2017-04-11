@@ -14,7 +14,7 @@ var VprUpdateOpData = require(global.VX_UTILS + 'VprUpdateOpData.js');
 var config = {
 	jds: {
 		protocol: 'http',
-		host: 'IP_ADDRESS',
+		host: 'IP        ',
 		port: 9080
 	}
 };

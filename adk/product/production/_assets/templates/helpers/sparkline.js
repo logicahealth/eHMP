@@ -176,7 +176,6 @@ define(['handlebars', 'hbs!_assets/templates/sparkline'], function(Handlebars, s
         var x0 = 0;
         if (hasCritical && standardDeviation) {
             var mean = (low + high) / 2;
-            // TODO: verify the calculation of low & high limits
             lowLimit = mean - mean * standardDeviation;
             highLimit = mean + mean * standardDeviation;
             // tw = w - 2 * b;

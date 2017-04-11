@@ -4,12 +4,12 @@ maintainer_email "vistacore@vistacore.us"
 license          "All rights reserved"
 description      "Configures development workstation"
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version          "2.0.42"
+version          "2.0.54"
 
 supports "mac_os_x"
 supports "centos"
 
-depends "common", "2.0.10"
+depends "common", "2.0.12"
 
 #############################
 # 3rd party
@@ -24,15 +24,15 @@ depends "jenkins", "=2.4.1"
 #############################
 # wrapper_cookbook
 #############################
-depends "virtualbox_wrapper", "2.0.4"
-depends "vagrant_wrapper", "2.0.4"
-depends "java_wrapper", "2.0.5"
-depends "nodejs_wrapper", "2.0.3"
-depends "chef-dk_wrapper", "2.0.4"
-depends "gradle_wrapper", "2.0.4"
-depends "phantomjs_wrapper", "2.0.4"
-depends "nokogiri_wrapper", "2.0.4"
-depends "xvfb_wrapper", "2.0.3"
-depends "git_wrapper", "2.0.3"
-depends "oracle_wrapper", "2.0.10"
-depends "newrelic_wrapper", "2.0.2"
+depends "virtualbox_wrapper", "2.0.5"
+depends "vagrant_wrapper", "2.0.5"
+depends "java_wrapper", "2.0.6"
+depends "nodejs_wrapper", "2.0.4"
+depends "chef-dk_wrapper", "2.0.5"
+depends "gradle_wrapper", "2.0.5"
+depends "phantomjs_wrapper", "2.0.5"
+depends "nokogiri_wrapper", "2.0.5"
+depends "xvfb_wrapper", "2.0.4"
+depends "git_wrapper", "2.0.6"
+depends "oracle_wrapper", "2.0.16"
+depends "newrelic_wrapper", "2.0.3"

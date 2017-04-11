@@ -92,7 +92,7 @@ function transformRecord(job, log, environment, patientDemographicsIcn, callback
             log.error('jmeadows-xform-domain-vpr-handler.handle: Received error while attempting to store metaStamp for pid: %s.  Error: %s;  Response: %j; metaStamp:[%j]', job.patientIdentifier.value, error, response, domainMetastamp);
             error = errorUtil.createTransient('Unable to store metastamp', error);
 
-            // TODO:   Push this to an error message location.  We do not want to error out the entire set of messages for one problem.
+            // FUTURETODO:   Push this to an error message location.  We do not want to error out the entire set of messages for one problem.
             //--------------------------------------------------------------------------------------------------------------------------
             return callback(null, 'FailedJdsError');
         }
@@ -100,7 +100,7 @@ function transformRecord(job, log, environment, patientDemographicsIcn, callback
         if (!response) {
             log.error('jmeadows-xform-domain-vpr-handler.handle:  Failed to store metaStamp for pid: %s - no response returned.  Error: %s;  Response: %j; metaStamp:[%j]', job.patientIdentifier.value, error, response, domainMetastamp);
 
-            // TODO:   Push this to an error message location.  We do not want to error out the entire set of messages for one problem.
+            // FUTURETODO:   Push this to an error message location.  We do not want to error out the entire set of messages for one problem.
             //--------------------------------------------------------------------------------------------------------------------------
             // return callback(util.format('Failed to store metaStamp for pid: %s - no response returned.  Error: %s;  Response: %j; metaStamp:[%j]', syncStartJob.pid, error, response, syncStartJob.metaStamp), null);
 
@@ -110,7 +110,7 @@ function transformRecord(job, log, environment, patientDemographicsIcn, callback
         if (response.statusCode !== 200) {
             log.error('jmeadows-xform-domain-vpr-handler.handle:  Failed to store metaStamp for pid: %s - incorrect status code returned. Error: %s;  Response: %j; metaStamp:[%j]', job.patientIdentifier.value, error, response, domainMetastamp);
 
-            // TODO:   Push this to an error message location.  We do not want to error out the entire set of messages for one problem.
+            // FUTURETODO:   Push this to an error message location.  We do not want to error out the entire set of messages for one problem.
             //--------------------------------------------------------------------------------------------------------------------------
             // return callback(util.format('Failed to store metaStamp for pid: %s - incorrect status code returned.  Error: %s;  Response: %j; metaStamp:[%j]', syncStartJob.pid, error, response, syncStartJob.metaStamp), null);
 
@@ -148,7 +148,7 @@ function transformRecord(job, log, environment, patientDemographicsIcn, callback
             if (error) {
                 log.error('jmeadows-xform-domain-vpr-handler.handle:  Failed to publish jobs.  error: %s; response: %s; jobs: %j', error, response, jobsToPublish);
 
-                // TODO:   Push this to an error message location.  We do not want to error out the entire set of messages for one problem.
+                // FUTURETODO:   Push this to an error message location.  We do not want to error out the entire set of messages for one problem.
                 //--------------------------------------------------------------------------------------------------------------------------
                 return callback(null, 'FailedToPublishJobs');
             }
@@ -212,7 +212,7 @@ var getDemographicsIcnFromJds = function(pid, log, jdsClient, callback) {
         if (error) {
             log.error('jmeadows-xform-domain-vpr-handler.getDemographicsIcnFromJds:  Received error while retrieving patient identifiers for pid: %s; error: %s; response: %j', pid, error, response);
 
-            // TODO:   Push this to an error message location.  We do not want to error out the entire set of messages for one problem.
+            // FUTURETODO:   Push this to an error message location.  We do not want to error out the entire set of messages for one problem.
             //--------------------------------------------------------------------------------------------------------------------------
             //return callback(util.format('Received error while attempting to store metaStamp for pid: %s.  Error: %s;  Response: %j; metaStamp:[%j]', syncStartJob.pid, error, response, syncStartJob.metaStamp), null);
 
@@ -222,7 +222,7 @@ var getDemographicsIcnFromJds = function(pid, log, jdsClient, callback) {
         if (!response) {
             log.error('jmeadows-xform-domain-vpr-handler.getDemographicsIcnFromJds:  Failed to retrieve patient identifiers for pid: %s; error: %s; response: %j', pid, error, response);
 
-            // TODO:   Push this to an error message location.  We do not want to error out the entire set of messages for one problem.
+            // FUTURETODO:   Push this to an error message location.  We do not want to error out the entire set of messages for one problem.
             //--------------------------------------------------------------------------------------------------------------------------
             // return callback(util.format('Failed to store metaStamp for pid: %s - no response returned.  Error: %s;  Response: %j; metaStamp:[%j]', syncStartJob.pid, error, response, syncStartJob.metaStamp), null);
 
@@ -232,7 +232,7 @@ var getDemographicsIcnFromJds = function(pid, log, jdsClient, callback) {
         if (response.statusCode !== 200) {
             log.error('jmeadows-xform-domain-vpr-handler.getDemographicsIcnFromJds:  Failed to retrieve patient identifiers for pid: %s - incorrect status code returned. Error: %s;  Response: %j', pid, error, response);
 
-            // TODO:   Push this to an error message location.  We do not want to error out the entire set of messages for one problem.
+            // FUTURETODO:   Push this to an error message location.  We do not want to error out the entire set of messages for one problem.
             //--------------------------------------------------------------------------------------------------------------------------
             // return callback(util.format('Failed to store metaStamp for pid: %s - incorrect status code returned.  Error: %s;  Response: %j; metaStamp:[%j]', syncStartJob.pid, error, response, syncStartJob.metaStamp), null);
 

@@ -28,6 +28,21 @@ function doQueryWithParams(req, dbConfig, query, queryParameters, callback, maxR
 }
 module.exports.doQueryWithParams = doQueryWithParams;
 
+function doExecuteProcWithParams(req, dbConfig, query, parameters, callback, maxRowsParam) {
+    activityDb.doExecuteProcWithParams(req, dbConfig, query, parameters, callback, (maxRowsParam || 10000));
+}
+module.exports.doExecuteProcWithParams = doExecuteProcWithParams;
+
+function doExecuteProcMultipleRecordSets(req, dbConfig, query, parameters, callback, maxRowsParam) {
+    activityDb.doExecuteProcMultipleRecordSets(req, dbConfig, query, parameters, callback, (maxRowsParam || 10000));
+}
+module.exports.doExecuteProcMultipleRecordSets = doExecuteProcMultipleRecordSets;
+
+function doExecuteProcWithInOutParams(req, dbConfig, query, parameters, autoCommit, callback, maxRowsParam) {
+    activityDb.doExecuteProcWithInOutParams(req, dbConfig, query, parameters, autoCommit, callback, (maxRowsParam || 10000));
+}
+module.exports.doExecuteProcWithInOutParams = doExecuteProcWithInOutParams;
+
 function doQueryWithParamsLogger(logger, dbConfig, query, queryParameters, callback, maxRowsParam) {
     var req = {};
     req.logger = logger;
@@ -36,12 +51,12 @@ function doQueryWithParamsLogger(logger, dbConfig, query, queryParameters, callb
 
 module.exports.doQueryWithParamsLogger = doQueryWithParamsLogger;
 
-function getHealthcheck(app) {
+function getHealthcheck(app, logger) {
     return {
         name: 'jbpm',
         interval: 100000,
         check: function(callback) {
-            var httpConfig = getJBPMHttpConfig(app.config, app.logger);
+            var httpConfig = getJBPMHttpConfig(app.config, logger);
 
             // [GET] /history/instances
             // Gets a list of ProcessInstanceLog instances
@@ -71,9 +86,9 @@ function getHealthcheck(app) {
 }
 module.exports.getHealthcheck = getHealthcheck;
 
-function getSubsystemConfig(app) {
+function getSubsystemConfig(app, logger) {
     return {
-        healthcheck: getHealthcheck(app)
+        healthcheck: getHealthcheck(app, logger)
     };
 }
 
@@ -125,3 +140,5 @@ function createBasicAuth(username, password) {
 module.exports.getSubsystemConfig = getSubsystemConfig;
 module.exports.getJBPMHttpConfig = getJBPMHttpConfig;
 module.exports.addAuthToConfig = addAuthToConfig;
+module.exports.ExecutionError = activityDb.ExecutionError;
+module.exports.ConnectionError = activityDb.ConnectionError;

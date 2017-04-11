@@ -76,6 +76,14 @@ IDXATTR ;
  ;;    collections: orderable
  ;;    fields: types[].type,name
  ;;    sort: name asc
+ ;;orderable-linktype
+ ;;    collections: orderable
+ ;;    fields: uid,linktype
+ ;;    sort: name asc
+ ;;vital-type-uid
+ ;;    collections: vital-type
+ ;;    fields: uid
+ ;;    sort: name asc
  ;;clioterminology
  ;;    collections: clioterminology
  ;;    fields: term, termType
@@ -99,6 +107,11 @@ IDXATTR ;
  ;;    fields: name
  ;;    sort: name asc
  ;;    setif: $$CLINLOC^VPRJFPS
+ ;;active-locations-clinics
+ ;;    collections: location
+ ;;    fields: uid,name
+ ;;    sort: name asc
+ ;;    setif: $$ACTIVECLINLOC^VPRJFPS
  ;;status-pt
  ;;    collections: syncstatus
  ;;    fields: pid

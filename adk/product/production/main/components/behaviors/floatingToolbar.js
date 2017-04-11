@@ -9,9 +9,6 @@ define([
 
     var FloatingToolbar = FloatingDialog.extend({
         component: 'toolbar',
-        behaviors: {
-            CRS: {}
-        },
         initialize: function(options, view) {
             //the view's intiialize is called after this one so we have to hijack it to configure
             //toolbar options that might be state depenedent, meaning they set in the view's initialze

@@ -1021,7 +1021,7 @@ Note: This is included only to support the convention of writing c/- address lin
 				<xsd:annotation>
 					<xsd:documentation>Birth : A name that a person was given at birth or established as a consequence of adoption.  
 
-Note: this is not used for temporary names assigned at birth such as &#34;Baby of PII  &#34; - which is just a name with a use code of &#34;TEMP&#34;.</xsd:documentation>
+Note: this is not used for temporary names assigned at birth such as &#34;Baby of Smith&#34; - which is just a name with a use code of &#34;TEMP&#34;.</xsd:documentation>
 				</xsd:annotation>
 			</xsd:enumeration>
 			<xsd:enumeration value="AD">

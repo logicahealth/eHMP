@@ -27,11 +27,11 @@ import java.util.*;
  * Working on a supplemental DataSource that only provides search results using a custom Lucene index
  * which is built from other DataSources.
  * 
- * TODO: how to provide SAB list?
- * TODO: is there a way to package/compress/zip the lucene index?  
+ * FUTURETODO: how to provide SAB list?
+ * FUTURETODO: is there a way to package/compress/zip the lucene index?  
  * -- I don't think so.
  * 
- * TODO: Only create the writer if requested?
+ * FUTURETODO: Only create the writer if requested?
  * @author brian
  */
 public class LuceneSearchDataSource extends AbstractTermDataSource {
@@ -77,7 +77,7 @@ public class LuceneSearchDataSource extends AbstractTermDataSource {
 	}
 	
 	
-	protected void init(boolean write) throws IOException {
+	protected final void init(boolean write) throws IOException {
 		// configure/initialize lucene
         Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_44);
         IndexWriterConfig conf = new IndexWriterConfig(Version.LUCENE_44, 
@@ -101,7 +101,7 @@ public class LuceneSearchDataSource extends AbstractTermDataSource {
 			TermsEnum itr = terms.iterator(null);
 			BytesRef bytes = null;
 			while((bytes = itr.next()) != null) {
-				String term = new String(bytes.bytes, bytes.offset, bytes.length);
+				String term = bytes.utf8ToString();
 				sabs.add(term);
 			}
 		}
@@ -153,7 +153,7 @@ public class LuceneSearchDataSource extends AbstractTermDataSource {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public void buildIndexFrom(ITermDataSource src) throws IOException {
+	public final void buildIndexFrom(ITermDataSource src) throws IOException {
 		
 		// close and re-open as writable index
 		this.writer.close();
@@ -233,7 +233,7 @@ public class LuceneSearchDataSource extends AbstractTermDataSource {
 	}
 	
 	@Override
-	public void close() throws IOException {
+	public final void close() throws IOException {
 		if (this.writer != null) {
 			this.writer.close(true);
 		}
@@ -255,7 +255,7 @@ public class LuceneSearchDataSource extends AbstractTermDataSource {
 	}
 
 	@Override
-	public Set<String> getCodeSystemList() {
+	final public Set<String> getCodeSystemList() {
 		return systems;
 	}
 

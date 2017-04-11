@@ -6,8 +6,8 @@ var httpUtil = rdk.utils.http;
 var activityDb = require('../../../subsystems/jbpm/jbpm-subsystem');
 var _ = require('lodash');
 var getGenericJbpmConfig = require('../activity-utils').getGenericJbpmConfig;
+var callJpid = require('./task-operations-resource').callJpid;
 var async = require('async');
-var dd = require('drilldown');
 var moment = require('moment');
 
 function getOpenConsultTasks(req, res) {
@@ -31,17 +31,47 @@ function getOpenConsultTasks(req, res) {
         return res.rdkSend(results);
     };
 
-    return doGetOpenConsultTasks(icn, req.logger, getGenericJbpmConfig(req), req.app.config.jbpm.activityDatabase, consultTaskCb);
+    callJpid(req, icn, function(error, response, result) {
+        if (error) {
+            req.logger.error(error);
+        }
+
+        var identifiers = [];
+
+        if (result && result.hasOwnProperty('patientIdentifiers') && Array.isArray(result.patientIdentifiers)) {
+            identifiers = result.patientIdentifiers;
+
+            //identifiers should not currently contain any commas
+            //if in the future they do, buggy behavior will occur due to the comma split performed in getTasksByIds procedure
+            _.each(identifiers, function(id, idIndex) {
+                if (id.indexOf(',') !== -1) {
+                    req.logger.error('Unqueryable patient identifier encountered from jpid lookup');
+                    identifiers.splice(idIndex, 1);
+                }
+            });
+        }
+
+        if (error || identifiers.length === 0 || !result || !result.hasOwnProperty('patientIdentifiers') || result.patientIdentifiers.length < 2) {
+            //use only passed-in patient id value in case of:
+            // error looking up patient identifiers
+            // received malformed result from identifier lookup
+            // no additional identifiers were retrieved (0 or 1 result in array)
+            // all identifiers contained unqueryable characters
+            if (icn.indexOf(',') !== -1) {
+                return consultTaskCb(new Error('Invalid \'icn\' parameter'));
+            }
+            return doGetOpenConsultTasks(icn, req.logger, getGenericJbpmConfig(req), req.app.config.jbpm.activityDatabase, consultTaskCb);
+        }
+
+        return doGetOpenConsultTasks(identifiers.join(), req.logger, getGenericJbpmConfig(req), req.app.config.jbpm.activityDatabase, consultTaskCb);
+    });
 }
 
-function doGetOpenConsultTasks(icn, logger, jbpmConfig, dbConfig, consultTaskCb) {
+function doGetOpenConsultTasks(identifiers, logger, jbpmConfig, dbConfig, consultTaskCb) {
 
-    var taskName = 'Complete Consult';
-    var queryParams = [taskName, icn];
+    var activityStates = 'Active:eConsult, Provider Completing|Active:eConsult|Scheduled:Appt. Booked|Scheduled:Appt. in Past|Scheduled:Appt. in Past, Checked Out|Scheduled:Patient no-showed previous Appt.|Scheduled:Provider Completing|Scheduling:Provider Completing|Scheduling:1st Attempt|Scheduling:2nd Attempt|Scheduling:3rd Attempt|Scheduling:EWL|Scheduling:Underway';
+    var processDefinitionId = 'Order.Consult';
 
-    var taskQuery = 'SELECT ti.CREATEDON, pi.DEPLOYMENTID, ti.PROCESSINSTANCEID, ti.ID as TASKID FROM ACTIVITYDB.AM_TASKINSTANCE ti ' +
-        'JOIN ACTIVITYDB.AM_PROCESSINSTANCE pi on ti.PROCESSINSTANCEID=pi.PROCESSINSTANCEID JOIN ACTIVITYDB.AM_TASKSTATUSLOOKUP tsl ON ti.STATUSID = tsl.ID ' +
-        'WHERE ti.TASKNAME = :taskName AND ti.ICN = :icn AND tsl.STATUS in (\'Created\',\'Ready\',\'Reserved\',\'InProgress\')';
     var cb = function(err, rows) {
         if (err) {
             //error fetch results from DB
@@ -99,8 +129,8 @@ function doGetOpenConsultTasks(icn, logger, jbpmConfig, dbConfig, consultTaskCb)
                         if (taskItemDetail && taskItemDetail.data && taskItemDetail.data.items && taskItemDetail.data.items.length) {
                             _.each(taskItemDetail.data.items, function(moreTaskItemDetail) {
 
-                                var taskId = dd(moreTaskItemDetail)('id').val || null;
-                                var activityInstanceId = dd(moreTaskItemDetail)('processInstanceId').val || null;
+                                var taskId = _.get(moreTaskItemDetail, 'id') || null;
+                                var activityInstanceId = _.get(moreTaskItemDetail, 'processInstanceId') || null;
 
                                 var correspondingStub = _.filter(stubs, {
                                     'taskId': taskId,
@@ -111,23 +141,6 @@ function doGetOpenConsultTasks(icn, logger, jbpmConfig, dbConfig, consultTaskCb)
                                     correspondingStub = correspondingStub[0];
 
                                     _.each(_.filter(moreTaskItemDetail.variables, {
-                                        'name': 'consultOrder'
-                                    }), function(consultOrder) {
-                                        try {
-                                            consultOrder = JSON.parse(consultOrder.value);
-                                        } catch (e) {
-                                            logger.error('Invalid JSON encountered parsing consultOrder for taskId: %s', taskId);
-                                            return;
-                                        }
-                                        correspondingStub.noteClinicalObjectUid = null;
-                                        correspondingStub.name = dd(consultOrder)('specialty').val || null;
-                                        correspondingStub.associatedCondition = dd(consultOrder)('condition').val || null;
-                                        correspondingStub.request = dd(consultOrder)('requestQuestion').val || null;
-                                        correspondingStub.comment = dd(consultOrder)('requestComment').val || null;
-
-                                    });
-
-                                    _.each(_.filter(moreTaskItemDetail.variables, {
                                         'name': 'consultClinicalObject'
                                     }), function(consultClinicalObject) {
                                         try {
@@ -136,7 +149,28 @@ function doGetOpenConsultTasks(icn, logger, jbpmConfig, dbConfig, consultTaskCb)
                                             logger.error('Invalid JSON encountered parsing consultClinicalObject for taskId: %s', taskId);
                                             return;
                                         }
-                                        correspondingStub.noteClinicalObjectUid = dd(consultClinicalObject)('data')('completion')('noteClinicalObjectUid').val || null;
+                                        correspondingStub.name = _.get(consultClinicalObject, 'displayName') || null;
+
+                                        var consultOrder = _.get(consultClinicalObject, 'data.consultOrders');
+                                        if (Array.isArray(consultOrder) && consultOrder.length > 0) {
+                                            consultOrder = consultOrder[consultOrder.length - 1]; //take last consultOrder if more than 1
+                                        }
+
+                                        var conditions = _.get(consultOrder, 'conditions');
+                                        var conditionNames = [];
+                                        if (Array.isArray(conditions)) {
+                                            _.each(conditions, function(conditionObj) {
+                                                conditionNames.push(_.get(conditionObj, 'name') || '');
+                                            });
+                                        } else {
+                                            conditionNames.push(conditions || '');
+                                        }
+                                        correspondingStub.associatedCondition = conditionNames.length > 0 ? conditionNames.join() : null;
+
+                                        correspondingStub.request = _.get(consultOrder, 'request') || null;
+                                        correspondingStub.comment = _.get(consultOrder, 'comment') || null;
+
+                                        correspondingStub.noteClinicalObjectUid = _.get(consultClinicalObject, 'data.completion.noteClinicalObjectUid') || null;
                                     });
 
                                     delete correspondingStub.taskId;
@@ -154,8 +188,17 @@ function doGetOpenConsultTasks(icn, logger, jbpmConfig, dbConfig, consultTaskCb)
         }
     };
 
-    logger.debug('consult-tasks-resource:getOpenConsultTasks taskQuery %s', taskQuery);
-    activityDb.doQueryWithParamsLogger(logger, dbConfig, taskQuery, queryParams, cb);
+    var procParams = {
+        p_patient_identifiers: identifiers,
+        p_activity_states: activityStates,
+        p_process_definition: processDefinitionId
+    };
+
+    var query = 'BEGIN TASKS.getTasksByState(:p_patient_identifiers, :p_activity_states, :p_process_definition, :recordset); END;';
+
+    activityDb.doExecuteProcWithParams({
+        logger: logger
+    }, dbConfig, query, procParams, cb);
 }
 
 function convertOracleDateToDisplay(dateInput) {

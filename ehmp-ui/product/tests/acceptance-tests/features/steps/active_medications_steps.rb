@@ -52,31 +52,6 @@ class ActiveMedications < AllApplets
   end
 end
 
-When(/^the user clicks the row that contains "(.*?)" in the Active & Recent Medications Applet$/) do |arg1|
-  # //table[@id='data-grid-activeMeds']/descendant::td[contains(string(), "${bob}")]/parent::tr
-  path = "//table[@id='data-grid-activeMeds']/descendant::td[contains(string(), '#{arg1}')]/parent::tr"
-  active_medications = ActiveMedications.instance
-  active_medications.add_action(CucumberLabel.new("Row to click"), ClickAction.new, AccessHtmlElement.new(:xpath, path))
-
-  expect(active_medications.perform_action("Row to click")).to be_true
-end
-
-Then(/^user selects the "(.*?)" detail icon in Active & Recent Medications Applet$/) do |arg1|
-  label = "#{arg1} Detail View Icon"
-  active_medications = ActiveMedications.instance
-  expect(active_medications.perform_action(label)).to be_true
-end
-
-Then(/^the Active Medications Applet table contains rows$/) do |table|
-  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultLogin.wait_time)
-  con = VerifyTableValue.new 
-  driver = TestSupport.driver
-  wait.until {  
-    browser_elements_list = driver.find_elements(:css, "#data-grid-activeMeds tbody tr")  
-    con.perform_table_verification(browser_elements_list, "#data-grid-activeMeds", table)
-  }
-end
-
 Then(/^the Active & Recent Medications Applet table finishes loading$/) do
   active_medications = ActiveMedications.instance
   wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
@@ -150,6 +125,9 @@ When(/^the user expands the Active & Recent Medications applet$/) do
 end
 
 When(/^the user minimizes the Meds Review applet$/) do
-  med_review = MedReviewAppletAll.instance
-  expect(med_review.perform_action('Control - applet - Minimize View')).to eq(true)
+  ehmp = PobMedsReview.new
+  ehmp.wait_for_btn_applet_minimize
+  expect(ehmp).to have_btn_applet_minimize
+  ehmp.btn_applet_minimize.click
+  ehmp.wait_until_btn_applet_minimize_invisible
 end

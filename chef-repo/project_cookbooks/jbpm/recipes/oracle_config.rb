@@ -34,6 +34,8 @@ jbpm_sql_config "configure_sql" do
   action :nothing
 end
 
+jbpm_users "create_users"
+
 # Install oracle connector in jboss
 common_directory "#{oracle_connector_home}" do
   owner node['jboss-eap'][:jboss_user]

@@ -25,7 +25,7 @@ define([
             .command(ENFORCE_VISIT_SELECTION, appletKey, options);
     }
 
-    function onAddMedicationOrderClicked(event) {
+    function onAddMedicationOrderClicked(event) { //this appears to be dead code
         var options = defaultChannelConfig('addOrderModal', defaultCallback(event));
         issueVisitRequest('addOrder', options);
     }
@@ -41,8 +41,7 @@ define([
         applets: [{
             "id": "medication_review",
             "title": "Medication Review",
-            "instanceId": "8afd050c9965",
-            "region": "8afd050c9965",
+            "region": "9bec149b8854",
             "dataRow": "1",
             "dataCol": "1",
             "dataSizeX": "12",

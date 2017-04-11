@@ -7,7 +7,7 @@ function getEventsRecentEventTime(pid) {
         return pid.lastAccessed;
     }
     else {
-        //TODO: Need to better handle when we don't have a date (perhaps update their records with last accessed date).
+        //If they don't have a lastAccessed time, then use today's date.
         return new Date();
     }
 }
@@ -21,36 +21,37 @@ function getEventsRecentEventTime(pid) {
  */
 function patientsAssignedCDSPanelRule(log, config, environment, patientIdentifiers, callback) {
     log.debug('patients-assigned-cds-panel.patientsAssignedCDSPanelRule() : Running patients-assigned-cds-panel');
-    //Check whether patient is assigned to a CDS panel
     log.debug('PatientIdentifiers before removing those assigned to a CDS panel: ', patientIdentifiers);
+
+    //Retrieve only those patientIdentifiers that are NOT in a CDS panel.
     var pidsNotInCDS = _.filter(patientIdentifiers, function(patientIdentifier) {
         log.debug('filtering identifier', patientIdentifier.value);
         //We need to save for those that are not in a CDS panel so we can add it later.
         return patientIdentifier.cdsPanel === false || patientIdentifier.cdsPanel === null || patientIdentifier.cdsPanel === undefined;
     });
+
+    //Retrieve only those patientIdentifiers that are in a CDS panel.
     patientIdentifiers = _.filter(patientIdentifiers, function(patientIdentifier) {
         log.debug('filtering identifier', patientIdentifier.value);
-        //TODO: See if they are in a CDS panel.
         return patientIdentifier.cdsPanel === true;
     });
     log.debug('Result after removing those assigned to a CDS panel', patientIdentifiers);
 
-    //TODO: Should we make this variable configurable?
-    var oneYearAgo = 365 * 24 * 60 * 60 * 1000; //365 days, 24 hours, 60 minutes, 60 second, 1000 milliseconds
+    var oneYearAgo = 365 * 24 * 60 * 60 * 1000; //365 days * 24 hours * 60 minutes * 60 second * 1000 milliseconds = total milliseconds in one normal (non-leap) year
     var dateCurrent = new Date();
-    //Get most recent event
+
+    //Retrieve only those CDS panel patientIdentifiers that are over one year ago.
     patientIdentifiers = _.filter(patientIdentifiers, function(pid) {
         var latestEvent = new Date(1970, 1, 1);
-        //TODO: Get the most recent event from each of these: admission, appointment, updates to data, accessed data - any touchpoints to patients record set.
+
         var eventTime = getEventsRecentEventTime(pid);
         eventTime = new Date(eventTime);
+
         if (latestEvent.getTime() < eventTime.getTime())
             latestEvent = eventTime;
 
-        //TODO: See if that is one year ago
-        //See if that is one year ago
+        //See if the latest event is over one year ago
         if ((dateCurrent.getTime() - latestEvent.getTime()) > oneYearAgo) {
-            //TODO: Remove from cache
             return true;
         }
         else {
@@ -58,7 +59,7 @@ function patientsAssignedCDSPanelRule(log, config, environment, patientIdentifie
         }
     });
 
-    //Add back those that are not in a CDS panel so we can add it later.
+    //Add back those patientIdentifiers that are not in a CDS panel.
     patientIdentifiers = patientIdentifiers.concat(pidsNotInCDS);
 
     return callback(null, patientIdentifiers);

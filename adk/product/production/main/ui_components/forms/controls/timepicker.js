@@ -26,7 +26,7 @@ define([
         template: Handlebars.compile([
             '{{ui-form-label (add-required-indicator label required) forID=(clean-for-id name) classes=(is-sr-only-label srOnlyLabel)}}',
             '<div class="input-group bootstrap-timepicker">',
-            '<span class="input-group-addon border-top-left-radius" aria-hidden="true"><i class="fa fa-clock-o color-primary"></i></span>',
+            '<span class="input-group-addon" aria-hidden="true"><i class="fa fa-clock-o color-primary"></i></span>',
             '<input type="{{type}}" id="{{clean-for-id name}}" name="{{name}}" value="{{value}}"' +
             ' class="{{PuppetForm "controlClassName"}}"' +
             ' placeholder="HH:MM"' +

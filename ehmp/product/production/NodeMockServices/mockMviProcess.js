@@ -105,7 +105,7 @@ function fetchMviData(req, res) {
             return;
         }
 
-        var namespace = { soapenv: 'http://schemas.xmlsoap.org/soap/envelope/', vaww: 'http://URL         .DNS   ' };
+        var namespace = { soapenv: 'http://schemas.xmlsoap.org/soap/envelope/', vaww: 'http://DNS  oed.oit.DNS   ' };
         var path1305 = '//soapenv:Envelope/soapenv:Body/vaww:PRPA_IN201305UV02';
         var path1309 = '//soapenv:Envelope/soapenv:Body/vaww:PRPA_IN201309UV02';
 

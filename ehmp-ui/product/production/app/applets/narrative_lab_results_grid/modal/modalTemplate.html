@@ -46,23 +46,31 @@
         </tbody>
     </table>
 </div>
-<form class="form-inline top-margin-lg">
+<form class="form-inline top-margin-sm">
     <div id="dateRangeFilter"></div>
 </form>
 <div class="row">
-    <div class="col-md-5" id="lrDataTableView" accesskey="r">
-        <div class="panel panel-primary">
+    <div class="col-xs-5" id="lrDataTableView" accesskey="r">
+        <div class="panel panel-primary bottom-margin-no bottom-padding-no">
             <div class="panel-heading">
-                <small class="pull-right">Total Tests: <span id="totalTests"></span></small>
-                <h5 class="panel-title">{{typeName}} - {{specimen}}</h5>
+                <div class="row">
+                    <div class="col-xs-8 left-padding-sm">
+                        <h5 class="all-padding-no top-margin-no color-primary-dark">{{typeName}} - {{specimen}}</h5>
+                    </div>
+                    <div class="col-xs-4 text-right">
+                        <p>Total Tests: <span id="totalTests"></span></p>
+                    </div>
+                </div>
             </div>
-            <div class="js-backgrid"></div>
+            <div class="table-responsive">
+                <div class="js-backgrid"></div>
+            </div>
         </div>
     </div>
-    <div class="col-md-7" id="lrGraph">
-        <div class="panel panel-info">
+    <div class="col-xs-7" id="lrGraph">
+        <div class="panel panel-primary bottom-margin-no bottom-padding-no">
             <div class="panel-heading">
-                <h5 class="panel-title">{{typeName}} - {{specimen}}</h5>
+                <h5 class="all-padding-no top-margin-no color-primary-dark">{{typeName}} - {{specimen}}</h5>
             </div>
             <div class="panel-body">
                 <div id="js-chart"></div>

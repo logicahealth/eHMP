@@ -1,11 +1,21 @@
 .patient-info-bar {
+    background: $pure-white;
     border-left: none;
+    border-right: 1px solid $grey;
     min-height: 710px;
     width: 160px;
-    background: white;
     z-index: 3;
-    border-right: 1px solid $grey;
+    .patient-demographic-help {
+        padding-left: 10px;
+        position: absolute;
+        top: 29px;
+        z-index: 100;
+        .help-icon-link {
+            color: $pure-white;
+        }
+    }
     .section-content {
+        cursor: pointer;
         padding: 0px 15px;
         .info {
             margin: 10px 0 0 4px;

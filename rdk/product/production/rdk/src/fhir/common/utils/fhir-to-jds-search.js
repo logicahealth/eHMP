@@ -398,7 +398,7 @@ function buildSearchQueryString(queries) {
  * @param fhirToJDSSortMap {Object} FHIR to JDS sort criteria map for a particular domain.
  * @returns {Array} List of query parts.
  *
- * TODO: This will grow as we add support for other common parameters.
+ * NOTE: This will grow as we add support for other common parameters.
  */
 function buildCommonQueryParams(params, fhirToJDSSortMap) {
     var query = [];

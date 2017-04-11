@@ -25,11 +25,12 @@ var domainMadlibGenerators = {
  * @param {object} noteObject The note object to be updated with the madlib string
  * @param {object} sourceClinicalObject The source clinical object passed to
  *        the domain specific madlib generator
+ * @param {object} appConfig Reference to the RDK config object
  */
-module.exports.generateMadlibString = function(errorMessages, noteObject, sourceClinicalObject) {
+module.exports.generateMadlibString = function(errorMessages, noteObject, sourceClinicalObject, appConfig) {
     var domain = detectDomain(sourceClinicalObject);
     var domainMadlibGenerator = _.get(domainMadlibGenerators, domain, handleInvalidDomain);
-    var madlibString = domainMadlibGenerator(errorMessages, sourceClinicalObject);
+    var madlibString = domainMadlibGenerator(errorMessages, sourceClinicalObject, appConfig);
 
     if (!_.isEmpty(errorMessages)) {
         return errorMessages;

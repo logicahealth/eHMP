@@ -383,7 +383,7 @@ public class AuditEntry {
      *     
      */
     public void setUserName(String value) {
-        this.VsID        alue;
+        this.userName = value;
     }
 
 }

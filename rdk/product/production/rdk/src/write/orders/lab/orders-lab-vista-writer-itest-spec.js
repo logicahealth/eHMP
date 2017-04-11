@@ -5,11 +5,11 @@ var vistaWriter = require('./orders-lab-vista-writer');
 var writebackContext = {
     pid: '9E7A;100615',
     vistaConfig: {
-        host: 'IP_ADDRESS',
+        host: 'IP        ',
         port: 9210,
-        accessCode: 'PW',
-        verifyCode: 'PW',
-        localIP: 'IPADDRES',
+        accessCode: 'PW    ',
+        verifyCode: 'PW    !!',
+        localIP: 'IP      ',
         localAddress: 'localhost',
         noReconnect: true
     },
@@ -71,7 +71,7 @@ describe('write-back orders lab vista writer integration tests', function() {
     //Test w/o required DFN
     it('tests that save order returns error with no vprResponse & no vprModel', function(done) {
         this.timeout(5000);
-        vistaWriter.createLab(writebackContext, function(err, result) {
+        vistaWriter.create(writebackContext, function(err, result) {
             expect(err).to.be.truthy();
             expect(writebackContext.vprResponse).to.be.undefined();
             expect(writebackContext.vprModel).to.be.undefined();

@@ -96,7 +96,7 @@ public class STSTokenGenerator {
 	private static final String JKS_ALIAS = "mocksts";
 
 	/** The Constant JKS_PASSWORD. */
-	private static final String JKS_PASSWORD       PW";
+	private static final String JKS_PASSWORD = "m0ckSts123";
 
 	/** The Constant SIGNING_JKS. */
 	private static final String SIGNING_JKS = "mocksts.jks";

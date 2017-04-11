@@ -13,51 +13,53 @@ var rdk = require('../../core/rdk');
 var mongo = require('mongoskin');
 var Agenda = require('agenda');
 var request = require('request');
-var dd = require('drilldown');
-var cdsDBUtil = require('./cds-db-util');
+var _ = require('lodash');
+var cdsSchedule = require('../../resources/cds-schedule/cds-schedule');
 
 var agenda;
 var logger;
 var dbName = '_cds_agenda_';
 var jobProcessorName = 'sendRequest';
 
-function init(app, mongoConfig) {
-    logger = app.logger;
+function init(app, subsystemLogger) {
+   logger = subsystemLogger;
+    if (!_.isUndefined(app, 'config.cdsMongoServer')) {
+        app.subsystems.cds.getCDSDB(dbName, null, function(error, dbConnection) {
+            if (!error) {
+                initDb(app, dbConnection);
+                cdsSchedule.init(app);
+            }
+        });
+    } else {
+        logger.debug('mongoServerConfigured was not configured - Agenda not initialized.');
+    }
+}
+
+function initDb(app, dbConnection) {
     try {
 
-    var connectionString = cdsDBUtil.getMongoDBConnectionString(dbName, mongoConfig, logger);
-
-    logger.debug('connection string test ' + connectionString );
         agenda = new Agenda()
             .name('CDS Jobs Queue')
-            .database(connectionString)
+            .mongo(dbConnection)
             .processEvery('5 seconds');
-
-        agenda._db.ensureIndex('nextRunAt', ignoreErrors)
-            .ensureIndex('lockedAt', ignoreErrors)
-            .ensureIndex('name', ignoreErrors)
-            .ensureIndex('priority', ignoreErrors);
-
-        // unlock jobs
-        agenda._db.update({
-            lockedAt: {
-                $exists: true
-            }
-        }, {
-            $set: {
-                lockedAt: null
-            }
-        }, function() {});
 
         agenda.define(jobProcessorName, function(job, done) {
             sendRequest(job, done);
         });
 
-        agenda.start();
+        agenda.on('ready', function() {
+            agenda.start();
+        });
+        agenda.on('error', function() {
+            logger.error('Agenda error - stopping');
+            agenda.stop();
+        });
+
+        agenda.db_init();
+
         return agenda;
 
     } catch (e) {
-        // console.log('error initializing agenda: ' + e);
         logger.error({error: e}, 'error initializing agenda');
         return null;
     }
@@ -68,9 +70,8 @@ function ignoreErrors() {}
 function sendRequest(job, done) {
 
     var info = job.attrs.data;
-    var url = 'http://' + info.url + '/' + info.cdsname;
+    var url = info.url + '/' + info.cdsname;
 
-    // console.log('In sendRequest: URL: ' + url + ' disabled: ' + job.attrs.disabled);
     logger.debug('In sendRequest: URL: ' + url + ' disabled: ' + job.attrs.disabled);
 
     if (job.attrs.disabled) {
@@ -95,23 +96,7 @@ function sendRequest(job, done) {
     }
 }
 
-
-
-/*
- * This is to shutdown Agenda - without it we can get into a situation where RDK
- * doesn't shut down when it's told to.
- */
-function graceful() {
-    if (agenda) {
-        agenda.stop(function() {
-            process.exit(0);
-        });
-    } else {
-        process.exit(0);
-    }
-}
-process.on('SIGTERM', graceful);
-process.on('SIGINT', graceful);
+//Note: agenda shutdown logic applied in app-factory
 
 function getAgenda() {
     return agenda;

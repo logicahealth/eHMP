@@ -119,4 +119,8 @@ class PobDemographicsElements < SitePrism::Page
     fail "'#{partialid}' is not a defined element" if nth_type.nil?
     self.class.elements :fld_primary_care_provider, ".demographic-group-wrapper:nth-of-type(#{nth_type}) dt"
   end
+
+  def provider_group_header_text
+    fld_provider_group_header.map { | item | item.text }
+  end
 end

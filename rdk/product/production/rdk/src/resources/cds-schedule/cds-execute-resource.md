@@ -2,7 +2,7 @@
 
 ## Cds execute cds execute [{{{path}}}]
 
-### Get [GET {{{path}}}/request{?name}]
+### Get [GET {{{path}}}/request{?name}{&id}]
 
 Execution Request resource
 
@@ -14,6 +14,7 @@ Get execution request(s)
 
     + name (string, optional) - name of execution request
 
+    + id (string, optional) - id of execution request
 
 + Response 200 (application/json)
 
@@ -24,18 +25,13 @@ Get execution request(s)
 :[Response 500]({{{common}}}/responses/500.md)
 
 
-### Post [POST {{{path}}}/request{?name}]
+### Post [POST {{{path}}}/request]
 
 Execution Request resource
 
 #### Notes
 
 Create an execution request
-
-+ Parameters
-
-    + name (string, optional) - name of execution request
-
 
 + Request JSON Message (application/json)
 
@@ -48,18 +44,13 @@ Create an execution request
 :[Response 500]({{{common}}}/responses/500.md)
 
 
-### Put [PUT {{{path}}}/request{?name}]
+### Put [PUT {{{path}}}/request]
 
 Execution Request resource
 
 #### Notes
 
 Update an execution request
-
-+ Parameters
-
-    + name (string, optional) - name of execution request
-
 
 + Request JSON Message (application/json)
 

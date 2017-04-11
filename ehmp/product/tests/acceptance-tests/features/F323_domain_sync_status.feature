@@ -14,7 +14,6 @@ Scenario: Client request sync for patient and get all domain records in Panorama
       | Consult     | true         |
       | CPT         | true         |
       | Document    | true         |
-      | Factor      | true         |
       | Med         | true         |
       | Order       | true         |
       | POV         | true         |
@@ -53,7 +52,6 @@ Scenario: Client request sync for patient and get all domain records in Kodak
       | Consult     | true         |
       | CPT         | true         |
       | Document    | true         |
-      | Factor      | true         |
       | Med         | true         |
       | Order       | true         |
       | POV         | true         |
@@ -117,7 +115,6 @@ Scenario: Client request sync for patient and get all domain records in Panorama
       | Consult     | true         |
       | CPT         | true         |
       | Document    | true         |
-      | Factor      | true         |
       | Med         | true         |
       | Order       | true         |
       | POV         | true         |
@@ -149,7 +146,6 @@ Scenario: Client request sync for patient and get all domain records in Panorama
       | Consult     | true         |
       | CPT         | true         |
       | Document    | true         |
-      | Factor      | true         |
       | Med         | true         |
       | Order       | true         |
       | POV         | true         |

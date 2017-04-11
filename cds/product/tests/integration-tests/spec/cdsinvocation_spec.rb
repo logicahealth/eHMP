@@ -47,8 +47,8 @@ describe "Test cdsinvocation" do
     response = HTTParty.get(
       "#{url}/protected", 
       :basic_auth => {
-          :VsID         'PW',
-          :VsID        'PW'
+          :username        'UN',
+          :password       'PW'
       },
       :query => {}, 
       :headers => {

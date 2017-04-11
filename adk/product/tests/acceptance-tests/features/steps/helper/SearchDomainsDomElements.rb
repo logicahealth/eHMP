@@ -16,11 +16,6 @@ class SearchElements < AccessBrowserV2
     access_search_result_list = AccessHtmlElement.new(:class, "cpe-search-result-summary")
     add_verify(CucumberLabel.new("Search Results"), InElementList.new(access_search_result_list), access_search_result_list)
 
-    add_action(CucumberLabel.new("Past Month"), ClickAction.new, AccessHtmlElement.new(:xpath, "todo"))
-    add_action(CucumberLabel.new("Past Week"), ClickAction.new, AccessHtmlElement.new(:xpath, "todo"))
-    add_action(CucumberLabel.new("Yesterday"), ClickAction.new, AccessHtmlElement.new(:xpath, "todo"))
-    add_action(CucumberLabel.new("Today"), ClickAction.new, AccessHtmlElement.new(:xpath, "todo"))
-    add_action(CucumberLabel.new("Tomorrow"), ClickAction.new, AccessHtmlElement.new(:xpath, "todo"))
     add_action(CucumberLabel.new("Search Clinics close button"), ClickAction.new, AccessHtmlElement.new(:xpath, "//input[@placeholder='Search Clinics']/ancestor::div[contains(@id, 'popupmenu')]/descendant::*[contains(string(), 'Close')]/ancestor::a"))
     add_action(CucumberLabel.new("Search Wards close button"), ClickAction.new, AccessHtmlElement.new(:xpath, "//input[@placeholder='Search Wards']/ancestor::div[contains(@id, 'popupmenu')]/descendant::*[contains(string(), 'Close')]/ancestor::a"))
 

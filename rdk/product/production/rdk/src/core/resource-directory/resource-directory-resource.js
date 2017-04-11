@@ -1,7 +1,6 @@
 'use strict';
 
 var _ = require('lodash');
-var dd = require('drilldown');
 var path = require('path');
 
 var resourceDirectoryInterceptors = {
@@ -29,6 +28,6 @@ function getResourceDirectory(req, res) {
     var baseUrl = null;
     var serializedResources = req.app.resourceRegistry.getDirectory(
         baseUrl,
-        dd(req.app)('config')('rootPath').val);
+        _.get(req, 'app.config.rootPath'));
     return res.rdkSend(serializedResources);
 }

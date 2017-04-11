@@ -49,6 +49,9 @@ define([
         },
         isOfGroup: function(type, group) {
             return _.isEqual(this.get('type'), type)  && _.contains(this.get('group'), group);
+        },
+        isOfType: function(type) {
+            return _.isEqual(this.get('type'), type);
         }
     });
     var ComponentCollection = Backbone.Collection.extend({
@@ -94,8 +97,13 @@ define([
             return false;
         }
     });
-    Messaging.reply('get:components', function() {
-        return componentCollection;
+
+    Messaging.reply('get:components', function(iteratee) {
+        if (!_.isFunction(iteratee) || _.isEmpty(componentCollection)) {
+            return componentCollection;
+        }
+
+        return componentCollection.filter(iteratee);
     });
 
     // This is a global collection that gets used for all Component Sub-Items

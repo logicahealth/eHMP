@@ -62,7 +62,7 @@ function signOrders(writebackContext, callback) {
 
                 //update JDS with the latest version of the signed order
                 vprOrder.getVprOrders(writebackContext, function(err, vprOrderResults) {
-                    //TODO support updating JDS with more than one signed order (will probably require changes to jds-direct-writer)
+                    //FUTURE-TODO support updating JDS with more than one signed order (will probably require changes to jds-direct-writer)
                     if (vprOrderResults && vprOrderResults.length > 0) {
                         var vprOrder = vprOrderResults[0];
 
@@ -237,7 +237,7 @@ function signOrderSend(writebackContext, callback) {
                 }
             });
 
-            //TODO support reporting of multiple errors & successful signatures
+            //FUTURE-TODO support reporting of multiple errors & successful signatures
             if (errorMsg.length > 0) {
                 return callback(errorMsg);
             }

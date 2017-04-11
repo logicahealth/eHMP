@@ -15,7 +15,7 @@ module.exports.getResourceConfig = function() {
                 },
             }
         },
-        requiredPermissions: [],
+        requiredPermissions: ['read-orderable'],
         isPatientCentric: false,
     }];
 };

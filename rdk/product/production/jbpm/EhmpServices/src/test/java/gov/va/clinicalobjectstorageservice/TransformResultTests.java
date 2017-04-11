@@ -60,7 +60,7 @@ public class TransformResultTests {
 	
 	@Test
 	public void validResultJSONTest() throws EhmpServicesException {
-		String result = writeHandler.transformResult("{\"data\":{\"headers\":{\"location\":\"http://IP_ADDRESS:PORT/clinicobj/urn:va:ehmp-activity:9E7A:3:f385c135-79d7-47b7-ae7b-08d6db753bce\"}}}");
+		String result = writeHandler.transformResult("{\"data\":{\"headers\":{\"location\":\"http://IP             /clinicobj/urn:va:ehmp-activity:9E7A:3:f385c135-79d7-47b7-ae7b-08d6db753bce\"}}}");
 		JsonParser parser = new JsonParser();
 		JsonObject obj = parser.parse(result).getAsJsonObject();
 		

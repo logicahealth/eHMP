@@ -103,8 +103,8 @@ module.exports = function(req, res, next) {
                 req.interceptorResults.patientIdentifiers.edipi = dfn;
                 uid = 'urn:va:patient:DOD:' + dfn + ':' + dfn;
             } else if (pidValidator.isEdipi(pid)) {
-                req.interceptorResults.patientIdenfifiers.edipi = pid;
-                req.interceptorResults.patientIdenfifiers.pidEdipi = 'DOD;' + pid;
+                req.interceptorResults.patientIdentifiers.edipi = pid;
+                req.interceptorResults.patientIdentifiers.pidEdipi = 'DOD;' + pid;
                 uid = 'urn:va:patient:DOD:' + pid + ':' + pid;
             }
             req.interceptorResults.patientIdentifiers.uids.push(uid);

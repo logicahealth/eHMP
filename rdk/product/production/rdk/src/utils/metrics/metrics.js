@@ -1,7 +1,6 @@
 'use strict';
 
 var _ = require('lodash');
-var dd = require('drilldown');
 var uriBuilder = require('../uri-builder');
 var MetricsData = require('./metrics-data');
 
@@ -15,27 +14,27 @@ module.exports = {
         serviceHosts = [
             {
                 host: function () {
-                    return dd(app)('config')('jdsServer')('baseUrl').val;
+                    return _.get(app, 'config.jdsServer.baseUrl');
                 }, name: 'jds'
             },
             {
                 host: function () {
-                    return dd(app)('config')('solrServer')('baseUrl').val;
+                    return _.get(app, 'config.solrServer.baseUrl');
                 }, name: 'solr'
             },
             {
                 host: function () {
-                    return dd(app)('config')('mvi')('baseUrl').val;
+                    return _.get(app, 'config.mvi.baseUrl');
                 }, name: 'mvi'
             },
             {
                 host: function () {
-                    return dd(app)('config')('jbpm')('baseUrl').val;
+                    return _.get(app, 'config.jbpm.baseUrl');
                 }, name: 'jbpm'
             },
             {
                 host: function () {
-                    return dd(app)('config')('generalPurposeJdsServer')('host').val;
+                    return _.get(app, 'config.generalPurposeJdsServer.host');
                 }, name: 'pjds'
             }
         ];
@@ -131,7 +130,8 @@ function handleStart(type, config, reqLogger) {
 //Could possible use less code using _.flatten and concat function but not really any easier to understand.
 function findHostNameByIP(url) {
     var findHostPredicate = function(host) {
-        return _.contains(url, _.result(host, 'host'));
+        var hostString = _.result(host, 'host');
+        return _.size(hostString) > 1 && _.contains(url, hostString);
     };
 
     var hostName = _.result(_.find(serviceHosts, findHostPredicate), 'name');

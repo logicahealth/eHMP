@@ -11,18 +11,18 @@ var signVistaWriter = require('./orders-common-sign-vista-writer'),
 //    var writebackContext = {
 //        pid: '9E7A;100615',
 //        vistaConfig: {
-//            host: 'IP_ADDRESS',
+//            host: 'IP        ',
 //            port: 9210,
-//            accessCode: 'PW',
-//            verifyCode: 'PW',
-//            localIP: 'IPADDRES',
+//            accessCode: 'PW    ',
+//            verifyCode: 'PW    !!',
+//            localIP: 'IP      ',
 //            localAddress: 'localhost'
 //        },
 //        model: {
 //            'dfn': '100615',
 //            'provider': '10000000271',
 //            'location': '285',
-//            'eSig':'mx1234!!',
+//            'eSig':'PW    !!',
 //            'orderList': [{
 //                'orderId': '38999;1'
 //            }],
@@ -65,18 +65,18 @@ describe('Checks the sign order send functionality', function () {
     var writebackContext = {
         pid: '9E7A;100615',
         vistaConfig: {
-            host: 'IP_ADDRESS',
+            host: 'IP        ',
             port: 9210,
-            accessCode: 'PW',
-            verifyCode: 'PW',
-            localIP: 'IPADDRES',
+            accessCode: 'PW    ',
+            verifyCode: 'PW    !!',
+            localIP: 'IP      ',
             localAddress: 'localhost',
             noReconnect: true
         },
         model: {
             'provider': '10000000238',
             'location': '285',
-            'eSig': 'mx1234!!',
+            'eSig': 'PW    !!',
             'orderDialog': 'LR OTHER LAB TESTS',
             'displayGroup': '5',
             'quickOrderDialog': '2',
@@ -159,18 +159,18 @@ describe('Checks the validate signature functionality', function() {
     var writebackContext = {
         pid: '9E7A;100615',
         vistaConfig: {
-            host: 'IP_ADDRESS',
+            host: 'IP        ',
             port: 9210,
-            accessCode: 'PW',
-            verifyCode: 'PW',
-            localIP: 'IPADDRES',
+            accessCode: 'PW    ',
+            verifyCode: 'PW    !!',
+            localIP: 'IP      ',
             localAddress: 'localhost'
         },
         model: {
             'dfn': '100615',
             'provider': '10000000238',
             'location': '285',
-            'eSig':'mx1234!!'
+            'eSig':'PW    !!'
 
         },
         logger: sinon.stub(require('bunyan').createLogger({name: 'sign-vista-writer'}))
@@ -179,11 +179,11 @@ describe('Checks the validate signature functionality', function() {
     var writebackContext2 = {
         pid: '9E7A;100615',
         vistaConfig: {
-            host: 'IP_ADDRESS',
+            host: 'IP        ',
             port: 9210,
-            accessCode: 'PW',
-            verifyCode: 'PW',
-            localIP: 'IPADDRES',
+            accessCode: 'PW    ',
+            verifyCode: 'PW    !!',
+            localIP: 'IP      ',
             localAddress: 'localhost'
         },
         model: {
@@ -223,11 +223,11 @@ describe('Checks the order detail comparison functionality', function() {
     var detailWritebackContext = {
         pid: '9E7A;100615',
         vistaConfig: {
-            host: 'IP_ADDRESS',
+            host: 'IP        ',
             port: 9210,
-            accessCode: 'PW',
-            verifyCode: 'PW',
-            localIP: 'IPADDRES',
+            accessCode: 'PW    ',
+            verifyCode: 'PW    !!',
+            localIP: 'IP      ',
             localAddress: 'localhost',
             noReconnect: true
         },
@@ -278,11 +278,11 @@ describe('Checks the order detail comparison functionality', function() {
 //    var writebackContext = {
 //        pid: '9E7A;100615',
 //        vistaConfig: {
-//            host: 'IP_ADDRESS',
+//            host: 'IP        ',
 //            port: 9210,
-//            accessCode: 'PW',
-//            verifyCode: 'PW',
-//            localIP: 'IPADDRES',
+//            accessCode: 'PW    ',
+//            verifyCode: 'PW    !!',
+//            localIP: 'IP      ',
 //            localAddress: 'localhost'
 //        },
 //        model: {

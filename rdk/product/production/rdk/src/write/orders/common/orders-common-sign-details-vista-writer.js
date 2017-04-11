@@ -1,6 +1,3 @@
-/*
- TODO: Using existing RPCs until RPC wrapper is in place
- */
 'use strict';
 
 var rpcClientFactory = require('./../../core/rpc-client-factory');

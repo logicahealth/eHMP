@@ -1,5 +1,5 @@
 HMPSTMP ;ASMR/JD,BL,ASF,CK,CPC - MetaStamp ;Jun 22, 2016 17:23:52
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1**;May 15, 2016;Build 1
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1,2**;May 15, 2016;Build 24
  ;Per VA Directive 6402, this routine should not be modified.
  ;
  ; Returns the most recent date/time
@@ -149,6 +149,7 @@ MED ; Med
  S DATE(3)=$G(MED("overallStop"))
  S DATE(4)=$G(MED("stopped"))
  S DATE(5)=$G(MED("lastFilled"))
+ S DATE(6)=$G(MED("prescriptionFinished")) ; DE5723
  ;go through value array
  N I,J
  S J="",J=$O(DATE(J),-1)

@@ -58,11 +58,12 @@ define([
 
             this.$el.find('#screenReaderAuthenticating').addClass('sr-only').removeClass('hidden').focus();
             var fp = {
-                facility: this.$el.find('form #facility')[0].value,
+                site: this.$el.find('form #facility')[0].value,
                 accessCode: this.$el.find('form #accessCode')[0].value,
-                verifyCode: this.$el.find('form #verifyCode')[0].value
+                verifyCode: this.$el.find('form #verifyCode')[0].value,
+                division: this.$el.find('form #facility option:selected').attr('data-division')
             };
-            if (fp.facility && fp.accessCode && fp.verifyCode && (fp.facility !== "noneSelected")) {
+            if (fp.site && fp.accessCode && fp.verifyCode && (fp.site !== "noneSelected")) {
 
                 var onSuccessfulLogin = function() {
 
@@ -122,7 +123,7 @@ define([
                     login.button('reset');
                 };
 
-                var authenticateUser = ADK.UserService.authenticate(fp.accessCode, fp.verifyCode, fp.facility);
+                var authenticateUser = ADK.UserService.authenticate(fp.accessCode, fp.verifyCode, fp.site, fp.division);
 
                 authenticateUser.done(onSuccessfulLogin).fail(onFailedLogin);
 

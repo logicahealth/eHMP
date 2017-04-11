@@ -104,86 +104,14 @@ define([
         parse: fetchOptions.viewModel.parse
     });
 
-    var PanelModel = Backbone.Model.extend({
-        defaults: {
-            type: 'panel'
-        }
+    var message = ADK.Messaging.getChannel('narrative_lab_results');
+    message.on('detailView', function(channelObj) {
+        AppletUiHelper.getDetailView(channelObj.model, channelObj.targetElement, channelObj.model.collection, true, AppletUiHelper.showModal, AppletUiHelper.showErrorModal);
     });
-    var gridView;
+
     return ADK.AppletViews.GridView.extend({
-        initialize: function(options) {
-            this._super = ADK.AppletViews.GridView.prototype;
-
-            var columnList = [columns.dateCol(), columns.descriptionCol(),
-                columns.typeCol(), columns.authorCol(), columns.facilityCol()];
-
-            var authorColIdx = 3;
-
-            this.summaryColumns = _.without(columnList, columnList[authorColIdx]);
-            this.fullScreenColumns = columnList;
-
-            var appletOptions = {
-                filterFields: ['observed', 'typeName', 'flag', 'result', 'specimen', 'groupName', 'isPanel', 'units', 'referenceRange', 'facilityMoniker', 'labs.models', this.getLoincValues],
-                formattedFilterFields: {
-                    'observed': function(model, key) {
-                        var val = model.get(key);
-                        val = val.replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})/, '$2/$3/$1 $4:$5');
-                        return val;
-                    }
-                },
-                DetailsView: DetailsView,
-                filterDateRangeField: {
-                    name: "observed",
-                    label: "Date",
-                    format: "YYYYMMDD"
-                },
-                onClickAdd: LabOrderTrayUtils.launchLabForm,
-                onClickRow: function(model, event, gridView) {
-                    event.preventDefault();
-                    if (options.appletConfig.viewType === 'expanded') {
-                        model.set('isFullscreen', true);
-                    } else {
-                        model.set('isFullscreen', false);
-                    }
-                    if (model.get('isPanel')) {
-                        if (!$(event.currentTarget).data('isOpen')) {
-                            $(event.currentTarget).data('isOpen', true);
-                        } else {
-                            var k = $(event.currentTarget).data('isOpen');
-                            k = !k;
-                            $(event.currentTarget).data('isOpen', k);
-                        }
-                        var i = $(event.currentTarget).find('.js-has-panel i');
-                        if (i.length) {
-                            if (i.hasClass('fa-chevron-up')) {
-                                i.removeClass('fa-chevron-up')
-                                    .addClass('fa-chevron-down');
-                                $(event.currentTarget).data('isOpen', true);
-                            } else {
-                                i.removeClass('fa-chevron-down')
-                                    .addClass('fa-chevron-up');
-                                $(event.currentTarget).data('isOpen', false);
-                            }
-                        }
-                        gridView.expandRow(model, event);
-                    } else {
-                        AppletUiHelper.getDetailView(model, event.currentTarget, appletOptions, true, AppletUiHelper.showModal, AppletUiHelper.showErrorModal);
-                    }
-                },
-                tblRowSelector: "#data-grid-" + this.options.appletConfig.instanceId + " tbody tr"
-            };
-            if (this.columnsViewType === "expanded") {
-                appletOptions.columns = this.fullScreenColumns;
-            } else if (this.columnsViewType === "summary") {
-                appletOptions.columns = this.summaryColumns;
-            } else {
-                appletOptions.summaryColumns = this.summaryColumns;
-                appletOptions.fullScreenColumns = this.fullScreenColumns;
-            }
-
-            var self = this;
-
-            fetchOptions.onSuccess = function(collection) {
+        collectionEvents: {
+            'read:success': function(collection) {
                 var fullCollection = collection.fullCollection || collection;
 
                 fullCollection.each(function(result) {
@@ -255,6 +183,52 @@ define([
                         result.set('infobuttonContext', 'LABRREV');
                     }
                 });
+            }
+        },
+        initialize: function(options) {
+            this._super = ADK.AppletViews.GridView.prototype;
+
+            var columnList = [columns.dateCol(), columns.descriptionCol(),
+                columns.typeCol(), columns.authorCol(), columns.facilityCol()];
+
+            var authorColIdx = 3;
+
+            this.summaryColumns = _.without(columnList, columnList[authorColIdx]);
+            this.fullScreenColumns = columnList;
+
+            var appletOptions = {
+                filterFields: ['observed', 'description', 'author', 'facilityMoniker', 'typeName', this.getLoincValues],
+                formattedFilterFields: {
+                    'observed': function(model, key) {
+                        var val = model.get(key);
+                        val = val.replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})/, '$2/$3/$1 $4:$5');
+                        return val;
+                    }
+                },
+                DetailsView: DetailsView,
+                filterDateRangeField: {
+                    name: "observed",
+                    label: "Date",
+                    format: "YYYYMMDD"
+                },
+                tblRowSelector: "#data-grid-" + this.options.appletConfig.instanceId + " tbody tr"
+            };
+            if (ADK.PatientRecordService.isPatientInPrimaryVista()) {
+                appletOptions.onClickAdd = LabOrderTrayUtils.launchLabForm;
+            }
+            if (this.columnsViewType === "expanded") {
+                appletOptions.columns = this.fullScreenColumns;
+            } else if (this.columnsViewType === "summary") {
+                appletOptions.columns = this.summaryColumns;
+            } else {
+                appletOptions.summaryColumns = this.summaryColumns;
+                appletOptions.fullScreenColumns = this.fullScreenColumns;
+            }
+
+            var self = this;
+
+            fetchOptions.onSuccess = function(collection) {
+                collection.trigger('read:success', collection);
             };
 
             var narrativeLabsFilter = 'ne(categoryCode , "urn:va:lab-category:CH")';
@@ -270,8 +244,8 @@ define([
                 });
             });
 
-            this.gridCollection = ADK.PatientRecordService.fetchCollection(fetchOptions);
-            appletOptions.collection = this.gridCollection;
+            this.collection = appletOptions.collection = this.gridCollection = ADK.PatientRecordService.createEmptyCollection(fetchOptions);
+            ADK.PatientRecordService.fetchCollection(fetchOptions, this.collection);
 
             appletOptions.toolbarOptions = {
                 buttonTypes: ['infobutton', 'detailsviewbutton'],
@@ -279,11 +253,6 @@ define([
 
             this.appletOptions = appletOptions;
             this._super.initialize.apply(this, arguments);
-
-            var message = ADK.Messaging.getChannel('narrative_lab_results');
-            this.listenTo(message, 'detailView', function(channelObj) {
-                AppletUiHelper.getDetailView(channelObj.model, channelObj.targetElement, channelObj.model.collection, true, AppletUiHelper.showModal, AppletUiHelper.showErrorModal);
-            });
 
             message.reply('gridCollection', function() {
                 return self.gridCollection;

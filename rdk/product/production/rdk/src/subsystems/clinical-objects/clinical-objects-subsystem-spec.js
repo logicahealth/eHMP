@@ -10,7 +10,7 @@ var sample1 = {
     patientUid: 'urn:va:patient:9E7A:3:3',
     model: {
         patientUid: 'urn:va:patient:9E7A:3:3',
-        authorUid: 'mx1234',
+        authorUid: 'PW    ',
         domain: 'ehmp-order',
         subDomain: 'laboratory',
         ehmpState: 'active',
@@ -55,7 +55,7 @@ var buildSampleObject = function(sample) {
         authorUid: sample.model.authorUid,
         items: [{
             addendum: 'my note',
-            authorUid: 'mx1234',
+            authorUid: 'PW    ',
             data: {
                 labTestText: 'Lab Text',
                 currentItemCount: 1,
@@ -85,7 +85,7 @@ var buildOrderObject = function(ehmpState, referenceId, domain, subDomain){
         pid: '9E7A;3',
         model: {
             patientUid: 'urn:va:patient:9E7A:3:3',
-            authorUid: 'mx1234',
+            authorUid: 'PW    ',
             domain: domain,
             subDomain: subDomain,
             ehmpState: ehmpState,
@@ -111,7 +111,7 @@ var buildOrderObject = function(ehmpState, referenceId, domain, subDomain){
 var updatedClinincalObject  = {
     uid: 'urn:va:ehmp-order:9E7A:3:de305d54-75b4-431b-adb2-eb6b9e546014',
     patientUid: 'urn:va:patient:9E7A:3:3',
-    authorUid: 'mx1234',
+    authorUid: 'PW    ',
     domain: 'ehmp-order',
     subDomain: 'laboratory',
     ehmpState: 'active',
@@ -135,15 +135,15 @@ var updatedClinincalObject  = {
 //THIS SHOULD CHANGE ONCE WE SET THE CORRECT ENDPOINT!!
 var endpoint = 'clinicobj';
 var activityManagementEndpoint = 'activity-management-event';
-var testEndpoint = 'http://IP_ADDRESS:PORT';
-var testVxsyncEndpoint = 'http://IPADDRESS:POR';
+var testEndpoint = 'http://IP             ';
+var testVxsyncEndpoint = 'http://IP           ';
 
 var appConfig = {
     generalPurposeJdsServer: {
-        baseUrl: 'http://IP_ADDRESS:PORT'
+        baseUrl: 'http://IP             '
     },
     vxSyncServer: {
-        baseUrl: 'http://IPADDRESS:POR'
+        baseUrl: 'http://IP           '
     }
 };
 

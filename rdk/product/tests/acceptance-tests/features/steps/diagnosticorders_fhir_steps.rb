@@ -70,7 +70,7 @@ end
 When(/^the client requests "(.*?)" diagnosticorders for the patient "(.*?)" in FHIR format$/) do |limit, pid|
   temp = RDKQuery.new('diagnosticorder-diagnosticorder')
   temp.add_parameter("subject.identifier", pid)
-  temp.add_parameter("limit", limit)
+  temp.add_parameter("_count", limit)
   temp.add_acknowledge("true")
   p temp.path
   @response = HTTPartyRDK.get(temp.path)

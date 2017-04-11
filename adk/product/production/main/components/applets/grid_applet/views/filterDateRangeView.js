@@ -211,10 +211,10 @@ define([
                 this.$('.input-group.date#custom-date-range2-' + this.options.appletId).datepicker('update', globalCustomToDate);
 
                 if (selectedId !== 'custom-range-apply-global') {
-                    var targetId = '#' + selectedId.slice(0, -6) + this.options.appletId;
+                    var targetId = '#' + selectedId.split('RangeGlobal')[0] +'-range-' + this.options.appletId;
                     this.$el.find(targetId).addClass('active-range');
-                    this.$el.find('#filter-from-date-' + this.options.appletId).val('');
-                    this.$el.find('#filter-to-date-' + this.options.appletId).val('');
+                    this.$el.find('#filter-from-date-' + this.options.appletId).val(globalCustomFromDate);
+                    this.$el.find('#filter-to-date-' + this.options.appletId).val(globalCustomToDate);
                     this.$el.find('#custom-range-apply-' + this.options.appletId).prop('disabled', true);
 
                 }

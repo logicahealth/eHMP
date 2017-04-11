@@ -70,10 +70,16 @@ function addInMissingFields(record) {
     record.micro = (record.categoryCode !== undefined && record.categoryCode !== null && record.categoryCode === 'urn:va:lab-category:MI');
 
     // record.qualifiedName
-    //----------------
-    record.qualifiedName = record.typeName;
+    //---------------------
+    record.qualifiedName = '';
+    if (record.typeName) {
+        record.qualifiedName = record.typeName;
+    }
     if(record.specimen !== undefined && record.specimen !== null) {
-        record.qualifiedName += ' (' + record.specimen + ')';
+        if (record.qualifiedName) {
+            record.qualifiedName += ' ';
+        }
+        record.qualifiedName += '(' + record.specimen + ')';
     }
 
     // record.summary

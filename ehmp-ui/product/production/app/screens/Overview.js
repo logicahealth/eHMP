@@ -150,19 +150,16 @@ define([
         }],
         onResultClicked: function(clickedResult) {
             var domain = clickedResult.uid.split(":")[2],
-                channelName = detailAppletChannels[domain],
-                loadingTitle;
+                channelName = detailAppletChannels[domain];
 
             if (channelName) {
-                if (domain === 'med') {
-                    loadingTitle = 'Medication - '+clickedResult.model.get('qualifiedName');
-                }
+                if (channelName === 'medication_review') return;  // applets that request medication_review details e.g. activeMeds do their own messaging
                 // display spinner in modal while detail view is loading
                 var modal = new ADK.UI.Modal({
                     view: ADK.Views.Loading.create(),
                     options: {
                         size: "large",
-                        title: loadingTitle || 'Loading...'
+                        title: 'Loading...'
                     }
                 });
                 modal.show();

@@ -25,7 +25,6 @@
 package com.cognitive.cds.services.cdsresults;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
@@ -41,8 +40,6 @@ import javax.ws.rs.core.Response;
 
 import org.apache.cxf.jaxrs.ext.MessageContext;
 import org.bson.Document;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.cognitive.cds.invocation.model.IntentMapping;
 import com.cognitive.cds.invocation.model.InvocationMapping;
@@ -52,7 +49,6 @@ import com.cognitive.cds.services.cdsresults.model.Info;
 import com.cognitive.cds.services.cdsresults.model.Status;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.mongodb.client.result.DeleteResult;
-import com.mongodb.client.result.UpdateResult;
 
 /**
  * @author Tadesse Sefer
@@ -61,7 +57,6 @@ import com.mongodb.client.result.UpdateResult;
  */
 public class IntentMappingService implements IntentMappingInterface {
 
-	private static final Logger logger = LoggerFactory.getLogger(IntentMappingService.class);
 	private static IntentMappingDao intentLookup;
 
 	public IntentMappingService() {
@@ -126,18 +121,13 @@ public class IntentMappingService implements IntentMappingInterface {
 	@Path("/{intentName}")
 	public Response delete(@PathParam("intentName") String intentName) {
 		Status status = new Status();
-		try {
-			DeleteResult result = intentLookup.deleteIntent(intentName);
-			if (result != null) {
-				if (result.getDeletedCount() == 0) {
-					buildStatusMessage(status, intentName + " intent doesn't exist");
-				} else {
-					buildStatusMessage(status, intentName + " intent deleted");
-				}
+		DeleteResult result = intentLookup.deleteIntent(intentName);
+		if (result != null) {
+			if (result.getDeletedCount() == 0) {
+				buildStatusMessage(status, intentName + " intent doesn't exist");
+			} else {
+				buildStatusMessage(status, intentName + " intent deleted");
 			}
-		} catch (JsonProcessingException e) {
-			buildStatusMessage(status, e.getMessage());
-			return Response.status(200).entity(status).build();
 		}
 		return Response.status(200).entity(status).build();
 	}
@@ -220,9 +210,7 @@ public class IntentMappingService implements IntentMappingInterface {
 		if (im.getInvocations() == null || im.getInvocations().isEmpty()) {
 			buildStatusMessage(status, "At least one invocation mapping that has rules should be provided.");
 		} else {
-			List<InvocationMapping> invocations = im.getInvocations();
-			for (Iterator iterator = invocations.iterator(); iterator.hasNext();) {
-				InvocationMapping invocationMapping = (InvocationMapping) iterator.next();
+			for (InvocationMapping invocationMapping : im.getInvocations()) {
 				if (invocationMapping.getEngineName() == null || invocationMapping.getEngineName().isEmpty()) {
 					buildStatusMessage(status, "At least one invocation engine name should be provided.");
 				}
@@ -237,8 +225,7 @@ public class IntentMappingService implements IntentMappingInterface {
 
 	private void validateRule(InvocationMapping invocationMapping, Status status) {
 		List<Rule> rules = invocationMapping.getRules();
-		for (Iterator iterator2 = rules.iterator(); iterator2.hasNext();) {
-			Rule rule = (Rule) iterator2.next();
+		for (Rule rule : rules) {
 			if (rule.getProperties() == null || rule.getProperties().isEmpty()) {
 				buildStatusMessage(status, "Rules properties should be provided.");
 			} else {

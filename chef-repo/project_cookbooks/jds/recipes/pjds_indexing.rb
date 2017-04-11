@@ -6,7 +6,6 @@
 #
 
 node[:jds][:data_store].each do |key,store|
-  
   http_request "create_#{store}_uid_index" do
     url "http://#{node[:ipaddress]}:#{node[:jds][:cache_listener_ports][:general]}/#{store}/index"
     message  ({
@@ -18,5 +17,4 @@ node[:jds][:data_store].each do |key,store|
     action :post
     not_if { item_exists?("http://#{node[:ipaddress]}:#{node[:jds][:cache_listener_ports][:general]}/#{store}/index/#{store}_uid", "items") }
   end
-
 end

@@ -15,8 +15,8 @@ module.exports.getResourceConfig = function() {
             operationalDataCheck: false,
             synchronize: false
         },
-        requiredPermissions: [],  // TODO set permissions. See https://wiki.vistacore.us/display/VACORE/Writeback+Edition+Permissions
-        isPatientCentric: true
+        requiredPermissions: ['future-release-not-available-for-use'], //Note: Replace the future-release-not-available-for-use permission set with the permission set you would need for your endpoint.
+        //Please refer to https://wiki.vistacore.us/pages/viewpage.action?pageId=20055119 for information on permissions and permission sets
     }, {
         name: 'update',
         path: '/:resourceId',
@@ -25,7 +25,8 @@ module.exports.getResourceConfig = function() {
             operationalDataCheck: false,
             synchronize: false
         },
-        requiredPermissions: [],  // TODO set permissions. See https://wiki.vistacore.us/display/VACORE/Writeback+Edition+Permissions
+        requiredPermissions: ['future-release-not-available-for-use'],  //Note: Replace the future-release-not-available-for-use permission set with the permission set you would need for your endpoint.
+        //Please refer to https://wiki.vistacore.us/pages/viewpage.action?pageId=20055119 for information on permissions and permission sets
         isPatientCentric: true
     }, {
         name: 'get',
@@ -35,7 +36,8 @@ module.exports.getResourceConfig = function() {
             operationalDataCheck: false,
             synchronize: false
         },
-        requiredPermissions: [],  // TODO set permissions. See https://wiki.vistacore.us/display/VACORE/Writeback+Edition+Permissions
+        requiredPermissions: ['future-release-not-available-for-use'],  //Note: Replace the future-release-not-available-for-use permission set with the permission set you would need for your endpoint.
+        //Please refer to https://wiki.vistacore.us/pages/viewpage.action?pageId=20055119 for information on permissions and permission sets
         isPatientCentric: true
     }];
 };

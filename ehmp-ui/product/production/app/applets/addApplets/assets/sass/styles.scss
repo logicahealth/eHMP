@@ -3,7 +3,10 @@
         background-color: $pure-white;
         border-bottom: 3px solid $primary-light;
         border-radius: 0px;
-        padding: 10px;
+        padding: 10px 0px;
+    }
+    .panel-footer {
+        background-color: $pure-white;
     }
     .grid-filter {
         background-color: $grey-lighter;
@@ -81,7 +84,7 @@
             .gridster {
                 float: left;
                 height: 399px;
-                overflow-x: auto;
+                overflow-x: hidden;
                 overflow-y: hidden;
                 width: 100%;
                 ul {

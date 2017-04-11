@@ -132,7 +132,7 @@ module.exports.saveDraftLabOrder = function(writebackContext, callback) {
         if (_.isEmpty(writebackContext.model.visit)) {
             error = 'Missing Visit Context';
         } else {
-             if (_.isEmpty(writebackContext.model.visit.location)) {
+            if (_.isEmpty(writebackContext.model.visit.location)) {
                 error = 'Missing location for  Save Draft Lab Order';
             }
             if (_.isEmpty(writebackContext.model.visit.serviceCategory)) {
@@ -169,7 +169,7 @@ module.exports.saveDraftLabOrder = function(writebackContext, callback) {
     return setImmediate(callback, error);
 };
 
-module.exports.findDraftLabOrders = function(writebackContext, callback) {
+module.exports.findDraftOrders = function(writebackContext, callback) {
     var error = null; // set if there is an error validating
     if (writebackContext) {
         if (_.isEmpty(writebackContext.model.patientUid)) {
@@ -180,6 +180,18 @@ module.exports.findDraftLabOrders = function(writebackContext, callback) {
         }
     } else {
         error = 'Invalid find draft order request';
+    }
+    return setImmediate(callback, error);
+};
+
+module.exports.readDraftOrder = function(writebackContext, callback) {
+    var error = null; // set if there is an error validating
+    if (writebackContext) {
+        if (_.isEmpty(writebackContext.resourceId)) {
+            error = 'Missing clinical object UID (resourceId)';
+        }
+    } else {
+        error = 'Invalid read draft order request';
     }
     return setImmediate(callback, error);
 };

@@ -45,39 +45,14 @@ Given(/^the system knows about the following communication requests for the "(.*
 end
 
 When(/^the client retrieves all communication requests for recipient "(.*?)"$/) do |recipient_id|
-  resource = RDKQuery.new('communicationrequest-get-all')
-  resource.replace_path_var(':recipientId', recipient_id)  unless recipient_id.nil?
-
-  path = remove_escaped_amp(resource.path)
+  temp = QueryRDKCDSfhir.new
+  path = temp.path + "/communicationrequest/#{recipient_id}"
   @response = HTTPartyRDK.get(path)
 end
 
 When(/^the client retrieves a communication request for recipient "(.*?)" with the resource id$/) do |recipient_id|
-  #resource id generated on backend. Important: one request can create multiple messages (one per recipient)
-  #need to get all to get resource id
-  #assuming only one message given
-
-  resource = RDKQuery.new('communicationrequest-get-all')
-  resource.replace_path_var(':recipientId', recipient_id) unless recipient_id.nil?
-
-  path = remove_escaped_amp(resource.path)
-  @response = HTTPartyRDK.get(path)
-
-  result_array = JSON.parse(@response.body)
-  expect(result_array).to be_a_kind_of(Array)
-
-  #puts 'result array: ' + result_array.join
-
-  #get single request by id
-
-  resource_id = result_array[0]['id']
-  #puts 'resourceId: ' + resourceId
-
-  resource = RDKQuery.new('communicationrequest-get')
-  resource.replace_path_var(':recipientId', recipient_id) unless recipient_id.nil?
-  resource.replace_path_var(':id', resource_id)
-
-  path = remove_escaped_amp(resource.path)
+  temp = QueryRDKCDSfhir.new
+  path = temp.path + "/communicationrequest/#{recipient_id}"
   @response = HTTPartyRDK.get(path)
 end
 
@@ -86,29 +61,9 @@ When(/^the client deletes the communication request for recipient "(.*?)" with a
   #need to get all to get resource id
   #assuming only one message given
 
-  resource = RDKQuery.new('communicationrequest-get-all')
-  resource.replace_path_var(':recipientId', recipient_id) unless recipient_id.nil?
-
-  path = remove_escaped_amp(resource.path)
+  temp = QueryRDKCDSfhir.new
+  path = temp.path + "/communicationrequest/#{recipient_id}"
   @response = HTTPartyRDK.get(path)
-
-  result_array = JSON.parse(@response.body)
-  expect(result_array).to be_a_kind_of(Array)
-
-  #puts 'delete results array:' + result_array.join
-
-  #delete single request by id
-
-  resource_id = result_array[0]['id']
-
-  #puts 'resource id: ' + resource_id
-
-  resource = RDKQuery.new('communicationrequest-delete')
-  resource.replace_path_var(':recipientId', recipient_id)  unless recipient_id.nil?
-  resource.replace_path_var(':id', resource_id)
-
-  path = remove_escaped_amp(resource.path)
-  @response = HTTPartyRDK.delete(path)
 end
 
 When(/^the client retrieves a communication request for recipient "(.*?)" with an unknown resource id$/) do |recipient_id|
@@ -151,8 +106,8 @@ end
 
 Then(/^the response is a list containing (\d+) communication requests$/) do |number_of_results|
   num_results_int = number_of_results.to_i
-  json = JSON.parse(@response.body)
 
+  json = JSON.parse(@response.body)
   expect(json).to be_a_kind_of(Array)
   expect(json.count).to eq(num_results_int) unless number_of_results.nil?
 end
@@ -172,23 +127,7 @@ Then(/^the communication request contains$/) do |table|
 end
 
 Then(/^remove all communication requests for recipient "(.*?)"/) do |recipient_id|
-  # need to get all to get resource id
-  resource = RDKQuery.new('communicationrequest-get-all')
-  resource.replace_path_var(':recipientId', recipient_id) unless recipient_id.nil?
-
-  path = remove_escaped_amp(resource.path)
+  temp = QueryRDKCDSfhir.new
+  path = temp.path + "/communicationrequest/#{recipient_id}"
   @response = HTTPartyRDK.get(path)
-
-  result_array = JSON.parse(@response.body)
-  expect(result_array).to be_a_kind_of(Array)
-
-  for i in 0..result_array.length-1
-    resource_id = result_array[i]['id']
-    resource = RDKQuery.new('communicationrequest-delete')
-    resource.replace_path_var(':recipientId', recipient_id)  unless recipient_id.nil?
-    resource.replace_path_var(':id', resource_id)
-
-    path = remove_escaped_amp(resource.path)
-    @response = HTTPartyRDK.delete(path)
-  end
 end

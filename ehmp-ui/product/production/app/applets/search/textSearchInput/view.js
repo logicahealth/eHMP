@@ -65,11 +65,16 @@ define([
                     fetchOptions.patient = ADK.PatientRecordService.getCurrentPatient();
 
                     fetchOptions.resourceTitle = 'patient-record-search-suggest';
-
+                    fetchOptions.onError = self.onError;
                     self.suggestResults = ADK.PatientRecordService.fetchCollection(fetchOptions);
                     self.suggestResults.on("sync", self.fillSuggestList, self);
                 }
             }, 500);
+        },
+        onError: function(){
+            self.$('#suggestListDiv').append('<div id="noResults" class="left-padding-sm">No results</div>').show();
+            self.$('#suggestList').remove();
+            self.$("#suggestSpinner").remove();
         },
         clearSuggestList: function($list) {
             if (!$list) {
@@ -174,7 +179,6 @@ define([
 
         },
         doReturnResults: function() {
-            this.$("#suggestList").remove();
             this.$("#suggestSpinner").remove();
             //use this function to implement sending the data to the text-Search applet
             var completedSearchData = {

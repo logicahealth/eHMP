@@ -12,7 +12,7 @@ function getResourceConfig() {
         interceptors: {
             jdsFilter: false
         },
-        requiredPermissions: [],
+        requiredPermissions: ['read-concept-relationships'],
         isPatientCentric: false,
         subsystems: []
     }];

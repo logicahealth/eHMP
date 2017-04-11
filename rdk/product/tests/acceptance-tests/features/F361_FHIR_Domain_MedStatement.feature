@@ -4,7 +4,7 @@ Feature: F361 FHIR Domain - MedicationStatement
  Scenario: Client can request Medication Statement in FHIR format
      Given a patient with "medicationstatement" in multiple VistAs
      #And a patient with pid "5000000217V519385" has been synced through the RDK API
- 	When the client requests "medicationdstatement-getMedicationStatement" for the patient "9E7A;229"
+ 	When the client requests medicationstatement for the patient "9E7A;229"
      Then a successful response is returned
      And the FHIR results contain "medicationstatement"
      	 | field 						 | value 		     |

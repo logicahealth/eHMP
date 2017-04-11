@@ -2,6 +2,10 @@
 .alert-modal {
     .modal-body {
         h5 {
+            &:first-of-type {
+                margin-top: 0;
+                padding-top: 0;
+            }
             &::first-letter {
                 text-transform: capitalize;
             }

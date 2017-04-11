@@ -2,13 +2,12 @@
 
 var rdk = require('../../core/rdk');
 var _ = require('lodash');
-var dd = require('drilldown');
 var pjds = rdk.utils.pjdsStore;
 
 var dataStore = 'quickorder';
-module.exports.getSubsystemConfig = function(app) {
+module.exports.getSubsystemConfig = function(app, logger) {
     return {
-        healthcheck: pjds.createHealthcheck(dataStore, app)
+        healthcheck: pjds.createHealthcheck(dataStore, app, logger)
     };
 };
 
@@ -108,7 +107,7 @@ function doSearchOnPjds(req, res, name, siteId, userId, callback) {
         if (error) {
             return callback(error, null);
         }
-        if (dd(result)('data')('items').exists) {
+        if (_.get(result, 'data.items')) {
             result.data.items = _.map(result.data.items, shallowProjection);
         }
         return callback(null, result);
@@ -139,7 +138,7 @@ function _get(req, res, uid, callback) {
             error.statusCode = (result || {}).statusCode;
             return callback(error, null);
         }
-        if (dd(result)('error').exists) {
+        if (_.get(result, 'error')) {
             return callback('QuickOrder with uid: ' + uid + ' was not found.', null);
         }
         return callback(null, result);

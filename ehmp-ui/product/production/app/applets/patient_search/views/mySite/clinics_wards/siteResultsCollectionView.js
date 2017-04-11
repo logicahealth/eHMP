@@ -1,21 +1,21 @@
 define([
     "backbone",
     "marionette",
-    "app/applets/patient_search/views/mySite/clinics_wards/singleSearchResultView"
-], function(Backbone, Marionette, SingleSearchResultView) {
+    "app/applets/patient_search/views/mySite/clinics_wards/singleSearchResultView",
+     "app/applets/patient_search/views/common/loadingView",
+], function(Backbone, Marionette, SingleSearchResultView, LoadingView) {
     "use strict";
 
     var SCROLL_TRIGGERPOINT = 50;
     var SCROLL_ADDITIONAL_ROWS = 100;
     var INITIAL_NUMBER_OF_ROWS = 30;
 
-    var LoadingView = Backbone.Marionette.ItemView.extend({
-        template: _.template('<div class="loading all-padding-md"><i class="fa fa-spinner fa-spin"></i> Loading...</div>')
-    });
-
     var ErrorView = Backbone.Marionette.ItemView.extend({
-        template: _.template('<div aria-live="assertive" role="alert" class="all-padding-md"><p class="error-message padding">No results were found.</p></div>'),
-        tagName: "p"
+        template: _.template('<p class="error-message padding">No results were found.</p>'),
+        className: 'all-padding-md',
+        attributes: {
+            'aria-live': 'assertive'
+        }
     });
 
     var SiteResultsCollectionView = Backbone.Marionette.CollectionView.extend({
@@ -81,13 +81,15 @@ define([
             this.collection.fullCollection.reset(this.collection.originalModels, {
                 silent: true
             });
-            var matcher = _.bind(this.makeMatcher(filterModel.get('filterString').toLowerCase()), this);
-            this.collection.getFirstPage({
-                silent: true
-            });
-            this.collection.fullCollection.reset(this.collection.fullCollection.filter(matcher), {
-                reindex: false
-            });
+            if(!_.isUndefined(filterModel.get('filterString'))) {
+                var matcher = _.bind(this.makeMatcher(filterModel.get('filterString').toLowerCase()), this);
+                this.collection.getFirstPage({
+                    silent: true
+                });
+                this.collection.fullCollection.reset(this.collection.fullCollection.filter(matcher), {
+                    reindex: false
+                });
+            }
         },
         makeMatcher: function(query) {
             var regexp = this.makeRegExp(query);

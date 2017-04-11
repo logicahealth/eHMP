@@ -13,8 +13,12 @@ var JobStatusUpdater = require(global.VX_SUBSYSTEMS + 'jds/JobStatusUpdater');
  * Configure Job Middleware to save a logger and a config, initializes a JDS client and a JobStatusUpdater
  */
 function JobAPI(setLog, setConfig, setEnvironment) {
-    if (!(this instanceof JobAPI)) { return new JobAPI(setLog, setConfig, setEnvironment); }
-    if (_.isUndefined(setEnvironment)) { setEnvironment = {}; }
+    if (!(this instanceof JobAPI)) {
+        return new JobAPI(setLog, setConfig, setEnvironment);
+    }
+    if (_.isUndefined(setEnvironment)) {
+        setEnvironment = {};
+    }
     this.jobStatusUpdater = setEnvironment.jobStatusUpdater || new JobStatusUpdater(setLog, setConfig);
     this.jdsClient = setEnvironment.jds;
     this.log = logUtil.getAsChild('job-util', setLog);
@@ -58,9 +62,9 @@ var getJobHistory = function(req, res, next) {
     var filter = res.filter;
 
     var logPatientIdentifier;
-    if(job.patientIdentifier){
+    if (job.patientIdentifier) {
         logPatientIdentifier = job.patientIdentifier.value || job.patientIdentifier;
-    } else if (job.jpid){
+    } else if (job.jpid) {
         logPatientIdentifier = job.jpid;
     } else {
         logPatientIdentifier = '(no identifier given)';
@@ -71,28 +75,27 @@ var getJobHistory = function(req, res, next) {
     self.log.debug('job-middleware.getJobHistory - Getting job state history');
     if (typeof filter === 'undefined') {
         self.jdsClient.getJobStatus(job, function(error, response, result) {
-        if (error) {
-            var errorMessage = format(errorTemplate, logPatientIdentifier, inspect(error));
-            self.log.error(errorMessage);
-            return res.status(500).send(errorMessage);
-        }
-        self.log.debug('job-middleware.getJobHistory - Job status received');
-        self.log.debug(inspect(result));
-        res.jobStates = result.items;
-        next();
+            if (error) {
+                var errorMessage = format(errorTemplate, logPatientIdentifier, inspect(error));
+                self.log.error(errorMessage);
+                return res.status(500).send(errorMessage);
+            }
+            self.log.debug('job-middleware.getJobHistory - Job status received');
+            self.log.debug(inspect(result));
+            res.jobStates = result.items;
+            next();
         });
-    }
-    else {
+    } else {
         self.jdsClient.getJobStatus(job, filter, function(error, response, result) {
-        if (error) {
-            var errorMessage = format(errorTemplate, logPatientIdentifier, inspect(error));
-            self.log.error(errorMessage);
-            return res.status(500).send(errorMessage);
-        }
-        self.log.debug('job-middleware.getJobHistory - Job status received');
-        self.log.debug(inspect(result));
-        res.jobStates = result.items;
-        next();
+            if (error) {
+                var errorMessage = format(errorTemplate, logPatientIdentifier, inspect(error));
+                self.log.error(errorMessage);
+                return res.status(500).send(errorMessage);
+            }
+            self.log.debug('job-middleware.getJobHistory - Job status received');
+            self.log.debug(inspect(result));
+            res.jobStates = result.items;
+            next();
         });
     }
 };
@@ -160,7 +163,7 @@ var parseJobsForRecentStatus = function(jdsJobsResponse, type, status) {
     var self = this;
     var currentJob = false;
     self.log.debug('parseJobsForRecentStatus: Entered method, searching for job type: %s', type);
-    self.log.debug('parseJobsForRecentStatus: Starting with %s job(s)', (jdsJobsResponse?jdsJobsResponse.length:0));
+    self.log.debug('parseJobsForRecentStatus: Starting with %s job(s)', (jdsJobsResponse ? jdsJobsResponse.length : 0));
     var typeMatchedJobs = _.filter(jdsJobsResponse, function(job) {
         return job.type === type;
     });
@@ -207,7 +210,9 @@ var publishJob = function(currentRouter, req, res, next) {
 
         if (typeof currentJob !== 'undefined') {
             forceCurrentJob.call(self, currentJob, next);
-        } else { next(); }
+        } else {
+            next();
+        }
     });
 };
 

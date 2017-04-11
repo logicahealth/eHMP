@@ -9,7 +9,8 @@ import org.joda.time.format.DateTimeParser;
 import org.joda.time.format.DateTimePrinter;
 
 /**
- * TODO: Complete documentation for PointInTimeFormatter
+ * Creates a new formatter, however you will normally use the factory
+ * or the builder.
  */
 public class PointInTimeFormatter extends DateTimeFormatter {
     /**

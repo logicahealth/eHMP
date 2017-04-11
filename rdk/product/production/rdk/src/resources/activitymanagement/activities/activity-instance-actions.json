@@ -22,8 +22,7 @@
           "state": "Unreleased",
           "substate": "Pre-order Workup Complete",
           "actions": [
-            "END",
-            "EDIT"
+            "END"
           ]
         },
         {
@@ -106,6 +105,16 @@
           ]
         },
         {
+          "state": "Active",
+          "substate": "eConsult, Provider Completing",
+          "actions": [
+            "END",
+            "RELEASE.CONSULT",
+            "RELEASE.ECONSULT",
+            "COMPLETE"
+          ]
+        },
+        {
           "state": "Scheduling",
           "substate": "Underway",
           "actions": [
@@ -135,6 +144,15 @@
         },
         {
           "state": "Scheduling",
+          "substate": "Provider Completing",
+          "actions": [
+            "END",
+            "RELEASE.CONSULT",
+            "COMPLETE"
+          ]
+        },
+        {
+          "state": "Scheduling",
           "substate": "EWL",
           "actions": [
             "END",
@@ -158,7 +176,7 @@
           "actions": [
             "END",
             "APPT.CANCELED",
-            "APTT.KEPT",
+            "APPT.KEPT",
             "RESCHEDULE",
             "COMPLETE"
           ]
@@ -178,7 +196,7 @@
           "substate": "Appt. in Past, Action Required",
           "actions": [
             "END",
-            "APTT.CANCELED",
+            "APPT.CANCELED",
             "APPT.KEPT",
             "RESCHEDULE",
             "COMPLETE"
@@ -189,7 +207,7 @@
           "substate": "Appt. Started",
           "actions": [
             "END",
-            "APTT.KEPT",
+            "APPT.KEPT",
             "RESCHEDULE",
             "COMPLETE"
           ]

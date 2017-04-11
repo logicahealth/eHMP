@@ -115,3 +115,12 @@ Given(/^the user notes the patient's birth date$/) do
   @patient_dob = @ehmp.fld_patient_dob.text
   p @patient_dob
 end
+
+Then(/^the global date filter displays (\d+) hour range$/) do |arg1|
+  ehmp = PobGlobalDateFilter.new
+  ehmp.wait_for_fld_date_range_chosen
+  expect(ehmp).to have_fld_date_range_chosen
+  p ehmp.fld_date_range_chosen.text
+  expected_range = "#{Date.today.prev_day.strftime("%m/%d/%Y")} - #{Date.today.next_month(6).strftime("%m/%d/%Y")}"
+  expect(ehmp.fld_date_range_chosen.text).to eq(expected_range)
+end

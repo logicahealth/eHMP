@@ -16,13 +16,4 @@ Attributes
 
 Usage
 =====
-
-
-
-TODO
-=====
-Transitive Dependencies: 
-	http://www.osehra.org/page/osehra-code-repository
-Patching is a big deal:
-	http://www.osehra.org/blog/managing-vista-packages
 	

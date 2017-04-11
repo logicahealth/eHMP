@@ -6,7 +6,7 @@ var JdsClient = require(global.VX_SUBSYSTEMS + 'jds/jds-client');
 var MVIClient = require(global.VX_SUBSYSTEMS + 'mvi/mvi-client');
 var wConfig = require(global.VX_ROOT + 'worker-config');
 var config = JSON.parse(JSON.stringify(wConfig));            // Make sure we are not using a shared copy of this so we can make changes later and not side effect some other test.
-
+var _ = require('underscore');
 var logger = require(global.VX_DUMMIES + '/dummy-logger');
 //--------------------------------------------------------------
 // Uncomment the following to see the logging out on the screen.
@@ -21,7 +21,6 @@ var logger = require(global.VX_DUMMIES + '/dummy-logger');
 //------------------------------------------
 // End of logging stuff to comment out....
 //------------------------------------------
-
 var vx_sync_ip = require(global.VX_INTTESTS + 'test-config');
 var val = require(global.VX_UTILS + 'object-utils').getProperty;
 
@@ -109,7 +108,8 @@ describe('mvi-client.js', function() {
                 // The number is now 7 because one of the IDs is purposely not for a site that is in the HDR or VistA - and so we
                 // cannot obtain a site hash for that site.   It will not be returned anymore.
                 //---------------------------------------------------------------------------------------------------------------
-                expect(val(result, 'ids', 'length')).toBe(7);
+                // For HDR PUB/SUB the length will be 7
+                expect(val(result, 'ids', 'length')).toBe(5);
                 expect(result.ids).toContain({
                     type: 'vhicid',
                     value: '32758',
@@ -131,14 +131,15 @@ describe('mvi-client.js', function() {
                     type: 'pid',
                     value: 'C877;3'
                 });
-                expect(result.ids).toContain({
-                    type: 'pid',
-                    value: '2939;19'
-                });
-                expect(result.ids).toContain({
-                    type: 'pid',
-                    value: 'FFC7;28'
-                });
+                // This only exists for HDR PUB/SUB configuration
+                // expect(result.ids).toContain({
+                //     type: 'pid',
+                //     value: '2939;19'
+                // });
+                // expect(result.ids).toContain({
+                //     type: 'pid',
+                //     value: 'FFC7;28'
+                // });
                 finished = true;
             });
         });
@@ -158,7 +159,8 @@ describe('mvi-client.js', function() {
                 expect(err).toBeFalsy();
                 expect(result).toBeTruthy();
                 expect(val(result, 'ids')).toBeDefined();
-                expect(val(result, 'ids', 'length')).toBe(7);
+                // For HDR PUB/SUB this will be 7
+                expect(val(result, 'ids', 'length')).toBe(5);
                 finished = true;
             });
         });
@@ -203,5 +205,162 @@ describe('mvi-client.js', function() {
         waitsFor(function() {
             return finished;
         }, 'MVI call', 6000);
+    });
+
+    it('Mvi Attended Search API - invalid input: Missing givenNames and SSN', function() {
+        var mviClient = new MVIClient(logger, logger, config, jdsCli);
+        var finished = false;
+        runs(function(){
+            mviClient.attendedSearch({
+                familyName: 'TEST'
+            }, function (err, result) {
+                expect(err).toBeTruthy();
+                expect(result).toBeFalsy();
+                finished = true;
+            });
+        });
+        waitsFor(function() {
+            return finished;
+        }, 'MVI attend search call', 6000);
+    });
+
+    it('Mvi Attended Search API - invalid input: Missing SSN', function() {
+        var mviClient = new MVIClient(logger, logger, config, jdsCli);
+        var finished = false;
+        runs(function(){
+            mviClient.attendedSearch({
+                familyName: 'TEST',
+                givenNames: 'PATIENT'
+            }, function (err, result) {
+                expect(err).toBeTruthy();
+                expect(result).toBeFalsy();
+                finished = true;
+            });
+        });
+        waitsFor(function() {
+            return finished;
+        }, 'MVI attend search call', 6000);
+    });
+
+    it('Mvi Attended Search API - invalid input: Missing familyName', function() {
+        var mviClient = new MVIClient(logger, logger, config, jdsCli);
+        var finished = false;
+        runs(function(){
+            mviClient.attendedSearch({
+                ssn: '00000000',
+                givenNames: 'PATIENT'
+            }, function (err, result) {
+                expect(err).toBeTruthy();
+                expect(result).toBeFalsy();
+                finished = true;
+            });
+        });
+        waitsFor(function() {
+            return finished;
+        }, 'MVI attend search call', 6000);
+    });
+
+    it('Mvi Attended Search API - : EDIPIONLY PATIENT', function() {
+        var mviClient = new MVIClient(logger, logger, config, null);
+        var finished = false;
+        runs(function(){
+            mviClient.attendedSearch({
+                givenNames: 'PATIENT',
+                familyName: 'EDIPIONLY',
+                ssn: '111111234'
+            }, function (err, result) {
+                expect(err).toBeFalsy();
+                expect(result).toBeTruthy();
+                expect(_.isArray(result)).toBeTruthy();
+                expect(result.length).toEqual(1);
+                expect(result[0].patientIdentifier).toBeTruthy();
+                expect(result[0].patientIdentifier.type).toEqual('edipi');
+                expect(result[0].patientIdentifier.value).toEqual('43215678');
+                expect(result[0].demographics.familyName).toEqual('EDIPIONLY');
+                expect(result[0].demographics.givenNames).toEqual('PATIENT');
+                finished = true;
+            });
+        });
+        waitsFor(function() {
+            return finished;
+        }, 'MVI attend search call', 10000);
+    });
+
+    it('Mvi Attended Search API - : SYSTEM ERROR PATIENT', function() {
+        var mviClient = new MVIClient(logger, logger, config, null);
+        var finished = false;
+        runs(function(){
+            mviClient.attendedSearch({
+                givenNames: 'SYSTEM',
+                familyName: 'ERROR',
+                ssn: '000000000'
+            }, function (err, result) {
+                expect(err).toBeTruthy();
+                expect(result).toBeFalsy();
+                finished = true;
+            });
+        });
+        waitsFor(function() {
+            return finished;
+        }, 'MVI attend search call', 10000);
+    });
+
+    it('Mvi Attended Search API - : APPLICATION ERROR PATIENT', function() {
+        var mviClient = new MVIClient(logger, logger, config, null);
+        var finished = false;
+        runs(function(){
+            mviClient.attendedSearch({
+                givenNames: 'APPLICATION',
+                familyName: 'ERROR',
+                ssn: '000000000'
+            }, function (err, result) {
+                expect(err).toBeTruthy();
+                expect(result).toBeFalsy();
+                finished = true;
+            });
+        });
+        waitsFor(function() {
+            return finished;
+        }, 'MVI attend search call', 10000);
+    });
+
+    it('Mvi Attended Search API - : TOO MANY RECORDS PATIENT', function() {
+        var mviClient = new MVIClient(logger, logger, config, null);
+        var finished = false;
+        runs(function(){
+            mviClient.attendedSearch({
+                givenNames: 'JOHN',
+                familyName: 'SMITH',
+                ssn: '000000000'
+            }, function (err, result) {
+                expect(err).toBeTruthy();
+                expect(result).toBeFalsy();
+                finished = true;
+            });
+        });
+        waitsFor(function() {
+            return finished;
+        }, 'MVI attend search call', 10000);
+    });
+
+    it('Mvi Attended Search API - : 10 RESULTS PATIENTS', function() {
+        var mviClient = new MVIClient(logger, logger, config, null);
+        var finished = false;
+        runs(function(){
+            mviClient.attendedSearch({
+                givenNames: 'FRED',
+                familyName: 'JONES',
+                ssn: '000000000'
+            }, function (err, result) {
+                expect(err).toBeFalsy();
+                expect(result).toBeTruthy();
+                expect(_.isArray(result)).toBeTruthy();
+                expect(result.length).toEqual(10);
+                finished = true;
+            });
+        });
+        waitsFor(function() {
+            return finished;
+        }, 'MVI attend search call', 10000);
     });
 });

@@ -13,7 +13,7 @@ module.exports.getResourceConfig = function() {
             operationalDataCheck: false,
             synchronize: false
         },
-        requiredPermissions: [], // TODO set permissions. See https://wiki.vistacore.us/display/VACORE/Writeback+Edition+Permissions
+        requiredPermissions: ['add-lab-order'], 
         isPatientCentric: true
     }];
 };

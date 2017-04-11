@@ -6,8 +6,7 @@ var fspath = require('path');
 var async = require('async');
 var handlebars = require('handlebars');
 var hercule = require('hercule');
-var drafter = require('drafter.js');
-var dd = require('drilldown');
+var drafter = require('drafter');
 var http = require('../../utils/http');
 
 module.exports.commonDir = fspath.resolve(__dirname, './');
@@ -53,6 +52,9 @@ function registerResource(mountpoint, markdownPath, preload) {
     prefix = prefix || localPrefix;
 
     var resources = domains[prefix].resources;
+
+    // wrap colon-prefixed path parameters with braces
+    mountpoint = mountpoint.replace(/\/:(\w+)(\/|$)/g, '/{$1}$2');
 
     var existing = _.find(resources, {markdownPath: markdownPath});
     if (existing && _.startsWith(existing.mountpoint, mountpoint)) {
@@ -146,9 +148,9 @@ function resourcesForPath(path, resources) {
         if (resource.mountpoint.length <= 1) {
             return path === resource.mountpoint;
         }
-        // support colon-prefixed path parameters
+        // support path parameters
         resource.mountpointRegex = resource.mountpointRegex ||
-            new RegExp(resource.mountpoint.replace(/\/:\w+(\/|$)/g, '/[^/]+$1'));
+            new RegExp(resource.mountpoint.replace(/\/\{\w+\}(\/|$)/g, '/[^/]+$1'));
         return resource.mountpointRegex.test(path);
     });
 }
@@ -284,7 +286,7 @@ function parseApiBlueprint(markdown, done) {
     } catch (e) {
         error = e;
     }
-    if (dd(json)('error')('code').val) {
+    if (_.get(json, 'error.code')) {
         error = json.error;
     }
     done(error, json);
@@ -403,7 +405,7 @@ function matchAction(jsonDocumentation, path, method) {
     _.each(jsonDocumentation.ast.resourceGroups, function(resourceGroup) {
         _.each(resourceGroup.resources, function(resource) {
             _.each(resource.actions, function(action) {
-                var uriTemplate = dd(action)('attributes')('uriTemplate').val || resource.uriTemplate;
+                var uriTemplate = _.get(action, 'attributes.uriTemplate') || resource.uriTemplate;
                 var uriTemplateRegex = createUriTemplateRegex(uriTemplate);
                 var regexMatch;
                 if (method === action.method && (regexMatch = uriTemplateRegex.exec(path))) {
@@ -444,7 +446,11 @@ function createUriTemplateRegex(uriTemplate) {
     // swap out path parameters with regular expresssions
     uriTemplate = uriTemplate.replace(/\{\+[^\}]+\}/g, '(.*)');
     uriTemplate = uriTemplate.replace(/\{[\w%][^\}]*\}/g, '([^/]*)');
-    uriTemplate += '$';
+    // enforce an optional trailing slash
+    if (!_.endsWith(uriTemplate, '/')) {
+        uriTemplate += '/';
+    }
+    uriTemplate += '?$';
     return new RegExp(uriTemplate);
 }
 

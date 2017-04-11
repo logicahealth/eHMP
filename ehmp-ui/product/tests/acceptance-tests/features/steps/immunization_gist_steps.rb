@@ -17,7 +17,7 @@ class ImmunizationGist <  AllApplets
     add_verify(CucumberLabel.new("Immunization Gist Tooltip"), VerifyContainsText.new, AccessHtmlElement.new(:id, "urn:va:immunization:9E7A:301:37"))
     gist_view_count = AccessHtmlElement.new(:xpath, "//*[@id='immunizations-pill-gist-items']/descendant::div[contains(@class, 'immunGist')]")
     add_verify(CucumberLabel.new('Immunization gist view count'), VerifyXpathCount.new(gist_view_count), gist_view_count)
-    add_verify(CucumberLabel.new("Empty Gist"), VerifyText.new, AccessHtmlElement.new(:css, "#{appletid_css} div.empty-gist-list"))
+    add_verify(CucumberLabel.new("Empty Gist"), VerifyText.new, AccessHtmlElement.new(:css, "#{appletid_css} p.color-grey-darkest"))
 
     add_action(CucumberLabel.new('Add'), ClickAction.new, AccessHtmlElement.new(:css, "#{appletid_css} .applet-add-button"))
 
@@ -94,9 +94,9 @@ When(/^user clicks on "(.*?)" pill$/) do |vaccine_name|
 end
 
 Then(/^the immunization gist applet title is "(.*?)"$/)  do |title|
-  aa = ImmunizationGist.instance
-  aa.wait_until_action_element_visible("Immunization Gist Applet Title")
-  expect(aa.perform_verification("Immunization Gist Applet Title", title)).to be_true
+  @ehmp = PobImmunizationsApplet.new
+  expect(@ehmp).to have_fld_applet_title
+  expect(@ehmp.fld_applet_title.text.upcase).to eq(title.upcase)
 end
 
 When(/^user hover over "(.*?)" pill$/) do |_arg1|

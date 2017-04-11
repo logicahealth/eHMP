@@ -1,5 +1,5 @@
-HMPEF1 ;SLC/MKB,ASMR/RRB,JD,SRG,CPC,CK - Serve VistA operational data as JSON via RPC;June 24, 2016 17:23:46
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;*1*;Sep 01, 2011;Build 1
+HMPEF1 ;SLC/MKB,ASMR/RRB,JD,SRG,CPC,CK - Serve VistA operational data as JSON via RPC;June 24, 2016 13:17:46
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1,2**;Sep 01, 2011;Build 11
  ;Per VA Directive 6402, this routine should not be modified.
  ;
  ; HMPEF (cont'd)

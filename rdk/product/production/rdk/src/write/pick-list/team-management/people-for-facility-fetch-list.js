@@ -4,6 +4,7 @@ var _ = require('lodash');
 var async = require('async');
 var rdk = require('../../../core/rdk');
 var parse = require('./people-for-facility-parser').parse;
+var requestsPickListUtil = require('./requests-picklists-utils');
 
 module.exports.fetch = function(logger, configuration, callback, params) {
     var fullConfig = _.get(params, 'fullConfig');
@@ -13,13 +14,7 @@ module.exports.fetch = function(logger, configuration, callback, params) {
     }
 
     var facilityID = _.get(params, 'facilityID');
-    var facilitySiteCode = '';
-    _.each(fullConfig.vistaSites, function(value, key) {
-        if (_.get(value, 'division') === facilityID) {
-            facilitySiteCode = key;
-            return false;
-        }
-    });
+    var facilitySiteCode = requestsPickListUtil.getSiteCode(fullConfig.vistaSites, facilityID);
 
     var datastore = 'ehmpusers';
     var query = '?filter=like(uid,"urn:va:user:' + facilitySiteCode + '%25")';

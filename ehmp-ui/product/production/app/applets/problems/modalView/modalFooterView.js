@@ -16,15 +16,17 @@ define([
             'click #deleteBtn': 'deleteProblem',
             'click #editBtn': 'editProblem'
         },
-        initialize: function(){
+        serializeModel: function(model) {
+            var JSON = model.toJSON();
             var siteCode = ADK.UserService.getUserSession().get('site'),
-                pidSiteCode = this.model.get('pid') ? this.model.get('pid').split(';')[0] : '';
+                pidSiteCode = model.get('pid') ? model.get('pid').split(';')[0] : '';
 
             if(siteCode === pidSiteCode){
-                this.model.set('siteCodeMatches', true);
+                JSON.siteCodeMatches = true;
             } else {
-                this.model.set('siteCodeMatches', false);
+                JSON.siteCodeMatches = false;
             }
+            return JSON;
         },
         deleteProblem : function(event){
             problemChannel.command('openProblemDelete', 'problem_delete', this.model);
@@ -37,6 +39,9 @@ define([
         behaviors: {
             //see Bootstrap documentation for options
             Tooltip: tooltipConfig || {}
+        },
+        modelEvents: {
+            change: 'render'
         }
     });
 

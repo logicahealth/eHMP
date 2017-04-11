@@ -203,10 +203,10 @@ describe('Immunizations write-back', function () {
             };
 
             var rpcArgs = constructRpcArgs(immunizationFromModel(logger, model));
-            var expectedHDR = 'HDR^1^^349;3150411.004050;E';
+            var expectedHDR = 'HDR^1^^0;3150411.004050;E';
             var outsideLocation = 'VST^OL^^Pecan Street Rite Aid';
             expect(rpcArgs[1]).to.equal(expectedHDR); // deep compare
-            expect(rpcArgs[6]).to.equal(outsideLocation);
+            expect(rpcArgs[5]).to.equal(outsideLocation);
         });
 
     });

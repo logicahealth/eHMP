@@ -5,7 +5,7 @@ require './../lib/vistarpc4r/rpc_response'
 require './../lib/vistarpc4r/vista_rpc'
 require './../lib/vistarpc4r/rpc_broker_connection'
 
-broker = VistaRPC4r::RPCBrokerConnection.new('IP_ADDRESS', 9210, 'PW', 'PW', false)
+broker = VistaRPC4r::RPCBrokerConnection.new('IP        ', 9210, 'PW    ', 'PW    !!', false)
 
 broker.connect
 p "The RPC Broker Connection status is #{broker.isConnected}"

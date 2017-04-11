@@ -38,11 +38,14 @@ describe('writeback workflow', function() {
             user.site = 'C877';
             user.accessCode = 'accessCode';
             user.verifyCode = 'verifyCode';
+            user.division = '500';
 
             expect(writebackWorkflow._getVistaConfig(logger, appConfig, user)).to.eql({
+                site: user.site,
                 context: appConfig.rpcConfig.context,
                 accessCode: user.accessCode,
                 verifyCode: user.verifyCode,
+                division: user.division,
                 name: appConfig.vistaSites[user.site].name
             });
         });
@@ -54,11 +57,14 @@ describe('writeback workflow', function() {
             user.site = 'C877';
             user.accessCode = 'accessCode';
             user.verifyCode = 'verifyCode';
+            user.division = '500';
 
             expect(writebackWorkflow._getVistaConfig(logger, appConfig, user)).to.eql({
+                site: user.site,
                 context: appConfig.rpcConfig.context,
                 accessCode: user.accessCode,
-                verifyCode: user.verifyCode
+                verifyCode: user.verifyCode,
+                division: user.division
             });
         });
         it('handles an invalid user', function() {
@@ -72,9 +78,11 @@ describe('writeback workflow', function() {
             var user = {};
 
             expect(writebackWorkflow._getVistaConfig(logger, appConfig, user)).to.eql({
+                site: user.site,
                 context: appConfig.rpcConfig.context,
                 accessCode: undefined,
-                verifyCode: undefined
+                verifyCode: undefined,
+                division: undefined
             });
         });
     });

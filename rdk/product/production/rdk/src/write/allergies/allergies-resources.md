@@ -16,18 +16,17 @@ Add a new allergy for a patient to single Vista
     + Body
 
             {
-                "dfn": "ssss",
-                "eventDateTime": "ssss",
-                "allergyName": "ssss",
-                "natureOfReaction": "ssss",
-                "historicalOrObserved": "o^OBSERVED",
-                "comment": "ssss",
-                "severity": "ssss",
-                "name": "ssss",
                 "IEN": "ssss",
-                "location": "ssss",
+                "allergyName": "ssss",
+                "enteredBy": "ssss",
+                "eventDateTime": "ssss",
+                "historicalOrObserved": "o^OBSERVED",
+                "name": "ssss",
+                "natureOfReaction": "ssss",
                 "observedDate": "ssss",
-                "symptoms": []
+                "severity": "ssss",
+                "symptoms": [],
+                "comment": "ssss"
             }
 
     + Schema
@@ -36,26 +35,27 @@ Add a new allergy for a patient to single Vista
                 "$schema": "http://json-schema.org/draft-04/schema#",
                 "type": "object",
                 "required": [
-                    "dfn",
-                    "eventDateTime",
+                    "IEN",
                     "allergyName",
+                    "enteredBy",
+                    "eventDateTime",
+                    "historicalOrObserved",
+                    "name",
                     "natureOfReaction",
-                    "historicalOrObserved"
+                    "observedDate",
+                    "severity",
+                    "symptoms"
                 ],
                 "properties": {
-                    "dfn": {
+                    "IEN": {
                         "type": "string",
-                        "description": ""
-                    },
-                    "eventDateTime": {
-                        "type": "string",
-                        "description": ""
+                        "description": "IEN for the specific allergy"
                     },
                     "allergyName": {
                         "type": "string",
-                        "description": ""
+                        "description": "allergy name (Vista format)"
                     },
-                    "natureOfReaction": {
+                    "eventDateTime": {
                         "type": "string",
                         "description": ""
                     },
@@ -67,29 +67,21 @@ Add a new allergy for a patient to single Vista
                             "h^HISTORICAL"
                         ]
                     },
-                    "comment": {
-                        "type": "string",
-                        "description": ""
-                    },
-                    "severity": {
-                        "type": "string",
-                        "description": ""
-                    },
                     "name": {
                         "type": "string",
-                        "description": ""
+                        "description": "name of allergy"
                     },
-                    "IEN": {
-                        "type": "string",
-                        "description": "unique id of allergy in a single Vista"
-                    },
-                    "location": {
+                    "natureOfReaction": {
                         "type": "string",
                         "description": ""
                     },
                     "observedDate": {
                         "type": "string",
                         "description": ""
+                    },
+                    "severity": {
+                        "type": "string",
+                        "description": "severity level"
                     },
                     "symptoms": {
                         "type": "array",
@@ -125,23 +117,13 @@ Update an existing patient allergy
 
     + pid (string, required) - patient id
 
-    + resourceId (string, required) - allergy id
-
 
 + Request JSON Message (application/json)
 
     + Body
 
             {
-                "dfn": "ssss",
-                "eventDateTime": "ssss",
-                "allergyName": "ssss",
-                "enteredBy": "ssss",
-                "natureOfReaction": "ssss",
-                "historicalOrObserved": "o^OBSERVED",
-                "observedDate": "ssss",
-                "severity": "ssss",
-                "symptoms": []
+                "localId": "ssss"
             }
 
     + Schema
@@ -150,60 +132,12 @@ Update an existing patient allergy
                 "$schema": "http://json-schema.org/draft-04/schema#",
                 "type": "object",
                 "properties": {
-                    "dfn": {
+                    "localId": {
                         "type": "string"
-                    },
-                    "eventDateTime": {
-                        "type": "string"
-                    },
-                    "allergyName": {
-                        "type": "string"
-                    },
-                    "enteredBy": {
-                        "type": "string"
-                    },
-                    "natureOfReaction": {
-                        "type": "string"
-                    },
-                    "historicalOrObserved": {
-                        "type": "string",
-                        "enum": [
-                            "o^OBSERVED",
-                            "h^HISTORICAL"
-                        ]
-                    },
-                    "observedDate": {
-                        "type": "string"
-                    },
-                    "severity": {
-                        "type": "string"
-                    },
-                    "symptoms": {
-                        "type": "array",
-                        "items": {
-                            "type": "object",
-                            "properties": {
-                                "name": {
-                                    "type": "string"
-                                },
-                                "IEN": {
-                                    "type": "string"
-                                },
-                                "dateTime": {
-                                    "type": "string"
-                                }
-                            },
-                            "required": ["name", "IEN"]
-                        }
                     }
                 },
                 "required": [
-                    "dfn",
-                    "eventDateTime",
-                    "allergyName",
-                    "enteredBy",
-                    "natureOfReaction",
-                    "historicalOrObserved"
+                    "localId"
                 ]
             }
 

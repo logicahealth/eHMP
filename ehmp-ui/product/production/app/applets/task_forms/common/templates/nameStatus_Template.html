@@ -1,18 +1,17 @@
 {{#if isStaffView}}
 <div class="row">
     <div class="col-xs-12 background-color-primary-light all-padding-no">
-        <h5 class="font-size-16 all-margin-xs all-padding-xs">{{lastName}}, {{firstName}} ({{ssn}}), {{formatDate DOB "MM/DD/YYYY"}} ({{age}}yo), {{gender}}</h5>
+        <h5 class="font-size-16 all-margin-xs all-padding-xs">{{lastName}}, {{firstName}} ({{ssn}}), {{formatDate DOB "MM/DD/YYYY"}} ({{age}}y), {{fullGenderName}}</h5>
     </div>
 </div>
 {{/if}}
 <div class="row">
     <div class="col-xs-8">
-        {{#if healthIndicator}}<i class="fa fa-lg fa-flag color-primary" data-toggle="tooltip" data-placement="auto" title="{{healthIndicatorReason}}"></i>{{/if}}
-        <h5 class="font-size-16">{{instanceName}}</h5>
+        <h5 class="font-size-16">{{#if healthIndicator}}<i class="fa fa-lg fa-flag color-primary right-padding-sm" data-toggle="tooltip" data-placement="right" title="{{healthIndicatorReason}}"></i>{{/if}}{{instanceName}}</h5>
     </div>
     <div class="col-xs-4 text-right top-margin-lg">
-    	<span class="btn btn-icon top-padding-xs" data-toggle="tooltip" data-placement="auto" title="{{activityDescription}}">
-    		<i class="fa fa-info-circle font-size-16 right-padding-xs"></i>
+    	<span class="btn btn-icon top-padding-no" data-toggle="tooltip" data-placement="bottom" title="{{activityDescription}}">
+    		<i class="fa fa-info-circle font-size-16"></i>
     	</span>
     	<span class="sr-only">{{stateDescription}}</span>
     	<h5 class="text-uppercase font-size-16 inline-display">{{state}}<br />

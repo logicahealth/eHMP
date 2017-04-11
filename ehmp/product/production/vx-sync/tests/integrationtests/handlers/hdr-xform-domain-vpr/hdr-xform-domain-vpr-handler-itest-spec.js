@@ -23,7 +23,7 @@ var wConfig = require(global.VX_ROOT + 'worker-config');
 var config = {
     jds: _.defaults(wConfig.jds, {
         protocol: 'http',
-        host: 'IP_ADDRESS',
+        host: 'IP        ',
         port: 9080
     })
 };

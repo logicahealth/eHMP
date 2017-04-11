@@ -1,0 +1,15 @@
+<div class="row">
+	<div class="col-xs-1">
+		{{#hasPermission 'discontinue-lab-order'}}
+			{{#if showDiscontinue}}
+				{{ui-button "Discontinue" id="activityDetailDiscontinue" classes="btn-default btn-sm" title="Press enter to discontinue activity."}}
+			{{/if}}
+			{{#if showDelete}}
+				{{ui-button "Delete" id="activityDetailDelete" classes="btn-default btn-sm" title="Press enter to delete activity."}}
+			{{/if}}
+		{{/hasPermission}}
+	</div>
+	<div class="col-xs-11">
+		{{ui-button "Close" id="activityDetailClose" classes="btn-default btn-sm" title="Press enter to close." }}
+	</div>
+</div>

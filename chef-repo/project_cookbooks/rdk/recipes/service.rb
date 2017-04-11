@@ -14,6 +14,7 @@ node[:rdk][:services].each do |name, config|
       :deploy_path => config[:deploy_path]
     )
     source "#{config[:service_template_source]}"
+    notifies :stop, "service[#{config[:service]}]", :before
     notifies :restart, "service[#{config[:service]}]"
   end
 
@@ -29,8 +30,10 @@ node[:rdk][:services].each do |name, config|
       :dev_deploy => node[:rdk][:dev_deploy] || false,
       :debug_port => config[:debug_port],
       :processes => config[:processes],
-      :log_directory => node[:rdk][:log_dir]
+      :log_directory => node[:rdk][:log_dir],
+      :pid_directory => node[:rdk][:pid_dir]
     )
+    notifies :stop, "service[#{config[:service]}]", :before
     notifies :restart, "service[#{config[:service]}]"
   end
 

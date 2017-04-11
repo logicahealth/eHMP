@@ -8,18 +8,19 @@ define([
         idAttribute: 'uid',
         parse: function(resp, options) {
             return {
-                detail: _.get(resp, 'data.data', 'Unable to retrieve detail summary')
+                detail: _.get(resp, 'data.data', 'Unable to retrieve detail summary'),
+                detailSummary: _.get(resp, 'data.data', 'Unable to retrieve detail summary')
             };
         },
         getUrl: function(method, options) {
             var params = {
                 pid: this.patient.get('pid'),
-                resourceId: this.get('orderId')
+                resourceId: this.get('orderId') || Util.getFieldFromUid(this.get('uid'), 'orderId')
             };
 
             var url = ADK.ResourceService.buildUrl('orders-lab-detail', {
                 dfn: this.patient.get('localId'),
-                site: Util.getSiteCodeFromUid(this.patient.get('uid'))
+                site: Util.getFieldFromUid(this.get('uid'), 'siteCode')
             });
 
             if (ADK.PatientRecordService.getCurrentPatient().get('acknowledged')) {

@@ -28,6 +28,9 @@ function dodConsultToVPR(dodConsult, edipi){
 
     vprConsult.uid = uidUtils.getUidForDomain('document', 'DOD', edipi, dodConsult.cdrEventId);
 
+    vprConsult.author = dodConsult.provider ? dodConsult.provider.name : null;
+    vprConsult.authorDisplayName = vprConsult.author;
+
     vprConsult.text = [];
 
     //If dod consult note does not contain a link to external document but includes text instead

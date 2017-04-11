@@ -27,7 +27,7 @@ var patientLoad = function(app) {
         interceptors: {
             synchronize: false
         },
-        requiredPermissions: ['load-patient-sync'],
+        requiredPermissions: ['read-patient-record'],
         isPatientCentric: false,
         //healthcheck: [app.subsystems.jdsSync],
         get: patientLoadEndpoint.bind(null, app),
@@ -42,7 +42,7 @@ var patientDemographicsLoad = function(app) {
         interceptors: {
             synchronize: false
         },
-        requiredPermissions: [],
+        requiredPermissions: ['read-patient-record'],
         isPatientCentric: false,
         post: patientDemographicsLoadEndpoint.bind(null, app),
         subsystems: ['patientrecord', 'jdsSync']
@@ -71,7 +71,7 @@ var patientStatus = function(app) {
             operationalDataCheck: false,
             synchronize: false
         },
-        requiredPermissions: [],
+        requiredPermissions: ['read-patient-record'],
         isPatientCentric: false,
         get: patientStatusEndpoint.bind(null, app),
         subsystems: ['patientrecord','jdsSync']
@@ -86,7 +86,7 @@ var patientDataStatus = function(app) {
             operationalDataCheck: false,
             synchronize: false
         },
-        requiredPermissions: [],
+        requiredPermissions: ['read-patient-record'],
         isPatientCentric: false,
         get: patientDataStatusEndpoint.bind(null, app),
         subsystems: ['patientrecord','jdsSync']
@@ -101,7 +101,7 @@ var patientSyncStatusDetail = function(app) {
             operationalDataCheck: false,
             synchronize: false
         },
-        requiredPermissions: [],
+        requiredPermissions: ['read-patient-record'],
         isPatientCentric: false,
         get: patientSyncStatusDetailEndpoint.bind(null, app),
         subsystems: ['patientrecord','jdsSync']
@@ -116,7 +116,7 @@ var operationalStatus = function(app) {
             operationalDataCheck: false,
             synchronize: false
         },
-        requiredPermissions: [],
+        requiredPermissions: ['read-patient-record'],
         isPatientCentric: false,
         get: operationalStatusEndpoint.bind(null, app),
         subsystems: ['patientrecord','jdsSync']
@@ -148,7 +148,7 @@ function patientDemographicsLoadEndpoint(app, req, res) {
         return toResponseCallback(res, 500,{status:500, data:{error:{code:500, message:'Demographics are required'}}} );
     }
     if (pidValidator.isPidEdipi(req.body.edipi|| req.body.pid ||'')){
-        return toResponseCallback(res, 500, {status:500, data:{error:{code:500, message:'A dod pid is invalid, please use an edipi or icn.'}}})
+        return toResponseCallback(res, 500, {status:500, data:{error:{code:500, message:'A dod pid is invalid, please use an edipi or icn.'}}});
     }
     app.subsystems.jdsSync.syncPatientDemographics(req.body, req, toResponseCallback.bind(null, res));
 }

@@ -4,7 +4,7 @@ define([
     'jquery',
     'underscore',
     'handlebars',
-    "api/Messaging",
+    "api/Messaging"
 ], function(Backbone, Marionette, $, _, Handlebars, Messaging) {
     "use strict";
 
@@ -17,6 +17,11 @@ define([
     });
 
     var WorkflowContainerView = Backbone.Marionette.LayoutView.extend({
+        behaviors: {
+            ZIndex: {
+                eventString: 'show.bs.modal'
+            }
+        },
         className: 'modal fade',
         tagName: 'div',
         attributes: {
@@ -26,6 +31,15 @@ define([
         },
         modelEvents: {
             'change': 'render'
+        },
+        events: {
+            'shown.bs.modal': function(){
+                var ADK_WorkflowRegion = Messaging.request('get:adkApp:region', 'workflowRegion');
+                var $workflowBackdrop = ADK_WorkflowRegion.currentView.$el.data('bs.modal').$backdrop;
+                if (_.isNumber(ADK_WorkflowRegion.currentView.$el.zIndex()) && $workflowBackdrop instanceof jQuery && $workflowBackdrop.length > 0){
+                    $workflowBackdrop.css('z-index', ADK_WorkflowRegion.currentView.$el.zIndex()-1);
+                }
+            }
         },
         ui: {
             WorkflowRegion: '.modal-dialog'
@@ -60,14 +74,6 @@ define([
             }
             this.showChildView('workflowRegion', this.controllerView);
             Messaging.getChannel('toolbar').trigger('open:worflow:modal');
-        },
-        onShow: function() {
-            if ($('.modal:visible').length >= 1) {
-                var zIndex = Math.max.apply(null, Array.prototype.map.call($('.modal:visible'), function(el) {
-                    return +el.style.zIndex;
-                })) + 1111;
-                this.$el.css('z-index', zIndex);
-            }
         }
     });
     return WorkflowContainerView;

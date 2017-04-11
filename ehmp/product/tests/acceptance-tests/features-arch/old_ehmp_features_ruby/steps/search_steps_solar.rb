@@ -7,7 +7,7 @@ require 'VerifyJsonRuntimeValue.rb'
 When(/^the client searches for "(.*?)" for the patient "(.*?)" in VPR format$/) do |text, pid|
   base_solr_url = DefaultLogin.solr_url
   p path = "#{base_solr_url}/solr/vpr/select?q=*#{text}*&fq=pid:#{pid}&wt=json&indent=true&start=0&rows=1000"
-           #http://IPADDRESS:PORT/solr/vpr/select?q=*rad*&fq=pid:10108&wt=json&indent=true&start=0&rows=1000&
+           #http://IP            /solr/vpr/select?q=*rad*&fq=pid:10108&wt=json&indent=true&start=0&rows=1000&
   @response = HTTPartyWithBasicAuth.get_with_authorization(path)
 end
 

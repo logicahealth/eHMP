@@ -12,4 +12,4 @@ Scenario: As a user I will be able to view the app container including header re
        | patient name	| Ten,Patient 			|
 	Then the navigation bar displays the Patient Search Button
 	And the navigation bar displays "Current User Menu"
-	And the Current User Menu Text displays "USER, PANORAMA"
+	And the Current User Menu Text displays "EHMP, UATTWO"

@@ -5,7 +5,10 @@
     "description": "Ability to add a new active medication to a patient record outside the medication ordering process",
     "example": "",
     "note": "",
-    "version": "1.3.1",
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": null
+    },
     "status": "active"
 }, {
     "uid": "discontinue-active-medication",
@@ -14,7 +17,10 @@
     "description": "Ability to mark an active medication as discontinued as the patient no longer takes it",
     "example": "",
     "note": "",
-    "version": "1.3.1",
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": null
+    },
     "status": "active"
 }, {
     "uid": "edit-active-medication",
@@ -23,25 +29,34 @@
     "description": "Ability to change an attribute of a medication",
     "example": "Dosage or Frequency taken",
     "note": "This change might be implemented by discontinuing the current medication and adding a new one",
-    "version": "1.3.1",
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": null
+    },
     "status": "active"
 }, {
     "uid": "read-active-medication",
     "value": "read-active-medication",
     "label": "Read Active Medication",
-    "description": "Read access to patient medication list",
+    "description": "Read access to patient medication list.",
     "example": "",
     "note": "",
-    "version": "1.3.1",
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": null
+    },
     "status": "active"
 }, {
     "uid": "read-admin-screen",
     "value": "read-admin-screen",
     "label": "Read Admin Screen",
-    "description": "Read only access to view user administration applet",
+    "description": "Read access to view user administration screen",
     "example": "",
     "note": "",
-    "version": "1.3.1",
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": null
+    },
     "status": "active"
 }, {
     "uid": "add-allergy",
@@ -50,16 +65,22 @@
     "description": "Ability to add a new allergy to the patients list of allergies",
     "example": "",
     "note": "",
-    "version": "1.3.1",
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": null
+    },
     "status": "active"
 }, {
     "uid": "edit-allergy",
     "value": "edit-allergy",
     "label": "Edit Allergy",
     "description": "Ability to edit an existing entry (e.g.: changing the severity of the reaction)",
-    "example": "",
+    "example": "Changing the severity of the reaction",
     "note": "",
-    "version": "1.3.1",
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": null
+    },
     "status": "active"
 }, {
     "uid": "eie-allergy",
@@ -68,7 +89,10 @@
     "description": "Ability to mark an entry as entered in error if the entry was incorrectly entered in the patient record",
     "example": "",
     "note": "",
-    "version": "1.3.1",
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": null
+    },
     "status": "active"
 }, {
     "uid": "read-allergy",
@@ -77,25 +101,34 @@
     "description": "Read access to operations on allergies",
     "example": "",
     "note": "",
-    "version": "1.3.1",
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": null
+    },
     "status": "active"
 }, {
     "uid": "read-clinical-reminder",
     "value": "read-clinical-reminder",
     "label": "Read Clinical Reminder",
-    "description": "Read only access to view clinical reminders created in CPRS",
+    "description": "Read access to view clinical reminders created in CPRS",
     "example": "",
     "note": "",
-    "version": "1.3.1",
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": null
+    },
     "status": "active"
 }, {
     "uid": "read-community-health-summary",
     "value": "read-community-health-summary",
     "label": "Read Community Health Summary",
-    "description": "Read only access to view community health summaries. Community health summaries are documents such as Continuity of Care Documents (CCDs) coming from external providers.",
+    "description": "Read access to view community health summaries. Community health summaries are documents such as Continuity of Care Documents (CCDs) coming from external providers.",
     "example": "",
     "note": "",
-    "version": "1.3.1",
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": null
+    },
     "status": "active"
 }, {
     "uid": "read-document",
@@ -104,7 +137,10 @@
     "description": "Ability to view a variety of documents such as lab reports, radiology reports and progress notes all in one applet",
     "example": "",
     "note": "",
-    "version": "1.3.1",
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": null
+    },
     "status": "active"
 }, {
     "uid": "add-encounter",
@@ -113,7 +149,10 @@
     "description": "Ability to establish an encounter context (provider, location, date, and time)",
     "example": "",
     "note": "",
-    "version": "1.3.1",
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": null
+    },
     "status": "active"
 }, {
     "uid": "edit-encounter",
@@ -122,17 +161,25 @@
     "description": "",
     "example": "",
     "note": "",
-    "version": "1.3.1",
-    "status": "depricated"
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": "2.0.1"
+    },
+    "status": "deprecated",
+    "replacements": ["edit-encounter-form"]
 }, {
     "uid": "eie-encounter",
     "value": "eie-encounter",
     "label": "EIE Encounter",
     "description": "",
     "example": "",
-    "note": "",
-    "version": "1.3.1",
-    "status": "depricated"
+    "note": "No replacement",
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": "2.0.1"
+    },
+    "status": "deprecated",
+    "replacements": []
 }, {
     "uid": "read-encounter",
     "value": "read-encounter",
@@ -140,7 +187,10 @@
     "description": "Ability to view the current encounter context",
     "example": "",
     "note": "",
-    "version": "1.3.1",
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": null
+    },
     "status": "active"
 }, {
     "uid": "add-encounter-form",
@@ -149,7 +199,10 @@
     "description": "Ability to create an encounter form and add items such as diagnosis, procedures performed and visit type to support 3rd party billing and workload credit documentation",
     "example": "",
     "note": "",
-    "version": "1.3.1",
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": null
+    },
     "status": "active"
 }, {
     "uid": "edit-encounter-form",
@@ -158,7 +211,10 @@
     "description": "Ability to edit a previously created encounter form",
     "example": "",
     "note": "",
-    "version": "1.3.1",
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": null
+    },
     "status": "active"
 }, {
     "uid": "add-consult-order",
@@ -167,7 +223,10 @@
     "description": "Ability to create a new consult order, which could include creating an order to be signed by an authorized user",
     "example": "",
     "note": "",
-    "version": "1.3.1",
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": null
+    },
     "status": "active"
 }, {
     "uid": "complete-consult-order",
@@ -176,16 +235,22 @@
     "description": "Ability to complete a consult order which includes associating a consult with a note for completion",
     "example": "",
     "note": "",
-    "version": "2.0.1",
+    "version": {
+        "introduced": "2.0.1",
+        "deprecated": null
+    },
     "status": "active"
 }, {
     "uid": "discontinue-consult-order",
     "value": "discontinue-consult-order",
     "label": "Discontinue Order",
-    "description": "Ability to discontinue a signed consult order that has not been acted upon by the fullfillment activity (Note: a user can only discontinue their own orders)",
+    "description": "Ability to discontinue a signed consult order that has not been acted upon by the fulfillment activity",
     "example": "",
-    "note": "",
-    "version": "1.3.1",
+    "note": "A user can only discontinue their own orders",
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": null
+    },
     "status": "active"
 }, {
     "uid": "edit-consult-order",
@@ -194,16 +259,22 @@
     "description": "Ability to edit an unsigned consult order, which could include creating an order to be signed by an authorized user",
     "example": "",
     "note": "",
-    "version": "1.3.1",
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": null
+    },
     "status": "active"
 }, {
     "uid": "review-result-consult-order",
     "value": "review-result-consult-order",
     "label": "Review Consult Order Results",
-    "description": "Ability to complete the review results task and end the activity (For use if the ordering provider is unavailable)",
+    "description": "Ability to complete the review results task and end the activity",
     "example": "",
-    "note": "",
-    "version": "2.0.1",
+    "note": "For use if the ordering provider is unavailable",
+    "version": {
+        "introduced": "2.0.1",
+        "deprecated": null
+    },
     "status": "active"
 }, {
     "uid": "schedule-consult-order",
@@ -212,7 +283,10 @@
     "description": "Ability to schedule a consult order",
     "example": "",
     "note": "",
-    "version": "2.0.1",
+    "version": {
+        "introduced": "2.0.1",
+        "deprecated": null
+    },
     "status": "active"
 }, {
     "uid": "sign-consult-order",
@@ -221,7 +295,10 @@
     "description": "Ability to sign an order for transmission to the fulfillment activity",
     "example": "",
     "note": "",
-    "version": "1.3.1",
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": null
+    },
     "status": "active"
 }, {
     "uid": "triage-consult-order",
@@ -230,7 +307,10 @@
     "description": "Ability to triage a consult order",
     "example": "",
     "note": "",
-    "version": "2.0.1",
+    "version": {
+        "introduced": "2.0.1",
+        "deprecated": null
+    },
     "status": "active"
 }, {
     "uid": "add-immunization",
@@ -239,7 +319,10 @@
     "description": "Ability to add a new immunization, both administered or historical to a patient record",
     "example": "",
     "note": "",
-    "version": "1.3.1",
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": null
+    },
     "status": "active"
 }, {
     "uid": "edit-immunization",
@@ -248,16 +331,23 @@
     "description": "",
     "example": "",
     "note": "No replacement",
-    "version": "1.3.1",
-    "status": "depricated"
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": "2.0.1"
+    },
+    "status": "deprecated",
+    "replacements": []
 }, {
     "uid": "eie-immunization",
     "value": "eie-immunization",
     "label": "Eie Immunization",
-    "description": "",
+    "description": "Ability to mark an immunization as entered in error, which removes it from viewing",
     "example": "",
     "note": "",
-    "version": "1.3.1",
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": null
+    },
     "status": "active"
 }, {
     "uid": "read-immunization",
@@ -266,7 +356,10 @@
     "description": "Read access to a patients immunizations list",
     "example": "",
     "note": "",
-    "version": "1.3.1",
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": null
+    },
     "status": "active"
 }, {
     "uid": "add-lab-order",
@@ -275,7 +368,10 @@
     "description": "Ability to create a new lab order, which could include creating an order to be signed by an authorized user",
     "example": "",
     "note": "",
-    "version": "1.3.1",
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": null
+    },
     "status": "active"
 }, {
     "uid": "cosign-lab-order",
@@ -284,16 +380,23 @@
     "description": "",
     "example": "",
     "note": "",
-    "version": "1.3.1",
-    "status": "depricated"
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": "2.0.1"
+    },
+    "status": "deprecated",
+    "replacements": []
 }, {
     "uid": "discontinue-lab-order",
     "value": "discontinue-lab-order",
     "label": "Discontinue Lab Order",
-    "description": "Ability to discontinue a signed lab order that has not been acted upon by the fullfillment activity (Note: a user can only discontinue their own orders)",
+    "description": "Ability to discontinue a signed lab order that has not been acted upon by the fulfillment activity",
     "example": "",
-    "note": "",
-    "version": "1.3.1",
+    "note": "A user can only discontinue their own orders",
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": null
+    },
     "status": "active"
 }, {
     "uid": "edit-lab-order",
@@ -302,7 +405,10 @@
     "description": "Ability to edit an unsigned lab order, which could include creating an order to be signed by an authorized user",
     "example": "",
     "note": "",
-    "version": "1.3.1",
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": null
+    },
     "status": "active"
 }, {
     "uid": "enable-lab-order-collect-option",
@@ -311,8 +417,24 @@
     "description": "Ability to have an \"other\" option on the lab collection picklist",
     "example": "",
     "note": "",
-    "version": "2.0.1",
+    "version": {
+        "introduced": "2.0.1",
+        "deprecated": null
+    },
     "status": "active"
+}, {
+    "uid": "follow-up-incomplete-lab-order",
+    "value": "follow-up-incomplete-lab-order",
+    "label": "Follow-up Incomplete Lab Order",
+    "description": "Ability to follow-up an incomplete lab order",
+    "example": "",
+    "note": "",
+    "version": {
+        "introduced": "2.0.1",
+        "deprecated": null
+    },
+    "status": "active",
+    "replaces": ["track-lab-order"]
 }, {
     "uid": "release-lab-order",
     "value": "release-lab-order",
@@ -320,8 +442,12 @@
     "description": "",
     "example": "",
     "note": "",
-    "version": "1.3.1",
-    "status": "depricated"
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": "2.0.1"
+    },
+    "status": "deprecated",
+    "replacements": []
 }, {
     "uid": "sign-lab-order",
     "value": "sign-lab-order",
@@ -329,7 +455,10 @@
     "description": "Ability to sign an order for transmission to the fulfillment activity",
     "example": "",
     "note": "",
-    "version": "1.3.1",
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": null
+    },
     "status": "active"
 }, {
     "uid": "track-lab-order",
@@ -338,8 +467,12 @@
     "description": "Ability to track a lab order",
     "example": "",
     "note": "",
-    "version": "2.0.1",
-    "status": "active"
+    "version": {
+        "introduced": "1.3.2",
+        "deprecated": "2.0.1"
+    },
+    "status": "deprecated",
+    "replacements": ["follow-up-incomplete-lab-order"]
 }, {
     "uid": "add-med-order",
     "value": "add-med-order",
@@ -347,7 +480,10 @@
     "description": "Ability to create a new med order, which could include creating an order to be signed by an authorized user",
     "example": "",
     "note": "",
-    "version": "1.3.1",
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": null
+    },
     "status": "active"
 }, {
     "uid": "cosign-med-order",
@@ -356,16 +492,23 @@
     "description": "",
     "example": "",
     "note": "",
-    "version": "1.3.1",
-    "status": "depricated"
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": "2.0.1"
+    },
+    "status": "deprecated",
+    "replacements": []
 }, {
     "uid": "discontinue-med-order",
     "value": "discontinue-med-order",
     "label": "Discontinue Med Order",
-    "description": "Ability to discontinue a signed med order that has not been acted upon by the fullfillment activity (Note: a user can only discontinue their own orders)",
+    "description": "Ability to discontinue a signed med order that has not been acted upon by the fulfillment activity",
     "example": "",
-    "note": "",
-    "version": "1.3.1",
+    "note": "A user can only discontinue their own orders",
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": null
+    },
     "status": "active"
 }, {
     "uid": "edit-med-order",
@@ -374,7 +517,10 @@
     "description": "Ability to edit an unsigned med order, which could include creating an order to be signed by an authorized user",
     "example": "",
     "note": "",
-    "version": "1.3.1",
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": null
+    },
     "status": "active"
 }, {
     "uid": "release-med-order",
@@ -383,8 +529,12 @@
     "description": "",
     "example": "",
     "note": "",
-    "version": "1.3.1",
-    "status": "depricated"
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": "2.0.1"
+    },
+    "status": "deprecated",
+    "replacements": []
 }, {
     "uid": "sign-med-order",
     "value": "sign-med-order",
@@ -392,7 +542,10 @@
     "description": "Ability to sign an order for transmission to the fulfillment activity",
     "example": "",
     "note": "",
-    "version": "1.3.1",
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": null
+    },
     "status": "active"
 }, {
     "uid": "read-medication-review",
@@ -401,7 +554,10 @@
     "description": "Ability to see a patients medications including inpatient, outpatient, and clinic order medications in a timeline view",
     "example": "",
     "note": "",
-    "version": "1.3.1",
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": null
+    },
     "status": "active"
 }, {
     "uid": "add-non-va-medication",
@@ -410,16 +566,22 @@
     "description": "Ability to add a new active non VA medication to a patient record outside the medication ordering process",
     "example": "",
     "note": "",
-    "version": "1.3.1",
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": null
+    },
     "status": "active"
 }, {
     "uid": "edit-non-va-medication",
     "value": "edit-non-va-medication",
     "label": "Edit Non Va Medication",
     "description": "Ability to change an attribute of a non VA medication (e.g.: dosage or frequency taken: Note: this change might be implemented by discontinuing the current medication and adding a new one",
-    "example": "",
-    "note": "",
-    "version": "1.3.1",
+    "example": "dosage or frequency taken",
+    "note": "This change might be implemented by discontinuing the current medication and adding a new one",
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": null
+    },
     "status": "active"
 }, {
     "uid": "add-note",
@@ -428,7 +590,10 @@
     "description": "Ability to create a new progress note to document a patient encounter, which could include creating a note to be signed by an authorized user",
     "example": "",
     "note": "",
-    "version": "1.3.1",
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": null
+    },
     "status": "active"
 }, {
     "uid": "add-note-addendum",
@@ -437,7 +602,10 @@
     "description": "Ability to create a new progress note addendum to document a patient encounter, which could include creating a note addendum to be signed by an authorized user",
     "example": "",
     "note": "",
-    "version": "1.3.1",
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": null
+    },
     "status": "active"
 }, {
     "uid": "cosign-note",
@@ -446,7 +614,10 @@
     "description": "Ability to be a cosigner on a note such as an atttending physician cosigning a residents note",
     "example": "",
     "note": "",
-    "version": "1.3.1",
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": null
+    },
     "status": "active"
 }, {
     "uid": "delete-note",
@@ -455,7 +626,10 @@
     "description": "Ability to delete an unsigned note that the originating user drafted",
     "example": "",
     "note": "",
-    "version": "1.3.1",
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": null
+    },
     "status": "active"
 }, {
     "uid": "edit-note",
@@ -464,7 +638,10 @@
     "description": "Ability to edit an unsigned progress note, which could include editing a note to be signed by an authorized user",
     "example": "",
     "note": "",
-    "version": "1.3.1",
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": null
+    },
     "status": "active"
 }, {
     "uid": "edit-note-addendum",
@@ -473,7 +650,10 @@
     "description": "Ability to edit an unsigned progress note addendum, which could include editing a note addendum to be signed by an authorized user",
     "example": "",
     "note": "",
-    "version": "1.3.1",
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": null
+    },
     "status": "active"
 }, {
     "uid": "retract-note",
@@ -482,7 +662,10 @@
     "description": "Ability to mark a signed note as to reflect a status of retracted",
     "example": "",
     "note": "",
-    "version": "1.3.1",
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": null
+    },
     "status": "active"
 }, {
     "uid": "sign-note",
@@ -491,7 +674,10 @@
     "description": "Ability to sign a progress note making it an official part of the patient record",
     "example": "",
     "note": "",
-    "version": "1.3.1",
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": null
+    },
     "status": "active"
 }, {
     "uid": "sign-note-addendum",
@@ -500,7 +686,10 @@
     "description": "Ability to sign a progress note addendum making it an official part of the patient record",
     "example": "",
     "note": "",
-    "version": "1.3.1",
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": null
+    },
     "status": "active"
 }, {
     "uid": "read-order",
@@ -509,7 +698,10 @@
     "description": "Ability to view a patients order history",
     "example": "",
     "note": "",
-    "version": "1.3.1",
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": null
+    },
     "status": "active"
 }, {
     "uid": "add-patient-history",
@@ -518,7 +710,10 @@
     "description": "Ability to record a patients histories such as family or social history",
     "example": "",
     "note": "",
-    "version": "1.3.1",
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": null
+    },
     "status": "active"
 }, {
     "uid": "edit-patient-history",
@@ -527,7 +722,10 @@
     "description": "Ability to edit a patients histories such as family or social history",
     "example": "",
     "note": "",
-    "version": "1.3.1",
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": null
+    },
     "status": "active"
 }, {
     "uid": "eie-patient-history",
@@ -536,7 +734,10 @@
     "description": "Ability to mark an entry in a patients history as entered in error",
     "example": "",
     "note": "",
-    "version": "1.3.1",
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": null
+    },
     "status": "active"
 }, {
     "uid": "read-patient-history",
@@ -545,7 +746,34 @@
     "description": "Read access to a patients problem list",
     "example": "",
     "note": "",
-    "version": "1.3.1",
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": null
+    },
+    "status": "active"
+}, {
+    "uid": "edit-military-history",
+    "value": "edit-military-history",
+    "label": "Edit Military History",
+    "description": "Ability to edit a patient's military history",
+    "example": "",
+    "note": "",
+    "version": {
+        "introduced": "2.0.1",
+        "deprecated": null
+    },
+    "status": "active"
+}, {
+    "uid": "read-military-history",
+    "value": "read-military-history",
+    "label": "Read Military History",
+    "description": "Ability to read an entry in a patients history",
+    "example": "",
+    "note": "",
+    "version": {
+        "introduced": "2.0.1",
+        "deprecated": null
+    },
     "status": "active"
 }, {
     "uid": "clear-patient-sync",
@@ -554,7 +782,10 @@
     "description": "Ability to clear a patient's sync status",
     "example": "",
     "note": "",
-    "version": "1.3.1",
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": null
+    },
     "status": "active"
 }, {
     "uid": "load-patient-sync",
@@ -563,7 +794,10 @@
     "description": "Ability to start a patient sync",
     "example": "",
     "note": "",
-    "version": "1.3.1",
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": null
+    },
     "status": "active"
 }, {
     "uid": "add-condition-problem",
@@ -572,7 +806,10 @@
     "description": "Ability to add a new problem to the patients problem list",
     "example": "",
     "note": "",
-    "version": "1.3.1",
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": null
+    },
     "status": "active"
 }, {
     "uid": "edit-condition-problem",
@@ -581,7 +818,10 @@
     "description": "Ability to edit a problem on the patients problem list such as changing the severity of the problem",
     "example": "",
     "note": "",
-    "version": "1.3.1",
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": null
+    },
     "status": "active"
 }, {
     "uid": "read-condition-problem",
@@ -590,7 +830,10 @@
     "description": "Read access to a patients problem list",
     "example": "",
     "note": "",
-    "version": "1.3.1",
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": null
+    },
     "status": "active"
 }, {
     "uid": "remove-condition-problem",
@@ -599,7 +842,10 @@
     "description": "Ability to mark a patients problem list entry as removed",
     "example": "",
     "note": "",
-    "version": "1.3.1",
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": null
+    },
     "status": "active"
 }, {
     "uid": "read-patient-record",
@@ -608,7 +854,10 @@
     "description": "Ability to search for and select an individual patient record",
     "example": "",
     "note": "",
-    "version": "1.3.1",
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": null
+    },
     "status": "active"
 }, {
     "uid": "add-radiology-order",
@@ -617,25 +866,35 @@
     "description": "Ability to create a new rad order, which could include creating an order to be signed by an authorized user",
     "example": "",
     "note": "",
-    "version": "1.3.1",
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": null
+    },
     "status": "active"
 }, {
     "uid": "cosign-radiology-order",
     "value": "cosign-radiology-order",
     "label": "Cosign Radiology Order",
-    "description": "DEPRICATING",
+    "description": "Ability to cosign a radiology order.",
     "example": "",
     "note": "",
-    "version": "1.3.1",
-    "status": "depricated"
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": "2.0.1"
+    },
+    "status": "deprecated",
+    "replacements": []
 }, {
     "uid": "discontinue-radiology-order",
     "value": "discontinue-radiology-order",
     "label": "Discontinue Radiology Order",
-    "description": "Ability to discontinue a signed rad order that has not been acted upon by the fullfillment activity (Note: a user can only discontinue their own orders)",
+    "description": "Ability to discontinue a signed rad order that has not been acted upon by the fulfillment activity",
     "example": "",
-    "note": "",
-    "version": "1.3.1",
+    "note": "A user can only discontinue their own orders",
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": null
+    },
     "status": "active"
 }, {
     "uid": "edit-radiology-order",
@@ -644,7 +903,10 @@
     "description": "Ability to edit an unsigned rad order, which could include creating an order to be signed by an authorized user",
     "example": "",
     "note": "",
-    "version": "1.3.1",
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": null
+    },
     "status": "active"
 }, {
     "uid": "release-radiology-order",
@@ -653,8 +915,12 @@
     "description": "",
     "example": "",
     "note": "",
-    "version": "1.3.1",
-    "status": "depricated"
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": "2.0.1"
+    },
+    "status": "deprecated",
+    "replacements": []
 }, {
     "uid": "sign-radiology-order",
     "value": "sign-radiology-order",
@@ -662,7 +928,10 @@
     "description": "Ability to sign an order for transmission to the fulfillment activity",
     "example": "",
     "note": "",
-    "version": "1.3.1",
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": null
+    },
     "status": "active"
 }, {
     "uid": "read-stack-graph",
@@ -671,8 +940,25 @@
     "description": "",
     "example": "",
     "note": "",
-    "version": "1.3.1",
-    "status": "depricated"
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": "2.0.1"
+    },
+    "status": "deprecated",
+    "replacements": ["access-stack-graph"]
+}, {
+    "uid": "edit-stack-graph",
+    "value": "edit-stack-graph",
+    "label": "Edit Stack Graph",
+    "description": "",
+    "example": "",
+    "note": "",
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": "2.0.1"
+    },
+    "status": "deprecated",
+    "replacements": ["access-stack-graph"]
 }, {
     "uid": "access-stack-graph",
     "value": "access-stack-graph",
@@ -680,8 +966,12 @@
     "description": "Ability to utilize the stacked graph applet to view patient information over time",
     "example": "",
     "note": "",
-    "version": "1.3.1",
-    "status": "active"
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": null
+    },
+    "status": "active",
+    "replaces": ["read-stack-graph", "edit-stack-graph"]
 }, {
     "uid": "abort-task",
     "value": "abort-task",
@@ -689,8 +979,12 @@
     "description": "",
     "example": "",
     "note": "",
-    "version": "1.3.1",
-    "status": "depricated"
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": "2.0.1"
+    },
+    "status": "deprecated",
+    "replacements": ["cancel-task"]
 }, {
     "uid": "add-task",
     "value": "add-task",
@@ -698,25 +992,35 @@
     "description": "Ability to create a new task and assign it to yourself or another user",
     "example": "",
     "note": "",
-    "version": "1.3.1",
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": null
+    },
     "status": "active"
 }, {
     "uid": "cancel-task",
     "value": "cancel-task",
     "label": "Cancel Task",
     "description": "Ability to cancel own task",
-    "example": "A user can only cancel their own tasks",
-    "note": "",
-    "version": "1.3.1",
-    "status": "active"
+    "example": "",
+    "note": "A user can only cancel their own tasks",
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": null
+    },
+    "status": "active",
+    "replaces": ["abort-task"]
 }, {
     "uid": "edit-task",
     "value": "edit-task",
     "label": "Edit Task",
     "description": "Ability to edit own task",
-    "example": "A user can only edit their own tasks",
-    "note": "",
-    "version": "1.3.1",
+    "example": "",
+    "note": "A user can only edit their own tasks",
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": null
+    },
     "status": "active"
 }, {
     "uid": "read-task",
@@ -725,7 +1029,10 @@
     "description": "Ability to view a tasks related to a patient",
     "example": "",
     "note": "",
-    "version": "1.3.1",
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": null
+    },
     "status": "active"
 }, {
     "uid": "add-user-permission-set",
@@ -734,7 +1041,10 @@
     "description": "Ability to add to user's permissions",
     "example": "",
     "note": "",
-    "version": "1.3.1",
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": null
+    },
     "status": "active"
 }, {
     "uid": "edit-own-permissions",
@@ -743,7 +1053,10 @@
     "description": "Ability to edit permissions related to one self",
     "example": "",
     "note": "Allows a user to change permissions without fear of being able to edit them back. A user can't add or remove this from themself",
-    "version": "1.3.1",
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": null
+    },
     "status": "active"
 }, {
     "uid": "edit-user-permission-set",
@@ -752,7 +1065,10 @@
     "description": "Ability to edit a user's permissions",
     "example": "",
     "note": "",
-    "version": "1.3.1",
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": null
+    },
     "status": "active"
 }, {
     "uid": "read-user-permission-set",
@@ -761,7 +1077,10 @@
     "description": "Ability to read user's permissions",
     "example": "",
     "note": "",
-    "version": "1.3.1",
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": null
+    },
     "status": "active"
 }, {
     "uid": "remove-user-permission-set",
@@ -770,7 +1089,58 @@
     "description": "Ability to remove a user's permissions",
     "example": "",
     "note": "",
-    "version": "1.3.1",
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": null
+    },
+    "status": "active"
+}, {
+    "uid": "add-user-preferences",
+    "value": "add-user-preferences",
+    "label": "Add User Preferences",
+    "description": "Ability to add a user's preferences",
+    "example": "",
+    "note": "",
+    "version": {
+        "introduced": "2.0.1",
+        "deprecated": null
+    },
+    "status": "active"
+}, {
+    "uid": "edit-user-preferences",
+    "value": "edit-user-preferences",
+    "label": "Edit User Preferences",
+    "description": "Ability to edit a user's preferences",
+    "example": "",
+    "note": "",
+    "version": {
+        "introduced": "2.0.1",
+        "deprecated": null
+    },
+    "status": "active"
+}, {
+    "uid": "delete-user-preferences",
+    "value": "delete-user-preferences",
+    "label": "Delete User Preferences",
+    "description": "Ability to delete a user's preferences",
+    "example": "",
+    "note": "",
+    "version": {
+        "introduced": "2.0.1",
+        "deprecated": null
+    },
+    "status": "active"
+}, {
+    "uid": "read-user-preferences",
+    "value": "read-user-preferences",
+    "label": "Read User Preferences",
+    "description": "Ability to read a user's preferences",
+    "example": "",
+    "note": "",
+    "version": {
+        "introduced": "2.0.1",
+        "deprecated": null
+    },
     "status": "active"
 }, {
     "uid": "add-vital",
@@ -779,7 +1149,10 @@
     "description": "Ability to add a new vital signs",
     "example": "",
     "note": "",
-    "version": "1.3.1",
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": null
+    },
     "status": "active"
 }, {
     "uid": "edit-vital",
@@ -787,9 +1160,13 @@
     "label": "Edit Vital",
     "description": "",
     "example": "",
-    "note": "",
-    "version": "1.3.1",
-    "status": "depricated"
+    "note": "No replacement",
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": "2.0.1"
+    },
+    "status": "deprecated",
+    "replacements": []
 }, {
     "uid": "eie-vital",
     "value": "eie-vital",
@@ -797,7 +1174,10 @@
     "description": "Ability to mark one or more vital signs recorded at the same time that were entered in error",
     "example": "",
     "note": "",
-    "version": "1.3.1",
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": null
+    },
     "status": "active"
 }, {
     "uid": "read-vital",
@@ -806,7 +1186,10 @@
     "description": "Read access to a patients vital signs",
     "example": "",
     "note": "",
-    "version": "1.3.1",
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": null
+    },
     "status": "active"
 }, {
     "uid": "read-vista-health-summary",
@@ -815,7 +1198,10 @@
     "description": "Ability to view health summaries created in CPRS",
     "example": "",
     "note": "",
-    "version": "1.3.1",
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": null
+    },
     "status": "active"
 }, {
     "uid": "read-timeline",
@@ -823,9 +1209,13 @@
     "label": "Read Timeline",
     "description": "",
     "example": "",
-    "note": "",
-    "version": "1.3.1",
-    "status": "depricated"
+    "note": "No replacement",
+    "version": {
+        "introduced": "1.3.1",
+        "deprecated": "2.0.1"
+    },
+    "status": "deprecated",
+    "replacements": []
 }, {
     "uid": "create-clinical-object",
     "value": "create-clinical-object",
@@ -833,7 +1223,10 @@
     "description": "Allows users to create clinical objects",
     "example": "",
     "note": "This is for Activity Management Only",
-    "version": "2.0.1",
+    "version": {
+        "introduced": "2.0.1",
+        "deprecated": null
+    },
     "status": "activeJBPMOnly"
 }, {
     "uid": "delete-clinical-object",
@@ -842,7 +1235,10 @@
     "description": "Allows users to delete clinical objects",
     "example": "",
     "note": "This is for Activity Management Only",
-    "version": "2.0.1",
+    "version": {
+        "introduced": "2.0.1",
+        "deprecated": null
+    },
     "status": "activeJBPMOnly"
 }, {
     "uid": "edit-clinical-object",
@@ -851,7 +1247,10 @@
     "description": "Allows users to edit clinical objects",
     "example": "",
     "note": "This is for Activity Management Only",
-    "version": "2.0.1",
+    "version": {
+        "introduced": "2.0.1",
+        "deprecated": null
+    },
     "status": "activeJBPMOnly"
 }, {
     "uid": "read-clinical-object",
@@ -860,6 +1259,573 @@
     "description": "Allows users to read clinical objects",
     "example": "",
     "note": "This is for Activity Management Only",
-    "version": "2.0.1",
+    "version": {
+        "introduced": "2.0.1",
+        "deprecated": null
+    },
     "status": "activeJBPMOnly"
+}, {
+    "uid": "access-general-ehmp",
+    "value": "access-general-ehmp",
+    "label": "eHMP General Access",
+    "description": "Ability to perform application specific actions as an authenticated eHMP user such as set user preferences",
+    "example": "",
+    "note": "",
+    "version": {
+        "introduced": "2.0.1",
+        "deprecated": null
+    },
+    "status": "active"
+}, {
+    "uid": "read-operational-data",
+    "value": "read-operational-data",
+    "label": "Read Operational Data",
+    "description": "Ability to read operational data",
+    "example": "picklists, jds user info",
+    "note": "",
+    "version": {
+        "introduced": "2.0.1",
+        "deprecated": null
+    },
+    "status": "active"
+}, {
+    "uid": "read-orderable",
+    "value": "read-orderable",
+    "label": "Read Orderable",
+    "description": "Ability to read a list of potential orderables",
+    "example": "",
+    "note": "",
+    "version": {
+        "introduced": "2.0.1",
+        "deprecated": null
+    },
+    "status": "active"
+}, {
+    "uid": "manage-enterprise-orderable",
+    "value": "manage-enterprise-orderable",
+    "label": "Manage Enterprise Orderable",
+    "description": "Ability to add/edit/delete enterprise orderable definitions",
+    "example": "",
+    "note": "",
+    "version": {
+        "introduced": "2.0.1",
+        "deprecated": null
+    },
+    "status": "active"
+}, {
+    "uid": "read-enterprise-orderable",
+    "value": "read-enterprise-orderable",
+    "label": "Read Enterprise Orderable",
+    "description": "Ability to read enterprise orderable definitions",
+    "example": "",
+    "note": "",
+    "version": {
+        "introduced": "2.0.1",
+        "deprecated": null
+    },
+    "status": "active"
+}, {
+    "uid": "read-concept-relationship",
+    "value": "read-concept-relationship",
+    "label": "Read Concept Relationships",
+    "description": "Ability to read Concept Relationships",
+    "example": "",
+    "note": "",
+    "version": {
+        "introduced": "2.0.1",
+        "deprecated": null
+    },
+    "status": "active"
+}, {
+    "uid": "read-cds-work-product",
+    "value": "read-cds-work-product",
+    "label": "Read CDS Work-product",
+    "description": "Ability to read CDS work product",
+    "example": "",
+    "note": "",
+    "version": {
+        "introduced": "2.0.1",
+        "deprecated": null
+    },
+    "status": "active"
+}, {
+    "uid": "manage-cds-work-product",
+    "value": "manage-cds-work-product",
+    "label": "Manage CDS Work-product",
+    "description": "Ability to add/edit/delete CDS work products",
+    "example": "",
+    "note": "",
+    "version": {
+        "introduced": "2.0.1",
+        "deprecated": null
+    },
+    "status": "active"
+}, {
+    "uid": "read-cds-work-product-subscription",
+    "value": "read-cds-work-product-subscription",
+    "label": "Read CDS Work-product Subscription",
+    "description": "Ability to read CDS work product subscriptions",
+    "example": "",
+    "note": "",
+    "version": {
+        "introduced": "2.0.1",
+        "deprecated": null
+    },
+    "status": "active"
+}, {
+    "uid": "manage-cds-work-product-subscription",
+    "value": "manage-cds-work-product-subscription",
+    "label": "Manage CDS Work-product Subscription",
+    "description": "Ability to add/edit/delete CDS work product subscriptions",
+    "example": "",
+    "note": "",
+    "version": {
+        "introduced": "2.0.1",
+        "deprecated": null
+    },
+    "status": "active"
+}, {
+    "uid": "read-cds-work-product-inbox",
+    "value": "read-cds-work-product-inbox",
+    "label": "Read CDS Work-product Inbox",
+    "description": "Ability to read CDS work product inbox",
+    "example": "",
+    "note": "",
+    "version": {
+        "introduced": "2.0.1",
+        "deprecated": null
+    },
+    "status": "active"
+}, {
+    "uid": "manage-cds-schedule",
+    "value": "manage-cds-schedule",
+    "label": "Manage CDS Schedule",
+    "description": "Ability to create/edit/delete CDS Schedule definitions",
+    "example": "",
+    "note": "",
+    "version": {
+        "introduced": "2.0.1",
+        "deprecated": null
+    },
+    "status": "active"
+}, {
+    "uid": "read-cds-schedule",
+    "value": "read-cds-schedule",
+    "label": "Read CDS Schedule",
+    "description": "Ability to read CDS Schedule definitions",
+    "example": "",
+    "note": "",
+    "version": {
+        "introduced": "2.0.1",
+        "deprecated": null
+    },
+    "status": "active"
+}, {
+    "uid": "read-cds-execute",
+    "value": "read-cds-execute",
+    "label": "Read CDS Job",
+    "description": "Ability to read CDS job definitions",
+    "example": "",
+    "note": "",
+    "version": {
+        "introduced": "2.0.1",
+        "deprecated": null
+    },
+    "status": "active"
+}, {
+    "uid": "manage-cds-execute",
+    "value": "manage-cds-execute",
+    "label": "Manage CDS Job",
+    "description": "Ability to add/edit/delete CDS job definitions",
+    "example": "",
+    "note": "",
+    "version": {
+        "introduced": "2.0.1",
+        "deprecated": null
+    },
+    "status": "active"
+}, {
+    "uid": "manage-cds-criteria",
+    "value": "manage-cds-criteria",
+    "label": "Manage CDS Patient List Criteria",
+    "description": "Ability to add/create criteria defining CDS Patient Lists",
+    "example": "",
+    "note": "",
+    "version": {
+        "introduced": "2.0.1",
+        "deprecated": null
+    },
+    "status": "active"
+}, {
+    "uid": "read-cds-criteria",
+    "value": "read-cds-criteria",
+    "label": "Read CDS Patient List Criteria",
+    "description": "Ability to read criteria defining CDS Patient Lists",
+    "example": "",
+    "note": "",
+    "version": {
+        "introduced": "2.0.1",
+        "deprecated": null
+    },
+    "status": "active"
+}, {
+    "uid": "manage-cds-definition",
+    "value": "manage-cds-definition",
+    "label": "Manage CDS Patient List Definition",
+    "description": "Ability to add/create CDS Patient Lists definitions",
+    "example": "",
+    "note": "",
+    "version": {
+        "introduced": "2.0.1",
+        "deprecated": null
+    },
+    "status": "active"
+}, {
+    "uid": "read-cds-definition",
+    "value": "read-cds-definition",
+    "label": "Read CDS Patient List Definition",
+    "description": "Ability to read CDS Patient Lists definitions",
+    "example": "",
+    "note": "",
+    "version": {
+        "introduced": "2.0.1",
+        "deprecated": null
+    },
+    "status": "active"
+}, {
+    "uid": "manage-cds-patientlist",
+    "value": "manage-cds-patientlist",
+    "label": "Manage CDS Patient List",
+    "description": "Ability to add/edit/delete CDS Patient List instances",
+    "example": "",
+    "note": "",
+    "version": {
+        "introduced": "2.0.1",
+        "deprecated": null
+    },
+    "status": "active"
+}, {
+    "uid": "read-cds-patientlist",
+    "value": "read-cds-patientlist",
+    "label": "Read CDS Patient List",
+    "description": "Ability to read CDS Patient List instances",
+    "example": "",
+    "note": "",
+    "version": {
+        "introduced": "2.0.1",
+        "deprecated": null
+    },
+    "status": "active"
+}, {
+    "uid": "manage-cds-metric-dashboard",
+    "value": "manage-cds-metric-dashboard",
+    "label": "Manage CDS Metric Dashboard",
+    "description": "Ability to create/delete CDS Metrics Dashboards",
+    "example": "",
+    "note": "",
+    "version": {
+        "introduced": "2.0.1",
+        "deprecated": null
+    },
+    "status": "active"
+}, {
+    "uid": "read-cds-metric-dashboard",
+    "value": "read-cds-metric-dashboard",
+    "label": "Read CDS Metric Dashboard",
+    "description": "Ability to read CDS Metrics Dashboards",
+    "example": "",
+    "note": "",
+    "version": {
+        "introduced": "2.0.1",
+        "deprecated": null
+    },
+    "status": "active"
+}, {
+    "uid": "manage-cds-metric-definition",
+    "value": "manage-cds-metric-definition",
+    "label": "Manage CDS Metric Definition",
+    "description": "Ability to create/delete CDS Metrics definitions",
+    "example": "",
+    "note": "",
+    "version": {
+        "introduced": "2.0.1",
+        "deprecated": null
+    },
+    "status": "active"
+}, {
+    "uid": "read-cds-metric-definition",
+    "value": "read-cds-metric-definition",
+    "label": "Read CDS Metric Definition",
+    "description": "Ability to read CDS Metrics definitions",
+    "example": "",
+    "note": "",
+    "version": {
+        "introduced": "2.0.1",
+        "deprecated": null
+    },
+    "status": "active"
+}, {
+    "uid": "manage-cds-metric-group",
+    "value": "manage-cds-metric-group",
+    "label": "Manage CDS Metric Group",
+    "description": "Ability to create/edit/delete CDS Metrics groups",
+    "example": "",
+    "note": "",
+    "version": {
+        "introduced": "2.0.1",
+        "deprecated": null
+    },
+    "status": "active"
+}, {
+    "uid": "read-cds-metric-group",
+    "value": "read-cds-metric-group",
+    "label": "Read CDS Metric Group",
+    "description": "Ability to read CDS Metrics groups",
+    "example": "",
+    "note": "",
+    "version": {
+        "introduced": "2.0.1",
+        "deprecated": null
+    },
+    "status": "active"
+}, {
+    "uid": "read-cds-metric",
+    "value": "read-cds-metric",
+    "label": "Read CDS Metric",
+    "description": "Ability to read CDS Metrics",
+    "example": "",
+    "note": "",
+    "version": {
+        "introduced": "2.0.1",
+        "deprecated": null
+    },
+    "status": "active"
+}, {
+    "uid": "read-cds-intent",
+    "value": "read-cds-intent",
+    "label": "Read CDS Intent",
+    "description": "Ability to read CDS Intents used by CDS reasoning",
+    "example": "",
+    "note": "",
+    "version": {
+        "introduced": "2.0.1",
+        "deprecated": null
+    },
+    "status": "active"
+}, {
+    "uid": "manage-cds-intent",
+    "value": "manage-cds-intent",
+    "label": "Manage CDS Intent",
+    "description": "Ability to add/edit/delete a new CDS Intent to facilitate access to CDS reasoning",
+    "example": "",
+    "note": "",
+    "version": {
+        "introduced": "2.0.1",
+        "deprecated": null
+    },
+    "status": "active"
+}, {
+    "uid": "manage-cds-engine",
+    "value": "manage-cds-engine",
+    "label": "Manage CDS Engine",
+    "description": "Ability to add/edit/delete CDS Engines from the library",
+    "example": "",
+    "note": "",
+    "version": {
+        "introduced": "2.0.1",
+        "deprecated": null
+    },
+    "status": "active"
+}, {
+    "uid": "read-cds-engine",
+    "value": "read-cds-engine",
+    "label": "Read CDS Engine",
+    "description": "Ability to read the CDS Engines in the library",
+    "example": "",
+    "note": "",
+    "version": {
+        "introduced": "2.0.1",
+        "deprecated": null
+    },
+    "status": "active"
+}, {
+    "uid": "read-fhir",
+    "value": "read-fhir",
+    "label": "Read FHIR",
+    "description": "Ability to read FHIR resources for a specific patient",
+    "example": "",
+    "note": "",
+    "version": {
+        "introduced": "2.0.1",
+        "deprecated": null
+    },
+    "status": "active"
+}, {
+    "uid": "edit-fhir-composition-request",
+    "value": "edit-fhir-composition-request",
+    "label": "Edit FHIR Composition Request",
+    "description": "Ability to edit FHIR Composition resources",
+    "example": "",
+    "note": "",
+    "version": {
+        "introduced": "2.0.1",
+        "deprecated": null
+    },
+    "status": "future"
+}, {
+    "uid": "delete-fhir-composition-request",
+    "value": "delete-fhir-composition-request",
+    "label": "Delete FHIR Composition Request",
+    "description": "Ability to delete FHIR Composition resources",
+    "example": "",
+    "note": "",
+    "version": {
+        "introduced": "2.0.1",
+        "deprecated": null
+    },
+    "status": "future"
+}, {
+    "uid": "add-quick-order",
+    "value": "add-quick-order",
+    "label": "Add Quick Order",
+    "description": "Ability to add a new Quick Order definition",
+    "example": "",
+    "note": "",
+    "version": {
+        "introduced": "2.0.1",
+        "deprecated": null
+    },
+    "status": "future"
+}, {
+    "uid": "delete-quick-order",
+    "value": "delete-quick-order",
+    "label": "Delete Quick Order",
+    "description": "Ability to delete an existing Quick Order definition",
+    "example": "",
+    "note": "",
+    "version": {
+        "introduced": "2.0.1",
+        "deprecated": null
+    },
+    "status": "future"
+}, {
+    "uid": "read-quick-order",
+    "value": "read-quick-order",
+    "label": "Read Quick Order",
+    "description": "Ability to read an existing Quick Order definition",
+    "example": "",
+    "note": "",
+    "version": {
+        "introduced": "2.0.1",
+        "deprecated": null
+    },
+    "status": "future"
+}, {
+    "uid": "edit-quick-order",
+    "value": "edit-quick-order",
+    "label": "Edit Quick Order",
+    "description": "Ability to edit an existing Quick Order definition",
+    "example": "",
+    "note": "",
+    "version": {
+        "introduced": "2.0.1",
+        "deprecated": null
+    },
+    "status": "future"
+}, {
+    "uid": "add-order-set",
+    "value": "add-order-set",
+    "label": "Add Order Set",
+    "description": "Ability to define new order set definitions",
+    "example": "",
+    "note": "",
+    "version": {
+        "introduced": "2.0.1",
+        "deprecated": null
+    },
+    "status": "future"
+}, {
+    "uid": "delete-order-set",
+    "value": "delete-order-set",
+    "label": "Delete Order Set",
+    "description": "Ability to delete order set definitions",
+    "example": "",
+    "note": "",
+    "version": {
+        "introduced": "2.0.1",
+        "deprecated": null
+    },
+    "status": "future"
+}, {
+    "uid": "read-order-set",
+    "value": "read-order-set",
+    "label": "Read Order Set",
+    "description": "Ability to read order set definitions",
+    "example": "",
+    "note": "",
+    "version": {
+        "introduced": "2.0.1",
+        "deprecated": null
+    },
+    "status": "future"
+}, {
+    "uid": "edit-order-set",
+    "value": "edit-order-set",
+    "label": "Edit Order Set",
+    "description": "Ability to edit order set definitions",
+    "example": "",
+    "note": "",
+    "version": {
+        "introduced": "2.0.1",
+        "deprecated": null
+    },
+    "status": "future"
+}, {
+    "uid": "add-favorite",
+    "value": "add-favorite",
+    "label": "Add Favorite",
+    "description": "Ability to mark orderables as Favorites",
+    "example": "",
+    "note": "",
+    "version": {
+        "introduced": "2.0.1",
+        "deprecated": null
+    },
+    "status": "future"
+}, {
+    "uid": "delete-favorite",
+    "value": "delete-favorite",
+    "label": "Delete Favorite",
+    "description": "Ability to unmark orderables as Favorites",
+    "example": "",
+    "note": "",
+    "version": {
+        "introduced": "2.0.1",
+        "deprecated": null
+    },
+    "status": "future"
+}, {
+    "uid": "read-favorite",
+    "value": "read-favorite",
+    "label": "Read Favorite",
+    "description": "Ability to read Favorite orderables",
+    "example": "",
+    "note": "",
+    "version": {
+        "introduced": "2.0.1",
+        "deprecated": null
+    },
+    "status": "future"
+},{
+    "uid": "read-vler-toc",
+    "value": "read-vler-toc",
+    "label": "Read VLER Transition of Care",
+    "description": "Ability to read the VLER transition of care",
+    "example": "",
+    "note": "",
+    "version": {
+        "introduced": "2.0.1",
+        "deprecated": null
+    },
+    "status": "active"
 }]

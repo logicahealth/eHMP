@@ -177,7 +177,7 @@ define([
                     facility: "TST01 - Las Vegas",
                     phone1: "(702) 321-4567",
                     phone2: "none",
-                    email1: PII                ",
+                    email1: "PII                ",
                     email2: "clark.bravo@asmr.com"
                 }
             });

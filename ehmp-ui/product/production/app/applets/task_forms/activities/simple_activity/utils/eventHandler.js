@@ -1,7 +1,8 @@
 define([
     'handlebars',
+    'moment',
     'app/applets/task_forms/activities/simple_activity/utils/countdown'
-], function(Handlebars, countdown) {
+], function(Handlebars, moment, countdown) {
     "use strict";
 
     var originalView;
@@ -67,8 +68,6 @@ define([
 
                 case 'modal-complete-button':
                     fetchOptions.criteria.state = 'complete';
-                    fetchOptions.criteria.user = 'Susan';
-                    fetchOptions.criteria.deploymentid = 'All';
                     fetchOptions.criteria.parameter = {
                         'out_completionnote': this.model.get('out_completionnote'),
                         'out_duedate': newDueDate,

@@ -49,9 +49,9 @@ define([
     enteredColumn = {
         name: 'entered',
         label: 'Order Date',
-        flexWidth: 'flex-width-1_5',
+        flexWidth: 'flex-width-2',
         cell: Backgrid.HandlebarsCell.extend({
-            className: 'handlebars-cell flex-width-1_5'
+            className: 'handlebars-cell flex-width-2'
         }),
         type: 'date',
         sortType: 'cycle',
@@ -61,37 +61,35 @@ define([
     flagColumn = {
         name: 'isFlagged',
         label: 'Flag',
-        flexWidth: 'flex-width-0_5',
+        flexWidth: 'flex-width-1',
         cell: Backgrid.HandlebarsCell.extend({
-            className: 'handlebars-cell flex-width-0_5'
+            className: 'handlebars-cell flex-width-1'
         }),
         template: Handlebars.compile('{{#if isFlagged}} {{#unless isDiscontinuedOrder}}<i class="fa fa-flag color-primary" data-toggle="tooltip" title="This order is flagged."></i>{{/unless}}{{/if}}'),
-        hoverTip: 'Identifies that this order has been flagged by a user.'
+        hoverTip: 'orders_flag'
     };
     statusColumn = {
         name: 'statusName',
         label: 'Status',
         flexWidth: 'flex-width-2',
-        template: Handlebars.compile('{{statusName}}'),
-        cell: Backgrid.HandlebarsCell.extend({
-            className: 'handlebars text-uppercase flex-width-2'
+        cell: Backgrid.StringCell.extend({
+            className: 'StringCell flex-width-2'
         }),
         hoverTip: 'orders_status'
     };
     shortSummaryColumn = {
         name: 'summary',
         label: 'Order',
-        flexWidth: 'flex-width-2_5',
-        cell: Backgrid.HandlebarsCell.extend({
-            className: 'handlebars-cell flex-width-2_5'
-        }),
         template: Handlebars.compile('{{#if longSummary}}<span data-toggle="tooltip" title="{{summary}}">{{shortSummary}}...</span>{{else}}{{shortSummary}}{{/if}}'),
         hoverTip: 'orders_order'
     };
     orderType = {
         name: 'kind',
         label: 'Type',
-        cell: 'string',
+        flexWidth: 'flex-width-1_5',
+        cell: Backgrid.StringCell.extend({
+            className: 'StringCell flex-width-1_5'
+        }),
         hoverTip: 'orders_type'
     };
     summaryOrderType = {
@@ -106,8 +104,9 @@ define([
     facilityCodeColumn = {
         name: 'facilityMoniker',
         label: 'Facility',
+        flexWidth: 'flex-width-1_5',
         cell: Backgrid.HandlebarsCell.extend({
-            className: 'handlebars-cell'
+            className: 'handlebars-cell flex-width-1_5'
         }),
         template: Handlebars.compile('{{facilityMoniker}}'),
         hoverTip: 'orders_facility'
@@ -121,18 +120,18 @@ define([
     summaryColumn = {
         name: 'summary',
         label: 'Order',
-        flexWidth: 'flex-width-6',
+        flexWidth: 'flex-width-4',
         cell: Backgrid.StringCell.extend({
-            className: 'string-cell flex-width-6'
+            className: 'string-cell flex-width-4'
         }),
         hoverTip: 'orders_order'
     };
     providerNameColumn = {
         name: 'providerDisplayName',
         label: 'Provider Name',
-        flexWidth: 'flex-width-1_5',
+        flexWidth: 'flex-width-3',
         cell: Backgrid.StringCell.extend({
-            className: 'string-cell flex-width-1_5'
+            className: 'string-cell flex-width-3'
         }),
         hoverTip: 'orders_providername'
     };
@@ -270,6 +269,7 @@ define([
         "mixedName": "Vitals",
         "show": true
     }]);
+
     //the following model is shared between the applet and the toolbar view
     var SharedModel = Backbone.Model.extend({
         defaults: {
@@ -376,12 +376,17 @@ define([
                 return collection.filter(function(model) {
                     if (model.get('childrenOrderUids')) { //filter parent orders (US14416)
                         return false;
-                    } else if (exclude.indexOf(model.get("displayGroup")) === -1) {
+                    }
+
+                    // Not all order entries have a 'displayGroup' attribute; for those entries, we attempt to map
+                    // back to an appropriate display group using the entry 'service' attribute, which should contain the
+                    // displayed group name as shown in the order group dropdown menu.
+                    var displayGroup = model.get('displayGroup') || orderUtil.getDisplayGroupFromDoDService(model.get('service'));
+                    if (!_.contains(exclude, displayGroup)) {
                         model.set(orderUtil.parseOrderResponse(model.attributes, displayGroup));
                         return true;
-                    } else {
-                        return false;
                     }
+                    return false;
                 });
             };
             fetchOptions.criteria = {
@@ -409,8 +414,9 @@ define([
                     //sort the collection by order type ascending, and entered date descending
                     comparator: function(order) {
                         var kind = order.attributes.kind;
-                        var dateEntered = moment(order.attributes.entered, 'YYYYMMDDHHmmssSSS', true);
-                        return [kind, dateEntered];
+                        var uid = order.attributes.uid;
+                        var dateEntered = moment(order.attributes.entered, 'YYYYMMDDHHmmssSSS');
+                        return kind + '-' + dateEntered + '-' + uid;
                     },
                     //parse the collection and filter out the excluded types
                     collectionParse: filterCollection
@@ -436,6 +442,9 @@ define([
             //Row click event handler - display the Modal window
             onClickRow = function(model, event, context) {
                 event.preventDefault();
+                _.defaults(context.options, {
+                    hideNavigation: false
+                });
                 ModalViewUtils.showOrderDetails(model, context.options);
             };
 
@@ -460,19 +469,12 @@ define([
                 }
             };
 
-            // Only show the "+" icon for the applet if the user has the 'add-lab-order' permission
-            if (ADK.UserService.hasPermissions(addPermission)) {
-                dataGridOptions.onClickAdd = function() {
-                    var TrayView = ADK.Messaging.request("tray:writeback:actions:trayView");
-                    if (TrayView) {
-                        TrayView.$el.trigger('tray.show');
-                        TrayView.$el.trigger('tray.swap', OrderSearchTrayView);
-                    }
-                };
+             if (ADK.PatientRecordService.isPatientInPrimaryVista()) {
+                dataGridOptions.onClickAdd = LabOrderTrayUtils.launchLabForm;
             }
 
+            dataGridOptions.filterFields = _.pluck(fullScreenColumns, 'name');
             if (this.columnsViewType === "summary") {
-                dataGridOptions.filterFields = ['statusName', 'shortSummary', 'enteredFormatted', 'facilityMoniker'];
                 dataGridOptions.columns = summaryColumns;
             } else if (this.columnsViewType === "expanded") {
                 dataGridOptions.columns = fullScreenColumns;

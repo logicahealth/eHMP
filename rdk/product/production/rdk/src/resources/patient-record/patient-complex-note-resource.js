@@ -1,10 +1,10 @@
 'use strict';
 
 var rdk = require('../../core/rdk');
+var nullchecker = rdk.utils.nullchecker;
 var _ = require('lodash');
 var async = require('async');
 var httpUtil = rdk.utils.http;
-var fetchPatientUid = require('./get-patient-uid');
 var url = require('url');
 
 FetchError.prototype = Error.prototype;
@@ -42,10 +42,19 @@ function getComplexNotePdf(req, res) {
 }
 
 function getComplexNote(req, res, isPdf) {
+    req.audit.logCategory = 'RETRIEVE';
+
+    var uid = req.param('uid');
+    var pid = req.param('pid');
+    if (nullchecker.isNullish(uid)) {
+        return res.status(rdk.httpstatus.bad_request).rdkSend('Missing uid parameter');
+    } else if (nullchecker.isNullish(pid)) {
+        return res.status(rdk.httpstatus.bad_request).rdkSend('Missing pid parameter');
+    }
 
     async.waterfall([
 
-        getDocumentContent.bind(null, req),
+        getDocumentContent.bind(null, req, pid, uid),
 
         getComplexNoteContent.bind(null, req)
 
@@ -74,22 +83,19 @@ function getComplexNote(req, res, isPdf) {
     });
 }
 
-function getDocumentContent(req, callback) {
-    fetchPatientUid.getPatientUid(req, function(err, response, obj) {
+function getDocumentContent(req, pid, uid, callback) {
+    req.app.subsystems.jds.getByUid(req, pid, uid, function(err, obj, statusCode) {
         if (err) {
+            if (err.code === 404) {
+                return callback(new NotFoundError('patient-complex-note-resource:getDocumentContent: Unable to retrieve document containing complex note - ' + obj.error.message, obj.error));
+            }
             return callback(err, obj);
         }
-        if (response.statusCode >= 300) {
-            return callback({code: response.statusCode, message: obj}, obj);
+        if (statusCode >= 300) {
+            return callback({code: statusCode, message: obj}, obj);
         }
         if ('data' in obj) {
             return callback(null, obj);
-        }
-        if ('error' in obj) {
-            if (obj.error.code === 404) {
-                return callback(new NotFoundError('patient-complex-note-resource:getDocumentContent: Unable to retrieve document containing complex note - ' + obj.error.message, obj.error));
-            }
-            return callback(new Error('patient-complex-note-resource:getDocumentContent: Unable to retrieve document containing complex note - ' + obj.error.message, obj.error));
         }
         return callback(new Error('patient-complex-note-resource:getDocumentContent: Unable to retrieve document containing complex note', obj));
     });
@@ -107,7 +113,7 @@ function getComplexNoteContent(req, results, callback) {
     var complexNoteUri = documentItems[0].dodComplexNoteUri;
 
     if (!complexNoteUri) {
-        return callback(new NotFoundError('patient-complex-note-resource:getComplexNoteContent: There is no Complex Note for this document')); //TODO don't throw an error here, just return empty results
+        return callback(new NotFoundError('patient-complex-note-resource:getComplexNoteContent: There is no Complex Note for this document'));
     }
     var complexNotePath = url.parse(complexNoteUri).path;
     var vxSyncServer = _.clone(req.app.config.vxSyncServer);
@@ -126,8 +132,8 @@ function getComplexNoteContent(req, results, callback) {
         if (error) {
             return callback(new FetchError('patient-complex-note-resource:getComplexNoteContent: Error fetching pid=' + pid + ' - ' + (error.message || error), error));
         }
-        // TODO do other error codes (e.g. 500) result in an error object or do we need to look more closely at the status code?
-        if (response && response.statusCode === 404) {
+        if (response && response.statusCode >= 300) {
+            req.logger.warn({ statusCode: response.statusCode, body: response.body }, 'Error response in patient-complex-note-resource:getComplexNoteContent');
             return callback(new NotFoundError('patient-complex-note-resource:getComplexNoteContent: The Complex Note was not found'));
         }
         if(_.isUndefined(result)) {

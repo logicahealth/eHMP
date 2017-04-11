@@ -1,4 +1,4 @@
-@F414 @regression @future @DE4560
+@F414 @f414_problem_list @regression @future @DE4560
 Feature: Enter and Store A Problem List
 
 @F414_1 @UAT_script 
@@ -13,7 +13,7 @@ Scenario:  eHMP user should not be able to add a problem without appropriate per
 
 @F414_2 @F414-1 @F414-2 @UAT_script @US6701 @US12012 @US6723 @TC3061 @DE5179
 Scenario: eHMP user with appropriate permissions is able to Add and Create Another problem
-  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "pu1234" verifycode as  "pu1234!!"
+  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "PW    " verifycode as  "PW    !!"
   And staff view screen is displayed
   And Navigate to Patient Search Screen
   Given user searches for and selects "TWENTY,PATIENT"
@@ -106,11 +106,11 @@ Scenario: eHMP user can search for a problem in the Lexicon using SNOMED CT code
   
   When user attempts to add a problem from problem applet header
   And user searches for a new problem with term "91935"
-  Then the Add Problem model displays a message "An unexpected error occurred during your search. Please try again"
+  Then the Add Problem model displays a message "An unexpected error occurred during your search. Try again"
 
 @F414-3 @F414-3a @US11634 @US3592 @US6704
 Scenario: As an authorized user adding a problem to a patient's problem list, I need to be prompted to set the visit context if I haven't already done this
-  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "pu1234" verifycode as  "pu1234!!"
+  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "PW    " verifycode as  "PW    !!"
   And staff view screen is displayed
   And Navigate to Patient Search Screen
   And user searches for and selects "TWENTY,PATIENT"
@@ -122,7 +122,7 @@ Scenario: As an authorized user adding a problem to a patient's problem list, I 
 
 @F414-3 @F414-3b @US11634 @US3592 @US6704
 Scenario: As an authorized user adding a problem to a patient's problem list, I need to be prompted to set the visit context if I haven't already done this
-  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "pu1234" verifycode as  "pu1234!!"
+  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "PW    " verifycode as  "PW    !!"
   And staff view screen is displayed
   And Navigate to Patient Search Screen
   And user searches for and selects "TWENTY,PATIENT"
@@ -163,7 +163,7 @@ Scenario: Verify Clinic field label text is Service for inpatients
 
 @US12784 @US12784_outpatient
 Scenario: Verify Clinic field label text is Clinic for outpatients
-  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "pu1234" verifycode as  "pu1234!!"
+  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "PW    " verifycode as  "PW    !!"
   And staff view screen is displayed
   And Navigate to Patient Search Screen
   Given user searches for and selects "TWENTY,PATIENT"
@@ -178,25 +178,6 @@ Scenario: Verify Clinic field label text is Clinic for outpatients
   Then the clinic field's label is "Clinic"
   And the clinic field's value is default to "Cardiology"
 
-@F414_8
-Scenario: :  eHMP user can add new comment after defining problem section within “Add problem” form.
-  Given user searches for and selects "TWENTY,INPATIENT"
-  And Overview is active
-  And the user navigates to expanded problems applet
-
-  And user opens observation tray
-  And user attempts to create a new "Problem" observation
-  And user searches and selects new problem "Allergy to peanuts"
-  And Add Problem modal is displayed
-  When user enters a comment "test comment" and a timestamp
-  Then the comment character count is updated
-  And the Add Problem comment add button is enabled
-  And the Add Problem accept button is disabled
-
-  When user adds the problem comment
-  Then the Add Problem comment add button is disabled
-  And the Add Problem accept button is enabled
-  And a Add Problem comment row is displayed with "test comment" and a timestamp
 
 @F414_9 @US12786 @TC3377
 Scenario: Verify Treatment factors

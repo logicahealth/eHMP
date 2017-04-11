@@ -1,20 +1,38 @@
 .backgrid-paginator {
-	height: 23px;
+	background: $primary-lightest;
+	height: 24px;
 	 ul {
+	 	margin-bottom: 0;
 		li > span {
 			cursor: default;
 			background: none;
 			float: none;
 		}
-		.active > span {
-		  background-color: transparent;
+		.active {
+			padding-top: 3px;
+			> span {
+				background-color: transparent;
+			}
 		}
 	}
 }
 
 .pagination-container {
 	> div {
-		position:fixed;
-		z-index:3;
+		position: fixed;
+		z-index: 3;
 	}
+}
+
+//table in numeric lab results and vitals details modal
+.details-modal-table {
+    height: 421px;
+    .label-critical {
+    	padding: 1.5px 3px;
+    }
+    .backgrid-paginator {
+        position: absolute;
+        bottom: 0;
+        width: calc(100% - 30px);
+    }
 }

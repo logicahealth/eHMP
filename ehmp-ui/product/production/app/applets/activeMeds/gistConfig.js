@@ -26,67 +26,86 @@ define([
                     response.nextAdminStatus = AppletHelper.getNextAdminStatus(response);
                     response.nextAdminData = AppletHelper.getNextAdminData(response);
                     response = AppletHelper.setMedCategory(response);
+
+                    this.setTotalFillsRemaining(response);
+                    this.updateFillableStatus(response);
+                    this.setShortNameAndDescription(response);
+
+                    response.applet_id = 'activeMeds';
+                    response.overallStartFormat = ADK.utils.formatDate(response.lastAction);
+                    response.popoverMeds = [{
+                            overallStartFormat :  response.overallStartFormat,
+                            normalizedName: response.normalizedName,
+                            sig: response.sig,
+                            age: response.age
+                        }];
+                    response.infobuttonContext = 'MLREV';
+                    response.crsDomain = ADK.utils.crsUtil.domain.MEDICATION;
+
+                    // Dependent on popoverMeds having already been set above
+                    response.tooltip = tooltip(response);
+
                     return response;
                 },
-                setTotalFillsRemaining: function() {
+                setTotalFillsRemaining: function(response) {
                     var isExpiredCancelledOrDiscontinued = false;
-                    if (this.get('calculatedStatus').toUpperCase() === 'DISCONTINUED' || this.get('calculatedStatus').toUpperCase() === 'CANCELLED' || this.get('calculatedStatus').toUpperCase() === 'EXPIRED') {
+                    if (response.calculatedStatus.toUpperCase() === 'DISCONTINUED' || response.calculatedStatus.toUpperCase() === 'CANCELLED' || response.calculatedStatus.toUpperCase() === 'EXPIRED') {
                         isExpiredCancelledOrDiscontinued = true;
-                        this.set('totalFillsRemaining', '0');
+                        response.totalFillsRemaining = 0;
                     }
-                    if (this.get('vaType').toUpperCase() === 'I' || this.get('vaType').toUpperCase() === 'V' || (this.get('vaType') === 'N' && !this.get('orders')[0].fillsRemaining)) {
-                        this.set('totalFillsRemaining', 'No Data');
-                    } else if (this.get('calculatedStatus').toUpperCase() === 'PENDING') {
-                        if (this.get('orders')[0].fillsAllowed) {
-                            this.set('totalFillsRemaining', this.get('orders')[0].fillsAllowed.toString());
+                    if (response.vaType.toUpperCase() === 'I' || response.vaType.toUpperCase() === 'V' || (response.vaType === 'N' && !response.orders[0].fillsRemaining)) {
+                        response.totalFillsRemaining = 'No Data';
+                    } else if (response.calculatedStatus.toUpperCase() === 'PENDING') {
+                        if (response.orders[0].fillsAllowed) {
+                            response.totalFillsRemaining = response.orders[0].fillsAllowed.toString();
                         } else {
-                            this.set('totalFillsRemaining', 'No Data');
+                            response.totalFillsRemaining = 'No Data';
                         }
                     } else if (!isExpiredCancelledOrDiscontinued) {
 
-                        if (this.get('expirationDate') !== undefined && this.get('orders')[0].daysSupply) {
-                            this.set('effectiveFillsRemaining', AppUtil.getCalculatedEffectiveFillsRemaining(this.get('expirationDate'), this.get('orders')[0].daysSupply, this.get('orders')[0].fillsRemaining, this.get('calculatedStatus')));
+                        if (response.expirationDate !== undefined && response.orders[0].daysSupply) {
+                            response.effectiveFillsRemaining =  AppUtil.getCalculatedEffectiveFillsRemaining(response.expirationDate, response.orders[0].daysSupply, response.orders[0].fillsRemaining, response.calculatedStatus);
                         } else {
-                            this.set('effectiveFillsRemaining', this.get('orders')[0].fillsRemaining);
+                            response.effectiveFillsRemaining = response.orders[0].fillsRemaining;
                         }
-                        this.set('totalFillsRemaining', this.get('effectiveFillsRemaining'));
+                        response.totalFillsRemaining =  response.effectiveFillsRemaining;
                     }
                 },
-                updateFillableStatus: function() {
+                updateFillableStatus: function(response) {
                     var fillableStatus;
-                    if(this.get('CategoryInpatient'))
+                    if(response.CategoryInpatient)
                     {
-                        if (this.get('nextAdminData').date) {
-                            fillableStatus = this.get('nextAdminData').display + " " + this.get('nextAdminData').date;
+                        if (response.nextAdminData.date) {
+                            fillableStatus = response.nextAdminData.display + " " + response.nextAdminData.date;
                         } else {
-                            fillableStatus = this.get('nextAdminData').display;
+                            fillableStatus = response.nextAdminData.display;
                         }
                     } else {
-                        if (this.get('fillableDays').date) {
-                            fillableStatus = this.get('fillableStatus') + " " + this.get('fillableDays').date;
+                        if (response.fillableDays.date) {
+                            fillableStatus = response.fillableStatus + " " + response.fillableDays.date;
                         }
                     }
 
                     if (!_.isUndefined(fillableStatus)) {
-                        this.set('fillableStatus', fillableStatus);
+                        response.fillableStatus =  fillableStatus;
                     }
                 },
-                setShortNameAndDescription: function() {  // used by ADK interventionsGistView for more/less link
-                    var name = this.get('normalizedName') || '';
-                    var description = this.get('sig') || '';
+                setShortNameAndDescription: function(response) {  // used by ADK interventionsGistView for more/less link
+                    var name = response.normalizedName || '';
+                    var description = response.sig || '';
                     var characterLimit = 100;
-                    this.set('characterLimit', characterLimit);
+                    response.characterLimit = characterLimit;
                     if (name.length > characterLimit) {
                         var limitedName = name.substring(0, characterLimit);
                         var nameCharacterLimitToLastSpace = limitedName.lastIndexOf(' ') > -1 ? limitedName.lastIndexOf(' ') : characterLimit;
                         var nameCharactersOverLimit = name.length - nameCharacterLimitToLastSpace;
-                        this.set('shortName', name.substring(0, name.length - nameCharactersOverLimit));
+                        response.shortName = name.substring(0, name.length - nameCharactersOverLimit);
                     }
                     if (description.length > characterLimit) {
                         var limitedDescription = description.substring(0, characterLimit);
                         var descriptionCharacterLimitToLastSpace = limitedDescription.lastIndexOf(' ') > -1 ? limitedDescription.lastIndexOf(' ') : characterLimit;
                         var descriptionCharactersOverLimit = description.length - descriptionCharacterLimitToLastSpace;
-                        this.set('shortDescription', description.substring(0, description.length - descriptionCharactersOverLimit));
+                        response.shortDescription = description.substring(0, description.length - descriptionCharactersOverLimit);
                     }
                 }
             },
@@ -94,26 +113,6 @@ define([
             criteria: {
                 filter: ''
             }
-        },
-        transformCollection: function(collection) {
-            collection.each(function(med) {
-                med.setTotalFillsRemaining();
-                med.updateFillableStatus();
-                med.setShortNameAndDescription();
-                med.set({
-                    'applet_id': 'activeMeds',
-                    'popoverMeds': [med],
-                    'numberOfMedsNotShownInPopover': 0,
-                    'overallStartFormat': ADK.utils.formatDate(med.get('lastAction')),
-                    'infobuttonContext': 'MLREV',
-                    'codes': med.get('codes'),
-                    'crsDomain': ADK.utils.crsUtil.domain.MEDICATION
-                });
-                // Dependent on popoverMeds having already been set above
-                med.set('tooltip', tooltip(med.toJSON()));
-            });
-            gistConfiguration.shadowCollection = collection.clone();
-            return collection;
         },
         gistHeaders: {
             name: {

@@ -63,6 +63,7 @@ define([
                 name: 'q-' + options.id,
                 template: filterTemplate,
                 filterName: options.filterName || '',
+                filterText: options.filterText || '',
                 model: options.model
             });
         }

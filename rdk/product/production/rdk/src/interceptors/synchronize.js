@@ -1,4 +1,3 @@
-/*jslint node: true */
 'use strict';
 
 var format = require('util').format;
@@ -18,6 +17,8 @@ intercept._clearThenSyncPatient = clearThenSyncPatient;
 intercept._syncPatient = syncPatient;
 intercept._waitForFullPatientSync = waitForFullPatientSync;
 intercept._isSyncExistsDelayAtTimeout = isSyncExistsDelayAtTimeout;
+intercept._isOneSiteCompleted = isOneSiteCompleted;
+intercept._isEverySiteInError = isEverySiteInError;
 
 intercept.JdsSyncAdapter = JdsSyncAdapter;
 
@@ -64,7 +65,11 @@ function intercept(req, res, next) {
     // sync interceptor will wait for the entire patient file to synchronize.
     if (isEdipi(pid) || isIcn(pid)) {
         logger.debug('synchronize.intercept(%s) "pid" value was an EDIPI or ICN. Waiting for full patient sync', pid);
-        return waitForFullPatientSync(logger, config, jdsSync, pid, req, res, next);
+        return waitForFirstSitePatientSync(logger, config, jdsSync, pid, req, res, next);
+
+        // As per DE6041, we are now waiting for only a single site to sync
+        // for EDIPI/ICN syncs as these are the result of global searches.
+        // return waitForFullPatientSync(logger, config, jdsSync, pid, req, res, next);
     }
 
     jdsSync.getPatientStatusSimple(pid, req, function(error, syncStatus) {
@@ -78,7 +83,7 @@ function intercept(req, res, next) {
         }
 
         // 2. patient not found, therefore, it should be synchronized
-        if(syncStatus.data.error && syncStatus.data.error.code === 404) {
+        if (syncStatus.data.error && syncStatus.data.error.code === 404) {
             logger.warn(error, 'synchronize.intercept() Patient not found, synchronizing: %s;', pid);
             return syncPatient(config, logger, jdsSync, pid, req, res, next);
         }
@@ -97,26 +102,48 @@ function intercept(req, res, next) {
         }
 
         // 5. if the sync has been inactive too long, clearAndSync()
-        if (isSyncLastUpdateTimeoutExceeded(syncStatus.data, inactivityTimeoutMillis)) {
-            logger.info('synchronize.intercept() The activity timeout was exceeded,clearing and resynching patient [%s]', pid);
+        if (!syncStatus.data.syncCompleted && isSyncLastUpdateTimeoutExceeded(syncStatus.data, inactivityTimeoutMillis)) {
+            logger.info('synchronize.intercept() The activity timeout was exceeded, clearing and resynching patient [%s]', pid);
             return clearThenSyncPatient(config, logger, jdsSync, pid, req, res, next);
         }
 
-        // 6. In all other cases, sync the patient.
+        // 6. if the sync is in progress and not "stuck", wait for sync to complete
+        if (!syncStatus.data.syncCompleted && !isSyncLastUpdateTimeoutExceeded(syncStatus.data, inactivityTimeoutMillis)) {
+            logger.info('synchronize.intercept() Patient [%s] sync already in progress--awaiting completion', pid);
+            return waitForPatientSync(config, logger, jdsSync, pid, req, res, next);
+        }
+
+        // 7. In all other cases, sync the patient.
         logger.info(syncStatus, 'synchronize.intercept() Calling sync for patient: ', pid);
         syncPatient(config, logger, jdsSync, pid, req, res, next);
     });
 }
 
 
+function waitForPatientSync(config, logger, jdsSync, pid, req, res, next) {
+    logger.debug('synchronize.waitForPatientSync(%s) waiting for patient', pid);
+
+    var prioritySite = getMySiteAsList(req);
+
+    jdsSync.waitForPatientLoad(pid, prioritySite, req, function(error, result) {
+        logger.debug('synchronize.waitForPatientSync(%s) start sync wait for patient callback', pid);
+        if (error) {
+            var status = _.isNumber(error) ? error : 500;
+            return res.status(status).rdkSend(result || error);
+        }
+
+        next();
+    });
+}
+
 function clearThenSyncPatient(config, logger, jdsSync, pid, req, res, next) {
     logger.debug('synchronize.clearThenSyncPatient(%s) Clearing, then synchronizing patient', pid);
 
-    jdsSync.clearPatient(pid, req, function(err, result) {
+    jdsSync.clearPatient(pid, req, function(error, result) {
         logger.debug('synchronize.clearThenSyncPatient(%s) start syncClear callback', pid);
-        if (err) {
-            var status = _.isNumber(err) ? err : 500;
-            result = result || err;
+        if (error) {
+            var status = _.isNumber(error) ? error : 500;
+            result = result || error;
             return res.status(status).rdkSend(result);
         }
 
@@ -140,16 +167,16 @@ function syncPatient(config, logger, jdsSync, pid, req, res, next) {
         res.setTimeout(timeoutMillis);
     }
 
-    jdsSync.loadPatientPrioritized(pid, prioritySite, req, function(err, result) {
+    jdsSync.loadPatientPrioritized(pid, prioritySite, req, function(error, result) {
         logger.debug('synchronize.syncPatient() called jdsSync.loadPatientPrioritized(%s, %s)', pid, prioritySite);
-        if (err) {
-            if (err === 404) {
+        if (error) {
+            if (error === 404) {
                 logger.debug('synchronize.syncPatient() 404 syncLoad');
                 return res.status(404).rdkSend(noSiteResponse);
             }
 
             logger.error('synchronize.syncPatient() Error synchronizing patient:');
-            logger.error(err);
+            logger.error(error);
             return res.status(500).rdkSend('There was an error processing your request. The error has been logged.');
         }
 
@@ -177,7 +204,8 @@ function syncPatient(config, logger, jdsSync, pid, req, res, next) {
     });
 }
 
-// TODO: There should be a implementation than including this here
+// Perhaps a future version should use the jds-sync-subsystem.js
+// implementation rather than including this here.
 var standardErrorResponse = {
     status: 500,
     data: {
@@ -188,7 +216,8 @@ var standardErrorResponse = {
     }
 };
 
-// TODO: There should be a implementation than including this here
+// Perhaps a future version should use the jds-sync-subsystem.js
+// implementation rather than including this here.
 var noSiteResponse = {
     status: 404,
     data: {
@@ -236,7 +265,7 @@ function waitForFullPatientSync(logger, config, jdsSync, pid, req, res, next, st
 
         // if sync has already started, try to use the earliest timestamp/stampTime for the
         // sync timeout calculation. Otherwise use the current time. Note that this should
-        // old be relevant to the first invocation of waitForFullPatientSync() in the recursive
+        // only be relevant to the first invocation of waitForFullPatientSync() in the recursive
         // call stack.
         startTime = startTime || minMoment([new Date(),
             syncStatus.data.latestEnterpriseSyncRequestTimestamp,
@@ -277,6 +306,111 @@ function waitForFullPatientSync(logger, config, jdsSync, pid, req, res, next, st
         // 6. everything else: wait and test again
         logger.info('synchronize.waitForFullPatientSync(%s) Patient sync not yet complete, continuing to wait', pid);
         return setTimeout(waitForFullPatientSync, loopDelayMillis, logger, config, jdsSync, pid, req, res, next, startTime);
+    });
+}
+
+/*
+Variadic Function
+function waitForFirstSitePatientSync(logger, config, pid, req, res, next, startTime)
+function waitForFirstSitePatientSync(logger, config, pid, req, res, next)
+
+startTime: not included in the initial recursive call
+*/
+function waitForFirstSitePatientSync(logger, config, jdsSync, pid, req, res, next, startTime) {
+    logger.debug('synchronize.waitForFirstSitePatientSync(%s)', pid);
+
+    if (jdsSync.version_1_2) {
+        var timeoutMillis = Number(config.jdsSync.settings.timeoutMillis || 300000) + 3000;
+        logger.debug({
+            timeout: timeoutMillis
+        }, 'synchronize.waitForFirstSitePatientSync(%s) Overriding response timeout to account for patient sync for version r1.2', pid);
+        res.setTimeout(timeoutMillis);
+    }
+
+    jdsSync.getPatientStatusSimple(pid, req, function(error, syncStatus) {
+        logger.debug({
+            status: syncStatus
+        }, 'synchronize.waitForFirstSitePatientSync(%s) called jdsSync.getPatientStatusSimple() for full sync', pid);
+        // 1. error returned in callback
+        if (error || _.isEmpty(syncStatus) || _.isEmpty(syncStatus.data) || (syncStatus.data.error && syncStatus.data.error.code !== 404)) {
+            logger.warn(error, 'synchronize.waitForFirstSitePatientSync(%s) Error retrieving simple sync status for patient, so skipping', pid);
+            return next();
+        }
+
+        var now = Date.now();
+        var loopDelayMillis = config.jdsSync.settings.waitMillis;
+        var syncTimeoutMillis = config.jdsSync.settings.timeoutMillis;
+        var syncExistsWaitDelayMillis = config.jdsSync.settings.syncExistsWaitDelayMillis;
+
+        // if sync has already started, try to use the earliest timestamp/stampTime for the
+        // sync timeout calculation. Otherwise use the current time. Note that this should
+        // only be relevant to the first invocation of waitForFirstSitePatientSync() in the
+        // recursive call stack.
+        startTime = startTime || minMoment([new Date(),
+            syncStatus.data.latestEnterpriseSyncRequestTimestamp,
+            syncStatus.data.latestJobTimestamp,
+            moment(syncStatus.data.latestSourceStampTime, 'YYYYMMDDHHmmss')
+        ]).valueOf();
+
+        logger.debug('synchronize.waitForFirstSitePatientSync(%s) loopDelayMillis=%s syncTimeoutMillis=%s syncExistsWaitDelayMillis=%s', pid, loopDelayMillis, syncTimeoutMillis, syncExistsWaitDelayMillis);
+
+        // 2. 404 and 404-timeout exceeded: res.send(result.status, result.data)
+        if (syncStatus.data.error && syncStatus.data.error.code === 404) {
+            if (isSyncExistsDelayAtTimeout(startTime, syncExistsWaitDelayMillis)) {
+                logger.warn('synchronize.waitForFirstSitePatientSync(%s) Patient Sync for timeout waiting to get past 404 status', pid);
+                return res.status(404).rdkSend(noSiteResponse);
+            }
+
+            logger.info('synchronize.waitForFirstSitePatientSync(%s) Patient sync returned 404, continuing to wait', pid);
+            return setTimeout(waitForFirstSitePatientSync, loopDelayMillis, logger, config, jdsSync, pid, req, res, next, startTime);
+        }
+
+        // 3. Patient Sync complete: next()
+        if (isOneSiteCompleted(syncStatus)) {
+            logger.info('synchronize.waitForFirstSitePatientSync(%s) Sync complete for patient', pid);
+            return next();
+        }
+
+        // 4. sync timeout exceeded before at least one site completed: return standardErrorResponse
+        if (now - startTime > syncTimeoutMillis) {
+            logger.warn('synchronize.waitForFirstSitePatientSync(%s) Timeout waiting for sync on patient', pid);
+            return res.status(500).rdkSend(standardErrorResponse);
+        }
+
+        // 5. All sites are in Sync/Job error
+        if (isEverySiteInError(syncStatus)) {
+            logger.warn('synchronize.waitForFirstSitePatientSync(%s) Sync had an error every site status for patient', pid);
+            return res.status(500).rdkSend(standardErrorResponse);
+        }
+
+        // 6. everything else: wait and test again
+        logger.info('synchronize.waitForFirstSitePatientSync(%s) Patient sync not yet complete, continuing to wait', pid);
+        return setTimeout(waitForFirstSitePatientSync, loopDelayMillis, logger, config, jdsSync, pid, req, res, next, startTime);
+    });
+}
+
+
+function isOneSiteCompleted(simpleSyncStatus) {
+    var data = _.get(simpleSyncStatus, 'data', {});
+
+    if (data.syncCompleted) {
+        return true;
+    }
+
+    return _.some(data.sites, function(site) {
+        return site.syncCompleted;
+    });
+}
+
+function isEverySiteInError(simpleSyncStatus) {
+    var data = _.get(simpleSyncStatus, 'data', {});
+
+    if (_.isEmpty(data.sites)) {
+        return false;
+    }
+
+    return _.every(data.sites, function(site) {
+        return site.hasError;
     });
 }
 
@@ -484,7 +618,7 @@ function JdsSyncAdapter(logger, config, jdsSync) {
 
 
 JdsSyncAdapter.prototype.clearPatient = function(pid, req, callback) {
-    this.logger.debug('JdsSyncAdapter.clearPatient(%s)', pid);
+    this.logger.debug('synchronize JdsSyncAdapter.clearPatient(%s)', pid);
 
     // Since this is being called with a callback in this interceptor, this call should never require
     // a value for 'res'.

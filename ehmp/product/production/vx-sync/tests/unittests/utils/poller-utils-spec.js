@@ -10,10 +10,10 @@ var config = {
     vistaSites: {
         '9E7A': {
             name: 'panorama',
-            host: 'IP_ADDRESS',
+            host: 'IP        ',
             port: 9210,
             accessCode: 'PW',
-            verifyCode: 'PW',
+            verifyCode: 'PW!!',
             localIP: '127.0.0.1',
             stationNumber: 500,
             localAddress: 'localhost',
@@ -22,10 +22,10 @@ var config = {
         },
         C877: {
             name: 'kodak',
-            host: 'IP_ADDRESS',
+            host: 'IP        ',
             port: 9210,
             accessCode: 'PW',
-            verifyCode: 'PW',
+            verifyCode: 'PW!!',
             localIP: '127.0.0.1',
             stationNumber: 500,
             localAddress: 'localhost',

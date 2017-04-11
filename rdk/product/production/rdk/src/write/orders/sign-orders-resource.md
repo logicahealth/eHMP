@@ -47,6 +47,9 @@ Signs an order
                             "locationIEN",
                             "orders"
                         ]
+                    },
+                    "pid": {
+                        "type": "string"
                     }
                 },
                 "required": [

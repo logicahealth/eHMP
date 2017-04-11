@@ -7,3 +7,4 @@ node.normal['oracle-xe']['oracle-password'] = Chef::EncryptedDataBagItem.load("o
 include_recipe "oracle-xe_wrapper::swap"
 include_recipe "oracle-xe"
 include_recipe "oracle-xe_wrapper::env_vars"
+include_recipe "oracle-xe_wrapper::stig_script"

@@ -13,32 +13,31 @@ var writebackContext = {
             '9E7A': {
                 name: 'PANORAMA',
                 division: '500',
-                host: 'IP_ADDRESS',
+                host: 'IP        ',
                 port: 9210,
                 production: false,
-                accessCode: 'PW',
-                verifyCode: 'PW',
+                accessCode: 'PW    ',
+                verifyCode: 'PW    !!',
                 localIP: '127.0.0.1',
                 localAddress: 'localhost'
             },
             'C877': {
                 name: 'KODAK',
                 division: '500',
-                host: 'IP_ADDRESS',
+                host: 'IP        ',
                 port: 9210,
                 production: false,
-                accessCode: 'PW',
-                verifyCode: 'PW',
+                accessCode: 'PW    ',
+                verifyCode: 'PW    !!',
                 localIP: '127.0.0.1',
                 localAddress: 'localhost'
             }
         }
     },
     model: {
-        "dfn": "3",
         "provider": "10000000231",
         "location": "285",
-        "eSig": "mx1234!!",
+        "eSig": "PW    !!",
         "orderList": [{
             'orderId': "38030;1",
             'orderDetailHash': "foobar"
@@ -46,6 +45,11 @@ var writebackContext = {
             'orderId': "38032;1",
             'orderDetailHash': "foobar"
         }]
+    },
+    interceptorResults: {
+        patientIdentifiers: {
+            "dfn": "3",
+        }
     },
     logger: sinon.stub(require('bunyan').createLogger({name: 'order-detail-comparator'}))
 };

@@ -31,7 +31,7 @@ var sampleDodConsult = {
     'id': null,
     'patientNextAppointment': null,
     'procedureConsult': 'Consultation Note (Provider) Document',
-    'providerName': null,
+    'provider': {'name': 'Borne, Jason'},
     'report': '',
     'requestDate': 1389374124000,
     'service': 'Consultation Note (Provider) Document',
@@ -50,7 +50,9 @@ var sampleVprConsult = {
     sensitive: false,
     dodComplexNoteUri: 'http://' + vx_sync_ip + ':8080/MockDoDAdaptor/async/complex/note/2157584289',
     uid: 'urn:va:document:DOD:00001:1000000649',
-    pid: 'DOD;00001'
+    pid: 'DOD;00001',
+    author: 'Borne, Jason',
+    authorDisplayName: 'Borne, Jason'
 };
 
 //console.log(xformer(sampleDodConsult, mockEdipi));
@@ -73,6 +75,8 @@ describe('jmeadows-consult-xformer', function(){
         expect(vprResult.dodComplexNoteUri).toEqual(sampleVprConsult.dodComplexNoteUri);
         expect(vprResult.uid).toEqual(sampleVprConsult.uid);
         expect(vprResult.pid).toEqual(sampleVprConsult.pid);
+        expect(vprResult.author).toEqual(sampleVprConsult.author);
+        expect(vprResult.authorDisplayName).toEqual(sampleVprConsult.authorDisplayName);
     });
     it('sets vpr sensitive flag to \'true\' when dod consult service field begins with *\'s', function(){
         sampleDodConsult.service = '*****Consultation Note (Provider) Document';

@@ -15,11 +15,11 @@ var fhirUtils = require('../common/utils/fhir-converter');
 
 function getResourceConfig() {
     return [{
-        name: 'adversereaction-adversereactions',
+        name: 'fhir-adverse-reaction',
         path: '',
         get: getAdverseReactions,
         subsystems: ['patientrecord', 'jds', 'solr', 'jdsSync', 'authorization'],
-        requiredPermissions: [],
+        requiredPermissions: ['read-fhir'],
         isPatientCentric: true,
         permitResponseFormat: true
     }];

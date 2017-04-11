@@ -10,17 +10,34 @@ define([
 
     'use strict';
 
+    var deleteMessageItemView = Backbone.Marionette.ItemView.extend({
+        template: Handlebars.compile([
+            '<p>Are you sure you want to delete <strong>{{screenTitle}}?</strong></p>'
+        ].join('\n')),
+    });
+    var deleteFooterItemView = Backbone.Marionette.ItemView.extend({
+        template: Handlebars.compile([
+            '{{ui-button "No" classes="btn-default btn-sm" title="Press enter to go back"}}',
+            '{{ui-button "Yes" classes="btn-danger btn-sm" title="Press enter to delete"}}'
+        ].join('\n')),
+        events: {
+            'click .btn-default': function() {
+                ADK.UI.Alert.hide();
+                this.model.get('buttonEl').focus();
+            },
+            'click .btn-danger': function() {
+                ADK.UI.Alert.hide();
+                ADK.UI.FullScreenOverlay.hide();
+                ADK.ADKApp.ScreenPassthrough.deleteUserScreen(this.model.get('screenId'));
+            }
+        }
+    });
+
+    var GRIDSTER_CONTAINER_RIGHT_PADDING = 15;
+
     var isSwitchboardDisplayed = function() {
         var switchboardDiv = $('#gridster2').find($('.view-switchboard'));
-        if (switchboardDiv.is(':visible')) {
-            //flash the box!!
-            for (var i = 0; i < 2; i++) {
-                $(switchboardDiv).fadeTo(225, 0.5).fadeTo(225, 1.0);
-            }
-            return true;
-        } else {
-            return false;
-        }
+        return switchboardDiv.is(':visible');
     };
 
     var Switchboard = Backbone.Marionette.CollectionView;
@@ -52,7 +69,7 @@ define([
             }
 
             this.model = new Backbone.Model();
-            var screenModule = ADK.ADKApp[Backbone.history.fragment.split("/").pop(-1)];
+            var screenModule = ADK.ADKApp.Screens[Backbone.history.fragment.split("/").pop(-1)];
             this.lastSave.currentScreenModule = screenModule;
             var screensConfig = ADK.UserDefinedScreens.getScreensConfigFromSession();
             self.screenConfig = _.findWhere(screensConfig.screens, {
@@ -70,7 +87,15 @@ define([
                 var appletId = params.appletId;
                 var appletTitle = params.appletTitle;
                 var regionId = self.getNextAppletId();
-                var appletHtml = '<li class="new" data-appletid="' + appletId + '" data-instanceid="' + regionId + '" data-view-type="default" data-min-sizex="4" data-min-sizey="3" data-max-sizex="8" data-max-sizey="12"><button type="button" aria-label="Press enter to open view options." class="btn btn-icon edit-applet applet-options-button"><i class="fa fa-cog"></i></button><br>' + appletTitle + '</li>';
+                var defaultViewType = ADK.ADKApp.Applets[appletId] && ADK.ADKApp.Applets[appletId].appletConfig && ADK.ADKApp.Applets[appletId].appletConfig.defaultViewType || ADK.Messaging.getChannel(appletId).request('viewTypes')[0].type; // Failover if the default isn't set
+
+                var maxSize = ADK.utils.getViewTypeMaxSize(defaultViewType);
+                var minSize = ADK.utils.getViewTypeMinSize(defaultViewType);
+                var size = ADK.utils.getViewTypeSize(defaultViewType);
+                params.sizeX = size.x; // This overrides the default in the addAppletPlaceholder reply, because we now have enough info to set them to what they should be
+                params.sizeY = size.y; //
+                var appletHtml = '<li class="new" data-appletid="' + appletId + '" data-instanceid="' + regionId + '" data-view-type="default" data-min-sizex="' + minSize.x + '" data-min-sizey="' + minSize.y + '" data-max-sizex="' + maxSize.x + '" data-max-sizey="' + maxSize.y + '"><button type="button" aria-label="Press enter to open view options." class="btn btn-icon edit-applet applet-options-button"><i class="fa fa-cog"></i></button><br>' + appletTitle + '</li>';
+
                 if (!isSwitchboardDisplayed()) {
                     window.requestAnimationFrame(function() {
                         var x = params.xPos;
@@ -78,12 +103,11 @@ define([
                         var col;
                         var row;
                         var gridsterDimen = self.getGridsterDimension();
-                        var $dragHere =  self.$('.dragHere');
+                        var $dragHere = self.$('.dragHere');
                         if ($dragHere.length !== 0) {
                             self.gridster.remove_widget($dragHere);
                         }
-
-                        self.gridster.add_widget(appletHtml, params.sizeX, params.sizeY, col, row);
+                        self.gridster.add_widget(appletHtml, params.sizeX, params.sizeY, col, row, [maxSize.x, maxSize.y], [minSize.x, minSize.y]);
                         self.displaySwitchboard(appletId, regionId, appletTitle, function() {
                             self.gridster.arrange_widgets_no_vertical_clipping(self.gridster.$widgets.toArray());
                             setTimeout(function() {
@@ -106,7 +130,7 @@ define([
             addAppletsChannel.reply('addAppletPlaceholder', function(params) {
                 var appletHtml = '<li class="preview-holder dragHere">Drag Applet Here</li>';
                 var hoverOverRow = (params.hoverOverRow > 9 ? 9 : params.hoverOverRow);
-                var placeholder_x = 4;
+                var placeholder_x = 4; // Can't change these yet (no data in params) see addAppletToGridster reply message (probably above)
                 var placeholder_y = 4;
                 var placeholderEl = $('.dragHere');
                 var noCollisionCol;
@@ -202,12 +226,12 @@ define([
             appletSlider: '.applet-tray'
         },
         events: {
-            'click #editorFilterBtn': function(e){
-                var filterContainer = $(e.currentTarget).closest('.workspace-editor-container');
-                filterContainer.one('shown.bs.collapse', function() {
-                    filterContainer.find('input[type=search]').focus();
-                });
-            },
+            'click #editorFilterBtn': function(e) {               
+                var filterContainer = $(e.currentTarget).closest('.workspace-editor-container');               
+                filterContainer.one('shown.bs.collapse', function() {                   
+                    filterContainer.find('input[type=search]').focus();               
+                });           
+            },
             'keyup #searchApplets': 'filterApplets',
             'keydown #searchApplets': function(evt) {
                 if (evt.which == 13) {
@@ -216,6 +240,8 @@ define([
                 }
             },
             'click #workspace-editor-filter .editor-clear-filter': 'clearFilterText',
+            'click .delete-workspace': 'deleteWorkspace',
+            'click .open-manager': 'navigateToManager',
             'click #exitEditing': 'hideOverlay',
             'click .edit-applet': 'editClicked',
             'keydown .options-box': 'handleSpacebarOrEnter',
@@ -249,6 +275,31 @@ define([
                 return false;
             }
         },
+        deleteWorkspace: function(e) {
+            var deleteMessageModel = new Backbone.Model({
+                screenTitle: this.screenConfig.title,
+            });
+            var deleteFooterModel = new Backbone.Model({
+                screenId: this.screenConfig.id,
+                buttonEl: this.$(e.target)
+            });
+            var deleteAlertView = new ADK.UI.Alert({
+                title: 'Delete',
+                icon: 'icon-triangle-exclamation',
+                messageView: deleteMessageItemView.extend({
+                    model: deleteMessageModel
+                }),
+                footerView: deleteFooterItemView.extend({
+                    model: deleteFooterModel
+                })
+            });
+            deleteAlertView.show();
+        },
+        navigateToManager: function() {
+            ADK.UI.FullScreenOverlay.hide();
+            var channel = ADK.Messaging.getChannel('workspaceManagerChannel');
+            channel.trigger('workspaceManager');
+        },
         hideOverlay: function() {
             this.saveGridsterAppletsConfig(true);
             ADK.UI.FullScreenOverlay.hide();
@@ -262,7 +313,7 @@ define([
             this.appletSlider.show(new AppletSelectionSlider());
             this.initGridster();
 
-            this.listenTo(ADK.utils.resize.dimensions.gridsterWidget, 'change', function(){
+            this.listenTo(ADK.utils.resize.dimensions.gridsterWidget, 'change', function() {
                 this.setGridsterBaseDimension();
             }, this);
         },
@@ -376,11 +427,11 @@ define([
         },
         getGridsterDimension: function() {
             var windowWidth = $(window).width();
-            var hightestCol = this.gridster.get_highest_occupied_cell().col;
-            if (hightestCol < 1) {
+            var highestCol = this.gridster.get_highest_occupied_cell().col + GRIDSTER_CONTAINER_RIGHT_PADDING;
+            if (highestCol < 1) {
                 return [40, 20];
             }
-            var x = Math.floor(windowWidth / hightestCol) - 10;
+            var x = Math.floor(windowWidth / highestCol) - 10;
             if (x > 40) x = 40;
             return [x, 20];
         },
@@ -401,13 +452,6 @@ define([
         },
         initGridster: function() {
             var self = this;
-            function gridsterResizeSnap($widget) {
-                var sizeX = parseInt($widget.attr('data-sizex'));
-                var mod = sizeX % 2;
-                if (mod === 1) {
-                    self.gridster.resize_widget($widget, sizeX + 1);
-                }
-            }
             this.gridster = this.$el.find(".gridsterContainer ul").gridster({
                 namespace: '#gridster2',
                 widget_selector: "li",
@@ -419,18 +463,12 @@ define([
                 min_cols: 100,
                 resize: {
                     enabled: true,
-                    resize: function(e, ui, $widget) {
-                        gridsterResizeSnap($widget);
-                    },
                     stop: function(e, ui, $widget) {
-                        gridsterResizeSnap($widget);
                         self.setGridsterBaseDimension();
                         self.saveGridsterAppletsConfig();
                     }
                 },
                 draggable: {
-                    drag: function(e, ui) {
-                    },
                     stop: function(e, ui) {
                         self.setGridsterBaseDimension();
                         self.saveGridsterAppletsConfig();
@@ -477,12 +515,12 @@ define([
 
             this.$('.boundary-indicator').css('width', editorIndicatorWidth + "px");
         },
-        onBeforeDestroy: function(){
+        onBeforeDestroy: function() {
             var addAppletsChannel = ADK.Messaging.getChannel('addApplets');
             addAppletsChannel.stopReplying('addAppletToGridster');
             addAppletsChannel.stopReplying('addAppletPlaceholder');
 
-            if(this.gridster){
+            if (this.gridster) {
                 this.gridster.destroy(true);
             }
             $(window).off("resize.appletLayoutView");

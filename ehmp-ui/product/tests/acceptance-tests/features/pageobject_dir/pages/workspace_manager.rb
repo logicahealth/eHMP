@@ -10,10 +10,11 @@ class PobWorkspaceManager < SitePrism::Page
   elements :fld_udw_titles, ".workspaceTable .user-defined .editor-title input"
   elements :fld_predefined_desc, ".workspaceTable .predefined-screen-row div:nth-child(5)"
   elements :fld_udw_desc, ".workspaceTable .user-defined .editor-description input"
+  elements :fld_all_problem_results, ".problem-result"
 
   element :btn_toggle_filter, '#gridFilterButtonWorkspaceManager'
   element :btn_add_workspace, '.addScreen'
-  element :btn_close_manager, '#doneEditing'
+  element :btn_close_manager, '.panel-heading .done-editing'
   element :fld_filter_screens, '#searchScreens'
 
   def predefined_screens_ids

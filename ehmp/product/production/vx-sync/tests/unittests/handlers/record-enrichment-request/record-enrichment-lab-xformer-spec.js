@@ -3,6 +3,8 @@
 
 require('../../../../env-setup');
 
+var _ = require('underscore');
+
 var xformer = require(global.VX_HANDLERS + 'record-enrichment-request/record-enrichment-lab-xformer');
 var log = require(global.VX_DUMMIES + '/dummy-logger');
 
@@ -395,6 +397,22 @@ describe('record-enrichment-lab-xformer.js', function(){
         });
     });
 
+    it('transform VA lab record - Verify handling of missing typeName field.',function(){
+        environment.terminologyUtils.getJlvMappedCode = function(type, code, callback) {
+            callback(null, {
+                        'code': '2344-0',
+                        'codeSystem': 'http://loinc.org',
+                        'displayText': 'Glucose [Mass/volume] in Body fluid'
+                    });
+        };
+        var labRecord1Copy = JSON.parse(JSON.stringify(labRecord1));
+        labRecord1Copy = _.omit(labRecord1Copy, 'typeName');
+        xformer(log, null, environment, labRecord1Copy, function(error, record){
+            expect(error).toBeFalsy();
+            expect(record).toBeTruthy();
+            expect(record.qualifiedName).toBe('(SERUM)');
+        });
+    });
 
     it('transform DOD lab record',function(){
         environment.terminologyUtils.getJlvMappedCode = function(type, code, callback) {

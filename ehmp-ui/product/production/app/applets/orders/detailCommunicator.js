@@ -2,6 +2,7 @@ define([
     'main/ADK',
     'app/applets/orders/util',
     'app/applets/orders/modalView/modalContentView'
+
 ], function(ADK, Util, ModalContentView) {
     "use strict";
 
@@ -12,33 +13,28 @@ define([
             // expose detail view through messaging
             var channel = ADK.Messaging.getChannel(appletId);
             channel.reply('detailView', function(params) {
-
-                var response = $.Deferred();
-                var orderId = _.last(_.isString(params.uid) ? params.uid.split(':') : []);
+                var orderId = Util.getFieldFromUid(params.uid, 'orderId');
                 var options = _.extend({
                     orderId: orderId
                 }, _.get(params, 'model.attributes', {}));
 
                 var orderDetailModel = new ADK.UIResources.Writeback.Orders.Detail(options);
-                orderDetailModel.on('read:success', function(model) {
-                    this.off();
-                    var detailView = new ModalContentView({
-                        model: new Backbone.Model({
-                            detailSummary: model.get('detail')
-                        })
-                    });
-                    response.resolve({
-                        title: model.get('summary'),
-                        view: detailView
-                    });
-                });
-                orderDetailModel.on('read:error', function(model, resp) {
-                    this.off();
-                    response.reject(resp);
-                });
-                orderDetailModel.execute();
+                var view = ModalContentView;
+                var ViewDef = view.extend({
+                    model: orderDetailModel,
+                    onBeforeShow: function() {
+                        this.model.execute();
+                    }
 
-                return response.promise();
+                });
+
+                return {
+                    view: ViewDef,
+                    navHeader: false,
+                    showLoading: true,
+                    title: orderDetailModel.get('summary'),
+                    resourceEntity: orderDetailModel
+                };
             });
         }
     };

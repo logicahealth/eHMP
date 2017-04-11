@@ -16,14 +16,14 @@ var fhirToJDSAttrMap = [ {
     definition: 'http://www.hl7.org/FHIR/2015May/datatypes.html#string',
     description: 'Patient indentifier - note that this patient identifier will override any patient identifier that is in the URI of this endpoint.',
     searchable: true
-}, {
+},{
     fhirName: 'pid',  // Note this attribute is a app-defined search param, not a Fhir specified attribute.
     vprName: 'pid',
     dataType: 'string',
     definition: 'http://www.hl7.org/FHIR/2015May/datatypes.html#string',
     description: 'Patient indentifier - note that this patient identifier will override any patient identifier that has been specified in the URI of this endpoint, as well as any subject.identifier in the query string.',
     searchable: true
-}, {
+},{
     fhirName : 'patient',
     vprName : 'pid',
     dataType : 'string',
@@ -31,7 +31,7 @@ var fhirToJDSAttrMap = [ {
     description : 'Who the referral is about.',
     searchable: true,
     sortable: false
-}, {
+},{
     fhirName : 'priority',
     vprName : 'urgency',
     dataType : 'string',
@@ -39,7 +39,7 @@ var fhirToJDSAttrMap = [ {
     description : 'he priority assigned to the referral.',
     searchable: false,
     sortable: false
-}, {
+},{
     fhirName : 'recipient',
     vprName : 'activity.responsible',
     dataType : 'dateTime',
@@ -47,7 +47,7 @@ var fhirToJDSAttrMap = [ {
     description : 'The person that the referral was sent to.',
     searchable: false,
     sortable: false
-}, {
+},{
     fhirName : 'requester',
     vprName : 'providerUid',
     dataType : 'string',
@@ -55,7 +55,7 @@ var fhirToJDSAttrMap = [ {
     description : 'Requester of referral / transfer of care.',
     searchable: false,
     sortable: false
-}, {
+},{
     fhirName : 'specialty',
     vprName : 'service',
     dataType : 'string',
@@ -63,7 +63,7 @@ var fhirToJDSAttrMap = [ {
     description : 'The specialty that the referral is for.',
     searchable: false,
     sortable: false
-}, {
+},{
     fhirName : 'status',
     vprName : 'statusName',
     dataType : 'string',
@@ -71,7 +71,7 @@ var fhirToJDSAttrMap = [ {
     description : 'The status of the referral.',
     searchable: false,
     sortable: false
-}, {
+},{
     fhirName : 'type',
     vprName : 'consultProcedure',
     dataType : 'string',
@@ -79,12 +79,13 @@ var fhirToJDSAttrMap = [ {
     description : 'The type of the referral.',
     searchable: false,
     sortable: false
-} ];
+}];
+confUtils.addCountAttribute(fhirToJDSAttrMap); //adding the _count attribute that is common to (almost) all endpoints.
 
 //Issue call to Conformance registration
 conformance.register(confUtils.domains.REFERRALREQUEST, createConformanceData());
 
-function createConformanceData() {   
+function createConformanceData() {
     var resourceType = confUtils.domains.REFERRALREQUEST;
     var profileReference = 'http://www.hl7.org/FHIR/2015May/referralrequest.html';
     var interactions = [ 'read', 'search-type' ];
@@ -95,11 +96,21 @@ function createConformanceData() {
 
 function getResourceConfig() {
     return [{
-        name: 'referralrequest-getReferralRequest',
+        name: 'fhir-referral-request',
         path: '',
         get: getReferralRequest,
         subsystems: ['patientrecord', 'jds', 'solr', 'authorization'],
-        requiredPermissions: [],
+        interceptors: { fhirPid: true },
+        requiredPermissions: ['read-fhir'],
+        isPatientCentric: true,
+        permitResponseFormat: true
+    },{
+        name: 'fhir-referral-request-search',
+        path: '_search',
+        post: getReferralRequest,
+        subsystems: ['patientrecord', 'jds', 'solr', 'authorization'],
+        interceptors: { fhirPid: true },
+        requiredPermissions: ['read-fhir'],
         isPatientCentric: true,
         permitResponseFormat: true
     }];
@@ -125,7 +136,7 @@ function getReferralRequest(req, res) {
 function getData(req, callback) {
     req._pid = req.param('subject.identifier');
     var start = req.param('start') || 0;
-    var limit = req.param('limit');
+    var limit = req.param('_count');
     var jdsQuery = {
         start: start
     };

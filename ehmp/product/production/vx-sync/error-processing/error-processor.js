@@ -28,11 +28,11 @@ function ErrorProcessor(logger, config, environment, name) {
     this.config = config;
     this.environment = environment;
     this.name = name;
-    this.ignoreSeverity = objUtil.getProperty(config, 'error-processing', name, 'ignoreSeverity') || false;
-    this.jobTypes = objUtil.getProperty(config, 'error-processing', name, 'jobTypes') || [];
+    this.ignoreSeverity = objUtil.getProperty(config, 'error-processing', 'profiles', name, 'ignoreSeverity') || false;
+    this.jobTypes = objUtil.getProperty(config, 'error-processing', 'profiles', name, 'jobTypes') || [];
     this.limit = objUtil.getProperty(config, 'error-processing', 'jdsGetErrorLimit') || 1000;
     this.paused = true;
-    this._loopDelayMillis = objUtil.getProperty(config, 'error-processing', name, 'loopDelayMillis') || 10000;
+    this._loopDelayMillis = objUtil.getProperty(config, 'error-processing', 'profiles', name, 'loopDelayMillis') || 10000;
     this.readyToShutdown = true;
 
     this.logger.debug('ErrorProcessor.ErrorProcessor() jobTypes: %s', this.jobTypes);

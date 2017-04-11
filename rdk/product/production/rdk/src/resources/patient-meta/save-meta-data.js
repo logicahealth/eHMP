@@ -1,9 +1,9 @@
 'use strict';
 
-var dd = require('drilldown');
 var rdk = require('../../core/rdk');
 var pjds = rdk.utils.pjdsStore;
 var _ = require('lodash');
+var moment = require('moment');
 
 module.exports = saveMetaData;
 
@@ -24,11 +24,11 @@ function saveMetaData(req, res, next) {
         }
     }
 
-    var now = new Date();
+
     var updatedMetadata = {
         val: metadata,
         modifiedBy: currentModifyingUser.uid,
-        modifiedOn: now.toString()
+        modifiedOn: moment().format('YYYYMMDDHHmmss')
     };
 
     var pjdsOptions = {
@@ -45,7 +45,7 @@ function saveMetaData(req, res, next) {
         pjdsOptions.data = updatedMetadata;
         pjds.put(req, res, pjdsOptions, function(error, response) {
             if (error) {
-                return res.status(dd(response)('statusCode').val || rdk.httpstatus.bad_request).rdkSend(error.message);
+                return res.status(_.get(response, 'statusCode') || rdk.httpstatus.bad_request).rdkSend(error.message);
             }
             var resultObj = {};
             resultObj.data = pjdsOptions.data;

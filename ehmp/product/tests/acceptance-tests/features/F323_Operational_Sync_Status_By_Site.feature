@@ -21,7 +21,6 @@ Scenario: Client can request operational sync status from multiple sites and dom
       | qo					|
       | route				|
       | schedule			|
-      | sign-symptom	|
       | user				|
       | vital-category	|
       | vital-qualifier	|
@@ -42,7 +41,6 @@ Scenario: Client can request operational sync status from multiple sites and dom
       | qo					|
       | route				|
       | schedule			|
-      | sign-symptom       	|
       | user				|
       | vital-category  	|
       | vital-qualifier 	|

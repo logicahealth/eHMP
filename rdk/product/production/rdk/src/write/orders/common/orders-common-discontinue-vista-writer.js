@@ -1,6 +1,3 @@
-/*
- TODO: Using ORWDXA DC until RPC wrapper is in place
- */
 'use strict';
 
 var fhirUtils = require('../../../fhir/common/utils/fhir-converter');
@@ -14,12 +11,17 @@ var orderDetail = require('./orders-common-detail-vista-writer');
 var vprOrder = require('./orders-common-vpr-order');
 var crypto = require('crypto');
 var ERR_MSG_COMPARISON_FAILURE = 'The status of this order has recently changed.  Please refresh the order view and if necessary, try again.';
+var nullchecker = require('../../../core/rdk').utils.nullchecker;
 
 module.exports = function(writebackContext, callback) {
     writebackContext.vistaConfig.noReconnect = true;
     rpcClientFactory.getRpcClient(writebackContext, 'OR CPRS GUI CHART', function(error, rpcClient) {
         if (error) {
             return callback(error, null);
+        }
+
+        if (nullchecker.isNullish(writebackContext.interceptorResults.patientIdentifiers.dfn)) {
+            return callback('Missing required patient identifiers');
         }
 
         var lock = []; //use dfn as key for patient lock and use orderId as key for order lock
@@ -29,7 +31,7 @@ module.exports = function(writebackContext, callback) {
                     if (err) {
                         return asyncCallback(err);
                     }
-                    lock[writebackContext.model.dfn] = true;
+                    lock[writebackContext.interceptorResults.patientIdentifiers.dfn] = true;
                     asyncCallback(null);
 
                 });
@@ -46,7 +48,7 @@ module.exports = function(writebackContext, callback) {
                             lockOrdersCallback(null);
 
                         });
-                    }
+                    };
                 };
                 var orderId;
                 for (var i = 0; i < writebackContext.model.orderList.length; i++) {
@@ -78,7 +80,7 @@ module.exports = function(writebackContext, callback) {
                             }
                             detailCallback(null);
                         });
-                    }
+                    };
                 };
                 var orderId, hash;
                 for (var i = 0; i < writebackContext.model.orderList.length; i++) {
@@ -108,7 +110,7 @@ module.exports = function(writebackContext, callback) {
                             }
                             discontinueCallback(null, true);
                         });
-                    }
+                    };
                 };
                 var orderId;
                 for (var i = 0; i < writebackContext.model.orderList.length; i++) {
@@ -136,7 +138,7 @@ module.exports = function(writebackContext, callback) {
                                 orderLock.unlockOrder(orderId, writebackContext);
                             }
                             unlockOrdersCallback(null);
-                        }
+                        };
                     };
                     var orderId;
                     for (var i = 0; i < writebackContext.model.orderList.length; i++) {
@@ -154,7 +156,7 @@ module.exports = function(writebackContext, callback) {
                     );
                 },
                 function(resultsCallback) { //unlock patient by checking patient lock, lock[dfn]
-                    if (lock[writebackContext.model.dfn]) {
+                    if (lock[writebackContext.interceptorResults.patientIdentifiers.dfn]) {
                         patientLock.unlockPatient(writebackContext);
                     }
                     resultsCallback(null);
@@ -167,7 +169,7 @@ module.exports = function(writebackContext, callback) {
 
                 //update JDS with the latest version of the discontinued order
                 vprOrder.getVprOrders(writebackContext, function(err, vprOrderResults) {
-                    //TODO support updating JDS with more than one discontinued order (will probably require changes to jds-direct-writer)
+                    //FUTURE-TODO support updating JDS with more than one discontinued order (will probably require changes to jds-direct-writer)
                     if (vprOrderResults && vprOrderResults.length > 0) {
                         var vprOrder = vprOrderResults[0];
 
@@ -195,7 +197,7 @@ function discontinue(orderId, rpcClient, writebackContext, callback) {
 
 function getParameters(model, orderId) {
     var parameters = [];
-     if (model && model.provider && model.location && orderId) {
+    if (model && model.provider && model.location && orderId) {
         parameters.push(orderId);
         parameters.push(model.provider);
         parameters.push(model.location);

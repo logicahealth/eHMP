@@ -306,7 +306,7 @@ public class FhirDataRetrieverTest {
             // MAINTAIN SESSION for multi request using same session(cookie)
             WebClient.getConfig(client).getRequestContext().put(org.apache.cxf.message.Message.MAINTAIN_SESSION, Boolean.TRUE);
 
-            String body = "{" + "\"accessCode\": \"pu1234\"," + "\"verifyCode\":\"pu1234!!\"," + "\"site\":\"9E7A\"" + "}";
+            String body = "{" + "\"accessCode\": \"PW    \"," + "\"verifyCode\":\"PW    !!\"," + "\"site\":\"9E7A\"," + "\"division\":\"500\"" + "}";
 
             response = client.accept(MediaType.APPLICATION_JSON).type(MediaType.APPLICATION_JSON).post(body);
 

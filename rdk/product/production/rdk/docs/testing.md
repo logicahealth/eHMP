@@ -143,7 +143,7 @@ expect(result).toEqual(jasmine.any(MyClass));  // Jasmine
 expect(result).to.be.a(MyClass);  // Must (Mocha)
 ```
 
-| Jasmine                | Mocha                 | Notes             |
+| Jasmine                | Must                  | Notes             |
 |------------------------|-----------------------|-------------------|
 | toBe                   | to.equal              |                   |
 | toEqual                | to.eql                |                   |

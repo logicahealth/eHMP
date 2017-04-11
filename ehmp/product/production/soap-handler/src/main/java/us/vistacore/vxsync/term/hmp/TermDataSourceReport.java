@@ -255,8 +255,8 @@ public class TermDataSourceReport {
 	 * a report on what is seen.  Help in finding border cases where some concept has a crazy
 	 * number of relations, etc.
 	 * 
-	 * TODO: Expand this to include a histogram of counts?
-	 * TODO: Find concepts with terms with non-identical CUI's
+	 * FUTURETODO: Expand this to include a histogram of counts?
+	 * FUTURETODO: Find concepts with terms with non-identical CUI's
 	 * @throws SQLException 
 	 * @throws ClassNotFoundException 
 	 * @throws IOException 

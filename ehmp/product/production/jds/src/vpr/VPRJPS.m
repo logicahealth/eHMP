@@ -34,7 +34,7 @@ SAVE(JPID,JSON) ; Save a JSON encoded object
  N COLL S COLL=$P(UID,":",3)
  I '$L(COLL) D SETERROR^VPRJRER(210,UID) QUIT ""
  ;
- ; TODO: replace with a general facility for pre-actions based on collection?
+ ; Pre-actions for collections go here
  ; Next statement is special processing when patient demographics are updated
  ;   (DEMOG is defined if UPDPT has been called already)
  I COLL="patient",'$D(DEMOG) S JPID=$$UPDPT^VPRJPR(.OBJECT,JPID) Q:'$L(JPID) ""
@@ -49,14 +49,17 @@ SAVE(JPID,JSON) ; Save a JSON encoded object
  ; kill the old indexes and object
  S OLDSTAMP=""
  S OLDSTAMP=$O(^VPRPT(JPID,PID,UID,""),-1)
- I OLDSTAMP'="",OLDSTAMP<METASTAMP S OLDOBJ="" M OLDOBJ=^VPRPT(JPID,PID,UID,OLDSTAMP)
- I METASTAMP>OLDSTAMP D BLDTLT^VPRJCT1(COLL,.OBJECT,.TLTARY) Q:$G(HTTPERR) ""
+ ; Get the old object if METASTAMP is equal or greater than OLDSTAMP
+ I OLDSTAMP'="",METASTAMP'<OLDSTAMP S OLDOBJ="" M OLDOBJ=^VPRPT(JPID,PID,UID,OLDSTAMP)
+ ; Rebuild template if METASTAMP is equal or greater than OLDSTAMP
+ I METASTAMP'<OLDSTAMP D BLDTLT^VPRJCT1(COLL,.OBJECT,.TLTARY) Q:$G(HTTPERR) ""
  K ^VPRPT(JPID,PID,UID,METASTAMP)
  K ^VPRPTJ("JSON",JPID,PID,UID,METASTAMP)
  ;
  S ^VPRPTJ("KEY",UID,PID,METASTAMP)=""
  M ^VPRPTJ("JSON",JPID,PID,UID,METASTAMP)=JSON
- I METASTAMP>OLDSTAMP M ^VPRPTJ("TEMPLATE",JPID,PID,UID)=TLTARY
+ ; Merge template array if METASTAMP is equal or greater than OLDSTAMP
+ I METASTAMP'<OLDSTAMP M ^VPRPTJ("TEMPLATE",JPID,PID,UID)=TLTARY
  M ^VPRPT(JPID,PID,UID,METASTAMP)=OBJECT
  ; Set stored flags
  S SOURCE=$P(PID,";",1)

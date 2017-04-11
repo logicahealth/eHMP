@@ -281,3 +281,13 @@ Then(/^the urls contains "([^"]*)"$/) do |udw|
   @ehmp = UserDefinedWorkspace.new
   expect(@ehmp.current_url).to end_with "/#{udw}"
 end
+
+Then(/^the user closes the workspace manager to save workspace updates$/) do
+  ehmp = PobWorkspaceManager.new
+  ehmp.wait_for_btn_close_manager
+  expect(ehmp).to have_btn_close_manager
+  ehmp.btn_close_manager.click
+  ehmp.wait_until_btn_close_manager_invisible
+  expect(ehmp).to_not have_btn_close_manager
+end
+

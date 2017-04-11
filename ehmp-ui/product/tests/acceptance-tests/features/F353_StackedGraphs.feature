@@ -1,23 +1,11 @@
 @F353 @regression @triage
 Feature: F353 - stacked graphs
 
-@US6312 @debug @DE3444
+@US6312 @DE3444
 Scenario: Stacked Graph has a quick view button
 	# Given user is logged into eHMP-UI
 	And user searches for and selects "Eight,Patient"
-	And Default Screen is active
-	When the user navigates to the Diabetes Mellitus CBW
-	And the applets are displayed on the Diabetes Mellitus CBW
-      | applet                 |
-      | PROBLEMS             |
-      | STACKED GRAPHS         |
-      | APPOINTMENTS & VISITS  |
-      | CLINICAL REMINDERS     |
-      | MEDICATIONS REVIEW     |
-      | TIMELINE               |
-      | ORDERS                 |
-      | DOCUMENTS              |
-      | VISTA HEALTH SUMMARIES |
+	And Summary View is active
 	Then the Stacked Graphs applet displays at least 1 row
 	When the user selects the first row in the Stacked Graph applet
 	Then a toolbar displays with a quick view icon
@@ -99,7 +87,7 @@ Scenario: Add Lab Result to stack graph
   When the user adds lab troponin to the graph
   Then the Stacked Graphs applet displays a row for "troponin"
 
-@US5402 @US4388
+@US5402 @US4388 @DE5779 @debug @DE6760
 Scenario: Add Medication to stack graph
   And user searches for and selects "Eight,Patient"
   Then Overview is active

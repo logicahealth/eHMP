@@ -45,6 +45,7 @@
         "prescription": "O",
         "active": false,
         "comment": "^O^\nNONE",
+        "careSetting": "O",
         "dispensingPharmacy": {
           "name": "MAIN PHARMACY"
         },
@@ -84,21 +85,38 @@
               "end": "2013-10-25T14:44:00"
             },
             "fillNumber": "0",
-            "quantity": "1",
-            "units": [
-              {
-                "display": "mg",
-                "primary": true
-              }
-            ]
+            "quantity": {
+              "raw": "1",
+              "value": 1,
+              "units": [
+                {
+                  "display": "mg",
+                  "primary": true
+                }
+              ]
+            }
           }
         ],
-        "drug": [
+        "drugs": [
           {
-            "display": "HYDRALAZINE HCL, 25 MG, TABLET, ORAL",
-            "code": "3000257828",
-            "system": "2.16.840.1.113883.3.42.126.100001.16",
-            "primary": true
+            "drug": [
+              {
+                "display": "HYDRALAZINE HCL, 25 MG, TABLET, ORAL",
+                "code": "3000257828",
+                "system": "2.16.840.1.113883.3.42.126.100001.16",
+                "primary": true
+              }
+            ],
+            "dosage": {
+              "raw": "1",
+              "value": 1,
+              "units": [
+                {
+                  "display": "mg",
+                  "primary": true
+                }
+              ]
+            }
           }
         ],
         "numberOfRefills": 0,
@@ -106,7 +124,16 @@
           "name": "AHLTADTE, ATTEND B",
           "primary": true
         },
-        "quantity": "1",
+        "quantity": {
+          "raw": "1",
+          "value": 1,
+          "units": [
+            {
+              "display": "mg",
+              "primary": true
+            }
+          ]
+        },
         "refillsRemaining": 0,
         "rxNumber": {
           "id": "131025-00076"
@@ -118,13 +145,7 @@
             "primary": true
           }
         ],
-        "daysSupply": 30,
-        "units": [
-          {
-            "display": "mg",
-            "primary": true
-          }
-        ]
+        "daysSupply": 30
       },
       {
         "repository": {
@@ -159,6 +180,7 @@
         "prescription": "O",
         "active": false,
         "comment": "^O^\nNONE",
+        "careSetting": "O",
         "dispensingPharmacy": {
           "name": "MAIN PHARMACY"
         },
@@ -198,21 +220,38 @@
               "end": "2013-10-25T14:41:00"
             },
             "fillNumber": "0",
-            "quantity": "1",
-            "units": [
-              {
-                "display": "mg/mL",
-                "primary": true
-              }
-            ]
+            "quantity": {
+              "raw": "1",
+              "value": 1,
+              "units": [
+                {
+                  "display": "mg/mL",
+                  "primary": true
+                }
+              ]
+            }
           }
         ],
-        "drug": [
+        "drugs": [
           {
-            "display": "Hydralazine Hydrochloride 20mg/mL, Solution, Injection",
-            "code": "15155310",
-            "system": "2.16.840.1.113883.3.42.126.100001.16",
-            "primary": true
+            "drug": [
+              {
+                "display": "Hydralazine Hydrochloride 20mg/mL, Solution, Injection",
+                "code": "15155310",
+                "system": "2.16.840.1.113883.3.42.126.100001.16",
+                "primary": true
+              }
+            ],
+            "dosage": {
+              "raw": "1",
+              "value": 1,
+              "units": [
+                {
+                  "display": "mg/mL",
+                  "primary": true
+                }
+              ]
+            }
           }
         ],
         "numberOfRefills": 0,
@@ -220,7 +259,16 @@
           "name": "AHLTADTE, ATTEND B",
           "primary": true
         },
-        "quantity": "1",
+        "quantity": {
+          "raw": "1",
+          "value": 1,
+          "units": [
+            {
+              "display": "mg/mL",
+              "primary": true
+            }
+          ]
+        },
         "refillsRemaining": 0,
         "rxNumber": {
           "id": "131025-00075"
@@ -232,13 +280,7 @@
             "primary": true
           }
         ],
-        "daysSupply": 30,
-        "units": [
-          {
-            "display": "mg/mL",
-            "primary": true
-          }
-        ]
+        "daysSupply": 30
       },
       {
         "repository": {
@@ -273,6 +315,7 @@
         "prescription": "O",
         "active": false,
         "comment": "^O^\nNONE",
+        "careSetting": "O",
         "dispensingPharmacy": {
           "name": "MAIN PHARMACY"
         },
@@ -312,21 +355,38 @@
               "end": "2013-10-25T14:40:00"
             },
             "fillNumber": "0",
-            "quantity": "148",
-            "units": [
-              {
-                "display": "%",
-                "primary": true
-              }
-            ]
+            "quantity": {
+              "raw": "148",
+              "value": 148,
+              "units": [
+                {
+                  "display": "%",
+                  "primary": true
+                }
+              ]
+            }
           }
         ],
-        "drug": [
+        "drugs": [
           {
-            "display": "Hexachlorophene 3%, Soap, Topical",
-            "code": "15172714",
-            "system": "2.16.840.1.113883.3.42.126.100001.16",
-            "primary": true
+            "drug": [
+              {
+                "display": "Hexachlorophene 3%, Soap, Topical",
+                "code": "15172714",
+                "system": "2.16.840.1.113883.3.42.126.100001.16",
+                "primary": true
+              }
+            ],
+            "dosage": {
+              "raw": "148",
+              "value": 148,
+              "units": [
+                {
+                  "display": "%",
+                  "primary": true
+                }
+              ]
+            }
           }
         ],
         "numberOfRefills": 0,
@@ -334,7 +394,16 @@
           "name": "AHLTADTE, ATTEND B",
           "primary": true
         },
-        "quantity": "148",
+        "quantity": {
+          "raw": "148",
+          "value": 148,
+          "units": [
+            {
+              "display": "%",
+              "primary": true
+            }
+          ]
+        },
         "refillsRemaining": 0,
         "rxNumber": {
           "id": "131025-00074"
@@ -346,13 +415,7 @@
             "primary": true
           }
         ],
-        "daysSupply": 30,
-        "units": [
-          {
-            "display": "%",
-            "primary": true
-          }
-        ]
+        "daysSupply": 30
       },
       {
         "repository": {
@@ -387,6 +450,7 @@
         "prescription": "O",
         "active": false,
         "comment": "^O^\nNONE",
+        "careSetting": "O",
         "dispensingPharmacy": {
           "name": "MAIN PHARMACY"
         },
@@ -426,21 +490,38 @@
               "end": "2013-10-25T14:39:00"
             },
             "fillNumber": "0",
-            "quantity": "1",
-            "units": [
-              {
-                "display": "unknown",
-                "primary": true
-              }
-            ]
+            "quantity": {
+              "raw": "1",
+              "value": 1,
+              "units": [
+                {
+                  "display": "unknown",
+                  "primary": true
+                }
+              ]
+            }
           }
         ],
-        "drug": [
+        "drugs": [
           {
-            "display": "Hepatitis B Immune Globulin, Injection",
-            "code": "15168266",
-            "system": "2.16.840.1.113883.3.42.126.100001.16",
-            "primary": true
+            "drug": [
+              {
+                "display": "Hepatitis B Immune Globulin, Injection",
+                "code": "15168266",
+                "system": "2.16.840.1.113883.3.42.126.100001.16",
+                "primary": true
+              }
+            ],
+            "dosage": {
+              "raw": "1",
+              "value": 1,
+              "units": [
+                {
+                  "display": "unknown",
+                  "primary": true
+                }
+              ]
+            }
           }
         ],
         "numberOfRefills": 0,
@@ -448,7 +529,16 @@
           "name": "AHLTADTE, ATTEND B",
           "primary": true
         },
-        "quantity": "1",
+        "quantity": {
+          "raw": "1",
+          "value": 1,
+          "units": [
+            {
+              "display": "unknown",
+              "primary": true
+            }
+          ]
+        },
         "refillsRemaining": 0,
         "rxNumber": {
           "id": "131025-00073"
@@ -460,13 +550,7 @@
             "primary": true
           }
         ],
-        "daysSupply": 30,
-        "units": [
-          {
-            "display": "unknown",
-            "primary": true
-          }
-        ]
+        "daysSupply": 30
       },
       {
         "repository": {
@@ -501,6 +585,7 @@
         "prescription": "O",
         "active": false,
         "comment": "^O^\nNONE",
+        "careSetting": "O",
         "dispensingPharmacy": {
           "name": "MAIN PHARMACY"
         },
@@ -540,21 +625,38 @@
               "end": "2013-10-25T14:37:00"
             },
             "fillNumber": "0",
-            "quantity": "1",
-            "units": [
-              {
-                "display": "U/mL",
-                "primary": true
-              }
-            ]
+            "quantity": {
+              "raw": "1",
+              "value": 1,
+              "units": [
+                {
+                  "display": "U/mL",
+                  "primary": true
+                }
+              ]
+            }
           }
         ],
-        "drug": [
+        "drugs": [
           {
-            "display": "Heparin Sodium 1000U/mL, Solution, Injection",
-            "code": "15165601",
-            "system": "2.16.840.1.113883.3.42.126.100001.16",
-            "primary": true
+            "drug": [
+              {
+                "display": "Heparin Sodium 1000U/mL, Solution, Injection",
+                "code": "15165601",
+                "system": "2.16.840.1.113883.3.42.126.100001.16",
+                "primary": true
+              }
+            ],
+            "dosage": {
+              "raw": "1",
+              "value": 1,
+              "units": [
+                {
+                  "display": "U/mL",
+                  "primary": true
+                }
+              ]
+            }
           }
         ],
         "numberOfRefills": 0,
@@ -562,7 +664,16 @@
           "name": "AHLTADTE, ATTEND B",
           "primary": true
         },
-        "quantity": "1",
+        "quantity": {
+          "raw": "1",
+          "value": 1,
+          "units": [
+            {
+              "display": "U/mL",
+              "primary": true
+            }
+          ]
+        },
         "refillsRemaining": 0,
         "rxNumber": {
           "id": "131025-00072"
@@ -574,13 +685,7 @@
             "primary": true
           }
         ],
-        "daysSupply": 30,
-        "units": [
-          {
-            "display": "U/mL",
-            "primary": true
-          }
-        ]
+        "daysSupply": 30
       },
       {
         "repository": {
@@ -615,6 +720,7 @@
         "prescription": "O",
         "active": false,
         "comment": "^O^\nNONE",
+        "careSetting": "O",
         "dispensingPharmacy": {
           "name": "MAIN PHARMACY"
         },
@@ -654,21 +760,38 @@
               "end": "2013-10-25T14:36:00"
             },
             "fillNumber": "0",
-            "quantity": "1",
-            "units": [
-              {
-                "display": "Units",
-                "primary": true
-              }
-            ]
+            "quantity": {
+              "raw": "1",
+              "value": 1,
+              "units": [
+                {
+                  "display": "Units",
+                  "primary": true
+                }
+              ]
+            }
           }
         ],
-        "drug": [
+        "drugs": [
           {
-            "display": "Heparin Sodium 100U/mL, Solution, Injection",
-            "code": "15167468",
-            "system": "2.16.840.1.113883.3.42.126.100001.16",
-            "primary": true
+            "drug": [
+              {
+                "display": "Heparin Sodium 100U/mL, Solution, Injection",
+                "code": "15167468",
+                "system": "2.16.840.1.113883.3.42.126.100001.16",
+                "primary": true
+              }
+            ],
+            "dosage": {
+              "raw": "1",
+              "value": 1,
+              "units": [
+                {
+                  "display": "Units",
+                  "primary": true
+                }
+              ]
+            }
           }
         ],
         "numberOfRefills": 0,
@@ -676,7 +799,16 @@
           "name": "AHLTADTE, ATTEND B",
           "primary": true
         },
-        "quantity": "1",
+        "quantity": {
+          "raw": "1",
+          "value": 1,
+          "units": [
+            {
+              "display": "Units",
+              "primary": true
+            }
+          ]
+        },
         "refillsRemaining": 0,
         "rxNumber": {
           "id": "131025-00070"
@@ -688,13 +820,7 @@
             "primary": true
           }
         ],
-        "daysSupply": 30,
-        "units": [
-          {
-            "display": "Units",
-            "primary": true
-          }
-        ]
+        "daysSupply": 30
       },
       {
         "repository": {
@@ -729,6 +855,7 @@
         "prescription": "O",
         "active": false,
         "comment": "^O^\nNONE",
+        "careSetting": "O",
         "dispensingPharmacy": {
           "name": "MAIN PHARMACY"
         },
@@ -768,21 +895,38 @@
               "end": "2013-10-25T14:34:00"
             },
             "fillNumber": "0",
-            "quantity": "1",
-            "units": [
-              {
-                "display": "mg",
-                "primary": true
-              }
-            ]
+            "quantity": {
+              "raw": "1",
+              "value": 1,
+              "units": [
+                {
+                  "display": "mg",
+                  "primary": true
+                }
+              ]
+            }
           }
         ],
-        "drug": [
+        "drugs": [
           {
-            "display": "HALOPERIDOL, 2 MG, TABLET, ORAL",
-            "code": "3000261401",
-            "system": "2.16.840.1.113883.3.42.126.100001.16",
-            "primary": true
+            "drug": [
+              {
+                "display": "HALOPERIDOL, 2 MG, TABLET, ORAL",
+                "code": "3000261401",
+                "system": "2.16.840.1.113883.3.42.126.100001.16",
+                "primary": true
+              }
+            ],
+            "dosage": {
+              "raw": "1",
+              "value": 1,
+              "units": [
+                {
+                  "display": "mg",
+                  "primary": true
+                }
+              ]
+            }
           }
         ],
         "numberOfRefills": 0,
@@ -790,7 +934,16 @@
           "name": "AHLTADTE, ATTEND B",
           "primary": true
         },
-        "quantity": "1",
+        "quantity": {
+          "raw": "1",
+          "value": 1,
+          "units": [
+            {
+              "display": "mg",
+              "primary": true
+            }
+          ]
+        },
         "refillsRemaining": 0,
         "rxNumber": {
           "id": "131025-00067"
@@ -802,13 +955,7 @@
             "primary": true
           }
         ],
-        "daysSupply": 30,
-        "units": [
-          {
-            "display": "mg",
-            "primary": true
-          }
-        ]
+        "daysSupply": 30
       },
       {
         "repository": {
@@ -843,6 +990,7 @@
         "prescription": "O",
         "active": false,
         "comment": "^O^\nNONE",
+        "careSetting": "O",
         "dispensingPharmacy": {
           "name": "MAIN PHARMACY"
         },
@@ -882,21 +1030,38 @@
               "end": "2013-10-25T14:34:00"
             },
             "fillNumber": "0",
-            "quantity": "1",
-            "units": [
-              {
-                "display": "mg",
-                "primary": true
-              }
-            ]
+            "quantity": {
+              "raw": "1",
+              "value": 1,
+              "units": [
+                {
+                  "display": "mg",
+                  "primary": true
+                }
+              ]
+            }
           }
         ],
-        "drug": [
+        "drugs": [
           {
-            "display": "HALOPERIDOL, 5 MG, TABLET, ORAL",
-            "code": "3000261403",
-            "system": "2.16.840.1.113883.3.42.126.100001.16",
-            "primary": true
+            "drug": [
+              {
+                "display": "HALOPERIDOL, 5 MG, TABLET, ORAL",
+                "code": "3000261403",
+                "system": "2.16.840.1.113883.3.42.126.100001.16",
+                "primary": true
+              }
+            ],
+            "dosage": {
+              "raw": "1",
+              "value": 1,
+              "units": [
+                {
+                  "display": "mg",
+                  "primary": true
+                }
+              ]
+            }
           }
         ],
         "numberOfRefills": 0,
@@ -904,7 +1069,16 @@
           "name": "AHLTADTE, ATTEND B",
           "primary": true
         },
-        "quantity": "1",
+        "quantity": {
+          "raw": "1",
+          "value": 1,
+          "units": [
+            {
+              "display": "mg",
+              "primary": true
+            }
+          ]
+        },
         "refillsRemaining": 0,
         "rxNumber": {
           "id": "131025-00068"
@@ -916,13 +1090,7 @@
             "primary": true
           }
         ],
-        "daysSupply": 30,
-        "units": [
-          {
-            "display": "mg",
-            "primary": true
-          }
-        ]
+        "daysSupply": 30
       },
       {
         "repository": {
@@ -957,6 +1125,7 @@
         "prescription": "O",
         "active": false,
         "comment": "^O^\nNONE",
+        "careSetting": "O",
         "dispensingPharmacy": {
           "name": "MAIN PHARMACY"
         },
@@ -996,21 +1165,38 @@
               "end": "2013-10-25T14:31:00"
             },
             "fillNumber": "0",
-            "quantity": "120",
-            "units": [
-              {
-                "display": "mg/5mL",
-                "primary": true
-              }
-            ]
+            "quantity": {
+              "raw": "120",
+              "value": 120,
+              "units": [
+                {
+                  "display": "mg/5mL",
+                  "primary": true
+                }
+              ]
+            }
           }
         ],
-        "drug": [
+        "drugs": [
           {
-            "display": "GUAIFENESIN, 100 MG/5ML, SYRUP, ORAL",
-            "code": "3000258290",
-            "system": "2.16.840.1.113883.3.42.126.100001.16",
-            "primary": true
+            "drug": [
+              {
+                "display": "GUAIFENESIN, 100 MG/5ML, SYRUP, ORAL",
+                "code": "3000258290",
+                "system": "2.16.840.1.113883.3.42.126.100001.16",
+                "primary": true
+              }
+            ],
+            "dosage": {
+              "raw": "120",
+              "value": 120,
+              "units": [
+                {
+                  "display": "mg/5mL",
+                  "primary": true
+                }
+              ]
+            }
           }
         ],
         "numberOfRefills": 0,
@@ -1018,7 +1204,16 @@
           "name": "AHLTADTE, ATTEND B",
           "primary": true
         },
-        "quantity": "120",
+        "quantity": {
+          "raw": "120",
+          "value": 120,
+          "units": [
+            {
+              "display": "mg/5mL",
+              "primary": true
+            }
+          ]
+        },
         "refillsRemaining": 0,
         "rxNumber": {
           "id": "131025-00065"
@@ -1030,13 +1225,7 @@
             "primary": true
           }
         ],
-        "daysSupply": 30,
-        "units": [
-          {
-            "display": "mg/5mL",
-            "primary": true
-          }
-        ]
+        "daysSupply": 30
       },
       {
         "repository": {
@@ -1071,6 +1260,7 @@
         "prescription": "O",
         "active": false,
         "comment": "^O^\nNONE",
+        "careSetting": "O",
         "dispensingPharmacy": {
           "name": "MAIN PHARMACY"
         },
@@ -1110,21 +1300,38 @@
               "end": "2013-10-25T14:29:00"
             },
             "fillNumber": "0",
-            "quantity": "1",
-            "units": [
-              {
-                "display": "mg/mL",
-                "primary": true
-              }
-            ]
+            "quantity": {
+              "raw": "1",
+              "value": 1,
+              "units": [
+                {
+                  "display": "mg/mL",
+                  "primary": true
+                }
+              ]
+            }
           }
         ],
-        "drug": [
+        "drugs": [
           {
-            "display": "GLYCOPYRROLATE, 0.2 MG/ML, VIAL, INJECTION",
-            "code": "3000262265",
-            "system": "2.16.840.1.113883.3.42.126.100001.16",
-            "primary": true
+            "drug": [
+              {
+                "display": "GLYCOPYRROLATE, 0.2 MG/ML, VIAL, INJECTION",
+                "code": "3000262265",
+                "system": "2.16.840.1.113883.3.42.126.100001.16",
+                "primary": true
+              }
+            ],
+            "dosage": {
+              "raw": "1",
+              "value": 1,
+              "units": [
+                {
+                  "display": "mg/mL",
+                  "primary": true
+                }
+              ]
+            }
           }
         ],
         "numberOfRefills": 0,
@@ -1132,7 +1339,16 @@
           "name": "AHLTADTE, ATTEND B",
           "primary": true
         },
-        "quantity": "1",
+        "quantity": {
+          "raw": "1",
+          "value": 1,
+          "units": [
+            {
+              "display": "mg/mL",
+              "primary": true
+            }
+          ]
+        },
         "refillsRemaining": 0,
         "rxNumber": {
           "id": "131025-00061"
@@ -1144,13 +1360,7 @@
             "primary": true
           }
         ],
-        "daysSupply": 30,
-        "units": [
-          {
-            "display": "mg/mL",
-            "primary": true
-          }
-        ]
+        "daysSupply": 30
       },
       {
         "repository": {
@@ -1185,6 +1395,7 @@
         "prescription": "O",
         "active": false,
         "comment": "^O^\nNONE",
+        "careSetting": "O",
         "dispensingPharmacy": {
           "name": "MAIN PHARMACY"
         },
@@ -1224,21 +1435,38 @@
               "end": "2013-10-24T18:29:00"
             },
             "fillNumber": "0",
-            "quantity": "1",
-            "units": [
-              {
-                "display": "mg/5mL",
-                "primary": true
-              }
-            ]
+            "quantity": {
+              "raw": "1",
+              "value": 1,
+              "units": [
+                {
+                  "display": "mg/5mL",
+                  "primary": true
+                }
+              ]
+            }
           }
         ],
-        "drug": [
+        "drugs": [
           {
-            "display": "Gabapentin 50mg/mL, (Neurontin), Solution, Oral, 5mL",
-            "code": "15518112",
-            "system": "2.16.840.1.113883.3.42.126.100001.16",
-            "primary": true
+            "drug": [
+              {
+                "display": "Gabapentin 50mg/mL, (Neurontin), Solution, Oral, 5mL",
+                "code": "15518112",
+                "system": "2.16.840.1.113883.3.42.126.100001.16",
+                "primary": true
+              }
+            ],
+            "dosage": {
+              "raw": "1",
+              "value": 1,
+              "units": [
+                {
+                  "display": "mg/5mL",
+                  "primary": true
+                }
+              ]
+            }
           }
         ],
         "numberOfRefills": 0,
@@ -1246,7 +1474,16 @@
           "name": "AHLTADTE, ATTEND B",
           "primary": true
         },
-        "quantity": "1",
+        "quantity": {
+          "raw": "1",
+          "value": 1,
+          "units": [
+            {
+              "display": "mg/5mL",
+              "primary": true
+            }
+          ]
+        },
         "refillsRemaining": 0,
         "rxNumber": {
           "id": "131024-00029"
@@ -1258,13 +1495,7 @@
             "primary": true
           }
         ],
-        "daysSupply": 30,
-        "units": [
-          {
-            "display": "mg/5mL",
-            "primary": true
-          }
-        ]
+        "daysSupply": 30
       }
     ]
   }

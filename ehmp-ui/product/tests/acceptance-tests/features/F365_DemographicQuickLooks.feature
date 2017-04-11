@@ -44,7 +44,7 @@ Feature: F365 - Enhance Patient Header - Include Non-Local Demographics by Site
 
   @F365-5.2_DemographicQuickLooks4.1 @US5692 @US5461 @DE1309 @DE1545 @non_default_login @DE2154
   Scenario: Patient Home Phone Demographic Quick Looks (Kodak)
-	Given POB user is logged into EHMP-UI with facility as  "KODAK" accesscode as  "mx1234" verifycode as  "mx1234!!"
+	Given POB user is logged into EHMP-UI with facility as  "KODAK" accesscode as  "PW    " verifycode as  "PW    !!"
     And staff view screen is displayed
     And Navigate to Patient Search Screen
     When user searches for and selects "twentythree,patient"
@@ -60,7 +60,7 @@ Feature: F365 - Enhance Patient Header - Include Non-Local Demographics by Site
 
   @F365-5.2_DemographicQuickLooks4.1 @US5692 @US5461 @DE1309 @DE1545 @non_default_login @DE2154
   Scenario: Patient Cell Phone Demographic Quick Looks (Kodak)
-    Given POB user is logged into EHMP-UI with facility as  "KODAK" accesscode as  "mx1234" verifycode as  "mx1234!!"
+    Given POB user is logged into EHMP-UI with facility as  "KODAK" accesscode as  "PW    " verifycode as  "PW    !!"
     And staff view screen is displayed
     And Navigate to Patient Search Screen
     When user searches for and selects "twentythree,patient"
@@ -77,7 +77,7 @@ Feature: F365 - Enhance Patient Header - Include Non-Local Demographics by Site
 
   @F365-5.2_DemographicQuickLooks5 @US5692 @US5461 @DE1309 @DE1545 @non_default_login
   Scenario: Patient Address Demographic Quick Looks (Kodak)
-	Given POB user is logged into EHMP-UI with facility as  "KODAK" accesscode as  "mx1234" verifycode as  "mx1234!!"
+	Given POB user is logged into EHMP-UI with facility as  "KODAK" accesscode as  "PW    " verifycode as  "PW    !!"
     And staff view screen is displayed
     And Navigate to Patient Search Screen
     When user searches for and selects "twentythree,patient"
@@ -94,7 +94,7 @@ Feature: F365 - Enhance Patient Header - Include Non-Local Demographics by Site
 
   @F365-5.2_DemographicQuickLooks6 @US5692 @US5461 @DE1309 @DE1592 @non_default_login @DE2154
   Scenario: Patient Email Demographic Quick Looks (Kodak)
-	Given POB user is logged into EHMP-UI with facility as  "KODAK" accesscode as  "mx1234" verifycode as  "mx1234!!"
+	Given POB user is logged into EHMP-UI with facility as  "KODAK" accesscode as  "PW    " verifycode as  "PW    !!"
     And staff view screen is displayed
     And Navigate to Patient Search Screen
     When user searches for and selects "twentythree,patient"
@@ -111,7 +111,7 @@ Feature: F365 - Enhance Patient Header - Include Non-Local Demographics by Site
 
   @F365-5.2_DemographicQuickLooks7 @US5692 @US5461  @DE1309 @DE1601 @non_default_login @DE2154
   Scenario: Patient Emergency Contact Demographic Quick Looks (Kodak)
-	Given POB user is logged into EHMP-UI with facility as  "KODAK" accesscode as  "mx1234" verifycode as  "mx1234!!"
+	Given POB user is logged into EHMP-UI with facility as  "KODAK" accesscode as  "PW    " verifycode as  "PW    !!"
     And staff view screen is displayed
     And Navigate to Patient Search Screen
     When user searches for and selects "twentythree,patient"

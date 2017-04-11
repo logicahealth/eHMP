@@ -2,7 +2,7 @@
      {{#if tooltip}}
         data-content="{{tooltip}}" data-toggle="popover"
      {{/if}}
-     class="gist-item selectable 
+     class="gist-item selectable
      	{{#if severe}}
 			severe
 		{{else if moderate}}
@@ -16,6 +16,8 @@
     <span class="sr-only">{{#if severe}} severe {{else if moderate}} moderate {{else if mild}} mild {{else}} unspecified {{/if}} severity.</span>
     {{#if seriesNorm}}
     <strong class="badge">{{seriesNorm}}</strong>
+    {{else}}
+    <span class="left-padding-xs"></span>
     {{/if}}
     {{#if age}}
     <span class="age">{{formatTimeSince age}}</span>

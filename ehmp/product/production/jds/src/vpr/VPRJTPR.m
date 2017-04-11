@@ -24,7 +24,7 @@ ASSERT(EXPECT,ACTUAL,MSG) ; convenience
  Q
  ;
 TIMERNG ;; @TEST query for range of time
- ;;{"apiVersion":"1.0","data":{"updated":20120517174918,"totalItems":3,"items":[{
+ ;;{"data":{"updated":20120517174918,"totalItems":3,"items":[{
  N ROOT,JSON,ERR,HTTPERR,PTIME,TIME,VPRJPID
  ; The hang commands are necessary to ensure subsequent accesses on the lastAccessTime node don't happen within the same second
  S VPRJPID=$$JPID4PID^VPRJPR(VPRJTPID)
@@ -124,7 +124,7 @@ ORDEMPTY ;; @TEST "order by" where field includes empty string
  D ASSERT("20080128",$G(JSON("data","items",5,"stopped")))
  Q
 FILTER ;; @TEST filter to return based on criteria
- ;;{"apiVersion":"1.0","data":{"updated":20120517174918,"totalItems":3,"items":[{
+ ;;{"data":{"updated":20120517174918,"totalItems":3,"items":[{
  N ROOT,JSON,ERR,HTTPERR,PTIME,TIME,VPRJPID
  ; The hang commands are necessary to ensure subsequent accesses on the lastAccessTime node don't happen within the same second
  S VPRJPID=$$JPID4PID^VPRJPR(VPRJTPID)

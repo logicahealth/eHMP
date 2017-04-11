@@ -1,3 +1,9 @@
+/* The purspose of this rule is to check BMI < 30 for the most recent height and weight in the last 60 days.
+   Input: FHIR Observation of Height and Weight
+   Output: FHIR observation of BMI caluculated from the most recent values of height and weight in the last 60 days
+           The height and weight observations used for BMI calculation.
+   Processing logic: Weight issued date is less than or equal to 60 days, BMI is < 30, status of Passed if bmi < 30, status of Failed if bmi < 30
+*/
 package neurosurgeryConsult;
 
 import org.joda.time.Period;
@@ -159,8 +165,7 @@ rule "The most recent weight Observation"
     Related r = new Related();
     r.setTarget(rr);
     bmiObs.getRelated().add(r);
-    
-    //System.out.println("Weigght date = " + obs.getIssued());
+
 end  
 
 rule "The most recent Height Observation"
@@ -182,9 +187,7 @@ rule "The most recent Height Observation"
     Related r = new Related();
     r.setTarget(rr);
     bmiObs.getRelated().add(r);
-     
-    //System.out.println("Heigght date = " + obs.getIssued());
-   
+  
 end    
 
 rule "bmi calculate"
@@ -225,6 +228,4 @@ rule "BMI check passed rule"
 	  bmiObs.setValue(bmiValue);
      
       setStatus(bmiObs, "Passed");
-      
-      //System.out.println("passed");
 end

@@ -17,5 +17,6 @@ yum_repository node['yum_wrapper']['localrepo']['name'] do
 end
 
 rpm_package "yum-priorities" do
-	source "#{node[:nexus_url]}/nexus/content/repositories/yum-managed/fakepath/yum-plugin-priorities/1.1.30-30.el6.noarch/yum-plugin-priorities-1.1.30-30.el6.noarch.rpm"
+	source "#{node[:nexus_url]}/nexus/content/repositories/yum-managed/fakepath/yum-plugin-priorities/#{node['yum_wrapper']['priorities_version']}/yum-plugin-priorities-#{node['yum_wrapper']['priorities_version']}.rpm"
+	only_if { `rpm -qa | grep yum-plugin-priorities`.empty? }
 end.run_action(:install)

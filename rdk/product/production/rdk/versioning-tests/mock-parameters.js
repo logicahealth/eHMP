@@ -10,7 +10,7 @@ var IncludeParams = {
     all: 'all',
     required: 'required',
     none: 'none',
-// TODO: support invalid
+// FUTURE-TODO: support invalid
     invalid: 'invalid'
 };
 
@@ -32,7 +32,6 @@ function mockParameters(resource, method, includeParams) {
         return result;
     }
 
-// TODO: maybe handle paramType of form
     result = {headers: {}, query: {}, body: {}, path: {}};
 
     if (includeParams === IncludeParams.none) {

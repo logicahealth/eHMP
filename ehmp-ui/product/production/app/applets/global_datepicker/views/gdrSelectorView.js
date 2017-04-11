@@ -21,20 +21,23 @@ define([
     gdrSelectorTemplate,
     parseEvents
 ) {
-    "use strict";
+    'use strict';
+
+    var DATE_FORMAT = 'MM/DD/YYYY';
 
     var DateRangeModel = Backbone.Model.extend({
-        defaults: {
-            fromDate: moment().subtract('years', 1).format('MM/DD/YYYY'),
-            toDate: moment().add('months', 6).format('MM/DD/YYYY'),
-            customFromDate: null,
-            customToDate: null,
-            selectedId: '1yrRangeGlobal'
+        defaults: function () {
+            return {
+                fromDate: moment().subtract('years', 1).format(DATE_FORMAT),
+                toDate: moment().add('months', 6).format(DATE_FORMAT),
+                customFromDate: null,
+                customToDate: null,
+                selectedId: '1yr-range-global'
+            };
         }
     });
 
     var FilterDateRangeView = Backbone.Marionette.LayoutView.extend({
-        model: new DateRangeModel(),
         template: gdrSelectorTemplate,
         className: 'global-grid-filter-daterange',
         regions: {
@@ -44,11 +47,13 @@ define([
         events: {
             'click .gdt-btn': 'clickButton',
             'keydown .gdt-btn': 'handleEnterOrSpaceBar',
-            'keyup .gdt-input': 'keyUpCustomDateRange',
+            'input .gdt-input': 'onInputCustomDateRange',
             'blur .gdt-input': 'blurCustomDateRange'
         },
         initialize: function(options) {
+            this.model = new DateRangeModel();
             var sessionGlobalDate = ADK.SessionStorage.getModel_SessionStoragePreference('globalDate');
+            this.lastCustomToDateOnly = '';
             this.model = sessionGlobalDate.clone();
             this.firstEvent = null;
             this.trendHistoryView = new TrendHistoryView({
@@ -56,15 +61,15 @@ define([
                 sharedCollection: options.sharedCollection
             });
 
-            this.firstEvent = moment(ADK.PatientRecordService.getCurrentPatient().get('birthDate'), 'YYYYMMDD').format('MM/DD/YYYY');
+            this.firstEvent = moment(ADK.PatientRecordService.getCurrentPatient().get('birthDate'), 'YYYYMMDD').format(DATE_FORMAT);
 
             this.listenTo(ADK.Messaging, 'updateGlobalTimelineDateRange', function(dateRange) {
                 var selectedId = this.model.get('selectedId');
                 var formattedDateRange;
 
                 if (selectedId !== 'allRangeGlobal') {
-                    var newCustomFromDate = moment(dateRange.from).format('MM/DD/YYYY'),
-                    newCustomToDate = moment(dateRange.to).format('MM/DD/YYYY');
+                    var newCustomFromDate = moment(dateRange.from).format(DATE_FORMAT),
+                    newCustomToDate = moment(dateRange.to).format(DATE_FORMAT);
 
                     formattedDateRange = {
                         from: newCustomFromDate,
@@ -77,12 +82,12 @@ define([
                         customToDate: newCustomToDate
                     });
 
-                    this.$el.find('.input-group.date#customDateFromGlobal').datepicker('update', newCustomFromDate);
-                    this.$el.find('.input-group.date#customDateToGlobal').datepicker('update', newCustomToDate);
-                    this.$el.find('#customRangeApplyGlobal').removeAttr('disabled');
+                    this.$('.input-group.date#customDateFromGlobal').datepicker('update', newCustomFromDate);
+                    this.$('.input-group.date#customDateToGlobal').datepicker('update', newCustomToDate);
+                    this.$('#customRangeApplyGlobal').removeAttr('disabled');
                 } else { // allRangeGlobal case
                     var firstEventDate = this.firstEvent,
-                    lastEventDate = moment(dateRange.to).format('MM/DD/YYYY');
+                    lastEventDate = moment(dateRange.to).format(DATE_FORMAT);
                     
                     formattedDateRange = {
                         from: firstEventDate,
@@ -110,39 +115,44 @@ define([
                 self.timelineSummary.show(timelineSummaryApplet);
             });
         },
-        keyUpCustomDateRange: function(event) {
+        onInputCustomDateRange: function(event) {
             this.model.set('selectedId', 'customRangeApplyGlobal');
-            //this.$el.find('button').removeClass('active-range');
             this.monitorCustomDateRange(false);
+            this.lastCustomToDateOnly = this.getDateOnly(this.$('#filterToDateGlobal').val());
         },
         blurCustomDateRange: function(event) {
             this.monitorCustomDateRange(true);
         },
         monitorCustomDateRange: function(triggerUpdateFlag) {
-            this.$el.find('button').removeClass('active-range');
+            this.$('button').removeClass('active-range');
             if (this.checkCustomRangeCondition(triggerUpdateFlag)) {
-                this.$el.find('#customRangeApplyGlobal').removeAttr('disabled');
+                this.$('#customRangeApplyGlobal').removeAttr('disabled');
             } else {
-                this.$el.find('#customRangeApplyGlobal').prop('disabled', true);
+                this.$('#customRangeApplyGlobal').prop('disabled', true);
             }
         },
         isEarlierThanToday: function(date) {
-            return moment(date, 'MM/DD/YYYY') < moment();
+            return moment(date, DATE_FORMAT) < moment();
+        },
+        getDateOnly: function (dateStringInFormat) {
+            if (_.isEmpty(dateStringInFormat)) return '';
+
+            return dateStringInFormat.match(/\d+(\/\d+)*/)[0];
         },
         checkCustomRangeCondition: function(triggerUpdateFlag) {
             var hasCustomRangeValuesBeenSetCorrectly = true,
-                customFromDateStr = this.$el.find('#filterFromDateGlobal').val(),
-                customToDateStr = this.$el.find('#filterToDateGlobal').val(),
-                customFromDate = moment(customFromDateStr, 'MM/DD/YYYY', true),
-                customToDate = moment(customToDateStr, 'MM/DD/YYYY', true),
-                todayStr = moment().format('MM/DD/YYYY'),
-                today = moment(todayStr, 'MM/DD/YYYY'),
+                customFromDateStr = this.$('#filterFromDateGlobal').val(),
+                customToDateStr = this.$('#filterToDateGlobal').val(),
+                customFromDate = moment(customFromDateStr, DATE_FORMAT, true),
+                customToDate = moment(customToDateStr, DATE_FORMAT, true),
+                todayStr = moment().format(DATE_FORMAT),
+                today = moment(todayStr, DATE_FORMAT),
                 isDateRangeChanged = false;
 
             if (customFromDate.isValid()) {
                 if (customFromDateStr !== this.model.get('customFromDate')) {
                     if (customFromDate >= today) {
-                        this.$el.find('#filterFromDateGlobal').attr('data-toggle', 'tooltip').attr('data-placement', 'bottom').tooltip('enable').tooltip('show').val('');
+                        this.$('#filterFromDateGlobal').attr('data-toggle', 'tooltip').attr('data-placement', 'bottom').tooltip('enable').tooltip('show').val('');
                         hasCustomRangeValuesBeenSetCorrectly = false;
                     } else {
                         this.$('#filterFromDateGlobal').removeAttr('data-toggle').tooltip('hide').tooltip('disable');
@@ -158,10 +168,26 @@ define([
                 hasCustomRangeValuesBeenSetCorrectly = false;
             }
 
+            var customToDateOnly = this.getDateOnly(customToDateStr);
+
+            if (!_.isEmpty(customToDateOnly) && customToDateOnly.length > 4 && customToDateOnly.length > this.lastCustomToDateOnly.length) {
+                var customToMaxDate;
+                if (customToDateOnly.length < 10) {
+                    customToMaxDate = moment((customToDateOnly + '999').substring(0, 10), DATE_FORMAT, true);
+                } else {
+                    customToMaxDate = moment(customToDateOnly, DATE_FORMAT, true);
+                }
+
+                if (customToMaxDate < today) {
+                    this.$('#filterToDateGlobal').val(customToDateOnly.substring(0, customToDateOnly.length -1));
+                    hasCustomRangeValuesBeenSetCorrectly = false;
+                }
+            }
+
             if (customToDate.isValid()) {
                 if (customToDateStr !== this.model.get('customToDate')) {
                     if (customToDate < today) {
-                        this.$el.find('#filterToDateGlobal').attr('data-toggle', 'tooltip').attr('data-placement', 'bottom').tooltip('enable').tooltip('show').val('');
+                        this.$('#filterToDateGlobal').attr('data-toggle', 'tooltip').attr('data-placement', 'bottom').tooltip('enable').tooltip('show').val('');
                         hasCustomRangeValuesBeenSetCorrectly = false;
                     } else {
                         this.$('#filterToDateGlobal').removeAttr('data-toggle').tooltip('hide').tooltip('disable');
@@ -185,10 +211,12 @@ define([
         },
         enableDatePickers: function() {
             var self = this,
+                fromStartDate = new Date(1900, 0, 1),
                 today = new Date(),
                 fromDatePicker = this.$('.input-group.date#customDateFromGlobal')
                 .datepicker({
                     format: 'mm/dd/yyyy',
+                    startDate: fromStartDate,
                     endDate: '-1d',
                     showOnFocus: false,
                     todayBtn: 'linked',
@@ -217,6 +245,10 @@ define([
                         evt.preventDefault();
                         evt.stopPropagation();
                     });
+                })
+                .on('changeDate', function (e) {
+                    self.model.set('selectedId', 'customRangeApplyGlobal');
+                    self.monitorCustomDateRange(true);
                 });
 
             toDatePicker
@@ -226,6 +258,10 @@ define([
                         evt.preventDefault();
                         evt.stopPropagation();
                     });
+                })
+                .on('changeDate', function (e) {
+                    self.model.set('selectedId', 'customRangeApplyGlobal');
+                    self.monitorCustomDateRange(true);
                 });
 
             this.$('#filterFromDateGlobal, #filterToDateGlobal').datepicker('remove');
@@ -235,7 +271,7 @@ define([
 
             if (keyCode == 13 || keyCode == 32) {
                 event.preventDefault();
-                var targetElement = this.$el.find('#' + event.target.id);
+                var targetElement = this.$('#' + event.target.id);
                 targetElement.focus();
                 targetElement.trigger('click');
             }
@@ -258,20 +294,20 @@ define([
             var isApplyButtonClicked = true;
 
             if (selectedId !== 'customRangeApplyGlobal') {
-                this.$el.find('#' + selectedId).siblings().removeClass('active-range').attr('aria-pressed', 'false');
-                this.$el.find('#' + selectedId).addClass('active-range').attr('aria-pressed', 'true');
+                this.$('#' + selectedId).siblings().removeClass('active-range').attr('aria-pressed', 'false');
+                this.$('#' + selectedId).addClass('active-range').attr('aria-pressed', 'true');
                 this.model.set('selectedId', selectedId);
                 isApplyButtonClicked = false;
             }
 
             var fromDate,
-                toDate = moment().format('MM/DD/YYYY'); // today by default
+                toDate = moment().add('months', 6).format(DATE_FORMAT); // +6 months by default
 
             if (selectedId.indexOf('-range-') !== -1 &&
                 selectedId.indexOf('customRangeApplyGlobal') === -1) {
-                this.$el.find('#filterFromDateGlobal').val('');
-                this.$el.find('#filterToDateGlobal').val('');
-                this.$el.find('#customRangeApplyGlobal').prop('disabled', true);
+                this.$('#filterFromDateGlobal').val('');
+                this.$('#filterToDateGlobal').val('');
+                this.$('#customRangeApplyGlobal').prop('disabled', true);
             }
 
             switch (selectedId) {
@@ -279,47 +315,39 @@ define([
                     if (lastSelectedId === 'allRangeGlobal') {
                         sessionGlobalDate = ADK.SessionStorage.getModel_SessionStoragePreference('globalDate');
                         fromDate = self.firstEvent;
-                        toDate = this.$el.find('#filterToDateGlobal').val();
+                        toDate = this.$('#filterToDateGlobal').val();
                     } else {
-                        fromDate = this.$el.find('#filterFromDateGlobal').val();
-                        toDate = this.$el.find('#filterToDateGlobal').val();
+                        fromDate = this.$('#filterFromDateGlobal').val();
+                        toDate = this.$('#filterToDateGlobal').val();
                     }
                     break;
                 case '5yr-range-global':
-                    fromDate = moment().subtract('years', 5).format('MM/DD/YYYY');
+                    fromDate = moment().subtract('years', 5).format(DATE_FORMAT);
                     break;
                 case '2yrRangeGlobal':
-                    fromDate = moment().subtract('years', 2).format('MM/DD/YYYY');
+                    fromDate = moment().subtract('years', 2).format(DATE_FORMAT);
                     break;
                 case '1yrRangeGlobal':
-                    fromDate = moment().subtract('years', 1).format('MM/DD/YYYY');
+                    fromDate = moment().subtract('years', 1).format(DATE_FORMAT);
                     break;
                 case '3moRangeGlobal':
-                    fromDate = moment().subtract('months', 3).format('MM/DD/YYYY');
+                    fromDate = moment().subtract('months', 3).format(DATE_FORMAT);
                     break;
                 case '1moRangeGlobal':
-                    fromDate = moment().subtract('months', 1).format('MM/DD/YYYY');
+                    fromDate = moment().subtract('months', 1).format(DATE_FORMAT);
                     break;
                 case '7dRangeGlobal':
-                    fromDate = moment().subtract('days', 7).format('MM/DD/YYYY');
+                    fromDate = moment().subtract('days', 7).format(DATE_FORMAT);
                     break;
                 case '72hrRangeGlobal':
-                    fromDate = moment().subtract('days', 3).format('MM/DD/YYYY');
+                    fromDate = moment().subtract('days', 3).format(DATE_FORMAT);
                     break;
                 case '24hrRangeGlobal':
-                    fromDate = moment().subtract('days', 1).format('MM/DD/YYYY');
+                    fromDate = moment().subtract('days', 1).format(DATE_FORMAT);
                     break;
                 case 'allRangeGlobal':
                     sessionGlobalDate = ADK.SessionStorage.getModel_SessionStoragePreference('globalDate');
                     fromDate = self.firstEvent;
-
-                    var lastEventDate = sessionGlobalDate.get('lastEventDate');
-                    if ((lastEventDate !== undefined) && (lastEventDate !== null)) {
-                        toDate = lastEventDate;
-                    } else {
-                        toDate = moment('12/31/2099').format('MM/DD/YYYY');
-                    }
-
                     break;
                 default:
                     break;
@@ -355,9 +383,9 @@ define([
                 customToDate: customToDate
             });
 
-            this.$el.find('.input-group.date#customDateFromGlobal').datepicker('update', customFromDate);
-            this.$el.find('.input-group.date#customDateToGlobal').datepicker('update', customToDate);
-            this.$el.find('#customRangeApplyGlobal').removeAttr('disabled');
+            this.$('.input-group.date#customDateFromGlobal').datepicker('update', customFromDate);
+            this.$('.input-group.date#customDateToGlobal').datepicker('update', customToDate);
+            this.$('#customRangeApplyGlobal').removeAttr('disabled');
         },
         resetToCurrentGlbalDate: function() {
             var globalDate = ADK.SessionStorage.getModel('globalDate'),
@@ -389,9 +417,9 @@ define([
                 this.$('#customDateToGlobal').datepicker('update', toDate);
             }
 
-            this.$el.find('button').removeClass('active-range');
+            this.$('button').removeClass('active-range');
             if (selectedId !== 'customRangeApplyGlobal') {
-                this.$el.find('#' + selectedId).addClass('active-range');
+                this.$('#' + selectedId).addClass('active-range');
             }
 
             if (fromDate !== undefined && fromDate !== null && toDate !== undefined && toDate !== null) {
@@ -404,11 +432,11 @@ define([
         },
         onRender: function(event) {
             this.$('#filterFromDateGlobal, #filterToDateGlobal').inputmask('m/d/y', {
-                'placeholder': 'MM/DD/YYYY'
+                'placeholder': DATE_FORMAT
             });
             this.enableDatePickers();
             this.resetToCurrentGlbalDate();
-            this.$el.find('#filterFromDateGlobal, #filterToDateGlobal').on('blur', function() {
+            this.$('#filterFromDateGlobal, #filterToDateGlobal').on('blur', function() {
                 $('.input-group.date#customDateFromGlobal').datepicker('hide');
             });
             this.trendHistoryChart.show(this.trendHistoryView);

@@ -103,7 +103,7 @@ var config = {
     },
     jds: _.defaults(wConfig.jds, {
         protocol: 'http',
-        host: 'IP_ADDRESS',
+        host: 'IP        ',
         port: 9080
     }),
     rules: {

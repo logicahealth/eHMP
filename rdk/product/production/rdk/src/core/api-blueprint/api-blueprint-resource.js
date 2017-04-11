@@ -4,7 +4,6 @@ var _ = require('lodash');
 var fs = require('fs');
 var fspath = require('path');
 var async = require('async');
-var dd = require('drilldown');
 var theme = require('aglio-theme-olio');
 var handlebars = require('handlebars');
 var apiBlueprint = require('./api-blueprint');
@@ -166,7 +165,7 @@ function prependResourcesUri(json, done) {
                 resource.uriTemplate = prefix + resource.uriTemplate;
             }
             async.each(resource.actions, function(action, actionDone) {
-                var uriTemplate = dd(action)('attributes')('uriTemplate').val;
+                var uriTemplate = _.get(action, 'attributes.uriTemplate');
                 if (uriTemplate && !_.startsWith(uriTemplate, prefix)) {
                     action.attributes.uriTemplate = prefix + uriTemplate;
                 }
@@ -218,7 +217,7 @@ function addQueryParameter(parameter, checkFunction, json, done) {
                 }
 
                 applies = true;
-                var uriTemplate = dd(action)('attributes')('uriTemplate').val;
+                var uriTemplate = _.get(action, 'attributes.uriTemplate');
                 if (uriTemplate) {
                     action.parameters.push(parameter);
                     action.attributes.uriTemplate = appendQueryParameter(uriTemplate, parameter);

@@ -49,10 +49,10 @@ define([
         return response;
     };
 
-    Util.noVitlasNoRecord = function(response) {
+    Util.noVitalsNoRecord = function(response) {
         var noVital = '';
-        if (response.result == noVital) {
-            response.result = "No record";
+        if (response.result === noVital) {
+            response.result = "No Records Found";
         }
 
         return response;
@@ -72,19 +72,15 @@ define([
     };
     Util.getResultUnits = function(response) {
         response.resultUnits = '';
-
-        if (response.result) {
+        if (( _.isString(response.result) && !_.isEmpty(response.result)) || _.isNumber(response.result)) {
             response.resultUnits = response.result;
             if (response.typeName.toLowerCase() === 'pain') {
-                var resultNumber = parseInt(response.result);
                 // fix for de3511
                 // in the case of DOD data, the data is different than Vista
                 // parse out the number from the incoming data.
-                if (!_.isNumber(resultNumber)){
-                    var parts = response.result.split('/');
-                    if (!_.isEmpty(parts)) {
-                        response.result = parts[0];
-                    }
+                var number  = parseInt(response.result);
+                if (! isNaN(number)){
+                    response.result = number;
                 }
             }
         }
@@ -147,6 +143,9 @@ define([
                 response.metricUnits = 'C';
                 response.metricResult = Math.round(response.result / 1.8);
             }
+        } else if (!_.isUndefined(response.result) && (response.result.toUpperCase() === 'UNAVAILABLE' || response.result.toUpperCase() === 'REFUSED' || response.result.toUpperCase() === 'PASS')){
+            response.metricResult = '';
+            response.metricUnits = '';
         }
         return response;
     };

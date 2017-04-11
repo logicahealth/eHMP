@@ -15,8 +15,8 @@ define([], function() {
     });
 
     var Clinics = ADK.Resources.Picklist.Collection.extend({
-        type: 'clinics-newloc-fetch-list',
         model: Clinic,
+        resource: 'write-pick-list-clinics-newloc-fetch-list',
         params: function(method, options) {
             return {
                 site: options.site,

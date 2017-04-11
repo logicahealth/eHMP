@@ -19,9 +19,9 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="demographics" type="{http://webservice.vds.DNS       /}patientDemographics" minOccurs="0"/>
+ *         &lt;element name="demographics" type="{http://webservice.vds.med.DNS   /}patientDemographics" minOccurs="0"/>
  *         &lt;element name="errorMsg" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="patients" type="{http://webservice.vds.DNS       /}patient" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="patients" type="{http://webservice.vds.med.DNS   /}patient" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element name="success" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
  *       &lt;/sequence>
  *     &lt;/restriction>

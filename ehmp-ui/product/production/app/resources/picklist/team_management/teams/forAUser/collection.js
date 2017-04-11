@@ -4,7 +4,7 @@ define([
     'use strict';
 
     var Teams = ADK.Resources.Picklist.Collection.extend({
-        type: 'teams-for-user',
+        resource: 'write-pick-list-teams-for-user',
         model: Team,
         params: function(method, options) {
             return {

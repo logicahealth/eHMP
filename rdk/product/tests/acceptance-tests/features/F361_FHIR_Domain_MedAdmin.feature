@@ -4,7 +4,7 @@ Feature: F361 FHIR Domain - MedicationAdministration
  Scenario: Client can request Medication Administration in FHIR format
      Given a patient with "medicationadministration" in multiple VistAs
      #And a patient with pid "5000000217V519385" has been synced through the RDK API
- 	 When the client requests "medicationadministration-medicationAdministration" for the patient "9E7A;100716"
+ 	 When the client requests medicationadministration for the patient "9E7A;100716"
     Then a successful response is returned
      And the FHIR results contain "medicationadministration"
        | field 											     | value 								|

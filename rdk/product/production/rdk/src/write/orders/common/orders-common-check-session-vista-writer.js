@@ -1,11 +1,11 @@
-/*
- TODO: Using ORWDXC SESSION until RPC wrapper is in place
- */
 'use strict';
-
+var nullchecker = require('../../../core/rdk').utils.nullchecker;
 var rpcClientFactory = require('./../../core/rpc-client-factory');
 
 module.exports.check = function(orderId, writebackContext, callback) {
+    if(nullchecker.isNullish(writebackContext.interceptorResults.patientIdentifiers.dfn)){
+        return callback('Missing required patient identifiers');
+    }
 
     rpcClientFactory.getRpcClient(writebackContext, 'OR CPRS GUI CHART', function(error, rpcClient) {
         if (error) {
@@ -13,7 +13,7 @@ module.exports.check = function(orderId, writebackContext, callback) {
         }
 
         var rpcName = 'ORWDXC SESSION';
-        rpcClient.execute(rpcName, getParameters(writebackContext.model.dfn, orderId), function(err, data) {
+        rpcClient.execute(rpcName, getParameters(writebackContext.interceptorResults.patientIdentifiers.dfn, orderId), function(err, data) {
             if (err) {
                 return callback(err, data);
             }

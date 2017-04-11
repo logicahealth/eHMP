@@ -16,7 +16,14 @@ define([
 
     /* clinics locations */
     var LocationsListFilterViewClinics = Backbone.Marionette.LayoutView.extend({
-        template: Handlebars.compile("<input type='text' autocomplete='off' class='form-control input-sm location-filter' id='clinicFilter' placeholder='Filter {{locationType}}' title='Begin typing to filter the clinics list below. Press tab to view results.' accesskey='c' />"),
+        template: Handlebars.compile([
+            "<form class='clinic-filter-form'>",
+            "<label class='sr-only' for='clinicFilter'></label>",
+            "<i class='fa fa-filter font-size-14'></i>",
+            "<input type='text' autocomplete='off' class='form-control input-sm clinic-input-filter' id='clinicFilter' placeholder='Filter {{locationType}}' title='Begin typing to filter the clinics list below. Press tab to view results.' accesskey='c' />",
+            "<button type='button' class='btn btn-icon btn-sm clear-clinic-filter clear-filter color-grey-darkest' title='Press enter to clear filtered text'><i class='fa fa-times'></i> <span class='sr-only'>Clear.</span></button>",
+            "</form>"
+            ].join("\n")),
         initialize: function(options) {
             this.model = new LocationsListFilterModel();
             this.model.set('locationType', options.locationType);
@@ -27,14 +34,28 @@ define([
             'keydown input': 'updateClinicListResults',
             'keypress input': 'updateClinicListResults',
             'input input': 'updateClinicListResults',
-            'change': 'updateClinicListResults'
+            'change': 'updateClinicListResults',
+            'click .clear-clinic-filter': 'clearClinicFilter',
         },
         updateClinicListResults: function(event) {
-            var target = event.target.id;
-            if (target == 'clinicFilter') {
-                this.model.set({
-                    'filterString': $(event.target).val()
-                });
+                if (!_.isUndefined(this.$el.find('#clinicFilter').val())) {
+                    this.model.set({
+                        'filterString': this.$el.find('#clinicFilter').val()
+                    });
+                }
+
+                this.clearClinicFilterBtnDisplay(this.$el.find('#clinicFilter').val());
+        },
+        clearClinicFilter: function(e) {
+            this.$el.find('#clinicFilter').val('');
+            this.updateClinicListResults(e);
+            this.$el.find('#clinicFilter').focus();
+        },
+        clearClinicFilterBtnDisplay: function(val) {
+            if (val) {
+                this.$('.clear-clinic-filter').show();
+            } else {
+                this.$('.clear-clinic-filter').hide();
             }
         }
     });
@@ -43,7 +64,14 @@ define([
     /* wards locations */
     var LocationsListFilterViewWards = Backbone.Marionette.ItemView.extend({
 
-        template: Handlebars.compile("<input type='text' autocomplete='off' class='form-control input-sm location-filter' id='wardFilter'  placeholder='Filter {{locationType}}' title='Begin typing to filter the wards list below. Press tab to view results.' accesskey='w' /> "),
+        template: Handlebars.compile([
+            "<form class='ward-filter-form'>",
+            "<label class='sr-only' for='wardFilter'></label>",
+            "<i class='fa fa-filter font-size-14'></i>",
+            "<input type='text' autocomplete='off' class='form-control input-sm ward-input-filter' id='wardFilter'  placeholder='Filter {{locationType}}' title='Begin typing to filter the wards list below. Press tab to view results.' accesskey='w' />",
+            "<button type='button' class='btn btn-icon btn-sm clear-ward-filter clear-filter color-grey-darkest' title='Press enter to clear filtered text'><i class='fa fa-times'></i> <span class='sr-only'>Clear.</span></button>",
+            "</form>"
+            ].join("\n")),
         initialize: function(options) {
             this.model = new LocationsListFilterModel();
             this.model.set('locationType', options.locationType);
@@ -54,13 +82,28 @@ define([
             'keydown input': 'updateWardsListResults',
             'keypress input': 'updateWardsListResults',
             'input input': 'updateWardsListResults',
-            'change': 'updateWardsListResults'
+            'change': 'updateWardsListResults',
+            'click .clear-ward-filter': 'clearWardFilter',
         },
         updateWardsListResults: function(event) {
-            if (event.currentTarget.id == 'wardFilter') {
-                this.model.set({
-                    'filterString': this.$(event.currentTarget).val()
-                });
+            if (!_.isUndefined(this.$el.find('#wardFilter').val())) {
+                    this.model.set({
+                        'filterString': this.$el.find('#wardFilter').val()
+                    });
+                }
+
+                this.clearWardFilterBtnDisplay(this.$el.find('#wardFilter').val());
+        },
+        clearWardFilter: function(e) {
+            this.$el.find('#wardFilter').val('');
+            this.updateWardsListResults(e);
+            this.$el.find('#wardFilter').focus();
+        },
+        clearWardFilterBtnDisplay: function(val) {
+            if (val) {
+                this.$('.clear-ward-filter').show();
+            } else {
+                this.$('.clear-ward-filter').hide();
             }
         }
     });

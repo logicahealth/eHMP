@@ -61,17 +61,15 @@ function getStaffNotificationsIndicatorSummary(req, res) {
         maxSalience: 4,
         userId: req.params.userId,
         groupRows: true,
-        navigationRequired: true
+        navigationRequired: true,
+        countNotifs: true
     };
 
-    dataaccess.getNotificationsCounterByParams(req, params, function(err, result) {
+    dataaccess.getNotificationsByParams(req, params, function(err, result) {
         if (err) {
             return res.status(500).rdkSend(err.message);
         }
-        var response = {
-            count: result.length
-        };
-        return res.rdkSend(response);
+        return res.rdkSend(result);
     });
 }
 

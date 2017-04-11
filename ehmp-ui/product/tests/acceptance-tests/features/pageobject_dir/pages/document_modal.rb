@@ -12,8 +12,9 @@ class DocumentDetail < ModalElements
   element :fld_date, 'span[data-detail=date-time]'
   element :fld_providers_label, 'span[data-detail-label=providers]'
   element :fld_providers, 'span[data-detail=providers]'
-
-  element :fld_results_region, '.results-region h5'
-  elements :fld_results_links, '.result-links-region button.detail-result-link'
   element :fld_result_doc, '.result-docs-region .detail-modal-content'
+  element :fld_results_region, '.results-region h5'
+
+  elements :fld_results_links, '.result-links-region button.detail-result-link'
+  elements :fld_documents_row_headers, "#modal-body p > span strong"
 end

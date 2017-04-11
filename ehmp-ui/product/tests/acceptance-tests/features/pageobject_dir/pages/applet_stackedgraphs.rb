@@ -7,7 +7,6 @@ class PobStackedGraphsApplet < PobParentApplet
     appletid_css = "[data-appletid=stackedGraph]"
     add_applet_buttons appletid_css
     add_title appletid_css
-
     add_generic_error_message appletid_css
   end
 

@@ -10,7 +10,7 @@ define([
         template: Handlebars.compile([
             '<a href="#{{clean-for-id label}}-tab-panel-{{tabId}}" class="left-padding-sm right-padding-sm" aria-controls="{{clean-for-id label}}-tab-panel-{{tabId}}" data-toggle="tab" role="tab">' +
             '{{label}}' +
-            '<span class="sr-only">Tab heading. Tab through to view headings and then arrow down to hear content.</span>' +
+            '<span class="sr-only">Tab heading. Tab through to view headings, press enter to activate tab and then arrow down to view content.</span>' +
             '</a>',
         ].join("\n")),
         tagName: 'li',

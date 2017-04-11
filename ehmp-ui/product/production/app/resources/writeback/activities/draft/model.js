@@ -311,54 +311,13 @@ define([
 
         //============================= RESOURCES =============================
         var resourceMap = {
-            create: {
-                resource: 'clinical-object-add',
-                validate: validateClinicalObject,
-                getUrl: getUrl,
-                beforeExecute: populateModel,
-                parse: parse,
-                method: 'draft:create',
-                requestType: 'create'
-            },
             read: {
-                resource: 'clinical-object-read',
+                resource: 'orders-read-draft',
                 validate: validateUid,
                 getUrl: getUrlWithUid,
                 parse: parseRead,
                 method: 'draft:read',
                 requestType: 'read'
-            },
-            update: {
-                resource: 'clinical-object-update',
-                validate: validateUpdate,
-                getUrl: getUrlWithUid,
-                parse: parse,
-                method: 'draft:update',
-                requestType: 'update'
-            },
-            delete: {
-                resource: 'clinical-object-save-draft',
-                validate: validateUid,
-                getUrl: getUrl,
-                beforeExecute: setDeletedState,
-                parse: parseEmpty,
-                method: 'draft:delete',
-                requestType: 'create'
-            },
-            save: {
-                resource: 'clinical-object-save-draft',
-                validate: validateClinicalObject,
-                getUrl: getUrl,
-                beforeExecute: populateModel,
-                parse: parse,
-                method: 'draft:save',
-                requestType: 'create'
-            },
-            invalid: {
-                resource: 'clinical-object-invalid',
-                validate: validateInvalid,
-                method: 'draft:invalid',
-                requestType: 'invalid'
             }
         };
 
@@ -382,11 +341,7 @@ define([
 
             methodMap: getMethodMap(),
 
-            createDraft: _.partial(execute, 'create'),
             getDraft: _.partial(execute, 'read'),
-            updateDraft: _.partial(execute, 'update'),
-            deleteDraft: _.partial(execute, 'delete'),
-            saveDraft: _.partial(execute, 'save'),
 
             getPayload: getPayload,
             setPayload: setPayload,

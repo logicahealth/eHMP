@@ -1176,6 +1176,7 @@ define([
             startDate: new Date("01/01/2015"), // default: 01011900
             endDate: new Moment().format('MM/DD/YYYY'), // default: 12312099
             outputFormat: "DDMMYYYY", // default: MM/DD/YYYY
+            minPrecision: 'month'
         }, {
             name: "date3",
             label: "datepicker (disabled)",
@@ -1206,6 +1207,36 @@ define([
             control: 'timepicker',
             title: 'Enter a time',
             placeholder: 'HH:MM'
+        }, {
+            name: 'timePickerNoInitialValue1',
+            label: 'timepicker (basic with no initial)',
+            control: 'timepicker',
+            title: 'Enter a time',
+            placeholder: 'HH:MM',
+            options: {
+                defaultTime: false
+            }
+        }, {
+            name: 'timePicker1',
+            label: 'timepicker (with bootstrap timepicker options)',
+            control: 'timepicker',
+            title: 'Enter a time',
+            placeholder: 'HH:MM',
+            options: {
+                showMeridian: true,
+                showSeconds: true
+            }
+        }, {
+            name: 'timePickerNoInitialValue2',
+            label: 'timepicker (with bootstrap timepicker options and no initial)',
+            control: 'timepicker',
+            title: 'Enter a time',
+            placeholder: 'HH:MM',
+            options: {
+                showMeridian: true,
+                showSeconds: true,
+                defaultTime: false
+            }
         }, {
             name: 'timePicker2',
             label: 'timepicker (with extra classes)',

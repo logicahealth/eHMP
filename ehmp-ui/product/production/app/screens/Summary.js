@@ -1,5 +1,5 @@
 define([
-    'app/screens/OrdersFull'
+    'app/screens/OrdersFull' //probably unnecessary
 ], function(OrdersFull) {
     'use strict';
     var detailAppletChannels = {
@@ -207,7 +207,7 @@ define([
             "dataMaxSizeY": 12,
             "viewType": "summary",
             "filterName": ""
-        }],
+        }],/*most likely dead code
         onResultClicked: function(clickedResult) {
             var domain = clickedResult.uid.split(":")[2],
                 channelName = detailAppletChannels[domain],
@@ -272,17 +272,12 @@ define([
                 }
             }
             return deferredResponse.promise();
-        },
+        },*/
         onStart: function() {
 
-            OrdersFull.setUpEvents();
-            var searchAppletChannel = ADK.Messaging.getChannel("activeMeds");
-            searchAppletChannel.on('detailView', this.onResultClicked);
-
+            OrdersFull.setUpEvents();  //probably not needed
         },
         onStop: function() {
-            var searchAppletChannel = ADK.Messaging.getChannel("activeMeds");
-            searchAppletChannel.off('detailView', this.onResultClicked);
             OrdersFull.turnOffEvents();
         },
         patientRequired: true

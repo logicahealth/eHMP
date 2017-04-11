@@ -9,11 +9,10 @@ define([
     var displayBanner = function(action, orderType, uid, options) {
         var suppressBanner = !!(_.get(options, 'suppressBanner', false));
         if (suppressBanner === false) {
-            var bannerTitle = (_.capitalize(orderType || 'unknown') + ' Draft Order');
-            var message = 'Successfully ' + action;
+            var message = (_.capitalize(orderType || 'unknown') + ' draft order succesfully ' + action);
 
             var successBanner = new ADK.UI.Notification({
-                title: bannerTitle,
+                title: 'Success',
                 message: message,
                 type: "success"
             });
@@ -23,14 +22,13 @@ define([
     var displayErrorBanner = function(action, orderType, error, options) {
         var suppressBanner = !!(_.get(options, 'suppressBanner', false));
         if (suppressBanner === false) {
-            var bannerTitle = (_.capitalize(orderType || 'unknown') + ' Draft Order');
             var errorMessage = 'Error ' + action + ' draft order';
 
             // Report the error to the console to provide debugging info without confusing the user
             console.log(errorMessage + ': ' + error);
 
             var errorBanner = new ADK.UI.Notification({
-                title: bannerTitle,
+                title: 'Error',
                 message: errorMessage,
                 type: "danger"
             });
@@ -202,12 +200,7 @@ define([
     };
 
     var deleteDraft = function(draft, options) {
-        var forceDelete = !!_.get(options, 'forceDelete', false);
-        if (forceDelete) {
             draft.deleteDraft(options);
-        } else {
-            showDeleteDraftDialog.call(this, draft, options);
-        }
     };
 
     var resetDraft = function(draft) {

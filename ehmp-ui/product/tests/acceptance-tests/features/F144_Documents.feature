@@ -1,4 +1,4 @@
-@documents_summary_and_details @regression @DE1786 @triage
+@documents_summary_and_details @regression @DE1786
 Feature: F144 - eHMP Viewer GUI - Documents
 
 #POC:Team Jupiter
@@ -13,7 +13,7 @@ Scenario: Documents grouping by Date/Time
   And the user has selected All within the global date picker
   And the user sees date groups in the Documents Applet
  
-@f144_17_documents_default_display  @US2593 @DE1480 @debug @DE1735
+@f144_17_documents_default_display  @US2593 @DE1480 @DE1735
 Scenario: date/time can be clicked and collapsed
   # Given user is logged into eHMP-UI
   And user searches for and selects "ZZZRETFOUREIGHTY,PATIENT"

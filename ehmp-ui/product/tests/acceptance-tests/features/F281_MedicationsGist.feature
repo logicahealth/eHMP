@@ -66,21 +66,10 @@ Scenario: Medication Applet is sorted by the column header medication
   And user searches for and selects "eightyeight,patient"
   Then Overview is active
   Then the "Active & Recent MEDICATIONS" gist is displayed
-  When user clicks on the column header "Medication"
-  Then "Medication" column is sorted in ascending order
-  When user clicks on the column header "Medication"
-  Then "Medication" column is sorted in descending order
-  
-@F281_6_ActiveMedicationGist_Column_Sorting_refills @US4684 @DE831
-Scenario: Medication Applet is sorted by the column header medication
-  # Given user is logged into eHMP-UI
-  And user searches for and selects "eightyeight,patient"
-  Then Overview is active
-  Then the "Active & Recent MEDICATIONS" gist is displayed
-  When user clicks on the column header "Refills"
-  Then "Refills" column is sorted in ascending order
-  When user clicks on the column header "Refills"
-  Then "Refills" column is sorted in descending order
+  And the user sorts the Medication Gist by column Medication
+  Then the Medication Gist is sorted in alphabetic order based on Medication
+  And the user sorts the Medication Gist by column Medication
+  Then the Medication Gist is sorted in reverse alphabetic order based on Medication  
   
 @f281_active_medication_gist_refresh 
 Scenario: Active Medications Gist applet displays all of the same details after applet is refreshed

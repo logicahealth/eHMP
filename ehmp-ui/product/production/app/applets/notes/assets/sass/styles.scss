@@ -29,7 +29,7 @@
             .btn-xs {
                 width: 96%;
                 &:active {
-                    color: purple;
+                    color: $pure-white;
                 }
             }
         }
@@ -50,5 +50,14 @@
 .panel-body {
     .accordion-indented-more {
         padding-left: 40px !important; //Done by TT
+    }
+}
+
+.notes-textarea-wrapper{
+    flex-grow: 1;
+    flex-shrink: 1;
+    position: relative;
+    textarea.form-control {
+        height: 100%;
     }
 }

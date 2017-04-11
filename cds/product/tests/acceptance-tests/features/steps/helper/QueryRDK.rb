@@ -264,7 +264,7 @@ class QueryRDKFilterBySummary < BuildQuery
 end
 
 #http://IP_ADDRESS:PORT/resource/tasks/startprocess?deploymentId=All&processDefId=project1.FollowUpWorkflow&
-#patientid=1234567&patientname=EightPatient&description=FirstHumanTask&where=VA&when=date&site=9E7A&accessCode=pu1234&verifyCode=pu1234!!
+#patientid=1234567&patientname=EightPatient&description=FirstHumanTask&where=VA&when=date&site=9E7A&accessCode=PW    &verifyCode=PW    !!
 class RDKStartProcess< BuildQuery
   def initialize(pDefId = nil, pid = nil, pname = nil, description = nil, pwhere = nil, pwhen = nil)
     super()
@@ -309,7 +309,7 @@ end
 class QueryCDSInvocation < BuildQuery
   def initialize
     super()
-    @path = String.new(DefaultLogin.cds_url)
+    @path = String.new(DefaultLogin.cdsinvocation_url)
   end
 end
 

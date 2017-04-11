@@ -4,10 +4,9 @@ var util = require('util');
 var _ = require('underscore');
 var RpcClient = require('./RpcClient').RpcClient;
 
-// var inspect = _.partial(util.inspect, _, {
-// 	depth: null
-// });
-
+var inspect = _.partial(util.inspect, _, {
+	depth: null
+});
 var logger = require('bunyan').createLogger({
 	name: 'rpc',
 	level: 'debug'
@@ -30,15 +29,16 @@ var logger = require('bunyan').createLogger({
 
 var config = {
 	// host: '101.2.2.102',
-	host: 'IP_ADDRESS',
+	host: 'IP        ',
 	port: 9210,
-	accessCode: 'PW',
-	verifyCode: 'PW',
-	context: 'VPR UI CONTEXT',
+	accessCode: 'PW    ',
+	verifyCode: 'PW    !!',
+	context: 'HMP UI CONTEXT',
 	localIP: '127.0.0.1',
 	localAddress: 'localhost',
 	connectTimeout: 3000,
-	sendTimeout: 10000
+	sendTimeout: 10000,
+	noMetrics: false
 };
 
 // function makeVisible(string, openChar, closeChar) {
@@ -74,10 +74,10 @@ var config = {
 
 // var config = {
 // 	// host: '101.2.2.102',
-// 	host: 'IP_ADDRESS',
+// 	host: 'IP        ',
 // 	port: 9210,
-// 	accessCode: 'PW',
-// 	verifyCode: 'PW',
+// 	accessCode: 'PW    ',
+// 	verifyCode: 'PW    !!',
 // 	context: 'VPR SYNCHRONIZATION CONTEXT',
 // 	localIP: '127.0.0.1',
 // 	localAddress: 'localhost',
@@ -157,10 +157,10 @@ var config = {
 
 // config = {
 // 	// host: '101.2.2.102',
-// 	host: 'IP_ADDRESS',
+// 	host: 'IP        ',
 // 	port: 99210,
-// 	accessCode: 'PW',
-// 	verifyCode: 'PW',
+// 	accessCode: 'PW    ',
+// 	verifyCode: 'PW    !!',
 // 	context: 'VPR UI CONTEXT',
 // 	localIP: '127.0.0.1',
 // 	localAddress: 'localhost',
@@ -188,7 +188,7 @@ client.connect(function(error, result) {
 			return;
 		}
 
-		console.log(result);
+		console.log('result: %s', result);
 
 		client.close(function(error, result) {
 			console.log('********** close');

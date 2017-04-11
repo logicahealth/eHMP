@@ -2,7 +2,6 @@
 
 var rdk = require('../../core/rdk');
 var nullchecker = rdk.utils.nullchecker;
-var fetchPatientUid = require('./get-patient-uid');
 var _ = require('lodash');
 var asuUtils = require('./asu-utils');
 
@@ -19,12 +18,24 @@ module.exports.getResourceConfig = function () {
 };
 
 function getPatientUid(req, res) {
-    fetchPatientUid.getPatientUid(req, function(err, response, data) {
+    req.audit.logCategory = 'RETRIEVE';
+
+    var uid = req.param('uid');
+    var pid = req.param('pid');
+    if (nullchecker.isNullish(uid)) {
+        return res.status(rdk.httpstatus.bad_request).rdkSend('Missing uid parameter');
+    } else if (nullchecker.isNullish(pid)) {
+        return res.status(rdk.httpstatus.bad_request).rdkSend('Missing pid parameter');
+    }
+
+    req.app.subsystems.jds.getByUid(req, pid, uid, function(err, data, statusCode) {
         if(!nullchecker.isNullish(err)) {
             if (_.isNumber(err.code)) {
-                res.status(err.code).rdkSend(err.message);
+                res.status(err.code).rdkSend(data);
             } else {
-                res.status(500).rdkSend('500');  // TODO respond with real error
+                err = new Error('Unable to retrieve the Patient Uid');
+                req.logger.error(err);
+                return res.status(rdk.httpstatus.internal_server_error).rdkSend(err.message);
             }
             return;
         }
@@ -32,9 +43,9 @@ function getPatientUid(req, res) {
 
          var checkASU=isCheckASU(data);
         if(checkASU==='true'){
-            filterAsuDocuments(req, res, response.statusCode, data);
+            filterAsuDocuments(req, res, statusCode, data);
         }else{
-            return res.set('Content-Type', 'application/json').status(response.statusCode).rdkSend(data);
+            return res.set('Content-Type', 'application/json').status(statusCode).rdkSend(data);
         }
    });
 }

@@ -15,6 +15,7 @@
         margin-top: 10px;
         background: $pure-white;
         border-radius: 2px;
+        word-wrap: break-word;
         &:last-child {
             margin-bottom: 5px;
         }
@@ -56,6 +57,11 @@
                         border-top: 1px solid $grey-lighter;
                     }
                 }
+            }
+            .demographic-sub-group-content{
+                background-color: $primary-lightest;
+                border-left: 3px solid $grey-lighter;
+                padding-left: 5px;
             }
         }
         [data-diff="true"] {

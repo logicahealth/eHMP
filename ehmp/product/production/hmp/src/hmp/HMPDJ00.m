@@ -1,5 +1,5 @@
-HMPDJ00 ;SLC/MKB,ASMR/RRB - Patient demographics;8/11/11  15:29
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**;Sep 01, 2011;Build 63
+HMPDJ00 ;SLC/MKB,ASMR/RRB,MBS - Patient demographics;Jul 27, 2016 11:20:16
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**2,3**;Sep 01, 2011;Build 17
  ;Per VA Directive 6402, this routine should not be modified.
  ;
  ; External References          DBIA#
@@ -47,7 +47,7 @@ DPT1OD(PAT) ; -- Demographics (data array only)
 LKUP ; patient lookup data
  ; expects HMPSYS,DFN
  N X,X0
- S X0=^DPT(DFN,0),X=$P(X0,U)
+ S X0=$G(^DPT(DFN,0)),X=$P(X0,U) Q:X=""  ; invalid DFN passed in DE4983
  S PAT("fullName")=X
  S PAT("familyName")=$P(X,",")
  S PAT("givenNames")=$P(X,",",2,99)
@@ -282,6 +282,7 @@ INPT ;-inpatient information
  S TS=$G(^DPT(DFN,.103)) I TS D  ;treating specialty
  . S X=$$TSDATA^DGACT(45.7,+TS,.Y) Q:X<1
  . S PAT("specialty")=$G(Y(1)),X=""
+ . S PAT("specialtyUid")=$$SETUID^HMPUTILS("specialty",,+TS)
  . I +$G(Y(2))>0 S X=$$TSDATA^DGACT(42.4,+Y(2),.Z)
  . I X>0,$G(Z(3))]"" S PAT("specialtyService")=$P(Z(3),U)
  Q

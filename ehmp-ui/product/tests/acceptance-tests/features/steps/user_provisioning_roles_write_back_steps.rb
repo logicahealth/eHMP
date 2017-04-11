@@ -169,12 +169,6 @@ Then(/^the "([^"]*)" has "([^"]*)", "([^"]*)" and "([^"]*)" roles$/) do |user, r
   expect(aa.perform_verification(role_3 + " role", role_3)).to eq(true)  
 end
 
-#Then(/^deletes "([^"]*)" role for user "([^"]*)"$/) do |role, user|
-#  aa = UserProvisioningRoles.instance
-#  expect(aa.perform_action("Delete Standard Doctor Role")).to eq(true) if aa.am_i_visible?("Delete Standard Doctor Role")
-#  save_and_exit_modal
-#end
-
 Then(/^user chooses "([^"]*)" row$/) do |user|
   aa = UserProvisioningRoles.instance
   expect(aa.perform_action(user)).to eq(true)

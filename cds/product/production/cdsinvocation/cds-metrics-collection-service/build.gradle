@@ -19,18 +19,21 @@ dependencies {
     compile group: 'org.apache.cxf', name: 'cxf-rt-transports-http', version: property('cxfVersion')
     compile group: 'org.springframework', name: 'spring-web', version: property('springVersion')
     compile group: 'org.springframework.security', name: 'spring-security-core', version: property('springSecurityVersion')
-    compile group: 'org.slf4j', name: 'slf4j-log4j12', version: property('slf4jVersion')
+    
     compile project(':production:cdsinvocation:cds-invocation')
     testCompile group: 'junit', name: 'junit', version: property('junitVersion')
 }
 
 war {
     baseName = 'cdsinvocation-metrics'
+	rootSpec.exclude('**/cds-metrics-service.properties')
+	rootSpec.exclude('**/cds-metrics-log4j2.xml')
+	rootSpec.exclude('**/certs/')
 }
 
 
 gretty {
-	httpPort = 8080
+	httpPORT       
 	managedClassReload = true
 }
 

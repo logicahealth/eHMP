@@ -3,7 +3,7 @@ define([], function() {
     var LotNumber = ADK.Resources.Picklist.Model.extend({
         idAttribute: 'lotNumber',
         label: 'lotNumber',
-        value: function(){
+        value: function() {
             return this.get('lotNumber') + ';' + this.get('ien');
         },
         childParse: 'false',
@@ -13,7 +13,7 @@ define([], function() {
     });
 
     var LotNumbers = ADK.Resources.Picklist.Collection.extend({
-        type: 'immunization-lot',
+        resource: 'write-pick-list-immunization-lot',
         model: LotNumber,
         params: function(method, options) {
             return {

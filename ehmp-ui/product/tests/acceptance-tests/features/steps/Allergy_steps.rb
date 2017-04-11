@@ -326,6 +326,32 @@
     expect(@ehmp).to have_fld_modal_title
   end
 
+  Then(/^the Allergy Previous button is disabled$/) do
+    ehmp = PobAllergiesApplet.new
+    ehmp.wait_for_btn_previous
+    expect(ehmp).to have_btn_previous
+    expect(ehmp.btn_previous.disabled?).to eq(true), "The Previous button is not disabled"
+  end
+
+  When(/^user opens the last allergy row detail$/) do
+    @ehmp = PobAllergiesApplet.new
+    expect(@ehmp.expanded_rows.length).to be > 0
+    @ehmp.expanded_rows.last.click
+    @ehmp.wait_until_fld_toolbar_visible
+    expect(@ehmp).to have_btn_detail_view
+    @ehmp.btn_detail_view.click
+    @ehmp = ModalElements.new
+    @ehmp.wait_for_fld_modal_title
+    expect(@ehmp).to have_fld_modal_title
+  end
+
+  Then(/^the Allergy Next button is disabled$/) do
+    ehmp = PobAllergiesApplet.new
+    ehmp.wait_for_btn_next
+    expect(ehmp).to have_btn_next
+    expect(ehmp.btn_next.disabled?).to eq(true), "The Next button is not disabled"
+  end
+
   Then(/^the user can step through the allergies using the next button$/) do
     @ehmp = PobAllergiesApplet.new
     @titles.each do |modal_title|

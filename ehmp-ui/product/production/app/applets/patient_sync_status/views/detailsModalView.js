@@ -78,11 +78,31 @@ define([
         return siteDisplayName;
     };
 
+    var VX_SYNC_BASIS_PATIENT_DOMAIN_STAMPTIME = 16051105010000;
+    /**
+        For DE5667, This is a UI hack to cover the fact that vx-sync will posted a basis patient demographics for HDR, DoD & VLET, even though
+        those data does not exists on those secondary sites yet.
+    **/
+    var ignorePatientDomainForSite = function (site, domain, domainStampTime) {
+        if (domain === 'patient') {
+            if (site === 'HDR' || site === 'VLER' || site === 'DOD') {
+                return isVxSyncBasisStampTime(domainStampTime);
+            }
+        }
+        return false;
+    };
+
+    var isVxSyncBasisStampTime = function (stampTime) {
+        if (!_.isUndefined(stampTime)) {
+            return stampTime === VX_SYNC_BASIS_PATIENT_DOMAIN_STAMPTIME || stampTime === VX_SYNC_BASIS_PATIENT_DOMAIN_STAMPTIME.toString();
+        }
+        return false;
+    };
+
     var createDomainObject = function(domain, site, diffDetail, getSecondarySiteTimeSince){
         var status = domain.syncCompleted ? 'completed' : 'inProgress';
         var timeSince = getSecondarySiteTimeSince(domain.stampTime);
         var newDataSince = diffDetail && diffDetail[site.sourceName] && diffDetail[site.sourceName].domain[domain.domain] ? diffDetail[site.sourceName].domain[domain.domain].toString() : '';
-
         return {
             domainName: domain.domain,
             domainDisplayName: jdsDomainToUiDomain(domain.domain),
@@ -247,12 +267,16 @@ define([
                 }
 
                 _.each(site.status.domainMetaStamp, function(domain){
+                    // ignore patient domain for HDR/VLER, or DoD with basic stampTime
+                    if (ignorePatientDomainForSite(site.sourceName, domain.domain, domain.stampTime)) {
+                        return;
+                    }
                     allDomains.push(createDomainObject(domain, site, diffDetail, getSecondarySiteTimeSince));
                 });
             });
 
             source.status = status;
-            source.mostRecentTime = mostRecentTime ? getSecondarySiteTimeSince(mostRecentTime) : '';
+            source.mostRecentTime = mostRecentTime && !isVxSyncBasisStampTime(mostRecentTime) ? getSecondarySiteTimeSince(mostRecentTime) : '';
             source.newDataSince = newDataSince ? ADK.utils.getTimeSince(newDataSince, false).timeSince : '';
 
             if(leastRecentTime){
@@ -316,23 +340,29 @@ define([
 
     var ModalView = Backbone.Marionette.ItemView.extend({
         template: modalTemplate,
+        ui: {
+            'syncDetailHeaderSite': '[data-header-instanceid="sync-detail-header-site"]',
+            'syncDetailHeaderDomain': '[data-header-instanceid="sync-detail-header-domain"]',
+            'syncDetailHeaderLastSynced': '[data-header-instanceid="sync-detail-header-last-synced"]',
+            'syncDetailHeaderNewDataSince': '[data-header-instanceid="sync-detail-header-new-data-since"]'
+        },
         events: {
             'click #sync-source-sites li': 'changeDetailView',
             'click #force-source-sync': 'forceSourceSync',
             'click #msg-successful-sync': 'closeSuccessfulSync',
             'click #msg-failed-sync': 'closeFailedSync',
-            'click #sync-detail-header-site': 'sortBySite',
-            'click #sync-detail-header-domain': 'sortByDomain',
-            'click #sync-detail-header-last-synced': 'sortByLastSynced',
-            'click #sync-detail-header-new-data-since': 'sortByNewDataSince',
+            'click @ui.syncDetailHeaderSite': 'sortBySite',
+            'click @ui.syncDetailHeaderDomain': 'sortByDomain',
+            'click @ui.syncDetailHeaderLastSynced': 'sortByLastSynced',
+            'click @ui.syncDetailHeaderNewDataSince': 'sortByNewDataSince',
             'keydown #sync-source-sites li': 'handleKeyPress',
             'keydown #force-source-sync': 'handleKeyPress',
             'keydown #msg-successful-sync': 'handleKeyPress',
             'keydown #msg-failed-sync': 'handleKeyPress',
-            'keydown #sync-detail-header-site': 'handleKeyPress',
-            'keydown #sync-detail-header-domain': 'handleKeyPress',
-            'keydown #sync-detail-header-last-synced': 'handleKeyPress',
-            'keydown #sync-detail-header-new-data-since': 'handleKeyPress',
+            'keydown @ui.syncDetailHeaderSite': 'handleKeyPress',
+            'keydown @ui.syncDetailHeaderDomain': 'handleKeyPress',
+            'keydown @ui.syncDetailHeaderLastSynced': 'handleKeyPress',
+            'keydown @ui.syncDetailHeaderNewDataSince': 'handleKeyPress',
         },
         initialize: function(options){
             var view = this;
@@ -411,22 +441,22 @@ define([
         sortBySite: function(e){
             e.preventDefault();
             this.sortByColumn(this.model, 'siteDisplayName', true);
-            this.$el.find('#sync-detail-header-site a').focus();
+            this.$el.find('[data-header-instanceid="sync-detail-header-site"] a').focus();
         },
         sortByDomain: function(e){
             e.preventDefault();
             this.sortByColumn(this.model, 'domainDisplayName', true);
-            this.$el.find('#sync-detail-header-domain a').focus();
+            this.$el.find('[data-header-instanceid="sync-detail-header-domain"] a').focus();
         },
         sortByLastSynced: function(e){
             e.preventDefault();
             this.sortByColumn(this.model, 'stampTime', true);
-            this.$el.find('#sync-detail-header-last-synced a').focus();
+            this.$el.find('[data-header-instanceid="sync-detail-header-last-synced"] a').focus();
         },
         sortByNewDataSince: function(e){
             e.preventDefault();
             this.sortByColumn(this.model, 'newDataSince', true);
-            this.$el.find('#sync-detail-header-new-data-since a').focus();
+            this.$el.find('[data-header-instanceid="sync-detail-header-new-data-since"] a').focus();
         },
         sortByColumn: function(newModel, field, rerender, sortOrder){
             if(newModel.get('selectedSource').sourceName === this.model.get('selectedSource').sourceName){

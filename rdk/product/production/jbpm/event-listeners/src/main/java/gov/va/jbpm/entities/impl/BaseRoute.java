@@ -13,6 +13,10 @@ public class BaseRoute {
 	protected String userId;
 	protected boolean patientAssignment;
 
+	//JPA Entities are required to have a default (empty) constructor.
+	public BaseRoute() {
+	}
+
 	//Constructor
 	public BaseRoute(String facility, Integer team, Integer teamFocus, Integer teamType, 
 			Integer teamRole, String userId, boolean patientAssignment) {

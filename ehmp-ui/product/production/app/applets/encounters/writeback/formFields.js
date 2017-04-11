@@ -89,7 +89,7 @@ define([
                                 },
                                 {
                                     control: 'container',
-                                    extraClasses:['scrolling-content'],
+                                    extraClasses:['auto-overflow-y'],
                                     items:[
                                         {
                                             control: 'container',

@@ -1,4 +1,3 @@
-/*jslint node: true */
 'use strict';
 
 var _ = require('lodash');
@@ -12,6 +11,7 @@ module.exports.getSyncConfig = getSyncConfig;
 module.exports.setupAudit = setupAudit;
 module.exports.addForcedParam = addForcedParam;
 module.exports.addSiteToPath = addSiteToPath;
+module.exports.addSitesParam = addSitesParam;
 module.exports.addPidParam = addPidParam;
 module.exports.addParam = addParam;
 module.exports.addPidToPath = addPidToPath;
@@ -57,8 +57,8 @@ var httpConfig = {
         server: 'jdsServer',
         json: true
     },
-    getJdsStatus: {
-        url: '/vpr/:pid/count/collection',
+    getPatientIdentifiers: {
+        url: '/vpr/jpid',
         server: 'jdsServer',
         json: true
     }
@@ -85,7 +85,6 @@ function getSyncConfig(configName, req) {
     var config = _.clone(httpConfig[configName]);
     config.logger = req.logger;
     config.timeout = req.app.config.jdsSync.settings.timeoutMillis;
-
     var serverConfig = req.app.config[config.server];
     config.baseUrl = serverConfig.baseUrl;
     delete config.server;
@@ -123,6 +122,18 @@ function addSiteToPath(config, req, site) {
         }
         config.url = configPath + site;
     }
+}
+
+function addSitesParam(config, siteList) {
+    if(!_.isArray(siteList) && !_.isUndefined(siteList) && !_.isNull(siteList)) {
+        siteList = [siteList];
+    }
+
+    if(_.isEmpty(siteList)) {
+        return;
+    }
+
+    addParam('sites', String(siteList), config);
 }
 
 function addPidParam(config, req, pid) {

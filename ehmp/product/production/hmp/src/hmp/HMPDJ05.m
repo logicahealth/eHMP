@@ -1,5 +1,5 @@
-HMPDJ05 ;SLC/MKB,ASMR/RRB,CPC - Medications by order;Jun 28, 2016 15:12:10
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**;Sep 01, 2011;Build 63
+HMPDJ05 ;SLC/MKB,ASMR/RRB,CPC - Medications by order;Jul 18, 2016 15:12:10
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**2**;Sep 01, 2011;Build 63
  ;Per VA Directive 6402, this routine should not be modified.
  ;
  ; External References: see HMPDJ05V for DBIA list
@@ -125,6 +125,7 @@ C ; - Get OP data
  . S X=$S($P(RX0,U,11):$P(RX0,U,11),$P(RX0,U,10):$P(RX0,U,10),1:0)
  . S:X MED("orders",1,"fillCost")=X
  . S X=$$GET1^PSODI(52,+ORPK_",",26,"I") S:X MED("overallStop")=$$JSONDT^HMPUTILS($P(X,U,2)) ;1^expirationDate
+ . S X=$$GET1^PSODI(52,+ORPK_",",38.3,"I") S:X MED("prescriptionFinished")=$$JSONDT^HMPUTILS($P(X,U,2)) ;DE5723 1^date prescription finished
  I CLS="I" D
  . S X=$$GET1^DIQ(55.06,+ORPK_","_DFN_",",25,"I")
  . S:X MED("overallStop")=$$JSONDT^HMPUTILS(X)

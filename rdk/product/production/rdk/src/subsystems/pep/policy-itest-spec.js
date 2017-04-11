@@ -1,4 +1,3 @@
-/*jslint node: true */
 'use strict';
 
 var httpMocks = require('node-mocks-http');
@@ -13,8 +12,8 @@ function buildRequest() {
         },
         session: {
             user: {
-                accessCode: 'pu1234',
-                verifyCode: 'pu1234!!',
+                accessCode: 'PW    ',
+                verifyCode: 'PW    !!',
                 ssn: '666884833',
                 breakglass: true,
                 sensitive: false,
@@ -51,7 +50,7 @@ function buildRequest() {
                 vistaSites: {
                     '9E7A': {
                         name: 'PANORAMA',
-                        host: 'IP_ADDRESS'
+                        host: 'IP        '
                     }
                 }
             }

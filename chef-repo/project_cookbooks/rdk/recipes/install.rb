@@ -25,6 +25,12 @@ directory node[:rdk][:log_dir] do
   action :create
 end
 
+directory node[:rdk][:pid_dir] do
+  mode "0755"
+  recursive true
+  action :create
+end
+
 # Run npm install only if using shared folders
 execute "install modules" do
   cwd node[:rdk][:home_dir]
@@ -46,7 +52,7 @@ end
 # This is required because dev deploys create a hanging process which prevents the oracle
 # npm module from being installed/updated.. Restarting the fetch_server process in this manner
 # frees up the locked file/folder and allows the reinstll of the oracle module
-# 
+#
 # This should only happen on 'dev' deploys and when the process is actually running.
 execute 'restart the fetch_server on dev deploys' do
   command 'stop fetch_server ; start fetch_server'

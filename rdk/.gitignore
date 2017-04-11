@@ -27,7 +27,7 @@ Thumbs.db
 # chef/vagrant generated files #
 ################################
 .filecache
-
+/infrastructure/gradle/nodes
 /infrastructure/vagrant/virtualbox/rdk/dist-file
 /infrastructure/workspace-management/build
 /product/.metadata
@@ -45,6 +45,7 @@ Thumbs.db
 /product/production/rdk/config/rdk-fetch-server-config*.json
 /product/production/rdk/config/rdk-write-server-config*.json
 /product/production/rdk/config/rdk-pick-list-server-config*.json
+/product/production/rdk/config/activity_handler*.json
 /product/production/rdk/write/pick-list/logs
 /product/production/build
 /product/production/jbpm/build
@@ -84,3 +85,5 @@ product/production/rdk/config/activity_handler-1.json
 product/production/rdk/config/activity_handler.json
 
 *-preparsed.json
+**/cdsdbConfig.js
+**/ssl_ca.crt

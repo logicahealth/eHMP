@@ -65,11 +65,11 @@ define([
                 'authorUid': this.authorUid,
                 'status': 'UNSIGNED'
             });
-            var existingCprsAddendum = _.find(model.get('addendaText'), {
-                'authorUid': this.authorUid,
-                'status': 'UNSIGNED'
+            var authorUid = this.authorUid;
+            var existingCprsAddendum = _.filter(model.get('addendaText'),function(item) {
+                return item.authorUid === authorUid && item.status.toLowerCase() === 'unsigned';
             });
-            return existingAddendum || existingCprsAddendum;
+            return existingAddendum || existingCprsAddendum.length > 0;
         },
         toggleAddAddendumButton: function () {
             if (this.hasUnsignedAddendum(this.model)) {

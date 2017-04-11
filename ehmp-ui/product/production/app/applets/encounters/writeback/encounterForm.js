@@ -19,7 +19,7 @@ define([
         tagName: 'p'
     });
     var FooterView = Backbone.Marionette.ItemView.extend({
-        template: Handlebars.compile('{{ui-button "No" id="alert-cancel-btn" classes="btn-default" title="Press enter to go back."}}{{ui-button "Yes" id="alert-continue-btn" classes="btn-primary" title="Press enter to cancel."}}'),
+        template: Handlebars.compile('{{ui-button "No" id="alert-cancel-btn" classes="btn-primary btn-sm" title="Press enter to go back."}}{{ui-button "Yes" id="alert-continue-btn" classes="btn-primary btn-sm" title="Press enter to cancel."}}'),
         events: {
             'click #alert-continue-btn': function() {
                 ADK.UI.Alert.hide();
@@ -136,13 +136,13 @@ define([
                     if (this.getPrimaryProviderSelected() === false) {
                         //No Primary Provider Selected
                         this.$el.find('.providerList input').focus();
-                        this.model.errorModel.set('providerList', 'Select a Primary Provider.');
+                        this.model.errorModel.set('providerList', 'Select a primary provider');
                         validForm = false;
                     }
                     //Verifying All Procedures have a Provider Assigned
                     if (!this.procedureHasProvider()) {
                         //A Selected Procedure is Missing a Provider
-                        this.model.errorModel.set('ProcedureCollection', 'A Selected Procedure does not have an assigned Provider.');
+                        this.model.errorModel.set('ProcedureCollection', 'A selected procedure does not have an assigned provider');
                         validForm = false;
                     }
                     //Form Model Validation
@@ -170,7 +170,7 @@ define([
                 e.preventDefault();
                 var deleteAlertView = new ADK.UI.Alert({
                     title: 'Cancel',
-                    icon: 'icon-cancel',
+                    icon: 'icon-triangle-exclamation',
                     messageView: DeleteMessageView,
                     footerView: FooterView,
                     footerOptions: {
@@ -504,7 +504,7 @@ define([
                     var listItems;
                     if (!(_.isUndefined(otherDiagnoses))) {
                         listItems = otherDiagnoses.get('values');
-                        // todo: fix NestedCommentBox so value doesn't have to be set to true after adding to listItems
+                        // FUTURE-TODO: fix NestedCommentBox so value doesn't have to be set to true after adding to listItems
                         listItems.add(selectedDiagnosis);
                         listItems.get(selectedDiagnosis).set('value', true);
                     }

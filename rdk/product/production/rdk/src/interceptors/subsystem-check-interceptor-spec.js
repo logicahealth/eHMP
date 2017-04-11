@@ -1,7 +1,7 @@
 'use strict';
 
 var subsystemCheckInterceptor = require('./subsystem-check-interceptor');
-var dd = require('drilldown');
+var _ = require('lodash');
 var bunyan = require('bunyan');
 
 var logger = sinon.stub(bunyan.createLogger({name: 'subsystem-check-interceptor-spec.js'}));
@@ -13,16 +13,16 @@ describe('subsystemCheckInterceptor', function() {
         req.logger = logger;
     });
     it('allows resources with empty subsystems to run', function(done) {
-        dd(req)('_resourceConfigItem')('subsystems').set([]);
+        _.set(req, '_resourceConfigItem.subsystems', []);
         subsystemCheckInterceptor(req, null, done);
     });
     it('allows resources with null subsystems to run', function(done) {
-        dd(req)('_resourceConfigItem')('subsystems').set(null);
+        _.set(req, '_resourceConfigItem.subsystems', null);
         subsystemCheckInterceptor(req, null, done);
     });
     it('prevents resources with missing subsystems from running', function() {
-        dd(req)('_resourceConfigItem')('subsystems').set(['mySubsystem']);
-        dd(req)('app')('subsystems').set({notMySubsystem: null});
+        _.set(req, '_resourceConfigItem.subsystems', ['mySubsystem']);
+        _.set(req, 'app.subsystems', {notMySubsystem: null});
         var res = {
             status: function(code) {
                 expect(code).to.equal(503);
@@ -35,8 +35,8 @@ describe('subsystemCheckInterceptor', function() {
         subsystemCheckInterceptor(req, res);
     });
     it('allows resources with deployed subsystems to run', function(done) {
-        dd(req)('_resourceConfigItem')('subsystems').set(['mySubsystem']);
-        dd(req)('app')('subsystems').set({mySubsystem: null});
+        _.set(req, '_resourceConfigItem.subsystems', ['mySubsystem']);
+        _.set(req, 'app.subsystems', {mySubsystem: null});
         subsystemCheckInterceptor(req, null, done);
     });
 });

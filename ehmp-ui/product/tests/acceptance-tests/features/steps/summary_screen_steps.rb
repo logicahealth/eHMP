@@ -53,6 +53,11 @@ end
 Then(/^Summary View is active$/) do
   navigate_in_ehmp '#/patient/summary'
   verify_on_summaryview
+  @ehmp_for_reload = PobSummaryScreen.new
+end
+
+Then(/^the user is returned to the summary view$/) do
+  verify_on_summaryview
 end
 
 Then(/^the "([^"]*)" \("([^"]*)"\) summary applet is displayed$/) do |descripter, appletid|

@@ -1,11 +1,9 @@
-/*jslint node: true */
 'use strict';
 var rdk = require('../../core/rdk');
 var fs = require('fs');
 var _ = require('lodash');
 var jbpm = require('../../subsystems/jbpm/jbpm-subsystem');
 var nullchecker = rdk.utils.nullchecker;
-var dd = require('drilldown');
 var complexObjectPropertiesXML = fs.readFileSync(__dirname + '/tasks/complex-object-properties-template.xml', {
     encoding: 'utf8',
     flag: 'r'
@@ -42,7 +40,7 @@ function filterVariablesForRecency(variableList) {
             history: []
         };
         _.each(variableList, function(el) {
-            var location = _.findIndex(retList, function(retItem) { //requires lodash since the current underscore version doesn't support this
+            var location = _.findIndex(retList, function(retItem) {
                 //make sure we are dealing with 2 objects and both have names that match
                 return (retItem && retItem.name && el && el.name && (retItem.name === el.name));
             });
@@ -107,8 +105,8 @@ function processJsonObject(jsonObj) {
         if (_.isObject(value)) {
             var id = 0;
             if (value !== null && value.constructor === Array) {
-                for (var i=0; i< value.length; i++) {
-                    id =  i+1;
+                for (var i = 0; i < value.length; i++) {
+                    id = i + 1;
                     subitemsList += complexArrayedObjectPropertiesXML.replace(/{Key}/g, key).replace(/{ID}/, id).replace('{Value}', processValue(value[i]));
                 }
             } else {
@@ -185,7 +183,7 @@ function getFormattedRoutesString(parsedRoutes, users, isTaskRoute) {
                 formattedRoutesString += sortedParsedRoute.TF + ' - ';
                 teamRole = sortedParsedRoute.TR;
                 if (!_.isUndefined(sortedParsedRoute.TR)) {
-                    formattedRoutesString += sortedParsedRoute.TR ;
+                    formattedRoutesString += sortedParsedRoute.TR;
                 }
                 facility = sortedParsedRoute.FC;
                 teamFocus = sortedParsedRoute.TF;
@@ -194,7 +192,7 @@ function getFormattedRoutesString(parsedRoutes, users, isTaskRoute) {
                     if (!_.isUndefined(teamRole)) {
                         formattedRoutesString += ', ';
                     }
-                    formattedRoutesString += sortedParsedRoute.TR ;
+                    formattedRoutesString += sortedParsedRoute.TR;
                 } else {
                     formattedRoutesString = endRoute(formattedRoutesString);
                     if (isTaskRoute) {
@@ -205,13 +203,21 @@ function getFormattedRoutesString(parsedRoutes, users, isTaskRoute) {
                 teamRole = sortedParsedRoute.TR;
             }
         } else {
-            if (!_.isUndefined(sortedParsedRoute.FC)) {
+            // Here we parse Request team assignment
+            if (!_.isUndefined(sortedParsedRoute.TM && !_.isUndefined(sortedParsedRoute.TR))) {
+                if(!_.startsWith(formattedRoutesString, sortedParsedRoute.TM)) {
+                    formattedRoutesString = sortedParsedRoute.TM + " - ";
+                }
+                if(!_.isUndefined(sortedParsedRoute.TR)) {
+                    formattedRoutesString += sortedParsedRoute.TR + ", ";
+                }
+            } else if (!_.isUndefined(sortedParsedRoute.FC)) {
                 if (facility === sortedParsedRoute.FC) {
                     if (!_.isUndefined(sortedParsedRoute.TR)) {
                         if (!_.isUndefined(teamRole)) {
                             formattedRoutesString += ', ';
                         }
-                        formattedRoutesString += sortedParsedRoute.TR ;
+                        formattedRoutesString += sortedParsedRoute.TR;
                     }
                 } else {
                     formattedRoutesString = endRoute(formattedRoutesString);
@@ -237,7 +243,7 @@ function getFormattedRoutesString(parsedRoutes, users, isTaskRoute) {
                             formattedRoutesString += sortedParsedRoute.TF + ' - ';
                             facility = sortedParsedRoute.FC;
                         }
-                        formattedRoutesString += sortedParsedRoute.TR ;
+                        formattedRoutesString += sortedParsedRoute.TR;
                     }
                     teamRole = sortedParsedRoute.TR;
                 } else {
@@ -245,24 +251,24 @@ function getFormattedRoutesString(parsedRoutes, users, isTaskRoute) {
                     formattedRoutesString += sortedParsedRoute.TF + ' - ';
                     teamFocus = sortedParsedRoute.TF;
                     if (!_.isUndefined(sortedParsedRoute.TR)) {
-                        formattedRoutesString += sortedParsedRoute.TR ;
+                        formattedRoutesString += sortedParsedRoute.TR;
                     }
                     teamRole = sortedParsedRoute.TR;
                 }
                 facility = undefined;
             } else if (!_.isUndefined(sortedParsedRoute.user)) {
-                    formattedRoutesString = endRoute(formattedRoutesString);
-                    if (_.has(users, sortedParsedRoute.user)) {
-                        formattedRoutesString += users[sortedParsedRoute.user];
-                    } else {
-                        formattedRoutesString += sortedParsedRoute.user;
-                    }
+                formattedRoutesString = endRoute(formattedRoutesString);
+                if (_.has(users, sortedParsedRoute.user)) {
+                    formattedRoutesString += users[sortedParsedRoute.user];
+                } else {
+                    formattedRoutesString += sortedParsedRoute.user;
+                }
             }
         }
     });
 
     if (!_.isEmpty(formattedRoutesString)) {
-        formattedRoutesString = _.trimRight(formattedRoutesString, ' -;');
+        formattedRoutesString = _.trimRight(formattedRoutesString, ' -;,');
     }
 
     return formattedRoutesString;
@@ -313,6 +319,23 @@ function parseRoute(route) {
     return parsedRoute;
 }
 
+function filterIdentifiers(identifiersList) {
+    if (!identifiersList || !Array.isArray(identifiersList) || !identifiersList.length) {
+        return [];
+    }
+
+    var validIdentifiers = [];
+    _.each(identifiersList, function(identifier) {
+        //validate each individual identifier
+        if (nullchecker.isNotNullish(identifier)) {
+            identifier = identifier.replace(/(\s|\')/g, '');
+            validIdentifiers.push(identifier);
+        }
+    });
+
+    return validIdentifiers;
+}
+
 module.exports.getGenericJbpmConfig = getGenericJbpmConfig;
 module.exports.filterVariablesForRecency = filterVariablesForRecency;
 module.exports.handleTaskStatuses = handleTaskStatuses;
@@ -324,3 +347,4 @@ module.exports.getJbpmUser = getJbpmUser;
 module.exports.validateClinicalObject = validateClinicalObject;
 module.exports.getFormattedRoutesString = getFormattedRoutesString;
 module.exports.parseAssignedTo = parseAssignedTo;
+module.exports.filterIdentifiers = filterIdentifiers;

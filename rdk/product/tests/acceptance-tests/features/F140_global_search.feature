@@ -126,21 +126,6 @@ Feature: F140 - Global Patient Search
       | lastname    | firstname   | ssnumber    | dobirth     | contenttype         | error                                                                              |
       | SMITH       | JOHN        | NOT DEFINED | NOT DEFINED | application/json    | Search returned too many results please refine your search criteria and try again. |
 
-# These tests don't seem to belong in this feature since sync functionality is
-# already tested in F117_Sync_Patient.feature
-# @F140_US2039_1 @F140 @future
-# Scenario: Verifies that patient is synced
-
-# 	Given a patient with pid "9E7A;287" has been synced through the RDK API
-# 	When the client queries the patientSync RDK API for pid "9E7A;287"
-# 	Then patient sync status says true
-
-# @F140_US2039_2 @F140 @future
-# Scenario: Verifies that patient is unsynced
-
-# 	Given a patient with pid "9E7A;287" has not been synced through the RDK API
-# 	When the client queries the patientSync RDK API for pid "9E7A;287"
-# 	Then patient sync status says false
 
 @F140_globalsearch_api_8 @DE3534_1
    Scenario Outline: When a user searches for ICNONLY, patient and gets  1 results

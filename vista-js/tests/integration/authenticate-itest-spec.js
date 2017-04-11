@@ -13,10 +13,10 @@ var wConfig = require('./config');
 var authenticate = require('../../src/RpcClient').RpcClient.authenticate;
 
 var config = _.defaults(wConfig.vistaSites['9E7A'], {
-	host: 'IP_ADDRESS',
+	host: 'IP        ',
 	port: 9210,
-	accessCode: 'PW',
-	verifyCode: 'PW',
+	accessCode: 'PW    ',
+	verifyCode: 'PW    !!',
 	context: 'HMP SYNCHRONIZATION CONTEXT',
 	localIP: '127.0.0.1',
 	localAddress: 'localhost',
@@ -33,8 +33,8 @@ describe('verify RpcClient.authenticate() against Panorama', function() {
 
 			var expectedError = null;
 			var expectedResult = {
-				accessCode: 'ep1234',
-				verifyCode: 'ep1234!!',
+				accessCode: 'PW    ',
+				verifyCode: 'PW    !!',
 				duz: jasmine.any(String),
 				greeting: jasmine.any(String)
 			};
@@ -64,9 +64,6 @@ describe('verify RpcClient.authenticate() against Panorama', function() {
 			var testResult;
 			var called = false;
 
-			// var expectedError = null;
-			// var expectedResult = undefined;
-
 			function callback(error, result) {
 				called = true;
 				testError = error;
@@ -86,4 +83,31 @@ describe('verify RpcClient.authenticate() against Panorama', function() {
 			});
 		});
 	});
+
+    describe('verify invalid verify code yields error', function() {
+        it('verified', function() {
+            var testError;
+            var called = false;
+
+            var expectedError = 'Not a valid ACCESS CODE/VERIFY CODE pair.';
+
+            function callback(error, result) {
+                called = true;
+                testError = error;
+            }
+
+            config.verifyCode="dfssd";
+
+            authenticate(logger, config, callback);
+
+            waitsFor(function() {
+                return called;
+            }, 'should be called', 5000);
+
+            runs(function() {
+                expect(testError).toEqual(expectedError);
+            });
+        });
+    });
+
 });

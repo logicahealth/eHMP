@@ -1,187 +1,148 @@
 'use strict';
 
+var _ = require('lodash');
+var bunyan = require('bunyan');
 var httpMocks = require('node-mocks-http');
 var auth = require('./authentication');
-var dd = require('drilldown');
-var _ = require('lodash');
 var rdk = require('../../core/rdk');
-var bunyan = require('bunyan');
-var RpcClient = require('vista-js').RpcClient;
+var RdkError = rdk.utils.RdkError;
 
-function buildRequest(username, password, disabled) {
-    var headers = {
+var VALID_ACCESS = '10VEHU';
+var VALID_PASS = 'VEHU10';
+var INVALID_ACCESS = 'zzz';
+var INVALID_PASS = 'xxx';
+var VALID_SYSTEM = 'CDS';
+var SITE = 'C877';
 
-    };
-
-    if (username && password) {
-        var authHeader = 'Basic ' + new Buffer(username + ':' + password).toString('base64');
-        headers.Authorization = authHeader;
-    }
-
-    var request = httpMocks.createRequest({
-        method: 'GET',
-        url: '/authenticate'
-    });
-
-    request.get = function(header) {
-        return headers[header];
-    };
-
-    request.logger = {
-        trace: function() {},
-        debug: function() {},
-        info: function() {},
-        warn: function() {},
-        error: function() {}
-    };
-
-    request.app = {
-        config: {}
-    };
-
-    if (disabled !== undefined) {
-        request.app.config = {
-            interceptors: {
-                authentication: {
-                    disabled: true
-                }
-            }
-        };
-    }
-
-    return request;
-}
-
-
-var validUid = 'C877;10VEHU';
-var validPwd = 'VEHU10';
-var invalidUid = 'zzz';
-var invalidPwd = 'xxx';
-
-describe('Authentication test mock request', function() {
-    it('tests that Authorization header is created correctly', function() {
-        var req = buildRequest(validUid, validPwd);
-        expect(req.get('Authorization')).not.to.be.undefined();
-
-        req = buildRequest();
-        expect(req.get('Authorization')).to.be.undefined();
-    });
-
-    it('tests that undefined disabled does not create interceptors.authentication.disabled property', function() {
-        var req = buildRequest(validUid, validPwd);
-        expect(req.app.config.interceptors).to.be.undefined();
-    });
-
-    it('tests that true disabled creates interceptors.authentication.disabled property', function() {
-        var req = buildRequest(validUid, validPwd, true);
-        expect(req.app.config.interceptors.authentication.disabled).to.be.true();
-    });
-});
-
-describe('BasicAuth', function() {
-    it('tests that an invalid login when authentication is disabled calls next()', function() {
-        var next = sinon.spy();
-        var req = buildRequest(invalidUid, invalidPwd, true);
-        var res = httpMocks.createResponse();
-
-        auth(req, res, next);
-        expect(next.called).to.be.true();
-    });
-});
-
-describe('authentication', function() {
+describe('Authentication interceptor', function() {
     var req;
     var res;
-    var completedSites;
-    beforeEach(function() {
-        req = {};
+    var next;
+
+    beforeEach(function(done) {
+        req = httpMocks.createRequest({
+            method: 'GET',
+            url: '/authenticate'
+        });
         req.logger = sinon.stub(bunyan.createLogger({
-            name: 'authentication'
+            name: 'authentication-interceptor'
         }));
-        req.param = _.identity;
-        dd(req)('app')('config').set({});
-        res = {};
-        completedSites = {
-            site: true
-        };
-    });
 
-    it('attempts login if the operational data sync check passed', function(done) {
-        var site = '9E7A';
-        req.audit = {};
-        req.param = function(param) {
-            if (param === 'site') {
-                return site;
-            }
-            return param;
-        };
-        dd(req)('session')('destroy').set(_.noop);
-        dd(req)('app')('config')('rpcConfig')('context').set('CONTEXT');
-        dd(req)('app')('config')('vistaSites')('9E7A')('name').set('PANORAMA');
-        dd(req)('_resourceConfigItem')('title').set('authentication-authentication');
-        dd(req)('_resourceConfigItem')('rel').set('vha.create');
-        dd(req)('body')('accessCode').set('fakeAccess');
-        dd(req)('body')('verifyCode').set('fakeVerify');
-        dd(req)('body')('site').set('fakeSite');
-        var response = {
-            statusCode: 200,
-            body: {}
-        };
-        dd(response)('body')('completedStamp')('sourceMetaStamp')(site)('syncCompleted').set(true);
+        _.set(req, '_resourceConfigItem.rel', 'vha.create');
 
-        sinon.stub(rdk.utils.http, 'get', function(options, callback) {
-            return callback(null, response, response.body);
+        _.set(req, 'app.config', {});
+        _.set(req, 'app.config.interceptors.authentication.readOnly', true);
+        _.set(req, 'app.config.interceptors.authentication.disabled', false);
+
+        _.set(req, 'session', {
+            regenerate: sinon.stub().callsArg(0)
         });
 
-        var res = {
-            status: function(status) {
-                return this;
-            },
-            rdkSend: function(response) {
-                expect(req.logger.info.calledWith(
-                    sinon.match(/DOING LOGIN/)
-                )).to.be.true();
-                done();
-            }
-        };
-        auth(req, res);
+        next = sinon.spy();
+        res = httpMocks.createResponse();
+        res.rdkSend = sinon.spy();
+
+        done();
     });
 
-    it('does not attempt login if the request was not with the login resource', function(done) {
-        var site = '9E7A';
-        req.audit = {};
-        req.param = function(param) {
-            if (param === 'site') {
-                return site;
-            }
-            return param;
-        };
-        dd(req)('session')('destroy').set(_.noop);
-        dd(req)('app')('config')('rpcConfig')('context').set('CONTEXT');
-        dd(req)('app')('config')('vistaSites')('9E7A')('name').set('PANORAMA');
-        dd(req)('_resourceConfigItem')('title').set('not-login-resource');
-        dd(req)('_resourceConfigItem')('rel').set('vha.read');
-        var response = {
-            statusCode: 200,
-            body: {}
-        };
-        dd(response)('body')('completedStamp')('sourceMetaStamp')(site)('syncCompleted').set(true);
+    afterEach(function(done) {
+        next.reset();
+        req.logger.warn.restore();
+        req.session.regenerate.reset();
+        res.rdkSend.reset();
+        done();
+    });
 
-        sinon.stub(rdk.utils.http, 'get', function(options, callback) {
-            return callback(null, response, response.body);
+    it('tests that enabling the interceptor calls next after warning', function() {
+        //purposly hit the disabled interceptor
+        _.set(req, '_resourceConfigItem.title', 'authentication-authentication');
+        _.set(req, 'app.config.interceptors.authentication.disabled', true);
+        auth(req, res, next);
+        expect(req.logger.warn.called).to.be.true();
+        expect(res.rdkSend.called).to.be.false();
+        expect(next.called).to.be.true();
+    });
+
+    it('tests that enabling the interceptor calls next with no warning or rdkSend', function() {
+        //bypass everything
+        _.set(req, 'session.user.consumerType', 'user');
+        _.set(req, '_resourceConfigItem.title', 'authentication-refreshToken');
+        auth(req, res, next);
+        expect(req.logger.warn.called).to.be.false();
+        expect(res.rdkSend.called).to.be.false();
+        expect(next.called).to.be.true();
+    });
+
+    it('tests that an invalid user can\'t call resources other than authentication resources', function() {
+        _.set(req, '_resourceConfigItem.title', 'postulate-this-fresh-beat');
+        auth(req, res, next);
+        expect(req.logger.warn.called).to.be.false();
+        expect(res.rdkSend.called).to.be.true();
+        expect(res.rdkSend.calledWith(new RdkError({
+            code: 'rdk.401.1002',
+            logger: req.logger
+        }))).to.be.true();
+        expect(next.called).to.be.false();
+    });
+
+    it('tests that next is called when an invalid user is calling an authentication resource so that login may occur', function() {
+        _.set(req, 'body', {
+            accessCode: INVALID_ACCESS,
+            verifyCode: INVALID_PASS,
+            site: SITE
         });
+        _.set(req, '_resourceConfigItem.title', 'authentication-authentication');
+        auth(req, res, next);
+        expect(req.logger.warn.called).to.be.false();
+        expect(res.rdkSend.called).to.be.false();
+        expect(req.session.regenerate.called).to.be.true();
+        expect(next.called).to.be.true();
+    });
 
-        var res = {
-            status: function(status) {
-                this.status = status;
-                return this;
-            },
-            rdkSend: function(response) {
-                expect(response).to.match(/Unauthorized. Please log in/);
-                expect(this.status).to.be(401);
-                done();
-            }
-        };
-        auth(req, res);
+    it('tests that next is called when an invalid system user is calling an authentication resource so that login may occur', function() {
+        _.set(req, 'headers', {
+            authorization: VALID_SYSTEM
+        });
+        _.set(req, '_resourceConfigItem.title', 'authentication-internal-systems-authenticate');
+        auth(req, res, next);
+        expect(req.logger.warn.called).to.be.false();
+        expect(res.rdkSend.called).to.be.false();
+        expect(req.session.regenerate.called).to.be.true();
+        expect(next.called).to.be.true();
+    });
+
+    it('tests that calling a login resource with a valid session and user credentials will not regenerate the session and calls next', function() {
+        _.set(req, 'body', {
+            accessCode: VALID_ACCESS,
+            verifyCode: VALID_PASS,
+            site: SITE
+        });
+        _.set(req, 'session.user', {
+            accessCode: VALID_ACCESS,
+            password: VALID_PASS,
+            site: SITE,
+            consumerType: 'user'
+        });
+        _.set(req, '_resourceConfigItem.title', 'authentication-authentication');
+        auth(req, res, next);
+        expect(req.logger.warn.called).to.be.false();
+        expect(res.rdkSend.called).to.be.false();
+        expect(req.session.regenerate.called).to.be.false();
+        expect(next.called).to.be.true();
+    });
+    it('tests that calling a login resource with a valid session and system user credentials will not regenerate the session and calls next', function() {
+        _.set(req, 'headers', {
+            authorization: VALID_SYSTEM
+        });
+        _.set(req, 'session.user', {
+            name: VALID_SYSTEM,
+            consumerType: 'system'
+        });
+        _.set(req, '_resourceConfigItem.title', 'authentication-internal-systems-authenticate');
+        auth(req, res, next);
+        expect(req.logger.warn.called).to.be.false();
+        expect(res.rdkSend.called).to.be.false();
+        expect(req.session.regenerate.called).to.be.false();
+        expect(next.called).to.be.true();
     });
 });

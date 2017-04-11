@@ -2,7 +2,6 @@
 
 var rdk = require('../../core/rdk');
 var _ = require('lodash');
-var dd = require('drilldown');
 var RpcClient = require('vista-js').RpcClient;
 var getVistaRpcConfiguration = require('../../utils/rpc-config').getVistaRpcConfiguration;
 var nullchecker = rdk.utils.nullchecker;
@@ -95,12 +94,12 @@ module.exports = {
             return res.status(rdk.httpstatus.bad_request).end(errorMissingRequiredParam);
         }
 
-        var cached = adviceCache.getCachedAdvice(req.session.id, pid, use, adviceId);
+        var cached = adviceCache.getCachedAdvice(req.session, pid, use, adviceId);
         if (cached && !_.isEmpty(cached.details)) {
             return res.rdkSend(createResponse(cached.details));
         }
 
-        if (!dd(req)('interceptorResults')('patientIdentifiers')('dfn').exists) {
+        if (_.isUndefined(_.get(req, 'interceptorResults.patientIdentifiers.dfn'))) {
             req.logger.error('CDS Advice - Error retrieving clinical reminder details, DFN is nullish.');
             return res.status(rdk.httpstatus.not_found).rdkSend(errorDetailNotFound);
         }
@@ -110,7 +109,7 @@ module.exports = {
         req.logger.debug('dfn: ' + dfn);
 
         // Make the RPC call and cache the result
-        RpcClient.callRpc(req.logger, getVistaRpcConfiguration(req.app.config, req.session.user.site), 'ORQQPX REMINDER DETAIL', [dfn, adviceId], function(error, result) {
+        RpcClient.callRpc(req.logger, getVistaRpcConfiguration(req.app.config, req.session.user), 'ORQQPX REMINDER DETAIL', [dfn, adviceId], function(error, result) {
             if (error) {
                 req.logger.error(errorVistaJSCallback + error);
                 return res.status(rdk.httpstatus.not_found).rdkSend(errorDetailNotFound);

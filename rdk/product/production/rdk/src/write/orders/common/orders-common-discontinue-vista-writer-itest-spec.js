@@ -9,16 +9,15 @@ var async = require('async');
 var discontinueWritebackContext = {
     pid: '9E7A;100615',
     vistaConfig: {
-        host: 'IP_ADDRESS',
+        host: 'IP        ',
         port: 9210,
-        accessCode: 'PW',
-        verifyCode: 'PW',
-        localIP: 'IPADDRES',
+        accessCode: 'PW    ',
+        verifyCode: 'PW    !!',
+        localIP: 'IP      ',
         localAddress: 'localhost',
         noReconnect: true
     },
     model: {
-        'dfn': '3',
         'provider': '10000000238',
         'location': '285',
         'kind': 'Laboratory',
@@ -26,22 +25,26 @@ var discontinueWritebackContext = {
             {'orderId': '0', 'hash': 'foobar'}
         ]
     },
+    interceptorResults: {
+        patientIdentifiers: {
+            'dfn': '3',
+        }
+    },
     logger: sinon.stub(require('bunyan').createLogger({name: 'discontinue-vista-writer'}))
 };
 
 var saveWritebackContext = {
     pid: '9E7A;100615',
     vistaConfig: {
-        host: 'IP_ADDRESS',
+        host: 'IP        ',
         port: 9210,
-        accessCode: 'PW',
-        verifyCode: 'PW',
-        localIP: 'IPADDRES',
+        accessCode: 'PW    ',
+        verifyCode: 'PW    !!',
+        localIP: 'IP      ',
         localAddress: 'localhost',
         noReconnect: true
     },
     model: {
-        'dfn': '100716',
         'provider': '10000000271',
         'location': '285',
         'orderDialog': 'LR OTHER LAB TESTS',
@@ -70,6 +73,11 @@ var saveWritebackContext = {
             'inputValue': '28'
         }],
         'kind': 'Laboratory'
+    },
+    interceptorResults: {
+        patientIdentifiers: {
+            'dfn': '100716',
+        }
     },
     logger: sinon.stub(require('bunyan').createLogger({
         name: 'check-vista-writer'

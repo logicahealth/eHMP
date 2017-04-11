@@ -2,12 +2,14 @@ define([
     "backbone",
     "marionette",
     "underscore",
-    "app/applets/documents/debugFlag"
-], function(Backbone, Marionette, _, DEV) {
+    "moment",
+    "app/applets/documents/appConfig",
+    "app/applets/documents/imaging/helpers/thumbnailHelper"
+], function(Backbone, Marionette, _, moment, appConfig, ThumbnailHelper) {
     "use strict";
 
-    var DEBUG = DEV.flag;
-    var ERROR_LOG = DEV.errorLog;
+    var DEBUG = appConfig.debug;
+    var ERROR_LOG = appConfig.errorLog;
     var DETAIL_CHILD_DOC_SORT_FIELD = 'localTitle';
 
     var appletHelper = {
@@ -64,6 +66,7 @@ define([
 
         formatAddenda: function(data) {
             if (this.hasAddenda(data)) {
+                data.addendumIndicator = 'w/ Addendum';
                 var addendaText = [];
                 for (var i = 1; i < data.text.length; i++) {
                     if (data.text[i].dateTime) {
@@ -73,6 +76,13 @@ define([
                     }
                     if (data.text[i].status !== 'SIGNED') {
                         data.text[i].app = 'vista';
+                    }
+                    if(data.text[i].status){
+                        var status = data.text[i].status.toLowerCase();
+                        data.text[i].status = _.capitalize(status);
+                        if(status === 'complete' || status === 'completed'){
+                            data.text[i].status = 'Completed';
+                        }
                     }
                     addendaText.push(data.text[i]);
                 }
@@ -91,29 +101,21 @@ define([
             return moment(dateTime, source).format(display);
         },
 
-        getResultsFromUid: function(data, callback) {
-            if (!_.isUndefined(callback) && !_.isFunction(callback)) {
-                if (DEBUG) {
-                    console.log("Callback is not a function. Using Default function.");
-                    console.log(callback);
-                }
-                callback = undefined;
-            }
-            var ResultsDocCollection = Backbone.Collection.extend({
-                model: Backbone.Model.extend({
-                    idAttribute: 'uid',
-                    parse: function(resp) {
-                        appletHelper.parseDocResponse(resp);
-                        if (resp.authorDisplayName.toLowerCase() === 'none' && resp.signerDisplayName) {
-                            resp.authorDisplayName = resp.signerDisplayName;
-                            resp.providerDisplayName = resp.signerDisplayName;
-                        }
-                        return resp;
+        ResultsDocCollection: Backbone.Collection.extend({
+            model: Backbone.Model.extend({
+                idAttribute: 'uid',
+                parse: function(resp) {
+                    appletHelper.parseDocResponse(resp);
+                    if (resp.authorDisplayName.toLowerCase() === 'none' && resp.signerDisplayName) {
+                        resp.authorDisplayName = resp.signerDisplayName;
+                        resp.providerDisplayName = resp.signerDisplayName;
                     }
-                })
-            });
-            var resultDocCollection = new ResultsDocCollection();
+                    return resp;
+                }
+            })
+        }),
 
+        getResultsFromUid: function(data, resultDocCollection) {
             if (appletHelper.isComplexDoc(data.get('kind')) && data.get('results') && !data.get('dodComplexNoteUri')) {
                 if (data.get('results').length > 0) {
                     var resultUids = _.map(data.get('results'), function(result) {
@@ -125,12 +127,6 @@ define([
                         criteria: {
                             filter: 'in("uid",' + JSON.stringify(resultUids) + ')',
                             order: DETAIL_CHILD_DOC_SORT_FIELD + ' ASC'
-                        },
-                        onSuccess: callback || function(response) {
-                            if (DEBUG) {
-                                console.log("Fetch Success");
-                                console.log(resultDocCollection);
-                            }
                         }
                     };
                     ADK.PatientRecordService.fetchCollection(fetchOptions, resultDocCollection);
@@ -139,17 +135,17 @@ define([
             return resultDocCollection;
         },
 
-        getChildDocs: function(data) {
+        ChildDocCollection: Backbone.Collection.extend({
+            model: Backbone.Model.extend({
+                idAttribute: 'uid',
+                parse: function(resp) {
+                    return appletHelper.parseDocResponse(resp);
+                }
+            })
+        }),
+
+        getChildDocs: function(data, childCollection) {
             if (appletHelper.hasChildDocs(data)) {
-                var ChildDocCollection = Backbone.Collection.extend({
-                    model: Backbone.Model.extend({
-                        idAttribute: 'uid',
-                        parse: function(resp) {
-                            return appletHelper.parseDocResponse(resp);
-                        }
-                    })
-                });
-                var childDocCollection = new ChildDocCollection();
                 var fetchOptions = {
                     resourceTitle: 'patient-record-document',
                     criteria: {
@@ -165,6 +161,10 @@ define([
         },
 
         parseDocResponse: function(response) {
+            if (DEBUG) console.log("Doc parseDocResponse before-----> ",response.kind);
+            if (response.thumbnails) {
+                ThumbnailHelper.convertThumbnails(response);
+            }
             if (response.kind) {
                 response.kind = response.kind;
                 response.complexDoc = appletHelper.isComplexDoc(response.kind);
@@ -172,8 +172,11 @@ define([
                 response.consultBool = appletHelper.isConsult(response.kind);
                 response.imagingBool = appletHelper.isImaging(response.kind);
                 response.radiologyBool = appletHelper.isRadiology(response.kind);
+                response.orderableBool = _.isEmpty(response.orderUid) ? false : true;
 
                 if ((response.kind == "Radiology") || (response.kind == "Imaging")) {
+
+                    response.orderableBool = true;
                     if (response.typeName) {
                         response.localTitle = response.typeName;
                     }
@@ -182,6 +185,16 @@ define([
                     }
                     if (response.providerDisplayName) {
                         response.authorDisplayName = response.providerDisplayName;
+                    }
+                    //Add the requesting provider to the document for imaging documents/reports
+                    var requestingProvider = _.find(response.providers, {'providerRole': 'Requestor'});
+                    if (!_.isEmpty(requestingProvider)) {
+                        response.requestingProviderName = requestingProvider.providerName;
+                    } else {
+                        response.requestingProviderName = 'N/A';
+                    }
+                    if (_.isEmpty(response.orderName)) {
+                        response.orderName = 'N/A';
                     }
                 }
 
@@ -286,8 +299,9 @@ define([
 
             if (response.statusDisplayName) {
                 var sdn = response.statusDisplayName.toLowerCase();
-                if (sdn === 'completed') {
-                    response.statusDisplayClass = 'text-success';
+                response.statusDisplayName = _.capitalize(sdn);
+                if (sdn === 'completed' || sdn === 'complete') {
+                    response.statusDisplayName = 'Completed';
                 } else if (sdn === 'rejected') {
                     response.statusDisplayClass = 'text-danger';
                 }
@@ -295,8 +309,9 @@ define([
 
             if (response.statusName) {
                 var sn = response.statusName.toLowerCase();
+                 response.statusName = _.capitalize(sn);
                 if (sn === 'complete' || sn === 'completed') {
-                    response.statusClass = 'text-success';
+                    response.statusName = 'Completed';
                 }
             }
 
@@ -307,7 +322,7 @@ define([
             }
 
             response.addendaText = appletHelper.formatAddenda(response);
-
+            if (DEBUG) console.log("Doc parseDocResponse after-----> ",response.kind);
             return response;
         },
         scrollToResultDoc: function($clickedLink, $targetResult) {
@@ -342,6 +357,28 @@ define([
                 }).eq(0);
 
             return position === "fixed" || !scrollParent.length ? $($elem[0].ownerDocument || document) : scrollParent;
+        },
+        getAuthorVerifier: function (obj) {
+            if (!_.isUndefined(obj.activity)) {
+                var result = _.findWhere(obj.activity, {
+                    name: "COMPLETE/UPDATE"
+                });
+                if (result.length !== 0) {
+                    if (!_.isUndefined(result.responsible)) {
+                        return result.responsible;
+                    }
+                }
+
+            }
+            return obj.authorDisplayName;
+        },
+        stringNormalization: function (str) {
+            if (_.isString(str)){
+                return str.replace(/\b\w+/g,
+                            function(s) {
+                                return s.charAt(0).toUpperCase() + s.substr(1).toLowerCase();
+                            });
+            }
         }
     };
     return appletHelper;

@@ -43,11 +43,13 @@ public class Authentication implements Serializable {
     private String verifyCode;
     private String accessCode;
     private String site;
+    private String division;
 
-    public Authentication(String accessCode, String verifyCode, String site) {
+    public Authentication(String accessCode, String verifyCode, String site, String division) {
         this.verifyCode = verifyCode;
         this.accessCode = accessCode;
         this.site = site;
+        this.division = division;
     }
 
     public boolean isComplete() {
@@ -64,6 +66,8 @@ public class Authentication implements Serializable {
         if (accessCode.isEmpty())
             return false;
         if (site.isEmpty())
+            return false;
+        if (division.isEmpty())
             return false;
 
         return true;
@@ -126,16 +130,25 @@ public class Authentication implements Serializable {
         this.site = site;
     }
 
-    public String getAuthenticationQuery() {
+    public String getDivision() {
+		return division;
+	}
+
+	public void setDivision(String division) {
+		this.division = division;
+	}
+
+	public String getAuthenticationQuery() {
         return "&accessCode=" + accessCode + "&verifyCode=" + verifyCode
-                + "&site=" + site;
+                + "&site=" + site+ "&division=" + division;
     }
 
     @Override
     public String toString() {
         return "{verifyCode:" + verifyCode +
-               ", accessCode:" + accessCode +
-               ", site:" + site + "}";
+                ", accessCode:" + accessCode +
+                ", site:" + site +
+               ", division:" + division+ "}";
     }
 
 }

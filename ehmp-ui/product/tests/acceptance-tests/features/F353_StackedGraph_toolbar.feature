@@ -23,14 +23,9 @@ Scenario: User should be able to get information by clicking quick view button o
    | button |
    | Quick View Button |
   When the user clicks the BMI Quick View Button
-   Then a quickview displays table with headers
-   | header |
-   | Date       |
-   | Result |
-   | Ref. Range |
-   | Facility |
+  Then a quickview displays a vitals table with expected headers
 
-@US4668
+@US4668 @DE6010
 Scenario: Verify detail modal view
   When the user clicks the row for BMI
   Then a popover toolbar displays buttons

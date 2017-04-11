@@ -3,7 +3,7 @@ define([], function() {
     var Allergen = ADK.Resources.Picklist.Model.extend({
         idAttribute: 'ien', //primary key--can't have duplicates
         label: 'name',
-        value: function(){
+        value: function() {
             return this.get('ien') + ';' + this.get('file');
         },
         defaults: {
@@ -32,7 +32,7 @@ define([], function() {
     });
 
     var allergies = ADK.Resources.Picklist.Collection.extend({
-        type: 'allergies-match',
+        resource: 'write-pick-list-allergies-match',
         model: AllergenGroup,
         params: function(method, options) {
             return {

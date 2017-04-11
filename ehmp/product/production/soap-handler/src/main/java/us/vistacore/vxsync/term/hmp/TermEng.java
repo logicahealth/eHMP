@@ -14,7 +14,7 @@ import java.util.*;
  * 4) Concepts are fairly dumb, should delegate to TermEng to perform most of their work: isa/sameas/etc.
  * 5) We are heavily based on URN's
  * 
- * TODO: Need some sort of namespace aliasing mechanism, so that SCT,sct,SNOMEDCT,1.1234.5.2.43525 are al recognized as the same codeSystem
+ * FUTURETODO: Need some sort of namespace aliasing mechanism, so that SCT,sct,SNOMEDCT,1.1234.5.2.43525 are al recognized as the same codeSystem
  */
 public class TermEng implements ITermEng {
 	private static TermEng INSTANCE;
@@ -42,7 +42,7 @@ public class TermEng implements ITermEng {
 	}
 	
 	public static TermEng getInstance() {
-		// TODO: How to ensure this is never null?
+		// FUTURETODO: How to ensure this is never null?
 		return INSTANCE;
 	}
 	
@@ -54,7 +54,7 @@ public class TermEng implements ITermEng {
 	
 	public static final String buildURN(String code, String codeSystem) {
 		codeSystem = codeSystem.toLowerCase();
-		if (codeSystem.equals("snomedct")) codeSystem = "sct";
+		if (codeSystem.equalsIgnoreCase("snomedct")) codeSystem = "sct";
 		return "urn:" + codeSystem + ":" + code;
 	}
 	
@@ -76,7 +76,7 @@ public class TermEng implements ITermEng {
 //    	cache.removeAll();
 //    }
     
-    public void addDataSource(ITermDataSource... src) {
+    public final void addDataSource(ITermDataSource... src) {
     	for (ITermDataSource s : src) {
     		fDataSources.add(s);
     	}
@@ -223,7 +223,7 @@ public class TermEng implements ITermEng {
 		return ret;
 	}
     
-	// TODO: Brian B., please look this over and see that I'm not making any grossly wrong assumptions here about caching descriptions. I believe this has a significant cost during synching.
+	// FUTURETODO: Brian B., please look this over and see that I'm not making any grossly wrong assumptions here about caching descriptions. I believe this has a significant cost during synching.
 	@Override
 	public String getDescription(String urn) {
 		if(fConceptMap.containsKey(urn)) {

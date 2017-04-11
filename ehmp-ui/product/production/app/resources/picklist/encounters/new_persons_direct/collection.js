@@ -14,14 +14,12 @@ define([], function() {
     });
 
     var NewPersons = ADK.Resources.Picklist.Collection.extend({
-        type: 'new-persons-direct',
         model: NewPerson,
+        resource: 'write-pick-list-new-persons-direct',
         params: function(method, options) {
-            if (!options.date) {
-                return;
-            }
             return {
-                date: options.date,
+                date: options.date || '',
+                newPersonsType: options.newPersonsType || ''
             };
         }
     });

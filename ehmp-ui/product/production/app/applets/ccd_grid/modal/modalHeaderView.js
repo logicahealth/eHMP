@@ -18,7 +18,7 @@ define([
             var $target = $(e.currentTarget),
                 id = $target.attr('id');
 
-            id === 'ccdPrevious' ? this.theView.getPrevModal(id) : this.theView.getNextModal(id);
+            id === 'ccdPrevious' ? this.theView.getPrevModal() : this.theView.getNextModal();
         },
 
         template: HeaderTemplate

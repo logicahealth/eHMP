@@ -1,4 +1,3 @@
-/*jslint node: true */
 'use strict';
 
 var rdk = require('../../core/rdk');
@@ -51,6 +50,45 @@ describe('jds\'s', function() {
             var data = 'data';
             expectHttpFetch('jdsServer', '/vpr/' + pid + '/index/docs-view?', 200);
             jds.getPatientDomainData(req, pid, domain, query, vlerQuery, expectError(done, 500));
+        });
+
+        it('filters out parent medications from JDS', function(done) {
+            var data = 'data';
+            expectHttpFetch('jdsServer', '/vpr/' + pid + '/index/medication?', 200, {
+                data: {
+                    totalItems: 3,
+                    currentItemCount: 3,
+                    items: [{
+                        name: 'Parent',
+                        orders: [{
+                            childrenOrderUids: ['some:uid']
+                        }]
+                    }, {
+                        name: 'No orders'
+                    }, {
+                        name: 'Unrelated orders',
+                        orders: [{
+                            orderUid: 'some:order:uid'
+                        }]
+                    }]
+                },
+                status: 200
+            });
+
+            jds.getPatientDomainData(req, pid, 'medication', query, vlerQuery, function(error, result) {
+                expect(error).to.be.falsy();
+                expect(result.status).to.equal(200);
+
+                result.data.items.length.must.be(2);
+                result.data.totalItems.must.be(2);
+                result.data.currentItemCount.must.be(2);
+
+                expect(_.find(result.data.items, { name: 'Parent' })).to.be.undefined();
+                expect(_.find(result.data.items, { name: 'No orders' })).to.be.an.object();
+                expect(_.find(result.data.items, { name: 'Unrelated orders' })).to.be.an.object();
+
+                done();
+            });
         });
 
     });

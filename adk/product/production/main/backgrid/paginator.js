@@ -37,10 +37,11 @@ define([
               this.$el.empty();
               var elem;
               if(this.title !== 'Next' && this.title !== 'Previous'){
-                elem = document.createElement("span");
-                elem.title = this.title;
-                elem.innerHTML = this.label;
-                elem.setAttribute("aria-hidden","true");
+                if (this.label === this.collection.state.currentPage.toString()) {
+                  elem = document.createElement("span");
+                  elem.title = this.title + ' of ' + this.collection.state.totalPages;
+                  elem.innerHTML = this.label + ' of ' + this.collection.state.totalPages;
+                }
               }else {
                 elem = document.createElement("button");
                 elem.type = 'button';
@@ -62,8 +63,9 @@ define([
                   elem.innerHTML = '<i class="fa fa-chevron-left fa-lg"></i>';
                 }
               }
-
-              this.el.appendChild(elem);
+              if (!_.isUndefined(elem)) {
+                this.el.appendChild(elem);
+              }
 
               var collection = this.collection;
               var state = collection.state;

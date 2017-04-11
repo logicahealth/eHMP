@@ -1,4 +1,4 @@
-@writeback 
+@writeback @debug
 Feature: F360 - Enter and Store Immunizations
 
 @writeback_immunization

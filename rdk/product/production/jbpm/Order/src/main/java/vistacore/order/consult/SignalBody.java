@@ -63,6 +63,8 @@ public class SignalBody implements java.io.Serializable
    private java.util.List<vistacore.order.consult.ConsultPreReqQuestion> questions;
 
    private java.util.List<vistacore.order.consult.ConsultPreReqOrder> ordersResults;
+   
+   private java.lang.String orderResultComment;
 
    public SignalBody()
    {
@@ -422,5 +424,13 @@ public class SignalBody implements java.io.Serializable
       this.questions = questions;
       this.ordersResults = ordersResults;
    }
+
+public java.lang.String getOrderResultComment() {
+	return orderResultComment;
+}
+
+public void setOrderResultComment(java.lang.String orderResultComment) {
+	this.orderResultComment = orderResultComment;
+}
 
 }

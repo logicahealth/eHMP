@@ -1,4 +1,3 @@
-/*jslint node: true */
 'use strict';
 
 var rdk = require('../../core/rdk');
@@ -9,6 +8,132 @@ var pidValidator = rdk.utils.pidValidator;
 var nullchecker = require('../../utils/nullchecker');
 var S = require('string');
 
+var full_incomplete = {
+    icn: '10108V420871',
+    latestEnterpriseSyncRequestTimestamp: 1467819360679,
+    latestJobTimestamp: 1467819371546,
+    latestSourceStampTime: 20160706113600,
+    sites: {
+        '9E7A': {
+            latestJobTimestamp: 1467819360679,
+            pid: '9E7A;3',
+            sourceStampTime: 20160706094004,
+            syncCompleted: true
+        },
+        C877: {
+            latestJobTimestamp: 1467819360679,
+            pid: 'C877;3',
+            sourceStampTime: 20160706093941,
+            syncCompleted: false
+        }
+    },
+    syncCompleted: false
+};
+
+var full_complete = {
+    icn: '10108V420871',
+    latestEnterpriseSyncRequestTimestamp: 1467819360679,
+    latestJobTimestamp: 1467819371546,
+    latestSourceStampTime: 20160706113600,
+    sites: {
+        '9E7A': {
+            latestJobTimestamp: 1467819360679,
+            pid: '9E7A;3',
+            sourceStampTime: 20160706094004,
+            syncCompleted: true
+        },
+        C877: {
+            latestJobTimestamp: 1467819360679,
+            pid: 'C877;3',
+            sourceStampTime: 20160706093941,
+            syncCompleted: true
+        }
+    },
+    syncCompleted: true
+};
+
+var site_incomplete = {
+    icn: '10108V420871',
+    latestEnterpriseSyncRequestTimestamp: 1467819360679,
+    sites: {
+        '9E7A': {
+            latestJobTimestamp: 1467819360679,
+            pid: '9E7A;3',
+            sourceStampTime: 20160706094004,
+            syncCompleted: true
+        },
+        C877: {
+            latestJobTimestamp: 1467819360679,
+            pid: 'C877;3',
+            sourceStampTime: 20160706093941,
+            syncCompleted: false
+        }
+    }
+};
+
+var site_complete = {
+    icn: '10108V420871',
+    latestEnterpriseSyncRequestTimestamp: 1467819360679,
+    sites: {
+        '9E7A': {
+            latestJobTimestamp: 1467819360679,
+            pid: '9E7A;3',
+            sourceStampTime: 20160706094004,
+            syncCompleted: true
+        },
+        C877: {
+            latestJobTimestamp: 1467819360679,
+            pid: 'C877;3',
+            sourceStampTime: 20160706093941,
+            syncCompleted: true
+        }
+    }
+};
+
+var site_error = {
+    icn: '10108V420871',
+    latestEnterpriseSyncRequestTimestamp: 1467819360679,
+    sites: {
+        '9E7A': {
+            latestJobTimestamp: 1467819360679,
+            pid: '9E7A;3',
+            sourceStampTime: 20160706094004,
+            hasError: true,
+            syncCompleted: false
+        },
+        C877: {
+            latestJobTimestamp: 1467819360679,
+            pid: 'C877;3',
+            sourceStampTime: 20160706093941,
+            syncCompleted: true
+        }
+    }
+};
+
+var full_error = {
+    icn: '10108V420871',
+    latestEnterpriseSyncRequestTimestamp: 1467819360679,
+    latestJobTimestamp: 1467819371546,
+    latestSourceStampTime: 20160706113600,
+    hasError: true,
+    sites: {
+        '9E7A': {
+            latestJobTimestamp: 1467819360679,
+            pid: '9E7A;3',
+            sourceStampTime: 20160706094004,
+            syncCompleted: true
+        },
+        C877: {
+            latestJobTimestamp: 1467819360679,
+            pid: 'C877;3',
+            sourceStampTime: 20160706093941,
+            hasError: true,
+            syncCompleted: false
+        }
+    },
+    syncCompleted: false
+};
+
 describe('jdsSync\'s', function() {
     var pid;
     var req;
@@ -18,7 +143,6 @@ describe('jdsSync\'s', function() {
         pid = 'test;patientId';
 
         req = buildRequest();
-
         log = '';
 
         httpExpected = [];
@@ -70,79 +194,38 @@ describe('jdsSync\'s', function() {
         });
     });
 
-    describe('getPatientDataStatus', function() {
-        it('should add the pid to the path', function(done) {
-            expectHttpFetch('vxSyncServer', '/sync/status?pid=test;patientId');
-            req.app.subsystems.jdsSync.getPatientDataStatus(pid, req, expectSuccess(done));
+    describe('isSimpleSyncStatusWithError()', function() {
+        it('should be false for empty status', function() {
+            expect(jdsSync.isSimpleSyncStatusWithError()).to.equal(false);
         });
 
-        it('should add the icn to the path', function(done) {
-            pid = 'testicn';
-            expectHttpFetch('vxSyncServer', '/sync/status?icn=testicn');
-            req.app.subsystems.jdsSync.getPatientDataStatus(pid, req, expectSuccess(done));
+        it('should be false when no hasError attribute exists', function() {
+            expect(jdsSync.isSimpleSyncStatusWithError(full_incomplete)).to.equal(false);
+            expect(jdsSync.isSimpleSyncStatusWithError(full_complete)).to.equal(false);
         });
 
-        it('should get the pid from the request when not provided', function(done) {
-            req = buildRequest({ params: { pid: 'req;pid' } });
-            expectHttpFetch('vxSyncServer', '/sync/status?pid=req;pid');
-            req.app.subsystems.jdsSync.getPatientDataStatus(null, req, expectSuccess(done));
+        it('should be true when any hasError attribute exists', function() {
+            expect(jdsSync.isSimpleSyncStatusWithError(full_error)).to.equal(true);
+            expect(jdsSync.isSimpleSyncStatusWithError(site_error)).to.equal(true);
+        });
+    });
+
+    describe('isSimpleSyncStatusComplete()', function() {
+        it('should be false for empty status', function() {
+            expect(jdsSync.isSimpleSyncStatusComplete()).to.equal(false);
         });
 
-        it('should return success for a normal patient', function(done) {
-            expectHttpFetch('vxSyncServer', '/sync/status?pid=test;patientId', 200, {
-                syncStatus: {
-                    completedStamp: {
-                        sourceMetaStamp: {
-                            'C877': {
-                                syncCompleted: true,
-                                stampTime: 'time'
-                            }
-                        }
-                    }
-                },
-                jobStatus: [
-                    {type: 'vler-blah'},
-                    {
-                        type: 'vista-9E7A-blah',
-                        error: 'uh-oh'
-                    },
-                    {type: 'jmeadows-blah'}
-                ]
-            });
-            req.app.subsystems.jdsSync.getPatientDataStatus(pid, req, expectResponse(done, {
-                data: {
-                    VISTA: {
-                        C877: {
-                            isSyncCompleted: true,
-                            completedStamp: 'time'
-                        },
-                        '9E7A': {
-                            isSyncCompleted: false,
-                            hasError: true
-                        }
-                    },
-                    VLER: {
-                        isSyncCompleted: false,
-                        hasError: false
-                    },
-                    DOD: {
-                        isSyncCompleted: false,
-                        hasError: false
-                    },
-                    allSites: false
-                },
-                status: 200
-            }));
+        it('should be false if the top-level syncCompleted attribute is false', function() {
+            expect(jdsSync.isSimpleSyncStatusComplete(full_incomplete)).to.equal(false);
         });
 
-        it('should return 404 when a patient isn\'t found', function(done) {
-            expectHttpFetch('vxSyncServer', '/sync/status?pid=test;patientId', 404);
-            req.app.subsystems.jdsSync.getPatientDataStatus(pid, req, expectError(done, 404, 'pid test;patientId is unsynced'));
+        it('should be false when any site-level syncCompeted attribute is false and no top-level attribute exists or is true', function() {
+            expect(jdsSync.isSimpleSyncStatusComplete(site_incomplete)).to.equal(false);
         });
 
-        it('should return a standard error result for other errors', function(done) {
-            expectHttpFetch('vxSyncServer', '/sync/status?pid=test;patientId', 407);
-            req.app.subsystems.jdsSync.getPatientDataStatus(pid, req, expectError(done, 407));
+        it('should be true when all syncCompeted attributes are true', function() {
+            expect(jdsSync.isSimpleSyncStatusComplete(full_complete)).to.equal(true);
+            expect(jdsSync.isSimpleSyncStatusComplete(site_complete)).to.equal(true);
         });
     });
 
@@ -160,57 +243,6 @@ describe('jdsSync\'s', function() {
         it('should return a standard error result for other errors', function(done) {
             expectHttpFetch('jdsServer', '/status/test;patientId?detailed=true', 407);
             req.app.subsystems.jdsSync.getPatientStatusDetail(pid, req, expectError(done, 407));
-        });
-    });
-
-    describe('syncPatientDemographics', function() {
-        var payload;
-
-        beforeEach(function() {
-            payload = {
-                'edipi': 'testedipi',
-                'icn': 'testicn',
-                'demographics': {}
-            };
-        });
-
-        it('should POST to vxSyncServer', function(done) {
-            expectHttpPost(payload, 'vxSyncServer', '/sync/demographicSync');
-            expectHttpFetch('vxSyncServer', '/sync/status?icn=testicn');
-            req.app.subsystems.jdsSync.syncPatientDemographics(payload, req, expectSuccess(done));
-        });
-
-        it('should set the pid in the audit with the icn', function(done) {
-            expectHttpPost(payload, 'vxSyncServer', '/sync/demographicSync').toAudit('testicn');
-            expectHttpFetch('vxSyncServer', '/sync/status?icn=testicn');
-            req.app.subsystems.jdsSync.syncPatientDemographics(payload, req, expectSuccess(done));
-        });
-
-        it('should set the pid in the audit with the edipi when icn isn\'t found', function(done) {
-            payload.icn = undefined;
-            expectHttpPost(payload, 'vxSyncServer', '/sync/demographicSync').toAudit('DOD;testedipi');
-            expectHttpFetch('vxSyncServer', '/sync/status?pid=DOD;testedipi');
-            req.app.subsystems.jdsSync.syncPatientDemographics(payload, req, expectSuccess(done));
-        });
-
-        it('should raise an error when neither edipi or icn are present', function(done) {
-            payload.pid = '9E7A;123';
-            payload.icn = undefined;
-            payload.edipi = undefined;
-            req.app.subsystems.jdsSync.syncPatientDemographics(payload, req, function(error, result) {
-                expect(error).to.equal('ICN or EDIPI is required for syncing patients by demographics.');
-                done();
-            });
-        });
-
-        it('should not use a resultProcessor', function(done) {
-            expectHttpPost(payload, 'vxSyncServer', '/sync/demographicSync');
-            expectHttpFetch('vxSyncServer', '/sync/status?icn=testicn');
-            req.app.subsystems.jdsSync.syncPatientDemographics(payload, req, expectResponse(done, {data: {}, status: 201}));
-        });
-
-        afterEach(function() {
-            payload = undefined;
         });
     });
 
@@ -248,23 +280,6 @@ describe('jdsSync\'s', function() {
         it('should return a standard error result for errors', function(done) {
             expectHttpFetch('jdsServer', '/vpr/mpid/test;patientId', 407);
             req.app.subsystems.jdsSync.getPatientAllSites(pid, req, expectError(done, 407));
-        });
-    });
-
-    describe('getJdsStatus', function() {
-        it('should add the pid to the path', function(done) {
-            expectHttpFetch('jdsServer', '/vpr/test;patientId/count/collection');
-            req.app.subsystems.jdsSync.getJdsStatus(pid, req, expectSuccess(done));
-        });
-
-        it('should return 404 when a patient isn\'t found', function(done) {
-            expectHttpFetch('jdsServer', '/vpr/test;patientId/count/collection', 404);
-            req.app.subsystems.jdsSync.getJdsStatus(pid, req, expectError(done, 404, 'pid test;patientId is unsynced'));
-        });
-
-        it('should return a standard error result for other errors', function(done) {
-            expectHttpFetch('jdsServer', '/vpr/test;patientId/count/collection', 407);
-            req.app.subsystems.jdsSync.getJdsStatus(pid, req, expectError(done, 407));
         });
     });
 
@@ -377,7 +392,7 @@ describe('jdsSync\'s', function() {
                     host: 'hmphost',
                     port: 3,
                     accessCode: '9E7A;500',
-                    verifyCode: 'ep1234;ep1234!!'
+                    verifyCode: 'PW    ;PW    !!'
                 },
                 jdsSync: {
                     settings: {

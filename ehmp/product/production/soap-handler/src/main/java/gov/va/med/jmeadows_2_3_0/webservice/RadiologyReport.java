@@ -16,7 +16,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  * <pre>
  * &lt;complexType name="radiologyReport">
  *   &lt;complexContent>
- *     &lt;extension base="{http://webservice.vds.DNS       /}radiologyExam">
+ *     &lt;extension base="{http://webservice.vds.med.DNS   /}radiologyExam">
  *       &lt;sequence>
  *         &lt;element name="approvedBy" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="caseNumber" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -38,7 +38,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "radiologyReport", namespace = "http://webservice.vds.DNS       /", propOrder = {
+@XmlType(name = "radiologyReport", namespace = "http://webservice.vds.med.DNS   /", propOrder = {
     "approvedBy",
     "caseNumber",
     "impressionText",

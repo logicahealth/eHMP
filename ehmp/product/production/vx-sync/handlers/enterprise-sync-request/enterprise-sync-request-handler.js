@@ -136,14 +136,17 @@ var queryMVI = function(callback) {
     var self = this;
     self.log.debug('enterprise-sync-request-handler.queryMVI : Entered method: job: %s', inspect(self.job));
 
-    self.environment.mvi.lookup(self.job.patientIdentifier, function(mviError, mviResponse) {
+    self.environment.mvi.lookupWithDemographics(self.job.patientIdentifier, self.job.demographics, function(mviError, mviResponse) {
         self.log.debug('enterprise-sync-request-handler.queryMVI: Entered routine.  error: %j; mviResponse: %j', mviError, mviResponse);
-
+        var patientIdentifier = self.job.patientIdentifier;
         if (mviError) {
-            self.log.error('enterprise-sync-request-handler.queryMVI : got the kind of error that we shouldn\'t get from MVI.  patient: %j error: %j', self.job.patientIdentifier, mviError);
+            self.log.error('enterprise-sync-request-handler.queryMVI : got the kind of error that we shouldn\'t get from MVI.  patient: %j error: %j', patientIdentifier, mviError);
             return callback(errorUtil.createTransient(mviError), mviResponse);
         }
-
+        if (mviResponse && mviResponse.skipResyncCheck) {
+            self.log.info('enterprise-sync-request-handler.queryMVI: skip resync check for %j', patientIdentifier);
+            return callback(null, [patientIdentifier]);
+        }
         var jdsPatientIdentifiers = createValidIdentifiers.call(self, mviResponse);
         var vhicIdEvent = createVhicIdEvent.call(self, mviResponse);
 
@@ -303,10 +306,13 @@ var saveMviResults = function(patientIdentifiers, vhicIdEvent, callback) {
                 }
                 if (results === 'RESYNCING') {
                     self.log.info('enterprise-sync-request-handler.saveMviResults(): Patient identifier conflicts detected, resync request(s) were published related to patient identifier %j,', self.job.patientIdentifier);
+                    return callback(null, patientIdentifiers);
                 } else {
-                    self.log.debug('enterprise-sync-request-handler.saveMviResults(): Patient identifier conflicts were NOT detected. This patient identifier %j does NOT need to be resynced.', self.job.patientIdentifier);
+                    self.log.error('enterprise-sync-request-handler.saveMviResults(): ' +
+                        'Patient identifier conflicts were NOT detected. This patient identifier %j does NOT need to be resynced. ' +
+                        'But JDS did return an error(s): %j', self.job.patientIdentifier, results);
+                    return callback(errorUtil.createTransient(results), patientIdentifiers);
                 }
-                return storeVhicIdEvent.call(self, vhicIdEvent, patientIdentifiers, callback);
             });
         } else {
             return storeVhicIdEvent.call(self, vhicIdEvent, patientIdentifiers, callback);

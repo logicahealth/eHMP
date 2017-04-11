@@ -30,7 +30,7 @@ define([
             var selectedItems = this.getSelected();
             if (selectedItems.length === 0) {
                 this.errorModel.set({
-                    itemChecklist: "Select at least one item."
+                    itemChecklist: "Select at least one item"
                 });
             }
             if (!_.isEmpty(this.errorModel.toJSON())) {

@@ -13,9 +13,12 @@ define([
     var screenManagerChannel = ADK.Messaging.getChannel('managerAddScreen');
 
     var EmptyView = Backbone.Marionette.ItemView.extend({
-        template: _.template('<i>No Results</i>'),
+        template: _.template('<p>No Results Found</p>'),
         tagName: 'p',
-        className: 'bold-font top-margin-sm left-margin-xl'
+        className: 'bold-font top-margin-sm left-margin-xl',
+        attributes: {
+            "aria-live": "assertive",
+        }
     });
 
     var generateScreenId = function(screenTitle) {
@@ -78,13 +81,13 @@ define([
         attributes: function() {
             if (this.model.get('predefined') === true) {
                 return {
-                    class: 'table-row tableRow predefined-screen-row background-color-primary-lighter',
+                    class: 'table-row tableRow predefined-screen-row',
                     'data-screen-id': this.model.get('id'),
                     role: 'row',
                 };
             } else {
                 return {
-                    class: 'table-row tableRow user-defined background-color-pure-white',
+                    class: 'table-row tableRow user-defined',
                     'data-screen-id': this.model.get('id'),
                     role: 'row'
                 };
@@ -113,7 +116,6 @@ define([
                 title: this.model.get('title'),
                 description: this.model.get('description'),
                 predefined: this.model.get('predefined'),
-                defaultScreen: this.model.get('defaultScreen'),
                 hasCustomize: this.model.get('hasCustomize'),
                 problems: _.clone(this.model.get('problems')) || []
             };
@@ -123,7 +125,7 @@ define([
             this.model.set('hasCustomize', this.screenOptions.hasCustomize);
             var id = this.model.get('id');
             var screenId = this.model.get('screenId');
-            var module = ADK.ADKApp[id];
+            var module = ADK.ADKApp.Screens[id];
             var config = ADK.UserDefinedScreens.getGridsterConfigFromSession(this.model.get("id"));
             var predefined = this.model.get('predefined');
             if (predefined === true && module.applets && module.applets.length > 0) {
@@ -147,8 +149,7 @@ define([
             });
         },
         onRender: function() {
-            var self = this;
-            if (this.screenOptions.defaultScreen) {
+            if (this.screenOptions.id === ADK.WorkspaceContextRepository.currentContextDefaultScreen) {
                 var defaultButtonHTML = this.$el.find('.default-workspace-btn');
                 toggleDefaultHtml(undefined, defaultButtonHTML);
             }
@@ -263,7 +264,7 @@ define([
         customizeWorksheet: function(e) {
             var input = $(e.currentTarget);
             var title = input.closest('.tableRow').find('.editor-input-element');
-            if (title && title.val() === '') {
+            if (title && title.val().trim() === '') {
                 return;
             }
             ADK.Navigation.navigate(this.screenOptions.routeName, {
@@ -295,7 +296,7 @@ define([
             var isTitle = input.parent().hasClass('editor-title');
             var isDescription = input.parent().hasClass('editor-description');
             if (isTitle) {
-                if (value !== '' && value !== origValue) {
+                if (value.trim() !== '' && value.trim() !== origValue) {
                     this.cleanupPopover();
                     if (value.trim().toLowerCase() === origValue.toLowerCase()) {
                         value = value.trim();
@@ -347,7 +348,7 @@ define([
             input.next().removeClass('fa-check fa-asterisk color-red-dark color-secondary')
                 .siblings('span.sr-only').html('');
 
-            if (isTitle && input.val() === '') {
+            if (isTitle && input.val().trim() === '') {
                 input.parent().addClass('has-error');
                 input.next().addClass('fa-asterisk color-red-dark');
             }
@@ -416,6 +417,9 @@ define([
             $popover.off('shown.bs.popover');
             $popover.off('hidden.bs.popover');
             $popover.popover('destroy');
+        },
+        behaviors: {
+            Tooltip: {}
         }
     });
 
@@ -728,8 +732,8 @@ define([
             var callBack = function(model, response, options) {
                 // If we don't clone the original screen config applet object array into the new screen config, the
                 // cloned workspace will be empty.
-                var _applets = _.get(ADK.ADKApp, [origModel.get('id'), 'applets'], []);
-                _.set(ADK.ADKApp, [newId, 'applets'], _.clone(_applets));
+                var _applets = _.get(ADK.ADKApp.Screens, [origModel.get('id'), 'applets'], []);
+                _.set(ADK.ADKApp.Screens, [newId, 'applets'], _.clone(_applets));
 
                 if (origModel.get('predefined') === true) {
                     var predefinedAppletConfig = {

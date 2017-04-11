@@ -64,14 +64,14 @@ define([
          *                         the note form is destroyed
          */
         launchNoteForm: function(notesFormOptions) {
+            notesFormOptions || (notesFormOptions = {});
             var model = notesFormOptions.model,
                 showVisit = !_.isUndefined(notesFormOptions.showVisit) ? notesFormOptions.showVisit : true,
                 isEdit = !_.isUndefined(notesFormOptions.isEdit) ? notesFormOptions.isEdit : false,
                 openTrayOnDestroy = !_.isUndefined(notesFormOptions.openTrayOnDestroy) ? notesFormOptions.openTrayOnDestroy : true,
                 noteFormStepNumber,
                 formModel,
-                NoteModel = ADK.UIResources.Writeback.Notes.Model;
-
+                NoteModel = ADK.UIResources.Writeback.Notes.Model;         
             if (_.isUndefined(model) || _.isNull(model)) {
                 formModel = new NoteModel({
                     'app': 'ehmp',
@@ -140,8 +140,10 @@ define([
                                 });
 
                                 ModelUtil.setEncounterDisplayName(formModel);
+                                ModelUtil.setLocation(formModel);
                             }
                         }
+                        channel.trigger('workflow:done');
                     }
                 }
             });

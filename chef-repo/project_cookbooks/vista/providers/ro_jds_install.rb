@@ -18,7 +18,7 @@ action :execute do
 
       # start the shell, set up GTM environment and start GTM shell
       shell.start!
-      shell.wait_for(:output, /sh-[0-9\.]+#/) do | process, match |
+      shell.wait_for(:output, node[:jds][:shell_prompt]) do | process, match |
         process.write("#{node[:vista][:session]}\n")
       end
 
@@ -59,7 +59,7 @@ action :execute do
         process.write("h\n")
       end
 
-      shell.wait_for(:output, /sh-[0-9\.]+#/) do | process, match |
+      shell.wait_for(:output, node[:jds][:shell_prompt]) do | process, match |
         process.write("exit\n")
       end
       shell.wait_for(:exit)

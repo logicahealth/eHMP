@@ -71,10 +71,10 @@ function getConfiguration() {
         'vistaSites': {
             'AEDD': _.defaults(wConfig.vistaSites['9E7A'], {
                 'name': 'panorama',
-                'host': 'IP_ADDRESS',
+                'host': 'IP        ',
                 'port': 9210,
-                'accessCode': 'PW',
-                'verifyCode': 'PW',
+                'accessCode': 'PW    ',
+                'verifyCode': 'PW    !!',
                 'localIP': '127.0.0.1',
                 'localAddress': 'localhost',
                 'connectTimeout': 3000,
@@ -82,10 +82,10 @@ function getConfiguration() {
             }),
             'ABCD': _.defaults(wConfig.vistaSites.C877, {
                 'name': 'kodak',
-                'host': 'IP_ADDRESS',
+                'host': 'IP        ',
                 'port': 9210,
-                'accessCode': 'PW',
-                'verifyCode': 'PW',
+                'accessCode': 'PW    ',
+                'verifyCode': 'PW    !!',
                 'localIP': '127.0.0.1',
                 'localAddress': 'localhost',
                 'connectTimeout': 3000,
@@ -95,7 +95,7 @@ function getConfiguration() {
         beanstalkConfig: beanstalkConfig,
         jds: _.defaults(wConfig.jds, {
             protocol: 'http',
-            host: 'IP_ADDRESS',
+            host: 'IP        ',
             port: 9080
         })
     };

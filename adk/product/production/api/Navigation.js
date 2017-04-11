@@ -19,7 +19,7 @@ define([
     'use strict';
     var DefaultPatientContextCheck = Checks.CheckModel.extend({
         validate: function(attributes, validateOptions) {
-            // TODO - future implementations of shouldNavigate will also contain the context you are navigating to.
+            // FUTURE-TODO - future implementations of shouldNavigate will also contain the context you are navigating to.
             validateOptions = validateOptions || {};
             var options = validateOptions.options || {};
             var screenName = options.screenName || {};
@@ -89,8 +89,8 @@ define([
                 });
                 var SimpleAlertFooterItemView = Backbone.Marionette.ItemView.extend({
                     template: Handlebars.compile([
-                        '{{ui-button "No" classes="btn-default alert-cancel" title="Press enter to cancel"}}',
-                        '{{ui-button "Yes" classes="btn-primary alert-continue" title="Press enter to continue"}}'
+                        '{{ui-button "No" classes="btn-default alert-cancel btn-sm" title="Press enter to go back"}}',
+                        '{{ui-button "Yes" classes="btn-primary alert-continue btn-sm" title="Press enter to continue"}}'
                     ].join('\n')),
                     events: {
                         'click button.alert-cancel': function() {
@@ -119,7 +119,7 @@ define([
                 });
                 var alertView = new UIAlert({
                     title: "Warning",
-                    icon: "fa-warning color-tertiary-dark",
+                    icon: "icon-triangle-exclamation",
                     messageView: ConsolidatedCheckBody,
                     footerView: SimpleAlertFooterItemView
                 });
@@ -130,7 +130,7 @@ define([
             }
         }
     });
-    var Events = {
+    var Navigation = {
         PatientContextCheck: DefaultPatientContextCheck,
         registerCheck: function(model) {
             return Checks.register(model);
@@ -276,13 +276,13 @@ define([
             var previous = Backbone.history._previousFragment;
             if (previous) {
                 if (this._isFirstScreenForCurrentContext(previous)) {
-                    Events.navigate(WorkspaceContextRepository.currentContextDefaultScreen);
+                    Navigation.navigate(WorkspaceContextRepository.currentContextDefaultScreen);
                 } else {
                     var routePieces = previous.split('/');
-                    Events.navigate(routePieces[routePieces.length - 1]);
+                    Navigation.navigate(routePieces[routePieces.length - 1]);
                 }
             } else {
-                Events.navigate(WorkspaceContextRepository.appDefaultScreen);
+                Navigation.navigate(WorkspaceContextRepository.appDefaultScreen);
             }
         },
         hasPreviousRoute: function() {
@@ -290,7 +290,7 @@ define([
         },
         _isFirstScreenForCurrentContext: function (previous) {
             previous = previous || Backbone.history._previousFragment;
-            return _.includes(previous, 'patient-search') || !_.includes(previous, '/' + WorkspaceContextRepository.currentContext.get('id') + '/');
+            return _.includes(previous, 'patient-search') || !_.includes(previous, '/' + WorkspaceContextRepository.currentContextId + '/');
         },
         isFirstAndDefaultScreen: function () {
             if (!this._isFirstScreenForCurrentContext()) {
@@ -306,15 +306,15 @@ define([
      * @return {undefined}
      */
     Messaging.on('user:sessionEnd', function() {
-        Events.navigate(WorkspaceContextRepository.appDefaultScreen);
+        Navigation.navigate(WorkspaceContextRepository.appDefaultScreen);
     });
 
     $(window).on('beforeunload', function() {
-        var failureString = Events.getMessagesOfAllChecks();
+        var failureString = Navigation.getMessagesOfAllChecks();
         if (_.isEmpty(failureString)) {
             return;
         }
         return failureString;
     });
-    return Events;
+    return Navigation;
 });

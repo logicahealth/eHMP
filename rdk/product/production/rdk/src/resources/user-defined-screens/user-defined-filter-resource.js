@@ -5,7 +5,6 @@ var _ = require('lodash');
 var httpUtil = rdk.utils.http;
 var fs = require('fs');
 var uds = require('./user-defined-screens-resource');
-var dd = require('drilldown');
 var nullchecker = rdk.utils.nullchecker;
 
 var USER_SCREENS_CONFIG = 'UserScreensConfig';
@@ -14,7 +13,6 @@ var interceptors = {
     operationalDataCheck: false,
     synchronize: false
 };
-var permissions = [];
 var healthcheck = {
     dependencies: ['jdsSync']
 };
@@ -26,7 +24,7 @@ function getResourceConfig() {
         get: getFilter,
         interceptors: interceptors,
         healthcheck: healthcheck,
-        requiredPermissions: permissions,
+        requiredPermissions: ['access-general-ehmp'],
         isPatientCentric: false
     }, {
         name: 'user-defined-filter',
@@ -34,7 +32,7 @@ function getResourceConfig() {
         post: createFilter,
         interceptors: interceptors,
         healthcheck: healthcheck,
-        requiredPermissions: permissions,
+        requiredPermissions: ['access-general-ehmp'],
         isPatientCentric: false
     }, {
         name: 'user-defined-filter',
@@ -42,7 +40,7 @@ function getResourceConfig() {
         delete: removeFilter,
         interceptors: interceptors,
         healthcheck: healthcheck,
-        requiredPermissions: permissions,
+        requiredPermissions: ['access-general-ehmp'],
         isPatientCentric: false
     }, {
         name: 'user-defined-filter',
@@ -50,7 +48,7 @@ function getResourceConfig() {
         put: duplicateFilters,
         interceptors: interceptors,
         healthcheck: healthcheck,
-        requiredPermissions: permissions,
+        requiredPermissions: ['access-general-ehmp'],
         isPatientCentric: false
     }, {
         name: 'user-defined-filter-all',
@@ -58,7 +56,7 @@ function getResourceConfig() {
         'delete': removeAllFilters,
         interceptors: interceptors,
         healthcheck: healthcheck,
-        requiredPermissions: permissions,
+        requiredPermissions: ['access-general-ehmp'],
         isPatientCentric: false
     }];
 }
@@ -122,7 +120,7 @@ function createFilter(req, res) {
             var filterData = {};
             var found;
 
-            userDefinedFilterData = dd(data)('userDefinedFilters').val;
+            userDefinedFilterData = _.get(data, 'userDefinedFilters');
 
             if (nullchecker.isNotNullish(userDefinedFilterData)) {
                 for (count = 0; count < userDefinedFilterData.length; count++) {
@@ -362,7 +360,7 @@ function removeAllFilters(req, res) {
             return res.status(rdk.httpstatus.internal_server_error).rdkSend(err);
         }
 
-        userDefinedFilterData = dd(data)('userDefinedFilters').val;
+        userDefinedFilterData = _.get(data, 'userDefinedFilters');
         var filterData = _.findWhere(userDefinedFilterData, {
             id: filterId
         }) || {};
@@ -496,7 +494,7 @@ function removeFilter(req, res) {
             return res.status(rdk.httpstatus.internal_server_error).rdkSend(err);
         }
 
-        userDefinedFilterData = dd(data)('userDefinedFilters').val;
+        userDefinedFilterData = _.get(data, 'userDefinedFilters');
         var filterData = _.findWhere(userDefinedFilterData, {
             id: filterId
         }) || {};
@@ -644,7 +642,7 @@ function getPredefinedFilterData(req, screenId, callback) {
                     }
                     cbwFilters.push(result);
 
-                    filterData = dd(result)('userdefinedfilters').val;
+                    filterData = _.get(result, 'userdefinedfilters');
 
                     if (!_.isUndefined(filterData)) {
                         filterData.id = screenId;
@@ -787,8 +785,8 @@ function deleteFilterData(filterId, req, callback) {
 function createScreenIdFromRequest(req, screenType) {
     var uid;
     var userSession = req.session.user;
-    var site = dd(userSession)('site').val;
-    var ien = dd(userSession)('duz')(site).val;
+    var site = _.get(userSession, 'site');
+    var ien = _.get(userSession, ['duz', site]);
 
     if (!_.isUndefined(site) && !_.isUndefined(ien)) {
         uid = site.concat(';').concat(ien);

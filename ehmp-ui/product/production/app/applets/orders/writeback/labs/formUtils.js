@@ -1,8 +1,9 @@
 define([
     "backbone",
     "marionette",
-    "underscore"
-], function(Backbone, Marionette, _) {
+    "underscore",
+    "moment"
+], function(Backbone, Marionette, _, moment) {
     "use strict";
 
     var FormUtils = {
@@ -203,6 +204,9 @@ define([
                         if (_.isEmpty(form.model.get('collectionDateTimePicklist'))) {
                             form.model.set('collectionDateTimePicklist', form.model.get('collectionDateTimeLC')[0].code);
                         }
+                        else {
+                            this.handleCollectionDateTimePicklist(form);
+                        }
                     }
                     form.ui.collectionDateTimePicklist.trigger('control:hidden', false);
                     form.ui.collectionDateTimePicklist.trigger('control:disabled', false);
@@ -321,7 +325,12 @@ define([
                 form.ui.futureLabCollectTimesContainer.trigger('control:hidden', false);
                 form.ui.futureLabCollectDate.trigger('control:required', true);
                 form.ui.futureLabCollectTime.trigger('control:required', true);
-                form.model.set('futureLabCollectDate', moment().format('MM/DD/YYYY'));
+                if (_.isEmpty(form.model.get('futureLabCollectDate'))) {
+                    form.model.set('futureLabCollectDate', moment().format('MM/DD/YYYY'));
+                }
+                else {
+                    form.ui.futureLabCollectTime.trigger('control:hidden', false);
+                }
             }
         },
         handleUrgency: function(form) {
@@ -590,7 +599,7 @@ define([
 
         //====================== DRAFT UTILITY FUNCTIONS ======================
         onBeforeDraftEvent: function(action, option) {
-            this.showInProgress(action + ' draft...');
+            this.showInProgress(action);
             this.enableInputFields(false);
             this.enableFooterButtons(false);
         },
@@ -604,7 +613,6 @@ define([
             this.enableFooterButtons(true);
         },
         onDraftReadSuccess: function(options) {
-            this.hideInProgress();
             this.isDraftLoaded = true;
             this.model.trigger('draft:getData');
         }

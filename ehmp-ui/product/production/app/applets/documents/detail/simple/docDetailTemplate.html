@@ -6,19 +6,19 @@
 	        </div>
 			<div class="col-xs-3">
 				<p>
-					<span data-detail-label="facility"><strong>Facility</strong></span><br />
+					<span data-detail-label="facility"><strong>Facility:</strong></span><br />
 					<span data-detail="facility">{{facilityName}}</span>
 				</p>
 			</div>
 			<div class="col-xs-3">
 				<p>
-					<span data-detail-label="author"><strong>Author</strong></span><br />
+					<span data-detail-label="author"><strong>Author:</strong></span><br />
 					<span data-detail="author">{{authorDisplayName}}</span>
 				</p>
 			</div>
 			<div class="col-xs-3">
 				<p>
-					<span data-detail-label="status"><strong>Status</strong></span><br />
+					<span data-detail-label="status"><strong>Status:</strong></span><br />
 					<span class="{{#if radiologyBool}}{{statusClass}}{{else}}{{statusDisplayClass}}{{/if}}" data-detail="status">
                        {{#if radiologyBool}}
                             {{statusName}}
@@ -36,14 +36,14 @@
 			</div>
 			<div class="col-xs-3">
 				<p>
-					<span data-detail-label="date-time"><strong>Date/Time</strong></span><br />
+					<span data-detail-label="date-time"><strong>Date/Time:</strong></span><br />
 					<span data-detail="date-time">{{dateTimeDisplay}}</span>
 				</p>
 			</div>
 			{{#if radiologyBool}} {{#if providers}}
 			<div class="col-xs-3">
 				<p>
-					<span data-detail-label="providers"><strong>Providers</strong></span><br />
+					<span data-detail-label="providers"><strong>Providers:</strong></span><br />
 					{{#each providers}}
 					<span data-detail="providers">{{providerDisplayName}}</span>
 					{{/each}}
@@ -64,6 +64,12 @@
 		</div>
 		{{#if addendaText}}
 		<pre>{{content}}{{signature}}</pre>
+		{{/if}}
+		{{#if hasImages}}
+		<div class="row">
+			<div class="col-xs-12 top-margin-sm thumbnails-region">
+			</div>
+		</div>
 		{{/if}}
 		<div class="document-detail-addenda-region"></div>
 		{{#unless addendaText}} {{#unless radiologyBool}} {{#if dodComplexNotePdf}}

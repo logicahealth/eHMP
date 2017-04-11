@@ -128,10 +128,6 @@ Then(/^the user clicks on the outside of GDT$/) do
   expect(con.perform_action("Outside", "")).to be_true
 end
 
-Then(/^the user waits for 5 seconds$/) do
-  sleep 5
-end
-
 Then(/^the Date Filter displays "(.*?)" months in the past and "(.*?)" months in the future$/) do |months_past, months_future|
   con = GTDate.instance
   date_format_template = "%m/%d/%Y"

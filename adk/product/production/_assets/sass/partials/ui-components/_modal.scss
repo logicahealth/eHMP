@@ -14,6 +14,9 @@
             border-radius: 6px 6px 0 0;
         }
     }
+    &.autologoff {
+        z-index: 1112;
+    }
     .modal-dialog {
         margin: calc(28px + 58px) auto 0;
         &.draggable {
@@ -28,6 +31,16 @@
         &.modal-xl {
             width: 85%; // phantomjs fallback
             width: calc(100vw - 191px);
+        }
+        &.liquid-modal{
+            .modal-content{
+                display: flex;
+                flex-direction: column;
+                height: 90vh;
+            }
+            #modal-footer{
+                flex-shrink: 0;
+            }
         }
         .modal-body {
             height: 100%;
@@ -53,6 +66,7 @@
             color: $grey-darkest;
             font-weight: 600;
             text-transform: capitalize;
+            word-wrap: break-word;
         }
         .close {
             color: inherit;
@@ -71,7 +85,6 @@
         background-color: $pure-white;
         .detail-modal-content {
             word-wrap: break-word;
-            text-transform: capitalize;
             h5 {
                 text-transform: uppercase;
                 padding: 0px 0px 5px;
@@ -87,7 +100,7 @@
                 &.bottom-border-grey-dark {
                     border-bottom: 1px solid $grey-dark;
                 }
-                color: $grey-darker;
+                color: $grey-darkest;
                 font-weight: bold;
             }
             hr {
@@ -95,12 +108,11 @@
             }
             pre {
                 font-size: 12px;
-                font-family: inherit;
                 margin: 5px;
                 text-transform: none;
             }
             strong {
-                color: $grey-darker;
+                color: $grey-darkest;
             }
             .detail-modal-text-transform-none {
                 text-transform: none;
@@ -125,10 +137,13 @@
                     box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.5);
                     color: $primary-dark;
                 }
-            }
-            &.disabled,
-            &[disabled] {
-                background: none;
+                &[disabled],
+                &[disabled]:hover,
+                &[disabled]:focus,
+                &[disabled]:active {
+                    color: $primary;
+                    box-shadow: 0px 1px 7px 0px rgba(0,0,0,0.15),0px 1px 2px 0px rgba(0,0,0,0.15);
+                }
             }
         }
         p {
@@ -142,6 +157,15 @@
 }
 
 /* used for the workspace manager overlay */
+body.overlay-open {
+    #top-region, #center-region, #bottom-region {
+        -webkit-filter: blur(2px);
+        -moz-filter: blur(2px);
+        -o-filter: blur(2px);
+        -ms-filter: blur(2px);
+        filter: blur(2px);
+    }
+}
 #modal-region {
     .overlay {
         position: fixed;

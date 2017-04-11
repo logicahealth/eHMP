@@ -6,10 +6,10 @@
 include_recipe "windows"
 
 # Add all nodes for the local copies of the vista sites
-vista_sites = search(:node, "role:vista-* AND stack:#{node[:stack]}")
-# If deploying the vista-client with no local vista sites deployed, add 
+vista_sites = find_multiple_nodes_by_role("vista-.*", node[:stack])
+# If deploying the vista-client with no local vista sites deployed, add
 # this bogus domain to ensure the shortcuts are created
-if vista_sites.size == 0 
+if vista_sites.size == 0
   vista_sites.push(
     {
       "ipaddress" => "IP_ADDRESS"
@@ -40,7 +40,7 @@ end
 
 # Create VistA GUI clients links
 # Use a custom resource here to ensure the CPRS versions exist when compiling the shortcut resources
-vista_client_shortcuts "create shortcuts on Desktop for each CPRS component" do 
+vista_client_shortcuts "create shortcuts on Desktop for each CPRS component" do
   sites vista_sites
   action :execute
 end

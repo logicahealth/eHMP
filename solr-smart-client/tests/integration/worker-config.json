@@ -1,5 +1,5 @@
 {
-  "VXSYNC_IP": "IPADDRES",
+  "VXSYNC_IP": "IP      ",
   "vxsync": {
     "solrClient": {
       "core": "vpr",

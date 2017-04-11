@@ -88,9 +88,9 @@ Then(/^"(.*?)" contains "(.*?)"$/) do |location, expected_text|
   expect(con.perform_verification(location, expected_text)).to be_true
 end
 
-def wait_until_dom_has_confirmflag_or_patientsearch
+def wait_until_dom_has_confirmflag_or_patientsearch(wait_until = 60)
   patient_search = PatientSearch2.instance
-  wait_until = 60
+  # wait_until = 60
   has_refreshed = false
   completed = false
   counter = 0
@@ -147,7 +147,11 @@ def perform_patient_search_and_selection(search_value)
 
   @ehmp = PobPatientSearch.new
   wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
-  wait.until { @ehmp.screen_loaded? }
+  begin
+    wait.until { @ehmp.screen_loaded? }
+  rescue Exception => e
+    raise e unless @ehmp.screen_loaded? true
+  end
   enter_search_term(patient_search, search_value)
 
   #----------------------------#
@@ -363,7 +367,7 @@ def applet_refresh_action(css_string)
   aa = Ehmpui.instance
   label = CucumberLabel.new("Applet Refresh")
   string = "[data-appletid='#{css_string}'] .applet-refresh-button"
-  elements = AccessHtmlElement.new(:css, "[data-instanceid='#{css_string}'] .applet-refresh-button")
+  elements = AccessHtmlElement.new(:css, string)
   aa.add_action(label, ClickAction.new, elements)
   expect(aa.wait_until_action_element_visible("Applet Refresh", DefaultLogin.wait_time)).to be_true
   expect(aa.perform_action("Applet Refresh", '')).to eq(true)

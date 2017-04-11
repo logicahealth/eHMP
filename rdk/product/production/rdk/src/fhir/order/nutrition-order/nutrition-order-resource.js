@@ -3,15 +3,23 @@ var rdk = require('../../../core/rdk');
 var nullchecker = rdk.utils.nullchecker;
 var nutritionOrder = require('./nutrition-order');
 
+// FUTURE-TODO Enhance once full support for this FHIR domain has been put into place
 function getResourceConfig() {
     return [{
-        name: 'nutrition-order-nutrition-order',
+        name: 'fhir-order-nutrition-order',
         path: '',
         get: getNutritionOrder,
         subsystems: ['patientrecord', 'jds', 'solr', 'jdsSync', 'authorization'],
-        interceptors: {
-            fhirPid: true
-        },
+        interceptors: { fhirPid: true },
+        requiredPermissions: [],
+        isPatientCentric: true,
+        permitResponseFormat: true
+    },{
+        name: 'fhir-order-nutrition-order-search',
+        path: '_search',
+        post: getNutritionOrder,
+        subsystems: ['patientrecord', 'jds', 'solr', 'jdsSync', 'authorization'],
+        interceptors: { fhirPid: true },
         requiredPermissions: [],
         isPatientCentric: true,
         permitResponseFormat: true
@@ -24,14 +32,13 @@ function getResourceConfig() {
  * @apiGroup Nutrition Order
  * @apiParam {Number} [_count] The number of results to show.
  *
- * @apiDescription
- *
  * @apiExample {js} Request Examples:
  *      // Limiting results count
- *      http://IPADDRESS:POR/resource/fhir/patient/9E7A;253/nutritionorder?_count=1
+ *      http://IP           /resource/fhir/patient/9E7A;253/nutritionorder?_count=1
  *
  * @apiSuccess {json} data Json object conforming to the <a href="http://www.hl7.org/FHIR/2015May/nutritionorder.html">Nutrition Order FHIR DTSU2 specification</a>.
  * @apiSuccessExample Success-Response:
+ * HTTP/1.1 200 OK
  *
  * @apiError (Error 400) Invalid parameter values.
  * @apiErrorExample Error-Response:

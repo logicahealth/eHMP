@@ -35,7 +35,7 @@ Remote Order Checking not available - checks done on local data only^992
 ^PS(55,100863,"PS")
 6
 ^PSRX(404240,0)
-501014^100863^6^992^32^872^30^30^5^^W^^{today+98}^^^992^0.0039^1^2
+501014^100863^6^992^32^872^30^30^5^^W^^{today-451}^^^992^0.0039^1^2
 ^PSRX(404240,1,0)
 ^52.1D^5^5
 ^PSRX(404240,1,1,0)
@@ -69,7 +69,7 @@ Remote Order Checking not available - checks done on local data only^992
 ^PSRX(404240,1,"B",{today-305},5)
 
 ^PSRX(404240,2)
-{today+98}.175946^{today-451}^^^{today+113}^{today-269}^00603-0025-32^^2^^^^{today-451}.180221
+{today-451}.175946^{today-451}^^^{today-451}^{today-269}^00603-0025-32^^2^^^^{today-451}.180221
 ^PSRX(404240,3)
 {today-451}^{today+133}^^{today-333}
 ^PSRX(404240,6,0)
@@ -79,7 +79,7 @@ Remote Order Checking not available - checks done on local data only^992
 ^PSRX(404240,"A",0)
 ^52.3DA^1^1
 ^PSRX(404240,"A",1,0)
-{today+113}^G^^0^Patient Instructions Not Sent By Provider.
+{today-451}^G^^0^Patient Instructions Not Sent By Provider.
 ^PSRX(404240,"ICD",0)
 ^52.052311P^1^1
 ^PSRX(404240,"ICD",1,0)
@@ -87,7 +87,7 @@ Remote Order Checking not available - checks done on local data only^992
 ^PSRX(404240,"L",0)
 ^52.032DA^1^1
 ^PSRX(404240,"L",1,0)
-{today+113}.110239^0^From RX number 501014^119
+{today-451}.110239^0^From RX number 501014^119
 ^PSRX(404240,"MP")
 WINDOW
 ^PSRX(404240,"OR1")
@@ -95,7 +95,7 @@ WINDOW
 ^PSRX(404240,"PC")
 0
 ^PSRX(404240,"PI",0)
-^^1^1^{today+113}^
+^^1^1^{today-451}^
 ^PSRX(404240,"PI",1,0)
 TAKE ONE TABLET PO QDAY
 ^PSRX(404240,"POE")
@@ -111,9 +111,9 @@ TAKE ONE TABLET BY MOUTH EVERY DAY
 ^PSRX(404240,"TYPE")
 0
 ^PSRX(404263,0)
-501037^100863^6^988^426^1368^42^14^0^^W^^{today+119}^^1^988^0.0243^1^2
+501037^100863^6^988^426^1368^42^14^0^^W^^{today-50}^^1^988^0.0243^1^2
 ^PSRX(404263,2)
-{today+119}.143254^{today-50}.1037^20122^^{today+119}^{today-20}^50111-0563-03^^2^^^^{today-50}.1037^^^2
+{today-50}.143254^{today-50}.1037^20122^^{today-50}^{today-20}^50111-0563-03^^2^^^^{today-50}.1037^^^2
 ^PSRX(404263,3)
 {today-50}.1037^^^^^^Administered in Clinic.
 ^PSRX(404263,6,0)
@@ -123,7 +123,7 @@ TAKE ONE TABLET BY MOUTH EVERY DAY
 ^PSRX(404263,"A",0)
 ^52.3DA^1^1
 ^PSRX(404263,"A",1,0)
-{today+119}^G^^0^Patient Instructions Not Sent By Provider.
+{today-50}^G^^0^Patient Instructions Not Sent By Provider.
 ^PSRX(404263,"ICD",0)
 ^52.052311P^1^1
 ^PSRX(404263,"ICD",1,0)
@@ -131,7 +131,7 @@ TAKE ONE TABLET BY MOUTH EVERY DAY
 ^PSRX(404263,"L",0)
 ^52.032DA^1^1
 ^PSRX(404263,"L",1,0)
-{today+119}.143429^0^From RX number 501037^119
+{today-50}.143429^0^From RX number 501037^119
 ^PSRX(404263,"MP")
 CLINIC
 ^PSRX(404263,"OR1")
@@ -139,7 +139,7 @@ CLINIC
 ^PSRX(404263,"PC")
 0
 ^PSRX(404263,"PI",0)
-^^1^1^{today+119}^
+^^1^1^{today-50}^
 ^PSRX(404263,"PI",1,0)
 TAKE ONE TABLET PO TID PRN
 ^PSRX(404263,"POE")
@@ -155,9 +155,9 @@ TAKE ONE TABLET BY MOUTH THREE TIMES A DAY AS NEEDED
 ^PSRX(404263,"TYPE")
 0
 ^PSRX(404297,0)
-501053^100863^6^988^32^92^60^30^6^^W^^{today+124}^^^988^0.5000^1^2
+501053^100863^6^988^32^92^60^30^6^^W^^{today-17}^^^988^0.5000^1^2
 ^PSRX(404297,2)
-{today+124}.141042^{today-17}^^^{today+124}^{today+193}^00087-6063-13^^2^^^^{today-17}.1159
+{today-17}.141042^{today-17}^^^{today-17}^{today+193}^00087-6063-13^^2^^^^{today-17}.1159
 ^PSRX(404297,3)
 {today-17}^{today+144}
 ^PSRX(404297,6,0)
@@ -167,7 +167,7 @@ TAKE ONE TABLET BY MOUTH THREE TIMES A DAY AS NEEDED
 ^PSRX(404297,"A",0)
 ^52.3DA^1^1
 ^PSRX(404297,"A",1,0)
-{today+124}^G^^0^Patient Instructions Not Sent By Provider.
+{today-17}^G^^0^Patient Instructions Not Sent By Provider.
 ^PSRX(404297,"ICD",0)
 ^52.052311P^1^1
 ^PSRX(404297,"ICD",1,0)
@@ -175,13 +175,13 @@ TAKE ONE TABLET BY MOUTH THREE TIMES A DAY AS NEEDED
 ^PSRX(404297,"INS")
 for diabetes
 ^PSRX(404297,"INS1",0)
-^52.0115^1^1^{today+124}^^
+^52.0115^1^1^{today-17}^^
 ^PSRX(404297,"INS1",1,0)
 for diabetes
 ^PSRX(404297,"L",0)
 ^52.032DA^1^1
 ^PSRX(404297,"L",1,0)
-{today+124}.165825^0^From RX number 501053^119
+{today-17}.165825^0^From RX number 501053^119
 ^PSRX(404297,"MP")
 WINDOW
 ^PSRX(404297,"OR1")
@@ -189,13 +189,13 @@ WINDOW
 ^PSRX(404297,"PC")
 0
 ^PSRX(404297,"PI",0)
-^^1^1^{today+124}^
+^^1^1^{today-17}^
 ^PSRX(404297,"PI",1,0)
 TAKE TWO TABLETS PO QDAY
 ^PSRX(404297,"POE")
 1
 ^PSRX(404297,"PRC",0)
-^^1^1^{today+124}^
+^^1^1^{today-17}^
 ^PSRX(404297,"PRC",1,0)
 for diabetes
 ^PSRX(404297,"SIG")
@@ -205,7 +205,7 @@ for diabetes
 ^PSRX(404297,"SIG1",1,0)
 TAKE TWO TABLETS MOUTH EVERY DAY FOR DIABETES
 ^PSRX(404297,"STA")
-11
+0
 ^PSRX(404297,"TYPE")
 0
 

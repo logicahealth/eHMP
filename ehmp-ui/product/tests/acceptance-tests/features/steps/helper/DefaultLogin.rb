@@ -1,12 +1,17 @@
 require_relative 'DefaultTiming.rb'
 # Valid Login information to be used for most tests
 class DefaultLogin
-  @@adk_url = ENV.keys.include?('ADK_IP') ? 'http://' + ENV['ADK_IP'] : "http://IP_ADDRESS/"
-  @@ehmpui_url = ENV.keys.include?('EHMPUI_IP') ? ENV['EHMPUI_IP'] : "https://IP_ADDRESS"
+  @@adk_url = ENV.keys.include?('ADK_IP') ? 'http://' + ENV['ADK_IP'] : "http://IP        /"
+  @@ehmpui_url = ENV.keys.include?('EHMPUI_IP') ? ENV['EHMPUI_IP'] : "https://IP        "
   @@local_testrun = ENV.keys.include?('LOCAL')
 
   @@default_wait_time = DefaultTiming.default_wait_time
   @@facility_name = "PANORAMA"
+  # @@accesscode = "PW    "
+  # @@verifycode = "PW    !!"
+  #@@accesscode = "PW"
+  #@@verifycode = "PW"
+
   @@accesscode = "PW"
   @@verifycode = "PW"
   @@logged_in = false

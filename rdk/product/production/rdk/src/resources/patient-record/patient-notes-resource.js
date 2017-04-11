@@ -1,8 +1,8 @@
 'use strict';
 
 var rdk = require('../../core/rdk');
+var nullchecker = rdk.utils.nullchecker;
 var async = require('async');
-var dd = require('drilldown');
 var httpUtil = require('../../core/rdk').utils.http;
 var _ = require('lodash');
 var jdsFilter = require('jds-filter');
@@ -97,7 +97,7 @@ function getPatientNotes(req, res) {
             'EDIT RECORD',
             'DELETE RECORD',
             'CHANGE TITLE',
-			'MAKE ADDENDUM'
+            'MAKE ADDENDUM'
         ];
         var unsignedAddenda = [];
         _.each(rawNotes.ehmpAddenda, function(note) {
@@ -188,7 +188,9 @@ function getPatientNotes(req, res) {
 
 function readEhmpUnsignedNotes(req, callback) {
     getDocumentsFromPjds(req, function(err, results) {
-        req.logger.info({result: results}, 'NOTES-READER: ehmp unsigned raw results');
+        req.logger.info({
+            result: results
+        }, 'NOTES-READER: ehmp unsigned raw results');
         if (err || (results && results.error)) {
             return callback(err || results.error);
         }
@@ -205,7 +207,9 @@ function readEhmpUnsignedNotes(req, callback) {
 
 function readEhmpUnsignedAddenda(req, callback) {
     getAddendaFromPjds(req, true, function(err, results) {
-        req.logger.info({result: results}, 'NOTES-READER: ehmp unsigned addenda raw results');
+        req.logger.info({
+            result: results
+        }, 'NOTES-READER: ehmp unsigned addenda raw results');
         if (err || (results && results.error)) {
             return callback(err || results.error);
         }
@@ -230,7 +234,9 @@ function readVistaUnsignedNotes(req, callback) {
             ['like', 'uid', '%' + req.session.user.site + '%']
         ]
     }, function(err, results) {
-        req.logger.info({result: results}, 'NOTES-READER: vista unsigned raw results');
+        req.logger.info({
+            result: results
+        }, 'NOTES-READER: vista unsigned raw results');
         if (err || (results && results.error)) {
             return callback(err || results.error);
         }
@@ -254,7 +260,9 @@ function readVistaUncosignedNotes(req, callback) {
             ['like', 'uid', '%' + req.session.user.site + '%']
         ]
     }, function(err, results) {
-        req.logger.info({result: results}, 'NOTES-READER: vista uncosigned raw results');
+        req.logger.info({
+            result: results
+        }, 'NOTES-READER: vista uncosigned raw results');
         if (err || (results && results.error)) {
             return callback(err || results.error);
         }
@@ -285,7 +293,9 @@ function readVistaUncosignedAddenda(req, callback) {
             ['like', 'uid', '%' + req.session.user.site + '%']
         ]
     }, function(err, results) {
-        req.logger.info({result: results}, 'NOTES-READER: vista uncosigned raw results (uncosigned addenda)');
+        req.logger.info({
+            result: results
+        }, 'NOTES-READER: vista uncosigned raw results (uncosigned addenda)');
         if (err || (results && results.error)) {
             return callback(err || results.error);
         }
@@ -323,7 +333,9 @@ function readVistaSignedNotes(req, callback) {
         ],
         order: 'referenceDateTime DESC'
     }, function(err, results) {
-        req.logger.info({result: results}, 'NOTES-READER: vista signed raw results');
+        req.logger.info({
+            result: results
+        }, 'NOTES-READER: vista signed raw results');
         if (err || (results && results.error)) {
             return callback(err || results.error);
         }
@@ -578,11 +590,7 @@ function getAddendaFromPjds(req, removeNonAuthorNote, callback) {
 
         //Add the rest of the VistA addenda
         _.each(uniqueParents, function(parent) {
-            if (parent.text.length > 1) {
-                for (var i = 1; i < parent.text.length; i++) {
-                    parent.addenda.push(createModelForDocumentAddendum(logger, parent.text[i], parent)); // TODO: Possible candidate for createAddendaFromText()
-                }
-            }
+            createAddendaFromText(req, parent);
             delete parent.clinicalObject;
             return parent.status !== 'RETRACTED';
         });
@@ -784,13 +792,19 @@ function wrapItems(items) {
 }
 
 function getLocationName(req, cb) {
+
+    var DFN = req.interceptorResults.patientIdentifiers.dfn;
+
+    if(nullchecker.isNullish(DFN)){
+        return cb('Missing required patient identifiers');
+    }
+
     var config = req.app.config;
     var site = req.session.user.site;
     var HMP_UI_CONTEXT = 'HMP UI CONTEXT';
     var RPC_NAME = 'TIU DOCUMENTS BY CONTEXT';
-    var DFN = _.last(req.query.localPid.split(';'));
-    var START_DATE = filemanDateUtil.getFilemanDateTime(new Date(moment().subtract(2, 'years').format("MMMM D, YYYY HH:mm:ss")));
-    var STOP_DATE = filemanDateUtil.getFilemanDateTime(new Date(moment().format("MMMM D, YYYY HH:mm:ss")));
+    var START_DATE = filemanDateUtil.getFilemanDateTime(new Date(moment().subtract(2, 'years').format('MMMM D, YYYY HH:mm:ss')));
+    var STOP_DATE = filemanDateUtil.getFilemanDateTime(new Date(moment().format('MMMM D, YYYY HH:mm:ss')));
     var vistaConfig = _.extend({}, req.app.config.vistaSites[site], {
         context: HMP_UI_CONTEXT,
         accessCode: req.session.user.accessCode,
@@ -814,7 +828,9 @@ function getLocationName(req, cb) {
             return cb(null, []); // return empty list in case of error
         }
 
-        req.logger.debug({result: result}, 'Resource patient-record-notes: getLocationName(), TIU DOCUMENTS BY CONTEXT: response success');
+        req.logger.debug({
+            result: result
+        }, 'Resource patient-record-notes: getLocationName(), TIU DOCUMENTS BY CONTEXT: response success');
         var arrResults = result.split('\n');
         var arrObj = [];
 

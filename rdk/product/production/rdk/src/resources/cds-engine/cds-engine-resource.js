@@ -1,4 +1,3 @@
-/*jslint node: true */
 'use strict';
 
 var cdsEngine = require('./cds-engine');
@@ -13,36 +12,33 @@ var interceptors = {
 
 exports.getResourceConfig = function (app) {
 
-    // db setup
-    cdsEngine.init(app);
-
     return [{
         name: 'cds-engine-cds-engine-get',
         path: '/registry',
         get: cdsEngine.getEngine,
         interceptors: interceptors,
-        requiredPermissions: [],
+        requiredPermissions: ['read-cds-engine'],
         isPatientCentric: false
     }, {
         name: 'cds-engine-cds-engine-post',
         path: '/registry',
         post: cdsEngine.postEngine,
         interceptors: interceptors,
-        requiredPermissions: [],
+        requiredPermissions: ['manage-cds-engine'],
         isPatientCentric: false
     }, {
         name: 'cds-engine-cds-engine-put',
         path: '/registry',
         put: cdsEngine.putEngine,
         interceptors: interceptors,
-        requiredPermissions: [],
+        requiredPermissions: ['manage-cds-engine'],
         isPatientCentric: false
     }, {
         name: 'cds-engine-cds-engine-delete',
         path: '/registry',
         delete: cdsEngine.deleteEngine,
         interceptors: interceptors,
-        requiredPermissions: [],
+        requiredPermissions: ['manage-cds-engine'],
         isPatientCentric: false
     }];
 };

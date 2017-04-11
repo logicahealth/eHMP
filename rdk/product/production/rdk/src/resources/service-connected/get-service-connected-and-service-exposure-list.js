@@ -2,7 +2,6 @@
 
 var rdk = require('../../core/rdk');
 var _ = require('lodash');
-var dd = require('drilldown');
 var httpUtil = rdk.utils.http;
 
 
@@ -26,7 +25,7 @@ function getServiceConnectedAndServiceExposureList(req, res) {
     req.audit.logCategory = 'SERVICE_CONNECTED_EXPOSURE_LIST';
     req.audit.patientId = req.param('pid');
 
-    var sitePid = dd(req.interceptorResults)('patientIdentifiers')('siteDfn').val;
+    var sitePid = _.get(req.interceptorResults, 'patientIdentifiers.siteDfn');
 
     var appConfig = req.app.config;
     var jdsServer = appConfig.jdsServer;

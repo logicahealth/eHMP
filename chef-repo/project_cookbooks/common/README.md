@@ -4,7 +4,6 @@ cookbook for common funtionality across the Automated Infrastructure Development
 
 Attributes
 ----------
-TODO: List your cookbook attributes here.
 
 find_nodes.rb library
 ---------------------

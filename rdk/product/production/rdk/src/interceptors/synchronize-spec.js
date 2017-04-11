@@ -1,4 +1,3 @@
-/*jslint node: true */
 'use strict';
 
 var _ = require('lodash');
@@ -299,6 +298,207 @@ describe('synchronize.js', function() {
 
             expect(synchronize._isSyncLastUpdateTimeoutExceeded(non_timeout_1, inactivityTimeoutMillis, now)).to.equal(false);
             expect(synchronize._isSyncLastUpdateTimeoutExceeded(non_timeout_2, inactivityTimeoutMillis, now)).to.equal(false);
+        });
+    });
+
+    describe('isOneSiteCompleted()', function() {
+        var simpleSyncStatus = {
+            data: {
+                icn: '10108V420871',
+                latestEnterpriseSyncRequestTimestamp: 1471616762518,
+                latestJobTimestamp: 1471616762518,
+                latestSourceStampTime: 20160819101156,
+                sites: {
+                    '9E7A': {
+                        latestJobTimestamp: 1471616762518,
+                        pid: '9E7A;3',
+                        sourceStampTime: 20160817124027,
+                        syncCompleted: true
+                    },
+                    C877: {
+                        latestJobTimestamp: 1471616762518,
+                        pid: 'C877;3',
+                        sourceStampTime: 20160817124043,
+                        syncCompleted: true
+                    },
+                    DOD: {
+                        latestJobTimestamp: 1471616762518,
+                        pid: 'DOD;0000000003',
+                        sourceStampTime: 20160819101156,
+                        syncCompleted: true
+                    },
+                    HDR: {
+                        latestJobTimestamp: 1471616762518,
+                        pid: 'HDR;10108V420871',
+                        sourceStampTime: 20160819101156,
+                        syncCompleted: true
+                    },
+                    VLER: {
+                        latestJobTimestamp: 1471616762518,
+                        pid: 'VLER;10108V420871',
+                        sourceStampTime: 20160819101156,
+                        syncCompleted: true
+                    }
+                },
+                syncCompleted: true
+            }
+        };
+
+        it('tests that all true values returns true', function() {
+            simpleSyncStatus.data.syncCompleted = true;
+            simpleSyncStatus.data.sites['9E7A'].syncCompleted = true;
+            simpleSyncStatus.data.sites.C877.syncCompleted = true;
+            simpleSyncStatus.data.sites.DOD.syncCompleted = true;
+            simpleSyncStatus.data.sites.HDR.syncCompleted = true;
+            simpleSyncStatus.data.sites.VLER.syncCompleted = true;
+
+            expect(synchronize._isOneSiteCompleted(simpleSyncStatus)).to.equal(true);
+        });
+
+        it('tests that all true values except base level attribute returns true', function() {
+            simpleSyncStatus.data.syncCompleted = false;
+            simpleSyncStatus.data.sites['9E7A'].syncCompleted = true;
+            simpleSyncStatus.data.sites.C877.syncCompleted = true;
+            simpleSyncStatus.data.sites.DOD.syncCompleted = true;
+            simpleSyncStatus.data.sites.HDR.syncCompleted = true;
+            simpleSyncStatus.data.sites.VLER.syncCompleted = true;
+
+            expect(synchronize._isOneSiteCompleted(simpleSyncStatus)).to.equal(true);
+        });
+
+        it('tests that single true value returns true', function() {
+            simpleSyncStatus.data.syncCompleted = false;
+            simpleSyncStatus.data.sites['9E7A'].syncCompleted = false;
+            simpleSyncStatus.data.sites.C877.syncCompleted = true;
+            simpleSyncStatus.data.sites.DOD.syncCompleted = true;
+            simpleSyncStatus.data.sites.HDR.syncCompleted = true;
+            simpleSyncStatus.data.sites.VLER.syncCompleted = true;
+
+            expect(synchronize._isOneSiteCompleted(simpleSyncStatus)).to.equal(true);
+        });
+
+        it('tests that multiple true values returns true', function() {
+            simpleSyncStatus.data.syncCompleted = false;
+            simpleSyncStatus.data.sites['9E7A'].syncCompleted = true;
+            simpleSyncStatus.data.sites.C877.syncCompleted = false;
+            simpleSyncStatus.data.sites.DOD.syncCompleted = true;
+            simpleSyncStatus.data.sites.HDR.syncCompleted = false;
+            simpleSyncStatus.data.sites.VLER.syncCompleted = false;
+
+            expect(synchronize._isOneSiteCompleted(simpleSyncStatus)).to.equal(true);
+        });
+
+        it('tests that all false values returns false', function() {
+            simpleSyncStatus.data.syncCompleted = false;
+            simpleSyncStatus.data.sites['9E7A'].syncCompleted = false;
+            simpleSyncStatus.data.sites.C877.syncCompleted = false;
+            simpleSyncStatus.data.sites.DOD.syncCompleted = false;
+            simpleSyncStatus.data.sites.HDR.syncCompleted = false;
+            simpleSyncStatus.data.sites.VLER.syncCompleted = false;
+
+            expect(synchronize._isOneSiteCompleted(simpleSyncStatus)).to.equal(false);
+        });
+
+        it('tests that empty and null status returns false', function() {
+            expect(synchronize._isOneSiteCompleted(null)).to.equal(false);
+            expect(synchronize._isOneSiteCompleted({})).to.equal(false);
+        });
+    });
+
+    describe('isEverySiteInError()', function() {
+        var simpleSyncStatus = {
+            data: {
+                icn: '10108V420871',
+                latestEnterpriseSyncRequestTimestamp: 1471616762518,
+                latestJobTimestamp: 1471616762518,
+                latestSourceStampTime: 20160819101156,
+                sites: {
+                    '9E7A': {
+                        latestJobTimestamp: 1471616762518,
+                        pid: '9E7A;3',
+                        sourceStampTime: 20160817124027,
+                        syncCompleted: false
+                    },
+                    C877: {
+                        latestJobTimestamp: 1471616762518,
+                        pid: 'C877;3',
+                        sourceStampTime: 20160817124043,
+                        syncCompleted: false
+                    },
+                    DOD: {
+                        latestJobTimestamp: 1471616762518,
+                        pid: 'DOD;0000000003',
+                        sourceStampTime: 20160819101156,
+                        syncCompleted: false
+                    },
+                    HDR: {
+                        latestJobTimestamp: 1471616762518,
+                        pid: 'HDR;10108V420871',
+                        sourceStampTime: 20160819101156,
+                        syncCompleted: false
+                    },
+                    VLER: {
+                        latestJobTimestamp: 1471616762518,
+                        pid: 'VLER;10108V420871',
+                        sourceStampTime: 20160819101156,
+                        syncCompleted: false
+                    }
+                },
+                syncCompleted: false
+            }
+        };
+
+        it('tests that no error values returns false', function() {
+            delete simpleSyncStatus.data.hasError;
+            delete simpleSyncStatus.data.sites['9E7A'].hasError;
+            delete simpleSyncStatus.data.sites.C877.hasError;
+            delete simpleSyncStatus.data.sites.DOD.hasError;
+            delete simpleSyncStatus.data.sites.HDR.hasError;
+            delete simpleSyncStatus.data.sites.VLER.hasError;
+
+            expect(synchronize._isEverySiteInError(simpleSyncStatus)).to.equal(false);
+        });
+
+        it('tests that only overall error returns false', function() {
+            simpleSyncStatus.data.hasError = true;
+            delete simpleSyncStatus.data.sites['9E7A'].hasError;
+            delete simpleSyncStatus.data.sites.C877.hasError;
+            delete simpleSyncStatus.data.sites.DOD.hasError;
+            delete simpleSyncStatus.data.sites.HDR.hasError;
+            delete simpleSyncStatus.data.sites.VLER.hasError;
+
+            expect(synchronize._isEverySiteInError(simpleSyncStatus)).to.equal(false);
+        });
+
+        it('tests that any false value returns false', function() {
+            simpleSyncStatus.data.hasError = true;
+            delete simpleSyncStatus.data.sites['9E7A'].hasError;
+            simpleSyncStatus.data.sites.C877.hasError = true;
+            simpleSyncStatus.data.sites.DOD.hasError = true;
+            simpleSyncStatus.data.sites.HDR.hasError = true;
+            simpleSyncStatus.data.sites.VLER.hasError = true;
+
+            expect(synchronize._isEverySiteInError(simpleSyncStatus)).to.equal(false);
+        });
+
+        it('tests that all errors returns true', function() {
+            simpleSyncStatus.data.hasError = true;
+            simpleSyncStatus.data.sites['9E7A'].hasError = true;
+            simpleSyncStatus.data.sites.C877.hasError = true;
+            simpleSyncStatus.data.sites.DOD.hasError = true;
+            simpleSyncStatus.data.sites.HDR.hasError = true;
+            simpleSyncStatus.data.sites.VLER.hasError = true;
+
+            expect(synchronize._isEverySiteInError(simpleSyncStatus)).to.equal(true);
+
+            delete simpleSyncStatus.data.hasError;
+            expect(synchronize._isEverySiteInError(simpleSyncStatus)).to.equal(true);
+        });
+
+        it('tests that empty and null status returns false', function() {
+            expect(synchronize._isEverySiteInError(null)).to.equal(false);
+            expect(synchronize._isEverySiteInError({})).to.equal(false);
+            expect(synchronize._isEverySiteInError({ data: { sites: {}}})).to.equal(false);
         });
     });
 

@@ -9,6 +9,15 @@ var patientSearchResource = require('./patient-search-resource');
 
 module.exports = performPatientLast5Search;
 
+/**
+ * Retrieves patient information for a patients that
+ * matches on a given string that equals the first letter
+ * of a patient's last name concatenated with the last
+ * four digits of their SSN.
+ *
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ */
 function performPatientLast5Search(req, res) {
     req.logger.debug('last5.performPatientSearch entering method');
     req.audit.logCategory = 'RETRIEVE';

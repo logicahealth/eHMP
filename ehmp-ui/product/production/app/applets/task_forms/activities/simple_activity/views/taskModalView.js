@@ -2,10 +2,11 @@ define([
     'backbone',
     'marionette',
     'underscore',
+    'moment',
     'app/applets/task_forms/activities/simple_activity/utils/eventHandler',
     'hbs!app/applets/task_forms/activities/simple_activity/templates/taskModalTemplate',
     'app/applets/task_forms/activities/simple_activity/utils/appletHelper'
-], function(Backbone, Marionette, _, EventHandler, TaskModalTemplate, AppletHelper) {
+], function(Backbone, Marionette, _, moment, EventHandler, TaskModalTemplate, AppletHelper) {
     "use strict";
 
     var Form = ADK.UI.Form.extend({

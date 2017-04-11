@@ -1,19 +1,19 @@
 define([
+    'handlebars',
     'app/applets/cds_advice/util',
     'app/applets/cds_advice/modal/default/defaultModal',
     'app/applets/cds_advice/modal/error/errorModal',
     'app/applets/cds_advice/modal/advice/adviceModal',
     'app/applets/cds_advice/modal/reminder/reminderModal',
     'app/applets/cds_advice/modal/loading/loadingModal',
-    'hbs!app/applets/cds_advice/list/priorityTemplate'
-], function(Util, DefaultModal, ErrorModal, AdviceModal, ReminderModal, LoadingModal, PriorityTemplate) {
+], function(Handlebars,Util, DefaultModal, ErrorModal, AdviceModal, ReminderModal, LoadingModal) {
     'use strict';
     //Data Grid Columns
     var priorityCol = {
         name: 'priorityText',
         label: 'Priority',
         cell: 'handlebars',
-        template: PriorityTemplate,
+        template: Handlebars.compile('<span class="{{priorityCSS}}">{{priorityText}}</span>'),
         hoverTip: 'clinicalreminders_priority'
     };
     var typeCol = {
@@ -100,6 +100,7 @@ define([
                 fullScreenColumns: fullScreenColumns,
                 enableModal: true,
                 filterEnabled: true,
+                filterFields: _.pluck(fullScreenColumns, 'name'),
                 onClickRow: function(model, event) { //Row click event handler
                     self.onClickRowHandler(model, event);
                 },

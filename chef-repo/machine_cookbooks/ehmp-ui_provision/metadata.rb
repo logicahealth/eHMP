@@ -4,19 +4,9 @@ maintainer_email 'team-milkyway@vistacore.us'
 license          'All rights reserved'
 description      'Installs/Configures ehmp-ui_provision'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version          "2.0.58"
+version          "2.0.75"
 
-depends "machine", "2.0.29"
+depends "machine", "2.0.40"
 
-########################################################################
-# This section is adding all provision cookbooks as dependencies in
-# order to get the list of all artifacts and their versions for the
-# manifest json file
-########################################################################
-depends "ehmp_provision", "~>2.0.0"
-depends "rdk_provision", "~>2.0.0"
-depends "cds_provision", "~>2.0.0"
-########################################################################
-
-depends "ehmp-ui", "2.0.15"
-depends "ehmp_balancer", "2.0.28"
+depends "ehmp-ui", "2.0.17"
+depends "ehmp_balancer", "2.0.33"

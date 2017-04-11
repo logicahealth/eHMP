@@ -125,6 +125,41 @@ var convertDateFormat = function (originalDate) {
     return formattedDate = moment(originalDate).format('YYYY-MM-DDTHH:mm:ss');
 }
 
+
+var extendObject = function(baseObject, newObject) {
+    for (var attr in newObject) {
+        baseObject[attr] = newObject[attr];
+    }
+    return baseObject;
+};
+
+var checkQueryComplete = function(v2JSON) {
+    var result = {};
+
+    if ((v2JSON.queryComplete !== 'true') || (!(v2JSON.statusList instanceof Array))) {
+        return result;
+    }
+
+    v2JSON.statusList.forEach(function(status) {
+        result = (status.SiteStatus !== 'COMPLETE') ? result : {
+            queryComplete: true,
+            statusList: v4StatusList(parseInt(status.RetrievedCount))
+        };
+    });
+
+    return result;
+};
+
+var mapRecords = function(v2JSON, mapper) {
+    if (!(v2JSON.dataList instanceof Array)) {
+        return [];
+    }
+    return v2JSON.dataList.map(function(dataItem) {
+        return (dataItem.dataRecord ? mapper(dataItem.dataRecord) : {});
+    });
+};
+
+
 module.exports.baseTransform = baseTransfom;
 module.exports.nullInsteadOfEmptyString = nullInsteadOfEmptyString;
 module.exports.nullInsteadOfEmptyOneElementObject = nullInsteadOfEmptyOneElementObject;
@@ -135,3 +170,7 @@ module.exports.emptyArrayInsteadOfEmptyOneElementObjectArrayWithPrimary = emptyA
 module.exports.v4StatusList = v4StatusList;
 module.exports.convertDateFormat = convertDateFormat;
 module.exports.nullInsteadOfFormattedDateObject = nullInsteadOfFormattedDateObject;
+
+module.exports.extendObject = extendObject;
+module.exports.checkQueryComplete = checkQueryComplete;
+module.exports.mapRecords = mapRecords;

@@ -100,6 +100,7 @@
                      if (bulkEditFormModel !== null) {
                          inWorkflow = true;
                          parentCollection.trigger('hide-loading-view');
+                         parentCollection.trigger('enable-form');
                      }
                      appletUtil.appletAlert.warning(usersCollection, 'Error Retrieving Users', errorMessage, inWorkflow);
                      if (inResultsView === true) {
@@ -107,6 +108,10 @@
                      } else {
                          usersCollection.trigger('noUsersReturned');
                      }
+                     _.each(_.clone(formModel.usersListResults.models), function(model){
+                        if(model.get('selected') !== true)
+                            model.destroy();
+                     });
                  }
                  if (elementTarget !== null && !_.isUndefined(elementTarget)) {
                     var findTarget = currentView.$el.find(elementTarget);

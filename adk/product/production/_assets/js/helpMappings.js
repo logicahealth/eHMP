@@ -1,10 +1,10 @@
 define([], function() {
 
-    var serverPath = "help/eHMP_User Guide for Release 1.3_v1.1_12012015.htm";
-    var serverLogonPath = "help/eHMP_User Guide for Release 1.3_v1.1_12012015 logon.htm";
+    var serverPath = "http://DNS  DNS       .DNS   /pm/iehr/vista_evolution/eHMP/Help_Wiki/Wiki%20Page%20Library/";
+    var serverLogonPath = "http://DNS  DNS       .DNS   /pm/iehr/vista_evolution/eHMP/Help_Wiki/Wiki%20Page%20Library/Accessing%20the%20eHMP%20Application.aspx";
     var pageNotFoundPath = "help/eHMP_Page Not Found.htm";
     var helpNotAvailablePath = "help/eHMP_Help Content Not Available.htm";
-    var pdfVersionPath = "eHMP_User Guide for Release 1.3_v1.1_12012015.pdf";
+    var pdfVersionPath = "eHMP_User Guide for Release 2 0_v1 2_09132016.pdf";
 
     var helpLinks = {
         "html_version": {
@@ -28,7 +28,7 @@ define([], function() {
             "url": serverLogonPath,
             "tooltip": "Help"
         },
-        //TODO: add "#_TOC" when the user manual includes section about Supported VistAs
+        //FUTURE-TODO: SSOi add "#_TOC" when the user manual includes section about Supported VistAs
         "suported_vistas": {
             "url": serverPath,
             "tooltip": "Help"
@@ -38,24 +38,24 @@ define([], function() {
         Patient Search
         ****************************************/
         "patient_search": {
-            "url": serverPath + "#_Toc435776066",
+            "url": serverPath + "Patient%20Selection%20Screen.aspx",
             "tooltip": "Help",
             "tooltip_placement": "bottom"
         },
         "myCPRSList": {
-            "url": serverPath + "#_Toc435776067",
+            "url": serverPath + "Patient%20Selection%20Screen.aspx",
             "tooltip": "Help"
         },
         "mySite": {
-            "url": serverPath + "#_Toc435776067",
+            "url": serverPath + "Patient%20Selection%20Screen.aspx",
             "tooltip": "Help"
         },
         "patient_search_confirm": {
-            "url": serverPath + "#_Toc435776070",
+            "url": serverPath + "Patient%20Confirmation.aspx",
             "tooltip": "Help"
         },
         "patient_search_restricted": {
-            "url": serverPath + "#_Toc435776071",
+            "url": serverPath + "Patient%20Selection%20Screen.aspx",
             "tooltip": "Help"
         },
 
@@ -63,15 +63,23 @@ define([], function() {
         The eHMP Header
         ****************************************/
         "ehmp_header": {
-            "url": serverPath + "#_Toc435776074",
+            "url": serverPath + "Global%20Navigation.aspx",
             "tooltip": "Help"
         },
         "patient_search_button": {
-            "url": serverPath + "#_Toc435776076",
+            "url": serverPath + "Global%20Navigation.aspx",
             "tooltip": "Help"
         },
         "user_info": {
-            "url": serverPath + "#_Toc435776078",
+            "url": serverPath + "Global%20Navigation.aspx",
+            "tooltip": "Help"
+        },
+
+         /****************************************
+        The Patient Demographic Bar
+        ****************************************/
+        "patient_demographic": {
+            "url": serverPath + "Patient%20Information%20Bar.aspx",
             "tooltip": "Help"
         },
 
@@ -79,11 +87,23 @@ define([], function() {
         Active & Recent Medications
         ****************************************/
         "activeMeds_gist": {
-            "url": serverPath + "#_Toc435776094",
+            "url": serverPath + "Active%20and%20Recent%20Meds%20Applet.aspx",
             "tooltip": "Help"
         },
         "activeMeds_standard": {
-            "url": serverPath + "#_Toc435776095",
+            "url": serverPath + "Active%20and%20Recent%20Meds%20Applet.aspx",
+            "tooltip": "Help"
+        },
+
+        /****************************************
+        Activities
+        ****************************************/
+        "activities_standard": {
+            "url": serverPath + "Activities%20Applet.aspx",
+            "tooltip": "Help"
+        },
+        "activities_expanded": {
+            "url": serverPath + "Activities%20Applet.aspx",
             "tooltip": "Help"
         },
 
@@ -91,15 +111,15 @@ define([], function() {
         Allergies
         ****************************************/
         "allergy_grid_gist": {
-            "url": serverPath + "#_Toc435776098",
+            "url": serverPath + "Allergies%20Applet.aspx",
             "tooltip": "Help"
         },
         "allergy_grid_standard": {
-            "url": serverPath + "#_Toc435776099",
+            "url": serverPath + "Allergies%20Applet.aspx",
             "tooltip": "Help"
         },
         "allergy_grid_expanded": {
-            "url": serverPath + "#_Toc435776100",
+            "url": serverPath + "Allergies%20Applet.aspx",
             "tooltip": "Help"
         },
 
@@ -107,11 +127,11 @@ define([], function() {
         Appointments & Visits
         ****************************************/
         "appointments_standard": {
-            "url": serverPath + "#_Toc435776103",
+            "url": serverPath + "Appointments%20and%20Visits%20Applet.aspx",
             "tooltip": "Help"
         },
         "appointments_expanded": {
-            "url": serverPath + "#_Toc435776104",
+            "url": serverPath + "Appointments%20and%20Visits%20Applet.aspx",
             "tooltip": "Help"
         },
 
@@ -119,15 +139,15 @@ define([], function() {
         Clinical Reminders
         ****************************************/
         "clinical_reminders": {
-            "url": serverPath + "#_Toc435776106",
+            "url": serverPath + "Clinical%20Reminders%20Applet.aspx",
             "tooltip": "Help"
         },
         "cds_advice_standard": {
-            "url": serverPath + "#_Toc435776107",
+            "url": serverPath + "Clinical%20Reminders%20Applet.aspx",
             "tooltip": "Help"
         },
         "cds_advice_expanded": {
-            "url": serverPath + "#_Toc435776108",
+            "url": serverPath + "Clinical%20Reminders%20Applet.aspx",
             "tooltip": "Help"
         },
 
@@ -135,11 +155,11 @@ define([], function() {
         Community Health Summaries
         ****************************************/
         "ccd_grid_standard": {
-            "url": serverPath + "#_Toc435776111",
+            "url": serverPath + "Community%20Health%20Summaries%20Applet.aspx",
             "tooltip": "Help"
         },
         "ccd_grid_expanded": {
-            "url": serverPath + "#_Toc435776112",
+            "url": serverPath + "Community%20Health%20Summaries%20Applet.aspx",
             "tooltip": "Help"
         },
 
@@ -147,19 +167,19 @@ define([], function() {
         Conditions
         ****************************************/
         "problems": {
-            "url": serverPath + "#_Toc435776114",
+            "url": serverPath + "Problems%20Applet.aspx",
             "tooltip": "Help"
         },
         "problems_gist": {
-            "url": serverPath + "#_Toc435776115",
+            "url": serverPath + "Problems%20Applet.aspx",
             "tooltip": "Help"
         },
         "problems_standard": {
-            "url": serverPath + "#_Toc435776116",
+            "url": serverPath + "Problems%20Applet.aspx",
             "tooltip": "Help"
         },
         "problems_expanded": {
-            "url": serverPath + "#_Toc435776117",
+            "url": serverPath + "Problems%20Applet.aspx",
             "tooltip": "Help"
         },
 
@@ -167,11 +187,11 @@ define([], function() {
         Documents
         ****************************************/
         "documents_standard": {
-            "url": serverPath + "#_Toc435776120",
+            "url": serverPath + "Documents%20Applet.aspx",
             "tooltip": "Help"
         },
         "documents_expanded": {
-            "url": serverPath + "#_Toc435776121",
+            "url": serverPath + "Documents%20Applet.aspx",
             "tooltip": "Help"
         },
 
@@ -179,7 +199,7 @@ define([], function() {
         Encounters
         ****************************************/
         "encounters_gist": {
-            "url": serverPath + "#_Toc435776124",
+            "url": serverPath + "Encounters%20Applet.aspx",
             "tooltip": "Help"
         },
 
@@ -187,15 +207,15 @@ define([], function() {
         Immunizations
         ****************************************/
         "immunizations_gist": {
-            "url": serverPath + "#_Toc435776127",
+            "url": serverPath + "Immunizations%20Applet.aspx",
             "tooltip": "Help"
         },
         "immunizations_standard": {
-            "url": serverPath + "#_Toc435776128",
+            "url": serverPath + "Immunizations%20Applet.aspx",
             "tooltip": "Help"
         },
         "immunizations_expanded": {
-            "url": serverPath + "#_Toc435776129",
+            "url": serverPath + "Immunizations%20Applet.aspx",
             "tooltip": "Help"
         },
 
@@ -203,7 +223,7 @@ define([], function() {
         Medications Review
         ****************************************/
         "medication_review_expanded": {
-            "url": serverPath + "#_Toc435776132",
+            "url": serverPath + "Medications%20Review%20Applet.aspx",
             "tooltip": "Help"
         },
 
@@ -211,11 +231,11 @@ define([], function() {
         Narrative Lab Results
         ****************************************/
         "narrative_lab_results_grid_standard": {
-            "url": serverPath + "#_Toc435776135",
+            "url": serverPath + "Narrative%20Lab%20Results%20Applet.aspx",
             "tooltip": "Help"
         },
         "narrative_lab_results_grid_expanded": {
-            "url": serverPath + "#_Toc435776136",
+            "url": serverPath + "Narrative%20Lab%20Results%20Applet.aspx",
             "tooltip": "Help"
         },
 
@@ -223,15 +243,15 @@ define([], function() {
         Numeric Lab Results
         ****************************************/
         "lab_results_grid_standard": {
-            "url": serverPath + "#_Toc435776135",
+            "url": serverPath + "Numeric%20Lab%20Results%20Applet.aspx",
             "tooltip": "Help"
         },
         "lab_results_grid_expanded": {
-            "url": serverPath + "#_Toc435776136",
+            "url": serverPath + "Numeric%20Lab%20Results%20Applet.aspx",
             "tooltip": "Help"
         },
         "lab_results_grid_gist": {
-            "url": serverPath + "#_Toc435776139",
+            "url": serverPath + "Numeric%20Lab%20Results%20Applet.aspx",
             "tooltip": "Help"
         },
 
@@ -239,11 +259,11 @@ define([], function() {
         Orders
         ****************************************/
         "orders_standard": {
-            "url": serverPath + "#_Toc435776144",
+            "url": serverPath + "Orders%20Applet.aspx",
             "tooltip": "Help"
         },
         "orders_expanded": {
-            "url": serverPath + "#_Toc435776145",
+            "url": serverPath + "Orders%20Applet.aspx",
             "tooltip": "Help"
         },
 
@@ -251,11 +271,11 @@ define([], function() {
         Reports
         ****************************************/
         "reports_standard": {
-            "url": serverPath + "#_Toc435776148",
+            "url": serverPath + "Reports%20Applet.aspx",
             "tooltip": "Help"
         },
         "reports_expanded": {
-            "url": serverPath + "#_Toc435776149",
+            "url": serverPath + "Reports%20Applet.aspx",
             "tooltip": "Help"
         },
 
@@ -263,7 +283,19 @@ define([], function() {
         Stacked Graph
         ****************************************/
         "stackedGraph_expanded": {
-            "url": serverPath + "#_Toc435776151",
+            "url": serverPath + "Stacked%20Graphs%20Applet.aspx",
+            "tooltip": "Help"
+        },
+
+        /****************************************
+        Tasks
+        ****************************************/
+        "todo_list_standard": {
+            "url": serverPath + "Tasks%20Applet.aspx",
+            "tooltip": "Help"
+        },
+        "todo_list_expanded": {
+            "url": serverPath + "Tasks%20Applet.aspx",
             "tooltip": "Help"
         },
 
@@ -271,7 +303,15 @@ define([], function() {
         Timeline
         ****************************************/
         "newsfeed_standard": {
-            "url": serverPath + "#_Toc435776153",
+            "url": serverPath + "Timeline%20Applet.aspx",
+            "tooltip": "Help"
+        },
+
+        /****************************************
+        Timeline Summary in GDT
+        ****************************************/
+        "newsfeed_expanded": {
+            "url": serverPath + "Timeline%20Applet.aspx",
             "tooltip": "Help"
         },
 
@@ -279,7 +319,7 @@ define([], function() {
         VistA Health Summaries
         ****************************************/
         "vista_health_summaries_standard": {
-            "url": serverPath + "#_Toc435776158",
+            "url": serverPath + "VistA%20Health%20Summaries%20Applet.aspx",
             "tooltip": "Help"
         },
 
@@ -287,15 +327,27 @@ define([], function() {
         Vitals
         ****************************************/
         "vitals_gist": {
-            "url": serverPath + "#_Toc435776161",
+            "url": serverPath + "Vitals%20Applet.aspx",
             "tooltip": "Help"
         },
         "vitals_standard": {
-            "url": serverPath + "#_Toc435776162",
+            "url": serverPath + "Vitals%20Applet.aspx",
             "tooltip": "Help"
         },
         "vitals_expanded": {
-            "url": serverPath + "#_Toc435776163",
+            "url": serverPath + "Vitals%20Applet.aspx",
+            "tooltip": "Help"
+        },
+
+        /****************************************
+        Military History
+        ****************************************/
+        "military_hist_standard": {
+            "url": serverPath + "Military%20History%20Applet.aspx",
+            "tooltip": "Help"
+        },
+        "military_hist_expanded": {
+            "url": serverPath + "Military%20History%20Applet.aspx",
             "tooltip": "Help"
         },
 
@@ -303,7 +355,7 @@ define([], function() {
         Applet Features
         ****************************************/
         "coversheet": {
-            "url": serverPath + "#_Toc435776166",
+            "url": serverPath + "Workspaces.aspx",
             "tooltip": "Help",
             "tooltip_placement": "bottom"
         },
@@ -311,8 +363,32 @@ define([], function() {
         /****************************************
         Workspace Manager
         ****************************************/
-        "_standard": {
-            "url": serverPath + "#_Toc435776183",
+        "workspace_manager": {
+            "url": serverPath + "Workspace%20Manager.aspx",
+            "tooltip": "Help"
+        },
+
+        /****************************************
+        Workspace Editor
+        ****************************************/
+        "workspace_editor": {
+            "url": serverPath + "Workspace%20Editor.aspx",
+            "tooltip": "Help"
+        },
+
+        /****************************************
+        Record Search
+        ****************************************/
+        "record_search": {
+            "url": serverPath + "Record%20Search.aspx",
+            "tooltip": "Help"
+        },
+
+        /****************************************
+        Global Date Filter
+        ****************************************/
+        "gdf": {
+            "url": serverPath + "Global%20Date%20Filter.aspx",
             "tooltip": "Help"
         },
 
@@ -320,7 +396,7 @@ define([], function() {
         Other eHMP Features
         ****************************************/
         "status_bar": {
-            "url": serverPath + "#_Toc435776198",
+            "url": serverPath + "Footer.aspx",
             "tooltip": "Help"
         },
 
@@ -328,11 +404,11 @@ define([], function() {
         User Management
         ****************************************/
         "user_management_standard": {
-            "url": serverPath + "#_Toc435776199",
+            "url": serverPath + "Access%20Control.aspx",
             "tooltip": "Help"
         },
         "user_management_expanded": {
-            "url": serverPath + "#_Toc435776199",
+            "url": serverPath + "Access%20Control.aspx",
             "tooltip": "Help"
         }
     };

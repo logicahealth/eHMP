@@ -9,14 +9,21 @@ var fhirToJDSSearch = require('../common/utils/fhir-to-jds-search');
 
 function getResourceConfig() {
     return [{
-        name: 'medicationprescription-medicationprescription',
+        name: 'fhir-medication-prescription',
         path: '',
         get: getmedicationPrescription,
         subsystems: ['patientrecord', 'jds', 'solr', 'jdsSync', 'authorization'],
-        interceptors: { // REQUIRED FOR pid IN URL
-            fhirPid: true
-        },
-        requiredPermissions: [],
+        interceptors: { fhirPid: true },
+        requiredPermissions: ['read-fhir'],
+        isPatientCentric: true,
+        permitResponseFormat: true
+    },{
+        name: 'fhir-medication-prescription-search',
+        path: '_search',
+        post: getmedicationPrescription,
+        subsystems: ['patientrecord', 'jds', 'solr', 'jdsSync', 'authorization'],
+        interceptors: { fhirPid: true },
+        requiredPermissions: ['read-fhir'],
         isPatientCentric: true,
         permitResponseFormat: true
     }];
@@ -63,7 +70,7 @@ function validateParams(params, onSuccess, onError) {
                 onError(['Unsupported _sort criteria. Supported attributes are: identifier, patient']);
             }
         }, onError);
-        // TODO: add validation for code param
+        // FUTURE-TODO: add validation for code param
     }, onError);
 }
 

@@ -9,6 +9,7 @@ import java.security.cert.X509Certificate;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import java.util.regex.Pattern;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
@@ -50,7 +51,11 @@ public class HdrConnection {
                 "&clientRequestInitiationTime=" + clientRequestInitiationTime;
 
         for (String excludeIdentifier : excludeIdentifiers) {
-            answer += "&excludeIdentifier=" + excludeIdentifier;
+            if (Pattern.matches("-\\d+-[A-Z\\da-z]+", excludeIdentifier)) {
+                answer += "&excludeIdentifier=" + excludeIdentifier;
+            } else {
+                LOG.debug("Invalid identifier provided: " + excludeIdentifier);
+            }
         }
 
         LOG.debug("Using HDR url: " + answer);

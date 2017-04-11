@@ -6,13 +6,15 @@
        xmlns:jaxrs="http://cxf.apache.org/jaxrs"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:task="http://www.springframework.org/schema/task"
+	   xmlns:util="http://www.springframework.org/schema/util"
        xsi:schemaLocation="
 			http://cxf.apache.org/core http://cxf.apache.org/schemas/core.xsd
 			http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 			http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd
 			http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd
 			http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
-			http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.1.xsd">
+			http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.1.xsd
+			http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 
     <import resource="classpath:META-INF/cxf/cxf.xml"/>
     <import resource="classpath:META-INF/cxf/cxf-servlet.xml"/>
@@ -27,7 +29,6 @@
         <property name="locations">
             <list>
                 <value>classpath:cds-metrics-service.properties</value>
-                <value>file:${catalina.home}/shared/classes/cds-metrics-service.properties</value>
             </list>
         </property>
     </bean>
@@ -84,9 +85,14 @@
 	-->
 
 
-    <bean id="mongoDbDao" class="com.cognitive.cds.invocation.mongo.MongoDbDao" >
-		<constructor-arg name="mongoDbUrl" value="${mongo-db-url}" />
-    </bean> 
+	<!-- Add as a bean reference for Mongo DB access -->
+     <bean id="mongoDbDao" class="com.cognitive.cds.invocation.mongo.MongoDbDao" >
+		<property name="mongo_host" value="${mongo_host}" />
+		<property name="mongo_port" value="${mongo_port}" />
+		<property name="mongo_username" value="${mongo_username}" />
+		<property name="mongo_password" value="${mongo_password}" />
+		<property name="mongo_connectionsPerHost" value="${mongo_connectionsPerHost}" />
+    </bean>
 
     <bean class="com.cognitive.cds.services.metrics.MetricsCollectionService">
         <property name="mongoDbDao" ref="mongoDbDao" />

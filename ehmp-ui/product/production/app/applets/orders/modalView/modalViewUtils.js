@@ -12,14 +12,15 @@ define([
     var getBaseModalOptions = function(title) {
         return {
             size: 'large',
-            title: title || ''
+            title: title || '',
+            'wrapperClasses': 'liquid-modal'
         };
     };
 
     var getDetailModelOptions = function(model, options) {
         var collection = _.get(options, 'collection', new Backbone.Collection());
         return _.extend({}, model.attributes, {
-            orderId: model.get('localId') + ';1',
+            orderId: OrderUtils.getFieldFromUid(model.get('uid'), 'orderId'),
             collection: collection,
             modelIndex: collection.indexOf(model),
             pageable: !_.get(options, 'appletConfig.fullScreen', true)
@@ -33,14 +34,18 @@ define([
         };
     };
 
-    var getOrderDetailModalOptions = function(model) {
+    var getOrderDetailModalOptions = function(model, showOptions) {
+        _.defaults(showOptions, {});
         var modalModel = new Backbone.Model(_.extend({}, model.attributes, {
             detailSummary: model.get('detail'),
             getSignBtnStatus: OrderUtils.getSignBtnStatus(model),
-            getDiscontinueBtnStatus: OrderUtils.getDiscontinueBtnStatus(model)
+            getDiscontinueBtnStatus: OrderUtils.getDiscontinueBtnStatus(model),
+            hideNavigation: _.has(showOptions, 'hideNavigation') ? showOptions.hideNavigation : true
         }));
+
         var attributes = _.extend(_.pick(model.attributes, VIEW_ATTRIBUTE_LIST), {
-            model: modalModel
+            model: modalModel,
+            triggerElement: showOptions.triggerElement || undefined
         });
 
         var modalView = new ModalView(attributes);
@@ -58,8 +63,13 @@ define([
 
     return {
         showOrderDetails: function(model, options) {
+            _.defaults(options, {});
             var loadingModal = new ADK.UI.Modal(getLoadingModalOptions(model));
-            loadingModal.show();
+            var showOptions = {
+                triggerElement: $(document.activeElement),
+                hideNavigation: _.has(options, 'hideNavigation') ? options.hideNavigation : true
+            };
+            loadingModal.show(showOptions);
 
             //If it's an eHMP order we want to pull up activity detail screen.
             if (!_.isUndefined(model.get('kind')) && model.get('kind') === 'Consult-eHMP' && !_.isUndefined(model.get('data'))) {
@@ -75,8 +85,8 @@ define([
                 var detailModel = new ADK.UIResources.Writeback.Orders.Detail(getDetailModelOptions(model, options));
 
                 loadingModal.listenTo(detailModel, 'read:success', function(model) {
-                    var orderDetailModal = new ADK.UI.Modal(getOrderDetailModalOptions(model));
-                    orderDetailModal.show();
+                    var orderDetailModal = new ADK.UI.Modal(getOrderDetailModalOptions(model, showOptions));
+                    orderDetailModal.show(showOptions);
                 });
                 loadingModal.listenTo(detailModel, 'read:error', function(model, resp) {
                     loadingModal.showChildView('modalRegion', new ADK.Views.Error.create({

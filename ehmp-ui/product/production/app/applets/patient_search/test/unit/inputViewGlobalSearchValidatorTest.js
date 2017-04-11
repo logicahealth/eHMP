@@ -107,45 +107,11 @@ define([
     });
 
     //Tests for .validateGlobalSearchData() (valid configurations of search parameters)
-    describe("Determine if the search parameters validator recognizes valid combinations of search parameters (last name required, at least one other search term required)", function() {
-        it("Should return success (last name + first name)", function() {
-            testValidatorData['name.last'] = testGlobalSearchValidatorData.validLastName;
-            testValidatorData['name.first'] = testGlobalSearchValidatorData.validFirstName;
-            expect(validatorUtil.validateGlobalSearchParameterConfiguration(testValidatorData)).toBe("success");
-        });
-        it("Should return success (last name + DOB)", function() {
-            testValidatorData['name.last'] = testGlobalSearchValidatorData.validLastName;
-            testValidatorData['date.birth'] = testGlobalSearchValidatorData.validDOB;
-            expect(validatorUtil.validateGlobalSearchParameterConfiguration(testValidatorData)).toBe("success");
-        });
-        it("Should return success (last name + SSN)", function() {
-            testValidatorData['name.last'] = testGlobalSearchValidatorData.validLastName;
-            testValidatorData.ssn = testGlobalSearchValidatorData.validSSN;
-            expect(validatorUtil.validateGlobalSearchParameterConfiguration(testValidatorData)).toBe("success");
-        });
-        it("Should return success (last name + first name + DOB)", function() {
-            testValidatorData['name.last'] = testGlobalSearchValidatorData.validLastName;
-            testValidatorData['name.first'] = testGlobalSearchValidatorData.validFirstName;
-            testValidatorData['date.birth'] = testGlobalSearchValidatorData.validDOB;
-            expect(validatorUtil.validateGlobalSearchParameterConfiguration(testValidatorData)).toBe("success");
-        });
+    describe("Determine if the search parameters validator recognizes valid combinations of search parameters (last name, first name, and ssn is required)", function() {
         it("Should return success (last name + first name + SSN)", function() {
             testValidatorData['name.last'] = testGlobalSearchValidatorData.validLastName;
             testValidatorData['name.first'] = testGlobalSearchValidatorData.validFirstName;
-            testValidatorData.ssn = testGlobalSearchValidatorData.validSSN;
-            expect(validatorUtil.validateGlobalSearchParameterConfiguration(testValidatorData)).toBe("success");
-        });
-        it("Should return success (last name + DOB + SSN)", function() {
-            testValidatorData['name.last'] = testGlobalSearchValidatorData.validLastName;
-            testValidatorData['date.birth'] = testGlobalSearchValidatorData.validDOB;
-            testValidatorData.ssn = testGlobalSearchValidatorData.validSSN;
-            expect(validatorUtil.validateGlobalSearchParameterConfiguration(testValidatorData)).toBe("success");
-        });
-        it("Should return success (last name + first name + DOB + SSN)", function() {
-            testValidatorData['name.last'] = testGlobalSearchValidatorData.validLastName;
-            testValidatorData['name.first'] = testGlobalSearchValidatorData.validFirstName;
-            testValidatorData['date.birth'] = testGlobalSearchValidatorData.validDOB;
-            testValidatorData.ssn = testGlobalSearchValidatorData.validSSN;
+            testValidatorData.ssn = testGlobalSearchValidatorData.validSSN1;
             expect(validatorUtil.validateGlobalSearchParameterConfiguration(testValidatorData)).toBe("success");
         });
     });
@@ -153,44 +119,44 @@ define([
     //Tests for .validateGlobalSearchData() (invalid configurations of search parameters)
     describe("Determine if the search parameters validator recognizes invalid combinations of search parameters", function() {
         it("Should return false (no search parameters)", function() {
-            expect(validatorUtil.validateGlobalSearchParameterConfiguration(testValidatorData)).toBe("lastNameRequiredFailure");
+            expect(validatorUtil.validateGlobalSearchParameterConfiguration(testValidatorData)).toBe("threeFieldsRequiredFailure");
         });
         it("Should return false (last name)", function() {
             testValidatorData['name.last'] = testGlobalSearchValidatorData.validLastName;
-            expect(validatorUtil.validateGlobalSearchParameterConfiguration(testValidatorData)).toBe("twoFieldsRequiredFailure");
+            expect(validatorUtil.validateGlobalSearchParameterConfiguration(testValidatorData)).toBe("threeFieldsRequiredFailure");
         });
         it("Should return false (first name)", function() {
             testValidatorData['name.first'] = testGlobalSearchValidatorData.validFirstName;
-            expect(validatorUtil.validateGlobalSearchParameterConfiguration(testValidatorData)).toBe("lastNameRequiredFailure");
+            expect(validatorUtil.validateGlobalSearchParameterConfiguration(testValidatorData)).toBe("threeFieldsRequiredFailure");
         });
         it("Should return false (DOB)", function() {
             testValidatorData['date.birth'] = testGlobalSearchValidatorData.validDOB;
-            expect(validatorUtil.validateGlobalSearchParameterConfiguration(testValidatorData)).toBe("lastNameRequiredFailure");
+            expect(validatorUtil.validateGlobalSearchParameterConfiguration(testValidatorData)).toBe("threeFieldsRequiredFailure");
         });
         it("Should return false (SSN)", function() {
             testValidatorData['date.birth'] = testGlobalSearchValidatorData.validSSN;
-            expect(validatorUtil.validateGlobalSearchParameterConfiguration(testValidatorData)).toBe("lastNameRequiredFailure");
+            expect(validatorUtil.validateGlobalSearchParameterConfiguration(testValidatorData)).toBe("threeFieldsRequiredFailure");
         });
         it("Should return false (first name + DOB)", function() {
             testValidatorData['name.first'] = testGlobalSearchValidatorData.validFirstName;
             testValidatorData['date.birth'] = testGlobalSearchValidatorData.validDOB;
-            expect(validatorUtil.validateGlobalSearchParameterConfiguration(testValidatorData)).toBe("lastNameRequiredFailure");
+            expect(validatorUtil.validateGlobalSearchParameterConfiguration(testValidatorData)).toBe("threeFieldsRequiredFailure");
         });
         it("Should return false (first name + SSN)", function() {
             testValidatorData['name.first'] = testGlobalSearchValidatorData.validFirstName;
             testValidatorData.ssn = testGlobalSearchValidatorData.validSSN;
-            expect(validatorUtil.validateGlobalSearchParameterConfiguration(testValidatorData)).toBe("lastNameRequiredFailure");
+            expect(validatorUtil.validateGlobalSearchParameterConfiguration(testValidatorData)).toBe("threeFieldsRequiredFailure");
         });
         it("Should return false (DOB + SSN)", function() {
             testValidatorData['date.birth'] = testGlobalSearchValidatorData.validDOB;
             testValidatorData.ssn = testGlobalSearchValidatorData.validSSN;
-            expect(validatorUtil.validateGlobalSearchParameterConfiguration(testValidatorData)).toBe("lastNameRequiredFailure");
+            expect(validatorUtil.validateGlobalSearchParameterConfiguration(testValidatorData)).toBe("threeFieldsRequiredFailure");
         });
         it("Should return false (first name + DOB + SSN)", function() {
             testValidatorData['name.first'] = testGlobalSearchValidatorData.validFirstName;
             testValidatorData['date.birth'] = testGlobalSearchValidatorData.validDOB;
             testValidatorData.ssn = testGlobalSearchValidatorData.validSSN;
-            expect(validatorUtil.validateGlobalSearchParameterConfiguration(testValidatorData)).toBe("lastNameRequiredFailure");
+            expect(validatorUtil.validateGlobalSearchParameterConfiguration(testValidatorData)).toBe("threeFieldsRequiredFailure");
         });
     });
 

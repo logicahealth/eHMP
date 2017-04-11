@@ -40,7 +40,7 @@ var sampleDodProblem = {
     'priority': null,
     'providerIEN': null,
     'recordedDate': null,
-    'responsibleProvider': null,
+    'responsibleProvider': 'BHIE, USERONE',
     'scConditions': null,
     'serviceConnected': true,
     'serviceIEN': null,
@@ -85,8 +85,10 @@ var expectedResult = {
     'acuityName': 'problem.1.acuity',
     'entered': '20100821000000',
     'updated': '20110821000000',
+    'enteredBy': 'problem.1.provider',
+    'responsibleProvider': 'BHIE, USERONE',
     'pid': 'DOD;' + mockEdipi,
-    'onset': '20090314000000',
+    'onset': '20090313',
     'kind': 'Problem',
     'uid': 'urn:va:problem:DOD:0000000001:987654321',
     'summary': 'problem.1.detail.text',
@@ -124,6 +126,9 @@ function assertFieldExpectations(transformResult, expectedResult, original) {
     expect(transformResult.facilityCode).toEqual(expectedResult.facilityCode);
     expect(transformResult.locationName).toEqual(expectedResult.locationName);
     expect(transformResult.providerName).toEqual(expectedResult.providerName);
+    expect(transformResult.enteredBy).toEqual(expectedResult.enteredBy);
+    expect(transformResult.responsibleProvider).toEqual(expectedResult.responsibleProvider);
+    expect(transformResult.onset).toEqual(expectedResult.onset);
 
     expect(transformResult.problemText).toEqual(expectedResult.problemText);
     expect(transformResult.icdCode).toEqual(expectedResult.icdCode);
@@ -224,6 +229,7 @@ var expectedResultWithNulls = {
     'acuityName': 'problem.1.acuity',
     'pid': 'DOD;' + mockEdipi,
     'entered': null,
+    'enteredBy': 'problem.1.provider',
     'updated': null,
     'onset': null,
     'kind': 'Problem',

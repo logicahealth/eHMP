@@ -20,6 +20,6 @@ pre-stop script
   set -x
   PATH=/opt/chef/bin:/opt/chef/embedded/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
   bluepill <%= @name %> unmonitor
-  sh <%= node[:vxsync][:home_dir] %>/scripts/shutdownVxSync.sh
+  sh <%= @shutdown_script %>
   exec bluepill <%= @name %> stop
 end script

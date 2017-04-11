@@ -72,7 +72,7 @@ define(['jquery', 'moment', 'underscore'], function($, Moment, _) {
         var markStart = '<mark class="cpe-search-term-match">';
         var markEnd = '</mark>';
         _.each(keywords, function(key) {
-            var regex = new RegExp("\\b"+key+"\\b", "gi");
+            var regex = new RegExp('\\b' + key.replace(/[-[\]{}()*+?.,\\^$|#\key]/g, "\\$&") + '\\b' + '(?=[^<>]*(<|$))', "gi");
             textToHighlight = textToHighlight.replace(regex, markStart + '$&' + markEnd);
         });
         return textToHighlight;

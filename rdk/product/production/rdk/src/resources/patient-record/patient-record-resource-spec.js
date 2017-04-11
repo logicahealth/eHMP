@@ -1,9 +1,7 @@
-/*jslint node: true*/
 'use strict';
 
 var asu = require('../../subsystems/asu/asu-process');
-var rdk = require('../../core/rdk');
-var jds = rdk.utils.jds;
+var jds = require('../../subsystems/jds/jds-subsystem');
 var patientrecordResource = require('./patient-record-resource');
 var httpMocks = require('node-mocks-http');
 

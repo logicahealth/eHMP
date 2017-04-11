@@ -2,9 +2,8 @@ define([
     'app/screens/AllergyGridFull',
     'app/screens/VitalsFull',
     'app/screens/ImmunizationsFull',
-    'app/screens/OrdersFull',
-    "main/ADK"
-], function(AllergyGridFull, VitalsFull, ImmunizationsFull, OrdersFull, ADK) {
+    'app/screens/OrdersFull'
+], function(AllergyGridFull, VitalsFull, ImmunizationsFull, OrdersFull) {
     'use strict';
     var detailAppletChannels = {
         // mapping of domain --> appletId
@@ -155,40 +154,25 @@ define([
                 deferredResponse = $.Deferred();
 
             if (channelName) {
+                // request detail view from whatever applet is listening for this domain
+                var channel = ADK.Messaging.getChannel(channelName),
+                    response = channel.request('detailView', clickedResult);
+
+
                 if (!clickedResult.suppressModal) {
-                    // display spinner in modal while detail view is loading
                     var modal = new ADK.UI.Modal({
-                        view: ADK.Views.Loading.create(),
+                        view: new response.view({
+                            model: clickedResult.model
+                        }),
                         options: {
                             size: "large",
-                            title: "Loading..."
+                            title: response.title
                         }
                     });
                     modal.show();
+                } else {
+                    return response;
                 }
-
-                // request detail view from whatever applet is listening for this domain
-                var channel = ADK.Messaging.getChannel(channelName),
-                    deferredDetailResponse = channel.request('detailView', clickedResult);
-
-                deferredDetailResponse.done(function(response) {
-                    if (!clickedResult.suppressModal) {
-                        var modal = new ADK.UI.Modal({
-                            view: response.view,
-                            options: {
-                                size: "large",
-                                title: response.title
-                            }
-                        });
-                        modal.show();
-                        deferredResponse.resolve();
-                    } else {
-                        deferredResponse.resolve(response);
-                    }
-                });
-                deferredDetailResponse.fail(function(response) {
-                    deferredResponse.reject(response);
-                });
             } else {
                 // no detail view available; use the default placeholder view
                 var detailView = new DefaultDetailView();
@@ -210,22 +194,14 @@ define([
                 }
             }
 
-            return deferredResponse.promise();
         },
         onStart: function() {
             AllergyGridFull.setUpEvents();
             VitalsFull.setUpEvents();
             ImmunizationsFull.setUpEvents();
             OrdersFull.setUpEvents();
-            var searchAppletChannel = ADK.Messaging.getChannel("activeMeds");
-            searchAppletChannel.on('detailView', this.onResultClicked);
         },
-        // afterStart: function() {
-        //     ADK.Messaging.trigger('appletsCreated');
-        // },
         onStop: function() {
-            var searchAppletChannel = ADK.Messaging.getChannel("activeMeds");
-            searchAppletChannel.off('getDetailView', this.onResultClicked);
             OrdersFull.turnOffEvents();
         },
         patientRequired: true

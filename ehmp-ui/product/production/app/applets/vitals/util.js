@@ -2,9 +2,10 @@ define([
     'backbone',
     'marionette',
     'underscore',
+    'moment',
     'app/applets/vitals/utilParse'
 
-], function(Backbone, Marionette, _, Util) {
+], function(Backbone, Marionette, _, moment, Util) {
     "use strict";
     Util.defaults = {
         'BPS': {
@@ -111,8 +112,6 @@ define([
     };
 
     Util.buildCollection = function(collection, splitBloodPressure) {
-        var currentScreen = ADK.Messaging.request('get:current:screen');
-        var isWorkspaceScreen = !currentScreen.config.predefined;
 
         var newcol = Util.splitBloodPressure(collection, splitBloodPressure);
         //add normalized names,columndescriptions,valid result flag
@@ -151,7 +150,7 @@ define([
             model.attributes.vitalColumns = true;
         });
 
-        collection.reset(newcol.models);
+        collection.reset(newcol.models, {});
         return collection;
     };
 
@@ -249,10 +248,10 @@ define([
                 descriptionColumn: (Util.defaults.hasOwnProperty(type)) ? Util.defaults[type].descriptionColumn : type,
                 displayName: type,
                 name: type,
-                resultUnitsMetricResultUnits: 'No Record',
-                resultUnits: 'No Record',
-                summary: 'No Record',
-                metricResultUnits: 'No Record',
+                resultUnitsMetricResultUnits: 'No Records Found',
+                resultUnits: 'No Records Found',
+                summary: 'No Records Found',
+                metricResultUnits: 'No Records Found',
                 typeName: type,
                 observed: '',
                 observationType: (Util.defaults.hasOwnProperty(type)) ? Util.defaults[type].observationType : 'vitals',

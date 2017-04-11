@@ -1,12 +1,14 @@
-/*
- TODO: Using ORWDXC ACCEPT until RPC wrapper is in place
- */
 'use strict';
 
 var rpcClientFactory = require('./../../core/rpc-client-factory');
 var filemanDateUtil = require('../../../utils/fileman-date-converter');
+var nullchecker = require('../../../core/rdk').utils.nullchecker;
 
 module.exports.check = function(writebackContext, callback) {
+    writebackContext.model.dfn = writebackContext.interceptorResults.patientIdentifiers.dfn;
+    if(nullchecker.isNullish(writebackContext.model.dfn)){
+        return callback('Missing required patient identifiers');
+    }
 
     rpcClientFactory.getRpcClient(writebackContext, 'OR CPRS GUI CHART', function (error, rpcClient) {
         if (error) {

@@ -174,10 +174,6 @@ Create a Clinical Object. The service will perform server-side validation of the
 * subDomain (Note: 'subDomain' **must** be present **and** be a registered subdomain)
 * visit
 
-+ Parameters
-
-    + pid (string, required) - Patient ID
-
 + Request JSON Body (application/json)
 
     + Body

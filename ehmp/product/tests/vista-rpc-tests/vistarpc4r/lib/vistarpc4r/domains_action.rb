@@ -60,9 +60,9 @@ class DomainsView
     end
     
     if host.upcase == "9E7A"
-      @host = 'IP_ADDRESS'
+      @host = 'IP        '
     elsif host.upcase == "C877"
-      @host = 'IP_ADDRESS'
+      @host = 'IP        '
     else
       fail "*** This host (#{host}) is not define! ***"
     end
@@ -70,7 +70,7 @@ class DomainsView
   private :define_port_dfn
   
   def broker_connection
-    broker = VistaRPC4r::RPCBrokerConnection.new(@host, 9210, 'pu1234', 'pu1234!!')
+    broker = VistaRPC4r::RPCBrokerConnection.new(@host, 9210, 'PW    ', 'PW    !!')
     broker.connect
     p "The RPC Broker Connection status is #{broker.isConnected}"
     broker.setContext('OR CPRS GUI CHART')

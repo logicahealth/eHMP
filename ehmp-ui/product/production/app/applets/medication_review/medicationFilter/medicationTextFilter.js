@@ -22,24 +22,13 @@ define([
 
             this.maximizedScreen = false;
             var maximizedApplet = ADK.Messaging.request('applet:maximized');
-            if (maximizedApplet && maximizedApplet.get('instanceId').indexOf(appletConfig.id) != -1) {
+            if (maximizedApplet) {
                 this.maximizedScreen = true;
                 appletConfig.filterName = maximizedApplet.get('filterName');
+                appletConfig.filterText = maximizedApplet.get('filterText');
                 ADK.Messaging.reply("applet:maximized", function() {
                     return undefined;
                 });
-            }
-
-            this.expandedAppletId = this.view.options.appletConfig.instanceId;
-            if (appletConfig.fullScreen) {
-                this.parentWorkspace = ADK.Messaging.request('get:current:workspace');
-                var expandedModel = ADK.SessionStorage.get.sessionModel('expandedAppletId');
-                if (!_.isUndefined(expandedModel) && !_.isUndefined(expandedModel.get('id'))) {
-                    this.expandedAppletId = expandedModel.get('id');
-                    ADK.SessionStorage.set.sessionModel('expandedAppletId', new Backbone.Model({
-                        'id': undefined
-                    }));
-                }
             }
 
             //Set applet's fullScreen option in session
@@ -75,6 +64,7 @@ define([
                     destinationCollection: this.textFilteredCollection,
                     filterFields: filterFields,
                     filterName: appletConfig.filterName,
+                    filterText: appletConfig.filterText,
                     model: this.model
                 };
 

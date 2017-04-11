@@ -1,4 +1,4 @@
-@F280_VitalsGist @regression @triage
+@F280_VitalsGist @regression @triage 
 
 Feature: F280 - Vitals Applet
 
@@ -28,7 +28,7 @@ Scenario: Verfy vitals for patient using Overview Sheet
   Then the Vitals gist displays no records for
       | CG    | CG           |
 
-@F280_3_vitalsGist_View  @US4259
+@F280_3_vitalsGist_View  @US4259 
 Scenario: Verfy vitals for patient using Overview Sheet
   # Given user is logged into eHMP-UI
   And user searches for and selects "Ninetynine,Patient"
@@ -81,12 +81,12 @@ Scenario: Verify that Type column header can be sorted in ascending when clicked
   Then Overview is active
   And the user has selected All within the global date picker
   Then the "Vitals" applet is finished loading
-  And the user sorts the Vitals Gist grid by "Type" 
+  When the user sorts the Vitals Gist grid by "Type" 
   Then the Vitals gist is sorted in alphabetic order based on Type
   When the user sorts the Vitals Gist grid by "Type" 
   Then the Vitals gist is sorted in reverse alphabetic order based on Type
 
-@f280_vitals_toolbar
+@f280_vitals_toolbar  
 Scenario: Verify the vital toolbar
   # Given user is logged into eHMP-UI
   And user searches for and selects "Ten,Patient"
@@ -100,7 +100,7 @@ Scenario: Verify the vital toolbar
    | Detail View Button|
    | Info Button       |
 
-@f280_vitals_quickview @DE3242
+@f280_vitals_quickview_resultcol @DE3242 @DE6037 @debug @DE6842
 Scenario: Verify the vital quick
   # Given user is logged into eHMP-UI
   And user searches for and selects "Ten,Patient"
@@ -108,31 +108,38 @@ Scenario: Verify the vital quick
   And the user has selected All within the global date picker
   Then the "Vitals" applet is finished loading
   When the user clicks "Blood pressure Sistolic" vital result column
-  Then a quickview displays table with headers
-   | header |
-   | Date       |
-   | Result |
-   | Ref. Range |
-   | Facility |
+  Then a quickview displays a vitals table with expected headers
+
+@f280_vitals_quickview_button @DE3242 @DE6037 @debug @DE6842
+Scenario: Verify the vital quick
+  # Given user is logged into eHMP-UI
+  Given user searches for and selects "Ten,Patient"
+  And Overview is active
+  And the user has selected All within the global date picker
+  And the "Vitals" applet is finished loading
+  When the user views the first Vitals Gist quicklook table via the toolbar
+  Then a quickview displays a vitals table with expected headers
    
-@F280_VitalsGist_detail_view 
+@F280_VitalsGist_detail_view @DE6010 @DE6897
 Scenario: Verfy details for Vitals for patient using Gist view applet
 	# Given user is logged into eHMP-UI
 	And user searches for and selects "Ten,Patient"
 	Then Overview is active
+  And the user has selected All within the global date picker
 	Then the "Vitals" applet is finished loading
 	When the user views the first Vitals Gist detail view
     Then the modal is displayed
     And the modal's title is "Blood Pressure"
     
-@F280_VitalsGist_detail_from_expand_view 
+@F280_VitalsGist_detail_from_expand_view @DE6010
 Scenario: Verfy details for Vitals for patient using expand view applet
 	# Given user is logged into eHMP-UI
 	And user searches for and selects "Ten,Patient"
 	Then Overview is active
+    And the user has selected All within the global date picker
 	Then the "Vitals" applet is finished loading
 	Then the user expands the vitals applet
 	When the user views the first Vital detail view
     Then the modal is displayed
-    And the modal's title is "BMI"
+    And the modal's title is "Body Mass Index"
 

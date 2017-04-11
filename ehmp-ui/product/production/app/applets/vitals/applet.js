@@ -7,10 +7,7 @@ define([
     "app/applets/vitals/gistConfig",
     'app/applets/vitals/vitalsCollectionHandler',
     'app/applets/vitals/modal/modalView',
-    'hbs!app/applets/vitals/list/resultTemplate',
-    'hbs!app/applets/vitals/list/observedTemplate',
     'hbs!app/applets/vitals/list/gridTemplate',
-    'hbs!app/applets/vitals/list/qualifierTemplate',
     'hbs!app/applets/vitals/modal/detailsFooterTemplate',
     'app/applets/vitals/modal/modalHeaderView',
     'hbs!app/applets/vitals/templates/tooltip',
@@ -18,7 +15,7 @@ define([
     'app/applets/vitals/writeback/addVitals',
     'app/applets/visit/writeback/addselectVisit',
     'app/applets/vitals/writeback/enteredInErrorView'
-], function(Backbone, Marionette, $, Handlebars, Util, gistConfig, collectionHandler, ModalView, resultTemplate, observedTemplate, gridTemplate, qualifierTemplate, detailsFooterTemplate, modalHeader, tooltip, StackedGraph, addVitals, addselectEncounter, EnteredInErrorView) {
+], function(Backbone, Marionette, $, Handlebars, Util, gistConfig, collectionHandler, ModalView, gridTemplate, detailsFooterTemplate, modalHeader, tooltip, StackedGraph, addVitals, addselectEncounter, EnteredInErrorView) {
 
     'use strict';
     var model;
@@ -37,7 +34,7 @@ define([
         name: 'resultUnitsMetricResultUnits',
         label: 'Result',
         cell: 'handlebars',
-        template: resultTemplate,
+        template: Handlebars.compile('{{resultUnits}}{{#if metricResult}}<span class="color-grey-darker">({{metricResultUnits}})</span>{{/if}}'),
         hoverTip: 'vitals_result'
     };
     var observedFormattedCol = {
@@ -47,7 +44,7 @@ define([
         cell: Backgrid.HandlebarsCell.extend({
             className: 'handlebars-cell flex-width-date-time'
         }),
-        template: observedTemplate,
+        template: Handlebars.compile('{{observedFormatted}}'),
         hoverTip: 'vitals_dateobserved'
     };
     var observedFormattedCoversheetCol = {
@@ -119,7 +116,7 @@ define([
         response = Util.getResultedFormatted(response);
         response = Util.getDisplayName(response);
         response = Util.getTypeName(response);
-        response = Util.noVitlasNoRecord(response);
+        response = Util.noVitalsNoRecord(response);
         response = Util.getFormattedHeight(response);
         response = Util.getResultUnits(response);
         response = Util.getMetricResultUnits(response);
@@ -161,11 +158,11 @@ define([
     //Collection fetchOption
 
     var AppletLayoutView = ADK.Applets.BaseGridApplet.extend({
+
         initialize: function(options) {
 
             var fetchOptions = _.clone(_fetchOptions);
 
-            var viewType = 'summary';
             var self = this;
             this._super = ADK.Applets.BaseGridApplet.prototype;
             var dataGridOptions = {};
@@ -205,14 +202,8 @@ define([
                         filter: 'and(ne(removed, true),' + self.buildJdsDateFilter('observed') + '), ne(result,Pass)'
                     };
                 }
-                fetchOptions.collectionConfig = {
-                    collectionParse: function() {
-                        return self.filterCollection.apply(self, arguments);
-                    }
-                };
 
                 fetchOptions.onSuccess = function(collection) {
-                    collectionHandler.addTooltips(collection, 4);
                     if (self.isFullscreen) {
                         collection.trigger('reset');
                     } else {
@@ -231,15 +222,17 @@ define([
                     }
 
                     if (!_.isUndefined(uniqueId))
-                        ADK.TileSortManager.getSortOptions(collection, sortId, uniqueId);
+                        ADK.TileSortManager.getSortOptions(self.dataGridOptions.collection, sortId, uniqueId);
+
                 };
 
                 ADK.PatientRecordService.fetchCollection(fetchOptions, self.dataGridOptions.collection);
             });
 
+
             fetchOptions.collectionConfig = {
-                collectionParse: function() {
-                    return self.filterCollection.apply(self, arguments);
+                collectionParse: function () {
+                    return collectionHandler.filterCollection(self.dataGridOptions.collection, self.dataGridOptions.appletId, options.appletConfig.viewType);
                 }
             };
 
@@ -253,13 +246,16 @@ define([
                 };
             }
 
-            fetchOptions.onSuccess = function() {
-                collectionHandler.addTooltips(dataGridOptions.collection, 4);
-            };
             dataGridOptions.appletId = 'vitals';
             this.dataGridOptions = dataGridOptions;
 
-            self.dataGridOptions.collection = ADK.PatientRecordService.fetchCollection(fetchOptions);
+            this.dataGridOptions.collection = ADK.PatientRecordService.createEmptyCollection(fetchOptions);
+
+            if(this.columnsViewType === 'gist'){
+                this.bindEntityEvents(this.dataGridOptions.collection, this.collectionEvents);
+            }
+
+            ADK.PatientRecordService.fetchCollection(fetchOptions, this.dataGridOptions.collection);
 
             this.listenTo(ADK.Messaging.getChannel('vitals'), 'refreshGridView', function() {
                 this.refresh({});
@@ -299,6 +295,7 @@ define([
                         model: model,
                         theView: view
                     }),
+                    showLoading: true,
                     footerView: Backbone.Marionette.ItemView.extend({
                         template: detailsFooterTemplate,
                         events: {
@@ -358,17 +355,21 @@ define([
                         };
                     } else {
                         return {
-                            'class': this.model.get('observedDateLatest') + '',
+                            'class': this.model.get('observedDateLatest') + ' no-records',
                             'data-code': this.model.get('dataCode')
                         };
                     }
                 },
                 template: Handlebars.compile(['<td>{{displayName}}{{#if vitalsRecord}}<span class="sr-only"> vital. Press enter to view additional details.</span>{{/if}}</td>',
+                    '{{#if vitalsRecord}}',
                     '<td>{{resultUnitsMetricResultUnits}}</td>',
-                    '<td>{{observedFormattedCover}}</td>'
+                    '<td>{{observedFormattedCover}}</td>',
+                    '{{else}}',
+                    '<td colspan="2" class="background-color-grey-lightest">{{resultUnitsMetricResultUnits}}</td>',
+                    '{{/if}}'
                 ].join('\n')),
                 templateHelpers: function() {
-                    if (this.model.get('resultUnitsMetricResultUnits') === "No Record") {
+                    if (this.model.get('resultUnitsMetricResultUnits') === "No Records Found") {
                         return {
                             vitalsRecord: false
                         };
@@ -381,6 +382,11 @@ define([
                 events: {
                     'click td': function(e) {
                         dataGridOptions.onClickRow(this.model, event, this);
+                    },
+                    'keydown': function(e) {
+                        if (e.keyCode === 13) {
+                            dataGridOptions.onClickRow(this.model, event, this);
+                        }
                     }
                 }
             });
@@ -425,7 +431,6 @@ define([
                         this.$el.find('.a-table')
                             .after('<div>No Records Found</div>');
                     }
-
                 }
             });
 
@@ -449,6 +454,23 @@ define([
                         tileSortingUniqueId: 'typeName'
 
                     };
+                    var originalChildView = this.dataGridOptions.SummaryView.prototype.childView;
+                    this.dataGridOptions.SummaryView = this.dataGridOptions.SummaryView.extend({
+                        childView: originalChildView.extend({
+                            serializeModel: function(model) {
+                                var data = model.toJSON();
+                                var limit = 4;
+                                if (data.oldValues) {
+                                    data.limitedoldValues = data.oldValues.splice(1, limit);
+                                    if ((data.oldValues.length - data.limitedoldValues.length) > 0) {
+                                        data.moreresultsCount = data.oldValues.length - data.limitedoldValues.length;
+                                    }
+                                }
+                                data.tooltip = tooltip(data);
+                                return data;
+                            }
+                        })
+                    });
                 } else {
                     this.dataGridOptions.SummaryView = VitalsLayoutView;
                 }
@@ -470,7 +492,11 @@ define([
             }
             this._super.onSync.apply(this, arguments);
         },
-        filterCollection: collectionHandler.filterCollection
+        onDestroy: function(){
+            if(this.columnsViewType === 'gist'){
+                this.unbindEntityEvents(this.collection, this.collectionEvents);
+            }
+        }
     });
 
     // expose gist detail view through messaging
@@ -487,16 +513,23 @@ define([
 
         var siteCode = ADK.UserService.getUserSession().get('site'),
             pidSiteCode = params.model.get('pid') ? params.model.get('pid').split(';')[0] : '';
+
+        var view = new ModalView({
+            model: params.model,
+            gridCollection: params.collection,
+            navHeader: false,
+            fullScreen: self.isFullscreen
+        });
         // todo need to check that I merge conflicted this properly
         var modal = new ADK.UI.Modal({
-            view: new ModalView({
-                model: params.model,
-                navHeader: false,
-                fullScreen: self.isFullscreen
-            }),
+            view: view,
             options: {
                 size: "xlarge",
                 title: vitalsTitle,
+                'headerView': modalHeader.extend({
+                    model: params.model,
+                    theView: view
+                }),
                 footerView: Backbone.Marionette.ItemView.extend({
                     template: detailsFooterTemplate,
                     events: {
@@ -528,8 +561,6 @@ define([
         modal.show();
     });
 
-    //We shouldn't be passing views around or triggering displays outside of the scope of a Marionette.View
-    //This should be refactored to be a view type in applet's config
     channel.reply('detailView', function(params) {
         var fetchOptions = {
             criteria: {
@@ -539,34 +570,31 @@ define([
             resourceTitle: 'patient-record-vital'
         };
 
-        var response = $.Deferred();
 
-        var data = ADK.PatientRecordService.fetchCollection(fetchOptions),
-            pidSiteCode,
-            detailModel;
-        data.on('sync', function() {
-            detailModel = data.first();
-            var siteCode = ADK.UserService.getUserSession().get('site'),
-                pidSiteCode = detailModel.get('pid') ? detailModel.get('pid').split(';')[0] : '';
-            var vitalsTitle;
-            if (detailModel.get('typeName') == 'Blood Pressure Systolic' || detailModel.get('typeName') == 'Blood Pressure Diastolic') {
-                vitalsTitle = 'Blood Pressure';
-            } else {
-                vitalsTitle = detailModel.get('typeName');
-            }
-            response.resolve({
-                view: new ModalView({
-                    model: detailModel,
-                    collection: data,
-                    navHeader: false,
-                    fullScreen: self.isFullscreen
-                }),
-                title: vitalsTitle,
-                modalSize: "xlarge",
-            });
-        }, this);
+        var data = ADK.PatientRecordService.createEmptyCollection(fetchOptions);
 
-        return response.promise();
+        var detailModel = params.model;
+
+        var vitalsTitle;
+        if (detailModel.get('typeName') == 'Blood Pressure Systolic' || detailModel.get('typeName') == 'Blood Pressure Diastolic') {
+            vitalsTitle = 'Blood Pressure';
+        } else {
+            vitalsTitle = detailModel.get('typeName') || "Loading";
+        }
+        return {
+            view: ModalView.extend({
+                model: detailModel,
+                navHeader: false,
+                fullScreen: self.isFullscreen
+            }),
+            modalSize: "xlarge",
+            title: _.bind(function() {
+                if (this.get('typeName') == 'Blood Pressure Systolic' || this.get('typeName') == 'Blood Pressure Diastolic') {
+                    return 'Blood Pressure';
+                }
+                return this.get('typeName') || 'Loading';
+            }, detailModel)
+        };
     });
 
     //This is a problem as well--the model should be pulled from the resource pool and the graph handled in the stackedGraph

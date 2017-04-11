@@ -3,10 +3,11 @@ define([
         'marionette',
         'underscore',
         'handlebars',
+        'moment',
         'hbs!app/applets/task_forms/activities/FIT_FOBT/templates/notification_Template',
         'app/applets/task_forms/common/utils/eventHandler'
     ],
-    function(Backbone, Marionette, _, Handlebars, NotificationTemplate, EventHandler) {
+    function(Backbone, Marionette, _, Handlebars, moment, NotificationTemplate, EventHandler) {
         "use strict";
 
         return ADK.UI.Form.extend({

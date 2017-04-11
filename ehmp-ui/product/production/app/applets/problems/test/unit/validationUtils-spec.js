@@ -14,7 +14,7 @@ define(['backbone', 'jasminejquery', 'moment', 'app/applets/problems/writeback/v
                 formModel.errorModel = new Backbone.Model();
 
                 var errorModel = ValidationUtil.validateMeasuredDateAndTime(formModel, '12/1/2019' );
-                expect(formModel.errorModel.get('onset-date')).toBe('Onset Date must be in the past.');
+                expect(formModel.errorModel.get('onset-date')).toBe('Onset date must be in the past');
             });
 
             it('should validate past on-set date (MM/DD/YYYY)', function() {
@@ -24,7 +24,7 @@ define(['backbone', 'jasminejquery', 'moment', 'app/applets/problems/writeback/v
 
                 var errorModel = ValidationUtil.validateMeasuredDateAndTime(formModel, '12/1/2014' );
                 expect(formModel.errorModel.get('onset-date')).toBe(undefined);
-            }); 
+            });
 
             it('should invalidate future fuzzy on-set date (MM/YYYY)', function() {
 
@@ -32,7 +32,7 @@ define(['backbone', 'jasminejquery', 'moment', 'app/applets/problems/writeback/v
                 formModel.errorModel = new Backbone.Model();
 
                 var errorModel = ValidationUtil.validateMeasuredDateAndTime(formModel, '12/2019' );
-                expect(formModel.errorModel.get('onset-date')).toBe('Onset Date must be in the past.');
+                expect(formModel.errorModel.get('onset-date')).toBe('Onset date must be in the past');
             });
 
             it('should validate past fuzzy on-set date (MM/YYYY)', function() {
@@ -42,7 +42,7 @@ define(['backbone', 'jasminejquery', 'moment', 'app/applets/problems/writeback/v
 
                 var errorModel = ValidationUtil.validateMeasuredDateAndTime(formModel, '12/2014' );
                 expect(formModel.errorModel.get('onset-date')).toBe(undefined);
-            }); 
+            });
 
             it('should invalidate future fuzzy on-set date (YYYY)', function() {
 
@@ -50,8 +50,8 @@ define(['backbone', 'jasminejquery', 'moment', 'app/applets/problems/writeback/v
                 formModel.errorModel = new Backbone.Model();
 
                 var errorModel = ValidationUtil.validateMeasuredDateAndTime(formModel, '2019' );
-                expect(formModel.errorModel.get('onset-date')).toBe('Onset Date must be in the past.');
-            });         
+                expect(formModel.errorModel.get('onset-date')).toBe('Onset date must be in the past');
+            });
 
             it('should validate past fuzzy on-set date (YYYY)', function() {
 
@@ -60,7 +60,7 @@ define(['backbone', 'jasminejquery', 'moment', 'app/applets/problems/writeback/v
 
                 var errorModel = ValidationUtil.validateMeasuredDateAndTime(formModel, '2014' );
                 expect(formModel.errorModel.get('onset-date')).toBe(undefined);
-            });                        
+            });
         });
 
         describe('Test overall form validation function', function(){

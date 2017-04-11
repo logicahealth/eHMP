@@ -73,7 +73,8 @@ define([
                 return true;
             }
             var userSession = ADK.UserService.getUserSession();
-            var userId = userSession.get('duz')[userSession.get('site')];
+            var site = userSession.get('site');
+            var userId = [site, ';', userSession.get('duz')[site]].join('');
             if (ADK.UserService.hasPermissions(permission.ehmp.join('|'))) {
                 if (_.isEmpty(permission.user) || _.contains(permission.user, userId)) {
                     return true;
@@ -90,37 +91,40 @@ define([
         return Backbone.Marionette.ItemView.extend({
             template: currentTasksTemplate,
             events: {
-                'click .activity-detail-task-table tbody tr': function(e) {
-                    var dataTaskId = Number(e.currentTarget.dataset.taskid);
+                'click .activity-detail-task-table .body .table-row': function(e) {
+                    e.preventDefault();
+                    if(!this.model.get('readOnly')){
+                        var dataTaskId = Number(e.currentTarget.dataset.taskid);
 
-                    if(_.isNumber(dataTaskId)){
-                        var task = _.find(this.model.get('tasks'), {TASKID: dataTaskId});
-                        var isStaffView = ADK.WorkspaceContextRepository.currentContext.get('id') === 'staff';
+                        if(_.isNumber(dataTaskId)){
+                            var task = _.find(this.model.get('tasks'), {TASKID: dataTaskId});
+                            var isStaffView = ADK.WorkspaceContextRepository.currentContextId === 'staff';
 
-                        if(!_.isUndefined(task) && task.hasPermissions){
-                            var navigation = task.NAVIGATION;
-                            if (_.isObject(task.NAVIGATION)) {
-                                ADK.UI.Modal.hide();
-                                navigation.parameters.createdBy = {
-                                    CREATEDBYNAME: task.CREATEDBYNAME
-                                };
-                                ADK.PatientRecordService.setCurrentPatient(task.PATIENTICN, {
-                                    reconfirm: isStaffView,
-                                    navigation: isStaffView,
-                                    staffnavAction: {
-                                        channel: navigation.channel,
-                                        event: navigation.event,
-                                        data: navigation.parameters
-                                    }
-                                });
-                            } else {
-                                //Temporary fallback until all tasks have a navigation node
-                                //Trigger the activity management form router to open the appropriate form.
-                                ADK.Messaging.getChannel('activity-management').trigger('show:form', {
-                                    taskId: dataTaskId,
-                                    taskDefinitionId: task.DEFINITIONID,
-                                    clinicalObjectUid: task.CLINICALOBJECTUID
-                                });
+                            if(!_.isUndefined(task) && task.hasPermissions){
+                                var navigation = task.NAVIGATION;
+                                if (_.isObject(task.NAVIGATION)) {
+                                    ADK.UI.Modal.hide();
+                                    navigation.parameters.createdBy = {
+                                        CREATEDBYNAME: task.CREATEDBYNAME
+                                    };
+                                    ADK.PatientRecordService.setCurrentPatient(task.PATIENTICN, {
+                                        reconfirm: isStaffView,
+                                        navigation: isStaffView,
+                                        staffnavAction: {
+                                            channel: navigation.channel,
+                                            event: navigation.event,
+                                            data: navigation.parameters
+                                        }
+                                    });
+                                } else {
+                                    //Temporary fallback until all tasks have a navigation node
+                                    //Trigger the activity management form router to open the appropriate form.
+                                    ADK.Messaging.getChannel('activity-management').trigger('show:form', {
+                                        taskId: dataTaskId,
+                                        taskDefinitionId: task.DEFINITIONID,
+                                        clinicalObjectUid: task.CLINICALOBJECTUID
+                                    });
+                                }
                             }
                         }
                     }

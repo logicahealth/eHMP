@@ -2,9 +2,10 @@ define([
     "backbone",
     "marionette",
     "underscore",
+    "moment",
     "hbs!app/applets/task_forms/activities/simple_activity/templates/changedActivityFooterTemplate"
 
-], function(Backbone, Marionette, _, ChangedActivityFooterTemplate) {
+], function(Backbone, Marionette, _, moment, ChangedActivityFooterTemplate) {
     'use strict';
     return Backbone.Marionette.ItemView.extend({
         template: ChangedActivityFooterTemplate,

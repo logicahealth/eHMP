@@ -36,7 +36,7 @@ Scenario: Clinical Reminders applet displays all of the same details after apple
   When user refreshes Clinical Reminders applet
   Then the message on the Clinical Reminders applet does not say an error has occurred
   
-@f363_clinical_reminders_details_view_from_overview 
+@f363_clinical_reminders_details_view_from_overview @DE6433 @debug
 Scenario: User can view the detail view of Clinical Reminders applet
   When user opens the first Clincial Reminders detail view
   Then the detail modal is displayed
@@ -71,7 +71,7 @@ Scenario: Clinical Reminders applet displays all of the same details after expan
   When user refreshes Clinical Reminders applet
   Then the message on the Clinical Reminders applet does not say an error has occurred
   
-@f363_clinical_reminders_details_view_from_expand_view
+@f363_clinical_reminders_details_view_from_expand_view @DE6433 @debug
 Scenario: User can view the detail view of Clinical Reminders applet
   When user navigates to Clinical Reminders Applet expanded view
   And user opens the first Clincial Reminders detail view

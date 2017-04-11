@@ -67,7 +67,7 @@ var originalVaImmunizationJob = {
 // };
 // What it is with the mock terminology translations.
 //-----------------------------------------------------------------
-var jdsCodedVaValue = { system : 'urn:oid:2.16.840.1.113883.12.292', code : '03', display : 'measles, mumps and rubella virus vaccine' };
+var jdsCodedVaValue = { system : 'urn:oid:2.16.840.1.113883.12.292', code : '3', display : 'measles, mumps and rubella virus vaccine' };
 
 // NOTE:  There are no DOD transformations for Immunization... - No test needed for DOD
 //-------------------------------------------------------------------------------------

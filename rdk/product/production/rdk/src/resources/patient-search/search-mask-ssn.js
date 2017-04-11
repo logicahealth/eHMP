@@ -57,6 +57,12 @@ function maskPtSelectSsn(jdsResponse) {
     return jdsResponse;
 }
 
+/**
+ * Masks an SSN. Replaces the first five numerical characters with asterisks.
+ *
+ * @param {string} ssn - The ssn to mask.
+ * @return {string} maskedSsn - The masked SSN.
+ */
 function maskSsn(ssn) {
     var last4 = /(.*)(.{4})/;
     var validSsn = ssn.match(last4);

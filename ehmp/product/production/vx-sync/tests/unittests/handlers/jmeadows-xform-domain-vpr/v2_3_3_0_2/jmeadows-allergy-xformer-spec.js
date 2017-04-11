@@ -17,6 +17,12 @@ describe('jmeadows-allergy-xformer', function() {
             display: 'Sodium Chloride',
             system: 'UMLS'
         }],
+        provider: {
+            name: 'TEST'
+        },
+        reactions: [{
+            display: 'TEST'
+        }],
         site: {
             agency: 'DOD',
             moniker: 'NH Great Lakes IL/0056',
@@ -47,6 +53,10 @@ describe('jmeadows-allergy-xformer', function() {
         facilityName: 'DOD',
         facilityCode: 'DOD',
         kind: 'Allergy/Adverse Reaction',
+        originatorName: 'TEST',
+        reactions: [{
+            name: 'TEST'
+        }],
         uid: 'urn:va:allergy:DOD:00000099:1000001128',
         pid: 'DOD;00000099'
     };
@@ -64,6 +74,8 @@ describe('jmeadows-allergy-xformer', function() {
             expect(vprData.facilityName).toEqual(sampleVPRAllergy.facilityName);
             expect(vprData.facilityCode).toEqual(sampleVPRAllergy.facilityCode);
             expect(vprData.kind).toEqual(sampleVPRAllergy.kind);
+            expect(vprData.originatorName).toEqual(sampleVPRAllergy.originatorName);
+            expect(vprData.reactions).toEqual(sampleVPRAllergy.reactions);
             expect(vprData.uid).toEqual(sampleVPRAllergy.uid);
             expect(vprData.pid).toEqual(sampleVPRAllergy.pid);
         });

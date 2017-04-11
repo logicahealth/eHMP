@@ -22,10 +22,8 @@ function getDocumentDetail(req, res) {
         return res.status(rdk.httpstatus.bad_request).rdkSend('Missing parameter(s) ' + missingParameters.join(', '));
     }
 
-    //var domain = req.query.domain;
     var pid = req.query.pid;
     var query = req.query.query;
-    //var domain = req.query.domain;
     var group_value = req.query['group.value'];
     var group_field = req.query['group.field'];
 
@@ -41,65 +39,45 @@ function getDocumentDetail(req, res) {
      sort=visit_date_time+desc&
      */
 
-    async.waterfall(
-        [
-            req.app.subsystems.jdsSync.getPatientAllSites.bind(null, pid, req),
-            function(jdsResponse, callback) {
-                if (jdsResponse.data.error) {
-                    return callback(jdsResponse.data.error);
-                }
+    var grouping = util.format('%s:"%s"', group_field, group_value);
 
-                 var grouping = util.format('%s:"%s"', group_field, group_value);
+    var patientPIDList = [];
+    _.each(req.interceptorResults.patientIdentifiers.allSites, function(pid){
+        patientPIDList.push(pid);
+    });
 
-                var patientPIDList = [];
-                _.each(req.interceptorResults.patientIdentifiers.allSites, function(pid){
-                    patientPIDList.push(pid);
-                });
+    req.logger.debug({patientPIDList: patientPIDList}, 'document-details.js patientPIDList');
 
-                req.logger.debug({patientPIDList: patientPIDList}, 'document-details.js patientPIDList');
+    var fq = [
+        'pid:(' + patientPIDList.join(' OR ') + ')',
+        grouping
+    ];
+    if (group_field === 'local_title') {
+        fq.push('domain: document');
+    }
 
-                var fq = [
-                    'pid:(' + patientPIDList.join(' OR ') + ')',
-                    grouping
-                ];
-                if (group_field === 'local_title') {
-                    fq.push('domain: document');
-                }
+    req.logger.debug('document-details.js fq: %j', fq);
 
-                req.logger.debug('document-details.js fq: %j', fq);
-
-                var queryParameters = {
-                    q: util.format('%s', query),
-                    sort: 'datetime desc,reference_date_time desc',
-                    fq: fq,
-                    //fl: [
-                    //    'uid'
-                    //],
-                    hl: true,
-                    'hl.fragsize': 60,
-                    'hl.snippets': 10,
-                    'hl.fl': [
-                        'body',
-                        'subject'
-                    ],
-                    defType: 'synonym_edismax',
-                    synonyms: true,
-                    qs: 4,
-                    qf: 'all',
-                    wt: 'json',
-                    rows: 1000
-                };
-                //
-                //if(req.query.range) {
-                //    // TODO
-                //}
-                //if(req.query.stop_code_name) {
-                //
-                //}
-                return solrSimpleClient.executeSolrQuery(querystring.stringify(queryParameters), 'select', req, callback);
-            }
+    var queryParameters = {
+        q: util.format('%s', query),
+        sort: 'datetime desc,reference_date_time desc',
+        fq: fq,
+        hl: true,
+        'hl.fragsize': 60,
+        'hl.snippets': 10,
+        'hl.fl': [
+            'body',
+            'subject'
         ],
-        function(err, response) {
+        defType: 'synonym_edismax',
+        synonyms: true,
+        qs: 4,
+        qf: 'all',
+        wt: 'json',
+        rows: 1000
+    };
+    return solrSimpleClient.executeSolrQuery(querystring.stringify(queryParameters), 'select', req,
+        function (err, response) {
             if (!err && response.error) {
                 err = response.error;
             }

@@ -48,5 +48,17 @@ Scenario: Date filtering using the Custom button.
 	Then the "Numeric Lab Results Applet" table contains 7 rows
 
 
+@f144_numeric_lab_results_modal_apply_enabled @US2326 @TA6661 @DE284 @DE3867 @DE4267 @DE4559 @debug @DE5524
+Scenario: Custom filters should retain their values.
+  Then the "Numeric Lab Results" applet is finished loading
+  And the user has selected All within the global date picker
 
-
+  And the user clicks the first non-Panel result in the Numeric Lab Results applet
+  Then the modal is displayed
+  When the user inputs "01/01/2010" in the "From Date" control in the "Numeric Lab Results modal"
+  And the user inputs "01/01/2013" in the "To Date" control in the "Numeric Lab Results modal"
+  And the Custom date field "Apply" button should be "enabled" in the "Numeric Lab Results modal"
+  When the user clicks the date control 2yr in the Numeric Lab Results modal
+  Then the "From Date" input should have the value "01/01/2010" in the "Numeric Lab Results modal"
+  And the "To Date" input should have the value "01/01/2013" in the "Numeric Lab Results modal"
+  And the Custom date field "Apply" button should be "disabled" in the "Numeric Lab Results modal"

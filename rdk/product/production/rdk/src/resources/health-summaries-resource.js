@@ -13,39 +13,36 @@ var HEALTHSUMREPORTLISTENDTAG = '$$END';
 var REPORTLISTRPC = 'ORWRP REPORT LISTS';
 var REPORTCONTENTRPC = 'ORWRP REPORT TEXT';
 
-function getMatchingSites(req, res, patientData, callback) {
-    var vistaSiteCollection = req.app.config.vistaSites,
-        sitesInfo = [],
-        syncStatus = patientData.completedStamp.sourceMetaStamp,
-        patientVistaSiteKeys = _.keys(syncStatus);
+function getPatientSites(req) {
+    var allSites = _.get(req, 'interceptorResults.patientIdentifiers.allSites');
+    if (!allSites) {
+        return;
+    }
+
+    var vistaSiteCollection = req.app.config.vistaSites;
+    var sitesInfo = [];
+    var patientVistaSiteKeys = _.map(allSites, function (pid) {
+        return pid.substring(0, pid.indexOf(';'));
+    });
 
     _.each(patientVistaSiteKeys, function (site) {
         if (_.has(vistaSiteCollection, site)) {
-            //TODO: This is to work around Panorama and Kodak as their facility Codes are same. This should not impact beyond Development Environment
-            // Hard Coding facility Code for PANORAMA
-            if (site === '9E7A') {
+            _.each(vistaSiteCollection[site].division, function(division) {
                 sitesInfo.push({
                     'siteKey': site,
-                    'facilityCode': 'TST1',
-                    'facilityName': vistaSiteCollection[site].name,
+                    'facilityCode': division.id,
+                    'facilityName': division.name,
                     'isPrimary': true
                 });
-                //Hard Coding facility Code for KODAK
-            } else if (site === 'C877') {
-                sitesInfo.push({
-                    'siteKey': site,
-                    'facilityCode': 'TST2',
-                    'facilityName': vistaSiteCollection[site].name,
-                    'isPrimary': true
-                });
-            } else {
-                sitesInfo.push({
-                    'siteKey': site,
-                    'facilityCode': vistaSiteCollection[site].stationNumber || vistaSiteCollection[site].division,
-                    'facilityName': vistaSiteCollection[site].name,
-                    'isPrimary': true
-                });
-            }
+                //TODO: This is to work around Panorama and Kodak as their facility Codes are same. This should not impact beyond Development Environment
+                // Hard Coding facility Code for PANORAMA
+                if (site === '9E7A') {
+                    sitesInfo.facilityCode = 'TST1';
+                    //Hard Coding facility Code for KODAK
+                } else if (site === 'C877') {
+                    sitesInfo.facilityCode = 'TST2';
+                }
+            });
         } else {
             sitesInfo.push({
                 'facilityCode': site,
@@ -55,11 +52,7 @@ function getMatchingSites(req, res, patientData, callback) {
         }
     });
 
-    if (callback && typeof (callback) === 'function') {
-        callback(sitesInfo);
-    } else {
-        res.status(rdk.httpstatus.ok).rdkSend(sitesInfo);
-    }
+    return sitesInfo;
 }
 
 function getReportListForAllSites(req, res, sites, callbackObj) {
@@ -75,7 +68,7 @@ function getReportListForAllSites(req, res, sites, callbackObj) {
                 var msg = 'Calling ' + REPORTLISTRPC + ' at site ' + site.facilityName + ' (' + site.facilityCode + ')';
                 auditUtil.addAdditionalMessage(req, 'healthSummaries', msg);
 
-                RpcClient.callRpc(req.logger, getVistaRpcConfiguration(req.app.config, site.siteKey), REPORTLISTRPC, function (error, result) {
+                RpcClient.callRpc(req.logger, getVistaRpcConfiguration(req.app.config, req.session.user), REPORTLISTRPC, function (error, result) {
 
                     if (error) {
 
@@ -128,10 +121,7 @@ function getReportListForAllSites(req, res, sites, callbackObj) {
 
                 });
             });
-        } //else {
-        //TODO: May require refactoring to use config file not to show.
-        //secondarySites.push(site);
-        //}
+        }
     });
 
     try {
@@ -169,40 +159,17 @@ function getSitesInfoFromPatientData(req, res) {
         return res.status(rdk.httpstatus.internal_server_error).rdkSend('Patient ID is required');
     }
 
-    var jdsPath = '/status/' + req.query.pid,
-        jdsServer = req.app.config.jdsServer,
-        options = _.extend({}, jdsServer, {
-            url: jdsPath,
-            logger: req.logger,
-            json: true
-        });
+    var sites = getPatientSites(req);
+    if (_.isUndefined(sites)) {
+        return res.status(rdk.httpstatus.not_found).rdkSend('Bad Patient ID');
+    }
 
-    httpUtil.get(options, function (err, response, patientData) {
-        if (err || !patientData) {
-            req.logger.info(err);
-            res.status(rdk.httpstatus.internal_server_error).rdkSend('There was an error getting patient data.');
+    req.logger.info(sites);
+    getReportListForAllSites(req, res, sites, function (sitesInfo) {
+        if (sitesInfo.error) {
+            res.status(sitesInfo.statuscode).rdkSend(sitesInfo.error);
         } else {
-            try {
-                if (patientData.error && patientData.error.code === 404) {
-                    res.status(rdk.httpstatus.not_found).rdkSend('Bad Patient ID');
-
-                } else {
-                    getMatchingSites(req, res, patientData, function (sites) {
-                        req.logger.info(sites);
-                        getReportListForAllSites(req, res, sites, function (sitesInfo) {
-                            if (sitesInfo.error) {
-                                res.status(sitesInfo.statuscode).rdkSend(sitesInfo.error);
-                            } else {
-                                res.status(rdk.httpstatus.ok).rdkSend(sitesInfo);
-                            }
-                        });
-                    });
-                }
-            } catch (e) {
-                req.logger.error(e);
-                var statusCode = response.statusCode >= 300 ? response.statusCode : rdk.httpstatus.internal_server_error;
-                res.status(statusCode).rdkSend('There was an error processing patient data');
-            }
+            res.status(rdk.httpstatus.ok).rdkSend(sitesInfo);
         }
     });
 }
@@ -238,7 +205,7 @@ function getReportContentByReportID(req, res) {
             return;
         }
 
-        RpcClient.callRpc(req.logger, getVistaRpcConfiguration(req.app.config, site), REPORTCONTENTRPC, params, function (error, result) {
+        RpcClient.callRpc(req.logger, getVistaRpcConfiguration(req.app.config, req.session.user), REPORTCONTENTRPC, params, function (error, result) {
 
             if (error) {
 

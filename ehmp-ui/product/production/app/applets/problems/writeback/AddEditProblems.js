@@ -13,12 +13,12 @@ define([
 
     var problemLabelContainer = {
         control: 'container',
-        extraClasses: ['row', 'left-padding-sm', 'right-padding-sm', 'bottom-padding-sm', 'top-padding-lg', 'select-problem-container', 'background-color-primary-lightest'],
+        extraClasses: ['row', 'all-padding-sm', 'top-padding-lg', 'select-problem-container', 'background-color-pure-white'],
         modelListeners: ['problemText', 'isFreeTextProblem'],
         items: [{
                 control: 'container',
                 extraClasses: ['col-xs-6', 'left-padding-no'],
-                template: '<p class="bottom-margin-xs"><strong>Problem Name *</strong></p>{{#unless isFreeTextProblem}}<p>{{problemText}}</p>{{/unless}}'
+                template: '<p class="bottom-margin-xs"><strong>Problem name *</strong></p>{{#unless isFreeTextProblem}}<p>{{problemText}}</p>{{/unless}}'
             },
             {
                 control: 'container',
@@ -70,44 +70,33 @@ define([
         control: 'container',
         extraClasses: ['row',' bottom-margin-sm'],
         items: [{
-            control: "fieldset",
-            legend: 'Status *',
+            control: "radio",
             extraClasses: ['col-xs-5'],
-            items: [{
-                control: "radio",
-                required: true,
-                name: "statusRadioValue",
-                label: "Status",
-                srOnlyLabel: true,
-                options: [{
-                    label: "Active",
-                    value: "A^ACTIVE"
-                }, {
-                    label: "Inactive",
-                    value: "I^INACTIVE"
-                }]
+            required: true,
+            name: "statusRadioValue",
+            label: "Status",
+            options: [{
+                label: "Active",
+                value: "A^ACTIVE"
+            }, {
+                label: "Inactive",
+                value: "I^INACTIVE"
             }]
-            
         }, {
-            control: "fieldset",
-            legend: 'Acuity *',
+            control: "radio",
             extraClasses: ['col-xs-7', 'left-padding-no'],
-            items: [{
-                control: "radio",
-                required: true,
-                name: "immediacyRadioValue",
-                label: "Acuity",
-                srOnlyLabel: true,
-                options: [{
-                    label: "Acute",
-                    value: "A^ACUTE"
-                }, {
-                    label: "Chronic",
-                    value: "C^CHRONIC"
-                }, {
-                    label: "Unknown",
-                    value: "U^UNKNOWN"
-                }]
+            required: true,
+            name: "immediacyRadioValue",
+            label: "Acuity",
+            options: [{
+                label: "Acute",
+                value: "A^ACUTE"
+            }, {
+                label: "Chronic",
+                value: "C^CHRONIC"
+            }, {
+                label: "Unknown",
+                value: "U^UNKNOWN"
             }]
         }]
     };
@@ -217,6 +206,7 @@ define([
         extraClasses: ['row annotations-container', 'left-padding-md', 'right-padding-md', 'top-padding-md', 'bottom-padding-md', 'background-color-pure-white'],
         items: [{
             control: "container",
+            extraClasses: ["color-pure-black"],
             template: Handlebars.compile('<strong>Comment</strong>')
         }]
     };
@@ -243,16 +233,21 @@ define([
             extraClasses: ['row'],
             items: [{
                 control: "container",
-                extraClasses: ['col-xs-12'],
-                items: [{
-                    control: "button",
-                    extraClasses: ["btn-default", "btn-sm"],
-                    label: "Cancel",
-                    id: "cancelBtnProblem",
-                    type: "button",
-                    title: "Press enter to close",
-                    name: "cancel-btn"
-                }, {
+                extraClasses: ['col-xs-12','display-flex','valign-bottom'],
+                items: [
+                {
+                    control: 'popover',
+                    behaviors: {
+                        Confirmation: {
+                            title: 'Warning',
+                            eventToTrigger: 'problem-add-confirm-cancel'
+                        }
+                    },
+                    label: 'Cancel',
+                    name: 'problemAddConfirmCancel',
+                    extraClasses: ['btn-default', 'btn-sm','right-margin-xs']
+                },
+                {
                     control: "dropdown",
                     extraClasses: ["dropup"],
                     split: true,
@@ -279,34 +274,13 @@ define([
             }]
         }]
     }];
-
-    var CancelMessageView = Backbone.Marionette.ItemView.extend({
-        template: Handlebars.compile('All unsaved changes will be lost. Are you sure you want to cancel?'),
-        tagName: 'p'
-    });
-    var CancelFooterView = Backbone.Marionette.ItemView.extend({
-        template: Handlebars.compile('{{ui-button "No" classes="btn-default" title="Press enter to go back."}}{{ui-button "Yes" classes="btn-primary" title="Press enter to cancel."}}'),
-        events: {
-            'click .btn-primary': function() {
-                ADK.UI.Alert.hide();
-                ADK.UI.Workflow.hide();
-                writebackUtils.unregisterChecks();
-                this.options.workflow.close();
-            },
-            'click .btn-default': function() {
-                ADK.UI.Alert.hide();
-            }
-        },
-        tagName: 'span'
-    });
-
     var ErrorMessageView = Backbone.Marionette.ItemView.extend({
         template: Handlebars.compile('Unable to save your data at this time due to a system error. Try again later.'),
         tagName: 'p'
     });
 
     var ErrorFooterView = Backbone.Marionette.ItemView.extend({
-        template: Handlebars.compile('{{ui-button "OK" classes="btn-primary" title="Press enter to close"}}'),
+        template: Handlebars.compile('{{ui-button "OK" classes="btn-primary btn-sm" title="Press enter to close"}}'),
         events: {
             'click .btn-primary': function() {
                 ADK.UI.Alert.hide();
@@ -453,26 +427,25 @@ define([
             'submit': function(e) {
                 var self = this;
                 e.preventDefault();
-                this.initLoader();
+
                 if (!this.model.isValid()) {
                     this.model.set("formStatus", {
                         status: "error",
                         message: self.model.validationError
                     });
                 } else {
+                    this.initLoader();                    
                     this.model.unset("formStatus");
 
-                    var saveTitle = this.model.get('editMode') ? 'Problem Saved' : 'Problem Added';
                     var saveAlertView = new ADK.UI.Notification({
-                        title: saveTitle,
-                        icon: 'fa-check',
-                        message: 'Problem successfully submitted with no errors.',
+                        title: 'Success',
+                        message: 'Problem Submitted',
                         type: "success"
                     });
 
                     var errorAlertView = new ADK.UI.Alert({
-                        title: 'Save Failed (System Error)',
-                        icon: 'icon-error',
+                        title: 'Error',
+                        icon: 'icon-circle-exclamation',
                         messageView: ErrorMessageView,
                         footerView: ErrorFooterView.extend({
                             form: self
@@ -514,16 +487,9 @@ define([
                     }
                 }
             },
-            "click #cancelBtnProblem": function(e) {
-                e.preventDefault();
-                var cancelAlertView = new ADK.UI.Alert({
-                    title: 'Cancel',
-                    icon: 'icon-cancel',
-                    messageView: CancelMessageView,
-                    footerView: CancelFooterView,
-                    workflow: this.workflow
-                });
-                cancelAlertView.show();
+            'problem-add-confirm-cancel': function(e) {
+                writebackUtils.unregisterChecks();
+                this.workflow.close();
             }
         },
         modelEvents: {
@@ -553,7 +519,11 @@ define([
         initLoader: function() {
             if (this.$('#addDrpDwnContainer').is(':visible')){
                 this.$el.trigger('tray.loaderShow',{
-                    loadingString:'Adding new problem'
+                    loadingString:'Accepting'
+                });
+            } else if (this.$('#saveEditProblem').is(':visible')){
+                this.$el.trigger('tray.loaderShow',{
+                    loadingString:'Saving'
                 });
             }
         },
@@ -576,7 +546,7 @@ define([
             var disable = true;
 
             if (!_.isEmpty(this.model.get('onset-date')) && !_.isEmpty(this.model.get('immediacyRadioValue')) &&
-                !_.isEmpty(this.model.get('statusRadioValue')) && !_.isEmpty(this.model.get('resProvider'))) {
+                !_.isEmpty(this.model.get('statusRadioValue')) && !_.isEmpty(this.model.get('resProvider')) && this.model.isValid() ) {
                 disable = false;
 
                 if (!skipCommentCheck) {

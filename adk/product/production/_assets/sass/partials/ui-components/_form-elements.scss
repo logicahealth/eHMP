@@ -1,22 +1,12 @@
 form.form-container,
 form .form-container {
-    // START OF: Reducing the ammount of padding inbetween columns inside a form
-    // [class*="col-"] {
-    //     padding-right: 5px;
-    //     padding-left: 5px;
-    // }
-    // .container-fluid {
-    //     padding-right: 5px;
-    //     padding-left: 5px;
-    // }
-    // .row {
-    //     margin-right: -5px;
-    //     margin-left: -5px;
-    // }
-    // END OF: Reducing the ammount of padding inbetween columns inside a form
     .control.has-error {
+        .form-control {
+            border-color: $red-dark;
+        }
         .help-block {
             font-weight: bold;
+            color: $red-dark;
         }
     }
     .form-group {
@@ -33,7 +23,7 @@ form .form-container {
             font-weight: 700;
             width: 100%;
         }
-        .input-group {
+        &.input-control .input-group {
             .form-control {
                 &:not(:first-child):not(:last-child) {
                     border-top-left-radius: 4px;
@@ -122,6 +112,9 @@ form .form-container {
         &.disabled label {
             color: $grey-dark;
         }
+    }
+    .checkbox-inline+.checkbox-inline, .radio-inline+.radio-inline {
+        margin-left: 8px;
     }
     [class^="col-"] {
         .button-control,

@@ -2,7 +2,7 @@
 
 Feature: F893 : Enhanced Immunization Detail View with VIMM Fields
 
-@893_1_add_administered @UAT_script
+@893_1_add_administered @UAT_script @DE6768 @debug
 Scenario: Add administered immunization and verify detail view and note object creation
 
   Given user searches for and selects "twenty,patient"
@@ -17,8 +17,8 @@ Scenario: Add administered immunization and verify detail view and note object c
   | Name									| PNEUMOCOCCAL CONJUGATE VACCINE	|
   | Series									| COMPLETE							|
   | Lot #									| EHMP00012							|
-  | Admin Route/Site						| INTRAMUSCULAR LEFT UPPER ARM		|
-  | Administered By							| USER,PANORAMA						|
+  | Admin route/site						| INTRAMUSCULAR LEFT UPPER ARM		|
+  | Administered by							| USER,PANORAMA						|
   | Vaccine Information Statement(s) (VIS)	| MULTIPLE VACCINES VIS 			|
   | Vaccine Information Statement(s) (VIS)	| PNEUMOCOCCAL CONJUGATE 			|
 #  | Comment									| Immunization added by automation test|
@@ -41,5 +41,5 @@ Scenario: Add administered immunization and verify detail view.
   And POB user verifies the immunization detail modal fields
   | field									|	value											|
   | Name									| PNEUMOCOCCAL, UNSPECIFIED FORMULATION				|
-  | Information Source						| HISTORICAL INFORMATION - FROM BIRTH CERTIFICATE 	|
+  | Information source						| HISTORICAL INFORMATION - FROM BIRTH CERTIFICATE 	|
 #  | Comment									| Immunization added by automation test				|

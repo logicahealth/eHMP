@@ -5,7 +5,6 @@ var resource = require('./orders-lab-vista-writer');
 describe('write-back orders lab vista writer', function() {
     it('tests that getParameters returns correct parameters array', function() {
         var model = {
-            "dfn": "100615",
             "provider": "10000000231",
             "location": "285",
             "orderDialog": "LR OTHER LAB TESTS",
@@ -50,18 +49,18 @@ describe('write-back orders lab vista writer', function() {
                 '6,1': 'TODAY',
                 '29,1': '28',
                 '"ORCHECK"': '1',
-                '"ORCHECK","NEW","2","01"': '11^2^Duplicate order: 11-DEOXYCORTISOL BLOOD   SERUM SP *UNSIGNED*  [UNRELEASED]',
+                '"ORCHECK","NEW","2","1"': '11^2^Duplicate order: 11-DEOXYCORTISOL BLOOD   SERUM SP *UNSIGNED*  [UNRELEASED]',
                 '"ORTS"': '0'
             },
             '', '', '', '0'
         ];
-        var parameters = resource._getParameters(model);
+
+        var parameters = resource._getParameters("100615", model);
         expect(parameters).to.eql(expectedArray);
     });
 
     it('tests that getParameters returns correct parameters array with comments', function() {
         var model = {
-            "dfn": "100615",
             "provider": "10000000238",
             "location": "285",
             "orderDialog": "LR OTHER LAB TESTS",
@@ -119,7 +118,7 @@ describe('write-back orders lab vista writer', function() {
         },
             '', '', '', '0'
         ];
-        var parameters = resource._getParameters(model);
+        var parameters = resource._getParameters("100615", model);
         expect(parameters).to.eql(expectedArray);
     });
 

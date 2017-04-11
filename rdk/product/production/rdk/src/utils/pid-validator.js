@@ -1,23 +1,20 @@
-/**
- * Created by alexluong on 5/26/15.
- */
-
 'use strict';
 
 var _ = require('lodash');
 var vistaSites = null;
 var rdk = require('../core/rdk');
-var dd = require('drilldown');
 var logger = null;
 
 module.exports.initialize = function(app) {
-    var appVistaSites = dd(app)('config')('vistaSites').val;
-    var appLogger = dd(app)('logger').val;
+    var appVistaSites = _.get(app, 'config.vistaSites');
+    var appLogger = _.get(app, 'logger');
     if(!_.isObject(appLogger)) {
-        process.exit(1);  // TODO: determine whether to gracefully exit
+        console.log('pid-validator#initialize process.exit - no logger found');
+        process.exit(1);
     }
     logger = appLogger;
-    if(!_.isObject(appVistaSites)) {
+    if (!_.isObject(appVistaSites)) {
+        console.error('pidValidator: attempted to initialize with no VistA sites defined');
         app.logger.fatal('pidValidator: attempted to initialize with no VistA sites defined');
         process.exit(1);
     }
@@ -25,19 +22,21 @@ module.exports.initialize = function(app) {
 };
 
 function containsSite(pid) {
-    if(!_.isObject(logger)) {
-        process.exit(1);
-    }
-    if(!_.isObject(vistaSites)) {
-        logger.fatal('pidValidator: attempted to access vista site configuration when none exists');
-        process.exit(1);
-    }
     return pid.indexOf(';') !== -1;
 }
 function isCurrentSite(currentSite, pid) {
     return pid.split(';')[0] === currentSite;
 }
 function isPrimarySite(pid) {
+    if(!_.isObject(logger)) {
+        console.error('pid-validator#containsSite process.exit - no logger found');
+        process.exit(1);
+    }
+    if (!_.isObject(vistaSites)) {
+        console.error('pidValidator: attempted to access vista site configuration when none exists');
+        logger.fatal('pidValidator: attempted to access vista site configuration when none exists');
+        process.exit(1);
+    }
     return vistaSites[pid.split(';')[0]];
 }
 
@@ -68,6 +67,7 @@ function isEdipi(pid) {
 function isVhic(pid) {
     return containsSite(pid) && !isPrimarySite(pid) && vhicRegex.test(pid);
 }
+
 module.exports.containsSite = containsSite;
 module.exports.isCurrentSite = isCurrentSite;
 module.exports.isPrimarySite = isPrimarySite;

@@ -9,6 +9,7 @@ define([
     'main/adk_utils/infoButtonUtils',
     'main/adk_utils/stringUtils',
     'main/adk_utils/crsUtil',
+    'main/adk_utils/cssCalcUtils',
     'main/Session',
     'backbone-sorted-collection',
     'moment',
@@ -26,6 +27,7 @@ define([
     InfoButtonUtils,
     StringUtils,
     CrsUtil,
+    CssCalcUtils,
     Session,
     SortedCollection,
     moment,
@@ -48,6 +50,7 @@ define([
     Utils.stringUtils = StringUtils;
     Utils.tooltipMappings = TooltipMappings;
     Utils.crsUtil = CrsUtil;
+    Utils.cssCalc = CssCalcUtils;
 
     Utils.formatDate = function(date, displayFormat, sourceFormat) {
 
@@ -551,6 +554,22 @@ define([
         };
 
         Utils.setCollection(collection, filterFunction);
+    };
+
+    Utils.getViewTypeSize = function(viewType) {
+        return  viewType === 'summary'  ? {'x':4, 'y':4} : 
+                viewType === 'expanded' ? {'x':8, 'y':6} :
+                viewType === 'gist'     ? {'x':4, 'y':3} : null;
+    };
+    Utils.getViewTypeMinSize = function(viewType) {
+        return  viewType === 'summary'  ? {'x':4, 'y':4} : 
+                viewType === 'expanded' ? {'x':8, 'y':4} :
+                viewType === 'gist'     ? {'x':4, 'y':3} : null;
+    };
+    Utils.getViewTypeMaxSize = function(viewType) {
+        return  viewType === 'summary'  ? {'x':8, 'y':12}  : 
+                viewType === 'expanded' ? {'x':12,'y':12}  :
+                viewType === 'gist'     ? {'x':8, 'y':12}  : null;
     };
 
     Utils.chartDataBinning = function (graphData, config) {

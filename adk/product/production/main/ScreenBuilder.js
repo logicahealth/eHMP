@@ -10,7 +10,18 @@ define([
     'api/Messaging',
     'api/Navigation',
     'api/WorkspaceContextRepository'
-], function(Backbone, Marionette, _, AppletBuilder, ResourceBuilder, Session, SessionStorage, UserDefinedScreens, Messaging, Navigation, WorkspaceContextRepository) {
+], function(
+    Backbone,
+    Marionette,
+    _,
+    AppletBuilder,
+    ResourceBuilder,
+    Session,
+    SessionStorage,
+    UserDefinedScreens,
+    Messaging,
+    Navigation,
+    WorkspaceContextRepository) {
     'use strict';
     var AppletsManifest = Messaging.request('AppletsManifest');
     var NewUserScreen = Messaging.request('NewUserScreen');
@@ -20,7 +31,7 @@ define([
         screenConfig.fileName = "NewUserScreen";
 
         //initialize the screen
-        var screenModule = app.module(screenConfig.routeName);
+        var screenModule = app.module('Screens.' + screenConfig.routeName);
         screenModule.buildPromise = $.Deferred();
 
         Navigation.initWorkspaceRoute(screenConfig.routeName, app);
@@ -29,7 +40,7 @@ define([
         newScreenConfig.id = screenConfig.id;
         UserDefinedScreens.addNewScreen(screenConfig, screenIndex, callback);
         if (_.isUndefined(screenConfig.context) && !_.isUndefined(WorkspaceContextRepository.currentContext)) {
-            screenConfig.context = WorkspaceContextRepository.currentContext.get('id');
+            screenConfig.context = WorkspaceContextRepository.currentContextId;
         }
         ScreenBuilder.build(app, newScreenConfig);
     };
@@ -53,21 +64,21 @@ define([
             UserDefinedScreens.updateScreenId(origId, newId);
 
             var attributesToChangeObject = _.pick(newScreenConfig, ['id', 'screenId', 'title']);
-            ADK.ADKApp[newId] = _.extend(ADK.ADKApp[origId], _.defaults({
+            ADK.ADKApp.Screens[newId] = _.extend(ADK.ADKApp.Screens[origId], _.defaults({
                 moduleName: newId
             }, attributesToChangeObject));
 
             // Update the module's config object and the workspace's model
             attributesToChangeObject = _.pick(newScreenConfig, ['id', 'screenId']);
-            _.extend(ADK.ADKApp[newId].config, attributesToChangeObject);
+            _.extend(ADK.ADKApp.Screens[newId].config, attributesToChangeObject);
             WorkspaceContextRepository.getWorkspace(origId).set(attributesToChangeObject);
 
             // Update the workspace routes
             Navigation.removeWorkspaceRoute(oldScreenConfig.routeName || null, ADK.ADKApp);
             Navigation.initWorkspaceRoute(newScreenConfig.routeName, ADK.ADKApp);
 
-            ADK.ADKApp[origId].stop();
-            delete ADK.ADKApp[origId];
+            ADK.ADKApp.Screens[origId].stop();
+            delete ADK.ADKApp.Screens[origId];
 
             var contextId = WorkspaceContextRepository.getWorkspace(newId).get('context');
             var formattedFragmentPrefix = '/' + contextId + '/';
@@ -76,9 +87,7 @@ define([
             // If the current Workspace was changed, make the following updates after the id change has been processed
             if (_.isEqual(currentWorkspaceId, origId)) {
                 WorkspaceContextRepository.currentWorkspace = newId;
-                // TODO: Update the Workspace Selection Dropdown's Model instead of using jQuery to change the label
-                $('#screenName').text(newScreenConfig.title);
-
+                ADK.Messaging.trigger('workspace:change:currentWorkspaceTitle', newScreenConfig.title);
                 var previousFragment = Backbone.history._previousFragment;
                 Navigation.updateRouter(newId, contextId);
                 // we have to persist the previous fragment since updateRouter updates the history's _previousFragment
@@ -112,8 +121,21 @@ define([
 
         UserDefinedScreens.removeOneScreenFromSession(screenId);
 
-        if (screenToRemove.defaultScreen === true) {
-            ScreenBuilder.resetUserSelectedDefaultScreen();
+        if (screenToRemove.id === WorkspaceContextRepository.currentContextDefaultScreen) {
+            // ScreenBuilder.resetUserSelectedDefaultScreen();
+            WorkspaceContextRepository.setDefaultScreenOfContext('patient',
+                WorkspaceContextRepository.currentContext.get('originalDefaultScreen')
+            );
+
+            var preferences = ADK.UserService.getPreferences();
+            var currentContextId = WorkspaceContextRepository.currentContextId;
+
+            if (_.get(preferences, 'defaultScreen.' + currentContextId)) {
+                delete preferences.defaultScreen[currentContextId];
+            }
+
+            ADK.UserService.savePreferences({append: false, preferences: preferences});
+            ADK.UserService.getUserSession().trigger('change:preferences:defaultScreen');
         }
 
         // if we are trying to delete the screen that we came from, let's go back to the predefined default screen.
@@ -135,8 +157,8 @@ define([
 
         WorkspaceContextRepository.removeWorkspace(screenToRemove.id);
 
-        ADK.ADKApp[screenToRemove.id].stop();
-        delete ADK.ADKApp[screenToRemove.id];
+        ADK.ADKApp.Screens[screenToRemove.id].stop();
+        delete ADK.ADKApp.Screens[screenToRemove.id];
     };
 
     //Processes a new title and returns a different name if title already exists
@@ -151,42 +173,18 @@ define([
         return titleExists;
     };
 
-    //Sets the Overview to Default, sets all other screens as not default
-    ScreenBuilder.resetUserSelectedDefaultScreen = function() {
-        var screensConfig = UserDefinedScreens.getScreensConfigFromSession();
-
-        var setToDefault = _.map(screensConfig.screens, function(screen) {
-            if (screen.id === WorkspaceContextRepository.currentContext.get('originalDefaultScreen')) {
-                screen.defaultScreen = true;
-                WorkspaceContextRepository.setDefaultScreenOfContext(WorkspaceContextRepository.currentWorkspaceAndContext.get('context'), screen.id);
-            } else {
-                screen.defaultScreen = false;
-            }
-            return screen;
-        });
-        var newScreenConfig = {};
-        newScreenConfig.screens = setToDefault;
-        UserDefinedScreens.saveScreensConfig(newScreenConfig);
-    };
-
     //Set the default screen. Omit the parameter to clear the default screen parameter.
     ScreenBuilder.resetDefaultScreen = function(screenId) {
         var defaultScreenId = screenId || '';
-        var screensConfig = UserDefinedScreens.getScreensConfigFromSession();
-
-        var modifiedScreensConfig = _.map(screensConfig.screens, function(screen) {
-            screen.defaultScreen = (screen.id === defaultScreenId);
-            return screen;
-        });
-
-        var newScreenConfig = {};
-        newScreenConfig.screens = modifiedScreensConfig;
-        UserDefinedScreens.saveScreensConfig(newScreenConfig);
+        var defaultScreen = {};
+        defaultScreen[WorkspaceContextRepository.currentContextId] = defaultScreenId;
+        ADK.UserService.savePreferences({preferences: {defaultScreen: defaultScreen}});
     };
 
     ScreenBuilder.setNewDefaultScreen = function(newDefaultScreenId) {
         ScreenBuilder.resetDefaultScreen(newDefaultScreenId);
         WorkspaceContextRepository.setDefaultScreenOfContext(WorkspaceContextRepository.currentWorkspaceAndContext.get('context'), newDefaultScreenId);
+        ADK.UserService.getUserSession().trigger('change:preferences:defaultScreen');
     };
 
     ScreenBuilder.initAllRouters = function(app) {
@@ -216,7 +214,7 @@ define([
 
             _.each(ScreensManifest.screens, function initRouter(screenDescriptor) {
                 if (!app.hasOwnProperty(screenDescriptor.routeName)) {
-                    var screenModule = app.module(screenDescriptor.routeName);
+                    var screenModule = app.module('Screens.' + screenDescriptor.routeName);
                     screenModule.buildPromise = $.Deferred();
                     Navigation.initWorkspaceRoute(screenDescriptor.routeName, app);
                 }
@@ -266,11 +264,10 @@ define([
     };
 
     ScreenBuilder.build = function(marionetteApp, workspaceConfig) {
-        var workspaceModule = marionetteApp.module(workspaceConfig.id);
+        var workspaceModule = marionetteApp.module('Screens.' + workspaceConfig.id);
         initializeScreenModule(workspaceModule, workspaceConfig);
         if (workspaceModule.config && workspaceModule.config.predefined === false) {
             // For not predefined config
-            //TODO-WC load from workspace context repository
             UserDefinedScreens.updateScreenModuleFromStorage(workspaceModule);
         }
 
@@ -284,7 +281,6 @@ define([
 
         WorkspaceContextRepository.addWorkspace(workspaceConfig);
 
-        //TODO-WC save the modified screen config to JDS?
         workspaceModule.buildPromise.resolve();
         return workspaceModule;
     };

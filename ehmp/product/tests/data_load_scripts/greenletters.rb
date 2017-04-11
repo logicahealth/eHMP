@@ -1,10 +1,10 @@
 require 'greenletters'
 
-console = Greenletters::Process.new("ssh vagrant@IP_ADDRESS",:transcript => $stdout, :timeout => 10)
+console = Greenletters::Process.new("ssh vagrant@IP        ",:transcript => $stdout, :timeout => 10)
 
 console.start!
 
-console.wait_for(:output, /vagrant@IP_ADDRESS's VsID       i)
+console.wait_for(:output, /vagrant@IP        's password: /i)
 console << "vagrant\r"
 
 console.wait_for(:output, /[vagrant@localhost ~]$/i)

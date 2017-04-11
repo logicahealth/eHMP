@@ -48,7 +48,7 @@ var sampleVprRadiology = {
     facilityName: 'DOD',
     imageLocation: 'INTERNAL MEDICINE     SEYMOUR JOHNSON AFB, NC',
     locationName: 'INTERNAL MEDICINE     SEYMOUR JOHNSON AFB, NC',
-    statusName: 'Not Available',
+    statusName: 'TRANSCRIBED',
     name: 'CHEST,AP',
     typeName: 'RADIOLOGIC EXAMINATIONCHEST,AP',
     kind: 'Radiology',

@@ -45,10 +45,15 @@ function createTopLevelEntry(logger, fields) {
  * @returns {{ien: *, name: *, file: *, foodDrugOther: *, source: *}}
  */
 function createAllergen(logger, fields) {
+    var file = '';
+
+    if(!_.isEmpty(fields[2])){
+        file = fields[2].split(',')[0];
+    }
     var allergen = {
         ien: fields[0],
         name: fields[1],
-        file: fields[2],
+        file: file,
         foodDrugOther: fields[3],
         source: fields[4]
     };

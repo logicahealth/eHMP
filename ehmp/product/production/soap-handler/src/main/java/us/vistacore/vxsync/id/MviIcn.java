@@ -24,7 +24,7 @@ public class MviIcn extends Icn implements MviId {
 		this.setLocalId(idparts[0]);
 	}
 	
-	public static boolean isIdType(String id) {
+	public static boolean isIcnType(String id) {
 		String[] parts = id.split("\\^");
 		return (parts[3].equals(AUTHORITY) && parts[1].equals("NI"));
 	}

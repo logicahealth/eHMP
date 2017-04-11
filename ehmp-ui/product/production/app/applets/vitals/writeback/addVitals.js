@@ -3,10 +3,11 @@ define([
     'marionette',
     'jquery',
     'handlebars',
+    'moment',
     'app/applets/vitals/writeback/validationUtils',
     'app/applets/vitals/writeback/writebackUtils',
     'app/applets/vitals/writeback/errorFooterView'
-], function(Backbone, Marionette, $, Handlebars, validationUtils, writebackUtils, ErrorFooterView) {
+], function(Backbone, Marionette, $, Handlebars, moment, validationUtils, writebackUtils, ErrorFooterView) {
     "use strict";
 
     var rowSubheader = {
@@ -14,18 +15,20 @@ define([
         extraClasses: ["row"],
         items: [{
             control: "container",
-            extraClasses: ["col-xs-12", "left-padding-xs"],
+            extraClasses: ["col-xs-12", "left-padding-xs right-padding-xs"],
             items: [{
                 control: 'container',
                 extraClasses: ["col-xs-4", "all-padding-xs"],
                 items: [{
                     control: "datepicker",
                     name: "dateTakenInput",
-                    title: "Enter in a date in the following format, MM/DD/YYYY",
                     label: "Date Taken",
+                    flexible: true,
+                    minPrecision: 'day',
                     required: true,
                     options: {
-                        endDate: '0d'
+                        endDate: '0d',
+                        startDate: moment().subtract(100, 'y')
                     }
                 }]
             }, {
@@ -43,9 +46,10 @@ define([
 
             }, {
                 control: "container",
-                extraClasses: ["col-xs-2", "top-margin-xs", "all-padding-no", "left-padding-xs"],
+                extraClasses: ["col-xs-2", "top-margin-xs", "all-padding-no"],
                 items: [{
                     control: "button",
+                    type: "button",
                     title: "Press enter to pass",
                     name: "facility-name-pass-po",
                     label: "Pass",
@@ -53,13 +57,13 @@ define([
                 }]
             }, {
                 control: "container",
-                extraClasses: ["col-xs-3", "top-margin-xs", "all-padding-no", "left-paddgin-xs"],
+                extraClasses: ["col-xs-3", "top-margin-xs", "all-padding-no"],
                 items: [{
                     control: 'button',
                     type: 'button',
                     label: 'Expand All',
                     name: 'expandCollapseAll',
-                    extraClasses: ["btn-default", "btn-xs", "top-margin-xl", "background-color-pure-white", "font-size-12"],
+                    extraClasses: ["btn-default", "btn-xs", "top-margin-xl", "left-margin-xs", "background-color-pure-white", "font-size-12"],
                     title: "Press enter to expand all vitals"
                 }]
             }, {
@@ -680,20 +684,26 @@ define([
                 modelListeners: ["savedTime"]
             }, {
                 control: "container",
-                extraClasses: ["col-xs-6"],
-                items: [{
-                    control: "button",
-                    id: 'form-cancel-btn',
-                    extraClasses: ["btn-default", "btn-sm", "left-margin-xs"],
-                    type: "button",
-                    label: "Cancel",
-                    title: "Press enter to cancel"
-                }, {
+                extraClasses: ['col-xs-12','display-flex','valign-bottom'],
+                items: [
+                {
+                    control: 'popover',
+                    behaviors: {
+                        Confirmation: {
+                            title: 'Warning',
+                            eventToTrigger: 'vitals-confirm-cancel'
+                        }
+                    },
+                    label: 'Cancel',
+                    name: 'vitalsConfirmCancel',
+                    extraClasses: ['btn-default', 'btn-sm','right-margin-xs']
+                },
+                {
                     control: "button",
                     extraClasses: ["btn-primary", "btn-sm", "left-margin-xs"],
                     label: "Accept",
                     type: "button",
-                    id: "form-add-btn",
+                    name: "form-add-btn",
                     title: "Press enter to accept"
                 }]
             }]
@@ -714,30 +724,10 @@ define([
     });
 
     var saveAlertView = new ADK.UI.Notification({
-        title: 'Vitals Submitted',
-        icon: 'fa-check',
-        message: 'Vitals successfully submitted with no errors.'
+        title: 'Success',
+        type: 'success',
+        message: 'Vitals Submitted'
     });
-
-    var DeleteMessageView = Backbone.Marionette.ItemView.extend({
-        template: Handlebars.compile('All unsaved changes will be lost. Are you sure you want to cancel?'),
-        tagName: 'p'
-    });
-    var FooterView = Backbone.Marionette.ItemView.extend({
-        template: Handlebars.compile('{{ui-button "No" classes="btn-default" title="Press enter to go back."}}{{ui-button "Yes" classes="btn-primary" title="Press enter to cancel."}}'),
-        events: {
-            'click .btn-primary': function() {
-                ADK.UI.Alert.hide();
-                writebackUtils.unregisterChecks();
-                this.getOption('workflow').close();
-            },
-            'click .btn-default': function() {
-                ADK.UI.Alert.hide();
-            }
-        },
-        tagName: 'span'
-    });
-
     var OpDataErrorMessageView = Backbone.Marionette.ItemView.extend({
         template: Handlebars.compile('We\'re sorry. {{message}}'),
         templateHelpers: function() {
@@ -758,7 +748,7 @@ define([
     });
 
     var WarningFooterView = Backbone.Marionette.ItemView.extend({
-        template: Handlebars.compile('{{ui-button "Cancel" classes="btn-default" title="Press enter to cancel."}}{{ui-button "Submit" classes="btn-primary" title="Press enter to submit."}}'),
+        template: Handlebars.compile('{{ui-button "Cancel" classes="btn-default btn-sm" title="Press enter to go back."}}{{ui-button "Submit" classes="btn-primary btn-sm" title="Press enter to submit."}}'),
         events: {
             'click .btn-primary': function() {
                 var self = this;
@@ -772,8 +762,8 @@ define([
                     },
                     function() {
                         var errorAlertView = new ADK.UI.Alert({
-                            title: 'Save Failed (System Error)',
-                            icon: 'icon-error',
+                            title: 'Error',
+                            icon: 'icon-circle-exclamation',
                             messageView: ErrorMessageView,
                             footerView: ErrorFooterView.extend({
                                 form: self.form
@@ -784,30 +774,6 @@ define([
             },
             'click .btn-default': function() {
                 this.form.$(this.form.ui.submitButton.selector).trigger('control:disabled', false);
-                ADK.UI.Alert.hide();
-            }
-        },
-        tagName: 'span'
-    });
-
-    var NoVitalsEnteredMessageView = Backbone.Marionette.ItemView.extend({
-        template: Handlebars.compile('No data entered for patient {{patientDisplayName}}. Close the window?'),
-        model: new Backbone.Model(),
-        initialize: function(options) {
-            this.model.set('patientDisplayName', ADK.PatientRecordService.getCurrentPatient().get('displayName'));
-        },
-        tagName: 'p'
-    });
-
-    var NoVitalsEnteredFooterView = Backbone.Marionette.ItemView.extend({
-        template: Handlebars.compile('{{ui-button "No" classes="btn-default" title="Press enter to cancel."}}{{ui-button "Yes" classes="btn-primary" title="Press enter to continue."}}'),
-        events: {
-            'click .btn-primary': function() {
-                ADK.UI.Alert.hide();
-                writebackUtils.unregisterChecks();
-                this.getOption('workflow').close();
-            },
-            'click .btn-default': function() {
                 ADK.UI.Alert.hide();
             }
         },
@@ -825,7 +791,7 @@ define([
             toggleBooleanPassBtn = true;
         },
         ui: {
-            'submitButton': '#form-add-btn',
+            'submitButton': '.form-add-btn',
             "bpInput": ".bpInput",
             "tempLocation": ".temperature-location-po",
             "heightQuality": ".height-quality-po",
@@ -837,7 +803,7 @@ define([
             "cgFields": ".cg-site-po, .cg-location-po",
             "ExpandCollapseAllButton": ".expandCollapseAll button",
             "ExpandCollapseAllControl": ".expandCollapseAll",
-            "PassButton": ".facility-name-pass-po button",
+            "PassButton": ".button-control.facility-name-pass-po",
             "AllCollapsibleContainers": ".bpSection, .temperatureSection, .pulseSection, .respirationSection, .poSection, .heightSection, .weightSection, .cgSection"
         },
         fields: F423Fields,
@@ -863,10 +829,10 @@ define([
             this.listenToOnce(this.model, 'change.inputted', this.registerChecks);
             writebackUtils.retrievePickLists(this, function() {}, function() {
                 var errorAlertView = new ADK.UI.Alert({
-                    title: 'Failed to load picklist data.',
-                    icon: 'icon-error',
+                    title: 'Error',
+                    icon: 'icon-circle-exclamation',
                     messageView: OpDataErrorMessageView.extend({
-                        msg: 'There was an error loading the form.'
+                        msg: 'Failed to load picklist data.'
                     }),
                     footerView: ErrorFooterView
                 });
@@ -962,16 +928,29 @@ define([
             'click @ui.PassButton': function(e) {
                 e.preventDefault();
                 this.ui.PassButton.toggleClass('active');
-                this.allFields.forEach(function(field) {
-                    if (this.model.get(field)) {
-                        this.model.unset(field);
-                    }
+
+                var fieldsToUnset = _.transform(this.allFields, function(existingFields, field) {
+                    if (this.model.get(field)) existingFields[field] = null;
                     if (($('.' + field + ':disabled').length < 1)) {
                         $('.' + field).trigger("control:disabled", toggleBooleanPassBtn);
                     }
-                }, this);
-
+                }, {}, this);
+                
+                if (_.size(fieldsToUnset) > 0) {
+                    this.model.set(fieldsToUnset, {unset: true});
+                } else {
+                    this.checkSubmitButtonState();
+                }
+                
                 toggleBooleanPassBtn = !toggleBooleanPassBtn;
+
+                if (this.ui.PassButton.hasClass('active')) {
+                    this.ui.PassButton.trigger('control:label', 'Enable').trigger('control:title', 'Press enter to enable all vitals');
+                } else {
+                    this.ui.PassButton.trigger('control:label', 'Pass').trigger('control:title', 'Press enter to pass all vitals');
+                }
+                this.ui.PassButton.find('button').focus();
+
                 this.registerChecks();
             },
             "keyup .vitalInput:not(:last) input:not(:radio):focus": function(e) {
@@ -998,32 +977,13 @@ define([
                 this.ui.ExpandCollapseAllControl.find('button').focus();
                 toggleBooleanExpandCollapse = !toggleBooleanExpandCollapse;
             },
-            "click #form-cancel-btn": function(e) {
-                e.preventDefault();
-                var deleteAlertView = new ADK.UI.Alert({
-                    title: 'Cancel',
-                    icon: 'icon-cancel',
-                    messageView: DeleteMessageView,
-                    footerView: FooterView,
-                    workflow: this.workflow
-                });
-                deleteAlertView.show();
+            'vitals-confirm-cancel':function(e){
+                writebackUtils.unregisterChecks();
+                this.workflow.close();
             },
-            "click #form-add-btn": function(e) {
+            "click @ui.submitButton": function(e) {
                 var self = this;
                 e.preventDefault();
-
-                if (validationUtils.areAllDataFieldsEmpty(self.model, self.isPassSelected())) {
-                    var noVitalsEnteredAlertView = new ADK.UI.Alert({
-                        title: 'No Data Entered',
-                        icon: 'icon-warning',
-                        messageView: NoVitalsEnteredMessageView,
-                        footerView: NoVitalsEnteredFooterView,
-                        workflow: this.workflow
-                    });
-                    noVitalsEnteredAlertView.show();
-                    return;
-                }
 
                 if (!this.model.isValid())
                     this.model.set("formStatus", {
@@ -1040,8 +1000,8 @@ define([
                                 tagName: 'p'
                             });
                             var warningView = new ADK.UI.Alert({
-                                title: 'Height/Weight Warnings Exist',
-                                icon: 'icon-warning',
+                                title: 'Warning',
+                                icon: 'icon-triangle-exclamation',
                                 messageView: WarningMessageView,
                                 footerView: WarningFooterView.extend({
                                     form: self
@@ -1049,7 +1009,11 @@ define([
                             });
                             warningView.show();
                         } else {
+                            self.$el.trigger('tray.loaderShow',{
+                                loadingString:'Accepting'
+                            });
                             writebackUtils.addVitals(self.model, self.isPassSelected(), self.model.get('vitalsIENMap'), function() {
+                                    self.$el.trigger('tray.loaderHide');
                                     saveAlertView.show();
                                     writebackUtils.unregisterChecks();
                                     self.workflow.close();
@@ -1059,9 +1023,10 @@ define([
                                     vitalsChannel.trigger('refreshGridView');
                                 },
                                 function() {
+                                    self.$el.trigger('tray.loaderHide');
                                     var errorAlertView = new ADK.UI.Alert({
-                                        title: 'Save Failed (System Error)',
-                                        icon: 'icon-error',
+                                        title: 'Error',
+                                        icon: 'icon-circle-exclamation',
                                         messageView: ErrorMessageView,
                                         footerView: ErrorFooterView.extend({
                                             form: self
@@ -1204,7 +1169,14 @@ define([
             },
             'change:cg-radio-po': function() {
                 this.radioDisableHandler("circumferenceGirth");
+            },
+            change: function() {
+                _.defer(_.bind(this.checkSubmitButtonState, this));
             }
+        },
+        checkSubmitButtonState: function() {
+            var isButtonDisabled = validationUtils.areAllDataFieldsEmpty(this.model, this.isPassSelected()) || !this.model.errorModel.isEmpty();
+            this.ui.submitButton.trigger('control:disabled', isButtonDisabled);
         },
         validateFormField: function(formField, validationFunction) {
             validationFunction(this.model, this.model.get(formField));

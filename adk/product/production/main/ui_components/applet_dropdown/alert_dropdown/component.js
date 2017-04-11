@@ -33,12 +33,12 @@ define([
 
             var model_alerts = model.get('alert_count');
             var function_alerts =  (this.getAlertCount && _.isFunction(this.getAlertCount)) ? this.getAlertCount(model, this.collection) : null;
-            var alerts = model_alerts || function_alerts;
+            var alerts = _.isNumber(model_alerts) ? model_alerts : function_alerts;
             if (_.isNumber(alerts)) {
                 JSON.alert_count = alerts;
             } else {
                 var collection = this.getOption('collection');
-                if(collection.length) JSON.alert_count = collection.length;
+                if(_.isNumber(collection.length)) JSON.alert_count = collection.length;
             }
 
             return JSON;
@@ -54,8 +54,11 @@ define([
     var RowView = Marionette.ItemView.extend({
         tagName: 'li',
         className: 'list-group-item bottom-margin-no',
+        attributes: {
+            role: 'presentation'
+        },
         RowContentTemplate: '{{label}}',
-        template: '<a href="#" class="btn btn-link btn-sm" title="{{title}}"><div class="row"><div class="col-xs-1 left-padding-no"><i class="fa fa-arrow-right color-primary-dark top-margin-lg"></i></div><div class="col-xs-11 left-padding-no">{{content}}</div></div></a>',
+        template: '<a href="#" class="btn btn-link btn-sm" title="{{title}}" role="menuitem" tabindex="-1"><div class="row"><div class="col-xs-1 left-padding-no"><i class="fa fa-arrow-right color-primary-dark top-margin-lg"></i></div><div class="col-xs-11 left-padding-no">{{content}}</div></div></a>',
         getTemplate: function() {
             var template = this.getOption('template');
             if(_.isFunction(template)) return template;
@@ -101,8 +104,36 @@ define([
             return classes.join(' ');
         }
     });
-
+    var PageBlur = Backbone.Marionette.Behavior.extend({
+        events: {
+            'dropdown.show': function(thisE, e) {
+                if (!this.view.isOpen() && this.backdrop) {
+                    this.$el.addClass('blur-none');
+                    $('html').addClass('page-blur');
+                }
+            },
+            'dropdown.hide': function(thisE, e) {
+                if (this.view.isOpen() && this.backdrop) {
+                    this.$el.removeClass('blur-none');
+                    $('html').removeClass('page-blur');
+                }
+            }
+        },
+        initialize: function() {
+            this.backdrop = _.isBoolean(this.view.getOption('backdrop')) || false;
+        }
+    });
     var AlertDropdownView = AppletDropdownView.extend({
+        behaviors: {
+            ZIndex: {
+                eventString: 'dropdown.shown',
+                element: function() {
+                    return this.DropdownRegion.$el.find('#' + this.getOption('dropdown_id') + ' .dropdown-menu');
+                }
+            }, PageBlur: {
+                behaviorClass: PageBlur
+            }
+        },
         container: 'body',
         position: 'auto',
         RowView: RowView,
@@ -140,29 +171,6 @@ define([
                 collection: this.getOption('collection'),
                 RowContentTemplate: this.getOption('RowContentTemplate')
             });
-            this.backdrop = _.isBoolean(this.getOption('backdrop')) || false;
-        },
-        events: {
-            'dropdown.show': function(thisE, e) {
-                this.trigger('dropdown.show', e, this);
-                if (!this.isOpen()) {
-                    this.open(e);
-                    if (this.backdrop){
-                        this.$el.addClass('blur-none');
-                        $('html').addClass('page-blur');
-                    }
-                }
-            },
-            'dropdown.hide': function(thisE, e) {
-                this.trigger('dropdown.hide', e, this);
-                if (this.isOpen()) {
-                    this.close(e);
-                    if (this.backdrop){
-                        this.$el.removeClass('blur-none');
-                        $('html').removeClass('page-blur');
-                    }
-                }
-            }
         },
         configureDropdownView: function(options) {
             var collection = this.getOption('collection');
@@ -186,7 +194,6 @@ define([
             this.$el.removeClass('blur-none');
             $('html').removeClass('page-blur');
         }
-
     });
 
     //attach these as options for the end user

@@ -13,24 +13,28 @@ var req = {
             },
             vistaSites: {
                 '9E7A': {
-                    name: 'PANORAMA',
-                    division: '500',
-                    host: 'IP_ADDRESS',
+                    division: [{
+                        id: '500',
+                        name: 'PANORAMA'
+                    }],
+                    host: 'IP        ',
                     port: 9210,
                     production: false,
-                    accessCode: 'PW',
-                    verifyCode: 'PW',
-                    localIP: 'IPADDRES',
+                    accessCode: 'PW    ',
+                    verifyCode: 'PW    !!',
+                    localIP: 'IP      ',
                     localAddress: 'localhost'
                 },
                 'C877': {
-                    name: 'KODAK',
-                    division: '500',
-                    host: 'IP_ADDRESS',
+                    division: [{
+                        id: '500',
+                        name: 'KODAK'
+                    }],
+                    host: 'IP        ',
                     port: 9210,
                     production: false,
-                    accessCode: 'PW',
-                    verifyCode: 'PW'
+                    accessCode: 'PW    ',
+                    verifyCode: 'PW    !!'
                 }
             }
         }

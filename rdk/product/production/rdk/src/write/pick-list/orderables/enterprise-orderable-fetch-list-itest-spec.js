@@ -10,11 +10,11 @@ var configuration = {
     environment: 'development',
     context: 'OR CPRS GUI CHART',
     generalPurposeJdsServer: {
-        baseUrl: 'http://IP_ADDRESS:PORT'
+        baseUrl: 'http://IP             '
     },
-    accessCode: 'PW',
-    verifyCode: 'PW',
-    localIP: 'IPADDRES',
+    accessCode: 'PW    ',
+    verifyCode: 'PW    !!',
+    localIP: 'IP      ',
     localAddress: 'localhost'
 };
 

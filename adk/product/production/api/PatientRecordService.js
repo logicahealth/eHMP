@@ -80,38 +80,31 @@ define([
             var self = this;
             var options = {
                 resourceTitle: 'patient-record-patient',
+                cache: false
             };
-            options.success = function(collection, resp) {
-                var modelIndex = _.indexOf(collection.pluck('pid'), self.getCurrentPatient().get('pid')) || 0;
-                self.getCurrentPatient().set(collection.models[modelIndex].attributes);
+            options.onSuccess = function(collection, resp) {
+                var currentPatient = self.getCurrentPatient();
+                var refreshedPatient = collection.findWhere({'pid': currentPatient.get('pid')}) || collection.at(0);
+                if (currentPatient.get('patientRecordFlag') && !refreshedPatient.get('patientRecordFlag')) {
+                    currentPatient.unset('patientRecordFlag');
+                }
+                currentPatient.set(refreshedPatient.attributes);
                 Messaging.trigger('refreshed.ehmp.patient');
             };
-            options.error = function(collection, error) {
+            options.onError = function(collection, error) {
                 console.log("ADK refreshCurrentPatient: -------->> Error");
                 console.log(JSON.stringify(error, null, 4));
                 Messaging.trigger('refreshed.ehmp.patient');
             };
-            this.fetchCollection(options).fetch(options);
+            this.fetchCollection(options);
         },
         fetchDateFilteredCollection: function(collection, filterOptions) {
             return resourceService.fetchDateFilteredCollection(collection, filterOptions);
         },
         isPatientInPrimaryVista: function() {
-            var domainModel = SessionStorage.get.sessionModel('patient-domain'),
-                domainData = domainModel.get('data'),
-                vistaSites = domainModel.get('sites'),
-                inVista = false;
-
-            _.each(domainData, function(item) {
-                var pidSite = item.pid.split(';')[0];
-                var match = vistaSites.filter(function(a) {
-                    return a.siteCode === pidSite;
-                });
-                if (match.length) {
-                    inVista = true;
-                }
-            });
-            return inVista;
+            var currentPatient = ADK.PatientRecordService.getCurrentPatient();
+            var user = ADK.UserService.getUserSession();
+            return currentPatient.get('pid').indexOf(user.get('site') + ';') === 0;
         },
         buildUrl: function(resourceTitle, criteria) {
             var options = {
@@ -153,19 +146,20 @@ define([
             });
         },
         isMatchingPatient: function(sourcePatient, targetPatient) {
-            var pid;
+            var pid, icn;
 
             if (_.isString(sourcePatient)) {
                 pid = sourcePatient;
             } else {
                 pid = sourcePatient.get('pid');
+                icn = sourcePatient.get('icn');
             }
 
             if (_.isEmpty(targetPatient)) {
                 targetPatient = this.getCurrentPatient();
             }
 
-            return targetPatient.get('pid') === pid || targetPatient.get('icn') === pid;
+            return targetPatient.get('pid') === pid || targetPatient.get('icn') === icn || targetPatient.get('icn') === pid;
         },
         getLastWorkspace: function(patientModel) {
             var getPatientWorkspaceContextOptions = {

@@ -1,21 +1,42 @@
 <div class="col-xs-12">
-	<h5 class="bottom-border-grey-light">Current Appointment Info</h5>
-	{{#if appointment}}
-		<div class="row">
-			<div class="col-xs-4">
-				<p><strong>Scheduled Date</strong><br />
-				{{formatDate appointment.date "MM/DD/YYYY"}}</p>
-			</div>
-			<div class="col-xs-4">
-				<p><strong>Clinic</strong><br />
-				{{appointment.clinic}}</p>
-			</div>
-			<div class="col-xs-4">
-				<p><strong>Provider</strong><br />
-				{{appointment.provider}}</p>
-			</div>
-		</div>
+	<h5 class="bottom-border-grey-light">Current Appointment Info {{#compare appointment.type "Community Care"}}(Community Care){{/compare}}</h5>
+	{{#if appointment.unscheduled}}
+	<p>Unscheduled</p>
 	{{else}}
-		<p>Unscheduled<p>
+		{{#if appointment.ewl}}
+		<p>Patient is currently on the Electronic Waiting List (EWL).</p>
+		{{else}}
+			{{#compare appointment.type "VA"}}
+			<div class="row">
+				<div class="col-xs-3">
+					<p><strong>Scheduled Date</strong><br />
+					{{#if appointment.date}}{{appointment.date}}{{else}}N/A{{/if}}</p>
+				</div>
+				<div class="col-xs-3">
+					<p><strong>Clinic</strong><br />
+					{{#if appointment.clinic}}{{appointment.clinic}}{{else}}N/A{{/if}}</p>
+				</div>
+				<div class="col-xs-3">
+					<p><strong>Provider</strong><br />
+					{{#if appointment.provider}}{{appointment.provider}}{{else}}N/A{{/if}}</p>
+				</div>
+			</div>
+			{{/compare}}
+			{{#compare appointment.type "Community Care"}}
+				<div class="row">
+					<div class="col-xs-3">
+						<p><strong>Type of Community Care</strong><br />
+						{{#if appointment.communityCareType}}{{appointment.communityCareType}}{{else}}N/A{{/if}}</p>
+					</div>
+					<div class="col-xs-3">
+						<p class="transform-text-capitalize"><strong>Status</strong><br />
+						{{#if appointment.status}}{{appointment.status}}{{else}}N/A{{/if}}</p>
+					</div>
+				</div>
+			{{/compare}}
+			{{#compare appointment.type "eConsult"}}
+				<p>Patient is currently being reviewed by eConsult.</p>
+			{{/compare}}
+		{{/if}}
 	{{/if}}
 </div>

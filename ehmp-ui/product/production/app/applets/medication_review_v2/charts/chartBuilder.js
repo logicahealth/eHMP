@@ -1,4 +1,4 @@
-define(['moment'], function() {
+define(['moment'], function(moment) {
     "use strict";
 
     function chartBuilder(model, isStackedGraph) {

@@ -8,21 +8,29 @@
         <div class="col-xs-12">
             <h5 class="bottom-border-grey-dark">Details</h5>
         </div>
+    </div>
+    <div class="row">
         <div class="col-xs-3">
             <p>
-                <span><strong>Date</strong></span><br />
+                <span><strong>Date:</strong></span><br />
                 <span data-detail="dateTime">{{formatDate dateTime "MM/DD/YYYY - HH:mm"}}</span>
             </p>
         </div>
         <div class="col-xs-3">
             <p>
-                <span><strong>Type</strong></span><br />
-                <span data-detail="typeDisplayName">{{typeDisplayName}}</span>
+                <span><strong>Type:</strong></span><br />
+                <span data-detail="typeDisplayName">
+                    {{#if typeDisplayName}}
+                        {{typeDisplayName}}
+                    {{else}}
+                        N/A
+                    {{/if}}
+                </span>
             </p>
         </div>
         <div class="col-xs-3">
             <p>
-                <span><strong>Category</strong></span><br />
+                <span><strong>Category:</strong></span><br />
                 <span data-detail="categoryName">
                 {{#if categoryName}}
                     {{categoryName}}
@@ -34,7 +42,7 @@
         </div>
         <div class="col-xs-3">
             <p>
-                <span><strong>Patient Class</strong></span><br />
+                <span><strong>Patient class:</strong></span><br />
                 <span data-detail="patientClassName">
                     {{#if patientClassName}}
                         {{patientClassName}}
@@ -47,14 +55,14 @@
         {{#if appointmentStatus}}
         <div class="col-xs-3">
             <p>
-                <span><strong>Appointment Status</strong></span><br />
+                <span><strong>Appointment status:</strong></span><br />
                 <span data-detail="appointmentStatus">{{appointmentStatus}}</span>
             </p>
         </div>
         {{/if}}
         <div class="col-xs-3">
             <p>
-                <span><strong>Location</strong></span><br />
+                <span><strong>Location:</strong></span><br />
                 <span data-detail="locationDisplayName">
                     {{#if locationDisplayName}}
                         {{locationDisplayName}}
@@ -66,7 +74,7 @@
         </div>
         <div class="col-xs-3">
             <p>
-                <span><strong>Stop Code</strong></span><br />
+                <span><strong>Stop code:</strong></span><br />
                 <span data-detail="stopCodeName">
                     {{#if stopCodeName}}
                         {{stopCodeName}}
@@ -79,7 +87,7 @@
 
         <div class="col-xs-3">
             <p>
-                <span><strong>Facility</strong></span><br />
+                <span><strong>Facility:</strong></span><br />
                 <span data-detail="facilityName">{{facilityName}}</span>
             </p>
         </div>
@@ -95,7 +103,7 @@
                 {{#if primary}}
                 <span><strong>Primary</strong></span>
                 {{else}}
-                <span><strong>Additional Provider</strong></span>
+                <span><strong>Additional provider</strong></span>
                 {{/if}}
                 <br />
                 <span>{{providerDisplayName}}</span>
@@ -107,7 +115,7 @@
     {{#if dischargeDiagnoses}}
     <div class="row top-margin-sm">
         <div class="col-xs-12">
-            <h5 class="bottom-border-grey-dark" data-group-instanceid="diagnosisSection">Discharge Diagnoses</h5>
+            <h5 class="bottom-border-grey-dark" data-group-instanceid="diagnosisSection">Discharge diagnoses</h5>
         </div>
         {{#each dischargeDiagnoses}}
         <div class="col-xs-12">

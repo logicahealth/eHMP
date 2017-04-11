@@ -50,7 +50,7 @@ define([
             selectedSignsSymptoms = model.get('signsSymptoms').where({ booleanValue : true });
 
             var error = ValidationUtils.validateAllergyType(model.get('allergyType'), selectedSignsSymptoms );
-            expect(error).toBe('A Symptom must be selected when Allergy Type is Observed.');
+            expect(error).toBe('A symptom must be selected when allergy type is observed');
         });
         it('should validate reaction date', function() {
             var model = getModel(),
@@ -59,7 +59,7 @@ define([
             model.set('reaction-date', tomorrow);
 
             var error = ValidationUtils.validateReactionDate(model.get('reaction-date'));
-            expect(error).toBe('Reaction Date/Time cannot be in the future.');
+            expect(error).toBe('Reaction date/time cannot be in the future');
          });
         it('should validate reaction time', function() {
             var model = getModel(),
@@ -69,7 +69,7 @@ define([
             model.set('reaction-time', currentTime);
 
             var error = ValidationUtils.validateReactionTime(model.get('reaction-date'), model.get('reaction-time'));
-            expect(error).toBe('Reaction Date is required with Time.');
+            expect(error).toBe('Reaction date is required with time');
          });
         it('should not validate reaction time if date is only YYYY or MM/YYYY', function() {
             var model = getModel(),

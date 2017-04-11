@@ -61,10 +61,10 @@ define(['jquery', 'backbone', 'marionette', 'jasminejquery', 'app/applets/task_f
                 expect(actionModel.get('deploymentId')).toEqual('Vista.Order.2.0');
                 expect(actionModel.get('processInstanceId')).toEqual(42);
                 expect(actionModel.get('signalName')).toEqual('END');
-                expect(actionModel.get('parameter').discontinueData.get('objectType')).toEqual('requestSignal');
-                expect(actionModel.get('parameter').discontinueData.get('name')).toEqual('END');
-                expect(actionModel.get('parameter').discontinueData.get('actionText')).toEqual('discontinue');
-                expect(actionModel.get('parameter').discontinueData.get('data').comment).toEqual('Some reason text');
+                expect(actionModel.get('parameter').signalBody.get('objectType')).toEqual('requestSignal');
+                expect(actionModel.get('parameter').signalBody.get('name')).toEqual('END');
+                expect(actionModel.get('parameter').signalBody.get('actionText')).toEqual('Discontinue');
+                expect(actionModel.get('parameter').signalBody.get('data').comment).toEqual('Some reason text');
             });
         });
 

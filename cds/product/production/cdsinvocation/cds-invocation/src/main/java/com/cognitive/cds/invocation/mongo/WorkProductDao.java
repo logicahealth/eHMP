@@ -24,28 +24,25 @@
  */
 package com.cognitive.cds.invocation.mongo;
 
-import com.cognitive.cds.invocation.execution.model.PatientList;
+import java.io.IOException;
+import java.util.Iterator;
+
+import org.bson.Document;
+import org.bson.types.ObjectId;
+
+import com.cognitive.cds.invocation.mongo.exception.CDSDBConnectionException;
 import com.cognitive.cds.invocation.util.JsonUtils;
 import com.cognitive.cds.invocation.workproduct.model.WorkProduct;
 import com.cognitive.cds.invocation.workproduct.model.WorkProductAssignment;
-import com.cognitive.cds.invocation.workproduct.model.WorkProductSubscription;
 import com.cognitive.cds.invocation.workproduct.model.WorkProductWrapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
-import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
-
-import java.io.IOException;
-import java.util.Iterator;
-import java.util.List;
-
-import org.bson.Document;
-import org.bson.types.ObjectId;
 
 /**
  *
@@ -55,7 +52,6 @@ public class WorkProductDao {
 
     private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(WorkProductDao.class);
 
-    private boolean cacheWorkProducts;
     private MongoDbDao mongoDbDao;
 
     public MongoDbDao getMongoDbDao() {
@@ -68,8 +64,8 @@ public class WorkProductDao {
 
     public String saveWorkProduct(WorkProduct workProduct) throws JsonProcessingException {
 
-        mongoDbDao.setDatabase("work");
         try {
+            MongoDatabase database = mongoDbDao.getMongoClient().getDatabase("work");
             ObjectId id = new ObjectId();
 
             workProduct.setId(id.toHexString()); // same id as the wrapper class
@@ -82,12 +78,12 @@ public class WorkProductDao {
             logger.info("=====> WorkProductWrapper json to write: " + objectJson);
             Document doc = Document.parse(objectJson);
             doc.put("_id", new ObjectId(id.toHexString()));
-            mongoDbDao.getCollection("work").insertOne(doc);
+            database.getCollection("work").insertOne(doc);
 
             return id.toHexString();
 
         } catch (Exception e) {
-            logger.error("=======> WorkProduct Insert Exception: " + e.toString());
+            logger.error("=======> WorkProduct Insert Exception: " + e.toString(),e);
         }
 
         return null;
@@ -97,8 +93,14 @@ public class WorkProductDao {
     public WorkProductWrapper getWorkProduct(String id) {
         WorkProductWrapper wpw = null;
 
-        mongoDbDao.setDatabase("work");
-        MongoCollection<Document> collection = mongoDbDao.getCollection("work");
+        MongoDatabase database = null;
+		try {
+			database = mongoDbDao.getMongoClient().getDatabase("work");
+		} catch (CDSDBConnectionException e1) {
+            logger.error("========> mongoDbDao.getMongoClient().getDatabase: " + e1.toString(),e1);
+            return wpw;
+		}
+        MongoCollection<Document> collection = database.getCollection("work");
 
         Document filter = new Document();
         filter.put("_id", new ObjectId(id));
@@ -110,7 +112,7 @@ public class WorkProductDao {
                 String json = obj.toJson();
                 wpw = (WorkProductWrapper) JsonUtils.getMapper().readValue(json, WorkProductWrapper.class);
             } catch (IOException e) {
-                logger.error("========> Deserialize: " + e.toString());
+                logger.error("========> Deserialize: " + e.toString(),e);
             }
         }
         return wpw;
@@ -118,10 +120,9 @@ public class WorkProductDao {
 
     public boolean insertAssignment(WorkProductAssignment workProductAssignment) throws JsonProcessingException {
 
-        mongoDbDao.setDatabase("work");
-        ObjectMapper mapper = new ObjectMapper();
-
         try {
+            MongoDatabase database = mongoDbDao.getMongoClient().getDatabase("work");
+            ObjectMapper mapper = new ObjectMapper();
 
             ObjectId id = new ObjectId(workProductAssignment.getWorkProductId());
 
@@ -136,36 +137,44 @@ public class WorkProductDao {
             BasicDBObject query = new BasicDBObject("_id", id);
             BasicDBObject update = new BasicDBObject("$push", listItem);
 
-            Document response = mongoDbDao.getCollection("work").findOneAndUpdate(query, update);
+            Document response = database.getCollection("work").findOneAndUpdate(query, update);
             if (response != null)
                 return true;
             else
                 return false;
         } catch (Exception e) {
-            logger.error("=======> WorkProduct Assignment Exception: " + e.toString());
+            logger.error("=======> WorkProduct Assignment Exception: " + e.toString(),e);
         }
         return false;
     }
 
     public DeleteResult deleteWorkProduct(String id) throws JsonProcessingException {
+    	DeleteResult result = DeleteResult.unacknowledged();
+    	try {
+    		MongoDatabase database = mongoDbDao.getMongoClient().getDatabase("work");
+    		MongoCollection<Document> collection = database.getCollection("work");
 
-        mongoDbDao.setDatabase("work");
-        MongoClient mongo = mongoDbDao.getMongoClient();
-        MongoDatabase db = mongo.getDatabase("work");
-        MongoCollection<Document> collection = db.getCollection("work");
+    		BasicDBObject query = new BasicDBObject();
+    		query.append("_id", new ObjectId(id));
 
-        BasicDBObject query = new BasicDBObject();
-        query.append("_id", new ObjectId(id));
-
-        DeleteResult result = collection.deleteOne(query);
-        return result;
+    		result = collection.deleteOne(query);
+    	} catch (CDSDBConnectionException e) {
+    		// TODO Auto-generated catch block
+    		e.printStackTrace();
+    	}
+    	return result;
     }
 
     public UpdateResult updateWorkProduct(WorkProduct wp) throws JsonProcessingException {
-        mongoDbDao.setDatabase("work");
-        MongoClient mongo = mongoDbDao.getMongoClient();
-        MongoDatabase db = mongo.getDatabase("work");
-        MongoCollection<Document> collection = db.getCollection("work");
+        UpdateResult result = null;
+        MongoDatabase database = null;
+		try {
+			database = mongoDbDao.getMongoClient().getDatabase("work");
+		} catch (CDSDBConnectionException e1) {
+            logger.error("========> mongoDbDao.getMongoClient().getDatabase: " + e1.toString(),e1);
+            return result;
+		}
+        MongoCollection<Document> collection = database.getCollection("work");
 
         Document filter = new Document();
         if(wp.getId() == null)
@@ -174,7 +183,6 @@ public class WorkProductDao {
             filter.put("_id", new ObjectId(wp.getId()));
 
         Document obj = collection.find(filter).first();
-        UpdateResult result = null;
 
         if (obj != null) {
             try {
@@ -183,7 +191,7 @@ public class WorkProductDao {
                 result = collection.updateOne(filter, new Document("$set", new Document("workproduct", doc)));
                
             } catch (IOException e) {
-                logger.error("========> Deserialize: " + e.toString());
+                logger.error("========> Deserialize: " + e.toString(),e);
             }
         }
         return result;
@@ -193,10 +201,16 @@ public class WorkProductDao {
      * @param wpa is the new work product assignment to be assigned to the work product id.
      */
     public UpdateResult updateWorkProductAssignment(WorkProductAssignment wpa) throws JsonProcessingException {
-        mongoDbDao.setDatabase("work");
-        MongoClient mongo = mongoDbDao.getMongoClient();
-        MongoDatabase db = mongo.getDatabase("work");
-        MongoCollection<Document> collection = db.getCollection("work");
+        UpdateResult result = null;
+
+        MongoDatabase database = null;
+		try {
+			database = mongoDbDao.getMongoClient().getDatabase("work");
+		} catch (CDSDBConnectionException e1) {
+            logger.error("========> mongoDbDao.getMongoClient().getDatabase: " + e1.toString(),e1);
+            return result;
+		}
+        MongoCollection<Document> collection = database.getCollection("work");
         WorkProductWrapper wpw;
         Document filter = new Document();
         if(wpa.getUser() == null)
@@ -205,7 +219,6 @@ public class WorkProductDao {
             filter.put("_id", new ObjectId(wpa.getWorkProductId()));
 
         Document obj = collection.find(filter).first();
-        UpdateResult result = null;
         if (obj != null) {
             try {
                 String json = obj.toJson();
@@ -224,9 +237,9 @@ public class WorkProductDao {
                 String objectJson = JsonUtils.getMapper().writeValueAsString(wpw);
                 Document doc = Document.parse(objectJson);
                 doc.put("_id", new ObjectId(wpa.getWorkProductId()));
-                result = mongoDbDao.getCollection("work").replaceOne(filter, doc);
+                result = database.getCollection("work").replaceOne(filter, doc);
             } catch (IOException e) {
-                logger.error("========> Deserialize: " + e.toString());
+                logger.error("========> Deserialize: " + e.toString(),e);
             }
         }
         return result;
@@ -238,16 +251,22 @@ public class WorkProductDao {
      * @returns UpdateResult object if it was deleted or null if it's not
      */
     public UpdateResult deleteWorkProductAssignment(String workProductId, String userId) {
-       
+        UpdateResult result = null;
+      
         WorkProductWrapper wpw;
-        mongoDbDao.setDatabase("work");
-        MongoCollection<Document> collection = mongoDbDao.getCollection("work");
+        MongoDatabase database = null;
+		try {
+			database = mongoDbDao.getMongoClient().getDatabase("work");
+		} catch (CDSDBConnectionException e1) {
+            logger.error("========> mongoDbDao.getMongoClient().getDatabase: " + e1.toString(),e1);
+            return result;
+		}
+        MongoCollection<Document> collection = database.getCollection("work");
 
         Document filter = new Document();
         filter.put("_id", new ObjectId(workProductId));
 
         Document obj = collection.find(filter).first();
-        UpdateResult result = null;
         if (obj != null) {
             try {
                 String json = obj.toJson();
@@ -265,9 +284,9 @@ public class WorkProductDao {
                 Document doc = Document.parse(objectJson);
                 doc.put("_id", new ObjectId(workProductId));
                 // Update the work product.
-                result = mongoDbDao.getCollection("work").replaceOne(filter, doc);
+                result = database.getCollection("work").replaceOne(filter, doc);
             } catch (IOException e) {
-                logger.error("========> Deserialize: " + e.toString());
+                logger.error("========> Deserialize: " + e.toString(),e);
             }
         }
         return result;

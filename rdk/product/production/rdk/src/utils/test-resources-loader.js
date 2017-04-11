@@ -3,7 +3,7 @@
 var fs = require('fs');
 var fspath = require('path');
 var _ = require('lodash');
-var appfactory = require('../core/app-factory');
+var rdkResources = require('../core/factory-components/rdk-resources');
 
 var registerRegex = /^app\.register\('([^']+)', [^']+'([^']+)'\);/gm;
 
@@ -77,7 +77,7 @@ function addResource(app, resources, filePath, mountpoint) {
     }
     var resourceConfigs = _.cloneDeep(resourceModule.getResourceConfig(app));
     _.each(resourceConfigs, function(resource) {
-        appfactory._processConfigItem(resource, mountpoint);
+        rdkResources._processResourceConfigItem(resource, mountpoint);
     });
     resources[filePath] = resourceConfigs;
 }

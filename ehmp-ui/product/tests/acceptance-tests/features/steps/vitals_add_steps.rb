@@ -718,40 +718,6 @@ Then(/^Add Vitals modal contains error "([^"]*)" for "([^"]*)"$/) do |value, vit
   con.perform_verification(label, value, 10)
 end
 
-# Then(/^the Vitals Write Back user opens the blood pressure details page$/) do
-#   con = AddVitalsTest.instance
-#   driver = TestSupport.driver
-#   con.wait_until_action_element_visible("OpenBpDetails", 60)
-#   expect(con.static_dom_element_exists?("OpenBpDetails")).to be_true
-#   con.perform_action("OpenBpDetails")
-# end
-
-# Then(/^the latest Vital is "([^"]*)"$/) do |element|
-#   con = AddVitalsTest.instance
-#   driver = TestSupport.driver
-#   con.wait_until_action_element_visible("VerifyBpDetails", 60)
-#   expect(con.static_dom_element_exists?("VerifyBpDetails")).to be_true
-#   con.perform_verification("VerifyBpDetails", element)
-# end
-
-# Then(/^the Vitals Write Back user enters a date range$/) do
-#   con = AddVitalsTest.instance
-#   driver = TestSupport.driver
-#   con.wait_until_action_element_visible("EnterFromDate", 60)
-#   expect(con.static_dom_element_exists?("EnterFromDate")).to be_true
-#   con.perform_action("EnterFromDate", "11/14/2014")
-#   driver.save_screenshot('EnterFromDate.png')
-
-#   con.wait_until_action_element_visible("EnterToDate", 60)
-#   expect(con.static_dom_element_exists?("EnterToDate")).to be_true
-#   con.perform_action("EnterToDate", "11/14/2014")
-#   driver.save_screenshot('EnterToDate.png')
-
-#   con.wait_until_action_element_visible("ClickCustomRangeApply", 60)
-#   expect(con.static_dom_element_exists?("ClickCustomRangeApply")).to be_true
-#   con.perform_action("ClickCustomRangeApply")
-# end
-
 Then(/^the Vitals Write Back user enters "([^"]*)" measured date$/) do |element|
   con = ChangeDateTest.instance
   driver = TestSupport.driver

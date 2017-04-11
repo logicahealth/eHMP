@@ -2,71 +2,49 @@
 
 Feature:F639 - Picklist Enhancement for Writeback
 
-@F639_1_Encounter_Visit_picklist_service_connected @US8297 @US6647
-Scenario: Retrieve Service Connected flag associated with patient visit
-When the client requests picklist with the parameters and site "9E7A"
-      | paramter name | value                              |
-      | type          | encounters-visit-service-connected |
-      | dfn           | 140                                |
-      | visitDate     | 0                                  |
-      | locationUid  | urn:va:location:9E7A:240           |
-
-  Then a successful response is returned
-  And the Service Conntected result contains
-      | Label                        | Abbrevation | status    |
-      | Service Connected            | SC          | on     |
-      | Agent Orange                 | AO          | off    |
-      | Ionnizing Radiation          | IR          | on     |
-      | Southwest Asian Contions     | SAC         | off    |
-      | Shipboard Hazard and Defence | SHD         | off    |
-      | Military Sexual Trauma       | MST         | off    |
-      | Head and Neck Cancer         | HNC         | off    |
-
-  
 @F639_2_Radiology_Endpoint_For_Radiology_type @US9322
 Scenario: Create Endpoint for ORWDRA32 IMTYPSEL (RADIOLOGY)
-  When the client requests picklist with the parameters and site "9E7A"
+  When the client requests picklist with the parameters for "radiology-imaging-types" with the user "9E7A;PW    "
       | paramter name | value                                   |
-      | type          | radiology-imaging-types |
 
   Then a successful response is returned
-  And the picklist result contains 
+  And the picklist result contains
       | field           | value                      |
       | ien             | 6                          |
       | typeOfImaging   | ANGIO/NEURO/INTERVENTIONAL |
       | abbreviation    | ANI                        |
       | ienDisplayGroup | 37                         |
-      And the picklist result contains 
+      And the picklist result contains
       | field           | value                      |
       | ien             | 5                          |
       | typeOfImaging   | CT SCAN                    |
       | abbreviation    | CT                         |
-      | ienDisplayGroup | 35                         | 
-      And the picklist result contains 
+      | ienDisplayGroup | 35                         |
+      And the picklist result contains
       | field           | value                      |
       | ien             | 9                          |
       | typeOfImaging   | MAMMOGRAPHY                |
       | abbreviation    | MAM                        |
       | ienDisplayGroup | 42                         |
-      And the picklist result contains 
+      And the picklist result contains
       | field           | value                      |
       | ien             | 4                          |
       | typeOfImaging   | MAGNETIC RESONANCE IMAGING |
       | abbreviation    | MRI                        |
       | ienDisplayGroup | 36                         |
-      And the picklist result contains 
+      And the picklist result contains
       | field           | value                      |
       | ien             | 2                          |
       | typeOfImaging   | NUCLEAR MEDICINE           |
       | abbreviation    | NM                         |
       | ienDisplayGroup | 39                         |
-      And the picklist result contains 
+      And the picklist result contains
       | field           | value                      |
       | ien             | 1                          |
       | typeOfImaging   | GENERAL RADIOLOGY          |
       | abbreviation    | RAD                        |
       | ienDisplayGroup | 9                          |
-      And the picklist result contains 
+      And the picklist result contains
       | field           | value                      |
       | ien             | 3                          |
       | typeOfImaging   | ULTRASOUND                 |
@@ -76,17 +54,16 @@ Scenario: Create Endpoint for ORWDRA32 IMTYPSEL (RADIOLOGY)
 
 @F639_3_Radiology_Endpoint_For_Radiology_Dialog_Default @US9323
 Scenario: Create Endpoint for ORWDRA32 DEF (RADIOLOGY)
-  When the client requests picklist with the parameters and site "9E7A"
+  When the client requests picklist with the parameters for "radiology-dialog-default" with the user "9E7A;PW    "
       | paramter name | value                    |
-      | type          | radiology-dialog-default |
       | patientDFN    | 100623                   |
       | imagingType   | 40                       |
 
   Then a successful response is returned
-  And the picklist result contains 
+  And the picklist result contains
       | field           | value              |
       | categoryName    |  ShortList         |
-   And the picklist result contains 
+   And the picklist result contains
       | field                              | value                                          |
       | categoryName                       | Common Procedures                              |
       | values.ien                         | 3320                                           |
@@ -118,12 +95,12 @@ Scenario: Create Endpoint for ORWDRA32 DEF (RADIOLOGY)
       | values.ien                         | 3077                                           |
       | values.name                        | ECHOGRAM CHEST A-MODE                          |
       | values.requiresRadiologistApproval | false                                          |
-  And the picklist result contains 
+  And the picklist result contains
       | field        | value     |
       | categoryName | Modifiers |
       | values.ien   | 29        |
       | values.name  | LEFT-U    |
- And the picklist result contains 
+ And the picklist result contains
       | field        | value     |
       | categoryName | Urgencies |
       | values.ien   | 2         |
@@ -134,7 +111,7 @@ Scenario: Create Endpoint for ORWDRA32 DEF (RADIOLOGY)
       | values.name  | STAT      |
       | default.ien  | 9         |
       | default.name | ROUTINE   |
-  And the picklist result contains 
+  And the picklist result contains
       | field        | value      |
       | categoryName | Transport  |
       | values.ien   | A          |
@@ -145,7 +122,7 @@ Scenario: Create Endpoint for ORWDRA32 DEF (RADIOLOGY)
       | values.name  | STRETCHER  |
       | values.ien   | W          |
       | values.name  | WHEELCHAIR |
-  And the picklist result contains                     
+  And the picklist result contains
       | field        | value      |
       | categoryName | Category   |
       | values.ien   | I          |
@@ -158,7 +135,7 @@ Scenario: Create Endpoint for ORWDRA32 DEF (RADIOLOGY)
       | values.name  | CONTRACT   |
       | values.ien   | R          |
       | values.name  | RESEARCH   |
-  And the picklist result contains 
+  And the picklist result contains
       | field                  | value          |
       | categoryName           | Submit to      |
       | values.ien             | 24             |
@@ -167,22 +144,21 @@ Scenario: Create Endpoint for ORWDRA32 DEF (RADIOLOGY)
       | values.institutionFile | CAMP MASTER    |
       | default.ien            | 24             |
       | default.name           | SBK ULTRASOUND |
-  And the picklist result contains 
+  And the picklist result contains
       | field        | value      |
       | categoryName | Ask Submit |
       | default.ien  | 1          |
       | default.name | YES        |
-  And the picklist result contains 
+  And the picklist result contains
       | field        | value       |
       | categoryName | Last 7 Days |
 
 @F639_4_Lab_Orders_all_collection_samples
 Scenario: Returns all collection samples (ORWDLR32 ALLSAMP)
-When the client requests picklist with the parameters and site "9E7A"
+When the client requests picklist with the parameters for "lab-all-samples" with the user "9E7A;PW    "
       | paramter name | value                                 |
-      | type          | lab-all-samples |
 Then a successful response is returned
-And the picklist result contains 
+And the picklist result contains
       | field             | value       |
       | categoryName      | CollSamp    |
       | values.ien        | 68          |
@@ -194,108 +170,103 @@ And the picklist result contains
 
 @F639_5_Lab_Orders_list_of_specimens
 Scenario: Returns a list of specimens from the TOPOGRAPHY FIELD file (#61) (ORWDLR32 ALLSPEC)
-When the client requests picklist with the parameters and site "9E7A"
+When the client requests picklist with the parameters for "lab-order-specimens" with the user "9E7A;PW    "
       | paramter name | value               |
-      | type          | lab-order-specimens |
   Then a successful response is returned
-  And the picklist result contains 
+  And the picklist result contains
       | field | value                |
       | ien   | 8755                 |
       | name  | 24 HR URINE  (URINE) |
-        And the picklist result contains 
+        And the picklist result contains
       | field | value                |
       | ien   | 6072                 |
       | name  | ZYGOTE  (88150) |
-        And the picklist result contains 
+        And the picklist result contains
       | field | value                |
       | ien   | 4028                 |
       | name  | MEDIAL STRIATE ARTERIES  (45642) |
-        And the picklist result contains 
+        And the picklist result contains
       | field | value                |
       | ien   | 448                 |
       | name  | SUBCUTANEOUS TISSUE OF TAIL OF HELIX  (03204) |
 
 @F639_6_Lab_Orders_dialog_definition
 Scenario: Returns a list of specimens from the TOPOGRAPHY FIELD file (#61) (ORWDLR32 DEF)
-When the client requests picklist with the parameters and site "9E7A"
+When the client requests picklist with the parameters for "lab-order-dialog-def" with the user "9E7A;PW    "
       | paramter name | value                |
-      | type          | lab-order-dialog-def |
       | location  | 240           |
   Then a successful response is returned
-  And the picklist result contains 
+  And the picklist result contains
       | field             | value        |
       | categoryName      | ShortList    |
-  And the picklist result contains 
+  And the picklist result contains
       | field             | value                   |
       | categoryName      | Lab Collection Times    |
-  And the picklist result contains 
+  And the picklist result contains
       | field             | value                 |
       | categoryName      | Send Patient Times    |
-  And the picklist result contains 
+  And the picklist result contains
       | field             | value                |
       | categoryName      | Collection Types     |
-  And the picklist result contains 
+  And the picklist result contains
       | field             | value                |
       | categoryName      | Default Urgency      |
-  And the picklist result contains 
+  And the picklist result contains
       | field             | value        |
       | categoryName      | Schedules    |
-     
+
 
 @F639_7_Lab_Orders_For_LAB_Times @US9956
 Scenario: Create Endpoint for ORWDLR32 GET LAB TIMES (a list of date/time available from the lab schedule)
-When the client requests picklist with the parameters and site "9E7A"
+When the client requests picklist with the parameters for "lab-times-available" with the user "9E7A;PW    "
       | paramter name | value               |
-      | type          | lab-times-available |
       | date          | 20312015            |
       | locationUid      | urn:va:location:9E7A:1 |
   Then a successful response is returned
-  And the picklist result contains 
+  And the picklist result contains
       | field   | value         |
       | time    |  0930         |
-  And the picklist result contains 
+  And the picklist result contains
       | field   | value         |
-  And the picklist result contains 
+  And the picklist result contains
       | field   | value         |
       | time    |  1100         |
-  And the picklist result contains 
+  And the picklist result contains
       | field   | value         |
       | time    |  1230         |
-  And the picklist result contains 
+  And the picklist result contains
       | field   | value         |
       | time    |  1300         |
-  And the picklist result contains 
+  And the picklist result contains
       | field   | value         |
       | time    |  1530         |
-  And the picklist result contains 
+  And the picklist result contains
       | field   | value         |
       | time    |  1545         |
-  And the picklist result contains 
+  And the picklist result contains
       | field   | value         |
       | time    |  1600         |
-  And the picklist result contains 
+  And the picklist result contains
       | field   | value         |
       | time    |  1730         |
 
 @F639_8_Lab_Orders_valid_lab_immediate_collect_time @US9957
 Scenario: Create Endpoint for ORWDLR32 IC VALID (Determines whether the supplied time is a valid lab immediate collect time.)
-When the client requests picklist with the parameters and site "9E7A"
+When the client requests picklist with the parameters for "lab-time-valid-immediate-collect-time" with the user "9E7A;PW    "
       | paramter name | value                                 |
-      | type          | lab-time-valid-immediate-collect-time |
       | time          | 3151127.151                           |
 Then a successful response is returned
 
 @F639_9_Lab_Orders_valid_lab_collect_time @US9025
 Scenario: Returns help text showing lab immediate collect times for the user's division. (ORWDLR32 IMMED COLLECT)
-When the client requests picklist with the parameters and site "9E7A"
+When the client requests picklist with the parameters for "lab-collect-times" with the user "9E7A;PW    "
       | paramter name | value             |
-      | type          | lab-collect-times |
   Then a successful response is returned
   And the picklist result contains
       | field      | value                               |
       | text0      |  CONTAINS NO COLLECTION ON HOLIDAYS |
   And the picklist result contains
-      | field      | value                                              |    
+      | field      | value                                              |
       | text1      | CONTAINS MON Collection |
   And the picklist result contains
       | field      | value                                              |
@@ -315,9 +286,8 @@ When the client requests picklist with the parameters and site "9E7A"
 
 @F639_10_Lab_Orders_valid_lab_collect_time @US9025
 Scenario: Returns help text showing lab immediate collect times for the user's division. (ORWDLR32 IMMED COLLECT)
-When the client requests picklist with the parameters and site "C877"
+When the client requests picklist with the parameters for "lab-collect-times" with the user "C877;PW    "
       | paramter name | value             |
-      | type          | lab-collect-times |
   Then a successful response is returned
       And the picklist result contains
       | field         | value             |
@@ -325,21 +295,18 @@ When the client requests picklist with the parameters and site "C877"
 
 @F639_11_Endpoint_for_New_Persons @US9972
 Scenario: Update the new-persons endpoint to retrieve the entire list of persons.
-When the client requests picklist with the parameters and site "9E7A"
+When the client requests picklist with the parameters for "new-persons" with the user "9E7A;PW    "
       | paramter name | value       |
-      | type          | new-persons |     
   Then a successful response is returned
-  
 
 
-@F639_12_Allergies_match 
+@F639_12_Allergies_match
 Scenario: Create Endpoint for allergies match (ORWDAL32 ALLERGY MATCH)
-  When the client requests picklist with the parameters and site "9E7A"
+  When the client requests picklist with the parameters for "allergies-match" with the user "9E7A;PW    "
       | paramter name | value                          |
-      | type          | allergies-match                |
       | searchString  | DIALYSIS MEMBRANE              |
   Then a successful response is returned
-  And the picklist result contains 
+  And the picklist result contains
       | field                   | value             |
       | categoryName            | VA Allergies File |
       | top                     | TOP               |
@@ -352,11 +319,10 @@ Scenario: Create Endpoint for allergies match (ORWDAL32 ALLERGY MATCH)
 
 @F639_13_Allergies_symptioms_top_ten
 Scenario: Create Endpoint for allergies-symptoms-top-ten (ORWDAL32 DEF)
-  When the client requests picklist with the parameters and site "9E7A"
+  When the client requests picklist with the parameters for "allergies-symptoms-top-ten" with the user "9E7A;PW    "
       | paramter name | value                          |
-      | type          | allergies-symptoms-top-ten     |
   Then a successful response is returned
-  And the picklist result contains 
+  And the picklist result contains
       | field        | value           |
       | categoryName | Allergy Types   |
       | values.name  | Drug            |
@@ -373,7 +339,7 @@ Scenario: Create Endpoint for allergies-symptoms-top-ten (ORWDAL32 DEF)
       | values.ien   | FO              |
       | values.name  | Drug,Food,Other |
       | values.ien   | DFO             |
-  And the picklist result contains 
+  And the picklist result contains
       | field        | value                 |
       | categoryName | Top Ten               |
       | values.ien   | 39                    |
@@ -400,17 +366,16 @@ Scenario: Create Endpoint for allergies-symptoms-top-ten (ORWDAL32 DEF)
 
 @F639_14_Allergies_symptoms
 Scenario: Create Endpoint for allergies symptoms (ORWDAL32 SYMPTOMS)
-  When the client requests picklist with the parameters and site "9E7A"
+  When the client requests picklist with the parameters for "allergies-symptoms" with the user "9E7A;PW    "
       | paramter name | value              |
-      | type          | allergies-symptoms |
       | searchString  | hives              |
   Then a successful response is returned
-  And the picklist result contains 
+  And the picklist result contains
       | field   | value |
       | ien     | 1     |
       | synonym | HIVES |
       | name    | HIVES |
-  And the picklist result contains 
+  And the picklist result contains
       | field   | value          |
       | ien     | 158            |
       | synonym | CONTAINS HIVES |
@@ -419,11 +384,10 @@ Scenario: Create Endpoint for allergies symptoms (ORWDAL32 SYMPTOMS)
 
 @F639_15_Allergies_symptoms_all_with_top_ten
 Scenario: Create Endpoint for allergies symptoms all with top ten (ORWDAL32 DEF and ORWDAL32 SYMPTOMS )
-  When the client requests picklist with the parameters and site "9E7A"
+  When the client requests picklist with the parameters for "allergies-symptoms-all-with-top-ten" with the user "9E7A;PW    "
       | paramter name | value                               |
-      | type          | allergies-symptoms-all-with-top-ten |
   Then a successful response is returned
-  And the picklist result contains 
+  And the picklist result contains
       | field        | value           |
       | categoryName | Allergy Types   |
       | values.ien   | D               |
@@ -439,29 +403,18 @@ Scenario: Create Endpoint for allergies symptoms all with top ten (ORWDAL32 DEF 
       | values.name  | Food,Other      |
       | values.ien   | FO              |
       | values.name  | Drug,Food,Other |
-      | values.ien   | DFO             | 
-  And the picklist result contains 
+      | values.ien   | DFO             |
+  And the picklist result contains
       | field   | value              |
       | ien     | 237                |
       | synonym | ABDOMINAL BLOATING |
       | name    | ABDOMINAL BLOATING |
 
 
-@F639_16_Encounters_diagnosis_codes_for_clinic
-Scenario: Create Endpoint for encounters diagnosis codes for clinic (ORWPCE DIAG)
-  When the client requests picklist with the parameters and site "9E7A"
-      | paramter name | value                                 |
-      | type          | encounters-diagnosis-codes-for-clinic |
-      | locationUid  | urn:va:location:9E7A:195           |
-
-  Then a successful response is returned
- 
-
 @F639_17_Problems-lexicon-lookup
 Scenario: Create Endpoint for problems-lexicon-lookup (ORQQPL4 LEX)
-  When the client requests picklist with the parameters and site "9E7A"
+  When the client requests picklist with the parameters for "problems-lexicon-lookup" with the user "9E7A;PW    "
       | paramter name | value                   |
-      | type          | problems-lexicon-lookup |
       | searchString  | ABC                     |
   Then a successful response is returned
   And the picklist result contains
@@ -475,45 +428,13 @@ Scenario: Create Endpoint for problems-lexicon-lookup (ORQQPL4 LEX)
       | desigId   | 312186013            |
       | version   | ICD-10-CM            |
 
-@F639_18_Encounters_diagnosis_lexicon_lookup
-Scenario: Create Endpoint for encounters-diagnosis-lexicon-lookup (ORWPCE4 LEX)
-  When the client requests picklist with the parameters and site "9E7A"
-      | paramter name | value                               |
-      | type          | encounters-diagnosis-lexicon-lookup |
-      | searchString  | ABC                                 |
-  Then a successful response is returned
-  And the picklist result contains
-      | field     | value                |
-      | lexIen    | 7299081              |
-      | prefText  | Aneurysmal bone cyst |
-      | code      | EMPTY                |
-      | codeSys   | SNOMED CT            |
-      | conceptId | 203468000            |
-      | desigId   | 312186013            |
-      | version   | EMPTY                |
-
-@F639_19_Encounters_procedures_lexicon_lookup @debug
-Scenario: Create Endpoint for encounters-procedures-lexicon-lookup(ORWPCE4 LEX)
-  When the client requests picklist with the parameters and site "9E7A"
-      | paramter name | value                                |
-      | type          | encounters-procedures-lexicon-lookup |
-      | searchString  | ABC                                  |
-  Then a successful response is returned
-  And the picklist result contains
-      | field     | value                      |
-      | lexIen    | 321435                     |
-      | prefText  | Injection Abciximab, 10 mg |
-      | codeSys   | HCPCS                      |
-      | conceptId | J0130                      |
-
 @F639_20_Vitals_List
 Scenario: Get list of vitals qualifiers/categories
-  When the client requests picklist with the parameters and site "9E7A"
+  When the client requests picklist with the parameters for "vitals" with the user "9E7A;PW    "
       | paramter name | value |
-      | type          | vitals|
-      
+
   Then a successful response is returned
-  And the picklist result contains 
+  And the picklist result contains
       | field                 | value          |
       | ien                   | 1              |
       | name                  | BLOOD PRESSURE |
@@ -527,12 +448,11 @@ Scenario: Get list of vitals qualifiers/categories
 
 @F639_21_Printer_Devices_List
 Scenario: Get List of printer devices
-  When the client requests picklist with the parameters and site "9E7A"
+  When the client requests picklist with the parameters for "printer-devices" with the user "9E7A;PW    "
       | paramter name | value |
-      | type          | printer-devices|
-      
+
   Then a successful response is returned
-  And the picklist result contains 
+  And the picklist result contains
       | field       | value             |
       | ienName     | 524;HFS           |
       | displayName | HFS               |
@@ -545,22 +465,21 @@ Scenario: Get List of printer devices
 
 @F639_22_List_Of_Notes_Titles
 Scenario: Returns a list of Note Titles
-  When the client requests picklist with the parameters and site "9E7A"
+  When the client requests picklist with the parameters for "progress-notes-titles" with the user "9E7A;PW    "
       | paramter name | value |
-      | type          |progress-notes-titles|
       | class         | 3 |
       | searchString | ACROMEGALY |
-      
+
   Then a successful response is returned
-  And the picklist result contains 
+  And the picklist result contains
       | field | value                        |
       | ien   | 1295                         |
       | name  | ACROMEGALY  <C&P ACROMEGALY> |
-      And the picklist result contains 
+      And the picklist result contains
       | field | value          |
       | ien   | 1295           |
       | name  | C&P ACROMEGALY |
-      And the picklist result contains 
+      And the picklist result contains
       | field | value                            |
       | ien   | 1295                             |
       | name  | C&P ACROMEGALY  <C&P ACROMEGALY> |
@@ -568,14 +487,13 @@ Scenario: Returns a list of Note Titles
 
 @F639_23_Flag_For_Notes_Title
 Scenario: Returns the flags for a Progress Note Title
-  When the client requests picklist with the parameters and site "9E7A"
+  When the client requests picklist with the parameters for "progress-notes-titles-flags" with the user "9E7A;PW    "
       | paramter name | value                       |
-      | type          | progress-notes-titles-flags |
       | ien           | 1354                       |
       | searchString  | ACROMEGALY                  |
-      
+
   Then a successful response is returned
-  And the result contains 
+  And the result contains
       | field          | value |
       | isSurgeryNote  | false |
       | isOneVisitNote | false |
@@ -585,9 +503,8 @@ Scenario: Returns the flags for a Progress Note Title
 
 @F639_24_Lab_Order_Types @DE5107 @DE5196
 Scenario: Create endpoint for ORWDX ORDITM (lab order types)
-  When the client requests picklist with the parameters and site "9E7A"
+  When the client requests picklist with the parameters for "lab-order-orderable-items" with the user "9E7A;PW    "
       | parameter name | value                     |
-      | type           | lab-order-orderable-items |
       | labType        | S.LAB                     |
 
   Then a successful response is returned

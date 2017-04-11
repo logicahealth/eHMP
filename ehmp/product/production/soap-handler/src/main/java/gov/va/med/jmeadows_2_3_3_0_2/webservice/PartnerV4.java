@@ -30,7 +30,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "partnerV4", namespace = "http://webservice.bhie.DNS       /", propOrder = {
+@XmlType(name = "partnerV4", namespace = "http://webservice.bhie.med.DNS   /", propOrder = {
     "partnerIdentifier",
     "partnerName",
     "partnerSubIdentifier",

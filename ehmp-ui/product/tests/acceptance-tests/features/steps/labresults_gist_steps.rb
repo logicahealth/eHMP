@@ -21,7 +21,7 @@ class LabResultsGist <  AllApplets
     
     add_action(CucumberLabel.new('Lab Test Header Sort'), ClickAction.new, AccessHtmlElement.new(:css, "[data-appletid=lab_results_grid] [sortkey=shortName]"))
     
-    add_verify(CucumberLabel.new('Empty Row'), VerifyText.new, AccessHtmlElement.new(:css, '[data-appletid=lab_results_grid] div.empty-gist-list'))
+    add_verify(CucumberLabel.new('Empty Row'), VerifyText.new, AccessHtmlElement.new(:css, '[data-appletid=lab_results_grid] p.color-grey-darkest'))
       
     # Numeric Lab Results Gist Rows
     rows = AccessHtmlElement.new(:css, "div[id='grid-panel-lab_results_grid'] [class='gist-item table-row-toolbar']")
@@ -132,29 +132,25 @@ Then(/^verify the Numeric Lab Results Gist applet has the following headers$/) d
     @ehmp.fld_lab_results_modal_header.text.include? "#{header}"
   end
 end
-#######################
+
 Then(/^the Numeric Lab Results Gist applet displays data$/) do
   wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
   
   numeric_lab_results_gist = LabResultsGist.instance
   wait.until { numeric_lab_results_gist.applet_grid_loaded }
   expect(numeric_lab_results_gist.am_i_visible? 'Empty Row').to eq(false), 'Cannot check Lab Result Gist applet with out some data'
-  expect(TestSupport.driver.find_elements(:css, "div[id='grid-panel-lab_results_grid'] [class='gist-item table-row-toolbar']").length).to be > (0), 'Cannot check Lab Result Gist applet with out some data'
+  expect(TestSupport.driver.find_elements(:css, "[data-appletid=lab_results_grid] .grid-applet-panel [class='gist-item table-row-toolbar']").length).to be > (0), 'Cannot check Lab Result Gist applet with out some data'
 end
 
 Then(/^the Lab Test column contains data$/) do
-  xpath = "//*[@id='lab_results_grid-observations-gist-items']/descendant::*[contains(@class, 'gistItemInner')]/descendant::*[contains(@class, 'problem-name')]"
-  css = "#grid-panel-lab_results_grid .selectable[dialog-toggle='toolbar']"
-
-  driver = TestSupport.driver
-  gist_items = driver.find_elements(:css, css)
-  # check 
-  expect(gist_items.length).to be > (0), "Expected Lab Test column to be populated"
+  ehmp = PobNumericLabApplet.new
+  ehmp.wait_for_fld_lab_test_column_data
+  expect(ehmp.fld_lab_test_column_data.length).to be > (0), "Expected Lab Test column to be populated"
 end
 
 Then(/^the Result column contains data$/) do
   
-  css = "div[id='grid-panel-lab_results_grid'] [class='table-cell text-center border-vertical']"
+  css = "div[id='grid-panel-lab_results_grid'] [class='table-cell border-vertical']"
 
   driver = TestSupport.driver
   gist_items = driver.find_elements(:css, css)
@@ -212,34 +208,21 @@ When(/^the user sorts the Lab Results Gist by "([^"]*)"$/) do |arg1|
 end
 
 Then(/^the Lab Results Gist is sorted in alphabetic order based on Lab Test$/) do
-  driver = TestSupport.driver
-  column_values_array = []
-  
-  element_column_values = driver.find_elements(css: '#lab_results_grid-observations-gist-items div.problem-name')
-  element_column_values.each do |row|
-    column_values_array << row.text.downcase    
-  end
-
-  copy = Array.new(column_values_array)
-  #  print "sorted data -----"
-  sleep 3
-  p column_values_array.sort { |x, y| x <=> y }
-  (column_values_array == copy.sort { |x, y| x <=> y }).should == true
+  @ehmp = PobNumericLabApplet.new
+  @ehmp.wait_for_fld_lab_test_column_data
+  column_values = @ehmp.fld_lab_test_column_data
+  expect(column_values.length).to be > 2
+  is_ascending = ascending? column_values
+  expect(is_ascending).to be(true), "Values are not in Alphabetical Order: #{print_all_value_from_list_elements(column_values) if is_ascending == false}"
 end
 
 Then(/^the Lab Results Gist is sorted in reverse alphabetic order based on Lab Test$/) do
-  driver = TestSupport.driver
-  column_values_array = []
-  
-  element_column_values = driver.find_elements(css: '#lab_results_grid-observations-gist div.problem-name')
-  element_column_values.each do |row|
-    column_values_array << row.text.downcase    
-  end
-
-  copy = Array.new(column_values_array)
-  #  print "sorted data -----"
-  # p column_values_array.sort { |x, y| x <=> y }    
-  (column_values_array == copy.sort { |x, y| y <=> x }).should == true
+  @ehmp = PobNumericLabApplet.new
+  @ehmp.wait_for_fld_lab_test_column_data
+  column_values = @ehmp.fld_lab_test_column_data
+  expect(column_values.length).to be > 2
+  is_descending = descending? column_values
+  expect(is_descending).to be(true), "Values are not in reverse Alphabetical Order: #{print_all_value_from_list_elements(column_values) if is_descending == false}"
 end
 
 When(/^the user views the first Numeric Lab Result Gist detail view$/) do
@@ -265,4 +248,91 @@ Then(/^the modal's title contains first Numeric Lab Result name$/) do
   expect(@ehmp.fld_modal_title).to have_text(title)
 end
 
+Then(/^Lab Test column is sorted in manual order in Numeric Lab Results Gist$/) do
+  ehmp = PobNumericLabApplet.new
+  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_wait_time)
+
+  ehmp.wait_for_fld_lab_names
+  expect(@manual_numeric_gist_order).to_not be_nil, "Expected manual sort order to be saved in a previous step"
+  wait.until { (ehmp.gist_numeric_lab_names_only <=> @manual_numeric_gist_order) == 0 }
+  expect(ehmp.gist_numeric_lab_names_only).to eq(@manual_numeric_gist_order)
+end
+
+When(/^user clicks on the column header Lab Test in Numeric Lab Results Gist$/) do
+  ehmp = PobNumericLabApplet.new
+  ehmp.wait_for_gist_header_lab_test
+  expect(ehmp).to have_gist_header_lab_test
+  ehmp.gist_header_lab_test.click
+end
+
+Then(/^Lab Test column is sorted in default order in Numeric Lab Results Gist$/) do
+  ehmp = PobNumericLabApplet.new
+  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_wait_time)
+
+  ehmp.wait_for_fld_lab_names
+  expect(@default_numeric_lab_gist_order).to_not be_nil, "Expected default lab result order to be saved in a previous step"
+  wait.until { (ehmp.gist_numeric_lab_names_only <=> @default_numeric_lab_gist_order) == 0 }
+
+  expect(ehmp.gist_numeric_lab_names_only).to eq(@default_numeric_lab_gist_order)
+end
+
+Then(/^Lab Test column is sorted in ascending order in Numeric Lab Results Gist$/) do
+  ehmp = PobNumericLabApplet.new
+  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_wait_time)
+
+  ehmp.wait_for_fld_lab_names
+  expected_sort_result = ehmp.gist_numeric_lab_names_only.sort { |x, y| x.downcase <=> y.downcase }
+  begin
+    wait.until { ehmp.gist_numeric_lab_names_only == expected_sort_result }
+  ensure
+    expect(ehmp.gist_numeric_lab_names_only).to eq(expected_sort_result)
+  end
+end
+
+Then(/^Lab Test column is sorted in descending order in Numeric Lab Results Gist$/) do
+  ehmp = PobNumericLabApplet.new
+  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_wait_time)
+
+  ehmp.wait_for_fld_lab_names
+  expected_sort_result = ehmp.gist_numeric_lab_names_only.sort { |x, y| y.downcase <=> x.downcase }
+  begin
+    wait.until { ehmp.gist_numeric_lab_names_only == expected_sort_result }
+  ensure
+    expect(ehmp.gist_numeric_lab_names_only).to eq(expected_sort_result)
+  end
+end
+
+When(/^the user views the first Numeric Lab Result Gist quick look via the toolbar$/) do
+  ehmp = PobNumericLabApplet.new
+  ehmp.wait_for_fld_lab_names
+  expect(ehmp.fld_lab_names.length).to be > 0
+  ehmp.fld_lab_names[0].click
+  ehmp.wait_until_fld_toolbar_visible
+  ehmp.wait_for_btn_quick_view
+  expect(ehmp).to have_btn_quick_view
+  ehmp.btn_quick_view.click
+  ehmp.wait_for_fld_quickview_popover
+  expect(ehmp).to have_fld_quickview_popover
+  ehmp.wait_until_fld_quickview_popover_visible
+end
+
+When(/^the user views the first Numeric Lab Result Gist quick look via the results column$/) do
+  ehmp = PobNumericLabApplet.new
+  ehmp.wait_for_fld_results
+  expect(ehmp.fld_results.length).to be > 0
+  ehmp.fld_results[0].click
+  ehmp.wait_for_fld_quickview_popover
+  expect(ehmp).to have_fld_quickview_popover
+  ehmp.wait_until_fld_quickview_popover_visible
+end
+
+Then(/^a quickview displays a numeric lab table with expected headers$/) do | expected_headers |
+  ehmp = PobNumericLabApplet.new  
+  ehmp.wait_for_quickview_tbl_headers
+  expect(ehmp).to have_quickview_tbl_headers, "The vitals quickview did not display table headers"
+  header_text = ehmp.quickview_th_text_only_upper
+  expected_headers.rows.each do | temp_header |
+    expect(header_text).to include(temp_header[0].upcase)
+  end
+end
 

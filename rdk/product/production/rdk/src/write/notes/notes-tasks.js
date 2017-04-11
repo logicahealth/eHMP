@@ -14,8 +14,6 @@ var noteTasks = {
  * @returns {*} Array of tasks if applicable
  */
 module.exports.update = function getUpdateNoteTasks(model) {
-	// TODO assign taskName if there is an applicable task for the request
-
 	var taskName = 'updateUnsigned';
 	return noteTasks[taskName];
 };

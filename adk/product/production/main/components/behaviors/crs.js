@@ -5,9 +5,10 @@ define([
     'api/ResourceService',
     'handlebars',
     'main/adk_utils/crsUtil',
-], function(Backbone, Marionette, Messaging, ResourceService, Handlebars, CrsUtil) {
+    'main/ui_components/modal/component.js'
+], function(Backbone, Marionette, Messaging, ResourceService, Handlebars, CrsUtil, ModalComponent) {
     'use strict';
-    
+
     var CRS = Backbone.Marionette.Behavior.extend({
         initialize: function() {
             this.crsCollection = new Backbone.Collection();
@@ -25,7 +26,7 @@ define([
                 var items = resp.data;
                 var displayedCrsApplets = [];
                 var dataCode = itemClicked.model.get('dataCode');
-                var styles = '[data-code="' + dataCode + '"]{ background-color:#F4FFAB !important; border:#132F50 solid 2px !important;}';
+                var styles = '[data-code="' + dataCode + '"]{ background-color:#F4FFAB !important; border:#132F50 solid 2px !important; }' + '[data-code="' + dataCode + '"] > .table-row > div:hover{ background-color:#EEFF7F !important; }';
                 var screenReaderFeedback = CrsUtil.screenReaderFeedback;
                 var appletManifestApplets = ADK.Messaging.request('AppletsManifest');
                 if (items && items.length > 0) {
@@ -41,7 +42,6 @@ define([
                     });
                     currentDomains = _.uniq(currentDomains);
                     var itemFound = false;
-                    var self = this;
                     //check items vs currentDomains
                     _.forEach(currentDomains, function(domain) {
                         _.forEach(items, function(item) {
@@ -52,8 +52,8 @@ define([
                     });
                     if (!itemFound) {
                         var problemText = itemClicked.model.get('groupName') ? itemClicked.model.get('groupName') : itemClicked.model.get('problemText') ? itemClicked.model.get('problemText') : '';
-                        var errorWithOrginatorName = 'No relationships found for ' + ' <span class="text-capitalize"><em>' + problemText + '</em></span>' + ' on this workspace. Medications, Laboratory and Vitals applets can display relationships.';
-                        self.createNotification(errorWithOrginatorName);
+                        var errorWithOrginatorName = 'No relationships found for ' + ' <span class="text-capitalize"><strong>' + problemText + '</strong></span>' + ' on this workspace. Medications, Laboratory and Vitals applets can display relationships.';
+                        this.createNotification(errorWithOrginatorName);
                     } else {
                         //if empty display Other message
                         var itemClickedDomain = itemClicked.model.get('crsDomain');
@@ -82,12 +82,12 @@ define([
                             } else {
                                 formattedDataItems = formattedDataItems + value + ',';
                             }
+                            styles += value + ' { background-color:#F4FFAB !important; border:rgb(204, 153, 102) solid 2px !important; }' + value + ' > .table-row > div:hover { background-color:#EEFF7F !important; }';
                         });
-                        styles += formattedDataItems + ' { background-color:#F4FFAB !important; border:rgb(204, 153, 102) solid 2px !important;}';
                     }
                 } else {
                     var zeroItemProblemText = itemClicked.model.get('groupName') ? itemClicked.model.get('groupName') : itemClicked.model.get('problemText') ? itemClicked.model.get('problemText') : '';
-                    var zeroItemErrorWithOrginatorName = 'No relationships exist in the eHMP data for the '  + '<span class="text-capitalize"><em>' + zeroItemProblemText + '</em></span>' + ' at this time.';
+                    var zeroItemErrorWithOrginatorName = 'No relationships exist in the eHMP data for the '  + '<span class="text-capitalize"><strong>' + zeroItemProblemText + '</strong></span>' + ' at this time.';
                     this.createNotification(zeroItemErrorWithOrginatorName);
                 }
                 $('<style></style>', {
@@ -135,31 +135,29 @@ define([
             activeItems.eq(CrsUtil.activeItemOn).trigger('focus');
         },
         createNotification: function(message) {
-            var headerView = Backbone.Marionette.ItemView.extend({
-                template: Handlebars.compile('<p class="left-padding-md"><strong>Clinically Related Concept</strong></p>')
-            });
             var ContentView = Backbone.Marionette.ItemView.extend({
-                template: Handlebars.compile('<p>' + message + '</p>')
-            });
-            var footerView = Backbone.Marionette.ItemView.extend({
-                template: Handlebars.compile('<button type="button" class="btn btn-default" id="modal-close-button" data-dismiss="modal">OK</button>')
+                template: Handlebars.compile(message),
+                tagName: 'p'
             });
             var modalOptions = {
                 size: 'medium',
                 backdrop: 'static',
                 draggable: false,
-                headerView: headerView,
-                footerView: footerView
+                title: 'Clinically Related Concept',
             };
-            var modalView = new ADK.UI.Modal({
+            var modalView = new ModalComponent({
                 view: new ContentView(),
                 options: modalOptions,
                 events: {
                     'click #modal-close-button': function() {
                         CrsUtil.removeStyle(this);
+                    },
+                    'click .close': function() {
+                        CrsUtil.removeStyle(this);
                     }
                 }
             });
+            this.getOption('view').trigger('modal.show');
             modalView.show();
         },
         getCrs: function(itemClicked) {

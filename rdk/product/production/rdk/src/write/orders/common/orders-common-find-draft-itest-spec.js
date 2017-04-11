@@ -14,7 +14,7 @@ var writebackContextFind = {
     })),
     appConfig: {
         generalPurposeJdsServer: {
-            baseUrl: 'http://IP_ADDRESS:PORT/resource/write-health-data/patient/:pid/orders/find-draft'
+            baseUrl: 'http://IP             /resource/write-health-data/patient/:pid/orders/find-draft'
         }
     }
 

@@ -59,6 +59,10 @@ When(/^the user associates user defined workspace "([^"]*)" with "([^"]*)"$/) do
   expect(workspace_manager.perform_action("#{arg1} search problems", arg2)).to eq(true)
 
   workspace_manager.wait_until_xpath_count_greater_than('All Problem Results', 0)
+  
+  PobWorkspaceManager.new.wait_until_fld_all_problem_results_visible
+  
+  workspace_manager.wait_until_action_element_visible("#{arg2} problem list")
 
   # choose the problem from the search result list
   expect(workspace_manager.perform_action("#{arg2} problem list")).to eq(true)
@@ -67,7 +71,7 @@ When(/^the user associates user defined workspace "([^"]*)" with "([^"]*)"$/) do
   workspace_manager.wait_until_action_element_visible("#{arg2} associated problem")
   p '5'
   # clear the search input so close button is visible
-  expect(workspace_manager.perform_action("Clear Search Problem Btn")).to eq(true)
+  # expect(workspace_manager.perform_action("Clear Search Problem Btn")).to eq(true)
 
   # close the Association Manager
   expect(workspace_manager.perform_action("Close Association Manager")).to eq(true)

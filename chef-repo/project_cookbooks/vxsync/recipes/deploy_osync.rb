@@ -66,10 +66,10 @@ trigger_resources << template("/etc/bluepill/osync.pill") do
     :working_directory => node[:osync][:home],
     :log_directory => node[:osync][:bluepill_log_directory]
   )
-end 
+end
 
 service node[:osync][:service] do
   provider Chef::Provider::Service::Upstart
   restart_command "/sbin/stop #{node[:osync][:service]}; /sbin/start #{node[:osync][:service]}"
-  action [:enable, :start]
+  action [:enable]
 end

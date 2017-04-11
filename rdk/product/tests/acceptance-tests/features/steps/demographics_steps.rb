@@ -39,20 +39,6 @@ class DemographicsHTMLElements < AccessBrowserV2
   end
 end
 
-Then(/^user views the "(.*?)" demographics$/) do |chosen_patient, table|
-  demo_details = DemographicsHTMLElements.instance
-  new_action_key = "View Demographics"
-  header_xpath = demo_details.build_header_xpath(chosen_patient)
-  demo_details.add_dynamic_xpath_to_actions(new_action_key, ClickAction.new, header_xpath)
-  demo_details.wait_until_element_present(new_action_key, 5)
-  demo_details.static_dom_element_exists?(new_action_key)
-  demo_details.perform_action(new_action_key)
-  sleep 5 # TODO: change so not hard coded sleep
-  table.rows.each do |cucumber_label, value_expected|
-    demo_details.perform_verification(cucumber_label, value_expected)
-  end
-end
-
 When(/^the client requests demographics for that patient "(.*?)"$/) do |uid|
   temp = QueryRDKDemographics.new("patient", uid)
   # temp.add_parameter("urn:va:patient:", pid)

@@ -13,17 +13,8 @@ var interceptors = {
     synchronize: false
 };
 
-module.exports.getResourceConfig = function(/*app*/) {
-    var resourceConfig = [{
-        name: 'write-pick-list',
-        path: '',
-        interceptors: interceptors,
-        requiredPermissions: [],
-        isPatientCentric: false,
-        undocumented: true,
-        get: fetchWritePickList
-    }];
-
+module.exports.getResourceConfig = function( /*app*/ ) {
+    var resourceConfig = [];
     registerPickLists(pickListDirectRpcCall.config, resourceConfig);
     registerPickLists(pickListInMemoryRpcCall.config, resourceConfig);
     registerPickLists(pickListGroups.config, resourceConfig);
@@ -38,7 +29,7 @@ function registerPickLists(pickListConfig, resourceConfig) {
             path: call.name,
             apiBlueprintFile: path.resolve(__dirname, call.modulePath + '.md'),
             interceptors: interceptors,
-            requiredPermissions: [],
+            requiredPermissions: call.requiredPermissions || [],
             isPatientCentric: false,
             get: fetchIndividualPickList.bind(null, call.name)
         });
@@ -71,12 +62,10 @@ function fetchWritePickList(req, res) {
                     });
                 }
                 res.status(statusCode).rdkSend(error);
-            }
-            else {
+            } else {
                 res.status(500).rdkSend(error);
             }
-        }
-        else {
+        } else {
             res.status(200).rdkSend(json);
         }
     };

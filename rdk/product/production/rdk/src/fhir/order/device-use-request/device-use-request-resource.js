@@ -3,15 +3,23 @@ var rdk = require('../../../core/rdk');
 var nullchecker = rdk.utils.nullchecker;
 var deviceUseRequest = require('./device-use-request.js');
 
+// FUTURE-TODO Enhance once full support for this FHIR domain has been put into place
 function getResourceConfig() {
     return [{
-        name: 'order-device-use-request-device-use-request',
+        name: 'fhir-order-device-use-request',
         path: '',
         get: getDeviceUseRequest,
         subsystems: ['patientrecord', 'jds', 'solr', 'jdsSync', 'authorization'],
-        interceptors: {
-            fhirPid: true
-        },
+        interceptors: { fhirPid: true },
+        requiredPermissions: [],
+        isPatientCentric: true,
+        permitResponseFormat: true
+    },{
+        name: 'fhir-order-device-use-request-search',
+        path: '_search',
+        post: getDeviceUseRequest,
+        subsystems: ['patientrecord', 'jds', 'solr', 'jdsSync', 'authorization'],
+        interceptors: { fhirPid: true },
         requiredPermissions: [],
         isPatientCentric: true,
         permitResponseFormat: true
@@ -24,14 +32,13 @@ function getResourceConfig() {
  * @apiGroup Device Use Request
  * @apiParam {Number} [_count] The number of results to show.
  *
- * @apiDescription
- *
  * @apiExample {js} Request Examples:
  *      // Limiting results count
- *      http://IPADDRESS:POR/resource/fhir/patient/9E7A;253/deviceuserequest?_count=1
+ *      http://IP           /resource/fhir/patient/9E7A;253/deviceuserequest?_count=1
  *
  * @apiSuccess {json} data Json object conforming to the <a href="http://www.hl7.org/FHIR/2015May/deviceuserequest.html">Device Use Request FHIR DTSU2 specification</a>.
  * @apiSuccessExample Success-Response:
+ * HTTP/1.1 200 OK
  *
  * @apiError (Error 400) Invalid parameter values.
  * @apiErrorExample Error-Response:

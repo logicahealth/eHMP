@@ -1,0 +1,41 @@
+DECLARE
+        u_count number;
+        user_name VARCHAR2 (50);
+        password VARCHAR(32);
+
+    BEGIN
+        u_count :=0;
+        user_name := '<%= @pcmm_username %>';
+        password := '<%= @pcmm_replication_password %>';
+        SELECT COUNT (1) INTO u_count FROM dba_users WHERE username = UPPER (user_name);
+        IF u_count = 0
+        THEN
+                EXECUTE IMMEDIATE 'CREATE USER '||user_name||' IDENTIFIED BY '||password||' ';
+                EXECUTE IMMEDIATE 'GRANT CONNECT TO '||user_name||' ';
+                EXECUTE IMMEDIATE 'GRANT RESOURCE TO '||user_name||' ';
+                EXECUTE IMMEDIATE 'GRANT CREATE SESSION TO '||user_name||' ';
+                EXECUTE IMMEDIATE 'GRANT CREATE ANY TABLE TO '||user_name||' ';
+                EXECUTE IMMEDIATE 'GRANT DROP ANY TABLE TO '||user_name||' ';
+                EXECUTE IMMEDIATE 'GRANT ALTER ANY TABLE TO '||user_name||' ';
+
+            FOR tName IN (SELECT TABLE_NAME FROM dba_tables WHERE OWNER = 'PCMM')
+              LOOP
+                EXECUTE IMMEDIATE 'GRANT SELECT ON PCMM.' || tName.TABLE_NAME || ' TO '||user_name||' ';
+                EXECUTE IMMEDIATE 'GRANT INSERT ON PCMM.' || tName.TABLE_NAME || ' TO '||user_name||' ';
+                EXECUTE IMMEDIATE 'GRANT UPDATE ON PCMM.' || tName.TABLE_NAME || ' TO '||user_name||' ';
+                EXECUTE IMMEDIATE 'GRANT DELETE ON PCMM.' || tName.TABLE_NAME || ' TO '||user_name||' ';
+
+              END LOOP;
+            FOR tName IN (SELECT TABLE_NAME FROM dba_tables WHERE OWNER = 'SDSADM')
+              LOOP
+                EXECUTE IMMEDIATE 'GRANT SELECT ON SDSADM.' || tName.TABLE_NAME || ' TO '||user_name||' ';
+                EXECUTE IMMEDIATE 'GRANT INSERT ON SDSADM.' || tName.TABLE_NAME || ' TO '||user_name||' ';
+                EXECUTE IMMEDIATE 'GRANT UPDATE ON SDSADM.' || tName.TABLE_NAME || ' TO '||user_name||' ';
+                EXECUTE IMMEDIATE 'GRANT DELETE ON SDSADM.' || tName.TABLE_NAME || ' TO '||user_name||' ';
+
+              END LOOP;
+          END IF;
+        u_count := 0;
+        
+    END;
+    /

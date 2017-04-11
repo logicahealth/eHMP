@@ -25,24 +25,7 @@ Get available activity definitions
 
 :[Response 500]({{{common}}}/responses/500.md)
 
-### Activity Instances Available [GET {{{path}}}/instances{?context}{&pid}]
 
-Get activity instances
-
-+ Parameters
-
-    + context (string) - Either patient or staff
-
-    + pid (string, optional) - Patient pid (required only with patient context)
-
-
-+ Response 200 (application/json)
-
-:[Response 400]({{{common}}}/responses/400.md)
-
-:[Response 404]({{{common}}}/responses/404.md)
-
-:[Response 500]({{{common}}}/responses/500.md)
 
 ### Single Instance [GET {{{path}}}/singleInstance{?id}]
 
@@ -278,6 +261,38 @@ deploymentId requires format GroupId:ArtifactId:Version
                     }
                 }
             }
+
++ Response 200 (application/json)
+
+:[Response 400]({{{common}}}/responses/400.md)
+
+:[Response 404]({{{common}}}/responses/404.md)
+
+:[Response 500]({{{common}}}/responses/500.md)
+
+### Activity Instances Available [GET {{{path}}}/instances{&context}{&pid}{&createdByMe}{&intendedForMeAndMyTeams}{&startDate}{&endDate}{&mode}]
+
+Get activity instances
+
++ Parameters
+
+    + context (string) - Either patient or staff
+
+    + pid (string, optional) - Patient pid (required only with patient context)
+
+    + mode (string, optional) - Patient pid (required only with patient context)
+
+    + createdByMe (string, optional) - to query for instances that are created by me
+
+    + intendedForMeAndMyTeams (string, optional) - to query for instances that are related to me or my teams
+
+    + startDate (string, optional) - designates the start of a date range for searches
+
+    + endDate (string, optional) - designates the end of a date range for searches
+
+
+
+
 
 + Response 200 (application/json)
 

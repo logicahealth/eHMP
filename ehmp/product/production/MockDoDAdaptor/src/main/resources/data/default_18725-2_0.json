@@ -3,67 +3,6 @@
   "dataList": [
     {
       "dataRecord": {
-        "OrderStatus": "",
-        "PlacerSystemName": "",
-        "EnteredBy": "",
-        "TestName": "URINE CULTURE",
-        "RepositoryId": "2.16.840.1.113883.3.42.10002.100001.8.22200",
-        "EnteredByDate": "",
-        "OrderDateTime": "",
-        "CustodianName": "va",
-        "CertifiedDate": "",
-        "ResultId": "",
-        "Accession": "MICRO 99 1086",
-        "ResultStatusName": "",
-        "FillerSystemName": "",
-        "OrderPriority": "",
-        "OrderingProvider": "",
-        "OrderComment": "",
-        "OrderId": "",
-        "SpecimenName": "URINE",
-        "CustodianId": "2.16.840.1.113883.3.42.10002.100001.8.22200",
-        "IsPanel": "false",
-        "OtherIdentifier": "",
-        "TestStatusName": "",
-        "TestId": "",
-        "RequestingLocation": "",
-        "Specimen": "",
-        "Tests": [
-          {
-            "Name": "URINE CULTURE",
-            "Results": [
-              {
-                "ResultStatusDescription": "",
-                "Name": "URINE CULTURE",
-                "Result": "---- MICROBIOLOGY ----\nAccession: MICRO 99 1086               Received: Aug 26, 1999 09:22\nCollection sample: URINE               Collection date: Aug 26, 1999 09:22\nProvider: HENLEY,SHIRLEY J\n\n\n    Test(s) ordered:  URINE CULTURE        completed: Aug 30, 1999 10:17\n\n* BACTERIOLOGY FINAL REPORT => Aug 30, 1999   TECH CODE: 3584\nCULTURE RESULTS: >100,000 CFU/ML ESCHERICHIA COLI\n\nANTIBIOTIC SUSCEPTIBILITY TEST RESULTS:\n              ESCHERICHIA COLI\n              :\nAMPICILLIN    S\nNITROFURANTOINS\nTETRACYCLINE  S\nTRIMETH/SULFA S\nGENTAMICIN    S\nCEPHALOTHIN   S\nCEFUROXIME    S\nCEFTRIAXONE   S\nTRIMETHOPRIM  S\nCIPROFLOXACIN S\nAUGMENTIN     S\n\nBacteriology Remark(s):\n  TEST PERFORMED AT QUEST LABORATORY, REC'D 8/27/99",
-                "Organisms": [
-
-                ],
-                "CertifiedDate": "199908260922",
-                "FullReport": "",
-                "ResultId": "",
-                "Facility": "ALASKA VAHSRO/463",
-                "ResultIndependent": "",
-                "CertifiedBy": "",
-                "ResultStatus": "",
-                "EventId": "1000001226"
-              }
-            ],
-            "EventId": "1000001227"
-          }
-        ],
-        "Facility": "ALASKA VAHSRO/463",
-        "LoincCode": "18725-2",
-        "CollectionSample": "URINE",
-        "OrderNumber": "MICRO 99 1086",
-        "OrderFacility": "ALASKA VAHSRO/463",
-        "CollectionDateTime": "199908260922",
-        "EventId": "1000001228"
-      },
-      "dataType": 11
-    },
-    {
-      "dataRecord": {
         "OrderStatus": "COMPLETE",
         "PlacerSystemName": "",
         "EnteredBy": "",

@@ -3,6 +3,7 @@ define([
     "marionette",
     "underscore",
     "handlebars",
+    "moment",
     "hbs!app/applets/patient_information/postings/templates/detail",
     "hbs!app/applets/patient_information/postings/templates/allergiesDetails",
     "hbs!app/applets/patient_information/postings/templates/directiveDetails",
@@ -12,6 +13,7 @@ define([
     Marionette,
     _,
     Handlebars,
+    moment,
     DetailTemplate,
     AllergiesDetailsTemplate,
     DirectiveDetails,
@@ -138,6 +140,15 @@ define([
                                     response.expectedCosignerDisplayName = expectedCosigner.displayName;
                                 }
                             }
+
+                            if(response.statusDisplayName){
+                                var lstatusName = response.statusDisplayName.toLowerCase();
+                                response.statusDisplayName = _.capitalize(lstatusName);
+                                if( lstatusName === 'complete' || lstatusName === 'completed'){
+                                   response.statusDisplayName =  'Completed';
+                                }
+                            }
+
                             return response;
                         }
                     }
@@ -187,7 +198,7 @@ define([
                 if (_.isUndefined(resp)) {
                     return;
                 }
-                var successes = dd(resp)('data')('successes').val;
+                var successes = _.get(resp, 'data.successes');
                 if (successes && successes.find(function(model) {
                         return (model.get('documentTypeCode') === self.cwadfCode && (model.get('status') === 'COMPLETED' || model.get('status') === 'AMENDED'));
                     })) {

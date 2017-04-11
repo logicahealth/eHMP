@@ -1,20 +1,32 @@
 <div class="row">
     <div class="col-xs-12">
-        <h5 class="bottom-border-grey">History of {{domain}}</h5>
+        <h5 class="bottom-border-grey top-margin-lg">History of {{domain}}</h5>
     </div>
 </div>
+{{#if taskHistory}}
 {{#each taskHistory}}
 <div class="row">
-    <div class="col-xs-3 text-right">
-        <p><strong>{{signalOwnerName}}</strong>
-            <br /> {{formatDate signalStatusTimestamp "MM/DD/YYYY HH:mm"}}</p>
+    <div class="col-xs-2 text-right">
+        <p class="bottom-margin-sm"><strong>{{signalOwnerName}}</strong><br />
+        {{formattedStatusTimestamp}}</p>
     </div>
     <div class="col-xs-9">
-        <div class="well well-sm background-color-primary-lightest all-padding-xs">
-            <p class="all-margin-no"><strong>{{taskName}}: {{signalAction}}</strong>
-                <br /> {{signalHistory}}
-            </p>
+        <div class="well well-sm background-color-primary-lightest all-padding-xs bottom-margin-sm">
+            <p class="all-margin-no"><strong>
+                {{#if taskName}} {{#if signalAction}}
+                    {{taskName}}: {{signalAction}}
+                {{else}}
+                    {{taskName}}
+                {{/if}}
+                {{else if signalAction}}
+                {{signalAction}}
+                {{/if}}
+            </strong><br />
+            {{signalHistory}}</p>
         </div>
     </div>
 </div>
 {{/each}}
+{{else}}
+<p>N/A</p>
+{{/if}}

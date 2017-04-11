@@ -457,7 +457,7 @@ describe('middleware/patient-identifier-middleware.js', function() {
             opts.createJPID = createJPID;
 
             opts.mviClient = {
-                lookup: function(patientIdentifier, callback) {
+                lookupWithDemographics: function(patientIdentifier, demographics, callback) {
                     return callback(null, {ids: idObjects} );
                 }
             };
@@ -509,7 +509,7 @@ describe('middleware/patient-identifier-middleware.js', function() {
             opts.createJPID = createJPID;
 
             opts.mviClient = {
-                lookup: function(patientIdentifier, callback) {
+                lookupWithDemographics: function(patientIdentifier, demographics, callback) {
                     return callback(null, {ids: idObjects} );
                 }
             };
@@ -551,7 +551,7 @@ describe('middleware/patient-identifier-middleware.js', function() {
             opts.createJPID = createJPID;
 
             opts.mviClient = {
-                lookup: function(patientIdentifier, callback) {
+                lookupWithDemographics: function(patientIdentifier, demographics, callback) {
                     return callback(null, {ids: idObjects} );
                 }
             };
@@ -560,7 +560,7 @@ describe('middleware/patient-identifier-middleware.js', function() {
                 jds: {}
             });
 
-            jdsClientDummy._setResponseData([null, null, null],[{statusCode: 404}, {statusCode: 201, headers: {location:'http://IP_ADDRESS:PORT/vpr/jpid'+jpid}}, {statusCode: 201}, {statusCode: 200}], [null, null, null, {jpid: jpid, patientIdentifiers: identifiers}]);
+            jdsClientDummy._setResponseData([null, null, null],[{statusCode: 404}, {statusCode: 201, headers: {location:'http://IP             /vpr/jpid'+jpid}}, {statusCode: 201}, {statusCode: 200}], [null, null, null, {jpid: jpid, patientIdentifiers: identifiers}]);
 
             opts.jdsClient = jdsClientDummy;
             var done = false;
@@ -591,7 +591,7 @@ describe('middleware/patient-identifier-middleware.js', function() {
             opts.createJPID = createJPID;
 
             opts.mviClient = {
-                lookup: function(patientIdentifier, callback) {
+                lookupWithDemographics: function(patientIdentifier, demographics, callback) {
                     return callback(null, {ids: idObjects} );
                 }
             };
@@ -600,7 +600,7 @@ describe('middleware/patient-identifier-middleware.js', function() {
                 jds: {}
             });
 
-            jdsClientDummy._setResponseData([null, null, null, null, null],[{statusCode:404},{statusCode: 201, headers: {location:'http://IP_ADDRESS:PORT/vpr/jpid'+jpid}}, {statusCode: 400}, {statusCode:201}, {statusCode:200}], [null,null, null, null, {jpid: jpid, patientIdentifiers:[request.patientIdentifier.value]}]);
+            jdsClientDummy._setResponseData([null, null, null, null, null],[{statusCode:404},{statusCode: 201, headers: {location:'http://IP             /vpr/jpid'+jpid}}, {statusCode: 400}, {statusCode:201}, {statusCode:200}], [null,null, null, null, {jpid: jpid, patientIdentifiers:[request.patientIdentifier.value]}]);
 
             opts.jdsClient = jdsClientDummy;
             var done = false;
@@ -630,7 +630,7 @@ describe('middleware/patient-identifier-middleware.js', function() {
             opts.createJPID = createJPID;
 
             opts.mviClient = {
-                lookup: function(patientIdentifier, callback) {
+                lookupWithDemographics: function(patientIdentifier, demographics, callback) {
                     return callback(null, null);
                 }
             };
@@ -687,7 +687,7 @@ describe('middleware/patient-identifier-middleware.js', function() {
             spyOn(response, 'json').andCallThrough();
 
             opts.mviClient = {
-                lookup: function(patientIdentifier, callback) {
+                lookupWithDemographics: function(patientIdentifier, demographics, callback) {
                     return callback({error: 'ERROR!'}, null);
                 }
             };
@@ -735,7 +735,7 @@ describe('middleware/patient-identifier-middleware.js', function() {
             spyOn(response, 'json').andCallThrough();
 
             opts.mviClient = {
-                lookup: function(patientIdentifier, callback) {
+                lookupWithDemographics: function(patientIdentifier, demographics, callback) {
                     return callback(null, {ids: idObjects});
                 }
             };
@@ -783,7 +783,7 @@ describe('middleware/patient-identifier-middleware.js', function() {
             spyOn(response, 'json').andCallThrough();
 
             opts.mviClient = {
-                lookup: function(patientIdentifier, callback) {
+                lookupWithDemographics: function(patientIdentifier, demographics, callback) {
                     return callback(null, {ids: idObjects});
                 }
             };
@@ -831,7 +831,7 @@ describe('middleware/patient-identifier-middleware.js', function() {
             spyOn(response, 'json').andCallThrough();
 
             opts.mviClient = {
-                lookup: function(patientIdentifier, callback) {
+                lookupWithDemographics: function(patientIdentifier, demographics, callback) {
                     return callback(null, {ids: idObjects});
                 }
             };
@@ -879,7 +879,7 @@ describe('middleware/patient-identifier-middleware.js', function() {
             spyOn(response, 'json').andCallThrough();
 
             opts.mviClient = {
-                lookup: function(patientIdentifier, callback) {
+                lookupWithDemographics: function(patientIdentifier, demographics, callback) {
                     return callback(null, {ids: idObjects});
                 }
             };
@@ -927,7 +927,7 @@ describe('middleware/patient-identifier-middleware.js', function() {
             spyOn(response, 'json').andCallThrough();
 
             opts.mviClient = {
-                lookup: function(patientIdentifier, callback) {
+                lookupWithDemographics: function(patientIdentifier, demographics, callback) {
                     return callback(null, {ids: idObjects});
                 }
             };
@@ -975,7 +975,7 @@ describe('middleware/patient-identifier-middleware.js', function() {
             spyOn(response, 'json').andCallThrough();
 
             opts.mviClient = {
-                lookup: function(patientIdentifier, callback) {
+                lookupWithDemographics: function(patientIdentifier, demographics, callback) {
                     return callback(null, {ids: idObjects});
                 }
             };

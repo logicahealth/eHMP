@@ -11,9 +11,6 @@ class ModalTest < AccessBrowserV2
   include Singleton
   def initialize
     super
-    add_action(CucumberLabel.new("appletPath"), ClickClearAndSendKeysAction.new, AccessHtmlElement.new(:id, "appletPath"))
-    add_action(CucumberLabel.new("launchModal"), ClickAction.new, AccessHtmlElement.new(:id, "launchModal"))
-
     add_action(CucumberLabel.new("Close Button"), ClickAction.new, AccessHtmlElement.new(:css, "#modal-footer div div.pull-right .btn.btn-default")) 
     add_action(CucumberLabel.new("Cancel Button"), ClickAction.new, AccessHtmlElement.new(:css, "#modal-footer div div.pull-right #cancelBtn"))
     add_verify(CucumberLabel.new("ModalTitle"), VerifyContainsText.new, AccessHtmlElement.new(:id, "mainModalLabel"))
@@ -22,26 +19,6 @@ end
 
 Then(/^a modal with the title "(.*?)" is displayed$/) do |title|
   expect(ModalTest.instance.perform_verification("ModalTitle", title)).to be_true
-end
-
-Then(/^the applet selection input is displayed$/) do
-  con = ModalTest.instance
-  con.wait_until_action_element_visible("appletPath", 60)
-  expect(con.static_dom_element_exists?("appletPath")).to be_true
-end
-
-Given(/^the user selects the applet "(.*?)"$/) do |applet|
-  con = ModalTest.instance
-  con.wait_until_action_element_visible("appletPath", 60)
-  expect(con.static_dom_element_exists?("appletPath")).to be_true
-  con.perform_action("appletPath", applet)
-end
-
-When(/^the user launches the modal$/) do
-  con = ModalTest.instance
-  con.wait_until_action_element_visible("launchModal", 60)
-  expect(con.static_dom_element_exists?("launchModal")).to be_true
-  con.perform_action("launchModal")
 end
 
 When(/^the user clicks the modal "(.*?)"$/) do |button|

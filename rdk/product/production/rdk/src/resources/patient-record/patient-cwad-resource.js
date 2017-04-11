@@ -17,7 +17,7 @@ module.exports.getResourceConfig = function() {
         interceptors: {
             jdsFilter: true
         },
-        requiredPermissions: [],
+        requiredPermissions: ['read-patient-record'],
         isPatientCentric: true,
         outerceptors: ['asu'],
         subsystems: ['patientrecord','jds','solr','jdsSync','authorization']

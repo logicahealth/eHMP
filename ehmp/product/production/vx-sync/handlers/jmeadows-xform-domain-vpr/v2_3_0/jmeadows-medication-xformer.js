@@ -22,31 +22,31 @@ function dodMedicationToVPR(dodMedication, edipi){
 
 
     vprMedication.codes = xformUtils.transformCodes(dodMedication.codes);
-    vprMedication.medStatus=dodMedication.active;
-    vprMedication.medType=dodMedication.medType;
-    vprMedication.patientInstruction=dodMedication.comment;
-    vprMedication.productFormName=dodMedication.drugName;
-    vprMedication.productFormCode=dodMedication.medId;
-    vprMedication.name=dodMedication.drugName;
-    vprMedication.facilityName='DOD';
+    vprMedication.medStatus = dodMedication.active;
+    vprMedication.medType = dodMedication.medType;
+    vprMedication.patientInstruction = dodMedication.comment;
+    vprMedication.productFormName = dodMedication.drugName;
+    vprMedication.productFormCode = dodMedication.medId;
+    vprMedication.name = dodMedication.drugName;
     vprMedication.facilityCode='DOD';
-    vprMedication.sig=dodMedication.sigCode;
-	vprMedication.uid=uidUtils.getUidForDomain('med', 'DOD', edipi, dodMedication.cdrEventId);
+    vprMedication.facilityName = dodMedication.site ? dodMedication.site.moniker : 'DOD';
+    vprMedication.sig = dodMedication.sigCode;
+	vprMedication.uid = uidUtils.getUidForDomain('med', 'DOD', edipi, dodMedication.cdrEventId);
     vprMedication.pid='DOD;'+edipi;
 
     if(!_.isNull(dodMedication.active)){
-    	vprMedication.vaStatus=dodMedication.active;
+    	vprMedication.vaStatus = dodMedication.active;
     }
     else{
-    	vprMedication.vaStatus='Unknown';
+    	vprMedication.vaStatus = 'Unknown';
     }
 
     if(!_.isNull(dodMedication.fillOrderDate)){
-		vprMedication.overallStart=moment(dodMedication.fillOrderDate, 'x').format('YYYYMMDDHHmmss');
+		vprMedication.overallStart = moment(dodMedication.fillOrderDate, 'x').format('YYYYMMDDHHmmss');
     }
 
  	if(!_.isNull(dodMedication.stopDate)){
-    	vprMedication.overallStop=moment(dodMedication.stopDate, 'x').format('YYYYMMDDHHmmss');
+    	vprMedication.overallStop = moment(dodMedication.stopDate, 'x').format('YYYYMMDDHHmmss');
  	}
 
     if(dodMedication.medType && (dodMedication.medType.toUpperCase().valueOf()=='I' || dodMedication.medType.toUpperCase().valueOf()=='O'
@@ -76,6 +76,8 @@ function dodMedicationToVPR(dodMedication, edipi){
     vprMedication.orders=_.map([dodMedication],function(){
         if (dodMedication.orderingProvider && dodMedication.orderingProvider.name) {
             return {
+                locationName: vprMedication.facilityName,
+                orderUid: dodMedication.rxNumber,
                 daysSupply: dodMedication.daysSupply,
                 quantityOrdered: dodMedication.quantity,
                 fillsRemaining: dodMedication.refills,
@@ -83,6 +85,8 @@ function dodMedicationToVPR(dodMedication, edipi){
             };
         }else {
             return {
+                locationName: vprMedication.facilityName,
+                orderUid: dodMedication.rxNumber,
                 daysSupply: dodMedication.daysSupply,
                 quantityOrdered: dodMedication.quantity,
                 fillsRemaining: dodMedication.refills

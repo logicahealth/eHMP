@@ -35,6 +35,7 @@ describe('User Defined Stacked Graph', function() {
         expect(resources[3].interceptors).to.eql(interceptors);
         expect(resources[3].subsystems).not.to.be.undefined();
         expect(resources[3].delete).not.to.be.undefined();
+        expect(resources[3].requiredPermissions).to.eql(['access-general-ehmp']);
     });
 
     /*it('correctly creates stacked graph ID from session', function() {

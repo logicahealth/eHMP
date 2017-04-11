@@ -191,7 +191,7 @@ define([
                 '</button>',
             '</div>',
             '<div class="panel-collapse collapse" aria-labelledby="heading-{{formatIdString summaryLabel}}-{{formatIdString groupLabel}}" id="collapse-{{formatIdString summaryLabel}}-{{formatIdString groupLabel}}">',
-                '<div class="panel-body multi-select-list all-padding-no" id="body-{{summaryLabel}}-{{groupLabel}}">',
+                '<div class="panel-body multi-select-list all-padding-no" id="body-{{summaryLabel}}-{{formatIdString groupLabel}}">',
                     '<ul class="all-padding-no"></ul>',
                 '</div>',
             '</div>'

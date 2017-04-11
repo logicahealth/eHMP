@@ -5,7 +5,6 @@ var querystring = require('querystring');
 var _ = require('lodash');
 var async = require('async');
 var moment = require('moment');
-var dd = require('drilldown');
 var rdk = require('../core/rdk');
 var RpcClient = require('vista-js').RpcClient;
 var httpUtil = rdk.utils.http;
@@ -15,6 +14,7 @@ var patientSearchResource = require('./patient-search/patient-search-resource');
 var locationUtil = rdk.utils.locationUtil;
 var patientSearchUtil = require('./patient-search/results-parser');
 var formatPatientSearchCommonFields = patientSearchUtil.formatPatientSearchCommonFields;
+var pidValidatorIsSiteDfn = require('../utils/pid-validator').isSiteDfn;
 
 function getResourceConfig() {
     return [].concat(
@@ -27,7 +27,7 @@ function getResourceConfig() {
                     jdsFilter: true,
                     synchronize: false
                 },
-                requiredPermissions: [],
+                requiredPermissions: ['read-patient-record'],
                 isPatientCentric: false,
                 subsystems: ['patientrecord', 'jds', 'solr', 'jdsSync']
             };
@@ -45,7 +45,7 @@ function searchLocation(locationType, req, res) {
 
     filter is required to prevent a search from showing every patient in a clinic or ward by default
      */
-    var location = req.param('uid');
+    var location = _.get(req,'query.uid','');
 
     if (!location) {
         return res.status(rdk.httpstatus.bad_request).rdkSend('Missing uid parameter');
@@ -100,13 +100,20 @@ function searchLocation(locationType, req, res) {
         function(err, result) {
             if (err) {
                 if (err instanceof Error) {
+                    req.logger.error('Error searching location');
+                    req.logger.error(err);
                     return res.status(rdk.httpstatus.internal_server_error).rdkSend(err.message);
                 } else {
+                    req.logger.warn('Potential error searching location');
+                    req.logger.warn(err);
                     return res.status(rdk.httpstatus.ok).rdkSend(err);
                 }
             }
 
             if (!_.isObject(result)) {
+                req.logger.warn({
+                    result: result
+                }, 'result is not an object');
                 return res.status(rdk.httpstatus.internal_server_error).rdkSend(result);
             }
             result = formatPatientSearchCommonFields(result, hasDGAccess);
@@ -124,8 +131,8 @@ function searchLocation(locationType, req, res) {
  */
 function addClinicParameters(req, parameters) {
     // start date and stop date are required but start date can be (an empty string, which defaults to today in vista)
-    var startDate = req.param('date.start') || '';
-    var stopDate = req.param('date.end') || moment().format('YYYYMMDD');
+    var startDate = _.get(req.query, 'date.start', '');
+    var stopDate = _.get(req.query, 'date.end', moment().format('YYYYMMDD'));
     parameters.push(startDate);
     parameters.push(stopDate);
 }
@@ -189,7 +196,7 @@ function selectPatientsFromDfnsInBatches(req, locationType, siteCode, patientInf
             return callback(err);
         }
         var patientItems = _.reduce(responses, function(allResponses, response) {
-            var items = dd(response)('data')('items').val;
+            var items = _.get(response, 'data.items');
             if (_.isEmpty(items)) {
                 return allResponses;
             }
@@ -204,7 +211,7 @@ function selectPatientsFromDfnsInBatches(req, locationType, siteCode, patientInf
 }
 
 function selectPatientsFromDfns(req, locationType, range, patientInfoFromRpc, callback) {
-    var order = req.query.order;
+    var order = _.get(req, 'query.order', '');
 
     var site = patientSearchResource.getSite(req.logger, 'locations-resource.selectPatientsFromDfns', '', req);
 
@@ -219,6 +226,12 @@ function selectPatientsFromDfns(req, locationType, range, patientInfoFromRpc, ca
                 return mapcallback('Missing site information from session or request');
             }
         }
+
+        if (!pidValidatorIsSiteDfn(pid)) {
+            req.logger.error('locations-resource.ERROR invalid pid: data missing');
+            return mapcallback('Invalid PID: Missing pid information');
+        }
+
         var searchOptions = {
             site: site,
             searchType: 'PID',

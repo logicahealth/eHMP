@@ -1,9 +1,9 @@
 define([
     "app/applets/activeMeds/appletLayout",
-    "app/applets/activeMeds/gistView"
-], function(AppletLayoutView, GistView) {
+    "app/applets/activeMeds/gistView",
+    'app/applets/medication_review/medicationsUngrouped/medicationOrderModel'
+], function(AppletLayoutView, GistView, MedicationOrderModel) {
     "use strict";
-    var DETAIL_VIEW_CHANNEL = "medication_review";
     var applet = {
         id: "activeMeds",
         viewTypes: [{
@@ -20,36 +20,41 @@ define([
         defaultViewType: 'summary'
     };
 
+    var getDetailsModal = function(newModel, newCollection) {
+        var uid = newModel.get('uid');
+        var currentPatient = ADK.PatientRecordService.getCurrentPatient();
+        ADK.Messaging.getChannel("activeMeds").trigger('detailView', {
+            uid: uid,
+            patient: {
+                icn: currentPatient.attributes.icn,
+                pid: currentPatient.attributes.pid
+            },
+            model: newModel,
+            collection: newCollection
+        });
+    };
+
     (function initMessaging() {
-        ADK.Messaging.getChannel(applet.id).on('detailView',
-            function(clickedResult) {
-                var channelName = DETAIL_VIEW_CHANNEL;
-                // display spinner in modal while detail view is loading
-                var modal = new ADK.UI.Modal({
-                    view: ADK.Views.Loading.create(),
-                    options: {
-                        size: "large",
-                        title: 'Medication - '+clickedResult.model.get('qualifiedName')
-                    }
-                });
-                modal.show();
+        ADK.Messaging.getChannel('activeMeds').on('detailView', function(clickedResult) {
+            var medModel = new MedicationOrderModel(clickedResult.model.attributes);
 
-                // request detail view from whatever applet is listening for this domain
-                var channel = ADK.Messaging.getChannel(channelName);
-                var deferredResponse = channel.request('detailView', clickedResult);
+            var channel = ADK.Messaging.getChannel('medication_review');
+            var response = channel.request('detailView', clickedResult);
 
-                deferredResponse.done(function(response) {
-                    var modal = new ADK.UI.Modal({
-                        view: response.view,
-                        options: {
-                            size: "large",
-                            title: response.title
-                        }
-                    });
-                    modal.show();
-                });
-            }
-        );
+            var modal = new ADK.UI.Modal({
+                view: new response.view({
+                    model: medModel
+                }),
+                options: {
+                    size: "large",
+                    title: response.title,
+                    'nextPreviousCollection': clickedResult.collection,
+                    'nextPreviousModel': clickedResult.model
+                },
+                callbackFunction: getDetailsModal
+            });
+            modal.show();
+        });
     })();
 
     return applet;

@@ -1,6 +1,7 @@
-define([], function() {
+define([
+    'moment'
+], function(moment) {
     "use strict";
-
     var ValidationUtil = {
         validateModel: function(model){
             model.errorModel.clear();
@@ -18,17 +19,16 @@ define([], function() {
                 var dateMeasured = moment(dateValue, 'MM/DD/YYYY');
 
                 if(dateValue.length === 4){
-                    dateMeasured = moment(dateValue, 'YYYY');                    
+                    dateMeasured = moment(dateValue, 'YYYY');
                 }else if(dateValue.length === 7){
-                    dateMeasured = moment(dateValue, 'MM/YYYY');                    
+                    dateMeasured = moment(dateValue, 'MM/YYYY');
                 }
 
                 if(dateMeasured.isAfter(today)){
-                    model.errorModel.set({'onset-date': 'Onset Date must be in the past.'});
+                    model.errorModel.set({'onset-date': 'Onset date must be in the past'});
                 }
             }
         }
     };
-
     return ValidationUtil;
 });

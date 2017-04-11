@@ -92,7 +92,7 @@ define([
             var popupModel = popupView.extendDefaultModel(popupOptions);
 
             popupView.setModel(popupModel, popupSilent);
-
+            
             if (logout) {
                 popupView.logout();
             }
@@ -111,7 +111,7 @@ define([
                 case 3:
                 case 2:
                 case 1:
-                    popupOptions.title = 'Warning: Login Session Ending.';
+                    popupOptions.title = 'Warning: Session Expiring';
                     popupOptions.header = 'Your user session will time out in ';
                     //append the text to the header
                     popupOptions.header += timeLeft + ' minute';
@@ -119,8 +119,7 @@ define([
                         popupOptions.header += 's';
                     }
                     popupOptions.header += '.';
-                    popupOptions.body = 'To help ensure privacy and protect patient information, your user session times out after ' + sessionLength + ' minutes';
-                    popupOptions.footer = 'If you are actively using eHMP, simply tap Continue to reset the session. You can also tap Logout to logout now.';
+                    popupOptions.body = 'To help ensure privacy and protect patient information, your user session times out after ' + sessionLength + ' minutes. If you are actively using eHMP, select Continue to reset the session, or Logout to end the session.';
                     popupOptions.buttons = true;
                     //popup
                     envokePopupModal({
@@ -132,10 +131,9 @@ define([
                     resetLogoutTimeout();
                     break;
                 case 0:
-                    popupOptions.title = 'Warning: You Have Been Logged Out';
+                    popupOptions.title = 'Session Expired';
                     popupOptions.header = 'You\'ve been logged out due to inactivity.';
-                    popupOptions.body = '';
-                    popupOptions.footer = 'To help ensure privacy and protect patient information, your user session timed out after ' + sessionLength + ' minutes';
+                    popupOptions.body = 'To help ensure privacy and protect patient information, your user session timed out after ' + sessionLength + ' minutes.';
                     popupOptions.buttons = false;
                     //popup and logout
                     envokePopupModal({

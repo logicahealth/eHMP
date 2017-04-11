@@ -1,19 +1,19 @@
 define([
     'marionette',
+    'moment',
     'main/ADK',
     'app/applets/orders/viewUtils',
-], function(Marionette, ADK, ViewUtils) {
+], function(Marionette, moment, ADK, ViewUtils) {
     'use strict';
 
     //========================= BANNER UTILITIES ==========================
     var displayBanner = function(action, activityType, uid, options) {
         var suppressBanner = !!(_.get(options, 'suppressBanner', false));
         if (suppressBanner === false) {
-            var bannerTitle = (_.capitalize(activityType || 'unknown') + ' Draft Activity');
-            var message = 'Successfully ' + action;
+            var message = (_.capitalize(activityType || 'unknown') + ' draft activity succesfully ' + action);
 
             var successBanner = new ADK.UI.Notification({
-                title: bannerTitle,
+                title: 'Success',
                 message: message,
                 type: "success"
             });
@@ -226,10 +226,14 @@ define([
                 this.model.set('earliest', moment(draftData.requests[0].earliestDate).format('MM/DD/YYYY'));
             }
             if (draftData.requests[0].latestDate) {
-                this.model.set('latest', moment(draftData.requests[0].latestDate).format('MM/DD/YYYY'));
+                this.model.set('latest', moment.utc(draftData.requests[0].latestDate).local().format('MM/DD/YYYY'));
             }
             if (draftData.requests[0].request) {
-                this.model.set('requestDetails', draftData.requests[0].request);
+                var requestDetails = draftData.requests[0].request;
+                if (requestDetails && _.isString(requestDetails)) {
+                    requestDetails = requestDetails.trim();
+                }
+                this.model.set('requestDetails', requestDetails);
             }
             if (draftData.requests[0].title) {
                 this.model.set('title', draftData.requests[0].title);

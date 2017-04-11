@@ -76,15 +76,15 @@ app.get('/ping', function(req, res) {
 
 //HDR interface
 //Subscribe
-app.post('/repositories.DNS       /fpds/vpr/subscribe', [validateSubscribeParams, handleSubscribe]);
+app.post('/repositories.med.DNS   /fpds/vpr/subscribe', [validateSubscribeParams, handleSubscribe]);
 //Poll
-app.get('/repositories.DNS       /fpds/vpr/patientdata/:siteId', [validatePollParams, handlePoll]);
+app.get('/repositories.med.DNS   /fpds/vpr/patientdata/:siteId', [validatePollParams, handlePoll]);
 //Unsubscribe
-app.post('/repositories.DNS       /fpds/vpr/cancel', [validateUnsubscribeParams, handleUnsubscribe]);
+app.post('/repositories.med.DNS   /fpds/vpr/cancel', [validateUnsubscribeParams, handleUnsubscribe]);
 
 //Not part of the real HDR interface
 //Clear all subscriptions
-app.post('/repositories.DNS       /fpds/vpr/cancel/all', handleUnsubscribeAll);
+app.post('/repositories.med.DNS   /fpds/vpr/cancel/all', handleUnsubscribeAll);
 //Unsolicited update
 app.post('/update', [validateUnsolicitedUpdate, handleUnsolicitedUpdate]);
 
@@ -370,7 +370,7 @@ function getSyncDataForPatient(patient, site) {
     var patientData = [];
     var siteId = site.siteId;
 
-    var stampTime = moment().format('YYYYMMDDHHmmss'); //TODO: Figure out whether this is supposed to equal lastUpdateTime...
+    var stampTime = moment().format('YYYYMMDDHHmmss'); //FUTURETODO: Figure out whether this is supposed to equal lastUpdateTime...
     var metaStamp = {};
 
     log.debug('mockHdr.getSyncDataForPatient: Generating syncStatus object for patient %s', patient.pid);

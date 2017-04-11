@@ -3,7 +3,7 @@
 global.VX_ROOT = __dirname + '/';
 global.VX_MOCKS = global.VX_ROOT + 'mocks/';
 global.VX_UTILS = global.VX_ROOT + 'utils/';
-global.VX_VISTAJS = 'vista-js';
+global.OSYNC_UTILS = global.VX_ROOT + 'utils/osync/';
 global.VX_HANDLERS = global.VX_ROOT + 'handlers/';
 global.OSYNC_HANDLERS = global.VX_HANDLERS + 'osync/';
 global.VX_ENDPOINTS = global.VX_ROOT + 'endpoints/';

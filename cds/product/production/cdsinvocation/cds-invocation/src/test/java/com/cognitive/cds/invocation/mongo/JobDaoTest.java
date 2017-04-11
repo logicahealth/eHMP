@@ -24,13 +24,12 @@
  */
 package com.cognitive.cds.invocation.mongo;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -40,7 +39,7 @@ public class JobDaoTest {
 
     private static MongoDbDao mongoDbDao;
     private JobDao jobDao;
-    private static Logger logger = Logger.getLogger(JobDaoTest.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(JobDaoTest.class);
 
     @BeforeClass
     public static void beforeClass() {
@@ -49,8 +48,7 @@ public class JobDaoTest {
                     "classpath:mongodb-dao-context.xml");
             mongoDbDao = (MongoDbDao) context.getBean("mongoDbDao");
         } catch (Exception e) {
-            logger.log(Level.SEVERE,
-                    "Error loading connection properties.  Cannot connect to MongoDB");
+            LOGGER.error("Error loading connection properties.  Cannot connect to MongoDB");
         }
     }
 

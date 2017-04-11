@@ -113,7 +113,7 @@ public class VlerConfiguration {
     }
 
     public void setSystemusername(String systemusername) {
-        this.systemVsID        ystemusername;
+        this.systemusername = systemusername;
     }
 
     public String getSystemsitecode() {

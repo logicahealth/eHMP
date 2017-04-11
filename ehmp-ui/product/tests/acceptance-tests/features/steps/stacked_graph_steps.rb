@@ -53,11 +53,11 @@ When(/^the user selects the first row in the Stacked Graph applet$/) do
 end
 
 Then(/^a toolbar displays with a quick view icon$/) do
-  expect(@stacked_graph_elements.wait_until_element_present('Quick View Icon')).to eq(true)
+  expect(@stacked_graph_elements.wait_until_element_present('Quick View Button')).to eq(true)
 end
 
 When(/^the user selects the Stacked Graphs quick view icon$/) do
-  expect(@stacked_graph_elements.perform_action('Quick View Icon')).to eq(true)
+  expect(@stacked_graph_elements.perform_action('Quick View Button')).to eq(true)
 end
 
 Then(/^a Stacked Graph quick view table is displayed$/) do

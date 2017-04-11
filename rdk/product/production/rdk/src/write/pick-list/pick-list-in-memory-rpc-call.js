@@ -1,4 +1,3 @@
-/*jslint node: true */
 'use strict';
 
 var pickListConfig = require('./config/pick-list-config-in-memory-rpc-call').pickListConfig;

@@ -6,7 +6,7 @@ Feature: sync all patients that have been used for test
 Scenario: Check sync request is stable
 	Given the patient(s) with pid
       | pid                |
-	  | 1006184063V088473  |
+	  | PII       V088473  |
 	  | 10101V964144	   |
       | 10104V248233       |
       | 10105V001065       |

@@ -42,14 +42,18 @@ end
 
 When(/^user accepts the new problem$/) do
   @ehmp = AddProblemsTrayModal.new
+  @ehmp.wait_until_btn_accept_problem_addition_visible
   @ehmp.btn_accept_problem_addition.click
 
+  verify_and_close_growl_alert_pop_up("Problem Submitted")
+  
   @ehmp.wait_until_btn_accept_problem_addition_invisible
 end
 
 Then(/^a problem is added to the applet$/) do
   @ehmp = PobProblemsApplet.new
-  wait = Selenium::WebDriver::Wait.new(:timeout => 30)
+  @ehmp.wait_for_tbl_problems
+  wait = Selenium::WebDriver::Wait.new(:timeout => 60)
   wait.until { @ehmp.number_expanded_applet_rows == @number_existing_problems + 1 }
 end
 
@@ -270,61 +274,8 @@ end
 
 Then(/^the Add Problem New Term Request Comment is populated with "([^"]*)" and the timestamp$/) do |user_comment|
   @ehmp = AddProblemsTrayModal.new unless @ehmp.is_a? AddProblemsTrayModal
-  expect(@ehmp).to have_txt_new_term_request
-  expect(@ehmp.txt_new_term_request.text).to eq("#{user_comment} #{@new_problem_comment_time}")
-end
-
-When(/^user enters a comment "([^"]*)" and a timestamp$/) do |user_comment|
-  @ehmp = AddProblemsTrayModal.new unless @ehmp.is_a? AddProblemsTrayModal
-  expect(@ehmp).to have_fld_comment
-  @new_problem_comment_time = Time.now
-  @full_comment = "#{user_comment} #{@new_problem_comment_time}"
-  @ehmp.fld_comment.set @full_comment
-
-end
-
-Then(/^the comment character count is updated$/) do
-  @ehmp = AddProblemsTrayModal.new unless @ehmp.is_a? AddProblemsTrayModal
-  expect(@ehmp).to have_fld_comment_characters_left
-  expect(@ehmp.fld_comment_characters_left.text).to eq((200 - @full_comment.length).to_s)
-end
-
-Then(/^the Add Problem comment add button is enabled$/) do
-  @ehmp = AddProblemsTrayModal.new unless @ehmp.is_a? AddProblemsTrayModal
-  expect(@ehmp.btn_add_comment.disabled?).to eq(false), "Expected Add comment button to be enabled"
-end
-
-Then(/^the Add Problem accept button is disabled$/) do
-  @ehmp = AddProblemsTrayModal.new unless @ehmp.is_a? AddProblemsTrayModal
-  expect(@ehmp.btn_accept_problem_addition.disabled?).to eq(true), "Expected Add Problem accept button to be disabled"
-end
-
-When(/^user adds the problem comment$/) do
-  @ehmp = AddProblemsTrayModal.new unless @ehmp.is_a? AddProblemsTrayModal
-  comment_count = @ehmp.fld_comment_rows.length
-  @ehmp.btn_add_comment.click
-  wait = Selenium::WebDriver::Wait.new(:timeout => 5)
-  wait.until { @ehmp.fld_comment_rows.length == comment_count + 1 }
-end
-
-Then(/^the Add Problem comment add button is disabled$/) do
-  @ehmp = AddProblemsTrayModal.new unless @ehmp.is_a? AddProblemsTrayModal
-  expect(@ehmp.btn_add_comment.disabled?).to eq(true), "Expected Add comment button to be disabled"
-end
-
-Then(/^the Add Problem accept button is enabled$/) do
-  @ehmp = AddProblemsTrayModal.new unless @ehmp.is_a? AddProblemsTrayModal
-  expect(@ehmp.btn_accept_problem_addition.disabled?).to eq(false), "Expected Add Problem accept button to be enabled"
-end
-
-Then(/^a Add Problem comment row is displayed with "([^"]*)" and a timestamp$/) do |user_comment|
-  @ehmp = AddProblemsTrayModal.new unless @ehmp.is_a? AddProblemsTrayModal
-  # assumption that the most recently comment is the last in the list
-  count = @ehmp.fld_comment_row_text.length
-  expect(count).to be > 0
-  expect(@ehmp.fld_comment_row_text[count-1].text).to eq("#{user_comment} #{@new_problem_comment_time}")
-  expect(@ehmp.btn_comment_row_edit.length).to eq(count), "Expected every comment row to have an edit button"
-  expect(@ehmp.btn_comment_row_delete.length).to eq(count), "Expected every comment row to have an edit button"
+  expect(@ehmp).to have_txt_new_term_request2
+  expect(@ehmp.txt_new_term_request2.text).to eq("#{user_comment} #{@new_problem_comment_time}")
 end
 
 Then(/^Treatment Factors are displayed on the Add Problem modal$/) do

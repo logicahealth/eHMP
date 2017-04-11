@@ -24,7 +24,7 @@ var mockConfig = {
     },
     jds: {
         protocol: 'http',
-        host: 'IP_ADDRESS',
+        host: 'IP        ',
         port: 9080
     }
 };
@@ -591,7 +591,7 @@ describe('jmeadows-xform-domain-vpr-handler', function() {
                 },
                 jds: {
                     protocol: 'http',
-                    host: 'IP_ADDRESS',
+                    host: 'IP        ',
                     port: 9080
                 }
             };

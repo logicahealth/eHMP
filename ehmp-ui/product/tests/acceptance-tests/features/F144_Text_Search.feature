@@ -40,7 +40,7 @@ Scenario: User is able to filter the search based on time
   Then the the text search results only display results from the last 3mos ( or Unknown )
 
 
-@f144_5_med_search_result_view_detail @US2374 @DE832 @DE2337 @DE3798
+@f144_5_med_search_result_view_detail @US2374 @DE832 @DE2337 @DE3798 @debug @DE6757
 Scenario: Verify user is able to view the detail medication search results
   # Given user is logged into eHMP-UI
   And user searches for and selects "TEN,PATIENT"
@@ -48,7 +48,7 @@ Scenario: Verify user is able to view the detail medication search results
   Then the user clicks one of the search result "Medication, Outpatient" 
   Then the user clicks one of the search result "Ascorbic Acid" 
   Then the modal is displayed
-  And the modal's title is "Medication - ascorbic acid tab"
+  And the modal's title is "Medication - ascorbic acid"
 
 @f144_6_immunization_search_result_view_detail @US2364 @vimm @triage @DE5248
 Scenario: User is able to view the detail immunization search results
@@ -60,7 +60,7 @@ Scenario: User is able to view the detail immunization search results
   Then the modal is displayed
   And the modal's title is "Vaccine - CHOLERA, ORAL (HISTORICAL)"
 
-@f144_7_Allergy_search_result_view_detail @US2241 @DE2337 @debug @DE5484
+@f144_7_Allergy_search_result_view_detail @US2241 @DE2337 @DE5484
 Scenario: User is able to view the detail allergy search results
   # Given user is logged into eHMP-UI
   And user searches for and selects "Four,PATIENT"
@@ -69,23 +69,18 @@ Scenario: User is able to view the detail allergy search results
   Then the user clicks one of the search result "Penicillin"
   Then the modal is displayed
   And the modal's title is "Allergen - PENICILLIN"
-  And the Allergy Detail modal displays 
-      | field               |
-      | title               |
-      | close button        |
-      | Symptoms            |
-      | Severity            |
-      | Drug Classes        |
-      | Nature of Reaction  |
-      | Entered By          |
-      | Originated          |
-      | Verified            |
-      | Observed/Historical |
-      | Observed Date       |
-      | Site                |
-
+  And the Allergy Detail modal displays
+      | symptoms            |
+      | severity            |
+      | drug classes        |
+      | nature of reaction  |
+      | entered by          |
+      | originated          |
+      | verified            |
+      | observed/historical |
+      | observed date       |
  
-@f144_8_Problem_list_search_result_view_detail @US2251 @US2792 @DE2657
+@f144_8_Problem_list_search_result_view_detail @US2251 @US2792 @DE2657 @DE5921 @DE6552 @DE6758 @debug @DE6989
 Scenario: User is able to view the detail of problem list search results
   Given user searches for and selects "Four,PATIENT"
   Then user searches for "headache"
@@ -106,7 +101,7 @@ Scenario: User is able to view the detail of problem list search results
   And the modal's title is "Headache"
   And the "Headache details" modal dialog contains data
 
-@f144_10_lab_report_search_result_view_detail @US2242 @DE865 @DE910 @DE2067 @debug @DE4207
+@f144_10_lab_report_search_result_view_detail @US2242 @DE865 @DE910 @DE2067 @DE4207 @DE5715 @DE6759
 Scenario: User is able to view the detail of Lab result search results
 
   Given user searches for and selects "Four,PATIENT"
@@ -119,15 +114,15 @@ Scenario: User is able to view the detail of Lab result search results
   Then the user clicks one of the search result "Laboratory" 
   Then the user clicks one of the search result "HDL"
   Then the modal is displayed
-  And the modal's title is "HDL - SERUM" 
+  And the modal's title is "HDL (SERUM) 58 MG/DL" 
   And the "Lab Detail" table contains headers
     | Date       | Lab Test          | Flag | Result | Unit  | Ref Range | Facility |
   And the "Lab Detail" row is
     | Date       | Lab Test          | Flag | Result | Unit  | Ref Range | 
     | 03/05/2010 | HDL - SERUM       |      | 58     | MG/DL | 40-60     | 
 
- 
-@f144_11_lab_order_search_result_view_detail @US2250 @DE2432 @DE3413 @DE5126 @debug @DE5165
+  
+@f144_11_lab_order_search_result_view_detail @US2250 @DE2432 @DE3413 @DE5126 @DE5165 @DE6759 @DE6912
 Scenario: User is able to view the detail of lab order search results
   # Given user is logged into eHMP-UI
   And user searches for and selects "Four,PATIENT"
@@ -141,11 +136,9 @@ Scenario: User is able to view the detail of lab order search results
   Then the user clicks one of the search result "Urinalysis"
   And the modal is displayed
   And the modal's title is "URINALYSIS URINE WC LB #579"
-  And Current Status for "Lab" is "ACTIVE"
-  And the user clicks the modal "Close Button"
-  And the modal is closed
+  And Current Status for Lab is ACTIVE
     
-@f144_12a_radiology_order_search_result_view_detail @US2256 @DE2337 @DE2432 @DE4555 @debug
+@f144_12a_radiology_order_search_result_view_detail @US2256 @DE2337 @DE2432 @DE4555 @DE6814
 Scenario: User is able to view the detail of radiology/Imaging orders search results
   # Given user is logged into eHMP-UI
   And user searches for and selects "Four,PATIENT"
@@ -158,11 +151,11 @@ Scenario: User is able to view the detail of radiology/Imaging orders search res
   Then the user clicks one of the search result "Radiology Report" 
   When the user expands the Radiology Hip 2 or more views headache subgroup
   Then the user clicks one of the search result "HIP 2 OR MORE VIEWS" 
-  And the modal's title is "radiologic examination, hip, unilateral; complete, minimum of 2 views"
+  And the modal's title is "HIP 2 OR MORE VIEWS"
   And Current Status for "Rad" is "COMPLETE" 
 
 
-@f144_12b_radiology_order_search_result_view_detail @US2256 @DE2337 @DE2432 @DE4555 @debug
+@f144_12b_radiology_order_search_result_view_detail @US2256 @DE2337 @DE2432 @DE4555
 Scenario: User is able to view the detail of radiology/Imaging orders search results
   # Given user is logged into eHMP-UI
   And user searches for and selects "Four,PATIENT"
@@ -202,31 +195,22 @@ Scenario: Text snippets should display when the requested text is found in the s
   And the text search snippet "blood" is highlighted 
   
   
- @f144_14_data_for_subgroup_not_loaded_until_clicked @US2791 @DE2337 @debug @DE2767
+ @f144_14_data_for_subgroup_not_loaded_until_clicked @US2791 @DE2337 @DE2767
  Scenario: Data under subgroup is not loaded until the User expands the sub group.
- # Given user is logged into eHMP-UI
-  And user searches for and selects "Four,PATIENT"
-  Then user searches for "Progress Notes"
-  Then text search result contains
-  
+  Given user searches for and selects "Four,PATIENT"
+  And user searches for "Progress Notes"
+  And text search result contains
   	  | Grouped_search_results |
-      | Advance Directive      |
-      | Consult Report         |
       | Progress Note          |
-      | Crisis Note            |
       
-  Then the user clicks one of the search result "Progress Note"
-  Then text search result contains subgroups
-      | sub_grouped_results   |
-      | GENERAL MEDICINE NOTE |
-      | DIABETES              |
-      | CAMPER84              |
-      | CAMPER02              |
-   Then the user clicks one of the search result "General Medicine Note" 
-   And the following subgroups data are not loaded
-      | sub_grouped_results   |
-      | CAMPER84              |
-      | CAMPER02              |
+  When the user clicks one of the search result "Progress Note"
+  Then the sub group for "Progress Note" displays
+  And no subgroup data rows are loaded
+  Then the user clicks one of the search result "General Medicine Note" 
+  Then subgroup data rows are loaded
+  Then the user clicks one of the search result "Anne Lab" 
+  Then more subgroup data rows are loaded
+   
    
 
  @f144_15_subgrouping_view_of_progress_notes @US2376 @DE1575 @DE2767 @document_text_search
@@ -439,7 +423,7 @@ Scenario:Text Search: Document data drill down "Surgery Report"
      | facility | is valid facility               |
       
       
-@f144_26_Radiology_Report_detail_view_from_tex_search @US2363 @DE2337 @DE2657 @DE5290
+@f144_26_Radiology_Report_detail_view_from_tex_search @US2363 @DE2337 @DE2657 @DE5290 @DE6814
 Scenario:User is able to view Radiology/Imaging Report detail from Text Search 
 # Given user is logged into eHMP-UI
   And user searches for and selects "ten,PATIENT"

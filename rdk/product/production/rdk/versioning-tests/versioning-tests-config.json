@@ -4,25 +4,25 @@
             "path": "/roles/edit",
             "method": "PUT",
             "includeParams": "required",
-            "justification": "TODO: this currently fails due to a bug in node-mocks-http.mockRequest which picks up the statusCode in any response and sets it to the status code. See roles/edit.js line 128."
+            "justification": "FUTURE-TODO: this currently fails due to a bug in node-mocks-http.mockRequest which picks up the statusCode in any response and sets it to the status code. See roles/edit.js line 128."
         },
         {
             "path": "/roles/edit",
             "method": "PUT",
             "includeParams": "all",
-            "justification": "TODO: this currently fails due to a bug in node-mocks-http.mockRequest which picks up the statusCode in any response and sets it to the status code. See roles/edit.js line 128."
+            "justification": "FUTURE-TODO: this currently fails due to a bug in node-mocks-http.mockRequest which picks up the statusCode in any response and sets it to the status code. See roles/edit.js line 128."
         },
         {
             "path": "/vitals/all",
-            "justification": "TODO: currently getting an error from VistA: VistA SECURITY error (byte 0 was '\\u0054'): The remote procedure GMV V/M ALLDATA is not registered to the option HMP UI CONTEXT."
+            "justification": "FUTURE-TODO: currently getting an error from VistA: VistA SECURITY error (byte 0 was '\\u0054'): The remote procedure GMV V/M ALLDATA is not registered to the option HMP UI CONTEXT."
         },
         {
             "path": "/vitals/closest",
-            "justification": "TODO: currently getting an error from VistA: VistA SECURITY error (byte 0 was '\\u0054'): The remote procedure GMV V/M ALLDATA is not registered to the option HMP UI CONTEXT."
+            "justification": "FUTURE-TODO: currently getting an error from VistA: VistA SECURITY error (byte 0 was '\\u0054'): The remote procedure GMV V/M ALLDATA is not registered to the option HMP UI CONTEXT."
         },
         {
             "path": "/vitals/vitals-rule",
-            "justification": "TODO: app.config.cdsInvocationServer is currently not present."
+            "justification": "FUTURE-TODO: app.config.cdsInvocationServer is currently not present."
         },
 
 

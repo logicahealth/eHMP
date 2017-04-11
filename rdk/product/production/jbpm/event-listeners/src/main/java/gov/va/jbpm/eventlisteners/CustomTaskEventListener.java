@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.jbpm.services.task.commands.TaskContext;
+import org.jbpm.workflow.instance.impl.WorkflowProcessInstanceImpl;
 import org.kie.api.runtime.manager.RuntimeManager;
 import org.kie.api.task.TaskEvent;
 import org.kie.api.task.TaskLifeCycleEventListener;
@@ -15,6 +16,8 @@ import org.kie.internal.task.api.TaskPersistenceContext;
 import gov.va.jbpm.entities.impl.TaskInstanceImpl;
 import gov.va.jbpm.entities.impl.TaskRouteImpl;
 import gov.va.jbpm.entities.util.TaskInstanceImplUtil;
+import gov.va.jbpm.exception.EventListenerException;
+import gov.va.jbpm.utils.Logging;
 
 /*
  * Custom task event listener
@@ -22,10 +25,10 @@ import gov.va.jbpm.entities.util.TaskInstanceImplUtil;
  * */
 public class CustomTaskEventListener implements TaskLifeCycleEventListener {
 	private RuntimeManager runtimeManager = null;
-
-//-----------------------------------------------------------------------------
-//------------------------Constructors-----------------------------------------
-//-----------------------------------------------------------------------------
+	private static final String SIGNAL_TASKCREATED = "TaskCreated"; //this signal name should not be changed because it is referenced in the activity workflows
+// -----------------------------------------------------------------------------
+// ------------------------Constructors-----------------------------------------
+// -----------------------------------------------------------------------------
 
 	public CustomTaskEventListener() {
 	}
@@ -34,9 +37,9 @@ public class CustomTaskEventListener implements TaskLifeCycleEventListener {
 		this.runtimeManager = runtimeManager;
 	}
 
-//-----------------------------------------------------------------------------
-//--------------------------Unused Overrides-----------------------------------
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// --------------------------Unused Overrides-----------------------------------
+// -----------------------------------------------------------------------------
 	@Override
 	public void beforeTaskActivatedEvent(TaskEvent event) {
 	}
@@ -97,148 +100,203 @@ public class CustomTaskEventListener implements TaskLifeCycleEventListener {
 	public void beforeTaskNominatedEvent(TaskEvent event) {
 	}
 
-//-----------------------------------------------------------------------------
-//----------------------publishTaskStatusChange--------------------------------
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// ----------------------publishTaskStatusChange--------------------------------
+// -----------------------------------------------------------------------------
 
 	@Override
 	public void afterTaskActivatedEvent(TaskEvent event) {
-		publishTaskStatusChange (event);
+		Logging.debug("Entering CustomTaskEventListener.afterTaskActivatedEvent");
+		publishTaskStatusChange(event);
 	}
 
 	@Override
 	public void afterTaskClaimedEvent(TaskEvent event) {
-		publishTaskStatusChange (event);
+		Logging.debug("Entering CustomTaskEventListener.afterTaskClaimedEvent");
+		publishTaskStatusChange(event);
 	}
 
 	@Override
 	public void afterTaskSkippedEvent(TaskEvent event) {
-		publishTaskStatusChange (event);
+		Logging.debug("Entering CustomTaskEventListener.afterTaskSkippedEvent");
+		publishTaskStatusChange(event);
 
 	}
 
 	@Override
 	public void afterTaskStartedEvent(TaskEvent event) {
-		publishTaskStatusChange (event);
+		Logging.debug("Entering CustomTaskEventListener.afterTaskStartedEvent");
+		publishTaskStatusChange(event);
 	}
 
 	@Override
 	public void afterTaskStoppedEvent(TaskEvent event) {
-		publishTaskStatusChange (event);
+		Logging.debug("Entering CustomTaskEventListener.afterTaskStoppedEvent");
+		publishTaskStatusChange(event);
 	}
 
 	@Override
 	public void afterTaskCompletedEvent(TaskEvent event) {
-		publishTaskStatusChange (event);
+		Logging.debug("Entering CustomTaskEventListener.afterTaskCompletedEvent");
+		publishTaskStatusChange(event);
 	}
 
 	@Override
 	public void afterTaskFailedEvent(TaskEvent event) {
-		publishTaskStatusChange (event);
+		Logging.debug("Entering CustomTaskEventListener.afterTaskFailedEvent");
+		publishTaskStatusChange(event);
 	}
 
 	@Override
-	public void afterTaskExitedEvent (TaskEvent event) {
-		publishTaskStatusChange (event);
+	public void afterTaskExitedEvent(TaskEvent event) {
+		Logging.debug("Entering CustomTaskEventListener.afterTaskExitedEvent");
+		publishTaskStatusChange(event);
 	}
 
 	@Override
-	public void afterTaskReleasedEvent (TaskEvent event) {
-		publishTaskStatusChange (event);
+	public void afterTaskReleasedEvent(TaskEvent event) {
+		Logging.debug("Entering CustomTaskEventListener.afterTaskReleasedEvent");
+		publishTaskStatusChange(event);
 	}
 
 	@Override
 	public void afterTaskResumedEvent(TaskEvent event) {
-		publishTaskStatusChange (event);
+		Logging.debug("Entering CustomTaskEventListener.afterTaskResumedEvent");
+		publishTaskStatusChange(event);
 	}
 
 	@Override
 	public void afterTaskSuspendedEvent(TaskEvent event) {
-		publishTaskStatusChange (event);
+		Logging.debug("Entering CustomTaskEventListener.afterTaskSuspendedEvent");
+		publishTaskStatusChange(event);
 	}
 
 	@Override
 	public void afterTaskForwardedEvent(TaskEvent event) {
-		publishTaskStatusChange (event);
+		Logging.debug("Entering CustomTaskEventListener.afterTaskForwardedEvent");
+		publishTaskStatusChange(event);
 	}
 
 	@Override
 	public void afterTaskDelegatedEvent(TaskEvent event) {
-		publishTaskStatusChange (event);
+		Logging.debug("Entering CustomTaskEventListener.afterTaskDelegatedEvent");
+		publishTaskStatusChange(event);
 	}
 
 	@Override
 	public void afterTaskNominatedEvent(TaskEvent event) {
-		publishTaskStatusChange (event);
+		Logging.debug("Entering CustomTaskEventListener.afterTaskNominatedEvent");
+		publishTaskStatusChange(event);
 	}
 
-//-----------------------------------------------------------------------------
-//-----------------------------afterTaskAddedEvent-----------------------------
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// -----------------------------afterTaskAddedEvent-----------------------------
+// -----------------------------------------------------------------------------
 
 	/*
-	 * Handler for afterTaskAddedEvent event. This event is raised when new task added.
-	 * Create a new task instance record in the database. Here state of the task is Ready.
-	 * */
+	 * Handler for afterTaskAddedEvent event. This event is raised when new task
+	 * added. Create a new task instance record in the database. Here state of
+	 * the task is Ready.
+	 */
 	@Override
 	public void afterTaskAddedEvent(TaskEvent event) {
-		if (runtimeManager == null) {
-			return;
-		}
+		Logging.debug("Entering CustomTaskEventListener.afterTaskAddedEvent");
+		try {
+			TaskPersistenceContext persistenceContext = getPersistenceContext(event);
 
-		TaskPersistenceContext persistenceContext = ((TaskContext)event.getTaskContext()).getPersistenceContext();
-		if (persistenceContext == null) {
-			return;
-		}
+			TaskInstanceImpl taskInstanceImpl = TaskInstanceImplUtil.create(runtimeManager, event);
+			persistenceContext.persist(taskInstanceImpl);
 
-		persistenceContext.joinTransaction();
-
-		TaskInstanceImpl taskInstanceImpl = TaskInstanceImplUtil.create(runtimeManager, event);
-		persistenceContext.persist(taskInstanceImpl);
-		
-		List<TaskRouteImpl> routes = taskInstanceImpl.getRoutes();
-		for (TaskRouteImpl taskRouteImpl : routes) {
-			persistenceContext.persist(taskRouteImpl);
+			List<TaskRouteImpl> routes = taskInstanceImpl.getRoutes();
+			if (routes != null) {
+				for (TaskRouteImpl taskRouteImpl : routes) {
+					persistenceContext.persist(taskRouteImpl);
+				}
+			}
+			WorkflowProcessInstanceImpl processInstance = TaskInstanceImplUtil.getWorkflowProcessInstanceImpl(runtimeManager, event.getTask().getTaskData().getProcessInstanceId());
+			if (processInstance == null)
+				throw new EventListenerException("Invalid state, processInstance cannot be null");
+			processInstance.signalEvent(SIGNAL_TASKCREATED, null); //send a signal to notify the process that the task has been created.
+		} catch (EventListenerException e) {
+			//Error was already logged
+			//Re-throw the Exception to avoid any inconsistencies between JBPM and our internal database (let them bubble up to the main transaction so it can rollback).
+			throw new RuntimeException (e.getMessage(), e);
+		} catch (Exception e) {
+			Logging.error("CustomTaskEventListener.afterTaskAddedEvent: An unexpected condition has happened: " + e.getMessage());
+			//Re-throw the Exception to avoid any inconsistencies between JBPM and our internal database (let them bubble up to the main transaction so it can rollback).
+			throw new RuntimeException (e.getMessage(), e);
 		}
 	}
 
-//-----------------------------------------------------------------------------
-//------------------------private helper methods-------------------------------
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+// ------------------------private helper methods-------------------------------
+// -----------------------------------------------------------------------------
 
 	/*
 	 * Publish task status change to database
-	 * */
-	private void publishTaskStatusChange (TaskEvent event) {
-		if (runtimeManager == null) {
-			return;
-		}
+	 */
+	private void publishTaskStatusChange(TaskEvent event) {
+		Logging.debug("Entering CustomTaskEventListener.publishTaskStatusChange");
+		try {
+			TaskPersistenceContext persistenceContext = getPersistenceContext(event);
 
-		TaskPersistenceContext persistenceContext = ((TaskContext)event.getTaskContext()).getPersistenceContext();
-		if (persistenceContext == null) {
-			return;
+			Task task = event.getTask();
+			if (task == null)
+				throw new EventListenerException("CustomTaskEventListener.publishTaskStatusChange task was null");
+			TaskData taskData = task.getTaskData();
+			if (taskData == null)
+				throw new EventListenerException("CustomTaskEventListener.publishTaskStatusChange taskData was null");
+			User user = taskData.getActualOwner();
+			
+			Long taskId = task.getId();
+			if (taskId == null)
+				throw new EventListenerException("CustomTaskEventListener.publishTaskStatusChange taskId was null");
+			
+			TaskInstanceImpl taskInstanceImpl = persistenceContext.find(TaskInstanceImpl.class, taskId);
+			if (taskInstanceImpl == null) {
+				return;
+			}
+
+			if (user != null)
+				taskInstanceImpl.setActualOwner(user.getId());
+			else
+				taskInstanceImpl.setActualOwner(null);
+
+			int newStatusId = TaskInstanceImplUtil.mapStatus(taskData.getStatus());
+			taskInstanceImpl.setStatusId(newStatusId);
+			taskInstanceImpl.setStatusTimeStamp(new Date());
+
+			persistenceContext.merge(taskInstanceImpl);
+		} catch (EventListenerException e) {
+			//Error was already logged
+			//Re-throw the Exception to avoid any inconsistencies between JBPM and our internal database (let them bubble up to the main transaction so it can rollback).
+			throw new RuntimeException (e.getMessage(), e);
+		} catch (Exception e) {
+			Logging.error("ConsultHelperUtil.buildConsultOrder: An unexpected condition has happened: " + e.getMessage());
+			//Re-throw the Exception to avoid any inconsistencies between JBPM and our internal database (let them bubble up to the main transaction so it can rollback).
+			throw new RuntimeException (e.getMessage(), e);
 		}
+	}
+
+	/**
+	 * Retrieves the persistenceContext and joins the transaction.
+	 */
+	private TaskPersistenceContext getPersistenceContext(TaskEvent event) throws EventListenerException {
+		Logging.debug("Entering CustomTaskEventListener.getPersistenceContext");
+		
+		if (runtimeManager == null)
+			throw new EventListenerException("CustomTaskEventListener...runtimeManager was null");
+		if (event == null)
+			throw new EventListenerException("CustomTaskEventListener...event was null");
+		if (event.getTaskContext() == null)
+			throw new EventListenerException("CustomTaskEventListener...event.getTaskContext() was null");
+	
+		TaskPersistenceContext persistenceContext = ((TaskContext) event.getTaskContext()).getPersistenceContext();
+		if (persistenceContext == null)
+			throw new EventListenerException("CustomTaskEventListener...persistenceContext was null");
+		
 		persistenceContext.joinTransaction();
-
-		Task task = event.getTask();
-		TaskData taskData = task.getTaskData();
-		User user = taskData.getActualOwner();
-
-		Long taskId = task.getId();
-		TaskInstanceImpl taskInstanceImpl = persistenceContext.find(TaskInstanceImpl.class, taskId);
-		if (taskInstanceImpl == null) {
-			return;
-		}
-
-		if (user != null)
-			taskInstanceImpl.setActualOwner(user.getId());
-		else
-			taskInstanceImpl.setActualOwner(null);
-
-		int newStatusId = TaskInstanceImplUtil.mapStatus(taskData.getStatus());
-		taskInstanceImpl.setStatusId(newStatusId);
-		taskInstanceImpl.setStatusTimeStamp(new Date());
-
-		persistenceContext.merge(taskInstanceImpl);
+		
+		return persistenceContext;
 	}
 }

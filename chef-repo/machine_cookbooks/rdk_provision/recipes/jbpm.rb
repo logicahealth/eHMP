@@ -9,7 +9,6 @@ require 'chef/provisioning/ssh_driver'
 ############################################## Staging Artifacts #############################################
 if ENV.has_key?('DEV_DEPLOY')
   node.default[:rdk_provision][:jbpm][:copy_files].merge!({
-    "/tmp/#{File.basename(ENV['JBPM_PROJECTS_LOCAL_FILE_1'])}" => ENV['JBPM_PROJECTS_LOCAL_FILE_1'],
     "/tmp/#{File.basename(ENV['JBPM_PROJECTS_LOCAL_FILE_2'])}" => ENV['JBPM_PROJECTS_LOCAL_FILE_2'],
     "/tmp/#{File.basename(ENV['JBPM_PROJECTS_LOCAL_FILE_3'])}" => ENV['JBPM_PROJECTS_LOCAL_FILE_3'],
     "/tmp/#{File.basename(ENV['JBPM_PROJECTS_LOCAL_FILE_4'])}" => ENV['JBPM_PROJECTS_LOCAL_FILE_4'],
@@ -22,8 +21,6 @@ if ENV.has_key?('DEV_DEPLOY')
     "/tmp/#{File.basename(ENV['JBPM_EHMPSERVICES_LOCAL_FILE'])}" => ENV['JBPM_EHMPSERVICES_LOCAL_FILE'],
     "/tmp/#{File.basename(ENV['JBPM_SQL_CONFIG_LOCAL_FILE'])}" => ENV['JBPM_SQL_CONFIG_LOCAL_FILE']
   })
-  jbpm_artifacts_source = "file:///tmp/#{File.basename(ENV['JBPM_PROJECTS_LOCAL_FILE_1'])}"
-  jbpm_artifacts_version = "0.0.0"
   jbpm_fit_artifacts_source = "file:///tmp/#{File.basename(ENV['JBPM_PROJECTS_LOCAL_FILE_2'])}"
   jbpm_fit_artifacts_version = "0.0.0"
   jbpm_general_medicine_artifacts_source = "file:///tmp/#{File.basename(ENV['JBPM_PROJECTS_LOCAL_FILE_3'])}"
@@ -46,8 +43,6 @@ if ENV.has_key?('DEV_DEPLOY')
   jbpm_ehmpservices_artifacts_version = "0.0.0"
   jbpm_sql_config_artifacts_source = "file:///tmp/#{File.basename(ENV['JBPM_SQL_CONFIG_LOCAL_FILE'])}"
 else
-  jbpm_artifacts_source = artifact_url(node[:rdk_provision][:artifacts][:vistatasks])
-  jbpm_artifacts_version = node[:rdk_provision][:artifacts][:vistatasks][:version]
   jbpm_fit_artifacts_source = artifact_url(node[:rdk_provision][:artifacts][:jbpm_fitlabproject])
   jbpm_fit_artifacts_version = node[:rdk_provision][:artifacts][:jbpm_fitlabproject][:version]
   jbpm_general_medicine_artifacts_source = artifact_url(node[:rdk_provision][:artifacts][:jbpm_general_medicine])
@@ -82,7 +77,7 @@ rdk_deps = parse_dependency_versions "rdk_provision"
 
 r_list = []
 r_list << "recipe[packages::enable_internal_sources@#{machine_deps["packages"]}]"
-r_list << "recipe[packages::disable_external_sources@#{machine_deps["packages"]}]" unless node[:machine][:allow_web_access]
+r_list << "recipe[packages::disable_external_sources@#{machine_deps["packages"]}]" unless node[:machine][:allow_web_access] || node[:machine][:driver] == "ssh"
 r_list << "recipe[role_cookbook::#{node[:machine][:driver]}@#{machine_deps["role_cookbook"]}]"
 if node[:machine][:driver] == "vagrant"
   oracle_cookbook = "oracle-xe_wrapper"
@@ -92,6 +87,7 @@ end
 r_list << "role[jbpm]"
 r_list << "recipe[jbpm@#{rdk_deps["jbpm"]}]"
 r_list << "recipe[packages::upload@#{machine_deps["packages"]}]" if node[:machine][:cache_upload]
+r_list << "recipe[packages::remove_localrepo@#{machine_deps["packages"]}]" if node[:machine][:driver] == "ssh"
 
 machine_boot "boot #{machine_ident} machine to the #{node[:machine][:driver]} environment" do
   machine_name machine_ident
@@ -133,10 +129,6 @@ machine machine_name do
     nexus_url: node[:common][:nexus_url],
     data_bag_string: node[:common][:data_bag_string],
     production_flag: production_flag,
-    jbpm_artifacts: {
-      source: jbpm_artifacts_source,
-      version: jbpm_artifacts_version
-    },
     jbpm_fit_artifacts: {
       source: jbpm_fit_artifacts_source,
       version: jbpm_fit_artifacts_version

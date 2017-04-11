@@ -5,6 +5,7 @@ class PobReportsApplet < PobParentApplet
   # *****************  All_Logo_Elements  ******************* #
 
   # *****************  All_Field_Elements  ******************* #
+  elements :fld_reports_row_details_header, "#modal-body .document-detail strong"
 
   # *****************  All_Button_Elements  ******************* #
 
@@ -20,6 +21,7 @@ class PobReportsApplet < PobParentApplet
     add_empty_table_row appletid_css
     add_generic_error_message appletid_css
     add_empty_gist appletid_css
+    add_expanded_applet_fields appletid_css
     add_toolbar_buttons
   end
   

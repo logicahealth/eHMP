@@ -6,11 +6,6 @@ define([
 
     return Backbone.Marionette.ItemView.extend({
         model: new Backbone.Model.extend({}),
-        template: modalTemplate,
-        events: {
-            "click #close-btn": function(e) {
-                ADK.UI.Workflow.hide();
-            }
-        }
+        template: modalTemplate
     });
 });

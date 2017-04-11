@@ -1,4 +1,4 @@
-@F144_Lab_Results_Base_Applet @Lab_Results @regression @triage
+@F144_Lab_Results_Base_Applet @Lab_Results @regression
 Feature: F144 - eHMP Viewer GUI - Numeric Lab Results
 
 # Team: Andromeda, inherited by Team Venus
@@ -8,7 +8,7 @@ Feature: F144 - eHMP Viewer GUI - Numeric Lab Results
 
 
   
-@F144_numericlabresults_3
+@F144_numericlabresults_3 @debug @DE6976
 Scenario: Expanded Numeric Lab results applet minimizes to Coversheet screen
   Given user searches for and selects "Eight,Patient"
   Then Cover Sheet is active
@@ -18,19 +18,7 @@ Scenario: Expanded Numeric Lab results applet minimizes to Coversheet screen
   And the user minimizes the expanded Numeric Lab Results Applet
   Then the user is returned to the coversheet
 
-@f144_numeric_lab_results_microbiology @DE377 @future @obe
-Scenario: Numeric Lab Results Applet - Ensure results for Microbiology labs are being shown.
-  Given user searches for and selects "Zzzretfourthirtytwo,Patient"
-  Then Cover Sheet is active
-  When the user clicks the control "Expand View" in the "Numeric Lab Results applet"
-  When the user clicks the date control "All" in the "Numeric Lab Results applet"
-  When the user enters "Blood+Culture" into the "Numeric Lab Results Filter Field"
-  #And the user inputs "Blood+Culture" in the "Text Filter" control in the "Numeric Lab Results applet"
-  And the user waits for 5 seconds
-  Then the "Numeric Lab Results Applet" table contains 1 rows
-  And the "Numeric Lab Results Applet" table contains rows
-    | Date             | Lab Test                     | Flag | Result      | Unit | Ref Range | Facility |
-    | 01/03/1994 - 07:00 | BLOOD CULTURE SET #1 - BLOOD |      | View Report |      |           | TST1     |
+
     
 @f144_labresults_applet_summary_view_refresh 
 Scenario: Lab Results Summary applet displays all of the same details after applet is refreshed
@@ -88,6 +76,7 @@ Scenario: Verify Numeric Lab Results applet on overview page has info button too
 Scenario: Verify Numeric Lab Result applet expanded view has info button toolbar
   And user searches for and selects "Eight,Patient"
   Then Overview is active
+  And the user has selected All within the global date picker 
   And user navigates to numeric lab results expanded view 
   When user opens the first numeric lab results row
   Then numeric lab results info button is displayed

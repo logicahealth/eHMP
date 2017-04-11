@@ -25,6 +25,8 @@ rdkJWT.updatePublicRoutes = function(app, configItem) {
     return publicEndpoints;
 };
 
+rdkJWT.isPublicEndpoint = canSkipCSRFCheck;
+
 function addRoute(app, configItem) {
     var relToMethod = {
         'vha.create': 'POST',
@@ -80,22 +82,28 @@ function getBearer(req) {
 
 function canSkipCSRFCheck(req) {
     var canSkip = !!_.find(publicEndpoints[req.method], function(path) {
-        return path === req.path || (_.isRegExp(path) && path.test(req.path));
+        return path === req.path || path === req.app.config.rootPath + req.path || (_.isRegExp(path) && path.test(req.path));
     });
     req.logger.trace('JWT: The check %s %s as a public endpoints returns %s', req.method, req.path, canSkip);
     return canSkip;
 }
 
 function processCsrfToken(req) {
-    req.session.csrf = {secret: tokens.secretSync()};
-    req.session.jwt = {secret: tokens.secretSync()};
+    req.session.csrf = {
+        secret: tokens.secretSync()
+    };
+    req.session.jwt = {
+        secret: tokens.secretSync()
+    };
 }
 
-function getJWTToken(req){
+function getJWTToken(req) {
     var jwtSecret = req.session.jwt.secret;
     var jwtToken = jwt.sign({
         csrf: tokens.create(req.session.csrf.secret)
-    }, jwtSecret, {subject: req.session._id});
+    }, jwtSecret, {
+        subject: req.session._id
+    });
     req.logger.trace('JWT has been created as %s', jwtToken);
     return jwtToken;
 }

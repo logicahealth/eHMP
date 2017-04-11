@@ -1,5 +1,4 @@
 VPRJTPS ;SLC/KCM -- Integration tests for saving patient objects
- ;;1.0;JSON DATA STORE;;Sep 01, 2012
  ;
 STARTUP  ; Run once before all tests
  N DATA
@@ -154,6 +153,79 @@ DELCLTN ;; @TEST delete a collection for a patient
  D ASSERT(0,$D(^VPRPTI(VPRJPID,VPRJTPID,"attr","utest-c","testrels ","urn:va:utestc:93EF:-7:23",1)))
  D ASSERT(0,$G(^VPRPTI(VPRJPID,"93EF;-7","tally","collection","utestc"),0))
  Q
+ ;
+ADD2SST ;; @TEST Add 2 objects with the same stampTime different data
+ N DATA,LOC,METASTAMP,VPRJTPID,HTTPERR,VPRJPID,JSON,ERR
+ S VPRJTPID="93EF;-7"
+ S VPRJPID=$$JPID4PID^VPRJPR(VPRJTPID)
+ ; OverallStop=20060318
+ ; StampTime=71
+ D GETDATA^VPRJTX("MED1","VPRJTP02",.DATA)
+ ; Save an initial version of an object
+ S LOC=$$SAVE^VPRJPS(VPRJPID,.DATA)
+ ; modify the object to have a different overallStop attribute to verify indexes work correctly
+ D DECODE^VPRJSON("DATA","JSON","ERR")
+ S JSON("overallStop")=20060319
+ K DATA
+ D ENCODE^VPRJSON("JSON","DATA","ERR")
+ ; Save the modified object
+ ; OverallStop=20060319
+ ; StampTime=71
+ S LOC=$$SAVE^VPRJPS(VPRJPID,.DATA)
+ ; modify the object one more to have a different overallStop and stampTime attribute to verify indexes work correctly
+ K JSON,ERR
+ D DECODE^VPRJSON("DATA","JSON","ERR")
+ S JSON("overallStop")=20060321
+ S JSON("stampTime")=72
+ K DATA
+ D ENCODE^VPRJSON("JSON","DATA","ERR")
+ ; Save the modified object
+ ; OverallStop=20060321
+ ; StampTime=72
+ S LOC=$$SAVE^VPRJPS(VPRJPID,.DATA)
+ S METASTAMP=""
+ S METASTAMP=$O(^VPRPT(VPRJPID,VPRJTPID,"urn:va:med:93EF:-7:16982",METASTAMP),-1)
+ D ASSERT(10,$D(^VPRPT(VPRJPID,VPRJTPID,"urn:va:med:93EF:-7:16982",METASTAMP)))
+ D ASSERT(20060321,^VPRPT(VPRJPID,VPRJTPID,"urn:va:med:93EF:-7:16982",METASTAMP,"overallStop"))
+ D ASSERT(1,$D(^VPRPTJ("JSON",VPRJPID,VPRJTPID,"urn:va:med:93EF:-7:16982",METASTAMP,1)))
+ D ASSERT(19350407,+$P($G(^VPRPTJ("TEMPLATE",VPRJPID,VPRJTPID,"urn:va:patient:93EF:-7:-7","summary",1)),":",2))
+ D ASSERT(1,^VPRPTI(VPRJPID,VPRJTPID,"tally","collection","med"))
+ N VPRJTPID,HTTPERR,VPRJPID
+ S VPRJTPID="93EF;-7"
+ S VPRJPID=$$JPID4PID^VPRJPR(VPRJTPID)
+ D ASSERT(1,$D(^VPRPTI(VPRJPID,VPRJTPID,"attr","med-class-code","urn:vadc:hs502 ","79939678=","urn:va:med:93EF:-7:16982","products#1")))
+ D ASSERT(1,$D(^VPRPTI(VPRJPID,VPRJTPID,"attr","med-provider","labtech,special ","79939678=","urn:va:med:93EF:-7:16982","orders#1")))
+ D ASSERT(1,$D(^VPRPTI(VPRJPID,VPRJTPID,"attr","med-qualified-name","metformin ","79939678=","urn:va:med:93EF:-7:16982",1)))
+ D ASSERT(1,$D(^VPRPTI(VPRJPID,VPRJTPID,"attr","medication","79939678=","urn:va:med:93EF:-7:16982",1)))
+ D ASSERT("79939678=",$G(^VPRPTI(VPRJPID,VPRJTPID,"time","med-time","79949682=","urn:va:med:93EF:-7:16982",1)))
+ D ASSERT("79949682=",$G(^VPRPTI(VPRJPID,VPRJTPID,"stop","med-time","79939678=","urn:va:med:93EF:-7:16982",1)))
+ D ASSERT(1,$G(^VPRPTI(VPRJPID,VPRJTPID,"tally","kind","medication, outpatient")))
+ D ASSERT(1,$D(^VPRPTI(VPRJPID,VPRJTPID,"attr","med-active-outpt","79939678=","urn:va:med:93EF:-7:16982",1)))
+ K JSON,DATA,ERR,HTTPERR
+ N HTTPREQ,START,LIMIT,SIZE,PREAMBLE,RSP
+ ; Setup paging info for PAGE^VPRJRUT
+ S HTTPREQ("paging")=$G(HTTPARGS("start"),0)_":"_$G(HTTPARGS("limit"),999999)
+ S START=$P(HTTPREQ("paging"),":"),LIMIT=$P(HTTPREQ("paging"),":",2)
+ ; Get the data we've stored so far
+ S HTTPREQ("store")="vpr"
+ S ARGS("indexName")="medication"
+ S ARGS("pid")=VPRJTPID
+ D INDEX^VPRJPR(.RSP,.ARGS)
+ D PAGE^VPRJRUT(.RSP,START,LIMIT,.SIZE,.PREAMBLE)
+ ; Emulate RESPOND^VPRJRSP to get a real JSON response
+ S DATA(0)=PREAMBLE
+ F I=START:1:(START+LIMIT-1) Q:'$D(@RSP@($J,I))  D
+ . I I>START S DATA(I)="," ; separate items with a comma
+ . S J="" F  S J=$O(@RSP@($J,I,J)) Q:'J  S DATA(I)=$G(DATA(I))_@RSP@($J,I,J)
+ S DATA(I)="]}}"
+ D:$D(DATA) DECODE^VPRJSON("DATA","JSON","ERR")
+ D ASSERT(10,$D(JSON("data","items")),"Data does not exist and it should")
+ D ASSERT(0,$D(ERR),"A JSON Decode Error Occured")
+ D ASSERT("",$G(HTTPERR))
+ D ASSERT(1,$G(JSON("data","currentItemCount")),"Too many items returned from index")
+ D ASSERT(20060321,$G(JSON("data","items",1,"overallStop")),"Unexpected overallStop value")
+ Q
+ ;
 DELCSRV ;; @TEST delete a collection for a specific server
  N I,TAGS,VPRJTPID,HTTPERR,PTIME,TIME,VPRJPID
  ; The hang commands are necessary to ensure subsequent accesses on the lastAccessTime node don't happen within the same second

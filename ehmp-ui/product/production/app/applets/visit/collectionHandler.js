@@ -2,27 +2,17 @@ define([
     'backbone',
     'marionette',
     'jquery',
-    'handlebars'
-], function(Backbone, Marionette, $, Handlebars) {
+    'handlebars',
+    'moment'
+], function(Backbone, Marionette, $, Handlebars, moment) {
     "use strict";
-    
+
     var ADMISSION_LIMIT = '5';
     var DATE_TIME_FORMAT = 'YYYYMMDDHHmm';
     var DISPLAY_TIME_FORMAT = 'MM/DD/YYYY HH:mm';
     var DATE_FORMAT = 'MM/DD/YYYY';
     var DATE_DISPLAY_FORMAT = 'YYYYMMDD';
     var collectionHandler = {
-        getProviders: function(callback) {
-            var siteCode = ADK.UserService.getUserSession().get('site');
-            var providersfetchOptions = {
-                resourceTitle: "visits-providers",
-                onSuccess: callback,
-                criteria: {
-                    "facility.code": siteCode
-                }
-            };
-            ADK.ResourceService.fetchCollection(providersfetchOptions);
-        },
         getProvidersPicklist: function(filterDate, callback) {
             var people = new ADK.UIResources.Picklist.Encounters.Providers();
             var date = '';

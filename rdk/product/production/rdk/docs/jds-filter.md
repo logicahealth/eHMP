@@ -91,3 +91,51 @@ Examples:
  * `siteCode` - compares the top-level siteCode field
  * `exposure[].name` - compares the name field of each object in the top-level exposure array
  * `primaryProvider.role` - compares the role field of the top-level primaryProvider object
+
+
+## jds-filter.js
+
+jds-filter.js can:
+
+ * parse JDS filter queries into JavaScript objects
+ * build those JavaScript objects back into JDS filter query strings
+ * apply JDS filter objects to an array of items
+
+
+### Parsing and Building
+
+ * `var filterObject = jdsFilter.parse(filterString);`
+ * `var filterString = jdsFilter.build(filterObject);`
+
+JDS filter objects look like:
+
+```JavaScript
+[
+  ['between', 'observedDate', '20140830', '20140930'],
+  ["or",
+    ['in', 'facilityCode', ['9E7A', 'C877']],
+    ['eq', 'status', 'ACTIVE']
+  ]
+]
+```
+
+The equivalent JDS query string would look like:
+
+```
+between("observedDate","20140830","20140930"),
+or(
+  in("facilityCode",["9E7A","C877"]),
+  eq("status","ACTIVE")
+  )
+```
+
+JDS filter object operator expressions are arrays, where the first element is the operator, and the following elements are the operator's arguments. Group operators may take any set of operators as arguments, and group operators can be nested.
+
+An implicit `and` group surrounds the entire filter query parameter.
+
+
+### Applying Filter Objects
+
+ * `var filteredItems = jdsFilter.applyFilters(filterObject, items);`
+
+If the filter expression evaluates to true for an item, that item is included in the result.

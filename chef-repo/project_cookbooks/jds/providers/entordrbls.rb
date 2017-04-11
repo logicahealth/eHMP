@@ -1,10 +1,11 @@
 #
 # Cookbook Name:: jds
-# Resource:: data
+# Resource:: entordrbls
 #
+require 'uri'
 
 action :execute do
-  
+
   store = new_resource.store || new_resource.name
   store_url = "http://localhost:#{new_resource.port}/#{store}"
   data_path = "#{new_resource.data_dir}/#{store}.json"
@@ -36,19 +37,21 @@ action :execute do
   end
 
   list.each{ |item|
-    ruby_block "check if #{item['uid']} exists" do
+    escaped_name = URI.escape("\"#{item['name']}\"");
+
+    ruby_block "check if #{item['name']} exists" do
       block do
-        puts "\nWARNING:  #{item['uid']} alread exists in #{store}.  We will skip modifying #{item['uid']}"
+        puts "\nWARNING:  #{item['name']} already exists in #{store}.  We will skip modifying #{item['name']}"
       end
-      only_if { item_exists?("http://localhost:#{new_resource.port}/#{store}/#{item['uid']}", "data") }
+      only_if { item_exists?("http://localhost:#{new_resource.port}/#{store}/?filter=eq(name,#{escaped_name})","items") }
     end
 
-    http_request "#{item["uid"]}_put" do
+    http_request "#{item["name"]}_put" do
       message item.to_json
-      url "http://localhost:#{new_resource.port}/#{store}/#{item['uid']}"
+      url "http://localhost:#{new_resource.port}/#{store}/"
       action :put
-      not_if { item_exists?("http://localhost:#{new_resource.port}/#{store}/#{item['uid']}", "data") }
+      not_if { item_exists?("http://localhost:#{new_resource.port}/#{store}/?filter=eq(name,#{escaped_name})","items") }
     end
   }
-  
+
 end

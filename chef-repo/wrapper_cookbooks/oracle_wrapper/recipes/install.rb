@@ -68,8 +68,8 @@ directory node[:oracle][:ora_inventory] do
   action :create
 end
 
-# use template for version 11.2.0.1
-template "#{node[:oracle][:rdbms][:install_dir]}/db_install.rsp" do
+template "#{node[:oracle][:rdbms][:install_dir]}/db11R23.rsp" do
+  cookbook 'oracle'
   owner 'oracle'
   group 'oinstall'
   mode '0644'
@@ -80,7 +80,7 @@ end
 bash 'run_rdbms_installer' do
   cwd "#{node[:oracle][:rdbms][:install_dir]}/database"
   environment (node[:oracle][:rdbms][:env])
-  code "sudo -Eu oracle ./runInstaller -silent -waitforcompletion -ignoreSysPrereqs -responseFile #{node[:oracle][:rdbms][:install_dir]}/db_install.rsp -invPtrLoc #{node[:oracle][:ora_base]}/oraInst.loc"
+  code "sudo -Eu oracle ./runInstaller -silent -waitforcompletion -ignoreSysPrereqs -responseFile #{node[:oracle][:rdbms][:install_dir]}/db11R23.rsp -invPtrLoc #{node[:oracle][:ora_base]}/oraInst.loc"
   returns [0, 6, 253]
   not_if { File.exist? node[:oracle][:rdbms][:ora_home] }
 end

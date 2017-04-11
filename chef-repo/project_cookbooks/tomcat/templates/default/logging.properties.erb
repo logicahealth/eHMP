@@ -1,0 +1,7 @@
+############################################################
+
+java.util.logging.FileHandler.pattern = ${catalina.base}/logs/catalina.out
+java.util.logging.FileHandler.limit = <%= node['tomcat']['logging']['fileHandlerLimit'] %>
+java.util.logging.FileHandler.count = <%= node['tomcat']['logging']['fileHandlerCount'] %>
+java.util.logging.FileHandler.level = <%= node['tomcat']['logging']['fileHandlerLevel'] %>
+java.util.logging.FileHandler.formatter = java.util.logging.SimpleFormatter

@@ -28,13 +28,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import org.bson.Document;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.cognitive.cds.invocation.model.CallMetrics;
 import com.cognitive.cds.invocation.mongo.MongoDbDao;
+import com.cognitive.cds.invocation.mongo.exception.CDSDBConnectionException;
 import com.cognitive.cds.services.metrics.model.CDSResponseStatus;
 import com.cognitive.cds.services.metrics.model.Info;
 import com.cognitive.cds.services.metrics.model.MetricsUpdate;
@@ -42,6 +42,7 @@ import com.cognitive.cds.services.metrics.model.Status;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mongodb.client.MongoDatabase;
 
 /**
  * @author Jerry Goodnough
@@ -50,8 +51,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 public class MetricsCollectionService implements MetricsCollectionServiceIface {
 
-    private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory
-            .getLogger(MetricsCollectionService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MetricsCollectionService.class);
 
     private MongoDbDao mongoDbDao;
 
@@ -61,8 +61,7 @@ public class MetricsCollectionService implements MetricsCollectionServiceIface {
 
     public void setMongoDbDao(MongoDbDao mongoDbDao) {
         this.mongoDbDao = mongoDbDao;
-        logger.info("==========> MetricsCollectionService.mongoDbDao: "
-                + mongoDbDao);
+        LOGGER.info("MetricsCollectionService.mongoDbDao: " + mongoDbDao);
     }
 
     public MetricsCollectionService() {
@@ -150,12 +149,11 @@ public class MetricsCollectionService implements MetricsCollectionServiceIface {
                 statDetailList.add("Metrics Id=" + metricIn.getCallId()
                         + " saved successfully.");
 
-            } catch (IOException ex) {
+            } catch (IOException | CDSDBConnectionException ex) {
                 statuscode = "1";
                 statDetailList.add("Metrics Id=" + metricIn.getCallId()
                         + " failed saving.");
-                Logger.getLogger(MetricsCollectionService.class.getName()).log(
-                        Level.SEVERE, null, ex);
+                LOGGER.error(ex.getMessage(), ex);
             }
         }
         status = prepStatusObject(statuscode, statDetailList);
@@ -176,7 +174,7 @@ public class MetricsCollectionService implements MetricsCollectionServiceIface {
 
         List<Info> infoList = new ArrayList<>();
 
-        Iterator iter = statusDetails.iterator();
+        Iterator<String> iter = statusDetails.iterator();
         while (iter.hasNext()) {
             Info i = new Info();
             i.setText((String) iter.next());
@@ -189,7 +187,7 @@ public class MetricsCollectionService implements MetricsCollectionServiceIface {
     }
 
     public void writeToMetricsDb(CallMetrics metric) throws IOException,
-            JsonMappingException, JsonGenerationException {
+            JsonMappingException, JsonGenerationException, CDSDBConnectionException {
         // --------------------------------------
         // parse Object to Json,
         // then can send to metric DB
@@ -197,12 +195,11 @@ public class MetricsCollectionService implements MetricsCollectionServiceIface {
         ObjectMapper mapper = new ObjectMapper();
         String toSend = mapper.writeValueAsString(metric);
 
-        logger.info("==========> MetricsCollectionService.writeToMetricsDb: "
-                + mongoDbDao);
+        LOGGER.info("MetricsCollectionService.writeToMetricsDb: " + mongoDbDao);
 
         Document callMetricBson = Document.parse(toSend);
-        mongoDbDao.setDatabase("metric");
-        mongoDbDao.getCollection("metrics").insertOne(callMetricBson);
+		MongoDatabase database = mongoDbDao.getMongoClient().getDatabase("metric");
+		database.getCollection("metrics").insertOne(callMetricBson);
     }
 
 }

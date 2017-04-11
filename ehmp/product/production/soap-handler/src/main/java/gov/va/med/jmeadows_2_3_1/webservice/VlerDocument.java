@@ -19,9 +19,9 @@ import javax.xml.datatype.XMLGregorianCalendar;
  * <pre>
  * &lt;complexType name="vlerDocument">
  *   &lt;complexContent>
- *     &lt;extension base="{http://webservice.vds.DNS       /}dataBean">
+ *     &lt;extension base="{http://webservice.vds.med.DNS   /}dataBean">
  *       &lt;sequence>
- *         &lt;element name="authorList" type="{http://webservice.vds.DNS       /}author" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="authorList" type="{http://webservice.vds.med.DNS   /}author" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element name="creationTime" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/>
  *         &lt;element name="document" type="{http://www.w3.org/2001/XMLSchema}base64Binary" minOccurs="0"/>
  *         &lt;element name="documentUniqueId" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -39,7 +39,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "vlerDocument", namespace = "http://webservice.vds.DNS       /", propOrder = {
+@XmlType(name = "vlerDocument", namespace = "http://webservice.vds.med.DNS   /", propOrder = {
     "authorList",
     "creationTime",
     "document",

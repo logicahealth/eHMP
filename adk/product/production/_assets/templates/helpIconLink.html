@@ -1,3 +1,3 @@
-<a id="linkHelp-{{key}}" class="help-icon-link" href="{{url}}" target="helpIconUniqueWindow" title="Press enter to access the help content in a new browser window.">
-    <i class="fa fa-question-circle fa-lg"><span class="sr-only">Help</span></i>
+<a id="linkHelp-{{key}}" class="help-icon-link {{#if iconClass}}btn btn-icon{{/if}}" href="{{url}}" target="helpIconUniqueWindow" title="Press enter to access the help content in a new browser window.">
+    <i {{#if iconClass}} class="{{iconClass}}" {{else}} class="fa fa-question-circle fa-lg" {{/if}} title="{{tooltip}}"><span class="sr-only">Help</span></i>
 </a>

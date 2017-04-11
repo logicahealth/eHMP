@@ -3,6 +3,7 @@ define([
     'handlebars',
     'backbone',
     'marionette',
+    'moment',
     'app/applets/notes/writeback/formUtil',
     'app/applets/notes/writeback/errorView',
     'app/applets/notes/subtray/noteSubtray',
@@ -10,12 +11,14 @@ define([
     'app/applets/notes/subtray/consultSubtray',
     'hbs!app/applets/notes/tray/addendumTileTemplate',
     'hbs!app/applets/notes/tray/noteTileTemplate'
-], function(_, Handlebars, Backbone, Marionette, FormUtil, ErrorView, NoteSubtray, NoteObjectsSubtray, ConsultSubtray, addendumTileTemplate, noteTileTemplate) {
+], function(_, Handlebars, Backbone, Marionette, moment, FormUtil, ErrorView, NoteSubtray, NoteObjectsSubtray, ConsultSubtray, addendumTileTemplate, noteTileTemplate) {
     'use strict';
     var titlePicklistOptions = {
         roleNames: 'AUTHOR/DICTATOR',
         actionNames: 'ENTRY'
     };
+
+    var NOTE_MISSING = 'The note referenced by this task no longer exists.';
 
     function ascSortCollection(addendums) {
         return _.sortBy(addendums, function(addendum) {
@@ -29,6 +32,13 @@ define([
 
     var NotesTraySummaryView = ADK.Views.TraySummaryList.extend({
         selectedNoteUid: null,
+        templateHelpers: function() {
+            return {
+                formatIdString: function(string) {
+                    return _.isString(string) ? string.replace(/ |\(|\)/g, "-").toLowerCase() : string;
+                },
+            };
+        },
         initialize: function() {
             var self = this;
             this.loading(true);
@@ -116,7 +126,9 @@ define([
 
             this.listenTo(ADK.Messaging.getChannel('notes'), 'tray.show', function(event) {
                 if (!_.isUndefined(event) && !_.isUndefined(event.currentTarget) && event.currentTarget.tagName === "BUTTON") {
-                    this.collection.fetch();
+                    if (!_.has(this, "collection.xhr") || !_.isFunction(_.get(this, "collection.xhr.state", null)) || this.collection.xhr.state() !== "pending") {
+                        this.collection.xhr = this.collection.fetch();
+                    }
                 }
             });
 
@@ -167,6 +179,10 @@ define([
                             });
                             if (!model) {
                                 var err = 'Note edit: Could not find model with uid of ' + objNoteUid.clinicalObjectUid;
+                                var errorView = new ErrorView({
+                                    message: NOTE_MISSING
+                                });
+                                errorView.showModal();
                                 throw new Error(err);
                             }
                         }
@@ -218,6 +234,21 @@ define([
                     this.selectedNoteUid = null;
                 }
             });
+
+            this.listenTo(ADK.Messaging.getChannel('notes'), 'note:detail', function(noteClinicalObject) {
+                //Launch note preview modal with note clinical object
+                var note;
+                if (noteClinicalObject.get('data')) {
+                    note = new Backbone.Model(noteClinicalObject.get('data'));
+                }
+
+                if (note) {
+                    FormUtil.launchDraggablePreview(note);
+                } else {
+                    ADK.Messaging.getChannel('notes').trigger('tray:display');
+                }
+            });
+
             this.listenTo(ADK.Messaging.getChannel('notes'), 'note:consult', function(objClinicalObjUid) {
                 var errMessage;
                 if (_.isObject(objClinicalObjUid)) {
@@ -328,7 +359,7 @@ define([
         view: TrayView,
         orderIndex: 40,
         shouldShow: function() {
-            return (ADK.PatientRecordService.isPatientInPrimaryVista() && ADK.UserService.hasPermissions('sign-note&add-encounter'));
+            return (ADK.PatientRecordService.isPatientInPrimaryVista() && ADK.UserService.hasPermissions('sign-note'));
         }
     });
 
@@ -338,11 +369,7 @@ define([
         label: 'Note',
         onClick: function() {
             ADK.Messaging.getChannel('notes').trigger('note:deselected');
-            var notesFormOptions = {
-                openTrayOnDestroy: true
-            };
-            ADK.Messaging.trigger('tray.close');
-            FormUtil.launchNoteForm(notesFormOptions);
+            FormUtil.launchNoteForm();
         },
         shouldShow: function() {
             return true;

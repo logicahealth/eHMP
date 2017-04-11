@@ -2,7 +2,7 @@
 
 require('../env-setup');
 
-var config = require(global.VX_ROOT + 'worker-config');
+var config = require(global.VX_ROOT + 'worker-config.json').vxsync;
 var solrSmartClient = require('solr-smart-client');
 var log = require(global.VX_DUMMIES + 'dummy-logger');
 

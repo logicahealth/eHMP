@@ -18,7 +18,7 @@ var config = {
         },
         "vxsync": {
             "protocol": "http",
-            "host": "IPADDRES",
+            "host": "IP      ",
             "port": "8080",
             "timeout": 300000
         },
@@ -44,14 +44,14 @@ describe('large-patient-record-rule', function(){
     beforeEach(function() {
         nock.cleanAll();
         nock.disableNetConnect();
-        nock('http://IPADDRESS:POR')
+        nock('http://IP           ')
             .get('/sync/status?pid=9E7A;10&docStatus=true')
             .reply(200, '{"jpid":"215c2ab2-cfe2-4702-9395-949e32f6d3e4","identifierDocSizes":{"totalSize":10,"9E7A;10":"NO_DOCUMENTS"},"syncStatus":{"completedStamp":{"sourceMetaStamp":{"9E7A":{"domainMetaStamp":{"allergy":{"domain":"allergy","eventCount":3}}}}}}}');
-        nock('http://IPADDRESS:POR')
+        nock('http://IP           ')
             .get('/sync/status?icn=10108V420871&docStatus=true')
             .reply(200, '{"jpid":"215c2ab2-cfe2-4702-9395-949e32f6d3e4","identifierDocSizes":{"totalSize":100,"9E7A;3":"NO_DOCUMENTS"},"syncStatus":{"completedStamp":{"sourceMetaStamp":{"9E7A":{"domainMetaStamp":{"allergy":{"domain":"allergy","eventCount":3}}}}}}}');
 
-        nock('http://IPADDRESS:POR')
+        nock('http://IP           ')
             .get('/sync/status?icn=10110V004877&docStatus=true')
             .reply(200, '{"jpid":"215c2ab2-cfe2-4702-9395-949e32f6d3e4","identifierDocSizes":{"totalSize":200,"9E7A:8":"NO_DOCUMENTS"},"syncStatus":{"completedStamp":{"sourceMetaStamp":{"9E7A":{"domainMetaStamp":{"allergy":{"domain":"allergy","eventCount":3}}}}}}}');
 
@@ -87,7 +87,7 @@ describe('large-patient-record-rule', function(){
                 },
                 "vxsync": {
                     "protocol": "http",
-                    "host": "IPADDRES",
+                    "host": "IP      ",
                     "port": "8080",
                     "timeout": 300000
                 }

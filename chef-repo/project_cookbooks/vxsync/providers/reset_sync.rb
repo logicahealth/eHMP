@@ -9,9 +9,17 @@ action :execute do
     version '0.11.0'
   end
 
-  service "vxsync" do
+  node[:vxsync][:vxsync_applications].each do |app|
+    service "vxsync_#{app}" do
+      provider Chef::Provider::Service::Upstart
+      action :stop
+    end
+  end
+
+  service "osync" do
     provider Chef::Provider::Service::Upstart
     action :stop
+    only_if { node[:vxsync][:vxsync_applications].include?("client") }
   end
 
   service "soap_handler" do
@@ -19,14 +27,15 @@ action :execute do
     action :stop
   end
 
-  service "beanstalk" do
-    provider Chef::Provider::Service::Upstart
-    action :stop
+  node[:vxsync][:vxsync_applications].each do |app|
+    service "beanstalk_#{app}" do
+      provider Chef::Provider::Service::Upstart
+      action :stop
+    end
   end
 
   jds = find_node_by_role("jds", node[:stack])
   solr = find_node_by_role("solr", node[:stack], "mocks")
-  vxsync = find_node_by_role("vxsync", node[:stack])
   pjds = find_node_by_role("pjds", node[:stack], "jds")
 
   ruby_block 'clear jds cache' do
@@ -38,19 +47,21 @@ action :execute do
     only_if { new_resource.reset }
   end
 
-  directory node[:vxsync][:documents_dir] do
-    recursive true
-    action :delete
-    notifies :create, "directory[#{node[:vxsync][:documents_dir]}]", :immediately
-    only_if { new_resource.reset }
+  node[:vxsync][:vxsync_applications].each do |app|
+    directory node[:vxsync][app.to_sym][:documents_dir] do
+      recursive true
+      action :delete
+      notifies :create, "directory[#{node[:vxsync][app.to_sym][:documents_dir]}]", :immediately
+      only_if { new_resource.reset}
+    end
   end
 
   ruby_block "reset vista" do
     block do
-      vxsync_config = ::File.read(node[:vxsync][:config_file])
+      vxsync_config = ::File.read(node[:vxsync][node[:vxsync][:vxsync_applications][0].to_sym][:config_file])
       vista_sites = JSON.parse(vxsync_config)["vxsync"]["vistaSites"]
       vista_sites.each do |site_name, site_config|
-        system("node #{node[:vxsync][:home_dir]}/tools/rpc/rpc-unsubscribe-all.js --host \"#{site_config['host']}\" \
+        system("node #{node[:vxsync][node[:vxsync][:vxsync_applications][0].to_sym][:home_dir]}/tools/rpc/rpc-unsubscribe-all.js --host \"#{site_config['host']}\" \
                                                                                   --port #{site_config['port']} \
                                                                                   --accessCode #{site_config['accessCode']} \
                                                                                   --verifyCode #{site_config['verifyCode']}")
@@ -62,7 +73,7 @@ action :execute do
 
   ruby_block 'clear HDR pub/sub subscription' do
     block do
-      vxsync_config = ::File.read(node[:vxsync][:config_file])
+      vxsync_config = ::File.read(node[:vxsync][node[:vxsync][:vxsync_applications][0].to_sym][:config_file])
       hdr_config = JSON.parse(vxsync_config)["vxsync"]["hdr"]
       hdr_mode = hdr_config["operationMode"]
       if hdr_mode && "PUB/SUB".casecmp(hdr_mode) == 0
@@ -82,19 +93,21 @@ action :execute do
   end
 
   execute "echo 'starting vxsync processes'" do
-    notifies :start, "service[beanstalk]", :immediately
+    node[:vxsync][:vxsync_applications].each { |app| notifies :start, "service[beanstalk_#{app}]", :immediately }
     notifies :start, "service[soap_handler]", :immediately
-    notifies :start, "service[vxsync]", :immediately
+    notifies :start, "service[osync]", :immediately
+    node[:vxsync][:vxsync_applications].each { |app| notifies :start, "service[vxsync_#{app}]", :immediately }
+    only_if { node[:vxsync][:start_vxsync_services] }
   end
 
-  sites = find_multiple_nodes_by_role("vista-*", node[:stack])
+  sites = find_multiple_nodes_by_role("vista-.*", node[:stack])
 
   sites.each { |site|
     site_id = site['vista']['site_id']
 
     vxsync_wait_for_connection "triggering initial operational data sync for site #{site_id}" do
-      url "http://localhost:#{vxsync[:vxsync][:web_service_port]}/data/doLoad?sites=#{site_id}"
-      only_if { new_resource.reset }
+      url "http://localhost:#{node[:vxsync][:web_service_port]}/data/doLoad?sites=#{site_id}"
+      only_if { node[:vxsync][:vxsync_applications].include?("client") && new_resource.reset }
     end
   }
 

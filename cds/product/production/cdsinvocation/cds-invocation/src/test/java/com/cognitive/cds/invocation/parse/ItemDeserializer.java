@@ -49,12 +49,12 @@ public class ItemDeserializer extends JsonDeserializer<Item> {
         
         // accomondate either "createdBy" or regular "owner" attribute.
         int userId = 0;
-        String VsID        ull;
+        String userName = null;
         if (node.get("createdBy") != null)
             userId = (Integer) ((IntNode) node.get("createdBy")).numberValue();
         else {
             userId =  (Integer)(node.get("owner").get("id").numberValue());
-            VsID        ode.get("owner").get("name").asText();
+            userName = node.get("owner").get("name").asText();
         }
 
         return new Item(id, itemName, new User(userId, userName));

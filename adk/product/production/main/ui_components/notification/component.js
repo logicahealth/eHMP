@@ -29,7 +29,7 @@ define([
                 message: this.message || ''
             }, {
                 // settings go here
-                delay: alertOptions.sticky ? '0' : '10000',
+                delay: alertOptions.sticky ? '0' : '5000',
                 type: (this.type ? 'custom ' + this.type : 'custom basic'),
                 onClick: alertOptions.onClick,
                 isDuplicateSticky: function() {
@@ -69,7 +69,7 @@ define([
                 template: '<div data-notify="container" class="growl-alert growl-alert-user col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
                     '   <div class="alert-content">' +
                     '       <span data-notify="icon"></span>' +
-                    '       <span class="notify-message">' +
+                    '       <span class="notify-message" role="alertdialog">' +
                     '           <span data-notify="title">{1}</span>' +
                     '           <span data-notify="message">{2}</span>' +
                     '       </span>' +
@@ -81,8 +81,8 @@ define([
                     '   </div>' +
                     '</div>',
                 onShown: function() {
-                    this.previouslyFocusedItem = $(':focus');
-                    $(this).uniqueId().focus(); // focus growl alert so screen reader reads it.
+                    this.previouslyFocusedItem = this.previouslyFocusedItem || $(':focus:not([data-notify="container"])');
+                    $('[data-notify="container"]').uniqueId().focus(); // focus growl alert so screen reader reads it.
                 },
                 onClosed: function() {
                     if (this.previouslyFocusedItem && $(this.previouslyFocusedItem).length > 0) {

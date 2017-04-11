@@ -37,8 +37,16 @@ define([
         events: {
             'click @ui.WorkspaceLink': 'navigateToNewScreen',
         },
-        modelEvents: {
-            "change:defaultScreen": "render"
+        sessionUserEvents: {
+            'change:preferences:defaultScreen': 'render'
+        },
+        initialize: function() {
+            var user = ADK.UserService.getUserSession();
+            this.bindEntityEvents(user, this.sessionUserEvents);
+        },
+        onDestroy: function() {
+            var user = ADK.UserService.getUserSession();
+            this.unbindEntityEvents(user, this.sessionUserEvents);
         },
         navigateToNewScreen: function(e) {
             e.preventDefault();
@@ -49,11 +57,10 @@ define([
         templateHelpers: function() {
             return {
                 'currentWorkspace': function() {
-                    if (ADK.WorkspaceContextRepository.currentWorkspaceAndContext.attributes.workspace === this.routeName) {
-                        return true;
-                    } else {
-                        return false;
-                    }
+                    return ADK.WorkspaceContextRepository.currentWorkspaceAndContext.get('workspace') === this.routeName;
+                },
+                'defaultScreen': function () {
+                    return this.id === ADK.WorkspaceContextRepository.currentContextDefaultScreen;
                 }
             };
         }
@@ -75,7 +82,6 @@ define([
                 e.preventDefault();
                 e.stopPropagation();
                 this.resetMenuItems();
-                this.ui.FilterInput.val('');
                 this.$el.find('#dropdownSearchElement').focus();
             },
             'keydown @ui.FilterInput': function(e) {
@@ -111,7 +117,10 @@ define([
         childView: WorkspaceSelectDropdownItemView,
         emptyView: Backbone.Marionette.ItemView.extend({
             template: _.template('<p class="left-padding-sm top-margin-sm">No workspaces found.</p>'),
-            tagName: 'li'
+            tagName: 'li',
+            attributes: {
+                "aria-live":"assertive"
+            }
         }),
         childEvents: {
             'navigate:new:screen': function(child) {
@@ -131,7 +140,7 @@ define([
         initialize: function(options) {
             this.originalCollection = options.originalCollection;
             this.currentWorkspaceModel = options.currentWorkspaceModel;
-            this.listenTo(this.currentWorkspaceModel, 'change:currentWorkspace', function() {
+            this.listenTo(ADK.Messaging, 'screen:navigate', function() {
                 this.resetMenuItems();
                 this.updateForCurrentScreen();
             });
@@ -153,6 +162,7 @@ define([
         hideFilterButton: function() {
             if (!this.ui.ClearFilterButton.hasClass('hidden')) {
                 this.ui.ClearFilterButton.addClass('hidden');
+                this.ui.FilterInput.val('');
             }
         },
         updateForCurrentScreen: function() {
@@ -241,17 +251,16 @@ define([
                 this.updateWorkspaceList();
                 this.updateCurrentScreenModel();
             });
+
+            this.listenTo(ADK.Messaging, 'workspace:change:currentWorkspaceTitle', function (newTitle) {
+                this.currentWorkspaceModel.set('currentWorkspaceTitle', newTitle);
+            });
         },
         onBeforeShow: function() {
             this.showChildView('WorkspaceSelectDropdownButtonTextRegion', this.dropdownButtonTextView);
             this.showChildView('WorkspaceSelectDropdownMenuRegion', this.dropdownMenuView);
         },
         updateCurrentScreenModel: function() {
-            /** TODO: remove check to hide the Plus Button when
-             * WorkspaceManager is smart enough to allow only applets
-             * that are associated with a screen or applet type
-             **/
-            // this can be cleaned up once workspace uses a shared collection
             var screenTitle = "",
                 currentWorkspace = ADK.WorkspaceContextRepository.currentWorkspace || {};
 
@@ -260,7 +269,7 @@ define([
             } else if (currentWorkspace.get('id').indexOf("-full") > -1) {
                 screenTitle = _.isArray(currentWorkspace.get('applets')) && !_.isUndefined(currentWorkspace.get('applets')[0]) ? currentWorkspace.get('applets')[0].title || "" : "";
             } else {
-                var predefinedScreenConfigForCurrentScreen = this.collection.find(function(model) {
+                var predefinedScreenConfigForCurrentScreen = this.originalCollection.find(function(model) {
                     return model.get('id') == currentWorkspace.get('id');
                 }, this) || new Backbone.Model();
                 screenTitle = predefinedScreenConfigForCurrentScreen.get("title") || "";

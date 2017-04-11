@@ -3,46 +3,63 @@
 # Recipe::configure_deploy
 #
 
-rdknode = find_node_by_role("resource_server", node[:stack])
+rdknodes = find_multiple_nodes_by_role("resource_server", node[:stack])
 cdsinvocation = find_optional_node_by_role("cdsinvocation", node[:stack])
 admin_password = Chef::EncryptedDataBagItem.load("credentials", "jbpm_admin_password", node[:data_bag_string])["password"]
 
 jbpm_check_war_deployment "business-central"
 
 template "#{node[:jbpm][:home]}/deployments/business-central.war/WEB-INF/jboss-web.xml" do
+  mode "0644"
+  owner "jboss"
+  group "jboss"
   variables(:contextroot => "business-central")
   notifies :restart, "service[jboss]"
 end
 
 template "#{node[:jbpm][:home]}/deployments/business-central.war/WEB-INF/lib/rdkconfig.properties" do
-  variables(:rdknode => rdknode)
+  mode "0644"
+  owner "jboss"
+  group "jboss"
+  variables(:rdknodes => rdknodes)
   notifies :restart, "service[jboss]"
 end
 
 template "#{node[:jbpm][:home]}/deployments/business-central.war/WEB-INF/lib/cdsconfig.properties" do
+  mode "0644"
+  owner "jboss"
+  group "jboss"
   variables(:cdsinvocation => cdsinvocation)
   notifies :restart, "service[jboss]"
 end
 
 template "#{node[:jbpm][:home]}/deployments/business-central.war/WEB-INF/lib/rdkwritebackconfig.properties" do
-  variables(:rdknode => rdknode)
+  mode "0644"
+  owner "jboss"
+  group "jboss"
+  variables(:rdknodes => rdknodes)
   notifies :restart, "service[jboss]"
 end
 
 jbpm_check_war_deployment "dashbuilder"
 
 template "#{node[:jbpm][:home]}/deployments/dashbuilder.war/WEB-INF/jboss-web.xml" do
+  mode "0644"
+  owner "jboss"
+  group "jboss"
   variables(:contextroot => "dashbuilder")
   notifies :restart, "service[jboss]"
 end
 
 template "#{node[:jbpm][:home]}/deployments/dashbuilder.war/WEB-INF/jboss-deployment-structure.xml" do
+  mode "0644"
+  owner "jboss"
+  group "jboss"
   notifies :restart, "service[jboss]"
 end
 
 template "#{Chef::Config[:file_cache_path]}/set_authentication_settings.xml" do
   mode "0755"
-  variables(:rdknode => rdknode)
 end
 
 template "#{node[:jbpm][:m2_home]}/settings.xml" do
@@ -151,18 +168,6 @@ template "#{node[:jbpm][:home]}/deployments/business-central.war/WEB-INF/classes
 end
 
 jbpm_check_war_deployment "business-central"
-
-jbpm_deploy_jar "deploy_vista_tasks_jar" do
-  password admin_password
-  group_id node[:jbpm][:organization]
-  artifact_id "VistaTasks"
-  version node[:jbpm_artifacts][:version]
-  jar_source node[:jbpm_artifacts][:source]
-  owner 'jboss'
-  group 'jboss'
-  mode  '0755'
-  not_if { jar_deployed?("VistaTasks", node[:jbpm_artifacts][:version], node[:jbpm][:install][:admin_user], admin_password) }
-end
 
 jbpm_deploy_jar "deploy_fit_lab_jar" do
   password admin_password

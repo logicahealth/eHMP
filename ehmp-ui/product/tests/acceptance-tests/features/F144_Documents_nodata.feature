@@ -1,4 +1,4 @@
-@documents_NoData @regression @triage
+@documents_NoData @regression
 Feature: F144 - eHMP Viewer GUI - Documents
 
 @f144_documents_navigation_thro_dropdwon @US1914
@@ -25,7 +25,7 @@ Scenario: Procedure, Surgery, Imaging, Discharge Summary, Advance Directive and 
       | Header1     | Date        |
       | Header2     | Description |
       | Header3     | Type        |
-      | Header4     | Author or Verifier  |
+      | Header4     | Author/Verifier |
       | Header5     | Facility    |
   Then the Docuemnts table diplays Type "Consult" rows
   Then the Docuemnts table diplays Type "Imaging" rows 

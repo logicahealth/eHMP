@@ -6,260 +6,240 @@ require('../../../env-setup');
 var SyncRulesEngine = require(global.VX_SYNCRULES + 'rules-engine');
 var JdsClient = require(global.VX_SUBSYSTEMS + 'jds/jds-client');
 var wConfig = require(global.VX_ROOT + 'worker-config');
-var val = require(global.VX_UTILS + 'object-utils').getProperty;
-
-var patientIdentifiers = [{
-    'type': 'pid',
-    'value': 'AAAA;1'
-}, {
-    'type': 'pid',
-    'value': 'BBBB;1'
-}, {
-    'type': 'pid',
-    'value': 'DOD;1111111'
-}];
-var enterpriseSyncJob = {
-    'type': 'enterprise-sync-request',
-    'patientIdentifier': patientIdentifiers[0],
-    'rootJobId': '1',
-    'jobId': '1'
-};
-var vistaAAAAjob = {
-    'type': 'vista-AAAA-subscribe-request',
-    'patientIdentifier': patientIdentifiers[0],
-    'rootJobId': '1',
-    'jobId': '2'
-};
-var vistaBBBBjob = {
-    'type': 'vista-BBBB-subscribe-request',
-    'patientIdentifier': patientIdentifiers[1],
-    'rootJobId': '1',
-    'jobId': '3'
-};
-var jmeadowsJob = {
-    'type': 'jmeadows-sync-request',
-    'patientIdentifier': patientIdentifiers[2],
-    'rootJobId': '1',
-    'jobId': '4'
-};
-var jmeadowsDomainSyncJob = {
-    'type': 'jmeadows-sync-allergy-request',
-    'patientIdentifier': patientIdentifiers[2],
-    'rootJobId': '1',
-    'jobId': '5'
-};
 
 var log = require(global.VX_DUMMIES + 'dummy-logger');
-var config = {
-    vistaSites: {
-        'AAAA': {},
-        'BBBB': {}
-    },
-    jds: _.defaults(wConfig.jds, {
-        protocol: 'http',
-        host: 'IP_ADDRESS',
-        port: 9080
-    }),
-    rules: {
-        'expiration': {
-            'default': 60000
-        }
-    }
-};
-var environment = {
-    'jds': new JdsClient(log, log, config),
-    'metrics': log
-};
+// log = require('bunyan').createLogger({
+//     name: 'expiration-rule-itest-spec',
+//     level: 'debug'
+// });
 
-var engine = new SyncRulesEngine(log, config, environment);
-var jpid;
+//---------------------------------------------------------------------
+// Create an instance of the environment variable.
+//
+// config:  The config object to be used in the environment.
+// returns: The environment that was created.
+//---------------------------------------------------------------------
+function createEnvironment(config) {
+    var environment = {
+        jds: new JdsClient(log, log, config),
+        metrics: log
+    };
+
+    spyOn(environment.jds, 'getSimpleSyncStatus').andCallThrough();
+
+    return environment;
+}
+
+//--------------------------------------------------------------------------------
+// Create the config needed for the tests.
+//--------------------------------------------------------------------------------
+function createConfig() {
+    var config = {
+        vistaSites: {
+            'AAAA': {},
+            'BBBB': {}
+        },
+        jds: _.defaults(wConfig.jds, {
+            protocol: 'http',
+            host: 'IP        ',
+            port: 9080
+        }),
+        rules: {
+            'expiration': {
+                'default': 300000, // 5 minutes
+                'dod': 60000, // 1 minute
+                'hdr': 120000, // 2 minutes
+                'vler': 180000 // 3 minutes
+            }
+        },
+        'hdr': {
+            'operationMode': 'REQ/RES'
+        }
+    };
+    return config;
+}
+
+//---------------------------------------------------------------------------------
+// This function creates the pid based on the site and icn and returns it.
+//
+// site: The site for which the pid is being created.
+// icn: The ICN for this patient.
+// dfn:  The DFN to use for the VistA sites.
+// edipi: The edipi to use for DoD.
+// returns: The pid that was created.
+//---------------------------------------------------------------------------------
+function createPid(site, icn, dfn, edipi) {
+    var patientId = '';
+    if (site === 'DOD') {
+        patientId = edipi;
+    } else if (_.contains(['HDR', 'VLER'], site)) {
+        patientId = icn;
+    } else {
+        patientId = dfn;
+    }
+
+    return site + ';' + patientId;
+}
+
+//-----------------------------------------------------------------------------------
+// Create the set of patientIdentifiers that will be used for this testing.
+//
+// sites: The sites to create the patient identifiers for.
+// icn: The ICN for this patient.
+// jpid: The JPID for this patient.
+// dfn:  The DFN to use for the VistA sites.
+// edipi: The edipi to use for DoD.
+// returns: The patientIdentifiers array.
+//-----------------------------------------------------------------------------------
+function createPatientIdentifiers(sites, icn, jpid, dfn, edipi) {
+    var patientIdentifiers = [{
+        'type': 'icn',
+        'value': icn
+    }, {
+        'type': 'pid',
+        'value': 'JPID;' + jpid
+    }];
+
+    _.each(sites, function(site) {
+        var patientIdentifier = {
+            'type': 'pid',
+            'value': createPid(site, icn, dfn, edipi)
+        };
+        patientIdentifiers.push(patientIdentifier);
+
+    });
+
+
+    return patientIdentifiers;
+}
+
+//---------------------------------------------------------------------------------------
+// This function creates the set of identifiers that will be stored in JDS for this
+// test patient.
+//
+// sites: The sites to put in the patient identifier list.
+// returns: The patient identifiers to be stored to JDS.
+//---------------------------------------------------------------------------------------
+function createJDSPatientIdentifierList(sites, icn, dfn, edipi) {
+    var jdsPatientIdentifiers = {
+        patientIdentifiers: [icn]
+    };
+
+    _.each(sites, function(site) {
+        var pid = createPid(site, icn, dfn, edipi);
+        jdsPatientIdentifiers.patientIdentifiers.push(pid);
+    });
+
+    return jdsPatientIdentifiers;
+}
+
+
+//-----------------------------------------------------------------------------------------------------
+//  Store a set of identifiers so that we can use it for our test.
+//
+//  jdsPatientIdentifiers:  The patient identifiers to link together in JDS.
+//  environment: The environment information to be used.
+//  callback:  The callback function.
+//              function(error, jpid)
+//             Where:
+//                   error: The error that occurred.
+//                   jpid: The jpid that was created by JDS for these identifiers.
+//-----------------------------------------------------------------------------------------------------
+function storeJdsPatientIdentifiers(jdsPatientIdentifiers, environment, callback) {
+    environment.jds.storePatientIdentifier(jdsPatientIdentifiers, function(error, response, result) {
+        expect(error).toBeFalsy();
+        expect(response).toBeTruthy();
+        expect(response.statusCode).toBe(201);
+        expect(response.headers).toBeTruthy();
+        expect(response.headers.location).toBeTruthy();
+        expect(_.isString(response.headers.location)).toBe(true);
+        expect(result).toBeFalsy();
+
+        var jpid = '';
+        var tokens = response.headers.location.split('jpid/');
+        if ((tokens) && (_.isArray(tokens)) && (tokens.length === 2)) {
+            jpid = tokens[1];
+        }
+        expect(jpid).toBeTruthy();
+
+        return callback(null, jpid);
+    });
+}
 
 describe('expiration-rule-itest', function() {
-    beforeEach(function() {
-        var finished = false;
+    it('Run expiration rule on unsynchronized patient.', function() {
+        var config = createConfig();
+        var environment = createEnvironment(config);
+        var sites = ['AAAA', 'BBBB', 'DOD', 'HDR', 'VLER'];
+        var icn = '555555555555V5555555555';
+        var dfn = '56565656';
+        var edipi = '5050505050';
+        var jdsPatientIdentifiers = createJDSPatientIdentifierList(sites, icn, dfn, edipi);
+
+        // Store the Identifiers we will need to use.
+        //-------------------------------------------
+        var finishedJdsIdStore = false;
+        var jpid = '';
         runs(function() {
-            environment.jds.storePatientIdentifier({
-                'patientIdentifiers': _.pluck(patientIdentifiers, 'value')
-            }, function() {
-                environment.jds.getPatientIdentifier({
-                    'patientIdentifier': patientIdentifiers[0]
-                }, function(error, response, result) {
-                    jpid = result.jpid;
-                    enterpriseSyncJob.jpid =
-                        vistaAAAAjob.jpid =
-                        vistaBBBBjob.jpid =
-                        jmeadowsJob.jpid =
-                        jpid;
-                    var startedState = _.clone(enterpriseSyncJob);
-                    startedState.status = 'started';
-                    startedState.timestamp = Date.now().toString();
-                    environment.jds.saveJobState(startedState, function() {
-                        finished = true;
-                    });
-                });
+            storeJdsPatientIdentifiers(jdsPatientIdentifiers, environment, function(error, assignedJpid) {
+                expect(error).toBeFalsy();
+                expect(assignedJpid).toBeTruthy();
+                jpid = assignedJpid;
+                finishedJdsIdStore = true;
             });
         });
 
         waitsFor(function() {
-            return finished;
+            return finishedJdsIdStore;
         });
-    });
 
-    it('lets all identifiers through when unsynced', function() {
-        var finished = false;
+        // Make our call to expiration rules engine.   In this case, since no sync has been done on the patient, the rules
+        // should return all entries for this patient.
+        //-----------------------------------------------------------------------------------------------------------------
+        var engine = new SyncRulesEngine(log, config, environment);
+        var patientIdentifiers = createPatientIdentifiers(sites, icn, jpid, dfn, edipi);
+        var patientIdentifiersExpected = createPatientIdentifiers(sites, icn, jpid, dfn, edipi);
+
+        var finishedRulesEngineCall = false;
         runs(function() {
-            engine.getSyncPatientIdentifiers(patientIdentifiers, [], function(error, ids) {
-                expect(val(ids, 'length')).toBe(3);
-                finished = true;
+            engine.getSyncPatientIdentifiers(patientIdentifiers, [], function(error, result) {
+                expect(error).toBeFalsy();
+                expect(result).toEqual(patientIdentifiersExpected);
+                finishedRulesEngineCall = true;
+            });
+
+        });
+
+        waitsFor(function() {
+            return finishedRulesEngineCall;
+        });
+
+
+        // Clean up what we created...
+        //-----------------------------
+        var finishedCleanup = false;
+        runs(function() {
+            environment.jds.deletePatientByPid(patientIdentifiers[0].value, function(error) {
+                expect(error).toBeFalsy();
+                finishedCleanup = true;
             });
         });
 
         waitsFor(function() {
-            return finished;
-        });
-    });
-
-    it('intercepts identifiers for non-expired data when not forced', function() {
-        var finished = false;
-        runs(function() {
-            var completedEnterpriseJob = _.clone(enterpriseSyncJob);
-            completedEnterpriseJob.status = 'completed';
-            completedEnterpriseJob.timestamp = (Date.now() - 10000).toString();
-
-            var completedDodJob = _.clone(jmeadowsJob);
-            completedDodJob.status = 'completed';
-            completedDodJob.timestamp = (Date.now() - 9000).toString();
-
-            environment.jds.saveJobState(completedEnterpriseJob, function() {
-                environment.jds.saveJobState(completedDodJob, function() {
-                    engine.getSyncPatientIdentifiers(patientIdentifiers, [], function(error, ids) {
-                        expect(val(ids, 'length')).toBe(2);
-                        finished = true;
-                    });
-                });
-            });
-        });
-
-        waitsFor(function() {
-            return finished;
-        });
-    });
-
-    it('lets identifiers through for forced jobs on non-expired data', function() {
-        var finished = false;
-        runs(function() {
-            var completedEnterpriseJob = _.clone(enterpriseSyncJob);
-            completedEnterpriseJob.status = 'completed';
-            completedEnterpriseJob.timestamp = (Date.now() - 10000).toString();
-
-            var completedDodJob = _.clone(jmeadowsJob);
-            completedDodJob.status = 'completed';
-            completedDodJob.timestamp = (Date.now() - 9000).toString();
-
-            environment.jds.saveJobState(completedEnterpriseJob, function() {
-                environment.jds.saveJobState(completedDodJob, function() {
-                    engine.getSyncPatientIdentifiers(patientIdentifiers, true, function(error, ids) {
-                        expect(val(ids, 'length')).toBe(3);
-                        finished = true;
-                    });
-                });
-            });
-        });
-
-        waitsFor(function() {
-            return finished;
-        });
-    });
-
-    it('lets identifiers through for a forced site on non-expired data', function() {
-        var finished = false;
-        runs(function() {
-            var completedEnterpriseJob = _.clone(enterpriseSyncJob);
-            completedEnterpriseJob.status = 'completed';
-            completedEnterpriseJob.timestamp = (Date.now() - 10000).toString();
-
-            var completedDodJob = _.clone(jmeadowsJob);
-            completedDodJob.status = 'completed';
-            completedDodJob.timestamp = (Date.now() - 9000).toString();
-
-            environment.jds.saveJobState(completedEnterpriseJob, function() {
-                environment.jds.saveJobState(completedDodJob, function() {
-                    engine.getSyncPatientIdentifiers(patientIdentifiers, ['dod'], function(error, ids) {
-                        expect(val(ids, 'length')).toBe(3);
-                        finished = true;
-                    });
-                });
-            });
-        });
-
-        waitsFor(function() {
-            return finished;
-        });
-    });
-
-    it('lets identifiers through on expired data', function() {
-        var finished = false;
-        runs(function() {
-            var completedEnterpriseJob = _.clone(enterpriseSyncJob);
-            completedEnterpriseJob.status = 'completed';
-            completedEnterpriseJob.timestamp = (Date.now() - 10000000).toString();
-
-            var completedDodJob = _.clone(jmeadowsJob);
-            completedDodJob.status = 'completed';
-            completedDodJob.timestamp = (Date.now() - 90000000).toString();
-
-            environment.jds.saveJobState(completedEnterpriseJob, function() {
-                environment.jds.saveJobState(completedDodJob, function() {
-                    engine.getSyncPatientIdentifiers(patientIdentifiers, [], function(error, ids) {
-                        expect(val(ids, 'length')).toBe(3);
-                        finished = true;
-                    });
-                });
-            });
-        });
-
-        waitsFor(function() {
-            return finished;
-        });
-    });
-
-    it('lets identifiers through for secondary sites with error jobs', function() {
-        var finished = false;
-
-        var completedEnterpriseJob = _.clone(enterpriseSyncJob);
-        completedEnterpriseJob.status = 'completed';
-        completedEnterpriseJob.timestamp = (Date.now() - 10000).toString();
-
-        var completedDodJob = _.clone(jmeadowsJob);
-        completedDodJob.status = 'completed';
-        completedDodJob.timestamp = (Date.now() - 9000).toString();
-
-        var errorDodJob = _.clone(jmeadowsDomainSyncJob);
-        errorDodJob.status = 'error';
-        completedDodJob.timestamp = (Date.now() - 9000).toString();
-
-        runs(function() {
-            engine.getSyncPatientIdentifiers(patientIdentifiers, [], function(error, ids) {
-                expect(val(ids, 'length')).toBe(3);
-                finished = true;
-            });
-        });
-
-        waitsFor(function() {
-            return finished;
-        });
-    });
-
-    afterEach(function() {
-        var finished = false;
-        runs(function() {
-            environment.jds.deletePatientByPid(patientIdentifiers[0].value, function() {
-                finished = true;
-            });
-        });
-
-        waitsFor(function() {
-            return finished;
+            return finishedCleanup;
         }, 10000);
     });
+    // it('Run expiration rule on full synchronized patient.', function() {
+    //     var finished = false;
+    //     runs(function() {
+    //         engine.getSyncPatientIdentifiers(patientIdentifiers, [], function(error, ids) {
+    //             expect(val(ids, 'length')).toBe(3);
+    //             finished = true;
+    //         });
+    //     });
+
+    //     waitsFor(function() {
+    //         return finished;
+    //     });
+    // });
 });

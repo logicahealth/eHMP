@@ -1,7 +1,8 @@
 define([
     'backbone',
+    '_assets/js/tooltipMappings',
     'backgrid'
-], function(Backbone) {
+], function(Backbone, TooltipMappings) {
     'use strict';
     var HeaderCell = Backgrid.HeaderCell.extend({
         attributes: {
@@ -70,15 +71,15 @@ define([
             var ariaRegion = header.parent().find('[aria-live]');
             if(dir === "asc") {
                 ariaRegion.text('Sorted ascending. Press enter to sort descending');
-                header.find('span').text("Sorted ascending. Press enter to sort descending");
-            } else if (dir === "desc") { 
+                header.find('.sort-span').text("Sorted ascending. Press enter to sort descending");
+            } else if (dir === "desc") {
                 ariaRegion.text('Sorted descending. Press enter to sort ascending');
-                header.find('span').text("Sorted descending. Press enter to sort ascending");
+                header.find('.sort-span').text("Sorted descending. Press enter to sort ascending");
             } else {
                 ariaRegion.text('Press enter to sort');
-                header.find('span').text("Press enter to sort");
+                header.find('.sort-span').text("Press enter to sort");
             }
-            header.siblings().find('span').text('Press enter to sort');
+            header.siblings().find('.sort-span').text('Press enter to sort');
         },
         render: function() {
             // Remove the label if we're using a custom header template
@@ -102,11 +103,16 @@ define([
                 this.el.className = this.el.className.replace(this.column.get('name'), 'grid-header-' + this.column.get('name'));
             }
             if(this.column.get('sortable')) {
-                this.$('a').attr({'href': '#', 'role': 'button'}).append('<span  class="sr-only">Press enter to sort.</span>');
+                this.$('a').attr({'href': '#', 'role': 'button'}).append('<span class="sr-only sort-span">Press enter to sort</span>');
             } else if (this.column.get('srOnlyLabel')) {
                 this.$el.append('<span class="sr-only">' + this.column.get('srOnlyLabel') + '. Not a sortable column</span>');
             }
             this.$el.attr('data-header-instanceid', this.column.get('appletId') + '-' + this.column.get('name'));
+
+            if(this.column.get('hoverTip')) {
+                this.$el.attr('tooltip-data-key', this.column.get('hoverTip'));
+                this.$('.sort-caret').prepend('<span class="sr-only">( ' + TooltipMappings[this.column.get('hoverTip')] + ' )</span>');
+            }
 
             return this;
         },

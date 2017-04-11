@@ -1,0 +1,108 @@
+	[{
+      "description": "Rheumatology Consult Screen Intent",
+      "invocations": [
+        {
+          "dataFormat": "application/json+fhir",
+          "dataQueries": [
+            "patient/##SUBJECT.ID##/diagnosticreport?domain=lab&amp;date=##dateGreaterThanOrEqual-90d##"
+          ],
+          "prerequisites": [
+            {
+              "valueSetQuery": "valueSet.sparql",
+              "remediationQuery": "orderable.sparql",
+              "display": "CRP",
+              "coding": {
+                "system": "http://snomed.org",
+                "code": "55235003",
+                "display": "C Reactive Protein"
+              },
+              "remediation": {
+                "action": "order",
+                "domain": "lab",
+                "coding": {
+                  "system": "http://snomed.org",
+                  "code": "55235003",
+                  "display": "C Reactive Protein"
+                }
+              }
+            },
+            {
+              "valueSetQuery": "valueSet.sparql",
+              "remediationQuery": "orderable.sparql",
+              "display": "RF",
+              "coding": {
+                "system": "http://snomed.org",
+                "code": "415301001",
+                "display": "Rheumatoid Factor"
+              },
+              "remediation": {
+                "action": "order",
+                "domain": "lab",
+                "coding": {
+                  "system": "http://snomed.org",
+                  "code": "415301001",
+                  "display": "Rheumatoid Factor"
+                }
+              }
+            }
+          ],
+          "crsResolverRequired": true,
+          "engineName": "OpenCDS",
+          "rules": [
+            {
+              "properties": {
+                "version": "1.0.0",
+                "businessId": "rheumatologyConsultScreen",
+                "scopingEntityId": "com.cognitive"
+              }
+            }
+          ]
+        }
+      ],
+      "name": "RheumatologyConsultScreen",
+      "scope": "BuiltIn"
+    },
+    {
+      "description": "Neurosurgery Consult Intent",
+      "invocations": [
+        {
+          "dataFormat": "application/json+fhir",
+          "dataQueries": [
+            "patient/##SUBJECT.ID##",
+            "patient/##SUBJECT.ID##/observation?code=8302-2,29463-7"
+          ],
+          "prerequisites": [
+            {
+              "display": "BMI",
+              "coding": {
+                "system": "http://snomed.org",
+                "code": "60621009",
+                "display": "BMI - Body Mass Index"
+              },
+              "remediation": {
+                "action": "",
+                "domain": "Vitals",
+                "coding": {
+                  "system": "http://snomed.org",
+                  "code": "60621009",
+                  "display": "BMI"
+                }
+              }
+            }
+          ],
+          "crsResolverRequired": false,
+          "engineName": "OpenCDS",
+          "rules": [
+            {
+              "properties": {
+                "version": "1.0.0",
+                "businessId": "neurosurgeryConsult",
+                "scopingEntityId": "com.cognitive"
+              }
+            }
+          ]
+        }
+      ],
+      "name": "NeurosurgeryConsult",
+      "scope": "BuiltIn"
+    }]

@@ -18,6 +18,11 @@
         .help-block.error {
             font-size: 13px;
             font-weight: 600;
+            color: $red-dark;
+            text-transform: lowercase;
+            &:first-letter{
+                text-transform: capitalize;
+            }
         }
     }
     .table-cell {
@@ -57,12 +62,12 @@
                 }
             }
         }
-        .body.scrolling-content {
+        .body.auto-overflow-y {
             height: 156px;
         }
     }
     .selected-region {
-        .body.scrolling-content {
+        .body.auto-overflow-y {
             height: calc(156px + 32px);
             .table-row .table-cell .control .input-group {
                 .input-group-addon {

@@ -18,14 +18,13 @@ define([], function() {
             titleId: ''
         },
         parse: function(item) {
-            if (item.localTitle) {
-                item.name = item.localTitle;
-            }
-            if (item.documentDefUid) {
-                item.ien = item.documentDefUid;
+            if (!_.has(item, 'name')) {
                 item.titleId = item.documentDefUid + '---' + item.localTitle.replace(/\s/g, '_') + '---last';
             } else {
-                item.titleId = 'urn:va:doc-def:' + ADK.UserService.getUserSession().get('site') + ':' + item.ien + '---' + item.name.replace(/\s/g, '_') + '---all';
+                item.titleId = item.documentDefUid + '---' + item.name.replace(/\s/g, '_') + '---all';
+            }
+            if (item.localTitle) {
+                item.name = item.localTitle;
             }
             return item;
         }
@@ -44,7 +43,6 @@ define([], function() {
     });
 
     var NoteTitles = ADK.Resources.Picklist.Collection.extend({
-        type: 'progress-notes-titles',
         model: NoteTitleGroup,
         allTitlesFetchComplete: true,
         comparator: function(model) {
@@ -52,7 +50,11 @@ define([], function() {
         },
 
         fetch: function(options) {
-            options = _.extend({ parse: true }, options, { remove: false });
+            options = _.extend({
+                parse: true
+            }, options, {
+                remove: false
+            });
             var self = this,
                 success = options.success,
                 error = options.error,
@@ -85,7 +87,7 @@ define([], function() {
                 }
                 if (successCount + errorCount === fetchMethods.length) {
                     self.sort();
-                    if(allTitlesFetchComplete) {
+                    if (allTitlesFetchComplete) {
                         self.trigger('read:complete', self, {}, options);
                     } else {
                         self.trigger('read:incomplete', self, {}, options);
@@ -118,7 +120,9 @@ define([], function() {
         },
         getUrl: function(method, options) {
             var url,
-                opts = _.extend({ 'params': this.params }, options),
+                opts = _.extend({
+                    'params': this.params
+                }, options),
                 standardParams = {
                     pid: this.patient.get('pid'),
                     resourceId: this.get('uid')
@@ -130,9 +134,15 @@ define([], function() {
             if (this.patient.has("acknowledged")) {
                 criteria._ack = true;
             }
-            switch(method.toLowerCase()) {
+            switch (method.toLowerCase()) {
                 case 'readall':
-                    return 'resource/write-pick-list/progress-notes-titles-asu-filtered?docStatus=UNTRANSCRIBED&actionNames=ENTRY';
+                    resource = 'progress-notes-titles-asu-filtered';
+                    criteria = _.extend(criteria, {
+                        docStatus: 'UNTRANSCRIBED',
+                        actionNames: 'ENTRY'
+                    });
+                    url = ADK.ResourceService.buildUrl(resource, criteria);
+                    return url.replace(/\/+/g, '/').replace(/\?$/, '');
                 case 'readrecent':
                     resource = 'notes-titles-getUserRecentTitles';
                     url = ADK.ResourceService.buildUrl(resource, criteria);

@@ -141,7 +141,7 @@ define([
             id: 'tooltip',
             field: 'tooltip'
         }],
-        filterFields: ['observedFormatted', 'shortName', 'typeName', 'normalizedName', 'specimenForTrend', 'timeSince', 'result', 'units'],
+        filterFields: ['observedFormatted', 'typeName', 'flag', 'result', 'specimen', 'groupName', 'isPanel', 'units', 'referenceRange', 'facilityMoniker', 'labs.models'],
         gistHeaders: {
             header1: {
                 title: 'Lab Test',
@@ -263,12 +263,21 @@ define([
 
                 if (self.columnsViewType !== undefined && self.columnsViewType === 'gist') {
                     var modifiedCollection = self.modifyModel(fullCollection);
-                    modifiedCollection = self.addTooltips(modifiedCollection, 4);
                     fullCollection.reset(modifiedCollection.models, {
                         reindex: true
                     });
                 }
             }
+        },
+        getLoincValues: function(json) {
+            if (json.codes === undefined) return '';
+            var codesWithLoincString = '';
+            _.each(json.codes, function(item) {
+                if (item.system === 'http://loinc.org'){
+                    codesWithLoincString += ' ' + item.code;
+                }
+            });
+            return codesWithLoincString;
         },
         initialize: function(options) {
             this._super = ADK.Applets.BaseGridApplet.prototype;
@@ -280,35 +289,33 @@ define([
                 event.preventDefault();
 
                 if (model.get('isPanel')) {
-                    if (!$(event.currentTarget).data('isOpen')) {
-                        $(event.currentTarget).data('isOpen', true);
+                    if (!gridView.$(event.currentTarget).data('isOpen')) {
+                        gridView.$(event.currentTarget).data('isOpen', true);
                     } else {
-                        var k = $(event.currentTarget).data('isOpen');
+                        var k = gridView.$(event.currentTarget).data('isOpen');
                         k = !k;
-                        $(event.currentTarget).data('isOpen', k);
+                        gridView.$(event.currentTarget).data('isOpen', k);
                     }
 
-                    var i = $(event.currentTarget).find('.js-has-panel i');
+                    var i = gridView.$(event.currentTarget).find('.js-has-panel i');
                     if (i.length) {
                         if (i.hasClass('fa-chevron-up')) {
                             i.removeClass('fa-chevron-up')
                                 .addClass('fa-chevron-down');
-                            $(event.currentTarget).data('isOpen', true);
+                            gridView.$(event.currentTarget).data('isOpen', true);
                         } else {
                             i.removeClass('fa-chevron-down')
                                 .addClass('fa-chevron-up');
-                            $(event.currentTarget).data('isOpen', false);
+                            gridView.$(event.currentTarget).data('isOpen', false);
                         }
                     }
                     gridView.expandRow(model, event);
                 } else {
-                    AppletUiHelper.getDetailView(model, event.currentTarget, dataGridOptions.collection, true, AppletUiHelper.showModal, AppletUiHelper.showErrorModal);
+                    AppletUiHelper.getDetailView(model, null, this.collection);
                 }
             };
 
             var dataGridOptions = {
-                //filterFields: ['observed', 'typeName', 'flag', 'result', 'specimen', 'groupName', 'isPanel', 'units', 'referenceRange', 'facilityMoniker', 'labs.models'],
-                filterFields: gistConfiguration.filterFields,
                 formattedFilterFields: {
                     'observed': function(model, key) {
                         var val = model.get(key);
@@ -327,9 +334,11 @@ define([
                 },
                 onClickRow: onClickRow
             };
+            dataGridOptions.filterFields = gistConfiguration.filterFields;
+            dataGridOptions.filterFields.push(this.getLoincValues);
 
             // Only show the "+" icon for the applet if the user has the 'add-lab-order' permission
-            if (ADK.UserService.hasPermissions(addPermission)) {
+            if (ADK.UserService.hasPermissions(addPermission) && ADK.PatientRecordService.isPatientInPrimaryVista()) {
                 dataGridOptions.onClickAdd = LabOrderTrayUtils.launchLabForm;
             }
 
@@ -362,6 +371,23 @@ define([
             if (!self.isFullscreen) {
                 if (dataGridOptions.gistView === true) {
                     this.dataGridOptions.SummaryView = ADK.Views.LabresultsGist.getView();
+                    var originalChildView = this.dataGridOptions.SummaryView.prototype.childView;
+                    this.dataGridOptions.SummaryView = this.dataGridOptions.SummaryView.extend({
+                        childView: originalChildView.extend({
+                            serializeModel: function(model) {
+                                var data = model.toJSON();
+                                var limit = 4;
+                                if (data.oldValues) {
+                                    data.limitedoldValues = data.oldValues.splice(0, limit - 1);
+                                    if ((data.oldValues.length - data.limitedoldValues.length) > 0) {
+                                        data.moreresultsCount = data.oldValues.length - data.limitedoldValues.length;
+                                    }
+                                }
+                                data.tooltip = tooltip(data);
+                                return data;
+                            }
+                        })
+                    });
                     this.dataGridOptions.SummaryViewOptions = {
                         gistHeaders: gistConfiguration.gistHeaders,
                         enableTileSorting: true
@@ -417,31 +443,13 @@ define([
                 }
                 this.getRegion('appletContainer').currentView.expandRow(model, event);
             } else {
-                AppletUiHelper.getDetailView(model, currentTarget, model.collection, true, AppletUiHelper.showModal, AppletUiHelper.showErrorModal);
+                AppletUiHelper.getDetailView(model, null, this.collection);
             }
         },
         onDestroy: function() {
             ADK.Messaging.getChannel('lab_results_grid').off('addItem');
             var message = ADK.Messaging.getChannel('lab_results');
             message.stopReplying('gridCollection');
-        },
-        onRender: function() {
-            this._super.onRender.apply(this, arguments);
-        },
-        addTooltips: function(collectionItems, limit) {
-            for (var i = 0; i < collectionItems.models.length; i++) {
-                var attr = collectionItems.models[i].attributes;
-                if (attr.oldValues) {
-                    attr.limitedoldValues = attr.oldValues.splice(0, limit - 1);
-                    if ((attr.oldValues.length - attr.limitedoldValues.length) > 0) {
-                        attr.moreresultsCount = attr.oldValues.length - attr.limitedoldValues.length;
-                    }
-                }
-                collectionItems.models[i].set('tooltip', tooltip(attr), {
-                    silent: true
-                });
-            }
-            return collectionItems;
         },
         modifyModel: function(collectionItems) {
             var modifiedCollection = {};
@@ -540,18 +548,16 @@ define([
     var channel = ADK.Messaging.getChannel(AppletID);
 
     channel.on('detailView', function(params) {
-        if (!params.model.has('chart')) {
-            return;
-        }
         var modalView = new ModalView.ModalView({
             model: params.model,
+            collection: params.model.collection,
             navHeader: false,
         });
 
         var modalOptions = {
             'fullScreen': self.isFullscreen,
             'size': "xlarge",
-            'title': params.model.get('typeName')
+            'title': params.model.get('typeName') + ' - ' + params.model.get('specimen')
         };
 
         var modal = new ADK.UI.Modal({
@@ -576,26 +582,17 @@ define([
                 icn: params.patient.icn,
                 pid: params.patient.pid
             }),
+            pageable: true,
             resourceTitle: 'uid',
             viewModel: {
                 parse: params.model.parse
             }
         };
 
-        var response = $.Deferred();
-
-        var data = ADK.PatientRecordService.fetchCollection(fetchOpt);
-        data.on('sync', function() {
-            var detailModel = data.first();
-            var onSuccess = function(detailData) {
-                response.resolve(detailData);
-            };
-            var onError = response.reject;
-
-            AppletUiHelper.getDetailView(detailModel, null, data, false, onSuccess, onError);
-        }, this);
-
-        return response.promise();
+       var collection = ADK.PatientRecordService.createEmptyCollection(fetchOpt);
+       collection.fetchOptions = fetchOpt;
+       var config = AppletUiHelper.getDetailView(params.model, null, collection);
+       return config;
     });
 
     // get the chart for the StackedGraph applet

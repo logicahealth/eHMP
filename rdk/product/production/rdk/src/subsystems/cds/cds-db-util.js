@@ -1,11 +1,11 @@
 'use strict';
-var dd = require('drilldown');
+var _ = require('lodash');
 
 function getMongoDBConnectionString(dbName, cdsMongoServer, logger) {
 
 	var connectionString = 'mongodb://';
-    
-    if (dd(cdsMongoServer)('username').exists && dd(cdsMongoServer)('password').exists) {
+
+    if (!_.isUndefined(_.get(cdsMongoServer, 'username')) && !_.isUndefined(_.get(cdsMongoServer, 'password'))) {
         logger.debug('username: ' + cdsMongoServer.username);
         logger.debug('password: ' + cdsMongoServer.password);
         connectionString += cdsMongoServer.username + ':' + cdsMongoServer.password + '@';
@@ -15,7 +15,7 @@ function getMongoDBConnectionString(dbName, cdsMongoServer, logger) {
 
     connectionString += cdsMongoServer.host + ':' + cdsMongoServer.port + '/' +dbName + '?auto_reconnect=true';
 
-    if (dd(cdsMongoServer)('options').exists) {
+    if (!_.isUndefined(_.get(cdsMongoServer, 'options'))) {
         logger.debug('options: ' + cdsMongoServer.options);
         connectionString += '&' + cdsMongoServer.options;
     } else {

@@ -1,8 +1,11 @@
-HMPEF ;SLC/MKB,ASMR/RRB,JD,SRG,CK - Serve VistA operational data as JSON via RPC;Jun 22, 2016 17:23:52
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1**;May 15, 2016;Build 1
+HMPEF ;SLC/MKB,ASMR/RRB,JD,SRG,CK - Serve VistA operational data as JSON via RPC;Sep 1, 2016 17:21:57
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1,2,3**;May 15, 2016;Build 11
  ;Per VA Directive 6402, this routine should not be modified.
  ;
  ; DE2818 - SQA findings. Newed L42 and L44 in LOC+1.  RRB - 10/30/2015
+ ;
+ ; DE6652 - JD - 9/1/16: Removed code behind synching sign-symptom domain for operational data.
+ ;                       SIGNS tag.
  ;
  ; ^SC references - IA 10040, HOSPITAL LOCATION file (#44)
  ; ^DIC(42) references - IA #10039, WARD LOCATION file
@@ -90,7 +93,6 @@ TAG(X) ; -- linetag for reference domain X
  I X="immunization"    S Y="IMMTYPE"
  I X="allergy-list"         S Y="ALLTYPE"
  ;I X="problem-list"        S Y="PROB"
- I X="sign-symptom"   S Y="SIGNS"
  I X="vital-type"      S Y="VTYPE"
  I X="vital-qualifier"  S Y="VQUAL"
  I X="vital-category"   S Y="VCAT"
@@ -287,10 +289,6 @@ ISPROXY(IEN) ; Boolean function, is NEW PERSON entry an APPLICATION PROXY?
  ;
 IMMTYPE ;immunization types
  D IMMTYPE^HMPCORD5
- Q
- ;
-SIGNS ;SIGNS/SYMPTONS file
- D SIGNS^HMPCORD5
  Q
  ;
 ALLTYPE ;allergy-list types

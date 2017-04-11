@@ -234,49 +234,31 @@ define([
 
             var isActive = this.isOpen();
 
-            //edge cases for shift key--not in Bootstrap
-            if (e.which == 9) {
-                var firstmenuitem = this.$('[role=menuitem]:first:visible');
-                if (!!firstmenuitem.length && isActive && this.isFocusInsideButton(this, e.target) && !this.getOption('preventFocusoutClose')) {
-                    e.preventDefault();
-                    e.stopImmediatePropagation();
-                    firstmenuitem.trigger('focus');
-                } else if (isActive && this.isFocusInsideDropdown(this, e.target)) {
-                    if (e.shiftKey) {
-                        //if it's active, shift key is pressed, and we are inside the dropdown container, or focused on the dropdown container itself
-                        //when the button is in the same container as the dropdown, this method will close it
-                        $(document).one('focusin.buttoncontainer.' + this.getOption('dropdown_id'), 'body', _.bind(function() {
-                            if (this.getOption('container')) { //if focus has left the dropdown and the dropdown isn't inside this.$el
-                                if (!this.$(e.target).length) { //focus has left our container
-                                    this.$('a, button').focus();
-                                }
-                                return;
-                            }
+            if (!isActive) return;
 
-                            //if focus lands on the button--will only happen when focus returns to the button
-                            if (!!this.ui.ButtonContainer.find(e.target).length || e.target === this.ui.ButtonContainer[0]) {
-                                this.ui.ButtonContainer.trigger('dropdown.hide');
-                            }
-                        }, this));
-                    } else {
-                        $(document).one('focusin.buttoncontainer.' + this.getOption('dropdown_id'), 'body', _.bind(function(e) {
-                            var inputs = $(':input, a, [tabindex]').filter(function() {
-                                var tabindex = this.attributes.tabindex;
-                                if (!tabindex) return true;
-                                return tabindex >= 0;
-                            });
-                            var nextInput = inputs.get(inputs.index(this.$('a, button').first()[0]) + 1);
-                            if (nextInput) {
-                                nextInput.focus();
-                            }
-                        }, this));
+            e.preventDefault();
+            e.stopPropagation();
+
+            //tab and shift+tab out of the dropdown
+            if (e.which == 9) {
+                var inputs = $(':input, a, [tabindex]').filter(function() {
+                    if (!this.tabIndex) return true;
+                    return this.tabIndex >= 0;
+                });
+
+                if (!inputs.length) return;
+
+                var increment = (event.shiftKey) ? 0 : 1;
+
+                var nextInput = inputs.get(inputs.index(this.$('a, button').first()[0]) + increment);
+                if (nextInput) {
+                    nextInput.focus();
+                    if(e.shiftKey) {
+                        this.ui.ButtonContainer.trigger('dropdown.hide');
                     }
                 }
                 return;
             }
-
-            e.preventDefault();
-            e.stopPropagation();
 
             if ($this.is('.disabled, :disabled')) return;
 

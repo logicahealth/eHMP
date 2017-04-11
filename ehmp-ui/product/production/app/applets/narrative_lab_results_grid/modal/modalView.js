@@ -8,14 +8,10 @@ define([
     "handlebars",
     "highcharts",
     "app/applets/narrative_lab_results_grid/appletHelpers",
-    "hbs!app/applets/narrative_lab_results_grid/list/dateTemplate",
-    "hbs!app/applets/narrative_lab_results_grid/list/resultTemplate",
-    "hbs!app/applets/narrative_lab_results_grid/list/siteTemplate",
     "hbs!app/applets/narrative_lab_results_grid/list/flagTemplate",
     "hbs!app/applets/narrative_lab_results_grid/modal/modalTemplate",
     "app/applets/narrative_lab_results_grid/modal/filterDateRangeView"
-], function($, InputMask, moment, Backbone, Marionette, _, Handlebars, Highcharts, AppletHelper, dateTemplate, resultTemplate, siteTemplate,
-    flagTemplate, modalTemplate, FilterDateRangeView) {
+], function($, InputMask, moment, Backbone, Marionette, _, Handlebars, Highcharts, AppletHelper, flagTemplate, modalTemplate, FilterDateRangeView) {
     'use strict';
 
     var currentModel, currentCollection, gridOptions = {},
@@ -29,7 +25,7 @@ define([
     columns = [{
         name: "observed",
         label: "Date",
-        template: dateTemplate,
+        template: Handlebars.compile('{{formatDate observed "MM/DD/YYYY - HH:mm"}}'),
         cell: "handlebars",
         sortable: false
     }, {
@@ -41,13 +37,13 @@ define([
     }, {
         name: "result",
         label: "Result",
-        template: resultTemplate,
+        template: Handlebars.compile('{{result}} {{units}}'),
         cell: "handlebars",
         sortable: false
     }, {
         name: "facilityMoniker",
         label: "Facility",
-        template: siteTemplate,
+        template: Handlebars.compile('{{facilityMoniker}}'),
         cell: "handlebars",
         sortable: false
     }];
@@ -79,7 +75,7 @@ define([
         sharedDateRange = new DateRangeModel();
     };
 
-    // TODO - May have to make ChartView a composite view for cycling through panel results
+    // FUTURE-TODO - May have to make ChartView a composite view for cycling through panel results
     var ChartView = Backbone.Marionette.ItemView.extend({
         template: Handlebars.compile('<div></div>'),
         id: 'chart-container',

@@ -12,13 +12,13 @@ define([
 
     var deleteMessageItemView = Backbone.Marionette.ItemView.extend({
         template: Handlebars.compile([
-            '<p>Are you sure you want to delete <strong>{{screenTitle}}?</strong></p><span class="sr-only">Note that focus will shift to the beginning of the Workspace Manager Screen after deleting a workspace.</span>'
+            '<p>Are you sure you want to delete <strong>{{screenTitle}}?</strong></p>'
         ].join('\n')),
     });
     var deleteFooterItemView = Backbone.Marionette.ItemView.extend({
         template: Handlebars.compile([
-            '{{ui-button "Cancel" classes="btn-default" title="Press enter to cancel and close this dialog"}}',
-            '{{ui-button "Delete" classes="btn-danger" title="Press enter to delete this workspace"}}'
+            '{{ui-button "No" classes="btn-default btn-sm" title="Press enter to go back"}}',
+            '{{ui-button "Yes" classes="btn-danger btn-sm" title="Press enter to delete"}}'
         ].join('\n')),
         events: {
             'click .btn-default': function() {
@@ -37,7 +37,7 @@ define([
 
     var AppletLayoutView = Backbone.Marionette.LayoutView.extend({
         template: screenEditor,
-        className: 'workspaceManager-applet full-height',
+        className: 'workspaceManager-applet percent-height-100',
         initialize: function() {
             var self = this;
             this.model = new Backbone.Model();
@@ -56,13 +56,13 @@ define([
                 }
             },
             'click #gridFilterButtonWorkspaceManager': function(e){
-                var filterContainer = $(e.currentTarget).closest('.full-height');
+                var filterContainer = $(e.currentTarget).closest('.percent-height-100');
                 filterContainer.one('shown.bs.collapse', function() {
                     filterContainer.find('input[type=search]').focus();
                 });
             },
             'click .clearSearch': 'clearSearch',
-            'click #doneEditing': 'hideOverlay',
+            'click .done-editing': 'hideOverlay',
             'click .addScreen': 'triggerAddNew',
             'click .delete-worksheet': 'removeScreen',
             'click .previewWorkspace': 'showPreview',
@@ -109,8 +109,8 @@ define([
                 buttonEl: deleteButton
             });
             var deleteAlertView = new ADK.UI.Alert({
-                title: 'Delete Workspace',
-                icon:'icon-delete',
+                title: 'Delete',
+                icon:'icon-triangle-exclamation',
                 messageView: deleteMessageItemView.extend({
                     model: deleteMessageModel
                 }),
@@ -134,7 +134,7 @@ define([
 
             var PreviewFooterItemView = Backbone.Marionette.ItemView.extend({
                 template: Handlebars.compile([
-                    '{{ui-button "Close" classes="btn-primary" title="Press enter to close."}}'
+                    '{{ui-button "Close" classes="btn-primary btn-sm" title="Press enter to close."}}'
                 ].join('\n')),
                 events: {
                     'click button': function() {

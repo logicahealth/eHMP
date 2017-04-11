@@ -150,35 +150,22 @@ Then(/^under the "(.*?)" headers there are the following fields$/) do |_section_
 end
 
 Then(/^the Orders should be sorted by "(.*?)" and then "(.*?)"$/) do |_first_sort_argument, _second_sort_argument|
-  sleep 5
-  # check type first
-  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultLogin.wait_time)
-  wait.until { VerifyTableValue.verify_alphabetic_sort_caseinsensitive('data-grid-orders', 5, true) }
+  @ehmp = PobOrdersApplet.new
+  @ehmp.wait_for_tbl_coversheet_type_column
+  @ehmp.wait_for_tbl_coversheet_date_column
+  column_values = @ehmp.tbl_coversheet_type_column
+  expect(column_values.length).to be > 2
+  expect(ascending? column_values).to be(true), "Values are not in Alphabetical Order #{print_all_value_from_list_elements(column_values)}"
 
-  types = Set.new
-  format = "%m/%d/%Y"
-  date_format = Regexp.new("\\d{2}\/\\d{2}\/\\d{4}")
-  driver = TestSupport.driver
-  all_row_types = driver.find_elements(:css, '#content-region #data-grid-orders tbody td:nth-child(5)')
-  all_row_types.each do |column|
-    types.add(column.text)
+  column_values = @ehmp.tbl_coversheet_date_column
+  column_values_array = []
+  column_values.each do |row|
+    each_value = row.text.downcase
+    value = each_value.split("details.").last.strip
+    order_date = Date.strptime(value, "%m/%d/%Y")
+    column_values_array << order_date
   end
-  p types
-
-  types.each do |order_type, _num|
-    columns = driver.find_elements(:xpath, "//*[@id='data-grid-orders']/tbody/tr/td[.='#{order_type}']/ancestor::tr/descendant::td[1]")
-    date_only = date_format.match(columns[0].text).to_s
-    higher = Date.strptime(date_only, format)
-    (1..columns.length-1).each do |i|
-      columns[i].location_once_scrolled_into_view
-      date_only = date_format.match(columns[i].text).to_s
-      lower = Date.strptime(date_only, format)
-      check_alpha =  ((higher >= lower))
-      expect(check_alpha).to eq(true), "Failing order type #{order_type}, expected #{higher} to be earlier then #{lower}"
-      #return false unless check_alpha
-      higher = lower
-    end
-  end
+  expect(column_values_array == column_values_array.sort).to be(true), "column_values_array: #{print_all_value_from_list_elements(column_values)}"
 end
 
 Then(/^the "(.*?)" input should have the value "(.*?)" in the Orders applet$/) do |control_name, expected_value|
@@ -287,9 +274,9 @@ Then(/^the Orders applet table displays rows with an Order Date between "([^"]*)
 end
 
 Then(/^the Orders should be sorted by Order Date$/) do
-  wait = Selenium::WebDriver::Wait.new(:timeout => (DefaultTiming.default_table_row_load_time))
-  expect(VerifyTableValue.verify_date_sort('data-grid-orders', 1, true)).to eq(true)
-  wait.until { VerifyTableValue.verify_date_sort('data-grid-orders', 1, true) }
+  orders = PobOrdersApplet.new
+  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_wait_time)
+  wait.until { orders.verify_date_time_sort_selectable(true) == true }
 end
 
 Then(/^the Orders Applet contains data rows$/) do
@@ -387,16 +374,21 @@ def verify_orders_between(start_time, end_time)
   wait.until { infiniate_scroll('#data-grid-orders tbody') }
 
   format = "%m/%d/%Y"
+  order_date_format = Regexp.new("\\d{2}\/\\d{2}\/\\d{4}")
 
   @ehmp = PobOrdersApplet.new 
   unless @ehmp.has_tbl_order_empty_row?
     date_column_elements = @ehmp.tbl_coversheet_date_column
     expect(date_column_elements.length).to be > 0
     date_column_elements.each do | date_element |
-      is_after_start_time = Date.strptime(date_element.text, format) >= start_time
-      is_before_now = Date.strptime(date_element.text, format) <= end_time
-      expect(is_after_start_time).to eq(true), "#{date_element.text} is not after #{start_time}"
-      expect(is_before_now).to eq(true), "#{date_element.text} is not before #{end_time}"
+
+      order_date_match = order_date_format.match(date_element.text)
+      date_string = order_date_match.to_s
+
+      is_after_start_time = Date.strptime(date_string, format) >= start_time
+      is_before_now = Date.strptime(date_string, format) <= end_time
+      expect(is_after_start_time).to eq(true), "#{date_string} is not after #{start_time}"
+      expect(is_before_now).to eq(true), "#{date_string} is not before #{end_time}"
     end
   end
 end
@@ -468,4 +460,24 @@ Then(/^the Stop Date\/Time is in the correct format: mm\/dd\/yyyy hh:mm$/) do
   #Start Date/Time:              04/01/2004 22:57
   order_format = Regexp.new("Stop Date/Time:.*\\d{2}\/\\d{2}\/\\d{4} \\d{2}:\\d{2}")
   expect((@ehmp.fld_modal_content.text).should =~ (order_format)).to eq(true)
+end
+
+When(/^the user maximizes the Order applet$/) do
+  ehmp = PobOrdersApplet.new
+  ehmp.wait_for_btn_applet_expand_view
+  expect(ehmp).to have_btn_applet_expand_view
+  ehmp.btn_applet_expand_view.click
+  ehmp.wait_until_btn_applet_expand_view_invisible
+end
+
+Then(/^the Expanded Order applet is displayed$/) do
+  expect(CoverSheet.instance.perform_verification("Cover Sheet Pill", "Orders")).to be_true
+  ehmp = PobOrdersApplet.new
+  ehmp.wait_until_applet_loaded
+  expect(ehmp.applet_loaded?).to eq(true), "Expected Orders applet to be loaded and it was not"
+end
+
+When(/^the user navigates to the expanded Orders applet$/) do
+  navigate_in_ehmp "#orders-full"
+  step 'the Expanded Order applet is displayed'
 end

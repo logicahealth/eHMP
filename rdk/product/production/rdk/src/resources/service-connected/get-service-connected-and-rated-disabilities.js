@@ -2,7 +2,6 @@
 
 var rdk = require('../../core/rdk');
 var _ = require('lodash');
-var dd = require('drilldown');
 var httpUtil = rdk.utils.http;
 
 var noRatedDisabilitiesMessage = 'NONE STATED';
@@ -29,7 +28,7 @@ function getServiceConnectedAndRatedDisabilities(req, res) {
     req.audit.logCategory = 'SERVICE_CONNECTED_RATED_DISABILITIES';
     req.audit.patientId = req.param('pid');
 
-    var dfn = dd(req.interceptorResults)('patientIdentifiers')('siteDfn').val;
+    var dfn = _.get(req.interceptorResults, 'patientIdentifiers.siteDfn');
 
     if(!dfn) {
         req.logger.info('pid not provided');

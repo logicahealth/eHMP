@@ -4,84 +4,82 @@
         "name": "allergies-match",
         "modulePath": "allergies/allergies-match-fetch-list",
         "vistaContext": "OR CPRS GUI CHART",
-        "requiredParams": ["searchString"]
-    }, {
-        "name": "encounters-diagnosis-lexicon-lookup",
-        "modulePath": "encounters/encounters-diagnosis-lexicon-lookup-fetch-list",
-        "vistaContext": "OR CPRS GUI CHART",
-        "requiredParams": ["searchString"]
-    }, {
-        "name": "encounters-procedures-lexicon-lookup",
-        "modulePath": "encounters/encounters-procedures-lexicon-lookup-fetch-list",
-        "vistaContext": "OR CPRS GUI CHART",
-        "requiredParams": ["searchString"]
+        "requiredParams": ["searchString"],
+        "requiredPermissions": ["add-allergy"]
     }, {
         "name": "lab-time-valid-immediate-collect-time",
         "modulePath": "labs/lab-time-valid-immediate-collect-time-fetch-list",
         "vistaContext": "OR CPRS GUI CHART",
-        "requiredParams": ["time"]
+        "requiredParams": ["time"],
+        "requiredPermissions": ["add-lab-order"]
     }, {
         "name": "lab-times-available",
         "modulePath": "labs/lab-times-available-fetch-list",
         "vistaContext": "OR CPRS GUI CHART",
-        "requiredParams": ["date", "locationUid"]
+        "requiredParams": ["date", "locationUid"],
+        "requiredPermissions": ["add-lab-order"]
     }, {
         "name": "medication-list",
         "modulePath": "medications/medication-list-fetch-list",
         "vistaContext": "OR CPRS GUI CHART",
-        "requiredParams": ["searchString"]
+        "requiredParams": ["searchString"],
+        "requiredPermissions": ["future-release-not-available-for-use"]
     }, {
         "name": "medication-orders-calc-max-refills",
         "modulePath": "medications/medication-orders-calc-max-refills-fetch-list",
         "vistaContext": "OR CPRS GUI CHART",
-        "requiredParams": ["patientDFN", "drug", "days", "ordItem", "discharge"]
+        "requiredParams": ["patientDFN", "drug", "days", "ordItem", "discharge"],
+        "requiredPermissions": ["future-release-not-available-for-use"]
     }, {
         "name": "medication-orders-default-days",
         "modulePath": "medications/medication-orders-default-days-fetch-list",
         "vistaContext": "OR CPRS GUI CHART",
-        "requiredParams": ["unitStr", "schedStr", "patientDFN", "drug", "oi"]
+        "requiredParams": ["unitStr", "schedStr", "patientDFN", "drug", "oi"],
+        "requiredPermissions": ["future-release-not-available-for-use"]
     }, {
         "name": "medication-orders-quantity-for-days-supply",
         "modulePath": "medications/medication-orders-quantity-for-days-supply-fetch-list",
         "vistaContext": "OR CPRS GUI CHART",
-        "requiredParams": ["daysSupply", "unitsPerDose", "schedule", "duration", "patientDFN", "drug"]
+        "requiredParams": ["daysSupply", "unitsPerDose", "schedule", "duration", "patientDFN", "drug"],
+        "requiredPermissions": ["future-release-not-available-for-use"]
     }, {
         "name": "new-persons-direct",
         "modulePath": "person/new-persons-fetch-list",
         "vistaContext": "OR CPRS GUI CHART",
-        "optionalParams": ["date"]
+        "optionalParams": ["date", "newPersonsType"],
+        "requiredPermissions": ["read-patient-record"]
     }, {
         "name": "problems-lexicon-lookup",
         "modulePath": "problems/problems-lexicon-lookup-fetch-list",
         "vistaContext": "OR CPRS GUI CHART",
         "requiredParams": ["searchString"],
-        "optionalParams": ["date", "synonym", "limit", "noMinimumLength"]
+        "optionalParams": ["date", "synonym", "limit", "noMinimumLength"],
+        "requiredPermissions": ["add-condition-problem"]
     }, {
         "name": "problems-lexicon-extended-lookup",
         "modulePath": "problems/problems-lexicon-extended-lookup-fetch-list",
         "vistaContext": "OR CPRS GUI CHART",
         "requiredParams": ["searchString"],
-        "optionalParams": ["date", "synonym", "limit", "noMinimumLength"]
+        "optionalParams": ["date", "synonym", "limit", "noMinimumLength"],
+        "requiredPermissions": ["add-condition-problem"]
     }, {
         "name": "radiology-dialog-default",
         "modulePath": "radiology/radiology-dialog-default-fetch-list",
         "vistaContext": "OR CPRS GUI CHART",
         "requiredParams": ["patientDFN", "imagingType"],
-        "optionalParams": ["anEventDiv"]
+        "optionalParams": ["anEventDiv"],
+        "requiredPermissions": ["future-release-not-available-for-use"]
     }, {
         "name": "progress-notes-titles-icd-10",
         "modulePath": "progressnotes/progress-notes-titles-icd-10-fetch-list",
         "vistaContext": "OR CPRS GUI CHART",
-        "requiredParams": ["searchString"]
+        "requiredParams": ["searchString"],
+        "requiredPermissions": ["add-encounter", "edit-encounter"]
     }, {
         "name": "services-fetch-list",
         "modulePath": "services/services-fetch-list",
-        "vistaContext": "OR CPRS GUI CHART"
-    }, {
-        "name": "encounters-visit-service-connected",
-        "modulePath": "encounters/encounters-visit-service-connected-fetch-list",
         "vistaContext": "OR CPRS GUI CHART",
-        "requiredParams": ["dfn", "visitDate", "locationUid"]
+        "requiredPermissions": ["read-patient-record"]
     }, {
         "name": "quick-orders",
         "modulePath": "orderables/quick-order-fetch-list",
@@ -117,40 +115,46 @@
         "vistaContext": "NOT APPLICABLE",
         "needsPcmm": true,
         "needsFullConfig": true,
-        "requiredParams": ["staffIEN"]
+        "requiredParams": ["staffIEN"],
+        "requiredPermissions": ["read-patient-record"]
     }, {
         "name": "teams-for-patient",
         "modulePath": "team-management/teams-for-patient-fetch-list",
         "vistaContext": "NOT APPLICABLE",
         "needsPcmm": true,
         "needsFullConfig": true,
-        "requiredParams": ["patientID"]
-    },{
+        "requiredParams": ["patientID"],
+        "requiredPermissions": ["read-patient-record"]
+    }, {
         "name": "teams-for-user-patient-related",
         "modulePath": "team-management/teams-for-user-patient-related-fetch-list",
         "vistaContext": "NOT APPLICABLE",
         "needsPcmm": true,
         "needsFullConfig": true,
-        "requiredParams": ["staffIEN", "patientID"]
+        "requiredParams": ["staffIEN", "patientID"],
+        "requiredPermissions": ["read-patient-record"]
     }, {
         "name": "teams-for-facility",
         "modulePath": "team-management/teams-for-facility-fetch-list",
         "vistaContext": "NOT APPLICABLE",
         "needsPcmm": true,
         "needsFullConfig": true,
-        "requiredParams": ["facilityID"]
+        "requiredParams": ["facilityID"],
+        "requiredPermissions": ["read-patient-record"]
     }, {
         "name": "teams-for-facility-patient-related",
         "modulePath": "team-management/teams-for-facility-patient-related-fetch-list",
         "vistaContext": "NOT APPLICABLE",
         "needsPcmm": true,
         "needsFullConfig": true,
-        "requiredParams": ["facilityID", "patientID"]
+        "requiredParams": ["facilityID", "patientID"],
+        "requiredPermissions": ["read-patient-record"]
     }, {
         "name": "roles-for-team",
         "modulePath": "team-management/roles-for-team-fetch-list",
         "vistaContext": "NOT APPLICABLE",
         "needsPcmm": true,
-        "requiredParams": ["teamID"]
+        "requiredParams": ["teamID"],
+        "requiredPermissions": ["read-patient-record"]
     }]
 }

@@ -31,6 +31,7 @@ define([
         }
     });
 
+
     var FilterDateRangeView = Backbone.Marionette.LayoutView.extend({
         fetchOptions: {},
         sharedDateRange: {},
@@ -161,7 +162,7 @@ define([
 
             this.model.set('fromDate', fromDate);
             this.model.set('toDate', toDate);
-            //TODO: Remove this once the new Resource is Created
+
             this.sharedDateRange.set('fromDate', fromDate);
             this.sharedDateRange.set('toDate', toDate);
 
@@ -275,7 +276,7 @@ define([
             }
         },
         fetchDateRangeFilteredCollection: function() {
-            ADK.PatientRecordService.fetchCollection(this.fetchOptions);
+            ADK.PatientRecordService.fetchCollection(this.fetchOptions, this.collection);
             this.parentView.leftColumn.show(ADK.Views.Loading.create());
         },
         setFetchOptions: function(fetchOptions) {

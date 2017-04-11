@@ -2,7 +2,7 @@ define([
     "backbone",
     "underscore",
     'moment'
-], function(Backbone, _, Moment) {
+], function(Backbone, _, moment) {
     'use strict';
 
     function formatDate(str, year, month, day) {

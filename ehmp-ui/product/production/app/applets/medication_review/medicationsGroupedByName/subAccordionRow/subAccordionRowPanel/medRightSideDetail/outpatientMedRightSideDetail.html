@@ -18,12 +18,12 @@
         </div>
         <div class="col-xs-3">
             <p>
-                <span><strong>Ordering Provider</strong></span><br />
+                <span><strong>Ordering provider:</strong></span><br />
                 {{#if orders}}
                     {{#each orders}}
                         <span>
                             {{#if providerName}}
-                                {{providerName}}{{#if ordered}} <span class="text-lowercase">on</span> {{formatDate ordered "MM/DD/YYYY HH:mm"}}{{/if}}
+                                {{providerName}}{{#if ordered}} <span class="text-lowercase">on</span> {{formatDate ordered "MM/DD/YYYY"}}{{/if}}
                             {{else}}
                                 No Data
                             {{/if}}
@@ -36,7 +36,7 @@
         </div>
         <div class="col-xs-3">
             <p>
-                <span><strong>Ordering Location</strong></span><br />
+                <span><strong>Ordering location:</strong></span><br />
                 {{#if orders}}
                     {{#each orders}}
                         <span>{{#if locationName}}{{locationName}}{{else}}No Data{{/if}}</span><br />
@@ -48,7 +48,7 @@
         </div>
         <div class="col-xs-3">
             <p>
-                <span><strong>Pharmacist</strong></span><br />
+                <span><strong>Pharmacist:</strong></span><br />
                 {{#if orders}}
                     {{#each orders}}
                         <span>{{#if pharmacistName}}{{pharmacistName}}{{else}}No Data{{/if}}</span><br />
@@ -60,7 +60,7 @@
         </div>
         <div class="col-xs-3">
             <p>
-                <span><strong>Order Text</strong></span><br />
+                <span><strong>Order text:</strong></span><br />
                 <span>{{name}} {{strength}}</span>
             </p>
         </div>
@@ -68,10 +68,10 @@
     <div class="row">
         <div class="col-xs-3">
             <p>
-                <span><strong>Start Date/Time</strong></span><br />
+                <span><strong>Start date/time:</strong></span><br />
                 <span>
                     {{#if overallStart}}
-                        {{formatDate overallStart "MM/DD/YYYY HH:mm"}}
+                        {{formatDate overallStart "MM/DD/YYYY"}}
                     {{else}}
                         No Data
                     {{/if}}
@@ -80,24 +80,24 @@
         </div>
         <div class="col-xs-3">
             <p>
-                <span><strong>Stop Date/Time</strong></span><br />
+                <span><strong>Stop date/time:</strong></span><br />
                 {{#if isDiscontinued}}
-                    <span class="right-padding-xs">{{#if stopped}}{{formatDate stopped "MM/DD/YYYY HH:mm"}}{{else}}No Data{{/if}}</span>
+                    <span class="right-padding-xs">{{#if stopped}}{{formatDate stopped "MM/DD/YYYY"}}{{else}}No Data{{/if}}</span>
                 {{/if}}
                 {{#if showExpiredDate}}
-                    <span>{{#if overallStop}}({{expireText}} {{formatDate overallStop "MM/DD/YYYY HH:mm"}}){{else}}No Data{{/if}}</span>
+                    <span>{{#if overallStop}}({{expireText}} {{formatDate overallStop "MM/DD/YYYY"}}){{else}}No Data{{/if}}</span>
                 {{/if}}
             </p>
         </div>
         <div class="col-xs-3">
             <p>
-                <span><strong>Order Number</strong></span><br />
+                <span><strong>Order number:</strong></span><br />
                 <span>{{slicedOrderUid}}</span>
             </p>
         </div>
         <div class="col-xs-3">
             <p>
-                <span><strong>Prescription Number</strong></span><br />
+                <span><strong>Prescription number:</strong></span><br />
                 {{#if orders}}
                     {{#each orders}}
                         <span>{{#if prescriptionId}}{{prescriptionId}}{{else}}No Data{{/if}}</span><br />
@@ -111,7 +111,7 @@
     <div class="row">
         <div class="col-xs-3">
             <p>
-                <span><strong>Quantity/Day Supply</strong></span><br />
+                <span><strong>Quantity/Day supply:</strong></span><br />
                 {{#if orders}} {{#each orders}}
                 <span class="right-padding-xs">{{convertStringToInteger quantityOrdered}} <span class="text-lowercase">for</span> {{convertStringToInteger daysSupply}} <span class="text-lowercase">days</span></span><br />
                 {{/each}} {{else}}
@@ -121,7 +121,7 @@
         </div>
         <div class="col-xs-3">
             <p>
-                <span><strong>Fills Remaining</strong></span><br />
+                <span><strong>Fills remaining:</strong></span><br />
                 {{#if orders}} {{#each orders}}
                 <span>{{convertStringToInteger fillsRemaining}} <span class="text-lowercase">of</span> {{convertStringToInteger fillsAllowed}}</span><br />
                 {{/each}} {{else}}

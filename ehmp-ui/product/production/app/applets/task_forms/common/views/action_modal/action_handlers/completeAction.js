@@ -18,47 +18,73 @@ define([
             if (isCommunityCare) {
                 actionItemComponent = {
                     control: 'container',
-                    extraClasses: ['col-xs-12', 'top-margin-sm', 'bottom-margin-sm'],
-                    template: 'This consult was completed external to VA'
+                    extraClasses: ['row'],
+                    items: [{
+                        control: 'container',
+                        extraClasses: ['col-xs-12', 'top-margin-sm', 'bottom-margin-sm'],
+                        template: 'This consult was completed external to VA'
+                    }]
                 };
             } else {
                 actionItemComponent = {
-                    control: "container",
-                    extraClasses: ["col-xs-6", "top-margin-sm"],
+                    control: 'container',
+                    extraClasses: ['row'],
                     items: [{
-                        control: 'select',
-                        name: 'actionId',
-                        label: 'Complete Action',
-                        required: true,
-                        disabled: false,
-                        title: 'Use up and down arrow keys to view options and press enter to select',
-                        pickList: [{
-                            value: '1',
-                            label: 'Completed, by Note'
-                        }, {
-                            value: '2',
-                            label: 'Completed, eConsult'
-                        }, {
-                            value: '3',
-                            label: 'Completed, Admin'
+                        control: 'container',
+                        extraClasses: ['col-xs-6', 'top-margin-sm'],
+                        items: [{
+                            control: 'select',
+                            name: 'actionId',
+                            label: 'Complete Action',
+                            required: true,
+                            disabled: false,
+                            title: 'Use up and down arrow keys to view options and press enter to select',
+                            pickList: [{
+                                value: '1',
+                                label: 'Completed, by Note'
+                            }, {
+                                value: '2',
+                                label: 'Completed, eConsult'
+                            }, {
+                                value: '3',
+                                label: 'Completed, Admin'
 
+                            }]
                         }]
                     }]
                 };
             }
             var CompleteActionBody = {
                 control: "container",
-                extraClasses: ["row"],
                 items: [{
                     control: 'container',
-                    extraClasses: ['col-xs-12'],
-                    modelListeners: [''],
-                    template: Handlebars.compile('<h5 class="top-margin-xs bottom-margin-xs bottom-padding-xs font-size-18">{{clinicalObject.displayName}}</h5>')
-                }, actionItemComponent, {
+                    extraClasses: ['row'],
+                    items: [{
+                        control: 'container',
+                        extraClasses: ['col-xs-12'],
+                        template: Handlebars.compile('<h5 class="top-margin-xs bottom-margin-xs bottom-padding-xs font-size-18">{{clinicalObject.displayName}}</h5>')
+                    }]
+                },
+                {
+                    control: 'container',
+                    extraClasses: ['row'],
+                    template: Handlebars.compile('{{#ifExp state "===" "Scheduled"}}<div class="col-xs-12 bottom-padding-sm"><strong>Current Appointment Info</strong></div>{{/ifExp}}')
+                }, {
+                    control: 'container',
+                    extraClasses: ['row'],
+                    template: Handlebars.compile('{{#ifExp state "===" "Scheduled"}}<div class="col-xs-4"><strong>Scheduled Date</strong></div><div class="col-xs-4"><strong>Clinic</strong></div><div class="col-xs-4"><strong>Provider</strong></div>{{/ifExp}}')
+                },{
+                    control: 'container',
+                    extraClasses: ['row'],
+                    template: Handlebars.compile('{{#ifExp state "===" "Scheduled"}}<div class="col-xs-4">{{clinicalObject.data.schedules.0.appointment.date}}</div><div class="col-xs-4">{{clinicalObject.data.schedules.0.appointment.clinic.name}}</div><div class="col-xs-4">{{clinicalObject.data.schedules.0.appointment.provider}}</div>{{/ifExp}}')
+                },
+                actionItemComponent,
+                {
                     control: "container",
-                    extraClasses: ["col-xs-12"],
+                    extraClasses: ['row'],
                     items: [{
                         control: "textarea",
+                        extraClasses: ['col-xs-12', "top-margin-xs", "bottom-margin-md"],
                         name: "comment",
                         title: "Enter a comment",
                         label: "Comment",

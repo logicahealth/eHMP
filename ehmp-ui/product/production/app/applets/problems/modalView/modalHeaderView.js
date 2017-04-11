@@ -14,7 +14,7 @@ define([
         navigateModal: function(e) {
             var $target = $(e.currentTarget);
             var id = $target.attr('id');
-            id === 'ccdPrevious' ? this.theView.getPrevModal(id) : this.theView.getNextModal(id);
+            id === 'ccdPrevious' ? this.theView.getPrevModal() : this.theView.getNextModal();
         },
 
         template: HeaderTemplate

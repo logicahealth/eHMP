@@ -251,13 +251,20 @@ define([
                             });
                         }
                     };
-                    CollectionHandler.fetchAllMeds(false, function(collection) {
+
+                    var medGroups = ADK.PatientRecordService.createEmptyCollection();
+                    self.listenToOnce(medGroups, 'read:success', function(collection) {
+                        self.stopListening(medGroups, 'read:error');
                         var groupNames = MedsResource.getMedicationGroupNames(collection);
                         medDeferred.resolve({
                             coll: groupNames,
                             collection: collection
                         });
                     });
+                    self.listenToOnce(medGroups, 'read:error', function(collection) {
+                        self.stopListening(medGroups, 'read:success');
+                    });
+                    CollectionHandler.fetchAllMeds(false, medGroups);
 
                     // ADK.ResourceService.fetchCollection(medFetchOptions);
 
@@ -422,8 +429,10 @@ define([
                         });
 
                     //The dropdown closes everytime the input box looses focus, but hidden.bs.dropdown isn't always triggered, so we're using 'focusout' instead
-                    theTypeahead.parents('.dropdown-menu').on('focusout', function() {
-                        theTypeahead.typeahead('val', '');
+                    theTypeahead.parents('.dropdown-menu').on('focusout', function(e) {
+                        if (_.isEmpty(e.relatedTarget) || !_.isEqual(e.relatedTarget.className, 'tt-dropdown-menu') && e.relatedTarget.className.indexOf('typeahead') === -1) {
+                            theTypeahead.typeahead('val', '');
+                        }
                     });
 
                     theTypeahead.parents('.dropdown').on('click', function() {

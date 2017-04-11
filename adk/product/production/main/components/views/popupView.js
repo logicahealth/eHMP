@@ -4,8 +4,9 @@ define([
     "marionette",
     "underscore",
     'api/Messaging',
+    'main/Utils',
     "hbs!main/components/views/popupTemplate"
-], function(Backbone, $, Marionette, _, Messaging, PopupTemplate) {
+], function(Backbone, $, Marionette, _, Messaging, Utils, PopupTemplate) {
     "use strict";
 
     var defaultPopup = {
@@ -30,13 +31,17 @@ define([
             'tabindex': '-1'
         },
         id: 'base-modal',
-        className: 'modal fade',
+        className: 'modal fade autologoff',
         template: PopupTemplate,
         regions: {
             dialog: '#autologoff-alert-dialog'
         },
         isShown: false,
         events: {
+            "show.bs.modal": function() {
+                var zIndex = Utils.cssCalc.zIndex.getNextLayer();
+                this.$el.css('z-index', zIndex * 2);
+            },
             "shown.bs.modal": function(){
                 this.isShown = true;
                 this.focus();

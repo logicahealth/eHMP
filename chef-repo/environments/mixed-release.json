@@ -1,0 +1,15 @@
+{
+  "name": "mixed-release",
+  "description": "r1.2 mixed release",
+  "override_attributes": {
+    "override_stacks": {
+      "jds": "ehmp-ui-deploy-mixed-release-demo-build-r1.2",
+      "pjds": "ehmp-ui-deploy-mixed-release-demo-build-r1.2",
+      "solr": "ehmp-ui-deploy-mixed-release-demo-build-r1.2",
+      "vxsync": "ehmp-ui-deploy-mixed-release-demo-build-r1.2",
+      "vhic": "ehmp-ui-deploy-mixed-release-demo-build-r1.2",
+      "mvi": "ehmp-ui-deploy-mixed-release-demo-build-r1.2",
+      "vista": "ehmp-ui-deploy-mixed-release-demo-build-r1.2"
+    }
+  }
+}

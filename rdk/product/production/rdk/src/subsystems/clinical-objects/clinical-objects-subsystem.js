@@ -3,7 +3,6 @@
 var _ = require('lodash');
 var rdk = require('../../core/rdk');
 var uidUtils = require('../../utils/uid-utils');
-var dd = require('drilldown');
 var httpUtil = rdk.utils.http;
 var uuid = require('node-uuid');
 var jdsFilter = require('jds-filter');
@@ -27,7 +26,7 @@ var PJDS_CONNECTION_ERROR = module.exports.PJDS_CONNECTION_ERROR = 'Unable to re
 var JDS_CONNECTION_ERROR = module.exports.JDS_CONNECTION_ERROR = 'Unable to reach JDS';
 var UTC_STANDARD = module.exports.UTC_STANDARD = 'YYYYMMDDHHmmss+0000';
 
-function getSubsystemConfig(app) {
+function getSubsystemConfig(app, logger) {
     return {
         healthcheck: {
             name: 'pjds',
@@ -36,7 +35,7 @@ function getSubsystemConfig(app) {
                 var jdsOptions = _.extend({}, app.config.generalPurposeJdsServer, {
                     url: '/ping',
                     timeout: 5000,
-                    logger: app.logger
+                    logger: logger
                 });
 
                 httpUtil.get(jdsOptions, function(err) {
@@ -123,7 +122,7 @@ function readClinicalObject(logger, appConfig, uid, loadReference, callback) {
         if (err) {
             return callback(err);
         }
-        var clinicalObjectExists = _.isObject(dd(listResponse)('items')(0).val);
+        var clinicalObjectExists = _.isObject(_.get(listResponse, 'items[0]'));
         if (!clinicalObjectExists) {
             errorMessages.push(CLINICAL_OBJECT_NOT_FOUND);
             return callback(errorMessages);
@@ -319,7 +318,7 @@ function dereferenceClinicalObject(logger, appConfig, clinicalObject, callback) 
             });
             return callback(errorMessages);
         }
-        var jdsUidExists = _.isObject(dd(body)('data')('items')(0).val);
+        var jdsUidExists = _.isObject(_.get(body, 'data.items[0]'));
         if (!jdsUidExists) {
             errorMessages.push(REFERENCE_ID_NOT_FOUND);
             return callback(errorMessages);

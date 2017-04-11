@@ -1,7 +1,7 @@
 @F564 @regression
 Feature: Encounters Applet Enhancements
 
-@US5650 @F564-2
+@US5650 @F564-2 @DE6882
 Scenario: As a clinical user when I am reviewing inpatient admissions within the encounters applet I would like the discharge diagnosis to display
 	# Given user is logged into eHMP-UI
 	And user searches for and selects "thirtytwo,patient"

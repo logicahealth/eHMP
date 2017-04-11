@@ -8,7 +8,7 @@ class AllergiesGist <  AllApplets
     add_verify(CucumberLabel.new("AllergiesGridVisible"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid=allergy_grid] div.gridContainer"))
     add_verify(CucumberLabel.new("Allergy Details"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-appletid=allergy_grid] div.gridContainer")) 
     
-    add_verify(CucumberLabel.new('Empty Allergy Gist'), VerifyContainsText.new, AccessHtmlElement.new(:css, "#{appletid_css} div.empty-gist-list"))
+    add_verify(CucumberLabel.new('Empty Allergy Gist'), VerifyContainsText.new, AccessHtmlElement.new(:css, "#{appletid_css} p.color-grey-darkest"))
     pills = AccessHtmlElement.new(:css, '[data-appletid=allergy_grid] [data-infobutton-class=info-button-pill]')
     add_verify(CucumberLabel.new('Allergy Pills'), VerifyXpathCount.new(pills), pills)
     add_action(CucumberLabel.new('first pill'), ClickAction.new, AccessHtmlElement.new(:xpath, "//div[@data-appletid='allergy_grid']/descendant::div[@data-infobutton-class='info-button-pill'][1]"))
@@ -27,7 +27,7 @@ class AllergiesGist <  AllApplets
 
   def applet_loaded?
     return true if am_i_visible? 'Empty Allergy Gist'
-    return TestSupport.driver.find_elements(:css, '[data-appletid=allergy_grid] .grid-container [data-infobutton-class=info-button-pill]').length > 0
+    return (TestSupport.driver.find_elements(:css, '[data-appletid=allergy_grid] .grid-container [data-infobutton-class=info-button-pill]').length > 0)
   rescue => e 
     # p e
     false
@@ -85,8 +85,13 @@ Then(/^the Allergies Gist Applet does not contain buttons$/) do |table|
 end
 
 Then(/^the Allergies Gist contains at least (\d+) pill$/) do |arg1|
-  count = arg1.to_i - 1
-  expect(@ag.wait_until_xpath_count_greater_than('Allergy Pills', count)).to eq(true), "Test requires at least #{arg1} pill to be displayed"
+  # count = arg1.to_i - 1
+  # expect(@ag.wait_until_xpath_count_greater_than('Allergy Pills', count)).to eq(true), "Test requires at least #{arg1} pill to be displayed"
+
+  @ehmp = PobAllergiesApplet.new
+  @ehmp.wait_for_fld_allergy_gist_all_pills
+  pill_count = @ehmp.fld_allergy_gist_all_pills.length.to_s
+  expect(pill_count).to be >= (arg1), "In the Applet, Pill counts are showing: #{pill_count}"
 end
 
 When(/^user clicks an allergy pill$/) do
@@ -107,7 +112,6 @@ end
 
 Then(/^the modal's title matches the first pill$/) do
   @ehmp = PobAllergiesApplet.new
-
   modal = ModalElements.new
   modal.wait_until_fld_modal_title_visible
   expect(modal.fld_modal_title.text.upcase).to eq("ALLERGEN - #{@ehmp.first_pill_text.upcase}")
@@ -126,6 +130,9 @@ Then(/^the message on the Allergies Gist Applet does not say "(.*?)"$/) do |mess
 end
 
 When(/^the user minimizes the expanded Allergies Applet$/) do
+  @ehmp = PobAllergiesApplet.new
+  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
+  wait.until { applet_grid_loaded(@ehmp.has_fld_empty_row?, @ehmp.expanded_rows) }
   expect(@ag.perform_action('Control - applet - Minimize View')).to eq(true)
 end
 
@@ -134,5 +141,3 @@ When(/^the user views the first Allergies Gist detail view$/) do
   expect(@ag.perform_action('first pill')).to eq(true)
   expect(@ag.perform_action('Detail View Button')).to eq(true)
 end
-
-

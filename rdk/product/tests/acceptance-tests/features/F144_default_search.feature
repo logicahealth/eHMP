@@ -13,7 +13,6 @@ Feature: F144 - eHMP Viewer GUI
     And the VPR results contain
       | field       | value                                   |
       | pid         | 9E7A;100726                             |
-      | icn         | 5000000227V477236                       |
       | familyName  | EIGHTEEN                                |
       | givenNames  | INPATIENT                               |
       | fullName    | EIGHTEEN,INPATIENT                      |

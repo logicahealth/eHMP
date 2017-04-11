@@ -83,6 +83,13 @@ template "#{node[:workstation][:user_home]}/.aws/config" do
   mode "0755"
 end
 
+template '/var/lib/jenkins/.npmrc' do
+  source 'npmrc.erb'
+  owner node[:workstation][:user]
+  group node[:workstation][:user]
+  mode "0755"
+end
+
 include_recipe "awscli"
 include_recipe "newrelic_wrapper"
 

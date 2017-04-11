@@ -5,9 +5,11 @@ import java.io.IOException;
 import org.bson.Document;
 
 import com.cognitive.cds.invocation.execution.model.Job;
+import com.cognitive.cds.invocation.mongo.exception.CDSDBConnectionException;
 import com.cognitive.cds.invocation.util.JsonUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
 
 public class JobDao {
 
@@ -32,10 +34,14 @@ public class JobDao {
      */
     public Job loadJobInfo(String name) {
         Job job = null;
-
-        mongoDbDao.setDatabase("schedule");
-        MongoCollection<Document> collection = mongoDbDao
-                .getCollection("cdsjobs");
+        MongoDatabase database = null;
+		try {
+			database = mongoDbDao.getMongoClient().getDatabase("schedule");
+		} catch (CDSDBConnectionException e1) {
+            logger.error("========> mongoDbDao.getMongoClient().getDatabase(: " + e1.toString(),e1);
+            return job;
+		}
+        MongoCollection<Document> collection = database.getCollection("cdsjobs");
         logger.info("Job Count: " + collection.count());
         Document filter = new Document();
         filter.put("name", name);
@@ -45,7 +51,7 @@ public class JobDao {
                 String json = obj.toJson();
                 job = (Job) JsonUtils.getMapper().readValue(json, Job.class);
             } catch (IOException e) {
-                logger.error("========> Deserialize: " + e.toString());
+                logger.error("========> Deserialize: " + e.toString(),e);
             }
         }
         return job;
@@ -66,12 +72,12 @@ public class JobDao {
      */
     public void saveJobInfo(String jobId, Job job) {
 
-        mongoDbDao.setDatabase("schedule");
-        ObjectMapper mapper = new ObjectMapper();
         if (job.getName() == null || job.getName().isEmpty()) {
             job.setName(jobId);
         }
         try {
+            MongoDatabase database = mongoDbDao.getMongoClient().getDatabase("schedule");
+            ObjectMapper mapper = new ObjectMapper();
             String objectJson = mapper.writeValueAsString(job);
             logger.info("=====> Job json to write: " + objectJson);
             Document filter = new Document();
@@ -80,9 +86,9 @@ public class JobDao {
             // filter.put("name", jobId);
             Document doc = Document.parse(objectJson);
             doc.remove("_id");
-            mongoDbDao.getCollection("cdsjobs").findOneAndReplace(filter, doc);
+            database.getCollection("cdsjobs").findOneAndReplace(filter, doc);
         } catch (Exception e) {
-            logger.error("=======> Job Update Exception: " + e.toString());
+            logger.error("=======> Job Update Exception: " + e.toString(),e);
         }
     }
     //

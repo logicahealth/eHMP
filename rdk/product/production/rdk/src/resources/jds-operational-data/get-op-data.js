@@ -10,7 +10,6 @@ var _ = require('lodash');
 var querystring = require('querystring');
 var util = require('util');
 var async = require('async');
-var dd = require('drilldown');
 var rdk = require('../../core/rdk');
 var httpUtil = rdk.utils.http;
 
@@ -20,7 +19,7 @@ var interceptors = {
 
 function buildVitalsPath(req, callback) {
 
-    var jdsResource = '/data/find/vital-type';
+    var jdsResource = '/data/index/vital-type-uid';
     var jdsQuery = {};
     var userSession = req.session.user || {};
     var limit = req.param('limit');
@@ -29,7 +28,7 @@ function buildVitalsPath(req, callback) {
         jdsQuery.limit = Number(limit);
     }
     if (site) {
-        jdsQuery.filter = 'like("uid","%' + site + '%")';
+        jdsQuery.range = 'urn:va:vital-type:' + site + ':*';
     }
 
     var jdsQueryString = querystring.stringify(jdsQuery);
@@ -40,7 +39,7 @@ function buildVitalsPath(req, callback) {
 
 function buildLaboratoryPath(req, callback) {
 
-    var jdsResource = '/data/find/orderable';
+    var jdsResource = '/data/index/orderable-linktype';
     var jdsQuery = {};
     var userSession = req.session.user || {};
     var limit = req.param('limit');
@@ -49,7 +48,8 @@ function buildLaboratoryPath(req, callback) {
         jdsQuery.limit = Number(limit);
     }
     if (site) {
-        jdsQuery.filter = 'and(eq(linktype,LRT), like("uid","%' + site + '%"))';
+        jdsQuery.range = 'urn:va:orderable:' + site + ':*';
+        jdsQuery.filter = 'eq(linktype,LRT)';
     }
 
     var jdsQueryString = querystring.stringify(jdsQuery);
@@ -60,7 +60,7 @@ function buildLaboratoryPath(req, callback) {
 
 function buildMedicationPath(req, callback) {
 
-    var jdsResource = '/data/find/orderable';
+    var jdsResource = '/data/index/orderable-linktype';
     var jdsQuery = {};
     var userSession = req.session.user || {};
     var limit = req.param('limit');
@@ -69,7 +69,8 @@ function buildMedicationPath(req, callback) {
         jdsQuery.limit = Number(limit);
     }
     if (site) {
-        jdsQuery.filter = 'and(eq(linktype,PSP), like("uid","%' + site + '%"))';
+        jdsQuery.range = 'urn:va:orderable:' + site + ':*';
+        jdsQuery.filter = 'eq(linktype,PSP)';
     }
 
     var jdsQueryString = querystring.stringify(jdsQuery);
@@ -106,14 +107,14 @@ function getOpData(opType, req, res) {
 function getJdsResponse(req, path, callback) {
     var jdsServer = req.app.config.jdsServer;
     var options = _.extend({}, jdsServer, {
-            url: path,
-            logger: req.logger,
-            json: true
-        });
+        url: path,
+        logger: req.logger,
+        json: true
+    });
     httpUtil.get(options, function(error, response, data) {
         var resultObj = {};
         resultObj.data = data;
-        resultObj.statusCode = dd(response)('statusCode').val;
+        resultObj.statusCode = _.get(response, 'statusCode');
         if (error) {
             req.logger.error('DE4687:getJdsResponse:BEGIN --- ', error, response, resultObj);
             req.logger.error('DE4687:getJdsResponse:END ---');

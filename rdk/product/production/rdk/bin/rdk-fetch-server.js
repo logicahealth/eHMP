@@ -1,13 +1,12 @@
 #!/usr/bin/env node
 
 'use strict';
-
 var path = require('path');
 var rdk = require('../src/core/rdk');
 
 var ROOT = path.resolve(__dirname, '..');
 
-var app = rdk.appfactory().defaultConfigFilename('../../config/rdk-fetch-server-config.json').argv(process.argv).build();
+var app = rdk.appfactory().defaultConfigFilename(ROOT + '/config/rdk-fetch-server-config.json').argv(process.argv).build();
 // app.register
 // app.start
 
@@ -31,8 +30,6 @@ app.register('/patient/record/labs/by-order', ROOT + '/src/resources/lab-search-
 app.register('/patient/record/labs/by-panel', ROOT + '/src/resources/lab-panels/lab-panels-resource');
 app.register('/patient/record/timeline', ROOT + '/src/resources/patient-record/patient-timeline-resource');
 app.register('/patient/record/notes', ROOT + '/src/resources/patient-record/patient-notes-resource');
-app.register('/patient/record/patient-entered-goals', ROOT + '/src/resources/patient-record/patient-generated-data/patient-goals-resource');
-app.register('/patient/record/patient-self-assessment', ROOT + '/src/resources/patient-record/patient-generated-data/patient-assessment-resource');
 app.register('/patient/record/service-connected', ROOT + '/src/resources/service-connected/service-connected-resource');
 app.register('/patient/record/metadata', ROOT + '/src/resources/patient-meta/patientmeta-resource');
 
@@ -59,18 +56,18 @@ app.register('/crs/concept-relationships', ROOT + '/src/resources/crs/concept-re
 //Orders
 app.register('/order', ROOT + '/src/resources/orders/order-resource');
 
-// Immunizations
-app.register('/immunizations', ROOT + '/src/resources/immunizations/immunization-resource');
+//Facility
+app.register('/facility', ROOT + '/src/resources/facility/facility-resource');
 
 // Locations
 app.register('/locations', ROOT + '/src/resources/locations-resource');
 app.register('/locations/facility-monikers', ROOT + '/src/resources/facility-moniker/facility-moniker-resource');
 
+
 // Order Details resource using RPC call
 app.register('/order', ROOT + '/src/resources/order-detail-resource');
 app.register('/problems', ROOT + '/src/resources/problems-resource');
 app.register('/visits', ROOT + '/src/resources/visits/visits-resource');
-app.register('/visit', ROOT + '/src/resources/visits/visit-service-category-resource');
 app.register('/vitals', ROOT + '/src/resources/vitals/vitals-resource');
 app.register('/tasks', ROOT + '/src/resources/activitymanagement/tasks/tasks-resource');
 app.register('/notifications', ROOT + '/src/resources/notifications/notifications-resource');
@@ -96,7 +93,7 @@ app.register('/fhir/patient/:id/diagnosticreport', ROOT + '/src/fhir/diagnostic-
 app.register('/fhir/order', ROOT + '/src/fhir/order/order-resource');
 app.register('/fhir/patient/:id/diagnosticorder', ROOT + '/src/fhir/order/diagnostic-order/diagnostic-order-resource');
 app.register('/fhir/patient/:id/procedure', ROOT + '/src/fhir/procedure/procedure-resource');
-// TODO: Uncomment Procedure Request, Device Use Request and Nutrition Order once the FHIR mapping has been completed.
+// FUTURE-TODO: Uncomment Procedure Request, Device Use Request and Nutrition Order once the FHIR mapping has been completed.
 // app.register('/fhir/patient/:id/procedurerequest', ROOT + '/src/fhir/order/procedure-request/procedure-request-resource');
 // app.register('/fhir/patient/:id/deviceuserequest', ROOT + '/src/fhir/order/device-use-request/device-use-request-resource');
 // app.register('/fhir/patient/:id/nutritionorder', ROOT + '/src/fhir/order/nutrition-order/nutrition-order-resource');
@@ -108,34 +105,33 @@ app.register('/fhir/medicationdispense', ROOT + '/src/fhir/medication-dispense/m
 app.register('/fhir/medicationadministration', ROOT + '/src/fhir/medication-administration/medication-administration-resource');
 app.register('/fhir/medicationstatement', ROOT + '/src/fhir/medication-statement/medication-statement-resource');
 app.register('/fhir/patient/:id/medicationprescription', ROOT + '/src/fhir/medication-prescription/medication-prescription-resource');
-app.register('/fhir/communicationrequest', ROOT + '/src/fhir/communication-request/communication-request-resource');
+
+// FUTURE-TODO: Uncomment when resource is fully supported/tested end-to-end by system.
+// app.register('/fhir/communicationrequest', ROOT + '/src/fhir/communication-request/communication-request-resource');
 
 // Orderables
 app.register('/orderables', ROOT + '/src/resources/orderables/orderables-resource');
-app.register('/favorites', ROOT + '/src/resources/orderables/favorites/favorites-resource');
-app.register('/orderset', ROOT + '/src/resources/orderables/order-set/order-set-resource');
-app.register('/quickorder', ROOT + '/src/resources/orderables/quick-order/quick-order-resource');
+
+// FUTURE-TODO: Uncomment when resource is fully supported/tested end-to-end by system.
+// app.register('/favorites', ROOT + '/src/resources/orderables/favorites/favorites-resource');
+// app.register('/orderset', ROOT + '/src/resources/orderables/order-set/order-set-resource');
+// app.register('/quickorder', ROOT + '/src/resources/orderables/quick-order/quick-order-resource');
+
 app.register('/enterprise-orderable', ROOT + '/src/resources/orderables/enterprise-orderable/enterprise-orderable-resource');
 
-//Authentication
+//Authorization
 //TODO this will be moved to its own resource server prior to delivery
 app.register('/authorize', ROOT + '/src/resources/authorization-check-resource');
 
+//Operational data
 app.register('/operational-data/type', ROOT + '/src/resources/jds-operational-data/op-data-resource');
-
+app.register('/operational-data-by-uid', ROOT + '/src/resources/jds-operational-data/operational-data-by-uid-resource');
 //vler
 app.register('/vler/:pid/toc', ROOT + '/src/resources/vler/toc/toc-resource');
-
-//ccow
-app.register('/vergencevaultproxy', ROOT + '/src/resources/vergence-vault-proxy-resource');
 
 // Vista Roles Resource and eHMP Permission Sets
 app.register('/permission-sets', ROOT + '/src/resources/permission-sets/permission-sets-resource');
 app.register('/permissions', ROOT + '/src/resources/permissions/permissions-resource');
-app.register('/teams', ROOT + '/src/resources/teams/teams-resource');
-
-// Vista Encounter Resource
-app.register('/encounter', ROOT + '/src/resources/encounter/encounter-resource');
 
 app.register('/shortcuts', ROOT + '/src/resources/shortcuts/shortcuts-resource');
 
@@ -145,8 +141,8 @@ app.register('/shortcuts', ROOT + '/src/resources/shortcuts/shortcuts-resource')
 
 app.logger.info('app created with ' + app.resourceRegistry.getResources().length + ' mounted endpoints');
 
-// todo: move listen to start
+// FUTURE-TODO: maybe start listening earlier, asynchronously register resources
 var port = app.config.appServer.port;
-app.rdkListen(port, function() {
+app.rdkListen(port, function () {
     app.logger.info('application now listening on %s', port);
 });

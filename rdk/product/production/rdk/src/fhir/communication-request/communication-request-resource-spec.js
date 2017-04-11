@@ -6,7 +6,8 @@ var addHandler = require('./communication-request-add');
 var deleteHandler = require('./communication-request-delete');
 var communicationRequestResource = require('./communication-request-resource');
 
-describe('When the communication resource is called', function() {
+// FUTURE-TODO: Re-enable (remove .skip) once resource is fully supported/tested end-to-end by system.
+describe.skip('When the communication resource is called', function() {
     var req, res, mockHandler, spyStatus;
 
     var logger = sinon.stub(require('bunyan').createLogger({
@@ -18,7 +19,7 @@ describe('When the communication resource is called', function() {
         req.logger = logger;
         req.params = {
             resourceId: 1000,
-            recipientId: 'pu1234'
+            recipientId: 'PW    '
         };
 
         res = httpMocks.createResponse();

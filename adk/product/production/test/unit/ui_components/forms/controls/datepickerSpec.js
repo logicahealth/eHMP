@@ -174,7 +174,7 @@ define([
             }
         }
     });
-    var defaultBasicControlDefinition;
+
     var extensibleDatepickerTests = function(isFlexible, inputSelector) {
         describe('with initial value', function() {
             beforeEach(function() {
@@ -215,7 +215,6 @@ define([
             });
         });
 
-        // TODO: update with startDate, endDate, and outOfRange tests... options is no longer supported(maybe pass through?).
         describe('with bootstrap-datepicker option', function() {
             // legacy options. No longer direct pass-through.. Only startDate and endDate are supported
             beforeEach(function() {
@@ -625,6 +624,30 @@ define([
             extensibleDatepickerTests(false, 'input.datepicker-input');
         });
         describe('flexible', function() {
+            var ensureCorrectHelpFormats = function(tooltipElement, minPrecision) {
+                minPrecision = minPrecision || 'year';
+                var helpTooltipFormats = [
+                    'MM/DD/YYYY',
+                    minPrecision !== 'day' ? 'MM/YYYY' : { format: 'MM/YYYY' },
+                    minPrecision === 'year' ? 'YYYY' : { format: 'YYYY' },
+                    'MM/DD',
+                    't',
+                    't+x',
+                    't+ym',
+                    'n',
+                    'yesterday',
+                    'tomorrow'
+                ];
+                var liIndex = 0;
+                helpTooltipFormats.forEach(function(format, index) {
+                    if (typeof format === 'string') {
+                        expect($(tooltipElement.text()).find('li').get(liIndex)).toContainText(format);
+                        liIndex++;
+                    } else if (typeof format === 'object') {
+                        expect($(tooltipElement.text()).find('li').get(liIndex)).not.toContainText(format);
+                    }
+                }, this);
+            };
             describe('basic', function() {
                 beforeEach(function() {
                     testPage = new TestView({
@@ -643,8 +666,19 @@ define([
                     expect($testPage.find('input.flexible-input')).toHaveLength(1);
                 });
 
-                it('contains help popover with formats', function() {
+                it('contains help popover with correct formats for default minPrecision', function(done) {
                     expect($testPage.find('button[data-toggle="tooltip"]')).toHaveLength(1);
+                    $testPage.find('button[data-toggle="tooltip"]').tooltip('show');
+                    var tooltipTimeout = setTimeout(function() {
+                        $testPage.find('button[data-toggle="tooltip"]').off('inserted.bs.tooltip');
+                        ensureCorrectHelpFormats($testPage.find('.tooltip-inner'), 'year');
+                        done();
+                    }, 300);
+                    $testPage.find('button[data-toggle="tooltip"]').one('inserted.bs.tooltip', function() {
+                        clearTimeout(tooltipTimeout);
+                        ensureCorrectHelpFormats($testPage.find('.tooltip-inner'), 'year');
+                        done();
+                    });
                 });
 
                 it('does not pop up a calendar picker', function() {
@@ -667,8 +701,31 @@ define([
                     expect(_.isEqual($testPage.find('input.datepicker-input').val(), validDate)).toBe(true);
                 });
 
-                it('contains a title on the input field', function() {
-                    expect($testPage.find('input.flexible-input').attr('title')).toBe('Enter date in text or numerical format.');
+                it('contains a title on the input field which resets when value is emptied', function(done) {
+                    expect($testPage.find('input.flexible-input')).toHaveProp('title', 'Enter date in text or numerical format.');
+                    $testPage.find('input.flexible-input').val('11/12/2015').trigger('input');
+                    var onOpenCallback = function() {
+                        expect($testPage.find('.tooltip-inner')).toHaveText('11/12/2015');
+                        $testPage.find('input.flexible-input').val('').trigger('input');
+                        var tooltipHideTimeout = setTimeout(function() {
+                            $testPage.find('input.flexible-input').off('hidden.bs.tooltip');
+                            expect($testPage.find('input.flexible-input').attr('title')).toBe('Enter date in text or numerical format.');
+                            done();
+                        }, 400);
+                        $testPage.find('input.flexible-input').one('hidden.bs.tooltip', function() {
+                            clearTimeout(tooltipHideTimeout);
+                            expect($testPage.find('input.flexible-input').attr('title')).toBe('Enter date in text or numerical format.');
+                            done();
+                        });
+                    }
+                    var tooltipTimeout = setTimeout(function() {
+                        $testPage.find('input.flexible-input').off('inserted.bs.tooltip');
+                        onOpenCallback.apply(this, arguments);
+                    }, 300);
+                    $testPage.find('input.flexible-input').one('inserted.bs.tooltip', function() {
+                        clearTimeout(tooltipTimeout);
+                        onOpenCallback.apply(this, arguments);
+                    });
                 });
 
                 it('allows free text to be typed into a date field', function() {
@@ -1000,6 +1057,64 @@ define([
                     expect(testPage.ViewToTest.model.get('_datePicker0').get('formattedDate')).toBe(testDate);
                     $testPage.find('form').trigger('submit');
                     expect($testPage.find('.control.datepicker-control')).not.toHaveClass('has-error');
+                });
+            });
+            describe('with minPrecision option', function() {
+                beforeEach(function() {
+                    testPage = new TestView({
+                        view: new SubmittableForm({
+                            model: new FormModelCleanSlate(),
+                            fields: [_.defaults({
+                                minPrecision: 'day'
+                            }, datePickerControlDefinitionFlexibleBasic)]
+                        })
+                    });
+                    testPage = testPage.render();
+                    $testPage = testPage.$el;
+                    $('body').append($testPage);
+                });
+                it('contains help popover with correct formats for minPrecision of day', function(done) {
+                    expect($testPage.find('button[data-toggle="tooltip"]')).toHaveLength(1);
+                    $testPage.find('button[data-toggle="tooltip"]').tooltip('show');
+                    var tooltipTimeout = setTimeout(function() {
+                        $testPage.find('button[data-toggle="tooltip"]').off('inserted.bs.tooltip');
+                        ensureCorrectHelpFormats($testPage.find('.tooltip-inner'), 'day');
+                        done();
+                    }, 300);
+                    $testPage.find('button[data-toggle="tooltip"]').one('inserted.bs.tooltip', function() {
+                        clearTimeout(tooltipTimeout);
+                        ensureCorrectHelpFormats($testPage.find('.tooltip-inner'), 'day');
+                        done();
+                    });
+
+                });
+                it('sets parsed value as model value if not correct precision and on submit, error is shown', function() {
+                    expect($testPage.find('input.flexible-input')).toHaveLength(1);
+                    $testPage.find('input.flexible-input').val('11/02/2015').change();
+                    expect($testPage.find('input.flexible-input')).toHaveValue('11/02/2015');
+                    expect(testPage.ViewToTest.model.get('datePicker0')).toBe('11/02/2015');
+                    $testPage.find('form').trigger('submit');
+                    expect($testPage.find('.control.datepicker-control')).not.toHaveClass('has-error');
+                    $testPage.find('input.flexible-input').val('11/2015').change();
+                    expect($testPage.find('input.flexible-input')).toHaveValue('11/2015');
+                    expect(testPage.ViewToTest.model.get('datePicker0')).toBe('11/2015');
+                    $testPage.find('form').trigger('submit');
+                    expect($testPage.find('.control.datepicker-control')).toHaveClass('has-error');
+                    expect($testPage.find('span.help-block.error')).toContainText('Date must be in MM/DD/YYYY format');
+                });
+                it('sets parsedDate as date and displays tooltip saying invalid date when not correct precision', function(done) {
+                    $testPage.find('input.flexible-input').val('').change();
+                    $testPage.find('input.flexible-input').val('11/2015').trigger('input');
+                    var tooltipTimeout = setTimeout(function() {
+                        $testPage.find('input.flexible-input').off('inserted.bs.tooltip');
+                        expect($testPage.find('.tooltip-inner')).toContainText('Invalid Date Format');
+                        done();
+                    }, 300);
+                    $testPage.find('input.flexible-input').one('inserted.bs.tooltip', function() {
+                        clearTimeout(tooltipTimeout);
+                        expect($testPage.find('.tooltip-inner')).toContainText('Invalid Date Format');
+                        done();
+                    });
                 });
             });
             describe('with sr-only label option', function() {

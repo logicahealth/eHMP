@@ -1,39 +1,46 @@
 define([
+    'moment',
     'app/applets/orders/writeback/common/assignmentType/assignmentTypeFields'
-], function(AssignmentTypeFields) {
+], function(moment, AssignmentTypeFields) {
     'use strict';
 
-    var bodyContents = [{
+    var errorMessageContainer = {
+        control: "container",
+        extraClasses: ["row"],
+        items: [{
+            control: "alertBanner",
+            name: "errorMessage",
+            title: "Unable To Submit",
+            extraClasses: ["col-xs-12"],
+            type: "danger",
+            dismissible: false
+        }]
+    };
+
+    var bodyContents = [errorMessageContainer, {
         control: 'container',
-        extraClasses: ['row', 'top-padding-lg', 'bottom-padding-lg'],
+        extraClasses: ['row', 'top-padding-md', 'bottom-padding-lg'],
         items: [{
             control: 'container',
-            extraClasses: ['col-xs-8'],
+            extraClasses: ['col-xs-7'],
             template: '<h5 class="font-size-16">Request</h5>'
         }, {
             control: 'container',
-            extraClasses: ['col-xs-4', 'text-right', 'top-margin-xs'],
+            extraClasses: ['col-xs-5', 'text-right', 'top-margin-xs'],
             items: [{
                 control: 'container',
                 tagName: 'span',
                 template: '<span class="btn btn-icon top-padding-no" data-toggle="tooltip" title="Use this activity to request other providers or yourself to complete a patient specific task at any time now or in the future."><i class="fa fa-info-circle font-size-16"/></span><span class="sr-only">Use this activity to request other providers or yourself to complete a patient specific task at any time now or in the future.</span>'
             }, {
                 control: 'container',
-                tagName: 'h4',
-                extraClasses: ['inline-display', 'all-padding-no', 'all-margin-no', 'text-capitalize', 'color-pure-black'],
+                tagName: 'h5',
+                extraClasses: ['inline-display', 'all-padding-no', 'all-margin-no', 'text-uppercase', 'color-pure-black', 'font-size-16'],
                 template: '{{formStatus}}',
                 modelListeners: ['formStatus']
-            }]
-        },{
-            control: 'container',
-            extraClasses: ['col-xs-8']
-        }, {
-            control: 'container',
-            extraClasses: ['col-xs-4', 'text-right'],
-            items: [{
+            }, {
                 control: 'container',
                 extraClasses: ['inline-display', 'all-padding-no', 'all-margin-no'],
-                template: '{{#if formStatusDescription}}<h5>{{formStatusDescription}}</h5>{{/if}}',
+                template: '{{#if formStatusDescription}}<br /><small class="font-size-12 color-pure-black text-uppercase"><strong>{{formStatusDescription}}</strong></small>{{/if}}',
                 modelListeners: ['formStatusDescription']
             }]
         }]
@@ -63,19 +70,19 @@ define([
             extraClasses: ['col-xs-6'],
             name: 'earliest',
             required: true,
-            startDate: moment(),
-            label: 'Earliest Date',
-            title: 'Enter the earliest date for the request in the following format, MM/DD/YYYY',
-            outputFormat: 'MM/DD/YYYY'
+            startDate: '0d',
+            flexible: true,
+            minPrecision: 'day',
+            label: 'Earliest date',
         }, {
             control: 'datepicker',
             extraClasses: ['col-xs-6'],
             name: 'latest',
             required: true,
-            startDate: moment(),
-            label: 'Latest Date',
-            title: 'Enter the latest date for the request in the following format, MM/DD/YYYY',
-            outputFormat: 'MM/DD/YYYY'
+            startDate: '0d',
+            label: 'Latest date',
+            flexible: true,
+            minPrecision: 'day'
         }]
     }, {
         control: 'container',
@@ -92,7 +99,7 @@ define([
         }]
     }];
 
-    _.each(AssignmentTypeFields, function(field) {
+    _.each(AssignmentTypeFields.getFields(), function(field) {
         bodyContents.push(field);
     });
 
@@ -106,7 +113,8 @@ define([
             label: 'Request',
             placeholder: 'Enter your request',
             title: 'Enter details for the request',
-            maxlength: 200
+            maxlength: 200,
+            rows: 4
         }]
     });
 
@@ -115,14 +123,18 @@ define([
         extraClasses: ['modal-body', 'top-padding-no'],
         items: [{
             control: 'container',
-            extraClasses: ['all-padding-md', 'top-padding-xs', 'bottom-padding-md', 'bottom-border-grey-light', 'activityDetailsContainer'],
+            extraClasses: ['row', 'all-margin-no'],
             items: {
-                control: 'button',
-                extraClasses: ['btn-primary'],
-                id: 'activityDetails',
-                label: 'Activity Details',
-                type: 'button',
-                title: 'Press enter for activity details'
+                control: 'container',
+                extraClasses: ['col-xs-12', 'top-padding-sm', 'bottom-padding-sm', 'bottom-border-grey-light', 'activityDetailsContainer', 'background-color-primary-light-alt'],
+                items: {
+                    control: 'button',
+                    extraClasses: ['btn-primary', 'btn-sm'],
+                    id: 'activityDetails',
+                    label: 'Activity details',
+                    type: 'button',
+                    title: 'Press enter for activity details'
+                }
             }
         }, {
             control: 'container',
@@ -137,21 +149,35 @@ define([
             extraClasses: ['row'],
             items: [{
                 control: 'container',
-                extraClasses: ['col-xs-12'],
+                extraClasses: ['col-xs-12', 'display-flex', 'valign-bottom'],
                 items: [{
-                    control: 'button',
-                    extraClasses: ['btn-danger', 'btn-sm', 'pull-left'],
-                    id: 'requestDeleteButton',
-                    label: 'Delete',
-                    type: 'button',
-                    title: 'Press enter to delete'
+                    control: 'container',
+                    extraClasses: ['flex-grow-loose', 'text-left'],
+                    items: [{
+                        control: 'popover',
+                        behaviors: {
+                            Confirmation: {
+                                title: 'Delete Request',
+                                eventToTrigger: 'request-add-confirm-delete',
+                                message: 'Are you sure you want to delete?'
+                            }
+                        },
+                        label: 'Delete',
+                        name: 'requestAddConfirmDelete',
+                        id: 'requestDeleteButton',
+                        extraClasses: ['btn-default', 'btn-sm']
+                    }]
                 }, {
-                    control: 'button',
-                    extraClasses: ['btn-default', 'btn-sm'],
-                    id: 'requestCancelButton',
+                    control: 'popover',
+                    behaviors: {
+                        Confirmation: {
+                            title: 'Warning',
+                            eventToTrigger: 'request-add-confirm-cancel'
+                        }
+                    },
                     label: 'Cancel',
-                    type: 'button',
-                    title: 'Press enter to cancel'
+                    name: 'requestAddConfirmCancel',
+                    extraClasses: ['btn-default', 'btn-sm', 'right-margin-xs']
                 }, {
                     control: 'button',
                     extraClasses: ['btn-primary', 'btn-sm'],

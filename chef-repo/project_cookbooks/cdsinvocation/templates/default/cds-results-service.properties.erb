@@ -26,4 +26,11 @@ RDK-resource-server=http://<%= @rdks[0]['ipaddress'] %>:<%= @rdks[0]['rdk']['ser
 CRSServer=http://<%= @crs['ipaddress'] %>:<%= @crs['crs']['fuseki']['port'] %>/
 <% end %>
 authentication-path=authentication/systems/internal
-mongo-db-url=mongodb://<%= @cdsdb['ipaddress'] %>:<%= @cdsdb['cdsdb']['config']['port'] %>
+mongo-db-url=mongodb://<%= @cdsdb['ipaddress'] %>:<%= @cdsdb[:mongodb][:config][:port] %>
+mongo_host=<%= @cdsdb['ipaddress'] %>
+mongo_port=<%= @cdsdb[:mongodb][:config][:port] %>
+mongo_username=<%= @mongodb_creds['cds']['user'] %>
+mongo_password=<%= @mongodb_creds['cds']['password'] %>
+mongo_connectionsPerHost=10
+deployDefaultIntents=<%= @dev_cdsi %>
+cacheIntents=<%= @dev_cdsi %>

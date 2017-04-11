@@ -12,11 +12,11 @@ PXVIMM IMMDATA
 
     :[site]({{{common}}}/parameters/site.md)
 
-    + brief (boolean, required) - A value of true indicates that the returned array is to contain just the first 10 fields list listed in the RETURNED VALUE description from the IMMUNIZATION file.
+    + brief (boolean, optional) - A value of true indicates that the returned array is to contain just the first 10 fields list listed in the RETURNED VALUE description from the IMMUNIZATION file.
 
-    + activeOnly (boolean, required) - A value of true indicates that only active immunizations should be returned.
+    + activeOnly (boolean, optional) - A value of true indicates that only active immunizations should be returned.
 
-    + selectableForHistoric (boolean, required) - A value of true indicates that records marked as SELECTABLE FOR HISTORIC `8803` should also be returned along with the active immunizations. This only has meaning if the activeOnly parameter is also set to true. Otherwise all records will be returned whether or not the SELECTABLE FOR HISTORIC flag is true.
+    + selectableForHistoric (boolean, optional) - A value of true indicates that records marked as SELECTABLE FOR HISTORIC `8803` should also be returned along with the active immunizations. This only has meaning if the activeOnly parameter is also set to true. Otherwise all records will be returned whether or not the SELECTABLE FOR HISTORIC flag is true.
 
 ### GET
 

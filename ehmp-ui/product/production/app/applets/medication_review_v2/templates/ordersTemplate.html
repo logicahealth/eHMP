@@ -17,7 +17,7 @@
         </div>
         <div class="col-xs-3">
             <p>
-                <span><strong>Prescription No.</strong></span><br />
+                <span><strong>Prescription No.:</strong></span><br />
                 {{#each orders}} {{#if prescriptionId}}
                 <span>{{prescriptionId}}</span><br />
                 {{else}}
@@ -27,7 +27,7 @@
         </div>
         <div class="col-xs-3">
             <p>
-                <span><strong>Supply</strong></span><br />
+                <span><strong>Supply:</strong></span><br />
                 {{#each orders}} {{#if quantityOrdered}}
                 <span>
                     {{quantityOrdered}} <span class="text-lowercase">for</span> {{daysSupply}} <span class="text-lowercase">days</span> ({{fillsRemaining}} <span class="text-lowercase">of</span> {{fillsAllowed}} <span class="text-lowercase">remaining</span>
@@ -39,7 +39,7 @@
         </div>
         <div class="col-xs-3">
             <p>
-                <span><strong>Dose/Schedule</strong></span><br />
+                <span><strong>Dose/Schedule:</strong></span><br />
                 {{#each dosages}}
                 <span>{{dose}} {{dosagesUnits}} {{routeName}} {{scheduleName}} {{duration}} {{complexDuration}} {{complexConjunction}}</span><br />
                 {{/each}}
@@ -49,7 +49,7 @@
     <div class="row top-margin-sm">
         <div class="col-xs-3">
             <p>
-                <span><strong>Provider</strong></span><br />
+                <span><strong>Provider:</strong></span><br />
                 {{#each orders}}
                 <span>{{providerName}}</span><br />
                 {{/each}}
@@ -57,7 +57,7 @@
         </div>
         <div class="col-xs-3">
             <p>
-                <span><strong>Pharmacist</strong></span><br />
+                <span><strong>Pharmacist:</strong></span><br />
                 {{#each orders}}
                 <span>{{pharmacistName}}</span><br />
                 {{/each}}
@@ -65,7 +65,7 @@
         </div>
         <div class="col-xs-3">
             <p>
-                <span><strong>Location</strong></span><br />
+                <span><strong>Location:</strong></span><br />
                 {{#each orders}}
                 <span>{{locationName}}</span><br />
                 {{/each}}
@@ -73,7 +73,7 @@
         </div>
         <div class="col-xs-3">
             <p>
-                <span><strong>Facility</strong></span><br />
+                <span><strong>Facility:</strong></span><br />
                 {{#each orders}} {{#if facilityName}}
                 <span>{{facilityName}}</span><br />
                 {{else}}

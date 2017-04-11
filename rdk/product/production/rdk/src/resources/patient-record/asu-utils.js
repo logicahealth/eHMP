@@ -1,4 +1,3 @@
-/*jslint node: true */
 'use strict';
 
 var rdk = require('../../core/rdk');
@@ -18,7 +17,7 @@ function applyAsuRules(req, details, callback) {
             });
         }
     }, function (error, response) {
-        if (!_.isUndefined(error)) {
+        if (error) {
             req.logger.debug(error, 'asuProcess.getAsuPermissionForActionNames: Got an error fetching default USER class from JDS');
             return callback(error);
         }
@@ -77,6 +76,7 @@ function applyAsuRules(req, details, callback) {
                     if (asuResult === true) {
                         req.logger.debug('asu-utils.applyAsuRules: pushing item to response');
                         documents.response.push(item);
+                        return;
                     }
                     item.text = [];
                 });
@@ -94,7 +94,7 @@ function applyAsuRulesWithActionNames(req, requiredPermission, allPermissions, d
             });
         }
     }, function (error, response) {
-        if (!_.isUndefined(error)) {
+        if (error) {
             req.logger.debug(error, 'asuProcess.getAsuPermissionForActionNames: Got an error fetching default USER class from JDS');
             return callback(error);
         }
@@ -165,6 +165,8 @@ function applyAsuRulesWithActionNames(req, requiredPermission, allPermissions, d
                             asuResult: item
                         }, 'asu-utils.applyAsuRulesForActionNames: pushing item to response');
                         documents.response.push(item);
+                    } else {
+                        formatAddendum(item);
                     }
                 });
 
@@ -296,8 +298,6 @@ function formatAddendum(item) {
                 textElement.contentPreview = NO_PERMISSION_FOR_ADDENDUM;
             }
         });
-    } else {
-        item.text = [];
     }
 }
 

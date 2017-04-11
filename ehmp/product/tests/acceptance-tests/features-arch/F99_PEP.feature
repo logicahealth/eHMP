@@ -22,7 +22,7 @@ Scenario: Client can break the glass after being warned when requesting demograp
 @US810
 Scenario: Non-CPRS user cannot access patient demographics
 	Given a patient with "demographics" in multiple VistAs
-	When a user "9E7A;lu1234" with password "lu1234!!" requests demographics for that patient "10105V001065"
+	When a user "9E7A;PW    " with password "PW    !!" requests demographics for that patient "10105V001065"
 	Then a forbidden response is returned
 
 

@@ -4,7 +4,7 @@ var _ = require('lodash');
 var rdk = require('../core/rdk');
 var http = rdk.utils.http;
 
-function getSubsystemConfig(app) {
+function getSubsystemConfig(app, logger) {
     return {
         healthcheck: {
             name: 'jds',
@@ -12,7 +12,7 @@ function getSubsystemConfig(app) {
             check: function(callback) {
                 var patientrecordOptions = _.extend({}, app.config.jdsServer, {
                     url: '/ping',
-                    logger: app.logger,
+                    logger: logger,
                     timeout: 5000
                 });
 

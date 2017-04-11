@@ -1,7 +1,7 @@
 define([
     'moment',
     'pattern-fill'
-], function() {
+], function(moment) {
     'use strict';
     (function(H) {
         var defaultPlotOptions = H.getOptions().plotOptions,

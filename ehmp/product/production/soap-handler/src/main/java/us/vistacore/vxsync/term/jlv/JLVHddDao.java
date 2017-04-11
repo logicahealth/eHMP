@@ -1,6 +1,7 @@
 package us.vistacore.vxsync.term.jlv;
 
 
+import org.h2.jdbcx.JdbcDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -8,10 +9,11 @@ import us.vistacore.vxsync.term.hmp.TermLoadException;
 import us.vistacore.vxsync.utility.NullChecker;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.naming.NamingException;
 
 /**
  * This class is used to read/write concept information from the JLV H2 Terminology database.
@@ -95,9 +97,18 @@ public class JLVHddDao {
 	 * 
 	 * @return The JDBC Connection
 	 * @throws SQLException The exception that is thrown if the connection could not be created.
+	 * @throws NamingException 
 	 */
-	protected Connection getConnection() throws SQLException {
-		return DriverManager.getConnection(this.sJLVH2JdbcUrl, "sa", "");
+	protected Connection getConnection() throws SQLException, NamingException {
+		JdbcDataSource jbdcds = new JdbcDataSource();
+		jbdcds.setUrl(this.sJLVH2JdbcUrl);
+		jbdcds.setUser("sa");
+		jbdcds.setPassword("");
+		
+		Connection conn = null;
+
+		conn = jbdcds.getConnection();
+		return conn;
 	}
 	
 	/**

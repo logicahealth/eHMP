@@ -5,9 +5,11 @@ define([
     'app/applets/documents/appletHelper',
     'app/applets/documents/detail/dodComplexNoteUtil',
     'app/applets/documents/detail/addendaView',
-    'hbs!app/applets/documents/detail/simple/docDetailTemplate'
-], function(Backbone, Marionette, _, appletHelper, dodComplexNoteUtil, AddendaView, detailTemplate) {
+    'hbs!app/applets/documents/detail/simple/docDetailTemplate',
+    'app/applets/documents/imaging/views/thumbnailCollectionView'
+], function(Backbone, Marionette, _, appletHelper, dodComplexNoteUtil, AddendaView, detailTemplate, ThumbnailCollectionView) {
     'use strict';
+
     return Backbone.Marionette.LayoutView.extend({
         template: detailTemplate,
         events: {
@@ -16,7 +18,8 @@ define([
         },
         regions: {
             addendaRegion: '.document-detail-addenda-region',
-            pdfViewer: '.pdf-viewer-container'
+            pdfViewer: '.pdf-viewer-container',
+            thumbnailRegion: '.thumbnails-region'
         },
         onClickResultLink: function(event) {
             var docUid = $(event.target).attr('data-doc-uid'),
@@ -38,6 +41,11 @@ define([
                 this.pdfViewer.show(new ADK.UI.PdfViewer({
                     model: this.model
                 }));
+            if (this.model.get('hasImages')) {
+                this.thumbnailRegion.show(new ThumbnailCollectionView({
+                    collection: this.model.get('thumbnails'),
+                }));
+            }
         },
         onEnter: function(keyEvent) {
             if (keyEvent.keyCode === 13 || keyEvent.keyCode === 32) {
@@ -49,6 +57,20 @@ define([
             if (this.model.get('dodComplexNoteContent')) {
                 dodComplexNoteUtil.showContent.call(this, this.model);
             }
+        },
+        getNextModal: function(model, view, resultDocCollection, childDocCollection) {
+            var modals = model.collection.models;
+            var next = _.indexOf(modals, model) + 1;
+            var newModel = modals[next];
+            var appletRows = _.filter($('[data-appletid="documents"] tbody tr'), function(item) { return !($(item).hasClass('group-by-header')); });
+            appletRows[next].click();
+        },
+        getPrevModal: function(model, view, resultDocCollection, childDocCollection) {
+            var modals = model.collection.models;
+            var next = _.indexOf(modals, model) - 1;
+            var newModel = modals[next];
+            var appletRows = _.filter($('[data-appletid="documents"] tbody tr'), function(item) { return !($(item).hasClass('group-by-header')); });
+            appletRows[next].click();
         }
     });
 });

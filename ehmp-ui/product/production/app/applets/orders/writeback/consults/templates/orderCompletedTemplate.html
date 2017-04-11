@@ -1,4 +1,8 @@
+{{#if_eq domain "lab"}}
 <p class="color-secondary"><strong>Completed:</strong></p>
-<a href="javascript:void(0);" title="Press enter to view the results file" class="btn btn-link btn-sm prereq-order-results left-padding-xs color-secondary">
+<a href="javascript:void(0);" data-label="{{label}}" title="Press enter to view the results file" class="btn btn-link btn-sm prereq-order-results left-padding-xs color-secondary">
 	<i class="fa fa-file-text-o fa-lg font-size-14 right-padding-xs valign-top"></i>{{formatDate statusDate "MM/DD/YYYY"}}
 </a>
+{{else}}
+<p class="color-secondary"><strong>Completed</strong></p>
+{{/if_eq}}

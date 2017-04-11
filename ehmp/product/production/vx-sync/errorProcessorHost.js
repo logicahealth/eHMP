@@ -46,7 +46,7 @@ process.on('SIGURG', function() {
     pauseProcessors(processors);
     listenForShutdownReady(processors);
 
-    //TODO: move time to wait into configuration
+    //FUTURETODO: move time to wait into configuration
     setTimeout(timeoutOnWaitingForShutdownReady, 30000, processors).unref();
 });
 

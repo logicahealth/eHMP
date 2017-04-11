@@ -47,7 +47,7 @@ Then(/^user views the "(.*?)" demographics$/) do |chosen_patient, table|
   demo_details.wait_until_element_present(new_action_key, 5)
   demo_details.static_dom_element_exists?(new_action_key)
   demo_details.perform_action(new_action_key)
-  sleep 5 # TODO: change so not hard coded sleep
+  sleep 5
   table.rows.each do | cucumber_label, value_expected |
     demo_details.perform_verification(cucumber_label, value_expected)
   end

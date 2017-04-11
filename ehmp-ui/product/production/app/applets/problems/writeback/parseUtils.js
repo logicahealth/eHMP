@@ -1,6 +1,7 @@
 define([
-    'jquery'
-], function($) {
+    'jquery',
+    'moment'
+], function($, moment) {
     "use strict";
 
     return {

@@ -77,8 +77,7 @@ define([
         }
 
         formModel.set('value', true); // for signing
-        //openTrayOnDestroy = !_.isUndefined(notesFormOptions.openTrayOnDestroy) ? notesFormOptions.openTrayOnDestroy : true,
-        formModel.openTrayOnDestroy = true; //openTrayOnDestroy;
+        formModel.openTrayOnDestroy = true;
         var signCollection = new Backbone.Collection([formModel]);
         SignatureUtil.addAttributes(signCollection);
         var signModel = new ADK.UIResources.Writeback.Notes.NotesSignModel({
@@ -194,8 +193,9 @@ define([
             closeButton: '.control.note-close',
             deleteButton: '.control.note-delete',
             signButton: '.control.note-sign',
-            textArea: '#noteBody',
+            textArea: '.control.noteBody',
             titles: '.control.documentDefUidUnique',
+            selectNotesTitle: '#documentDefUidUnique',
             saveErrorBanner: '.saveErrorBanner'
         },
         events: {
@@ -212,7 +212,7 @@ define([
                 e.preventDefault();
                 this.onCloseForm(this, true);
             },
-            'click @ui.deleteButton': 'deleteNote'
+            'note-confirm-delete':'deleteNote'
         },
         modelEvents: {
             'change:documentDefUidUnique': 'addTitle',
@@ -269,6 +269,9 @@ define([
             this.listenTo(this.notesChannel, 'note:close_form', function() {
                 this.workflow.close();
             });
+            this.listenTo(this.notesChannel, 'workflow:done', function() {
+                this.showLoading();
+            });
 
             this.listenTo(this.notesChannel, 'note:sign', function(model, mode) {
                 if (model.isNew()) { // Save note if it's new and when it sign from preview modal
@@ -318,8 +321,14 @@ define([
             event.stopPropagation();
             this.$('.dropdown').toggleClass('open');
         },
+        showLoading: function() {
+            if (!titleFetchDone) {
+                this.$el.trigger('tray.loaderShow',{
+                    loadingString:'Loading'
+                });
+            }
+        },
         addTitle: function() {
-            this.ui.titles.trigger('control:disabled', true);
             this.model.unset('asuPermissions', {
                 silent: true
             });
@@ -337,8 +346,17 @@ define([
                     this.saveNote(false, false, true, false);
                 }
             } else {
+                this.model.set({
+                    'documentDefUid': null,
+                    'localTitle': null
+                }, {
+                    silent: true,
+                    unset: true
+                });
                 this.enableButtons();
             }
+            // Make sure focus remains on the select component after selecting a note title.
+            this.$el.find('#select2-' + this.ui.selectNotesTitle.prop('id') + '-container').closest('.select2-selection').focus();
             this.enableText();
             this.initTitlePermissions();
         },
@@ -378,6 +396,7 @@ define([
             } else {
                 self.enforcePermissions();
             }
+            this.$el.trigger('tray.loaderHide');
         },
         onClickActionButton: function(event) {
             event.preventDefault();
@@ -404,7 +423,7 @@ define([
         },
         registerChecks: function(model) {
             // Register Check once and only on valuable model attributes change
-            if ((_.has(model.changed, "localTitle") || _.has(model.changed, "derivReferenceDate") || _.has(model.changed, "derivReferenceTime") || _.has(model.changed, "noteBody")) && (!model.get("_isCheckRegistred"))) {
+            if ((_.has(model.changed, "localTitle") || _.has(model.changed, "derivReferenceDate") || _.has(model.changed, "derivReferenceTime") || _.has(model.changed, "noteBody")) ) {
                 var checkOptions = {
                     id: navigationCheckId,
                     label: 'Note',
@@ -413,10 +432,13 @@ define([
                         this.workflow.close();
                     }, this)
                 };
+                ADK.Checks.unregister({
+                    id: navigationCheckId
+                });
                 ADK.Checks.register([new ADK.Navigation.PatientContextCheck(checkOptions),
                     new ADK.Checks.predefined.VisitContextCheck(checkOptions)
                 ]);
-                model.set("_isCheckRegistred", true, {
+                model.set("_isFormChanged", true, {
                     silent: true
                 });
             }
@@ -425,13 +447,6 @@ define([
             ADK.Checks.unregister({
                 id: navigationCheckId
             });
-        },
-        checkFormChanges: function(model) {
-            if ((_.has(model.changed, "localTitle") || _.has(model.changed, "derivReferenceDate") || _.has(model.changed, "derivReferenceTime") || _.has(model.changed, "noteBody")) && (!model.get("_isFormChanged"))) {
-                model.set("_isFormChanged", true, {
-                    silent: true
-                });
-            }
         },
         onRender: function() {
             var formView;
@@ -443,6 +458,9 @@ define([
             if (!ADK.UserService.hasPermission('sign-note')) {
                 this.ui.signButton.addClass("hidden");
             }
+            if (!ADK.UserService.hasPermission('edit-note')) {
+                this.ui.closeButton.addClass("hidden");
+            }
             this.subtrayChannel.reply('note:ready', _.bind(function() {
                 return !!this.isEditReady();
             }, this));
@@ -451,7 +469,6 @@ define([
             }, this));
 
             this.listenTo(this.model, 'change.inputted', this.registerChecks);
-            this.listenTo(this.model, 'change.inputted', this.checkFormChanges);
             this.initTitlePermissions();
         },
         onShow: function() {
@@ -491,19 +508,23 @@ define([
         showTitleError: function() {
             var message = 'Unable to fetch note titles. Reopen the form to try again.';
             var titleErrorView = new ADK.UI.Notification({
-                title: 'Warning',
+                title: 'Error',
                 message: message,
-                type: 'warning'
+                type: 'info'
             });
             titleErrorView.show();
         },
         saveNote: function(formSign, formClose, formAuto, formCancel) {
             var self = this;
-            this.disableButtons();
+            this.disableButtons(!formAuto);
             this.doSaveNote(formSign, formClose, formAuto, formCancel);
         },
         doSaveNote: function(formSign, formClose, formAuto, formCancel) {
-            this.disableButtons();
+            if (formClose) {
+                this.disableButtons(true,'Drafting');
+            } else {
+                this.disableButtons(!formAuto,'Saving');
+            }
 
             if (!formCancel) {
                 this.model.set('lastSavedTime', moment().format('YYYYMMDDHHmmss'));
@@ -520,12 +541,8 @@ define([
                 silent: true
             });
             var self = this;
-            self.$el.trigger('tray.loaderShow',{
-                loadingString:'Saving note'
-            });
             this.model.save(null, {
                 error: function(model, resp) {
-                    self.$el.trigger('tray.loaderHide');
                     //re-set the permissions: they haven't changed.
                     //review
                     console.error('Note save error:', resp);
@@ -550,10 +567,10 @@ define([
                         self.ui.saveErrorBanner.removeClass('hidden');
                         self.ui.saveErrorBanner.focus();
                     }
-                    self.enableButtons();
+                    self.enableButtons(!formAuto);
+                    self.enforcePermissions();
                 },
                 success: function(model, resp) {
-                    self.$el.trigger('tray.loaderHide');
                     //re-set the permissions: they haven't changed.
                     if (perms) {
                         model.set('asuPermissions', perms);
@@ -572,7 +589,7 @@ define([
                     if (formClose) {
                         self.workflow.close();
                     } else {
-                        self.enableButtons();
+                        self.enableButtons(!formAuto);
                         self.enforcePermissions();
                     }
                     if (formAuto) {
@@ -582,9 +599,8 @@ define([
                     }
                     if (!formAuto && !formSign) {
                         var saveAlertView = new ADK.UI.Notification({
-                            title: 'Note Saved',
-                            icon: 'fa-check',
-                            message: 'Note successfully saved with no errors.',
+                            title: 'Success',
+                            message: 'Note Draft Saved',
                             type: 'success'
                         });
                         saveAlertView.show();
@@ -604,7 +620,7 @@ define([
                 return;
                 // } else if (ADK.Messaging.request('get:adkApp:region', 'alertRegion').hasView()) { --- we concluded not to check for errors on autosave while modals exist (see discussion in DE5084)
             } else {
-                if (this.model.get("_isFormChanged")) {
+                if (this.model.get("_isFormChanged") && this.model.isValid()) {
                     var formSign = false;
                     var formClose = false;
                     var formSilent = true;
@@ -654,7 +670,7 @@ define([
         deleteNote: function(event) {
             this.disableButtons();
             var self = this;
-            util.deleteNoteWithPrompt(this.model, {
+            util.deleteNote(this.model, {
                 completeCallback: _.bind(this.enableButtons, this),
                 successCallback: function(response) {
                     if (response && response.data.failedConsults) {
@@ -664,8 +680,7 @@ define([
                             message: 'One or more consults failed to disassociate.'
                         });
                         alertView.show();
-                        console.error('Failed to disassociate consults. Failed consults object array:');
-                        console.error(response.data.failedConsults);
+                        console.error('Failed to disassociate consults. Failed consults object array: ', response.data.failedConsults);
                     }
                     self.workflow.close();
                 }
@@ -694,24 +709,30 @@ define([
             }
         },
         enforceEditForm: function() {
-            if (titleFetchDone && asuUtil.canChangeTitle(this.model)) {
+            if (titleFetchDone && (asuUtil.canChangeTitle(this.model) || !this.model.get('documentDefUid'))) {
                 this.ui.titles.trigger('control:disabled', false);
             } else {
                 this.ui.titles.trigger('control:disabled', true);
             }
         },
-
+        // Call this whenever you enableButtons (after) to hide buttons the user shouldn't be able to see
         enforcePermissions: function() {
-            //if it has a title, check for sign permisson
+            //if it has a title, check for sign permission
             if (this.model.get('documentDefUid') && this.model.get('documentDefUid').length) {
                 if (!asuUtil.canSign(this.model)) {
                     this.ui.signButton.addClass('hidden');
                 } else {
                     this.ui.signButton.removeClass('hidden');
                 }
+                if (!asuUtil.canEdit(this.model)) {
+                    this.ui.closeButton.addClass('hidden');
+                } else {
+                    this.ui.closeButton.removeClass('hidden');
+                }
             } else {
                 //No title selected. Show, but disable, the sign button
                 this.ui.signButton.removeClass('hidden');
+                this.ui.closeButton.removeClass('hidden');
             }
             this.enableText();
 
@@ -722,7 +743,6 @@ define([
             }
         },
         isEditReady: function() {
-            this.$el.trigger('tray.loaderHide');
             return this.model.get('localTitle') ? true && asuUtil.canEdit(this.model) : false;
         },
         enableText: function() {
@@ -742,17 +762,34 @@ define([
                 this.subtrayChannel.trigger('note:enabled');
             }
         },
-        disableButtons: function() {
+        disableButtons: function(showLoader,loaderMessage) {
+            if (_.isUndefined(showLoader)){
+                showLoader = true;
+            }
+            if (_.isUndefined(loaderMessage)){
+                loaderMessage = 'Loading';
+            }
             this.ui.previewButton.trigger('control:disabled', true);
             this.ui.closeButton.trigger('control:disabled', true);
             this.ui.signButton.trigger('control:disabled', true);
             this.ui.deleteButton.trigger('control:disabled', true);
+            if (showLoader){
+                this.$el.trigger('tray.loaderShow',{
+                    loadingString:loaderMessage
+                });
+            }
         },
-        enableButtons: function() {
+        enableButtons: function(hideLoader) {
+            if (_.isUndefined(hideLoader)){
+                hideLoader = true;
+            }
             this.ui.previewButton.trigger('control:disabled', false);
-            this.ui.closeButton.trigger('control:disabled', false);
+            this.ui.closeButton.trigger('control:disabled', false); // Draft Button
             this.ui.signButton.trigger('control:disabled', false);
             this.ui.deleteButton.trigger('control:disabled', false);
+            if (hideLoader){
+                this.$el.trigger('tray.loaderHide');
+            }
         },
         onBeforeDestroy: function() {
             this.unregisterChecks();
@@ -760,15 +797,11 @@ define([
         onDestroy: function() {
             this.stopAutosave();
             delete this.subtrayChannel;
-
-            // if (this.model.openTrayOnDestroy) {
-            //     this.notesChannel.trigger('tray:open');
-            // }
         },
         onAttach: function() {
             if (this.$('#documentDefUidUnique').is(':visible')){
                 this.$el.trigger('tray.loaderShow',{
-                    loadingString:'Loading note titles'
+                    loadingString:'Loading'
                 });
             }
         }

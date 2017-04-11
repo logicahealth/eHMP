@@ -91,21 +91,29 @@ end
 
 # end
 
-When(/^the client requests allergies for the patient "(.*?)" in FHIR format$/) do |pid|
-  temp = RDKQuery.new('adversereaction-adversereactions')
-  temp.add_parameter("subject.identifier", pid)
-  temp.add_acknowledge("true")
-  p temp.path
-  @response = HTTPartyRDK.get(temp.path)
+When(/^the client requests allergies for the patient "(.*?)" in FHIR format$/) do |pid|  
+  temp = QueryRDKCDSfhir.new
+  path = temp.path + "/adverseReaction?subject.identifier=" + "#{pid}"
+  type = { "Content-Type" => "application/json" }
+  @response = HTTPartyRDK.get(path)
+  puts @response
 end
 
 When(/^the client requests "(.*?)" allergies for the patient "(.*?)" in FHIR format$/) do |limit, pid|
-  temp = RDKQuery.new('adversereaction-adversereactions')
-  temp.add_parameter("subject.identifier", pid)
-  temp.add_acknowledge("true")
-  temp.add_parameter("limit", limit)
-  p temp.path
-  @response = HTTPartyRDK.get(temp.path)
+  temp = QueryRDKCDSfhir.new
+  path = temp.path + "/adverseReaction?subject.identifier=" + "#{pid}" + "&limit=" + "#{limit}"
+  type = { "Content-Type" => "application/json" }
+  @response = HTTPartyRDK.get(path)
+  json = JSON.parse(@response.body)
+  i = 0
+  while i < json["entry"].size
+    @adversereaction = json["entry"][i]["title"]
+    expect(@adversereaction.include? "adversereaction").to eq(true)
+    p @adversereaction
+    i += 1
+  end
+  p i
+  expect(limit.to_i).to eq(i)
 end
 
 Then(/^the client receives (\d+) FHIR DoD result\(s\)$/) do |number_of_results|

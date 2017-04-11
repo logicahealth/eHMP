@@ -54,12 +54,6 @@ input.form-control.alert-danger:-ms-input-placeholder {
         overflow-y: hidden;
     }
 }
-// .overview, .documents-list, .cover-sheet, .medication-review, .hypertension-cbw, .diabetes-mellitus-cbw, .depression-cbw, .pre-procedure-cbw, .notifications-full, .news-feed, .record-search {
-//     #center-region {
-//         background: $pure-white;
-//         background: linear-gradient(to bottom, $pure-white 0%, $primary-light 20%, $primary-light 100%);
-//     }
-// }
 .my-notifications-full {
     #center-region {
         background-color: $pure-white;
@@ -92,10 +86,6 @@ input.form-control.alert-danger:-ms-input-placeholder {
 .overview #content-region .panel {
     margin-bottom: 15px;
 }
-// .grid-footer {
-//     height: 5px;
-//     background: $pure-white;
-// }
 
 
 /*--- gridster ---*/
@@ -112,8 +102,21 @@ input.form-control.alert-danger:-ms-input-placeholder {
         height: inherit;
     }
     .grid-applet-panel {
-        height: inherit;
-        overflow-y: auto;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        .grid-container {
+            flex-grow: 1;
+            flex-shrink: 1;
+            position: relative;
+            min-height: 200px;
+            min-height: calc(2vh - 2vh);
+            & > div {
+                position: absolute;
+                height: 100%;
+                width: 100%;
+            }
+        }
     }
     span.center-block.text-center.panel-title {
         cursor: move;
@@ -199,10 +202,6 @@ input.form-control.alert-danger:-ms-input-placeholder {
     .panel-primary {
         height: 100%;
     }
-    .grid-applet-panel {
-        height: inherit;
-        overflow-y: auto;
-    }
     span.center-block.text-center.panel-title {
         cursor: move;
     }
@@ -211,15 +210,6 @@ input.form-control.alert-danger:-ms-input-placeholder {
 .optionsPanelStyle {
     color: red;
     background-color: white;
-}
-body.overlay-open {
-    #top-region, #center-region, #bottom-region {
-        -webkit-filter: blur(2px);
-        -moz-filter: blur(2px);
-        -o-filter: blur(2px);
-        -ms-filter: blur(2px);
-        filter: blur(2px);
-    }
 }
 /*--- Bootstrap ---*/
 .table {
@@ -245,7 +235,7 @@ body.overlay-open {
     border: 5px solid $grey-lighter;
     padding: 0px;
     margin-top: 0px!important;
-    z-index: 1040;
+    z-index: 10;
     .popover-title-container {
         display: table;
         background-color: #dde3e8;
@@ -293,22 +283,6 @@ body.overlay-open {
             float: right;
             padding: 0;
             background: none;
-        }
-    }
-}
-.filtered {
-    .panel.panel-primary .applet-div-chrome-container .gridContainer .grid-container {
-        height: calc(100% - 20px);
-    }
-    &[data-appletid=orders] .panel.panel-primary .applet-div-chrome-container .gridContainer .grid-container {
-        height: calc(100% - 44px);
-    }
-    &.edit-filtered {
-        .panel.panel-primary .applet-div-chrome-container .gridContainer .grid-container {
-            height: calc(100% - 90px);
-        }
-        &[data-appletid=orders] .panel.panel-primary .applet-div-chrome-container .gridContainer .grid-container {
-            height: calc(100% - 119px);
         }
     }
 }

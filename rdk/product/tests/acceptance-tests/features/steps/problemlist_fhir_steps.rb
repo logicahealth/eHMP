@@ -1,10 +1,7 @@
 When(/^the client requests problem list for the patient "(.*?)" in FHIR format$/) do |pid|
-  temp = RDKQuery.new('condition-getProblems')
-  temp.add_parameter("subject.identifier", pid)
-  temp.replace_path_var(":id", pid)
-  temp.add_acknowledge("true")
-  p temp.path
-  @response = HTTPartyRDK.get(temp.path)
+  temp = QueryRDKCDSfhir.new
+  path = temp.path + "/patient/#{pid}/condition"
+  @response = HTTPartyRDK.get(path)
 end
 
 When(/^the client requests problem list for that sensitive patient "(.*?)"$/) do |pid|

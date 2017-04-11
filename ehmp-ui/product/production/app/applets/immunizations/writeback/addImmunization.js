@@ -3,10 +3,11 @@ define([
     'marionette',
     'jquery',
     'handlebars',
+    'moment',
     'app/applets/immunizations/writeback/utils/parseUtils',
     'app/applets/immunizations/writeback/utils/validationUtil',
     'app/applets/immunizations/writeback/utils/writebackUtils'
-], function(Backbone, Marionette, $, Handlebars, ParseUtil, ValidationUtil, WritebackUtil) {
+], function(Backbone, Marionette, $, Handlebars, moment, ParseUtil, ValidationUtil, WritebackUtil) {
     "use strict";
 
     var ImmuniztionType = {
@@ -31,13 +32,13 @@ define([
             }]
         }, {
             control: 'container',
-            extraClasses: ['col-xs-7', 'immunization-type-container', 'bottom-margin-sm'],
+            extraClasses: ['col-xs-12', 'immunization-type-container'],
             template: Handlebars.compile('<i class="loading fa fa-spinner fa-spin"></i>'),
             items: [{
                 control: 'select',
                 name: 'immunizationType',
-                label: 'Select an Immunization Type.',
-                title: 'Start typing to retrieve immunizations and use the arrow keys to select.',
+                label: 'Select an Immunization Type',
+                title: 'Press enter to open the immunization type search filter text',
                 required: true,
                 showFilter: true,
                 pickList: [],
@@ -58,7 +59,7 @@ define([
             }]
         }, {
             control: 'container',
-            extraClasses: ['col-xs-5', 'left-padding-no'],
+            extraClasses: ['col-xs-12'],
             items: [{
                 control: 'select',
                 name: 'informationSource',
@@ -82,11 +83,6 @@ define([
                 label: 'Lot Number',
                 title: 'Use up and down arrows to view options and then press enter to select.',
                 pickList: []
-            }, {
-                control: 'input',
-                name: 'lotNumberHistorical',
-                label: 'Lot Number',
-                title: 'Enter the lot number.'
             }]
         }, {
             control: 'container',
@@ -95,54 +91,40 @@ define([
                 control: 'container',
                 extraClasses: ['expirationDateAdministered', 'form-group'],
                 modelListeners: ['expirationDateAdministered'],
-                template: Handlebars.compile('<label for="expirationDateAdministered">Expiration Date *</label><div id="expirationDateAdministered">{{#if expirationDateAdministered}}{{expirationDateAdministered}}{{else}}<i>Not specified</i>{{/if}}</div>'),
-            }, {
-                control: 'datepicker',
-                name: 'expirationDateHistorical',
-                label: 'Expiration Date',
-                title: 'Enter in a date in the following format, MM/DD/YYYY'
+                template: Handlebars.compile('<label for="expirationDateAdministered">Expiration Date *</label><div id="expirationDateAdministered">{{#if expirationDateAdministered}}{{expirationDateAdministered}}{{else}}<div class="well well-collapse left-padding-sm left-margin-no background-color-grey-lighter"><span>Not specified</span></div>{{/if}}</div>'),
             }]
         }, {
             control: 'container',
-            extraClasses: ['col-xs-6'],
+            extraClasses: ['col-xs-12'],
             items: [{
                 control: 'container',
                 extraClasses: ['manufacturerAdministered', 'form-group'],
                 modelListeners: ['manufacturerAdministered'],
-                template: Handlebars.compile('<label for="manufacturerAdministered">Manufacturer *</label><div id="manufacturerAdministered">{{#if manufacturerAdministered}}{{manufacturerAdministered}}{{else}}<i>Not specified</i>{{/if}}</div>'),
-            }, {
-                control: 'typeahead',
-                name: 'manufacturerHistorical',
-                label: 'Manufacturer',
-                title: 'Enter the manufacturer.',
-                pickList: [],
-                options: {
-                    minLength: 3
-                }
+                template: Handlebars.compile('<label for="manufacturerAdministered">Manufacturer *</label><div id="manufacturerAdministered">{{#if manufacturerAdministered}}{{manufacturerAdministered}}{{else}}<div class="well well-collapse left-padding-sm left-margin-no background-color-grey-lighter">Not specified</em></div>{{/if}}</div>'),
             }]
         }]
     };
 
     var AdminDateAndProviders = {
         control: 'container',
-        extraClasses: ['clear'],
+        extraClasses:['immunization-administration-fields'],
         items: [{
             control: 'container',
             extraClasses: ['col-xs-6'],
             items: [{
                 control: 'container',
                 extraClasses: ['administrationDate', 'form-group'],
-                template: Handlebars.compile('<p class="faux-label bottom-margin-xs">Administration Date *</p><p>{{administrationDate}}</p>'),
+                template: Handlebars.compile('<p class="faux-label bottom-margin-xs">Administration Date *</p><div class="well well-collapse left-padding-sm left-margin-no background-color-grey-lighter"><span>{{administrationDate}}</span></div>'),
                 modelListeners: ['administrationDate']
             },{
                 control: 'datepicker',
                 name: 'administrationDateHistorical',
                 label: 'Administration Date',
-                title: 'Enter in a date in the following format, MM/DD/YYYY',
+                flexible: true,
                 options: {
-                    endDate: '0d'
-                },
-                flexible: true
+                    endDate: '0d',
+                    startDate: moment().subtract(100, 'y')
+                }
             },]
         }, {
             control: 'container',
@@ -181,26 +163,11 @@ define([
                     minLength: 3
                 }
             }]
-        },
-        {
-            control: 'container',
-            extraClasses: ['col-xs-6'],
-            items: [{
-                control: 'typeahead',
-                name: 'orderedByHistorical',
-                label: 'Ordering Provider',
-                title: 'Start typing to retrieve providers and use the arrow keys to select.',
-                pickList: [],
-                options: {
-                    minLength: 3
-                }
-            }]
         }]
     };
 
     var RouteLocationDosageSeriesRow = {
         control: 'container',
-        extraClasses: ['clear'],
         items: [{
             control: 'container',
             extraClasses: ['col-xs-6'],
@@ -229,7 +196,7 @@ define([
                 name: 'dosage',
                 title: 'Enter dosage in milliliters',
                 units: 'mL',
-                label: 'Dosage/Unit'
+                label: 'Dosage/Unit',
             }]
         }, {
             control: 'container',
@@ -246,7 +213,6 @@ define([
 
     var VisRow = {
         control: 'container',
-        extraClasses: ['clear'],
         items: [{
             control: 'container',
             extraClasses: ['col-xs-12'],
@@ -266,9 +232,11 @@ define([
                 control: "datepicker",
                 name: "visDateOffered",
                 label: "VIS Date Offered",
-                title: 'Enter in a date in the following format, MM/DD/YYYY',
+                flexible: true,
+                minPrecision: "day",
                 options: {
-                    endDate: '0d'
+                    endDate: '0d',
+                    startDate: moment().subtract(100, 'y')
                 }
             }]
         }]
@@ -276,7 +244,6 @@ define([
 
     var CommentsRow = {
         control: 'container',
-        extraClasses: ['clear'],
         items: [{
             control: 'container',
             items: [{
@@ -284,8 +251,8 @@ define([
                 extraClasses: ['col-xs-12'],
                 name: 'comments',
                 label: 'Comments',
-                maxlength: 245,
-                rows: 8
+                maxlength: 200,
+                rows: 4
             }]
         }]
     };
@@ -306,18 +273,21 @@ define([
             extraClasses: ["row"],
             items: [{
                 control: "container",
-                extraClasses: ["col-xs-6"],
-            }, {
-                control: "container",
-                extraClasses: ["col-xs-6"],
-                items: [{
-                    control: "button",
-                    id: 'form-cancel-btn',
-                    extraClasses: ["btn-default", "btn-sm", "left-margin-xs"],
-                    type: "button",
-                    label: "Cancel",
-                    title: "Press enter to cancel"
-                }, {
+                extraClasses: ["col-xs-12",'flex-display','valign-bottom'],
+                items: [
+                {
+                    control: 'popover',
+                    behaviors: {
+                        Confirmation: {
+                            title: 'Warning',
+                            eventToTrigger: 'immunizations-confirm-cancel'
+                        }
+                    },
+                    label: 'Cancel',
+                    name: 'immunizationsConfirmCancel',
+                    extraClasses: ['btn-default', 'btn-sm']
+                },
+                {
                     control: "button",
                     extraClasses: ["btn-primary", "btn-sm", "left-margin-xs"],
                     label: "Accept",
@@ -344,7 +314,7 @@ define([
     });
 
     var ErrorFooterView = Backbone.Marionette.ItemView.extend({
-        template: Handlebars.compile('{{ui-button "OK" classes="btn-primary" title="Press enter to close."}}'),
+        template: Handlebars.compile('{{ui-button "OK" classes="btn-primary btn-sm" title="Press enter to close."}}'),
         events: {
             'click .btn-primary': function () {
                 ADK.UI.Alert.hide();
@@ -375,17 +345,12 @@ define([
             'immunizationType': '.immunizationType',
             'immunizationTypeContainer': '.immunization-type-container',
             'lotNumberAdministered': '.lotNumberAdministered',
-            'lotNumberHistorical': '.lotNumberHistorical',
             'expirationDateAdministered': '.expirationDateAdministered',
-            'expirationDateHistorical': '.expirationDateHistorical',
             'manufacturerAdministered': '.manufacturerAdministered',
-            'manufacturerHistorical': '.manufacturerHistorical',
             'administrationDate': '.administrationDate',
             'administrationDateHistorical': '.administrationDateHistorical',
             'administeredBy': '.administeredBy',
             'administeredByInput': '#administeredBy',
-            'orderedByHistorical': '.orderedByHistorical',
-            'orderedByInputHistorical': '#orderedByHistorical',
             'orderedByAdministered': '.orderedByAdministered',
             'administeredLocation': '.administeredLocation',
             'routeOfAdministration': '.routeOfAdministration',
@@ -436,16 +401,9 @@ define([
                 this.ui.informationSource.trigger('control:picklist:set', [ParseUtil.getInformationSourceList(collection.toPicklist())]);
             }
         },
-        manufacturersEvents: {
-            'read:success': function(collection, response) {
-                this.ui.manufacturerHistorical.trigger('control:picklist:set', [collection.toPicklist()]);
-            }
-        },
         orderingProvidersEvents: {
             'read:success': function(collection, response) {
-                var orderingProviderList = [ParseUtil.getOrderingProviderList(response)];
-                this.ui.orderedByAdministered.trigger('control:picklist:set', orderingProviderList);
-                this.ui.orderedByHistorical.trigger('control:picklist:set', orderingProviderList);
+                this.ui.orderedByAdministered.trigger('control:picklist:set', [collection.toPicklist()]);
                 updateOrderedBy(this);
             }
         },
@@ -477,8 +435,7 @@ define([
             this.informationStatements = new ADK.UIResources.Picklist.Immunizations.InformationStatements();
             this.immunizationTypes = new ADK.UIResources.Picklist.Immunizations.Data();
             this.informationSources = new ADK.UIResources.Picklist.Immunizations.InformationSources();
-            this.manufacturers = new ADK.UIResources.Picklist.Immunizations.Manufacturers();
-            this.orderingProviders = new Backbone.Collection();
+            this.orderingProviders = new ADK.UIResources.Picklist.Encounters.NewPersonsDirect();
             this.administeredByCollection = new ADK.UIResources.Picklist.Encounters.NewPersons();
             this.anatomicLocations = new ADK.UIResources.Picklist.Immunizations.AnatomicLocations();
             this.routesOfAdministration = new ADK.UIResources.Picklist.Immunizations.RoutesOfAdministration();
@@ -487,7 +444,6 @@ define([
             this.bindEntityEvents(this.informationStatements, this.informationStatementsEvents);
             this.bindEntityEvents(this.immunizationTypes, this.immunizationTypesEvents);
             this.bindEntityEvents(this.informationSources, this.informationSourcesEvents);
-            this.bindEntityEvents(this.manufacturers, this.manufacturersEvents);
             this.bindEntityEvents(this.orderingProviders, this.orderingProvidersEvents);
             this.bindEntityEvents(this.administeredByCollection, this.administeredByCollectionEvents);
             this.bindEntityEvents(this.anatomicLocations, this.anatomicLocationsEvents);
@@ -512,7 +468,7 @@ define([
         onAttach:function(){
             if (this.$('#immunizationType').is(':visible')){
                 this.$el.trigger('tray.loaderShow',{
-                    loadingString:'Loading immunization types'
+                    loadingString:'Loading'
                 });
             }
         },
@@ -537,7 +493,6 @@ define([
             this.unbindEntityEvents(this.informationStatements, this.informationStatementsEvents);
             this.unbindEntityEvents(this.immunizationTypes, this.immunizationTypesEvents);
             this.unbindEntityEvents(this.informationSources, this.informationSourcesEvents);
-            this.unbindEntityEvents(this.manufacturers, this.manufacturersEvents);
             this.unbindEntityEvents(this.orderingProviders, this.orderingProvidersEvents);
             this.unbindEntityEvents(this.administeredByCollection, this.administeredByCollectionEvents);
             this.unbindEntityEvents(this.anatomicLocations, this.anatomicLocationsEvents);
@@ -551,21 +506,13 @@ define([
             this.ui.lotNumberAdministered.trigger('control:hidden', true);
             this.ui.lotNumberAdministered.trigger('control:disabled', true);
             this.ui.lotNumberAdministered.trigger('control:required', false);
-            this.ui.lotNumberHistorical.trigger('control:hidden', false);
-            this.ui.lotNumberHistorical.trigger('control:disabled', true);
-            this.ui.expirationDateHistorical.trigger('control:disabled', true);
             this.ui.expirationDateAdministered.trigger('control:hidden', true);
-            this.ui.expirationDateHistorical.trigger('control:hidden', false);
-            this.ui.manufacturerHistorical.trigger('control:disabled', true);
             this.ui.manufacturerAdministered.trigger('control:hidden', true);
-            this.ui.manufacturerHistorical.trigger('control:hidden', false);
             this.ui.administrationDateHistorical.trigger('control:disabled', true);
             this.ui.administrationDateHistorical.trigger('control:hidden', true);
             this.ui.administrationDateHistorical.trigger('control:required', false);
             this.ui.administeredBy.trigger('control:disabled', true);
             this.ui.administeredBy.trigger('control:required', false);
-            this.ui.orderedByHistorical.trigger('control:disabled', true);
-            this.ui.orderedByHistorical.trigger('control:hidden', true);
             this.ui.orderedByAdministered.trigger('control:disabled', true);
             this.ui.orderedByAdministered.trigger('control:hidden', false);
             this.ui.administeredLocation.trigger('control:disabled', true);
@@ -587,16 +534,9 @@ define([
 
         },
         events: {
-            'click #form-cancel-btn': function(e) {
-                e.preventDefault();
-                var closeAlertView = new ADK.UI.Alert({
-                    title: 'Cancel',
-                    icon: 'icon-cancel',
-                    messageView: CloseMessageView,
-                    footerView: CloseFooterView,
-                    workflow: this.workflow
-                });
-                closeAlertView.show();
+            'immunizations-confirm-cancel': function(e) {
+                WritebackUtil.unregisterChecks();
+                this.workflow.close();
             },
             'submit': function(e) {
                 e.preventDefault();
@@ -607,7 +547,7 @@ define([
                     });
                 else {
                     this.$el.trigger('tray.loaderShow',{
-                        loadingString:'Adding Immunization'
+                        loadingString:'Accepting'
                     });
                     this.model.unset("formStatus");
                     this.ui.addBtn.trigger('control:disabled', true);
@@ -616,9 +556,8 @@ define([
                         function() {
                             self.$el.trigger('tray.loaderHide');
                             var saveAlertView = new ADK.UI.Notification({
-                                title: 'Immunization Added',
-                                icon: 'fa-check',
-                                message: 'Immunization saved successfully',
+                                title: 'Success',
+                                message: 'Immunization Submitted',
                                 type: "success"
 
                             });
@@ -633,8 +572,8 @@ define([
                             self.$el.trigger('tray.loaderHide');
                             self.ui.addBtn.trigger('control:disabled', false);
                             var errorAlertView = new ADK.UI.Alert({
-                                title: 'Save Failed (System Error)',
-                                icon: 'icon-error',
+                                title: 'Error',
+                                icon: 'icon-circle-exclamation',
                                 messageView: ErrorMessageView,
                                 footerView: ErrorFooterView
                             });
@@ -646,13 +585,29 @@ define([
         },
         handleEnableAddButton: function(){
             var enableAddButton = false;
-            if(this.model.get('administeredHistorical') === 'administered'){
-                if(this.model.get('immunizationType') && this.model.get('lotNumberAdministered') && this.model.get('administeredBy') &&
-                    this.model.get('routeOfAdministration') && this.model.get('anatomicLocation') &&
-                    this.model.get('dosage')){
 
-                    if(this.model.get('visCount') === 0 || (this.model.get('visCount') > 0 && this.model.get('visDateOffered'))){
-                        enableAddButton = true;
+            if(this.model.get('administeredHistorical') === 'administered'){
+
+
+                if(this.model.get('immunizationType') && this.model.get('lotNumberAdministered') && this.model.get('administeredBy') &&
+                    this.model.get('routeOfAdministration') &&  this.model.get('dosage')){
+
+                    var words = _.words(this.model.get('routeOfAdministration'));
+                    var needAnatomicLocation  = true;
+                    if (!_.isEmpty(words) && !_.isEmpty(words[0])) {
+                        var routeOfAdministration = words[0];
+                        if (routeOfAdministration.toUpperCase() === 'NASAL' ||
+                            routeOfAdministration.toUpperCase() === 'ORAL' ){
+                            needAnatomicLocation = false;
+                        }
+                    }
+
+                    if (needAnatomicLocation === true && ! this.model.get('anatomicLocation')){
+                        enableAddButton = false;
+                    } else {
+                        if(this.model.get('visCount') === 0 || (this.model.get('visCount') > 0 && this.model.get('visDateOffered'))){
+                            enableAddButton = true;
+                        }
                     }
                 }
             } else {
@@ -681,28 +636,24 @@ define([
                     this.ui.informationSource.trigger('control:required', false);
                     this.ui.lotNumberAdministered.trigger('control:hidden', false);
                     this.ui.lotNumberAdministered.trigger('control:required', true);
-                    this.ui.lotNumberHistorical.trigger('control:hidden', true);
                     this.ui.expirationDateAdministered.trigger('control:hidden', false);
-                    this.ui.expirationDateHistorical.trigger('control:hidden', true);
                     this.ui.manufacturerAdministered.trigger('control:hidden', false);
-                    this.ui.manufacturerHistorical.trigger('control:hidden', true);
                     this.ui.administeredBy.trigger('control:required', true);
-                    this.ui.orderedByHistorical.trigger('control:hidden', true);
                     this.ui.orderedByAdministered.trigger('control:hidden', false);
                     this.ui.orderedByAdministered.trigger('control:required', true);
                     this.ui.administeredLocation.trigger('control:hidden', true);
                     this.ui.routeOfAdministration.trigger('control:required', true);
                     this.ui.anatomicLocation.trigger('control:required', true);
                     this.ui.dosage.trigger('control:required', true);
+                    this.ui.comments.trigger('control:placeholder', '');
 
                     if(this.model.get('informationStatement').length > 0){
                         this.ui.informationStatement.trigger('control:hidden', false);
                         this.ui.visDateOffered.trigger('control:hidden', false);
                     }
 
-
                     this.model.trigger('change:visCount');
-                    this.$(this.ui.administeredBy.selector).parent().removeClass('col-xs-3').addClass('col-xs-5');
+                    // this.$(this.ui.administeredBy.selector).parent().removeClass('col-xs-3').addClass('col-xs-5');
                     this.handleAdministrationDate(true);
 
                     if(_.isEmpty(this.model.get('orderedByAdministered'))){
@@ -717,22 +668,19 @@ define([
                     this.ui.informationSource.trigger('control:required', true);
                     this.ui.lotNumberAdministered.trigger('control:hidden', true);
                     this.ui.lotNumberAdministered.trigger('control:required', false);
-                    this.ui.lotNumberHistorical.trigger('control:hidden', false);
                     this.ui.expirationDateAdministered.trigger('control:hidden', true);
-                    this.ui.expirationDateHistorical.trigger('control:hidden', false);
                     this.ui.manufacturerAdministered.trigger('control:hidden', true);
-                    this.ui.manufacturerHistorical.trigger('control:hidden', false);
                     this.ui.administeredBy.trigger('control:required', false);
                     this.ui.administeredLocation.trigger('control:hidden', false);
                     this.ui.orderedByAdministered.trigger('control:required', false);
                     this.ui.orderedByAdministered.trigger('control:hidden', true);
-                    this.ui.orderedByHistorical.trigger('control:hidden', false);
                     this.ui.routeOfAdministration.trigger('control:required', false);
                     this.ui.anatomicLocation.trigger('control:required', false);
                     this.ui.dosage.trigger('control:required', false);
                     this.ui.informationStatement.trigger('control:hidden', true);
                     this.ui.visDateOffered.trigger('control:hidden', true);
                     this.ui.visDateOffered.trigger('control:required', false);
+                    this.ui.comments.trigger('control:placeholder', 'If available, please record the lot number, manufacturer, expiration date and ordering provider as part of the Comments');
 
                     this.model.unset('orderedByAdministered');
                     if($(this.ui.informationSource).find('#informationSource').is(':disabled')){
@@ -784,7 +732,22 @@ define([
             'change:administrationDateHistorical': function(){
                 this.handleEnableAddButton();
             },
-            'change:routeOfAdministration': function(){
+            'change:routeOfAdministration': function() {
+                if(this.model.get('administeredHistorical') === 'administered') {
+                    // for administered if this is Nasal or Oral
+                    // anatomical location field is not required anymore
+
+                    var words = _.words(this.model.get('routeOfAdministration'));
+                    var required  = true;
+                    if (!_.isEmpty(words) && !_.isEmpty(words[0])) {
+                        var routeOfAdministration = words[0];
+                        if (routeOfAdministration.toUpperCase() === 'NASAL' ||
+                            routeOfAdministration.toUpperCase() === 'ORAL' ){
+                            required = false;
+                        }
+                    }
+                    this.ui.anatomicLocation.trigger('control:required', required);
+                }
                 this.handleEnableAddButton();
             },
             'change:anatomicLocation': function(){
@@ -804,11 +767,19 @@ define([
             var immunization = this.immunizationTypes.findWhere({ien: this.model.get('immunizationType')});
 
             if(immunization){
+
                 this.model.set('cvxCode', immunization.get('cvxCode'));
                 this.model.set('immunizationNarrative', immunization.get('name'));
                 if(this.lotNumbers){
-                    var lotNumbers = this.lotNumbers.where({vaccine: immunization.get('name')});
-                    self.ui.lotNumberAdministered.trigger('control:picklist:set', lotNumbers);
+                    var associatedFacility = ADK.UserService.getAssociatedFacility();
+                    if (!_.isUndefined(associatedFacility)) {     
+                        var lotNumbers = this.lotNumbers.where({
+                            vaccine: immunization.get('name'),
+                            associatedFacility: associatedFacility.get('facilityName').toUpperCase()
+                        });
+    
+                        self.ui.lotNumberAdministered.trigger('control:picklist:set', lotNumbers);                            
+                    }
                 }
                 this.model.set('inactiveFlag', immunization.get('inactiveFlag'));
                 self.ui.series.trigger('control:picklist:set', [ParseUtil.getSeriesList(immunization.get('maxInSeries'))]);
@@ -835,12 +806,8 @@ define([
         disableFields: function(disabled) {
             this.ui.informationSource.trigger('control:disabled', disabled);
             this.ui.lotNumberAdministered.trigger('control:disabled', disabled);
-            this.ui.lotNumberHistorical.trigger('control:disabled', disabled);
-            this.ui.expirationDateHistorical.trigger('control:disabled', disabled);
-            this.ui.manufacturerHistorical.trigger('control:disabled', disabled);
             this.ui.administeredBy.trigger('control:disabled', disabled);
             this.ui.orderedByAdministered.trigger('control:disabled', disabled);
-            this.ui.orderedByHistorical.trigger('control:disabled', disabled);
             this.ui.administeredLocation.trigger('control:disabled', disabled);
             this.ui.routeOfAdministration.trigger('control:disabled', disabled);
             this.ui.anatomicLocation.trigger('control:disabled', disabled);
@@ -898,33 +865,13 @@ define([
         }
     });
 
-    var CloseMessageView = Backbone.Marionette.ItemView.extend({
-        template: Handlebars.compile('All unsaved changes will be lost. Are you sure you want to cancel?'),
-        tagName: 'p'
-    });
-
-    var CloseFooterView = Backbone.Marionette.ItemView.extend({
-        template: Handlebars.compile('{{ui-button "No" classes="btn-default" title="Press enter to go back."}}{{ui-button "Yes" classes="btn-primary" title="Press enter to cancel."}}'),
-        events: {
-            'click .btn-primary': function() {
-                ADK.UI.Alert.hide();
-                this.getOption('workflow').close();
-                WritebackUtil.unregisterChecks();
-            },
-            'click .btn-default': function() {
-                ADK.UI.Alert.hide();
-            }
-        },
-        tagName: 'span'
-    });
-
     var preserveAdmMessageView = Backbone.Marionette.ItemView.extend({
         template: Handlebars.compile('You have chosen to switch between VA-Administered and Historical. Administered and Historical immunizations have different documentation requirements. We can preserve what you’ve previously entered, where possible, discard it, or cancel this request. What would you prefer?'),
         tagName: 'p'
     });
 
     var preserveAdmFooterView = Backbone.Marionette.ItemView.extend({
-        template: Handlebars.compile('{{ui-button "Preserve" id="adm-preserve" classes="btn-primary" title="Press enter to preserve your data."}}{{ui-button "Discard" id="adm-discard" classes="btn-default" title="Press enter to discard your data."}}{{ui-button "Cancel" id="adm-cancel" classes="btn-default" title="Press enter to cancel."}}'),
+        template: Handlebars.compile('{{ui-button "Preserve" id="adm-preserve" classes="btn-primary btn-sm" title="Press enter to preserve."}}{{ui-button "Discard" id="adm-discard" classes="btn-default btn-sm" title="Press enter to discard."}}{{ui-button "Cancel" id="adm-cancel" classes="btn-default btn-sm" title="Press enter to go back."}}'),
         events: {
             'click #adm-preserve': function() {
                 ADK.UI.Alert.hide();
@@ -932,7 +879,7 @@ define([
                     clearForm();
                 }else{
                     formModel.errorModel.clear();
-                    select2_search($('#immunizationType'), formModel.get('_labelsForSelectedValues').get('immunizationType').substring(0, 5));                    
+                    select2_search($('#immunizationType'), formModel.get('_labelsForSelectedValues').get('immunizationType').substring(0, 5));
                 }
             },
             'click #adm-discard': function() {
@@ -954,29 +901,18 @@ define([
     });
 
     var preserveHistFooterView = Backbone.Marionette.ItemView.extend({
-        template: Handlebars.compile('{{ui-button "Preserve" id="hist-preserve" classes="btn-primary" title="Press enter to preserve your data."}}{{ui-button "Discard" id="hist-discard" classes="btn-default" title="Press enter to discard your data."}}{{ui-button "Cancel" id="hist-cancel" classes="btn-default" title="Press enter to cancel."}}'),
+        template: Handlebars.compile('{{ui-button "Preserve" id="hist-preserve" classes="btn-primary btn-sm" title="Press enter to preserve."}}{{ui-button "Discard" id="hist-discard" classes="btn-default btn-sm" title="Press enter to discard."}}{{ui-button "Cancel" id="hist-cancel" classes="btn-default btn-sm" title="Press enter to go back."}}'),
         events: {
             'click #hist-preserve': function() {
                 ADK.UI.Alert.hide();
 
                 formModel.errorModel.clear();
-
-                if(formModel.has('orderedByHistorical') && formModel.get('orderedByHistorical').indexOf('urn:va:user') > -1){
-                    formModel.set('orderedByAdministered', formModel.get('orderedByHistorical'));
-                } else {
-
-                }
-
-                formModel.unset('orderedByHistorical');
                 formModel.unset('lotNumberAdministered');
-                formModel.unset('lotNumberHistorical');
                 formModel.unset('visDateOffered');
                 formModel.get('informationStatement').each(function(infoStatement){
                     infoStatement.set('value', false);
                 });
                 formModel.unset('informationSource');
-                formModel.unset('manufacturerHistorical');
-                formModel.unset('expirationDateHistorical');
                 formModel.unset('administeredLocation');
                 if(formModel.get('inactiveFlag') === "1"){
                     clearForm();
@@ -1008,16 +944,16 @@ define([
         if(prevValue && !formModel.get('preserveCancel') && formModel.get('immunizationType') && isDirtyForm()){
             if(prevValue === 'administered'){
                 var preserveAdmView = new ADK.UI.Alert({
-                    title: 'Attention',
-                    icon: 'icon-warning',
+                    title: 'Warning',
+                    icon: 'icon-triangle-exclamation',
                     messageView: preserveAdmMessageView,
                     footerView: preserveAdmFooterView
                 });
                 preserveAdmView.show();
             }else{
                 var preserveHistView = new ADK.UI.Alert({
-                    title: 'Attention',
-                    icon: 'icon-warning',
+                    title: 'Warning',
+                    icon: 'icon-triangle-exclamation',
                     messageView: preserveHistMessageView,
                     footerView: preserveHistFooterView
                 });
@@ -1042,7 +978,6 @@ define([
     function clearForm(){
         formModel.unset('immunizationType');
         formModel.unset('lotNumberAdministered');
-        formModel.unset('lotNumberHistorical');
         formModel.unset('visDateOffered');
         formModel.get('informationStatement').reset();
         formModel.unset('administeredLocation');
@@ -1052,9 +987,6 @@ define([
         formModel.unset('anatomicLocation');
         formModel.unset('dosage');
         formModel.unset('informationSource');
-        formModel.unset('manufacturerHistorical');
-        formModel.unset('expirationDateHistorical');
-        formModel.unset('orderedByHistorical');
         formModel.errorModel.clear();
     }
 
@@ -1063,12 +995,9 @@ define([
         var isDirty =   (!_.isUndefined(formModel.get('comments')) && (formModel.get('comments') !== "") ) ||
                         (!_.isUndefined(formModel.get('routeOfAdministration')) && (formModel.get('routeOfAdministration') !== "") ) ||
                         (!_.isUndefined(formModel.get('orderedByAdministered')) && (formModel.get('orderedByAdministered') !== "") ) ||
-                        (!_.isUndefined(formModel.get('orderedByHistorical')) && (formModel.get('orderedByHistorical') !== '')) ||
                         (!_.isUndefined(formModel.get('anatomicLocation')) && (formModel.get('anatomicLocation') !== "") ) ||
                         (!_.isUndefined(formModel.get('series')) && (formModel.get('series') !== "") ) || 
                         (!_.isUndefined(formModel.get('informationSource')) && (formModel.get('informationSource') !== "") ) ||
-                        (!_.isUndefined(formModel.get('lotNumberHistorical')) && (formModel.get('lotNumberHistorical') !== "") ) ||
-                        (!_.isUndefined(formModel.get('manufacturerHistorical')) && (formModel.get('manufacturerHistorical') !== "") ) ||
                         (!_.isUndefined(formModel.get('administeredBy')) && (formModel.get('administeredBy') !== "") ) ||
                         (!_.isUndefined(formModel.get('administeredLocation')) && (formModel.get('administeredLocation') !== "")  );
 
@@ -1077,15 +1006,13 @@ define([
 
     function updateOrderedBy(form){
 
-        var visit = ADK.PatientRecordService.getCurrentPatient().get('visit'); 
+        var visit = ADK.PatientRecordService.getCurrentPatient().get('visit');
         if(!_.isUndefined(form.orderingProviders)){
             var selectedProvider = visit.selectedProvider;
-            var validProvider = form.orderingProviders.findWhere({name: selectedProvider.name.toUpperCase()});
+            var validProvider = form.orderingProviders.findWhere({name: selectedProvider.name});
             if(!_.isUndefined(validProvider)){
-                //form.$(form.ui.orderedByInput.selector).typeahead('val', validProvider.get('name'));    
-
                 form.model.set({
-                    'orderedByAdministered' :  validProvider.get('uid')
+                    'orderedByAdministered': validProvider.get('code')
                 });
             }
         }
@@ -1156,22 +1083,10 @@ define([
         form.informationStatements.fetch();
         form.immunizationTypes.fetch();
         form.informationSources.fetch();
-        form.manufacturers.fetch();
+        form.orderingProviders.fetch({newPersonsType: 'PROVIDER'});
         form.administeredByCollection.fetch();
         form.anatomicLocations.fetch();
         form.routesOfAdministration.fetch();
-
-        var site = ADK.UserService.getUserSession().get('site');
-        var providersfetchOptions = {
-            resourceTitle: "visits-providers",
-            onSuccess: function(collection, response) {
-                collection.trigger('read:success', collection, response);
-            },
-            criteria: {
-                "facility.code": site
-            }
-        };
-        ADK.ResourceService.fetchCollection(providersfetchOptions, form.orderingProviders);
     }
 
     return formView;

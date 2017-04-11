@@ -16,10 +16,10 @@ var logger = {
 };
 
 var config = {
-    host: 'IP_ADDRESS',
+    host: 'IP        ',
     port: 9210,
-    accessCode: 'PW',
-    verifyCode: 'PW',
+    accessCode: 'PW    ',
+    verifyCode: 'PW    !!',
     context: 'HMP UI CONTEXT',
     localIP: '127.0.0.1',
     localAddress: 'localhost',
@@ -171,6 +171,10 @@ describe('RpcClient.js', function() {
             testCommand(RpcClient.prototype.verifyCommand, null, '0\r\n0', 'No DUZ returned from login request', '0\r\n0');
         });
 
+        it('verify no DUZ triggers callback error from rpc', function() {
+            testCommand(RpcClient.prototype.verifyCommand, null, '0\r\n0\r\n0\r\nNot a valid access/verify code\r\n0', 'Not a valid access/verify code', '0\r\n0\r\n0\r\nNot a valid access/verify code\r\n0');
+        });
+
         it('verify no error triggers callback result', function() {
             testCommand(RpcClient.prototype.verifyCommand, null, '10000217\r\n0', null, {
                 accessCode: config.accessCode,
@@ -267,7 +271,7 @@ describe('RpcClient.js', function() {
             called = false;
 
             client = RpcClient.create(logger, config);
-            client._execute = function(rpcCall, callback) {
+            client._execute = function(startTime, rpcCall, callback) {
                 setTimeout(callback, 0, null, 'response');
             };
 
@@ -390,8 +394,8 @@ describe('RpcClient.js', function() {
     describe('RpcClient.connect()', function() {
         it('verify connection', function() {
             var user = {
-                accessCode: 'ep1234',
-                verifyCode: 'ep1234!!',
+                accessCode: 'PW    ',
+                verifyCode: 'PW    !!',
                 duz: '10000000226',
                 greeting: 'OK'
             };
@@ -501,6 +505,7 @@ describe('RpcClient.js', function() {
                 greetingCommand: defaultFunction,
                 signonCommand: defaultFunction,
                 verifyCommand: defaultFunction,
+                divisionCommand: defaultFunction,
                 contextCommand: defaultFunction
             };
 
@@ -508,6 +513,7 @@ describe('RpcClient.js', function() {
             spyOn(instance, 'greetingCommand').andCallThrough();
             spyOn(instance, 'signonCommand').andCallThrough();
             spyOn(instance, 'verifyCommand').andCallThrough();
+            spyOn(instance, 'divisionCommand').andCallThrough();
             spyOn(instance, 'contextCommand').andCallThrough();
         });
 
@@ -529,6 +535,7 @@ describe('RpcClient.js', function() {
                 expect(instance.greetingCommand).toHaveBeenCalled();
                 expect(instance.signonCommand).toHaveBeenCalled();
                 expect(instance.verifyCommand).toHaveBeenCalled();
+                expect(instance.divisionCommand).toHaveBeenCalled();
                 expect(instance.contextCommand).toHaveBeenCalled();
             });
         });
@@ -639,8 +646,8 @@ describe('RpcClient.js', function() {
     describe('authenticate()', function() {
         it('verify authenticate() calls connect() and close()', function() {
             var user = {
-                accessCode: 'ep1234',
-                verifyCode: 'ep1234!!',
+                accessCode: 'PW    ',
+                verifyCode: 'PW    !!',
                 duz: '10000000226',
                 greeting: 'OK'
             };
@@ -690,8 +697,8 @@ describe('RpcClient.js', function() {
     describe('callRpc()', function() {
         it('verify callRpc() calls connect(), execute(), and close()', function() {
             var user = {
-                accessCode: 'ep1234',
-                verifyCode: 'ep1234!!',
+                accessCode: 'PW    ',
+                verifyCode: 'PW    !!',
                 duz: '10000000226',
                 greeting: 'OK'
             };
@@ -707,7 +714,7 @@ describe('RpcClient.js', function() {
                     callback(null, user);
                 },
                 _connect: function() {},
-                execute: function(rpcCall, parameters, callback) {
+                execute: function(startTime, rpcCall, parameters, callback) {
                     callback(null, response);
                 },
                 _execute: function() {},

@@ -18,22 +18,16 @@ Add a new immunization for a patient in a single Vista
             {
                   "encounterInpatient":"ssss",
                   "encounterLocation":"ssss",
+                  "location":"ssss",
                   "encounterServiceCategory":"ssss",
                   "encounterDateTime":"ssss",
                   "eventDateTime":"ssss",
-                  "providerName":"ssss",
-                  "encounterProviderIEN":"ssss",
-                  "encounterPatientDFN":"ssss",
                   "immunizationIEN":"ssss",
-                  "route":"ssss",
-                  "dose":"ssss",
+                  "encounterPatientDFN":"ssss",
                   "cvxCode":"ssss",
                   "immunizationNarrative":"ssss",
-                  "adminSite":"ssss",
                   "informationSource":"ssss",
-                  "lotNumber":"ssss",
-                  "manufacturer":"ssss",
-                  "expirationDate":"ssss"
+                  "authorUid":"ssss"
             }
 
     + Schema
@@ -44,22 +38,16 @@ Add a new immunization for a patient in a single Vista
                 "required": [
                       "encounterInpatient",
                       "encounterLocation",
+                      "location",
                       "encounterServiceCategory",
                       "encounterDateTime",
                       "eventDateTime",
-                      "providerName",
-                      "encounterProviderIEN",
-                      "encounterPatientDFN",
                       "immunizationIEN",
-                      "route",
-                      "dose",
+                      "encounterPatientDFN",
                       "cvxCode",
                       "immunizationNarrative",
-                      "adminSite",
                       "informationSource",
-                      "lotNumber",
-                      "manufacturer",
-                      "expirationDate"
+                      "authorUid"
                 ],
                 "properties": {
                     "encounterInpatient": {
@@ -69,6 +57,10 @@ Add a new immunization for a patient in a single Vista
                     "encounterLocation": {
                         "type": "string",
                         "description": "location for the encounter"
+                    },
+                    "location": {
+                        "type": "string",
+                        "description": "location"
                     },
                     "encounterServiceCategory": {
                         "type": "string",
@@ -82,29 +74,13 @@ Add a new immunization for a patient in a single Vista
                         "type": "string",
                         "description": "date and time for the event"
                     },
-                    "providerName": {
-                        "type": "string",
-                        "description": "name of the provider"
-                    },
-                    "encounterProviderIEN": {
-                        "type": "string",
-                        "description": "provider's IEN for the encounter"
-                    },
-                    "encounterPatientDFN": {
-                        "type": "string",
-                        "description": "patient DFN for the encounter"
-                    },
                     "immunizationIEN": {
                         "type": "string",
                         "description": "IEN for the immunization"
                     },
-                    "route": {
+                    "encounterPatientDFN": {
                         "type": "string",
-                        "description": "route for the immunization"
-                    },
-                    "dose": {
-                        "type": "string",
-                        "description": "dose for the immunization"
+                        "description": "patient DFN for the encounter"
                     },
                     "cvxCode": {
                         "type": "string",
@@ -114,25 +90,13 @@ Add a new immunization for a patient in a single Vista
                         "type": "string",
                         "description": "description for the immunization"
                     },
-                    "adminSite": {
-                        "type": "string",
-                        "description": "site of administration for the immunization"
-                    },
                     "informationSource": {
                         "type": "string",
                         "description": "information source for the immunization"
                     },
-                    "lotNumber": {
+                    "authorUid": {
                         "type": "string",
-                        "description": "lot number for the immunization"
-                    },
-                    "manufacturer": {
-                        "type": "string",
-                        "description": "manufacturer for the immunization"
-                    },
-                    "expirationDate": {
-                        "type": "string",
-                        "description": "expiration date for the immunization"
+                        "description": "author's UID"
                     }
                 }
             }

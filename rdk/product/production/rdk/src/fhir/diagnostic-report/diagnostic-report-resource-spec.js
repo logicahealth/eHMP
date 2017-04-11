@@ -63,7 +63,7 @@ describe('DiagnosticReport FHIR Resource', function() {
     });
     it('Verifies correct resource name and path', function() {
         var config = diagnosticReport.getResourceConfig()[0];
-        expect(config.name).to.eql('diagnosticreport-diagnosticreport');
+        expect(config.name).to.eql('fhir-diagnostic-report');
         expect(config.path).to.eql('');
     });
 

@@ -5,6 +5,7 @@ var util = require('util');
 var nock = require('nock');
 var _ = require('lodash');
 var httpUtil = require('./http');
+var fs = require('fs');
 
 var logger = {
     trace: function() {this.log('trace', arguments);},
@@ -14,6 +15,7 @@ var logger = {
     error: function() {this.log('error', arguments);},
     fatal: function() {this.log('fatal', arguments);},
 
+    fields: {},
     logged: {},
     log: function(level, args) {
         if (!this.logged[level]) {
@@ -233,6 +235,62 @@ describe('http', function() {
         });
     });
 
+    describe('request ID', function() {
+        var config;
+
+        beforeEach(function() {
+            this.timeout(1000);
+            config = {
+                url: 'http://localhost/info',
+                logger: logger
+            };
+        });
+
+        afterEach(function () {
+            delete logger.fields.requestId;
+        });
+
+        it('adds an X-Request-ID header when present in the logger', function(done) {
+            logger.fields.requestId = 'test-request-ID';
+
+            nock('http://localhost')
+                .matchHeader('X-Request-ID', 'test-request-ID')
+                .get('/info')
+                .reply(200, 'Hello World');
+
+            httpUtil.get(config, function(error, response, body) {
+                expect(error).to.be.falsy();
+                done();
+            });
+        });
+
+        it('preserves a custom-added X-Request-ID header in the options', function(done) {
+            logger.fields.requestId = 'test-request-ID';
+            config.headers = { 'X-Request-ID': 'original-request-ID' };
+
+            nock('http://localhost')
+                .matchHeader('X-Request-ID', 'original-request-ID')
+                .get('/info')
+                .reply(200, 'Hello World');
+
+            httpUtil.get(config, function(error, response, body) {
+                expect(error).to.be.falsy();
+                done();
+            });
+        });
+
+        it('doesn\'t add an X-Request-ID header when not in the options', function(done) {
+            nock('http://localhost', { badheaders: ['X-Request-ID'] })
+                .get('/info')
+                .reply(200, 'Hello World');
+
+            httpUtil.get(config, function(error, response, body) {
+                expect(error).to.be.falsy();
+                done();
+            });
+        });
+    });
+
     describe('metrics', function() {
         var start, error, finish;
 
@@ -271,6 +329,118 @@ describe('http', function() {
                 done();
             });
         });
+    });
+
+    describe('certificates', function() {
+        var options;
+        var certificate = new Buffer('---BEGIN CERTIFICATE---\nhello world\n---END CERTIFICATE---\n');
+        var key = new Buffer('---BEGIN KEY---\nhello world\n---END KEY---\n');
+
+        beforeEach(function() {
+            options = {};
+            sinon.stub(fs, 'readFile', function(file, callback) {
+                if (/\.key$/.test(file)) {
+                    return callback(null, key);
+                }
+                return callback(null, certificate);
+            });
+        });
+
+        it('replaces certificate file paths with their contents', function() {
+            options.key = '/tmp/helloWorld.key';
+            options.cert = '/tmp/helloWorld.crt';
+            options.pfx = '/tmp/helloWorld.pfx';
+            options.ca = '/tmp/helloWorld.ca';
+            options.agentOptions = {};
+            options.agentOptions.key = '/tmp/helloWorld.key';
+            options.agentOptions.cert = '/tmp/helloWorld.crt';
+            options.agentOptions.pfx = '/tmp/helloWorld.pfx';
+            options.agentOptions.ca = '/tmp/helloWorld.ca';
+            var callback = sinon.spy();
+            httpUtil._withCertificates(next, options, callback);
+            function next(options, callback) {
+                expect(callback.callCount).to.equal(0);
+                expect(options).to.eql({
+                    key: key,
+                    cert: certificate,
+                    pfx: certificate,
+                    ca: certificate,
+                    agentOptions: {
+                        key: key,
+                        cert: certificate,
+                        pfx: certificate,
+                        ca: certificate
+                    }
+                });
+            }
+        });
+
+        it('preserves the value of certificates that are not file paths', function() {
+            options.key = key;
+            options.cert = '---BEGIN CERTIFICATE---\ncert\n---END CERTIFICATE---';
+            options.pfx = new Buffer([0x30, 0x82, 0x9, 0x50, 0x2, 0x1, 0x3, 0x30, 0x82, 0x9, 0x1a]);
+            options.ca = '/tmp/helloWorld.ca';
+            options.agentOptions = {};
+            options.agentOptions.key = new Buffer([0x30, 0x82, 0x4, 0xa4, 0x2, 0x1, 0x0, 0x2, 0x82, 0x1, 0x1]);
+            options.agentOptions.cert = options.cert;
+            options.agentOptions.pfx = new Buffer([0x30, 0x82, 0x9, 0x50, 0x2, 0x1, 0x3, 0x30, 0x82, 0x9, 0x1a]);
+            options.agentOptions.ca = '/tmp/helloWorld.ca';
+            var callback = sinon.spy();
+            httpUtil._withCertificates(next, options, callback);
+            function next(resultOptions, callback) {
+                expect(callback.callCount).to.equal(0);
+                expect(resultOptions).to.eql({
+                    key: key,
+                    cert: options.cert,
+                    pfx: options.pfx,
+                    ca: certificate,
+                    agentOptions: {
+                        key: options.agentOptions.key,
+                        cert: options.cert,
+                        pfx: options.agentOptions.pfx,
+                        ca: certificate
+                    }
+                });
+            }
+        });
+
+        it('handles arrays of certificate authority certificates', function() {
+            options.key = key;
+            options.cert = '---BEGIN CERTIFICATE---\ncert\n---END CERTIFICATE---';
+            options.ca = [
+                '/tmp/helloWorld.ca',
+                options.cert,
+                new Buffer([0x30, 0x82, 0x5, 0xb5, 0x30, 0x82, 0x03, 0x9d, 0xa0, 0x3, 0x2, 0x1, 0x2, 0x2, 0x9])
+            ];
+            options.agentOptions = {};
+            options.agentOptions.ca = [
+                options.cert,
+                new Buffer([0x30, 0x82, 0x5, 0xb5, 0x30, 0x82, 0x03, 0x9d, 0xa0, 0x3, 0x2, 0x1, 0x2, 0x2, 0x9]),
+                '/tmp/helloWorld.ca'
+            ];
+            var callback = sinon.spy();
+            httpUtil._withCertificates(next, options, callback);
+            function next(resultOptions, callback) {
+                expect(callback.callCount).to.equal(0);
+                expect(resultOptions).to.eql({
+                    key: key,
+                    cert: options.cert,
+                    ca: [
+                        certificate,
+                        options.ca[1],
+                        options.ca[2]
+                    ],
+                    agentOptions: {
+                        ca: [
+                            options.agentOptions.ca[0],
+                            options.agentOptions.ca[1],
+                            certificate
+                        ]
+                    }
+                });
+            }
+        });
+
     });
 
     xdescribe('caching', function() {

@@ -35,7 +35,7 @@ API Blueprint's [Action sections](https://github.com/apiaryio/api-blueprint/blob
 
 ### Linking to Common Parameters
 
-Many RDK resources share common parameters, like `pid`. Rather than copying the same parameter to every API Bluprint file, you should instead link to common parameters using the `:[]()` syntax, which is like a regular Markdown link but with an initial colon:
+Many RDK resources share common parameters, like `pid`. Rather than copying the same parameter to every API Blueprint file, you should instead link to common parameters using the `:[]()` syntax, which is like a regular Markdown link but with an initial colon:
 
     + Parameters
 

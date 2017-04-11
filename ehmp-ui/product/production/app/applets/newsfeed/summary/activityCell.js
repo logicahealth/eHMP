@@ -45,9 +45,6 @@ define([
 
     var ActivityCell = Backgrid.StringCell.extend({
         render: function() {
-            // todo: uncomment these lines for 508, it was reverted to fix the build
-            //var templateResult = templateSelector(this.model);
-            //screenReaderCell.setHtmlWithScreenReader(this, templateResult);
             this.$el.html(templateSelector(this.model));
             return this;
         }

@@ -13,9 +13,9 @@ describe('When pep-handler-factory is called', function() {
         req._resourceConfigItem = {};
         req._resourceConfigItem.requiredPermissions = [];
         req._resourceConfigItem.isPatientCentric = false;
-        req.logger = sinon.stub(require('bunyan').createLogger(
-            {name: 'validate-response-format-spec.js'}
-        ));
+        req.logger = sinon.stub(require('bunyan').createLogger({
+            name: 'validate-response-format-spec.js'
+        }));
         req.session = {};
         req.session.user = {
             uid: 'read-access',
@@ -34,10 +34,10 @@ describe('When pep-handler-factory is called', function() {
         done();
     });
 
-    it('with no permissions, not patient centric, no asu actions', function(done){
+    it('with no permissions, not patient centric, no asu actions', function(done) {
         var handlers = handlerFactory.build(req);
 
-        expect(handlers).must.be.empty();
+        expect(handlers).must.have.length(1);
 
         done();
     });
@@ -46,7 +46,7 @@ describe('When pep-handler-factory is called', function() {
     it('with an empty permissions array', function(done) {
         var handlers = handlerFactory.build(req);
 
-        expect(handlers).must.be.empty();
+        expect(handlers).must.have.length(1);
 
         done();
     });
@@ -57,7 +57,7 @@ describe('When pep-handler-factory is called', function() {
         var handlers = handlerFactory.build(req);
 
         expect(handlers).must.not.be.empty();
-        expect(handlers).must.have.length(1);
+        expect(handlers).must.have.length(2);
         expect(handlers[0]).must.be.a.function();
 
         done();
@@ -66,7 +66,7 @@ describe('When pep-handler-factory is called', function() {
     it('as not Patient Centric', function(done) {
         var handlers = handlerFactory.build(req);
 
-        expect(handlers).must.be.empty();
+        expect(handlers).must.have.length(1);
 
         done();
     });
@@ -77,7 +77,7 @@ describe('When pep-handler-factory is called', function() {
         var handlers = handlerFactory.build(req);
 
         expect(handlers).must.not.be.empty();
-        expect(handlers).must.have.length(1);
+        expect(handlers).must.have.length(2);
         expect(handlers[0]).must.be.a.function();
 
         done();
@@ -86,7 +86,7 @@ describe('When pep-handler-factory is called', function() {
     it('without an asu action', function(done) {
         var handlers = handlerFactory.build(req);
 
-        expect(handlers).must.be.empty();
+        expect(handlers).must.have.length(1);
 
         done();
     });
@@ -98,22 +98,22 @@ describe('When pep-handler-factory is called', function() {
         var handlers = handlerFactory.build(req);
 
         expect(handlers).must.not.be.empty();
-        expect(handlers).must.have.length(1);
+        expect(handlers).must.have.length(2);
         expect(handlers[0]).must.be.a.function();
 
         done();
     });
 
 
-    it('with no permissions, not patient centric, no asu actions', function(done){
+    it('with no permissions, not patient centric, no asu actions', function(done) {
         var handlers = handlerFactory.build(req);
 
-        expect(handlers).must.be.empty();
+        expect(handlers).must.have.length(1);
 
         done();
     });
 
-    it('with permissions, patient centric, an asu action', function(done){
+    it('with permissions, patient centric, an asu action', function(done) {
         req._resourceConfigItem.isPatientCentric = true;
         req._resourceConfigItem.requiredPermissions = ['some-blank-permission'];
         req._resourceConfigItem.requiredASUActions = ['DELETE RECORD'];
@@ -121,7 +121,7 @@ describe('When pep-handler-factory is called', function() {
         var handlers = handlerFactory.build(req);
 
         expect(handlers).must.not.be.empty();
-        expect(handlers).must.have.length(3);
+        expect(handlers).must.have.length(4);
         expect(handlers[0]).must.be.a.function();
         expect(handlers[1]).must.be.a.function();
         expect(handlers[2]).must.be.a.function();

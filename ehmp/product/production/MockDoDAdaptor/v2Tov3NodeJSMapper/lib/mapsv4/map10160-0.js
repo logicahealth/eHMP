@@ -47,6 +47,11 @@ var map = function (v2JSON) {
 
         v4DataRecord.active = (v2DataRecord.Active === true);
         v4DataRecord.comment = v2DataRecord.Comments;
+        if ( JSON.stringify(v4DataRecord.comment).indexOf('^O^') != -1) {
+        	v4DataRecord.careSetting = 'O';
+        }else if (JSON.stringify(v4DataRecord.comment).indexOf('^I^') > -1){ 
+        	v4DataRecord.careSetting = 'I';
+        }
         v4DataRecord.dispensingPharmacy = {};
         v4DataRecord.dispensingPharmacy.name = v2DataRecord.DispensingPharmacy;
         //v4DataRecord.recordId.id = v2DataRecord.EventId;
@@ -73,27 +78,28 @@ var map = function (v2JSON) {
                 medFillInfo.fillCost = medFillDate.FillCost === "" ? null : medFillDate.FillCost;
                 medFillInfo.fillDate = maputil.nullInsteadOfFormattedDateObject(medFillDate.FillDate);
                 medFillInfo.fillNumber = medFillDate.FillNumber;
-                medFillInfo.quantity = medFillDate.Quantity;
-                medFillInfo.units = [{
-                    "display": medFillDate.Units,
-                    "primary": true
-                }];
+                medFillInfo.quantity = quantityConverstionV4(medFillDate);
 
                 return medFillInfo;
             });
         }
-
-        v4DataRecord.drug = [{
+        
+        var drug = [{
             "display": v2DataRecord.MedicationName,
             "code": v2DataRecord.OtherIdentifier,
             "system": "2.16.840.1.113883.3.42.126.100001.16",
             "primary": true
         }];
+        
+        var quantity = quantityConverstionV4(v2DataRecord);
+        v4DataRecord.drugs = [{drug: drug, dosage: quantity}];
+
         v4DataRecord.numberOfRefills = Number(v2DataRecord.NumberOfRefills);
         v4DataRecord.provider = {};
         v4DataRecord.provider.name = v2DataRecord.OrderingProvider;
         v4DataRecord.provider.primary = true;
-        v4DataRecord.quantity = v2DataRecord.Quantity;
+        	
+        v4DataRecord.quantity = quantity;
         v4DataRecord.refillsRemaining = Number(v2DataRecord.RefillsRemaining);
         v4DataRecord.rxNumber = {};
         v4DataRecord.rxNumber.id = v2DataRecord.RxNumber;
@@ -103,10 +109,6 @@ var map = function (v2JSON) {
             "primary": true
         }];
         v4DataRecord.daysSupply = Number(v2DataRecord.SupplyDays);
-        v4DataRecord.units = [{
-            "display": v2DataRecord.Units,
-            "primary": true
-        }];
 
         v4DataList.push(v4DataRecord);
 
@@ -117,5 +119,20 @@ var map = function (v2JSON) {
     return v4JSON;
 
 };
+
+function quantityConverstionV4(v2DataRecord){
+	if (v2DataRecord.Quantity) {
+		var quantity = {
+		   raw: v2DataRecord.Quantity,
+	       value: parseFloat(v2DataRecord.Quantity),
+	       units: [{
+	          "display": v2DataRecord.Units,
+	          "primary": true
+	       }]
+	    }
+		return quantity;
+	}else 
+		return null;
+}
 
 module.exports.map = map;

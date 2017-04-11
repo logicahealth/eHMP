@@ -3,8 +3,7 @@ define([
     'marionette',
     'underscore',
     'hbs!app/applets/cds_advice/modal/advice/adviceBodyTpl',
-    'hbs!app/applets/cds_advice/modal/advice/adviceFooterTpl'
-], function(Backbone, Marionette, _, bodyTpl, footerTpl) {
+], function(Backbone, Marionette, _, bodyTpl) {
     'use strict';
 
     function createBodyView(model) {
@@ -17,12 +16,6 @@ define([
         return new View(opts);
     }
 
-    function getFooterView(model) {
-        var View = Backbone.Marionette.ItemView.extend({
-            template: footerTpl
-        });
-        return View;
-    }
 
     return {
         /**
@@ -30,12 +23,10 @@ define([
          *
          * @param {BackboneJS.Model} model The model object created for the list item.
          */
-        show: function (model) {
+        show: function(model) {
             var view = createBodyView(model);
-            var footer = getFooterView(model);
             var modalOptions = {
                 title: 'Advice',
-                footerView: footer
             };
             var modal = new ADK.UI.Modal({
                 view: view,

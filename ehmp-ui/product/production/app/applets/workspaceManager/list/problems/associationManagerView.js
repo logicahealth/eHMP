@@ -43,6 +43,12 @@ define([
         },
         events: {
             'keyup #screenProblemSearch': function(event) {
+                if (event.keyCode === 13) {
+                    event.preventDefault();
+                    event.stopImmediatePropagation();
+                    return;
+                }
+
                 if ($(event.target).val().length < QUERY_LENGTH_THRESHOLD) {
                     this.hideStatus();
                 }
@@ -54,8 +60,12 @@ define([
                 }
             },
             'keyup .association-manager': function(event) {
-                if (event.keyCode === 27) { // escape
-                    // close the dropdown on escape keyup
+                if (event.keyCode === 13) {
+                    event.preventDefault();
+                    event.stopImmediatePropagation();
+                } else if (event.keyCode === 27) { // escape
+                    event.preventDefault();
+                    event.stopImmediatePropagation();
                     this.closeSearchResultDropdown(event);
                 }
             },
@@ -160,6 +170,10 @@ define([
                             event.preventDefault();
                             event.stopImmediatePropagation();
                             break;
+                        case 13: // return
+                            event.preventDefault();
+                            event.stopImmediatePropagation();
+                            break;
                     }
                 });
                 $typeahead.on('blur', function(event) {
@@ -238,6 +252,8 @@ define([
                     } else {
                         self.addProblemAssociation(snomed);
                     }
+                    self.closeSearchResultDropdown(event);
+                    self.$('.clear-search-problem-btn').trigger('click');
                 });
                 $item.on('focus', function(event) {
                     $(this).closest('.tt-suggestions').find('.tt-cursor').removeClass('tt-cursor');

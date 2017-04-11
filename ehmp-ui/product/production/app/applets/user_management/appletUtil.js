@@ -458,7 +458,7 @@ define([
             if (cells !== '' && rows === '') {
                 rows = '<tr>' + cells + '</tr>';
             }
-            var detailsTable = '<div class="body scrolling-content auto-overflow pixel-height-100">' +
+            var detailsTable = '<div class="body auto-overflow-y auto-overflow pixel-height-100">' +
                 '<table class="table ehmp-table-default table-bordered">' +
                 '<caption class="sr-only">This table represents data details for {{label}}</caption>' +
                 '<thead>' +

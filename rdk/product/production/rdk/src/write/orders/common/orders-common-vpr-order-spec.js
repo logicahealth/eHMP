@@ -6,9 +6,13 @@ var writebackContext = {
     pid: '9E7A;3',
     siteHash:'9E7A',
     model: {
-        'dfn': '3',
         'provider': '10000000238',
         "location": "285",
+    },
+    interceptorResults: {
+        patientIdentifiers: {
+            'dfn': '3',
+        }
     }
 };
 

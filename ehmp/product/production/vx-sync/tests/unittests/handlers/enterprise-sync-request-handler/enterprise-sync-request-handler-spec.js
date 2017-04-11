@@ -101,11 +101,12 @@ var vistaSites = {
     }
 };
 
-function mviLookup(patientIdentifier, callback) {
+
+function mviLookupWithDemographics(patientIdentifier, demographics, callback) {
     callback(null, patient);
 }
 
-function mviErrorLookup(patientIdentifier, callback) {
+function mviErrorLookupWithDemographics(patientIdentifier, demographics, callback) {
     callback('mvi error');
 }
 
@@ -129,7 +130,7 @@ function storeJdsIdentifiers(job, callback) {
 
 var environment = {
     mvi: {
-        lookup: function(identifiers, callback) {
+        lookupWithDemograhics: function(identifiers, demographics, callback) {
             callback(404);
         }
     },
@@ -207,7 +208,7 @@ function createEnvironment() {
     var env = JSON.parse(JSON.stringify(environment));
     env.publisherRouter.publish = publish;
     env.jds.storePatientIdentifier = storeJdsIdentifiers;
-    env.mvi.lookup = jasmine.createSpy().andCallFake(mviLookup);
+    env.mvi.lookupWithDemographics = jasmine.createSpy().andCallFake(mviLookupWithDemographics);
     env.patientIdComparator =  patIdCompareUtil.detectAndResync;
     env.jds.storePatientIdentifier = jasmine.createSpy().andCallFake(storeJdsIdentifiers);
     return env;
@@ -309,7 +310,7 @@ describe('enterprise-sync-request-handler.js', function() {
                 }, 'should be called', 100);
 
                 runs(function() {
-                    expect(opts.environment.mvi.lookup).toHaveBeenCalled();
+                    expect(opts.environment.mvi.lookupWithDemographics).toHaveBeenCalled();
                 });
             });
 
@@ -319,7 +320,7 @@ describe('enterprise-sync-request-handler.js', function() {
                 var env = createEnvironment();
                 var opts = createOptions(log, config, env);
                 env.mvi = {
-                    lookup: mviErrorLookup
+                    lookupWithDemographics: mviErrorLookupWithDemographics
                 };
                 opts.environment = env;
 
@@ -346,7 +347,7 @@ describe('enterprise-sync-request-handler.js', function() {
                 var env = createEnvironment();
                 var opts = createOptions(log, config, env);
                 env.mvi = {
-                    lookup: mviLookup
+                    lookupWithDemographics: mviLookupWithDemographics
                 };
                 env.jds.storePatientIdentifier = jasmine.createSpy().andCallFake(storePatientIdentifier);
                 env.jds.storePatientData = jasmine.createSpy().andCallFake(storePatientIdentifier);
@@ -1064,7 +1065,7 @@ describe('enterprise-sync-request-handler.js', function() {
                 callback(200, []);
             };
 
-            opts.environment.mvi.lookup = mviErrorLookup;
+            opts.environment.mvi.lookupWithDemographics = mviErrorLookupWithDemographics;
 
             runs(function() {
                 handle(opts.log, opts.config, opts.environment, opts.job, function(error, result) {
@@ -1121,7 +1122,7 @@ describe('enterprise-sync-request-handler.js', function() {
             var env = createEnvironment();
             var opts = createOptions(log, config, env);
 
-            opts.environment.mvi.lookup = function(identifier, callback) {
+            opts.environment.mvi.lookupWithDemographics = function(identifier, callback) {
                 callback(null, {
                     'ids': patientIdList
                 });

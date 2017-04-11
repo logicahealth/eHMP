@@ -15,7 +15,7 @@ class AppointmentsCoverSheet < AllApplets
     add_verify(CucumberLabel.new("Date"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid=appointments] [data-header-instanceid=appointments-dateTimeFormatted]"))
     add_verify(CucumberLabel.new("Description"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid=appointments] [data-header-instanceid=appointments-formattedDescription]"))
     add_verify(CucumberLabel.new("Location"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid=appointments] [data-header-instanceid=appointments-locationName]"))
-    add_verify(CucumberLabel.new("Status"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid=appointments] [data-header-instanceid=appointments-appointmentStatus]"))
+    add_verify(CucumberLabel.new("Status"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid=appointments] [data-header-instanceid=appointments-status]"))
     add_verify(CucumberLabel.new("Provider"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid=appointments] [data-header-instanceid=appointments-providerDisplayName]"))
     add_verify(CucumberLabel.new("Facility"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid=appointments] [data-header-instanceid=appointments-facilityMoniker]"))
     add_verify(CucumberLabel.new("Empty Row"), VerifyText.new, AccessHtmlElement.new(:css, '#data-grid-appointments tbody tr.empty'))
@@ -70,15 +70,13 @@ class AppointmentExpanded < AllApplets
     add_verify(CucumberLabel.new("Date"), VerifyText.new, AccessHtmlElement.new(:css, '[data-appletid="appointments"] [data-header-instanceid="appointments-dateTimeFormatted"]'))
     add_verify(CucumberLabel.new("Description"), VerifyText.new, AccessHtmlElement.new(:css, '[data-appletid="appointments"] [data-header-instanceid="appointments-formattedDescription"]'))
     add_verify(CucumberLabel.new("Location"), VerifyText.new, AccessHtmlElement.new(:css, '[data-appletid="appointments"] [data-header-instanceid="appointments-locationName"]'))
-    add_verify(CucumberLabel.new("Status"), VerifyText.new, AccessHtmlElement.new(:css, '[data-appletid="appointments"] [data-header-instanceid="appointments-appointmentStatus"]'))
+    add_verify(CucumberLabel.new("Status"), VerifyText.new, AccessHtmlElement.new(:css, '[data-appletid="appointments"] [data-header-instanceid="appointments-status"]'))
     add_verify(CucumberLabel.new('Type'), VerifyText.new, AccessHtmlElement.new(:css, '[data-appletid="appointments"] [data-header-instanceid="appointments-dateTimeFormatted"]'))
     add_verify(CucumberLabel.new("Provider"), VerifyText.new, AccessHtmlElement.new(:css, '[data-appletid="appointments"] [data-header-instanceid="appointments-providerDisplayName"]'))
     add_verify(CucumberLabel.new('Reason'), VerifyText.new, AccessHtmlElement.new(:css, '[data-appletid="appointments"] [data-header-instanceid="appointments-reasonName"]'))
     add_verify(CucumberLabel.new("Facility"), VerifyText.new, AccessHtmlElement.new(:css, '[data-appletid="appointments"] [data-header-instanceid="appointments-facilityMoniker"]'))
 
     # specific appointment rows
-    add_action(CucumberLabel.new('12/02/2013 - 13:00 Visit GENERAL MEDICINE (TST1)'), ClickAction.new, AccessHtmlElement.new(:css, "#center [data-row-instanceid='urn-va-appointment-9E7A-3-A-3131202-13-23']"))
-    #add_action(CucumberLabel.new('12/02/2013 - 13:00 Visit GENERAL MEDICINE (TST1)'), ClickAction.new, AccessHtmlElement.new(:id, 'urn-va-appointment-9E7A-3-A-3131202-13-23'))
     add_verify(CucumberLabel.new("Empty Row"), VerifyText.new, AccessHtmlElement.new(:css, '#data-grid-appointments tbody tr.empty'))
   end
   
@@ -160,9 +158,10 @@ When(/^the user views the first appointment detail view$/) do
 end
 
 Then(/^the Appointment Detail modal displays$/) do |table|
-  modal = AppointmentModal.instance
-  table.rows.each do | row |
-    expect(modal.am_i_visible? row[0]).to eq(true)
+  @ehmp = PobAppointmentsApplet.new
+  @ehmp.wait_for_fld_appointment_modal_headers
+  table.rows.each do |headers|
+    expect(object_exists_in_list(@ehmp.fld_appointment_modal_headers, "#{headers[0]}")).to eq(true), "Field '#{headers[0]}' was not found"
   end
 end
 
@@ -173,9 +172,10 @@ Then(/^the Appointments & Visits expanded applet is displayed$/) do
 end
 
 Then(/^the Appointments expanded table contains headers$/) do |table|
-  app_elements = AppointmentExpanded.instance
-  table.rows.each do | row |
-    expect(app_elements.wait_until_action_element_visible(row[0])).to eq(true)
+  @ehmp = PobAppointmentsApplet.new
+  @ehmp.wait_for_expanded_appointment_modal_headers
+  table.rows.each do |headers|
+    expect(object_exists_in_list(@ehmp.expanded_appointment_modal_headers, "#{headers[0]}")).to eq(true), "Field '#{headers[0]}' was not found"
   end
 end
 
@@ -185,15 +185,6 @@ When(/^the user clicks the "([^"]*)" appointment row$/) do |arg1|
   p 'done scrolling'
   app_elements = AppointmentExpanded.instance
   expect(app_elements.perform_action(arg1)).to eq(true)
-end
-
-Then(/^user sees Appointments Modal table display$/) do |table|
-  driver = TestSupport.driver
-  modal_elements = AppointmentModal.instance
-  table.rows.each do |column1, column2|
-    
-    expect(modal_elements.perform_verification(column1, column2)).to be_true, "could not find row with #{column1}, #{column2}"
-  end
 end
 
 Then(/^the Appointments and Visits Applet contains data rows$/) do

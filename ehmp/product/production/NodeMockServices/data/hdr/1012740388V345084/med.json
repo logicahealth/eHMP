@@ -2,7 +2,7 @@
 	"sites": [{
 		"apiVersion": "1.01",
 		"params": {
-			"domain": "CHEY.VACO.VA.GOV",
+			"domain": "CHEY.VACO.DNS   ",
 			"systemId": "9016"
 		},
 		"data": {

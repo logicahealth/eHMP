@@ -267,7 +267,7 @@ define([
             }
 
             // Only show the "+" icon for the applet if the user has the 'add-lab-order' permission
-            if (ADK.UserService.hasPermissions(addPermission)) {
+            if (ADK.UserService.hasPermissions(addPermission) && ADK.PatientRecordService.isPatientInPrimaryVista()) {
                 appletOptions.onClickAdd = LabOrderTrayUtils.launchLabForm;
             }
 
@@ -345,10 +345,13 @@ define([
         },
         getLoincValues: function(json) {
             if (json.codes === undefined) return '';
-            var codesWithLoinc = _.filter(json.codes, function(item) {
-                return item.system === 'http://loinc.org';
+            var codesWithLoincString = '';
+            _.each(json.codes, function(item) {
+                if (item.system === 'http://loinc.org'){
+                    codesWithLoincString += ' ' + item.code;
+                }
             });
-            return _.pluck(codesWithLoinc, 'code').join(' ');
+            return codesWithLoincString;
         },
 
         onBeforeDestroy: function() {

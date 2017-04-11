@@ -1,0 +1,33 @@
+HOME            = .
+RANDFILE        = $ENV::HOME/.rnd
+ 
+[ req ]
+default_bits        = 2048
+prompt              = yes
+default_md          = sha256
+default_keyfile     = serverkey.pem
+distinguished_name  = server_distinguished_name
+req_extensions      = server_req_extensions
+string_mask         = utf8only
+ 
+[ server_distinguished_name ]
+countryName                    = Country Name (2 letter code)
+countryName_default            = US
+countryName_min                = 2
+countryName_max                = 2
+ 
+organizationName               = Organization Name (company)
+organizationName_default       = VistA Core
+ 
+organizationalUnitName         = Organizational Unit Name (department, division)
+organizationalUnitName_default = VistA Core Dev Internal
+ 
+commonName                     = Common Name (hostname, IP, FQDN or your name)
+commonName_max                 = 64
+ 
+[ server_req_extensions ]
+subjectKeyIdentifier        = hash
+basicConstraints            = CA:FALSE
+keyUsage                    = digitalSignature, keyEncipherment, dataEncipherment
+subjectAltName              = ${ENV::SAN}
+nsComment                   = "OpenSSL Generated Certificate"

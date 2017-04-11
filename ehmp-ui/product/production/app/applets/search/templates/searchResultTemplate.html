@@ -1,4 +1,4 @@
-<div class="{{Class}}" data-uid="{{uid}}"  tabindex="0" date="{{datetime}}"  count="{{count}}" sortText="{{summary}}">
+<div class="{{Class}}" data-uid="{{uid}}" tabindex="0" date="{{datetime}}" count="{{count}}" sortText="{{summary}}">
 <span class="sr-only">Press enter to view additional details</span>
 	<div class="container-fluid left-margin-lg">
 	{{#if subGroupResult}}
@@ -9,33 +9,65 @@
 	{{#if basicResult}}
 		{{#if singleResult}}
 			<div class="row">
-				<div class="col-xs-12">				
-					<span class="badge right-margin-xs background-color-primary">{{count}}</span>
-					<span><strong>{{{summary}}}</strong></span>
-
+				<div class="col-xs-1 pixel-width-45">				
+					<span class="badge background-color-primary">{{count}}</span>
+				</div>
+				<div class="col-xs-11">
+					<div class="row">
+						<div class="col-xs-12">
+							<span><strong>{{{summary}}}</strong></span>
+						</div>
+						<div class="col-xs-4">
+							<span>{{datetime}}</span>
+						</div>
+						<div class="col-xs-4">
+							{{#if signer}}
+								<i class="fa fa-pencil" title="/eh/ {{signer}} - Signed: {{ datetime }}"></i>
+							{{/if}} 
+							{{#if name}}
+								<span>{{{name}}}</span>
+							{{/if}} 
+							{{#if problemStatus}} 
+								<span>{{{problemStatus}}}</span>
+							{{else}} 
+								<span>{{{domain}}}</span>
+							{{/if}}
+							<div>
+								<span>{{{highlights}}}</span>
+							</div>
+						</div>
+						<div class="col-xs-4">
+							<span>{{{facility}}}</span>
+						</div>
+					</div>
 				</div>
 			</div>
-		{{/if}}
+		{{else}}
 		<div class="row left-margin-xs">
 			<div class="col-xs-4">
-				{{datetime}}
+				<span>{{datetime}}</span>
 			</div>
 			<div class="col-xs-4">
-				<div>
 					{{#if signer}}
 						<i class="fa fa-pencil" title="/eh/ {{signer}} - Signed: {{ datetime }}"></i>
 					{{/if}} 
-					{{#if name}} {{{name}}} {{/if}} 
+					{{#if name}}
+						<span>{{{name}}}</span>
+					{{/if}} 
 					{{#if problemStatus}} 
-						{{{problemStatus}}} 
+						<span>{{{problemStatus}}}</span>
 					{{else}} 
-						{{{ domain }}} 
+						<span>{{{domain}}}</span>
 					{{/if}}
+				<div>
+					<span>{{{highlights}}}</span>
 				</div>
-				<div>{{{ highlights }}}</div>
 			</div>
-			<div class="col-xs-4">{{{ facility }}}</div>
+			<div class="col-xs-4">
+				<span>{{{facility}}}</span>
+			</div>
 		</div>
+		{{/if}}
 	{{/if}}
 	</div>
 </div>

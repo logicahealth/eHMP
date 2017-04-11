@@ -1,6 +1,6 @@
 # Group FHIR
 
-## Communicationrequest [{{{path}}}]
+## Communication Request [{{{path}}}]
 
 ### Add Communication Request [POST]
 
@@ -348,15 +348,15 @@ Add a new communication request for one or more recipients. The message is queue
             :[Schema]({{{common}}}/schemas/message.jsonschema)
 
 
-### Get All Communication Requests [GET {{{path}}}/{recipientId}{?identifier}{&category}{&priority}{&status}{&count}{&subject}]
+### Get All Communication Requests [GET {{{path}}}/{recipient}{?identifier}{&category}{&priority}{&status}{&_count}{&subject}]
 
 Get all communication requests for a single recipient. Optional filters supported.
 
 + Parameters
 
-    + recipientId (string, required) - recipient id
+    + recipient (string, required) - recipient identifier
 
-    + identifier (string, optional) - Business identifier id used to find a communication request. If provided then all other parameters are ignored.
+    + identifier (string, optional) - Business identifier used to find a communication request. If provided then all other parameters are ignored.
 
     + category (string, optional) - Filter returned communication request by the provided category. Can be combined with priority and status.
 
@@ -364,7 +364,7 @@ Get all communication requests for a single recipient. Optional filters supporte
 
     + status (string, optional) - Filter returned communication request by the provided status. Can be combined with category and priority.
 
-    + count (string, optional) - Filter returned number of communication requests; count=true must be provided. Can be combined with all filters.
+    :[_count]({{{common}}}/parameters/count.md)
 
     + subject (string, optional) - Filter returned communication requests by subject. Can be combined with all filters.
 
@@ -372,13 +372,37 @@ Get all communication requests for a single recipient. Optional filters supporte
 + Response 200 (application/json)
 
 
-### Get Communication Request [GET {{{path}}}/{recipientId}/{id}]
+### Get All Communication Requests [POST {{{path}}}/{recipient}/_search{?identifier}{&category}{&priority}{&status}{&_count}{&subject}]
+
+Get all communication requests for a single recipient. Optional filters supported.
+
++ Parameters
+
+    + recipient (string, required) - recipient identifier
+
+    + identifier (string, optional) - Business identifier used to find a communication request. If provided then all other parameters are ignored.
+
+    + category (string, optional) - Filter returned communication request by the provided category. Can be combined with priority and status.
+
+    + priority (string, optional) - Filter returned communication request by the provided priority. Can be combined with category and status.
+
+    + status (string, optional) - Filter returned communication request by the provided status. Can be combined with category and priority.
+
+    :[_count]({{{common}}}/parameters/count.md)
+
+    + subject (string, optional) - Filter returned communication requests by subject. Can be combined with all filters.
+
+
++ Response 200 (application/json)
+
+
+### Get a Communication Request [GET {{{path}}}/{recipient}/{id}]
 
 Get a single communication request for a specific recipient.
 
 + Parameters
 
-    + recipientId (string, required) - recipient id
+    + recipient (string, required) - recipient identifier
 
     + id (string, required) - resource id for a communication request
 
@@ -398,27 +422,40 @@ Get a single communication request for a specific recipient.
             :[Schema]({{{common}}}/schemas/message.jsonschema)
 
 
+### Get a Communication Request [POST {{{path}}}/{recipient}/{id}/_search]
 
-### Delete Communication Request [DELETE {{{path}}}/{recipientId}/{id}]
+Get a single communication request for a specific recipient.
+
++ Parameters
+
+    + recipient (string, required) - recipient identifier
+
+    + id (string, required) - resource id for a communication request
+
+
++ Response 200 (application/json)
++ Response 404 (application/json)
+
+### Delete a Communication Request [DELETE {{{path}}}/{recipient}/{id}]
 
 Delete a single communication request for a specific recipient.
 
 + Parameters
 
-    + recipientId (string, required) - recipient id
+    + recipient (string, required) - recipient identifier
 
     + id (string, required) - resource id for a communication request
 
 
 + Response 204 (application/json)
 
-### Update Communication Request [PUT {{{path}}}/{recipientId}/{id}]
+### Update a Communication Request [PUT {{{path}}}/{recipient}/{id}]
 
 Update a communication request by merging between the existing request and the payload (the new payload takes priority)
 
 + Parameters
 
-    + recipientId (string, required) - recipient id
+    + recipient (string, required) - recipient identifier
 
     + id (string, required) - resource id for a communication request
 
@@ -749,13 +786,13 @@ Update a communication request by merging between the existing request and the p
             :[Schema]({{{common}}}/schemas/message.jsonschema)
 
 
-### Set status for Communication Request [PUT {{{path}}}/setstatus/{status}/{recipientId}/{id}]
+### Set status for Communication Request [PUT {{{path}}}/setstatus/{status}/{recipient}/{id}]
 
 Set status for a Communication Request
 
 + Parameters
 
-    + recipientId (string, required) - recipient id
+    + recipient (string, required) - recipient identifier
 
     + id (string, required) - resource id for a communication request
 
@@ -778,12 +815,22 @@ Set status for a Communication Request
 
             :[Schema]({{{common}}}/schemas/message.jsonschema)
 
-### Add a long polling watch for incoming Communication Requests [GET {{{path}}}/watch/add/{recipientId}]
+### Add a long polling watch for incoming Communication Requests [GET {{{path}}}/watch/add/{recipient}]
 
 Opens a long polling request which is served when a recipient's queue receives a new Communication Request
 
 + Parameters
 
-    + recipientId (string, required) - recipient id
+    + recipient (string, required) - recipient identifier
+
++ Response 200 (application/json)
+
+### Add a long polling watch for incoming Communication Requests [POST {{{path}}}/watch/add/{recipient}/_search]
+
+Opens a long polling request which is served when a recipient's queue receives a new Communication Request
+
++ Parameters
+
+    + recipient (string, required) - recipient identifier
 
 + Response 200 (application/json)

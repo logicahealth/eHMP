@@ -133,9 +133,6 @@ define([
                         }
 
                         var currentPatient = PatientRecordService.getCurrentPatient();
-                        if (currentPatient.has('pid')) {
-                            PatientRecordService.refreshCurrentPatient();
-                        }
                         ComponentLoader.load(ADKApp, topRegion_layoutView, screenModule.config, currentPatient, contextId);
 
                         var layoutShowPromise = $.Deferred();
@@ -182,13 +179,17 @@ define([
                                 screenModule.contentRegion_layoutView_obj = contentRegion_layoutView;
                             }
                             //TEMPORARY FIX FOR LOGIN BACKGROUND IMAGE TO NOT DISPLAY IN APP
-                            $('body').removeClass();
+                            $('body').removeClass().attr('data-full-screen', false);
                             $('body').addClass(contextId + '-context ' + screenName);
+                            if (screenModule.applets.length === 1 && _.isObject(screenModule.applets[0]) && screenModule.applets[0].fullScreen) {
+                                // fix so we aren't looking for "-full" in screen name for styling
+                                $('body').attr('data-full-screen', true);
+                            }
                             if (!extraScreenDisplayOptions.dontLoadApplets) {
                                 _.each(screenModule.applets, function(currentApplet) {
                                     var showPromise = $.Deferred();
                                     pendingPromises.push(showPromise);
-                                    var appletModule = ADKApp[currentApplet.id];
+                                    var appletModule = ADKApp.Applets[currentApplet.id];
                                     appletModule.buildPromise.done(function() {
                                         if (typeof currentApplet.setDefaultView === 'function') {
                                             currentApplet.setDefaultView();

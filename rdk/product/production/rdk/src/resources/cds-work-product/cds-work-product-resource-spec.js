@@ -4,7 +4,7 @@ var rdk = require('../../core/rdk');
 var cdsWorkProductResource = require('./cds-work-product-resource');
 var workProduct = require('./cds-work-product');
 var cdsSpecUtil = require('../cds-spec-util/cds-spec-util');
-var mongo = require('mongoskin');
+var cdsSubsystem = require('../../subsystems/cds/cds-subsystem');
 
 var mockReqResUtil = cdsSpecUtil.mockReqResUtil;
 var appReference = cdsSpecUtil.createAppReference;
@@ -13,8 +13,8 @@ describe('CDS Work Product Resource', function() {
 
     var resources = cdsWorkProductResource.getResourceConfig(appReference());
     var interceptors = {
-       operationalDataCheck: false,
-       synchronize: false
+        operationalDataCheck: false,
+        synchronize: false
     };
 
     it('has 8 endpoints configured', function() {
@@ -117,11 +117,15 @@ describe('CDS Work Product Resource', function() {
         it('retrieveWorkProduct responds HTTP Bad Request when id parameter is not valid', function() {
 
             //Create the mocked MongoDB functions that are used by the code that we're testing...
-            db = cdsSpecUtil.createMockDb({
-                find: function() {
+            var db = cdsSpecUtil.createMockDb({
+                find: function(callback) {
                     return {
-                        toArray: function(callback) {
-                            callback(null, []);
+                        limit: function(count) {
+                            return {
+                                toArray: function(callback) {
+                                    callback(null, []);
+                                }
+                            };
                         }
                     };
                 },
@@ -130,11 +134,16 @@ describe('CDS Work Product Resource', function() {
                 }
             });
 
-            sinon.stub(mongo, 'db').returns(db);
+            sinon.stub(cdsSubsystem, 'getCDSDB', function(dbName, initDb, callback) {
+                callback(null, db);
+            });
+
             workProduct.init(appReference());
 
-            workProduct.retrieveWorkProduct(mockReqResUtil.createRequestWithParam({ id: 'Id_TOO_LONG_12345678597897897897879878978979879'}, null), res);
-            //console.log(res.status);
+            workProduct.retrieveWorkProduct(mockReqResUtil.createRequestWithParam({
+                id: 'Id_TOO_LONG_12345678597897897897879878978979879'
+            }, null), res);
+
             expect(res.status.calledWith(rdk.httpstatus.bad_request)).to.be.true();
 
         });

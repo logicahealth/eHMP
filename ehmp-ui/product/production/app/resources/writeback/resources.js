@@ -20,14 +20,13 @@ define([
     'app/resources/writeback/orders/discontinue',
     'app/resources/writeback/orders/sign',
     'app/resources/writeback/orders/labSupportData',
+    'app/resources/writeback/orders/clinicalObject',
     'app/resources/writeback/addenda/model',
     'app/resources/writeback/activities/draft/model',
     'app/resources/writeback/activities/signal/model',
-    'app/resources/writeback/clinical_objects/model',
-    'app/resources/writeback/clinical_objects/collection',
     'app/resources/writeback/notes/notesSignModel',
     'app/resources/writeback/addenda/addendumSignModel'
-], function(Notes, Note, UnsignedNotes, UncosignedNotes, SignedNotes, Allergy, Allergies, Vital, Vitals, Immunization, Immunizations, Esignature, Problem, Problems, Order, OrderDetail, DraftOrder, DraftOrders, OrderDiscontinue, OrderSign, LabSupportData, Addendum, DraftActivity, SignalActivity, ClinicalObject, ClinicalObjects, NotesSignModel, AddendumSignModel) {
+], function(Notes, Note, UnsignedNotes, UncosignedNotes, SignedNotes, Allergy, Allergies, Vital, Vitals, Immunization, Immunizations, Esignature, Problem, Problems, Order, OrderDetail, DraftOrder, DraftOrders, OrderDiscontinue, OrderSign, LabSupportData, OrderClinicalObject, Addendum, DraftActivity, SignalActivity, NotesSignModel, AddendumSignModel) {
     'use strict';
 
     return {
@@ -67,6 +66,7 @@ define([
                 LabSupportData: LabSupportData,
                 Discontinue: OrderDiscontinue,
                 Sign: OrderSign,
+                ClinicalObject: OrderClinicalObject,
                 Draft: {
                     Model: DraftOrder,
                     Collection: DraftOrders
@@ -84,10 +84,6 @@ define([
                 Signal: {
                     Model: SignalActivity
                 }
-            },
-            ClinicalObjects: {
-                Model: ClinicalObject,
-                Collection: ClinicalObjects
             }
         }
     };

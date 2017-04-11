@@ -2,21 +2,23 @@ define([
     'backbone',
     'marionette',
     'async',
+    'moment',
     'app/applets/documents/detail/simple/docDetailView',
     'app/applets/documents/detail/complex/complexDetailView',
     'app/applets/documents/detail/dodComplexNoteUtil',
-    'app/applets/documents/debugFlag',
+    'app/applets/documents/appConfig',
     'app/applets/documents/appletHelper',
     'pdf'
-], function(Backbone, Marionette, Async, DocDetailView, ComplexDetailView, DodComplexNoteUtil, DebugFlag, AppletHelper, pdf) {
+], function(Backbone, Marionette, Async, moment, DocDetailView, ComplexDetailView, DodComplexNoteUtil, appConfig, AppletHelper, pdf) {
     'use strict';
 
-    var DEBUG = DebugFlag.flag;
-    var ERROR_LOG = DebugFlag.errorLog;
+    var DEBUG = appConfig.debug;
+    var ERROR_LOG = appConfig.errorLog;
+    var COMPLEX_VIEWS = appConfig.complexViews;
 
-    var getDodComplexNotes = function(models, parentCallback) {
+    var getDodComplexNotes = function(models) {
         if (models.length !== 1) {
-            parentCallback();
+            this.trigger('complexNotes');
             return;
         }
         var model = models[0];
@@ -27,8 +29,8 @@ define([
             //embed DoD pdf note within modal using an embed tag a point src to pdf url
             if (isPdfDocument(complexNoteUri)) {
                 if (DEBUG) console.log("DoD Complex Note is format is PDF.");
-                if(!model.get('dodComplexNotePdf')) model.set('dodComplexNotePdf', true);
-                parentCallback();
+                if (!model.get('dodComplexNotePdf')) model.set('dodComplexNotePdf', true);
+                this.trigger('complexNotes');
                 return;
             }
             //render DoD html complex note into an iframe
@@ -37,13 +39,15 @@ define([
                 this.listenToOnce(complexData, 'fetch:success', function() {
                     this.stopListening(complexData, 'fetch:error');
                     model.set('dodComplexNoteContent', complexData.models[0].get('complexNote'));
-                    return parentCallback(null, model);
+                    this.trigger('complexNotes', model);
+                    return;
                 });
                 this.listenToOnce(complexData, 'fetch:error', function() {
                     this.stopListening(complexData, 'fetch:success');
                     var errorMsg = "Documents: Error fetching DoD Complex Note";
                     if (ERROR_LOG) console.log(errorMsg);
-                    return parentCallback(errorMsg);
+                    this.trigger('complexNotes', errorMsg);
+                    return;
                 });
 
                 if (DEBUG) console.log("DoD Complex Note format is HTML.");
@@ -62,7 +66,7 @@ define([
             }
         } else {
             if (DEBUG) console.log("Already have DoD Complex Note, not re-fetching");
-            parentCallback();
+            this.trigger('complexNotes');
         }
     };
 
@@ -78,20 +82,16 @@ define([
         if (DEBUG) console.log("Doc Details Displayer -----> doGetView");
         var dt = docType.toLowerCase();
         var isStub = model.attributes.stub && model.attributes.stub === 'true';
-        var complexViews = ['consult', 'procedure', 'imaging', 'surgery'];
 
         if (dt === 'discharge summary' && !isStub) {
             // request external view (asyncronous)
-            var deferredResponse = DocDetailsDisplayer.getExternalView(model, docType, resultDocCollection);
-            deferredResponse.done(function(results) {
-                callback(null, results);
-            });
-            deferredResponse.fail(function(error) {
-                callback(error);
-            });
-
+            var response = DocDetailsDisplayer.getExternalView(model, docType, resultDocCollection);
+            return {
+                view: response.view,
+                title: response.title
+            };
         } else {
-            var view, View;
+            var View;
             if (isStub) {
                 View = DocDetailView.extend({
                     model: model
@@ -102,9 +102,10 @@ define([
                     childDocCollection: childDocCollection,
                     model: model
                 });
-            } else if(_.contains(complexViews, docType.toLowerCase())) {
+            } else if (_.contains(COMPLEX_VIEWS, docType.toLowerCase())) {
                 View = ComplexDetailView.extend({
                     resultDocCollection: resultDocCollection,
+                    childDocCollection: childDocCollection,
                     model: model
                 });
             } else {
@@ -113,39 +114,26 @@ define([
                 });
             }
 
-            view = new View();
-
             var documentClass = model.get('documentClass') || '';
             if (documentClass.toLowerCase() === 'progress notes') {
-                injectSignatureBlock(view);
+                injectSignatureBlock(model);
             }
 
-            // call the callback with the view we just built
-            callback(null, {
-                view: view,
+            return {
+                view: View,
                 title: DocDetailsDisplayer.getTitle(model, docType)
-            });
-            // build internal view (syncronous)
+            };
         }
     }
 
-    function injectSignatureBlock(view) {
-        if (_.isEmpty(view)) {
+    function injectSignatureBlock(model) {
+        if (!_.get(model, 'attributes.clinicians')) {
             return;
         }
+        var signatures = getSignatures(model.get('clinicians'), model.get('status') === 'AMENDED');
+        model.set('signature', signatures);
 
-        // Heal bad data
-        if (!view.model) {
-            view.model = new Backbone.Model();
-        }
-
-        if (!view.model.get('clinicians')) {
-            return;
-        }
-        var signatures = getSignatures(view.model.get('clinicians'), view.model.get('status') === 'AMENDED');
-        view.model.set('signature', signatures);
-
-        _.each(view.model.get('text'), function(documentText) {
+        _.each(model.get('text'), function(documentText) {
             documentText.signature = getSignatures(documentText.clinicians, false);
         });
     }
@@ -228,6 +216,8 @@ define([
                     return 'Discharge Summary Details';
                 case 'surgery report':
                     return 'Surgery Report Details';
+                case 'radiology report':
+                    return model.get('localTitle');
 
                     // internal detail view
                 case 'advance directive':
@@ -249,42 +239,89 @@ define([
         getExternalView: function(model, docType, collection) {
             // request external detail view from screen controller
             var extDetailChannel = ADK.Messaging.getChannel('documents');
-            var deferredResponse = extDetailChannel.request('extDetailView', {
+            var response = extDetailChannel.request('extDetailView', {
                 model: model,
                 kind: docType,
                 uid: model.get('uid')
             });
 
-            return deferredResponse;
+            return response;
         },
 
-        getView: function(model, docType, resultDocCollection, childDocCollection) {
-            var deferredResponse = $.Deferred(),
-                complexNoteModels = [];
+        getView: function(model, docType, resultDocCollection, childDocCollection, modalCollection) {
+            var View = Backbone.Marionette.LayoutView.extend({
+                collection: modalCollection,
+                resultDocCollection: resultDocCollection,
+                childDocCollection: childDocCollection,
+                template: Handlebars.compile('<div class="detail-modal-content"></div>'),
+                regions: {
+                    'view': '.detail-modal-content'
+                },
+                'collectionEvents': {
+                    'fetch:success': function(collection, response) {
+                        if (!this.getRegion('view').hasView()) {
+                            this.onBeforeShow();
+                        } else {
+                            this.getRegion('view').currentView.render();
+                        }
+                    }
+                },
+                initialize: function() {
+                    this.bindEntityEvents(this.resultDocCollection, this.collectionEvents);
+                    this.bindEntityEvents(this.childDocCollection, this.collectionEvents);
+                    var Model = Backbone.Model.extend({
+                        defaults: {
+                            displayTitle: ''
+                        }
+                    });
+                    if(!this.model) this.model = new Model();
+                },
+                childEvents: {
+                    'render': function(view) {
+                        if (view.model && view.model.get('dodPdfDocumentUri')) {
+                            //prevent modal from displaying a scroll bar (needed to avoid display of two scroll bars)
+                            $('#modal-body').css('max-height', '100%');
+                        }
+                    }
+                },
+                onBeforeShow: function() {
+                    if(this.collection.isEmpty()) return;
 
-            if (resultDocCollection && resultDocCollection.length > 0) {
-                complexNoteModels = resultDocCollection.models;
-            } else if (model.get('dodComplexNoteUri')) {
-                complexNoteModels = [model];
-            }
-            var self = this;
-            Async.series([
+                    var complexNoteModels = [];
 
-                // Fetch complex note content and store in model
-                getDodComplexNotes.bind(self, complexNoteModels),
+                    this.model.set(_.get(this.collection.at(0), 'attributes'));
 
-                // Get the detail view
-                doGetView.bind(null, model, docType, resultDocCollection, childDocCollection)
+                    if (resultDocCollection && resultDocCollection.length > 0) {
+                        complexNoteModels = resultDocCollection.models;
+                    } else if (this.model.get('dodComplexNoteUri')) {
+                        complexNoteModels = [this.model];
+                    }
+                    var response = doGetView(this.model, docType, this.resultDocCollection, this.childDocCollection);
+                    this.responseView = response.view;
 
-            ], function onComplete(error, results) {
-                if (error) {
-                    deferredResponse.reject(error);
-                } else {
-                    deferredResponse.resolve(results[1]);
+                    this.listenToOnce(this, 'complexNotes', function() {
+                        var view = new this.responseView();
+                        this.getRegion('view').show(view);
+                    });
+                    var view = new this.responseView();
+
+                    if(_.isEmpty(complexNoteModels)) this.getRegion('view').show(view);
+                    else getDodComplexNotes.call(this, complexNoteModels);
+                },
+                onBeforeDestroy: function() {
+                    this.unbindEntityEvents(this.resultDocCollection, this.collectionEvents);
+                    this.unbindEntityEvents(this.childDocCollection, this.collectionEvents);
+                },
+                title: function() {
+                    return DocDetailsDisplayer.getTitle(this.model, docType);
                 }
             });
-
-            return deferredResponse.promise();
+            return {
+                view: View,
+                title: function() {
+                    return DocDetailsDisplayer.getTitle(model, _.isString(docType) ? docType : model.get('kind'));
+                }
+            };
         }
     };
     return DocDetailsDisplayer;

@@ -24,6 +24,7 @@
  */
 package com.cognitive.cds.invocation.crs;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -31,7 +32,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
+import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.core.Response;
+
+import org.apache.cxf.helpers.IOUtils;
+import org.apache.cxf.jaxrs.client.WebClient;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -39,6 +48,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import com.cognitive.cds.invocation.crs.model.Binding;
+import com.cognitive.cds.invocation.crs.model.LabSparqlResults;
+import com.cognitive.cds.invocation.crs.model.orderables.LabOrderableSparqlResult;
+import com.cognitive.cds.invocation.execution.model.Coding;
+import com.cognitive.cds.invocation.execution.model.Prerequisite;
+import com.cognitive.cds.invocation.util.FhirUtils;
 
 import ca.uhn.fhir.model.api.IResource;
 import ca.uhn.fhir.model.base.resource.BaseOperationOutcome;
@@ -49,13 +65,6 @@ import ca.uhn.fhir.model.primitive.IdDt;
 import ca.uhn.fhir.parser.IParser;
 import ca.uhn.fhir.validation.FhirValidator;
 import ca.uhn.fhir.validation.ValidationResult;
-
-import com.cognitive.cds.invocation.crs.model.Binding;
-import com.cognitive.cds.invocation.crs.model.LabSparqlResults;
-import com.cognitive.cds.invocation.crs.model.orderables.LabOrderableSparqlResult;
-import com.cognitive.cds.invocation.execution.model.Coding;
-import com.cognitive.cds.invocation.execution.model.Prerequisite;
-import com.cognitive.cds.invocation.util.FhirUtils;
 
 /**
  * Test Support Classes that retrieve CRS SPARQL queries
@@ -128,6 +137,78 @@ public class PrerequisitesTest {
         
     }
     
+    @Ignore
+    @Test
+    public void multiThreadCRSQuery() {
+        log.info("\n\n=====================> TESTING: Multi-Thread CRS Prerequesities query  <===================== ");
+
+        List<Callable<String>> threadWorkers = new ArrayList<>();
+        try{
+        	threadWorkers.add(new WebClientWorker(resolver.getCRSClient().getClient(), 1, "9E7A", "415301001"));
+        	threadWorkers.add(new WebClientWorker(resolver.getCRSClient().getClient(), 2, "9E7A", "55235003"));
+        	threadWorkers.add(new WebClientWorker(resolver.getCRSClient().getClient(), 3, "C877", "415301001"));
+        	threadWorkers.add(new WebClientWorker(resolver.getCRSClient().getClient(), 4, "C877", "55235003"));
+        	threadWorkers.add(new WebClientWorker(resolver.getCRSClient().getClient(), 5, "48B0", "415301001"));
+        	threadWorkers.add(new WebClientWorker(resolver.getCRSClient().getClient(), 6, "48B0", "55235003"));
+        	threadWorkers.add(new WebClientWorker(resolver.getCRSClient().getClient(), 7, "1158", "415301001"));
+        	threadWorkers.add(new WebClientWorker(resolver.getCRSClient().getClient(), 8, "1158", "55235003"));
+        	threadWorkers.add(new WebClientWorker(resolver.getCRSClient().getClient(), 9, "9946", "415301001"));
+        	threadWorkers.add(new WebClientWorker(resolver.getCRSClient().getClient(), 10, "9946", "55235003"));
+        	
+            ExecutorService executor = Executors.newFixedThreadPool(threadWorkers.size());
+        	executor.invokeAll(threadWorkers);
+        }
+        catch(Exception e) {
+        	log.error("Failure to execute", e);
+        }
+    }
+    
+    class WebClientWorker implements Callable<String> {
+    	private final String siteId;
+    	private final String conceptId;
+    	private final int clientNumber;
+    	private final WebClient client;
+    	
+    	public WebClientWorker(WebClient client, int clientNumber, String siteId, String conceptId) {
+    		this.clientNumber = clientNumber;
+    		this.siteId = siteId;
+    		this.conceptId = conceptId;
+    		this.client = client;
+    	}
+    	// For each client call we set a unique custom header and the return should be the same.
+		@Override
+		public String call() {
+            try {
+            	Prerequisite prereq = new Prerequisite();
+                prereq.setValueSetQuery("valueSet.sparql");
+                Coding coding =  new Coding();
+                coding.setCode(conceptId);
+                prereq.setCoding(coding);
+            	String queryString = getSparqlQuery(prereq.getValueSetQuery());
+            	queryString  = String.format(queryString, siteId, conceptId);
+            	
+        		client.resetQuery();
+        		client.header("CustomHeader", siteId + ":" + coding.getCode());
+        		Response response = client.accept("application/sparql-results+json").type("application/sparql-results+json")
+        				.header("Content-Type", "application/sparql-query").post(queryString);
+        		
+        		int status = response.getStatus();
+        		if (status != 200) {
+        			throw new IOException("SPARQL failed, status code: " + status);
+        		}
+        		
+        		MultivaluedMap<String, Object> map = response.getHeaders();
+        		
+      
+                // check the custom header after the call, it should be the same as what's set for this call
+            	assertEquals(siteId + ":" + conceptId, map.getFirst("CustomHeader") );
+            } catch (Exception e) {
+            	log.error("Failure for WebClientWorker : " + siteId + ":" + conceptId, e);
+            }
+            return clientNumber  + " finsihed";
+		}
+    }
+    
     private Bundle createBundleWithOneResource(IResource rsc) {
         Bundle bundle = new Bundle();
         java.util.UUID uuid = java.util.UUID.randomUUID();
@@ -170,4 +251,14 @@ public class PrerequisitesTest {
         log.info(".....................................................\n");
         assertTrue("Parsed & Validated: ", validationResult.isSuccessful());
     }
+    private String getSparqlQuery(String fileName){
+    	  String result = "";
+    	  ClassLoader classLoader = getClass().getClassLoader();
+    	  try {
+    		result = IOUtils.toString(classLoader.getResourceAsStream(fileName));
+    	  } catch (IOException e) {
+    		log.debug("Couldn't read resoruce : " + fileName + " " + e.getMessage());
+    	  }
+    	  return result;
+      }
 }

@@ -3,9 +3,10 @@ define([
     'marionette',
     'jquery',
     'handlebars',
+    'moment',
     'app/applets/allergy_grid/writeback/validationUtils',
     'app/applets/allergy_grid/writeback/writebackUtils'
-], function(Backbone, Marionette, $, Handlebars, validationUtils, writebackUtils) {
+], function(Backbone, Marionette, $, Handlebars, moment, validationUtils, writebackUtils) {
     "use strict";
 
     var NO_KNOWN_ALLERGY_CODE_D = '132;GMRD(120.82,"D")';
@@ -88,7 +89,6 @@ define([
                     control: 'datepicker',
                     name: 'reaction-date',
                     label: 'Reaction Date',
-                    title: 'Enter date in text or numerical format',
                     required: false,
                     disabled: true,
                     flexible: true,
@@ -162,7 +162,6 @@ define([
             extraClasses: ['cell-valign-middle', 'bottom-margin-no'],
             name: 'symptom-date',
             label: 'Symptom Date',
-            title: 'Enter date in text or numerical format.',
             srOnlyLabel: true,
             flexible: true,
             options: {
@@ -192,7 +191,7 @@ define([
 
     var SignsAndSymptomsFieldset = {
         control: 'fieldset',
-        legend: 'Signs / Symptoms *',
+        legend: 'Signs/Symptoms *',
         items: [SignsAndSymptoms],
         extraClasses: ['bottom-margin-md', 'signs-and-symptoms']
     };
@@ -239,75 +238,45 @@ define([
             extraClasses: ['row'],
             items: [{
                 control: 'container',
-                extraClasses: ['col-xs-6'],
+                extraClasses: ['col-xs-12'],
                 template: Handlebars.compile('{{#if savedTime}}<p><span id="allergies-saved-at">Saved at: {{savedTime}}</span></p>{{/if}}')
-            }, {
+            }]
+        }, {
+            control: 'container',
+            extraClasses: ['row'],
+            items: [{
                 control: 'container',
-                extraClasses: ['col-xs-6'],
+                extraClasses: ['col-xs-12', 'display-flex', 'valign-bottom'],
                 items: [{
-                        control: 'button',
-                        id: 'form-cancel-btn',
-                        extraClasses: ['btn-default', 'btn-sm'],
-                        label: 'Cancel',
-                        type: 'button',
-                        title: 'Press enter to cancel',
-                        name: 'cancelBtn'
+                    control: 'popover',
+                    behaviors: {
+                        Confirmation: {
+                            title: 'Warning',
+                            eventToTrigger: 'allergies-confirm-cancel',
+                        }
                     },
-                    // todo: removed until draft function is working
-                    // {
-                    //     control: 'button',
-                    //     id: 'form-close-btn',
-                    //     extraClasses: ['btn-default', 'btn-sm'],
-                    //     label: 'Close',
-                    //     type: 'button',
-                    //     title: 'Press enter to close',
-                    //     name: 'closeBtn'
-                    // },
-                    {
-                        control: 'button',
-                        extraClasses: ['btn-primary', 'btn-sm'],
-                        label: 'Accept',
-                        name: 'addBtn',
-                        title: 'Press enter to accept',
-                        disabled: true
-                    }
-                ]
+                    label: 'Cancel',
+                    name: 'allergiesConfirmCancel',
+                    extraClasses: ['btn-default', 'btn-sm']
+                }, {
+                    control: 'button',
+                    extraClasses: ['btn-primary', 'btn-sm', 'left-margin-xs'],
+                    label: 'Accept',
+                    name: 'addBtn',
+                    title: 'Press enter to accept',
+                    disabled: true
+                }]
             }]
         }]
     }];
 
-    var CancelMessageView = Backbone.Marionette.ItemView.extend({
-        template: Handlebars.compile('All unsaved changes will be lost. Are you sure you want to cancel?'),
-        tagName: 'p'
-    });
-    // todo: removed until draft function is working
-    // var CloseMessageView = Backbone.Marionette.ItemView.extend({
-    //     template: Handlebars.compile('Your progress will be saved and remain in draft status. Would you like to proceed with ending this observation?'),
-    //     tagName: 'p'
-    // });
-
-    var FooterView = Backbone.Marionette.ItemView.extend({
-        template: Handlebars.compile('{{ui-button "No" classes="btn-default btn-sm" title="Press enter to go back."}}{{ui-button "Yes" classes="btn-primary btn-sm" title="Press enter to cancel."}}'),
-        events: {
-            'click .btn-primary': function() {
-                ADK.UI.Alert.hide();
-                writebackUtils.unregisterChecks();
-                this.getOption('workflow').close();
-            },
-            'click .btn-default': function() {
-                ADK.UI.Alert.hide();
-            }
-        },
-        tagName: 'span'
-    });
-
     var ErrorMessageView = Backbone.Marionette.ItemView.extend({
-        template: Handlebars.compile('Unable to save your data at this time due to a system error. Try again later.'),
+        template: Handlebars.compile('Unable to save your data at this time due to a system error. Please try again later.'),
         tagName: 'p'
     });
 
     var ErrorFooterView = Backbone.Marionette.ItemView.extend({
-        template: Handlebars.compile('{{ui-button "OK" classes="btn-primary" title="Click button to close modal"}}'),
+        template: Handlebars.compile('{{ui-button "OK" classes="btn-primary btn-sm" title="Press enter to close"}}'),
         events: {
             'click .btn-primary': function() {
                 ADK.UI.Alert.hide();
@@ -358,10 +327,10 @@ define([
             'read:error': function(collection) {
                 this.ui.natureOfReaction.trigger('tray.loaderHide');
                 var errorAlertView = new ADK.UI.Alert({
-                    title: 'Failed to load picklist data.',
-                    icon: 'icon-error',
+                    title: 'Error',
+                    icon: 'icon-circle-exclamation',
                     messageView: ErrorMessageView.extend({
-                        msg: 'There was an error loading the form.'
+                        msg: 'Failed to load picklist data.'
                     }),
                     footerView: ErrorFooterView,
 
@@ -399,9 +368,9 @@ define([
 
         },
         onAttach:function(){
-            if (this.$('#allergen').is(':visible')){
+            if (this.ui.allergen.is(':visible')){
                 this.$el.trigger('tray.loaderShow',{
-                    loadingString:'Loading allergens and symptoms'
+                    loadingString:'Loading'
                 });
             }
         },
@@ -422,33 +391,14 @@ define([
             this.unbindEntityEvents(this.operationalData, this.operationalDataEvents);
         },
         events: {
-            'click #form-cancel-btn': function(e) {
-                e.preventDefault();
-
-                var cancelAlertView = new ADK.UI.Alert({
-                    title: 'Cancel',
-                    icon: 'icon-cancel',
-                    messageView: CancelMessageView,
-                    footerView: FooterView,
-                    workflow: this.workflow
-                });
-                cancelAlertView.show();
+            'allergies-confirm-cancel': function(e) {
+                writebackUtils.unregisterChecks();
+                this.workflow.close();
             },
-            // todo: removed until draft function is working
-            // 'click #form-close-btn': function(e) {
-            //     e.preventDefault();
-            //     var closeAlertView = new ADK.UI.Alert({
-            //         title: 'Are you sure you want to close this form?',
-            //         icon: 'icon-warning',
-            //         messageView: CloseMessageView,
-            //         footerView: FooterView
-            //     });
-            //     closeAlertView.show();
-            // },
             'submit': function(e) {
                 e.preventDefault();
                 var self = this;
-                if (!this.model.isValid()){
+                if (!this.model.isValid()) {
                     this.model.set('formStatus', {
                         status: 'error',
                         message: this.model.validationError
@@ -456,7 +406,7 @@ define([
                     this.transferFocusToFirstError();
                 } else {
                     this.$el.trigger('tray.loaderShow',{
-                        loadingString:'Adding allergy'
+                        loadingString:'Accepting'
                     });
                     this.model.unset('formStatus');
                     this.ui.addBtn.trigger('control:disabled', true);
@@ -464,9 +414,8 @@ define([
                         function() {
                             self.$el.trigger('tray.loaderHide');
                             var saveAlertView = new ADK.UI.Notification({
-                                title: 'Allergy Submitted',
-                                icon: 'fa-check',
-                                message: 'Allergy successfully submitted with no errors.',
+                                title: 'Success',
+                                message: 'Allergy Submitted',
                                 type: 'success'
                             });
 
@@ -484,36 +433,35 @@ define([
 
                             if (error.status === 409) {
                                 var errorMessage = '';
-                                var hbErrorMessage = Handlebars.compile('Something went wrong in the submission.');
+                                var hbErrorMessage = Handlebars.compile('<p>An error was returned during your submission:</p>');
                                 var errorMessageArray = JSON.parse(error.responseText);
 
                                 if (errorMessageArray && !_.isEmpty(errorMessageArray)) {
 
                                     if (errorMessageArray.message) {
-                                        hbErrorMessage = Handlebars.compile('An error was returned during your submission:<ul><li>' + errorMessageArray.message + '</li></ul>');
+                                        hbErrorMessage = Handlebars.compile('<p>An error was returned during your submission:</p><ul><li>' + errorMessageArray.message + '</li></ul>');
                                     } else if (errorMessageArray.data) {
                                         _.each(errorMessageArray.data, function(msg) {
                                             errorMessage += '<li>' + msg + '</li>';
                                         });
-                                        hbErrorMessage = Handlebars.compile('Review the following errors from the submission:<ul>' + errorMessage + '</ul>');
+                                        hbErrorMessage = Handlebars.compile('<p>Review the following errors from the submission:</p><ul>' + errorMessage + '</ul>');
                                     }
                                 }
 
                                 var DuplicateErrorMessageView = Backbone.Marionette.ItemView.extend({
-                                    template: hbErrorMessage,
-                                    tagName: 'p'
+                                    template: hbErrorMessage
                                 });
 
                                 errorAlertView = new ADK.UI.Alert({
-                                    title: 'Allergy Save Error',
-                                    icon: 'icon-error',
+                                    title: 'Error',
+                                    icon: 'icon-circle-exclamation',
                                     messageView: DuplicateErrorMessageView,
                                     footerView: ErrorFooterView
                                 });
                             } else {
                                 errorAlertView = new ADK.UI.Alert({
-                                    title: 'Save Failed (System Error)',
-                                    icon: 'icon-error',
+                                    title: 'Error',
+                                    icon: 'icon-circle-exclamation',
                                     messageView: ErrorMessageView,
                                     footerView: ErrorFooterView
                                 });
@@ -603,7 +551,7 @@ define([
                         this.$(this.ui.signsSymptoms.selector).trigger('control:hidden', false);
                         this.$(this.ui.allergyType.selector).trigger('control:disabled', false);
 
-                        if(this.model.has('allergyType') && !_.isEmpty(this.model.get('allergyType'))){
+                        if (this.model.has('allergyType') && !_.isEmpty(this.model.get('allergyType'))) {
                             this.model.trigger('change:allergyType', this.model);
                         }
                     }

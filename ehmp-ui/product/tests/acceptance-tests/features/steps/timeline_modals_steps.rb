@@ -38,27 +38,15 @@ class TimelineAppletModalDetail < ADKContainer
   end
 end
 
-class TimelineAppletImmunizationModalDetail < ADKContainer
-  include Singleton
-  def initialize
-    super
-    path = "//div[@id='modal-body']/descendant::"
-    add_verify(CucumberLabel.new("Name"), VerifyText.new, AccessHtmlElement.new(:xpath, "#{path}h5[string() = 'Name']"))
-    add_verify(CucumberLabel.new("Date Administered"), VerifyText.new, AccessHtmlElement.new(:xpath, "#{path}h5[string() = 'Date Administered']"))
-    add_verify(CucumberLabel.new("Location"), VerifyText.new, AccessHtmlElement.new(:xpath, "#{path}h5[string() = 'Location']"))
-    add_verify(CucumberLabel.new("Administered By"), VerifyText.new, AccessHtmlElement.new(:xpath, "#{path}h5[string() = 'Administered By']"))
-  end
-end
-
 class TimelineAppletSurgeryProcedureModalDetail < ADKContainer
   include Singleton
   def initialize
     super
-    add_verify(CucumberLabel.new("Facility"), VerifyText.new, AccessHtmlElement.new(:css, "[data-detail-label=facility] strong"))
-    add_verify(CucumberLabel.new("Type"), VerifyText.new, AccessHtmlElement.new(:css, "[data-detail-label=type] strong"))
-    add_verify(CucumberLabel.new("Status"), VerifyText.new, AccessHtmlElement.new(:css, "[data-detail-label=status] strong"))
-    add_verify(CucumberLabel.new("Date/Time"), VerifyText.new, AccessHtmlElement.new(:css, "[data-detail-label=date-time] strong"))
-    add_verify(CucumberLabel.new("Providers"), VerifyText.new, AccessHtmlElement.new(:css, "[data-detail-label=providers] strong"))
+    add_verify(CucumberLabel.new("Facility"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-detail-label=facility] strong"))
+    add_verify(CucumberLabel.new("Type"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-detail-label=type] strong"))
+    add_verify(CucumberLabel.new("Status"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-detail-label=status] strong"))
+    add_verify(CucumberLabel.new("Date/Time"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-detail-label=date-time] strong"))
+    add_verify(CucumberLabel.new("Providers"), VerifyContainsText.new, AccessHtmlElement.new(:css, "[data-detail-label=providers] strong"))
   end
 end
 
@@ -93,13 +81,25 @@ Then(/^the Timeline event "(.*?)" Detail modal displays$/) do |event_type, table
     modal = TimelineAppletModalDetail.instance
   when 'Surgery' , 'Procedure'
     modal = TimelineAppletSurgeryProcedureModalDetail.instance
-  when 'Immunization'
-    modal = TimelineAppletImmunizationModalDetail.instance
   when 'Lab'
     modal = TimelineAppletLabModalDetail.instance
   end
   
   table.rows.each do | row |
+    expect(modal.wait_until_action_element_visible("#{row[0]}")).to eq(true), "#{row[0]} is not visible after waiting"
     expect(modal.am_i_visible?(row[0])).to eq(true), "#{row[0]} was not visible"
   end
 end
+
+Then(/^the Timeline event Immunization Detail modal displays$/) do |table|
+  modal = ImmunizationDetail.new
+  modal.wait_for_fld_modal_title
+
+  table.rows.each do | row |
+    modal.add_field_label_element(row[0])
+    modal.wait_for_header_label
+    expect(modal).to have_header_label, "Modal does not display header #{row[0]}"
+    expect(modal.header_label.text).to start_with("#{row[0]}"), "Case Sensitivity Requirement.  '#{modal.header_label.text}' should start with '#{row[0]}'"
+  end
+end
+

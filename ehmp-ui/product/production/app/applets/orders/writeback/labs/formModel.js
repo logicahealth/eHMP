@@ -2,8 +2,9 @@ define([
     'main/ADK',
     'backbone',
     'handlebars',
+    'moment',
     'app/applets/orders/writeback/labs/labUtils'
-], function(ADK, Backbone, Handlebars, Utils) {
+], function(ADK, Backbone, Handlebars, moment, Utils) {
     "use strict";
 
     //constants

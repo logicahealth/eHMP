@@ -62,7 +62,7 @@ function createPgdSyncRequest(patientIdentifier, rootJob) {
     return create(pgdSyncRequestType(), patientIdentifier, null, null, null, null, rootJob);
 }
 
-// TODO: requestStampTime
+// FUTURETODO: requestStampTime
 function createPgdXformVpr(patientIdentifier, domain, record, rootJob) {
     return create(pgdXformVprType(), patientIdentifier, domain, record, null, null, rootJob);
 }
@@ -325,7 +325,7 @@ function recordUpdateType(){
     return 'record-update';
 }
 
-// TODO: requestStampTime
+// FUTURETODO: requestStampTime
 function create(type, patientIdentifier, domain, record, requestStampTime, eventUid, meta) {
     var job = {
         type: type,

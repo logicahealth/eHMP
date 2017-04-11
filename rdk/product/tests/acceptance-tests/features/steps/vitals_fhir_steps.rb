@@ -23,7 +23,7 @@ end
 When(/^the client "(.*?)" requests vitals for the patient "(.*?)" in FHIR format$/) do |user, pid|
   temp = QueryRDKCDSfhir.new
   path = temp.path + "/patient/#{pid}/observation"
-  @response = HTTPartyRDK.get_as_user(path, user, "pu1234!!")
+  @response = HTTPartyRDK.get_as_user(path, user, "PW    !!")
   puts @response.body
 end
 
@@ -72,7 +72,7 @@ end
 When(/^the client requests "(.*?)" vitals for the patient "(.*?)" in FHIR format$/) do |limit, pid|
   temp = RDKQuery.new('vitals-observation')
   temp.add_parameter("subject.identifier", pid)
-  temp.add_parameter("limit", limit)
+  temp.add_parameter("_count", limit)
   p temp.path
   @response = HTTPartyRDK.get(temp.path)
 end

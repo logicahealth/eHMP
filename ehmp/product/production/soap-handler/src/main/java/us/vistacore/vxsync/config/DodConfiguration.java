@@ -119,7 +119,7 @@ public class DodConfiguration {
     }
 
     public void setUsername(String username) {
-        this.VsID        sername;
+        this.username = username;
     }
 
     public String getUsersitecode() {

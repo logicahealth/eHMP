@@ -39,10 +39,31 @@ define([
                 for (; !coll.atEnd(); coll.moveNext()) {
                     var itemName = coll.item().name;
                     var itemValue = coll.item().value;
-                    if (itemName.indexOf("dfn") > 0) dfn = itemValue;
+                    if (itemName.indexOf("dfn") > 0) {
+                        dfn = itemValue;
+                        break;
+                    }
                 }
             }
             return dfn;
+        },
+        getDivisionFromContextItems: function () {
+            var contextItems = this.contextorControl.CurrentContext;
+            var division;
+            var coll = new Enumerator(contextItems);
+            if (!coll.atEnd()) {
+                for (; !coll.atEnd(); coll.moveNext()) {
+                    var itemName = coll.item().name;
+                    var itemValue = coll.item().value;
+                    //console.log('CCOW Item', itemName, itemValue);
+                    if (itemName.indexOf("dfn") > 0) {
+                        var itemArray = itemName.split('_');
+                        division = itemArray && itemArray[1];
+                        break;
+                    }
+                }
+            }
+            return division;
         },
         loadSessionObject: function (ccowObject) {
             var ccowSession = SessionStorage.getModel('ccow');
@@ -100,21 +121,34 @@ define([
 
         },
         getSiteInfo: function (callback) {
-            $.ajax({
-                url: ResourceService.buildUrl('vergencevaultproxy-getSiteInfo'),
-                contentType: 'application/json',
-                data: {
-                    site: UserService.getUserSession().get('site')
-                },
-                success: function (response) {
-                    callback(response);
-                },
-                error: function (response) {
+            var division;
+            var contextItemDivision = this.getDivisionFromContextItems();
+            contextItemDivision = contextItemDivision || UserService.getUserSession().get('division');
+
+            //authentication-list
+            var searchOptions = {
+                resourceTitle: 'authentication-list',
+                cache: true,
+                onError: function (coll, resp) {
                     callback({
                         error: 'Site Info cannot be obtained'
                     });
+                },
+                onSuccess: function (coll, resp) {
+                    if (resp.data && resp.data.items) {
+                        var site = _.find(resp.data.items, function (siteInfo) {
+                            division = siteInfo.stationNumber || siteInfo.division;
+                            return division === contextItemDivision;
+                        });
+                        callback(site);
+                    } else {
+                        callback({
+                            error: 'Site Info cannot be obtained'
+                        });
+                    }
                 }
-            });
+            };
+            ResourceService.fetchCollection(searchOptions);
         },
         getPid: function (patient) {
             var parsePID = patient.get('pid');
@@ -152,9 +186,9 @@ define([
                         self.contextorControl.StartContextChange();
 
                         //dfn
-                        localIdItem.name = 'Patient.id.MRN.DFN_' + (response.Site.stationNumber ||  response.Site.division);
+                        localIdItem.name = 'Patient.id.MRN.DFN_' + (response.stationNumber ||  response.division);
                         //Sometimes production key in json seems to have string value. This will ensure we are reading it right.
-                        if (response.Site.production.toString() === "false") {
+                        if (response.production.toString() === "false") {
                             localIdItem.name = localIdItem.name + '_TEST';
                         }
 
@@ -164,7 +198,7 @@ define([
                         if (patient.get('icn') !== null) {
                             nationalIdItem.name = 'Patient.id.MRN.NationalIDNumber';
                             //Sometimes production key in json seems to have string value. This will ensure we are reading it right.
-                            if (response.Site.production.toString() === "false") {
+                            if (response.production.toString() === "false") {
                                 nationalIdItem.name = nationalIdItem.name + '_TEST';
                             }
                             nationalIdItem.value = patient.get('icn');
@@ -180,7 +214,6 @@ define([
                         if (contextResponse === 1) {
                             callback();
                         } else if (contextResponse === 2) {
-                            //TODO: Go back to previous patient default screen
                             callback(true);
                         } else {
                             self.updateCcowStatus('Suspended');
@@ -198,7 +231,7 @@ define([
         },
 
         updatePatientInfo: function () {
-
+            var self = this;
             var dfn = this.getDfnFromContextItems();
             var parsePID = this.getPid(PatientRecordService.getCurrentPatient());
             if (!_.isUndefined(dfn) && (dfn !== parsePID)) {
@@ -208,12 +241,16 @@ define([
                 Checks.unregister(failingChecks);
                 ADK.UI.Workflow.hide();
                 ADK.UI.Modal.hide();
-                if(currentWorkspaceAndContextModel.get('context') !== 'staff'){
-                       Navigation.navigate(workspace);
-                       this.ensureICNforPatient(dfn, null);
+                if (currentWorkspaceAndContextModel.get('context') !== 'staff') {
+                    Navigation.navigate(workspace);
+                    self.getSiteInfo(function (site) {
+                        self.ensureICNforPatient(site.siteCode + ';' + dfn, false);
+                    });
 
-                  } else {
-                       this.ensureICNforPatient(dfn, null);
+                } else {
+                    self.getSiteInfo(function (site) {
+                        self.ensureICNforPatient(site.siteCode + ';' + dfn, false);
+                    });
                 }
             }
         },

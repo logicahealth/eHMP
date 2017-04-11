@@ -59,7 +59,6 @@ public class HdrSoapHandler {
         "cpt",
         "image",
         "problem",
-        "factor",
         "roadtrip",
         "appointment",
         "ptf",
@@ -106,9 +105,10 @@ public class HdrSoapHandler {
 
                 inputstream = conn.getInputStream();
                 reader = new BufferedReader(new InputStreamReader(inputstream));
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    hdrOutput.append(line);
+                
+                int charAsInt;
+                while ((charAsInt = reader.read()) != -1){
+                	hdrOutput.append((char) charAsInt);
                 }
 
                 hdrOutput.append(",");
@@ -200,11 +200,11 @@ public class HdrSoapHandler {
                 return null;
             }
 
-            String line;
-            while ((line = reader.readLine()) != null) {
-                hdrOutput.append(line);
+            int charAsInt;
+            while ((charAsInt = reader.read()) != -1){
+            	hdrOutput.append((char) charAsInt);
             }
-
+            
             inputstream.close();
             conn.disconnect();
             String hdrJSONString = hdrOutput.toString();

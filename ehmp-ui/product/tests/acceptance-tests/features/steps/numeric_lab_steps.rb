@@ -5,13 +5,17 @@ def verify_numeric_lab_between(start_time, end_time)
   wait.until { infiniate_scroll('#data-grid-lab_results_grid tbody') }
 
   @ehmp = PobNumericLabApplet.new 
-  unless @ehmp.has_tbl_empty_row?
+  unless @ehmp.has_fld_empty_row?
     format = "%m/%d/%Y"
+    lab_date_format = Regexp.new("\\d{2}\/\\d{2}\/\\d{4}")
     date_column_elements = @ehmp.tbl_coversheet_date_column
     expect(date_column_elements.length).to be > 0
     date_column_elements.each do | date_element |
-      is_after_start_time = Date.strptime(date_element.text, format) >= start_time
-      is_before_now = Date.strptime(date_element.text, format) <= end_time
+      lab_date_match = lab_date_format.match(date_element.text)
+      date_string = lab_date_match.to_s
+
+      is_after_start_time = Date.strptime(date_string, format) >= start_time
+      is_before_now = Date.strptime(date_string, format) <= end_time
       expect(is_after_start_time).to eq(true), "#{date_element.text} is not after #{start_time}"
       expect(is_before_now).to eq(true), "#{date_element.text} is not before #{end_time}"
     end

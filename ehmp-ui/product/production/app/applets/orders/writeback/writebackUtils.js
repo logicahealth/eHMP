@@ -21,7 +21,7 @@ define([
      *                                      the workflow to be launched modally.
      * @return {ADK.UI.Workflow}            The ADK Workflow object created.
      */
-    var launchWorkflow = function(model, view, options, title, trayTarget) {
+    var launchWorkflow = function(model, view, options, title, trayTarget, visitNotRequired) {
         if (_.isUndefined(model) || _.isUndefined(view)) {
             return;
         }
@@ -30,9 +30,11 @@ define([
         workflowOptions.steps = [];
         workflowOptions.title = title;
 
-        ADK.utils.writebackUtils.handleVisitWorkflow(workflowOptions, AddSelectVisit.extend({
-            inTray: true
-        }));
+        if (!visitNotRequired) {
+            ADK.utils.writebackUtils.handleVisitWorkflow(workflowOptions, AddSelectVisit.extend({
+                inTray: true
+            }));
+        }
 
         workflowOptions.steps.push({
             view: view,
@@ -46,7 +48,10 @@ define([
                 inTray: trayTarget
             });
         } else {
-            workflow.show();
+            var showOptions = {
+                triggerElement: options.triggerElement
+            };
+            workflow.show(showOptions);
         }
 
         return workflow;

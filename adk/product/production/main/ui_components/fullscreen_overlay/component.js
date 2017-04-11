@@ -40,7 +40,9 @@ define([
         attributes: {
             'role': 'dialog',
             'id': 'mainOverlay',
-            'data-backdrop': 'static'
+            'data-backdrop': 'static',
+            'aria-describedby': 'mainOverlayRegion',
+            'aria-label': ''
         },
         regions: {
             overlayViewRegion: '#mainOverlayRegion',

@@ -21,7 +21,7 @@ describe('When pep subsystem is called', function() {
             app: {
                 config: {
                     jdsServer:{
-                        'baseURL': 'http://IP_ADDRESS:PORT'
+                        'baseURL': 'http://IP             '
                     }
                 }
             }

@@ -3,6 +3,7 @@
     font-size: 11px;
     border-left: none;
     height: 100%;
+    position: relative;
     .body {
         height: calc(100% - 18px);
     }
@@ -64,6 +65,7 @@
             padding: 0px 6px;
             vertical-align: middle;
             justify-content: center;
+            word-wrap: break-word;
             > * {
                 padding: 0;
             }
@@ -97,16 +99,17 @@
             &.active {
                 background: $primary-lightest;
             }
-            &:hover {
+            &:hover, &:focus {
                 cursor: pointer;
                 background: $primary-lightest;
             }
+
         }
     }
     a.table-row {
         text-decoration: none;
         color: $grey-darkest;
-        &:hover, &.active {
+        &:hover, &.active, &:focus {
             background-color: $primary-lighter;
             color: $grey-darkest;
         }
@@ -155,7 +158,7 @@
         .table-row {
             &.header {
                 background-color: $pure-white;
-                min-height: 18px;
+                height: 18px;
                 white-space: nowrap;
                 border-top: none;
                 border-bottom: 2px solid $grey-light;

@@ -13,6 +13,8 @@ public class Visit implements java.io.Serializable
    private java.lang.String serviceCategory;
    private java.lang.String dateTime;
 
+   private java.lang.String locationDesc;
+
    public Visit()
    {
    }
@@ -47,12 +49,23 @@ public class Visit implements java.io.Serializable
       this.dateTime = dateTime;
    }
 
+   public java.lang.String getLocationDesc()
+   {
+      return this.locationDesc;
+   }
+
+   public void setLocationDesc(java.lang.String locationDesc)
+   {
+      this.locationDesc = locationDesc;
+   }
+
    public Visit(java.lang.String location, java.lang.String serviceCategory,
-         java.lang.String dateTime)
+         java.lang.String dateTime, java.lang.String locationDesc)
    {
       this.location = location;
       this.serviceCategory = serviceCategory;
       this.dateTime = dateTime;
+      this.locationDesc = locationDesc;
    }
 
 }

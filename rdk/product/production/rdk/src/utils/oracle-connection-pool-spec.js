@@ -101,7 +101,7 @@ describe('oracle-connection-pool-spec.js', function() {
                 return callback('_getPool error');
             });
             oracleConnectionPool.doQueryWithParams(req, dbConfig, query, null, function(error, response) {
-                expect(error).to.eql('_getPool error');
+                expect(error.message).to.eql('_getPool error');
             });
         });
 
@@ -112,7 +112,7 @@ describe('oracle-connection-pool-spec.js', function() {
                 });
             });
             oracleConnectionPool.doQueryWithParams(req, dbConfig, query, null, function(error, response) {
-                expect(error).to.eql('pool.getConnection error');
+                expect(error.message).to.eql('pool.getConnection error');
             });
         });
 
@@ -191,7 +191,7 @@ describe('oracle-connection-pool-spec.js', function() {
                 });
             });
             oracleConnectionPool.doQueryWithParams(req, dbConfig, query, null, function(error, response) {
-                expect(error).to.eql('connection.execute error');
+                expect(error.message).to.eql('connection.execute error');
             });
         });
 
@@ -227,7 +227,7 @@ describe('oracle-connection-pool-spec.js', function() {
 
         });
 
-        it('Should return an empty object because _onShutdown is called', function() {
+        xit('Should return an empty object because _onShutdown is called', function() {
             var pool;
             sinon.stub(oracleConnectionPool, '_onShutdown', function() {
                 pool = _.cloneDeep(oracleConnectionPool._cachedPool);
@@ -238,8 +238,11 @@ describe('oracle-connection-pool-spec.js', function() {
         });
 
         it('Should create a new pool even though cachedPool is not empty', function() {
-            oracleConnectionPool._cachedPool.randomkey = _.cloneDeep(oracleConnectionPool._cachedPool[mockKey]);
-            oracleConnectionPool._cachedPool.randomkey.pool = {'connectionPool': 'simulated'};
+            oracleConnectionPool._getPool(req, dbConfig, function(error, response) {
+                oracleConnectionPool._cachedPool.randomkey = _.cloneDeep(oracleConnectionPool._cachedPool[mockKey]);
+                oracleConnectionPool._cachedPool.randomkey.pool = {'connectionPool': 'simulated'};
+            });
+
             oracleConnectionPool._getPool(req, dbConfig, function(error, response) {
                 expect(_.has(oracleConnectionPool._cachedPool, mockKey)).to.eql(true);
                 expect(response.poolAttrs.connectString).to.eql(dbConfig.connectString);
@@ -260,10 +263,10 @@ describe('oracle-connection-pool-spec.js', function() {
         it('Should return an error sent from oracledb.createPool', function() {
             oracleConnectionPool._cachedPool = {};
             sinon.stub(oracledb, 'createPool', function(options, callback) {
-                return callback({message: 'error from createPool'}, null);
+                return callback(new Error('error from createPool'), null);
             });
             oracleConnectionPool._getPool(req, dbConfig, function(error, response) {
-                expect(error).to.eql({message: 'error from createPool'});
+                expect(_.get(error, 'message')).to.eql('Error: error from createPool');
                 expect(response).to.eql(null);
             });
         });
@@ -297,16 +300,16 @@ describe('oracle-connection-pool-spec.js', function() {
                 conn = connection;
             });
             conn.close = function(callback) {
-                return callback({message: 'Close error'});
+                return callback(new Error('Close error'));
             };
 
             oracleConnectionPool._doClose(req, conn);
             var lastError = logger.error.getCall(logger.error.callCount - 1).args;
-            expect(lastError[0]).to.eql('Close error');
+            expect(lastError[0]).to.eql('Error: Close error');
         });
     });
 
-    describe('_onShutdown', function() {
+    xdescribe('_onShutdown', function() { //moved out of this file
         it('Should have a listener on SIGQUIT pointing to closePool()', function() {
             var listeners = process.listeners('SIGQUIT');
             var foundClosePool = false;
@@ -345,19 +348,23 @@ describe('oracle-connection-pool-spec.js', function() {
     });
 
     describe('_closePool', function() {
-        it('Should catch the error and not delete the key from the cachedPool', function() {
+        it('Should log the error and delete the key from the cachedPool', function() {
             oracleConnectionPool._cachedPool[mockKey].close = function(callback) {
-                return callback({message: 'Failed'});
+                return callback('ORA-0000 Fake Oracle Error message');
             };
-            oracleConnectionPool._closePool();
-            var lastError = logger.error.getCall(logger.error.callCount - 1).args;
-            expect(oracleConnectionPool._cachedPool).to.not.be.empty();
+
+            var fakeSafeLog = sinon.spy();
+
+            oracleConnectionPool._closePool(function(err, res) {
+                expect(oracleConnectionPool._cachedPool).to.be.empty();
+                expect(fakeSafeLog.calledOnce).to.be.true();
+            }, fakeSafeLog);
         });
 
         it('Should close all the connections and cachedPool should be empty', function() {
             oracleConnectionPool._cachedPool = {};
             oracleConnectionPool._getPool(req, dbConfig, function(error, response) {
-                oracleConnectionPool._closePool();
+                oracleConnectionPool._closePool(function(err, res){});
                 expect(oracleConnectionPool._cachedPool).to.eql({});
             });
         });

@@ -5,116 +5,65 @@ var rdk = require('../../core/rdk');
 var _ = require('lodash');
 var async = require('async');
 var nullchecker = rdk.utils.nullchecker;
-var dd = require('drilldown');
 var notificationsHelper = require('./notifications-helper');
-var tasksResource = require('../activitymanagement/tasks/task-operations-resource');
+var navMapping = require('../activitymanagement/tasks/navigation-mapping');
+var dbAccess = require('../../subsystems/jbpm/jbpm-subsystem');
+var authUtils = rdk.utils.authentication;
 
-function doQuery(req, connection, query, bindParams, callback, maxRowsParam) {
-    var options = {
-        maxRows: maxRowsParam || 100,
-        outFormat: oracledb.OBJECT
-    };
+var DO_AUTO_COMMIT = true;
 
-    connection.execute(query, bindParams, options, function(err, result) {
-        if (err) {
-            doRelease(req, connection);
-            return callback(err, null);
-        }
-        return callback(null, result.rows);
-    });
-}
+function addRecipient(req, ntfid, recipient, callback) {
 
-function doCommit(req, connection) {
-    connection.commit(function(err) {
-        if (err) {
-            if (req && req.logger) {
-                req.logger.error(err.message);
-            }
-        }
-    });
-}
-
-function doRelease(req, connection) {
-    connection.release(function(err) {
-        if (err) {
-            if (req && req.logger) {
-                req.logger.error(err.message);
-            }
-        }
-    });
-}
-
-function doClose(req, connection, resultSet) {
-    resultSet.close(
-        function(err) {
-            if (err) {
-                if (req && req.logger) {
-                    req.logger.error(err.message);
-                }
-            }
-            doRelease(req, connection);
-        });
-}
-
-function addRecipient(req, ntfid, recipient, connection, callback) {
-    var dbConfig = req.app.config.jbpm.notifsDatabase;
     var rcp = {
-        patientId: recipient.recipient.patientId || '',
-        teamFoci: recipient.recipient.teamFoci || '',
-        role: recipient.recipient.role || '',
-        teamId: recipient.recipient.teamId || '',
         userId: recipient.recipient.userId || '',
+        teamId: recipient.recipient.teamId || '',
+        teamType: recipient.recipient.teamType || '',
+        teamFocus: recipient.recipient.teamFocus || '',
+        teamRole: recipient.recipient.teamRole || '',
+        patientId: recipient.recipient.patientId || '',
+        patientAssignment: recipient.recipient.patientAssignment || 0,
+        facility: recipient.recipient.facility || '',
         salience: recipient.salience || ''
     };
-    var bindParams = {
-        v_ntfid: '' + ntfid,
-        v_user_id: '' + rcp.userId,
-        v_team_id: '' + rcp.teamId,
-        v_role: '' + rcp.role,
-        v_patient_id: '' + rcp.patientId,
-        v_team_foci: '' + rcp.teamFoci,
-        v_salience: '' + rcp.salience
-    };
-    var query = 'BEGIN notifs_pkg.ADD_RECIPIENT(:v_ntfid,:v_user_id,:v_team_id,:v_role,:v_patient_id,:v_team_foci,:v_salience); END; ';
-    var options = {
-        maxRows: 100,
-        outFormat: oracledb.OBJECT
-    };
-    connection.execute(query, bindParams, options, function(err, result) {
-        if (err) {
-            return callback(err, null);
-        }
-        return callback(null, result);
-    });
 
+    var addRecip = {
+        bindParams: {
+            v_ntfid: '' + ntfid,
+            v_user_id: '' + rcp.userId,
+            v_team_id: '' + rcp.teamId,
+            v_team_type: '' + rcp.teamType,
+            v_team_focus: '' + rcp.teamFocus,
+            v_team_role: '' + rcp.teamRole,
+            v_patient_id: '' + rcp.patientId,
+            v_patient_assignment: rcp.patientAssignment,
+            v_facility: '' + rcp.facility,
+            v_salience: '' + rcp.salience
+        },
+        query: 'BEGIN notifs_pkg.ADD_RECIPIENT(:v_ntfid,:v_user_id,:v_team_id,:v_team_type,:v_team_focus,:v_team_role,:v_patient_id,:v_patient_assignment,:v_facility,:v_salience); END; '
+    };
+
+    dbAccess.doExecuteProcWithInOutParams(req, req.app.config.jbpm.notifsDatabase, addRecip.query, addRecip.bindParams, DO_AUTO_COMMIT, callback);
 }
 
-function addAssociatedItem(req, ntfid, item, connection, callback) {
-    var dbConfig = req.app.config.jbpm.notifsDatabase;
+function addAssociatedItem(req, ntfid, item, callback) {
+
     var rcp = {
         item: item || '',
     };
-    var bindParams = {
-        v_ntfid: '' + ntfid,
-        v_item: '' + rcp.item,
-    };
-    var query = 'BEGIN notifs_pkg.ADD_ASSOC_ITEM(:v_ntfid,:v_item); END; ';
-    var options = {
-        maxRows: 100,
-        outFormat: oracledb.OBJECT
-    };
-    connection.execute(query, bindParams, options, function(err, result) {
-        if (err) {
-            return callback(err, null);
-        }
-        return callback(null, result);
-    });
+    var addItem = {
+        bindParams: {
+            v_ntfid: '' + ntfid,
+            v_item: '' + rcp.item
+        },
 
+        query: 'BEGIN notifs_pkg.ADD_ASSOC_ITEM(:v_ntfid,:v_item); END; '
+    };
+
+    dbAccess.doExecuteProcWithInOutParams(req, req.app.config.jbpm.notifsDatabase, addItem.query, addItem.bindParams, DO_AUTO_COMMIT, callback);
 }
 
 function addNotification(req, intialCallback) {
     var body = req.body;
-    var notifDb = req.app.config.jbpm.notifsDatabase;
 
     var addNotif = {
         bindParams: {
@@ -139,11 +88,11 @@ function addNotification(req, intialCallback) {
         query: 'BEGIN notifs_pkg.ADD_NOTIFICATION(:prd_user_id,:prd_desc,:ntf_patient_id,:ntf_message_subject,:ntf_message_body,:ntf_resolution,:ntf_resolutionstate,:ntf_expiration,:ntf_ext_refid,:nav_channel,:nav_event,:nav_parameter,:permissions,:n_ntfid); END;'
     };
     var recipients = body.recipients;
+
     async.waterfall([
-
         function(callback) {
-            async.parallel([
 
+            async.parallel([
                     function(cb) {
                         // check for associated item matching 'ehmp:task:taskID'
                         if (nullchecker.isNotNullish(body.associatedItems)) {
@@ -152,44 +101,55 @@ function addNotification(req, intialCallback) {
                             });
                             if (!_.isUndefined(item) && !isNaN(parseInt(item.substring(('ehmp:task:').length)))) {
                                 var taskId = item.substring(('ehmp:task:').length);
-                                // call Get tasks enpoint to get task info by taskId
-                                // copy navigation and permissions info from task to notification
-                                var mockReq = {},
-                                    mockRes = {
-                                        status: function() {
-                                            return {};
-                                        },
-                                        rdkSend: function(result) {
-                                            if (dd(result)('data')('items').exists && dd(result)('data')('items').val.length > 0) {
-                                                var task = dd(result)('data')('items').val[0];
-                                                var params = {};
-                                                if (nullchecker.isNotNullish(task.NAVIGATION)) {
-                                                    _.extend(params, {
-                                                        nav_channel: task.NAVIGATION.channel,
-                                                        nav_event: task.NAVIGATION.event,
-                                                        nav_parameter: JSON.stringify(task.NAVIGATION.parameters)
-                                                    });
+                                var getTask = {
+                                    bindParams: {
+                                        p_task_definition_id: null,
+                                        p_task_instance_id: taskId,
+                                        p_patient_identifiers: null,
+                                        p_task_statuses: null
+                                    },
+                                    query: 'BEGIN TASKS.getTasksByIds(:p_task_definition_id, :p_task_instance_id, :p_patient_identifiers, :p_task_statuses, :recordset); END;'
+
+                                };
+
+                                // Get task by ID and copy NAVIGATION & PERMISSION into notification
+                                dbAccess.doExecuteProcWithParams(req, req.app.config.jbpm.activityDatabase, getTask.query, getTask.bindParams, function(err, results) {
+                                    if (results.length > 0) {
+                                        var task = results[0];
+                                        var params = {};
+                                        if (_.has(task, 'NAVIGATION') && nullchecker.isNotNullish(task.NAVIGATION)) {
+                                            try {
+                                                task.NAVIGATION = JSON.parse(task.NAVIGATION);
+
+                                                if (_.isObject(task.NAVIGATION)) {
+                                                    if (_.has(task.NAVIGATION, 'channel') && _.has(task.NAVIGATION, 'event')) {
+                                                        task.NAVIGATION.parameters = navMapping.getParameters(task);
+
+                                                        _.extend(params, {
+                                                            nav_channel: task.NAVIGATION.channel,
+                                                            nav_event: task.NAVIGATION.event,
+                                                            nav_parameter: JSON.stringify(task.NAVIGATION.parameters)
+                                                        });
+                                                    }
                                                 }
-                                                if (nullchecker.isNotNullish(task.PERMISSION)) {
-                                                    _.extend(params, {
-                                                        permissions: JSON.stringify(task.PERMISSION)
-                                                    });
-                                                }
-                                                _.extend(addNotif.bindParams, params);
-                                                cb(null, addNotif);
-                                            } else {
-                                                cb({
-                                                    status: rdk.httpstatus.not_found,
-                                                    message: 'Task not found for taskId: ' + taskId
-                                                }, null);
+                                            } catch (e) {
+                                                req.logger.error('Unable to parse task navigation data from task: ' + task);
                                             }
                                         }
-                                    };
-                                _.extend(mockReq, req);
-                                mockReq.param = function() {
-                                    return taskId;
-                                };
-                                tasksResource.queryTasksbyId(mockReq, mockRes);
+                                        if (_.has(task, 'PERMISSION') && nullchecker.isNotNullish(task.PERMISSION)) {
+                                            _.extend(params, {
+                                                permissions: task.PERMISSION
+                                            });
+                                        }
+                                        _.extend(addNotif.bindParams, params);
+                                        cb(null, addNotif);
+                                    } else {
+                                        cb({
+                                            status: rdk.httpstatus.not_found,
+                                            message: 'Task not found for taskId: ' + taskId
+                                        }, null);
+                                    }
+                                });
                             } else {
                                 cb(null, {});
                             }
@@ -228,54 +188,38 @@ function addNotification(req, intialCallback) {
                 });
         },
         function(recipients, callback) {
-            oracledb.getConnection({
-                    user: notifDb.user,
-                    password: notifDb.password,
-                    connectString: notifDb.connectString
-                },
-                function(error, connection) {
-                    if (error) {
-                        return intialCallback(error, null);
-                    }
-                    var options = {
-                        maxRows: 100,
-                        outFormat: oracledb.OBJECT
-                    };
-                    connection.execute(addNotif.query, addNotif.bindParams, options, function(err, result) {
-                        if (err) {
-                            return callback(err, null);
-                        }
-                        async.parallel([
 
-                            function(callbackParallel) {
-                                async.eachSeries(recipients, function(recipient, callbackEach) {
-                                    addRecipient(req, result.outBinds.n_ntfid, recipient, connection, function(err, result) {
-                                        callbackEach();
-                                    });
-                                }, function done() {
-                                    callbackParallel();
-                                });
-                            },
-                            function(callbackParallel) {
-                                if (body.associatedItems && body.associatedItems.length > 0) {
-                                    async.eachSeries(body.associatedItems, function(item, callbackEach) {
-                                        addAssociatedItem(req, result.outBinds.n_ntfid, item, connection, function(err, result) {
-                                            callbackEach();
-                                        });
-                                    }, function done() {
-                                        callbackParallel();
-                                    });
-                                } else {
-                                    callbackParallel();
-                                }
-                            }
-                        ], function done(err, results) {
-                            doCommit(req, connection);
-                            doRelease(req, connection);
-                            callback(null, result);
+            dbAccess.doExecuteProcWithInOutParams(req, req.app.config.jbpm.notifsDatabase, addNotif.query, addNotif.bindParams, DO_AUTO_COMMIT, function(err, result) {
+                if (err) {
+                    return callback(err, null);
+                }
+                async.parallel([
+                    function(callbackParallel) {
+                        async.eachSeries(recipients, function(recipient, callbackEach) {
+                            addRecipient(req, result.outBinds.n_ntfid, recipient, function(err, result) {
+                                callbackEach();
+                            });
+                        }, function done() {
+                            callbackParallel();
                         });
-                    });
+                    },
+                    function(callbackParallel) {
+                        if (body.associatedItems && body.associatedItems.length > 0) {
+                            async.eachSeries(body.associatedItems, function(item, callbackEach) {
+                                addAssociatedItem(req, result.outBinds.n_ntfid, item, function(err, result) {
+                                    callbackEach();
+                                });
+                            }, function done() {
+                                callbackParallel();
+                            });
+                        } else {
+                            callbackParallel();
+                        }
+                    }
+                ], function done(err, results) {
+                    callback(err, result);
                 });
+            });
         }
     ], function(err, result) {
         if (err) {
@@ -285,121 +229,91 @@ function addNotification(req, intialCallback) {
     });
 }
 
-function beginCondition(conditions) {
-    if (nullchecker.isNotNullish(conditions)) {
-        conditions = ' AND ';
-    }
-    return conditions;
-}
-
 function buildRouteNotifQuery(req, recipient) {
-    var query;
-    var site = req.session.user.site;
-    var stationNumber = dd(req)('app')('config')('vistaSites')(site)('division').val;
+    var divisions = authUtils.getSiteDivisions(_.get(req, 'app.config.vistaSites')).join(',');
 
-    if (nullchecker.isNotNullish(recipient.teamId) || nullchecker.isNotNullish(recipient.role) ||
-        nullchecker.isNotNullish(recipient.teamFoci) || nullchecker.isNotNullish(recipient.patientId)) {
-
-        var defaultParams = {
-            p_role: recipient.role || null,
-            p_st_number: stationNumber || null,
-            ntf_recordset: {
-                type: oracledb.CURSOR,
-                dir: oracledb.BIND_OUT
-            }
+    var defaultParams = {
+        p_team_role: recipient.teamRole || null,
+        p_facility: recipient.facility || divisions
+    };
+    if (nullchecker.isNotNullish(recipient.teamId)) {
+        return {
+            bindParams: _.extend({
+                p_team_id: recipient.teamId || null,
+                p_team_type: null,
+                p_team_focus: null,
+                p_patient_id: null,
+                p_patient_assignment: 0
+            }, defaultParams),
+            query: 'BEGIN notifs_pkg.GET_NOTIF_ROUTE(:p_team_id,:p_team_focus,:p_team_type,:p_team_role,:p_patient_id,:p_patient_assignment,:p_facility,:recordset); END;'
         };
-        if (nullchecker.isNotNullish(recipient.teamId)) {
-            return {
-                bindParams: _.extend({
-                    p_team_id: recipient.teamId || null,
-                    p_team_foci: null,
-                    p_icn: null
-                }, defaultParams),
-                query: 'BEGIN notifs_pkg.GET_NOTIF_ROUTE(:p_team_id,:p_team_foci,:p_icn,:p_role,:p_st_number,:ntf_recordset); END;'
-            };
-        } else {
-            return {
-                bindParams: _.extend({
-                    p_team_id: null,
-                    p_team_foci: recipient.teamFoci || null,
-                    p_icn: recipient.patientId || null
-                }, defaultParams),
-                query: 'BEGIN notifs_pkg.GET_NOTIF_ROUTE(:p_team_id,:p_team_foci,:p_icn,:p_role,:p_st_number,:ntf_recordset); END;'
-            };
-        }
+    } else {
+        return {
+            bindParams: _.extend({
+                p_team_id: null,
+                p_team_type: recipient.teamType || null,
+                p_team_focus: recipient.teamFocus || null,
+                p_patient_id: recipient.patientId || null,
+                p_patient_assignment: recipient.patientAssignment || 0
+            }, defaultParams),
+            query: 'BEGIN notifs_pkg.GET_NOTIF_ROUTE(:p_team_id,:p_team_focus,:p_team_type,:p_team_role,:p_patient_id,:p_patient_assignment,:p_facility,:recordset); END;'
+        };
     }
 }
 
 function routeNotification(req, recipientToQueryMap, callback) {
-    var notifDb = req.app.config.jbpm.notifsDatabase;
     var asyncJobs = [];
-    var NUM_ROWS = 100;
-    oracledb.getConnection({
-            user: notifDb.user,
-            password: notifDb.password,
-            connectString: notifDb.connectString
-        },
-        function(error, connection) {
-            if (error) {
-                return callback(error, null);
-            }
-            _.each(recipientToQueryMap, function(map) {
-                asyncJobs.push(function(callback) {
-                    var options = {
-                        maxRows: 100,
-                        outFormat: oracledb.OBJECT
-                    };
 
-                    connection.execute(map.query, map.bindParams, options, function(err, result) {
-                        if (err) {
-                            return callback(err, null);
-                        }
-                        var recipients = [];
-                        var resultSet = result.outBinds.ntf_recordset;
-                        var rows;
-                        fetchRows(req, connection, resultSet, NUM_ROWS, rows, function(data) {
-                            _.each(data, function(row) {
-                                recipients.push({
-                                    recipient: _.extend({}, map.recipient, {
-                                        userId: row.ien
-                                    }),
-                                    salience: map.salience
-                                });
-                            });
-                            return callback(null, recipients);
-                        });
-                    });
-                });
-            });
-            async.parallelLimit(asyncJobs, 5, function(err, results) {
-                doRelease(req, connection);
+    var newMap = _.filter(req.body.recipients, function(item) {
+        return nullchecker.isNotNullish(_.get(item, 'recipient.userId'));
+    });
+
+    _.each(recipientToQueryMap, function(map) {
+        asyncJobs.push(function(callback) {
+            dbAccess.doExecuteProcWithParams(req, req.app.config.jbpm.notifsDatabase, map.query, map.bindParams, function(err, data) {
                 if (err) {
                     callback(err, null);
-                } else {
-                    var newMap = [];
-                    var recipients = _.union(_.flatten(results), req.body.recipients);
-                    _.each(recipients, function(recipient) {
-                        if (nullchecker.isNotNullish(recipient.recipient.userId)) {
-                            var found = newMap.map(function(map) {
-                                return map.recipient.userId;
-                            }).indexOf(recipient.recipient.userId);
-                            if (found !== -1) {
-                                if (recipient.salience < newMap[found].salience) {
-                                    newMap[found] = recipient;
-                                }
-                            } else {
-                                newMap.push(recipient);
-                            }
-                        }
-                    });
-                    callback(null, newMap);
                 }
+                _.each(data, function(row) {
+                    if (nullchecker.isNotNullish(row.userId)) {
+                        // Find facility hash
+                        var site = authUtils.getSiteCode(_.get(req, 'app.config.vistaSites'), row.division);
+                        // Build recipient object
+                        var recipient = {
+                            recipient: _.extend({}, map.recipient, {
+                                userId: _.trimLeft((site + ';' + row.userId), ';')
+                            }),
+                            salience: map.salience
+                        };
+                        // Check for duplicate recipients (by userId) & keep the one with lowest value for salience
+                        var found = newMap.map(function(map) {
+                            return map.recipient.userId;
+                        }).indexOf(recipient.recipient.userId);
+                        if (found !== -1) {
+                            if (recipient.salience < newMap[found].salience) {
+                                newMap[found] = recipient;
+                            }
+                        } else {
+                            newMap.push(recipient);
+                        }
+                    }
+                });
+                return callback(null, newMap);
             });
         });
+    });
+
+    async.parallelLimit(asyncJobs, 5, function(err, results) {
+        if (err) {
+            callback(err, null);
+        } else {
+            callback(null, _.flatten(results));
+        }
+    });
+
 }
 
 function resolveNotificationById(req, callback) {
-    var dbConfig = req.app.config.jbpm.notifsDatabase;
 
     var resolveNotif = {
         bindParams: {
@@ -409,35 +323,10 @@ function resolveNotificationById(req, callback) {
         query: 'BEGIN notifs_pkg.RESOLVE_NOTIF_BY_ID(:p_ntf_id,:p_user_id); END;'
     };
 
-
-    oracledb.getConnection({
-            user: dbConfig.user,
-            password: dbConfig.password,
-            connectString: dbConfig.connectString
-        },
-        function(error, connection) {
-            if (error) {
-                return callback(error, null);
-            }
-            var options = {
-                maxRows: 100,
-                outFormat: oracledb.OBJECT
-            };
-            connection.execute(resolveNotif.query, resolveNotif.bindParams, options, function(err, result) {
-                if (err) {
-                    return callback(err, null);
-                }
-                doCommit(req, connection);
-                doRelease(req, connection);
-                return callback(null, result);
-            });
-        }
-    );
+    dbAccess.doExecuteProcWithInOutParams(req, req.app.config.jbpm.notifsDatabase, resolveNotif.query, resolveNotif.bindParams, DO_AUTO_COMMIT, callback);
 }
 
 function resolveNotificationsByRefId(req, callback) {
-    var params = req.params;
-    var dbConfig = req.app.config.jbpm.notifsDatabase;
 
     var resolveNotif = {
         bindParams: {
@@ -447,80 +336,11 @@ function resolveNotificationsByRefId(req, callback) {
         query: 'BEGIN notifs_pkg.RESOLVE_NOTIFS_BY_REF_ID(:p_ref_id,:p_user_id); END;'
     };
 
-    oracledb.getConnection({
-            user: dbConfig.user,
-            password: dbConfig.password,
-            connectString: dbConfig.connectString
-        },
-        function(error, connection) {
-            if (error) {
-                return callback(error, null);
-            }
-            var options = {
-                maxRows: 100,
-                outFormat: oracledb.OBJECT
-            };
-            connection.execute(resolveNotif.query, resolveNotif.bindParams, options, function(err, result) {
-                if (err) {
-                    return callback(err, null);
-                }
-                doCommit(req, connection);
-                doRelease(req, connection);
-                return callback(null, result);
-            });
-        }
-    );
-}
-
-function getNotificationsCounterByParams(req, params, callback) {
-    var dbConfig = req.app.config.jbpm.notifsDatabase;
-    var numRows = 10;
-    var getNotifsCounter = {
-        bindParams: {
-            p_user_id: params.userId || null,
-            p_patient_ids: params.patientIds || null,
-            p_recipient_filter: params.recipientFilter || null,
-            p_resolution_state: nullchecker.isNotNullish(params.resolutionState) ? params.resolutionState : null,
-            p_read_by_user: nullchecker.isNotNullish(params.readByUser) ? params.readByUser : null,
-            p_min_salience: params.minSalience || null,
-            p_max_salience: params.maxSalience || null,
-            p_start_date: params.startDate || null,
-            p_end_date: params.endDate || null,
-            ntf_recordset: {
-                type: oracledb.CURSOR,
-                dir: oracledb.BIND_OUT
-            }
-        },
-        query: 'BEGIN notifs_pkg.GET_NOTIFS_BY_PARAMS(:p_user_id,:p_patient_ids,:p_recipient_filter,:p_resolution_state,:p_read_by_user,:p_min_salience,:p_max_salience,:p_start_date,:p_end_date,:ntf_recordset); END;'
-    };
-
-    oracledb.getConnection({
-            user: dbConfig.user,
-            password: dbConfig.password,
-            connectString: dbConfig.connectString
-        },
-        function(error, connection) {
-            if (error) {
-                return callback(error, null);
-            }
-            var options = {
-                maxRows: 100,
-                outFormat: oracledb.OBJECT
-            };
-            connection.execute(getNotifsCounter.query, getNotifsCounter.bindParams, options, function(err, result) {
-                if (err) {
-                    doRelease(req, connection);
-                    return callback(err, null);
-                }
-                var data = [];
-                fetchRowsFromRS(req, connection, params, result.outBinds.ntf_recordset, numRows, data, callback);
-            });
-        });
+    dbAccess.doExecuteProcWithInOutParams(req, req.app.config.jbpm.notifsDatabase, resolveNotif.query, resolveNotif.bindParams, DO_AUTO_COMMIT, callback);
 }
 
 function getNotificationsByParams(req, params, callback) {
-    var dbConfig = req.app.config.jbpm.notifsDatabase;
-    var numRows = 10;
+
     var getNotifs = {
         bindParams: {
             p_user_id: params.userId || null,
@@ -531,183 +351,93 @@ function getNotificationsByParams(req, params, callback) {
             p_min_salience: params.minSalience || null,
             p_max_salience: params.maxSalience || null,
             p_start_date: params.startDate || null,
-            p_end_date: params.endDate || null,
-            ntf_recordset: {
-                type: oracledb.CURSOR,
-                dir: oracledb.BIND_OUT
-            }
+            p_end_date: params.endDate || null
         },
-        query: 'BEGIN notifs_pkg.GET_NOTIFS_BY_PARAMS(:p_user_id,:p_patient_ids,:p_recipient_filter,:p_resolution_state,:p_read_by_user,:p_min_salience,:p_max_salience,:p_start_date,:p_end_date,:ntf_recordset); END;'
+        query: 'BEGIN notifs_pkg.GET_NOTIFS_BY_PARAMS(:p_user_id,:p_patient_ids,:p_recipient_filter,:p_resolution_state,:p_read_by_user,:p_min_salience,:p_max_salience,:p_start_date,:p_end_date,:recordset); END;'
     };
 
-    oracledb.getConnection({
-            user: dbConfig.user,
-            password: dbConfig.password,
-            connectString: dbConfig.connectString
-        },
-        function(error, connection) {
-            if (error) {
-                return callback(error, null);
-            }
-            var options = {
-                maxRows: 100,
-                outFormat: oracledb.OBJECT
-            };
-            connection.execute(getNotifs.query, getNotifs.bindParams, options, function(err, result) {
-                if (err) {
-                    doRelease(req, connection);
-                    return callback(err, null);
-                }
-                var data = [];
-                fetchRowsFromRS(req, connection, params, result.outBinds.ntf_recordset, numRows, data, callback);
-            });
-        });
+    dbAccess.doExecuteProcWithParams(req, req.app.config.jbpm.notifsDatabase, getNotifs.query, getNotifs.bindParams, function(err, results) {
+        if (err) {
+            return callback(err, null);
+        }
+        processNotifications(req, params, results, callback);
+    });
 }
 
 function getNotificationsByRefId(req, callback) {
     var params = req.params;
-    var numRows = 10;
-    var dbConfig = req.app.config.jbpm.notifsDatabase;
 
     var getNotifs = {
         bindParams: {
-            p_ref_id: params.referenceId || null,
-            ntf_recordset: {
-                type: oracledb.CURSOR,
-                dir: oracledb.BIND_OUT
-            }
+            p_ref_id: params.referenceId || null
         },
-        query: 'BEGIN notifs_pkg.GET_NOTIFS_BY_REF_ID(:p_ref_id,:ntf_recordset); END;'
+        query: 'BEGIN notifs_pkg.GET_NOTIFS_BY_REF_ID(:p_ref_id,:recordset); END;'
     };
 
-    oracledb.getConnection({
-            user: dbConfig.user,
-            password: dbConfig.password,
-            connectString: dbConfig.connectString
-        },
-        function(error, connection) {
-            if (error) {
-                return callback(error, null);
-            }
-            var options = {
-                maxRows: 100,
-                outFormat: oracledb.OBJECT
-            };
-            connection.execute(getNotifs.query, getNotifs.bindParams, options, function(err, result) {
-                if (err) {
-                    doRelease(req, connection);
-                    return callback(err, null);
-                }
-                var data = [];
-                fetchRowsFromRS(req, connection, params, result.outBinds.ntf_recordset, numRows, data, callback);
-            });
+    dbAccess.doExecuteProcWithParams(req, req.app.config.jbpm.notifsDatabase, getNotifs.query, getNotifs.bindParams, function(err, results) {
+        if (err) {
+            return callback(err, null);
         }
-    );
-}
-
-function fetchRows(req, connection, resultSet, numRows, data, callback) {
-    resultSet.getRows(
-        numRows,
-        function(err, rows) {
-            if (err) {
-                doClose(req, connection, resultSet);
-                return callback(err, null);
-            } else if (rows.length > 0) {
-                //process rows
-                data = _.union(data, rows);
-                if (rows.length === numRows) { //might be more rows
-                    fetchRows(req, connection, resultSet, numRows, data, callback);
-                } else { //fewer rows so close and callback
-                    doClose(req, connection, resultSet);
-                    callback(data);
-                }
-            } else {
-                doClose(req, connection, resultSet);
-                callback(data);
-            }
-        }
-    );
-}
-
-function fetchRowsFromRS(req, connection, params, resultSet, numRows, data, callback) {
-    resultSet.getRows(
-        numRows,
-        function(err, rows) {
-            if (err) {
-                doClose(req, connection, resultSet);
-                return callback(err, data);
-            } else if (rows.length === 0) {
-                // no more rows to return
-                doClose(req, connection, resultSet);
-                if (data.length > 0) {
-                    processNotifications(req, params, data, callback);
-                } else {
-                    return callback(err, data);
-                }
-            } else if (rows.length > 0) {
-                // fetch next numRows rows
-                data = _.union(data, rows);
-                fetchRowsFromRS(req, connection, params, resultSet, numRows, data, callback);
-            }
-        });
+        processNotifications(req, params, results, callback);
+    });
 }
 
 function processNotifications(req, params, notifications, originalCallback) {
-    var dbConfig = req.app.config.jbpm.notifsDatabase;
-    oracledb.getConnection({
-            user: dbConfig.user,
-            password: dbConfig.password,
-            connectString: dbConfig.connectString
-        },
-        function(error, connection) {
-            if (error) {
-                return originalCallback(error, null);
-            }
-            async.each(notifications, function(notif, eachCallback) {
-                if (nullchecker.isNotNullish(notif.notificationId)) {
-                    async.parallel({
-                            recipients: function(callback) {
-                                doQuery(req, connection, 'SELECT * FROM TABLE(notifs_pkg.GET_RECIPIENTS_BY_NOTIF(:p_ntf_id))', {
-                                    p_ntf_id: notif.notificationId
-                                }, callback);
-                            },
-                            associatedItems: function(callback) {
-                                doQuery(req, connection, 'SELECT * FROM TABLE(notifs_pkg.GET_ASSOC_ITEMS_BY_NOTIF(:p_ntf_id))', {
-                                    p_ntf_id: notif.notificationId
-                                }, callback);
-                            }
-                        },
-                        function(err, results) {
-                            if (err) {
-                                return eachCallback(err);
-                            }
-                            updateNotificationFields(req, params, results, notif);
-                            return eachCallback();
-                        });
-                } else {
-                    return originalCallback({
-                        status: 500,
-                        message: 'Invalid notification'
-                    }, null);
+
+    async.each(notifications, function(notif, eachCallback) {
+        if (nullchecker.isNullish(notif.notificationId)) {
+            return originalCallback({
+                status: 500,
+                message: 'Invalid notification'
+            }, null);
+        }
+        async.parallel({
+                recipients: function(callback) {
+                    dbAccess.doQueryWithParams(req, req.app.config.jbpm.notifsDatabase, 'SELECT * FROM TABLE(notifs_pkg.GET_RECIPIENTS_BY_NOTIF(:p_ntf_id))', {
+                        p_ntf_id: notif.notificationId
+                    }, callback);
+                },
+                associatedItems: function(callback) {
+                    dbAccess.doQueryWithParams(req, req.app.config.jbpm.notifsDatabase, 'SELECT * FROM TABLE(notifs_pkg.GET_ASSOC_ITEMS_BY_NOTIF(:p_ntf_id))', {
+                        p_ntf_id: notif.notificationId
+                    }, callback);
                 }
-            }, function(err) {
-                doRelease(req, connection);
+            },
+            function(err, results) {
                 if (err) {
-                    return originalCallback(err, null);
-                } else {
-                    if (params.navigationRequired === true) {
-                        notifications = _.filter(notifications, function(notification) {
-                            return (hasNavigation(notification) && hasPermission(req, notification));
-                        });
-                    }
-                    if (params.groupRows === true) {
-                        getPatientNames(req, groupNotificationsByTask(notifications), originalCallback);
-                    } else {
-                        getPatientNames(req, notifications, originalCallback);
-                    }
+                    return eachCallback(err);
                 }
+
+                updateNotificationFields(req, params, results, notif);
+
+                return eachCallback();
             });
-        });
+    }, function(err) {
+        if (err) {
+            return originalCallback(err, null);
+        }
+        // Filter out notifications without navigation info or permissions for the current user
+        if (params.navigationRequired === true) {
+            notifications = _.filter(notifications, function(notification) {
+                return (hasNavigation(notification) && hasPermission(req, notification));
+            });
+        }
+
+        // Filter out notifications with duplicate taskID (associated item) - keep only the newest ones
+        if (params.groupRows === true) {
+            notifications = groupNotificationsByTask(notifications);
+        }
+
+        // If only a counter is needed, return without further processing
+        if (params.countNotifs === true) {
+            var response = {
+                count: notifications.length
+            };
+            return originalCallback(null, response);
+        }
+
+        getPatientNames(req, notifications, originalCallback);
+    });
 
 }
 
@@ -864,4 +594,3 @@ module.exports.getNotificationsByParams = getNotificationsByParams;
 module.exports.getNotificationsByRefId = getNotificationsByRefId;
 module.exports.resolveNotificationById = resolveNotificationById;
 module.exports.resolveNotificationsByRefId = resolveNotificationsByRefId;
-module.exports.getNotificationsCounterByParams = getNotificationsCounterByParams;

@@ -89,6 +89,17 @@ define([
                 'data-code': this.model.get('dataCode')
             };
         },
+
+        serializeData: function () {
+            var modelJSON = this.model.toJSON();
+            var gistModel = _.get(this, 'appletOptions.gistModel');
+            if (gistModel)
+                _.each(gistModel, function (object) {
+                    modelJSON[object.id] = modelJSON[object.field];
+                });
+            return modelJSON;
+        },
+
         ui: {
             popoverEl: '[data-toggle=popover]',
             toolbarToggler: '.selectable:not([data-toggle=popover])'
@@ -97,7 +108,11 @@ define([
         events: {
             'click @ui.popoverEl': function(e) {
                 this.trigger('toggle:quicklook');
-                this.ui.popoverEl.focus();
+            },
+            'blur @ui.popoverEl': function(e) {
+                if (this.$('[data-toggle=popover]')[0].hasAttribute('aria-describedby')) {
+                    this.trigger('toggle:quicklook');
+                }
             },
             'keydown @ui.popoverEl': function(e) {
                 var k = e.which || e.keydode;
@@ -107,11 +122,11 @@ define([
                 e.stopPropagation();
             },
             'before:showtoolbar': function() {
-                this.$el.addClass('toolbar-active');
+                this.$el.addClass('toolbar-active background-color-primary-lighter');
                 this.trigger('before:showtoolbar');
             },
             'before:hidetoolbar': function() {
-                this.$el.removeClass('toolbar-active');
+                this.$el.removeClass('toolbar-active background-color-primary-lighter');
                 this.trigger('before:hidetoolbar');
             },
             'after:showtoolbar': function() {

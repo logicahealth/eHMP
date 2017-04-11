@@ -16,16 +16,15 @@ define([
 
 
     var Config = ColumnsConfig;
-    var columns, collection;
+    var columns, collection, filterFields;
     var session;
 
     var TaskCollection = Backbone.PageableCollection.extend({});
 
     var filterByDueDate = function(collection) {
-        var filtered = collection.filter(function(model) {
-            return model.get("dueTextValue") < 1;
+        return collection.filter(function(model) {
+            return setOverdueText(model.get('DUE'), model.get('EXPIRATIONTIME')).dueTextValue < 1;
         });
-        return new TaskCollection(filtered);
     };
 
     var MenuItem = Backbone.Model.extend({
@@ -93,13 +92,34 @@ define([
         'All': ['All']
     };
 
+    var taskComparator = function(model) {
+        var sortValue = 0;
+        var dueDateVal = 0;
+        var activeSort = model.get('ACTIVE') ? 0 : 1;
+
+        // dueStatusVal - only positive numbers. (0, 1, 2 instead of -1, 0, 1)
+        var dueStatusVal = model.get('dueTextValue') + 1;
+
+        // Splits the priority intervals in 3 parts. [0,3] is 0, [4,6] is 1, [7,10] is 2.
+        var priorityVal = Math.floor((model.get('PRIORITY')) / 3.5);
+
+        if (!_.isNull(model.get('DUE'))) {
+            dueDateVal = model.get('earliestDateMilliseconds');
+        }
+
+        // sortValue is a concatenated string converted to integer
+        sortValue = parseInt('1' + activeSort + dueStatusVal + priorityVal + dueDateVal);
+        return sortValue;
+    };
+
     var fetchOptions = {
         resourceTitle: 'tasks-tasks',
         fetchType: 'POST',
-        pageable: false,
+        pageable: true,
         cache: false,
         viewModel: {
             parse: function(response) {
+                response.TASKNAMEFORMATTED = _.trim((response.TASKNAME + ' - ' + response.INSTANCENAME), ' -');
                 response.DUEDATEFORMATTED = moment(response.DUE).isValid() ? moment(response.DUE).format('MM/DD/YYYY') : 'N/A';
                 response.EXPIRATIONTIMEFORMATTED = moment(response.EXPIRATIONTIME).isValid() ? moment(response.EXPIRATIONTIME).format('MM/DD/YYYY') : 'N/A';
                 response.earliestDateMilliseconds = moment(response.DUE).valueOf();
@@ -124,27 +144,8 @@ define([
                 return response;
             }
         },
-        onSuccess: function(collection) {
-            // Default sorting
-            var sortedCollection = _.sortBy(collection.models, function(obj) {
-                var sortValue = 0;
-                var dueDateVal = 0;
-                var dueStatusVal = obj.get('dueTextValue') * 1 + 1;
-                var priorityVal = Math.floor((obj.get('PRIORITY')) / 3.5);
-                if (!_.isNull(obj.get('DUE'))) {
-                    dueDateVal = obj.get('earliestDateMilliseconds');
-                }
-                var activeSort = obj.get('ACTIVE') ? 0 : 1;
-                sortValue = parseInt('1' + activeSort + dueStatusVal + priorityVal + dueDateVal);
-                return sortValue;
-            });
-            if (collection.fetchOptions.viewType === 'summary') {
-                sortedCollection = filterByDueDate(sortedCollection).models;
-            }
-            collection.reset(sortedCollection, {
-                silent: true
-            });
-            collection.trigger('sort', collection);
+        collectionConfig: {
+            comparator: taskComparator
         }
     };
 
@@ -162,7 +163,7 @@ define([
             return true;
         }
         var userSession = ADK.UserService.getUserSession();
-        var userId = userSession.get('duz')[userSession.get('site')];
+        var userId = userSession.get('site') + ';' + userSession.get('duz')[userSession.get('site')];
         if (ADK.UserService.hasPermissions(permission.ehmp.join('|'))) {
             if (_.isEmpty(permission.user) || _.contains(permission.user, userId)) {
                 return true;
@@ -255,7 +256,6 @@ define([
             this.listenTo(ADK.Messaging, 'globalDate:selected', function(dateModel) {
                 self.dateRangeRefresh('DUEDATEFORMATTED', dateModel.toJSON());
             });
-
             if (isStaffView()) {
                 //provider data
                 this.fetchOptions.criteria = {
@@ -265,6 +265,7 @@ define([
                     getNotifications: true
                 };
                 columns = Config[this.columnsViewType].columns.provider;
+                filterFields = _.pluck(Config.expanded.columns.provider, 'name');
             } else {
                 //patient data
                 this.fetchOptions.criteria = {
@@ -275,15 +276,23 @@ define([
                     getNotifications: true
                 };
                 columns = Config[this.columnsViewType].columns.patient;
+                filterFields = _.pluck(Config.expanded.columns.patient, 'name');
             }
             this.fetchOptions.criteria.startDate = moment(dateFilter.fromDate).startOf('day').format('YYYYMMDDHHmm');
             this.fetchOptions.criteria.endDate = moment(dateFilter.toDate).endOf('day').format('YYYYMMDDHHmm');
 
             this.taskCollection = ADK.ResourceService.fetchCollection(this.fetchOptions);
+
             this.listenTo(this.taskCollection, 'fetch:success', function(fetchedModel) {
+                if (this.columnsViewType === 'summary') {
+                    fetchedModel.fullCollection.reset(filterByDueDate(fetchedModel.fullCollection.models), {
+                        silent: true
+                    });
+                }
                 this.$el.find("[name='assignedTo']").removeAttr('disabled');
                 this.$el.find("[name='status']").removeAttr('disabled');
             });
+
             this.listenTo(this.taskCollection, 'fetch:error', function(fetchedModel) {
                 this.$el.find("[name='assignedTo']").removeAttr('disabled');
                 this.$el.find("[name='status']").removeAttr('disabled');
@@ -303,7 +312,7 @@ define([
             this.appletOptions = {
                 columns: columns,
                 collection: this.taskCollection,
-                filterFields: _.union(_.pluck(columns, 'name'), ['dueDate'], ['INSTANCENAME']),
+                filterFields: _.union(filterFields, ['dueDate'], ['INSTANCENAME']),
                 onClickRow: this.onClickRow,
                 parent: self,
                 toolbarView: toolbarView,
@@ -397,10 +406,10 @@ define([
             });
             if (model.get('STATUS') === 'Completed') {
                 headerView = Backbone.Marionette.ItemView.extend({
-                    template: Handlebars.compile('<h4 class="top-margin-no all-padding-no left-margin-sm right-margin-sm"><i class="fa fa-check color-secondary right-padding-sm" aria-hidden="true"></i>Task Completed</h4>')
+                    template: Handlebars.compile('<div class="container-fluid"><div class="row"><div class="col-xs-11"><h4 class="modal-title" id="mainModalLabel"><i class="fa fa-check color-secondary font-size-18 right-padding-xs" aria-hidden="true"></i>Task Completed</h4></div><div class="col-xs-1 text-right top-margin-sm"><button type="button" class="close btn btn-icon btn-xs left-margin-sm" data-dismiss="modal" title="Press enter to close."><i class="fa fa-times fa-lg"></i></button></div></div></div>')
                 });
 
-                reason = 'This task has been completed and there are no further actions that need to be taken.';
+                reason = 'This task was completed and no further actions are required.';
                 modalModel = {
                     reason: reason
                 };
@@ -427,7 +436,7 @@ define([
                 event.currentTarget.focus();
             } else {
                 headerView = Backbone.Marionette.ItemView.extend({
-                    template: Handlebars.compile('<h4 class="top-margin-no all-padding-no left-margin-sm right-margin-sm"><i class="fa fa-ban font-size-16 color-primary-dark right-padding-sm" aria-hidden="true"></i>Task Cannot Be Completed</h4>')
+                    template: Handlebars.compile('<div class="container-fluid"><div class="row"><div class="col-xs-11"><h4 class="modal-title" id="mainModalLabel"><i class="fa fa-ban font-size-18 color-red-dark right-padding-xs" aria-hidden="true"></i>Task Cannot Be Completed</h4></div><div class="col-xs-1 text-right top-margin-sm"><button type="button" class="close btn btn-icon btn-xs left-margin-sm" data-dismiss="modal" title="Press enter to close."><i class="fa fa-times fa-lg"></i></button></div></div></div>')
                 });
 
                 modalModel = {
@@ -485,17 +494,11 @@ define([
             }
         };
 
-        if (moment().isAfter(pastDueDate, 'day')) {
-            return ret[-1];
-        }
+        var now = moment.utc();
+        var isDue = now.isSameOrAfter(dueDate, 'day') && (now.isSameOrBefore(pastDueDate, 'day') || !moment(pastDueDate).isValid());
+        var isPastDue = now.isAfter(pastDueDate, 'day');
 
-        if (moment().isSameOrAfter(dueDate, 'day') && (moment().isSameOrBefore(pastDueDate, 'day') || !moment(pastDueDate).isValid())) {
-            return ret[0];
-        }
-
-        return ret[1];
+        var index = isPastDue ? -1 : (isDue ? 0 : 1);
+        return ret[index];
     }
-
-
-    //end of function
 });

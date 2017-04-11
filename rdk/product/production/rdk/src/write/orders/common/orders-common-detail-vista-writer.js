@@ -1,10 +1,8 @@
-/*
- TODO: Using ORWDX LOADRSP until RPC wrapper is in place
- */
 'use strict';
 
 var rpcClientFactory = require('./../../core/rpc-client-factory');
 var readOnlyRpcClientFactory = require('./../../../subsystems/vista-read-only-subsystem');
+var nullchecker = require('../../../core/rdk').utils.nullchecker;
 
 module.exports = function(writebackContext, callback) {
     readOnlyRpcClientFactory.getRpcSystemClient(writebackContext, writebackContext.siteParam, function(error, rpcClient) {
@@ -38,17 +36,18 @@ module.exports.getDetail = function(resourceId, writebackContext, callback) {
 
 function getOrderDetail(rpcClient, resourceId, writebackContext, callback) {
     var rpcName = 'ORQOR DETAIL';
-    var dfn = writebackContext.model.dfn;
-    if (!dfn && writebackContext.pid) {
-        dfn = writebackContext.pid.substring(writebackContext.pid.indexOf(';') + 1, writebackContext.pid.length);
+    var dfn = writebackContext.interceptorResults.patientIdentifiers.dfn;
+    if(nullchecker.isNullish(dfn)){
+        return callback('Missing required patient identifiers');
     }
+
     rpcClient.execute(rpcName, getParameters(resourceId, dfn), function(err, data) {
         if (err) {
             return callback(err, data);
         }
         return callback(null, data);
     });
-};
+}
 
 function getParameters(resourceId, dfn) {
     var parameters = [];

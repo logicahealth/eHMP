@@ -62,3 +62,5 @@ product/production/opencds/opencds-parent/opencds-config/opencds-config-schema/s
 product/production/opencds/opencds-parent/opencds-config/opencds-config-schema/src/main/java/
 product/production/opencds/opencds-parent/opencds-vmr-1_0/opencds-vmr-1_0-schema/src/main/java/META-INF/sun-jaxb.episode
 product/production/opencds/opencds-parent/opencds-vmr-1_0/opencds-vmr-1_0-schema/src/main/java
+product/tests/acceptance-tests/.bundle/
+product/tests/acceptance-tests/.lastBundleInstallFlag

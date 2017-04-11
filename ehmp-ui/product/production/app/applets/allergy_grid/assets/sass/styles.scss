@@ -72,8 +72,16 @@
     .total-selected-region {
         border-top: 2px solid $grey;
     }
+    .available-region > .table-row:first-child > :last-child {
+        display: none;
+    }
     .help-block .error {
         background-color: $pure-white;
         margin: 0px;
+    }
+    .signs-and-symptoms {
+        legend {
+            text-transform: capitalize !important;
+        }
     }
 }

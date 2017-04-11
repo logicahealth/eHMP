@@ -1,18 +1,11 @@
 'use strict';
 
-var pepSubsystem = require('../../subsystems/pep/pep-subsystem');
 var _ = require('lodash');
-var now = require('performance-now');
+var rdk = require('../../core/rdk');
+var RdkTimer = rdk.utils.RdkTimer;
+var RdkError = rdk.utils.RdkError;
+var pepSubsystem = require('../../subsystems/pep/pep-subsystem');
 
-function PepMetrics(method, url) {
-    this.path =  method + ' ' + url;
-    this.start = now();
-}
-
-PepMetrics.prototype.stop = function() {
-    this.end = now();
-    this.elapsedMilliseconds = this.end - this.start;
-};
 
 function isDisabled(config) {
     return _.result(config, 'interceptors.pep.disabled', false);
@@ -37,15 +30,20 @@ module.exports = function(req, res, next) {
 
     req.logger.info('PEP: pep authorization invoked');
 
-    var pepMetrics = new PepMetrics(req.method, req.originalUrl);
+    var pepMetrics = new RdkTimer({
+        'name': 'elapsedAuthorization',
+        'start': true
+    });
 
     var writeMetrics = function(err, result) {
-        pepMetrics.stop();
         pepMetrics.error = err || '';
         pepMetrics.result = result || '';
-        req.logger.info({'pep-metrics': pepMetrics}); // Write them in res-server.log file now
-        
-        if(err){
+        pepMetrics.log(req.logger, {
+            'stop': true
+        });
+
+        if (err) {
+            //TODO convert pep to use RdkErrors
             return res.status(err.code).rdkSend(err.message);
         }
 
@@ -56,5 +54,4 @@ module.exports = function(req, res, next) {
 };
 
 //used for unit testing
-module.exports._PepMetrics = PepMetrics;
 module.exports._isDisabled = isDisabled;

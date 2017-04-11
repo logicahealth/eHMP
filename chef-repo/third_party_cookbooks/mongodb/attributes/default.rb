@@ -109,3 +109,6 @@ default['mongodb']['ruby_gems'] = {
   :mongo => nil,
   :bson_ext => nil
 }
+
+# The following attribute is a modification of a third party cookbook.
+default[:mongodb][:mongo_client_ssl] = true

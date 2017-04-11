@@ -22,7 +22,7 @@ function getResourceConfig(app) {
         queue = q;
     });
     return [{
-        name: 'communicationrequest-add',
+        name: 'fhir-communication-request-add',
         path: '',
         post: addCommunicationRequest,
         interceptors: {
@@ -30,11 +30,11 @@ function getResourceConfig(app) {
             synchronize: false,
             validatePid: false
         },
-        requiredPermissions: [],
+        requiredPermissions: ['edit-fhir'],
         isPatientCentric: false,
         permitResponseFormat: true
     }, {
-        name: 'communicationrequest-get-all',
+        name: 'fhir-communication-request-get-all',
         path: '/:recipientId',
         get: getAllCommunicationRequests,
         interceptors: {
@@ -42,11 +42,11 @@ function getResourceConfig(app) {
             synchronize: false,
             validatePid: false
         },
-        requiredPermissions: [],
+        requiredPermissions: ['read-fhir'],
         isPatientCentric: false,
         permitResponseFormat: true
     }, {
-        name: 'communicationrequest-get',
+        name: 'fhir-communication-request-get',
         path: '/:recipientId/:id',
         get: getCommunicationRequest,
         interceptors: {
@@ -54,11 +54,11 @@ function getResourceConfig(app) {
             synchronize: false,
             validatePid: false
         },
-        requiredPermissions: [],
+        requiredPermissions: ['read-fhir'],
         isPatientCentric: false,
         permitResponseFormat: true
     }, {
-        name: 'communicationrequest-delete',
+        name: 'fhir-communication-request-delete',
         path: '/:recipientId/:id',
         delete: deleteCommunicationRequest,
         interceptors: {
@@ -66,33 +66,33 @@ function getResourceConfig(app) {
             synchronize: false,
             validatePid: false
         },
-        requiredPermissions: [],
+        requiredPermissions: ['delete-fhir'],
         isPatientCentric: false,
         permitResponseFormat: true
     }, {
-        name: 'communicationrequest-update',
+        name: 'fhir-communication-request-update',
         path: '/:recipientId/:id',
         put: updateCommunicationRequest,
         interceptors: {
             operationalDataCheck: false,
             synchronize: false
         },
-        requiredPermissions: [],
+        requiredPermissions: ['edit-fhir'],
         isPatientCentric: false,
         permitResponseFormat: true
     }, {
-        name: 'communicationrequest-update-mark-as-read',
+        name: 'fhir-communication-request-update-mark-as-read',
         path: 'setstatus/:status/:recipientId/:id',
         put: setstatusCommunicationRequest,
         interceptors: {
             operationalDataCheck: false,
             synchronize: false
         },
-        requiredPermissions: [],
+        requiredPermissions: ['edit-fhir'],
         isPatientCentric: false,
         permitResponseFormat: true
     }, {
-        name: 'communicationrequest-watchtube',
+        name: 'fhir-communication-request-watchtube',
         path: '/watch/add/:recipientId',
         get: watchTube,
         interceptors: {
@@ -100,7 +100,43 @@ function getResourceConfig(app) {
             synchronize: false,
             validatePid: false
         },
-        requiredPermissions: [],
+        requiredPermissions: ['read-fhir'],
+        isPatientCentric: false,
+        permitResponseFormat: true
+    }, {
+        name: 'fhir-communication-request-get-all-search',
+        path: '/:recipientId/_search',
+        post: getAllCommunicationRequests,
+        interceptors: {
+            operationalDataCheck: false,
+            synchronize: false,
+            validatePid: false
+        },
+        requiredPermissions: ['read-fhir'],
+        isPatientCentric: false,
+        permitResponseFormat: true
+    }, {
+        name: 'fhir-communication-request-get-search',
+        path: '/:recipientId/:id/_search',
+        post: getCommunicationRequest,
+        interceptors: {
+            operationalDataCheck: false,
+            synchronize: false,
+            validatePid: false
+        },
+        requiredPermissions: ['read-fhir'],
+        isPatientCentric: false,
+        permitResponseFormat: true
+    }, {
+        name: 'fhir-communication-request-watchtube-search',
+        path: '/watch/add/:recipientId/_search',
+        post: watchTube,
+        interceptors: {
+            operationalDataCheck: false,
+            synchronize: false,
+            validatePid: false
+        },
+        requiredPermissions: ['read-fhir'],
         isPatientCentric: false,
         permitResponseFormat: true
     }];

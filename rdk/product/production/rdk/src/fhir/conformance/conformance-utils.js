@@ -7,6 +7,7 @@ var _ = require('lodash');
 var domains = {
     ALLERGY_INTOLERANCE: 'allergyIntolerance',
     CONDITION: 'condition',
+    CONFORMANCE: 'conformance',
     COMPOSITION: 'composition',
     DIAGNOSTIC_ORDER: 'diagnosticOrder',
     MEDICATION_STATEMENT: 'medicationStatement',
@@ -70,5 +71,17 @@ function createConformanceData(resource, profileRef, iActions, attrMap) {
     return conform;
 }
 
+function addCountAttribute(fhirToJDSAttrMap) {
+    fhirToJDSAttrMap.push({
+        fhirName: '_count',
+        vprName: 'limit',
+        dataType: 'integer',
+        definition: 'http://hl7.org/fhir/2015MAY/datatypes.html#integer',
+        description: 'The number of results to show.',
+        searchable: true
+    });
+}
+
 module.exports.createConformanceData = createConformanceData;
 module.exports.domains = domains;
+module.exports.addCountAttribute = addCountAttribute;

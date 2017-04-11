@@ -28,11 +28,12 @@ ehmp_deps = parse_dependency_versions "ehmp_provision"
 
 r_list = []
 r_list << "recipe[packages::enable_internal_sources@#{machine_deps["packages"]}]"
-r_list << "recipe[packages::disable_external_sources@#{machine_deps["packages"]}]" unless node[:machine][:allow_web_access]
+r_list << "recipe[packages::disable_external_sources@#{machine_deps["packages"]}]" unless node[:machine][:allow_web_access] || node[:machine][:driver] == "ssh"
 r_list << "recipe[role_cookbook::#{node[:machine][:driver]}@#{machine_deps["role_cookbook"]}]"
 r_list << "role[asu]"
-r_list << "recipe[asu@#{ehmp_deps["asu"]}]"
+r_list << "recipe[asu::install@#{ehmp_deps["asu"]}]"
 r_list << "recipe[packages::upload@#{machine_deps["packages"]}]" if node[:machine][:cache_upload]
+r_list << "recipe[packages::remove_localrepo@#{machine_deps["packages"]}]" if node[:machine][:driver] == "ssh"
 
 machine_boot "boot #{machine_ident} machine to the #{node[:machine][:driver]} environment" do
   elastic_ip ENV["ELASTIC_IP"]

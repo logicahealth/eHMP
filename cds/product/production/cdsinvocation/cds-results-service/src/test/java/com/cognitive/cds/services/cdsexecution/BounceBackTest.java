@@ -65,8 +65,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 @ContextConfiguration(locations = { "classpath:Test-executionTest.xml" })
 public class BounceBackTest {
 
-	private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(BounceBackTest.class);
-
 	@Autowired
 	// @Quailifer("FullMockInvoker"))
 	CDSInvoker theInvoker;

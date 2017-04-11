@@ -3,6 +3,7 @@ define([
     'marionette',
     'underscore',
     'highcharts',
+    'moment',
     'hbs!app/applets/stackedGraph/list/rowItemViewTemplate',
     'hbs!app/applets/stackedGraph/list/rowItemViewMedicationsTemplate',
     'hbs!app/applets/stackedGraph/list/rowItemViewLabsTemplate',
@@ -11,7 +12,7 @@ define([
     'hbs!app/applets/stackedGraph/list/popoverTemplate',
     'typeahead',
     'highcharts-more'
-], function(Backbone, Marionette, _, Highcharts, RowItemViewTemplate, RowItemViewMedicationsTemplate, RowItemViewLabsTemplate, Utils, RowItemParentView, PopoverTemplate) {
+], function(Backbone, Marionette, _, Highcharts, moment, RowItemViewTemplate, RowItemViewMedicationsTemplate, RowItemViewLabsTemplate, Utils, RowItemParentView, PopoverTemplate) {
     "use strict";
 
 

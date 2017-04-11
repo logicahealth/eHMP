@@ -37,7 +37,6 @@ define([
         hasCustomDateRangeFieldsBeenInitialized: false,
         template: dateRangeTemplate,
         initialize: function(options) {
-            this.parentView = options.parentView;
             this.fullScreen = options.fullScreen;
         },
         regions: {
@@ -116,19 +115,12 @@ define([
                 this.model.set('selectedId', selectedId);
             };
 
-            if (event.currentTarget.id.indexOf('Range') !== -1 &&
-                event.currentTarget.id.indexOf('customRangeApply') === -1) {
-                this.$el.find('#filterFromDate').val('');
-                this.$el.find('#filterToDate').val('');
-                this.$el.find('#customRangeApply').prop('disabled', true);
-            }
-
+            // Do button logic
             switch (event.currentTarget.id) {
                 case 'customRangeApply':
                     event.preventDefault();
                     var filterFromDate = this.$el.find('#filterFromDate').val();
                     var filterToDate = this.$el.find('#filterToDate').val();
-
                     if (moment(filterToDate).isAfter(filterFromDate)) {
                         fromDate = filterFromDate;
                         toDate = filterToDate;
@@ -168,40 +160,48 @@ define([
                     break;
             }
 
+            // Fill the UI pickers if the user didn't already do it
+            if (event.currentTarget.id !== 'customRangeApply') {
+                var birthdayRaw = ADK.PatientRecordService.getCurrentPatient().get('birthDate') || '19000101';
+                var birthday = birthdayRaw.substring(4,6) + '/' + birthdayRaw.substring(6,8) + '/' + birthdayRaw.substring(0,4);
+                this.setDatePickers((fromDate||birthday), (toDate||moment().format('MM/DD/YYYY'))); // Note that we only use birthday for visual effect
+            }
+
+            // Set "observed" dates
             if (fromDate !== undefined && fromDate !== null) {
                 this.fetchOptions.criteria.observedFrom = moment(fromDate).format('YYYYMMDD');
             } else {
                 delete this.fetchOptions.criteria.observedFrom;
             }
-
             if (toDate !== undefined && toDate !== null) {
                 this.fetchOptions.criteria.observedTo = moment(toDate).format('YYYYMMDD');
             } else {
                 delete this.fetchOptions.criteria.observedTo;
             }
 
-            //Replaces existing date filter with updated date filter 
-            if (fromDate !== undefined && fromDate !== null && toDate !== undefined && toDate !== null) {
-                var dateFilterString = ', between(observed,' + moment(fromDate).format('YYYYMMDD') + ',' + moment(toDate).format('YYYYMMDD') + ')';
-                this.fetchOptions.criteria.filter = this.fetchOptions.criteria.filterHold + dateFilterString;
-            } else {
-                this.fetchOptions.criteria.filter = this.fetchOptions.criteria.filterHold;
+            // Append a date range to the fetch criteria, if one has been defined, using the JDS date filter builder
+            // function from the ADK BaseGridApplet class.
+            this.fetchOptions.criteria.filter = this.fetchOptions.criteria.filterHold;
+            if (!_.isEmpty(fromDate) || !_.isEmpty(toDate)) {
+                var dateFilter = ADK.Applets.BaseGridApplet.prototype.buildJdsDateFilter.call(null, 'observed', {
+                    fromDate: fromDate,
+                    toDate: toDate,
+                    isOverrideGlobalDate: true
+                });
+                this.fetchOptions.criteria.filter += (', ' + dateFilter);
             }
 
+            // Cleanup
             this.model.set('fromDate', fromDate);
             this.model.set('toDate', toDate);
-            //TODO: Remove this once the new Resource is Created
             this.sharedDateRange.set('fromDate', fromDate);
             this.sharedDateRange.set('toDate', toDate);
-
             this.$el.find('button').removeClass('active-range');
-
             if (event.currentTarget.id !== 'customRangeApply') {
                 this.$el.find('#' + event.currentTarget.id).addClass('active-range');
             }
-
             if (isFetchable) {
-                this.fetchDateRangeFilteredCollection();
+                this.triggerMethod('data:collection:fetch');
             }
         },
         onBeforeDestroy: function(event) {
@@ -317,10 +317,6 @@ define([
                     }
                 }
             }
-        },
-        fetchDateRangeFilteredCollection: function() {
-            ADK.PatientRecordService.fetchCollection(this.fetchOptions);
-            this.parentView.leftColumn.show(ADK.Views.Loading.create());
         },
         setFetchOptions: function(fetchOptions) {
             this.fetchOptions = fetchOptions;

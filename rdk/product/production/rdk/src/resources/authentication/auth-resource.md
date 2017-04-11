@@ -15,9 +15,10 @@ Requires the authentication interceptor to run in order to add the user to the s
     + Body
 
             {
-                "accessCode": "pu1234",
-                "verifyCode": "pu1234!!",
-                "site": "9E7A"
+                "accessCode": "PW    ",
+                "verifyCode": "PW    !!",
+                "site": "9E7A",
+                "division": "500"
             }
 
     + Schema
@@ -28,7 +29,8 @@ Requires the authentication interceptor to run in order to add the user to the s
                 "required": [
                     "accessCode",
                     "verifyCode",
-                    "site"
+                    "site",
+                    "division"
                 ],
                 "properties": {
                     "accessCode": {
@@ -38,6 +40,9 @@ Requires the authentication interceptor to run in order to add the user to the s
                         "type": "string"
                     },
                     "site": {
+                        "type": "string"
+                    },
+                    "division": {
                         "type": "string"
                     }
                 }
@@ -49,14 +54,19 @@ Requires the authentication interceptor to run in order to add the user to the s
 
             {
                 "data": {
+                    "uid": "urn:va:user:9E7A:10000000270",
                     "disabled": false,
                     "divisionSelect": false,
                     "duz": {
                         "9E7A": "10000000270"
                     },
+                    "expires": "2016-09-20T17:42:25.654Z",
                     "facility": "PANORAMA",
                     "firstname": "PANORAMA",
                     "lastname": "USER",
+                    "preferences": {
+                        "defaultScreen": {}
+                    },
                     "permissions": [
                         "read-patient-record",
                         "read-active-medication"
@@ -77,7 +87,9 @@ Requires the authentication interceptor to run in order to add the user to the s
                     }],
                     "requiresReset": false,
                     "section": "Medicine",
+                    "sessionLength": 900000,
                     "site": "9E7A",
+                    "division": "500",
                     "title": "Clinician",
                     "provider": true
                 },
@@ -117,11 +129,13 @@ Expects a session to already occur or it returns a blank object.
 
             {
                 "data": {
+                    "uid": "urn:va:user:9E7A:10000000270",
                     "disabled": false,
                     "divisionSelect": false,
                     "duz": {
                         "9E7A": "10000000270"
                     },
+                    "expires": "2016-09-20T17:42:25.654Z",
                     "facility": "PANORAMA",
                     "firstname": "PANORAMA",
                     "lastname": "USER",
@@ -145,7 +159,9 @@ Expects a session to already occur or it returns a blank object.
                     }],
                     "requiresReset": false,
                     "section": "Medicine",
+                    "sessionLength": 900000,
                     "site": "9E7A",
+                    "division": "500",
                     "title": "Clinician",
                     "provider": true
                 },
@@ -220,12 +236,14 @@ Is a readonly resource that returns an array.
                     "items": [
                         {
                             "name": "KODAK",
-                            "division": "500",
+                            "division": "507",
+                            "production": false,
                             "siteCode": "C877"
                         },
                         {
                             "name": "PANORAMA",
                             "division": "500",
+                            "production": false,
                             "siteCode": "9E7A"
                         }
                     ]

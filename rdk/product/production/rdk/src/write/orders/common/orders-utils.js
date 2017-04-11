@@ -1,7 +1,6 @@
 'use strict';
 
 /*
-    TODO: might not need this if RPC wrapper returns the status name
     All status names are from CPRS source codes except default
  */
 function getStatusName(status) {

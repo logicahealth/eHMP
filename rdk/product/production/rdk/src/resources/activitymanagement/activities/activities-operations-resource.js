@@ -14,7 +14,6 @@ var getGenericJbpmConfig = require('../activity-utils').getGenericJbpmConfig;
 var activityDb = rdk.utils.pooledJbpmDatabase;
 var jdsFilter = require('jds-filter');
 var querystring = require('querystring');
-var dd = require('drilldown');
 var nullchecker = rdk.utils.nullchecker;
 
 JBPMServerError.prototype = Error.prototype;
@@ -166,14 +165,6 @@ function startProcess(req, res) {
         idError = new Error('Missing deploymentId property/value in input JSON.');
         req.logger.error(idError);
         return res.status(rdk.httpstatus.bad_request).rdkSend(idError.message);
-    } else if (deploymentId === 'All') {
-        // Map deploymentid to actual value from jbpm config file
-        if (!req.app.config.jbpm.deployments[deploymentId]) {
-            idError = new Error('Invalid deploymentId property value.');
-            req.logger.error(idError);
-            return res.status(rdk.httpstatus.bad_request).rdkSend(idError.message);
-        }
-        deploymentId = req.app.config.jbpm.deployments[deploymentId];
     }
 
     var processDefId = req.body.processDefId || null;
@@ -200,7 +191,7 @@ function abortProcess(req, res) {
     // [POST] /runtime/{deploymentId}/process/instance/{procInstanceID}/abort
     //
     // Example Postman URL:
-    // http://IP_ADDRESS:PORT/business-central/rest/runtime/VistaCore:VistaTasks:1.0.2/process/instance/1/abort
+    // http://IP             /business-central/rest/runtime/VistaCore:VistaTasks:1.0.2/process/instance/1/abort
 
     req.audit.dataDomain = 'Tasks';
     req.audit.logCategory = 'ABORT_PROCESS';
@@ -292,7 +283,10 @@ function getDefinitionsFetchConfig(req, pagesize) {
 
     var uri = uriBuilder.fromUri(config.url).path('/deployment/processes');
 
-    pagesize = pagesize || 200;
+    // Pagination not working correctly for the above rest api in RedHat BPM 6.1 to get all available process definitions in batches,
+    // so as a short term fix, increasing default pagesize to 2000 (from 200).
+    // This needs to be revisited once BPM is migrated to a new version.
+    pagesize = pagesize || 2000;
 
     uri.query('pagesize', pagesize);
     config.url = uri.build();
@@ -304,10 +298,6 @@ function getDefinitionsFetchConfig(req, pagesize) {
 function getActivityDefinitionsByQuery(req, res) {
     req.audit.dataDomain = 'Tasks';
     req.audit.logCategory = 'GET_ACTIVITY_DEFINITIONS_BY_QUERY';
-
-    // TODO update this uri to something reasonable
-    //var uri = uriBuilder.fromUri(config.url).path('/deployment/processes/query');
-    //var filter = 'filter by some parameter here'
 
     // temporary mock implementation
     var lookupStr = fs.readFileSync(__dirname + '/activity-query-service-mock.json', {
@@ -463,7 +453,7 @@ function sendSignal(req, res) {
         // set signal issuer context to the payload
         var user = req.session.user;
         signalContent.signalBody = signalContent.signalBody || {};
-        signalContent.signalBody.executionUserId = user.site + ':' + user.duz[user.site]; // user.uid includes the namespace urn:va:user, JBPM wants it without the namespace
+        signalContent.signalBody.executionUserId = user.site + ';' + user.duz[user.site]; // user.uid includes the namespace urn:va:user, JBPM wants it without the namespace
         signalContent.signalBody.executionUserName = user.lastname + ',' + user.firstname; // JBPM wants "lastname,firstname"
     }
 
@@ -689,7 +679,7 @@ function getJbpmInstanceByInstanceId(req, res) {
             return res.rdkSend('NOT_FOUND');
         }
 
-        var keys = _.keys(dd(returnedData)('variables').val);
+        var keys = _.keys(_.get(returnedData, 'variables'));
 
         //Regular expression to match the java package reference returned by JBPM
         //eg. "vistacore.order.consult.ConsultOrder@6029c0b3"
@@ -698,7 +688,7 @@ function getJbpmInstanceByInstanceId(req, res) {
         var objectList = [];
 
        _.each(keys, function(key, i) {
-            var variableValue = dd(returnedData)('variables')(key).val;
+            var variableValue = _.get(returnedData, ['variables', key]);
             if(objRefRegEx.test(variableValue)) {
                 objectList.push(key);
             } else {
@@ -731,7 +721,7 @@ function getJbpmInstanceByInstanceId(req, res) {
                         return res.status(rdk.httpstatus.bad_request).rdkSend(err);
                     }
 
-                    var path = dd(response)('request')('uri')('path').val;
+                    var path = _.get(response, 'request.uri.path');
 
                     var objName = path.substring(path.lastIndexOf('/') + 1);
 

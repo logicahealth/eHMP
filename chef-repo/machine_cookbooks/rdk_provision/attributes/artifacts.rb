@@ -12,14 +12,6 @@ default[:rdk_provision][:artifacts] = {
   	:version => ENV["RDK_VERSION"],
     :release => true
   },
-  :vistatasks => {
-    :repo => "releases",
-    :group => "us.vistacore.jbpm",
-    :artifact => "VistaTasks",
-    :extension => "jar",
-    :version => ENV["JBPM_VISTATASKS_VERSION"],
-    :release => true
-  },
   :jbpm_fitlabproject => {
     :repo => "releases",
     :group => "us.vistacore.jbpm",

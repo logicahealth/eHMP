@@ -102,7 +102,7 @@ var map = {
 describe('Medication Statement FHIR Resource', function() {
     it('Verifies correct resource name and path', function() {
         var config = MedicationStatementResource.getResourceConfig()[0];
-        expect(config.name).to.equal('medicationdstatement-getMedicationStatement');
+        expect(config.name).to.equal('fhir-medication-statement');
         expect(config.path).to.equal('');
     });
 });

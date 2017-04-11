@@ -10,27 +10,29 @@
 					{{/if}}
 				</h5>
 	        </div>
-	        <div class="col-xs-3 left-margin-sm">
+	    </div>
+	    <div class="row left-padding-sm">
+			<div class="col-xs-3">
 				<p>
-					<span data-detail-label="facility"><strong>Facility</strong></span><br />
+					<span data-detail-label="facility"><strong>Facility:</strong></span><br />
 					<span data-detail="facility">{{facilityName}}</span>
 				</p>
 			</div>
 			<div class="col-xs-3">
 				<p>
-					<span data-detail-label="author"><strong>Author</strong></span><br />
+					<span data-detail-label="author"><strong>Author:</strong></span><br />
 					<span data-detail="author">{{authorDisplayName}}</span>
 				</p>
 			</div>
 			<div class="col-xs-3">
 				<p>
-					<span data-detail-label="status"><strong>Status</strong></span><br />
+					<span data-detail-label="status"><strong>Status:</strong></span><br />
 					<span data-detail="status">{{statusDisplayName}}</span>
 				</p>
 			</div>
 			<div class="col-xs-3">
 				<p>
-					<span data-detail-label="date-time"><strong>Date/Time</strong></span><br />
+					<span data-detail-label="date-time"><strong>Date/Time:</strong></span><br />
 					<span data-detail="date-time">
 						{{#if referenceDateTime}}
 							{{formatDateTime referenceDateTime "YYYYMMDDHHmmssSSS" "datetime"}}
@@ -108,25 +110,25 @@
 			</div>
 			{{#each addenda}}
 				{{#each text}}
-					<div class="row">
-					    <div class="col-xs-3 left-margin-sm">
-					    	<p>
-						        <span><strong>Date of Addendum</strong></span><br />
-						        <span>{{formatDateTime dateTime "YYYYMMDDHHmmssSSS" "datetime"}}</span>
-					        </p>
-					    </div>
-					    <div class="col-xs-3">
-					    	<p>
-						        <span><strong>Author</strong></span><br />
-						        <span>{{authorDisplayName}}</span>
-					        </p>
-					    </div>
-						<div class="col-xs-3">
-					    	<p>
-						        <span><strong>Status</strong></span><br />
-						        <span>{{status}}</span>
-					        </p>
-					    </div>
+					<div class="row left-padding-sm">
+				        <div class="col-xs-3">
+				        	<p>
+				    	        <span><strong>Date of Addendum:</strong></span><br />
+				    	        <span>{{formatDateTime dateTime "YYYYMMDDHHmmssSSS" "datetime"}}</span>
+				            </p>
+				        </div>
+				        <div class="col-xs-3">
+				        	<p>
+				    	        <span><strong>Author:</strong></span><br />
+				    	        <span>{{authorDisplayName}}</span>
+				            </p>
+				        </div>
+				    	<div class="col-xs-3">
+				        	<p>
+				    	        <span><strong>Status:</strong></span><br />
+				    	        <span>{{status}}</span>
+				            </p>
+				        </div>
 					</div>
 					<p class="sr-only">Addendum:</p>
 					{{#compare app "vista"}}
@@ -140,7 +142,7 @@
 								{{/if}}
 
 								<div class="col-xs-12">
-									<p class="all-margin-xs">This Unsigned addendum was created outside of eHMP. Edit the addendum in CPRS.</p>
+									<p class="all-margin-xs">This Unsigned addendum was created outside of eHMP. {{#unless noPermission}}Edit the addendum in CPRS.{{/unless}}</p>
 								</div>
 							{{/compare}}
 						</div>

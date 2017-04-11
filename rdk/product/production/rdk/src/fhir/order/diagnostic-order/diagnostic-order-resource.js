@@ -36,11 +36,12 @@ var fhirToJDSAttrMap = [{
     description: 'Code to indicate the item (test or panel) being ordered.',
     searchable: true
 }];
+conformanceUtils.addCountAttribute(fhirToJDSAttrMap); //adding the _count attribute that is common to (almost) all endpoints.
 
 // Issue call to Conformance registration
 conformance.register(conformanceUtils.domains.DIAGNOSTIC_ORDER, createDiagnosticOrderConformanceData());
 
-function createDiagnosticOrderConformanceData() {   
+function createDiagnosticOrderConformanceData() {
    var resourceType = conformanceUtils.domains.DIAGNOSTIC_ORDER;
    var profileReference = 'http://hl7.org/fhir/2015MAY/diagnosticorder.html';
    var interactions = [ 'read', 'search-type' ];
@@ -51,15 +52,21 @@ function createDiagnosticOrderConformanceData() {
 
 function getResourceConfig() {
     return [{
-        name: 'diagnostic-order-diagnostic-order',
+        name: 'fhir-order-diagnostic-order',
         path: '',
         get: getDiagnosticOrder,
         subsystems: ['patientrecord', 'jds', 'solr', 'jdsSync', 'authorization'],
-        interceptors: {
-            fhirPid: true,
-            validatePid: false
-        },
-        requiredPermissions: [],
+        interceptors: { fhirPid: true, validatePid: false },
+        requiredPermissions: ['read-fhir'],
+        isPatientCentric: true,
+        permitResponseFormat: true
+    },{
+        name: 'fhir-order-diagnostic-order-search',
+        path: '_search',
+        post: getDiagnosticOrder,
+        subsystems: ['patientrecord', 'jds', 'solr', 'jdsSync', 'authorization'],
+        interceptors: { fhirPid: true, validatePid: false },
+        requiredPermissions: ['read-fhir'],
         isPatientCentric: true,
         permitResponseFormat: true
     }];
@@ -69,13 +76,14 @@ function getResourceConfig() {
  * @api {get} /fhir/patient/{id}/diagnosticorder Get Diagnostic Order
  * @apiName getDiagnosticOrder
  * @apiGroup Diagnostic Order
+ * @apiParam {String} id The patient id
  * @apiParam {Number} [_count] The number of results to show.
  *
  * @apiDescription Converts a vpr call for radiology and laboratory orders into a FHIR \'DiagnosticOrder\' resource.
  *
  * @apiExample {js} Request Examples:
  *      // Limiting results count
- *      http://IPADDRESS:POR/resource/fhir/patient/9E7A;253/diagnosticorder?_count=1
+ *      http://IP           /resource/fhir/patient/9E7A;253/diagnosticorder?_count=1
  *
  * @apiSuccess {json} data JSON object conforming to the <a href="http://www.hl7.org/FHIR/2015May/diagnosticorder.html">Diagnostic Order FHIR DTSU2 specification</a>.
  * @apiSuccessExample Success-Response:
@@ -309,7 +317,7 @@ function validateParams(params, onSuccess, onError) {
                 onError(['Unsupported _sort criteria. Supported attributes are: ' + _.keys(diagnosticOrder.fhirToJDSMap)]);
             }
         }, onError);
-        // TODO: add validation for code param
+        // FUTURE-TODO: add validation for code param
     }, onError);
 }
 

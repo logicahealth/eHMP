@@ -48,7 +48,7 @@ define([
         },
         setPopover: function() {
             this.$('[data-toggle=popover]').popover({
-                //trigger: 'hover',
+                trigger: 'manual',
                 html: 'true',
                 container: 'body',
                 template: popoverTemplate(this.model),
@@ -78,12 +78,14 @@ define([
             }
         },
         tagName: 'ul',
+        className: 'all-padding-no',
         emptyView: Backbone.Marionette.ItemView.extend({
-            template: _.template('<div class="empty-gist-list left-padding-no"><p class="color-grey-darkest" role="gridcell">No Records Found</p></div>'),
+            template: _.template('<p class="color-grey-darkest top-padding-xs left-padding-xs" role="gridcell">No Records Found</p>'),
             attributes: {
                 "aria-live":"assertive",
                 "role":"row"
-            }
+            },
+            className: 'percent-height-100 background-color-grey-lightest'
         }),
         initialize: function(options) {
             var appletID = getAppletId(options);

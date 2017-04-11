@@ -22,7 +22,7 @@ var fhirToJDSAttrMap = [{
 // Issue call to Conformance registration
 conformance.register(confUtils.domains.MEDICATION_STATEMENT, createMedicationStatementConformanceData());
 
-function createMedicationStatementConformanceData() {   
+function createMedicationStatementConformanceData() {
    var resourceType = confUtils.domains.MEDICATION_STATEMENT;
    var profileReference = 'http://www.hl7.org/FHIR/2015May/medicationstatement.html';
    var interactions = [ 'read', 'search-type' ];
@@ -33,11 +33,21 @@ function createMedicationStatementConformanceData() {
 
 function getResourceConfig() {
     return [{
-        name: 'medicationdstatement-getMedicationStatement',
+        name: 'fhir-medication-statement',
         path: '',
         get: getMedicationStatement,
         subsystems: ['patientrecord', 'jds', 'solr', 'jdsSync', 'authorization'],
-        requiredPermissions: [],
+        interceptors: { fhirPid: true },
+        requiredPermissions: ['read-fhir'],
+        isPatientCentric: true,
+        permitResponseFormat: true
+    },{
+        name: 'fhir-medication-statement-search',
+        path: '_search',
+        post: getMedicationStatement,
+        subsystems: ['patientrecord', 'jds', 'solr', 'jdsSync', 'authorization'],
+        interceptors: { fhirPid: true },
+        requiredPermissions: ['read-fhir'],
         isPatientCentric: true,
         permitResponseFormat: true
     }];

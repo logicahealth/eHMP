@@ -48,7 +48,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "provider", namespace = "http://webservice.vds.DNS       /", propOrder = {
+@XmlType(name = "provider", namespace = "http://webservice.vds.med.DNS   /", propOrder = {
     "analogPager",
     "city",
     "classification",

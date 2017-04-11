@@ -24,8 +24,7 @@ allprojects {
   ext.set('openCDSDSSVersion', '2.1.2')
   ext.set('openCDSVMRVersion', '2.1.2')
   ext.set('javaxVersion', '2.0')
-  ext.set('slf4jVersion', '1.7.21')
-  ext.set('log4jVersion', '2.3')
+  ext.set('log4jVersion', '2.4.1')
   ext.set('junitVersion', '4.12')
   ext.set('springVersion', '4.2.5.RELEASE')
   ext.set('springSecurityVersion', '4.0.4.RELEASE')
@@ -61,5 +60,6 @@ project(':production:cdsinvocation').build.dependsOn(project(':production:cdsinv
 farm {
   webapp ':production:cdsinvocation:cds-results-service'
   webapp ':production:cdsinvocation:cds-engine-agent'
-  webapp '../opencds/opencds-parent/opencds-decision-support-service/target/opencds-decision-support-service.war'
+  //Your build must already have compiled opencds-decision-support-service.war for the below to run
+  //webapp '../opencds/opencds-parent/opencds-decision-support-service/target/opencds-decision-support-service.war'
 }

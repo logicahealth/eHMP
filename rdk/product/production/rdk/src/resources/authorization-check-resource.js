@@ -1,4 +1,3 @@
-/*jslint node: true*/
 'use strict';
 
 function getResourceConfig() {
@@ -8,10 +7,10 @@ function getResourceConfig() {
         interceptors: {
             synchronize: false
         },
-        requiredPermissions: [],
+        requiredPermissions: ['read-patient-record'],
         isPatientCentric: true,
         get: runRpc,
-        subsystems: ['jds','solr','jdsSync','authorization']
+        subsystems: ['jds', 'solr', 'jdsSync', 'authorization']
     }];
 }
 

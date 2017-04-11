@@ -93,8 +93,7 @@ function registerSyncAPI(log, config, environment, app) {
     ];
     var doDemoLoadMethods = [
         validateDemoParams,
-        idMiddleware.getJPID,
-        idMiddleware.createJPID,
+        idMiddleware.resolveJPID,
         jobMiddleware.buildJob.bind(jobMiddleware, jobFactory),
         logSyncMetrics,
         jobMiddleware.getJobHistory,

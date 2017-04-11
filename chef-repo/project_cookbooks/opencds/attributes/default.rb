@@ -28,3 +28,14 @@ default[:opencds][:deploy_cds_engine_agent][:app_name] = "cds-engine-agent"
 default[:opencds][:deploy_cds_engine_agent][:app_dir] = "#{node[:tomcat][:webapp_dir]}/#{node[:opencds][:deploy_cds_engine_agent][:app_name]}"
 default[:opencds][:deploy_cds_engine_agent][:deployed_war_file] = "#{node[:tomcat][:webapp_dir]}/#{node[:opencds][:deploy_cds_engine_agent][:app_name]}.war"
 default[:opencds][:deploy_cds_engine_agent][:downloaded_war_file] = "#{Chef::Config[:file_cache_path]}/#{node[:opencds][:deploy_cds_engine_agent][:app_name]}.war"
+
+# log rotation for juli-configured tomcat
+default[:tomcat][:logrotate][:name] = 'catalina_log'
+default[:tomcat][:logrotate][:path] = "#{node['tomcat']['log_dir']}/catalina.out"
+default[:tomcat][:logrotate][:rotate] = 7
+default[:tomcat][:logrotate][:options] = %w{missingok compress delaycompress copytruncate notifempty dateext}
+default[:tomcat][:logrotate][:frequency] = 'daily'
+default[:tomcat][:logrotate][:dateformat] = '-%Y%m%d%s'
+# Application Logging
+default['tomcat']['logging']['sizeBasedTriggeringPolicy'] = "50MB"
+default['tomcat']['logging']['defaultRolloverStrategy'] = "10"

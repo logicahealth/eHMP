@@ -221,7 +221,7 @@ describe('CDS Advice Resource', function() {
 
     describe('setReadStatus endpoint HTTP response codes', function() {
         it('responds HTTP Not Found if there is no Work Product with that id', function() {
-            sinon.stub(cdsWorkProduct, 'setReadStatus', function(id, readStatus, provider, callback) {
+            sinon.stub(cdsWorkProduct, 'setReadStatus', function(logger, id, readStatus, provider, callback) {
                 return callback(null /*body*/ , 'Work Product not found!' /*error*/ );
             });
 
@@ -233,7 +233,7 @@ describe('CDS Advice Resource', function() {
         });
 
         it('responds HTTP Bad Request when required parameters are missing', function() {
-            sinon.stub(cdsWorkProduct, 'setReadStatus', function(id, readStatus, provider, callback) {
+            sinon.stub(cdsWorkProduct, 'setReadStatus', function(logger, id, readStatus, provider, callback) {
                 return callback('Read Status updated!' /*body*/ , null /*error*/ );
             });
 

@@ -17,6 +17,34 @@ class HelperMethods
     end
   end
 
+  def click_all_objects_from_list(objects, text)
+    objects.each do |item|
+      if item.text.upcase.include? text.upcase
+        item.click if item.visible?
+      end
+    end
+  end
+
+  def click_an_element_from_elements_list_by_providing_text(row_list, element_list, text)
+    row_list.each_with_index do |item, index|
+      if item.text.upcase.include? text.upcase
+        element_list[index-1].click
+        break
+      end
+    end
+  end
+
+  def only_text_exists_in_list(objects, text)
+    objects.each do |item|
+      if item.text.upcase.include? text.upcase
+        next
+      else
+        return false
+      end
+    end
+    true
+  end
+  
   # Object existance will return true or false
   def object_exists_in_list(objects, text)
     objects.each do |item|
@@ -36,11 +64,11 @@ class HelperMethods
     true
   end
 
-  # This method will print all the text from lists, can be used only for troubleshoot purposes
+  # This method will print all the text from lists, can be used only for troubleshooting purposes
   def print_all_value_from_list_elements(objects)
     puts "Total count of the length is: #{objects.length}"
     objects.each do |item|
-      puts  item.text.upcase
+      puts  "Item text == >>> #{item.text.upcase}"
     end
   end
 
@@ -66,6 +94,66 @@ class HelperMethods
     value
   end
 
+  # Verify the Array is sorted by Ascending order
+  # How to use it?
+  # expect(ascending? objects).to be(true), "Values are not in Alphabetical Order"
+  def ascending?(objects)
+    column_values_array = []
+    objects.each do |row|
+      column_values_array << row.text.downcase
+    end
+    column_values_array == column_values_array.sort
+  end
+  
+  # this takes an array object and sorts in ascending
+  # expect(ascending_array? column_values_array).to be(true), "values are not in alphabetical order: #{column_values_array}"
+  def ascending_array?(column_values_array)
+    column_values_array == column_values_array.sort
+  end
+  
+  # this takes an array object and sorts in descending
+  # expect(descending_array? column_values_array).to be(true), "values are not in reverse alphabetical order: #{column_values_array}"
+  def descending_array?(column_values_array)
+    column_values_array == column_values_array.sort.reverse
+  end
+
+  # Verify the Array is sorted by Descending order
+  # How to use it?
+  # expect(descending? objects).to be(true), "Values are not in Alphabetical Order"
+  def descending?(objects)
+    column_values_array = []
+    objects.each do |row|
+      column_values_array << row.text.downcase
+    end
+    column_values_array == column_values_array.sort.reverse
+  end
+
+  def count_item_from_a_list(objects, word1, word2)
+    count1 = 0
+    count2 = 0
+    objects.each do |item|
+      if item.text.upcase.include? word1.upcase
+        count1 += 1
+      elsif item.text.upcase.include? word2.upcase
+        count2 += 1
+      end
+    end
+    return count1 + count2
+  end
+
+  # Defined applet_grid_loaded method: execution will wait until data has been loaded
+  # How to use it? See below:
+  # wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
+  # wait.until { applet_grid_loaded(@ehmp.has_fld_empty_row?, @ehmp.fld_expanded_applet_table_rows) }
+  # wait.until { applet_grid_loaded(@ehmp.has_fld_empty_gist?, @ehmp.fld_allergy_gist_all_pills) }
+  def applet_grid_loaded(empty_row_boolean, web_elements_row)
+    return true if empty_row_boolean
+    return web_elements_row.length > 0
+  rescue => e
+    p e
+    false
+  end
+
   def date_only?(text)
     date_format = Regexp.new("\\d{2}\/\\d{2}\/\\d{4}")
     !date_format.match(text).nil?
@@ -83,7 +171,7 @@ class HelperMethods
   end
 
   def known_facilities_monikers 
-    ['TST1', 'TST2']
+    %w(TST1 TST2 NJS)
   end
 
   def known_facilities

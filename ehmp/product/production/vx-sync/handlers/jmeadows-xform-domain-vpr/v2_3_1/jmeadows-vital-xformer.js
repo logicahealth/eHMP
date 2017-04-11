@@ -12,9 +12,12 @@ function dodVitalToVPR(record, edipi){
         return;
     }
 
+    var dateTimeTaken = moment(record.dateTimeTaken, 'x').format('YYYYMMDDHHmmss');
+
     return {
         codes: xformUtils.transformCodes(record.codes),
-        observed: moment(record.dateTimeTaken, 'x').format('YYYYMMDDHHmmss'),
+        observed: dateTimeTaken,
+        resulted: dateTimeTaken,
         typeName: record.vitalType,
         result: record.rate,
         units: record.units,

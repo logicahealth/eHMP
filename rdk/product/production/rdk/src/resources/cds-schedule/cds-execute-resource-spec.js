@@ -4,7 +4,7 @@ var cdsexecuteResource = require('./cds-execute-resource');
 var execute = require('./cds-execute');
 
 var rdk = require('../../core/rdk');
-var mongo = require('mongoskin');
+var MongoClient = require('mongodb').MongoClient;
 
 var cdsSpecUtil = require('../cds-spec-util/cds-spec-util');
 var mockReqResUtil = cdsSpecUtil.mockReqResUtil;
@@ -27,7 +27,7 @@ function createTestJson(name, scope) {
                     'entityType': 'User',
                     'codeSystem': 'VA:DUZ',
                     'name': 'USER PANORAMA',
-                    'id': '9E7A;pu1234',
+                    'id': '9E7A;PW    ',
                     'type': 'provider'
                 },
                 'location': {
@@ -128,7 +128,9 @@ describe('CDS Execute Resource', function() {
     describe('Execute endpoint HTTP response codes', function() {
 
         beforeEach(function() {
-            sinon.stub(mongo, 'db').returns(db);
+            sinon.stub(MongoClient, 'connect', function(string, options, callback) {
+                callback(null, db);
+            });
             execute.init(appReference());
         });
 

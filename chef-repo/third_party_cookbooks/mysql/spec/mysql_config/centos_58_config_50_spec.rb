@@ -31,7 +31,7 @@ describe 'mysql_config_test::default' do
 
     it 'creates user[hello :create mysql]' do
       expect(centos_58_config_50).to create_user('hello :create mysql')
-        .with(username: 'mysql')
+        .with(username       mysql')
     end
 
     it 'creates directory[hello :create /etc/mysql-default/conf.d]' do
@@ -62,7 +62,7 @@ describe 'mysql_config_test::default' do
 
     it 'creates user[hello_again :create mysql]' do
       expect(centos_58_config_50).to create_user('hello_again :create mysql')
-        .with(username: 'mysql')
+        .with(username       mysql')
     end
 
     it 'creates directory[hello_again :create /etc/mysql-foo/conf.d]' do

@@ -17,18 +17,20 @@ class PobImmunizationsApplet < PobParentApplet
   element :fld_vis_date_input, "#visDateOffered"
   element :fld_comments, "#comments"
   element :fld_administered_date_input, "#administrationDateHistorical"
+  element :fld_immunization_results, "#select2-immunizationType-results"
  
   elements :fld_immunization_gist, "[data-appletid=immunizations] .grid-container [data-infobutton-class=info-button-pill]"
   
   
 
   # *****************  All_Button_Elements  ******************* #
-  element :btn_addBtn , ".addBtn"
-  element :btn_next, '#immunizationsNext'
-  element :btn_previous, '#immunizationsPrevious'
+  element :btn_addBtn , ".addBtn [type='submit']"
+  element :btn_next, '#toNext'
+  element :btn_previous, '#toPrevious'
 
   # *****************  All_Drop_down_Elements  ******************* #
   element :ddl_immunization_type, "[x-is-labelledby='select2-immunizationType-container']"
+  element :ddl_ordered_by, "[x-is-labelledby='select2-orderedByAdministered-container']"
   element :ddl_lot_number, "#lotNumberAdministered"
   element :ddl_route_of_administration, "#routeOfAdministration"
   element :ddl_anatomic_location, "#anatomicLocation"
@@ -46,6 +48,8 @@ class PobImmunizationsApplet < PobParentApplet
   element :tbl_modal_body_immunization_table, "#data-grid-immunizations-modalView"
   elements :tbl_summary_imm_names, "[data-appletid='immunizations'] table tbody tr.selectable td:first-of-type"
   elements :tbl_summary_imm_screenreader_text, "[data-appletid='immunizations'] table tbody tr.selectable td:first-of-type span"
+  elements :tbl_immunization_headers, "table[id='data-grid-immunizations'] th a"
+  elements :tbl_immunization_headers_screenreadertext, "table[id='data-grid-immunizations'] th span"
 
   # **************** Gist Elements ************************** #
   elements :fld_pills, '[data-appletid=immunizations] [data-infobutton-class=info-button-pill]'
@@ -59,6 +63,7 @@ class PobImmunizationsApplet < PobParentApplet
     add_empty_table_row appletid_css
     add_generic_error_message appletid_css
     add_empty_gist appletid_css
+    add_expanded_applet_fields appletid_css
     add_toolbar_buttons
   end
   
@@ -101,5 +106,17 @@ class PobImmunizationsApplet < PobParentApplet
       names_only.push(name.strip)
     end
     names_only
+  end
+
+  def immunization_table_headers
+    # current header format
+    # <a> HEADER TEXT <b><span.sr-only></span></b><span.sr-only></span></a>
+    # so cut off header text at <b>
+    header_only = []
+    tbl_immunization_headers.each_with_index do | header, index |
+      header_sections = header.native.attribute('innerHTML').split("<b")
+      header_only.push(header_sections[0])
+    end
+    header_only
   end
 end

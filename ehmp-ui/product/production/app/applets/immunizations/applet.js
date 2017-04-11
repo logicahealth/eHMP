@@ -5,12 +5,12 @@ define([
     'app/applets/immunizations/util',
     'app/applets/immunizations/modal/modalView',
     'app/applets/immunizations/writeback/addImmunization',
+    'app/applets/immunizations/writeback/loadWorkflow',
     'app/applets/visit/writeback/addselectVisit',
-    "app/applets/immunizations/modal/modalHeaderView",
     "app/applets/immunizations/appConfig",
     "app/applets/immunizations/gistUtil",
     "hbs!app/applets/immunizations/templates/tooltip"
-], function(Backbone, Marionette, Handlebars, Util, ModalView, AddImmunizationView, addselectEncounter, modalHeader, CONFIG, gUtil, tooltip) {
+], function(Backbone, Marionette, Handlebars, Util, ModalView, AddImmunizationView, LoadWorkflowView, addselectEncounter, CONFIG, gUtil, tooltip) {
 
     'use strict';
     // Switch ON/OFF debug info
@@ -33,9 +33,9 @@ define([
     var summaryColumns = [{
         name: 'name',
         label: 'Vaccine Name',
-        flexWidth: 'flex-width-3',
+        flexWidth: 'flex-width-2',
         cell: Backgrid.StringCell.extend({
-            className: 'string-cell flex-width-3'
+            className: 'string-cell flex-width-2'
         }),
         hoverTip: 'immunizations_vaccinename'
     }, {
@@ -65,9 +65,6 @@ define([
                 '{{#if commentBubble}}',
                 '<i class="fa fa-comment"></i>',
                 '<span class="sr-only">Comments</span>',
-                '{{else}}',
-                '<i class="fa fa-transparent-comment"></i>',
-                '<span class="sr-only">No Comments</span>',
                 '{{/if}}'
             ].join("\n"))
         }]);
@@ -103,7 +100,7 @@ define([
             className: 'string-cell flex-width-3'
         })
     }));
-        
+
     var PanelModel = Backbone.Model.extend({
         defaults: {
             type: 'panel'
@@ -134,7 +131,7 @@ define([
             // parse model
             for (i = 0; i < shallowCollection.length; i++) {
                 // model parsing
-                collection.at(i).set({
+                shallowCollection.at(i).set({
                     administeredFormatted: shallowCollection.at(i).get("administeredFormatted"),
                     timeSince: shallowCollection.at(i).get("timeSinceDate"),
                     isReaction: gUtil.isReaction(shallowCollection.at(i).get("reactionName")),
@@ -218,6 +215,7 @@ define([
     };
 
     function setupAddHandler(options) {
+        channel.off('addItem');
         if (ADK.UserService.hasPermission('add-immunization') && ADK.PatientRecordService.isPatientInPrimaryVista()) {
             // handles applet add (+)
             options.onClickAdd = function(e) {
@@ -230,8 +228,6 @@ define([
                     triggerAddImmunization(channelObj);
                 });
             }
-        } else {
-            channel.off('addItem');
         }
     }
 
@@ -241,6 +237,7 @@ define([
             if (DEBUG) console.log("Immunizations initialization ----->>");
             this._super = ADK.Applets.BaseGridApplet.prototype;
             var dataGridOptions = {};
+            dataGridOptions.filterFields = _.pluck(fullScreenColumns, 'name');
             if (this.columnsViewType === "expanded") {
                 dataGridOptions.columns = fullScreenColumns;
             } else if (this.columnsViewType === "summary") {
@@ -295,31 +292,7 @@ define([
                     gridView.expandRow(model, event);
                 } else {
                     model.set('isNotAPanel', true);
-                    var view = new ModalView({
-                        model: model,
-                        target: event.currentTarget,
-                        navHeader: true,
-                        gridCollection: dataGridOptions.collection
-                    });
-
-                    view.resetSharedModalDateRangeOptions();
-
-                    var modalOptions = {
-                        'title': Util.getModalTitle(model),
-                        'size': 'xlarge',
-                        'headerView': modalHeader.extend({
-                            model: model,
-                            theView: view
-                        })
-                    };
-
-                    var modal = new ADK.UI.Modal({
-                        view: view,
-                        options: modalOptions
-                    });
-                    modal.show();
-
-
+                    getDetailsModal(model);
                 }
             };
 
@@ -352,40 +325,41 @@ define([
         },
         onRender: function() {
             this._super.onRender.apply(this, arguments);
-        },
-        onBeforeDestroy: function() {
-            channel.off('addItem');
         }
-
     });
+
+    var getDetailsModal = function(model, collection) {
+        var view = new ModalView({
+            model: model,
+            navHeader: true,
+            gridCollection: collection || model.collection
+        });
+
+        view.resetSharedModalDateRangeOptions();
+
+        var modalOptions = {
+            'title': Util.getModalTitle(model),
+            'size': 'xlarge',
+            'nextPreviousCollection': collection || model.collection
+        };
+
+        var modal = new ADK.UI.Modal({
+            view: view,
+            options: modalOptions,
+            callbackFunction: getDetailsModal
+        });
+        modal.show();
+    };
+
     // expose gist detail view through messaging
     var channel = ADK.Messaging.getChannel('immunizations');
 
 
     channel.on('detailView', function(params) {
         if (DEBUG) console.log("Immunizations gistDetailView ----->>");
-        var view = new ModalView({
-            model: params.model,
-            navHeader: true,
-            gridCollection: params.collection || params.model.collection
-        });
-
-        view.resetSharedModalDateRangeOptions();
-
-        var modalOptions = {
-            'title': Util.getModalTitle(params.model),
-            'size': 'xlarge',
-            'headerView': modalHeader.extend({
-                model: params.model,
-                theView: view
-            })
-        };
-        var modal = new ADK.UI.Modal({
-            view: view,
-            options: modalOptions
-        });
-        modal.show();
+        getDetailsModal(params.model, params.collection);
     });
+
     // expose detail view through messaging
     channel.reply('detailView', function(params) {
 
@@ -398,21 +372,20 @@ define([
             viewModel: viewParseModel
         };
 
-        var response = $.Deferred();
+        var gridCollection = params.collection || params.model.collection;
+        if(params.model) params.model.set('name', params.model.get('summary'));
 
-        var data = ADK.PatientRecordService.fetchCollection(fetchOptions);
-        data.on('sync', function() {
-            var detailModel = data.first();
-            response.resolve({
-                view: new ModalView({
-                    model: detailModel,
-                    navHeader: false
-                }),
-                title: Util.getModalTitle(detailModel)
-            });
-        }, this);
-
-        return response.promise();
+        return {
+            view: ModalView.extend({
+                model: new Backbone.Model(_.get(params, 'model.attributes')),
+                navHeader: false,
+                modelCollection: ADK.PatientRecordService.createEmptyCollection(fetchOptions),
+                gridCollection: gridCollection
+            }),
+            title: function() {
+                return Util.getModalTitle(this.model || this.view.prototype.model);
+            },
+        };
     });
 
     var GistView = ADK.AppletViews.PillsGistView.extend({
@@ -427,7 +400,7 @@ define([
             }
 
             this.appletOptions = {
-                filterFields: ["name"],
+                filterFields: _.pluck(fullScreenColumns, 'name'),
                 collectionParser: gistConfiguration.transformCollection,
                 gistModel: gistConfiguration.gistModel,
                 collection: ADK.PatientRecordService.fetchCollection(_fetchOptions),
@@ -444,24 +417,16 @@ define([
             });
 
             this._super.initialize.apply(this, arguments);
-        },
-        onBeforeDestroy: function() {
-            channel.off('addItem');
         }
     });
 
     function triggerAddImmunization(channelObj) {
         var workflowOptions = {
-            size: "xlarge",
             title: "Enter Immunization",
             showProgress: false,
             keyboard: false,
             steps: []
         };
-
-        ADK.utils.writebackUtils.handleVisitWorkflow(workflowOptions, addselectEncounter.extend({
-            inTray: true
-        }));
 
         var formModel = new Backbone.Model();
 
@@ -469,10 +434,11 @@ define([
             formModel = channelObj.model;
 
         workflowOptions.steps.push({
-            view: AddImmunizationView,
+            view: LoadWorkflowView,
             viewModel: formModel,
-            stepTitle: 'Step 2'
+            stepTitle: 'Load Workflow',
         });
+
         var workflowView = new ADK.UI.Workflow(workflowOptions);
         workflowView.show({
             inTray: 'observations'

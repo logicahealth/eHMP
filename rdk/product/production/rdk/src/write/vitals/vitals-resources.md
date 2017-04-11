@@ -17,8 +17,9 @@ Add one or more new vitals for a patient in a single Vista
 
             {
                 "dateTime": "ssss",
-                "localIEN": "ssss",
+                "dfn":"sss",
                 "enterdByIEN": "ssss",
+                "locationUid":"sss",
                 "vitals": []
             }
 
@@ -29,18 +30,23 @@ Add one or more new vitals for a patient in a single Vista
                 "type": "object",
                 "required": [
                     "dateTime",
+                    "dfn",
                     "enterdByIEN",
-                    "localIEN",
-                    "vitals"
+                    "vitals",
+                    "locationUid"
                 ],
                 "properties": {
                     "dateTime": {
                         "type": "string",
                         "description": "date/time vitals entered in yyyymmddHHMM format"
                     },
-                    "localIEN": {
+                    "dfn": {
                         "type": "string",
-                        "description": "IEN of clinic location where vitals where taken"
+                        "description": "patient dfn"
+                    },
+                    "locationUid": {
+                        "type": "string",
+                        "description": "UID of clinic location where vitals where taken"
                     },
                     "enterdByIEN": {
                         "type": "string",

@@ -1,48 +1,61 @@
-<div class="top-padding-md left-padding-md right-padding-md row">
-	<div class="col-xs-2 bold-font left-padding-no">Prerequisites</div>
-	<div class="col-xs-2 col-xs-offset-8 text-right">{{prerequisites.totalMet}} of {{prerequisites.totalCount}} met</div>
-	<hr />
-
-	<table class="table ehmp-table-default table-bordered">
-		<caption class="sr-only">This table represents data for consult questions, responses and if the prerequisite was met</caption>
-		<thead>
-			<tr class="color-primary bold-font">
-				<th scope="col">Questions</th>
-				<th scope="col">Response</th>
-				<th scope="col">Met</th>
-			</tr>
-		</thead>
-		<tbody>
-		{{#each prerequisites.questions}}
-			<tr>
-				<td>{{text}}</td>
-				<td>{{response}}</td>
-				<td>{{#if met}}<i class="fa fa-check fa-lg color-primary"></i>{{/if}}</td>
-			</tr>
-		{{/each}}
-		</tbody>
-	</table>
-
-	<table class="table ehmp-table-default table-bordered top-margin-lg">
-		<caption class="sr-only">This table represents data for orders/results, status and if the order/result was met</caption>
-		<thead>
-			<tr class="color-primary bold-font">
-				<th scope="col">Orders/Results</th>
-				<th scope="col">Status</th>
-				<th scope="col">Met</th>
-			</tr>
-		</thead>
-		<tbody>
-		{{#each prerequisites.orderResults}}
-			<tr>
-				<td>{{text}}</td>
-				<td>{{status}}</td>
-				<td>{{#if met}}<i class="fa fa-check fa-lg color-primary"></i>{{/if}}</td>
-			</tr>
-		{{/each}}
-		</tbody>
-	</table>
-
-	<div class="font-bold top-margin-md">Override Comment</div>
-	<p>{{prerequisites.overrideComment}}</p>
+<div class="col-xs-12">
+    <div class="col-xs-2 left-padding-no">
+        <h5 class="all-margin-no all-padding-no">Prerequisites</h5>
+    </div>
+    <div class="col-xs-10 all-padding-no text-right">{{consultOrder.totalMet}} of {{consultOrder.totalCount}} met</div>
+    <hr aria-hidden="true" />
+    <table class="table ehmp-table-default table-bordered">
+        <caption class="sr-only">This table represents data for consult questions, responses and if the prerequisite was met</caption>
+        <thead>
+            <tr class="color-primary bold-font">
+                <th scope="col" class="percent-width-45">Questions</th>
+                <th scope="col" class="percent-width-50">Response</th>
+                <th scope="col" class="percent-width-5">Met</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#if consultOrder.enablePrerequisiteQuestions}}
+                {{#each consultOrder.prerequisiteQuestions}}
+                <tr>
+                    <td class="percent-width-45">{{label}}</td>
+                    <td class="percent-width-50">{{value}}</td>
+                    <td class="percent-width-5">{{#if met}}<i class="fa fa-check fa-lg color-secondary left-padding-xs"></i>{{/if}}</td>
+                </tr>
+                {{/each}}
+            {{else}}
+                <tr>
+                    <td colspan="3">N/A</td>
+                </tr>
+            {{/if}}
+        </tbody>
+    </table>
+    <table class="table ehmp-table-default table-bordered top-margin-lg">
+        <caption class="sr-only">This table represents data for orders/results, status and if the order/result was met</caption>
+        <thead>
+            <tr class="color-primary bold-font">
+                <th scope="col" class="percent-width-45">Orders/Results</th>
+                <th scope="col" class="percent-width-50">Status</th>
+                <th scope="col" class="percent-width-5">Met</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#if consultOrder.enablePrerequisiteOrders}}
+                {{#each consultOrder.prerequisiteOrders}}
+                <tr>
+                    <td class="percent-width-45">{{label}}</td>
+                    <td class="percent-width-50">{{value}}</td>
+                    <td class="percent-width-5">{{#if met}}<i class="fa fa-check fa-lg color-secondary left-padding-xs"></i>{{/if}}</td>
+                </tr>
+                {{/each}}
+            {{else}}
+                <tr>
+                    <td colspan="3">N/A</td>
+                </tr>
+            {{/if}}
+        </tbody>
+    </table>
+    <h5 class="bottom-border-grey-light top-margin-lg">Comment on prerequisites met by external data</h5>
+    <p>{{#if consultOrder.orderResultComment}}{{consultOrder.orderResultComment}}{{else}}N/A{{/if}}</p>
+    <h5 class="bottom-border-grey-light top-margin-lg">Comment on prerequisites overridden</h5>
+    <p>{{#if consultOrder.overrideReason}}{{consultOrder.overrideReason}}{{else}}N/A{{/if}}</p>
 </div>

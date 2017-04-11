@@ -24,24 +24,19 @@
  */
 package com.cognitive.cds.invocation.mongo;
 
-import com.cognitive.cds.invocation.util.JsonUtils;
-import com.cognitive.cds.invocation.workproduct.model.WorkProduct;
-import com.cognitive.cds.invocation.workproduct.model.WorkProductSubscription;
-import com.cognitive.cds.invocation.workproduct.model.WorkProductWrapper;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.MongoClient;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
-import com.mongodb.client.result.DeleteResult;
-
 import java.io.IOException;
 
 import org.bson.Document;
 import org.bson.types.ObjectId;
+
+import com.cognitive.cds.invocation.mongo.exception.CDSDBConnectionException;
+import com.cognitive.cds.invocation.util.JsonUtils;
+import com.cognitive.cds.invocation.workproduct.model.WorkProductSubscription;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.mongodb.BasicDBObject;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.result.DeleteResult;
 
 /**
  *
@@ -51,7 +46,6 @@ public class WorkProductSubscriptionDao {
 
     private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(EngineInfoDao.class);
 
-    private boolean cacheWorkProducts;
     private MongoDbDao mongoDbDao;
 
     public MongoDbDao getMongoDbDao() {
@@ -71,8 +65,14 @@ public class WorkProductSubscriptionDao {
     public WorkProductSubscription getWorkProductSubscription(String user) {
         WorkProductSubscription wps = null;
 
-        mongoDbDao.setDatabase("work");
-        MongoCollection<Document> collection = mongoDbDao.getCollection("subscriptions");
+        MongoDatabase database = null;
+		try {
+			database = mongoDbDao.getMongoClient().getDatabase("work");
+		} catch (CDSDBConnectionException e1) {
+            logger.error("========> mongoDbDao.getMongoClient().getDatabase: " + e1.toString(),e1);
+            return wps;
+		}
+        MongoCollection<Document> collection = database.getCollection("subscriptions");
         logger.info("Subscription Count: " + collection.count()); // max of one
                                                                   // per user...
         Document filter = new Document();
@@ -83,7 +83,7 @@ public class WorkProductSubscriptionDao {
                 String json = obj.toJson();
                 wps = (WorkProductSubscription) JsonUtils.getMapper().readValue(json, WorkProductSubscription.class);
             } catch (IOException e) {
-                logger.error("========> Deserialize: " + e.toString());
+                logger.error("========> Deserialize: " + e.toString(),e);
             }
         } // else {
           // return defaulted response, or simply return null, which means
@@ -93,39 +93,39 @@ public class WorkProductSubscriptionDao {
     }
 
     public String insertWorkProductSubscription(WorkProductSubscription wps) throws JsonProcessingException {
-
-        mongoDbDao.setDatabase("work");
-        ObjectMapper mapper = new ObjectMapper();
-
         try {
+            MongoDatabase database = mongoDbDao.getMongoClient().getDatabase("work");
             ObjectId id = new ObjectId();
             String objectJson = JsonUtils.getMapper().writeValueAsString(wps);
             Document doc = Document.parse(objectJson);
             doc.put("_id", new ObjectId(id.toHexString()));
-            mongoDbDao.getCollection("subscriptions").insertOne(doc);
+            database.getCollection("subscriptions").insertOne(doc);
 
             return id.toHexString();
 
         } catch (Exception e) {
-            logger.error("=======> WorkProductSubscription Insert Exception: " + e.toString());
+            logger.error("=======> WorkProductSubscription Insert Exception: " + e.toString(),e);
         }
 
         return null;
     }
 
     public String deleteWorkProductSubscription(WorkProductSubscription wps) throws JsonProcessingException {
+    	DeleteResult result = DeleteResult.unacknowledged();
+    	
+    	try {
+    		MongoDatabase database = mongoDbDao.getMongoClient().getDatabase("work");
+    		MongoCollection<Document> collection = database.getCollection("subscriptions");
 
-        mongoDbDao.setDatabase("work");
-        MongoClient mongo = mongoDbDao.getMongoClient();
-        MongoDatabase db = mongo.getDatabase("work");
-        MongoCollection<Document> collection = db.getCollection("subscriptions");
+    		BasicDBObject query = new BasicDBObject();
+    		query.append("user", wps.getUser());
 
-        BasicDBObject query = new BasicDBObject();
-        query.append("user", wps.getUser());
+    		result = collection.deleteOne(query);
+    	} catch (CDSDBConnectionException e) {
+            logger.error("=======> WorkProductSubscription Delete Exception: " + e.toString(),e);
+    	}
 
-        DeleteResult result = collection.deleteOne(query);
-
-        return result.toString();
+    	return result.toString();
     }
 
 }

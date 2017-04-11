@@ -7,6 +7,12 @@ define([
     "use strict";
 
     var layoutView = Backbone.Marionette.LayoutView.extend({
+        behaviors: {
+            ZIndex: {
+                eventString: 'show.bs.dropdown',
+                cleanupEventString : 'hidden.bs.dropdown'
+            }
+        },
         template: Template,
         className: "navbar-fixed-top",
         regions: {

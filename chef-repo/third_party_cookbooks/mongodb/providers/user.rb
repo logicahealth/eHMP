@@ -12,7 +12,7 @@ def add_user(username, password, roles = [], database)
 
   # Check if user is admin / admin, and warn that this should
   # be overridden to unique values
-  if VsID        'admin' && VsID        'admin'
+  if username == 'admin' && password == 'admin'
     Chef::Log.warn('Default username / password detected for admin user');
     Chef::Log.warn('These should be overridden to different, unique values');
   end
@@ -59,11 +59,13 @@ def retrieve_db
   require 'rubygems'
   require 'mongo'
 
+# :ssl => node[:mongodb][:mongo_client_ssl] <--- That's a modification of a third party cookbook
   Mongo::MongoClient.new(
     @new_resource.connection['host'],
     @new_resource.connection['port'],
     :connect_timeout => 15,
-    :slave_ok => true
+    :slave_ok => true,
+    :ssl => node[:mongodb][:mongo_client_ssl]
   )
 end
 

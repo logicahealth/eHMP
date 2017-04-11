@@ -10,7 +10,7 @@
 
     + use (string, required) - Rules invocation context
 
-    + readStatus (boolean, optional) - Read status flag
+    + readStatus (string, optional) - Read status flag
 
 
 + Response 200 (application/json)
@@ -61,11 +61,9 @@ Sets the 'read' status of an assigned work product in the database.
 
 + Parameters
 
-    :[pid]({{{common}}}/parameters/pid.md)
-
     + id (string, required) - Work product ID
 
-    + value (boolean, required) - Read status of the work product
+    + value (string, required) - Read status of the work product
 
 
 + Response 200 (application/json)

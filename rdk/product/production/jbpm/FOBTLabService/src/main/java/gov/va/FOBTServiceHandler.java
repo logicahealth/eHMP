@@ -5,7 +5,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.URISyntaxException;
+import java.net.URI;
+import java.net.URL;
+import java.security.CodeSource;
+import java.security.ProtectionDomain;
 import java.util.Collection;
 //import java.io.InputStream;
 import java.util.HashMap;
@@ -19,12 +22,12 @@ import org.kie.api.runtime.process.WorkItemHandler;
 import org.kie.api.runtime.process.WorkItemManager;
 import org.kie.internal.runtime.Cacheable;
 import org.kie.internal.runtime.Closeable;
-import org.springframework.http.client.SimpleClientHttpRequestFactory;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.HttpEntity;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
@@ -35,8 +38,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * This code will eventually be merged into EhmpServices.  There is a class in there called RdkResourceUtil
  * that this class will eventually be replaced with.  It is more generic and provides better error handling.
  */
-public class FOBTServiceHandler implements WorkItemHandler, Closeable,
-		Cacheable {
+public class FOBTServiceHandler implements WorkItemHandler, Closeable, Cacheable {
 
 	public FOBTServiceHandler() {
 	}
@@ -62,7 +64,7 @@ public class FOBTServiceHandler implements WorkItemHandler, Closeable,
 	}
 
 	protected static void setSessionId(String sid) {
-		System.out.println("SessionId was set to " + sid);
+		FOBTLogging.debug("SessionId was set to " + sid);
 		sessionId = sid;
 	}
 
@@ -71,7 +73,7 @@ public class FOBTServiceHandler implements WorkItemHandler, Closeable,
 	}
 
 	protected static void setJwt(String jwtToSet) {
-		System.out.println("JWT was set to " + jwtToSet);
+		FOBTLogging.debug("JWT was set to " + jwtToSet);
 		jwt = jwtToSet;
 	}
 
@@ -81,29 +83,25 @@ public class FOBTServiceHandler implements WorkItemHandler, Closeable,
 		return headers;
 	}
 
-	protected Boolean establishSession() {
+	protected Boolean establishSession() throws FOBTException {
 		String resourceUrl = getRDKurl() + authenticationResource;
 		try {
-			HttpEntity<String> request = new HttpEntity<String>(
-					getJbpmAuthenticationHeader());
-			ResponseEntity<String> result = getRestTemplate().exchange(
-					resourceUrl, HttpMethod.POST, request, String.class);
+			HttpEntity<String> request = new HttpEntity<String>(getJbpmAuthenticationHeader());
+			ResponseEntity<String> result = getRestTemplate().exchange(resourceUrl, HttpMethod.POST, request, String.class);
 			HttpStatus resultStatus = result.getStatusCode();
 			if (resultStatus.is2xxSuccessful()) {
-				Collection<String> cookies = result.getHeaders().get(
-						"Set-Cookie");
+				Collection<String> cookies = result.getHeaders().get("Set-Cookie");
 
 				Boolean success = false;
 
 				for (String cookie : cookies) {
-					// System.out.println(cookie);
+					// FOBTLogging.debug(cookie);
 					if (cookie.contains(RDK_SESSION_COOKIE_ID)) {
 						String[] cookieCrumbles = cookie.split(";");
 						if (cookieCrumbles.length > 0) {
 							for (String crumble : cookieCrumbles) {
 								if (crumble.contains(RDK_SESSION_COOKIE_ID)) {
-									String[] sessionIdParts = crumble.split(
-											"=", 2);
+									String[] sessionIdParts = crumble.split("=", 2);
 									if (sessionIdParts.length > 0) {
 										rdkSessionCookieId = sessionIdParts[0];
 										setSessionId(sessionIdParts[1]);
@@ -126,9 +124,9 @@ public class FOBTServiceHandler implements WorkItemHandler, Closeable,
 
 			}
 		} catch (RestClientException rce) {
-			rce.printStackTrace();
+			throw new FOBTException("FOBTServiceHandler.establishSession: rest client exception: " + rce.getMessage(), rce);
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new FOBTException("FOBTServiceHandler.establishSession: An unexpected condition has happened: " + e.getMessage(), e);
 		}
 
 		setSessionId(null);
@@ -142,8 +140,7 @@ public class FOBTServiceHandler implements WorkItemHandler, Closeable,
 	 * @return a new restTemplate
 	 */
 	protected static RestTemplate getRestTemplate() {
-		RestTemplate restTemplate = new RestTemplate(
-				new SimpleClientHttpRequestFactory());
+		RestTemplate restTemplate = new RestTemplate(new SimpleClientHttpRequestFactory());
 		return restTemplate;
 	}
 
@@ -153,8 +150,7 @@ public class FOBTServiceHandler implements WorkItemHandler, Closeable,
 	 * @return the RDK url string
 	 */
 	protected static String getRDKurl() {
-
-		System.out.println("getRDKurl");
+		FOBTLogging.debug("getRDKurl");
 
 		String rdkResourceEndpoint = "";
 		Properties prop = new Properties();
@@ -164,41 +160,72 @@ public class FOBTServiceHandler implements WorkItemHandler, Closeable,
 		FileInputStream file = null;
 
 		try {
-			tempFile = new File(FOBTServiceHandler.class.getProtectionDomain()
-					.getCodeSource().getLocation().toURI().getPath());
+			tempFile = new File(getFOBTPath());
 			propertiesPath = tempFile.getParent();
 
 			try {
-				file = new FileInputStream(propertiesPath
-						+ "/rdkconfig.properties");
+				file = new FileInputStream(propertiesPath + "/rdkconfig.properties");
 			} catch (FileNotFoundException e) {
 				// if the properties file not found where the jar is, look for
 				// it in the project file
 				propertiesPath = tempFile.getParentFile().getParent();
-				file = new FileInputStream(propertiesPath
-						+ "/rdkconfig.properties");
+				file = new FileInputStream(propertiesPath + "/rdkconfig.properties");
 			}
-			System.out.println("RDK properties path: " + propertiesPath);
+			FOBTLogging.debug("RDK properties path: " + propertiesPath);
 			prop.load(file);
 			rdkResourceEndpoint = prop.getProperty("RDK-Protocol") + "://"
 					+ prop.getProperty("RDK-IP") + ":"
 					+ prop.getProperty("RDK-Port") + "/";
-			System.out.println("RDK URL: " + rdkResourceEndpoint);
-			file.close();
-		} catch (URISyntaxException e2) {
-			e2.printStackTrace();
-		} catch (FileNotFoundException e1) {
-			e1.printStackTrace();
+			FOBTLogging.debug("RDK URL: " + rdkResourceEndpoint);
+		} catch (FileNotFoundException e) {
+			FOBTLogging.error("FOBTServiceHandler.getRDKurl: File was not found: " + e.getMessage());
 		} catch (IOException e) {
-			e.printStackTrace();
+			FOBTLogging.error("FOBTServiceHandler.getRDKurl: An unexpected condition has happened with IO: " + e.getMessage());
+		} catch (FOBTException e) {
+			//Error was already logged
+		} catch (Exception e) {
+			FOBTLogging.error("FOBTServiceHandler.getRDKurl: An unexpected condition has happened: " + e.getMessage());
+		}
+		
+		finally {
+			if (file != null) {
+				try {
+					file.close();
+				} catch (IOException e) {
+					FOBTLogging.info("FOBTServiceHandler.getRDKurl: Problem closing file handle: " + e.getMessage());
+				}
+			}
 		}
 
 		return rdkResourceEndpoint;
 	}
 
-	protected String getRdkResponse(String resourceUrl, boolean isRetry) {
+	private static String getFOBTPath() throws FOBTException {
+		ProtectionDomain protectionDomain = FOBTServiceHandler.class.getProtectionDomain();
+		if (protectionDomain == null)
+			throw new FOBTException("FOBTServiceHandler.getFOBTPath: protectionDomain cannot be null");
+		CodeSource codeSource = protectionDomain.getCodeSource();
+		if (codeSource == null)
+			throw new FOBTException("FOBTServiceHandler.getFOBTPath: codeSource cannot be null");
+		URL location = codeSource.getLocation();
+		if (location == null)
+			throw new FOBTException("FOBTServiceHandler.getFOBTPath: location cannot be null");
+		URI uri;
+		try {
+			uri = location.toURI();
+		} catch (Exception e) {
+			throw new FOBTException("FOBTServiceHandler.getFOBTPath: uri was invalid: " + e.getMessage(), e);
+		}
+		if (uri == null)
+			throw new FOBTException("FOBTServiceHandler.getFOBTPath: uri cannot be null");
+		String path = uri.getPath();
+		if (path == null)
+			throw new FOBTException("FOBTServiceHandler.getFOBTPath: path cannot be null");
+		return path;
+	}
 
-		System.out.println("getRdkResponse" + (isRetry ? " (retry): " : ": ") + resourceUrl);
+	protected String getRdkResponse(String resourceUrl, boolean isRetry) throws FOBTException {
+		FOBTLogging.debug("getRdkResponse" + (isRetry ? " (retry): " : ": ") + resourceUrl);
 
 		String response = new String();
 
@@ -219,12 +246,11 @@ public class FOBTServiceHandler implements WorkItemHandler, Closeable,
 			headers.set("Cookie", rdkSessionCookieId.concat("=").concat(getSessionId()));
 			headers.set("Authorization", rdkJwtPrepend.concat(getJwt()));
 			HttpEntity<String> request = new HttpEntity<String>(headers);
-			result = getRestTemplate().exchange(resourceUrl, HttpMethod.GET,
-					request, String.class);
+			result = getRestTemplate().exchange(resourceUrl, HttpMethod.GET, request, String.class);
 			resultStatus = result.getStatusCode();
 			if (resultStatus.is2xxSuccessful()) {
 				response = result.getBody();
-				System.out.println(response);
+				FOBTLogging.debug(response);
 			}
 		} catch (HttpClientErrorException hce) {
 			resultStatus = hce.getStatusCode();
@@ -236,16 +262,15 @@ public class FOBTServiceHandler implements WorkItemHandler, Closeable,
 				if (!isRetry) {
 					setSessionId(null);
 					setJwt(null);
-					System.out.println("getRdkResponse received an Unauthorized status, going to establish a new session and invoke again");
+					FOBTLogging.debug("getRdkResponse received an Unauthorized status, going to establish a new session and invoke again");
 					return getRdkResponse(resourceUrl, true);
 				}
 			} else {
 				String messageBody = hce.getResponseBodyAsString();
-				System.out.println("ERROR: " + messageBody);
-				hce.printStackTrace();
+				throw new FOBTException("FOBTServiceHandler.getRdkResponse: ERROR: " + messageBody);
 			}
 		} catch (RestClientException rce) {
-			rce.printStackTrace();
+			throw new FOBTException("FOBTServiceHandler.getRdkResponse: problem with rest: " + rce.getMessage(), rce);
 		}
 		return response;
 	}
@@ -256,57 +281,46 @@ public class FOBTServiceHandler implements WorkItemHandler, Closeable,
 	 * @return a string
 	 */
 	public String pollJDSResults(String pid, String orderId) {
-
-		System.out.println("pollJDSResults");
-
-		if((orderId != null) && (orderId.trim().length() > 0)) {
-			queryString = queryString.concat("&orderId=").concat(orderId);
-		}
-
-		String resourceUrl = getRDKurl().concat(
-				labResultResource.replace("{pid}", pid)).concat(queryString);
-
-		LabFHIRResult labResults = null;
-		int recordCount = 0;
+		FOBTLogging.debug("pollJDSResults");
 		String returnString = "No Lab Results";
-		String response = getRdkResponse(resourceUrl, false);
-
+		
 		try {
+			if ((orderId != null) && (orderId.trim().length() > 0)) {
+				queryString = queryString.concat("&orderId=").concat(orderId);
+			}
+	
+			String resourceUrl = getRDKurl().concat(labResultResource.replace("{pid}", pid)).concat(queryString);
+	
+			LabFHIRResult labResults = null;
+			int recordCount = 0;
+			String response = getRdkResponse(resourceUrl, false);
+
 			if (response.indexOf("error") == -1) {
 
 				ObjectMapper mapper = new ObjectMapper();
 				labResults = mapper.readValue(response, LabFHIRResult.class);
-
 				recordCount = labResults.getTotal();
 
 				if (recordCount > 0) {
-
-					String type = labResults.getEntry().get(0).getResource()
-							.getResourceType();
-					String status = labResults.getEntry().get(0).getResource()
-							.getStatus();
-					if (type.equalsIgnoreCase("DiagnosticReport")
-							&& status.equalsIgnoreCase("final")) {
-
+					String type = labResults.getEntry().get(0).getResource().getResourceType();
+					String status = labResults.getEntry().get(0).getResource().getStatus();
+					if (type.equalsIgnoreCase("DiagnosticReport") && status.equalsIgnoreCase("final")) {
 						// check to confirm this is a new result - within a
 						// month from today
-						String issued = labResults.getEntry().get(0)
-								.getResource().getIssued();
+						String issued = labResults.getEntry().get(0).getResource().getIssued();
 						@SuppressWarnings("unused")
 						DateTime dateIssued = new DateTime(issued);
-						// Confirm that this is a new result - within the last
-						// month
-						// if(dateIssued.plusMonths(1).isAfterNow()) {
-
+						// Confirm that this is a new result - within the last month
+						// if (dateIssued.plusMonths(1).isAfterNow()) {
 						returnString = response;
-
 						// }
 					}
 				}
 			}
-
+		} catch (FOBTException e) {
+			//Error was already logged
 		} catch (Exception e) {
-			e.printStackTrace();
+			FOBTLogging.error("FOBTServiceHandler.pollJDSResults: An unexpected condition has happened: " + e.getMessage());
 		}
 
 		return returnString;
@@ -314,39 +328,30 @@ public class FOBTServiceHandler implements WorkItemHandler, Closeable,
 	}
 
 	public void executeWorkItem(WorkItem workItem, WorkItemManager manager) {
+		FOBTLogging.debug("FOBTService.executeWorkItem");
+		try {
+			String pid = (String) workItem.getParameter("pid");
+			String orderId = (String) workItem.getParameter("orderId");
 
-		System.out.println("FOBTService.executeWorkItem");
-		String pid = (String) workItem.getParameter("pid");
-		String orderId = (String) workItem.getParameter("orderId");
-		//String orderId = getOrderId();
+			//site is for future use
+			@SuppressWarnings("unused")
+			String site = (String) workItem.getParameter("site");
 
-		//site is for future use
-		@SuppressWarnings("unused")
-		String site = (String) workItem.getParameter("site");
+			String result = pollJDSResults(pid, orderId);
 
-		String result = pollJDSResults(pid, orderId);
-
-		Map<String, Object> serviceResult = new HashMap<String, Object>();
-		serviceResult.put("ServiceResponse", result);
-		manager.completeWorkItem(workItem.getId(), serviceResult);
-
-	}
-
-	String getOrderId() {
-		String orderId = null;
-		//TODO retrieve oderId from vxSync //
-		return orderId;
+			Map<String, Object> serviceResult = new HashMap<String, Object>();
+			serviceResult.put("ServiceResponse", result);
+			manager.completeWorkItem(workItem.getId(), serviceResult);
+		} catch (Exception e) {
+			FOBTLogging.error("FOBTServiceHandler.executeWorkItem: An unexpected condition has happened: " + e.getMessage());
+		}
 	}
 
 	public void abortWorkItem(WorkItem workItem, WorkItemManager manager) {
-
-		System.out.println("FOBTService.abortWorkItem");
-
+		FOBTLogging.debug("FOBTService.abortWorkItem");
 	}
 
 	@Override
 	public void close() {
-
 	}
-
 }

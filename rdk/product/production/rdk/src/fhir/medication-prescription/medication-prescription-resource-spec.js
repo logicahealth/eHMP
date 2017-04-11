@@ -52,7 +52,7 @@ function testJDSPath(params, queryStr) {
 describe('medicationPrescription FHIR Resource', function() {
     it('Verifies correct resource name and path', function() {
         var config = medicationPrescriptionResource.getResourceConfig()[0];
-        expect(config.name).to.equal('medicationprescription-medicationprescription');
+        expect(config.name).to.equal('fhir-medication-prescription');
         expect(config.path).to.equal('');
     });
 });

@@ -4,11 +4,10 @@ define([
     "handlebars",
     "moment",
     "app/applets/patient_search/views/common/searchResultsCollectionView",
-    "app/applets/patient_search/views/common/errorMessageView",
     "app/applets/patient_search/views/mySite/clinics_wards/siteResultsCollectionView",
     "hbs!app/applets/patient_search/templates/mySite/clinics_wards/searchViewTemplate",
     "app/applets/patient_search/views/mySite/clinics_wards/dateRangeSelectorView"
-], function(Backbone, Marionette, Handlebars, Moment, SearchResultsCollectionView, ErrorMessageView, LocationsListResultsView, SearchViewTemplate, DateRangeSelectorView) {
+], function(Backbone, Marionette, Handlebars, moment, SearchResultsCollectionView, LocationsListResultsView, SearchViewTemplate, DateRangeSelectorView) {
     "use strict";
 
     // var APPOINTMENT_DATE_FORMAT = 'MMDDYYYYHHmmss';
@@ -203,9 +202,8 @@ define([
                     if (resp.status === 200) {
                         self.patientsView.setEmptyMessage(resp.responseText);
                     } else {
-                        var error = self.searchApplet.getAlertText('unknownErrorText');
-                        var errorLog = self.searchApplet.formatAlertUnknownResponse(resp);
-                        self.patientsView.setEmptyMessage(error + errorLog);
+                        var errorMessage = self.searchApplet.getSearchErrorMessage(resp, self.searchApplet.getAlertText('unknownErrorText'));
+                        self.patientsView.setEmptyMessage(errorMessage);
                     }
                     self.patientsView.render();
                 };

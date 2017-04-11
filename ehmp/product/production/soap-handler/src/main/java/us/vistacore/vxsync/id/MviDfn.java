@@ -27,7 +27,7 @@ public class MviDfn extends Dfn implements MviId {
 		
 	}
 	
-	public static boolean isIdType(String id) {
+	public static boolean isDfnType(String id) {
 		String[] parts = id.split("\\^");
 		return (parts[3].equals(AUTHORITY) && parts[1].equals("PI"));
 	}

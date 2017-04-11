@@ -93,7 +93,7 @@ function addDefinitionFromEntry(entry, schema, entries, valueSets, options) {
         rewriteRequireds(definition);
     }
 
-// TODO: support fhir_comments if options ask us to
+// FUTURE-TODO: support fhir_comments if options ask us to
 
     schema.definitions[entry.resource.id] = definition;
 }
@@ -238,7 +238,7 @@ function mapType(element, entry, entries, options) {
 
     setPrefixPropertyIfPresent(element, 'defaultValue', type, 'defaultValue');
 
-// TODO: parse valuesets.json and create an enum if there's a binding with a valueSetReference
+// FUTURE-TODO: parse valuesets.json and create an enum if there's a binding with a valueSetReference
 
     type = maybeConvertToArray(type, element);
 

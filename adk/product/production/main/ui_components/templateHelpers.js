@@ -34,7 +34,7 @@ define([
                 '>' +
                 (icon ? '<i class="fa ' + icon + '" ></i> ' : "") +
                 (srOnlyLabel ? '<span class="sr-only">' + displayText + '</span>' : displayText) +
-                ((options.split === 'false' && _.isEmpty(icon)) || (options.split === 'true') ? ' <span class="caret"></span><span class="sr-only">Press enter to toggle dropdown</span>' : '') +
+                ((options.split === 'false' && _.isEmpty(icon)) || (options.split === 'true') ? ' <span class="caret"></span>' : '') +
                 '</button>'
             ].join("\n");
 
@@ -78,12 +78,12 @@ define([
                 htmlString = htmlString + mainButton + dropdownToggle;
             }
 
-            var dropdownList = '<ul class="dropdown-menu">';
+            var dropdownList = '<ul class="dropdown-menu dropdown-menu-right">';
             if (_.isString(options.items)) {
                 options.items = JSON.parse(options.items);
             }
             _.each(options.items, function(item) {
-                dropdownList += '<li id="' + options.id + '-' + item.id + '"' + 'title="Press enter to ' + item.label + '"' + '>' + '<a href="#">' + item.label + '</a></li>';
+                dropdownList += '<li id="' + options.id + '-' + item.id + '"' + 'title="Press enter to ' + item.label + '"' + '>' + '<a href="#" title="Press enter to select">' + item.label + '</a></li>';
             });
             dropdownList += '</ul></div>';
 

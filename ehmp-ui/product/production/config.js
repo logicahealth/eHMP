@@ -8,7 +8,7 @@ require.config({
         'marionette': 'node_modules/backbone.marionette/lib/backbone.marionette', // 2.4.1
         'jasmine': 'node_modules/grunt-contrib-jasmine/vendor/jasmine-2.0.1/jasmine',
         'jasmine-html': 'node_modules/grunt-contrib-jasmine/vendor/jasmine-2.0.1/jasmine-html',
-        'moment': 'moment/moment-2.7.0.min',
+        'moment': 'moment/moment-2.11.2.min',
         'highcharts': 'highcharts/highstock.src',
         'highcharts-more': 'highcharts/highcharts-more.src',
         'pattern-fill': 'highcharts/pattern-fill',

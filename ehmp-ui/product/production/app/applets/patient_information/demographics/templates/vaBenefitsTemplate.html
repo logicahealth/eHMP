@@ -5,36 +5,49 @@
 	<dl>
 		<dt id="demo-svc-connected">Service Connected</dt>
 		{{#if serviceConnected}}
-		<dd id="demo-svc-connected-status-val">Yes</dd>
+		<dd id="demo-svc-connected-status-val" class="left-padding-xs">Yes</dd>
 		{{else}}
-		<dd id="demo-svc-connected-status-val">No</dd>
+		<dd id="demo-svc-connected-status-val" class="left-padding-xs">No</dd>
 		{{/if}}
 		<dt id="demo-svc-conditions">Service Connected Conditions</dt>
 		{{#if scCondition.length}}
 			{{#each scCondition}}
-		<dd id="demo-svc-conditions-values">{{name}} ({{scPercent}}%)</dd>
+		<dd id="demo-svc-conditions-values" class="left-padding-xs">{{name}} ({{scPercent}}%)</dd>
 			{{/each}}
 		{{else}}
-		<dd>No Record Found</dd>
+		<dd class="left-padding-xs">No Record Found</dd>
 		{{/if}}
 		<dt id="demo-insurance">Insurance</dt>
-		{{#if insurance}}
-		<dd>
-			<table class="ehmp-table-default table">
-			<caption class="sr-only">Patient Insurance Information.</caption>
-			<tbody>
-			{{#with insurance}}
-				<tr><th scope="row" id="demo-insurance-name">Insurance Name</th><td id="demo-insurance-name-val">{{companyName}}</td></tr>
-				<tr><th scope="row" id="demo-insurance-gp">Group</th><td id="demo-insurance-gp-val">{{groupNumber}}</td></tr>
-				<tr><th scope="row" id="demo-insurance-holder">Holder</th><td id="demo-insurance-holder-val">{{toLowerCase policyHolder}}</td></tr>
-				<tr><th scope="row" id="demo-insurance-eff-date">Effective Date</th><td id="demo-insurance-eff-date-val">{{formatDate effectiveDate}}</td></tr>
-				<tr><th scope="row" id="demo-insurance-exp-date">Expiration Date</th><td id="demo-insurance-exp-date-val">{{formatDate expirationDate}}</td></tr>
+		{{#if getInsurance}}
+		<dd class="demographic-sub-group-content">
+			<span class="sr-only">Patient Insurance Information.</span>
+			<dl>
+			{{#with getInsurance}}
+				{{#if companyName}}
+				<dt id="demo-insurance-name">Name</dt>
+				<dd id="demo-insurance-name-val" class="left-padding-xs">{{companyName}}</dd>
+				{{/if}}
+				{{#if groupNumber}}
+				<dt id="demo-insurance-gp">Group</dt>
+				<dd id="demo-insurance-gp-val" class="left-padding-xs">{{groupNumber}}</dd>
+				{{/if}}
+				{{#if policyHolder}}
+				<dt id="demo-insurance-holder">Holder</dt>
+				<dd id="demo-insurance-holder-val" class="left-padding-xs">{{toLowerCase policyHolder}}</dd>
+				{{/if}}
+				{{#if effectiveDate}}
+				<dt id="demo-insurance-eff-date">Effective Date</dt>
+				<dd id="demo-insurance-eff-date-val" class="left-padding-xs">{{formatDate effectiveDate}}</dd>
+				{{/if}}
+				{{#if expirationDate}}
+				<dt id="demo-insurance-exp-date">Expiration Date</dt>
+				<dd id="demo-insurance-exp-date-val" class="left-padding-xs">{{formatDate expirationDate}}</dd>
+				{{/if}}
 			{{/with}}
-			</tbody>
-			</table>
+			</dl>
 		</dd>
 		{{else}}
-		<dd>No Record Found</dd>
+		<dd class="left-padding-xs">No Record Found</dd>
 		{{/if}}
 	</dl>
 </div>

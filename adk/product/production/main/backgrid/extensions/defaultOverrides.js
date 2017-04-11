@@ -23,15 +23,4 @@ define([
             return this;
         }
     });
-
-    // todo: temporarily commenting this out to fix the build
-    // Backgrid.StringCell = Backgrid.Cell.extend({
-    //     render: function() {
-    //         this.$el.empty();
-    //         screenReaderCell.setModelValueWithScreenReader(this);
-    //         this.delegateEvents();
-    //         return this;
-    //     }
-    // });
-
 });

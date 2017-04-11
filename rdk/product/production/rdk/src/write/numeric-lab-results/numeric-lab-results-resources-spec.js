@@ -14,7 +14,7 @@ describe('Numeric Lab Results Resources', function() {
             operationalDataCheck: false,
             synchronize: false
         });
-        //expect(resources[0].permissions).not.to.be.undefined();
+        expect(resources[0].requiredPermissions).not.to.be.undefined();
         expect(resources[0].post).not.to.be.undefined();
     });
 

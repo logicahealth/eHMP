@@ -6,7 +6,7 @@ var http = rdk.utils.http;
 
 module.exports.getSubsystemConfig = getSubsystemConfig;
 
-function getSubsystemConfig(app) {
+function getSubsystemConfig(app, logger) {
     return {
         healthcheck: {
             name: 'pjds',
@@ -15,7 +15,7 @@ function getSubsystemConfig(app) {
                 var pjdsOptions = _.extend({}, app.config.generalPurposeJdsServer, {
                     url: '/ping',
                     timeout: 5000,
-                    logger: app.logger
+                    logger: logger
                 });
 
                 http.get(pjdsOptions, function(err) {

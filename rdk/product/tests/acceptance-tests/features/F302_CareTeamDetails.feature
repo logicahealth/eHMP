@@ -9,7 +9,7 @@ Scenario: Care Team Information headers for Inpatient
 Given a patient with pid "9E7A;100731" has been synced through the RDK API
 When the client requests demographics for the patient "9E7A;100731" with credentials
  | SITE        | ACCESSCODE    | VERIFYCODE  |
- | 9E7A        | pu1234        | pu1234!!    |
+ | 9E7A        | PW            | PW    !!    |
 Then a successful response is returned
 And the VPR results contain
 |field    | value  |
@@ -23,7 +23,7 @@ Scenario: Care Team Information: Detail verification for outpatient (Panorama)
 Given a patient with pid "9E7A;722" has been synced through the RDK API
 When the client requests demographics for the patient "9E7A;722" with credentials
  | SITE        | ACCESSCODE    | VERIFYCODE  |
- | 9E7A        | pu1234        | pu1234!!    |
+ | 9E7A        | PW            | PW    !!    |
 Then a successful response is returned
 #| Primary Care Provider           | Provider, Fifteen   |  (843) 555-5455   | (843) 555-5456    | (843) 555-5454   |
 And the VPR results contain
@@ -70,7 +70,7 @@ Scenario: Care Team Information: Detail verification for inpatient (Panorama)
 Given a patient with pid "9E7A;100731" has been synced through the RDK API
 When the client requests demographics for the patient "9E7A;100731" with credentials
  | SITE        | ACCESSCODE    | VERIFYCODE  |
- | 9E7A        | pu1234        | pu1234!!    |
+ | 9E7A        | PW            | PW    !!    |
 Then a successful response is returned
 #| Primary Care Provider           | Provider, Fifteen   |  (843) 555-5455   | (843) 555-5456    | (843) 555-5454   |
 And the VPR results contain
@@ -119,7 +119,7 @@ Scenario: Care Team Information: Detail verification for inpatient (Kodak)
 Given a patient with pid "9E7A;100731" has been synced through the RDK API
 When the client requests demographics for the patient "9E7A;100731" with credentials
  | SITE        | ACCESSCODE    | VERIFYCODE  |
- | 9E7A        | pu1234        | pu1234!!    |
+ | 9E7A        | PW            | PW    !!    |
 Then a successful response is returned
 #| Primary Care Provider           | Provider, Seventythree  |  (555) 888-9900   | (555) 888-9977    | (555) 888-9999   |
 And the VPR results contain
@@ -168,7 +168,7 @@ Scenario: Care Team Information: Detail verification for outpatient (Kodak)
 Given a patient with pid "9E7A;722" has been synced through the RDK API
 When the client requests demographics for the patient "9E7A;722" with credentials
  | SITE        | ACCESSCODE    | VERIFYCODE  |
- | 9E7A        | pu1234        | pu1234!!    |
+ | 9E7A        | PW            | PW    !!    |
 Then a successful response is returned
 #| Primary Care Provider           | Provider, Seventythree  |  (555) 888-9900   | (555) 888-9977    | (555) 888-9999   |
 And the VPR results contain

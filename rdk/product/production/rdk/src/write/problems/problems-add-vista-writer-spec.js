@@ -37,7 +37,7 @@ describe('Add new patient problem to Vista', function () {
 
             var dateOfOnset = '3140102^01 02 2014';
 
-            transformModel(logger, model);
+            transformModel(logger, model, '229');
             expect(model.dateOfOnset).eql(dateOfOnset);
             expect(model.dateRecorded).eql(dateOfOnset);
             expect(model.newTermText).eql(undefined);
@@ -64,7 +64,7 @@ describe('Add new patient problem to Vista', function () {
                 'radiation': '1^YES'
             };
 
-            transformModel(logger, model);
+            transformModel(logger, model, '229');
 
             expect(model.patient).eql('229^EIGHT,OUTPATIENT^0008^');
             expect(model.service).eql('64^AUDIOLOGY');
@@ -92,7 +92,7 @@ describe('Add new patient problem to Vista', function () {
                 'radiation': '1^YES'
             };
 
-            transformModel(logger, model);
+            transformModel(logger, model, '229');
 
             expect(model.agentOrange).eql('0^NO');
             expect(model.radiation).eql('1^YES');
@@ -127,7 +127,7 @@ describe('Add new patient problem to Vista', function () {
                 'radiation': '1^YES'
             };
 
-            transformModel(logger, model);
+            transformModel(logger, model, '229');
 
             var rpcParameters = constructRpcArgs(model);
             expect(rpcParameters[0]).eql('GMPFLD(.01)="9779^784.0"');
@@ -165,7 +165,7 @@ describe('Add new patient problem to Vista', function () {
                 "comments": [ "test comment one", "test comment two"]
             };
 
-            transformModel(logger, model);
+            transformModel(logger, model, '229');
 
             var rpcParameters = constructRpcArgs(model);
             expect(rpcParameters[0]).eql('GMPFLD(.01)="9779^784.0"');

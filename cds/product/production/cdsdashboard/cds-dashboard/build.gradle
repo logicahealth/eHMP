@@ -54,3 +54,7 @@ gwt {
     	addGwtContainer=false
     }
 }
+
+war {
+	rootSpec.exclude('**/logging.properties')
+}

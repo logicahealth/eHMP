@@ -49,7 +49,7 @@ Scenario: Active Medications expand view applet displays all of the same details
   When user refreshes Meds Review Applet
   Then the message on the Meds Review Applet does not say "An error has occurred"
 
-@f144_active_medications_expand_minimize
+@f144_active_medications_expand_minimize @debug @DE6976
 Scenario: Coversheet Active Medications can be expanded
   And user searches for and selects "Eightyeight,Patient"
   When Cover Sheet is active

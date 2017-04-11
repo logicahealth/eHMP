@@ -103,7 +103,7 @@ function createDiagnosticReport(item, req) {
         pid = req._pid;
 
     }
-    var dr = new fhirResource.DiagnosticReport();
+    var dr = new fhirResource.DiagnosticReport(item.uid);
     dr.contained = []; // initialize contained, values will be added when building the rest of the report
     setName(dr, item);
     setStatus(dr, item);

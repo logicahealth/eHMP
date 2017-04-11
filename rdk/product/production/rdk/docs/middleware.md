@@ -40,54 +40,63 @@ The standard place for an interceptor to store information for the request handl
            * 'SYNC' - for when syncing patient data
            * 'AUTH' - for when authenticating to a service
         * `req.audit.sensitive`: for when accessing a sensitive patient
+ * **validatePid** interceptor
+    * Validates that the `pid` query parameter is correctly formatted
+ * **assignRequestSite** interceptor
+    * Validates the req.site property
  * **synchronize** interceptor
     * On requests with a `pid` query parameter, synchronizes that patient
         * `pid` can be an [ICN] identifier or a [site hash;dfn] identifier.
  * **convertPid** interceptor
-     * Requires 'pid' parameter as icn | dfn | siteDfn
-     * Must place after 'synchronize' interceptor
-     * Adds the `req.interceptorResults.patientIdentifiers` object with corresponding patient identifiers:
-        * `req.interceptorResults.patientIdentifiers.originalID`
-        * `req.interceptorResults.patientIdentifiers.icn`
-        * If primary site:
-            * `req.interceptorResults.patientIdentifiers.siteDfn`
-            * `req.interceptorResults.patientIdentifiers.dfn`
-        * If secondary site:
-            * `req.interceptorResults.patientIdentifiers.siteEdipi`
-            * `req.interceptorResults.patientIdentifiers.edipi`
+    * Requires 'pid' parameter as icn | dfn | siteDfn
+    * Must place after 'synchronize' interceptor
+    * Adds the `req.interceptorResults.patientIdentifiers` object with corresponding patient identifiers:
+       * `req.interceptorResults.patientIdentifiers.originalID`
+       * `req.interceptorResults.patientIdentifiers.icn`
+       * If primary site:
+           * `req.interceptorResults.patientIdentifiers.siteDfn`
+           * `req.interceptorResults.patientIdentifiers.dfn`
+       * If secondary site:
+           * `req.interceptorResults.patientIdentifiers.siteEdipi`
+           * `req.interceptorResults.patientIdentifiers.edipi`
  * **metrics** interceptor
     * Automatically logs information about request metrics
+ * **operationalDataCheck** interceptor
+    * Verifies that the operational data (the minimum amount of data required for JDS to operate as expected) has been loaded into JDS
  * **authentication** interceptor
     * Requires that a user must be logged in before accessing a resource
+ * **systemAuthentication** interceptor
+    * Requires that a system client must be authenticated before accessing a resource
  * **pep** interceptor (Policy Enforcement Point interceptor)
     * Checks for the Policy Decision Point (PDP) for authorization to use a resource
     * Can not be disabled
     * Uses convertPid interceptor to set the patient identifiers
- * **operationalDataCheck** interceptor
-    * Verifies that the operational data (the minimum amount of data required for JDS to operate as expected) has been loaded into JDS
+ * **subsystemCheck** interceptor
+    * Ensures that all subsystems that a resource depends on are configured to be deployed before running the resource
+    * Responds with a `503` if a required subsystem is not configured to deploy
+ * **validateRequestParameters** interceptor
+     * Validates requests against their API Blueprint docs
+     * Invalid requests return status 400 Bad Request with details specifying the invalid input
+     * Valid requests get parsed parameters in `req.parsedParams`
  * **jdsFilter** interceptor
     * Applies business logic to JDS filters on the filter query parameter.
     * Adds the `req.interceptorResults.jdsFilter` object:
         * `req.interceptorResults.jdsFilter.error` exists with an error if there was an error parsing
         * `req.interceptorResults.jdsFilter.filter` exists with the parsed filter parameters (parsed by `jdsFilter.parse()`) which can be used by `jdsFilter.build()` to construct a JDS filter query string
- * **validateRequestParameters** interceptor
-     * Validates requests against their API Blueprint docs
-     * Invalid requests return status 400 Bad Request with details specifying the invalid input
-     * Valid requests get parsed parameters in `req.parsedParams`
- * **subsystemCheck** interceptor
-    * Ensures that all subsystems that a resource depends on are configured to be deployed before running the resource
-    * Responds with a `503` if a required subsystem is not configured to deploy
 
 ### Default Interceptors
 The following interceptors are enabled for each resource by default:
  * `audit`
- * `convertPid`
- * `metrics`
  * `authentication`
+ * `validatePid`
+ * `assignRequestSite`
+ * `synchronize`
+ * `convertPid`
  * `pep` - can not be turned off
+ * `metrics`
  * `subsystemCheck`
- * `validateRequestParameters`
  * `operationalDataCheck`
+ * `validateRequestParameters`
 
 ### Creating an Interceptor
  * Ensure that what you want does not already exist
@@ -105,8 +114,9 @@ Outerceptors are run once a resource calls `res.send()` or an equivalent.
 
 An outerceptor may transform the body of the response sent to the client or send an error response.
 
-There are currently no default outerceptors.
-
+The following outerceptors are enabled for each resource by default:
+ * `whitelistJson`
+ * `validateResponseFormat`
 The **emulateJdsResponse** outerceptor can be used to add JDS-style pagination information to a response
 
 ### Creating an Outerceptor

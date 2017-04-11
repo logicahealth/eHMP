@@ -78,7 +78,7 @@ define([
                 },
                 'ccowSrOnlyMessage': function () {
                     if (this.ccowConnected()) {
-                        return "This patient is connected to clincal link";
+                        return "This patient is connected to clinical link";
                     } else {
                         return "This patient is disconnected from clinical link";
                     }

@@ -38,6 +38,8 @@ var fhirToJDSAttrMap = [{
     description: 'Kind of composition (LOINC if possible)  Currently this is optional, but supported options are 34745-0 and 34765-8.',
     searchable: true
 }];
+confUtils.addCountAttribute(fhirToJDSAttrMap); //adding the _count attribute that is common to (almost) all endpoints.
+
 
 // Issue call to Conformance registration
 conformance.register(confUtils.domains.COMPOSITION, createCompositionConformanceData());
@@ -213,7 +215,7 @@ function createExtensions(jdsItem) {
 function convertToComposition(jdsItem, req) {
     var pid = req.query['subject.identifier'];
 
-    var fhirItem = new fhirResource.Composition(helpers.generateUUID());
+    var fhirItem = new fhirResource.Composition(jdsItem.uid);
     fhirItem.contained = [];
     fhirItem.identifier = new fhirResource.Identifier(jdsItem.uid, constants.composition.COMPOSITION_UID_IDENTIFIER_SYSTEM);
     fhirItem.date = fhirUtils.convertToFhirDateTime(jdsItem.lastUpdateTime, fhirUtils.getSiteHash(jdsItem.uid)); // REQUIRED

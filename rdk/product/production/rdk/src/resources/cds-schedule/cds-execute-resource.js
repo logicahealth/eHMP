@@ -1,4 +1,3 @@
-/*jslint node: true */
 'use strict';
 
 var cdsExecute = require('./cds-execute');
@@ -21,28 +20,28 @@ exports.getResourceConfig = function (app) {
         path: '/request',
         get: cdsExecute.getExecute,
         interceptors: interceptors,
-        requiredPermissions: [],
+        requiredPermissions: ['read-cds-execute'],
         isPatientCentric: false
     }, {
         name: 'cds-execute-cds-execute-post',
         path: '/request',
         post: cdsExecute.postExecute,
         interceptors: interceptors,
-        requiredPermissions: [],
+        requiredPermissions: ['manage-cds-execute'],
         isPatientCentric: false
     }, {
         name: 'cds-execute-cds-execute-put',
         path: '/request',
         put: cdsExecute.putExecute,
         interceptors: interceptors,
-        requiredPermissions: [],
+        requiredPermissions: ['manage-cds-execute'],
         isPatientCentric: false
     }, {
         name: 'cds-execute-cds-execute-delete',
         path: '/request',
         delete: cdsExecute.deleteExecute,
         interceptors: interceptors,
-        requiredPermissions: [],
+        requiredPermissions: ['manage-cds-execute'],
         isPatientCentric: false
     }];
 };

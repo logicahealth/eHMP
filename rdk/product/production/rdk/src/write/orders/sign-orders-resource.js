@@ -16,8 +16,8 @@ function getResourceConfig() {
         interceptors: {
             synchronize: false
         },
-        requiredPermissions: [], //['sign-patient-laborder']
-        isPatientCentric: false, //shouldn't this be patient centric
+        requiredPermissions: ['sign-lab-order'],
+        isPatientCentric: true,
         description: {
             post: 'Signs an order'
         },
@@ -50,7 +50,7 @@ function signOrder(req, res) {
     var orders = input.orders;
     var pid = input.patientIEN;
     var locationIEN = input.locationIEN;
-    var rpcConfig = getVistaRpcConfiguration(req.app.config, req.session.user.site, userSession);
+    var rpcConfig = getVistaRpcConfiguration(req.app.config, userSession);
     // rpcConfig.context = 'OR CPRS GUI CHART';
 
     if (isNullish(pid) || isNullish(locationIEN) || isNullish(signatureCode) || isNullish(orders) || _.isEmpty(orders) || ('' in orders)) {

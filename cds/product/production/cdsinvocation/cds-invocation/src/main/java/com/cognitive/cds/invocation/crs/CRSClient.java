@@ -27,32 +27,22 @@ package com.cognitive.cds.invocation.crs;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.annotation.PostConstruct;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.cxf.jaxrs.client.WebClient;
 
 public class CRSClient {
 
-    private static CRSClient crsClient;// = new CRSClient();
-    private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(CRSClient.class);
+	// private static final should always be UPPERCASE
+    private static final org.slf4j.Logger LOGGER = org.slf4j.LoggerFactory.getLogger(CRSClient.class);
     private String crsServer;
     private String queryPath;
-    private WebClient webClient;
-
-    public CRSClient() {
-    }
-
-    @PostConstruct
-    private void init() throws IOException {
-        crsClient = this;
-        webClient = getClient();
-    }
-
-    /* Static 'instance' method */
-    public static CRSClient getInstance() {
-        return crsClient;
-    }
+    
+    // Singular instance of WebClient used to spawn others for thread safety
+    private volatile WebClient webClient;
+    
+    // Used to guarantee webClient is not initialized multiple times in succession
+    private final ReentrantLock lock = new ReentrantLock();
 
     public String getCRSServer() {
         return crsServer;
@@ -82,15 +72,18 @@ public class CRSClient {
 
         if (this.webClient == null) {
             try {
-                logger.info("Creating inital WebClient");
-                this.webClient = createWebClient();
+                LOGGER.info("Creating inital WebClient");
+                createWebClient();
             }
             catch (Exception e) {
-                logger.info("CRS - No WebClient - Create failed");
+                LOGGER.info("CRS - No WebClient - Create failed");
                 throw new IOException("CRS - No WebClient - Create failed");
             }
         }
-        return this.webClient;
+        
+        // Return a thread safe client
+        boolean inheritHeaders = true;
+        return WebClient.fromClient(webClient, inheritHeaders);
     }
 
     public void updateClient(WebClient client) {
@@ -107,21 +100,29 @@ public class CRSClient {
      * @return
      * @throws IOException
      */
-    private WebClient createWebClient() throws IOException {
+    private void createWebClient() throws IOException {
         
         List<Object> providers = new ArrayList<Object>();
         providers.add(new com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider());
-        boolean theadSafe = true;
-        
-        WebClient client = WebClient.create(this.crsServer, providers, theadSafe);
 
-        // MAINTAIN SESSION for multiple requests using same session
-        WebClient
-                .getConfig(client)
-                .getRequestContext()
-                .put(org.apache.cxf.message.Message.MAINTAIN_SESSION, Boolean.TRUE);
+        lock.lock();
+        try {
+        	// Check to see if initialization is still necessary
+        	if( webClient == null ) {
+                WebClient client = WebClient.create(this.crsServer, providers);
 
-        logger.info("Create WebClient - CRS client created");
-        return client;
+                // MAINTAIN SESSION for multiple requests using same session
+                WebClient
+                        .getConfig(client)
+                        .getRequestContext()
+                        .put(org.apache.cxf.message.Message.MAINTAIN_SESSION, Boolean.TRUE);
+
+                LOGGER.info("Create WebClient - CRS client created");
+                webClient = client;
+        	}
+        }
+        finally {
+        	lock.unlock();
+        }
     }
 }

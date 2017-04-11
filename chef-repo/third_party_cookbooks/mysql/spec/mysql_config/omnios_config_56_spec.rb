@@ -31,7 +31,7 @@ describe 'mysql_config_test::default' do
 
     it 'creates user[hello :create mysql]' do
       expect(omnios_config_56).to create_user('hello :create mysql')
-        .with(username: 'mysql')
+        .with(username       mysql')
     end
 
     it 'creates directory[hello :create /opt/mysql56/etc/mysql-default/conf.d]' do
@@ -62,7 +62,7 @@ describe 'mysql_config_test::default' do
 
     it 'creates user[hello_again :create mysql]' do
       expect(omnios_config_56).to create_user('hello_again :create mysql')
-        .with(username: 'mysql')
+        .with(username       mysql')
     end
 
     it 'creates directory[hello_again :create /opt/mysql56/etc/mysql-foo/conf.d]' do

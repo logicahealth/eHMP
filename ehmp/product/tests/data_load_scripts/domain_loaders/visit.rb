@@ -3,7 +3,7 @@ require 'vistarpc4r'
 
 # options
 #------------------------------------
-serve_ip = "IP_ADDRESS"
+serve_ip = "IP        "
 visit_amount = 207 # up to 62
 patient_id = "100841" # alpha test
 #------------------------------------

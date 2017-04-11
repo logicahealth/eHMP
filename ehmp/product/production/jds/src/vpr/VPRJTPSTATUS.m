@@ -60,6 +60,16 @@ PATIDS ; Setup patient identifiers
  S ^VPRPTJ("JPID","VLER;1234V4321")="52833885-af7c-4899-90be-b3a6630b2369"
  Q
  ;
+DELPATIDS ; Delete patient identifiers
+ K ^VPRPTJ("JPID","52833885-af7c-4899-90be-b3a6630b2369")
+ K ^VPRPTJ("JPID","9E7A;3")
+ K ^VPRPTJ("JPID","C877;3")
+ K ^VPRPTJ("JPID","1234V4321")
+ K ^VPRPTJ("JPID","DOD;12345678")
+ K ^VPRPTJ("JPID","HDR;1234V4321")
+ K ^VPRPTJ("JPID","VLER;1234V4321")
+ Q
+ ;
 JOB(PIDVALUE,ROOTJOBID,STATUS,TIMESTAMP,TYPE) ; Build Job history for business logic
  N JOB,JSON,ERR,ARGS
  S JOB("jobId")=$S($G(TYPE)="enterprise-sync-request":ROOTJOBID,1:$$UUID^VPRJRUT)
@@ -100,6 +110,40 @@ GETBEFORE ;; @TEST Get Patient Sync Status before metastamp stored
  D ASSERT("false",$G(OBJECT("syncCompleted")),"Sync shouldn't be complete")
  I $D(DATA) K @DATA
  Q
+ ;
+GETSTARTEDESR ;; @TEST Get Patient Sync Status ICN - ESR started, no meta-stamp or other jobs
+ N DATA,ARG,ERR,OBJECT,HTTPERR
+ ;
+ ; Modify patient identifiers
+ D DELPATIDS
+ S ^VPRPTJ("JPID","52833885-af7c-4899-90be-b3a6630b2369")=""
+ S ^VPRPTJ("JPID","52833885-af7c-4899-90be-b3a6630b2369","1234V4321")=""
+ S ^VPRPTJ("JPID","1234V4321")="52833885-af7c-4899-90be-b3a6630b2369"
+ ;
+ S ARG("icnpidjpid")="1234V4321"
+ ;
+ ; Create enterprise-sync-request error job
+ S ROOTJOBID=$$UUID^VPRJRUT
+ D JOB("1234V4321",ROOTJOBID,"started",20160420110400,"enterprise-sync-request")
+ ;
+ D COMBINED^VPRJPSTATUS(.DATA,.ARG)
+ I $D(DATA) D DECODE^VPRJSON(DATA,"OBJECT","ERR")
+ ; If we can't decode the JSON Fail the test
+ D ASSERT(0,$D(ERR),"ERROR DECODING JSON")
+ ;
+ ; Ensure that the JSON matches what we expect
+ D ASSERT("1234V4321",$G(OBJECT("icn")),"icn attribute should exist")
+ D ASSERT("20160420110400",$G(OBJECT("latestEnterpriseSyncRequestTimestamp")))
+ D ASSERT("20160420110400",$G(OBJECT("latestJobTimestamp")))
+ D ASSERT("false",$G(OBJECT("syncCompleted")),"Sync shouldn't be complete")
+ ;
+ I $D(DATA) K @DATA
+ ; Cleanup patient identifiers
+ D DELPATIDS
+ D PATIDS
+ K ^VPRJOB
+ Q
+ ;
 GETSINGLEINPROGRESS ;; @TEST Get Single Site in-progress Patient Sync Status - no jobs
  N DATA,ARG,ERR,OBJECT,HTTPERR
  D BASIC("9E7A",3)
@@ -153,9 +197,6 @@ GETSINGLEESRERR ;; @TEST Get Single Site complete Patient Sync Status - enterpri
  D ASSERT("1234V4321",$G(OBJECT("icn")),"icn attribute should exist")
  D ASSERT("true",$G(OBJECT("hasError")),"hasError attribute should exist")
  D ASSERT("false",$G(OBJECT("syncCompleted")),"Sync shouldn't be complete")
- D ASSERT("9E7A;3",$G(OBJECT("sites","9E7A","pid")),"Site-pid 9E7A should exist")
- D ASSERT("true",$G(OBJECT("sites","9E7A","hasError")),"Site-hasError 9E7A should exist")
- D ASSERT("false",$G(OBJECT("sites","9E7A","syncCompleted")),"Site-Sync 9E7A shouldn't be complete")
  I $D(DATA) K @DATA
  Q
 GETSINGLEVSR ;; @TEST Get Single Site complete Patient Sync Status - vista-9E7A-subscribe-request created
@@ -1428,4 +1469,34 @@ GETMSITESCOMPLETE9E ;; @TEST Get multiple site complete Patient Sync Status - RE
  D ASSERT(20161031094920,$G(OBJECT("sites","DOD","sourceStampTime")),"Site-sourceStampTime DOD should exist")
  D ASSERT(20160420110500,$G(OBJECT("sites","DOD","latestJobTimestamp")),"Site-latestJobTimestamp DOD should exist")
  I $D(DATA) K @DATA
+ Q
+GETMSITESCOMPLETENUM ;; @TEST Get multiple site complete Patient Sync Status - Fully Numeric site hash
+ N DATA,ARG,ERR,OBJECT,HTTPERR,ROOTJOBID
+ K ^VPRPTJ("JPID")
+ S ^VPRPTJ("JPID","52833885-af7c-4899-90be-b3a6630b2369")=""
+ S ^VPRPTJ("JPID","52833885-af7c-4899-90be-b3a6630b2369","6242;3")=""
+ S ^VPRPTJ("JPID","6242;3")="52833885-af7c-4899-90be-b3a6630b2369"
+ D BASIC("6242",3)
+ D COMPLETEBASIC("6242",3)
+ ;
+ ; Create jobs
+ S ROOTJOBID=$$UUID^VPRJRUT
+ D JOB("6242;3",ROOTJOBID,"completed",20160420110400,"enterprise-sync-request")
+ D JOB("6242;3",ROOTJOBID,"completed",20160420110400,"vista-6242-subscribe-request")
+ D JOB("6242;3",ROOTJOBID,"completed",20160420110400,"vista-6242-data-allergy-poller")
+ ;
+ S ARG("icnpidjpid")="6242;3"
+ D COMBINED^VPRJPSTATUS(.DATA,.ARG)
+ I $D(DATA) D DECODE^VPRJSON(DATA,"OBJECT","ERR")
+ ; If we can't decode the JSON Fail the test
+ D ASSERT(0,$D(ERR),"ERROR DECODING JSON")
+ ;
+ ; Ensure that the JSON matches what we expect
+ D ASSERT("",$G(OBJECT("icn")),"icn attribute should exist")
+ D ASSERT("true",$G(OBJECT("syncCompleted")),"SyncCompleted should exist")
+ D ASSERT("6242;3",$G(OBJECT("sites","""6242","pid")),"Site-pid 6242 should exist")
+ D ASSERT("true",$G(OBJECT("sites","""6242","syncCompleted")),"Site-Sync 6242 should be complete")
+ I $D(DATA) K @DATA
+ K ^VPRPTJ("JPID")
+ D PATIDS
  Q

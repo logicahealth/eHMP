@@ -1,4 +1,6 @@
-define([], function() {
+define([
+    'moment'
+], function(moment) {
     "use strict";
 
     var ValidationUtil = {
@@ -39,10 +41,10 @@ define([], function() {
 
                 if (symptomDate) {
                     if (self.isFutureDateTime(symptomDate, symptomTime)) {
-                        errorMsg = 'Selected Symptom Date/Time cannot be in the future';
+                        errorMsg = 'Selected symptom date/time cannot be in the future';
                     }
                 } else if (symptomTime) {
-                    errorMsg = 'Selected Symptom Date is required with Time.';
+                    errorMsg = 'Selected symptom date is required with time';
                 }
             });
 
@@ -52,7 +54,7 @@ define([], function() {
             var errorMsg;
 
             if (allergyType === 'o' && (typeof signsSymptoms === 'undefined' || signsSymptoms.length === 0)) {
-               errorMsg = 'A Symptom must be selected when Allergy Type is Observed.';
+               errorMsg = 'A symptom must be selected when allergy type is observed';
             }
 
             return errorMsg;
@@ -83,7 +85,7 @@ define([], function() {
             var errorMsg;
 
             if (this.isFutureDateTime(dateValue)) {
-                errorMsg = 'Reaction Date/Time cannot be in the future.';
+                errorMsg = 'Reaction date/time cannot be in the future';
             }
 
             return errorMsg;
@@ -93,10 +95,10 @@ define([], function() {
 
             if (dateValue) {
                 if (dateValue.split('/').length > 2 && timeValue && this.isFutureDateTime(dateValue, timeValue)) {
-                    errorMsg = 'Reaction Date/Time cannot be in the future.';
+                    errorMsg = 'Reaction date/time cannot be in the future';
                 }
             } else if (timeValue) {
-                errorMsg = 'Reaction Date is required with Time.';
+                errorMsg = 'Reaction date is required with time';
             }
 
             return errorMsg;

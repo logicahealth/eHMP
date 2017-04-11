@@ -39,14 +39,30 @@ define([
             this.appletConfig = this.options.appletConfig;
             this.appletOptions = this.textFilter.appletOptions;
             this.appletFilterInstanceId = this.textFilter.appletFilterInstanceId;
-            this.expandedAppletId = this.textFilter.expandedAppletId;
+
+            this.expandedAppletId = this.options.appletConfig.instanceId;
+            if (this.options.appletConfig.fullScreen) {
+                this.parentWorkspace = ADK.Messaging.request('get:current:workspace');
+                this.expandedAppletId = this.textFilter.expandedAppletId;
+            }
+
             this.maximizedScreen = this.textFilter.maximizedScreen;
             this.model = this.textFilter.model;
 
             this.initializeMedTypeListViewAndCollection(this.appletInstanceId);
         },
+        ungroupedMedsEvents: {
+            'read:success': 'onInitialUngroupedFetch',
+            'read:error': function(collection, resp) {
+                var errorView = ADK.Views.Error.create({
+                    model: new Backbone.Model(resp)
+                });
+                this.main.show(errorView);
+            }
+        },
         initializeUngroupedMedsCollection: function() {
             this.ungroupedMeds = new MedicationOrderCollection();
+            this.bindEntityEvents(this.ungroupedMeds, this.ungroupedMedsEvents);
         },
         initializeDateFilter: function() {
             this.dateFilter = new MedicationDateFilter({
@@ -84,8 +100,9 @@ define([
             this.performInitialUngroupedFetch();
         },
         onDestroy: function() {
-            this.ungroupedMeds.cleanUp();
             this.loadingView.destroy();
+            this.unbindEntityEvents(this.ungroupedMeds, this.ungroupedMedsEvents);
+            this.ungroupedMeds.cleanUp();
         },
         onRender: function() {
             this.loadingView = ADK.Views.Loading.create();
@@ -98,20 +115,33 @@ define([
                 });
 
                 this.appletFilter.show(this.filterView);
-                var queryInputSelector = 'input[name=\'q-' + this.appletInstanceId + '\']';
 
                 var self = this;
                 this.filterView.$el.find('input[type=search]').on('change', function() {
-                    ADK.SessionStorage.setAppletStorageModel(self.appletInstanceId, 'filterText', $(this).val(), true);
+                    ADK.SessionStorage.setAppletStorageModel(self.expandedAppletId, 'filterText', $(this).val(), true);
                 });
                 this.filterView.$el.find('a[data-backgrid-action=clear]').on('click', function() {
-                    ADK.SessionStorage.setAppletStorageModel(self.appletInstanceId, 'filterText', $(this).val(), true);
+                    ADK.SessionStorage.setAppletStorageModel(self.expandedAppletId, 'filterText', $(this).val(), true);
                 });
             }
         },
         showFilterView: function() {
-            var filterText = ADK.SessionStorage.getAppletStorageModel(this.appletInstanceId, 'filterText', true, this.parentWorkspace);
-            if (this.appletOptions.filterFields && filterText !== undefined && filterText !== null && filterText.length > 0) {
+            var appletConfig = this.appletConfig;
+            var expandedAppletId = this.appletConfig.instanceId;
+            if (appletConfig.fullScreen) {
+                this.parentWorkspace = ADK.Messaging.request('get:current:workspace');
+                var expandedModel = ADK.SessionStorage.get.sessionModel('expandedAppletId');
+                if (!_.isUndefined(expandedModel) && !_.isUndefined(expandedModel.get('id'))) {
+                    expandedAppletId = expandedModel.get('id');
+                    ADK.SessionStorage.set.sessionModel('expandedAppletId', new Backbone.Model({
+                        'id': undefined
+                    }));
+                }
+            }
+
+            var filterText = ADK.SessionStorage.getAppletStorageModel(expandedAppletId, 'filterText', true, this.parentWorkspace);
+            var filterTerms = _.get(this, 'filterView.userDefinedFilters');
+            if (!_.isEmpty(filterText) || (!_.isEmpty(filterTerms) && filterTerms.length > 0)) {
                 this.$el.find('#grid-filter-' + this.appletConfig.instanceId).toggleClass('collapse in');
                 this.$el.find('input[name=\'q-' + this.appletConfig.instanceId + '\']').val(filterText);
                 this.filterView.showClearButtonMaybe();
@@ -132,13 +162,11 @@ define([
             this.textFilteredCollection.once('reset', this.onInitialUngroupedFetch, this);
             var self = this;
             this.ungroupedMeds.performFetch({
-                onSuccess: _.bind(this.onInitialUngroupedFetch, this),
+                onSuccess: function(collection, resp) {
+                    collection.trigger('read:success');
+                },
                 onError: function(collection, resp) {
-                    var errorView = ADK.Views.Error.create({
-                        model: new Backbone.Model(resp)
-                    });
-                    self.main.show(errorView);
-                    self.hideLoading();
+                    collection.trigger('read:error');
                 }
             });
         },

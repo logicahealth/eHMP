@@ -57,13 +57,6 @@ class CommonDriver
     select = Selenium::WebDriver::Support::Select.new(@@web_driver.find_element(:tag_name, locator))
     select.deselect_all()
     select.select_by(:text, value)
-  #ToDo:
-  # select = driver.find_element(:tag_name, "select")
-  # all_options = select.find_elements(:tag_name, "option")
-  # all_options.each do |option|
-  # puts "Value is: " + option.attribute("value")
-  # option.click
-  # end
   end
 
   def select_frame(locator_method, locator)
@@ -87,16 +80,12 @@ class CommonDriver
   end
 
   def switch_to_new_win_pop_up
-    # ToDo
     wait_until_page_loaded()
     available_windows = @@web_driver.window_handles
     new_window = nil
     p available_windows
     available_windows.each do |window|
       p window
-    # if @@WDparent == window
-    # newWindow = window
-    # end
     end
 
   # # // assertNotNull(newWindow);

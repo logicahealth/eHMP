@@ -54,7 +54,7 @@ define([
 
             if (_.isEmpty(signNotesModel.get('notes'))) {
                 context.model.errorModel.set({
-                    notesChecklist: "Select at least one note."
+                    notesChecklist: "Select at least one note"
                 });
                 return;
             }
@@ -74,7 +74,7 @@ define([
                         var response = JSON.parse(resp.responseText);
                         try {
                             var message = response.message;
-                            if (message.indexOf('Invalid e-signature') > -1) {
+                            if (message.indexOf('Invalid e-signature.') > -1) {
                                 input = {
                                     message: message,
                                     ok_callback: function() {

@@ -25,7 +25,7 @@
                     display: block;
                 }
                 table.backgrid {
-                    height: calc(100% - 2px);
+                    height: 100%;
                     // for orders applet *** could be moved to applet
                     &#data-grid-orders {
                         height: calc(100% - 2px);
@@ -46,7 +46,7 @@
                             word-wrap: break-word;
                             &.flex-width-date {
                                 flex: none;
-                                width: 70px;
+                                width: 115px;
                             }
                             &.flex-width-date-time {
                                 flex: none;
@@ -55,6 +55,12 @@
                             &.flex-width-comment {
                                 flex: none;
                                 width: 30px;
+                                min-width: 20px;
+                            }
+                        }
+                        &.active {
+                            td, th {
+                                background-color: initial;
                             }
                         }
                         td:only-child {
@@ -64,6 +70,7 @@
                     }
                     thead {
                         border-bottom: 2px solid $grey-light;
+                        height: 20px;
                         th {
                             border-bottom: none;
                             text-align: left;
@@ -81,6 +88,9 @@
                         -ms-overflow-style: -ms-autohiding-scrollbar;
                         tr {
                             cursor: pointer;
+                            &.empty{
+                                cursor: default;
+                            }
                         }
                     }
                 }

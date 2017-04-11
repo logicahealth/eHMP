@@ -60,42 +60,32 @@ define([
             var fname = this.$el.find('#globalSearchFirstName').val();
             var dob = this.$el.find('#globalSearchDob').val();
             var ssn = this.$el.find('#globalSearchSsn').val();
-
             var fieldsToMarkArray = [];
+            var ssnLength = ssn.replace(/\D/g, '').length;
 
-            if (lname !== "") {
-                if ((fname === "") && (dob === "") && (ssn === "")) {
-                    fieldsToMarkArray.push(this.$el.find('#globalSearchFirstName'));
-                    fieldsToMarkArray.push(this.$el.find('#globalSearchDob'));
-                    fieldsToMarkArray.push(this.$el.find('#globalSearchSsn'));
-                } else {
+            if (lname === "") {
+                fieldsToMarkArray.push(this.$el.find('#globalSearchLastName'));
 
-                    var dobLength = dob.replace(/\D/g, '').length;
-                    var ssnLength = ssn.replace(/\D/g, '').length;
-
-                    if (dobLength !== 8 && dobLength !== 0) {
-                        fieldsToMarkArray.push(this.$el.find('#globalSearchDob'));
-                    }
-                    if (ssnLength !== 9 && ssnLength !== 0) {
-                        fieldsToMarkArray.push(this.$el.find('#globalSearchSsn'));
-                    }
-                }
-
-                if (fieldsToMarkArray.length > 0) {
-                    this.markInvalidInputFields(fieldsToMarkArray);
-                } else {
-                    this.markAllInputFieldsValid();
-                }
-            } else {
-                this.markInvalidInputFields([this.$el.find('#globalSearchLastName')]);
             }
+            if (fname === "") {
+                fieldsToMarkArray.push(this.$el.find('#globalSearchFirstName'));
+
+            }
+            if (ssnLength !== 9) {
+                fieldsToMarkArray.push(this.$el.find('#globalSearchSsn'));
+            }
+            if (fieldsToMarkArray.length > 0) {
+                this.markInvalidInputFields(fieldsToMarkArray);
+            } else {
+                this.markAllInputFieldsValid();
+            }
+
         },
         updateGlobalSearchButtonStatus: function() {
             var params = this.retrieveGlobalSearchParameters();
 
             var validatorResponseCode = searchParamsValidator.validateGlobalSearchParameterConfiguration(params);
-
-            if ((validatorResponseCode === "lastNameRequiredFailure") || (validatorResponseCode === "twoFieldsRequiredFailure")) {
+            if ((validatorResponseCode !== "success")) {
                 this.disableGlobalSearchButton();
             } else {
                 this.enableGlobalSearchButton();
@@ -120,14 +110,9 @@ define([
             var params = this.retrieveGlobalSearchParameters();
 
             var configValidatorResponseCode = searchParamsValidator.validateGlobalSearchParameterConfiguration(params);
-
-            if (configValidatorResponseCode === "lastNameRequiredFailure") {
-                this.triggerErrorMessage(NATIONWIDE, "Error: The patient's last name is a required field.");
-                this.markInvalidInputFields([this.$el.find('#globalSearchLastName')]);
-                return;
-            } else if (configValidatorResponseCode === "twoFieldsRequiredFailure") {
-                this.triggerErrorMessage(NATIONWIDE, "Error: Enter the patient's last name and at least one other field to display results.");
-                this.markInvalidInputFields([this.$el.find('#globalSearchFirstName'), this.$el.find('#globalSearchDob'), this.$el.find('#globalSearchSsn')]);
+            if (configValidatorResponseCode === "threeFieldsRequiredFailure") {
+                this.triggerErrorMessage(NATIONWIDE, "Error: Enter the patient's first name, last name, and SSN to enable search.");
+                this.markInvalidInputFields([this.$el.find('#globalSearchLastName'), this.$el.find('#globalSearchFirstName'), this.$el.find('#globalSearchSsn')]);
                 return;
             }
 

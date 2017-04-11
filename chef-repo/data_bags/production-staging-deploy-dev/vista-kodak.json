@@ -9,8 +9,8 @@
       "site_id": "C877",
       "site": "KODAK",
       "station_number": "507",
-      "access_code": "ep1234",
-      "verify_code": "ep1234!!",
+      "access_code": "PW",
+      "verify_code": "PW",
       "division": "500",
       "clinics_osync_appointment_request": [
         {

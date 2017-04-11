@@ -3,121 +3,105 @@
     <div class="col-xs-12">
         <h5 class="bottom-border-grey-dark">Details</h5>
     </div>
-    <div class="col-xs-12">
-      <div class="row">
-        <div class="col-xs-3">
-          <p>
-              <span data-detail-label="date"><strong>Date:</strong></span><br />
-              <span data-detail="date">
-                  {{#if dateTimeFormatted}}
-                    {{dateTimeFormatted}}
-                  {{else}}
-                    N/A
-                  {{/if}}
-              </span>
-              </p>
-          </div>
-        <div class="col-xs-3">
-          <p>
-            <span data-detail-label="type"><strong>Type:</strong></span><br />
-            <span data-detail="type">
-                {{#if typeDisplayName}}
-                  {{typeDisplayName}}
-                {{else}}
-                  N/A
-                {{/if}}
-            </span>
-            </p>
-        </div>
-        <div class="col-xs-3">
-          <p>
-            <span data-detail-label="desc"><strong>Description:</strong></span><br />
-            <span data-detail="desc">
-                {{#if kind}}
-                  {{kind}}
-                {{else}}
-                  N/A
-                {{/if}}
-            </span>
-            </p>
-        </div>
-        <div class="col-xs-3">
-          <p>
-            <span data-detail-label="patientClass"><strong>Patient Class:</strong></span><br />
-            <span data-detail="patientClass">
-                {{#if patientClassName}}
-                  {{patientClassName}}
-                {{else}}
-                  N/A
-                {{/if}}
-            </span>
-            </p>
-        </div>      
-      </div>
-      <div class="row">
-        <div class="col-xs-3">
-        <p>
-            <span data-detail-label="location"><strong>Location:</strong></span><br />
-            <span data-detail="location">
-                {{#if locationName}}
-                  {{locationName}}
-                {{else}}
-                  N/A
-                {{/if}}
-            </span>
-            </p>
-        </div>
-        <div class="col-xs-3">
-          <p>
-            <span data-detail-label="status"><strong>Status:</strong></span><br />
-            <span data-detail="status">
-                {{#if appointmentStatus}}
-                  {{appointmentStatus}}
-                {{else}}
-                  N/A
-                {{/if}}
-            </span>
-            </p>
-        </div>
-        <div class="col-xs-3">
-          <p>
-            <span data-detail-label="stopCode"><strong>Stop Code:</strong></span><br />
-            <span data-detail="stopCode">
-                {{#if stopCodeName}}
-                  {{stopCodeName}}
-                {{else}}
-                  N/A
-                {{/if}}
-            </span>
-            </p>
-        </div>
-        <div class="col-xs-3">
-          <p>
-            <span data-detail-label="provider"><strong>Provider:</strong></span><br />
-            <span data-detail="provider">
-                {{#if providerDisplayName}}
-                  {{providerDisplayName}}
-                {{else}}
-                  N/A
-                {{/if}}
-            </span>
-            </p>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-xs-3">
-          <p>
-            <span data-detail-label="facility"><strong>Facility:</strong></span><br />
-            <span data-detail="facility">
-                {{#if facilityMoniker}}
-                  {{facilityMoniker}}
-                {{else}}
-                  N/A
-                {{/if}}
-            </span>
-            </p>
-        </div>
-      </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-3">
+      <p>
+          <span data-detail-label="date"><strong>Date:</strong></span><br />
+          <span data-detail="date">
+              {{#if dateTimeFormatted}}
+                {{dateTimeFormatted}}
+              {{else}}
+                N/A
+              {{/if}}
+          </span>
+      </p>
+    </div>
+    <div class="col-xs-3">
+      <p>
+        <span data-detail-label="type"><strong>Type:</strong></span><br />
+        <span data-detail="type">
+            {{#if typeDisplayName}}
+              {{typeDisplayName}}
+            {{else}}
+              N/A
+            {{/if}}
+        </span>
+        </p>
+    </div>
+    <div class="col-xs-3">
+      <p>
+        <span data-detail-label="desc"><strong>Description:</strong></span><br />
+        <span data-detail="desc">
+            {{#if kind}}
+              {{kind}}
+            {{else}}
+              N/A
+            {{/if}}
+        </span>
+        </p>
+    </div>
+    <div class="col-xs-3">
+      <p>
+        <span data-detail-label="patientClass"><strong>Patient class:</strong></span><br />
+        <span data-detail="patientClass">
+            {{#if patientClassName}}
+              {{patientClassName}}
+            {{else}}
+              N/A
+            {{/if}}
+        </span>
+        </p>
+    </div>      
+  </div>
+  <div class="row">
+    <div class="col-xs-3">
+      <p>
+        <span data-detail-label="location"><strong>Location:</strong></span><br />
+        <span data-detail="location">
+          {{#if locationName}}
+            {{locationName}}
+          {{else}}
+            N/A
+          {{/if}}
+        </span>
+      </p>
+    </div>
+    <div class="col-xs-3">
+      <p>
+        <span data-detail-label="status"><strong>Status:</strong></span><br />
+        <span data-detail="status">
+          {{#if status}}
+            {{status}}
+          {{else}}
+             N/A
+          {{/if}}
+        </span>
+      </p>
+    </div>
+    <div class="col-xs-3">
+      <p>
+        <span data-detail-label="stopCode"><strong>Stop code:</strong></span><br />
+        <span data-detail="stopCode">
+          {{#if stopCodeName}}
+            {{stopCodeName}}
+          {{else}}
+            N/A
+          {{/if}}
+        </span>
+      </p>
+    </div>
+    <div class="col-xs-3">
+      <p>
+        <span data-detail-label="facility"><strong>Facility:</strong></span><br />
+        <span data-detail="facility">
+          {{#if facilityMoniker}}
+            {{facilityMoniker}}
+          {{else}}
+            N/A
+          {{/if}}
+        </span>
+      </p>
     </div>
   </div>
   {{#if reasonName}}

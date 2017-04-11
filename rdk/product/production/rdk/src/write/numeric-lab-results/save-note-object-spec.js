@@ -11,11 +11,11 @@ var writebackContext = {
         }
     },
     vistaConfig: {
-        host: 'IP_ADDRESS',
+        host: 'IP        ',
         port: 9210,
-        accessCode: 'PW',
-        verifyCode: 'PW',
-        localIP: 'IPADDRES',
+        accessCode: 'PW    ',
+        verifyCode: 'PW    !!',
+        localIP: 'IP      ',
         localAddress: 'localhost',
         noReconnect: true
     },
@@ -104,7 +104,7 @@ describe('getClinicalObjectUid', function() {
         sinon.stub(pjds, 'create', function(logger, appConfig, model, callback) {
             var result = {
                 headers: {
-                    location: 'http://IP_ADDRESS:PORT/clinicobj/urn:va:ehmp-observation:9E7A:100615:b5f0e8ff-434a-433f-a4d9-37459d1b419e'
+                    location: 'http://IP             /clinicobj/urn:va:ehmp-observation:9E7A:100615:b5f0e8ff-434a-433f-a4d9-37459d1b419e'
                 }
             };
             callback(null, result);
@@ -139,14 +139,14 @@ describe('createNoteObject', function() {
         sinon.stub(pjds, 'create', function(logger, appConfig, model, callback) {
             var result = {
                 headers: {
-                    location: 'http://IP_ADDRESS:PORT/clinicobj/urn:va:ehmp-note:9E7A:100615:67f4ce62-8f0f-4c89-9ec0-4ad83a3645ef'
+                    location: 'http://IP             /clinicobj/urn:va:ehmp-note:9E7A:100615:67f4ce62-8f0f-4c89-9ec0-4ad83a3645ef'
                 }
             };
             callback(null, result);
         });
 
         saveNoteObject._createNoteObject(writebackContext, 'urn:va:ehmp:9E7A;100615:0babd148-3f0d-4a0f-8c1a-c39ce3be48f4', function(err, result) {
-            expect(result).eql('http://IP_ADDRESS:PORT/clinicobj/urn:va:ehmp-note:9E7A:100615:67f4ce62-8f0f-4c89-9ec0-4ad83a3645ef');
+            expect(result).eql('http://IP             /clinicobj/urn:va:ehmp-note:9E7A:100615:67f4ce62-8f0f-4c89-9ec0-4ad83a3645ef');
         });
     });
 

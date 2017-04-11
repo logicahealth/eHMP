@@ -1,7 +1,6 @@
 @F285_allergies_gist @regression
 Feature: F285 : Overview Screen
 
-
 # POC Team Jupiter
 
 Background:
@@ -35,12 +34,14 @@ Scenario: Allergy Gist has popover menu
   
 @F285_2_AllergiesGistExpandView @US4005
 Scenario: View Allergies Applet Single Page by clicking on Expand View
-  When the user clicks the control "Expand View" in the "Allergies Applet"
+#  When the user clicks the control "Expand View" in the "Allergies Applet"
+  When User clicks the Expand View in the "Allergies" Applet
   Then the Allergies Applet title is "ALLERGIES"
 
 @F285_2b_AllergiesGistExpandView @US4005
 Scenario: Verify expanded applet returns to overview
-  When the user clicks the control "Expand View" in the "Allergies Applet"
+#  When the user clicks the control "Expand View" in the "Allergies Applet"
+  When User clicks the Expand View in the "Allergies" Applet
   And the Allergies Applet expand view contains data rows
   And the user minimizes the expanded Allergies Applet
   #Then Overview is active by default
@@ -56,7 +57,8 @@ Scenario: Allergies Gist displays all of the same details after applet is refres
   
 @f282_allergies_gist_exapnd_view_refresh 
 Scenario: Allergies Gist expand view displays all of the same details after applet is refreshed
-  When the user clicks the control "Expand View" in the "Allergies Applet"
+#  When the user clicks the control "Expand View" in the "Allergies Applet"
+  When User clicks the Expand View in the "Allergies" Applet
   Then the expanded Allergies Applet is displayed
   And the Allergies Applet expand view contains data rows
   When user refreshes Allergies Applet
@@ -70,7 +72,8 @@ Scenario: Verfy details for a particular allergy for patient using Gist view app
     
 @F282_AllergiesGist_detail_from_expand_view 
 Scenario: Verfy details for a pariticular allergy for patient using expand view applet
-    When the user clicks the control "Expand View" in the "Allergies Applet"
+#    When the user clicks the control "Expand View" in the "Allergies Applet"
+    When User clicks the Expand View in the "Allergies" Applet
     Then the expanded Allergies Applet is displayed
 	When the user views the first Allergies detail view
     Then the modal is displayed

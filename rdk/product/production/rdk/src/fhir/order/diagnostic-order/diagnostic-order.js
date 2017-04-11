@@ -152,7 +152,7 @@ function convertToFhir(result, req) {
 }
 
 function createDiagnosticOrder(jdsItem, pid) {
-    var fhirItem = new fhirResource.DiagnosticOrder(helpers.generateUUID());
+    var fhirItem = new fhirResource.DiagnosticOrder(jdsItem.uid);
     var results = [fhirItem];
 
     fhirItem.text = new fhirResource.Narrative('<div>' + _.escape(jdsItem.oiName || jdsItem.name) + '</div>', 'generated');

@@ -24,7 +24,7 @@ define([
             }
             if ((attributes.action === 'discontinue') && (_.isEmpty(attributes.reason))) {
                 this.errorModel.set({
-                    reason: 'A reason for discontinue must be selected.'
+                    reason: 'A reason for discontinue must be selected'
                 });
                 return 'Validation errors. Please fix.';
             }
@@ -64,9 +64,9 @@ define([
             var hash = resp.data[0].hash;
 
             var strArrayStatus = detailSummary.substring(detailSummary.search('Current Status:'), detailSummary.length).split('\r')[0];
-            var vistaStatus = strArrayStatus.replace('Current Status:', '').trim();
-            var vistaSignatureStatus = strArrayStatus.replace('Signature:', '').trim();
-            var jdsStatus = this.get('statusName');
+            var vistaStatus = strArrayStatus.replace('Current Status:', '').trim().toUpperCase();
+            var vistaSignatureStatus = strArrayStatus.replace('Signature:', '').trim().toUpperCase();
+            var jdsStatus = (this.get('statusName') || '').toUpperCase();
 
             if (jdsStatus !== vistaStatus) {
                 result.errorMessage = 'The order cannot be discontinued. ';
@@ -85,7 +85,7 @@ define([
                 result.action = (vistaStatus === 'PENDING') ? 'discontinue' : 'cancel';
 
                 var detailSummaryLines = detailSummary.split('\r');
-                result.summary = detailSummaryLines[0];
+                result.summary = this.attributes.summary;
 
                 // Parse the "order entered" date out from the activity section of the order detail text
                 var detailIndex = -1;
@@ -139,7 +139,7 @@ define([
                 silent: true
             });
 
-            var location = _.get(this.patient.get('visit'), 'locationUid').split(':').pop();
+            var location = _.get(this.patient.get('visit'), 'locationUid', '').split(':').pop();
             var siteCode = this.user.get('site');
             this.set({
                 pid: this.patient.get('pid'),

@@ -19,7 +19,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  * <pre>
  * &lt;complexType name="patientDemographics">
  *   &lt;complexContent>
- *     &lt;extension base="{http://webservice.vds.DNS       /}patient">
+ *     &lt;extension base="{http://webservice.vds.med.DNS   /}patient">
  *       &lt;sequence>
  *         &lt;element name="address1" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="address2" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -29,7 +29,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *         &lt;element name="city" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="clinic" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="codeGreen" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="ethnicity" type="{http://webservice.vds.DNS       /}code" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="ethnicity" type="{http://webservice.vds.med.DNS   /}code" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element name="labId" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="pcmDates" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/>
  *         &lt;element name="pcmPhone" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -37,9 +37,9 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *         &lt;element name="phone1" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="phone2" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="primaryProvider" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="race" type="{http://webservice.vds.DNS       /}code" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="race" type="{http://webservice.vds.med.DNS   /}code" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element name="rank" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="site" type="{http://webservice.vds.DNS       /}site" minOccurs="0"/>
+ *         &lt;element name="site" type="{http://webservice.vds.med.DNS   /}site" minOccurs="0"/>
  *         &lt;element name="sourceProtocol" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="state" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="ward" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -54,7 +54,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "patientDemographics", namespace = "http://webservice.vds.DNS       /", propOrder = {
+@XmlType(name = "patientDemographics", namespace = "http://webservice.vds.med.DNS   /", propOrder = {
     "address1",
     "address2",
     "admissionDate",

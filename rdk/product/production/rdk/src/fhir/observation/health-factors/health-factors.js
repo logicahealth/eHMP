@@ -130,6 +130,7 @@ function createHF(jdsItem) {
 
     fhirItem.resource = {};
     fhirItem.resource.resourceType = 'Observation';
+    fhirItem.resource.id = jdsItem.uid;
     fhirItem.resource.text = {
         'status': 'generated',
         'div': '<div>' + jdsItem.summary + '</div>'

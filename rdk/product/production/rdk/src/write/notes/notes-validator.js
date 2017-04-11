@@ -1,6 +1,5 @@
 'use strict';
 var _ = require('lodash');
-var dd = require('drilldown');
 var encryptor = require('../orders/common/orders-sig-code-encryptor');
 var nullchecker = require('../../utils/nullchecker');
 var querystring = require('querystring');
@@ -11,8 +10,6 @@ var clinicalObjSubsystem = require('../../subsystems/clinical-objects/clinical-o
 var asu = require('../../subsystems/asu/asu-process');
 
 module.exports.unsigned = function(writebackContext, callback) {
-    // TODO: more robust model validation.
-    // probably need to add some path icn/pid to model patientIcn and pid validation
     var titleId = writebackContext.model.documentDefUid;
     var error = null;
     var logger = writebackContext.logger;
@@ -80,7 +77,6 @@ module.exports.createAddendum = function(writebackContext, callback) {
 };
 
 module.exports.update = function(writebackContext, callback) {
-    // TODO: more robust model validation.
     var pid = writebackContext.pid;
     var ien = writebackContext.resourceId;
     var error = null;
@@ -101,14 +97,12 @@ module.exports.update = function(writebackContext, callback) {
 };
 
 module.exports.delete = function(writebackContext, callback) {
-    // TODO: validate signed notes
     addUid(writebackContext);
     var error = null;
     return setImmediate(callback, error);
 };
 
 module.exports.sign = function(writebackContext, callback) {
-    // TODO: validate signed notes
 
     var error = null;
     if (!writebackContext.model.signatureCode) {
@@ -117,11 +111,33 @@ module.exports.sign = function(writebackContext, callback) {
     writebackContext.model.signatureCode = encryptor.encryptSig(writebackContext.model.signatureCode);
     var pid = writebackContext.pid;
     writebackContext.model.dfn = _.last(writebackContext.pid.split(';'));
-    return setImmediate(callback, error);
+
+    var uid = writebackContext.model.signItems[0].uid;
+    var logger = writebackContext.logger;
+    var appConfig = writebackContext.appConfig;
+
+    clinicalObjSubsystem.read(logger, appConfig, uid, false, function(err, response) {
+        if (err) {
+            logger.warn({
+                unsignedNoteWriteError: err
+            }, 'Error calling the JDS notes read endpoint');
+
+            logger.warn('Failed to read the note from JDS.');
+            return setImmediate(callback, err);
+        }
+        var errors = [];
+        var model = clinicalObjUtil.returnClinicialObjectData(errors, [response])[0];
+        if (!_.isEmpty(errors) || !model) {
+            return setImmediate(callback, errors);
+        }
+        if (model.signLock || _.get(model, 'clinicalObject.ehmpState') === 'active') {
+            return setImmediate(callback, 'You are unable to sign this note because you signed it on another computer. Contact your System Administrator for assistance or refresh the application and locate this note under the My Signed Notes section.');
+        }
+        return setImmediate(callback, error);
+    });
 };
 
 module.exports.signAddendum = function(writebackContext, callback) {
-    // TODO: validate signed notes
 
     var error = null;
     if (!writebackContext.model.signatureCode) {
@@ -222,7 +238,7 @@ var runCreateAddendumASU = function(writebackContext, callback) {
             });
             return setImmediate(callback, 'Failed to retrieve parent note. JDS errors:' + errorMessages);
         }
-        var jdsUidExists = _.isObject(dd(body)('data')('items')(0).val);
+        var jdsUidExists = _.isObject(_.get(body, 'data.items[0]'));
         if (!jdsUidExists) {
             return setImmediate(callback, 'Failed to retrieve parent note.');
         }

@@ -51,7 +51,12 @@ module.exports.save = function(writebackContext, callback) {
     var model = writebackContext.model;
 
     // required
-    var patientDFN = model.patientDFN;
+    var patientDFN = writebackContext.interceptorResults.patientIdentifiers.dfn;
+
+    if(nullChecker.isNullish(patientDFN)){
+        return callback('Missing required patient identifiers');
+    }
+
     var isInpatient = model.isInpatient;
     var locationIEN = locationUtil.getLocationIEN(model.locationUid);
     var encounterDateTime = getFilemanDate(model.encounterDateTime);

@@ -1,10 +1,11 @@
 define([
     "backbone",
     "underscore",
+    "moment",
     "app/applets/newsfeed/newsfeedUtils",
     "app/applets/newsfeed/eventHandlers"
 
-], function(Backbone, _, newsfeedUtils, EventHandlers) {
+], function(Backbone, _, moment, newsfeedUtils, EventHandlers) {
     "use strict";
 
     return {
@@ -51,6 +52,14 @@ define([
                         if (response.kind.toLowerCase() === 'procedure') {
                             response.displayName = response.name || response.typeName || response.summary || "Unknown";
                         }
+                        if(response.appointmentStatus){
+                            var appointmentStatus = response.appointmentStatus.toLowerCase();
+                            response.appointmentStatus = _.capitalize(appointmentStatus);
+                            if(appointmentStatus === 'complete' || appointmentStatus === 'completed'){
+                                response.appointmentStatus = 'Completed';
+                            }
+                        }
+
                         return response;
                     }
                 }

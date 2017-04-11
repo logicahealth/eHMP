@@ -16,7 +16,7 @@ import java.util.Set;
  * 5) main difference between the set functions and map functions (parentSet() vs parentMap() is that map includes description)
  * 
  * 
- * TODO: Add generic attribute storage
+ * FUTURETODO: Add generic attribute storage
  * 
  * @author brian
  */
@@ -96,6 +96,14 @@ public abstract class Concept implements Serializable {
 	}
 	
     @Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((urn == null) ? 0 : urn.hashCode());
+		return result;
+	}
+
+	@Override
     public boolean equals(Object obj) {
     	if (obj instanceof Concept) {
     		return sameas((Concept) obj);

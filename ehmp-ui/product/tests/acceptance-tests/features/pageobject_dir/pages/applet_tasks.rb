@@ -9,6 +9,7 @@ class PobTasksApplet < PobParentApplet
     add_title appletid_css
     add_empty_table_row appletid_css
     add_generic_error_message appletid_css
+    add_expanded_applet_fields appletid_css
   end
 
   def applet_loaded?

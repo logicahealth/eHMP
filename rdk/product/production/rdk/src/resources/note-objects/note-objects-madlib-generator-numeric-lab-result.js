@@ -38,8 +38,8 @@ function getMadlibString(errorMessages, sourceClinicalObject) {
     }
 
     var madlibString = '';
-    if (data.displayName) {
-        madlibString += data.displayName;
+    if (data.typeName) {
+        madlibString += data.typeName;
     }
     if (data.specimen) {
         madlibString += ', ' + data.specimen;

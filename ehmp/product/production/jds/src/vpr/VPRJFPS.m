@@ -62,6 +62,9 @@ WARDLOC(LOC) ;
 CLINLOC(LOC) ;
  Q:LOC("type")="C" 1
  Q 0
+ACTIVECLINLOC(LOC) ;
+ Q:LOC("type")="C"&(LOC("oos")="false")&($G(LOC("inactive"))="") 1
+ Q 0
 PTLOADNG(STAT) ;
  N RSLT,I S RSLT=0,I="" F  S I=$O(STAT("syncStatusByVistaSystemId",I)) Q:I=""  D
  . I STAT("syncStatusByVistaSystemId",I,"syncComplete")="false" S RSLT=1

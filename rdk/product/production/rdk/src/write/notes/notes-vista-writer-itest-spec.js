@@ -5,11 +5,11 @@ var vistaWriter = require('./notes-vista-writer');
 var writebackContext = {
     pid: '9E7A;8',
     vistaConfig: {
-        host: 'IP_ADDRESS',
+        host: 'IP        ',
         port: 9210,
-        accessCode: 'PW',
-        verifyCode: 'PW',
-        localIP: 'IPADDRES',
+        accessCode: 'PW    ',
+        verifyCode: 'PW    !!',
+        localIP: 'IP      ',
         localAddress: 'localhost',
         context: 'HMP UI CONTEXT'
     },

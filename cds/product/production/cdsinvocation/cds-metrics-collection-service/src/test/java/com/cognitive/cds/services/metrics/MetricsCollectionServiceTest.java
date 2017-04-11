@@ -42,6 +42,7 @@ import com.cognitive.cds.invocation.model.Context;
 import com.cognitive.cds.invocation.model.Location;
 import com.cognitive.cds.invocation.model.Subject;
 import com.cognitive.cds.invocation.model.User;
+import com.cognitive.cds.invocation.mongo.exception.CDSDBConnectionException;
 import com.cognitive.cds.services.metrics.model.CDSResponseStatus;
 import com.cognitive.cds.services.metrics.model.MetricsUpdate;
 
@@ -132,16 +133,16 @@ public class MetricsCollectionServiceTest {
         
         MetricsCollectionService instance = new MetricsCollectionService();
         CDSResponseStatus result = instance.updateMetrics(request);
-        
-        
     }
 
+    
     /**
      * Test of writeToMetricsDb method, of class MetricsCollectionService.
+     * @throws CDSDBConnectionException 
      */
     @Ignore("This is really a servce integrayion test")
     @Test
-    public void testWriteToMetricsDb() throws IOException {
+    public void testWriteToMetricsDb() throws IOException, CDSDBConnectionException {
         System.out.println("writeToMetricsDb");
         
         String callId = "uuid678";

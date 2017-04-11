@@ -1,4 +1,6 @@
-define([], function() {
+define([
+    'moment'
+], function(moment) {
     var formUidCounter = 0;
     var addendum = ADK.Resources.Writeback.Model.extend({
         resource: 'addendum-add',
@@ -117,13 +119,13 @@ define([], function() {
             if (options.validationType && options.validationType === 'sign') {
                 if (_.isEmpty(attributes.text[0].content)) {
                     this.errorModel.set({
-                        "text.0.content": 'Note body is required before signing.'
+                        "text.0.content": 'Note body is required before signing'
                     });
                 }
             }
 
             if (!_.isEmpty(this.errorModel.toJSON())) {
-                return 'Correct validation errors before saving.';
+                return 'Correct validation errors before saving';
             }
         },
         validateRequiredTime: function(attributes) {
@@ -132,14 +134,14 @@ define([], function() {
 
             if (inputTime === null || inputTime === undefined || inputTime === '') {
                 this.errorModel.set({
-                    addendumDerivReferenceTime: 'Enter a time.'
+                    addendumDerivReferenceTime: 'Enter a time'
                 });
                 return false;
             }
 
             if (!this.isTime(inputTime)) {
                 this.errorModel.set({
-                    addendumDerivReferenceTime: 'Enter a valid time.'
+                    addendumDerivReferenceTime: 'Enter a valid time'
                 });
                 return false;
             }

@@ -5,9 +5,11 @@ import org.kie.api.runtime.process.WorkItemHandler;
 import org.kie.api.runtime.process.WorkItemManager;
 import org.kie.internal.runtime.Cacheable;
 import org.kie.internal.runtime.Closeable;
+import org.springframework.http.HttpStatus;
 
 import gov.va.clinicalobjectstorageservice.util.ResourceUtil;
 import gov.va.ehmp.services.exception.EhmpServicesException;
+import gov.va.ehmp.services.exception.ErrorResponseUtil;
 import gov.va.ehmp.services.utils.Logging;
 import gov.va.kie.utils.WorkItemUtil;
 
@@ -29,8 +31,8 @@ public class ClinicalObjectReadHandler implements WorkItemHandler, Closeable, Ca
 		
 		try {
 			Logging.info("Entering ClinicalObjectReadHandler.executeWorkItem");
-			String pId = WorkItemUtil.extractStringParam(workItem, "pid");
-			String uId = WorkItemUtil.extractStringParam(workItem, "uid");
+			String pId = WorkItemUtil.extractRequiredStringParam(workItem, "pid");
+			String uId = WorkItemUtil.extractRequiredStringParam(workItem, "uid");
 			
 			Logging.debug("ClinicalObjectReadHandler.executeWorkItem pId = " + pId + ", uId = " + uId);
 			
@@ -40,6 +42,9 @@ public class ClinicalObjectReadHandler implements WorkItemHandler, Closeable, Ca
 			Logging.debug("ClinicalObjectReadHandler.executeWorkItem response = " + response);
 		} catch (EhmpServicesException e) {
 			response = e.toJsonString();
+		} catch (Exception e) {
+			Logging.error("ClinicalObjectReadHandler.executeWorkItem: An unexpected condition has happened: " + e.getMessage());
+			response = ErrorResponseUtil.create(HttpStatus.INTERNAL_SERVER_ERROR, "ClinicalObjectReadHandler.executeWorkItem: An unexpected condition has happened: ", e.getMessage());
 		}
 		
 		WorkItemUtil.completeWorkItem(workItem, manager, response);

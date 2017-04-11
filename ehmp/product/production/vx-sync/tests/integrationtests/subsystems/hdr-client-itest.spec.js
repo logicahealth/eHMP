@@ -31,7 +31,8 @@ var testSampleData = {
 var invalidSiteId = 'DSSS-----';
 var invalidPatientId = '76C6:5';
 
-describe('hdr-client.js', function() {
+// test suite disabled. enable if hdr pub/sub functionality is required
+xdescribe('hdr-client.js', function() {
     config.hdr.hdrSites[testSampleData.siteId] = {stationNumber: testSampleData.stationNumber};
     var hdrClient = new HDRClient(logger, logger, config);
     beforeEach(function(){

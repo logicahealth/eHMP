@@ -2,13 +2,10 @@ define([
     "backbone",
     "marionette",
     'underscore',
-    "hbs!app/applets/lab_results_grid/list/dateTemplate",
+    'handlebars',
     "hbs!app/applets/lab_results_grid/list/labTestCoverSheetTemplate",
-    "hbs!app/applets/lab_results_grid/list/resultTemplate",
-    "hbs!app/applets/lab_results_grid/list/siteTemplate",
     "hbs!app/applets/lab_results_grid/list/flagTemplate",
-    "hbs!app/applets/lab_results_grid/list/referenceRangeTemplate"
-], function(Backbone, Marionette, _, dateTemplate, labTestCSTemplate, resultTemplate, siteTemplate, flagTemplate, referenceRangeTemplate) {
+], function(Backbone, Marionette, _, Handlebars, labTestCSTemplate, flagTemplate) {
     "use strict";
 
     function customFlagSort(model, sortKey) {
@@ -38,7 +35,7 @@ define([
             return {
                 name: "observed",
                 label: "Date",
-                template: dateTemplate,
+                template: Handlebars.compile('{{formatDate observed "MM/DD/YYYY - HH:mm"}}'),
                 flexWidth: 'flex-width-date',
                 cell: Backgrid.HandlebarsCell.extend ({
                     className: 'handlebars-cell flex-width-date'
@@ -51,9 +48,9 @@ define([
                 name: "typeName",
                 label: "Lab Test",
                 template: labTestCSTemplate,
-                flexWidth: 'flex-width-4',
+                flexWidth: 'flex-width-3',
                 cell: Backgrid.HandlebarsCell.extend ({
-                    className: 'handlebars-cell flex-width-4'
+                    className: 'handlebars-cell flex-width-3'
                 }),
                 hoverTip: 'labresults_labtest'
             };
@@ -75,7 +72,7 @@ define([
             return {
                 name: "result",
                 label: "Result",
-                template: resultTemplate,
+                template: Handlebars.compile('{{result}} {{units}}'),
                 cell: "handlebars",
                 hoverTip: 'labresults_result'
             };
@@ -100,7 +97,7 @@ define([
             return {
                 name: "referenceRange",
                 label: "Ref Range",
-                template: referenceRangeTemplate,
+                template: Handlebars.compile('{{referenceRange}}'),
                 cell: "handlebars",
                 hoverTip: 'labresults_refrange'
             };
@@ -109,9 +106,9 @@ define([
             return {
                 name: "facilityMoniker",
                 label: "Facility",
-                template: siteTemplate,
+                template: Handlebars.compile('{{facilityMoniker}}'),
                 cell: "handlebars",
-                hoverTip: 'labrestuls_facility'
+                hoverTip: 'labresults_facility'
             };
         }
     };

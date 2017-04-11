@@ -3,11 +3,13 @@
         <div class="col-xs-12">
             <h5 class="bottom-border-grey-dark">Details</h5>
         </div>
+    </div>
+    <div class="row">
         <div class="col-xs-3">
             <p>
                 <span data-detail-label="Primary_ICD-9-CM_Label"><strong>Primary ICD-9-CM:</strong></span><br />
                 <span data-detail="Primary_ICD-9-CM">
-                    {{#if icdCode}}
+                    {{#if icd9}}
                         {{icdCode}}
                     {{else}}
                         N/A
@@ -15,6 +17,44 @@
                 </span>
             </p>
         </div>
+        <div class="col-xs-3">
+            <p>
+                <span data-detail-label="Primary_ICD-10-CM_Label"><strong>Primary ICD-10-CM:</strong></span><br />
+                <span data-detail="Primary_ICD-10-CM">
+                    {{#if icd10}}
+                        {{icdCode}}
+                    {{else}}
+                        N/A
+                    {{/if}}
+                </span>
+            </p>
+        </div>   
+        <div class="col-xs-3">
+            <p>
+                <span data-detail-label="EnteredBy_Label"><strong>Recorded by:</strong></span><br />
+                <span data-detail="RecordedBy">
+                {{#if recordedBy}}
+                    {{recordedBy}}
+               {{else}}
+                    N/A
+                {{/if}}
+                </span>
+            </p>
+        </div>        
+        <div class="col-xs-3">
+            <p>
+                <span data-detail-label="RecordedOn_Label"><strong>Recorded on:</strong></span><br />
+                <span data-detail="RecordedOn">
+                {{#if recordedOn}}
+                    {{formatDate recordedOn}}
+                {{else}}
+                    N/A
+                {{/if}}
+                </span>
+            </p>
+        </div> 
+    </div>
+    <div class="row"> 
         <div class="col-xs-3">
             <p>
                 <span data-detail-label="Snomed_Label"><strong>SNOMED CT:</strong></span><br />
@@ -53,7 +93,7 @@
         </div>
         <div class="col-xs-3">
             <p>
-                <span data-detail-label="problem_sc_label"><strong>Service Connected:</strong></span><br />
+                <span data-detail-label="problem_sc_label"><strong>Service connected:</strong></span><br />
                 <span data-detail="problem_sc">
                     {{#if serviceConnected}}
                         Yes
@@ -63,6 +103,8 @@
                 </span>
             </p>
         </div>
+    </div>
+    <div class="row">
         <div class="col-xs-3">
             <p>
                 <span data-detail-label="problem_acuity_label"><strong>Acuity:</strong></span><br />
@@ -77,7 +119,7 @@
         </div>
         <div class="col-xs-3">
             <p>
-                <span data-detai-label="problem_provider_label"><strong>Responsible Provider:</strong></span><br />
+                <span data-detai-label="problem_provider_label"><strong>Responsible provider:</strong></span><br />
                 <span data-detail="problem_provider">
                     {{#if providerDisplayName}}
                         {{providerDisplayName}}
@@ -111,6 +153,8 @@
                 </span>
             </p>
         </div>
+    </div>
+    <div class="row">
         <div class="col-xs-3">
             <p>
                 <span data-detail-label="problem_entered_label"><strong>Entered on:</strong></span><br />
@@ -123,6 +167,18 @@
                 </span>
             </p>
         </div>
+        <div class="col-xs-3">
+            <p>
+                <span data-detail-label="EnteredBy_Label"><strong>Entered by:</strong></span><br />
+                <span data-detail="EnteredBy">
+                {{#if enteredBy}}
+                    {{enteredBy}}
+                {{else}}
+                    N/A
+                {{/if}}
+                </span>
+            </p>
+        </div>        
         <div class="col-xs-3">
             <p>
                 <span data-detail-label="problem_updated_label"><strong>Updated on:</strong></span><br />
@@ -188,8 +244,7 @@
                         <span>{{formatDate entered}}</span></br>
                         <span>{{comment}}</span>
                     <p>
-                    <hr aria-hidden="true">
-                </div>
+              </div>
             </div>
             {{/comments}}
         </div>

@@ -10,7 +10,7 @@ module.exports.getResourceConfig = function() {
             synchronize: true,
             convertPid: true
         },
-        requiredPermissions: [],
+        requiredPermissions: ['read-patient-record'],
         isPatientCentric: true,
         subsystems: ['jds']
     }, {
@@ -22,7 +22,7 @@ module.exports.getResourceConfig = function() {
             synchronize: true,
             convertPid: true
         },
-        requiredPermissions: [],
+        requiredPermissions: ['read-patient-record'],
         isPatientCentric: true,
         subsystems: ['jds']
     }];

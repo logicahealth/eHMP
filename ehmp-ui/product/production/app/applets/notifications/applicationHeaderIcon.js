@@ -3,13 +3,14 @@ define([
     'backbone',
     'marionette',
     'jquery',
-    'handlebars'
-], function(_, Backbone, Marionette, $, Handlebars) {
+    'handlebars',
+    'moment'
+], function(_, Backbone, Marionette, $, Handlebars, moment) {
     'use strict';
 
     var newTaskNotification = new ADK.UI.Notification({
-        icon: "fa fa-bell font-size-18", // only matters if type: "basic"
-        message: "NEW task notification(s) received",
+        icon: "fa fa-bell font-size-18 color-tertiary", // only matters if type: "basic"
+        message: "New task notification(s) received",
         type: "basic",
         autoClose: false, // prevents from closing automatically after 10 seconds
         //Do not remove. This is a workaround suggested by Josh Bell for closing the growler on onClick
@@ -27,7 +28,7 @@ define([
         },
         defaults: function() {
             var user = ADK.UserService.getUserSession();
-            var duz = user.get('duz')[user.get('site')];
+            var duz = user.get('site') + ';' + user.get('duz')[user.get('site')];
             return {
                 'DUZ': duz
             };
@@ -42,10 +43,13 @@ define([
     });
 
     var Collection = ADK.Resources.Collection.extend({
+        model: ADK.Resources.Model.extend({
+            idAttribute: 'notificationId'
+        }),
         resource: 'notifications-staff-indicator-list',
         initialize: function() {
             var user = ADK.UserService.getUserSession();
-            var duz = user.get('duz')[user.get('site')];
+            var duz = user.get('site') + ';' + user.get('duz')[user.get('site')];
             this.DUZ = duz;
         },
         parse: function(response, attr) {
@@ -56,6 +60,11 @@ define([
                 }).salience;
             }), function(item, index) {
                 item.title = 'Item ' + (index + 1) + '. Press enter to view notifications.';
+                var itemExpiration = moment(item.expiration);
+                if (itemExpiration.isValid()) {
+                    item.expirationFormatted = itemExpiration.format('MM/DD/YYYY HH:mm');
+                    item.message.body = item.message.body.replace('{dateString}', item.expirationFormatted);
+                }
             });
 
         },
@@ -72,7 +81,7 @@ define([
         resource: 'notifications-staff-growler-list',
         initialize: function() {
             var user = ADK.UserService.getUserSession();
-            var duz = user.get('duz')[user.get('site')];
+            var duz = user.get('site') + ';' + user.get('duz')[user.get('site')];
             this.DUZ = duz;
         },
         parse: function(response) {
@@ -84,6 +93,21 @@ define([
                     'userId': 'DUZ'
                 }
             }
+        }
+    });
+
+    var CountView = Backbone.Marionette.ItemView.extend({
+        tagName: 'strong',
+        template: Handlebars.compile('{{#if getCount}}({{getCount}}){{/if}}'),
+        templateHelpers: function() {
+            return {
+                'getCount': _.bind(function() {
+                    return this.getOption('collection').length > 0 ? this.getOption('collection').length : false;
+                }, this)
+            };
+        },
+        modelEvents: {
+            'change:dropdownTitle': 'render'
         }
     });
 
@@ -144,8 +168,15 @@ define([
             }, 300000);
         },
         fetch: function() {
-            this.countModel.fetch();
-            this.growlerCollection.fetch();
+            if (_.isUndefined(ADK.UserService.getStatus()) || ADK.UserService.getUserSession().get('status') !== ADK.UserService.STATUS.LOGGEDIN) {
+                return;
+            }
+            if (!_.has(this, "countModel.xhr") || !_.isFunction(_.get(this, "countModel.xhr.state", null)) || this.countModel.xhr.state() !== "pending") {
+                this.countModel.xhr = this.countModel.fetch();
+            }
+            if (!_.has(this, "growlerCollection.xhr") || !_.isFunction(_.get(this, "growlerCollection.xhr.state", null)) || this.growlerCollection.xhr.state() !== "pending") {
+                this.growlerCollection.xhr =  this.growlerCollection.fetch();
+            }
         },
         onDestroy: function() {
             clearInterval(this.timer);
@@ -175,10 +206,15 @@ define([
                 }
             },
             getTemplate: function() {
-                return Handlebars.compile('<a href="#" title="{{title}}" class="dd-link fa fa-arrow-right"><div class="row right-margin-no left-margin-no"><div class="col-xs-12 left-padding-md pre-wrap word-wrap-break-word word-break-break-word"><div><strong>{{patientName}} ({{last4OfSSN}})</strong></div><div>{{message.subject}}</div><div>{{message.body}}</div></div></div></a>');
+                return Handlebars.compile('<a href="#" title="{{title}}" class="dd-link" role="menuitem" tabindex="-1"><i class="fa fa-arrow-right"></i><div class="row right-margin-no left-margin-no"><div class="col-xs-12 left-padding-md pre-wrap word-wrap-break-word word-break-break-word"><div><strong>{{patientName}} ({{last4OfSSN}})</strong></div><div>{{message.subject}}</div><div>{{message.body}}</div></div></div></a>');
             }
         }),
         ButtonView: ADK.UI.AlertDropdown.ButtonView.extend({
+            modelEvents: {
+                'change alert_count': function(model) {
+                    this.render();
+                }
+            },
             getTemplate: function() {
                 return Handlebars.compile([
                     '<i class="fa {{icon}} font-size-18"></i>',
@@ -193,11 +229,6 @@ define([
                 this.model.set('dropdownTitle', 'MY TASK NOTIFICATIONS');
                 this.collection.fetch();
             },
-            modelEvents: {
-                'change dropdownTitle': function(model) {
-                    this.render();
-                }
-            },
             getTemplate: function() {
                 return Handlebars.compile([
                     '{{#if dropdownTitle}}<div class="dropdown-header left-padding-sm" aria-live="polite">',
@@ -207,26 +238,32 @@ define([
                     '{{else}}',
                     '<span>No Notifications Found</span>',
                     '{{/if}}',
-                    '{{#if count}}<span><strong>({{count}})</strong></span>{{/if}}',
+                    '<span class="numeric-notification-count-container"></span>',
                     '</p>',
                     '</div>{{/if}}',
-                    '<ul class="dropdown-body list-group"></ul>',
+                    '<ul class="dropdown-body list-group" role="menu" tabindex="-1"></ul>',
                     '{{#if footerButton}}<div class="dropdown-footer">',
                     '<button type="button" class="btn btn-link {{footerButton.extraClasses}}" title="{{footerButton.title}}">{{footerButton.label}}</button>',
                     '{{/if}}</div>'
                 ].join('\n'));
+            },
+            onRenderTemplate: function() {
+                this.regionManager = new Backbone.Marionette.RegionManager({
+                    regions: {
+                        'countRegion': Backbone.Marionette.Region.extend({
+                            el: this.$('.numeric-notification-count-container')
+                        }) // if dropdownTitle needs to be dynamic, control with new region/view here
+                    }
+                });
+                this.regionManager.get('countRegion').show(new CountView({
+                    model: this.model,
+                    collection: this.collection
+                }));
+            },
+            onBeforeDestroy: function() {
+                this.regionManager.destroy();
             }
         })
-    });
-
-
-    ADK.Messaging.trigger('register:component', {
-        type: 'applicationHeaderItem',
-        group: "user-nav-alerts",
-        title: 'Notifications Button. Press enter to view notifications.',
-        orderIndex: 1,
-        key: 'ApplicationHeaderNotificationIcon',
-        view: AlertDropdown
     });
 
     return AlertDropdown;

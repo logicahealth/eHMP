@@ -8,9 +8,9 @@ define([
 
     var VisitContextView = Backbone.Marionette.ItemView.extend({
         template: Template,
-        className: "btn-group encounter-info",
+        className: "btn-group encounter-info left-margin-sm",
         events: {
-            'click': 'setVisitContext'
+            'click button': 'setVisitContext'
         },
         modelEvents: {
             "change": "render"
@@ -42,7 +42,10 @@ define([
         group: ["patient", "patient-right"],
         key: "currentVisitContext",
         view: VisitContextView,
-        orderIndex: 10
+        orderIndex: 10,
+        shouldShow: function() {
+            return ADK.PatientRecordService.isPatientInPrimaryVista();
+        }
     });
 
     return VisitContextView;

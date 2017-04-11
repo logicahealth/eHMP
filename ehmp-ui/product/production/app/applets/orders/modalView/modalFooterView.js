@@ -18,7 +18,9 @@ define([
         ui: {
             order_change_order: '#ordersChangeOrder',
             order_discontinue_order: '#ordersDiscontinueOrder',
-            order_sign_order: '#ordersSignOrder'
+            order_sign_order: '#ordersSignOrder',
+            order_close_order: '.close-order'
+
         },
         events: {
             'click #ordersChangeOrder': 'openOrdersPopup',
@@ -44,17 +46,21 @@ define([
             this.ui.order_change_order.attr("disabled", "disabled");
             this.ui.order_discontinue_order.attr("disabled", "disabled");
             this.ui.order_sign_order.attr("disabled", "disabled");
+            this.ui.order_close_order.attr("disabled", "disabled");
         },
         enableButton: function() {
             this.ui.order_change_order.attr("disabled", false);
             this.ui.order_discontinue_order.attr("disabled", false);
             this.ui.order_sign_order.attr("disabled", false);
+            this.ui.order_close_order.attr("disabled", false);
+
         },
         discontinueOrder: function(e) {
             e.preventDefault();
             this.disableButton();
             var discontinueModel = new ADK.UIResources.Writeback.Orders.Discontinue({
-                'statusName': this.model.get('statusName')
+                'statusName': this.model.get('statusName'),
+                'summary': this.model.get('summary')
             });
 
             this.listenTo(discontinueModel, 'create:success', this.onDiscontinueSuccess);
@@ -76,7 +82,8 @@ define([
             e.preventDefault();
             this.disableButton();
             var signModel = new ADK.UIResources.Writeback.Orders.Sign({
-                'statusName': this.model.get('statusName')
+                'statusName': this.model.get('statusName'),
+                'summary': this.model.get('summary')
             });
 
             this.listenTo(signModel, 'create:success', this.onSignSuccess);
@@ -95,7 +102,8 @@ define([
                 size: 'medium',
                 headerOptions: {
                     closeButtonOptions: {title: 'Press enter to cancel.'}
-                }
+                },
+                triggerElement: this.triggerElement
             };
             Utils.launchWorkflow(model, SignView, workflowOptions, 'Sign Order');
         },

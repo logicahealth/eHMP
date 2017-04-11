@@ -6,9 +6,8 @@ define([
     'handlebars',
     'app/applets/orders/util',
     'hbs!app/applets/orders/modalView/headerTemplate',
-    'app/applets/visit/writeback/addselectVisit',
-    'app/applets/orders/writeback/signView'
-], function(ADK, Backbone, Marionette, _, Handlebars, ordersUtil, HeaderTemplate, addselectVisit, signView) {
+    'app/applets/visit/writeback/addselectVisit'
+], function(ADK, Backbone, Marionette, _, Handlebars, ordersUtil, HeaderTemplate, addselectVisit) {
     'use strict';
 
     //Modal Navigation Item View
@@ -22,11 +21,9 @@ define([
             'click #ordersPrevious, #ordersNext': 'navigateResults',
             'keydown #ordersPrevious, #ordersNext': 'accessibility'
         },
-
         modelEvents: {
             "change": "render"
         },
-
         //treat spacebar press as Enter key - 508 requirement
         accessibility: function(event) {
             if (event.keyCode === 32) {
@@ -63,23 +60,20 @@ define([
             this.currentModel.set({
                 "getDiscontinueBtnStatus": ordersUtil.getDiscontinueBtnStatus(this.currentModel),
                 "getSignBtnStatus": ordersUtil.getSignBtnStatus(this.currentModel),
-                "index": this.modelIndex
+                "index": this.modelIndex,
+                "orderId": ordersUtil.getFieldFromUid(this.currentModel.get('uid'), 'orderId')
             }, {
                 silent: true
             });
 
-            var orderId = this.currentModel.get('localId') + ';1';
             var detailModel = new ADK.UIResources.Writeback.Orders.Detail({
-                orderId: orderId
+                    orderId: this.currentModel.get('orderId')
             });
 
             this.listenTo(detailModel, 'read:success', function(model, resp) {
                 this.currentModel.set('detailSummary', model.get('detail'));
                 this.model.clear();
                 this.model.set(this.currentModel.attributes);
-
-                //After rendering we maintain focus on the button that was clicked - 508 requirement
-                this.$('#' + event.currentTarget.id).focus();
             });
 
             this.listenTo(detailModel, 'read:error', function(model, resp) {
@@ -87,6 +81,12 @@ define([
             });
 
             detailModel.execute();
+        },
+        onShow: function() {
+            if (this.model.get('hideNavigation')) {
+                this.ui.order_previous.addClass("hidden");
+                this.ui.order_next.addClass("hidden");
+            }
         }
     });
 });

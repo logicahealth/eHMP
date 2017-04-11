@@ -1,11 +1,10 @@
 define([
-    'main/ADK',
     'backbone',
     'marionette',
     'underscore',
     'highcharts',
     'moment'
-], function(ADK, Backbone, Marionette, _, Highcharts, moment) {
+], function(Backbone, Marionette, _, Highcharts, moment) {
     'use strict';
 
     var rect;

@@ -36,3 +36,19 @@ Scenario: The user can identify when a patient has postings
     | Patient Flags |
     | Directives|
     | Allergies |
+
+@US3584_3_cwad @DE979 @debug @DE3241
+Scenario: The user can identify when a patient has postings
+  # Given user is logged into eHMP-UI
+  When user searches for and selects "Eight,Inpatient"
+  Given Overview is active
+  Then the following postings are active
+    | Posting   |
+    | Allergies |
+    # The Directive is from an external source, non-va
+    | Directives|
+  And the following postings are inactive
+    | Posting       |
+    | Crisis Notes  |
+    | Warnings      |
+    | Patient Flags |

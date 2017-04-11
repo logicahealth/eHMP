@@ -1,7 +1,6 @@
 'use strict';
 
 var _ = require('lodash');
-var dd = require('drilldown');
 var mongo = require('mongoskin');
 var cdsSpecUtil = require('../../resources/cds-spec-util/cds-spec-util');
 var loadResources = require('../../utils/test-resources-loader');

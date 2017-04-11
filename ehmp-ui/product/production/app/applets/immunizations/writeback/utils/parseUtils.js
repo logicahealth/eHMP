@@ -78,21 +78,6 @@ define([
 
             return pickList;
         },
-        getOrderingProviderList: function(response){
-            var pickList = [];
-
-            if(response.data && response.data.items){
-                _.each(response.data.items, function(item){
-                    var provider = {
-                        label: item.name,
-                        value: item.uid
-                    };
-                    pickList.push(provider);
-                });
-            }
-
-            return _.sortBy(pickList, 'label');
-        },
         getSeriesList: function(maxInSeries){
             var pickList = [];
 

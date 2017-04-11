@@ -10,6 +10,7 @@ Background:
   
 @f144_documents_discharge_summary_modal_details @data_specific
 Scenario: Users will be able to view modal popup for event Discharge Summary
+Given there is at least one document of type "Discharge Summary"
   When the user views the first Documents event "Discharge Summary" detail view
   Then a modal with the title "Discharge Summary Details" is displayed
   And the Documents event "Discharge Summary" Detail modal displays 
@@ -19,35 +20,39 @@ Scenario: Users will be able to view modal popup for event Discharge Summary
       | Status			|
       | Attending		|
       | Date/Time		|
-      | Expected Cosigner|
+      | Expected cosigner|
       
 @f144_documents_progress_note_modal_details @data_specific
 Scenario: Users will be able to view modal popup for event Progress Note
+  Given there is at least one document of type "Progress Note"
   When the user views the first Documents event "Progress Note" detail view
   Then a modal with the title "general medicine note" is displayed
-  And the Documents event "Progress Note" Detail modal displays 
+  And the Documents event "GENERAL MEDICINE NOTE" Detail modal displays
       | modal item      |
       | Facility		|
       | Author			|
       | Status			|
       | Date/Time		|
+
       
-@f144_documents_procedure_modal_details @data_specific @DE4549 @debug
+@f144_documents_procedure_modal_details @data_specific @DE4549
 Scenario: Users will be able to view modal popup for event Procedure
+  Given there is at least one document of type "Procedure"
   When the user views the first Documents event "Procedure" detail view
   Then a modal with the title "laparascopy" is displayed
-  And the Documents event "Procedure" Detail modal displays 
+  And the Documents event "LAPARASCOPY" Detail modal displays
       | modal item      |
       | Facility		|
       | Type			|
       | Status			|
       | Date/Time		|
       
-@f144_documents_surgery_modal_details @data_specific @DE4549 @debug
+@f144_documents_surgery_modal_details @data_specific @DE4549
 Scenario: Users will be able to view modal popup for event Surgery
+  Given there is at least one document of type "Surgery"
   When the user views the first Documents event "Surgery" detail view
   Then a modal with the title "left inguinal hernia repair with mesh" is displayed
-  And the Documents event "Surgery" Detail modal displays 
+  And the Documents event "LEFT INGUINAL HERNIA REPAIR WITH MESH" Detail modal displays
       | modal item      |
       | Facility		|
       | Type			|
@@ -57,7 +62,8 @@ Scenario: Users will be able to view modal popup for event Surgery
       
 @f144_documents_advance_directive_modal_details @data_specific
 Scenario: Users will be able to view modal popup for event Advance Directive
-  When the user views the first Documents event "Advance Directive" detail view
+  Given there is at least one document of type "Advance Directive"
+  When the user views the first Documents event "ADVANCE DIRECTIVE" detail view
   Then a modal with the title "advance directive completed" is displayed
   And the Documents event "Advance Directive" Detail modal displays 
       | modal item      |
@@ -66,11 +72,12 @@ Scenario: Users will be able to view modal popup for event Advance Directive
       | Status			|
       | Date/Time		|
       
-@f144_documents_imaging_modal_details @data_specific @DE4549 @debug
+@f144_documents_imaging_modal_details @data_specific @DE4549
 Scenario: Users will be able to view modal popup for event Imaging
+  Given there is at least one document of type "Imaging"
   When the user views the first Documents event "Imaging" detail view
   Then a modal with the title "radiologic examination, ankle; 2 views" is displayed
-  And the Documents event "Imaging" Detail modal displays 
+  And the Documents event "RADIOLOGIC EXAMINATION" Detail modal displays
       | modal item      |
       | Facility		|
       | Type			|

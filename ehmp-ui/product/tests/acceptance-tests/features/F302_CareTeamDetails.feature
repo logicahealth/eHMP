@@ -1,4 +1,4 @@
-@F302-5.1_PatientCareTeamDetailHeadersInpatientQuicklook@F302 @CareTeamDetails @future @DE4560
+@F302-5.1_PatientCareTeamDetailHeadersInpatientQuicklook @F302 @CareTeamDetails @future @DE4560
 
 Feature: F302 - Enhance Care Team Header
 # POC: Team Saturn
@@ -49,7 +49,7 @@ Feature: F302 - Enhance Care Team Header
 
   @F302-3.2_PatientCareTeamDetailsKodak @US5256 @DE1309
     Scenario: Patient Information: Demographic verification (Kodak)
-    When POB user is logged into EHMP-UI with facility as  "KODAK" accesscode as  "mx1234" verifycode as  "mx1234!!"
+    When POB user is logged into EHMP-UI with facility as  "KODAK" accesscode as  "PW    " verifycode as  "PW    !!"
     And staff view screen is displayed
     And Navigate to Patient Search Screen
     And user searches for and selects "TWENTYTHREE,PATIENT"
@@ -73,7 +73,7 @@ Feature: F302 - Enhance Care Team Header
 
 @F302-3.1_PatientCareTeamDetailsKodak @US5256 @DE1309 @non_default_login @DE4009
     Scenario: Patient Information: Demographic verification (Kodak)
-    When POB user is logged into EHMP-UI with facility as  "KODAK" accesscode as  "mx1234" verifycode as  "mx1234!!"
+    When POB user is logged into EHMP-UI with facility as  "KODAK" accesscode as  "PW    " verifycode as  "PW    !!"
     And staff view screen is displayed
     And Navigate to Patient Search Screen
     And user searches for and selects "twentythree,inpatient"
@@ -96,7 +96,7 @@ Feature: F302 - Enhance Care Team Header
       | MH Treatment Coordinator        |
 
 #Quicklook Tests
-@F302-5.1_PatientCareTeamDetailHeadersInpatientQuicklook @US5260 @DE1205 @DE2960 @debug @DE4009
+@F302-5.1_PatientCareTeamDetailHeadersInpatientQuicklook @US5260 @DE1205 @DE2960 @DE4009
     Scenario: Patient Information: Quicklook Inpatient Care Team verification
     When user searches for and selects "TWENTYTHREE,INPATIENT"
     And Cover Sheet is active

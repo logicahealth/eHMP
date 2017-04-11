@@ -21,7 +21,7 @@ var optionConfig = _.clone(config.syncRequestApi);
 
 //Default to using VM sync endpoint
 if (!argv.local && !argv.l) {
-    optionConfig.host = 'IPADDRES';
+    optionConfig.host = 'IP      ';
 }
 log.debug('Using sync endpoint location: ', optionConfig.host);
 

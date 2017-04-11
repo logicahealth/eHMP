@@ -24,6 +24,8 @@
  */
 package com.cognitive.cds.invocation.fhir;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -387,7 +389,7 @@ public abstract class FHIRJSONDataModelHandler implements DataModelHandlerIFace 
     	while(matcher.find()) {
     		String operation = resolveOperation(matcher.group(1));
     		String date = resolvePeriodToDate(matcher.group(2));
-    		input.replace(matcher.start(), matcher.end(), "date"+operation+date);
+    		input.replace(matcher.start(), matcher.end(), "date" + operation + date);
     	}
     	return input;
     }
@@ -399,11 +401,11 @@ public abstract class FHIRJSONDataModelHandler implements DataModelHandlerIFace 
      */
     String resolveOperation(String op) {
     	switch(op) {
-    	case "dateEqual": return "=";
-    	case "dateLessThan": return "=<";
-    	case "dateLessThanOrEqual": return "=<=";
-    	case "dateGreaterThan": return "=>";
-    	case "dateGreaterThanOrEqual": return "=>=";
+	    	case "dateEqual": return "=";
+	    	case "dateLessThan": return "=" + urlEncode("<");
+	    	case "dateLessThanOrEqual": return "=" + urlEncode("<") + "=";
+	    	case "dateGreaterThan": return "=" + urlEncode(">") ;
+	    	case "dateGreaterThanOrEqual": return "=" + urlEncode(">") +  "=";
     	}
     	return "=";
     }
@@ -434,5 +436,14 @@ public abstract class FHIRJSONDataModelHandler implements DataModelHandlerIFace 
     	}
     	return dateTime.format(DATEFORMAT);
     }
-    	
+    
+    public String urlEncode(String s){
+    	String encoded = "";
+    	try {
+			encoded = URLEncoder.encode(s, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			logger.debug(e.getLocalizedMessage());
+		}
+    	return encoded;
+    }
 }

@@ -17,13 +17,6 @@ define([], function() {
 		encounters_enteredby: 'Person that entered information',
 		encounters_facility: 'Abbreviated name of VA facility, or notation of DoD',
 
-		patient_generated_goal: 'Patient Entered Goal',
-		patient_generated_progress: 'Current Progress',
-		patient_generated_end: 'Goal End Date',
-		patient_generated_next: 'Next Due Goal',
-		patient_generated_steps: 'Steps Completed',
-		patient_generated_type: 'Type',
-
 		reports_date: 'Date of report',
 		reports_type: 'Specific report type, i.e. Dietetics, Imaging, Laboratory, Orders, Patient Information',
 		reports_enteredby: 'Person that entered report',
@@ -88,7 +81,13 @@ define([], function() {
 		labresults_result: 'Link to the lab report which details the results of the test',
 		labresults_unit: 'Unit of measure',
 		labresults_refrange: 'The reference range of values for a physiologic measurement in healthy persons',
-		labrestuls_facility: 'Facility at which lab was ordered',
+		labresults_facility: 'Facility at which lab was ordered',
+
+		narrativelab_date: 'Lab Results Date',
+		narrativelab_facility: 'Lab Results Facility',
+		narrativelab_description: 'The description of the Lab Results',
+		narrativelab_author: 'Author of Lab Results',
+		narrativelab_type: 'Type of Lab Results',
 
 		visits_date: 'Date and time of patient appointment/visit at location',
 		visits_description: 'Overarching description of appointment/visit which primarily focuses on VA or DoD identifiers',
@@ -97,6 +96,7 @@ define([], function() {
 		visits_type: 'Category of appointment/visit, i.e. Hospitalization, Compensation & Pension, General Medicine, Outpatient',
 		visits_provider: 'Name of provider',
 		visits_reason: 'Cause or explanation for patient\'s appointment/visit',
+		visits_status: 'Status of patient appointment/visit at location',
 
 		chs_date: 'Date associated with Health Summary',
 		chs_authoringinstitution: 'Institution which collected data within the Health Summary, or Company which stores and distributes the patient\'s health data',
@@ -110,6 +110,7 @@ define([], function() {
 		orders_startdate: 'Date the order is to be started',
 		orders_stopdate: 'Date the order is to be stopped',
 		orders_type: 'Overarching category of order, i.e. Dietetics, Laboratory, Medication',
+		orders_flag: 'Identifies that this order has been flagged by a user',
 
 		timeline_datetime: 'Date range of information represented in the timeline',
 		timeline_activity: 'Test, order, other action',
@@ -122,6 +123,7 @@ define([], function() {
 		documents_type: 'Category of document listed',
 		documents_enteredby: 'Person that entered information',
 		documents_facility: 'Abbreviated name of VA facility, or notation of DoD',
+		documents_images: 'Identifies that an image is attached to the document',
 
 		postings: 'Lettered boxes highlighted in yellow are active, whereas lettered boxes that are grayed out are inactive',
 		timeline_dateinterval: 'Global date timeline: Set a date range to allow for easier investigation of records',
@@ -132,6 +134,7 @@ define([], function() {
 		toolbar_deletestackedgraph: 'Delete Stacked Graph',
 		toolbar_tilesortbutton: 'Tile sort',
 		toolbar_submenu: 'Submenu',
+		toolbar_associatedworkspace: 'Associated Workspace',
 		toolbar_quicklook: 'Quicklook',
 		toolbar_addorders: 'Add orders',
 		toolbar_addimmunizations: 'Add immunization',
@@ -141,10 +144,10 @@ define([], function() {
 		toolbar_crs_icon: 'May Contain Related Items',
         toolbar_note_object: 'Create Note Object',
 
-		patientSync_mySite: 'Green bullet indicates that MySite (the site you are operating from) health data is displayed',
-		patientSync_allVA: 'Green bullet indicates that All VA (VA data nationally available) health data is displayed',
-		patientSync_DoD: 'Green bullet indicates that DoD (data shared by the Department of Defense) health data is displayed',
-		patientSync_community: 'Green bullet indicates that Community (data shared by private vendors) health data is displayed',
+		patientSync_mySite: 'White checked circle indicates that MySite (the site you are operating from) health data is displayed',
+		patientSync_allVA: 'White checked circle indicates that All VA (VA data nationally available) health data is displayed',
+		patientSync_DoD: 'White checked circle indicates that DoD (data shared by the Department of Defense) health data is displayed',
+		patientSync_community: 'White checked circle indicates that Community (data shared by private vendors) health data is displayed',
 
 		sign_outpatientMeds_relatedTo_SC: 'Service Connected Condition (SC): Veterans are eligible for medical care for treatment of service-connected conditions without incurring copayment charges or payments against their insurance.\n\nClick here to toggle all enabled options in this column to Yes or No.',
 		sign_outpatientMeds_relatedTo_CV: 'Combat Veteran (CV): To receive CV exemption the veteran must have served in combat operations after the Gulf War or in combat against a hostile force after November 11, 1998. In addition, the condition for which the veteran is treated must be related to that combat, the veteran must have registered as a combat veteran, and be within two years of separation from active military service. Finally, the condition must not be already considered to be service related or that exemption should apply.\n\nClick here to toggle all enabled options in this column to Yes or No.',

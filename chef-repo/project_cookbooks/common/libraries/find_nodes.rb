@@ -37,9 +37,9 @@ def find_node_by_role(role, stack, alternate=nil)
     stack = node[:override_stacks][role]
     puts "stack override for #{role} found, using stack #{stack}"
   end
-  @nodes ||= find_stack(stack)
+  nodes = find_stack(stack)
   matching_nodes = []
-  @nodes.each { |stack_node|
+  nodes.each { |stack_node|
     if stack_node[:roles] && stack_node[:roles].include?(role)
       matching_nodes << stack_node
     end
@@ -47,7 +47,7 @@ def find_node_by_role(role, stack, alternate=nil)
   if matching_nodes.size == 0 && alternate
     Chef::Log.debug "Unable to locate node or data_bag with role: '#{role}' in the '#{stack}' stack."
     Chef::Log.debug "Searching for alternate role: #{alternate}..."
-    @nodes.each { |stack_node|
+    nodes.each { |stack_node|
       if stack_node[:roles] && stack_node[:roles].include?(alternate)
         matching_nodes << stack_node
       end
@@ -66,9 +66,9 @@ def find_optional_node_by_role(role, stack)
     stack = node[:override_stacks][role]
     puts "stack override for #{role} found, using stack #{stack}"
   end
-  @nodes ||= find_stack(stack)
+  nodes = find_stack(stack)
   matching_nodes = []
-  @nodes.each { |stack_node|
+  nodes.each { |stack_node|
     if stack_node[:roles] && stack_node[:roles].include?(role)
       matching_nodes << stack_node
     end
@@ -86,16 +86,16 @@ def find_multiple_nodes_by_role(role, stack, alternate=nil)
     stack = node[:override_stacks][role]
     puts "stack override for #{role} found, using stack #{stack}"
   end
-  @nodes ||= find_stack(stack)
+  nodes = find_stack(stack)
   matching_nodes = []
-  @nodes.each { |stack_node|
+  nodes.each { |stack_node|
     if stack_node[:roles] && stack_node[:roles].select{ |r| r[/#{role}/] }.size > 0
       matching_nodes << stack_node
     end
   }
   if matching_nodes.size == 0 && alternate
     Chef::Log.debug "Unable to locate a #{role} machine in the '#{stack}' environment. Searching for alternate #{alternate} machine..."
-    @nodes.each { |stack_node|
+    nodes.each { |stack_node|
       if stack_node[:roles] && stack_node[:roles].select{ |r| r[/#{alternate}/] }.size > 0
         matching_nodes << stack_node
       end

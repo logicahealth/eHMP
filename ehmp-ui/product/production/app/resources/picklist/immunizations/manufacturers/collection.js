@@ -12,7 +12,7 @@ define([], function() {
     });
 
     var Manufacturers = ADK.Resources.Picklist.Collection.extend({
-        type: 'immunization-manufacturer',
+        resource: 'write-pick-list-immunization-manufacturer',
         model: Manufacturer,
     });
 

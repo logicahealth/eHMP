@@ -33,8 +33,6 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ScheduledFuture;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -45,6 +43,8 @@ import javax.management.remote.JMXConnectorFactory;
 import javax.management.remote.JMXServiceURL;
 
 import org.bson.Document;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.stereotype.Component;
@@ -56,6 +56,7 @@ import com.cognitive.cds.services.metrics.model.Observation;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mongodb.client.MongoDatabase;
 
 /**
  * Basic JMX Polling Service to pull metric data on an interval from another
@@ -66,8 +67,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Component
 public class JMXPollingService {
 	
-    private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory
-            .getLogger(JMXPollingService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(JMXPollingService.class);
     
 	@Autowired
 	private TaskScheduler taskScheduler;
@@ -121,12 +121,12 @@ public class JMXPollingService {
 	@PostConstruct
 	public void init() throws Exception {
 		
-		logger.info("JMXPollingService.init()");
+		LOGGER.info("JMXPollingService.init()");
 		
 		//first, init any manually configured pollers (if there are any)
 		if(hardwiredEngines.size() > 0) {
 			for (EngineInstanceState eis : hardwiredEngines) {
-				logger.info("adding poller for engine: " + eis.getName());;
+				LOGGER.info("adding poller for engine: " + eis.getName());;
 				//not tracking the ScheduledFuture for these as we would need a restart to remove them anyways.
 				taskScheduler.scheduleWithFixedDelay(new JMXPoller(eis.getHost(), eis.getName()), period);
 			}
@@ -135,7 +135,7 @@ public class JMXPollingService {
 		ArrayList<EngineInstanceState> instances = new ArrayList<EngineInstanceState>();
 		if(dynamicRegistryEnabled) {
 			instances.addAll(engineInfoDao.getActiveEngines(ENGINE_TYPE));
-			logger.info("dynamically configured instances to be polled: " + instances.size());
+			LOGGER.info("dynamically configured instances to be polled: " + instances.size());
 			
 			//begin new engine check process
 			taskScheduler.scheduleAtFixedRate(new Runnable() {
@@ -147,17 +147,17 @@ public class JMXPollingService {
 			//end new engine check
 			
 		} else {
-			logger.info("dynamic engine registry polling is disabled");
+			LOGGER.info("dynamic engine registry polling is disabled");
 		}
 		
 		for (EngineInstanceState eis : instances) {
-			logger.info("Adding Poller for engine name: " + eis.getName() + " at " + eis.getHost() + ":" + eis.getPort());
+			LOGGER.info("Adding Poller for engine name: " + eis.getName() + " at " + eis.getHost() + ":" + eis.getPort());
 			ScheduledFuture<?> sf = taskScheduler.scheduleWithFixedDelay(new JMXPoller(eis.getHost(), eis.getName()), period);
 			engineMap.put(eis.getName(), sf);
 		}
 
 		if(instances.size() == 0) {
-			logger.info("No configured engine instances were found for JMX Poller.");
+			LOGGER.info("No configured engine instances were found for JMX Poller.");
 		}
 	}
 	
@@ -168,7 +168,7 @@ public class JMXPollingService {
 	 */
 	public void updateEngineList() {
 		
-		logger.info("Checking for new engine instances.");
+		LOGGER.info("Checking for new engine instances.");
 		ArrayList<EngineInstanceState> updatedInstances = engineInfoDao.getActiveEngines(ENGINE_TYPE);
 		//next, lets map these by name to make it easier to work with below...
 		HashMap<String, EngineInstanceState> updatedEngineMap = new HashMap<String, EngineInstanceState>();		
@@ -182,14 +182,14 @@ public class JMXPollingService {
 				updatedEngineMap.remove(key);
 			} else {
 				//it's not on the list anymore.  Stop the poller and remove the entry.
-				logger.info("removing poller for engine: " + key);
+				LOGGER.info("removing poller for engine: " + key);
 				engineMap.get(key).cancel(true); //true means 'interrupt if running'.
 				engineMap.remove(key);
 			}
 		}
 		//add any that we were missing.
 		for (String key : updatedEngineMap.keySet()) {
-			logger.info("adding poller for: " + key);
+			LOGGER.info("adding poller for: " + key);
 			
 			ScheduledFuture<?> sf = taskScheduler.scheduleWithFixedDelay(new JMXPoller(updatedEngineMap.get(key).getHost(), updatedEngineMap.get(key).getName()), period);
 			engineMap.put(key, sf);
@@ -199,7 +199,7 @@ public class JMXPollingService {
 	
 	@PreDestroy
 	public void cleanUp() throws Exception {
-		Logger.getLogger(JMXPollingService.class.getName()).log(Level.INFO, "JMXPollingService.cleanUp()");
+		LOGGER.info("JMXPollingService.cleanUp()");
 	}
 	
 	private class JMXPoller implements Runnable {
@@ -231,10 +231,9 @@ public class JMXPollingService {
 			    if(iterator.hasNext()) {
 			    	ObjectName setElement = iterator.next();
 			    	sessionCount = (Long)mbeanServerConn.getAttribute(setElement, "SessionCount");
-			    	Logger.getLogger(JMXPoller.class.getName()).log(Level.FINE, "SessionCount: " + sessionCount);
-
+			    	LOGGER.debug("SessionCount: " + sessionCount);
 			    } else {
-			    	Logger.getLogger(JMXPoller.class.getName()).log(Level.FINE, "Nothing to log - is the Drools MBean enabled?");
+			    	LOGGER.debug("Nothing to log - is the Drools MBean enabled?");
 			    }
 				
 			    Observation observation = new Observation();
@@ -246,10 +245,7 @@ public class JMXPollingService {
 				writeToMetricsDb(observation);
 			
 			} catch(Exception e) {
-				
-				Logger.getLogger(JMXPoller.class.getName()).log(Level.WARNING,
-						"Error Retrieving Metrics via JMX : " + e.getMessage());
-			
+				LOGGER.warn("Error Retrieving Metrics via JMX : " + e.getMessage());
 			} finally {
 				if (jmxConnector != null) {
 					try {
@@ -283,12 +279,16 @@ public class JMXPollingService {
         ObjectMapper mapper = new ObjectMapper();
         String toSend = mapper.writeValueAsString(observation);
         
-        logger.info("==========> JMXPollingService.writeToMetricsDb: " + mongoDbDao);
-        logger.info("Observation and Origin: " + observation.getName() + " from " + observation.getOrigin());;
+        LOGGER.info("==========> JMXPollingService.writeToMetricsDb: " + mongoDbDao);
+        LOGGER.info("Observation and Origin: " + observation.getName() + " from " + observation.getOrigin());;
         
-		Document callMetricBson = Document.parse(toSend);
-		mongoDbDao.setDatabase("metric");
-		mongoDbDao.getCollection("observation").insertOne(callMetricBson);
+		try {
+			Document callMetricBson = Document.parse(toSend);
+			MongoDatabase database = mongoDbDao.getMongoClient().getDatabase("metric");
+			database.getCollection("observation").insertOne(callMetricBson);
+		} catch (Exception e) {
+	        LOGGER.info("==========> JMXPollingService.error: " + e.getLocalizedMessage(),e);
+		}
     }
     
 }

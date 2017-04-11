@@ -4,7 +4,7 @@ As a clinician I would like to have a summary view of documents that contains on
 that are reports so that I can quickly get to information on reports
 
 #POC: Team Jupiter
-@US4157_modal @DE4549 @debug
+@US4157_modal @DE4549
 Scenario Outline: 
 #  Given user is logged into eHMP-UI
   And user searches for and selects "<patient>"
@@ -16,8 +16,10 @@ Scenario Outline:
   Then the modal is displayed
   And the Report Detail modal displays 
       | field               |
-      | Type Label          |
       | Type                |
+      | Facility            |
+      | Status              |
+      | Date/Time           |
 
 Examples:
   | patient | report_type |
@@ -49,11 +51,11 @@ Scenario: View Reports Gist View on the overview screen
   And the Reports Gist Applet table contains headers
     | Date | Type |  Entered By |
   
-@F294_2_ReportsGistDisplay_procedure @US4157 
+@F294_2_ReportsGistDisplay_procedure @US4157
 Scenario: View procedure in reports gist
   # Given user is logged into eHMP-UI
   #And user searches for and selects "ZZZRETFOUREIGHTY,PATIENT" #DE2907
-  And user searches for and selects "EIGHT,PATIENT"
+  And user searches for and selects "FIVE,PATIENT"
   Then Overview is active
   And the user has selected All within the global date picker
   And the Reports Gist Applet contains data rows

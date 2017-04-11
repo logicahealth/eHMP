@@ -56,28 +56,22 @@ class AllergiesApplet < AllApplets
     p e
     false
   end
-end 
-
-Then(/^user sees the allergy applet on the coversheet page$/) do
-  aa = AllergiesApplet.instance
-  expect(aa.wait_until_action_element_visible("Title", DefaultLogin.wait_time)).to be_true
-  expect(aa.perform_verification("Title", "ALLERGIES")).to be_true
 end
 
-Then(/^the Allergies Applet view contains$/) do |table|
-  aa = AllergiesApplet.instance 
-  # expect(aa.wait_until_action_element_visible("AllergiesGridVisible", DefaultLogin.wait_time)).to be_true    
-  table.rows.each do |row|
-    expect(aa.perform_verification('Allergy Details', row[0])).to be_true, "The value #{row[0]} is not present in the allergy details"
+And(/^The applet "(.*?)" on the coversheet page has been displayed$/) do |title|
+  @ehmp = PobAllergiesApplet.new
+  @ehmp.wait_for_fld_applet_title
+  expect(@ehmp.fld_applet_title.text.upcase).to include(title)
+end
+
+And(/^Applet ALLERGIES expanded view have the below table header$/) do |table|
+  @ehmp = PobAllergiesApplet.new
+  @ehmp.btn_applet_expand_view.click
+  @ehmp.wait_for_fld_expanded_applet_thead
+  table.rows.each do |headers|
+    expect(object_exists_in_list(@ehmp.fld_expanded_applet_thead, "#{headers[0]}")).to eq(true), "The value: <#{headers[0]}> is not present in the table header"
   end
-end
 
-When(/^the user clicks on the allergy pill "(.*?)"$/) do |vaccine_name|
-  aa = AllergiesApplet.instance
-  expect(aa.perform_action(vaccine_name, "")).to be_true
-  expect(aa.perform_action('Detail View Button')).to eq(true)
-  expect(aa.wait_until_action_element_visible("Allergy Modal Details", DefaultLogin.wait_time)).to be_true
-  TestSupport.wait_for_page_loaded
 end
 
 class AllergiesDetails < AccessBrowserV2
@@ -107,22 +101,18 @@ class AllergiesDetails < AccessBrowserV2
   end
 end 
 
-Then(/^the allergy applet modal detail contains$/) do |table|
-  aa = AllergiesDetails.instance
-  
-  table.rows.each do |row|
-    expect(aa.perform_verification(row[0], row[1])).to be_true, "The value #{row[1]} for field #{row[0]} is not present in the allergy modal details"
-  end
-end
-
 When(/^user sorts by the Standardized Allergen$/) do
   aa = AllergiesApplet.instance
   expect(aa.perform_action("Standardized Allergen", "")).to be_true
 end
 
 Then(/^the Allergies Applet is sorted in alphabetic order based on Standardized Allergen$/) do
-  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultLogin.wait_time)
-  wait.until { VerifyTableValue.verify_alphabetic_sort_caseinsensitive('data-grid-allergy_grid', 2, true) }
+  @ehmp = PobAllergiesApplet.new
+  @ehmp.wait_for_expanded_allergy_column_s_allergen
+  column_values = @ehmp.expanded_allergy_column_s_allergen
+  expect(column_values.length).to be > 2
+  is_ascending = ascending? column_values
+  expect(is_ascending).to be(true), "Values are not in Alphabetical Order #{print_all_value_from_list_elements(column_values) if is_ascending == false}"
 end
 
 When(/^user sorts by the Allergen Name$/) do
@@ -131,8 +121,12 @@ When(/^user sorts by the Allergen Name$/) do
 end
 
 Then(/^the Allergies Applet is sorted in alphabetic order based on Allergen Name$/) do
-  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultLogin.wait_time)
-  wait.until { VerifyTableValue.verify_alphabetic_sort_caseinsensitive('data-grid-allergy_grid', 1, true) }
+  @ehmp = PobAllergiesApplet.new
+  @ehmp.wait_for_expanded_allergy_column_allergen_names
+  column_values = @ehmp.expanded_allergy_column_allergen_names
+  expect(column_values.length).to be > 2
+  is_ascending = ascending? column_values
+  expect(is_ascending).to be(true), "Values are not in Alphabetical Order, #{print_all_value_from_list_elements(column_values) if is_ascending == false}"
 end
 
 When(/^the user expands the Allergies Applet$/) do
@@ -141,20 +135,15 @@ When(/^the user expands the Allergies Applet$/) do
   expect(aa.perform_action('Control - applet - Expand View')).to be_true
   expect(aa.wait_until_action_element_visible("Title", DefaultLogin.wait_time)).to be_true
   expect(aa.perform_verification("Title", 'ALLERGIES')).to be_true
-
   wait.until {  aa.applet_grid_loaded }
 end
 
-When(/^the user clicks the first allergy pill$/) do
-  aa = AllergiesGist.instance
-  expect(aa.wait_until_xpath_count_greater_than('Allergy Pills', 0)).to eq(true), "This test needs a least one visible allergy to verify"
-  expect(aa.perform_action('First Pill')).to eq(true)
-end
-
 Then(/^the Allergy Detail modal displays$/) do |table|
-  allergies_modal = AllergiesDetails.instance
+  @ehmp = PobAllergiesApplet.new
+  @ehmp.wait_for_btn_close_modal
+  expect(@ehmp).to have_btn_close_modal
   table.rows.each do | row |
-    expect(allergies_modal.am_i_visible? row[0]).to eq(true), "#{row} is not visible on the modal"
+    expect(@ehmp.fld_modal_body.text.downcase.include? "#{row[0]}").to eq(true), "the field <#{row[0]}> is not present"
   end
 end
 
@@ -239,13 +228,5 @@ When(/^the user views the first Allergies detail view$/) do
   expect(aa.wait_until_xpath_count_greater_than('Number of Allergies Applet Rows', 0)).to eq(true), "Test requires at least 1 row to be displayed"
   expect(aa.perform_action('First Allergies Row')).to eq(true), "Could not select first allery row"
   expect(aa.perform_action('Detail View Button')).to eq(true), "Could not select toolbar detail icon"
-end
-
-Then(/^the Allergy Applet table contains headers$/) do |table|
-  aa = AllergiesApplet.instance
-  table.headers.each do | row |
-    header = row
-    expect(aa.perform_verification("Header - #{header}", header)).to eq(true)
-  end
 end
 

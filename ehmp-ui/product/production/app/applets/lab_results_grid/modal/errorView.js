@@ -1,12 +1,12 @@
 define([
     "backbone",
     "marionette",
-    "hbs!app/applets/lab_results_grid/modal/errorTemplate"
-], function(Backbone, Marionette, ErrorTemplate) {
+    'handlebars'
+], function(Backbone, Marionette, Handlebars) {
     'use strict';
 
     var ErrorView = Backbone.Marionette.ItemView.extend({
-        template: ErrorTemplate
+        template: Handlebars.compile('{{ error }}')
     });
 
     return ErrorView;

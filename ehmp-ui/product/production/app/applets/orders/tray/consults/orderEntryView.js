@@ -3,13 +3,16 @@ define([
     'marionette',
     'underscore',
     'handlebars',
+    'moment',
     'app/applets/task_forms/common/utils/utils',
-    'app/applets/task_forms/activities/consults/eventHandler',
+    'app/applets/task_forms/activities/order.consult/eventHandler',
     'app/applets/orders/writeback/consults/consultUtils',
     'app/applets/orders/writeback/consults/formFields',
     'hbs!app/applets/orders/writeback/consults/instructionsTemplate',
-    'app/applets/problems/applet'
-], function(Backbone, Marionette, _, Handlebars, Utils, EventHandler, ConsultUtils, FormFields, InstructionsTemplate) {
+    'app/applets/lab_results_grid/appletHelpers',
+    'app/applets/problems/applet',
+    'app/applets/lab_results_grid/applet'
+], function(Backbone, Marionette, _, Handlebars, moment, Utils, EventHandler, ConsultUtils, FormFields, InstructionsTemplate, LabGridHelper) {
     "use strict";
 
     // Initialize the view for the notificiation
@@ -19,6 +22,34 @@ define([
         AlertItemView = Backbone.Marionette.ItemView.extend({
             template: Handlebars.compile([
                 '<p>Complete the Emergent Order or change the assigned urgency to something other than Emergent.</p>'
+            ].join('\n'))
+        });
+
+        AlertFooterItemView = Backbone.Marionette.ItemView.extend({
+            template: Handlebars.compile([
+                '{{ui-button "OK" classes="btn-primary btn-sm alert-continue" title="Press enter to close"}}'
+            ].join('\n')),
+            events: {
+                'click button': function() {
+                    ADK.UI.Alert.hide();
+                }
+            }
+        });
+
+        alertView = new ADK.UI.Alert({
+            title: "Alert",
+            icon: "icon-circle-exclamation",
+            messageView: AlertItemView,
+            footerView: AlertFooterItemView
+        });
+
+        alertView.show();
+    }
+
+    function initLabModalAlert(string) {
+        AlertItemView = Backbone.Marionette.ItemView.extend({
+            template: Handlebars.compile([
+                string
             ].join('\n'))
         });
 
@@ -43,26 +74,68 @@ define([
         alertView.show();
     }
 
+    function getIntentResult(intentLabel, allResults) {
+
+        // FIND the result of the targeted (label) intent
+        var intentResult = _.find(allResults, function(m) {
+            return m.get('label') === intentLabel;
+        });
+        return intentResult;
+    }
+
     var ProvideTaskModel = Backbone.Model.extend({
         validate: function(attributes, options) {
             this.errorModel.clear();
 
             var earliestDate = this.get('earliestDate');
             var latestDate = this.get('latestDate');
+            var urgency = this.get('urgency');
+            var consultName = this.get('consultName');
+
+            if ($.trim(consultName) === '') {
+                this.errorModel.set({
+                    consultName: 'Consult name is required'
+                });
+            }
+
+            if ($.trim(urgency) === '') {
+                this.errorModel.set({
+                    urgency: 'Urgency is required'
+                });
+            }
+
+            if ($.trim(earliestDate) === '') {
+                this.errorModel.set({
+                    earliestDate: 'Earliest date is required'
+                });
+            }
+
+            if ($.trim(latestDate) === '') {
+                this.errorModel.set({
+                    latestDate: 'Latest date is required'
+                });
+            }
 
             if (moment(earliestDate).isAfter(latestDate)) {
                 this.errorModel.set({
-                    earliestDate: 'The earliest date can not come after the latest date'
+                    earliestDate: 'Earliest date cannot be after latest date'
                 });
             }
 
             if (moment(latestDate).isBefore(earliestDate)) {
                 this.errorModel.set({
-                    latestDate: 'The latest date can not come before the earliest date'
+                    latestDate: 'Latest date cannot be before earliest date'
                 });
             }
 
-            if (!_.isEmpty(_.compact(this.errorModel.toJSON())))
+            var destinationFacility = this.get('destinationFacility');
+            if (!destinationFacility) {
+                this.errorModel.set({
+                    destinationFacility: 'Select a location for consult'
+                });
+            }
+
+            if (!_.isEmpty(this.errorModel.toJSON()))
                 return "Validation errors. Please fix.";
         }
     });
@@ -72,8 +145,13 @@ define([
         fields: FormFields.orderEntryFields,
         modelEvents: {
             'change:consultName': 'onConsultNameChange',
-            'change': 'onModelChange showOverRide showOrderResultComment',
+            'change': 'updateFormFields',
             'change:instructions': 'onInstructionsChange'
+        },
+        updateFormFields: function() {
+            this.showOverRide();
+            this.showOrderResultComment();
+            this.onModelChange();
         },
         onInstructionsChange: function() {
 
@@ -114,84 +192,49 @@ define([
             'preReqQuestions': '.preReqQuestions',
             'inputPreReqQuestions': '.control.selectList-control.preReqQuestions',
             'prereqFieldset': '.prereqFieldset',
-            'beginWorkupButton': '#modal-begin-workup-button',
-            'acceptButton': '#modal-accept-button',
-            'cancelButton': '#modal-cancel-button',
+            'beginWorkupButton': '#consult-add-begin-workup-button',
+            'acceptButton': '#consult-add-accept-button',
+            'draftButton': '#consult-add-save-button',
             'consultName': '.control.select-control.consultName',
             'restOfTheForm': '.the_rest_of_the_form',
             'instructions': '[data-instructions]',
             'instructionsContainer': '.instructions-container',
-            'inProgressContainer': '.inProgressContainer',
             'destinationFacility': '.control.select-control.destinationFacility',
             'acceptingProvider': '.control.select-control.acceptingProvider',
-            'condition': '.control.select-control.condition'
+            'condition': '.control.select-control.condition',
+            'consultAddDeleteButton': '.consultAddDeleteButton button',
+            'errorMessage': '.errorMessage',
+            'urgency': '.control.select-control.urgency',
+            'earliestDate': '.control.datepicker-control.earliestDate',
+            'latestDate': '.control.datepicker-control.latestDate'
         },
-        blockUI: function() {
+        blockUI: function(trayLoaderMessage) {
             var self = this;
             this.model.set('inProgressMessage', 'Loading..');
-            this.ui.inProgressContainer.trigger('control:hidden', false);
-            this.$(':input')
-                .each(function() {
-                    var $this = $(this);
-                    var $control = $this.parents('.control');
-                    var data = $control.data() || $this.data();
-
-                    var disabled = $this.attr('disabled');
-                    if (data.hasOwnProperty('uiblock') || disabled === 'disabled') {
-                        return;
-                    }
-                    if (disabled === undefined) {
-                        disabled = 'undefined';
-                    }
-                    if ($control.length) {
-                        $control.trigger('control:disabled', true).data('uiblock', disabled);
-                    } else {
-
-                        $this.attr('disabled', true).data('uiblock', disabled);
-                    }
-
-                });
+            this.$el.trigger('tray.loaderShow', {
+                loadingString: (_.isUndefined(trayLoaderMessage) ? 'Loading' : trayLoaderMessage)
+            });
         },
         unBlockUI: function() {
             this.model.unset('inProgressMessage');
-            this.ui.inProgressContainer.trigger('control:hidden', true);
-            this.$(':input')
-                .each(function() {
-                    var $this = $(this);
-                    var $control = $this.parents('.control');
-                    var data = $control.data() || $this.data();
-                    var disabled = _.get(data, 'uiblock');
-
-                    if (!data.hasOwnProperty('uiblock')) {
-                        return;
-                    }
-
-                    if (disabled === 'undefined') {
-                        if ($control.length) {
-                            $control.trigger('control:disabled', false).removeData('uiblock');
-                        } else {
-                            $this.removeAttr('disabled').removeData('uiblock');
-                        }
-                    }
-                });
+            this.$el.trigger('tray.loaderHide');
         },
         onConsultNameChange: function(model, value, options) {
             var val = $.trim(value);
             var previousConsultName = model.previous('consultName');
-
-
             model.set('specialty', val);
 
-
-            if (val !== '' && this.ui.restOfTheForm.is(':hidden')) {
+            this.$('#consult-add-save-button').attr('disabled', false);
+            if (!val) {
+                this.$('#consult-add-save-button').attr('disabled', true);
+            } else if (val !== '' && this.ui.restOfTheForm.is(':hidden')) {
                 this.ui.restOfTheForm.show();
             }
 
-            if ((previousConsultName) || (!previousConsultName && !this.taskModel && !this.isFromOrdersSearchBar && !this.isFromDraft)) {
+            if ((previousConsultName) || (!previousConsultName && !this.taskModel && !this.isFromOrdersSearchBar && !this.draftActivity)) {
                 ConsultUtils.retrievePreReqs.call(this);
             }
-
-
+            this.$el.find('#select2-consultName-container').closest('.select2-selection').focus();
         },
         showOrderResultComment: function() {
             var satisfiedPreReqOrders;
@@ -207,7 +250,6 @@ define([
             } else {
                 this.ui.orderResultComment.trigger('control:hidden', true);
             }
-
         },
         showOverRide: function(obj) {
             var overridePreReqQuestions;
@@ -254,6 +296,7 @@ define([
 
             this.showOverRide();
             this.showOrderResultComment();
+            this.checkForLabResults();
         },
         // Update the datepickers based on the urgency
         updateDates: function() {
@@ -261,82 +304,46 @@ define([
             Utils.resetFields.call(this, ['acceptingProvider']);
             var urgency = this.model.get('urgency');
             if (!urgency) {
+                this.listenTo(this.model, 'change:earliestDate change:latestDate', this.updateUrgency);
                 return;
             }
 
             urgency = urgency && urgency.toLowerCase();
             var date = moment();
 
-            if (urgency === '2') {
+            if (ConsultUtils.isEmergent(urgency)) {
                 Utils.activateField.call(this, 'acceptingProvider');
                 this.setDates(date.format('L'), date.add(24, 'h').format('L'));
-            } else if (urgency === '4') {
+            } else if (ConsultUtils.isUrgent(urgency)) {
                 this.setDates(date.format('L'), date.add(7, 'd').format('L'));
-            } else if (urgency === '9') {
+            } else if (ConsultUtils.isRoutine(urgency)) {
                 this.setDates(date.format('L'), date.add(30, 'd').format('L'));
             }
             this.listenTo(this.model, 'change:earliestDate change:latestDate', this.updateUrgency);
         },
         // Set the dates for the earliest and latest date fields
         setDates: function(earliestDate, latestDate) {
-            this.model.set('earliestDate', earliestDate);
-            this.model.set('latestDate', latestDate);
+            this.model.set({
+                'earliestDate': earliestDate,
+                'latestDate': latestDate
+            });
+
         },
         onInitialize: function(options) {
+            var alertError = new ADK.UI.Notification({
+                title: 'There was an error loading this draft.',
+                type: 'error'
+            });
+
             var self = this;
             if (this.model.errorModel) {
                 this.model.errorModel.clear();
             }
-            // this.fields = Fields.orderEntryFields(this.model);
+
             if (this.taskModel) {
                 EventHandler.claimTask(this.model);
             }
 
-            if (this.isFromDraft) {
-                this.listenToOnce(this.model, 'sync', function(model, resp, options) {
-
-                    this.consultName = model.get('consultName');
-                    this.destinationFacility = model.get('destinationFacility');
-
-                    if (model.has('questions') && model.get('questions').length) {
-                        var preReqQues = FormFields.mapPreReqQuestions(model.get('questions'), {
-                            'label': 'question',
-                            'name': 'question',
-                            'value': 'answer'
-                        });
-
-                        _.each(preReqQues, function(ques) {
-                            ques.value = ConsultUtils.mapQuestionCode('getText', ques.value);
-                        });
-
-
-                        model.get('preReqQuestions').add(preReqQues);
-
-                    }
-
-                    if (model.has('orderResults') && model.get('orderResults').length) {
-                        var preReqOrd = FormFields.mapPreReqOrders(model.get('orderResults'), {
-                            'label': 'orderName',
-                            'name': 'orderName',
-                            'value': 'status'
-                        });
-
-                        model.get('preReqOrders').add(preReqOrd);
-                        if (this.model.has('specialty') || this.model.has('consultName')) {
-                            ConsultUtils.retrieveFacilities.call(this, true);
-                        }
-
-                    }
-                    this.showPreReqs();
-                    this.onInstructionsChange();
-
-                });
-
-                this.model.fetch();
-            }
-
-
-            this.providerHasBeenLoaded = false;
         },
         registerChecks: function() {
             var checkOptions = {
@@ -358,27 +365,27 @@ define([
         },
         onDestroy: function() {
             this.unregisterChecks();
+            this.$el.trigger('tray.loaderHide');
         },
         onRender: function(e) {
+            this.updateFormForEdit();
+
             this.listenToOnce(ADK.Messaging.getChannel('loadConsult'), 'visit:ready', function() {
                 var taskVar = {};
                 var model = this.model;
 
-
-
                 // Disable consult name from being editable if coming from draft or process
-                if (this.isFromDraft || this.taskModel) {
-                    // this.ui.consultName.trigger('control:disabled', true);
+                if (this.draftActivity || this.taskModel) {
+                    this.ui.consultName.trigger('control:disabled', true);
                 }
+
                 if (_.get(this.model.toJSON(), 'name') === 'Accept') {
-                    this.ui.inputPreReqOrders.trigger('control:disabled', true);
-                    this.ui.inputPreReqQuestions.trigger('control:disabled', true);
-                    this.$('#modal-begin-workup-button, #modal-save-button').attr('disabled', true);
+                    this.ui.draftButton.trigger('control:disabled', true);
+                    this.ui.beginWorkupButton.trigger('control:disabled', true);
                 }
 
-                if (!this.taskModel && !this.isFromDraft) {
-                    this.$('#modal-delete-button').attr('disabled', true);
-
+                if (!this.taskModel && !this.draftActivity) {
+                    this.$(this.ui.consultAddDeleteButton.selector).attr('disabled', true);
                 }
 
                 taskVar = model.toJSON();
@@ -386,12 +393,12 @@ define([
                 var specialty;
                 var key;
                 var consultNameList;
-                if (!this.isFromOrdersSearchBar && !this.taskModel && !this.isFromDraft) {
+                if (!this.isFromOrdersSearchBar && !this.taskModel && !this.draftActivity) {
                     this.ui.restOfTheForm.hide();
+                    this.ui.draftButton.trigger('control:disabled', true);
                 }
 
                 ConsultUtils.fetchInitialResources.call(this);
-
 
                 // Initialize the form fields from model
                 var date = moment();
@@ -402,19 +409,37 @@ define([
                 this.listenTo(ADK.Messaging, 'retrieveConsultNames:' + this.cid, this.retrieveConsultNames);
                 this.listenTo(this.model, 'change:earliestDate change:latestDate', this.updateUrgency);
                 this.listenTo(this.model, 'change:urgency', this.updateDates);
-                if (!this.model.has('urgency')) {
-                    this.model.set('urgency', '9');
-                }
+
+                this.listenTo(ADK.Messaging.getChannel('consultOrder'), 'getLabOrdersUID', function(obj) {
+                    this.$el.data(obj.lab, obj.collection.at(0).toJSON());
+
+                });
+
+                this.listenTo(ADK.Messaging.getChannel('consultOrder'), 'showLabModel', function(obj) {
+                    obj.model.set('chart', true);
+                    ADK.Messaging.getChannel('lab_results_grid').trigger('detailView', {
+                        model: obj.model
+                    });
+                });
+
                 this.listenToOnce(this.model, 'change.inputted', this.registerChecks);
-
             });
+        },
+        onAttach: function() {
+            if (this.ui.consultName.is(':visible') && _.isEqual(this.model.get('inProgressMessage'), 'Loading..')) {
+                this.$el.trigger('tray.loaderShow', {
+                    loadingString: 'Loading'
+                });
+            }
 
-
+            if (!this.model.has('urgency')) {
+                this.model.set('urgency', '9');
+            }
         },
         retrieveConsultNames: function(collection) {
             this.ui.consultName.trigger('control:picklist:set', [collection]);
             var consultName;
-            if (this.taskModel || this.isFromOrdersSearchBar || this.isFromDraft) {
+            if (this.taskModel || this.isFromOrdersSearchBar || this.draftActivity) {
                 this.ui.consultName.find('select').trigger('change.select2');
             }
         },
@@ -428,7 +453,8 @@ define([
                 this.model.get('preReqQuestions').reset();
             }
 
-            if (model.has('orders') && model.get('name') !== 'Physical Therapy Consult') {
+            if (model.has('orders')) {
+                // preReqOrders gets updated
                 this.model.get('preReqOrders').reset(model.get('orders'));
             } else {
                 this.model.get('preReqOrders').reset();
@@ -438,12 +464,67 @@ define([
 
         },
         events: {
-            'click #modal-delete-button': 'fireDelete',
-            'click #modal-save-button': 'fireSaveEvent',
-            'click #modal-accept-button': 'fireAcceptEvent',
-            'click #modal-begin-workup-button': 'fireBeginWorkupEvent',
-            'click @ui.cancelButton': 'cancelOut',
-            'click @ui.instructions': 'showInstructions'
+            'consult-add-confirm-delete': function(e) {
+                this.fireDelete();
+            },
+            'click #consult-add-save-button': 'fireSaveEvent',
+            'click #consult-add-edit-save-button': 'fireSaveEvent',
+            'click #consult-add-accept-button': 'fireAcceptEvent',
+            'click #consult-add-begin-workup-button': 'fireBeginWorkupEvent',
+            'consult-add-confirm-cancel': 'cancelOut',
+            'click @ui.instructions': 'showInstructions',
+            'click [data-label]': 'onClickDataLabel'
+        },
+        onClickDataLabel: function(e) {
+            var intentResult = getIntentResult(this.$(e.currentTarget).data('label'), this.model.get('preReqOrders').models);
+
+            if (intentResult.get('domain') === 'lab') {
+                this.showLabResults(e);
+            }
+        },
+        updateFormForEdit: function() {
+            this.ui.consultName.trigger('control:hidden', this.showEdit);
+            this.$el.find('.edit_order_header').trigger('control:hidden', !this.showEdit);
+            this.$(this.ui.consultAddDeleteButton.selector).trigger('control:hidden', this.showEdit);
+            this.$el.find('#consult-add-save-button').parent().trigger('control:hidden', this.showEdit);
+            this.$el.find('#consult-add-begin-workup-button').parent().trigger('control:hidden', this.showEdit);
+            this.$el.find('#consult-add-accept-button').parent().trigger('control:hidden', this.showEdit);
+            this.$el.find('#consult-add-edit-save-button').parent().trigger('control:hidden', !this.showEdit);
+        },
+        checkForLabResults: function() {
+            if (this.model.get('preReqOrders').length) {
+                this.model.get('preReqOrders').each(ConsultUtils.getLabOrdersUID);
+            }
+        },
+        showLabResults: function(e) {
+            var label = this.$(e.currentTarget).data('label');
+            var model = this.$el.data(label);
+            if (_.isUndefined(model)) {
+                initLabModalAlert('<p>This lab result can not be shown at this time.</p>');
+                return;
+            }
+
+            var fetchOptions = {
+                resourceTitle: 'patient-record-lab',
+                criteria: {
+                    filter: 'eq("typeCode", "' + model.type_code + '")',
+                    limit: 1
+                },
+                cache: true,
+                viewModel: {
+                    parse: LabGridHelper.parseLabResponse
+                },
+                onSuccess: function(collection, response) {
+                    ADK.Messaging.getChannel('consultOrder').trigger('showLabModel', {
+                        model: collection.at(0)
+                    });
+                },
+                onError: function() {
+                    initLabModalAlert('<p>This lab result can not be shown at this time.</p>');
+                }
+            };
+
+            ADK.PatientRecordService.fetchCollection(fetchOptions);
         },
         showInstructions: function() {
             var workflow = new ADK.UI.Workflow({
@@ -462,34 +543,18 @@ define([
             workflow.show();
         },
         cancelOut: function(e) {
-            var alert = new ADK.UI.Alert({
-                title: 'Cancel',
-                icon: "icon-cancel",
-                messageView: Backbone.Marionette.ItemView.extend({
-                    template: '<p>All unsaved changes will be lost. Are you sure you want to cancel?</p>'
-                }),
-                footerView: Backbone.Marionette.ItemView.extend({
-                    template: Handlebars.compile('{{ui-button "No" classes="btn btn-default" title="Press enter to go back"}} {{ui-button "Yes" classes="btn btn-primary" title="Press enter to cancel"}}'),
-                    ui: {
-                        'cancel': '.btn.btn-default',
-                        'continue': '.btn.btn-primary'
-                    },
-                    events: {
-                        'click @ui.cancel': 'cancel',
-                        'click @ui.continue': 'continue'
-                    },
-                    cancel: function(e) {
-                        ADK.UI.Alert.hide();
-                    },
-                    continue: function(e) {
-                        ADK.UI.Alert.hide();
-                        EventHandler.closeModal(e);
-                    }
-                })
-            });
-            alert.show();
+            EventHandler.closeModal(e);
         },
         activateAcceptButton: function(obj) {
+            // Used locally to extract data from specific variables
+            function extractUID(data) {
+                if (typeof data === 'object' && data !== null) {
+                    return $.trim(data.uid);
+                } else {
+                    return $.trim(data);
+                }
+            }
+
             var orderAns = this.model.get('preReqOrders').groupBy(function(model) {
                 return model.get('value');
             });
@@ -497,40 +562,43 @@ define([
                 return model.get('value');
             });
 
+            var question = $.trim(_.get(obj, 'requestReason', '')) !== '';
+            var urgency = $.trim(_.get(obj, 'urgency', ''));
+            var destinationFacility = extractUID(obj.destinationFacility);
+            var hasAcceptingProvider = extractUID(obj.acceptingProvider) !== '';
 
-            var question = $.trim(obj.requestReason);
-            var urgency = $.trim(obj.urgency);
-            var acceptingProvider = $.trim(obj.acceptingProvider);
+            var baseCheck = question && destinationFacility;
             var result = false;
 
             if (urgency === '') {
-                return false;
-            } else if (urgency === '2') {
-                if (acceptingProvider && question) {
+                result = false;
+            } else if (ConsultUtils.isEmergent(urgency)) {
+                if (hasAcceptingProvider && baseCheck) {
                     result = true;
                 }
             } else { // NOT EMERGENT
+                var CDSNanValue = 'c928767e-f519-3b34-bff2-a2ed3cd5c6c3';
                 // Pass if there is no questions || there is no "no's" selected && none are left blank
                 var quesPass = _.isEmpty(quesAns) ||
-                    (!quesAns.hasOwnProperty('No') && !quesAns.hasOwnProperty('undefined') && !quesAns.hasOwnProperty(''));
+                    (!quesAns.hasOwnProperty(CDSNanValue) && !quesAns.hasOwnProperty('No') &&
+                        !quesAns.hasOwnProperty('undefined') && !quesAns.hasOwnProperty(''));
 
                 // Pass if there are no orders || nothing needs to be ordered && none are left blank
                 var ordersPass = _.isEmpty(orderAns) ||
-                    (!orderAns.hasOwnProperty('Order') && !orderAns.hasOwnProperty('undefined') && !orderAns.hasOwnProperty(''));
+                    (!orderAns.hasOwnProperty('Order') && !orderAns.hasOwnProperty('Failed') &&
+                        !orderAns.hasOwnProperty('undefined') && !orderAns.hasOwnProperty(''));
 
                 //  Check that required override fields are populated
                 var overridePass = !this.$('.control.textarea-control.overrideReason').is(':hidden') && $.trim(obj.overrideReason) !== '';
                 // Pass if there are no pre-reqs || no "override" was selected || it is override compliant
                 var overrideCompliant = (_.isEmpty(orderAns) && _.isEmpty(quesAns)) || (!quesAns.hasOwnProperty('Override') && !orderAns.hasOwnProperty('Override')) || overridePass;
 
-
                 //  Check that required orderResultComment fields are populated
                 var orderResultCommentPass = !this.$('.control.textarea-control.orderResultComment').is(':hidden') && $.trim(obj.orderResultComment) !== '';
                 // Pass if there are no pre-reqs orders || no "satisfied" was selected || it is satisfied compliant
                 var orderResultCommentCompliant = _.isEmpty(orderAns) || !orderAns.hasOwnProperty('Satisfied') || orderResultCommentPass;
 
-
-                if (quesPass && ordersPass && overrideCompliant && orderResultCommentCompliant && question) {
+                if (quesPass && ordersPass && overrideCompliant && orderResultCommentCompliant && baseCheck) {
                     result = true;
                 }
             }
@@ -538,43 +606,67 @@ define([
             return result;
         },
         activateWorkupButton: function(obj) {
+            var CDSNanValue = 'c928767e-f519-3b34-bff2-a2ed3cd5c6c3';
             var urgency = $.trim(obj.urgency);
-            if (urgency === '2' || urgency === '') {
+
+            var isAcceptForm = _.get(obj, 'name') === 'Accept';
+            var isInvalidUrgency = ConsultUtils.isEmergent(urgency) || urgency === '';
+
+            // Cannot order labs on Accept form or urgency of Emergent
+            if (isAcceptForm || isInvalidUrgency) {
                 return false;
             }
 
+            // Required fields
             var override = this.$('.control.textarea-control.overrideReason');
+            var isOverrideCompliant = override.is(':hidden') || $.trim(obj.overrideReason) !== '';
+
             var orderResultComment = this.$('.control.textarea-control.orderResultComment');
-            var isOverRideCompliant = override.is(':hidden') || $.trim(obj.overrideReason) !== '';
             var isOrderResultCommentCompliant = orderResultComment.is(':hidden') || $.trim(obj.orderResultComment) !== '';
-            var nosQues = obj.preReqQuestions.find(function(model) {
-                return model.get('value') === 'No' || !model.get('value');
-            }) || false;
-            var nosOrders = obj.preReqOrders.find(function(model) {
-                return !model.get('value');
-            }) || false;
-            var isRequest = $.trim(obj.requestReason) !== '';
 
-            if (_.get(obj, 'name') === 'Accept') {
-                return false;
-            }
+            var isRequestCompliant = $.trim(obj.requestReason) !== '';
+            var isDestinationFacilityCompliant = $.trim(obj.destinationFacility) !== '';
 
-            if (isOverRideCompliant && isOrderResultCommentCompliant && !nosQues && !nosOrders && isRequest) {
+            var ques = obj.preReqQuestions.groupBy(function(model) {
+                return model.get('value');
+            });
+            var isQuesCompliant = !ques.hasOwnProperty(CDSNanValue) &&
+                !ques.hasOwnProperty('No') && !ques.hasOwnProperty('undefined') && !ques.hasOwnProperty('');
+
+            var orders = obj.preReqOrders.groupBy(function(model) {
+                return model.get('value');
+            });
+            var isOrdersCompliant = !orders.hasOwnProperty('Failed') &&
+                !orders.hasOwnProperty('') && !orders.hasOwnProperty('undefined');
+
+            // Activation logic
+            var isAllReqFields = isOverrideCompliant && isOrderResultCommentCompliant && isRequestCompliant && isDestinationFacilityCompliant;
+            var isAllPreReqs = isQuesCompliant && isOrdersCompliant;
+
+            if (isAllReqFields && isAllPreReqs) {
                 return true;
             }
-
             return false;
         },
         onModelChange: function() {
-            this.$('#earliestDate').datepicker('setEndDate', this.model.get('latestDate'));
-            this.$('#latestDate').datepicker('startDate', this.model.get('earliestDate'));
-            this.$el.find('#modal-begin-workup-button').parent().trigger('control:disabled', true);
-            this.$el.find('#modal-accept-button').parent().trigger('control:disabled', true);
+            this.$('#earliestDate').trigger('control:endDate', this.model.get('latestDate'));
+            this.$('#latestDate').trigger('control:startDate', this.model.get('earliestDate'));
+            this.$el.find('#consult-add-begin-workup-button').parent().trigger('control:disabled', true);
+            this.$el.find('#consult-add-accept-button').parent().trigger('control:disabled', true);
+            this.$el.find('#consult-add-edit-save-button').parent().trigger('control:disabled', true);
+
+            var consultName = $.trim(this.model.get('consultName'));
+
+            if (consultName === '') {
+                return;
+            }
 
             if (this.activateAcceptButton(this.model.toJSON())) {
-                this.$el.find('#modal-accept-button').parent().trigger('control:disabled', false);
+                this.$el.find('#consult-add-accept-button').parent().trigger('control:disabled', false);
+                this.$el.find('#consult-add-edit-save-button').parent().trigger('control:disabled', false);
             } else if (this.activateWorkupButton(this.model.toJSON())) {
-                this.$el.find('#modal-begin-workup-button').parent().trigger('control:disabled', false);
+                this.$el.find('#consult-add-begin-workup-button').parent().trigger('control:disabled', false);
+                this.$el.find('#consult-add-edit-save-button').parent().trigger('control:disabled', false);
             }
         },
         onShow: function() {
@@ -582,45 +674,61 @@ define([
             this.onModelChange();
             this.showPreReqs();
             this.onInstructionsChange();
-        },
-        onBeforeDestroy: function() {
-            this.problemsCollection.reset();
-            delete this.problemsCollection;
+
+            if (this.showEdit && ConsultUtils.isEmergent(this.model.get('urgency') + '')) {
+                this.ui.urgency.trigger('control:disabled', true);
+                this.ui.earliestDate.trigger('control:disabled', true);
+                this.ui.latestDate.trigger('control:disabled', true);
+            }
         },
         fireDelete: function(e) {
-            this.blockUI();
+            this.blockUI('Deleting');
             EventHandler.deleteTask(e, this.model);
         },
         fireSaveEvent: function(e) {
-            if (!this.model.isValid()) {
-                return;
+            if (this.showEdit) {
+                if (!this.model.isValid()) {
+                    return;
+                }
             }
-            if (this.model.get('urgency') === '2') {
+            var isPreWorkup = this.model.get('subState') === 'Pre-order Workup';
+            if (ConsultUtils.isEmergent(this.model.get('urgency')) && !isPreWorkup) {
                 initAlert();
             } else {
-                this.blockUI();
-                if (this.isFromDraft) {
+                this.blockUI(this.showEdit ? 'Editing' : 'Drafting');
+                if (this.draftActivity) {
                     var self = this;
+                    var params;
+                    var trayResetFnc = function() {
+                        self.$el.trigger('tray.reset');
+                    };
 
+                    if (this.showEdit) {
+                        // Save for non-draft EDIT
+                        var processInstanceId = Number(this.draftActivity.processInstanceId) || null;
+                        params = EventHandler.editParamHelper(this);
+                        return EventHandler.sendSignalPost(e, this.draftActivity.deploymentId, processInstanceId, params, 'EDIT', trayResetFnc);
+                    }
+                    // Save for Drafts
                     this.model.set('sendActivitySignal', true);
-                    var params = EventHandler.paramHelper(this, 'saved');
+                    params = EventHandler.paramHelper(this, 'saved');
                     params = {
                         out_order: params.consultOrder
                     };
 
-                    EventHandler.sendSignal(e, this.model, params, 'EDIT', function() {
-                        self.$el.trigger('tray.reset');
-                    });
+                    EventHandler.sendSignal(e, this.model, params, 'EDIT', trayResetFnc);
 
                 } else if (this.taskModel) {
                     this.model.set('sendActivitySignal', true);
-                    EventHandler.saveTask(e, this);
+                    EventHandler.saveTask.call(this, e);
                 } else {
                     EventHandler.startConsult(e, this, 'saved');
                 }
             }
         },
         fireAcceptEvent: function(e) {
+            this.model.unset('errorMessage');
+
             if (!this.model.isValid()) {
                 return;
             }
@@ -629,7 +737,7 @@ define([
              * If urgency equal 'emergent' and there are orders to be placed, place the orders and allow the accept event to be fired.
              */
 
-            if ((this.model.get('urgency') + '' === '2')) {
+            if (ConsultUtils.isEmergent(this.model.get('urgency')) + '' && _.get(this.model.toJSON(), 'name') !== 'Accept') {
 
                 var orderAns = this.model.get('preReqOrders').groupBy(function(model) {
                     return model.get('value');
@@ -647,12 +755,11 @@ define([
             } else {
                 this.acceptEvent(e);
             }
-
-
         },
         acceptEvent: function(e) {
-            this.blockUI();
-            if (this.isFromDraft) {
+            this.blockUI('Accepting');
+            if (this.draftActivity) {
+
                 var self = this;
 
                 this.model.set('sendActivitySignal', true);
@@ -666,7 +773,7 @@ define([
                 });
 
             } else if (this.taskModel) {
-                EventHandler.completeTask(e, this, 'accepted');
+                EventHandler.completeTask.call(this, e, 'accepted');
             } else {
                 EventHandler.startConsult(e, this, 'accepted');
             }
@@ -678,14 +785,15 @@ define([
             ConsultUtils.prepareOrdersTobePlaced.call(this, 'ordersHaveBeenPlaced');
         },
         ordersHaveBeenPlaced: function(e) {
-            if (this.isFromDraft || this.taskModel) {
+            if (this.draftActivity || this.taskModel) {
                 this.model.set('sendActivitySignal', true);
-                EventHandler.beginWorkup(e, this);
+                EventHandler.beginWorkup.call(this, e);
             } else {
                 EventHandler.startConsult(e, this, 'workup');
             }
         },
         ordersError: function() {
+            this.unBlockUI();
             AlertItemView = Backbone.Marionette.ItemView.extend({
                 template: Handlebars.compile([
                     '<p>There was an error with placing an order/orders for this consult.</p>'
@@ -694,7 +802,7 @@ define([
 
             AlertFooterItemView = Backbone.Marionette.ItemView.extend({
                 template: Handlebars.compile([
-                    '{{ui-button "Ok" classes="btn-primary alert-continue" title="Press enter to continue"}}'
+                    '{{ui-button "Ok" classes="btn-primary alert-continue" title="Press enter to close"}}'
                 ].join('\n')),
                 events: {
                     'click button': function() {
@@ -704,15 +812,14 @@ define([
             });
 
             alertView = new ADK.UI.Alert({
-                title: "Alert",
-                icon: "icon-error",
+                title: "Error",
+                icon: "icon-circle-exclamation",
                 messageView: AlertItemView,
                 footerView: AlertFooterItemView
             });
 
             alertView.show();
         }
-
     });
 
     return {

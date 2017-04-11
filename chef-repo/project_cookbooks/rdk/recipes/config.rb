@@ -5,16 +5,17 @@
 
 include_recipe "rdk::service" # Included due to notify dependency from templates to service
 
-jbpm_admin_password = Chef::EncryptedDataBagItem.load("credentials", "jbpm_admin_password", 'k33p1ts@f3')["password"]
-jbpm_nurseuser_password = Chef::EncryptedDataBagItem.load("credentials", "jbpm_nurseuser_password", 'k33p1ts@f3')["password"]
-jbpm_activitydbuser_password = Chef::EncryptedDataBagItem.load("credentials", "jbpm_activitydbuser_password", 'k33p1ts@f3')["password"]
-rdk_secure_passcode_list = Chef::EncryptedDataBagItem.load("resource_server", "config", 'k33p1ts@f3')["passcode"]
+jbpm_admin_password = Chef::EncryptedDataBagItem.load("credentials", "jbpm_admin_password", node[:data_bag_string])["password"]
+jbpm_nurseuser_password = Chef::EncryptedDataBagItem.load("credentials", "jbpm_nurseuser_password", node[:data_bag_string])["password"]
+jbpm_activitydbuser_password = Chef::EncryptedDataBagItem.load("credentials", "jbpm_activitydbuser_password", node[:data_bag_string])["password"]
+mongodb_creds = Chef::EncryptedDataBagItem.load("credentials", "mongodb", node[:data_bag_string])["rdk"]
+rdk_secure_passcode_list = Chef::EncryptedDataBagItem.load("resource_server", "config", node[:data_bag_string])["passcode"]
 
 # Find other machines using find_nodes in common cookbook
 jds = find_node_by_role("jds", node[:stack])
 pjds = find_node_by_role("pjds", node[:stack], "jds")
 solr = find_node_by_role("solr", node[:stack], "mocks")
-vxsync = find_node_by_role("vxsync", node[:stack])
+vxsync = find_node_by_role("vxsync_client", node[:stack])
 vhic = find_node_by_role("vhic", node[:stack], "mocks")
 asu = find_node_by_role("asu", node[:stack], "vxsync")
 mvi = find_node_by_role("mvi", node[:stack], "mocks")
@@ -26,6 +27,12 @@ begin
 rescue
   Chef::Log.warn "No CRS machine found.  This is not required, so we will continue deployment without connecting to CRS."
   crs = nil
+end
+begin
+  vix = find_optional_node_by_role("vix", node[:stack]) || data_bag_item('servers', 'vix').to_hash
+rescue
+  Chef::Log.warn "No Vix machine found.  This is not required, so we will continue deployment without connecting to Vix."
+  vix = nil
 end
 vistas = find_multiple_nodes_by_role("vista-.*", node[:stack])
 
@@ -48,7 +55,7 @@ node[:rdk][:services].each do |name, config|
       end
     end
   end
-  
+
   # Create base config file
   template("#{config[:config_destination]}.json") do
     source "#{config[:config_source]}"
@@ -60,9 +67,12 @@ node[:rdk][:services].each do |name, config|
       :vhic => vhic,
       :asu => asu,
       :mvi => mvi,
+      :vix => vix,
       :jbpm => jbpm,
       :cdsinvocation => cdsinvocation,
       :cdsdb => cdsdb,
+      :mongodb_creds => mongodb_creds,
+      :sslCACertName => "#{node[:rdk][:home_dir]}/config/#{node[:rdk][:sslCACertName]}",
       :crs => crs,
       :vista_sites => vistas,
       :log_directory => node[:rdk][:log_dir],
@@ -81,7 +91,7 @@ node[:rdk][:services].each do |name, config|
     notifies :restart, "service[#{config[:service]}]"
   end
 
-  # Create remaining config files for dynamic processes. rdk-1, rdk-2, etc. 
+  # Create remaining config files for dynamic processes. rdk-1, rdk-2, etc.
   1.upto(config[:processes]) do |index|
     template("#{config[:config_destination]}-#{index}.json") do
       source "#{config[:config_source]}"
@@ -93,9 +103,12 @@ node[:rdk][:services].each do |name, config|
         :vhic => vhic,
         :asu => asu,
         :mvi => mvi,
+        :vix => vix,
         :jbpm => jbpm,
         :cdsinvocation => cdsinvocation,
         :cdsdb => cdsdb,
+        :mongodb_creds => mongodb_creds,
+        :sslCACertName => "#{node[:rdk][:home_dir]}/config/#{node[:rdk][:sslCACertName]}",
         :crs => crs,
         :vista_sites => vistas,
         :log_directory => node[:rdk][:log_dir],

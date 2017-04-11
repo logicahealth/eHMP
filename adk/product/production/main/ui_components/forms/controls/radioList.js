@@ -25,7 +25,7 @@ define([
                             'type="radio" ' +
                             'id="{{#if prependToDomId}}{{@root.prependToDomId}}-{{/if}}{{@root.formAttributeName}}-{{@root.name}}-{{clean-for-id (@root.getId this @index)}}" ' +
                             'name="{{#if prependToDomId}}{{@root.prependToDomId}}-{{/if}}{{@root.formAttributeName}}-{{@root.name}}" ' +
-                            '{{#if title}}title="{{title}}" {{else}}title="Press enter twice to select {{label}} for {{../../label}}" {{/if}}' +
+                            '{{#if title}}title="{{title}}" {{else}}title="Press spacebar to select {{label}} for {{../label}}" {{/if}}' +
                             'value="{{@root.getValueString this}}" ' +
                             '{{@root.isChecked this @root @index}}' +
                             '{{#if disabled}}disabled {{else}}{{#if @root.contorlDisabled}}disabled {{else}}{{#if @root.disabled}}disabled {{/if}}{{/if}}{{/if}}' +

@@ -12,7 +12,6 @@ define([
     'datejs'
 ], function(Backbone, PuppetForm, Handlebars, DateUtils, _, Moment, Accessibility, $, InputMask, DatePicker, DateJs) {
     'use strict';
-    var ACCEPTABLE_FORMATS = "<p class='text-left bottom-margin-no top-padding-xs left-padding-xs'><strong>Acceptable formats:</strong></p><hr class='top-margin-xs bottom-margin-xs left-margin-no right-margin-no'/><ul class='left-padding-md right-padding-no bottom-padding-xs'><li class='text-left'><span>MM/DD/YYYY (can be M/D/YY)</span></li></span></li><li class='text-left'><span>MM/YYYY (can be M/YYYY)</span></li><li class='text-left'><span>YYYY</span></li><li class='text-left'><span>MM/DD (assumes this year, can be M/D)</span></li><li class='text-left'><span>t</span></li><li class='text-left'><span>t+x or t-x (x = num. of days)</span></li><li class='text-left'><span>t+ym or t-ym (y = num. of months)</span></li><li class='text-left'><span>n (now)</span></li><li class='text-left'><span>yesterday<li class='text-left'><span>tomorrow</span></li></ul>";
 
     var CommonInputViewPrototype = _.defaults({
         template: Handlebars.compile([
@@ -96,9 +95,9 @@ define([
             var name = attrArr.shift();
             var path = attrArr.join('.');
             var rawValue = this.keyPathAccessor(attributes[name], path);
-            if (field.prependToDomId){
+            if (field.prependToDomId) {
                 field.name = field.prependToDomId + name;
-                if (field.id){
+                if (field.id) {
                     field.id = field.prependToDomId + field.id;
                 }
             }
@@ -148,53 +147,77 @@ define([
     // tomorrow
 
     var FlexibleInputViewPrototype = _.defaults({
-        template: Handlebars.compile([
-            '{{ui-form-label (add-required-indicator label required) forID=(clean-for-id name) classes=(is-sr-only-label srOnlyLabel)}}',
-            '{{#unless srOnlyLabel}}' +
-            '<button type="button" class="btn btn-icon all-padding-no left-margin-xs" data-toggle="tooltip" ' +
-            'title="' + ACCEPTABLE_FORMATS + '">' +
-            '<i class="fa fa-question-circle color-primary"></i><span class="sr-only">' + ACCEPTABLE_FORMATS + '</span></button>',
-            '{{/unless}}',
-            '<div class="input-group date calendar-container">',
-            '<span class="input-group-addon{{#if disabled}} disabled{{/if}}" aria-hidden="true"' +
-            '{{#if srOnlyLabel}} data-toggle="tooltip" title="' + ACCEPTABLE_FORMATS + '"{{/if}}' +
-            '><i class="fa fa-calendar color-primary"></i></span>',
-            '<input tabindex="-1" id="{{clean-for-id name}}-hidden" class="clone-input datepicker-input" aria-hidden="true"' +
-            '{{#if disabled}} disabled{{/if}}' +
-            ' name="{{name}}"{{#if maxlength}} maxlength="{{maxlength}}"{{/if}} value="{{value}}"/>',
-            '<input type="{{type}}" id="{{clean-for-id name}}" name="{{name}}"{{#if maxlength}} maxlength="{{maxlength}}"{{/if}} value="{{value}}"' +
-            ' class="{{PuppetForm "controlClassName"}} flexible-input"' +
-            ' id="{{clean-for-id name}}" name="{{name}}" maxlength="{{maxlength}}" value="{{value}}"' +
-            '{{#if title}} title="{{title}}"{{/if}}' +
-            'placeholder="{{#if placeholder}}{{placeholder}}{{else}}MM/DD/YYYY{{/if}}"' +
-            '{{#if disabled}} disabled{{/if}}' +
-            '{{#if required}} required{{/if}}' +
-            '{{#if readonly}} readonly{{/if}}/>',
-            '</div>',
-            '{{#if helpMessage}} <span {{#if (has-puppetForm-prop "helpMessageClassName")}}class="{{PuppetForm "helpMessageClassName"}}"{{/if}}>{{helpMessage}}</span>{{/if}}'
-        ].join('\n')),
+        getTemplate: function() {
+            var minPrecision = this._flexibleInternalModel.get('minPrecision');
+            var acceptableFormatTooltipHtml = [
+                "<p class='text-left bottom-margin-no top-padding-xs left-padding-xs'><strong>Acceptable formats:</strong></p>",
+                "<hr class='top-margin-xs bottom-margin-xs left-margin-no right-margin-no'/>",
+                "<ul class='left-padding-md right-padding-no bottom-padding-xs'>",
+                "<li class='text-left'><span>MM/DD/YYYY (can be M/D/YY)</span></li></span></li>",
+                minPrecision !== 'day' ? "<li class='text-left'><span>MM/YYYY (can be M/YYYY)</span></li>" : "",
+                minPrecision === 'year' ? "<li class='text-left'><span>YYYY</span></li>" : "",
+                "<li class='text-left'><span>MM/DD (assumes this year, can be M/D)</span></li>",
+                "<li class='text-left'><span>t (today)</span></li>",
+                "<li class='text-left'><span>t+x or t-x (x = num. of days)</span></li>",
+                "<li class='text-left'><span>t+ym or t-ym (y = num. of months)</span></li>",
+                "<li class='text-left'><span>n (now)</span></li>",
+                "<li class='text-left'><span>yesterday<li class='text-left'><span>tomorrow</span></li>",
+                "</ul>"
+            ].join('\n');
+            return Handlebars.compile([
+                '{{ui-form-label (add-required-indicator label required) forID=(clean-for-id name) classes=(is-sr-only-label srOnlyLabel)}}',
+                '{{#unless srOnlyLabel}}' +
+                '<button type="button" class="btn btn-icon all-padding-no left-margin-xs" data-toggle="tooltip" ' +
+                'title="' + acceptableFormatTooltipHtml + '">' +
+                '<i class="fa fa-question-circle color-primary"></i><span class="sr-only">' + acceptableFormatTooltipHtml + '</span></button>',
+                '{{/unless}}',
+                '<div class="input-group date calendar-container">',
+                '<span class="input-group-addon{{#if disabled}} disabled{{/if}}" aria-hidden="true"' +
+                '{{#if srOnlyLabel}} data-toggle="tooltip" title="' + acceptableFormatTooltipHtml + '"{{/if}}' +
+                '><i class="fa fa-calendar color-primary"></i></span>',
+                '<input tabindex="-1" id="{{clean-for-id name}}-hidden" class="clone-input datepicker-input" aria-hidden="true"' +
+                '{{#if disabled}} disabled{{/if}}' +
+                ' name="{{name}}"{{#if maxlength}} maxlength="{{maxlength}}"{{/if}} value="{{value}}"/>',
+                '<input type="{{type}}" id="{{clean-for-id name}}" name="{{name}}"{{#if maxlength}} maxlength="{{maxlength}}"{{/if}} value="{{value}}"' +
+                ' class="{{PuppetForm "controlClassName"}} flexible-input"' +
+                ' id="{{clean-for-id name}}" name="{{name}}" maxlength="{{maxlength}}" value="{{value}}"' +
+                '{{#if title}} title="{{title}}"{{/if}}' +
+                'placeholder="{{#if placeholder}}{{placeholder}}{{else}}MM/DD/YYYY{{/if}}"' +
+                '{{#if disabled}} disabled{{/if}}' +
+                '{{#if required}} required{{/if}}' +
+                '{{#if readonly}} readonly{{/if}}/>',
+                '</div>',
+                '{{#if helpMessage}} <span {{#if (has-puppetForm-prop "helpMessageClassName")}}class="{{PuppetForm "helpMessageClassName"}}"{{/if}}>{{helpMessage}}</span>{{/if}}'
+            ].join('\n'));
+        },
         ui: _.defaults({
             'flexibleInput': 'input.flexible-input',
             'helpTooltip': '[data-toggle="tooltip"]'
         }, CommonInputViewPrototype.ui),
         events: {
             'changeDate @ui.datepickerInput': function(event) {
+                this.listenToOnce(this._flexibleInternalModel, 'change', _.partialRight(this.onFlexibleInternalModelChange, { shouldShow: false }));
                 this.triggerMethod('flexible-date-selected', event, this.ui.datepickerInput.val());
             },
             'input @ui.flexibleInput': function(event) {
                 clearTimeout(this._inputTimeout);
                 this._inputTimeout = setTimeout(_.bind(function() {
+                    this._inputTimeoutActive = false;
                     this.onFlexibleInput();
                 }, this), 250);
+                this._inputTimeoutActive = true;
             },
             'change @ui.flexibleInput': function(event) {
-                clearTimeout(this._inputTimeout);
-                this.onFlexibleInput();
+                if (this._inputTimeoutActive) {
+                    clearTimeout(this._inputTimeout);
+                    this._inputTimeoutActive = false;
+                    this.onFlexibleInput();
+                }
                 var newVal = this.getValueFromDOM();
                 if (this.currVal === newVal && newVal.length > 0 && newVal === this.model.get(this.field.get('name'))) {
                     event.stopPropagation();
                 } else {
-                    this.removeTooltip(this.ui.flexibleInput);
+                    this.hideTooltip(this.ui.flexibleInput);
                     this.currVal = newVal;
                     this.triggerMethod('input:flexible:change', event);
                     if (!_.isNull(this.datepickerExternalModel.get('formattedDate'))) {
@@ -254,39 +277,53 @@ define([
             }, CommonInputViewPrototype.serializeModel.apply(this, arguments));
             return data;
         },
-        onFlexibleInput: function() {
-            this.listenToOnce(this._flexibleInternalModel, 'change', function() {
-                var parsedDate = this._flexibleInternalModel.get('parsedDate');
-                var isOutOfRange = this._flexibleInternalModel.get('outOfRange');
-                if (!_.isString(parsedDate) || (_.isString(parsedDate) && isOutOfRange)) {
-                    var inputString = this._flexibleInternalModel.get('inputString');
-                    if (_.isString(inputString) && inputString.length > 0 && !isOutOfRange && !_.isBoolean(parsedDate)) {
-                        this.updateToolTip('Invalid Date');
-                        this.announceParseChange('Invalid Date. Enter another date.');
-                    } else if (isOutOfRange) {
-                        this.updateToolTip('Date must be between ' + this._datepickerInternalModel.get('startDate') + ' - ' + this._datepickerInternalModel.get('endDate'));
-                        this.announceParseChange('Date out of range. Date must be between ' + this._datepickerInternalModel.get('startDate') + ' - ' + this._datepickerInternalModel.get('endDate'));
-                    } else if (_.isBoolean(parsedDate) && !parsedDate) {
-                        this.updateToolTip('Invalid Date Format');
-                        // might need to say what the acceptable formats are
-                        this.announceParseChange('Invalid Date Format. Date must be in a format specified in the help button above.');
-                    } else {
-                        this.removeTooltip(this.ui.flexibleInput);
-                    }
-                } else {
-                    this.updateToolTip(this._flexibleInternalModel.get('parsedDate'));
-                    this.announceParseChange('Date converted to: ' + this._flexibleInternalModel.get('parsedDate'));
+        onFlexibleInternalModelChange: function(model, changes, options) {
+            options = _.extend({
+                shouldShow: true
+            }, options);
+            var shouldShowTooltip = options.shouldShow;
+            var parsedDate = this._flexibleInternalModel.get('parsedDate');
+            var isOutOfRange = this._flexibleInternalModel.get('outOfRange');
+            var adequatelyPrecise = this._flexibleInternalModel.get('adequatelyPrecise');
+            if (!_.isString(parsedDate) || (_.isString(parsedDate) && (isOutOfRange || (_.isBoolean(adequatelyPrecise) && !adequatelyPrecise)))) {
+                var inputString = this._flexibleInternalModel.get('inputString');
+                if (!_.isString(inputString) || (_.isString(inputString) && inputString.length === 0)) {
+                    this.hideTooltip(this.ui.flexibleInput, true);
+                    shouldShowTooltip = false;
+                    this.ui.flexibleInput.attr('title', this.field.get('title') || this.defaults.title);
+                } else if (isOutOfRange) {
+                    this.updateTooltipText('Date must be between ' + this._datepickerInternalModel.get('startDate') + ' - ' + this._datepickerInternalModel.get('endDate'));
+                    this.announceParseChange('Date out of range. Date must be between ' + this._datepickerInternalModel.get('startDate') + ' - ' + this._datepickerInternalModel.get('endDate'));
+                } else if ((_.isBoolean(parsedDate) && !parsedDate) || (_.isBoolean(adequatelyPrecise) && !adequatelyPrecise)) {
+                    this.updateTooltipText('Invalid Date Format');
+                    // might need to say what the acceptable formats are
+                    this.announceParseChange('Invalid Date Format. Date must be in a format specified in the help button above.');
+                }  else {
+                    this.updateTooltipText('Invalid Date');
+                    this.announceParseChange('Invalid Date. Enter another date');
                 }
-            });
+            } else {
+                this.updateTooltipText(this._flexibleInternalModel.get('parsedDate'));
+                this.announceParseChange('Date converted to: ' + this._flexibleInternalModel.get('parsedDate'));
+            }
+            if (shouldShowTooltip) {
+                this.showTooltip();
+            }
+        },
+        onFlexibleInput: function() {
+            this.listenToOnce(this._flexibleInternalModel, 'change', this.onFlexibleInternalModelChange);
             this.triggerMethod('input:flexible:input', event);
         },
-        removeTooltip: function(tooltipElement) {
-            tooltipElement.tooltip('destroy');
+        hideTooltip: function(tooltipElement, shouldDestroy) {
+            tooltipElement.tooltip(shouldDestroy ? 'destroy' : 'hide');
         },
-        updateToolTip: function(string) {
+        updateTooltipText: function(string) {
             this.ui.flexibleInput.attr('title', string).tooltip({
                 placement: 'auto bottom'
-            }).tooltip('fixTitle').tooltip('show');
+            }).tooltip('fixTitle');
+        },
+        showTooltip: function() {
+            this.ui.flexibleInput.tooltip('show');
         },
         announceParseChange: function(announcement) {
             Accessibility.Notification.new({
@@ -300,8 +337,8 @@ define([
         },
         onBeforeDestroy: function() {
             clearTimeout(this._inputTimeout);
-            this.removeTooltip(this.ui.flexibleInput);
-            this.removeTooltip(this.ui.helpTooltip);
+            this.ui.flexibleInput.tooltip('destroy');
+            this.ui.helpTooltip.tooltip('destroy');
             this.ui.datepickerInput.datepicker('destroy');
         }
     }, CommonInputViewPrototype);
@@ -333,8 +370,33 @@ define([
             this._flexibleInternalModel.set({
                 inputString: inputString,
                 parsedDate: convertedDate,
-                outOfRange: this.isConvertedDateOutOfRange(convertedDate)
+                outOfRange: this.isConvertedDateOutOfRange(convertedDate),
+                adequatelyPrecise: this.ensurePrecision(this.getCurrentPrecision(convertedDate))
             });
+        },
+        getCurrentPrecision: function(convertedDate) {
+            var currentPrecision = null;
+            var splitString = this.splitDateString(convertedDate);
+            if (splitString.length === 3) {
+                currentPrecision = 'day';
+            } else if (splitString.length === 2) {
+                currentPrecision = 'month';
+            } else if (splitString.length === 1) {
+                currentPrecision = 'year';
+            }
+            return currentPrecision;
+        },
+        ensurePrecision: function(currentPrecision) {
+            if (!_.isString(currentPrecision)) {
+                return null;
+            }
+            var minPrecision = this._flexibleInternalModel.get('minPrecision');
+            var precisionWeightMap = {
+                day: 3,
+                month: 2,
+                year: 1
+            };
+            return precisionWeightMap[currentPrecision] >= precisionWeightMap[minPrecision];
         },
         enforceInputFormat: function(parsedDate, input, regexFormat) {
             if (_.isString(parsedDate) && _.isString(input)) {
@@ -461,7 +523,8 @@ define([
             title: 'Enter in a date in the following format, MM/DD/YYYY',
             inputFormatRestriction: /^((?:\d{4}|\d{1,2}\/(\d{4}|\d{1,2})|\d{1,2}\/\d{1,2}\/(?:\d{2}){1,2})|(?:[tn]|(?:today|now))(?:[+-]|[+-]\d{1,3}(?:m)?)?|(?:yesterday|tomorrow))$/,
             flexible: false,
-            datepickerOptions: {}
+            datepickerOptions: {},
+            minPrecision: 'year' // day, month, year -> in order from most to least precise
         },
         getTemplate: function() {
             if (this.field.get('flexible')) {
@@ -592,6 +655,8 @@ define([
             if (this.isFlexible) {
                 this.convertDate = FlexibleControlLevelPrototype.convertDate;
                 this.isConvertedDateOutOfRange = FlexibleControlLevelPrototype.isConvertedDateOutOfRange;
+                this.ensurePrecision = FlexibleControlLevelPrototype.ensurePrecision;
+                this.getCurrentPrecision = FlexibleControlLevelPrototype.getCurrentPrecision;
                 this.enforceInputFormat = FlexibleControlLevelPrototype.enforceInputFormat;
                 this.setFlexibleModel = FlexibleControlLevelPrototype.setFlexibleModel;
                 var dateFromModel = this.model.get(this.field.get('name'));
@@ -604,7 +669,8 @@ define([
                 var flexibleModelDefaults = {
                     parsedDate: dateFromModel,
                     inputString: null,
-                    outOfRange: this.isConvertedDateOutOfRange(dateFromModel)
+                    outOfRange: this.isConvertedDateOutOfRange(dateFromModel),
+                    minPrecision: this.convertMinPrecision(this.field.get('minPrecision'))
                 };
                 this._flexibleInternalModel = childOptions._flexibleInternalModel = new Backbone.Model(flexibleModelDefaults);
                 childOptions.datepickerExternalModel = this.datepickerExternalModel;
@@ -643,8 +709,13 @@ define([
                     var parsedDate = this._flexibleInternalModel.get('parsedDate');
                     var isOutOfRange = this._flexibleInternalModel.get('outOfRange');
                     var parsedDateIsFalse = _.isBoolean(parsedDate) && !parsedDate;
-                    if ((!_.isString(parsedDate) || (_.isString(parsedDate) && isOutOfRange) || parsedDateIsFalse) && _.isString(selectedDate) && selectedDate.length > 0) {
-                        var invalidDateMessage = isOutOfRange ? 'Date must be between ' + this._datepickerInternalModel.get('startDate') + ' - ' + this._datepickerInternalModel.get('endDate') + '.' : parsedDateIsFalse ? 'Enter a date in a valid format.' : 'Enter a valid date.';
+                    var isAdequatelyPrecise = this._flexibleInternalModel.get('adequatelyPrecise');
+                    var existingErrorMessage = this.model.errorModel.get(this.field.get('name'));
+                    if ((!_.isString(existingErrorMessage) || existingErrorMessage.length < 1 ) && (!_.isString(parsedDate) || (_.isString(parsedDate) && (isOutOfRange || (_.isBoolean(isAdequatelyPrecise) && !isAdequatelyPrecise))) || parsedDateIsFalse) && _.isString(selectedDate) && selectedDate.length > 0) {
+                        var invalidDateMessage = isOutOfRange ? 'Date must be between ' + this._datepickerInternalModel.get('startDate') + ' - ' + this._datepickerInternalModel.get('endDate') :
+                            parsedDateIsFalse ? 'Enter a date in a valid format' :
+                            !isAdequatelyPrecise ? 'Date must be in ' + this.getAcceptablePrecisionFormats(this._flexibleInternalModel.get('minPrecision')).join(' or ') + ' format' :
+                            'Enter a valid date';
                         this.model.errorModel.set(this.field.get('name'), invalidDateMessage);
                         return formErrorMessage || invalidDateMessage;
                     }
@@ -670,11 +741,43 @@ define([
                 }, this));
             }
         },
+        getAcceptablePrecisionFormats: function(precision) {
+            var precisionFormatMap = {
+                day: ['MM/DD/YYYY'],
+                month: ['MM/DD/YYYY', 'MM/YYYY'],
+                year: ['MM/DD/YYYY', 'MM/YYYY', 'YYYY']
+            };
+            return precisionFormatMap[precision];
+        },
+        convertMinPrecision: function(providedPrecision) {
+            var minPrecision;
+            if (!_.isString(providedPrecision) && _.isNaN(providedPrecision)) {
+                minPrecision = this.defaults.providedPrecision;
+            } else {
+                switch (_.isString(providedPrecision) ? providedPrecision.charAt(0) : providedPrecision) {
+                    case 'd':
+                    case 3:
+                        minPrecision = 'day';
+                        break;
+                    case 'm':
+                    case 2:
+                        minPrecision = 'month';
+                        break;
+                    case 'y':
+                    case 1:
+                        minPrecision = 'year';
+                        break;
+                    default:
+                        minPrecision = this.defaults.minPrecision;
+                }
+            }
+            return minPrecision;
+        },
         onChange: function(event) {
             event.preventDefault();
             event.stopPropagation();
             var model = this.model;
-            var attrArr = this.field.get("name").split('.');
+            var attrArr = this.field.get('name').split('.');
             var name = attrArr.shift();
             var path = attrArr.join('.');
             var changes = {};
@@ -721,7 +824,7 @@ define([
             var month = null;
             var day = null;
             if (_.isString(date)) {
-                var splitString = _.isString(date) ? date.split('/') : "";
+                var splitString = this.splitDateString(date);
                 var splitStringLength = splitString.length;
                 var transformFormat = format;
 
@@ -753,6 +856,9 @@ define([
                     day: day
                 });
             }
+        },
+        splitDateString: function(dateString) {
+            return _.isString(dateString) ? dateString.split('/') : "";
         },
         transformOutputFormat: function(dateToConvert, inputFormat, outputFormat, splitStringLength) {
             if (_.isString(dateToConvert) && _.isString(inputFormat) && _.isString(outputFormat)) {

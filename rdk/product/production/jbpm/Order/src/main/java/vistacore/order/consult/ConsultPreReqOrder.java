@@ -16,6 +16,10 @@ public class ConsultPreReqOrder implements java.io.Serializable
 
    private java.lang.String uid;
 
+   private java.lang.String satisfiedComment;
+
+   private java.lang.String ien;
+
    public ConsultPreReqOrder()
    {
    }
@@ -70,15 +74,38 @@ public class ConsultPreReqOrder implements java.io.Serializable
       this.signalRegistered = signalRegistered;
    }
 
+   public java.lang.String getSatisfiedComment()
+   {
+      return this.satisfiedComment;
+   }
+
+   public void setSatisfiedComment(java.lang.String satisfiedComment)
+   {
+      this.satisfiedComment = satisfiedComment;
+   }
+
+   public java.lang.String getIen()
+   {
+      return this.ien;
+   }
+
+   public void setIen(java.lang.String ien)
+   {
+      this.ien = ien;
+   }
+
    public ConsultPreReqOrder(java.lang.String orderName, java.lang.String status,
          java.lang.String statusDate, java.lang.Boolean signalRegistered,
-         java.lang.String uid)
+         java.lang.String uid, java.lang.String satisfiedComment,
+         java.lang.String ien)
    {
       this.orderName = orderName;
       this.status = status;
       this.statusDate = statusDate;
       this.signalRegistered = signalRegistered;
       this.uid = uid;
+      this.satisfiedComment = satisfiedComment;
+      this.ien = ien;
    }
 
 }

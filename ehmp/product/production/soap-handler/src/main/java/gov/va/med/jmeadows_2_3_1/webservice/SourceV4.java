@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "sourceV4", namespace = "http://webservice.bhie.DNS       /", propOrder = {
+@XmlType(name = "sourceV4", namespace = "http://webservice.bhie.med.DNS   /", propOrder = {
     "custodianOrgAddress",
     "custodianOrgName",
     "custodianOrgPhone",

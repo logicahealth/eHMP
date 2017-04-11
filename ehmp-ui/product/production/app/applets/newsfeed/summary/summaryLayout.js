@@ -1,9 +1,10 @@
 define([
+    "moment",
     "app/applets/newsfeed/newsfeedUtils",
     "hbs!app/applets/newsfeed/summary/formatDateTemplate",
     "app/applets/newsfeed/summary/activityCell",
     "app/applets/newsfeed/collectionHandler"
-], function(newsfeedUtils, formatDateTemplate, ActivityCell, CollectionHandler) {
+], function(moment, newsfeedUtils, formatDateTemplate, ActivityCell, CollectionHandler) {
     "use strict";
 
     var summaryColumns = [{
@@ -88,13 +89,66 @@ define([
         "lab": "labresults_timeline_detailview"
     };
 
+    var getDetailsModal = function(model, collection) {
+        //ugh, why is this needed?? Is it?? The detailed modals should grab this if need be
+        var currentPatient = ADK.PatientRecordService.getCurrentPatient();
+        var channelObject = {
+            model: model,
+            uid: model.get("uid"),
+            patient: {
+                icn: currentPatient.attributes.icn,
+                pid: currentPatient.attributes.pid
+            }
+        };
+        if(newsfeedUtils.isCptProcedure(model)){
+          if(model.get("visitInfo")){
+            channelObject.channelName = "visitDetail";
+            channelObject.model = new Backbone.Model(model.get("visitInfo")); 
+          }
+        }
+        if (newsfeedUtils.isVisit(model)) {
+            channelObject.channelName = "visitDetail";
+        }
+
+        var domain = channelObject.uid.split(":")[2],
+            channelName = detailAppletChannels[domain] || channelObject.channelName;
+
+        if (channelName) {
+            var channel = ADK.Messaging.getChannel(channelName),
+                response = channel.request('detailView', channelObject);
+
+                var modal = new ADK.UI.Modal({
+                    view: new response.view(),
+                    options:  {
+                        size: "large",
+                        title: response.title,
+                        'nextPreviousCollection': model.collection,
+                        'nextPreviousModel': model
+                    },
+                    callbackFunction: getDetailsModal
+                });
+                modal.show();
+
+        } else {
+
+            var modalView = new ADK.UI.Modal({
+                view: new DefaultDetailView(),
+                options:  {
+                    size: "large",
+                    title: "Detail - Placeholder"
+                }
+            });
+            modalView.show();
+        }
+    };
+
     var generateDataGridOptions = function(instanceId) {
         return {
             appletConfig: {
                 id: 'newsfeed',
                 instanceId: instanceId
             },
-            filterFields: ['activityDateTimeByIso', 'activityDateTimeByIsoWithSlashes', 'activity', 'summary', 'typeDisplayName', 'stopCodeName', 'locationDisplayName', 'displayType', 'primaryProviderDisplay', 'facilityName'],
+            filterFields: ['activityDateTimeByIso', 'activityDateTimeByIsoWithSlashes', 'activity', 'summary', 'typeDisplayName', 'stopCodeName', 'locationDisplayName', 'displayType', 'primaryProviderDisplay', 'facilityName', 'displayName'],
             summaryColumns: summaryColumns,
             fullScreenColumns: fullScreenColumns,
             enableModal: true,
@@ -102,66 +156,7 @@ define([
             groupable: true,
             onClickRow: function(model, event) {
                 event.preventDefault();
-                //ugh, why is this needed?? Is it?? The detailed modals should grab this if need be
-                var currentPatient = ADK.PatientRecordService.getCurrentPatient();
-                var channelObject = {
-                    model: model,
-                    uid: model.get("uid"),
-                    patient: {
-                        icn: currentPatient.attributes.icn,
-                        pid: currentPatient.attributes.pid
-                    }
-                };
-                if(newsfeedUtils.isCptProcedure(model)){
-                  if(model.get("visitInfo")){
-                    channelObject.channelName = "visitDetail";
-                    channelObject.model = new Backbone.Model(model.get("visitInfo")); 
-                  }
-                }
-                if (newsfeedUtils.isVisit(model)) {
-                    channelObject.channelName = "visitDetail";
-                }
-
-                var domain = channelObject.uid.split(":")[2],
-                    channelName = detailAppletChannels[domain] || channelObject.channelName;
-
-                if (channelName) {
-
-                    var modal = new ADK.UI.Modal({
-                        view: ADK.Views.Loading.create(),
-                        options:  {
-                            size: "large",
-                            title: "Loading..."
-                        }
-                    });
-                    modal.show();
-
-                    var channel = ADK.Messaging.getChannel(channelName),
-                        deferredResponse = channel.request('detailView', channelObject);
-
-                    deferredResponse.done(function(response) {
-
-                        var modal = new ADK.UI.Modal({
-                            view: response.view,
-                            options:  {
-                                size: "large",
-                                title: response.title
-                            }
-                        });
-                        modal.show();
-
-                    });
-                } else {
-
-                    var modalView = new ADK.UI.Modal({
-                        view: new DefaultDetailView(),
-                        options:  {
-                            size: "large",
-                            title: "Detail - Placeholder"
-                        }
-                    });
-                    modalView.show();
-                }
+                getDetailsModal(model, model.collection);
             }
         };
     };

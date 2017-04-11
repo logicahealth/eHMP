@@ -2,6 +2,10 @@ HMPEQLM ;SLC/MJK,ASMR/RRB - Event Queue Manager;30-JUN-2014
  ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**;Sep 01, 2011;Build 63
  ;Per VA Directive 6402, this routine should not be modified.
  ;
+ ; HMPM EVT QUE DISPLAY DETAILS is to be used by HMPM EVT QUE MGR 
+ ; MENU (a ListMan screen). No menu option is currently enabled for
+ ; these protocols.
+ ;
  Q
  ;
 EN ; -- main entry point for HMPM EVT QUE MGR
@@ -239,7 +243,7 @@ DETAIL ; -- detailed display
  . ;
  . I DOMAIN="med"!(DOMAIN="order") D MED(HMPREF,+$P(POST,"^",3)),RENDER
  . I DOMAIN="consult" D CONSULT(HMPREF,+$P(POST,"^",3)),RENDER
- . ; -- TODO: Need to understand HL7-type messages parsed in XQOR^HMPEVNT
+ . ; -- FUTURE-TODO: Need to implement linetags for HL7 messages; see XQOR^HMPEVNT for examples
  . ;I DOMAIN="document" D TIU(+$P(POST,"^",3))
  . ;I DOMAIN="lab" D LAB()
  . ;I DOMAIN="image" D IMAGE()
@@ -253,14 +257,6 @@ DETAIL ; -- detailed display
  . I DOMAIN="appointment" D APPT(HMPREF,$P(POST,"^",3)),RENDER
  . ;
  . I DOMAIN="user" D USER(HMPREF,+$P(POST,"^",3)),RENDER
- . ;
- . I DOMAIN="roster" D ROSTER(HMPREF,+$P(POST,"^",3)),RENDER
- . ;
- . ; -- HMP PATIENT OBJECT (#800000.1) domains
- . I DOMAIN="auxiliary" D AUX(HMPREF,+$P(POST,"^",3)),RENDER
- . I DOMAIN="diagnosis" D DIAG(HMPREF,+$P(POST,"^",3)),RENDER
- . I DOMAIN="roadtrip" D ROAD(HMPREF,+$P(POST,"^",3)),RENDER
- . I DOMAIN="task" D TASK(HMPREF,+$P(POST,"^",3)),RENDER
  . ;
  . W !!,HMPDASH
  . D PAUSE^VALM1
@@ -303,39 +299,6 @@ USER(HMPZ,IEN) ; -- get user name
  K @HMPZ
  S @HMPZ@(1,"label")="User"
  S @HMPZ@(1,"value")=$$GET1^DIQ(200,IEN_",",.01)
- Q
- ;
-ROSTER(HMPZ,IEN) ; -- get roster name
- K @HMPZ
- S @HMPZ@(1,"label")="Roster"
- S @HMPZ@(1,"value")=$$GET1^DIQ(800001.2,IEN_",",.01)
- Q
- ;
- ; -- TODO: is this real or just a dev anomaly
-AUX(HMPZ,IEN) ; -- get auxiliary uid
- K @HMPZ
- S @HMPZ@(1,"label")="Auxiliary UID"
- S @HMPZ@(1,"value")=$$GET1^DIQ(800000.1,IEN_",",.01)
- Q
- ;
- ; -- TODO: is this real or just a dev anomaly
-DIAG(HMPZ,IEN) ; -- get diagnosis uid
- K @HMPZ
- S @HMPZ@(1,"label")="Diagnosis UID"
- S @HMPZ@(1,"value")=$$GET1^DIQ(800000.1,IEN_",",.01)
- Q
- ;
- ; -- TODO: is this real or just a dev anomaly
-ROAD(HMPZ,IEN) ; -- get roadtrip uid
- K @HMPZ
- S @HMPZ@(1,"label")="Road Trip UID"
- S @HMPZ@(1,"value")=$$GET1^DIQ(800000.1,IEN_",",.01)
- Q
- ;
-TASK(HMPZ,IEN) ; -- get task uid
- K @HMPZ
- S @HMPZ@(1,"label")="Task UID"
- S @HMPZ@(1,"value")=$$GET1^DIQ(800000.1,IEN_",",.01)
  Q
  ;
 CONSULT(HMPZ,IEN) ; -- get consult date

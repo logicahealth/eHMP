@@ -2,11 +2,12 @@
 
 var _ = require('lodash');
 var RpcClient = require('vista-js').RpcClient;
-
+var rdk = require('../../core/rdk');
 var filemanDateUtil = require('../../utils/fileman-date-converter');
 var nullChecker = require('../../utils/nullchecker');
 var paramUtil = require('../../utils/param-converter');
 var allergiesConstants = require('./constants');
+var nullchecker = rdk.utils.nullchecker;
 
 /*
  ("GMRACHT",0)=1
@@ -189,12 +190,18 @@ function create (writebackContext, callback) {
     var logger = writebackContext.logger;
     var vistaConfig = writebackContext.vistaConfig;
     var model = writebackContext.model;
+    var dfn = writebackContext.interceptorResults.patientIdentifiers.dfn;
+
+    if(nullchecker.isNullish(dfn)){
+        logger.error('Missing required patient identifiers');
+        return callback('Missing required patient identifiers');
+    }
 
     var allergies = getAllergyRPCString(writebackContext.model, logger);
     logger.debug({allergies: allergies});
 
 
-    RpcClient.callRpc(logger, vistaConfig, 'HMP WRITEBACK ALLERGY', [0, model.dfn, allergies], function (err, result) {
+    RpcClient.callRpc(logger, vistaConfig, 'HMP WRITEBACK ALLERGY', [0, dfn, allergies], function (err, result) {
         handleRPCResponse(writebackContext, err, result);
         if (_.isNull(writebackContext.vprModel)) {
             return callback(null);

@@ -42,7 +42,7 @@ action :execute do
       end
       only_if { item_exists?("http://localhost:#{new_resource.port}/#{store}/#{item['uid']}", "description") }
     end
-    
+
     http_request "#{item["uid"]}_put" do
       message item.to_json
       url "http://localhost:#{new_resource.port}/#{store}/#{item['uid']}"
@@ -50,5 +50,5 @@ action :execute do
       not_if { item_exists?("http://localhost:#{new_resource.port}/#{store}/#{item['uid']}", "description") }
     end
   }
-  
+
 end

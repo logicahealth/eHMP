@@ -293,8 +293,8 @@ Scenario: client can request vitals in VPR format.
 @f100_5_vitals_neg_vpr	
 Scenario: Negative scenario.  Client can request vital results in VPR format
 Given a patient with "No vital results" in multiple VistAs
-Given a patient with pid "1006184063V088473" has been synced through Admin API
-When the client requests vitals for the patient "1006184063V088473" in VPR format
+Given a patient with pid "PII       V088473" has been synced through Admin API
+When the client requests vitals for the patient "PII       V088473" in VPR format
 Then a successful response is returned
 Then corresponding matching records totaling "0" are displayed
            

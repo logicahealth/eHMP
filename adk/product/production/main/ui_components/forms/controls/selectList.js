@@ -65,6 +65,7 @@ define([
 
     var SelectView = CustomTemplateView.extend({
         defaultTemplate: [
+                '<div class="select-list-caret"></div>',
                 '<select ' +
                     'id="{{clean-for-id (id this)}}" ' +
                     'name="{{clean-for-id (id this)}}"' +

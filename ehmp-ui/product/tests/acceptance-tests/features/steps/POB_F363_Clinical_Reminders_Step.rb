@@ -97,12 +97,6 @@ When(/^user opens the first Clincial Reminders detail view$/) do
   @ehmp.tbl_cds_rows.first.click
 end
 
-Then(/^the detail modal is displayed$/) do
-  @ehmp = PobCommonElements.new
-  @ehmp.wait_until_fld_modal_body_visible
-  expect(@ehmp).to have_fld_modal_body
-end
-
 Then(/^the Clinical Reminders applet Detail modal displays details$/) do
   @ehmp = PobClinicalRemindersApplet.new
   @ehmp.wait_until_fld_cds_modal_content_visible(30)

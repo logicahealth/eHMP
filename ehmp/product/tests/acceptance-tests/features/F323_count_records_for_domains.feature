@@ -180,7 +180,7 @@ Scenario: Client can request appointment in VPR format
 		| field             | value       |
 		| appointmentStatus | ALL_SET 	  |
       	| kind              | ALL_SET      |
-      	| providers		    | ALL_SET      |
+
 
 
 @jds_find_count
@@ -199,22 +199,6 @@ Scenario: Client can request visit in VPR format
       	| facilityName		| ALL_SET      |
       	
 
-@jds_find_count
-Scenario: Client can request factor in VPR format
-	Given a patient with "factor" in multiple VistAs
-	And a patient with pid "9E7A;227" has been synced through VX-Sync API for "9E7A;C877;DOD;HDR" site(s)
-	When the client requests "factor" for the patient "9E7A;227" in VPR format
-	Then the client receives 5 record(s) for site "9E7A"
-	And the client receives 5 record(s) for site "C877"
-	And the client receives 0 record(s) for site "DOD"
-	And the client receives 1 record(s) for site "HDR"
-	Then the VPR results contain "factor"
-		| field             | value       |
-		| categoryName 		| ALL_SET 	  |
-      	| encounterName     | ALL_SET      |
-      	| kind		    	| ALL_SET      |
-
-      
 @jds_find_count
 Scenario: Client can request CPT in VPR format
 	Given a patient with "CPT" in multiple VistAs

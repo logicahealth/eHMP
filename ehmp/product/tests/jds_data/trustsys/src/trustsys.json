@@ -7,10 +7,16 @@
         "modifiedBy": "urn:va:user:C877:10000000270",
         "modifiedOn": "2015-08-19T19:31:41Z",
         "additionalPermissions": [
+            "access-general-ehmp",
+            "add-task",
             "create-clinical-object",
-            "edit-clinical-object",
             "delete-clinical-object",
-            "read-clinical-object"
+            "edit-clinical-object",
+            "edit-military-history",
+            "read-clinical-object",
+            "read-operational-data",
+            "read-military-history",
+            "read-task"
         ]
     }
 }, {
@@ -21,6 +27,27 @@
         "val": ["read-access"],
         "modifiedBy": "urn:va:user:C877:10000000270",
         "modifiedOn": "2015-08-19T19:31:41Z",
-        "additionalPermissions": []
+        "additionalPermissions": [
+            "access-general-ehmp",
+            "read-operational-data",
+            "read-military-history",
+            "edit-military-history",
+            "manage-cds-execute",
+            "manage-cds-schedlue",
+            "manage-cds-work-product",
+            "manage-cds-work-product-subscription",
+            "read-cds-engine",
+            "read-cds-intent",
+            "read-cds-criteria",
+            "read-cds-definition",
+            "read-cds-work-product",
+            "read-cds-work-product-subscription",
+            "read-cds-work-product-inbox",
+            "read-cds-schedlue",
+            "read-cds-execute",
+            "read-cds-patientlist",
+            "read-concept-relationship",
+            "read-fhir"
+        ]
     }
 }]

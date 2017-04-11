@@ -16,7 +16,7 @@ Scenario: Create patient list
     Then a workproduct is created for Hypertension
     And a successful response is returned
     And user sends DELETE request to delete a patient list
-    And a successful response is returned
+    And a successful database delete response is returned
 
 @US8390_patientlist_CRUD 
 Scenario: Perform CRUD on patient list (note: based on the document, no PUT request to update patient list)
@@ -29,9 +29,9 @@ Scenario: Perform CRUD on patient list (note: based on the document, no PUT requ
     # And user sends PUT request to update patient list with content "{"name":"TestPatientList","definition":{"name":"Testlistupdated","description":"This is updated list","expression":"{and: [ {or: ['A.A','B.B'], {'A.A'} ]}","date":"2015-02-27T20:33:41.308Z","scope":"private","owner":"unknown"}}"
     # And a successful response is returned
     And user sends DELETE request to delete a patient list
-    And a successful response is returned
+    And a successful database delete response is returned
     
-@US8390_workproducts_CRUD @US8161 
+@US8390_workproducts_CRUD @US8161 @future
 Scenario: Perform CRUD on work products 
     Given user sends request to create a work product with content "{"categories":[419192003],"context":{"location":{"codeSystem":"VA:Location","entityType":"Location","id":"2883","name":"ClinicOne","type":"ClinicName"},"specialty":{"codeSystem":"VA:Specialty","entityType":"Specialty","id":"FM","name":"Family Medicine","type":"Speciality"},"subject":{"codeSystem":"VA:UniversalId","entityType":"Subject","id":"5000000317V387446","name":null,"type":"Patient"},"user":{"codeSystem":"VA:Provider","entityType":"User","id":"unitTestUserId","name":"TEST,USER","type":"Provider"}},"duplicateCheckKey":{"checkSum":"","subject":{"codeSystem":"VA:UniversalId","entityType":"Subject","id":"5000000317V387446","name":null,"type":"Patient"},"type":"advice"},"expirationDate":1443989700000,"generationDate":1443903300000,"id":"2929289789573","invocationInfo":{"callId":"UUID of CallId","generatedBy":"UnitTestRulesEngine","targetInfo":{"intentsSet":["InvocationIntentA"],"mode":"Normal","perceivedExecutionTime":null,"supplementalMappings":null,"type":"Background"}},"payload":[{"data":{"details":{"detail":"This is the Body","provenance":"Test Data"},"doneDate":null,"dueDate":1443989700000,"generatedBy":"GeneratedBYUnitTest","id":null,"pid":"5000000317V387446","priority":50,"provider":"ProviderId","title":"A Test Result","type":"advice"},"type":"advice"}],"priority":0,"type":"advice"}"
    Then a successful response is returned for created
@@ -43,7 +43,7 @@ Scenario: Perform CRUD on work products
    Then user sends DELETE request to delete a work product
    And a successful response is returned
    
-@US8161_subscriptions 
+@US8161_subscriptions @future
 Scenario: Get, update and delete subscription
     Given subscriptions are available fo the user
     And user sends GET request for subscriptions
@@ -53,7 +53,7 @@ Scenario: Get, update and delete subscription
     When user sends DELETE request to delete the subscription
     Then a successful response is returned
    
-@US8360_cdsjob_CRUD 
+@US8360_cdsjob_CRUD
 Scenario: Perform CRUD on cds job
     Given user sends DELETE request to delete a cdsjob
     And user sends DELETE request to delete a patient list
@@ -72,9 +72,9 @@ Scenario: Perform CRUD on cds job
     And user sends DELETE request to delete a cdsjob
     # And a successful response is returned
     And user sends DELETE request to delete a patient list
-    And a successful response is returned
+    And a successful database delete response is returned
     
-@US8360_schedulejob_CRUD 
+@US8360_schedulejob_CRUD  @future @US16819
 Scenario: Perform CRUD on schedule job
     Given user sends DELETE request to delete a scheduled job
     And user sends DELETE request to delete a cdsjob
@@ -96,7 +96,7 @@ Scenario: Perform CRUD on schedule job
     # And a successful response is returned
     And user sends DELETE request to delete a cdsjob
     And user sends DELETE request to delete a patient list
-    And a successful response is returned
+    And a successful database delete response is returned
     And user sends GET request to get patient list
 
 @US8155_Definition_CRUD 
@@ -130,5 +130,11 @@ Scenario: Perform CRUD on criteria
 Scenario: Metrics service and Dash board Hardening - Change payload response field name to data
   When client sends GET request for a static list of the metrics service
   Then a successful response is returned with field data instead of payload
+
+@DE6499
+Scenario: Get inbox for user
+    When user sends GET request for inbox
+    Then a successful response is returned
+
 
 

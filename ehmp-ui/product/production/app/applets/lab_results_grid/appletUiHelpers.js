@@ -51,18 +51,24 @@ define([
                 // for non panel lab result row
                 var isFullscreen  = model.get('isFullscreen');
                 model.set('isNotAPanel', true);
-                var view = new ModalView.ModalView({
+                var view = ModalView.ModalView.extend({
+
                     model: model,
                     target: target,
-                    gridCollection: dataCollection,
+                    collection: dataCollection,
+                    dataCollection: model.collection,
                     isFromNonPanel: true,
                     fullScreen: isFullscreen
                 });
+                var title = model.get('summary') || model.get('typeName') + ' - ' + model.get('specimen');
+                if (_.isString(title)) {
+                    title = title.replace(/(<([^>]+)>)/g, '');
+                }
                 var detailData = {
                     view: view,
-                    title: model.get('typeName') + ' - ' + model.get('specimen')
+                    title: title
                 };
-                onSuccess(detailData, model, dataCollection, navHeader, appletOptions, id);
+                return detailData;
 
             } else {
                 var resultDocs = model.get('results');
@@ -115,7 +121,7 @@ define([
                 options: modalOptions
             });
             modal.show();
-            modal.$el.closest('.modal').find('#' + id).focus();
+            modal.$el.closest('.modal').focus();
         },
         showErrorModal: function(error, itemModel, dataCollection) {
             var modalOptions = {

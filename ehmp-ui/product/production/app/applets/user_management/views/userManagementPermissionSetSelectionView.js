@@ -103,6 +103,9 @@ define([
                                     value: "selected"
                                 },
                                 detailsPopoverOptions: {
+                                    options: {
+                                        placement: 'auto left'
+                                    },
                                     items: [{
                                         control: 'container',
                                         template: appletUtil.getDetailsTemplate([{
@@ -135,6 +138,9 @@ define([
                                         value: "selected"
                                     },
                                     detailsPopoverOptions: {
+                                        options: {
+                                            placement: 'auto left'
+                                        },
                                         items: [{
                                             control: 'container',
                                             template: appletUtil.getDetailsTemplate([{
@@ -146,7 +152,7 @@ define([
                                             }])
                                         }]
                                     }
-                                }, ]
+                                }]
                             }]
                         }]
                     }]
@@ -232,12 +238,11 @@ define([
                                     var permissionToRemove = self.model.get('permissions').where({
                                         value: permission
                                     })[0];
-                                    if(!_.isUndefined(permissionToRemove)){
+                                    if (!_.isUndefined(permissionToRemove)) {
                                         self.model.get('permissions').remove(permissionToRemove);
                                     }
                                 });
                             }
-
                         }
                     });
                     this.model.get('permissionSets').on('change:selected', function(permissionSetModel) {
@@ -314,7 +319,6 @@ define([
                             }
                         });
                     }
-
                 },
                 events: {
                     'click @ui.CancelButton': function(e) {
@@ -360,9 +364,7 @@ define([
                             };
 
                             //update the user permissionSets based on the selection
-
                             this.editUserPermissionSets(model, getSelectedPermissionSetsValues(selectedPermissionSets), getSelectedPermissionsValues(selectedPermissions));
-
                         }
                     },
                 },
@@ -394,7 +396,6 @@ define([
                             }),
                             permissionSets: JSON.stringify(selectedPermissionSetsValues),
                             additionalPermissions: JSON.stringify(selectedPermissionsValues)
-
                         },
 
                         onSuccess: function(permissionSetsCollection, permissionSetsArray) {
@@ -403,12 +404,12 @@ define([
                             var alertMessage = '';
                             if (permissionSetsArray && permissionSetsArray.data && permissionSetsArray.data.val) {
                                 value = permissionSetsArray.data.val.join();
-                                alertMessage = 'The Permission Sets have been successfully modified with no errors. ';
+                                alertMessage = 'The permissions have been successfully modified with no errors. ';
                                 var ehmpStatus = 'active';
 
-                                if (permissionSetsArray.data.val.length === 0) {
+                                if (permissionSetsArray.data.val.length === 0 && permissionSetsArray.data.additionalPermissions && permissionSetsArray.data.additionalPermissions.length === 0) {
                                     ehmpStatus = 'inactive';
-                                    alertMessage = alertMessage + 'All Permission Sets have been removed. User ' + userModel.get('fname') + ' ' + userModel.get('lname') + ' is now inactive in eHMP';
+                                    alertMessage = alertMessage + 'All Permission Sets and Additional Individual Permissions have been removed. User ' + userModel.get('fname') + ' ' + userModel.get('lname') + ' is now inactive in eHMP';
                                 }
                                 var additionalPermissionsLabels = [];
 
@@ -425,20 +426,19 @@ define([
                                     'additionalPermissionsLabels': additionalPermissionsLabels,
                                     'additionalPermissionsLabelsFormatted': appletUtil.getFormattedAdditionalPermissionsString(additionalPermissionsLabels),
                                     'modalAlertMessage': alertMessage
-
                                 });
-                                ADK.Messaging.trigger('userPermissionSetsUpdated', model);
+                                ADK.Messaging.trigger('userPermissionsUpdated', model);
 
                             } else {
                                 alertMessage = 'An error occurred while updating user permissions. ' +
                                     'Try again. If problem persists, contact the Help Desk for assistance.';
-                                appletUtil.appletAlert.warning(model.collection, 'Error Editing Permission Sets', alertMessage);
+                                appletUtil.appletAlert.warning(model.collection, 'Error Editing Permissions', alertMessage);
                             }
                         },
                         onError: function(error, response) {
                             var alertMessage = 'An error occurred while updating user permissions. ' +
                                 'Try again. If problem persists, contact the Help Desk for assistance.';
-                            appletUtil.appletAlert.warning(model.collection, 'Error Editing Permission Sets', alertMessage);
+                            appletUtil.appletAlert.warning(model.collection, 'Error Editing Permissions', alertMessage);
                         }
                     };
                     ADK.ResourceService.fetchCollection(editUsersFetchOptions);

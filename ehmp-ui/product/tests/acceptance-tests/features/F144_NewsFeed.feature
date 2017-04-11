@@ -30,8 +30,7 @@ Scenario: Date/time can be clicked and collapsed
   When the user clicks on date/time "December 1995" in the newsfeed applet
   Then the date/time collapses and shows "2" result for "December 1995" in the newsfeed applet
 
-#this test pass only on Firefox.  The sorting order is different on phantomJS
-@f144_13_newsFeedDisplay @US2683 @debug @DE776
+@f144_13_newsFeedDisplay @US2683 @DE776 @debug @DE5726
 Scenario: Newsfeed applet displays sorting by Date/Time correctly
 
   # Given user is logged into eHMP-UI
@@ -39,20 +38,9 @@ Scenario: Newsfeed applet displays sorting by Date/Time correctly
   And the user has selected All within the global date picker
   When user navigates to Timeline Applet
   And the default sorting by Date/Time is in descending in Newsfeed Applet
-  And the first row is as below when grouped by "Date" in Newsfeed Applet
-  | row index	| Date & Time		      |  Activity								  	                 | Type	  | Entered By | Facility	|
-  | 2			    | 11/02/2006 - 15:28	|  Seen in GENERAL INTERNAL MEDICINE 20 Minute | Visit	|			       | FT. LOGAN|
-  And the last row is as below when grouped by "Date" in Newsfeed Applet
-   | row index  | Date & Time       | Activity                                           | Type        | Entered By | Facility  |
-   | 20         | 05/12/2003 - 15:00| Seen in GENERAL INTERNAL MEDICINE General Medicine | Appointment |            | FT. LOGAN |
   When user clicks on "Date/Time" column header in Newsfeed Applet
   Then the sorting by Date/Time is in ascending in Newsfeed Applet
-  And the first row is as below when grouped by "Date" in Newsfeed Applet
-   | row index | Date & Time        | Activity                                           | Type        | Entered By | Facility  |
-   | 2         | 05/12/2003 - 15:00 | Seen in GENERAL INTERNAL MEDICINE General Medicine | Appointment |            | FT. LOGAN |
-  And the last row is as below when grouped by "Date" in Newsfeed Applet
-  | row index  | Date & Time         |  Activity                                    | Type   | Entered By | Facility |
-  | 20         | 11/02/2006 - 15:28  |  Seen in GENERAL INTERNAL MEDICINE 20 Minute | Visit  |            | FT. LOGAN|
+
 
  @f144_16_newsFeedDisplay @US2639
 Scenario: Newsfeed applet is able to filter data based date filter search

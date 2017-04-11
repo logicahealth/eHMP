@@ -1,8 +1,8 @@
-HMP0311Q ;ASMR/MAT - HMP Subscribe Client Protocols to VAFC ; 10/1/2015 12:49pm
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;;;Build 62
+HMP0311Q ;ASMR/MAT - HMP Subscribe Client Protocols to VAFC;10/1/2015 12:49pm
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**;November 30,2015;Build 63
  ;Per VA Directive 6402, this routine should not be modified.
  ;
- ; DE2393 - MAT - Subscribe HMP ADT-A0# CLIENT Protcols to VAFC ADT-A0# SERVER
+ ; DE2393 - MAT - Subscribe HMP ADT-A0# CLIENT Protocol to VAFC ADT-A0# SERVER
  ;
  ; Called from POST^HMPP3I.
  Q

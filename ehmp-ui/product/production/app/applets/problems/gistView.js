@@ -126,7 +126,14 @@ define([
                     instanceId: instanceId,
                     allGroupedEncounters: [],
                     crsDomain: ADK.utils.crsUtil.domain.PROBLEM,
-                    lexiconCode: problems[0].get('lexiconCode')
+                    lexiconCode: problems[0].get('lexiconCode'),
+                    standardizedDescription: problems[0].get('standardizedDescription'),
+                    updatedFormatted: problems[0].get('updatedFormatted'),
+                    facilityCode: problems[0].get('facilityCode'),
+                    facNameTruncated: problems[0].get('facilityName').substring(0, 3),
+                    enteredBy: problems[0].get('enteredBy'),
+                    recordedBy: problems[0].get('recordedBy'),
+                    recordedOn: problems[0].get('recordedOn')                  
                 });
             });
             problemGroupsCollection.reset(problemGroups);
@@ -186,7 +193,7 @@ define([
                         allEncounterDateArray.push(moment(problemGroup.get('timeSinceDate'), "YYYYMMDD").format("YYYYMMDD"));
                         problemGroup.get('allGroupedEncounters').push({
                             dateTime: moment(problemGroup.get('timeSinceDate'), "YYYYMMDD").format("MM/DD/YYYY"),
-                            stopCodeName: problem.get('facilityMoniker'),
+                            stopCodeName: problem.get('facilityName'),
                             problemText: problemGroup.get('problemText'),
                             acuity: problemGroup.get('acuityName')
                         });
@@ -286,7 +293,7 @@ define([
             id: 'problemText',
             field: 'problemText'
         }],
-        filterFields: ['groupName', 'problemText', 'acuityName', 'statusName', 'facilityMoniker']
+        filterFields: ['problemText', 'standardizedDescription', 'acuityName', 'statusName', 'onsetFormatted', 'updatedFormatted', 'providerDisplayName', 'facilityMoniker', 'comments']
     };
 
     var GistViewItem = ADK.Views.EventGist.getRowItem().extend({

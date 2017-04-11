@@ -4,7 +4,7 @@ require 'json'
 require 'pp'
 
 
-url = ENV['BACKEND_BASEURL'] || 'https://IPADDRES'
+url = ENV['BACKEND_BASEURL'] || 'https://IP      '
 
 describe "Test rdk" do
   
@@ -32,7 +32,7 @@ describe "Test rdk" do
       "#{url}/hello-world",
       :body => {
       	"id" => 1,
-        "content" => "Hello Fuzzy Bunny!"
+        "content" => "Hello UuNz   u n !"
       }.to_json, 
       :headers => {
         'Content-Type' => 'application/json',
@@ -40,14 +40,14 @@ describe "Test rdk" do
       }
     )
   	expect(response.code).to eq(200)
-  	expect(response['content']).to eq('Hello Fuzzy Bunny!')
+  	expect(response['content']).to eq('Hello UuNz   u n !')
   end
 
   it "should greet with with protected endpoint" do
     response = HTTParty.get(
       "#{url}/protected", 
       :basic_auth => {
-          :username =>  'FuzzyB',
+          :username =>  'UN    ',
           :password => 'secret'
       },
       :query => {}, 
@@ -57,7 +57,7 @@ describe "Test rdk" do
       }
     )
     expect(response.code).to eq(200)
-    expect(response.parsed_response).to eq('Hey there, FuzzyB. You know the secret!')
+    expect(response.parsed_response).to eq('Hey there, UN    . You know the secret!')
   end
 
 end

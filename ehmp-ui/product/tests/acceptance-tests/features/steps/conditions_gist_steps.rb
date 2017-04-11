@@ -23,12 +23,9 @@ class ConditionsGist <  AllApplets
     add_action(CucumberLabel.new("Status Header"), ClickAction.new, AccessHtmlElement.new(:css, "[data-appletid=problems] [data-header-instanceid='status-name-header']"))
     add_action(CucumberLabel.new("Facility Header"), ClickAction.new, AccessHtmlElement.new(:css, "[data-appletid=problems] [data-header-instanceid='facility-name-header']"))
     add_action(CucumberLabel.new("Manic Disorder"), ClickAction.new, AccessHtmlElement.new(:css, "[data-appletid=problems] .gist-item:nth-child(3) .col-sm-6.selectable.info-display.noPadding"))
-    add_verify(CucumberLabel.new("No Records Found"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid=problems] .empty-gist-list"))
+    add_verify(CucumberLabel.new("No Records Found"), VerifyText.new, AccessHtmlElement.new(:css, "[data-appletid=problems] p.color-grey-darkest"))
 
-    #Chronic sinusitiscol-sm-6 selectable info-display noPadding
     add_action(CucumberLabel.new("Chronic sinusitis"), ClickAction.new, AccessHtmlElement.new(:css, "[data-appletid=problems] .gist-item:nth-child(2) .col-sm-6.selectable.border-vertical.info-display.noPadding"))
-    # add_action(CucumberLabel.new("Essential Hypertension"), ClickAction.new, AccessHtmlElement.new(:css, "[data-appletid=problems] .gist-item:nth-child(5) .col-sm-6.selectable.info-display.noPadding"))
-    # //div[contains(@class, 'problem-name') and contains(string(), 'Essential hypertension (disorder)')]/ancestor::div[contains(@class, 'selectable')]
     add_action(CucumberLabel.new("Essential Hypertension"), ClickAction.new, AccessHtmlElement.new(:xpath, "//div[contains(@class, 'problem-name') and contains(string(), 'Essential hypertension (disorder)')]/ancestor::div[contains(@class, 'selectable')]"))
     
     #menu  
@@ -58,7 +55,7 @@ class ConditionsGist <  AllApplets
     @@conditions_gist_items = AccessHtmlElement.new(:css, "#problems-event-gist-items .gist-item")
     add_verify(CucumberLabel.new("Number of Problems Gist Items"), VerifyXpathCount.new(@@conditions_gist_items), @@conditions_gist_items)         
   
-    add_verify(CucumberLabel.new("Empty Gist"), VerifyText.new, AccessHtmlElement.new(:css, "#{appletid_css} div.empty-gist-list"))
+    add_verify(CucumberLabel.new("Empty Gist"), VerifyText.new, AccessHtmlElement.new(:css, "#{appletid_css} p.color-grey-darkest"))
     add_action(CucumberLabel.new('Add'), ClickAction.new, AccessHtmlElement.new(:css, "#{appletid_css} .applet-add-button"))
 
     # Headers
@@ -138,28 +135,6 @@ class ActiveProblems <  ConditionsGist
     p e
     false
   end
-
-  # def clear_filter
-  #   css_filter = '#grid-filter-button-problems span.applet-filter-title'
-  #   driver = TestSupport.driver
-  #   element = driver.find_element(:css, css_filter)
-  #   p "Class: #{element.attribute('class')}"
-  #   unless element.attribute('class').include? 'hidden'
-  #     add_action(CucumberLabel.new('Filter Item'), ClickAction.new, AccessHtmlElement.new(:css, '.clear-udaf-tag'))
-  #     add_verify(CucumberLabel.new('UDAF'), VerifyText.new, AccessHtmlElement.new(:css, 'div.udaf'))
-      
-  #     # open filter
-  #     perform_action('Control - applet - Filter Toggle')
-
-  #     # Wait until the filter terms are displayed
-  #     wait_until_action_element_visible('UDAF', 40)
-      
-  #     # remove each filter displayed
-  #     perform_action('Filter Item') while am_i_visible? 'Filter Item'
-  #     #Close the filter
-  #     navigation.perform_action(html_action_element)
-  #   end
-  # end
 end
 
 class ActiveProblemsModal <  ADKContainer
@@ -261,62 +236,153 @@ When(/^user clicks on the column header "(.*?)" in Problems Gist$/) do |name_col
   expect(@cg.perform_action(name_column_header + " Header", "")).to be_true
 end
 
-Then(/^"(.*?)" column is sorted in ascending order in Problems Gist$/) do |column_name|
-  driver = TestSupport.driver
-  column_values_array = []
-    
-  expect(@cg.wait_until_action_element_visible("ProblemsGridVisible", DefaultLogin.wait_time)).to be_true
-  
-  case column_name
-  when 'Problem'
-    element_column_values = driver.find_elements(css: "[data-appletid=problems] [data-header-instanceid='name-header']")
-  when 'Acuity'
-    element_column_values = driver.find_elements(css: "[data-appletid=problems] [data-header-instanceid='comment-header']")
-  when 'Status'
-    element_column_values = driver.find_elements(css: "[data-appletid=problems] [data-header-instanceid='status-name-header']")
-  when 'Facility'
-    element_column_values = driver.find_elements(css: "[data-appletid=problems] [data-header-instanceid='facility-name-header']")
-  else
-    fail "**** No function found! Check your script ****"
-  end
-  
-  element_column_values.each do | row |
-#    print "selenium data ----"
-#    p row.text   
-    column_values_array << row.text.downcase
-
-  end
-  #  print "sorted data -----"
-  #  p column_values_array.sort { |x, y| x <=> y }    
-  (column_values_array == column_values_array.sort { |x, y| x <=> y }).should == true
+Given(/^the user notes the order of the problems in the Problems Gist$/) do
+  problems = PobProblemsApplet.new
+  problems.wait_for_fld_gist_problem_names
+  @default_problem_gist_order = problems.gist_problem_names_only
+  expect(@default_problem_gist_order.length).to be > 0
 end
 
-Then(/^"(.*?)" column is sorted in descending order in Problems Gist$/) do |column_name|
-  driver = TestSupport.driver
-  column_values_array = []
-  expect(@cg.wait_until_action_element_visible("ProblemsGridVisible", DefaultLogin.wait_time)).to be_true   
- 
-  case column_name
-  when 'Problem'
-    element_column_values = driver.find_elements(:css, "[data-appletid=problems] [data-header-instanceid='name-header']")
-  when 'Acuity'
-    element_column_values = driver.find_elements(:css, "[data-appletid=problems] [data-header-instanceid='comment-header']")
-  when 'Status'
-    element_column_values = driver.find_elements(:css, "[data-appletid=problems] [data-header-instanceid='status-name-header']")
-  when 'Facility'
-    element_column_values = driver.find_elements(:css, "[data-appletid=problems] [data-header-instanceid='facility-name-header']")
-  else
-    fail "**** No function found! Check your script ****"
-  end
-     
+When(/^the user clicks the last row in the problems applet$/) do
+  problems = PobProblemsApplet.new
+  problems.wait_for_fld_gist_problem_names
+  expect(problems.fld_gist_problem_names.length).to be > 2, "This test has a prerequestite requirement that the patient used has more then 2 problems"
+  problems.fld_gist_problem_names.last.click
+  problems.wait_for_fld_toolbar
+  expect(problems).to have_fld_toolbar
+end
 
-  element_column_values.each do | row |
-#    print "selenium data ----"
-#    p row.text
-    column_values_array << row.text.downcase
+Then(/^Problem column is sorted in default order in Problems Gist$/) do
+  problems = PobProblemsApplet.new
+  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_wait_time)
+
+  problems.wait_for_fld_gist_problem_names
+  expect(@default_problem_gist_order).to_not be_nil, "Expected default problem order to be saved in a previous step"
+  wait.until { (problems.gist_problem_names_only <=> @default_problem_gist_order) == 0 }
+
+  expect(problems.gist_problem_names_only).to eq(@default_problem_gist_order)
+end
+
+Then(/^Problem column is sorted in ascending order in Problems Gist$/) do
+  problems = PobProblemsApplet.new
+  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_wait_time)
+
+  problems.wait_for_fld_gist_problem_names
+  expect(problems.gist_problem_names_only.length).to be >= 2
+  expected_sort_result = problems.gist_problem_names_only.sort { |x, y| x.downcase <=> y.downcase }
+  begin
+    wait.until { problems.gist_problem_names_only == expected_sort_result }
+  ensure
+    expect(problems.gist_problem_names_only).to eq(expected_sort_result)
   end
-  
-  (column_values_array == column_values_array.sort { |x, y| y <=> x }).should == true
+end
+
+Then(/^Problem column is sorted in descending order in Problems Gist$/) do
+  problems = PobProblemsApplet.new
+  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_wait_time)
+
+  problems.wait_for_fld_gist_problem_names
+  expect(problems.gist_problem_names_only.length).to be >= 2
+  expected_sort_result = problems.gist_problem_names_only.sort { |x, y| y.downcase <=> x.downcase }
+  begin
+    wait.until { problems.gist_problem_names_only == expected_sort_result }
+  ensure
+    expect(problems.gist_problem_names_only).to eq(expected_sort_result)
+  end
+end
+
+Then(/^Acuity column is sorted in ascending order in Problems Gist$/) do
+  problems = PobProblemsApplet.new
+  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_wait_time)
+
+  problems.wait_for_fld_gist_acuity
+  expect(problems.gist_acuity_column_text.length).to be >= 2
+  expected_sort_result = problems.gist_acuity_column_text.sort { |x, y| x.downcase <=> y.downcase }
+  begin
+    wait.until { problems.gist_acuity_column_text == expected_sort_result }
+  ensure
+    expect(problems.gist_acuity_column_text).to eq(expected_sort_result)
+  end
+end
+
+Then(/^Acuity column is sorted in descending order in Problems Gist$/) do
+  problems = PobProblemsApplet.new
+  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_wait_time)
+
+  problems.wait_for_fld_gist_acuity
+  expect(problems.gist_acuity_column_text.length).to be >= 2
+  expected_sort_result = problems.gist_acuity_column_text.sort { |x, y| y.downcase <=> x.downcase }
+  begin
+    wait.until { problems.gist_acuity_column_text == expected_sort_result }
+  ensure
+    expect(problems.gist_acuity_column_text).to eq(expected_sort_result)
+  end
+end
+
+Then(/^Status column is sorted in ascending order in Problems Gist$/) do
+  problems = PobProblemsApplet.new
+  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_wait_time)
+
+  problems.wait_for_fld_gist_status
+  expect(problems.gist_status_column_text.length).to be >= 2
+  expected_sort_result = problems.gist_status_column_text.sort { |x, y| x.downcase <=> y.downcase }
+  begin
+    wait.until { problems.gist_status_column_text == expected_sort_result }
+  ensure
+    expect(problems.gist_status_column_text).to eq(expected_sort_result)
+  end
+end
+
+Then(/^Status column is sorted in descending order in Problems Gist$/) do
+  problems = PobProblemsApplet.new
+  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_wait_time)
+
+  problems.wait_for_fld_gist_status
+  expect(problems.gist_status_column_text.length).to be >= 2
+  expected_sort_result = problems.gist_status_column_text.sort { |x, y| y.downcase <=> x.downcase }
+  begin
+    wait.until { problems.gist_status_column_text == expected_sort_result }
+  ensure
+    expect(problems.gist_status_column_text).to eq(expected_sort_result)
+  end
+end
+
+Then(/^Facility column is sorted in ascending order in Problems Gist$/) do
+  problems = PobProblemsApplet.new
+  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_wait_time)
+
+  problems.wait_for_fld_gist_facility
+  expect(problems.gist_facility_column_text.length).to be >= 2
+  expected_sort_result = problems.gist_facility_column_text.sort { |x, y| x.downcase <=> y.downcase }
+  begin
+    wait.until { problems.gist_facility_column_text == expected_sort_result }
+  ensure
+    expect(problems.gist_facility_column_text).to eq(expected_sort_result)
+  end
+end
+
+Then(/^Facility column is sorted in descending order in Problems Gist$/) do
+  problems = PobProblemsApplet.new
+  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_wait_time)
+
+  problems.wait_for_fld_gist_facility
+  expect(problems.gist_facility_column_text.length).to be >= 2
+  expected_sort_result = problems.gist_facility_column_text.sort { |x, y| y.downcase <=> x.downcase }
+  begin
+    wait.until { problems.gist_facility_column_text == expected_sort_result }
+  ensure
+    expect(problems.gist_facility_column_text).to eq(expected_sort_result)
+  end
+end
+
+Then(/^Problem column is sorted in manual order in Problems Gist$/) do
+  problems = PobProblemsApplet.new
+  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_wait_time)
+
+  problems.wait_for_fld_gist_problem_names
+  expect(@manual_problem_gist_order).to_not be_nil, "Expected manual sort order to be saved in a previous step"
+  wait.until { (problems.gist_problem_names_only <=> @manual_problem_gist_order) == 0 }
+  expect(problems.gist_problem_names_only).to eq(@manual_problem_gist_order)
 end
 
 Then(/^Last column is sorted in "(.*?)" order in Problems Gist$/) do |_arg1|
@@ -345,8 +411,6 @@ Then(/^Last column is sorted in "(.*?)" order in Problems Gist$/) do |_arg1|
       expect(higher_placement).to be <= lower_placement, "#{higher_placement} is not <= #{lower_placement}"
     end
   end
-  #cucumber_array = table.headers  
-  #(column_values_array == cucumber_array).should == true
 end
 
 Then(/^a Menu appears on the Problems Gist$/) do
@@ -357,8 +421,6 @@ end
 
 Then(/^a Menu appears on the Problems Gist for item "(.*?)"$/) do |arg1|
   expect(@cg.wait_until_action_element_visible("ProblemsGridVisible", DefaultLogin.wait_time)).to be_true
-  # expect(@cg.wait_until_action_element_visible("#{arg1} Detail View Icon", DefaultLogin.wait_time)).to be_true, "Detail view icon is not displayed"
-  # expect(@cg.wait_until_action_element_visible("#{arg1} Quick View Icon", DefaultLogin.wait_time)).to be_true, "Quick view icon is not displayed"    
   expect(@cg.wait_until_action_element_visible('Detail View Button')).to eq(true), "Detail View button is not displayed"
   expect(@cg.wait_until_action_element_visible('Quick View Button')).to eq(true), "Quick View button is not displayed"
 end
@@ -375,24 +437,7 @@ Then(/^the Problems Gist Applet table contains headers$/) do |table|
   end
 end
 
-Then(/^the Problems Gist contains specific rows$/) do |table|
-  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultLogin.wait_time)
-  wait.until { VerifyTableValue.compare_specific_row(table, '#data-grid-problems') }
-end
-
-Then(/^the Problems Gist contains rows$/) do |table|
-  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultLogin.wait_time)
-  con = VerifyTableValue.new 
-  driver = TestSupport.driver
-  wait.until {  
-    browser_elements_list = driver.find_elements(:css, "#data-grid-problems tbody tr")  
-    con.perform_table_verification(browser_elements_list, "#data-grid-problems", table)
-  }
-end
-
 Then(/^user selects the "(.*?)" detail icon in Problems Gist$/) do |arg1|
-  #label = "#{arg1} Detail View Icon"
-  #expect(@cg.perform_action(label)).to be_true
   expect(@cg.perform_action('Detail View Button')).to be_true
 end
 
@@ -427,20 +472,6 @@ When(/^hovering over the "(.*?)" side of the tile "(.*?)"$/) do |direction, _pro
   end
 end
 
-Then(/^right half of the tile "(.*?)" changes color to indicate that there are more records that can be review$/) do |_arg1|
-  driver = TestSupport.driver
-  expect(@cg.wait_until_action_element_visible("ProblemsGridVisible", DefaultLogin.wait_time)).to be_true
-  element = driver.find_element(:css, "[data-row-instanceid='quickLook_urn_va_problem_9E7A_711_139']")
-  p element.css_value("background-color")
-end
-
-Then(/^left half of the tile "(.*?)" changes color to indicate that the user can go to the detailed view$/) do |_arg1|
-  driver = TestSupport.driver
-  expect(@cg.wait_until_action_element_visible("ProblemsGridVisible", DefaultLogin.wait_time)).to be_true
-  element = driver.find_element(:css, "[data-appletid=problems] #event_urn_va_problem_9E7A_711_139 .col-sm-6.selectable.info-display.noPadding")
-  p element.css_value("background-color")
-end
-
 When(/^the user filters the Problems Gist Applet by text "([^"]*)"$/) do |input_text|
   wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
   row_count = TableContainer.instance.get_elements("Rows - Problems Gist Applet").size
@@ -452,7 +483,7 @@ Then(/^the problems gist table only diplays rows including text "([^"]*)"$/) do 
   upper = input_text.upcase
   lower = input_text.downcase
 
-  path =  "//div[@id='problems-event-gist-items']/descendant::div[contains(translate(string(), '#{upper}', '#{lower}'), '#{lower}')]/ancestor::div[contains(@class, 'gistItemInner')]"
+  path =  "//div[contains(@class, 'gist-item-list')]/descendant::div[contains(translate(string(), '#{upper}', '#{lower}'), '#{lower}')]/ancestor::div[@data-code]"
 
   row_count = TableContainer.instance.get_elements("Rows - Problems Gist Applet").size 
   rows_containing_filter_text = TestSupport.driver.find_elements(:xpath, path).size
@@ -495,4 +526,20 @@ Then(/^the Problems applet contains buttons$/) do |table|
     cucumber_label = "Control - applet - #{button[0]}"
     expect(@cg.am_i_visible? cucumber_label).to eq(true), "Could not find button #{button[0]}"
   end
+end
+
+When(/^user clicks on the Problem Name of first problem$/) do
+  conditions = PobProblemsApplet.new
+  conditions.wait_for_fld_gist_problem_names
+  expect(conditions.fld_gist_problem_names.length).to be > 0
+  conditions.fld_gist_problem_names[0].click
+  conditions.wait_for_fld_toolbar
+  expect(conditions).to have_fld_toolbar
+end
+
+Then(/^user selects the quick view icon in Problems Gist$/) do
+  conditions = PobProblemsApplet.new
+  conditions.wait_for_btn_quick_view
+  expect(conditions).to have_btn_quick_view
+  conditions.btn_quick_view.click
 end

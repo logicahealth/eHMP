@@ -34,7 +34,6 @@ Then(/^the posting panel displays allergy "(.*?)" with details$/) do |allergy_na
       begin
         driver.find_element(:xpath=>table_column_xpath)
       rescue
-        # TODO: Farid wrote a error generator to handle this kind of case, figure out how to use it
         error_thrown = true
         errors.push "did not find #{column} under header #{allergy_name}"
       end

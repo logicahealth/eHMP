@@ -18,7 +18,7 @@ var statusDiagOrderMap = {
 describe('Orders FHIR Resource', function() {
     it('Verifies correct resource name and path', function() {
         var config = OrderResource.getResourceConfig()[0];
-        expect(config.name).to.equal('order-order');
+        expect(config.name).to.equal('fhir-order');
         expect(config.path).to.equal('');
     });
 });

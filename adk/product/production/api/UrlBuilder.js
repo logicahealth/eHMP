@@ -32,7 +32,8 @@ define([
                 });
                 queryParams = '?' + encodedCriteria.join('&');
             }
-            return url + queryParams;
+
+            return url.replace(/\/$/, '') + queryParams;
         },
         /**
          * Takes an url with :params and replaces them with their matching values. Parameters without a

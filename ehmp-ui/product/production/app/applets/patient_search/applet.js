@@ -200,6 +200,8 @@ define([
             if (resp.logId) {
                 errorMessage = errorMessage.concat('<br><br>For defect reporting:<br>' + resp.logId);
             }
+            console.log('Error retrieving patient list. Debug response:');
+            console.log(resp);
             return errorMessage;
         }
     });
@@ -210,14 +212,15 @@ define([
             return AppletLayoutView;
         },
         viewTypes: [{
-            type: 'full',
+            type: 'expanded',
             view: AppletLayoutView,
             chromeEnabled: false
         }, {
-            type: 'recent-patients',
+            type: 'summary',
             view: RecentPatientsView,
             chromeEnabled: false
-        }]
+        }],
+        defaultViewType: 'expanded'
     };
 
     ADK.Messaging.on('context:patient:change', function(patient, options) {

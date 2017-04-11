@@ -4,8 +4,9 @@
 var rdk = require('../../core/rdk');
 var metricsResource = require('./metrics-resource');
 var cdsMetrics = require('./metrics');
-var mongo = require('mongoskin');
+var MongoClient = require('mongodb').MongoClient;
 var cdsSpecUtil = require('../cds-spec-util/cds-spec-util');
+var cdsSubsystem = require('../../subsystems/cds/cds-subsystem');
 
 var mockReqResUtil = cdsSpecUtil.mockReqResUtil;
 var appReference = cdsSpecUtil.createAppReference;
@@ -185,10 +186,10 @@ describe('Metrics Resource', function() {
                 callback(null, echo); // can mock a response here...
             },
             remove: function(a, callback){
-                callback(null, []);
+                return;
             },
             update: function(query, update, options, callback){
-                callback(null, []);
+                return;
             },
             aggregate: function(pipeline, callback){
                 callback(null, []);
@@ -207,29 +208,37 @@ describe('Metrics Resource', function() {
         var paramMap = {};
 
         it('responds HTTP OK when no parameters are sent to getMetricDefinitions', function() {
-            sinon.stub(mongo, 'db').returns(db);
+            sinon.stub(cdsSubsystem, 'getCDSDB', function(dbName, initDefinitions, callback) {
+                callback(null, db);
+            });
             cdsMetrics.init(appReference());
             cdsMetrics.getMetricDefinitions(mockReqResUtil.createRequestWithParam({}), res);
             expect(res.status.calledWith(rdk.httpstatus.ok)).to.be.true();
         });
 
         it('responds HTTP Bad Request when required parameters are missing for getDashBoard', function() {
-            sinon.stub(mongo, 'db').returns(db);
+            sinon.stub(cdsSubsystem, 'getCDSDB', function(dbName, initDefinitions, callback) {
+                callback(null, db);
+            });
             cdsMetrics.init(appReference());
             cdsMetrics.getDashBoard(mockReqResUtil.createRequestWithParam({}), res);
             expect(res.status.calledWith(rdk.httpstatus.bad_request)).to.be.true();
         });
 
-        //TODO update for individual user access
+        //FUTURE-TODO update for individual user access
         it('responds HTTP Bad Request when required parameters are missing for getUserDashBoards', function() {
-            sinon.stub(mongo, 'db').returns(db);
+            sinon.stub(cdsSubsystem, 'getCDSDB', function(dbName, initDefinitions, callback) {
+                callback(null, db);
+            });
             cdsMetrics.init(appReference());
             cdsMetrics.getUserDashBoards(mockReqResUtil.createRequestWithParam({userIdParam: 'all'}), res);
             expect(res.status.calledWith(rdk.httpstatus.ok)).to.be.true();
         });
 
         it('responds HTTP Bad Request when required parameters are missing for getMetricSearch', function() {
-            sinon.stub(mongo, 'db').returns(db);
+            sinon.stub(cdsSubsystem, 'getCDSDB', function(dbName, initDefinitions, callback) {
+                callback(null, db);
+            });
             cdsMetrics.init(appReference());
 
             paramMap = {metricId: metricId, startPeriod: startPeriod, endPeriod: endPeriod,
@@ -241,8 +250,11 @@ describe('Metrics Resource', function() {
         });
 
         it('responds HTTP OK when required & optional parameters are present for getMetricSearch', function() {
-            sinon.stub(mongo, 'db').returns(db);
+            sinon.stub(cdsSubsystem, 'getCDSDB', function(dbName, initDefinitions, callback) {
+                callback(null, db);
+            });
             cdsMetrics.init(appReference());
+            cdsMetrics.initDefinitions(db);
 
             paramMap = {metricId: metricId, startPeriod: startPeriod, endPeriod: endPeriod,
                             granularity: granularity, origin: origin, invocationType: invocationType};
@@ -252,8 +264,12 @@ describe('Metrics Resource', function() {
         });
 
         it('responds HTTP OK when required parameters are present but optional parameters missing for getMetricSearch', function() {
-            sinon.stub(mongo, 'db').returns(db);
+            sinon.stub(cdsSubsystem, 'getCDSDB', function(dbName, initDefinitions, callback) {
+                initDefinitions(db);
+                callback(null, db);
+            });
             cdsMetrics.init(appReference());
+            cdsMetrics.initDefinitions(db);
 
             //all required parameters, no optional parameters
             paramMap = {metricId: metricId, startPeriod: startPeriod, endPeriod: endPeriod,
@@ -263,8 +279,11 @@ describe('Metrics Resource', function() {
         });
 
         it('responds HTTP Bad Request when required parameters are missing for getMetricSearch', function() {
-            sinon.stub(mongo, 'db').returns(db);
+            sinon.stub(cdsSubsystem, 'getCDSDB', function(dbName, initDefinitions, callback) {
+                callback(null, db);
+            });
             cdsMetrics.init(appReference());
+            cdsMetrics.initDefinitions(db);
 
             //missing some required parameters
             paramMap = {metricId: metricId,

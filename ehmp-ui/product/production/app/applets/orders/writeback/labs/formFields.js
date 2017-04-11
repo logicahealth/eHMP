@@ -124,7 +124,9 @@ define([
                                 items: [{
                                     control: "datepicker",
                                     label: "Date Taken",
-                                    name: "immediateCollectionDate"
+                                    name: "immediateCollectionDate",
+                                    flexible: true,
+                                    minPrecision: "day"
                                 }]
                             }, {
                                 control: "container",
@@ -162,14 +164,17 @@ define([
                     pickList: []
                 }, {
                     control: "datepicker",
-                    extraClasses: ["col-xs-4"],
+                    extraClasses: ["col-xs-6"],
                     required: true,
                     disabled: true,
                     name: "collectionDate",
-                    label: "Collection Date"
+                    label: "Collection Date",
+                    flexible: true,
+                    minPrecision: "day",
+                    startDate: '0d'
                 }, {
                     control: "timepicker",
-                    extraClasses: ["col-xs-3", "all-padding-no"],
+                    extraClasses: ["col-xs-6"],
                     disabled: true,
                     placeholder: 'HH:MM',
                     name: "collectionTime",
@@ -180,7 +185,7 @@ define([
                 }]
             }, {
                 control: "container",
-                extraClasses: ["col-xs-5"],
+                extraClasses: ["col-xs-6"],
                 items: [{
                     control: "select",
                     name: "collectionSample",
@@ -189,6 +194,22 @@ define([
                     disabled: true,
                     attributeMapping: {
                         label: 'displayName',
+                        value: 'ien'
+                    },
+                    options: [],
+                    pickList: []
+                }]
+            }, {
+                control: "container",
+                extraClasses: ["col-xs-6"],
+                items: [{
+                    control: "select",
+                    name: "specimen",
+                    label: "Specimen",
+                    disabled: true,
+                    required: true,
+                    attributeMapping: {
+                        label: 'name',
                         value: 'ien'
                     },
                     options: [],
@@ -216,8 +237,11 @@ define([
                                 extraClasses: ["col-xs-8"],
                                 items: [{
                                     control: "datepicker",
-                                    label: "Select a date and a routine lab collect time for that date.",
-                                    name: "futureLabCollectDate"
+                                    label: "Collect Date",
+                                    name: "futureLabCollectDate",
+                                    flexible: true,
+                                    minPrecision: "day",
+                                    startDate: '0d'
                                 }]
                             }]
                         }, {
@@ -278,22 +302,6 @@ define([
                 extraClasses: ["col-xs-6"],
                 items: [{
                     control: "select",
-                    name: "specimen",
-                    label: "Specimen",
-                    disabled: true,
-                    required: true,
-                    attributeMapping: {
-                        label: 'name',
-                        value: 'ien'
-                    },
-                    options: [],
-                    pickList: []
-                }]
-            }, {
-                control: "container",
-                extraClasses: ["col-xs-3", "all-padding-no"],
-                items: [{
-                    control: "select",
                     name: "howOften",
                     label: "How Often?",
                     required: false,
@@ -307,7 +315,7 @@ define([
                 }]
             }, {
                 control: "container",
-                extraClasses: ["col-xs-3"],
+                extraClasses: ["col-xs-6"],
                 items: [{
                     control: "input",
                     name: "howLong",
@@ -342,7 +350,7 @@ define([
             extraClasses: ["row"],
             items: [{
                 control: "container",
-                extraClasses: ["col-xs-6"],
+                extraClasses: ["col-xs-12"],
                 items: [{
                     control: "input",
                     hidden: true,
@@ -426,7 +434,9 @@ define([
                 items: [{
                     control: "datepicker",
                     name: "doseDate",
-                    label: "Enter the last dose date"
+                    label: "Enter the last dose date",
+                    flexible: true,
+                    minPrecision: "day"
                 }, {
                     control: "timepicker",
                     name: "doseTime",
@@ -443,7 +453,9 @@ define([
                 items: [{
                     control: "datepicker",
                     name: "drawDate",
-                    label: "Enter draw date"
+                    label: "Enter draw date",
+                    flexible: true,
+                    minPrecision: "day",
                 }, {
                     control: "timepicker",
                     label: "Enter draw time",
@@ -464,7 +476,7 @@ define([
             extraClasses: ["row background-color-pure-white"],
             items: [{
                 control: "select",
-                extraClasses: ["col-xs-6"],
+                extraClasses: ["col-xs-12"],
                 label: "Problem Relationship",
                 name: "problemRelationship",
                 pickList: [],
@@ -477,7 +489,7 @@ define([
             extraClasses: ["row addToNote background-color-pure-white top-padding-sm"]
         }, {
             control: "container",
-            extraClasses: ["row background-color-pure-white bottom-padding-md bottom-border-grey-light"],
+            extraClasses: ["row background-color-pure-white bottom-padding-md top-padding-lg bottom-border-grey-light"],
             items: [{
                 control: "textarea",
                 extraClasses: ["col-xs-12"],
@@ -485,7 +497,7 @@ define([
                 srOnlyLabel: true,
                 name: "annotation",
                 placeholder: 'Enter additional note object text here',
-                rows: 3
+                rows: 4
             }]
         }]
     };
@@ -514,12 +526,13 @@ define([
                     control: 'datepicker',
                     name: 'notificationDate',
                     label: 'Notification Date',
-                    title: 'Enter in a date in the following format, MM/DD/YYYY',
                     helpMessage: 'Default = Collection date +7d',
                     required: true,
-                    startDate: moment().format('MM/DD/YYYY'),
+                    startDate: '0d',
                     disabled: true,
-                    hidden: false
+                    hidden: false,
+                    flexible: true,
+                    minPrecision: "day"
                 }]
             }]
         }, {
@@ -549,12 +562,6 @@ define([
                     control: "container",
                     extraClasses: ["col-xs-12", "left-padding-sm", "bottom-padding-xs"],
                     items: [{
-                        /*
-                        control: "container",
-                        extraClasses: ["text-left favorite"],
-                        template: Handlebars.compile('<i class="fa fa-star-o"></i>')
-                    },{
-                        */
                         control: "container",
                         extraClasses: ["text-left inProgressContainer"],
                         hidden: true,
@@ -563,49 +570,59 @@ define([
                     }]
                 }, {
                     control: "container",
-                    extraClasses: ["col-xs-12"],
+                    extraClasses: ['col-xs-12', 'display-flex', 'valign-bottom'],
                     items: [{
-                        control: "container",
+                        control: 'container',
+                        extraClasses: ['flex-grow-loose', 'text-left'],
                         items: [{
-                            control: "button",
-                            extraClasses: ["btn-danger", "btn-sm", "pull-left"],
-                            label: "Delete",
-                            id: 'deleteButton',
-                            name: 'delete-button',
-                            type: "button",
-                            title: "Press enter to delete",
+                            control: 'popover',
+                            behaviors: {
+                                Confirmation: {
+                                    title: 'Delete',
+                                    eventToTrigger: 'lab-test-add-confirm-delete',
+                                    message: 'Are you sure you want to delete?',
+                                    confirmButtonTitle: 'Press enter to delete'
+                                }
+                            },
+                            label: 'Delete',
+                            name: 'labtestAddConfirmDelete',
+                            extraClasses: ['btn-default', 'btn-sm'],
                             disabled: true
-                        }, {
-                            control: "button",
-                            extraClasses: ["btn-default", "btn-sm"],
-                            label: "Cancel",
-                            id: 'cancelButton',
-                            type: "button",
-                            title: "Press enter to cancel"
-                        }, {
-                            control: "button",
-                            extraClasses: ["btn-primary", "btn-sm"],
-                            label: "Draft",
-                            id: 'saveButton',
-                            name: 'save-button',
-                            type: "button",
-                            title: "Press enter to save and close",
-                            disabled: true
-                        }, {
-                            control: "dropdown",
-                            extraClasses: ["dropup"],
-                            split: true,
+                        }]
+                    }, {
+                        control: 'popover',
+                        behaviors: {
+                            Confirmation: {
+                                title: 'Warning',
+                                eventToTrigger: 'lab-test-add-confirm-cancel'
+                            }
+                        },
+                        label: 'Cancel',
+                        name: 'labTestAddConfirmCancel',
+                        extraClasses: ['btn-default', 'btn-sm', 'right-margin-xs']
+                    }, {
+                        control: "button",
+                        extraClasses: ["btn-primary", "btn-sm"],
+                        label: "Draft",
+                        id: 'saveButton',
+                        name: 'save-button',
+                        type: "button",
+                        title: "Press enter to save and close",
+                        disabled: true
+                    }, {
+                        control: "dropdown",
+                        extraClasses: ["dropup"],
+                        split: true,
+                        label: "Accept & Add Another",
+                        id: "acceptDrpDwnContainer",
+                        title: "Press enter to accept and add another lab order",
+                        type: 'submit',
+                        items: [{
                             label: "Accept & Add Another",
-                            id: "acceptDrpDwnContainer",
-                            title: "Press enter to accept and add another lab order",
-                            type: 'submit',
-                            items: [{
-                                label: "Accept & Add Another",
-                                id: "accept-add"
-                            }, {
-                                label: "Accept",
-                                id: "accept"
-                            }]
+                            id: "accept-add"
+                        }, {
+                            label: "Accept",
+                            id: "accept"
                         }]
                     }]
                 }]

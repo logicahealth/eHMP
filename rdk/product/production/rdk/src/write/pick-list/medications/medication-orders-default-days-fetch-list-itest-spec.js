@@ -9,11 +9,11 @@ var log = sinon.stub(require('bunyan').createLogger({ name: 'medication-orders-d
 var configuration = {
     environment: 'development',
     context: 'OR CPRS GUI CHART',
-    host: 'IP_ADDRESS',
+    host: 'IP        ',
     port: 9210,
-    accessCode: 'PW',
-    verifyCode: 'PW',
-    localIP: 'IPADDRES',
+    accessCode: 'PW    ',
+    verifyCode: 'PW    !!',
+    localIP: 'IP      ',
     localAddress: 'localhost'
 };
 

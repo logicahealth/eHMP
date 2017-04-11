@@ -1,7 +1,6 @@
 'use strict';
 
 var _ = require('lodash');
-var dd = require('drilldown');
 var RpcClient = require('vista-js').RpcClient;
 var rdk = require('../core/rdk');
 
@@ -15,7 +14,6 @@ function getSubsystemConfig() {
             name: 'vista-read-only-subsystem',
             interval: 100000,
             check: function (callback) {
-                // TODO: do we need this check function?
                 return callback(true);
             }
         }
@@ -23,11 +21,11 @@ function getSubsystemConfig() {
 }
 
 function getReadOnlyVistaConfig(req, site) {
-    var context = dd(req)('app')('config')('rpcConfig')('context').val;
+    var context = _.get(req, 'app.config.rpcConfig.context');
     if (!context) {
         req.logger.error('getReadOnlyVistaConfig: app rpcConfig context not found');
     }
-    var vistaConfig = dd(req)('app')('config')('vistaSites')(site).val;
+    var vistaConfig = _.get(req, ['app', 'config', 'vistaSites', site]);
     if (!vistaConfig) {
         req.logger.error({site: site}, 'getReadOnlyVistaConfig: vistaSite not found');
     }

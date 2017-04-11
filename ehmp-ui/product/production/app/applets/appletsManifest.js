@@ -61,7 +61,7 @@ define(['main/ADK'], function(ADK) {
         context: ['patient', 'staff'],
         maximizeScreen: 'todo-list-full',
         showInUDWSelection: true,
-        permissions: ['read-task'], // todo: review permission
+        permissions: ['read-task'],
         dependencies: ['notes', 'orders']
     }, {
         id: 'activeMeds',
@@ -77,7 +77,7 @@ define(['main/ADK'], function(ADK) {
         context: ['patient'],
         maximizeScreen: 'problems-full',
         showInUDWSelection: true,
-        permissions: ['read-condition-problem'], // todo: review permission,
+        permissions: ['read-condition-problem'],
         crsDomain: crsDomain.PROBLEM
     }, {
         id: 'lab_results_grid',
@@ -85,7 +85,7 @@ define(['main/ADK'], function(ADK) {
         context: ['patient'],
         maximizeScreen: 'lab-results-grid-full',
         showInUDWSelection: true,
-        permissions: ['read-order'], // todo: review permission
+        permissions: ['read-order'],
         crsDomain: crsDomain.LABORATORY
     }, {
         id: 'narrative_lab_results_grid',
@@ -151,15 +151,15 @@ define(['main/ADK'], function(ADK) {
         context: ['patient'],
         maximizeScreen: 'documents-list',
         showInUDWSelection: true,
-        permissions: ['read-document'] // todo: review permission
-            //permissions: []
+        permissions: ['read-document']
+        //permissions: []
     }, {
         id: 'medication_review',
         title: 'Medications Review',
         context: ['patient'],
         maximizeScreen: 'medication-review',
         showInUDWSelection: true,
-        permissions: ['read-medication-review'], // todo: review permission
+        permissions: ['read-medication-review'],
         crsDomain: crsDomain.MEDICATION
     }, {
         id: 'newsfeed',
@@ -181,7 +181,7 @@ define(['main/ADK'], function(ADK) {
         context: ['patient'],
         maximizeScreen: 'reports-full',
         showInUDWSelection: true,
-        permissions: ['read-document'] // todo: review permission
+        permissions: ['read-document']
     }, {
         id: 'addApplets',
         title: 'Add Applets',
@@ -238,11 +238,6 @@ define(['main/ADK'], function(ADK) {
         permissions: [],
         requiredByLayout: ['patient']
     }, {
-        id: "problems_add_edit",
-        title: "Add/Edit Problem",
-        context: ['patient'],
-        permissions: []
-    }, {
         id: "patient_sync_status",
         title: "Patient Sync Status",
         context: ['patient'],
@@ -282,7 +277,7 @@ define(['main/ADK'], function(ADK) {
         id: 'notifications',
         title: 'My notifications',
         context: ['staff', 'patient'],
-        maximizeScreen: 'notifications',
+        showInUDWSelection: false,
         permissions: []
     }, {
         id: 'global_datepicker',
@@ -297,6 +292,12 @@ define(['main/ADK'], function(ADK) {
         context: ['patient', 'staff'],
         showInUDWSelection: true,
         maximizeScreen: 'activities-patient-full',
+        permissions: []
+    }, {
+        id: "tab_manager",
+        title: "Tab Manager",
+        context: ['patient', 'staff'],
+        showInUDWSelection: false,
         permissions: []
     }];
 

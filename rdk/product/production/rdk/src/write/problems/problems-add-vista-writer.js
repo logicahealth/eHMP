@@ -8,12 +8,12 @@ var rpcClientFactory = require('../core/rpc-client-factory');
 var filemanDateUtil = require('../../utils/fileman-date-converter');
 var getVistaFormattedDateString = require('./utils')._getVistaFormattedDateString;
 var adjustTreatmentFactors = require('./utils').adjustTreatmentFactors;
-
+var nullchecker = require('../../core/rdk').utils.nullchecker;
 var BAD_ADD_RESPONSE = require('./utils').BAD_ADD_RESPONSE;
 
-function transformModel(logger, model) {
+function transformModel(logger, model, dfn) {
     model.condition =                   'P';
-    model.patient =                     model.patientIEN + '^' + model.patientName + '^0008^';
+    model.patient =                     dfn + '^' + model.patientName + '^0008^';
 
     // optional fields: default to null string or empty array for comments
     model.acuity =                      model.acuity || '@^';
@@ -27,7 +27,7 @@ function transformModel(logger, model) {
     model.clinic =                      model.clinic || '^';
     model.problemNumber =               model.problemNumber || '';
 
-    model.patient =                     model.patientIEN + '^' + model.patientName + '^0008^';
+    model.patient =                     dfn + '^' + model.patientName + '^0008^';
 
     // format the date fields for VistA
     model.currentDate =                 new Date();
@@ -161,12 +161,16 @@ function getNewProblem(logger, problems, model) {
 function callRpcFunctions(writebackContext, siteId, rpcClient, passedInCallback) {
     var logger = writebackContext.logger;
     var model = writebackContext.model;
+    var dfn = writebackContext.interceptorResults.patientIdentifiers.dfn;
+    if(nullchecker.isNullish(dfn)){
+        return passedInCallback('Missing required patient identifiers');
+    }
 
     async.waterfall([
         // returns BAD_ADD_RESPONSE (-1) for failure and 1 for success...
         function addProblem(callback) {
             var parameters = [];
-            parameters.push(model.patientIEN);
+            parameters.push(dfn);
             parameters.push(model.recordingProviderIEN);
             parameters.push(siteId);
             parameters.push(model.rpcParameters);
@@ -258,8 +262,12 @@ function callRpcFunctions(writebackContext, siteId, rpcClient, passedInCallback)
 function add(writebackContext, callback) {
     var logger = writebackContext.logger;
     var context = writebackContext.vistaConfig.context;
+    var dfn = writebackContext.interceptorResults.patientIdentifiers.dfn;
+    if(nullchecker.isNullish(dfn)){
+        return callback('Missing required patient identifiers');
+    }
 
-    transformModel(logger, writebackContext.model);
+    transformModel(logger, writebackContext.model, dfn);
     var model = writebackContext.model;
 
     logger.debug({problemModel: model});

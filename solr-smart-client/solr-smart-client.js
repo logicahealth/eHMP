@@ -102,17 +102,17 @@ SolrSmartClient.prototype.closeZookeeper = function () {
  */
 function waitForValidNodeInfo(seriesCallback) {
   async.until(
-    function () {
-      return zkLiveNodes !== null;
-    },
-    function (callback) {
-      setTimeout(function () {
-        callback(null, null);
-      }, 10)
-    },
-    function (err, result) {
-      seriesCallback(null, null);
-    }
+      function () {
+        return zkLiveNodes !== null;
+      },
+      function (callback) {
+        setTimeout(function () {
+          callback(null, null);
+        }, 10)
+      },
+      function (err, result) {
+        seriesCallback(null, null);
+      }
   );
 }
 
@@ -123,28 +123,28 @@ function waitForValidNodeInfo(seriesCallback) {
 function getValidSolrClient(getClientCallback, agent) {
   async.series([
 
-      function (seriesCallback) {
-        //essentially poll until the nodes are valid
-        //This could take some time (amount of time to establish zk connection), but should be ready for subsequent calls
-        waitForValidNodeInfo(seriesCallback);
-      },
+        function (seriesCallback) {
+          //essentially poll until the nodes are valid
+          //This could take some time (amount of time to establish zk connection), but should be ready for subsequent calls
+          waitForValidNodeInfo(seriesCallback);
+        },
 
-      function (seriesCallback) {
-        //update options with known solr node values
-        //TODO: Do this after receiving updates from zookeeper, instead of for every request
-        var options = getOptions(agent);
-        logger.info('Solr-Smart-Client: SolrClient Options:');
-        logger.info(options);
-        var client = solrClient.createClient(options);
+        function (seriesCallback) {
+          //update options with known solr node values
+          //TODO: Do this after receiving updates from zookeeper, instead of for every request
+          var options = getOptions(agent);
+          logger.trace('Solr-Smart-Client: SolrClient Options:');
+          logger.trace(options);
+          var client = solrClient.createClient(options);
 
-        seriesCallback(null, client);
-      }
-    ],
-    function (err, results) {
-      if (!err) {
-        getClientCallback(err, results[1]);
-      }
-    });
+          seriesCallback(null, client);
+        }
+      ],
+      function (err, results) {
+        if (!err) {
+          getClientCallback(err, results[1]);
+        }
+      });
 }
 
 /**
@@ -262,23 +262,23 @@ SolrSmartClient.prototype.search = function (query, callback) {
  * @api public
  */
 SolrSmartClient.prototype.get = function (handler, query, callback) {
-    module.getValidSolrClient(function (err, solrClient) {
-        if (!err) {
-            return solrClient.get(handler, query, callback);
-        }
-    }, this.agent);
+  module.getValidSolrClient(function (err, solrClient) {
+    if (!err) {
+      return solrClient.get(handler, query, callback);
+    }
+  }, this.agent);
 }
 
 
 function getOptions(agent) {
   var options = {host: null, port: null, core: null, path: null};
 
-  logger.info('Solr-Smart-Client: zkLiveNodes:');
-  logger.info('Solr-Smart-Client: ' + zkLiveNodes);
+  logger.trace('Solr-Smart-Client: zkLiveNodes:');
+  logger.trace('Solr-Smart-Client: ' + zkLiveNodes);
   if (zkLiveNodes.length != 0) {
     var node = zkLiveNodes[0];  //just pick the first node for now
     //console.log('creating options for node: ' + node);
-    //  IPADDRESS:PORT/solr
+    //  IP            /solr
 
     var colonDigits = /:\d+/.exec(node)[0];
     //console.log('colonDigits: ' + colonDigits);
@@ -310,7 +310,7 @@ function getOptions(agent) {
     options.path = path;
     options.agent = agent;
   }
-    //parse out the live nodes to get the values
+  //parse out the live nodes to get the values
 
   return options;
 }
@@ -369,9 +369,9 @@ function getZkLiveNodes(client, callback) {
    * watcher for future updates
    */
   client.getChildren(
-    '/live_nodes',
-    getChildrenWatchCallback,
-    processGetChildrenResult
+      '/live_nodes',
+      getChildrenWatchCallback,
+      processGetChildrenResult
   );
 
   function getChildrenWatchCallback (event) {

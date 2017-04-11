@@ -1,6 +1,6 @@
 require 'vistarpc4r'
 
-@broker = VistaRPC4r::RPCBrokerConnection.new("IP_ADDRESS", 9210, "PW", "PW", false)
+@broker = VistaRPC4r::RPCBrokerConnection.new("IP        ", 9210, "pro12345", "pro12345!!", false)
 @broker.connect
 @broker.setContext('OR CPRS GUI CHART')
 

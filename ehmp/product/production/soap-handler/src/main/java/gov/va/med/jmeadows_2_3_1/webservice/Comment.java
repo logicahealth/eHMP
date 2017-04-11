@@ -31,7 +31,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "comment", namespace = "http://webservice.vds.DNS       /", propOrder = {
+@XmlType(name = "comment", namespace = "http://webservice.vds.med.DNS   /", propOrder = {
     "commentText",
     "commentType",
     "enteredBy",

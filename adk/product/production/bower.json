@@ -20,7 +20,6 @@
     "typeahead.js": "git://github.com/twitter/typeahead.js.git#v0.10.5",
     "lodash": "3.10.1",
     "jquery": "1.11.3",
-    "backbone.paginator": "2.0.0",
     "jasmine-jquery": "2.1.1",
     "async": "0.2.9",
     "moment": "~2.11.0",
@@ -51,7 +50,8 @@
     "requirejs-plugins": "1.0.3",
     "require-css": "0.1.8",
     "lunr": "https://github.com/olivernn/lunr.js.git#v0.7.0",
-    "jScrollPane": "2.0.23"
+    "jsondiffpatch": "~0.1.43",
+    "jquery.scrollTo": "^2.1.2"
   },
   "resolutions": {
     "backbone": "1.2.3",
@@ -81,7 +81,6 @@
       "async": "bower_components/async/lib/async.js",
       "backbone": "bower_components/backbone/backbone.js",
       "backbone-sessionStorage": "bower_components/backbone-sessionStorage/backbone.sessionStorage.js",
-      "backbone.paginator": "bower_components/backbone.paginator/lib/backbone.paginator.js",
       "backbone.radio": "bower_components/backbone.radio/src/backbone.radio.js",
       "backbone-sorted-collection": "bower_components/backbone-sorted-collection/backbone-sorted-collection.js",
       "backgrid": [
@@ -101,7 +100,8 @@
         "bower_components/bootstrap/dist/css/bootstrap.min.css",
         "bower_components/bootstrap/dist/css/bootstrap-theme.min.css",
         "bower_components/bootstrap/dist/fonts/glyphicons-halflings-regular.ttf",
-        "bower_components/bootstrap/dist/fonts/glyphicons-halflings-regular.woff"
+        "bower_components/bootstrap/dist/fonts/glyphicons-halflings-regular.woff",
+        "bower_components/bootstrap/dist/fonts/glyphicons-halflings-regular.woff2"
       ],
       "bootstrap-datepicker": [
         "bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.js",
@@ -125,6 +125,9 @@
         "bower_components/jasmine/lib/jasmine-core/jasmine.js",
         "bower_components/jasmine/lib/jasmine-core/jasmine-html.js",
         "bower_components/jasmine/lib/jasmine-core/jasmine.css"
+      ],
+      "jsondiffpatch": [
+        "bower_components/jsondiffpatch/public/build/jsondiffpatch-full.min.js"
       ],
       "jquery": [
         "bower_components/jquery/dist/jquery.min.js"

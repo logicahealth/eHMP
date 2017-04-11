@@ -16,7 +16,7 @@
             "doneDate": null,
             "title": "Due Colonoscopy",
             "provenance": "The U.S. Preventive Services Task Force (USPSTF) recommends screening for colorectal cancer using high-sensitivity fecal occult blood testing, sigmoidoscopy, or colonoscopy beginning at age 50 years and continuing until age 75 years. [source: http://www.cdc.gov/cancer/colorectal/basic_info/screening/guidelines.htm]",
-            "details": "Patient John PII   is due for a colonoscopy."
+            "details": "Patient John Smith is due for a colonoscopy."
         },
         {
             "priority": 30,
@@ -26,7 +26,7 @@
             "doneDate": null,
             "title": "Lab tests",
             "provenance": "The U.S. Preventive Services Task Force (USPSTF) recommends screening for colorectal cancer using high-sensitivity fecal occult blood testing, sigmoidoscopy, or colonoscopy beginning at age 50 years and continuing until age 75 years. [source: http://www.cdc.gov/cancer/colorectal/basic_info/screening/guidelines.htm]",
-            "details": "Patient John PII   is due for a lab test."
+            "details": "Patient John Smith is due for a lab test."
         }
     ]
 }

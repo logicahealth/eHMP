@@ -9,7 +9,7 @@ Background:
         | field      | value       	|
         | Facility   | PANORAMA    	|
         | AccessCode | 1tdnurse   	|
-        | VerifyCode | tdnurse1 	|
+        | VerifyCode | PW       	|
         | SignIn     |          	|
     Then the patient search screen is displayed  
   	And user searches for and selects "ZZZRETFOURFIFTYEIGHT,PATIENT"

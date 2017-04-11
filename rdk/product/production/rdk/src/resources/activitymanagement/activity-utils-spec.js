@@ -57,7 +57,9 @@ describe('Task Utilities', function() {
             }];
 
             var result = filterVariablesForRecency(noDupes);
-            var emptyHistory = {'history': []};
+            var emptyHistory = {
+                'history': []
+            };
             noDupes.push(emptyHistory);
 
             expect(result).to.eql(noDupes);
@@ -206,13 +208,17 @@ describe('Task Utilities', function() {
 
         it('handles userId 9E7A;10000000270 value for activities', function() {
             var routes = parseAssignedTo('9E7A;10000000270');
-            var result = getFormattedRoutesString(routes, {'9E7A;10000000270':'KHAN,VIHAAN'}, false);
+            var result = getFormattedRoutesString(routes, {
+                '9E7A;10000000270': 'KHAN,VIHAAN'
+            }, false);
             expect(result).to.eql('KHAN,VIHAAN');
         });
 
         it('handles userId 9E7A;10000000270 value for tasks', function() {
             var routes = parseAssignedTo('9E7A;10000000270');
-            var result = getFormattedRoutesString(routes, {'9E7A;10000000270':'KHAN,VIHAAN'}, true);
+            var result = getFormattedRoutesString(routes, {
+                '9E7A;10000000270': 'KHAN,VIHAAN'
+            }, true);
             expect(result).to.eql('KHAN,VIHAAN');
         });
 
@@ -258,6 +264,53 @@ describe('Task Utilities', function() {
             expect(result).to.eql('Physical Therapy - Physician, Scheduler');
         });
 
+    });
+
+    describe('filterIdentifiers', function() {
+        var filterIdentifiers = utils.filterIdentifiers;
+
+        it('deals with empty or null array of patient identifiers', function() {
+            var emptyIdentifiers = filterIdentifiers([]);
+            expect(emptyIdentifiers).to.eql([]);
+
+            var nullIdentifiers = filterIdentifiers(null);
+            expect(nullIdentifiers).to.eql([]);
+        });
+
+        //Generated from GET /vpr/jpid/9E7A;3
+        var sampleIdentifiers = [
+            '10108V420871',
+            '9E7A;3',
+            'C877;3',
+            'DOD;0000000003',
+            'HDR;10108V420871',
+            'JPID;07201c12-a760-41e7-b07b-99cbc2cb4132',
+            'VLER;10108V420871'
+        ];
+
+        it('deals with null patient identifiers', function() {
+            var containsNull = _.clone(sampleIdentifiers);
+            containsNull.push(null);
+            var resultIdentifiers = filterIdentifiers(containsNull);
+
+            expect(resultIdentifiers).to.eql(sampleIdentifiers);
+        });
+
+        it('removes invalid characters', function() {
+            var invalidChars = '\' ';
+            var beginChars = 'ABC;';
+            var endChars = '123';
+            var testString = beginChars + invalidChars + endChars;
+            var expectedString = beginChars + endChars;
+
+            var testIdentifiers = _.clone(sampleIdentifiers);
+            var expectedIdentifiers = _.clone(sampleIdentifiers);
+            testIdentifiers.push(testString);
+            expectedIdentifiers.push(expectedString);
+
+            var resultIdentifiers = filterIdentifiers(testIdentifiers);
+            expect(resultIdentifiers).to.eql(expectedIdentifiers);
+        });
     });
 
 });

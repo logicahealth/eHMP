@@ -35,7 +35,7 @@ def get_rdk_config_files(driver)
   configDir = "./rdk_config_files"
   configs = ["rdk-fetch-server-config.json", "rdk-pick-list-server-config.json", "rdk-write-server-config.json"]
   key = knife_search_for_key_name("rdk", driver)
-  user = driver == "aws" ? "ec2-user" : "vagrant"
+  user = driver == "aws" ? "PW      " : "vagrant"
   ip = knife_search_for_ip("resource_server")
   Dir.mkdir("#{configDir}") unless File.exists?("#{configDir}")
   puts "copy rdk configs from rdk machine to #{configDir}"
@@ -69,13 +69,13 @@ end
 desc "Copy rdk logs from the guest to the host"
 task :scpRdkLogs, :driver do |t, args|
   logDir = "./rdk_logs"
-  logs = ["*_stdout.log", "*_stderr.log"]
+  logs = ["*.log"]
   key = knife_search_for_key_name("rdk", args[:driver])
-  user = args[:driver] == "aws" ? "ec2-user" : "vagrant"
+  user = args[:driver] == "aws" ? "PW      " : "vagrant"
   ip = knife_search_for_ip("resource_server")
   Dir.mkdir("#{logDir}") unless File.exists?("#{logDir}")
   logs.each do |logname|
-    sh('scp', '-o', 'StrictHostKeyChecking=no', '-i', "#{key}", "#{user}@#{ip}:/var/rdk/logs/#{logname}", "#{logDir}")
+    sh('scp', '-o', 'StrictHostKeyChecking=no', '-i', "#{key}", "#{user}@#{ip}:/var/log/rdk/#{logname}", "#{logDir}")
   end
 end
 
@@ -83,49 +83,55 @@ desc "Copy vxsync logs from the guest to the host"
 task :scpVxsyncLogs, :driver do |t, args|
   logDir = "vxsync_error_logs"
   key = knife_search_for_key_name("vxsync", args[:driver])
-  user = args[:driver] == "aws" ? "ec2-user" : "vagrant"
-  ip = knife_search_for_ip("vxsync")
+  user = args[:driver] == "aws" ? "PW      " : "vagrant"
+  ip = knife_search_for_ip("vxsync_client")
   Dir.mkdir("#{logDir}") unless File.exists?("#{logDir}")
   sh('scp', '-o', 'StrictHostKeyChecking=no', '-i', "#{key}", "#{user}@#{ip}:/tmp/*_stderr.log", "#{logDir}")
 end
 
 desc "Presync the cache with the patient_sync_list prior to int/acc test runs"
-task :syncCache do
-  patient_sync_list = [
-  "9E7A;227",
-  "9E7A;71",
-  "9E7A;253",
-  "9E7A;239",
-  "9E7A;100001",
-  "9E7A;231",
-  "9E7A;3",
-  "9E7A;9",
-  "9E7A;18",
-  "9E7A;722",
-  "9E7A;100716",
-  "9E7A;100840",
-  "9E7A;100731",
-  "9E7A;8",
-  "9E7A;230",
-  "9E7A;100125",
-  "9E7A;229",
-  "9E7A;100022",
-  "9E7A;271",
-  "C877;1",
-  "9E7A;428",
-  "9E7A;1",
-  "9E7A;100184",
-  "9E7A;167",
-  "9E7A;100615",
-  "9E7A;301",
-  "9E7A;100033",
-  "9E7A;100817",
-  "9E7A;149",
-  "9E7A;204"
-  ]
-
+task :syncCache, [:testType] do |t, args|
+  testType = args[:testType]
+  if testType == "jbpm"
+    patient_sync_list = [
+      "9E7A;3"
+    ]
+  else
+    patient_sync_list = [
+    "9E7A;227",
+    "9E7A;71",
+    "9E7A;253",
+    "9E7A;239",
+    "9E7A;100001",
+    "9E7A;231",
+    "9E7A;3",
+    "9E7A;9",
+    "9E7A;18",
+    "9E7A;722",
+    "9E7A;100716",
+    "9E7A;100840",
+    "9E7A;100731",
+    "9E7A;8",
+    "9E7A;230",
+    "9E7A;100125",
+    "9E7A;229",
+    "9E7A;100022",
+    "9E7A;271",
+    "C877;1",
+    "9E7A;428",
+    "9E7A;1",
+    "9E7A;100184",
+    "9E7A;167",
+    "9E7A;100615",
+    "9E7A;301",
+    "9E7A;100033",
+    "9E7A;100817",
+    "9E7A;149",
+    "9E7A;204"
+    ]
+  end
   ENV["JDS_IP"] = knife_search_for_ip("jds")
-  ENV["VX_SYNC_IP"] = knife_search_for_ip("vxsync")
+  ENV["VX_SYNC_IP"] = knife_search_for_ip("vxsync_client")
   PatientSynchronizer.wait_until_operational_data_loaded "http://#{ENV["JDS_IP"]}:9080", 600, ["9E7A", "C877"]
   PatientSynchronizer.synchronize_patient_list "http://#{ENV["VX_SYNC_IP"]}:8080", 3600, patient_sync_list
 end

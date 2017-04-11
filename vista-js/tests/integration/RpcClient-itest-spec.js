@@ -12,10 +12,10 @@ var wConfig = require('./config');
 var RpcClient = require('../../src/RpcClient').RpcClient;
 
 var config = _.defaults(wConfig.vistaSites['9E7A'], {
-    host: 'IP_ADDRESS',
+    host: 'IP        ',
     port: 9210,
-    accessCode: 'PW',
-    verifyCode: 'PW',
+    accessCode: 'PW    ',
+    verifyCode: 'PW    !!',
     context: 'HMP SYNCHRONIZATION CONTEXT',
     localIP: '127.0.0.1',
     localAddress: 'localhost',
@@ -33,8 +33,8 @@ describe('verify RpcClient() and instance methods against Panorama', function() 
             var expectedError = null;
             var expectedResult = {
                 connect: {
-                    accessCode: 'ep1234',
-                    verifyCode: 'ep1234!!',
+                    accessCode: 'PW    ',
+                    verifyCode: 'PW    !!',
                     duz: jasmine.any(String),
                     greeting: jasmine.any(String)
                 },

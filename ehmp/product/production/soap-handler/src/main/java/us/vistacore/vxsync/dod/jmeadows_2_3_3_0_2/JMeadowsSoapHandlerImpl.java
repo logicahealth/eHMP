@@ -384,8 +384,8 @@ public class JMeadowsSoapHandlerImpl implements JMeadowsSoapHandler {
             LOG.debug("JMeadowsSoapHandler.getJMeadowsProgressNote: Enter: edipi " + edipi);
 
             List<ProgressNote> progressNote = jMeadowsConnection.getJMeadowsDataClientInstance().getPatientProgressNotes(getJMeadowsQuery(edipi));
-            LOG.debug("JMeadowsSoapHandler.getJMeadowsProgressNotes: results size " + progressNote.size());
             if (progressNote != null) {
+                LOG.debug("JMeadowsSoapHandler.getJMeadowsProgressNotes: results size " + progressNote.size());
                 return (DataConverter.convertObjectToJSON(transformProgressNotes(progressNote)));
             } else
                 return null;
@@ -466,7 +466,7 @@ public class JMeadowsSoapHandlerImpl implements JMeadowsSoapHandler {
             return null;
         }
     }
-	
+
 	/*
 	This method generates a unique CdrEventId and populates it in the consult notes if the CdrEventId is empty and
 	the site code starts with SITE_CODE_1 or SITE_CODE_2

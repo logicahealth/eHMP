@@ -261,14 +261,14 @@ define([
         },
         initSelect2: function() {
             var $select = this.$('select');
-            $select.attr('title', "Press enter to open the " + this.field.get('label') + " search filter text");
+            $select.attr('title', this.field.get('label') + " edit. Press enter to activate");
 
             if ($select.length === 0 || this.field.get('disabled')) {
                 return;
             }
 
             var fieldOptions = this.field.get('options');
-            this.$el.attr('role', 'application');
+            this.$el.attr('role', 'combobox');
             var self = this;
 
             if (this.SelectTransport) {

@@ -13,6 +13,10 @@ define([
 
     return Backbone.Model.extend({
         idAttribute: 'uid',
+        parse: function(response) {
+            response.vaType = _.get(response, 'va_type', response.vaType);
+            return response;
+        },
         getModifiedVaStatus: function() {
             var vaStatus = this.get("vaStatus");
             if (vaStatus) {
@@ -35,11 +39,7 @@ define([
         },
         getName: function() {
             var name = this.get("name");
-            if (name) {
-                return name.toLowerCase();
-            } else {
-                return "No Data";
-            }
+            return name ? name.toLowerCase() : "No Data";
         },
         getCode: function() {
             var codes = this.get("codes");
@@ -54,11 +54,7 @@ define([
         },
         getFacilityName: function() {
             var facilityName = this.get("facilityName");
-            if (facilityName) {
-                return facilityName;
-            } else {
-                return "No Data";
-            }
+            return facilityName ? facilityName : "No Data";
         },
         getProducts: function() { //needs rewriting because should not be accessing only first object need to loop
             var products = this.get("products");
@@ -80,23 +76,15 @@ define([
         },
         getFillsAllowed: function() { //needs rewriting because should not be accessing only first object need to loop
             var fillsAllowed = this.get('orders')[0].fillsAllowed;
-            if (fillsAllowed) {
-                return fillsAllowed;
-            } else {
-                return 0;
-            }
+            return fillsAllowed ? fillsAllowed : 0;
         },
         getDaysSupply: function() { //needs rewriting because should not be accessing only first object need to loop
             var daysSupply = this.get('orders')[0].daysSupply;
-            if (daysSupply) {
-                return daysSupply;
-            }
+            return daysSupply ? daysSupply : undefined;
         },
         getUid: function() {
             var uid = this.get('uid').replace(/[:|.]/g, "_");
-            if (uid) {
-                return uid;
-            }
+            return uid ? uid : undefined;
         },
         getSig: function() {
             var doseUnitRouteSchedule = '';
@@ -252,9 +240,6 @@ define([
                 if (siteCode !== userSiteCode) {
                     return "fa-globe";
                 }
-                // else {
-                //  return "fa-exclamation-triangle";
-                // }
             }
         },
         getPRN: function() {
@@ -274,11 +259,7 @@ define([
             var fillsAllowed = this.get('orders')[0].fillsAllowed; //needs rewriting because should not be accessing only first object need to loop
             var supply = this.get('supply');
             if (vaType === 'o' || supply) {
-                if (fillsAllowed && fillsAllowed >= 0) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return (fillsAllowed && fillsAllowed >= 0);
             } else {
                 return false;
             }
@@ -338,7 +319,7 @@ define([
             } else if (name) {
                 return {
                     property: "name",
-                    value: name.split(" ")[0].toLowerCase()
+                    value: name.split(/[, ]+/)[0].toLowerCase()
                 };
             } else {
                 return {
@@ -397,16 +378,16 @@ define([
                 durationUnitText = "1 day";
             } else if (fillTimeInMinutes >= 1440 && fillTimeInMinutes <= 86400) {
                 count = parseInt(Math.round(fillableFor.asDays()));
-                fillText = parseInt(Math.round(fillableFor.asDays())) + "d";
-                durationUnitText = parseInt(Math.round(fillableFor.asDays())) + " day";
+                fillText = count + "d";
+                durationUnitText = count + " day";
             } else if (fillTimeInMinutes > 86400 && fillTimeInMinutes <= 1051200) {
                 count = parseInt(Math.round(fillableFor.asMonths()));
-                fillText = parseInt(Math.round(fillableFor.asMonths())) + "m";
-                durationUnitText = parseInt(Math.round(fillableFor.asMonths())) + " month";
+                fillText = count + "m";
+                durationUnitText = count + " month";
             } else if (fillTimeInMinutes > 1051200) {
                 count = parseInt(Math.round(fillableFor.asYears()));
-                fillText = parseInt(Math.round(fillableFor.asYears())) + "y";
-                durationUnitText = parseInt(Math.round(fillableFor.asYears())) + " year";
+                fillText = count + "y";
+                durationUnitText = count + " year";
             }
 
             if (count > 1) {

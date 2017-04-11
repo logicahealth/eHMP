@@ -3,7 +3,8 @@ package gov.va.hmp.healthtime.format;
 import gov.va.hmp.healthtime.IntervalOfTime;
 
 /**
- * TODOC: Provide summary documentation of class IntervalOfTimeFormat
+ * Class that Formats the intervals of time.
+ * The interval is a string.
  */
 public class IntervalOfTimeFormat {
 

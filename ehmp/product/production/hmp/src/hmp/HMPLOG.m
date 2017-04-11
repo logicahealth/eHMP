@@ -1,5 +1,5 @@
-HMPLOG ; ASMR/hrubovcak - eHMP logging support ;Jun 21, 2016 16:41:12
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1**;June 13, 2016;Build 5
+HMPLOG ; ASMR/hrubovcak - eHMP logging support ;Aug 17, 2016 11:42:39
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**2,4**;June 13, 2016;Build 11
  ;Per VA Directive 6402, this routine should not be modified.
  ;
  ; routine created 13 June 2016 for US15658
@@ -82,3 +82,11 @@ PRGLOG ; purge HMP EVENT file (#800003) entries older than 61 days
  S Y=$$NWNTRY($$NOW^XLFDT,"I",.HMPRGLOG)  ; log the purge end
  Q
  ;
+ ;DE5111 begin
+STK2TXT(STKTXT) ; STKTXT passed by reference, no input, 11 August 2016
+ ; returns STKTXT where STKTXT(1) is the top, STKTXT(2) is next level, etc.
+ ; top 2 stack levels ignored because they're in this subroutine
+ K STKTXT N C,J S C=1
+ F J=$ST-2:-1:0 S C=C+1,STKTXT(C)=" $st("_J_"): "_$ST(J,"PLACE")_">"_$ST(J,"MCODE")  ; save $stack, skip top 2 levelS
+ Q
+ ;DE5111 end

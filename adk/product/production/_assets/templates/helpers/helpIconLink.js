@@ -3,7 +3,7 @@ define([
     'main/Utils',
     'hbs!_assets/templates/helpIconLink'
 ], function(Handlebars, utils, helpIconTemplate) {
-    function helpIconLink(key, iconColor, options) {
+    function helpIconLink(key, iconClass, options) {
         'use strict';
 
         if (arguments.length < 2)
@@ -17,7 +17,7 @@ define([
         };
 
         if(options)
-            context.iconColor = iconColor;
+            context.iconClass = iconClass;
 
         return helpIconTemplate(context);
     }

@@ -5,35 +5,35 @@ module.exports.getResourceConfig = function() {
         name: 'enterprise-orderable-create',
         path: '',
         post: callCreate,
-        requiredPermissions: [],
+        requiredPermissions: ['manage-enterprise-orderable'],
         isPatientCentric: false,
         subsystems: ['pjds', 'enterpriseOrderable']
     }, {
         name: 'enterprise-orderable-get',
         path: '/:uid',
         get: callGet,
-        requiredPermissions: [],
+        requiredPermissions: ['read-enterprise-orderable'],
         isPatientCentric: false,
         subsystems: ['pjds', 'enterpriseOrderable']
     }, {
         name: 'enterprise-orderable-search',
         path: '',
         get: callSearch,
-        requiredPermissions: [],
+        requiredPermissions: ['read-enterprise-orderable'],
         isPatientCentric: false,
         subsystems: ['pjds', 'enterpriseOrderable']
     }, {
         name: 'enterprise-orderable-delete',
         path: '/:uid',
         delete: callDelete,
-        requiredPermissions: [],
+        requiredPermissions: ['manage-enterprise-orderable'],
         isPatientCentric: false,
         subsystems: ['pjds', 'enterpriseOrderable']
     }, {
         name: 'enterprise-orderable-update',
         path: '/:uid',
         put: callUpdate,
-        requiredPermissions: [],
+        requiredPermissions: ['manage-enterprise-orderable'],
         isPatientCentric: false,
         subsystems: ['pjds', 'enterpriseOrderable']
     }];

@@ -45,9 +45,6 @@ define([
         }
     }
 
-    var modelUids = [],
-        dataCollection;
-
     var viewParseModel = {
         parse: function(response) {
             if (response.name) {
@@ -91,20 +88,12 @@ define([
             }
         },
         initialize: function(options) {
-            var self = this;
-
-            self.model = options.model;
-
-            self.collection = options.collection;
-            dataCollection = options.collection;
-
-
-            self.getModelUids();
+            this.getModelUids();
 
             if(options.initCount === 0) {
                 options.initCount++;
 
-                var modelUid = self.model.get('uid');
+                var modelUid = this.model.get('uid');
 
                 var modalFetchOptions = {
                     resourceTitle: 'patient-record-vlerdocument',
@@ -122,7 +111,7 @@ define([
                     var modalModel = _.find(modalCollection.models, function(model) {
                         return model.get('uid') === modelUid;
                     });
-
+                    ADK.UI.Modal.hide();
                     this.showModal(modalModel);
                 });
 
@@ -151,10 +140,10 @@ define([
               });
             }
         },
-        showModal: function(modalModel, clickedBtn) {
+        showModal: function(modalModel) {
             var view = new ModalView({
                 model: modalModel,
-                collection: dataCollection
+                collection: this.collection
             });
 
             var modalOptions = {
@@ -174,16 +163,14 @@ define([
                 options: modalOptions
             });
             modal.show();
-            if(clickedBtn) modal.$el.closest('.modal').find('#' + clickedBtn).focus();
+            modal.$el.closest('.modal').focus();
         },
-        showErrorModal: function(model, modelUid, clickedBtn){
-          var modalModel = _.find(dataCollection.models, function(model) {
-            return model.get('uid') === modelUid;
-          });
+        showErrorModal: function(model, modelUid){
+          var modalModel = this.collection.find({'uid': modelUid});
 
           var view = new ModalView({
             model: modalModel,
-            collection: dataCollection
+            collection: this.collection
           });
 
           var errorView = ADK.Views.Error.create({
@@ -204,17 +191,24 @@ define([
           });
 
           modal.show();
-
-          if(clickedBtn) modal.$el.closest('.modal').find('#' + clickedBtn).focus();
         },
-        getNextModal: function(clickedBtn) {
-            var next = _.indexOf(modelUids, this.model.get('uid')) + 1;
-            if (next >= modelUids.length) {
-
-                this.getModelUids();
-                next = 0;
+        onAttach: function() {
+            this.checkIfModalIsEnd();
+        },
+        checkIfModalIsEnd: function() {
+            var next = _.indexOf(this.modelUids, this.model.get('uid')) + 1;
+            if (next >= this.modelUids.length) {
+                this.$el.closest('.modal').find('#ccdNext').attr('disabled', true);
             }
-            var modelUid = modelUids[next];
+
+            next = _.indexOf(this.modelUids, this.model.get('uid')) - 1;
+            if (next < 0) {
+                this.$el.closest('.modal').find('#ccdPrevious').attr('disabled', true);
+            }
+        },
+        getNextModal: function() {
+            var next = _.indexOf(this.modelUids, this.model.get('uid')) + 1;
+            var modelUid = this.modelUids[next];
 
             var modalFetchOptions = {
                 resourceTitle: 'patient-record-vlerdocument',
@@ -232,7 +226,7 @@ define([
                 return model.get('uid') === modelUid;
               });
 
-              this.showModal(modalModel, clickedBtn);
+              this.showModal(modalModel);
 
             });
 
@@ -243,14 +237,9 @@ define([
             ADK.PatientRecordService.fetchCollection(modalFetchOptions, modalCollection);
 
         },
-        getPrevModal: function(clickedBtn) {
-            var prev = _.indexOf(modelUids, this.model.get('uid')) - 1;
-
-            if (prev < 0) {
-                this.getModelUids();
-                prev = modelUids.length - 1;
-            }
-            var modelUid = modelUids[prev];
+        getPrevModal: function() {
+            var prev = _.indexOf(this.modelUids, this.model.get('uid')) - 1;
+            var modelUid = this.modelUids[prev];
 
             var modalFetchOptions = {
                 resourceTitle: 'patient-record-vlerdocument',
@@ -269,7 +258,7 @@ define([
                 return model.get('uid') === modelUid;
               });
 
-              this.showModal(modalModel, clickedBtn);
+              this.showModal(modalModel);
 
             });
 
@@ -280,25 +269,25 @@ define([
             ADK.PatientRecordService.fetchCollection(modalFetchOptions, modalCollection);
         },
         getModelUids: function() {
-            modelUids = [];
-            _.each(dataCollection.models, function(m, key) {
+            this.modelUids = [];
+            this.collection.each(_.bind(function(m) {
 
                 if (m.get('vlerdocument')) {
-                    var outterIndex = dataCollection.indexOf(m);
-                    _.each(m.get('vlerdocument').models, function(m2, key) {
+                    var outterIndex = this.collection.indexOf(m);
+                    _.each(m.get('vlerdocument').models, function(m2) {
                         m2.set({
                             'inAPanel': true,
                             'parentIndex': outterIndex,
                             'parentModel': m
                         });
-                        modelUids.push(m2.get('uid'));
+                        this.modelUids.push(m2.get('uid'));
 
                     });
                 } else {
-                    modelUids.push(m.get('uid'));
+                    this.modelUids.push(m.get('uid'));
                 }
 
-            });
+            }, this));
         }
     });
 

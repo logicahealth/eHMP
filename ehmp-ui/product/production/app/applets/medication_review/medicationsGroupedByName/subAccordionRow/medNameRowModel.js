@@ -1,7 +1,8 @@
 define([
     'backbone',
+    'moment',
     'app/applets/medication_review/medicationsGroupedByName/subAccordionRow/medNameRowSubCollection'
-], function(Backbone, MedNameRowSubCollection) {
+], function(Backbone, moment, MedNameRowSubCollection) {
     'use strict';
     return Backbone.Model.extend({
 

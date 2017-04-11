@@ -34,6 +34,7 @@ desc 'Syncs and subscribes eHMP to a list of patients used for automated testing
 task :syncCache do
   patient_sync_list = [
   "9E7A;227",
+  "9E7A;100608",
   "9E7A;71",
   "9E7A;253",
   "9E7A;164",
@@ -182,21 +183,21 @@ def environment_endpoints(env)
   case env
   when "virtualbox"
     p "Running with virtualbox environments"
-    ENV["VX_SYNC_IP"] = knife_search_for_ip("vxsync")
+    ENV["VX_SYNC_IP"] = knife_search_for_ip("vxsync_client")
     ENV["VE_API_IP"] = knife_search_for_ip("mocks")
     ENV["JDS_IP"] = knife_search_for_ip("jds")
     ENV["PANORAMA_IP"] = knife_search_for_ip("vista-panorama")
     ENV["KODAK_IP"] = knife_search_for_ip("vista-kodak")
-    ENV['WB_VX_SYNC_PORT'] = '9090' 
+    ENV['WB_VX_SYNC_PORT'] = '9090'
   when "aws"
     p "Running with aws environments"
-    ENV["VX_SYNC_IP"] = knife_search_for_ip("vxsync")
+    ENV["VX_SYNC_IP"] = knife_search_for_ip("vxsync_client")
     ENV["VE_API_IP"] = knife_search_for_ip("mocks")
     ENV["JDS_IP"] = knife_search_for_ip("jds")
     ENV["SOLR_IP"] = knife_search_for_ip("solr")
     ENV["PANORAMA_IP"] = knife_search_for_ip("vista-panorama")
     ENV["KODAK_IP"] = knife_search_for_ip("vista-kodak")
-    ENV['WB_VX_SYNC_PORT'] = '9090' 
+    ENV['WB_VX_SYNC_PORT'] = '9090'
   when "ede"
     p "Running with ede environments"
     # TODO: Update these when we decide on a permanent location for EDE IP addresses

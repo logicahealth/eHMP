@@ -3,20 +3,21 @@
 Feature: F138 Return of Allergies in FHIR format
 
 #This feature item covers return of free text, observed, and historical allergies in FHIR format.
+#Since adverse reaction was deprecated, and also based on the comments from Heather Chase and Darren Maglidt, 
+#mark the tag OBE and DE6042 on the test scenarios
 
-
-@US2345_fhir_freetext @fhir @9E7A1
+@US2345_fhir_freetext @fhir @9E7A1 @OBE @DE6042
 Scenario: Client can request free text allergies in FHIR format
       Given a patient with "allergies" in multiple VistAs
-      When the client requests allergies for the patient "9E7A;1" in FHIR format
+      When the client requests allergies for the patient "9E7A;3" in FHIR format
       Then a successful response is returned
       And the FHIR results contain "allergy"
             | allergies_field_list            | panorama_allergies_values                                |
             | content.resourceType            | AdverseReaction                                          |
             | content.text.status             | generated                                                |
-            | content.text.div                | <div>MILK, ICE CREAM, YOGURT ( FREE TEXT )</div>         |
-            | content.identifier.value        | urn:va:allergy:9E7A:1:1                                  |
-            | content.subject.reference       | urn:va:allergy:9E7A:1:1                                  |
+            | content.text.div                | <div>PENICILLIN</div>         |
+            | content.identifier.value        | urn:va:allergy:9E7A:3:751                                  |
+            | content.subject.reference       | urn:va:allergy:9E7A:3:751                                  |
             | content.didNotOccurFlag         | false                                                    |
             | content.extension.url           | http://vistacore.us/fhir/profiles/@main#entered-datetime |
             | content.extension.valueDateTime | IS_FHIR_FORMATTED_DATE                                               |
@@ -24,7 +25,7 @@ Scenario: Client can request free text allergies in FHIR format
             | content.extension.valueString   | allergy                                                  |
             #Patient
             | content.contained.resourceType     | Patient |
-            | content.contained.identifier.label | 9E7A;1  |
+            | content.contained.identifier.label | 9E7A;3  |
             #Practitioner
             | content.contained.resourceType              | Practitioner |
             | content.contained.location.identifier.label | CAMP MASTER  |
@@ -32,14 +33,14 @@ Scenario: Client can request free text allergies in FHIR format
             #Substance
             | content.contained.resourceType        | Substance                                        |
             | content.contained.text.status         | generated                                        |
-            | content.contained.text.div            | <div>MILK, ICE CREAM, YOGURT ( FREE TEXT )</div> |
+            | content.contained.text.div            | <div>PENICILLIN</div> |
             | content.contained.type.coding.system  | urn:oid:2.16.840.1.113883.6.233                  |
-            | content.contained.type.coding.code    | urn:va:vuid:                                     |
-            | content.contained.type.coding.display | MILK, ICE CREAM, YOGURT ( FREE TEXT )            |
-            | content.contained.type.text           | MILK, ICE CREAM, YOGURT ( FREE TEXT )            |
+            | content.contained.type.coding.code    | urn:va:vuid:                                    |
+            | content.contained.type.coding.display | PENICILLIN           |
+            | content.contained.type.text           | PENICILLIN            |
         And FHIR date and time conver to Zulu format for Allergies
       
-@US2345_fhir_observed @fhir @5000000341V359724
+@US2345_fhir_observed @fhir @5000000341V359724 @OBE @DE6042
 Scenario: Client can request observed allergies in FHIR format
       Given a patient with "allergies" in multiple VistAs
       When the client requests allergies for the patient "9E7A;100022" in FHIR format
@@ -52,7 +53,7 @@ Scenario: Client can request observed allergies in FHIR format
       | content.symptom.code.coding.code    | urn:va:vuid:4637051             |
       | content.symptom.code.coding.display | ANOREXIA                        |
 
-@US2345_fhir_historical @fhir @5000000217V519385
+@US2345_fhir_historical @fhir @5000000217V519385 @OBE @DE6042
 Scenario: Client can request historical allergies in FHIR format
       Given a patient with "allergies" in multiple VistAs
       When the client requests allergies for the patient "9E7A;100716" in FHIR format
@@ -78,7 +79,7 @@ Scenario: Client can request historical allergies in FHIR format
       | content.contained.resourceType        | Substance                                                |
       | content.resourceType                  | AdverseReaction                                          |
 
-@DE974_fhir_limit @fhir @5000000339V988748 @DE974
+@DE974_fhir_limit @fhir @5000000339V988748 @DE974 @OBE @DE6042
 Scenario: Client can request observed allergies in FHIR format
       Given a patient with "allergies" in multiple VistAs
       When the client requests "10" allergies for the patient "9E7A;100840" in FHIR format

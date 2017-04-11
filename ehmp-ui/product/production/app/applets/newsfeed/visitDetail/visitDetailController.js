@@ -7,20 +7,15 @@ define([
         initialize: function () {
             var channel = ADK.Messaging.getChannel('visitDetail');
             channel.reply('detailView', function (params) {
-                var response = $.Deferred();
                 if (params.model !== undefined) {
-                    response.resolve({
-                        view: new VisitDetailView({
+                    return {
+                        view: VisitDetailView.extend({
                             model: params.model
                         }),
-                        title: params.model.get('summary') || params.model.get('typeDisplayName') //hacktasktic
+                        title: params.model.get('summary') || params.model.get('typeDisplayName')
 
-                    });
+                    };
                 }
-                else {
-                    //go fetch the details from the server
-                }
-                return response.promise();
             });
         }
     };

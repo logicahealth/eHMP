@@ -3,8 +3,8 @@ define([
     "app/applets/task_forms/activities/FIT_FOBT/viewController",
     "app/applets/task_forms/activities/simple_activity/viewController",
     "app/applets/task_forms/activities/sign_note/viewController",
-    "app/applets/task_forms/activities/consults/viewController",
-    "app/applets/task_forms/activities/lab/viewController",
+    "app/applets/task_forms/activities/order.consult/viewController",
+    "app/applets/task_forms/activities/order.lab/viewController",
     "app/applets/task_forms/activities/requests/responseViewController"
 ], function(CommonViewController, FITFOBTViewController, SimpleActivityViewController,
             SignNoteViewController, ConsultsViewController, LabViewController, ResponseViewController) {

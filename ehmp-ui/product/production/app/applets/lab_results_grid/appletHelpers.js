@@ -2,7 +2,7 @@ define([
     "backbone",
     "underscore",
     'moment'
-], function(Backbone, _, Moment) {
+], function(Backbone, _, moment) {
     'use strict';
 
     var MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -85,7 +85,7 @@ define([
                 labels: {
                     rotation: -45,
                     formatter: function() {
-                        return new Moment(this.value).format('MMM DD YYYY');
+                        return moment(this.value).format('MMM DD YYYY');
                     }
                 },
                 maxPadding: 0.05,
@@ -136,7 +136,7 @@ define([
             } else if ((months < 24) && (days > 60)) {
                 finalResult = Math.round(months) + lMonth;
             } else if ((days >= 2) && (days <= 60)) {
-                finalResult = Math.round(days) + lMonth;
+                finalResult = Math.round(days) + lDay;
             } else if (days < 2) {
                 finalResult = Math.round(hours) + lHour;
             }
@@ -246,14 +246,9 @@ define([
             return model.get('typeName') + ' - ' + model.get('specimen');
         },
         getObservedFormatted: function(observed) {
-            var convert = function(str, year, month, day, hour, min) {
-                var date = [month, day, year].join('/');
-                var time = [hour, min].join(':');
-                return [date, time].join(' ');
-            };
-
-            if (observed)
-                return observed.replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})/, convert);
+            if (observed) {
+                return moment(observed, 'YYYYMMDDHHmmssSSS').format('MM/DD/YYYY - HH:mm');
+            }
             return '';
         }
     };

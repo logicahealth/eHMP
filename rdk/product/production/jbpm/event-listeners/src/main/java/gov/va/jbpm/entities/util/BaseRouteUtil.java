@@ -4,9 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import gov.va.jbpm.entities.impl.BaseRoute;
+import gov.va.jbpm.exception.EventListenerException;
+import gov.va.jbpm.utils.Logging;
 
 public class BaseRouteUtil {
-	public static List<BaseRoute> create(String routes) {
+	public static List<BaseRoute> create(String routes) throws EventListenerException {
+		Logging.debug("Entering BaseRouteUtil.create");
 		
 		List<BaseRoute> baseRouteList = new ArrayList<BaseRoute>();
 		if (routes == null || routes.isEmpty()) {
@@ -42,10 +45,11 @@ public class BaseRouteUtil {
 					//  anything which is not a left parenthesis followed by a left parenthesis
 					//  any ASCII letters, digits, or underscores followed by a right parenthesis
 					if (!subRoute.matches("\\w\\w:[^(]*\\(\\w+\\)")) {
-						System.err.println("Unable to match the following subRoute (ignoring it): " + subRoute);
+						Logging.warn("Unable to match the following subRoute (ignoring it): " + subRoute);
 						continue;
 					}
 					
+					//subRoute is guaranteed of having more than 3 characters and having a ( and a ) because it matched the regular expression above.
 					String category = subRoute.substring(0, 2);
 					int subRouteCodeBegin = subRoute.indexOf('(');
 					int subRouteCodeEnd = subRoute.indexOf(')');
@@ -53,31 +57,55 @@ public class BaseRouteUtil {
 					subRouteCode = subRoute.substring(subRouteCodeBegin + 1, subRouteCodeEnd);
 					
 					switch (category) {
-					
-					case "FC":
-						facility = subRouteCode;
-						isValid = true;
-						break;
-					case "TM":
-						team = Integer.parseInt(subRouteCode);
-						isValid = true;
-						break;
-					case "TF": 
-						teamFocus = Integer.parseInt(subRouteCode);
-						isValid = true;
-						break;
-					case "TT": 
-						teamType = Integer.parseInt(subRouteCode);
-						isValid = true;
-						break;
-					case "TR":
-						teamRole = Integer.parseInt(subRouteCode);
-						isValid = true;
-						break;
-					case "PA":
-						patientAssignment = Integer.parseInt(subRouteCode) == 1;
-						isValid = true;
-						break;
+						case "FC":
+							facility = subRouteCode;
+							isValid = true;
+							break;
+						case "TM":
+							try {
+								team = Integer.parseInt(subRouteCode);
+							} catch (NumberFormatException e) {
+								throw new EventListenerException("Category (team) was not an Integer: " + subRouteCode);
+							}
+							
+							isValid = true;
+							break;
+						case "TF": 
+							try {
+								teamFocus = Integer.parseInt(subRouteCode);
+							} catch (NumberFormatException e) {
+								throw new EventListenerException("Category (teamFocus) was not an Integer: " + subRouteCode);
+							}
+							
+							isValid = true;
+							break;
+						case "TT": 
+							try {
+								teamType = Integer.parseInt(subRouteCode);
+							} catch (NumberFormatException e) {
+								throw new EventListenerException("Category (teamType) was not an Integer: " + subRouteCode);
+							}
+							
+							isValid = true;
+							break;
+						case "TR":
+							try {
+								teamRole = Integer.parseInt(subRouteCode);
+							} catch (NumberFormatException e) {
+								throw new EventListenerException("Category (teamRole) was not an Integer: " + subRouteCode);
+							}
+							
+							isValid = true;
+							break;
+						case "PA":
+							try {
+								patientAssignment = Integer.parseInt(subRouteCode) == 1;
+							} catch (NumberFormatException e) {
+								throw new EventListenerException("Category (patientAssignment) was not an Integer: " + subRouteCode);
+							}
+							
+							isValid = true;
+							break;
 					};
 				}
 			} else {
@@ -86,13 +114,11 @@ public class BaseRouteUtil {
 			}
 			
 			if (isValid) {
-				baseRouteList.add(new BaseRoute(facility, team, teamFocus, teamType,
-						teamRole, userId, patientAssignment));
+				BaseRoute baseRoute = new BaseRoute(facility, team, teamFocus, teamType, teamRole, userId, patientAssignment);
+				baseRouteList.add(baseRoute);
 			}
-
 		}
 	
 		return baseRouteList;
 	}
-
 }

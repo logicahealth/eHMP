@@ -1,7 +1,7 @@
 'use strict';
 
 var request = require('request');
-var url = 'http://IP_ADDRESS:PORT/ewdjs/';
+var url = 'http://IP             /ewdjs/';
 var endpoint = 'vpr/';
 var patient;
 

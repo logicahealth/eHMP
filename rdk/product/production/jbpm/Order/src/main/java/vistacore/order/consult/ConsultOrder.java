@@ -63,6 +63,12 @@ public class ConsultOrder implements java.io.Serializable
 
    private vistacore.order.Facility acceptingClinic;
 
+   private java.lang.String executionUserId;
+
+   private java.lang.String executionUserName;
+
+   private java.lang.String orderResultComment;
+
    public ConsultOrder()
    {
    }
@@ -330,6 +336,36 @@ public class ConsultOrder implements java.io.Serializable
       this.acceptingClinic = acceptingClinic;
    }
 
+   public java.lang.String getExecutionUserId()
+   {
+      return this.executionUserId;
+   }
+
+   public void setExecutionUserId(java.lang.String executionUserId)
+   {
+      this.executionUserId = executionUserId;
+   }
+
+   public java.lang.String getExecutionUserName()
+   {
+      return this.executionUserName;
+   }
+
+   public void setExecutionUserName(java.lang.String executionUserName)
+   {
+      this.executionUserName = executionUserName;
+   }
+
+   public java.lang.String getOrderResultComment()
+   {
+      return this.orderResultComment;
+   }
+
+   public void setOrderResultComment(java.lang.String orderResultComment)
+   {
+      this.orderResultComment = orderResultComment;
+   }
+
    public ConsultOrder(
          java.lang.String urgency,
          java.lang.String earliestDate,
@@ -352,7 +388,9 @@ public class ConsultOrder implements java.io.Serializable
          vistacore.order.Facility orderingFacility,
          vistacore.order.Provider orderingProvider, vistacore.order.Visit visit,
          vistacore.order.Facility destinationFacility,
-         vistacore.order.Facility acceptingClinic)
+         vistacore.order.Facility acceptingClinic,
+         java.lang.String executionUserId, java.lang.String executionUserName,
+         java.lang.String orderResultComment)
    {
       this.urgency = urgency;
       this.earliestDate = earliestDate;
@@ -380,6 +418,9 @@ public class ConsultOrder implements java.io.Serializable
       this.visit = visit;
       this.destinationFacility = destinationFacility;
       this.acceptingClinic = acceptingClinic;
+      this.executionUserId = executionUserId;
+      this.executionUserName = executionUserName;
+      this.orderResultComment = orderResultComment;
    }
 
 }

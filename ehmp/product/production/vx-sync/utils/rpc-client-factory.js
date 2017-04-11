@@ -7,7 +7,7 @@ var CACHE_TIME_OUT_FIVE_MIN = 300000;
 /**
  * Returns a RpcClient instance for a site.  All calls can use the same site connection for pick lists because:
  *
- * 1. The VistaJs no_reconnect flag is not set and should not be set for any pick list resource.  This allows the
+ * 1. The vista-js noReconnect flag is not set and should not be set for any pick list resource.  This allows the
  *    RpcClient to reconnect to Vista if the connection is dropped.
  * 2. Always using proxy users from the configuration.  If this is ever changed then a new RpcClient must be created per
  *    user.

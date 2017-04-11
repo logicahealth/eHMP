@@ -3,10 +3,12 @@ define([
     'marionette',
     'underscore',
     'handlebars',
+    'moment',
     'app/applets/task_forms/common/utils/utils',
     'app/applets/task_forms/common/views/alertView',
-    'hbs!app/applets/orders/writeback/consults/templates/orderCompletedTemplate'
-], function(Backbone, Marionette, _, Handlebars, Utils, AlertView, orderCompletedTemplate) {
+    'hbs!app/applets/orders/writeback/consults/templates/orderCompletedTemplate',
+    'hbs!app/applets/orders/writeback/consults/templates/editOrderHeader'
+], function(Backbone, Marionette, _, Handlebars, moment, Utils, AlertView, orderCompletedTemplate, EditOrderHeaderTemplate) {
     "use strict";
 
     var PreReqCollection = Backbone.Collection.extend({
@@ -16,8 +18,8 @@ define([
         onValueChange: function(model, val, options) {
             if (val.toLowerCase() === 'no') {
                 var alert = new ADK.UI.Alert({
-                    title: 'ATTENTION',
-                    icon: 'icon-warning',
+                    title: 'Attention',
+                    icon: 'icon-circle-exclamation',
                     messageView: AlertView.MessageView,
                     footerView: AlertView.FooterView
                 });
@@ -66,20 +68,69 @@ define([
         }
 
         return _.map(obj, function(obj) {
-            return {
+            return _.extend(obj, {
                 label: obj[mappingAttributes.label],
-                value: obj[mappingAttributes.value] === '' || null ? 'Override' : obj[mappingAttributes.value],
+                value: obj[mappingAttributes.value],
                 name: obj[mappingAttributes.name],
-                statusDate: obj[mappingAttributes.statusDate]
-            };
+                statusDate: obj[mappingAttributes.statusDate],
+                ien: obj[mappingAttributes.ien] || null,
+                domain: obj[mappingAttributes.domain],
+                action: obj[mappingAttributes.action],
+                uid: obj[mappingAttributes.uid]
+            });
         });
     };
+
+    /**
+     * US11569/TA77556 - Use a custom template and supporting helpers to allow the toggling of the
+     * Order option according to the remediation action.
+     */
+    var templateHelpers = _.extend({}, Handlebars.helpers, {
+        id: function(model) {
+            var prefix = model.prependToDomId ? model.prependToDomId + '-' : '';
+            return prefix + model.formAttributeName + '-' + model.name;
+        },
+        isSelected: function(optionValue, model) {
+            if (optionValue === model.value) {
+                return new Handlebars.SafeString(' selected');
+            }
+            return '';
+        },
+        if_eq: function(a, b, options) {
+            if (a === b) {
+                return options.fn(this);
+            } else {
+                return options.inverse(this);
+            }
+        }
+    });
+
+    var preReqOrdersSelectTemplate = Handlebars.compile([
+        '<div class="select-list-caret"></div>' +
+        '<select ' +
+        'id="{{clean-for-id (id this)}}" ' +
+        'name="{{clean-for-id (id this)}}"' +
+        '{{#if title}}title="{{title}}" {{else}}title="Use up and down arrow keys to view options and press enter to select" {{/if}}' +
+        '{{#if disabled}}disabled {{else}}{{#if controlDisabled}}disabled {{/if}}{{/if}}' +
+        '{{#if required}}required {{else}}{{#if controlRequired}}required {{/if}}{{/if}}' +
+        '{{#if multiple}}multiple {{else}}{{#if controlMultiple}}multiple {{/if}}{{/if}}' +
+        '>',
+        '<option value=""></option>',
+        '{{#if_eq action "order"}}<option value="Order"{{#if orderDisabled}} disabled{{/if}}{{isSelected "Order" @root}}>Order</option>{{/if_eq}}',
+        '<option value="Override"{{#if disabled}} disabled{{/if}}{{isSelected "Override" @root}}>Override</option>',
+        '<option value="Satisfied"{{#if disabled}} disabled{{/if}}{{isSelected "Satisfied" @root}}>Satisfied with data external to VA</option>',
+        '</select>',
+    ].join('\n'));
 
     var fromJBPMOrdersMapping = {
         label: 'orderName',
         value: 'status',
         name: 'orderName',
-        statusDate: 'statusDate'
+        statusDate: 'statusDate',
+        domain: 'domain',
+        action: 'action',
+        ien: 'ien',
+        uid: 'uid'
     };
     var fromCDSOrdersMapping = {
         label: 'display',
@@ -93,6 +144,19 @@ define([
         name: 'question-text'
     };
 
+    var errorMessageContainer = {
+        control: "container",
+        extraClasses: ["row"],
+        items: [{
+            control: "alertBanner",
+            name: "errorMessage",
+            title: "Unable To Submit",
+            extraClasses: ["col-xs-12"],
+            type: "danger",
+            dismissible: false
+        }]
+    };
+
     var orderEntryFields =
         [{
             control: 'container',
@@ -100,7 +164,13 @@ define([
             items: [{
                 control: 'container',
                 extraClasses: ['container-fluid'],
-                items: [{
+                items: [errorMessageContainer, {
+                    control: 'container',
+                    template: EditOrderHeaderTemplate,
+                    hidden: true,
+                    modelListeners: ['consultName', 'instructions', 'state', 'subState'],
+                    extraClasses: ['edit_order_header']
+                }, {
                     control: 'container',
                     extraClasses: ['row'],
                     items: [{
@@ -112,7 +182,7 @@ define([
                             required: true,
                             label: 'Consult Name',
                             title: 'Press enter to open search filter text',
-                            // showFilter: true,
+                            showFilter: true,
                             picklist: [],
                             options: {
                                 minimumInputLength: 0
@@ -153,7 +223,7 @@ define([
                                 disabled: 'true',
                                 hidden: 'true',
                                 title: 'Press enter to open search filter text',
-                                // showFilter: true,
+                                showFilter: true,
                                 options: {
                                     placeholder: 'Provider Contacted',
                                     minimumInputLength: 2,
@@ -178,7 +248,7 @@ define([
                                 extraClasses: ['prereqFieldset'],
                                 items: [{
                                     control: 'container',
-                                    template: '<p class="top-margin-sm color-grey-darkest"><strong>Questions</strong></p>',
+                                    template: '<p class="top-margin-sm color-grey-darkest"><strong>Questions *</strong></p>',
                                     extraClasses: ['preReqQuestions'],
                                     items: [{
                                         control: 'selectList',
@@ -200,36 +270,34 @@ define([
                                     }]
                                 }, {
                                     control: 'container',
-                                    template: '<p class="top-margin-sm color-grey-darkest"><strong>Orders and Results</strong></p>',
+                                    template: '<p class="top-margin-sm color-grey-darkest"><strong>Orders and Results *</strong></p>',
                                     extraClasses: ['preReqOrders'],
                                     items: [{
                                         name: 'preReqOrders',
                                         label: 'Pre-Requisite Orders',
+                                        required: true,
+                                        labelTemplate: '<label for="preReqOrders-{{label}}" class="transform-none">{{label}}</label>',
                                         control: "selectList",
                                         srOnlyLabel: true,
                                         collection: null,
                                         getValueTemplate: function(model, index) {
-                                            return model.get('value').match(':comp') || model.get('value').match('Passed') ? orderCompletedTemplate(model.toJSON()) : false;
-                                        },
-                                        options: [{
-                                            label: 'Order',
-                                            value: 'Order'
-                                        }, {
-                                            label: 'Override',
-                                            value: 'Override'
-                                        }, {
-                                            label: 'Satisfied with other information',
-                                            value: 'Satisfied'
-                                        }]
+                                            var json = model.toJSON();
+                                            return model.get('value').match(':comp') || model.get('value').match('Passed') ?
+                                                orderCompletedTemplate(json, {
+                                                    helpers: templateHelpers
+                                                }) :
+                                                preReqOrdersSelectTemplate(json, {
+                                                    helpers: templateHelpers
+                                                });
+                                        }
                                     }]
                                 }, {
                                     control: 'textarea',
                                     name: 'orderResultComment',
-                                    label: 'Order/Result Comment',
+                                    label: 'Satisfied with data external to VA - Comment',
                                     extraClasses: 'top-margin-xs',
                                     required: true,
                                     rows: 7,
-                                    maxlength: 250,
                                     hidden: true,
                                     charCount: true,
                                     title: 'Enter information regarding external data'
@@ -240,7 +308,6 @@ define([
                                     extraClasses: 'top-margin-xs',
                                     required: true,
                                     rows: 7,
-                                    maxlength: 250,
                                     hidden: true,
                                     charCount: true,
                                     title: 'Enter in the reason for override'
@@ -249,16 +316,17 @@ define([
                                 control: 'select',
                                 name: 'destinationFacility',
                                 label: 'Location for Consultation',
-                                extraClasses: ['color-red', 'top-margin-md'],
-                                // showFilter: true,
+                                extraClasses: ['top-margin-md'],
+                                showFilter: true,
                                 options: {
                                     minimumInputLength: 0
                                 },
                                 title: 'Use up and down arrow keys to view options and press enter to select',
                                 attributeMapping: {
-                                    label: 'vistaName',
-                                    value: 'facilityID'
-                                }
+                                    label: 'name',
+                                    value: 'division'
+                                },
+                                required: true
                             }]
                         }]
                     }, {
@@ -267,15 +335,21 @@ define([
                         items: [{
                             control: 'datepicker',
                             name: 'earliestDate',
-                            label: 'Earliest Date',
+                            label: 'Earliest date',
                             extraClasses: ['col-xs-6'],
-                            startDate: new Date()
+                            startDate: '0d',
+                            required: true,
+                            flexible: true,
+                            minPrecision: "day",
                         }, {
                             control: 'datepicker',
                             name: 'latestDate',
-                            label: 'Latest Date',
+                            label: 'Latest date',
                             extraClasses: ['col-xs-6'],
-                            startDate: new Date()
+                            startDate: '0d',
+                            required: true,
+                            flexible: true,
+                            minPrecision: "day",
                         }]
                     }, {
                         control: 'container',
@@ -286,9 +360,9 @@ define([
                             items: [{
                                 control: 'select',
                                 name: 'condition',
-                                label: 'Conditions Related to This Consult',
+                                label: 'Conditions related to this consult',
                                 title: 'Use up and down arrow keys to view options and press enter to select',
-                                // showFilter: true,
+                                showFilter: true,
                                 options: {
                                     minimumInputLength: 0
                                 },
@@ -298,7 +372,7 @@ define([
                                 }
                             }, {
                                 control: 'container',
-                                template: '<h5 class="bottom-border-grey-darker bottom-margin-xs">Reason for Request</h5>',
+                                template: '<h5 class="bottom-border-grey-dark bottom-margin-xs">Reason for request</h5>',
                                 items: [{
                                     control: 'textarea',
                                     name: 'requestReason',
@@ -310,7 +384,7 @@ define([
                             }, {
                                 control: 'textarea',
                                 name: 'requestComment',
-                                label: 'Comment (Clinical History)',
+                                label: 'Comment (clinical history)',
                                 title: 'Enter a comment',
                                 rows: 4
                             }]
@@ -339,44 +413,67 @@ define([
                 }]
             }, {
                 control: 'container',
-                extraClasses: ['col-xs-12'],
+                extraClasses: ['row'],
                 items: [{
                     control: 'container',
-                    extraClasses: 'row',
+                    extraClasses: ['col-xs-12', 'display-flex', 'valign-bottom'],
                     items: [{
-                        control: 'button',
-                        extraClasses: ['btn-danger', 'btn-sm', 'pull-left'],
-                        id: 'modal-delete-button',
-                        label: 'Delete',
-                        type: 'button',
-                        title: 'Press enter to delete'
+                        control: 'container',
+                        extraClasses: ['flex-grow-loose', 'text-left'],
+                        items: [{
+                            control: 'popover',
+                            behaviors: {
+                                Confirmation: {
+                                    title: 'Delete',
+                                    eventToTrigger: 'consult-add-confirm-delete',
+                                    message: 'Are you sure you want to delete?',
+                                    confirmButtonTitle: 'Press enter to delete'
+                                }
+                            },
+                            label: 'Delete',
+                            name: 'consultAddDeleteButton',
+                            extraClasses: ['btn-default', 'btn-sm']
+                        }]
                     }, {
-                        control: 'button',
-                        extraClasses: ['btn-default', 'btn-sm'],
-                        id: 'modal-cancel-button',
+                        control: 'popover',
+                        behaviors: {
+                            Confirmation: {
+                                title: 'Warning',
+                                eventToTrigger: 'consult-add-confirm-cancel'
+                            }
+                        },
                         label: 'Cancel',
-                        type: 'button',
-                        title: 'Press enter to cancel'
+                        name: 'consultAddConfirmCancel',
+                        extraClasses: ['btn-default', 'btn-sm', 'right-margin-xs']
                     }, {
                         control: 'button',
                         extraClasses: ['btn-primary', 'btn-sm'],
-                        id: 'modal-save-button',
+                        id: 'consult-add-save-button',
                         label: 'Draft',
                         type: 'button',
                         title: 'Press enter to save as draft and close'
                     }, {
                         control: 'button',
                         extraClasses: ['btn-primary', 'btn-sm'],
-                        id: 'modal-begin-workup-button',
+                        id: 'consult-add-begin-workup-button',
                         label: 'Begin Workup',
                         type: 'button',
                         title: 'Press enter to begin workup'
                     }, {
                         control: 'button',
                         extraClasses: ['btn-primary', 'btn-sm'],
-                        id: 'modal-accept-button',
+                        id: 'consult-add-accept-button',
                         label: 'Accept',
                         type: 'button',
+                        title: 'Press enter to accept'
+                    }, {
+                        control: 'button',
+                        extraClasses: ['btn-primary', 'btn-sm'],
+                        id: 'consult-add-edit-save-button',
+                        label: 'Accept',
+                        type: 'button',
+                        hidden: true,
+                        disabled: true,
                         title: 'Press enter to accept'
                     }]
                 }]

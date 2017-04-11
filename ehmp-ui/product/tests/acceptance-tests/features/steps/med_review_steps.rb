@@ -478,17 +478,6 @@ Then(/^the Medication Review table only diplays rows including text "([^"]*)"$/)
   @ehmp = PobMedsReview.new
   @ehmp.wait_for_fld_med_review_applet_rows(30)
   expect(object_exists_in_list(@ehmp.fld_med_review_applet_rows, input_text)).to be true
-  # med_reivew_applet = MedReviewApplet.instance
-  # upper = input_text.upcase
-  # lower = input_text.downcase
-  #
-  # in_row_count = med_reivew_applet.get_elements('Inpatient Med Rows').size
-  # out_row_count = med_reivew_applet.get_elements('Outpatient Med Rows').size
-  # row_count = in_row_count + out_row_count
-  #
-  # path = "//div[@id='medication_review-medication-list-items']/descendant::div[contains(translate(string(), '#{upper}', '#{lower}'), '#{lower}')]/ancestor::div[contains(@class, 'clickDetail')]"
-  # rows_containing_filter_text = TestSupport.driver.find_elements(:xpath, path).size
-  # expect(row_count).to eq(rows_containing_filter_text), "Only #{rows_containing_filter_text} rows contain the filter text but #{row_count} rows are visible"
 end
 
 When(/^the Meds Review Applet contains data rows$/) do
@@ -517,52 +506,51 @@ end
 
 When(/^the user views the details of an inpatient med$/) do
   @ehmp = PobMedsReview.new
-  @ehmp.wait_for_fld_inpatient_meds_rows
-  @ehmp.fld_inpatient_meds_rows.first.click
-  @ehmp.wait_for_btn_toolbar_popover
   attempt = 3
   begin
-    expect(@ehmp).to have_btn_toolbar_popover
-    @ehmp.btn_toolbar_popover.click
-  rescue
+    @ehmp.wait_for_fld_inpatient_meds_rows
+    @ehmp.fld_inpatient_meds_rows.first.click
+    @ehmp.wait_for_fld_toolbar
+    expect(@ehmp).to have_fld_toolbar
+    expect(@ehmp).to have_btn_detail_view
+    @ehmp.btn_detail_view.click
+  rescue => e
     attempt -=1
     retry if attempt > 1
+    raise e if attempt <= 0
   end
- # meds_review = MedReviewApplet.instance
- # meds_review.add_action(CucumberLabel.new('First Row'), ClickAction.new, AccessHtmlElement.new(:css, '.panel-heading.medsItem'))
- #  # meds_review.add_action(CucumberLabel.new('First Row'), ClickAction.new, AccessHtmlElement.new(:css, "[title='ibuprofen']"))
- #  meds_review.add_action(CucumberLabel.new('Active Toolbar'), ClickAction.new, AccessHtmlElement.new(:css, '#medsReviewMainGroup_INPATIENT div.toolbarActive'))
- #  meds_review.add_action(CucumberLabel.new('Active Detail Icon'), ClickAction.new, AccessHtmlElement.new(:css, "[style*='block'] .toolbarPopover [data-original-title='Details form']"))
- #  expect(meds_review.perform_action('First Row')).to eq(true)
- #  expect(meds_review.perform_action('Active Detail Icon')).to eq(true)
 end
 
 When(/^the user views the details of an outpatient med$/) do
   @ehmp = PobMedsReview.new
-  @ehmp.wait_for_fld_outpatient_med_rows
-  @ehmp.fld_outpatient_med_rows.first.click
-  @ehmp.wait_for_btn_toolbar_popover
+
   attempt = 3
   begin
-    expect(@ehmp).to have_btn_toolbar_popover
-    @ehmp.btn_toolbar_popover.click
-  rescue
+    @ehmp.wait_for_fld_outpatient_med_rows
+    @ehmp.fld_outpatient_med_rows.first.click
+    @ehmp.wait_for_fld_toolbar
+    expect(@ehmp).to have_fld_toolbar
+    expect(@ehmp).to have_btn_detail_view
+    @ehmp.btn_detail_view.click
+  rescue => e
     attempt -= 1
     retry if attempt > 1
+    raise e if attempt <= 0
   end
 end
 
 Then(/^the detail view displays$/) do |table|
   @ehmp = PobMedsReview.new
   @ehmp.wait_for_fld_panel_all_level_headers
+  expect(@ehmp.fld_panel_all_level_headers.length).to be > 0, "expected at least 1 detail header"
   table.rows.each do |heading|
     expect(object_exists_in_list(@ehmp.fld_panel_all_level_headers, "#{heading[0]}")).to eq(true)
   end
-  # meds_review = MedReviewApplet.instance
-  # meds_review.add_verify(CucumberLabel.new('Order History Panel'), VerifyContainsText.new, AccessHtmlElement.new(:id, 'order-history-panel'))
-  # meds_review.add_verify(CucumberLabel.new('Order Detail Panel'), VerifyContainsText.new, AccessHtmlElement.new(:id, 'order-detail-panel'))
-  # table.rows.each do |row|
-  #   expect(meds_review.wait_until_action_element_visible(row[0], 30)).to eq(true), "Section #{row[0]} is not displayed"
-  # end
+end
+
+Given(/^the Meds Review applet displays at least (\d+) outpatient medication$/) do |num|
+  @ehmp = PobMedsReview.new
+  @ehmp.wait_for_fld_outpatient_med_rows
+  expect(@ehmp.fld_outpatient_med_rows.length). to be >= num.to_i
 end
 

@@ -1,153 +1,153 @@
-# class TileSorting < AccessBrowserV2
-# include Singleton
-# def initialize
-# super
-# In Support of Background, add user defined VistA Health Summary screen
-# add_action(CucumberLabel.new("SelectSummaryView"), ClickAction.new, AccessHtmlElement.new(:xpath, "//*[@id='applet-1']/div/div[2]/ul/li[1]/div[2]"))
-# add_verify(CucumberLabel.new("VistA Health Summaries"), VerifyContainsText.new, AccessHtmlElement.new(:xpath, "//*[@id='screenName']"))
-# add_action(CucumberLabel.new("Workspace Manager Button"), ClickAction.new, AccessHtmlElement.new(:xpath, ".//*[@id='workspace-manager-button']"))
-# add_action(CucumberLabel.new("Add New WorkSheet"), ClickAction.new, AccessHtmlElement.new(:id, "addScreen"))
-# add_action(CucumberLabel.new("Default Title"), ClickAction.new, AccessHtmlElement.new(:xpath, ".//*[@id='mainOverlayRegion']/div/div/div[3]/div/div/div[1]/div/p/span"))
-# add_action(CucumberLabel.new("Title"), SendKeysAndEnterAction.new, AccessHtmlElement.new(:id, "screen-title"))
-# add_action(CucumberLabel.new("Description"), SendKeysAndEnterAction.new, AccessHtmlElement.new(:id, "screen-description"))
-# add_action(CucumberLabel.new("AddLoadButton"), ClickAction.new, AccessHtmlElement.new(:css, ".btn.btn-primary.addLoadButton"))
-# add_action(CucumberLabel.new("VistA Health Summaries Summary"), ClickAction.new, AccessHtmlElement.new(:xpath, "//*[@id='applet-1']/div/div[2]/p"))
-# add_verify(CucumberLabel.new("newScreenTitle"), VerifyContainsText.new, AccessHtmlElement.new(:xpath, "//*[@id='applet-1']/div/div/div[1]/span[3]/span"))
-# end
-# end
-
-When(/^the user creates a new workspace titled "(.*?)" with the description "(.*?)"$/) do |arg1, arg2|
-  driver = TestSupport.driver
-  driver.find_element(:xpath, "//*[@id='user-defined-workspace-1']/div/div[1]/div[2]/input").clear
-  driver.find_element(:xpath, "//*[@id='user-defined-workspace-1']/div/div[1]/div[2]/input").send_keys arg1
-  driver.find_element(:xpath, "//*[@id='user-defined-workspace-1']/div/div[1]/div[3]/input").send_keys arg2 
+Then(/^the toolbar displays with a Tile Sort button$/) do
+  problems = PobProblemsApplet.new
+  problems.wait_for_btn_tile_sort
+  expect(problems).to have_btn_tile_sort
 end
 
-When(/^sets "(.*?)" as the default workspace$/) do 
-  driver = TestSupport.driver
-  driver.find_element(:xpath, "//*[@id='user-defined-workspace-1']/div/div[2]/div[4]/i").click
-  sleep(1)
-  driver.find_element(:xpath, "//*[@id='user-defined-workspace-1']/div/div[3]/ul/li[1]").click
-end
+When(/^the user moves the problem row to the top of the applet$/) do
+  problems = PobProblemsApplet.new
+  problems.wait_for_fld_gist_problem_names
+  name_order = problems.gist_problem_names_only
 
-#When(/^the user drags and drops the Conditions thumbnail right by (\d+) and down by (\d+)$/) do |arg1, arg2|
-#  driver = TestSupport.driver
-#  TestSupport.wait_for_page_loaded
-#  applet_preview = driver.find_element(:xpath, "//*[@id='applets-carousel']/div[1]/div[2]/div[1]/div[5]")
-#  perform_drag(applet_preview, arg1, arg2)
-#end
+  # after sort, expect last element to be first
+  expected_name_order = Array.new(name_order)
+  last = expected_name_order.pop
+  expected_name_order.unshift(last)
 
-Given(/^user clicks Trend View on the workspace editor of Conditions$/) do 
-  driver = TestSupport.driver
-  driver.find_element(:xpath, "//*[@id='applet-1']/div/div[2]/ul/li[1]/div[1]").click
-end
+  problems.wait_until_btn_tile_sort_visible
+  problems.btn_tile_sort.click
+  problems.wait_for_btn_tile_sort_active
+  expect(problems).to have_btn_tile_sort_active
 
-When(/^user clicks Trend View on the workspace editor of Labs$/) do 
-  driver = TestSupport.driver
-  driver.find_element(:xpath, "//*[@id='applet-1']/div/div[2]/ul/li[1]/div[1]").click
-end
-
-#When(/^the user drags and drops the Labs thumbnail right by (\d+) and down by (\d+)$/) do |arg1, arg2|
-#  driver = TestSupport.driver
-#  applet_preview = driver.find_element(:xpath, "//*[@id='applets-carousel']/div[1]/div[2]/div[1]/div[9]")
-#  perform_drag(applet_preview, arg1, arg2)
-#end
-
-When(/^the user drags and drops the Vitals thumbnail right by (\d+) and down by (\d+)$/) do |arg1, arg2|
-  driver = TestSupport.driver
-  sleep(3)
-  driver.find_element(:xpath, "//*[@id='applets-carousel']/div[1]/div[3]/a/span").click
-  sleep(3)
-  applet_preview = driver.find_element(:xpath, "//*[@id='applets-carousel']/div[1]/div[2]/div[2]/div[4]")
-  perform_drag(applet_preview, arg1, arg2)
-end
-
-When(/^user clicks "(.*?)" on the workspace editor of Vitals$/) do 
-  driver = TestSupport.driver
-  driver.find_element(:xpath, "//*[@id='applet-4']/div/div[2]/ul/li[1]/div[1]").click
-end
-
-When(/^the user drags and drops the Meds thumbnail right by (\d+) and down by (\d+)$/) do |arg1, arg2|
-  driver = TestSupport.driver
-  applet_preview = driver.find_element(:xpath, "//*[@id='applets-carousel']/div[1]/div[2]/div[1]/div[10]")
-  perform_drag(applet_preview, arg1, arg2)
-end
-
-When(/^user clicks "(.*?)" on the workspace editor of Meds$/) do 
-  driver = TestSupport.driver
-  driver.find_element(:xpath, "//*[@id='applet-3']/div/div[2]/ul/li[1]/div[1]").click
-  sleep(3)
-end
-
-When(/^user clicks "(.*?)" on the workspace editor$/) do 
-  driver = TestSupport.driver
-  driver.find_element(:xpath, "//*[@id='exitEditing']").click
-end
-
-When(/^the user is viewing the workspace titled "(.*?)"$/) do 
-  driver = TestSupport.driver
-  text = driver.find_element(:xpath, "//*[@id='screenName']").text
-  if text.include? "test"
-  else fail("the test failed")  
+  move_times = name_order.length - 1
+  (0..move_times).each do |i|
+    problems.btn_tile_sort.native.send_keys(:up)
   end
+  problems.btn_tile_sort.native.send_keys(:enter)
+  problems.wait_until_btn_tile_sort_active_invisible
+  expect(problems.gist_problem_names_only).to eq(expected_name_order)
+  @manual_problem_gist_order = problems.gist_problem_names_only
 end
 
-Given(/^the user is viewing the applet titled "(.*?)"$/) do 
-  driver = TestSupport.driver
-  text = driver.find_element(:xpath, "//*[@id='applet-1']/div/div/div[1]/span[3]/span").text
-  puts text
-end
+When(/^the user moves the numeric lab gist row to the bottom of the applet$/) do
+  ehmp = PobNumericLabApplet.new
+  ehmp.wait_for_fld_lab_names
+  name_order = ehmp.gist_numeric_lab_names_only
 
-Given(/^the list of conditions in the applet is as follows$/) do 
-  # table is a Cucumber::Ast::Table
-  pending # express the regexp above with the code you wish you had
-end
+  # after sort, expect first element to be last
+  expected_name_order = Array.new(name_order)
+  first = expected_name_order.shift
+  expected_name_order.push(first)
 
-Given(/^the user is viewing the applet titled Conditions$/) do
-  driver = TestSupport.driver
-  text = driver.find_element(:xpath, "//*[@id='applet-1']/div/div/div[1]/span[3]/span").text
-  # puts text
-  if text.eql? "PROBLEMS"
-  else fail("the test failed")  
+  ehmp.wait_until_btn_tile_sort_visible
+  ehmp.btn_tile_sort.click
+  ehmp.wait_for_btn_tile_sort_active
+  expect(ehmp).to have_btn_tile_sort_active
+
+  move_times = name_order.length - 1
+  (0..move_times).each do |i|
+    ehmp.btn_tile_sort.native.send_keys(:down)
   end
+  ehmp.btn_tile_sort.native.send_keys(:enter)
+  ehmp.wait_until_btn_tile_sort_active_invisible
+  expect(ehmp.gist_numeric_lab_names_only).to eq(expected_name_order)
+  @manual_numeric_gist_order = ehmp.gist_numeric_lab_names_only
 end
 
-Given(/^the user is viewing the applet titled Numeric Lab Results$/) do
-  driver = TestSupport.driver
-  text = driver.find_element(:xpath, "//*[@id='applet-1']/div/div/div[1]/span[3]/span").text
-  if text.eql? "LAB RESULTS"
-  else fail("the test failed")  
+When(/^the user moves the vital gist row to the bottom of the applet$/) do
+  ehmp = PobVitalsApplet.new
+  ehmp.wait_for_fld_vital_names
+  name_order = ehmp.gist_vital_names_only
+
+  # after sort, expect first element to be last
+  expected_name_order = Array.new(name_order)
+  first = expected_name_order.shift
+  expected_name_order.push(first)
+
+  ehmp.wait_until_btn_tile_sort_visible
+  ehmp.btn_tile_sort.click
+  ehmp.wait_for_btn_tile_sort_active
+  expect(ehmp).to have_btn_tile_sort_active
+
+  move_times = name_order.length - 1
+  (0..move_times).each do |i|
+    ehmp.btn_tile_sort.native.send_keys(:down)
   end
+  ehmp.btn_tile_sort.native.send_keys(:enter)
+  ehmp.wait_until_btn_tile_sort_active_invisible
+  expect(ehmp.gist_vital_names_only).to eq(expected_name_order)
+  @manual_vitals_order = ehmp.gist_vital_names_only
 end
 
-Given(/^the user clicks column title Hx Occurrence$/) do
-  driver = TestSupport.driver
-  wait = Selenium::WebDriver::Wait.new(:timeout => 50)
-  wait.until { driver.find_element(:xpath, "//*[@id='count-header1']") }
-  driver.find_element(:xpath, "//*[@id='count-header1']").click
+Then(/^the Problems applet reports Manual sort$/) do
+  problems = PobProblemsApplet.new
+  problems.wait_for_fld_manual_sort
+  problems.wait_for_btn_remove_manual_sort
+  expect(problems).to have_fld_manual_sort
+  expect(problems).to have_btn_remove_manual_sort
 end
 
-Given(/^the user clicks column title Last$/) do
-  driver = TestSupport.driver
-  wait = Selenium::WebDriver::Wait.new(:timeout => 50)
-  wait.until { driver.find_element(:xpath, "//*[@id='age-header']") }
-  driver.find_element(:xpath, "//*[@id='age-header']").click
+Given(/^the Problems applet does not report Manual sort$/) do
+  problems = PobProblemsApplet.new
+  expect(problems).to_not have_fld_manual_sort
+  expect(problems).to_not have_btn_remove_manual_sort
 end
 
-Given(/^the user hits tab key three times on applet Conditions$/) do
-  driver = TestSupport.driver
-  driver.find_element(:xpath, "//*[@id='count-header1']").send_keys :tab
-  # driver.find_element(:xpath, "//*[@id='event_name_urn_va_problem_ABCD_17_58']").send_keys:tab
-  # driver.find_element(:xpath, "//*[@id='quickLook_urn_va_problem_9E7A_3_627']").send_keys:tab
+Then(/^the Numeric Lab Results applet does not report Manual sort$/) do
+  lab_results = PobNumericLabApplet.new
+  expect(lab_results).to_not have_fld_manual_sort
+  expect(lab_results).to_not have_btn_remove_manual_sort
 end
 
-Given(/^the user hit return key twice on applet Conditions$/) do
-  driver = TestSupport.driver
-  # driver.find_element(:xpath, "//*[@id='event_urn_va_problem_9E7A_3_747']").send_keys:enter
+Then(/^the Vitals applet does not report Manual sort$/) do
+  ehmp = PobVitalsApplet.new
+  expect(ehmp).to_not have_fld_manual_sort
+  expect(ehmp).to_not have_btn_remove_manual_sort
 end
 
-Then(/^the user is viewing the order of tiles$/) do
-  driver = TestSupport.driver
-  @tiles = driver.find_element(:xpath, "//*[@id='applet-1-event-gist-items']").size
-  puts @tiles
+Given(/^the Vitals Gist applet starts without Manual Sort$/) do
+  ehmp = PobVitalsApplet.new
+  applet_starts_without_manual_sort ehmp
+end
+
+def applet_starts_without_manual_sort(applet_elements)
+  p "DE5841: Tile manual sort retained after workspace is deleted"
+  applet_elements.wait_for_btn_remove_manual_sort
+  applet_elements.btn_remove_manual_sort.click if applet_elements.has_btn_remove_manual_sort?
+  applet_elements.wait_until_btn_remove_manual_sort_invisible
+  expect(applet_elements).to_not have_fld_manual_sort
+  expect(applet_elements).to_not have_btn_remove_manual_sort
+end
+
+Given(/^the Problems applet starts without Manual Sort$/) do
+  problems = PobProblemsApplet.new
+  applet_starts_without_manual_sort problems
+end
+
+Given(/^the Numeric Lab Results applet starts without Manual Sort$/) do
+  lab_results = PobNumericLabApplet.new
+  applet_starts_without_manual_sort lab_results
+end
+
+Then(/^the Numeric Lab Results applet reports Manual sort$/) do
+  lab_results = PobNumericLabApplet.new
+  lab_results.wait_for_fld_manual_sort
+  lab_results.wait_for_btn_remove_manual_sort
+  expect(lab_results).to have_fld_manual_sort
+  expect(lab_results).to have_btn_remove_manual_sort
+end
+
+Then(/^the Vitals Gist applet reports Manual sort$/) do
+  ehmp = PobVitalsApplet.new
+  ehmp.wait_for_fld_manual_sort
+  ehmp.wait_for_btn_remove_manual_sort
+  expect(ehmp).to have_fld_manual_sort
+  expect(ehmp).to have_btn_remove_manual_sort
+end
+
+When(/^the user clicks Manual sort to remove it$/) do
+  problems = PobProblemsApplet.new
+  problems.wait_for_btn_remove_manual_sort
+  expect(problems).to have_btn_remove_manual_sort
+  problems.btn_remove_manual_sort.click
 end

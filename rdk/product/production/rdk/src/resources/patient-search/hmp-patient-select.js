@@ -52,7 +52,7 @@ function isStringNullish(value) {
  */
 module.exports.fetch = function(req, params, site, callback) {
     //This RPC is found in the following context - this context does not change and is specific to this RPC call.
-    var rpcConfig = getVistaRpcConfiguration(req.app.config, site, req.session.user);
+    var rpcConfig = getVistaRpcConfiguration(req.app.config, req.session.user);
     rpcConfig.context = 'HMP UI CONTEXT';
     var searchString = params.searchString;
     var searchType = params.searchType;

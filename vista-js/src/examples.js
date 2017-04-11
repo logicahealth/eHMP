@@ -4,7 +4,7 @@ var util = require('util');
 var _ = require('underscore');
 var clc = require('cli-color');
 var moment = require('moment');
-var VistaJS = require('./VistaJS');
+var RpcClient = require('./RpcClient').RpcClient;
 var logger = require('bunyan').createLogger({
     name: 'RpcClient',
     level: 'trace'
@@ -54,12 +54,12 @@ function printJsonResult(error, result) {
 var context = 'OR CPRS GUI CHART';
 
 var configuration = {
-    context: 'VPR UI CONTEXT',
-    host: 'IP_ADDRESS',
+    context: 'HMP UI CONTEXT',
+    host: 'IP        ',
     port: 9210,
-    accessCode: 'PW',
-    verifyCode: 'PW',
-    localIP: 'IPADDRES',
+    accessCode: 'PW    ',
+    verifyCode: 'PW    !!',
+    localIP: 'IP      ',
     localAddress: 'localhost'
 };
 
@@ -70,7 +70,7 @@ var configuration = {
 // VistaJS.callRpc(logger, configuration, 'VPRCRPC RPC', { '"command"': 'logPatientAccess', '"patientId"': '167' }, printResult);
 // response -> '{"result":"ok"}'
 
-VistaJS.callRpc(logger, configuration, 'VPRCRPC RPC', { '"command"': 'getPatientChecks', '"patientId"': '3' }, printResult);
+RpcClient.callRpc(logger, configuration, 'VPRCRPC RPC', { '"command"': 'getPatientChecks', '"patientId"': '3' }, printResult);
 // response -> '{}'
 
 // VistaJS.callRpc(logger, configuration, 'VPRCRPC RPC', { '"command"': 'getPatientChecks', '"patientId"': '167' }, printResult);
@@ -79,9 +79,9 @@ VistaJS.callRpc(logger, configuration, 'VPRCRPC RPC', { '"command"': 'getPatient
 
 // VistaJS.callRpc(logger, configuration, 'ORWU USERINFO', printResult);
 
-// VistaJS.authenticate(logger, configuration, printResult);
+RpcClient.authenticate(logger, configuration, printResult);
 
-VistaJS.callRpc(logger, configuration, 'VPR GET PATIENT DATA JSON', { '"patientId"': '8', '"domain"': 'allergy' }, printResult);
+RpcClient.callRpc(logger, configuration, 'VPR GET PATIENT DATA JSON', { '"patientId"': '8', '"domain"': 'allergy' }, printResult);
 
 // VistaJS.callRpc(logger, configuration, 'ORWDAL32 SYMPTOMS', [
 //     VistaJS.RpcParameter.literal(''),
@@ -90,7 +90,7 @@ VistaJS.callRpc(logger, configuration, 'VPR GET PATIENT DATA JSON', { '"patientI
 
 // VistaJS.callRpc(logger, configuration, 'ORWDAL32 SYMPTOMS', ['', '1'], printResult);
 
-VistaJS.callRpc(logger, configuration, 'ORWDAL32 SYMPTOMS', '', '1', printResult);
+RpcClient.callRpc(logger, configuration, 'ORWDAL32 SYMPTOMS', '', '1', printResult);
 // VistaJS.callRpc(logger, configuration, 'ORWDAL32 SYMPTOMS', '', 1, printResult);
 
 // VistaJS.callRpc(logger, configuration, 'ORWDAL32 DEF', printResult);

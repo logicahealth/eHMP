@@ -112,14 +112,6 @@ Then(/^drag and drop the Vitals right by (\d+) and down by (\d+)$/) do |right_by
   perform_drag(applet_preview, right_by, down_by)
 end
 
-# Then(/^drag and drop the Stacked Graph right by (\d+) and down by (\d+)$/) do |right_by, down_by|
-#   driver = TestSupport.driver
-#   sleep 5
-#   wait_until_loaded("Applet Carousel")
-#   applet_preview = driver.find_element(:css, "#data-appletid='stackedGraph'")
-#   perform_drag(applet_preview, right_by, down_by)
-# end
-
 def wait_until_loaded(element)
   navigation = AppletCarousel.instance
   navigation.wait_until_action_element_visible(element, 60)

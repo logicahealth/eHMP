@@ -50,6 +50,9 @@
                 display: block;
                 clear: both;
             }
+            &:hover, &:focus {
+                background: $primary-lightest;
+            }
             .table-row {
                 background: transparent;
                 border-radius: 3px;
@@ -110,9 +113,9 @@
                 margin: 0;
                 float: left;
             }
-            &:hover {
+            &:hover, &:focus {
                 color: $pure-black;
-                background-color: $grey-lightest;
+                background-color: $primary-lightest;
             }
             &.severe, &.moderate {
                 font-weight: bold;

@@ -11,12 +11,6 @@ jds_version = ENV['JDS_VERSION']
 jds_data_version = ENV['JDS_DATA_VERSION']
 ############################################## Artifact Versions #############################################
 
-if node[:machine][:driver] == "ssh"
-  delete_stores = false
-else
-  delete_stores = true
-end
-
 machine_ident = "pjds"
 
 boot_options = node[:ehmp_provision][machine_ident.to_sym]["#{node[:machine][:driver]}".to_sym]
@@ -35,13 +29,14 @@ ehmp_deps = parse_dependency_versions "ehmp_provision"
 
 r_list = []
 r_list << "recipe[packages::enable_internal_sources@#{machine_deps["packages"]}]"
-r_list << "recipe[packages::disable_external_sources@#{machine_deps["packages"]}]" unless node[:machine][:allow_web_access]
+r_list << "recipe[packages::disable_external_sources@#{machine_deps["packages"]}]" unless node[:machine][:allow_web_access] || node[:machine][:driver] == "ssh"
 r_list << "recipe[role_cookbook::#{node[:machine][:driver]}@#{machine_deps["role_cookbook"]}]"
 r_list << "role[pjds]"
 r_list << "recipe[jds::reset_sync@#{ehmp_deps["jds"]}]" if reset
 r_list << "recipe[jds@#{ehmp_deps["jds"]}]"
 r_list << "recipe[jds::pjds@#{ehmp_deps["jds"]}]"
 r_list << "recipe[packages::upload@#{machine_deps["packages"]}]" if node[:machine][:cache_upload]
+r_list << "recipe[packages::remove_localrepo@#{machine_deps["packages"]}]" if node[:machine][:driver] == "ssh"
 
 machine_boot "boot #{machine_ident} machine to the #{node[:machine][:driver]} environment" do
   machine_name machine_ident
@@ -81,7 +76,7 @@ machine machine_name do
       source: artifact_url(node[:ehmp_provision][:artifacts][:jds]),
       jds_data: {
         source: artifact_url(node[:ehmp_provision][:artifacts][:jds_data]),
-        delete_stores: delete_stores
+        dev_pjds: node[:machine][:driver] == "ssh" ? false : true
       }
     },
     beats: {

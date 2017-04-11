@@ -1,7 +1,11 @@
-    define([], function() {
-    "use strict";
+define([], function() {
+    'use strict';
 
     var commonUtils = {
+        // Trigger a refresh in the activities, tasks, and notifications applets.
+        triggerRefresh: function() {
+            ADK.Messaging.getChannel('activities').trigger('create:success');
+        },
         // Compare two versions numbers and return the highest one
         versionCompare: function(v1, v2) {
             // Split version numbers to its parts
@@ -10,8 +14,8 @@
 
             // Shift 0 to the beginning of the version number that might be shorter
             //      ie. 1.2.3 and 1.2.3.4 => 0.1.2.3 and 1.2.3.4
-            while (v1parts.length < v2parts.length) v1parts.unshift("0");
-            while (v2parts.length < v1parts.length) v2parts.unshift("0");
+            while (v1parts.length < v2parts.length) v1parts.unshift('0');
+            while (v2parts.length < v1parts.length) v2parts.unshift('0');
 
             // Convert all values to numbers
             v1parts = v1parts.map(Number);
@@ -30,15 +34,15 @@
             return -1;
         },
         parseAssignment: function(assignment) {
-            if(assignment === 'opt_me') {
-                return "Me";
-            } else if(assignment === 'opt_person') {
+            if (assignment === 'opt_me') {
+                return 'Me';
+            } else if (assignment === 'opt_person') {
                 return 'Person';
-            } else if(assignment === 'opt_myteams') {
+            } else if (assignment === 'opt_myteams') {
                 return 'My Teams';
-            } else if(assignment === 'opt_anyteam') {
+            } else if (assignment === 'opt_anyteam') {
                 return 'Any Team';
-            } else if(assignment === 'opt_patientteams') {
+            } else if (assignment === 'opt_patientteams') {
                 return 'Patient\'s Teams';
             } else {
                 return null;
@@ -46,9 +50,9 @@
         },
         parseUrgencyId: function(urgency) {
             var urgencyId = '';
-            if(urgency === 'routine') {
+            if (urgency === 'routine') {
                 urgencyId =  9;
-            } else if(urgency === 'urgent') {
+            } else if (urgency === 'urgent') {
                 urgencyId =  4;
             }
             return urgencyId.toString();
@@ -59,12 +63,10 @@
 
             // Get only the request deployments
             collection.each(function(model) {
-                // if (model.get('id') === 'Order.Request') {
                 if (model.get('id') === 'Order.Request') {
                     requests.push(model);
                 }
             });
-
 
             // Get the list of just the deployment version numbers
             var modReqs = requests.map(function(model) {
@@ -80,28 +82,15 @@
                     }
                 }
             }
+
             return requests[newestReq];
-        },
-
-        // Escape all the special characters in the models attributes
-        escapeAll: function(model) {
-            // Remove this from attributes
-            model.attributes = _.omit(model.attributes, ['_labelsForSelectedValues']);
-
-            _.each(model.attributes, function(value, key) {
-                if (typeof value === 'string') {
-                    model.attributes[key] = _.escape(value);
-                }
-            });
-
-            return model;
         },
 
         routingCode: function(formModel, formAction) {
             var assignTo = this.parseAssignment(formModel.get('assignment'));
             var userSession = ADK.UserService.getUserSession().attributes;
             if (assignTo === 'Me') {
-                return userSession.site + ";" + userSession.duz[userSession.site];
+                return userSession.site + ';' + userSession.duz[userSession.site];
             } else if (assignTo === 'Person') {
                 return formModel.get('person');
             } else {
@@ -143,7 +132,15 @@
             });
 
             return foundTeam ? foundTeam.teamName : null;
+        },
+        removeWhiteSpace: function(s) {
+            if (s && _.isString(s)) {
+                return s.replace(/ +/g,' ');
+            } else {
+                return s;
+            }
         }
     };
+
     return commonUtils;
 });

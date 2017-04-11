@@ -50,8 +50,8 @@ describe('solr-smart-client', function () {
 
   var stubGetOptions = function(agent){
     return {
-      "host": "IPADDRESS",
-      "port": "8983",
+      "host": "IP       ",
+      "port": "0000",
       "core": "vpr",
       "path": "/solr",
       "agent": null

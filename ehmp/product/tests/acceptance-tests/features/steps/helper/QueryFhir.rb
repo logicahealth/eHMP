@@ -2,8 +2,8 @@ path = File.expand_path '..', __FILE__
 $LOAD_PATH.unshift path unless $LOAD_PATH.include?(path)
 require 'DefaultHmpLogin.rb'
 
-#https://IPADDRES/fhir/patient/_search?name=EIGHT,PATIENT&_format=json&_ack=true
-#https://IPADDRES/fhir/patient?identifier=10108&_format=json&_ack=false
+#https://IP      /fhir/patient/_search?name=EIGHT,PATIENT&_format=json&_ack=true
+#https://IP      /fhir/patient?identifier=10108&_format=json&_ack=false
 class QueryFhir
   def initialize(datatype)
     @path = String.new(DefaultLogin.fhir_url)
@@ -37,7 +37,7 @@ class QueryFhir
   end
 end
 
-#https://IPADDRES/fhir/patient/_search?name=EIGHT,PATIENT&_format=json&_skip=0&_count=20&_ack=true
+#https://IP      /fhir/patient/_search?name=EIGHT,PATIENT&_format=json&_skip=0&_count=20&_ack=true
 class SearchFhir < QueryFhir
   
   def initialize(search_type, search_value)

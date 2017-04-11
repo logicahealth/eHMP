@@ -11,12 +11,16 @@ Then(/^the cwad details view contains$/) do |table|
   cwad = CwadCoverSheet.instance
   @ehmp = PobOverView.new
   @ehmp.wait_until_fld_cwad_details_visible
+  @ehmp.wait_for_fld_cwad_visible_titles 
+  expect(@ehmp).to have_fld_cwad_visible_titles minimum: 1
+  #div[aria-hidden='false'] .cwad-title
   max_attempt = 4
   begin
     table.rows.each do |fields|
       expect(object_exists_in_list(@ehmp.fld_cwad_details, "#{fields[0]}")).to eq(true), "Field '#{fields[0]}' was not found"
     end
   rescue Exception => e
+
     max_attempt-=1
     retry if max_attempt > 0
     raise e if max_attempt <= 0
@@ -25,21 +29,23 @@ Then(/^the cwad details view contains$/) do |table|
 end
 
 When(/^the user opens the "(.*?)" details view$/) do |arg1|
-  driver = TestSupport.driver
-  cwad = CwadCoverSheet.instance
-  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultLogin.wait_time)
+  @ehmp_for_reload = PobCoverSheet.new if @ehmp_for_reload.nil?
   data_original_title = arg1.downcase
   max_attempt = 4
+  cwad_details = CwadDetails.new
+  cwad_details.open_and_title data_original_title
+  @ehmp = PobOverView.new
   begin
-    #css_string = "#patientDemographic-cwad span[data-original-title='#{data_original_title}'] span"
-    xpath_string = "//section[@class='patient-postings']/descendant::span[contains(string(),'#{data_original_title}')]/ancestor::button"
-    posting_element = driver.find_element(:xpath, xpath_string)
-    posting_element.click 
-    @ehmp = PobOverView.new
+    cwad_details.wait_until_btn_open_cwad_visible
+    cwad_details.btn_open_cwad.click 
+    
     @ehmp.wait_until_fld_cwad_details_visible
     @ehmp.wait_until_fld_panel_title_visible
     expect(@ehmp.fld_panel_title.text.downcase).to have_text(data_original_title)
   rescue Exception => e 
+    p "loading visible? #{cwad_details.loading.visible?}"
+    @ehmp_for_reload.load if cwad_details.loading.visible?
+    PobHeaderFooter.new.wait_until_header_footer_elements_loaded
     max_attempt-=1
     retry if max_attempt > 0
     raise e if max_attempt <= 0

@@ -11,7 +11,7 @@ define([
     var APPLET_STORAGE_KEY = 'appletStorage';
 
     function buildAppletStorageName(context) {
-        context = context || ADK.WorkspaceContextRepository.currentContext.get('id');
+        context = context || ADK.WorkspaceContextRepository.currentContextId;
         return context + '-' + APPLET_STORAGE_KEY;
     }
 

@@ -1,6 +1,5 @@
 'use strict';
 
-var dd = require('drilldown');
 var rdk = require('../../core/rdk');
 var moment = require('moment');
 var pjds = rdk.utils.pjdsStore;
@@ -14,7 +13,7 @@ function getPermissionSetsMap(req, res, callback) {
     };
     pjds.get(req, res, permissionSetsPjdsOptions, function(permissionSetsError, permissionSetsResponse) {
         if (permissionSetsError) {
-            var statusCode = dd(permissionSetsResponse)('statusCode').val || rdk.httpstatus.internal_server_error;
+            var statusCode = _.get(permissionSetsResponse, 'statusCode') || rdk.httpstatus.internal_server_error;
             return res.status(statusCode).rdkSend('Error retrieving Permission Sets List from P-JDS');
         } else {
             var permissionSetsMap = {};

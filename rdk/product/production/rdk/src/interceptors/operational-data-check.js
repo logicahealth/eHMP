@@ -19,13 +19,13 @@ module.exports = function(req, res, next) {
         return res.status(500).rdkSend('There was an error processing your request. The error and result have been logged.');
     }
 
+    if (operationDataLoaded[req.site]) {
+        req.logger.info('Used cached <true> operationalData value for site ' + req.site);
+        return next();
+    }
+
     req.app.subsystems.jdsSync.getOperationalStatus(req.site, req, function(err, result) {
         req.logger.info('operationalDataCheck callback invoked');
-
-        if (!(_.result(operationDataLoaded[req.site], true, false))) {
-            req.logger.info('Used cached <true> operationalData value for site ' + req.site);
-            return next();
-        }
 
         if (err || !result) {
             req.logger.error({error: err}, 'Error getting operational status');

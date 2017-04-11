@@ -30,3 +30,13 @@ directory node[:asu][:config_dir] do
   recursive true
   action :delete
 end
+
+directory node[:asu][:pid_dir] do
+  action :delete
+  recursive true
+end
+
+directory node[:asu][:base_dir] do
+  action :delete
+  recursive true
+end

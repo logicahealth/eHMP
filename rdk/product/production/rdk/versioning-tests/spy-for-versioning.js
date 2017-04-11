@@ -15,7 +15,7 @@ module.exports = function(app) {
         httpSpy.startSpying();
         vistajsSpy.startSpying();
         recordSchemas.startRecording(app);
-// TODO: start spying on mongodb
+// FUTURE-TODO: start spying on mongodb
 
         var alwaysEnabled = !!argv['spy-for-versioning'];
         enable(alwaysEnabled);

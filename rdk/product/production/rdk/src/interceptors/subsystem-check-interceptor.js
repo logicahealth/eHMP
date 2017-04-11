@@ -1,11 +1,10 @@
 'use strict';
 
 var _ = require('lodash');
-var dd = require('drilldown');
 
 module.exports = function(req, res, next) {
     req.logger.debug('subsystemCheckInterceptor invoked');
-    var subsystems = dd(req)('_resourceConfigItem')('subsystems').val;
+    var subsystems = _.get(req, '_resourceConfigItem.subsystems');
     if (_.isEmpty(subsystems)) {
         return next();
     }

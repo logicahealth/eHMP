@@ -3,7 +3,6 @@
 var _ = require('lodash');
 var fs = require('fs');
 var fspath = require('path');
-var dd = require('drilldown');
 var stringify = require('json-stable-stringify');
 var generateJsonSchema = require('./generate-json-schema/generate-json-schema');
 
@@ -70,7 +69,7 @@ function saveSchema(schema, req, res) {
 }
 
 function pathsForRequest(req, res) {
-    var path = dd(req)('_resourceConfigItem')('path').val || req.path;
+    var path = _.get(req, '_resourceConfigItem.path') || req.path;
     if (_.startsWith(path, '/')) {
         path = String(path).substring(1);
     }
@@ -98,7 +97,6 @@ function mergeSchemas(existingSchema, schema, req) {
         req.logger.warn({old: existingSchema, 'new': schema}, 'record-schemas-outerceptor.js found different schema types for the same resource path and will overwrite the old schema');
         return;
     }
-    // TODO: compare somehow, to see if the schemas are similar?
     req.logger.info({old: existingSchema, 'new': schema}, 'record-schemas-outerceptor.js will merge schemas');
     schema = _.merge(schema, existingSchema, function(a, b, key) {
         if (key === 'required' && (_.isArray(a) || _.isArray(b))) {

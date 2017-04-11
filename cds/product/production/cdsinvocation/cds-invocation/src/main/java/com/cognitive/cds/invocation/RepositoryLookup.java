@@ -71,9 +71,6 @@ public class RepositoryLookup implements RepositoryLookupIFace {
      */
     public void setIntentMappingAgent(IntentMappingDao intentMappingAgent) {
         this.intentMappingAgent = intentMappingAgent;
-        if (intentMappingAgent != null) {
-            intentMappingAgent.setCacheIntents(caching);
-        }
     }
 
     
@@ -124,9 +121,6 @@ public class RepositoryLookup implements RepositoryLookupIFace {
         this.caching = caching;
         if (engineInfoAgent != null) {
             engineInfoAgent.setCacheEngines(caching);
-        }
-        if (intentMappingAgent != null) {
-            intentMappingAgent.setCacheIntents(caching);
         }
     }
 

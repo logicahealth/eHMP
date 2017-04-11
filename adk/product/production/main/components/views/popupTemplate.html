@@ -1,31 +1,37 @@
 <div class="modal-dialog">
-	<div class="modal-content">
-		<div class="modal-header">
-			<div class="container-fluid bottom-padding-sm top-padding-sm">
-				<div class="row">
-					<div class="col-xs-9">
-						<h2 class="modal-title">{{title}}</h2>
-					</div>
-					<div class="col-xs-3 text-right">
-						<button type="button" class="close btn btn-icon btn-xs left-margin-sm" data-dismiss="modal" title="Press enter to close.">
-							<i class="fa fa-times fa-lg"></i>
-						</button>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="modal-body">
-			<h3>{{header}}</h3>
-			<p>{{body}}</p>
-			<p id="footercontent">{{footer}}</p>
-		</div>
-		{{#if buttons}}
-		<div class="modal-footer">
-			<div class="pull-right">
-				<button type="button" class="btn btn-default btn-sm" id="LgtBtn" title="Press enter to logout.">Logout</button>
-				<button type="button" class="btn btn-default btn-sm" id="ContBtn" title="Press enter to continue.">Continue</button>
-			</div>
-		</div>
-		{{/if}}
-	</div>
+    <div class="modal-content">
+        <div class="modal-header">
+            <div class="container-fluid bottom-padding-sm top-padding-sm">
+                <div class="row">
+                    <div class="col-xs-9">
+                        <h4 class="modal-title all-padding-no">
+                            <i class="fa icon-triangle-exclamation"></i>
+                            {{title}}
+                        </h4>
+                    </div>
+                    {{#unless buttons}}
+                    <div class="col-xs-3 text-right">
+                        <button type="button" class="close btn btn-icon btn-xs left-margin-sm" data-dismiss="modal" title="Press enter to close">
+                            <i class="fa fa-times fa-lg"></i>
+                        </button>
+                    </div>
+                    {{/unless}}
+                </div>
+            </div>
+        </div>
+        <div class="modal-body">
+            <p class="font-size-13 top-padding-sm"><strong>{{header}}</strong></p>
+            <p>{{body}}</p>
+        </div>
+        {{#if buttons}}
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default btn-sm" id="LgtBtn" title="Press enter to logout">Logout</button>
+            <button type="button" class="btn btn-default btn-sm" id="ContBtn" title="Press enter to continue">Continue</button>
+        </div>
+        {{else}}
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" title="Press enter to close">Close</button>
+        </div>
+        {{/if}}
+    </div>
 </div>

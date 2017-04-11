@@ -14,6 +14,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.io.StringReader;
 import java.text.SimpleDateFormat;
+import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -108,7 +109,21 @@ public class Utils
 
 		return builder.parse(is);
 	}
-
-
+	/**
+	 * Check if a String is a valid date format
+	 * @param dateString
+	 * @param format, the format to check
+	 * @return true if valid, false if not valid
+	 */
+	public static boolean isValidDateFormat(String dateString, String format) {
+	    try {
+			SimpleDateFormat df = new SimpleDateFormat(format);
+			df.setLenient(false);
+	        df.parse(dateString);
+	        return true;
+	    } catch (ParseException e) {
+	        return false;
+	    }
+	}
 
 }

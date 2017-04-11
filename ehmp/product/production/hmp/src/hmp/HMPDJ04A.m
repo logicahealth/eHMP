@@ -1,5 +1,5 @@
-HMPDJ04A ;ASMR/MKB - Admissions,PTF ;7/25/13
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**;Sep 01, 2011;Build 3
+HMPDJ04A ;ASMR/MKB - Admissions,PTF;Nov 12, 2015 16:42:22
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**2**;Sep 01, 2011;Build 11
  ;Per VA Directive 6402, this routine should not be modified.
  ;
  ; External References          DBIA#
@@ -33,17 +33,21 @@ ADM(ID,DATE) ; -- admission [from VSIT1]
  S:'DATE DATE=+$G(VAIP(13,1)) S:'VST VST=$$VISIT(DFN,DATE)
  S (ADM("dateTime"),ADM("stay","arrivalDateTime"))=$$JSONDT^HMPUTILS(DATE)
  S:$L($P(VAIP(6),U,2)) ADM("roomBed")=$P(VAIP(6),U,2)
- S MVT=13,I=0 I VADMVT=$G(^DPT(DFN,.105)) D  ;if current admission,
- . S ADM("current")="true",MVT=14            ; use last movement info
- . S X=$G(^DPT(DFN,.101)) S:$L(X) ADM("roomBed")=X
- . K HMPADMIT                                ;kill flag from HMPDJ0
+ ;DE2818, (#.105) CURRENT ADMISSION, changed ^DPT to FileMan, ICR 10035
+ S MVT=13,I=0 I VADMVT=$$GET1^DIQ(2,DFN_",",.105,"I") D  ;if current admission,
+ . S ADM("current")="true",MVT=14  ; use last movement info
+ . S X=$$GET1^DIQ(2,DFN_",",.101,"I") S:$L(X) ADM("roomBed")=X  ;(#.101) ROOM-BED, DE2818
+ . K HMPADMIT  ;kill flag from HMPDJ0
  S SPEC=$G(VAIP(MVT,6)),ADM("specialty")=$P(SPEC,U,2)
  S X=$$SERV^HMPDVSIT(+SPEC),ADM("service")=X
- S HLOC=+$G(^DIC(42,+$G(VAIP(MVT,4)),44)),FAC=$$FAC^HMPD(+HLOC) I HLOC D
+ ;DE2818, changed from ^DIC(42) to FileMan, ICR 10039
+ S HLOC=+$$GET1^DIQ(42,+$G(VAIP(MVT,4))_",",44,"I"),FAC=$$FAC^HMPD(+HLOC) I HLOC D
  . S ADM("locationUid")=$$SETUID^HMPUTILS("location",,+HLOC)
- . S X=$P($G(^SC(+HLOC,0)),U,2) S:X]"" ADM("shortLocationName")=X
- . S ADM("locationName")=$P($G(^SC(HLOC,0)),U)
- . S X=$$AMIS^HMPDVSIT($P($G(^SC(HLOC,0)),U,7))
+ . ;DE2818 begin, changed ^SC to FileMan, ICR 10040
+ . S X=$$GET1^DIQ(44,HLOC_",",1) S:X]"" ADM("shortLocationName")=X  ;(#1) ABBREVIATION
+ . S ADM("locationName")=$$GET1^DIQ(44,HLOC_",",.01)  ;(#.01) NAME
+ . S X=$$AMIS^HMPDVSIT($$GET1^DIQ(44,HLOC_",",8,"I"))  ;(#8) STOP CODE NUMBER
+ . ;DE2818, end
  . S:$L($G(X)) ADM("stopCodeUid")="urn:va:stop-code:"_$P(X,U),ADM("stopCodeName")=$P(X,U,2)
  . S ADM("summary")="${"_ADM("service")_"}:"_ADM("locationName")
  D FACILITY^HMPUTILS(FAC,"ADM")
@@ -62,7 +66,7 @@ ADM(ID,DATE) ; -- admission [from VSIT1]
  S ADM("lastUpdateTime")=$$EN^HMPSTMP("adm") ;RHL 20150102
  S ADM("stampTime")=ADM("lastUpdateTime") ; RHL 20150102
  ;US6734 - pre-compile metastamp
- I $G(HMPMETA) D ADD^HMPMETA("visit",ADM("uid"),ADM("stampTime")) Q:HMPMETA=1  ;US11019/US6734
+ I $G(HMPMETA) D ADD^HMPMETA("visit",ADM("uid"),ADM("stampTime")) Q:HMPMETA=1  ;US6734,US11019
  D ADD^HMPDJ("ADM","visit")
  Q
  ;
@@ -81,13 +85,14 @@ TIU(VISIT,ARR) ; -- add notes to ARR("document")
  ;
 PROV(ARR,I,IEN,ROLE,PRIM) ; -- add providers
  S @ARR@("providers",I,"providerUid")=$$SETUID^HMPUTILS("user",,+IEN)
- S @ARR@("providers",I,"providerName")=$P($G(^VA(200,+IEN,0)),U)
+ S @ARR@("providers",I,"providerName")=$$GET1^DIQ(200,IEN_",",.01)  ;DE2818, changed ^VA(200) to FileMan ICR 10060
  S @ARR@("providers",I,"role")=ROLE
  S:$G(PRIM) @ARR@("providers",I,"primary")="true"
  Q
  ;
 MVT(CA) ; -- add movements to ADM("movement",i,"attribute")
  N DATE,DA,CNT,X S (DATE,CNT)=0
+ ;DE2818, ^DGPM( - ICR 1865
  F  S DATE=$O(^DGPM("APCA",DFN,CA,DATE)) Q:DATE<1  S DA=+$O(^(DATE,0)) I DA'=CA D
  . S X0=$G(^DGPM(DA,0)),CNT=CNT+1
  . S ADM("movements",CNT,"localId")=DA
@@ -95,12 +100,14 @@ MVT(CA) ; -- add movements to ADM("movement",i,"attribute")
  . S ADM("movements",CNT,"movementType")=$$EXTERNAL^DILFD(405,.02,,$P(X0,U,2))
  . S X=+$P(X0,U,19) I X D
  .. S ADM("movements",CNT,"providerUid")=$$SETUID^HMPUTILS("user",,X)
- .. S ADM("movements",CNT,"providerName")=$P($G(^VA(200,X,0)),U)
+ .. S ADM("movements",CNT,"providerName")=$$GET1^DIQ(200,X_",",.01)  ;DE2818, changed ^VA(200) to FileMan ICR 10060
  . S X=+$P(X0,U,9)
  . S:X ADM("movements",CNT,"specialty")=$$EXTERNAL^DILFD(405,.09,,X)
- . S HLOC=+$G(^DIC(42,+$P(X0,U,6),44)),FAC=$$FAC^HMPD(HLOC) I HLOC D
+ . ;DE2818, changed ^DIC(42) to FileMan, ICR 10039
+ . S HLOC=+$$GET1^DIQ(42,+$P(X0,U,6)_",",44,"I"),FAC=$$FAC^HMPD(HLOC) I HLOC D
  .. S ADM("movements",CNT,"locationUid")=$$SETUID^HMPUTILS("location",,HLOC)
- .. S ADM("movements",CNT,"locationName")=$P($G(^SC(HLOC,0)),U)
+ .. ;DE2818, changed ^SC to FileMan, ICR 10040
+ .. S ADM("movements",CNT,"locationName")=$$GET1^DIQ(44,HLOC_",",.01)  ;(#.01) NAME
  Q
  ;
 PTFA(HMPLID) ; -- find ID in ^PXRMINDX(45) and call PTF1 if successful
@@ -119,6 +126,7 @@ PTFA(HMPLID) ; -- find ID in ^PXRMINDX(45) and call PTF1 if successful
  ; 
  N HMPLEN,HMPTYP,HMPID,HMPISYS,HMPTYP,HMPDX,HMPDT,HMPITEM,HMPRDT,HMPX
  S HMPLEN=$L(HMPLID,";"),HMPTYP=$P(HMPLID,";",HMPLEN),HMPID=$P(HMPLID,";",1,HMPLEN-1)
+ ; DE2818, ^PXRMINDX - ICR 4290
  ;Get ICD System from ^PXRMINDX Xref and loop for remaining subscripts
  S HMPISYS="" F  S HMPISYS=$O(^PXRMINDX(45,HMPISYS)) Q:HMPISYS=""  D
  . I '$D(^PXRMINDX(45,HMPISYS,"PNI",+$G(DFN),HMPTYP)) Q
@@ -162,7 +170,8 @@ PTF1 ; Set PTF data into PTF array
  S PTF("drg")=$$GET1^DIQ(45,+HMPLID_",",9,"")
  S PTF("admissionUid")=$$SETUID^HMPUTILS("visit",DFN,"H"_VAIN(1))
  S HMPADM=+$G(VAIN(7))  ; Admission date
- S HMPLOC=+$G(^DIC(42,+$G(VAIN(4)),44))  ; Get location
+ ;DE2818, changed from ^DIC(42) to FileMan, ICR 10039
+ S HMPLOC=+$$GET1^DIQ(42,+$G(VAIN(4))_",",44,"I")  ; Get location
  S:HMPADM PTF("arrivalDateTime")=$$JSONDT^HMPUTILS(HMPADM)
  S:HMPDIS PTF("dischargeDateTime")=$$JSONDT^HMPUTILS(HMPDIS)
  S HMPFAC=$$FAC^HMPD(HMPLOC) D:HMPFAC FACILITY^HMPUTILS(HMPFAC,"PTF")
@@ -176,12 +185,12 @@ PTF1 ; Set PTF data into PTF array
  S PTF("icdCode")=$$SETNCS^HMPUTILS("icd",$P(HMPX,U,2))
  S PTF("icdName")=$P(HMPX,U,4)
   ;US6734 - pre-compile metastamp
- I $G(HMPMETA) D ADD^HMPMETA("ptf",PTF("uid"),PTF("stampTime")) Q:HMPMETA=1  ;US11019/US6734
+ I $G(HMPMETA) D ADD^HMPMETA("ptf",PTF("uid"),PTF("stampTime")) Q:HMPMETA=1  ;US6734,US11019
  D ADD^HMPDJ("PTF","ptf")
  Q
  ;
 VISIT(DFN,DATE) ; -- Return visit# for admission
  N X,Y
  S X=9999999-$P(DATE,".")_"."_$P(DATE,".",2)
- S Y=+$O(^AUPNVSIT("AAH",DFN,X,0))
+ S Y=+$O(^AUPNVSIT("AAH",DFN,X,0))  ;DE2818, ICR 2028
  Q Y

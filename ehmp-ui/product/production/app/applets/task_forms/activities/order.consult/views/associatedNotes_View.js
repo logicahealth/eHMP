@@ -4,48 +4,46 @@ define([
     'underscore',
     'handlebars',
     'hbs!app/applets/task_forms/activities/order.consult/templates/associatedNotes_Template',
-    'app/applets/notes/writeback/formUtil'
-    ], function(Backbone, Marionette, _, Handlebars, associatedNotesTemplate, NotesFormUtil) {
+    'app/applets/notes/writeback/formUtil',
+    'app/applets/notes/writeback/modelUtil',
+    'app/applets/notes/preview/preview',
+    'app/applets/notes/appConfig'
+    ], function(Backbone, Marionette, _, Handlebars, associatedNotesTemplate, NotesFormUtil, NotesModelUtil, PreviewView, CONFIG) {
         'use strict';
 
-        var AssociatedNoteChildView = Backbone.Marionette.ItemView.extend({
-            template: Handlebars.compile('<a note-uid="{{uid}}">{{title}}</a>'),
+        return Backbone.Marionette.ItemView.extend({
+            template: associatedNotesTemplate,
             events: {
-                'click': 'openNoteModal'
+                'click a': 'openNoteModal'
+            },
+            templateHelpers: function(){
+                return {
+                    showNoteLink: function(){
+                        if(_.has(this.associatedNoteClinicalObject, 'data.status') && this.associatedNoteClinicalObject.data.status.toUpperCase() === 'COMPLETED'){
+                            return true;
+                        }
+
+                        return false;
+                    }
+                };
             },
             openNoteModal: function(e){
                 e.preventDefault();
-                var patient = ADK.PatientRecordService.getCurrentPatient();
-
-                var fetchOptions = {
-                    resourceTitle: 'patient-record-notes',
-                    criteria: {
-                        localPid: patient.get('pid')
-                    },
-                    onSuccess: function(collection, response){
-                        var collectionIndex;
-
-                        if(collection.at(0).get('notes').length > 0){
-                            collectionIndex = 0;
-                        } else if(collection.at(1).get('notes').length > 0){
-                            collectionIndex = 1;
-                        } else if(collection.at(2).get('notes').length > 0){
-                            collectionIndex = 2;
+                var noteClinicalObject = new Backbone.Model(this.model.get('associatedNoteClinicalObject'));
+                var contextViewType = ADK.WorkspaceContextRepository.currentContext.get('id');
+                if(contextViewType === 'staff'){
+                    ADK.PatientRecordService.setCurrentPatient(this.model.get('pid'), {
+                        reconfirm: true,
+                        navigation: true,
+                        staffnavAction: {
+                            channel: 'notes',
+                            event: 'note:detail',
+                            data: noteClinicalObject
                         }
-
-                        if(!_.isUndefined(collectionIndex)){
-                            var model = new Backbone.Model(collection.at(collectionIndex).get('notes')[0]);
-                            NotesFormUtil.launchDraggablePreview(model, true);
-                        }
-                    }
-                };
-                ADK.PatientRecordService.fetchCollection(fetchOptions);
+                    });
+                } else {
+                    ADK.Messaging.getChannel('notes').trigger('note:detail', noteClinicalObject);
+                }
             }
-        });
-
-        return Backbone.Marionette.CompositeView.extend({
-            template: associatedNotesTemplate,
-            childView: AssociatedNoteChildView,
-            childViewContainer: '#associatedNotesContainer'
         });
     });

@@ -126,6 +126,15 @@ vista_fileman "create_vpr_subscription" do
   not_if { node[:vista][:no_reset] }
 end
 
+# add entry to HMP SUBSCRIPTION file
+vista_fileman "create_hmp_subscription" do
+  action          :create
+  file            "800000"
+  field_values    ".01" => "hmp-development-box"
+  log             node[:vista][:chef_log]
+  not_if { node[:vista][:no_reset] }
+end
+
 vpr_subscription_entry = {
   ".01" => "2-hmp-2"
 }

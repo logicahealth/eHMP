@@ -9,7 +9,7 @@ define(function() {
             id: "patient_search",
             title: "Patient Search",
             region: "center",
-            viewType: 'full'
+            viewType: 'expanded'
         }],
         patientRequired: false
     };

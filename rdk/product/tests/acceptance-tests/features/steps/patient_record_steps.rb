@@ -29,6 +29,7 @@ do |pid, query, group_field, group_value, whitelist|
   resource.add_parameter('group.field', group_field) unless group_field.nil?
   resource.add_parameter('group.value', group_value) unless group_value.nil?
   resource.add_parameter('fields', whitelist) unless whitelist.nil?
+  resource.add_acknowledge('true')
 
   path = resource.path
   @response = HTTPartyRDK.get(path)

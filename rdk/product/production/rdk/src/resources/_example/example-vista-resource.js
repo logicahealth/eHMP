@@ -3,6 +3,8 @@
 var RpcClient = require('vista-js').RpcClient;
 var RpcParameter = RpcClient.RpcParameter;
 var _ = require('lodash');
+var rdk = require('../../core/rdk');
+var nullchecker = rdk.utils.nullchecker;
 
 function getResourceConfig() {
     return [{
@@ -21,7 +23,9 @@ function getResourceConfig() {
 
 function exampleVistaGet(req, res) {
     req.logger.debug('example VistA resource GET called');
-
+    if(nullchecker.isNullish(req.interceptorResults.patientIdentifiers.dfn)){
+        return res.status(500).rdkSend('Missing required patient identifiers');
+    }
     var vistaSite = '9E7A';
     var patientDfn = '3';
     req.audit.patientId = vistaSite + ';' + patientDfn;
@@ -37,7 +41,7 @@ function exampleVistaGet(req, res) {
     });
     var parameters = [];
     var rpcName = 'ORWPT CWAD';
-    parameters.push(new RpcParameter.literal(patientDfn));
+    parameters.push(new RpcParameter.literal(req.interceptorResults.patientIdentifiers.dfn));
     return RpcClient.callRpc(
         req.logger, vistaConfig, rpcName, parameters,
         function(err, result) {

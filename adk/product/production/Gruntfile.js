@@ -213,7 +213,7 @@ module.exports = function (grunt) {
                     archive: 'build/<%= pkg["artifact-name"] %>.tgz'
                 },
                 files: [
-                    { expand: true, src: ['**/*', '!**/documentation/**', '!**/node_modules/**', '!build/**', '!applets/**', '!**/test/**', '!*SpecRunner.html', '!README.md', '!.gitignore', '!**/package.json', '!**/Gruntfile.js', '!**/*.groovy', '!**/*config.rb', '!build.gradle', '!**/*.jade', '!**/*.scss', '!graph/**', '!gems/**', '!**/*.gem', '!Gemfile', '!app/**', '!Gemfile.lock'] }
+                    { expand: true, src: ['**/*', '!**/node_modules/**', '!build/**', '!applets/**', '!**/test/**', '!*SpecRunner.html', '!README.md', '!.gitignore', '!**/package.json', '!**/Gruntfile.js', '!**/*.groovy', '!**/*config.rb', '!build.gradle', '!**/*.jade', '!**/*.scss', '!graph/**', '!gems/**', '!**/*.gem', '!Gemfile', '!app/**', '!Gemfile.lock'] }
                 ]
             }
         },

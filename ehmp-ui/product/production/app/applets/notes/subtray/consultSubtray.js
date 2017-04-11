@@ -4,10 +4,11 @@ define([
     'underscore',
     'jquery',
     'handlebars',
+    'moment',
     'hbs!app/applets/notes/subtray/consultTemplate',
     'hbs!app/applets/notes/subtray/consultSubtrayTemplate',
     'app/applets/notes/writeback/errorView'
-], function(Backbone, Marionette, _, $, Handlebars, ConsultTemplate, ConsultSubtrayTemplate, ErrorViewModal) {
+], function(Backbone, Marionette, _, $, Handlebars, moment, ConsultTemplate, ConsultSubtrayTemplate, ErrorViewModal) {
     'use strict';
     var LINE_LENGTH = 90;
     var consultChannel = ADK.Messaging.getChannel('consult-subtray');
@@ -15,9 +16,10 @@ define([
 
     var getConsultText = function(consult) {
         var text = consult.name;
-        text += consult.associatedCondition ? ' - ' + consult.associatedCondition + '\n' : '';
-        text += consult.request ? consult.request + '\n' : '';
-        text += consult.comment ? consult.comment + '\n' : '';
+        text += consult.associatedCondition ? ': Assoc: ' + consult.associatedCondition : '';
+        text += '\nReason for consult:';
+        text += consult.request ? '\nRequest - ' + consult.request : '';
+        text += consult.comment ? '\nComment (Clinical History) - ' + consult.comment : '';
         return text;
     };
 

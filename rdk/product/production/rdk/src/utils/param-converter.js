@@ -1,4 +1,3 @@
-/* jslint node: true */
 /* jshint bitwise: false */
 'use strict';
 var moment = require('moment');

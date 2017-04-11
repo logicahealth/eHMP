@@ -13,7 +13,7 @@ define([
         extraClasses: ["row select-encounter-container"],
         items: [{
             control: "container",
-            extraClasses: ["col-md-6"],
+            extraClasses: ["col-xs-12", "top-margin-sm"],
             items: [{
                 control: "select",
                 label: "Select Encounter Provider",
@@ -35,7 +35,7 @@ define([
             items: [{
                 control: "container",
                 extraClasses: ["col-xs-12"],
-                template: '<p>Viewing {{clinicAppointmentsFromDate}} to {{clinicAppointmentsThroughDate}}<p>'
+                template: '<p class="top-padding-sm bottom-padding-sm">Viewing <strong>{{clinicAppointmentsFromDate}}</strong> to <strong>{{clinicAppointmentsThroughDate}}</strong><p>'
             }]
         }, {
             control: "container",
@@ -71,8 +71,8 @@ define([
             extraClasses: ["row"],
             items: [{
                 control: "container",
-                extraClasses: ["col-md-12"],
-                template: '<span>Viewing {{hospitalAdmissionFromDate}} to {{hospitalAdmissionThroughDate}}</span>'
+                extraClasses: ["col-xs-12"],
+                template: '<p class="top-padding-sm bottom-padding-sm">Viewing <strong>{{hospitalAdmissionFromDate}}</strong> to <strong>{{hospitalAdmissionThroughDate}}</strong></p>'
             }]
         }, {
             control: "container",
@@ -100,6 +100,7 @@ define([
             }]
         }]
     };
+
     var newVisitTab = {
         title: "New Visit",
         items: [{
@@ -107,15 +108,15 @@ define([
             extraClasses: ["row"],
             items: [{
                 control: "container",
-                extraClasses: ["col-md-12"],
-                template: '<h6>New Visit</h6>'
+                extraClasses: ["col-xs-12"],
+                template: '<p>New Visit</p>'
             }]
         }, {
             control: "container",
             extraClasses: ["row"],
             items: [{
                 control: "container",
-                extraClasses: ["col-md-6"],
+                extraClasses: ["col-xs-12"],
                 items: [{
                     control: "select",
                     label: "New Encounter Location",
@@ -126,12 +127,16 @@ define([
                     showFilter: true,
                     groupEnabled: true
                 }]
-            }, {
+            }]
+        }, {
+            control: "container",
+            extraClasses: ["row"],
+            items: [{
                 control: "container",
-                extraClasses: ["col-md-6"],
+                extraClasses: ["col-xs-12", "all-padding-no"],
                 items: [{
                     control: "container",
-                    extraClasses: ["col-md-6"],
+                    extraClasses: ["col-xs-6"],
                     items: [{
                         control: "datepicker",
                         name: "newVisitDate",
@@ -140,7 +145,7 @@ define([
                     }]
                 }, {
                     control: "container",
-                    extraClasses: ["col-md-6"],
+                    extraClasses: ["col-xs-6"],
                     items: [{
                         control: "timepicker",
                         placeholder: "HH:MM",
@@ -148,26 +153,30 @@ define([
                         srOnlyLabel: false,
                         label: "Time of Visit"
                     }]
-                }, {
-                    control: "container",
-                    extraClasses: ["col-md-12"],
-                    items: [{
-                        control: "alertBanner",
-                        name: "newVisitDateTimeWarning",
-                        type: "warning"
-                    }]
-                }, {
-                    control: "container",
-                    extraClasses: ["row"],
-                    items: [{
-                        control: "container",
-                        extraClasses: ["col-md-12"],
-                        items: [{
-                            control: "checkbox",
-                            name: "isHistorical",
-                            label: "Historical Visit: a visit that occurred at some time in the past or at some other location (possibly non-VA) but is not used for workload credit."
-                        }]
-                    }]
+                }]
+            }]
+        }, {
+            control: "container",
+            extraClasses: ["row", "top-margin-md"],
+            items: [{
+                control: "container",
+                extraClasses: ["col-xs-12"],
+                items: [{
+                    control: "alertBanner",
+                    name: "newVisitDateTimeWarning",
+                    type: "warning"
+                }]
+            }]
+        }, {
+            control: "container",
+            extraClasses: ["row"],
+            items: [{
+                control: "container",
+                extraClasses: ["col-xs-12"],
+                items: [{
+                    control: "checkbox",
+                    name: "isHistorical",
+                    label: "Historical Visit: a visit that occurred at some time in the past or at some other location (possibly non-VA) but is not used for workload credit."
                 }]
             }]
         }]

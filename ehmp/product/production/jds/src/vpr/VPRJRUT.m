@@ -160,7 +160,7 @@ APPLYTLT ; apply query time template
 BLDHEAD(TOTAL,COUNT,START,LIMIT) ; Build the object header
  N X,UPDATED
  S UPDATED=$$CURRTIME
- S X="{""apiVersion"":""1.0"",""data"":{""updated"":"_UPDATED_","
+ S X="{""data"":{""updated"":"_UPDATED_","
  S X=X_"""totalItems"":"_TOTAL_","
  S X=X_"""currentItemCount"":"_COUNT_","
  I LIMIT'=999999 D  ; only set this if paging

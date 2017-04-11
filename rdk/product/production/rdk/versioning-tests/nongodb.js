@@ -1,6 +1,6 @@
 'use strict';
 
-// TODO: mock mongodb requests/responses
+// FUTURE-TODO: mock mongodb requests/responses
 
 /*
 db.open

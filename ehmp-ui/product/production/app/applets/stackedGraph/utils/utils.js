@@ -1,8 +1,9 @@
 define([
     'backbone',
     'marionette',
-    'underscore'
-], function (Backbone, Marionette, _) {
+    'underscore',
+    'moment'
+], function (Backbone, Marionette, _, moment) {
     "use strict";
 
     var params = {

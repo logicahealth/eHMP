@@ -33,23 +33,29 @@ define([
         },
 
         template: HeaderTemplate,
-        getNextModal: function(id) {
+        onAttach: function() {
+            this.checkIfModalIsEnd();
+        },
+        checkIfModalIsEnd: function() {
             var next = _.indexOf(modals, this.model) + 1;
             if (next >= modals.length) {
-                this.getModals();
-                next = 0;
+                this.$el.closest('.modal').find('#labssNext').attr('disabled', true);
             }
-            var model = modals[next];
-            this.setNextPrevModal(model, id);
-        },
-        getPrevModal: function(id) {
-            var next = _.indexOf(modals, this.model) - 1;
+
+            next = _.indexOf(modals, this.model) - 1;
             if (next < 0) {
-                this.getModals();
-                next = modals.length - 1;
+                this.$el.closest('.modal').find('#labssPrevious').attr('disabled', true);
             }
+        },
+        getNextModal: function() {
+            var next = _.indexOf(modals, this.model) + 1;
             var model = modals[next];
-            this.setNextPrevModal(model, id);
+            this.setNextPrevModal(model);
+        },
+        getPrevModal: function() {
+            var next = _.indexOf(modals, this.model) - 1;
+            var model = modals[next];
+            this.setNextPrevModal(model);
         },
         getModals: function() {
             modals = [];
@@ -72,7 +78,7 @@ define([
 
             });
         },
-        setNextPrevModal: function(model, id) {
+        setNextPrevModal: function(model) {
 
             if (this.showNavHeader) {
                 model.attributes.navHeader = true;
@@ -93,7 +99,7 @@ define([
             }
 
             var AppletUiHelper = require('app/applets/lab_results_grid/appletUiHelpers');
-            AppletUiHelper.getDetailView(model, null, this.appletOptions, true, AppletUiHelper.showModal, AppletUiHelper.showErrorModal, id);
+            AppletUiHelper.getDetailView(model, null, this.appletOptions, true, AppletUiHelper.showModal, AppletUiHelper.showErrorModal);
         }
 
     });

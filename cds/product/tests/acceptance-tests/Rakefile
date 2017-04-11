@@ -92,11 +92,12 @@ def environment_endpoints(env)
       ENV["OPENCDS_IP"] = knife_search_for_ip("opencds")
       ENV["OPENCDS_PORT"] = "8080"
       ENV["CDSDB_IP"] = knife_search_for_ip("cdsdb")
-      ENV["CDSDB_PORT"] = "27017"
+      ENV["CDSDB_PORT"] = knife_search_for_attribute("cdsdb", %w(mongodb config port), "default")
       ip = knife_search_for_ip("cdsdashboard")
       ENV["CDSDASHBOARD_IP"] = 'http://' + "#{ip}:8080"
     rescue => error
-      raise error if Rake.application.top_level_tasks.include? "cdsTests"
+      raise error
+      #raise error if Rake.application.top_level_tasks.include? "cdsTests"
     end
   when "aws"
     ENV["RDK_IP"] = knife_search_for_ip("resource_server") 
@@ -111,7 +112,7 @@ def environment_endpoints(env)
     ENV["OPENCDS_IP"] = knife_search_for_ip("opencds")
     ENV["OPENCDS_PORT"] = "8080"
     ENV["CDSDB_IP"] = knife_search_for_ip("cdsdb")
-    ENV["CDSDB_PORT"] = "27017"
+    ENV["CDSDB_PORT"] = knife_search_for_attribute("cdsdb", %w(mongodb config port), "default")
     ip = knife_search_for_ip("cdsdashboard")
     ENV["CDSDASHBOARD_IP"] = 'https://' + "#{ip}"
   else
@@ -120,7 +121,25 @@ def environment_endpoints(env)
 end
 
 def knife_search_for_ip(machine_name)
-  stack = ENV['JOB_NAME'] || ENV['USER']
+  release = File.read(File.dirname(__FILE__) + "/../../../infrastructure/properties/releaseVersion")
+  stack = ENV['JOB_NAME'] || "#{ENV['USER']}-#{release}" || ENV['USER']
+  if ENV.key?('BUNDLE_BIN_PATH')
+    raw_search = Bundler.with_clean_env { `/opt/chefdk/bin/knife search node \'role:#{machine_name} AND stack:#{stack}\' -Fj --config ~/Projects/vistacore/.chef/knife.rb` }
+  else
+    raw_search = `/opt/chefdk/bin/knife search node \'role:#{machine_name} AND stack:#{stack}\' -Fj --config ~/Projects/vistacore/.chef/knife.rb`
+  end
+  parsed_search = JSON.parse(raw_search)
+  puts '=========================================================================='
+  puts parsed_search
+  puts '=========================================================================='
+  fail "More than one node with that name found" if parsed_search["results"] > 1
+  fail "No node with that name found" if parsed_search["results"] == 0
+  ip = parsed_search["rows"][0]['automatic']['ipaddress']
+end
+
+def knife_search_for_attribute(machine_name, attribute, attribute_type)
+  release = File.read(File.dirname(__FILE__) + "/../../../infrastructure/properties/releaseVersion")
+  stack = ENV['JOB_NAME'] || "#{ENV['USER']}-#{release}" || ENV['USER']
   if ENV.key?('BUNDLE_BIN_PATH')
     raw_search = Bundler.with_clean_env { `/opt/chefdk/bin/knife search node \'role:#{machine_name} AND stack:#{stack}\' -Fj --config ~/Projects/vistacore/.chef/knife.rb` }
   else
@@ -129,5 +148,13 @@ def knife_search_for_ip(machine_name)
   parsed_search = JSON.parse(raw_search)
   fail "More than one node with that name found" if parsed_search["results"] > 1
   fail "No node with that name found" if parsed_search["results"] == 0
-  ip = parsed_search["rows"][0]['automatic']['ipaddress']
+  node_attributes = parsed_search["rows"][0][attribute_type]
+  depth = 0
+  while node_attributes.is_a?(Hash) && node_attributes.keys.size > 0
+    node_attribute = attribute[depth]
+    node_attributes = node_attributes["#{node_attribute}"]
+    depth = depth + 1
+    puts "#{node_attribute} = #{node_attributes}"
+  end
+  return node_attributes.inspect
 end

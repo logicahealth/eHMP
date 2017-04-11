@@ -150,9 +150,6 @@ class SeleniumCommand
 
     wait_until_page_loaded()
     sleep 1
-  # wait_until_a_element_displayed()
-  # // ToDo Check if new window open, run the step in the new window.
-  # switch_to_new_win_pop_up()
   end
 
   def self.element_visible?(method = "SEARCH_ID_NAME_XPATH_LINK", locator)
@@ -166,10 +163,6 @@ class SeleniumCommand
 
     element = find_element(method, locator)
     element.click
-
-  # wait_until_a_element_displayed()
-  # // ToDo Check if new window open, run the step in the new window.
-  # switch_to_new_win_pop_up()
   end
 
   def self.send_keys(method = "SEARCH_ID_NAME_XPATH_LINK", locator, value)

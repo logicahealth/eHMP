@@ -2,37 +2,42 @@
 
 var async = require('async');
 var _ = require('lodash');
-var dd = require('drilldown');
 var jdsDirectWriter = require('./jds-direct-writer');
 var rpcClientFactory = require('./rpc-client-factory');
 var readOnlyRpcClientFactory = require('./../../subsystems/vista-read-only-subsystem');
 var pjdsWriter = require('../orders/common/orders-common-pjds-writer');
 
 function getVistaConfig(logger, appConfig, user) {
-    var site = dd(user)('site').val;
+    var site = _.get(user, 'site');
     if(!site) {
         logger.error('getVistaConfig: user site not found');
     }
-    var siteConfiguration = dd(appConfig)('vistaSites')(site).val;
+    var siteConfiguration = _.get(appConfig, ['vistaSites', site]);
     if(!siteConfiguration) {
         logger.error('getVistaConfig: site configuration not found');
     }
-    var context = dd(appConfig)('rpcConfig')('context').val;
+    var context = _.get(appConfig, ['rpcConfig', 'context']);
     if(!context) {
         logger.error('getVistaConfig: app rpcConfig context not found');
     }
-    var accessCode = dd(user)('accessCode').val;
+    var accessCode = _.get(user, 'accessCode');
     if(!accessCode) {
         logger.error('getVistaConfig: user access code not found');
     }
-    var verifyCode = dd(user)('verifyCode').val;
+    var verifyCode = _.get(user, 'verifyCode');
     if(!verifyCode) {
         logger.error('getVistaConfig: user verify code not found');
     }
+    var division = _.get(user, 'division');
+    if(!division) {
+        logger.error('getVistaConfig: user division not found');
+    }
     var vistaConfig = _.extend({}, siteConfiguration, {
+        site: site,
         context: context,
         accessCode: accessCode,
-        verifyCode: verifyCode
+        verifyCode: verifyCode,
+        division: division
     });
     return vistaConfig;
 }

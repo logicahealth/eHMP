@@ -6,6 +6,7 @@ define([
     var changeAssignment = function(form) {
         form.model.unset('person');
         form.model.unset('facility');
+        form.model.unset('facilityName');
         form.model.unset('team');
         form.model.unset('roles');
 
@@ -85,39 +86,66 @@ define([
 
     var retrieveFacilityPicklist = function(form) {
         form.ui.facilityField.trigger('control:disabled', true);
+        showLoader(form, 'Loading');
 
-        var facilities = new ADK.UIResources.Picklist.Team_Management.Facilities();
+        var fetchOptions = {
+            type: 'GET',
+            resourceTitle: 'authentication-list',
+            cache: true,
+            viewModel: {
+                parse: function(response) {
+                    return {
+                        facilityID: response.division,
+                        vistaName: response.name
+                    };
+                }
+            }
+        };
+        var facilitiesCollection = ADK.ResourceService.fetchCollection(fetchOptions);
+        form.listenToOnce(facilitiesCollection, 'sync', function(collection, response) {
+            if (response.status === 200) {
+                if (response && response.data && response.data.items) {
+                    var items = collection.models;
+                    collection.comparator = function(siteInfo) {
+                        return siteInfo.get('vistaName');
+                    };
+                    collection.sort();
+                    form.ui.facilityField.trigger('control:picklist:set', [collection]);
+                    form.ui.facilityField.trigger('control:disabled', false);
 
-        form.listenToOnce(facilities, 'read:success', function(collection, response) {
-            if (response && response.data) {
-                var items = _.sortBy(response.data, 'vistaName');
-                form.ui.facilityField.trigger('control:picklist:set', [items]);
-                form.ui.facilityField.trigger('control:disabled', false);
-
-                var assignment = form.model.get('assignment');
-                if (form.model.has('pendingFacility')) {
-                    form.model.set('facility', form.model.get('pendingFacility'));
-                    form.model.unset('pendingFacility');
-                } else {
-                    if (assignment === 'opt_person') {
-                        var userFacilityName = ADK.UserService.getUserSession().attributes.facility;
-                        if (userFacilityName) {
-                            var matchingFacility = _.find(items, function(item) {
-                                if (item.vistaName) {
-                                    return (item.vistaName.indexOf(userFacilityName) > -1);
+                    var assignment = form.model.get('assignment');
+                    if (form.model.has('pendingFacility')) {
+                        form.model.set('facility', form.model.get('pendingFacility'));
+                        form.model.set('facilityName', form.model.get('pendingFacilityName'));
+                        form.model.unset('pendingFacility');
+                        form.model.unset('pendingFacilityName');
+                        hideLoader(form);
+                    } else {
+                        if (assignment === 'opt_person') {
+                            var userFacilityName = ADK.UserService.getUserSession().attributes.facility;
+                            if (userFacilityName) {
+                                var matchingFacility = _.find(items, function(item) {
+                                    if (!_.isUndefined(item.get('vistaName'))) {
+                                        return (item.get('vistaName').indexOf(userFacilityName) > -1);
+                                    }
+                                    return false;
+                                });
+                                if (matchingFacility && !_.isUndefined(matchingFacility.get('facilityID'))) {
+                                    form.model.set('facility', matchingFacility.get('facilityID'));
+                                    form.model.set('facilityName', matchingFacility.get('vistaName'));
                                 }
-                                return false;
-                            });
-                            if (matchingFacility && matchingFacility.facilityID) {
-                                form.model.set('facility', matchingFacility.facilityID);
                             }
+                        } else {
+                            hideLoader(form);
                         }
                     }
                 }
-            }
-        });
 
-        facilities.fetch();
+            } else {
+                hideLoader(form);
+            }
+
+        });
     };
 
     function cloneArray(a) {
@@ -128,8 +156,20 @@ define([
         return rv;
     }
 
+    function hideLoader(form) {
+        form.$el.trigger('tray.loaderHide');
+    }
+
+    function showLoader(form, message) {
+        form.$el.trigger('tray.loaderShow', {
+            loadingString: message
+        });
+    }
+
     function cleanupAfterTeamListLoad(form) {
         form.ui.teamField.trigger('control:disabled', false);
+
+        hideLoader(form);
 
         if (form.model.has('pendingTeam')) {
             form.model.set('team', form.model.get('pendingTeam'));
@@ -159,6 +199,8 @@ define([
             form.ui.personContainer.trigger('control:hidden', false);
             form.ui.personField.trigger('control:hidden', false);
 
+            showLoader(form, 'Loading');
+
             var people = new ADK.UIResources.Picklist.Team_Management.PeopleAtAFacility();
 
             form.listenToOnce(people, 'read:success', function(collection, response) {
@@ -167,17 +209,28 @@ define([
                     form.ui.personField.trigger('control:picklist:set', [items]);
                     form.ui.personField.trigger('control:disabled', false);
 
+                    form.model.set('storedPersonsList', items);
+
                     if (form.model.has('pendingPerson')) {
                         form.model.set('person', form.model.get('pendingPerson'));
                         form.model.unset('pendingPerson');
                     }
                 }
+                hideLoader(form);
             });
 
-            people.fetch({facilityID: setFacility});
+            form.listenToOnce(people, 'read:error', function() {
+                hideLoader(form);
+            });
+
+            people.fetch({
+                facilityID: setFacility
+            });
         } else if (setAssignment === 'opt_anyteam') {
             form.ui.teamContainer.trigger('control:hidden', false);
             form.ui.teamField.trigger('control:hidden', false);
+
+            showLoader(form, 'Loading');
 
             var teams = new ADK.UIResources.Picklist.Team_Management.Teams.ForAFacility();
 
@@ -214,6 +267,8 @@ define([
 
         var teams = new ADK.UIResources.Picklist.Team_Management.Teams.ForAUser();
 
+        showLoader(form, 'Loading');
+
         form.listenToOnce(teams, 'read:success', function(collection, response) {
             if (response && response.data) {
                 var items = _.sortBy(response.data, 'teamName');
@@ -227,6 +282,8 @@ define([
                 form.ui.teamField.trigger('control:picklist:set', [groups]);
 
                 var patientAssociatedTeams = new ADK.UIResources.Picklist.Team_Management.Teams.PatientRelatedForAUser();
+
+                showLoader(form, 'Loading');
 
                 form.listenToOnce(patientAssociatedTeams, 'read:success', function(collection, response) {
                     if (response && response.data && (response.data.length > 0)) {
@@ -257,6 +314,7 @@ define([
                     patientID: patientID
                 });
             }
+            hideLoader(form);
         });
 
         teams.fetch({
@@ -270,21 +328,23 @@ define([
         var site = ADK.UserService.getUserSession().get('site');
         var user = ADK.UserService.getUserSession().get('duz')[site];
 
-         var patientAssociatedTeams = new ADK.UIResources.Picklist.Team_Management.Teams.ForAPatient();
+        var patientAssociatedTeams = new ADK.UIResources.Picklist.Team_Management.Teams.ForAPatient();
 
-         form.listenToOnce(patientAssociatedTeams, 'read:success', function(collection, response) {
-             if (response && response.data && (response.data.length > 0)) {
-                 var items = _.sortBy(response.data, 'teamName');
-                 var groups = [{
-                     group: 'Teams Associated with Patient',
-                     pickList: items
-                 }];
+        showLoader(form, 'Loading');
 
-                 form.model.set('storedTeamsList', items);
-                 form.ui.teamField.trigger('control:picklist:set', [groups]);
-             }
-             cleanupAfterTeamListLoad(form);
-         });
+        form.listenToOnce(patientAssociatedTeams, 'read:success', function(collection, response) {
+            if (response && response.data && (response.data.length > 0)) {
+                var items = _.sortBy(response.data, 'teamName');
+                var groups = [{
+                    group: 'Teams Associated with Patient',
+                    pickList: items
+                }];
+
+                form.model.set('storedTeamsList', items);
+                form.ui.teamField.trigger('control:picklist:set', [groups]);
+            }
+            cleanupAfterTeamListLoad(form);
+        });
 
         form.listenToOnce(patientAssociatedTeams, 'read:error', function() {
             cleanupAfterTeamListLoad(form);

@@ -3,6 +3,7 @@
 # Recipe:: cache
 #
 
+
 yum_package node[:vista][:cache_package] do
   version node[:vista][:cache_version]
   arch node[:vista][:cache_arch]
@@ -144,6 +145,33 @@ vista_mumps_block "Update Primary HFS directory" do
   ]
 end
 
+vista_mumps_block "Update vm domains" do
+  duz       1
+  programmer_mode true
+  namespace "VISTA"
+  command [
+    'S XUMF=1',
+    "S STN(#{vista_station['panorama']})=\"PANORAMA\",STN(#{vista_station['kodak']})=\"KODAK\"",
+    "S STN=\"\" F  S STN=$O(STN(STN)) Q:STN=\"\"  S NAME=\"ZZZ\"_STN(STN)_\".VISTACORE.US\",IEN=$$FIND1^DIC(4.2,,\"X\",NAME) I +IEN K FDA S FDA(4.2,IEN_\",\",.01)=$S(STN=#{node[:vista][:station_number]}:\"@\",1:$E(NAME,4,30)),FDA(4.2,IEN_\",\",5.5)=STN D FILE^DIE(,\"FDA\")"
+  ]
+  log node[:vista][:chef_log]
+end
+
+vista_mumps_block "Update Panorama Institution to point to correct domain" do
+  duz       1
+  programmer_mode true
+  namespace "VISTA"
+  command [
+    'S XUMF=1',
+    'K FDA,IENA,ERR',
+    'S FDA(4,"?1,",.01)="CAMP MASTER"',
+    'S FDA(4,"?1,",60)=$$FIND1^DIC(4.2,,"X","PANORAMA.VISTACORE.US")',
+    'D UPDATE^DIE(,"FDA",,"ERR")',
+    'W $S($D(ERR):"Error updating Institution",1:"Panorama Institution Updated")'
+  ]
+  log node[:vista][:chef_log]
+end
+
 vista_mumps_block "Add New Kodak Institution" do
   duz       1
   programmer_mode true
@@ -153,7 +181,7 @@ vista_mumps_block "Add New Kodak Institution" do
     'K FDA,IENA,ERR',
     'S FDA(4,"+1,",.01)="CAMP BEE"',
     "S FDA(4,\"+1,\",.99)=#{vista_station['kodak']}",
-    'S FDA(4,"+1,",60)=455',
+    'S FDA(4,"+1,",60)=$$FIND1^DIC(4.2,,"X","KODAK.VISTACORE.US")',
     "S FDA(4,\"+1,\",99)=#{vista_station['kodak']}",
     'S FDA(4.014,"+3,+1,",.01)=1',
     'S FDA(4.014,"+3,+1,",1)=17010',
@@ -212,18 +240,6 @@ if node[:vista].attribute?(:station_number) and node[:vista][:station_number] !=
   end
 end
 
-vista_mumps_block "Update vm domains" do
-  duz       1
-  programmer_mode true
-  namespace "VISTA"
-  command [
-    'S XUMF=1',
-    "S STN(#{vista_station['panorama']})=\"PANORAMA\",STN(#{vista_station['kodak']})=\"KODAK\"",
-    "S STN=\"\" F  S STN=$O(STN(STN)) Q:STN=\"\"  S NAME=\"ZZZ\"_STN(STN)_\".VISTACORE.US\",IEN=$$FIND1^DIC(4.2,,\"X\",NAME) I +IEN K FDA S FDA(4.2,IEN_\",\",.01)=$S(STN=#{node[:vista][:station_number]}:\"@\",1:$E(NAME,4,30)),FDA(4.2,IEN_\",\",5.5)=STN D FILE^DIE(,\"FDA\")"
-  ]
-  log node[:vista][:chef_log]
-end
-
 vista_mumps_block "Add new HDR domains" do
   duz       1
   programmer_mode true
@@ -280,6 +296,15 @@ vista_mumps_block "Add new HDR domains" do
   ]
   log node[:vista][:chef_log]
 end
+
+
+vista_christen "mailman setup" do
+  duz       1
+  programmer_mode true
+  namespace "VISTA"
+  log node[:vista][:chef_log]
+end
+
 
 #add system startup function to cache system
 vista_ro_install "zstu.ro" do

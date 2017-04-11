@@ -4,6 +4,7 @@ When(/^the client "(.*?)" requests user info$/) do |client|
 end
 
 def search_json(result_array, table, dateformat = DefaultDateFormat.format)
+  expect(result_array).to be_a(Array), "Expected variable result_array to be an Array but it is of type #{result_array.class}"   
   json_verify = JsonVerifier.new
   table.rows.each do |fieldpath, fieldvaluestring|
     json_verify.reset_output
@@ -47,7 +48,6 @@ Then(/^the RDK user info response contains$/) do |table|
   @json_object = JSON.parse(@response.body)
   json_verify = JsonVerifier.new
 
-  result_array = []
-  result_array.push(@json_object["data"])
-  search_json(result_array, table, dateformat)
+  result_array = @json_object["data"]
+  search_json([result_array], table, dateformat)
 end

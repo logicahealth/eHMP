@@ -19,7 +19,7 @@ Scenario: Verfy text search returns value duplicates
   Then Overview is active
   Then user searches for "chem" with no duplicates in the results dropdown
 
-@F320_3_TextSearchImprovements @US4542 @DE3379 @debug @DE5484
+@F320_3_TextSearchImprovements @US4542 @DE3379 @DE5484
 Scenario: The application needs to be able to highlight the same search terms when the details of the search results are displayed.
   # Given user is logged into eHMP-UI
   And user searches for and selects "Four,Patient"
@@ -33,7 +33,7 @@ Scenario: The application needs to be able to highlight the same search terms wh
   Then the modal contains highlighted "CHOCOLAT"
 
 
-@F320_4_TextSearchImprovements @US4542 @DE1793 @debug @DE2657
+@F320_4_TextSearchImprovements @US4542 @DE1793 @DE2657
 Scenario: The application needs to be able to highlight the same search terms when the details of the search results are displayed.
   # Given user is logged into eHMP-UI
   And user searches for and selects "Ten,Patient"
@@ -43,10 +43,8 @@ Scenario: The application needs to be able to highlight the same search terms wh
   Then the user clicks one of the search result "Diabetes"
   Then the user clicks one of the search result "Allergies"
   Then the modal is displayed
-  And the modal's title is "diabetes Details"
+  And the modal's title is "diabetes"
   Then the modal contains highlighted "ALLERGIES"
-  And the user clicks the modal "Close Button"
-  And the modal is closed
 
 @F320_5_TextSearchImprovements @US5866 @DE1200 @DE2270 @DE3379
 Scenario: Verify results for suggestions while searching for specific word
@@ -56,7 +54,7 @@ Scenario: Verify results for suggestions while searching for specific word
   Then user searches for "hiper" and verifies spelling suggestions are displayed
 
 
-@F320_6_TextSearchImprovements @US4543 @DE1660 @DE1838 @DE3379
+@F320_6_TextSearchImprovements @US4543 @DE1660 @DE1838 @DE3379 @debug @DE6816
 Scenario: Verify Related terms, Drug classes and Predications relevant to the initail search term are display in the search results
   # Given user is logged into eHMP-UI
   And user searches for and selects "Seven,Patient"

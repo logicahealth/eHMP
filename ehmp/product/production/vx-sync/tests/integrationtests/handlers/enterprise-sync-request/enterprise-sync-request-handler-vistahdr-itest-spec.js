@@ -29,7 +29,7 @@ var wConfig = require(global.VX_ROOT + 'worker-config');
 //     level: 'debug'
 // });
 
-describe('enterprise-sync-request-handler.js', function() {
+xdescribe('enterprise-sync-request-handler.js', function() {
     var patientIdentifier = patientIdUtil.create('icn', '5000000123V015819');
     var jpid;
     var job;
@@ -120,10 +120,10 @@ describe('enterprise-sync-request-handler.js', function() {
         'vistaSites': {
             '9E7A': _.defaults(wConfig.vistaSites['9E7A'], {
                 'name': 'panorama',
-                'host': 'IP_ADDRESS',
+                'host': 'IP        ',
                 'port': 9210,
-                'accessCode': 'PW',
-                'verifyCode': 'PW',
+                'accessCode': 'PW    ',
+                'verifyCode': 'PW    !!',
                 'localIP': '127.0.0.1',
                 'localAddress': 'localhost',
                 'connectTimeout': 3000,
@@ -132,10 +132,10 @@ describe('enterprise-sync-request-handler.js', function() {
             }),
             'C877': _.defaults(wConfig.vistaSites.C877, {
                 'name': 'kodak',
-                'host': 'IP_ADDRESS',
+                'host': 'IP        ',
                 'port': 9210,
-                'accessCode': 'pu1234',
-                'verifyCode': 'pu1234!!',
+                'accessCode': 'PW    ',
+                'verifyCode': 'PW    !!',
                 'localIP': '127.0.0.1',
                 'localAddress': 'localhost',
                 'connectTimeout': 3000,
@@ -152,7 +152,7 @@ describe('enterprise-sync-request-handler.js', function() {
         },
         jds: _.defaults(wConfig.jds, {
             protocol: 'http',
-            host: 'IP_ADDRESS',
+            host: 'IP        ',
             port: 9080
         }),
         rules: {
@@ -182,10 +182,10 @@ describe('enterprise-sync-request-handler.js', function() {
         'vistaSitesByStationCombined': {
             '500': _.defaults(wConfig.vistaSites['9E7A'], {
                 'name': 'panorama',
-                'host': 'IP_ADDRESS',
+                'host': 'IP        ',
                 'port': 9210,
-                'accessCode': 'PW',
-                'verifyCode': 'PW',
+                'accessCode': 'PW    ',
+                'verifyCode': 'PW    !!',
                 'localIP': '127.0.0.1',
                 'localAddress': 'localhost',
                 'connectTimeout': 3000,
@@ -195,10 +195,10 @@ describe('enterprise-sync-request-handler.js', function() {
             }),
             '507': _.defaults(wConfig.vistaSites.C877, {
                 'name': 'kodak',
-                'host': 'IP_ADDRESS',
+                'host': 'IP        ',
                 'port': 9210,
-                'accessCode': 'pu1234',
-                'verifyCode': 'pu1234!!',
+                'accessCode': 'PW    ',
+                'verifyCode': 'PW    !!',
                 'localIP': '127.0.0.1',
                 'localAddress': 'localhost',
                 'connectTimeout': 3000,
@@ -208,10 +208,10 @@ describe('enterprise-sync-request-handler.js', function() {
             }),
             '536': _.defaults(wConfig.hdr.hdrSites.FFC7, {
                 'name': 'panorama',
-                'host': 'IP_ADDRESS',
+                'host': 'IP        ',
                 'port': 9210,
-                'accessCode': 'pu1234',
-                'verifyCode': 'pu1234!!',
+                'accessCode': 'PW    ',
+                'verifyCode': 'PW    !!',
                 'localIP': '127.0.0.1',
                 'localAddress': 'localhost',
                 'connectTimeout': 3000,
@@ -221,10 +221,10 @@ describe('enterprise-sync-request-handler.js', function() {
             }),
             '551': _.defaults(wConfig.hdr.hdrSites['2939'], {
                 'name': 'panorama',
-                'host': 'IP_ADDRESS',
+                'host': 'IP        ',
                 'port': 9210,
-                'accessCode': 'PW',
-                'verifyCode': 'PW',
+                'accessCode': 'PW    ',
+                'verifyCode': 'PW    !!',
                 'localIP': '127.0.0.1',
                 'localAddress': 'localhost',
                 'connectTimeout': 3000,

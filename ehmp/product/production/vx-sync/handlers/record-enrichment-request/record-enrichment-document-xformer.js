@@ -178,7 +178,7 @@ function addInMissingFields(record) {
 
 	// isInterdisciplinary
 	//-------------------
-	if (record.localTitle) {
+	if ((record.localTitle) && (typeof record.localTitle === 'string')) {
 		if (record.localTitle.toLowerCase().indexOf('interdisciplinary') >= 0) {
 			record.isInterdisciplinary = 'true';
 		} else {
@@ -325,6 +325,9 @@ function fixFieldDataTypes(record) {
     if ((record.amended !== null) && (record.amended !== undefined)) {
         record.amended = String(record.amended);
     }
+	if ((record.localTitle !== null) && (record.localTitle !== undefined)) {
+		record.localTitle = String(record.localTitle);
+	}
 
 	// Fix items in DocumentText
 	//--------------------------

@@ -5,13 +5,15 @@ define([
     "api/UrlBuilder",
     "sessionstorage",
     'moment',
+    'jsondiffpatch',
     'api/Messaging',
     'api/Navigation',
     'api/Checks',
     'api/SessionStorage',
     'api/ResourceService',
-    'main/components/views/popupView'
-], function(Backbone, $, _, UrlBuilder, sessionStorage, moment, Messaging, Navigation, Checks, SessionStorage, ResourceService, popupView) {
+    'main/components/views/popupView',
+    'api/WorkspaceContextRepository'
+], function(Backbone, $, _, UrlBuilder, sessionStorage, moment, jsondiffpatch, Messaging, Navigation, Checks, SessionStorage, ResourceService, popupView, WorkspaceContextRespository) {
     'use strict';
 
     var USERKEY = 'user';
@@ -61,7 +63,7 @@ define([
          * @param  {String} facility
          * @return {boolean}
          */
-        authenticate: function(userName, password, facility) {
+        authenticate: function(userName, password, site, division) {
             var resourceTitle = "authentication-authentication";
             var userSession = this.getUserSession();
             userSession.clear({
@@ -81,7 +83,8 @@ define([
             userSession.save({
                 'accessCode': userName,
                 'verifyCode': password,
-                'site': facility
+                'site': site,
+                'division': division
             }, {
                 type: 'POST',
                 contentType: 'application/json',
@@ -165,6 +168,8 @@ define([
             Backbone.fetchCache._cache = {};
             Messaging.trigger('user:sessionEnd');
 
+            WorkspaceContextRespository.resetWorkspaceContexts();
+
             shouldNavigate = _.isBoolean(shouldNavigate) ? shouldNavigate : true;
             if (shouldNavigate) {
                 Navigation.navigate();
@@ -234,16 +239,20 @@ define([
                     },
                     error: function(model, response, options) {
                         if (response.status == '401') {
-                            var logId = response.getResponseHeader('requestId');
-                            var userSession = SessionStorage.get.sessionModel(USERKEY);
-                            var status = userSession.get('status');
-                            var popupModel = popupView.extendDefaultModel({
-                                title: 'Warning: Server Session Ended.',
-                                header: 'You have been logged out due to a server session issue.',
-                                footer: 'The session has ended on the server. Log in again to continue. If the problem persists contact your IT department and provide them with the following requestId: ' + requestId + '.',
-                                buttons: false
-                            });
-                            popupView.setModel(popupModel, false);
+                            try {
+                                var requestId = response.getResponseHeader('X-Request-ID');
+                                var userSession = SessionStorage.get.sessionModel(USERKEY);
+                                var status = userSession.get('status');
+                                var popupModel = popupView.extendDefaultModel({
+                                    title: 'Warning: Server Session Ended.',
+                                    header: 'You have been logged out due to a server session issue.',
+                                    footer: 'The session has ended on the server. Log in again to continue. If the problem persists contact your IT department and provide them with the following requestId: ' + requestId + '.',
+                                    buttons: false
+                                });
+                                popupView.setModel(popupModel, false);
+                            } catch (error) {
+                                console.error("UserService - Refresh User Token: ", error);
+                            }
                             return UserService.clearUserSession();
                         }
                         Messaging.trigger('user:sessionRefresh');
@@ -288,7 +297,100 @@ define([
                     return this.hasPermission(permission);
                 }, this);
             }
-        }
+        },
+        savePreferences: function(options) {
+            options = _.defaults({}, options, {
+                append: true,
+                saveToSession: true,
+                saveToServer: true,
+                triggerChange: true
+            });
+
+            var user = this.getUserSession();
+            var origPreferences = user.get('preferences');
+            var isLoggedIn = user.get('status') === UserService.STATUS.LOGGEDIN;
+
+            if (!isLoggedIn) return;
+
+            var newPreferences;
+
+            if (options.append) {
+                newPreferences = origPreferences || {};
+                if (!_.isEmpty(options.preferences)) {
+                    newPreferences = _.defaultsDeep({}, options.preferences, origPreferences);
+                }
+            } else {
+                newPreferences = options.preferences;
+            }
+
+            // Remove undefined keys
+            newPreferences = JSON.parse(JSON.stringify(newPreferences));
+
+            if (options.triggerChange) {
+                var delta = jsondiffpatch.diff(origPreferences, newPreferences);
+                _.forOwn(delta, function(changedProperty) {
+                    user.trigger('change:preferences:' + changedProperty);
+                })
+            }
+
+            if (options.saveToSession) {
+                user.set('preferences', newPreferences);
+                UserService.setUserSession(user);
+            }
+
+            if (options.saveToServer) {
+                var preferencesModel = new Backbone.Model();
+                preferencesModel.url = UrlBuilder.buildUrl('set-preferences');
+                preferencesModel.save({}, {
+                    type: 'PUT',
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    data: JSON.stringify({
+                        preferences: newPreferences
+                    }),
+                    success: function(response, xhr) {
+                        // console.log('Successful Set Prefernces');
+
+
+                    },
+                    error: function(errorResponse) {
+                        console.error('Failed to save preferences to pJDS');
+                    }
+                });
+            }
+        },
+        getPreferences: function(path, defaultValue) {
+            var user = this.getUserSession();
+            if (!user.get('preferences')) {
+                user.set('preferences', {
+                    defaultScreen: {}
+                });
+            }
+
+            var preferences = user.get('preferences');
+
+            if (_.isEmpty(path)) {
+                return preferences;
+            }
+
+            return _.get(preferences, path, defaultValue);
+        },
+
+        /**
+         * A method to return an associated facility by division id
+         * @return {string}
+         */
+        getAssociatedFacility: function() {
+            var facilityMonikers = Messaging.request('facilityMonikers');
+            var divisionId =  this.getUserSession().get('division');
+            var associatedFacility;
+
+            if (divisionId) {
+                associatedFacility = facilityMonikers.findWhere({facilityCode: divisionId}); 
+            }
+
+            return associatedFacility;
+        }        
     };
 
     Messaging.on('app:logout', UserService.clearUserSession);

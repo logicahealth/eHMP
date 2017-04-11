@@ -9,6 +9,15 @@ var demographicsSync = require(global.VX_HANDLERS + 'resync-request/demographics
 var JdsClient = require(global.VX_SUBSYSTEMS + 'jds/jds-client');
 
 var dummyLogger = require(global.VX_DUMMIES + 'dummy-logger');
+
+// NOTE: be sure next lines are commented out before pushing
+// var logUtil = require(global.VX_UTILS + 'log');
+// dummyLogger = logUtil._createLogger({
+//     name: 'test',
+//     level: 'debug',
+//     child: logUtil._createLogger
+// });
+
 var wConfig = require(global.VX_ROOT + 'worker-config');
 
 var host = require(global.VX_INTTESTS + 'test-config');
@@ -61,7 +70,7 @@ describe('demographics-sync', function() {
                     patientSyncPath: '/sync/doLoad',
                     patientUnsyncPath: '/sync/clearPatient',
                     patientStatusPath: '/sync/status',
-                    patientDemoSyncPath: '/sync/demographicSync',
+                    patientSyncDemoPath: '/sync/demographicSync',
                     method: 'POST'
                 },
                 vistaSites: {
@@ -70,7 +79,7 @@ describe('demographics-sync', function() {
                 },
                 jds: _.defaults(wConfig.jds, {
                     protocol: 'http',
-                    host: 'IP_ADDRESS',
+                    host: 'IP        ',
                     port: 9080
                 })
             };

@@ -35,7 +35,7 @@ module.exports.FetchError = FetchError;
 module.exports.NotFoundError = NotFoundError;
 module.exports.isNotFound = isNotFound;
 
-// TODO: Refactor all other error instances. JDS returns proper HTTP error codes.
+// FUTURE-TODO: Refactor all other error instances. JDS returns proper HTTP error codes.
 // There's no need to add another layer of error classes.
 
 function HTTPError(code, msg) {

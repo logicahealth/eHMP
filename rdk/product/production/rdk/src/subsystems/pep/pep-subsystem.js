@@ -1,10 +1,9 @@
-/* jslint node: true */
 'use strict';
 
 var async = require('async');
 var pdpFactory = require('./pep-handler-factory');
 
-function getSubsystemConfig(app) {
+function getSubsystemConfig(app, logger) {
     return {
         healthcheck: {
             name: 'pep',

@@ -16,9 +16,3 @@ filebeat_prospector 'messages' do
  harvester_buffer_size 16384
  fields 'type' => 'system_logs'
 end
-
-http_request 'template' do
-  url "http://#{node['beats']['instance_ip']}:9200/_template/filebeat?pretty"
-  message lazy { File.read('/etc/filebeat/filebeat.template.json') }
-  action :put
-end

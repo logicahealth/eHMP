@@ -54,7 +54,7 @@ Scenario: Client can request demographics in VPR format (address, gender, etc.)
       #| summary                        | gov.va.cpe.vpr.PatientDemographics{pids=[5000000217V519385, 500;100716, 666000808, 9E7A;100716]} |
       | syncErrorCount                  | IS_SET                                                                                           |
       #| domainUpdated                   | IS_SET                                                                                           |
-#      | lastUpdated                     | IS_SET                                                                                           |   TODO: only one patient demographics entry has a lastUpdated
+#      | lastUpdated                     | IS_SET                                                                                           |
       | exposure.name                   | No                                                                                               |
       | exposure.uid                    | urn:va:sw-asia:N                                                                                 |
       # according to wiki, this value should be at location 27.02, but this patient did not have a 27.02 location, so not sure where these values are coming from
@@ -185,7 +185,7 @@ Scenario: Client can request demographics in VPR format (address, gender, etc.)
       | fullName                        | EIGHT,INPATIENT                                                                                  |
       | last4                           | 0808                                                                                             |
       | last5                           | E0808                                                                                            |
-#      | pid                             | C877;100716                                                                                       |   TODO: This is a known bug for multi-site pid handling in JDS (Owners: Les Westberg and Brian Lord)
+#      | pid                             | C877;100716                                                                                       |
       | pid                             | CONTAINS 100716                                                                                  |
       #| summary                         | gov.va.cpe.vpr.PatientDemographics{pids=[5000000217V519385, 500;100716, 666000808, 9E7A;100716]} |
       | syncErrorCount                  | IS_SET                                                                                           |
@@ -249,7 +249,7 @@ Scenario: Client can request demographics in VPR format (marriage, religion, etc
       | last4                            | 0005                       |
       | last5                            | F0005                      |
 #      | lastUpdated                      | IS_SET                     |
-#      | pid                              | C877;231                   |  TODO: This is a known bug for multi-site pid handling in JDS (Owners: Les Westberg and Brian Lord)
+#      | pid                              | C877;231                   |
       | pid                              | CONTAINS 231               |
       | summary                          | IS_SET                     |
       | syncErrorCount                   | IS_SET                     |

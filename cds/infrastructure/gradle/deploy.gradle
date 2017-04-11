@@ -87,9 +87,42 @@ def projectInfoCollection = [
     ],
     vagrantEnvVarsVersion : [
       //'OPENCDS_KNOWLEDGE_REPOSITORY_DATA_VERSION' : "${-> chooseStableBuild('cds', 'acceptance-test', 'OPENCDS_KNOWLEDGE_REPOSITORY_DATA_VERSION')}",
-      'OPENCDS_VERSION' : "${-> chooseStableBuild('cds', 'acceptance-test', 'OPENCDS_KNOWLEDGE_REPOSITORY_DATA_VERSION')}",
+      'OPENCDS_VERSION' : "${-> chooseStableBuild('cds', 'acceptance-test', 'OPENCDS_VERSION')}",
       //'CDS_ENGINE_AGENT_VERSION' : "${-> chooseStableBuild('cds', 'acceptance-test', 'CDS_ENGINE_AGENT_VERSION')}"
       'CDS_ENGINE_AGENT_VERSION' : "2.0.0.10"
+    ],
+    cdsDeploy: true,
+    provisioner : "cds_provision"
+  ],
+  [
+    taskNamePart : 'CDS',
+    dependsOn : [
+    ':production:cdsinvocation:build',
+    ':production:cdsdashboard:build',
+    ':production:opencds:build',
+    ':production:cdsinvocation:cds-engine-agent:build'
+    ],
+    machineName: "cds",
+    vagrantDir : "${rootDir}/../../.chef/vms",
+    devDeploy : true,
+    testDeploy : true,
+    vagrantEnvVarsLocal : [
+      'CDSI_METRICS_LOCAL_FILE' : "${-> project(':production:cdsinvocation:cds-metrics-collection-service').war.outputs.files.singleFile.getCanonicalPath()}",
+      'CDSI_RESULTS_LOCAL_FILE' : "${-> project(':production:cdsinvocation:cds-results-service').war.outputs.files.singleFile.getCanonicalPath()}",
+      'DEV_DEPLOY' : 'true',
+      'CDSDASHBOARD_LOCAL_FILE' : "${-> project(':production:cdsdashboard:cds-dashboard').war.outputs.files.singleFile.getCanonicalPath()}",
+      //'OPENCDS_KNOWLEDGE_REPOSITORY_DATA_LOCAL_FILE': "${-> project(':production:opencds').makeZipOpenCDS.outputs.files.singleFile.getCanonicalPath()}",
+      'OPENCDS_LOCAL_FILE': "${-> project(':production:opencds:opencds-knowledge-repository-data').makeZipKnowRepo.outputs.files.singleFile.getCanonicalPath()}",
+      'CDS_ENGINE_AGENT_LOCAL_FILE' : "${-> project(':production:cdsinvocation:cds-engine-agent').war.outputs.files.singleFile.getCanonicalPath()}",
+      'DEV_DEPLOY' : "true"
+   ],
+    vagrantEnvVarsVersion : [
+      'OPENCDS_VERSION' : "${-> chooseStableBuild('rdk', 'acceptance-test', 'OPENCDS_VERSION')}",
+      'OPENCDS_KNOWLEDGE_REPOSITORY_DATA_VERSION' : "${-> chooseStableBuild('cds', 'acceptance-test', 'OPENCDS_KNOWLEDGE_REPOSITORY_DATA_VERSION')}",
+      'CDSI_METRICS_VERSION' : "${-> chooseStableBuild('rdk', 'acceptance-test', 'CDSI_METRICS_VERSION')}",
+      'CDSI_RESULTS_VERSION' : "${-> chooseStableBuild('rdk', 'acceptance-test', 'CDSI_RESULTS_VERSION')}",
+      'CDS_ENGINE_AGENT_VERSION' : "${-> chooseStableBuild('cds', 'acceptance-test', 'CDS_ENGINE_AGENT_VERSION')}",
+      'CDSDASHBOARD_VERSION' : "${-> chooseStableBuild('rdk', 'acceptance-test', 'CDSDASHBOARD_VERSION')}"
     ],
     cdsDeploy: true,
     provisioner : "cds_provision"
@@ -223,6 +256,8 @@ def stopVM(vagrantMachine, vagrantDir, provisioner) {
 
 def executeChefClient(vagrantMachine, vagrantDir, envVars, String action = 'converge', provisioner) {
   def newVars = envVars
+  println "ASDFASDFASDF"
+  println envVars
   def logLevel = (System.getenv()['LOG_LEVEL'] == null || "") ? "warn" : System.getenv()['LOG_LEVEL']
   println "LOG_LEVEL: ${logLevel}"
   println "ENV_VARS: ${envVars}"

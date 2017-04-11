@@ -44,6 +44,11 @@
         box-shadow: none;
         min-width: 55px;
     }
+    .bootstrap-timepicker-hour,
+    .bootstrap-timepicker-minute {
+        border: 1px solid $grey;
+    }
+
 }
 input[type=text]::-ms-clear {
     display: none;

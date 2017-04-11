@@ -18,7 +18,7 @@ define([
                 }
             };
         },
-        template: Handlebars.compile('<a role="button" href="#qualifiedName-{{uidUnderscored}}" title="Press enter to view additional content">{{formatDate overallStart}} - {{getEarlierStopAsMoment}}</a>'),
+        template: Handlebars.compile('<a role="button" href="#qualifiedName-{{uidUnderscored}}" title="Press enter to view additional content">{{#if overallStart}}{{formatDate overallStart}}{{else}}No Data{{/if}} - {{#if getEarlierStopAsMoment}}{{getEarlierStopAsMoment}}{{else}}No Data{{/if}}</a>'),
         className: "order-dates right-margin-xs",
         attributes : {
             role : 'tab',

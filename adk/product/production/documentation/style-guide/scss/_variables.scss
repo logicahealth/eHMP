@@ -8,30 +8,43 @@ $bootstrap-sass-asset-helper: false !default;
 //
 //## grey and brand colors for use across Bootstrap.
 
+//-------------------------//
+//--- 2.0 Color Palette 2/2016 ---//
+//-----------------------------------------------------------//
+
+$primary:         		#0D68A1;
+$primary-dark:         	#132F50;
+$primary-light:         #DCE4EF;
+$primary-light-alt:     #BDCCDB;
+$primary-lighter:       #E2F3F8;
+$primary-lightest:		#F3F5F7;
+
+$secondary:      		#328443;
+$secondary-light:      	#E4EFEC;
+$secondary-dark:		#256632;
+
+$tertiary:      		#F8C54F;
+$tertiary-dark:			#E6B131;
+$tertiary-darker:		#FD9827;
+
+/*--- supporting colors  ---*/
+$pure-black:			#000000;
+$pure-white:            #FFFFFF;
+
 $grey:              	#CCCCCC;
 $grey-dark:            	#BBBBBB;
 $grey-darker:           #767676;
 $grey-darkest:          #555555;
 $grey-light:            #DDDDDD;
 $grey-lighter:          #E6E6E6;
-$grey-lightest:         #F3F5F7;
+$grey-lightest: 		#F4F4F4;
 
-$primary:         		#0D68A1 !default;
-$primary-dark:         	#132F50 !default;
-$primary-light:			#DCE4EF !default;
-$primary-light-alt:     #BDCCDB !default;
-$primary-lighter:       #E2F3F8 !default;
-$primary-lightest:      #F3F5F7 !default;
-$secondary:      		#328443 !default;
-$secondary-dark:      	#256632 !default;
-$tertiary:      		#F8C54F !default;
-$tertiary-dark:      	#E6B131 !default;
-
-$pure-black:			#000000;
-$pure-white:			#FFFFFF;
-$red:					#EB1700 !default;
-$red-dark:				#C31300 !default;
-$red-lightest:			#FFF1F1 !default;
+$red:					#EB1700;
+$red-dark:				#C31300;
+$red-lightest:			#FFF1F1;
+$pure-yellow:			#FEFC9E;
+$orange-dark:			#9E5200;
+$yellow-light:			#FCF8E3;
 
 
 $brand-success:         #328443 !default;

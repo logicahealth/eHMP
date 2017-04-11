@@ -29,6 +29,6 @@ var status = {
 
 _.each(status, function mapDescriptionToStatusCode(value, key, object) {
     object[value] = _.parseInt(key);
-})
+});
 
 module.exports = status;

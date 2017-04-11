@@ -5,6 +5,7 @@ var async = require('async');
 var moment = require('moment');
 var rdk = require('../../core/rdk');
 var locationUtil = rdk.utils.locationUtil;
+var nullchecker = rdk.utils.nullchecker;
 var RpcClient = require('vista-js').RpcClient;
 var filemanDateUtil = require('../../utils/fileman-date-converter');
 
@@ -79,14 +80,17 @@ function constructRpcArgs(immunization) {
     var retVal =  {};
     var index = 1;
     var category = '';
+    var locationIEN = (immunization.encounterServiceCategory === 'E') ? '0' : locationUtil.getLocationIEN(immunization.encounterLocation);
 
     retVal[index++] = 'HDR' +  rpcDelimiter +
         immunization.encounterInpatient + rpcDelimiter +
         immunization.hasCptCodes + rpcDelimiter +
-        locationUtil.getLocationIEN(immunization.encounterLocation) + fieldDelimiter + immunization.encounterDateTime + fieldDelimiter + immunization.encounterServiceCategory;
+        locationIEN + fieldDelimiter + immunization.encounterDateTime + fieldDelimiter + immunization.encounterServiceCategory;
     retVal[index++] = 'VST^DT^' + immunization.encounterDateTime;
     retVal[index++] = 'VST^PT^' + immunization.encounterPatientDFN;
-    retVal[index++] = 'VST^HL^' + locationUtil.getLocationIEN(immunization.encounterLocation);
+    if (locationIEN !== '0'){
+        retVal[index++] = 'VST^HL^' + locationUtil.getLocationIEN(immunization.encounterLocation);
+    }
     retVal[index++] = 'VST^VC^' + immunization.encounterServiceCategory;
     retVal[index++] = 'VST^OL^^' + immunization.outsideLocation;
     retVal[index++] = 'PRV' + rpcDelimiter +
@@ -131,6 +135,12 @@ function add(writebackContext, passedInCallback) {
     var logger = writebackContext.logger;
     var vistaConfig = writebackContext.vistaConfig;
     var model = immunizationFromModel(logger, writebackContext.model);
+    model.encounterPatientDFN = writebackContext.interceptorResults.patientIdentifiers.dfn;
+
+    if(nullchecker.isNullish(model.encounterPatientDFN)){
+        return passedInCallback('Missing required patient identifiers');
+    }
+
     logger.debug({immunizationModel: model});
 
     var rpcParameters = constructRpcArgs(model);

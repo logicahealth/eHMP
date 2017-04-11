@@ -10,6 +10,10 @@ class PobActiveRecentMedApplet < PobParentApplet
   elements :fld_active_meds_gist_item, "[data-cell-instanceid^='name_desc_urn:va:med']"
   elements :fld_active_meds_gist, "[data-appletid=activeMeds] .gist-item-list .gist-item"
   elements :fld_meds_review_rows, ".medication-item-list-region.panel-group .meds-item"
+  elements :fld_gist_med_names, "[data-cell-instanceid^='name_desc'] strong"
+  elements :fld_gist_med_refills, "#count"
+  
+  element :fld_active_meds_name_header, "[data-appletid=activeMeds] [data-header-instanceid='name-header']"
 
   # *****************  All_Button_Elements  ******************* #
 
@@ -26,6 +30,7 @@ class PobActiveRecentMedApplet < PobParentApplet
     add_empty_table_row appletid_css
     add_generic_error_message appletid_css
     add_empty_gist appletid_css
+    add_expanded_applet_fields appletid_css
     add_toolbar_buttons
   end
   

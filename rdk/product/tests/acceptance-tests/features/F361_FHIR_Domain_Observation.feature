@@ -51,7 +51,7 @@ Feature: F361 FHIR Domain - Observation
         | resource.code.coding.display                | TEMPERATURE                           |
         | resource.code.coding.system                 | http://loinc.org                      |
         | resource.code.coding.code                   | 8310-5                                |
-        | resource.code.coding.display                | BODY TEMPERATURE                      |
+        | resource.code.coding.display                | Body temperature                      |
         | resource.valueQuantity.value                | 98.6                                   |
         | resource.valueQuantity.units                | F                                     |
         | resource.appliesDateTime                    | IS_FHIR_FORMATTED_DATE                |

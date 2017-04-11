@@ -2,19 +2,13 @@ define([
     'underscore',
     'handlebars',
     'hbs!app/applets/allergy_grid/details/detailsFooterTemplate',
-    'hbs!app/applets/allergy_grid/list/expirationCellTemplate',
-    'hbs!app/applets/allergy_grid/list/severityTemplate',
-    'hbs!app/applets/allergy_grid/list/summaryItemViewTemplate',
-    'hbs!app/applets/allergy_grid/list/summaryViewTemplate',
-    'app/applets/allergy_grid/modal/modalHeaderView',
     'app/applets/allergy_grid/modal/modalView',
     'app/applets/allergy_grid/writeback/addAllergy',
     'app/applets/allergy_grid/writeback/enteredInErrorView',
     'app/applets/allergy_grid/util',
     'app/applets/visit/writeback/addselectVisit',
     'app/applets/allergy_grid/writeback/addAllergyModel'
-], function(_, Handlebars, detailsFooterTemplate, expirationCellTemplate, severityTemplate,
-            summaryItemViewTemplate, summaryViewTemplate, modalHeader, ModalView,
+], function(_, Handlebars, detailsFooterTemplate, ModalView,
             addAllergy, EnteredInErrorView, Util, addselectEncounter, AddAllergyModel) {
     'use strict';
     //Data Grid Columns
@@ -26,13 +20,20 @@ define([
     }, {
         name: 'reaction',
         label: 'Reaction',
-        cell: 'string',
+        flexWidth: 'flex-width-1',
+        cell: Backgrid.StringCell.extend({
+            className: 'string-cell flex-width-1'
+        }),
         hoverTip: 'allergies_reaction'
     }, {
         name: 'acuityName',
         label: 'Severity',
         cell: 'handlebars',
-        template: severityTemplate,
+        template: Handlebars.compile([
+            '{{#if acuityName}}',
+            '<span class="label label-{{#if severe}}error{{else if moderate}}warning{{else}}info{{/if}}">{{acuityName}}</span>',
+            '{{/if}}'
+            ].join('\n')),
         hoverTip: 'allergies_severity'
     }];
 
@@ -65,9 +66,6 @@ define([
                 '{{#if commentBubble}}',
                 '<i class="fa fa-comment"></i>',
                 '<span class="sr-only">Comments</span>',
-                '{{else}}',
-                '<i class="fa fa-transparent-comment"></i>',
-                '<span class="sr-only">No Comments</span>',
                 '{{/if}}'
             ].join("\n"))
         }]);
@@ -75,7 +73,10 @@ define([
     fullScreenColumns.splice(1, 0, {
         name: 'standardizedName',
         label: 'Standardized Allergen',
-        cell: 'string',
+        flexWidth: 'flex-width-1_5',
+        cell: Backgrid.StringCell.extend({
+            className: 'string-cell flex-width-1_5'
+        }),
         hoverTip: 'allergies_standardizedAllergen'
     });
 
@@ -100,7 +101,13 @@ define([
                 } else if (response.observed && response.observed.length === 6) {
                     response.observedDate = ADK.utils.formatDate(response.observed + '01', 'MMM YYYY');
                 } else if (response.observed && response.observed.length == 8) {
-                    response.observedDate = ADK.utils.formatDate(response.observed, "MM/DD/YYYY");
+                    if(response.observed.substring(response.observed.length - 4, response.observed.length) === '0000'){
+                        response.observedDate = response.observed.substring(0, 4);
+                    } else if(response.observed.substring(response.observed.length - 2, response.observed.length) === '00'){
+                        response.observedDate = response.observed.substring(4, 6) + '/' + response.observed.substring(0, 4);
+                    } else {
+                        response.observedDate = ADK.utils.formatDate(response.observed, "MM/DD/YYYY");
+                    }
                 } else {
                     response.observedDate = ADK.utils.formatDate(response.observed, "MM/DD/YYYY - HH:mm");
                 }
@@ -183,25 +190,19 @@ define([
     var gridView;
     var expandedViewCollection;
 
-    var showModal = function(model, collection) {
+    var getDetailsModal = function(model, collection) {
         var view = new ModalView({
             model: model,
             collection: collection
         });
 
-        var modalOptions = [{
-            title: Util.getModalTitle(model)
-        }];
         var siteCode = ADK.UserService.getUserSession().get('site'),
             pidSiteCode = model.get('pid') ? model.get('pid').split(';')[0] : '';
 
-        modalOptions[1] = {
+        var modalOptions = {
             title: Util.getModalTitle(model),
             size: 'normal',
-            headerView: modalHeader.extend({
-                model: model,
-                theView: view
-            }),
+            nextPreviousCollection: collection,
             footerView: Backbone.Marionette.ItemView.extend({
                 template: detailsFooterTemplate,
                 onRender: function() {},
@@ -229,7 +230,8 @@ define([
 
         var modal = new ADK.UI.Modal({
             view: view,
-            options: modalOptions[1]
+            callbackFunction: getDetailsModal,
+            options: modalOptions
         });
         modal.show();
     };
@@ -244,7 +246,10 @@ define([
             steps: []
         };
 
-        ADK.utils.writebackUtils.handleVisitWorkflow(workflowOptions, addselectEncounter);
+        ADK.utils.writebackUtils.handleVisitWorkflow(workflowOptions, addselectEncounter.extend({
+            inTray: true
+        }));
+
         workflowOptions.steps.push({
             view: addAllergy,
             viewModel: formModel,
@@ -258,45 +263,6 @@ define([
         // ADK.utils.writebackUtils.applyModalCloseHandler(workflowView);
     }
 
-    var AllergySummaryItemView = Backbone.Marionette.ItemView.extend({
-        tagName: 'div',
-        className: 'summary-item',
-        attributes: function() {
-            return {
-                'tabindex': '0'
-            };
-        },
-        template: summaryItemViewTemplate,
-        events: {
-            'click span': function(e) {
-                showModal(this.model, this.collection);
-            }
-        }
-    });
-
-    var AllergySummaryView = Backbone.Marionette.CompositeView.extend({
-        initialize: function(options) {
-            this.collection = options.collection;
-            this.maximizeScreen = options.appletConfig.maximizeScreen;
-        },
-        template: summaryViewTemplate,
-        childView: AllergySummaryItemView,
-        childViewContainer: '.allergy-bubble-view',
-        events: {
-            'click a.seeAll': function(event) {
-                event.preventDefault();
-                ADK.Navigation.navigate(this.maximizeScreen);
-            }
-        },
-        onRender: function() {
-            if (this.collection.length > 0) {
-            } else {
-                this.$el.find('.allergy-bubble-view')
-                    .after('<div class="empty-text-allergy">No Records Found</div>');
-            }
-        }
-
-    });
 
     var AppletLayoutView = ADK.Applets.BaseGridApplet.extend({
         className: 'app-size',
@@ -333,7 +299,7 @@ define([
 
             //Row click event handler
             dataGridOptions.onClickRow = function(model) {
-                showModal(model, this.collection);
+                getDetailsModal(model, this.collection);
             };
 
             dataGridOptions.toolbarOptions = {
@@ -356,7 +322,7 @@ define([
     var searchAppletChannel = ADK.Messaging.getChannel("allergy_grid");
     searchAppletChannel.on('detailView', function(params) {
         var collection = params.collection || params.model.collection;
-        showModal(params.model, collection);
+        getDetailsModal(params.model, collection);
     });
     var channel = ADK.Messaging.getChannel('allergy_grid');
     channel.reply('detailView', function(params) {
@@ -369,49 +335,55 @@ define([
             viewModel: viewParseModel
         };
 
-        var response = $.Deferred();
+        var data = ADK.PatientRecordService.createEmptyCollection(fetchOptions),
+            detailModel = new Backbone.Model();
 
-        var data = new Backbone.Collection(),
-            detailModel;
-        data.once('sync', function() {
-            detailModel = data.first();
-            var siteCode = ADK.UserService.getUserSession().get('site'),
-                pidSiteCode = detailModel.get('pid') ? detailModel.get('pid').split(';')[0] : '';
-            response.resolve({
-                view: new ModalView({
-                    model: detailModel,
-                    collection: data
-                }),
-                title: Util.getModalTitle(detailModel),
-                modalSize: "medium",
-                footerView: Backbone.Marionette.ItemView.extend({
-                    template: detailsFooterTemplate,
-                    onRender: function() {},
-                    events: {
-                        'click #error': 'enteredInError'
-                    },
-                    enteredInError: function(event) {
-                        ADK.UI.Modal.hide();
-                        EnteredInErrorView.createAndShowEieView(model);
-                    },
-                    templateHelpers: function() {
-                        if (ADK.UserService.hasPermission('eie-allergy') && pidSiteCode === siteCode) {
-                            return {
-                                data: true
-                            };
-                        } else {
-                            return {
-                                data: false
-                            };
-                        }
+        return {
+            view: ModalView.extend({
+                model: detailModel,
+                collection: data
+            }),
+            title: Util.getModalTitle(params.model),
+            modalSize: "medium",
+            footerView: Backbone.Marionette.ItemView.extend({
+                template: detailsFooterTemplate,
+                collectionEvents: {
+                    'sync': function(collection) {
+                        detailModel.set(_.get(collection.first(), 'attributes'));
                     }
-                })
-            });
-        }, this);
-
-        ADK.PatientRecordService.fetchCollection(fetchOptions, data);
-
-        return response.promise();
+                },
+                modelEvents: {
+                    'change': 'render'
+                },
+                initialize: function() {
+                    this.collection = data;
+                    this.model = detailModel;
+                },
+                onBeforeShow: function() {
+                    ADK.PatientRecordService.fetchCollection(fetchOptions, data);
+                },
+                events: {
+                    'click #error': 'enteredInError'
+                },
+                enteredInError: function(event) {
+                    ADK.UI.Modal.hide();
+                    EnteredInErrorView.createAndShowEieView(model);
+                },
+                templateHelpers: function() {
+                    var siteCode = ADK.UserService.getUserSession().get('site'),
+                        pidSiteCode = detailModel.get('pid') ? detailModel.get('pid').split(';')[0] : '';
+                    if (ADK.UserService.hasPermission('eie-allergy') && pidSiteCode === siteCode) {
+                        return {
+                            data: true
+                        };
+                    } else {
+                        return {
+                            data: false
+                        };
+                    }
+                }
+            })
+        };
     });
 
     var gistConfiguration = {

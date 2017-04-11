@@ -5,6 +5,18 @@
 
 	.label {
 		padding: 5px !important;
+		align-self: flex-start;
+	}
+
+	.faux-table{
+		.table-row{
+			[class='selectable']{
+				.table-cell {
+					flex-direction: row;
+					justify-content: flex-start;
+				}
+			}
+		}
 	}
 
 }

@@ -1,0 +1,9 @@
+{
+  "id": "sample-vxsync-vista-1",
+  "vxsync": {
+    "encrypted_data": "AnyW4Sp39UQPRQp3airIqfP9tZejSWen86Y/m4MNOjQTrDqE14lvyD4vUooN\nprblOkoYDETcF+J9GNvoJ6AAq7Bfz0s4M1WOAGvc6tK9NsFU5P5k+FB7awz4\nSoGZUmyFSrwcudfujBDFrTNS/DdnYF+WVXierHRJH04vIE19WGAbNo3ZqeYZ\nVB7p4GRNQBwszxH89wD271jX/R3sQCdXRA==\n",
+    "iv": "c1Wk42tz2ACMwSuE52SH2Q==\n",
+    "version": 1,
+    "cipher": "aes-256-cbc"
+  }
+}

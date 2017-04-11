@@ -11,7 +11,7 @@ define([], function() {
     });
 
     var OperationalData = ADK.Resources.Picklist.Collection.extend({
-        type: 'allergies-symptoms-all-with-top-ten',
+        resource: 'write-pick-list-allergies-symptoms-all-with-top-ten',
         model: OperationalDatum
     });
 

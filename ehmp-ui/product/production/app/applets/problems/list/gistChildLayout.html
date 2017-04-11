@@ -6,21 +6,27 @@
             <span>
             {{formatNewLine groupName}}
             {{#if allGroupedComments}}
-                    <span class="sr-only">This problem has a comment</span>
-                    <i data-item-instanceid="comment_{{id}}" class="fa fa-comment"></i>
-                {{else}}
-                    <i data-item-instanceid="transparent_{{id}}" class="fa fa-transparent-comment"></i>
+                <span class="sr-only">This problem has a comment</span>
+                <i data-item-instanceid="comment_{{id}}" class="fa fa-comment"></i>
             {{/if}}
             </span>
         </div>
             {{#if acuityName}}
-                <div data-item-instanceid="acuity_{{id}}" role="gridcell" class="table-cell border-vertical flex-width-1 text-center">
+                <div data-item-instanceid="acuity_{{id}}" role="gridcell" class="table-cell border-vertical flex-width-1">
                     {{acuityName}}
                 </div>
             {{/if}}
     </div>
-    <div class="selectable noPadding flex-width-1 quick-view-popover" tabindex="0" data-toggle="popover" data-content="{{tooltip}}" aria-label="Press enter to toggle the quicklook table for {{groupName}}. Button.">
-        <div data-cell-instanceid="status_name_{{id}}" role="gridcell" class="table-cell text-center border-vertical">{{statusName}}</div>
-        <div data-cell-instanceid="facility_moniker_{{id}}" role="gridcell" class="table-cell text-center">{{facilityMoniker}}</div>
+    <div class="selectable all-no-padding flex-width-1 quick-view-popover" tabindex="0" data-toggle="popover" data-content="{{tooltip}}" aria-label="Press enter to toggle the quicklook table for {{groupName}}. Button." role="tablist">
+        <div data-cell-instanceid="status_name_{{id}}" role="tab" class="table-cell text-center border-vertical">{{statusName}}</div>
+        <div data-cell-instanceid="facility_moniker_{{id}}" role="tab" class="table-cell text-center">
+            {{#if facilityMoniker}}
+                {{facilityMoniker}}
+            {{else if facilityCode}}
+                {{facilityCode}}
+            {{else}}
+                {{facNameTruncated}}
+            {{/if}}                
+        </div>
     </div>
 </div>

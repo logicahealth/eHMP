@@ -35,8 +35,8 @@ define([
         var onConfirm = options.onConfirm;
         var onCancel = options.onCancel;
 
-        this.title = options.title || 'Alert';
-        this.icon = options.icon || 'icon-warning';
+        this.title = options.title || 'Warning';
+        this.icon = options.icon || 'icon-triangle-exclamation';
         this.context = options.context || this;
         this.callbackOptions = options.callbackOptions || this;
 

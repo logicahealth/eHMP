@@ -1,6 +1,5 @@
 'use strict';
 
-var dd = require('drilldown');
 var rdk = require('../../core/rdk');
 var moment = require('moment');
 var pjds = rdk.utils.pjdsStore;
@@ -30,7 +29,7 @@ function getEhmpUserContext(req, res, next) {
         var recentPatients = response.data.eHMPUIContext || [];
         recentPatients = recentPatients.reverse();
         var fetchedAdditionalDataCount = 0;
-        resultObj.status = dd(response)('statusCode').val;
+        resultObj.status = _.get(response, 'statusCode');
         resultObj.data = [];
         if (recentPatients.length === 0) {
             return res.status(rdk.httpstatus.ok).rdkSend(resultObj);

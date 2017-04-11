@@ -46,47 +46,44 @@ var env = {};
 var config = {
     'rdk': {
         protocol: 'http',
-        host: 'IP_ADDRESS',
+        host: 'IP        ',
         activityPort: 8888,
         writePort:9999,
         timeout: 60000,
-        accessCode: 'PW',
-        verifyCode: 'PW',
+        accessCode: 'PW    ',
+        verifyCode: 'PW    !!',
         activityURI: '/resource/activities/startactivityevent',
         writeURI: '/resource/write-health-data/patient'
     },
     'jdsServer': {
-        'baseUrl': 'http://IP_ADDRESS:PORT',
+        'baseUrl': 'http://IP             ',
         'timeout': 120000
     },
     'generalPurposeJdsServer': {
-        'baseUrl': 'http://IP_ADDRESS:PORT',
+        'baseUrl': 'http://IP             ',
         'urlLengthLimit': 120
     },
     'jbpm': {
-        'baseUrl': 'http://IP_ADDRESS:PORT',
+        'baseUrl': 'http://IP             ',
         'apiPath': '/business-central/rest',
         'adminUser': {
-            'username': 'PW',
-            'password': 'PW'
+            'username': 'bpmsAdmin',
+            'password': 'bpm$@dmin11'
         },
         'nurseUser': {
-            'username': 'PW',
-            'password': 'PW'
+            'username': 'Susan',
+            'password': 'Password1!'
         },
         'healthcheckEndpoint': '/history/instances',
-        'deployments': {
-            'All': 'VistaCore:VistaTasks:1.0'
-        },
         'activityDatabase': {
             'user': 'activitydbuser',
             'password': 'activitydb$11',
-            'connectString': 'IP_ADDRESS:PORT/xe'
+            'connectString': 'IP             /xe'
         },
         'notifsDatabase': {
             'user': 'notifdb',
             'password': 'notifdb',
-            'connectString': 'IP_ADDRESS:PORT/xe'
+            'connectString': 'IP             /xe'
         }
     }
 };
@@ -322,14 +319,14 @@ describe('handler-util-spec.js', function() {
     });
 
     describe('buildClinicalObject', function() {
-        it('Should have a domain of Laboratory', function() {
+        it('Should have a domain of laboratory', function() {
             var mockIsPrimarySite = sinon.stub(pidValidator, 'isPrimarySite', function() {
                 return true;
             });
             var clonedJob = _.cloneDeep(testJob);
             clonedJob.dataDomain = 'order';
             var response = util.buildClinicalObject(clonedJob, logger);
-            expect(response.subDomain).to.eql('Laboratory');
+            expect(response.subDomain).to.eql('laboratory');
             mockIsPrimarySite.restore();
         });
 

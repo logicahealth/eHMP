@@ -39,7 +39,7 @@ describe('Conformance FHIR Resource', function() {
 
     it('Verifies correct resource name and path', function() {
         var config = conformance.getResourceConfig()[0];
-        expect(config.name).to.eql('conformance-metadata');
+        expect(config.name).to.eql('fhir-conformance-metadata');
         expect(config.path).to.eql('');
     });
 

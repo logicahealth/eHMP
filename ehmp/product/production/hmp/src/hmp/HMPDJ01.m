@@ -1,8 +1,8 @@
-HMPDJ01 ;SLC/MKB/MBS -- Orders ;Apr 15, 2016 09:18:55
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**;Sep 01, 2011;Build 1
+HMPDJ01 ;SLC/MKB,ASMR/MBS -- Orders ;Aug 17, 2016 11:42:39
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**2,4**;Sep 01, 2011;Build 11
  ;Per VA Directive 6402, this routine should not be modified.
  ;
- ; External References          DBIA#
+ ; External References          ICR
  ; -------------------          -----
  ; ^DPT                         10035
  ; ^OR(100                       5771
@@ -25,15 +25,36 @@ HMPDJ01 ;SLC/MKB/MBS -- Orders ;Apr 15, 2016 09:18:55
  Q
  ;
 OR1(ID) ; -- order ID >> ^TMP("ORR",$J,ORLIST,HMPN)
- N ORDER
+ N ORDER,CHILD,HMPC
  D ORX(ID,.ORDER)
+ ;DE2818, ^OR(100) - ICR 5771
+ S HMPC=0 F  S HMPC=$O(^OR(100,ID,2,HMPC)) Q:HMPC<1  D
+ . ; DE5111 begin
+ . ; check for child Order's existence, if not found, log it and quit
+ . I '$L($$GET1^DIQ(100,HMPC_",",.01)) D  Q  ; HMPC is IFN
+ ..  N LOGTXT S LOGTXT(1)=" missing child Order IFN: "_HMPC_", DFN: "_$G(DFN,"*no DFN*")
+ ..  D EVNTLOG^HMPDOR(.LOGTXT,"M")  ; event type is "missing"
+ . ; DE5111 end
+ . K CHILD D ORX(HMPC,.CHILD)
+ . M ORDER("children",HMPC)=CHILD
  S ORDER("lastUpdateTime")=$$EN^HMPSTMP("order") ;RHL 20141231
  S ORDER("stampTime")=ORDER("lastUpdateTime") ; RHL 20141231
  ;US6734 - pre-compile metastamp
- I $G(HMPMETA) D ADD^HMPMETA("order",ORDER("uid"),ORDER("stampTime")) Q:HMPMETA=1  ; US11019/US6734
+ I $G(HMPMETA) D ADD^HMPMETA("order",ORDER("uid"),ORDER("stampTime")) Q:HMPMETA=1  ;US6734,US11019
  D ADD^HMPDJ("ORDER","order")
  Q
+ ;
 ORX(IFN,ORD) ; -- extract order IFN into ORD("attribute")
+ ;DE5111 begin
+ ;if no IFN passed, or invalid IFN, log it and quit
+ I '($G(IFN)>0) D  Q
+ . N LOGTXT S LOGTXT(1)=" invalid order IFN: "_$G(IFN,"*no IFN*")_", DFN: "_$G(DFN,"*no DFN*")
+ . D EVNTLOG^HMPDOR(.LOGTXT,"C")  ; event type is "corrupt"
+ ;if Order not found for this IFN, log it and quit
+ I '$L($$GET1^DIQ(100,IFN_",",.01)) D  Q
+ . N LOGTXT S LOGTXT(1)=" missing order IFN: "_IFN_", DFN: "_$G(DFN,"*no DFN*")
+ . D EVNTLOG^HMPDOR(.LOGTXT,"M")  ; event type is "missing"
+ ;DE5111 end
  N DA,HDFN,I,LOC,ORDSTAT,ORLIST,ORLST,X,X0,X8
  S ORLST=$S(+$G(HMPN):HMPN-1,1:0) S:'$D(ORLIST) ORLIST=$H
  D GET^ORQ12(IFN,ORLIST,1)  ; this modifies ^TMP("ORR",$J)
@@ -54,7 +75,6 @@ ORX(IFN,ORD) ; -- extract order IFN into ORD("attribute")
  S ORD("statusCode")="urn:va:order-status:"_$P(X0,U,7)
  S ORD("statusName")=$P(X0,U,6)
  S ORD("statusVuid")="urn:va:vuid:"_$$STS^HMPDOR($P(X0,U,7))
- ;
  D SETTEXT^HMPUTILS($NA(^TMP("ORR",$J,ORLIST,ORLST,"TX")),$NA(^TMP("HMPTEXT",$J,IFN)))
  M ORD("content","\")=^TMP("HMPTEXT",$J,IFN)
  ; DE3504 - Jan 18, 2016, added the code for US10045 below
@@ -75,9 +95,9 @@ ORX(IFN,ORD) ; -- extract order IFN into ORD("attribute")
  ;
  S X=$$GET1^DIQ(100,IFN_",",1,"I") I X D
  . S ORD("providerUid")=$$SETUID^HMPUTILS("user",,+X)
- . S ORD("providerName")=$P($G(^VA(200,+X,0)),U)
+ . S ORD("providerName")=$$GET1^DIQ(200,X_",",.01)  ;DE2818, ICR 10060
  S LOC=+$$GET1^DIQ(100,IFN_",",6,"I"),FAC=$$FAC^HMPD(LOC) I LOC D
- . S ORD("locationName")=$P($G(^SC(LOC,0)),U)
+ . S ORD("locationName")=$$GET1^DIQ(44,LOC_",",.01)  ;DE2818, ICR 10040
  . S ORD("locationUid")=$$SETUID^HMPUTILS("location",,LOC)
  D FACILITY^HMPUTILS(FAC,"ORD")
  S ORD("service")=$$GET1^DIQ(100,IFN_",","12:1")
@@ -157,7 +177,7 @@ RESULTS ; -- add ORD("results",n,"uid") list
  .. S ITM=+$G(ORD("oiPackageRef")) D EXPAND^LR7OU1(ITM,.HMPT)
  .. S (T,N)=0 F  S T=$O(HMPT(T)) Q:T<1  S ID=$O(^PXRMINDX(63,"PI",DFN,T,CDT,"")) I $L(ID) S N=N+1,ORD("results",N,"uid")=$$SETUID^HMPUTILS("lab",DFN,$P(ID,";",2,9))
  . I SUB="MI" D  Q
- .. S ITM="M;A;",N=0,LRDFN=$G(^DPT(DFN,"LR"))
+ .. S ITM="M;A;",N=0,LRDFN=$$LRDFN^HMPXGLAB(DFN)  ;DE2818
  .. F  S ITM=$O(^PXRMINDX(63,"PI",DFN,ITM)) Q:$E(ITM,1,4)'="M;A;"  I $D(^(ITM,CDT)) D
  ... S IDX=LRDFN_";MI;"_IDT
  ... F  S IDX=$O(^PXRMINDX(63,"PI",DFN,ITM,CDT,IDX)) Q:IDX=""  S ID=$P(IDX,";",2,99),N=N+1,ORD("results",N,"uid")=$$SETUID^HMPUTILS("lab",DFN,ID)
@@ -189,7 +209,7 @@ NTX1(IFN) ; -- extract nursing treatment order IFN into NTX("attribute")
  S NTX("lastUpdateTime")=$$EN^HMPSTMP("treatment") ;RHL 20141231
  S NTX("stampTime")=NTX("lastUpdateTime") ; RHL 20141231
  ;US6734 - pre-compile metastamp
- I $G(HMPMETA) D ADD^HMPMETA("treatment",NTX("uid"),NTX("stampTime")) Q:HMPMETA=1  ; US11019/US6734
+ I $G(HMPMETA) D ADD^HMPMETA("treatment",NTX("uid"),NTX("stampTime")) Q:HMPMETA=1  ;US6734,US11019
  D ADD^HMPDJ("NTX","treatment")
  Q
  ;
@@ -199,11 +219,17 @@ USER(N,ROLE,IEN,DATE) ; -- add signature/verification data
  S ORD("clinicians",N,"role")=$G(ROLE)
  Q:+$G(IEN)<1
  S ORD("clinicians",N,"uid")=$$SETUID^HMPUTILS("user",,IEN)
- S ORD("clinicians",N,"name")=$P($G(^VA(200,IEN,0)),U)
+ S ORD("clinicians",N,"name")=$$GET1^DIQ(200,IEN_",",.01)  ;DE2818, ICR 10060
  Q
  ;
 ORDACT(HMPDFN,ORDRNUM) ; function, if patient and order are in HMP(800000) return status code, Jan 10, 2016 US10045, US11894
  N SRV S SRV=$$SRVRNO^HMPOR(HMPDFN)  ; server number for patient
  Q:'(SRV>0) ""  ; not found, return null
  Q $P($G(^HMP(800000,SRV,1,HMPDFN,1,ORDRNUM,0)),U,14)  ; ORDER ACTION returned
+ ;
+TM(X) ; -- strip seconds off a FM time
+ N D,T,Y S D=$P(X,"."),T=$P(X,".",2)
+ S Y=D_$S(T:"."_$E(T,1,4),1:"")
+ S Y=$$JSONDT^HMPUTILS(Y)
+ Q Y
  ;

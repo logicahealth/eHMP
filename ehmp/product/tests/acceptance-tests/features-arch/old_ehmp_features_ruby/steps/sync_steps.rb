@@ -326,7 +326,7 @@ When(/^a client requests patient information for patient with pid "(.*?)" and ic
   end
   expect(@response.code).to eq(200), "response code was #{@response.code}: response body #{@response.body}"
 
-  # https://IPADDRESS:POR/vpr/10108/detail/cwadf?_dc=1398086783691
+  # https://IP           /vpr/10108/detail/cwadf?_dc=1398086783691
   path = "#{base_url}/vpr/#{pid}/detail/cwadf?_dc=1398086783691"
   @response = HTTPartyWithAuthorization.get_with_authorization(path)
   expect(@response.code).to eq(200), "response code was #{@response.code}: response body #{@response.body}"
@@ -388,7 +388,7 @@ def check_patient_has_been_synced(pid)
     elsif @response.code == 200
       is_synced = check_uncompeleted_sync
     else
-      p 'This seems to be like an error connecting to https://IPADDRES/admin/sync/#{pid}'
+      p 'This seems to be like an error connecting to https://IP      /admin/sync/#{pid}'
       is_synced = false
       can_be_sync = false
     end

@@ -3,6 +3,7 @@
 var bunyan = require('bunyan');
 var _ = require('lodash');
 
+// FUTURE-TODO: simplify this code
 module.exports = function(loggerConfigurations) {
     var loggers = {};
 
@@ -29,7 +30,7 @@ module.exports = function(loggerConfigurations) {
                 session: sessionSerializer,
                 body: bodySerializer
             });
-        }        
+        }
     }
 
     function userSerializer(user) {
@@ -51,7 +52,6 @@ module.exports = function(loggerConfigurations) {
             body = _.clone(body);
             body.session = sessionSerializer(body.session);
         }
-        // TODO: avoid logging big bodies?
         return body;
     }
 

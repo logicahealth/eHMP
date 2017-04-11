@@ -3,8 +3,11 @@ define([
 ], function (moment) {
     'use strict';
 
+    var APPOINTMENT_IN_PAST_SUBSTATE = 'Appt. in Past';
+    var AMENDED_APPOINTMENT_IN_PAST_SUBSTATE = APPOINTMENT_IN_PAST_SUBSTATE + ', Action Required';
+
     var Utils = {
-        enrichSingleActivityModel: function (model, facilityMonikers, contextViewType) {
+        enrichSingleActivityModel: function (model, facilityMonikers, contextViewType, readOnly) {
             var age = '';
             if (!_.isUndefined(model.get('DOB'))) {
                 var momentDob = moment(model.get('DOB'), 'YYYYMMDD');
@@ -18,6 +21,9 @@ define([
                 if (_.isArray(stateParts) && stateParts.length === 2) {
                     state = stateParts[0];
                     substate = stateParts[1];
+                }
+                if (substate === APPOINTMENT_IN_PAST_SUBSTATE) {
+                    substate = AMENDED_APPOINTMENT_IN_PAST_SUBSTATE;
                 }
                 model.set('state', state);
                 model.set('substate', substate);
@@ -35,7 +41,9 @@ define([
             }
 
             var healthIndicator = model.get('healthIndicator');
-            if (_.isNull(model.get('healthIndicator'))) {
+            if (_.isNull(model.get('healthIndicator')) || model.get('healthIndicator') === 1) {
+                healthIndicator = false;
+            } else {
                 healthIndicator = true;
             }
 
@@ -52,49 +60,22 @@ define([
                     break;
             }
 
-            var isConsult = model.get('domain') && model.get('domain').toUpperCase() === 'CONSULT';
             var isStaffView = contextViewType === 'staff';
             model.set({
                 'age': age,
-                'isConsult': isConsult,
                 'facilityRequestedName': facilityRequestedName,
                 'healthIndicator': healthIndicator,
                 'isStaffView': isStaffView,
-                'urgency': urgency
+                'urgency': urgency,
+                'readOnly': readOnly
             });
 
-            Utils.setPrerequisiteData(model);
-        },
-        setPrerequisiteData: function (model) {
-            var prerequisites = model.get('prerequisites');
-            if (!_.isUndefined(prerequisites)) {
-                var questionMetCounter = 0;
-                var orderResultMetCounter = 0;
-
-                if (!_.isUndefined(prerequisites.questions)) {
-                    _.each(prerequisites.questions, function (question) {
-                        if (!_.isUndefined(question.response) && (question.response.toUpperCase() === 'YES' || question.response.toUpperCase() === 'OVERRIDE')) {
-                            question.met = true;
-                            questionMetCounter++;
-                        }
-                    });
-
-                    prerequisites.questionCount = prerequisites.questions.length;
-                }
-
-                if (!_.isUndefined(prerequisites.orderResults)) {
-                    _.each(prerequisites.orderResults, function (orderResult) {
-                        if (!_.isUndefined(orderResult.status) && (orderResult.status.toUpperCase() === 'COMPLETED' || orderResult.status.toUpperCase() === 'OVERRIDE' || orderResult.status.toUpperCase() === 'ORDERED')) {
-                            orderResult.met = true;
-                            orderResultMetCounter++;
-                        }
-                    });
-
-                    prerequisites.orderResultCount = prerequisites.orderResults.length;
-                }
-
-                prerequisites.totalCount = prerequisites.questionCount + prerequisites.orderResultCount;
-                prerequisites.totalMet = questionMetCounter + orderResultMetCounter;
+            if(!_.isEmpty(model.get('taskHistory'))){
+                _.each(model.get('taskHistory'), function(historyItem){
+                    if(!_.isNull(historyItem.signalStatusTimestamp)){
+                        historyItem.formattedStatusTimestamp = moment.utc(historyItem.signalStatusTimestamp, 'YYYY-MM-DD[T]HH:mm[Z]').local().format('MM/DD/YYYY HH:mm');
+                    }
+                });
             }
         }
     };

@@ -38,12 +38,20 @@ var fhirToJDSAttrMap = [{
     definition: 'http://hl7.org/fhir/2015MAY/datatypes.html#dateTime',
     description: 'onset date/time. The prefixes >, >=, <=, < and != may be used on the parameter value (e.g. onset=>2015-01-15). The following date formats are permitted: yyyy-mm-ddThh:mm:ss (exact date search), yyyy-mm-dd (within given day), yyyy-mm (within given month), yyyy (within given year). A single date parameter can be used for an exact date search (e.g. onset=2015-01-26T08:30:00) or an implicit range (e.g. onset=2015-01, searches all dates in January 2015). Two date parameters can be used to specify an explicitly bounded range. When using a pair of date parameters, the parameters should bind both ends of the range. One should have a less-than operator (<, <=) while the other a greater-than operator (>, >=).',
     searchable: true
+},{
+    fhirName: '_sort',
+    vprName: '',
+    dataType: 'string',
+    definition: 'http://hl7.org/FHIR/2015May/datatypes.html#string',
+    description: 'Sort criteria. Ascending order by default, order is specified with the following variants:  _sort:asc (ascending), _sort:desc (descending). Supported sort properties: asserter, code, date-asserted, onset, patient.',
+    searchable: true
 }];
+conformanceUtils.addCountAttribute(fhirToJDSAttrMap); //adding the _count attribute that is common to (almost) all endpoints.
 
 // Issue call to Conformance registration
 conformance.register(conformanceUtils.domains.CONDITION, createConditionConformanceData());
 
-function createConditionConformanceData() {   
+function createConditionConformanceData() {
    var resourceType = conformanceUtils.domains.CONDITION;
    var profileReference = 'http://hl7.org/fhir/2015MAY/condition.html';
    var interactions = [ 'read', 'search-type' ];
@@ -52,23 +60,30 @@ function createConditionConformanceData() {
            interactions, fhirToJDSAttrMap);
 }
 
-//http://IP_ADDRESS:PORT/vpr/all/find/problem?filter=like(%22problemText%22,%22%25%22)
+//http://IP             /vpr/all/find/problem?filter=like(%22problemText%22,%22%25%22)
 //get all problems in the system
 
-//http://IP_ADDRESS:PORT/vpr/9E7A;20/find/problem
+//http://IP             /vpr/9E7A;20/find/problem
 //get all problems for a specific pid
 
 function getResourceConfig() {
     return [{
-        name: 'condition-getProblems',
+        name: 'fhir-condition',
         path: '',
         get: getProblems,
         subsystems: ['patientrecord', 'jds', 'solr', 'authorization'],
-        interceptors: {
-            fhirPid: true
-        },
+        interceptors: { fhirPid: true },
         permitResponseFormat: true,
-        requiredPermissions: [],
+        requiredPermissions: ['read-fhir'],
+        isPatientCentric: true
+    },{
+        name: 'fhir-condition-search',
+        path: '_search',
+        post: getProblems,
+        subsystems: ['patientrecord', 'jds', 'solr', 'authorization'],
+        interceptors: { fhirPid: true },
+        permitResponseFormat: true,
+        requiredPermissions: ['read-fhir'],
         isPatientCentric: true
     }];
 }
@@ -153,6 +168,7 @@ function buildSearchQuery(params) {
  * @api {get} /fhir/patient/{id}/condition Get Condition
  * @apiName getProblems
  * @apiGroup Condition
+ * @apiParam {String} id The patient id
  * @apiParam {Number} [_count] The number of results to show.
  * @apiParam {String} [date-asserted] date-asserted date/time. The prefixes >, >=, <=, < and != may be used on the parameter value (e.g. date-asserted=>2015-01-15). The following date formats are permitted: yyyy-mm-ddThh:mm:ss (exact date search), yyyy-mm-dd (within given day), yyyy-mm (within given month), yyyy (within given year). A single date parameter can be used for an exact date search (e.g. date-asserted=2015-01-26T08:30:00) or an implicit range (e.g. date-asserted=2015-01, searches all dates in January 2015). Two date parameters can be used to specify an explicitly bounded range. When using a pair of date parameters, the parameters should bind both ends of the range. One should have a less-than operator (<, <=) while the other a greater-than operator (>, >=). Consult the <a href="http://www.hl7.org/FHIR/2015May/search.html#date">FHIR DSTU2 API</a> documentation for more information.
  * @apiParam {String} [onset] onset date/time. The prefixes >, >=, <=, < and != may be used on the parameter value (e.g. onset=>2015-01-15). The following date formats are permitted: yyyy-mm-ddThh:mm:ss (exact date search), yyyy-mm-dd (within given day), yyyy-mm (within given month), yyyy (within given year). A single date parameter can be used for an exact date search (e.g. onset=2015-01-26T08:30:00) or an implicit range (e.g. onset=2015-01, searches all dates in January 2015). Two date parameters can be used to specify an explicitly bounded range. When using a pair of date parameters, the parameters should bind both ends of the range. One should have a less-than operator (<, <=) while the other a greater-than operator (>, >=). Consult the <a href="http://www.hl7.org/FHIR/2015May/search.html#date">FHIR DSTU2 API</a> documentation for more information.
@@ -161,37 +177,37 @@ function buildSearchQuery(params) {
  * @apiDescription Converts a vpr \'problem\' resource into a FHIR \'condition\' resource.
  * @apiExample {js} Request Examples:
  *      // Limiting results count
- *      http://IPADDRESS:POR/resource/fhir/patient/10110V004877/condition?_count=1
+ *      http://IP           /resource/fhir/patient/10110V004877/condition?_count=1
  *
  *      // Conditions on a year
- *      http://IPADDRESS:POR/resource/fhir/patient/10110V004877/condition?onset=2000
+ *      http://IP           /resource/fhir/patient/10110V004877/condition?onset=2000
  *
  *      // Conditions in a year and month
- *      http://IPADDRESS:POR/resource/fhir/patient/10110V004877/condition?onset=2005-04
+ *      http://IP           /resource/fhir/patient/10110V004877/condition?onset=2005-04
  *
  *      // Conditions in a year, month, and day
- *      http://IPADDRESS:POR/resource/fhir/patient/10110V004877/condition?onset=2000-02-21
+ *      http://IP           /resource/fhir/patient/10110V004877/condition?onset=2000-02-21
  *
  *      // Conditions outside of a date range
- *      http://IPADDRESS:POR/resource/fhir/patient/10110V004877/condition?onset=!=2000-02
+ *      http://IP           /resource/fhir/patient/10110V004877/condition?onset=!=2000-02
  *
  *      // Conditions within an explicit date range
- *      http://IPADDRESS:POR/resource/fhir/patient/10110V004877/condition?onset=>=2010-06&onset=<=2014-09-20
+ *      http://IP           /resource/fhir/patient/10110V004877/condition?onset=>=2010-06&onset=<=2014-09-20
  *
  *      // Conditions sorted by code
- *      http://IPADDRESS:POR/resource/fhir/patient/10110V004877/condition?_sort=code
+ *      http://IP           /resource/fhir/patient/10110V004877/condition?_sort=code
  *
  *      // Conditions sorted by asserter
- *      http://IPADDRESS:POR/resource/fhir/patient/10110V004877/condition?_sort=asserter
+ *      http://IP           /resource/fhir/patient/10110V004877/condition?_sort=asserter
  *
  *      // Conditions sorted by date-asserted
- *      http://IPADDRESS:POR/resource/fhir/patient/10110V004877/condition?_sort=date-asserted
+ *      http://IP           /resource/fhir/patient/10110V004877/condition?_sort=date-asserted
  *
  *      // Conditions sorted by onset
- *      http://IPADDRESS:POR/resource/fhir/patient/10110V004877/condition?_sort=onset
+ *      http://IP           /resource/fhir/patient/10110V004877/condition?_sort=onset
  *
  *      // Conditions sorted by patient (pid)
- *      http://IPADDRESS:POR/resource/fhir/patient/10110V004877/condition?_sort=patient
+ *      http://IP           /resource/fhir/patient/10110V004877/condition?_sort=patient
  *
  *
  * @apiSuccess {json} data Json object conforming to the <a href="http://www.hl7.org/FHIR/2015May/condition.html">Condition FHIR DTSU2 specification</a>.
@@ -360,7 +376,7 @@ function convertToFhir(inputJSON, req) {
     var results = [],
         items = inputJSON.data.items,
         total = inputJSON.data.totalItems;
-        
+
     _.forEach(items, function(item, index) {
          item.fhirMeta = {
             _pid: req._pid,

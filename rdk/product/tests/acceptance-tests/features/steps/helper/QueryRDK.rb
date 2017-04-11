@@ -150,7 +150,7 @@ class QueryRDKVisitAPI < BuildQuery
 end # class
 
 class QueryGenericRDK < BuildQuery
-  # http://IP_ADDRESS:PORT/visits/providers
+  # http://IP             /visits/providers
   def initialize(command, pid = nil, action = nil)
     super()
     @number_parameters = 0
@@ -186,7 +186,7 @@ class QueryGenericRDK < BuildQuery
   end
 end # class
 
-#http://IP_ADDRESS:PORT/patientrecord/search/text?query=document&pid=9E7A;100022
+#http://IP             /patientrecord/search/text?query=document&pid=9E7A;100022
 class QueryRDK < BuildQuery
   p "inside class QueryRDK"
   def initialize(pid, type)
@@ -199,7 +199,7 @@ class QueryRDK < BuildQuery
   end
 end
 
-#http://IP_ADDRESS:PORT/fhir/patient/urn:va:patient:9E7A:100716:100716
+#http://IP             /fhir/patient/urn:va:patient:9E7A:100716:100716
 class QueryRDKDemographics < BuildQuery
   def initialize(type, uid)
     super()
@@ -212,7 +212,7 @@ class QueryRDKDemographics < BuildQuery
   end
 end
 
-#http://IP_ADDRESS:PORT/resource/fhir/patient/9E7A;253/observation
+#http://IP             /resource/fhir/patient/9E7A;253/observation
 class QueryRDKFhir < BuildQuery
   def initialize(uid, domain)
     super()
@@ -225,7 +225,7 @@ class QueryRDKFhir < BuildQuery
   end
 end
 
-#http://IP_ADDRESS:PORT/resource/fhir/metadata
+#http://IP             /resource/fhir/metadata
 class QueryRDKFhirMetadata < BuildQuery
   def initialize
     super()
@@ -234,7 +234,7 @@ class QueryRDKFhirMetadata < BuildQuery
   end
 end
 
-#http://IPADDRESS:POR/resource/vler/9E7A;8/toc?encounterUid=urn:va:visit:9E7A:8:1218
+#http://IP           /resource/vler/9E7A;8/toc?encounterUid=urn:va:visit:9E7A:8:1218
 class QueryRDKVler < BuildQuery
   def initialize(type)
     super()
@@ -257,7 +257,7 @@ if __FILE__ == $PROGRAM_NAME
   p QueryRDKAPI.new("uid", "3", "false").path
 end
 
-#http://IP_ADDRESS:PORT/patientrecord/domain/document?pid=10108V420871&filter=eq(kind,"Progress Note")
+#http://IP             /patientrecord/domain/document?pid=10108V420871&filter=eq(kind,"Progress Note")
 class QueryRDKFilterBySummary < BuildQuery
   p "inside class QueryRDKFilterBySummary"
   def initialize(pid = nil, filter = nil)
@@ -273,7 +273,7 @@ class QueryRDKFilterBySummary < BuildQuery
   end
 end
 
-#http://IP_ADDRESS:PORT/resource/tasks?accessCode=pu1234&verifyCode=pu1234!!&site=9E7A
+#http://IP             /resource/tasks?accessCode=PW    &verifyCode=PW    !!&site=9E7A
 #{"context": "patient","patientICN":"10108V420871","status":"Ready"}
 class RDKProcessList< BuildQuery
   def initialize
@@ -283,7 +283,7 @@ class RDKProcessList< BuildQuery
   end
 end
 
-#http://IP_ADDRESS:PORT/resource/tasks/startprocess?accessCode=pu1234&verifyCode=pu1234!!&site=9E7A
+#http://IP             /resource/tasks/startprocess?accessCode=PW    &verifyCode=PW    !!&site=9E7A
 #{"deploymentId":"VistaCore:FITLabProject:0.0.0","processDefId":"FITLabProject.FITLabActivity","parameter":{"icn":"10108V420871","facility":"9E7A"}}
 class RDKStartProcess< BuildQuery
   def initialize
@@ -293,24 +293,7 @@ class RDKStartProcess< BuildQuery
   end
 end
 
-class QueryGenericVISTA < BuildQuery
-  # http://IP_ADDRESS:PORT/visits/providers
-  def initialize(command, pid = nil, action = nil)
-    super()
-    @number_parameters = 0
-    @path = String.new(DefaultLogin.vista_url)
-    @path.concat("/#{command}")
-    # @path.concat(pid)
-    unless pid.nil?
-      @path.concat("/#{pid}")
-    end
-    unless action.nil?
-      @path.concat("/#{action}")
-    end
-  end
-end
-
-#http://IP_ADDRESS:PORT/resource/patient/record/domain/vital?filter=and(DATEFILTER)&pid=10107V395912
+#http://IP             /resource/patient/record/domain/vital?filter=and(DATEFILTER)&pid=10107V395912
 class QueryRDKCCB < BuildQuery
   def initialize(type)
     super()
@@ -383,5 +366,13 @@ class QueryRDKExtendFhirAPI < BuildQuery
     super()
     @path = String.new(DefaultLogin.rdk_fetch_url)
     @path.concat("/resource/fhir/patient/")
+  end
+end
+
+class RDKOrder < BuildQuery
+  def initialize
+    super()
+    @path = String.new(DefaultLogin.rdk_fetch_url)
+    @path.concat("/resource/")
   end
 end

@@ -10,25 +10,221 @@
 
 @import "variables";
 @import "mixins";
-@import "buttons";
-
+/*@import "buttons";*/
 body {
   font-family: 'Source Sans Pro', sans-serif;
   color: $grey-darkest;
   overflow: auto;
+  overflow-x: hidden;
+  background-color: $pure-white;
+  font-size: 14px;
+}
+.menu-hamburger {
+  display: block;
+  position: fixed;
+  overflow: hidden;
+  left: 10px;
+  top: 10px;
+  z-index: 10000;
+  margin: 0;
+  padding: 0;
+  width: 36px;
+  height: 35px;
+  font-size: 0;
+  text-indent: -9999px;
+  appearance: none;
+  box-shadow: none;
+  border-radius: none;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.menu-hamburger span {
+  display: block;
+  position: absolute;
+  top: 14px;
+  left: 0px;
+  right: 0px;
+  height: 3px;
+  background: $pure-black;
+}
+.menu-hamburger span::before,
+.menu-hamburger span::after {
+  position: absolute;
+  display: block;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background-color: $pure-black;
+  content: "";
+}
+.menu-hamburger span::before {
+  top: -10px;
+}
+.menu-hamburger span::after {
+  bottom: -10px;
+}
+.menu-hamburger--htx span {
+  transition: background 0s 0.3s;
+}
+.menu-hamburger--htx span::before,
+.menu-hamburger--htx span::after {
+  transition-duration: 0.3s, 0.3s;
+  transition-delay: 0.3s, 0s;
+}
+.menu-hamburger--htx span::before {
+  transition-property: top, transform;
+}
+.menu-hamburger--htx span::after {
+  transition-property: bottom, transform;
+}
+.menu-hamburger--htx.is-active span {
+  background: none;
+}
+.menu-hamburger--htx.is-active {
+  transform: translate(191px, 5px);
+  transition: .4s ease-in-out;
+}
+.menu-hamburger--htx.is-active span::before {
+  top: 0;
+  transform: rotate(45deg);
+}
+.menu-hamburger--htx.is-active span::after {
+  bottom: 0;
+  transform: rotate(-45deg);
+}
+.menu-hamburger--htx.is-active span::before,
+.menu-hamburger--htx.is-active span::after {
+  transition-delay: 0s, 0.3s;
   background-color: $pure-white;
 }
+/* Toggle Styles */
+#wrapper {
+  padding-left: 0;
+  -webkit-transition: all 0.5s ease;
+  -moz-transition: all 0.5s ease;
+  -o-transition: all 0.5s ease;
+  transition: all 0.5s ease;
+  a#menu-toggle {
+    .fa-bars {
+      font-size: 25px;
+    }
+  }
+}
 
+#wrapper.toggled {
+    padding-left: 250px;
+}
+#sidebar-wrapper {
+    z-index: 1000;
+    position: fixed;
+    left: 250px;
+    top: 0;
+    width: 0;
+    height: 100%;
+    margin-left: -250px;
+    overflow-y: auto;
+    background: $pure-black;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+#wrapper.toggled #sidebar-wrapper {
+    width: 250px;
+}
+#page-content-wrapper {
+    width: 100%;
+    position: absolute;
+    padding: 15px;
+}
+#wrapper.toggled #page-content-wrapper {
+    position: absolute;
+    margin-right: -250px;
+}
+.radio-inline {
+  .radio-inline {
+    margin-left: 7px;
+  }
+}
+/* Sidebar Styles */
+.sidebar-nav {
+    position: absolute;
+    top: 0;
+    width: 250px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.sidebar-nav li {
+    text-indent: 20px;
+    line-height: 40px;
+}
+.sidebar-nav li a {
+    display: block;
+    text-decoration: none;
+    color: $grey-dark;
+}
+.sidebar-nav li a:hover {
+    text-decoration: none;
+    color: $pure-white;
+    background: rgba(255,255,255,0.2);
+}
+.sidebar-nav li a:active,
+.sidebar-nav li a:focus {
+    text-decoration: none;
+}
+.sidebar-nav > .sidebar-brand {
+    height: 50px;
+    font-size: 18px;
+    line-height: 60px;
+}
+.sidebar-nav > .sidebar-brand a {
+    color: $grey-dark;
+}
+.sidebar-nav > .sidebar-brand a:hover {
+    color: $pure-white;
+    background: none;
+}
+@media(min-width:768px) {
+    #wrapper {
+        padding-left: 250px;
+    }
+
+    #wrapper.toggled {
+        padding-left: 0;
+    }
+
+    #sidebar-wrapper {
+        width: 250px;
+    }
+
+    #wrapper.toggled #sidebar-wrapper {
+        width: 0;
+    }
+
+    #page-content-wrapper {
+        padding: 20px;
+        position: relative;
+    }
+
+    #wrapper.toggled #page-content-wrapper {
+        position: relative;
+        margin-right: 0;
+    }
+}
 h4 {
   margin: 30px 0;
   font-weight: bold;
 }
 .page-header {
     padding-bottom: 9px;
-    padding: 60px 0 20px;
-    border-bottom: 1px solid #eee;
+    padding: 0 0 20px 0;
+    border-bottom: none;
     h1 {
       display: inline-block;
+      font-size: 28px;
+      margin-bottom: 20px;
     }
     a {
       float: right;
@@ -40,7 +236,7 @@ h4 {
   margin-bottom: 40px;
 }
 .typography {
-  h4 {
+  h2 {
     &.patient-info {
       color: $grey-darkest;
       font-family: 'merriweather', serif;
@@ -48,20 +244,13 @@ h4 {
       font-weight: 700;
     }
     &.patient-name {
-      color: #fff;
-      font-family: 'merriweather', serif;
-      font-size: 14px;
-      line-height: 18px;
+      color: $pure-white;
       background-color: $primary;
       padding: 10px;
-      font-weight: 400;
-      width: auto;
-      display: inline-block;
-      margin: 10px 0 0 0;
     }
     &.modal-title {
       font-size: 13px;
-      color: #000;
+      color: $pure-black;
       font-weight: 700;
     }
   }
@@ -72,19 +261,22 @@ h4 {
     text-transform: uppercase;
   }
 }
+aside.tray-container .tray-menu>li.open .tray-close-icon {
+  top: 1px;
+  left: -1px;
+}
 
 //
 // Colors
 // --------------------------------------------------
 
 .color-box {
-  background-color: #fff;
+  background-color: $pure-white;
   border-radius: 4px;
   box-shadow: 0px 2px 3px 0px rgba(0,0,0,0.20);
   color: $grey-darkest;
   height: 200px;
-  max-width: 130px;
-  min-width: 15%;
+  width: 100%;
   text-align: center;
   float: left;
   margin: 0 3% 3% 0;
@@ -96,93 +288,10 @@ h4 {
     height: 70%;
     margin-bottom: 5%;
     padding: 0 5px;
-    &.primary {
-      background-color: $primary;
-      color: #fff;
-    }
-    &.primary-dark {
-      background-color: $primary-dark;
-      color: #fff;
-    }
-    &.primary-light {
-      background-color: $primary-light;
-      color: $grey-darkest;
-    }
-    &.primary-lighter {
-      background-color: $primary-lighter;
-      color: $grey-darkest;
-    }
-    &.primary-lightest {
-      background-color: $primary-lightest;
-      color: $grey-darkest;
-    }
-    &.secondary {
-      background-color: $secondary;
-      color: #fff;
-    }
-    &.secondary-dark {
-      background-color: $secondary-dark;
-      color: #fff;
-    }
-    &.tertiary {
-      background-color: $tertiary;
-      color: $grey-darkest;
-    }
-    &.tertiary-dark {
-      background-color: $tertiary-dark;
-      color: $grey-darkest;
-    }
-    &.black {
-      background-color: #000;
-      color: #fff;
-    }
-    &.white {
-      background-color: #fff;
-      color: $grey-darkest;
-    }
-    &.danger {
-      background-color: $red;
-      color: #fff;
-    }
-    &.danger-dark {
-      background-color: $red-dark;
-      color: #fff;
-    }
-    &.danger-lightest {
-      background-color: $red-lightest;
-      color: $red-dark;
-    }
-    &.grey-darkest {
-      background-color: $grey-darkest;
-      color: #fff;
-    }
-    &.grey-darker {
-      background-color: $grey-darker;
-      color: #fff;
-    }
-    &.grey-dark {
-      background-color: $grey-dark;
-      color: #000;
-    }
-    &.grey {
-      background-color: $grey;
-      color: #000;
-    }
-    &.grey-light {
-      background-color: $grey-light;
-      color: #000;
-    }
-    &.grey-lighter {
-      background-color: $grey-lighter;
-      color: #000;
-    }
-    &.grey-lightest {
-      background-color: $grey-lightest;
-      color: #000;
-    }
   }
   p {
     margin: 0;
+    font-size: 12px;
   }
   h3 {
     margin: 0 0 5px 0;
@@ -191,6 +300,29 @@ h4 {
 
 //
 // Badges
+.navbar.navbar-default.badge {
+  background: none;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  background-image: none;
+  padding-left: 0;
+  .container-fluid {
+    padding: 0;
+    margin: 0;
+    ul.nav.navbar-nav {
+      li {
+        button {
+          padding-left: 0;
+        }
+        &.alert-dropdown {
+          .badge {
+            left: 10px;
+          }
+        }
+      }
+    }
+  }
+}
 // --------------------------------------------------
 
 .label {
@@ -212,78 +344,15 @@ h4 {
     }
   }
 }
-.badge {
-  padding: 3px 6px;
-  font-size: 11px;
-  font-weight: 400;
-  background-color: $primary;
-  color: $pure-white;
-}
 //
-// Buttons
+// Modals
+.modal-xl {
+  width: calc(100vw - 191px);
+}
 // --------------------------------------------------
 
 // Common styles
-.btn-default,
-.btn-primary,
-.btn-success,
-.btn-info,
-.btn-warning,
-.btn-danger {
-  text-shadow: none;
-  $shadow: none;
-  background-image: none;
-  box-shadow: none;
 
-  // Reset the shadow
-  &:active,
-  &.active {
-    @include box-shadow(none);
-  }
-
-  &.disabled,
-  &[disabled],
-  fieldset[disabled] & {
-    @include box-shadow(none);
-  }
-
-  .badge {
-    text-shadow: none;
-  }
-}
-
-// Mixin for generating new styles
-@mixin btn-styles($btn-color: #555) {
-  @include gradient-vertical($start-color: $btn-color, $end-color: darken($btn-color, 12%));
-  @include reset-filter; // Disable gradients for IE9 because filter bleeds through rounded corners; see https://github.com/twbs/bootstrap/issues/10620
-  background-repeat: repeat-x;
-  border-color: darken($btn-color, 14%);
-
-  &:hover,
-  &:focus  {
-    background-color: darken($btn-color, 17%);
-  }
-
-  &:active,
-  &.active {
-    background-color: darken($btn-color, 12%);
-    border-color: darken($btn-color, 14%);
-  }
-
-  &.disabled,
-  &[disabled],
-  fieldset[disabled] & {
-    &,
-    &:hover,
-    &:focus,
-    &.focus,
-    &:active,
-    &.active {
-      background-color: darken($btn-color, 12%);
-      background-image: none;
-    }
-  }
-}
 
 // Common styles
 .no-margin {
@@ -293,7 +362,7 @@ h4 {
   text-align: left!important;
   margin-left: 2px;
 }
-.icon-library {
+.icons-library {
   font-size: 18px;
   ul {
     padding-left: 0;
@@ -336,136 +405,12 @@ h4 {
       font-size: 15px;
     }
 }
-.btn {
-  // Remove the gradient for the pressed/active state
-  &:active,
-  &.active {
-    background-image: none;
-  }
-  .badge {
-    margin-left: 5px;
-  }
-  border: none;
-  background-image: none;
-}
 
-// Apply the mixin to the buttons
-.btn-default {
-  background-color: $primary-light;
-  background-image:none;
-  color: $primary;
-  border: none;
-  &:hover,
-  &:active,
-  &:focus,
-  &.active,
-  &.focus {
-    background-color: darken($primary-light, 10%);
-    color: $primary-dark;
-  }
-  &:active {
-    &:focus {
-    background-color: darken($primary-light, 10%);
-    color: $primary-dark;
-    }
-  }
-}
-.btn-primary { @include btn-styles($btn-primary-bg);
-  background-image:none;
-  border: none;
-  &:hover,
-  &:active,
-  &:focus,
-  &.active,
-  &.focus {
-    background-color: $primary-dark;
-  }
-  &:active {
-    &:focus {
-    background-color: $primary-dark;
-    color: $pure-white;
-    }
-  }
-}
-.btn-success { @include btn-styles($btn-success-bg);
-  background-image:none;
-  border: none;
-  &:hover,
-  &:active,
-  &:focus,
-  &.active,
-  &.focus {
-    background-color: $secondary-dark;
-  }
-  &:active {
-    &:focus {
-    background-color: $secondary-dark;
-    color: $pure-white;
-    }
-  }
-}
-.btn-info    { @include btn-styles($btn-info-bg);
-  background-image:none;
-  background-color: $grey-darker;
-  border: none;
-  &:hover,
-  &:active,
-  &:focus,
-  &.active,
-  &.focus  {
-    background-color: $grey-darkest;
-    color:$pure-white;
-  }
-  &:active {
-    &:focus {
-    background-color: $grey-darkest;
-    color: $pure-white;
-    }
-  }
-}
-.btn-warning { @include btn-styles($btn-warning-bg);
-  background-image:none;
-  border: none;
-  color: $grey-darkest;
-  &:hover,
-  &:active,
-  &:focus,
-  &.active,
-  &.focus  {
-    background-color: $tertiary-dark;
-    color:$pure-black;
-  }
-  &:active {
-    &:focus {
-    background-color: $tertiary-dark;
-    color: $pure-black;
-    }
-  }
-}
-.btn-danger  { @include btn-styles($btn-danger-bg);
-  background-image:none;
-  border: none;
-  color: $pure-white;
-  &:hover,
-  &:active,
-  &:focus,
-  &.active,
-  &.focus  {
-    background-color: $red-dark;
-    color:$pure-white;
-  }
-  &:active {
-    &:focus {
-    background-color: $red-dark;
-    color: $pure-white;
-    }
-  }
-}
 .style-guide {
   .pop-over {
     width: 400px;
     height: 300px;
-    background: #F3F5F7;
+    background: $primary-lightest;
     box-shadow: 0px 0px 4px 0px rgba(0,0,0,0.20);
     position: relative;
   }
@@ -475,7 +420,7 @@ h4 {
   width: auto;
   height: 45px;
   background: $pure-white;
-  border-top: 1px solid #E6E6E6;
+  border-top: 1px solid $grey-lighter;
   padding: 8px 0 8px 8px;
   position: absolute;
   bottom: 0;
@@ -546,7 +491,17 @@ h4 {
 .form-control {
   border-color: $grey-light;
 }
+.grid-filter {
+  position: relative;
+  .backgrid-filter .fa.fa-filter {
+    left: 6px;
+    position: absolute;
+    top: 6px;
+    z-index: 1;
+    font-size: 11px;
+}
 
+  } 
 legend {
   border-bottom: none;
 }
@@ -590,6 +545,9 @@ legend {
 .img-thumbnail {
   @include box-shadow(0 1px 2px rgba(0,0,0,.075));
 }
+.img-percent-100 {
+  max-width: 100%;
+}
 
 
 //
@@ -614,6 +572,9 @@ legend {
 // --------------------------------------------------
 
 // Default navbar
+.navbar {
+  padding-top: 11px;
+}
 .navbar-default {
   @include gradient-vertical($start-color: lighten($navbar-default-bg, 10%), $end-color: $navbar-default-bg);
   @include reset-filter; // Remove gradient in IE<10 to fix bug where dropdowns don't get triggered
@@ -630,6 +591,7 @@ legend {
 
 .navbar-brand,
 .navbar-nav > li > a {
+  font-size: 14px;
 }
 
 // Inverted navbar
@@ -641,7 +603,7 @@ legend {
   .navbar-nav > .active > a {
     background-color: $primary-dark;
     background-image: none;
-    color: #fff;
+    color: $pure-white;
   }
   .navbar-brand {
     color: #323A45;
@@ -652,6 +614,9 @@ legend {
     &:focus {
       color: $primary-dark;
     }
+  }
+  .navbar-nav li:first-child a {
+    padding-left: 0;
   }
   .navbar-nav > li > a {
     text-shadow: none;
@@ -677,7 +642,7 @@ legend {
     &,
     &:hover,
     &:focus {
-      color: #fff;
+      color: $pure-white;
       @include gradient-vertical($start-color: $dropdown-link-active-bg, $end-color: darken($dropdown-link-active-bg, 5%));
     }
   }
@@ -686,13 +651,10 @@ legend {
 .jumbotron {
   background: $primary-lightest;
   color: $grey-darkest;
-  height: 350px;
   position: relative;
   width: 100%;
   display: block;
-  .container {
-    margin-top: 50px;
-  }
+  padding: 20px;
   // &::after {
   //   content: "";
   //   background: url("../../../_assets/img/login-bg-3.jpg");
@@ -812,4 +774,19 @@ legend {
   border-color: darken($well-bg, 10%);
   $shadow: inset 0 1px 3px rgba(0,0,0,.05), 0 1px 0 rgba(255,255,255,.1);
   @include box-shadow($shadow);
+}
+@media (min-width: 1200px) {
+.container {
+    width: 970px;
+}
+}
+@media (max-width: 1215px) {
+.container {
+    width: 745px;
+}
+}
+@media (max-width: 985px) {
+.container {
+    width: 600px;
+}
 }

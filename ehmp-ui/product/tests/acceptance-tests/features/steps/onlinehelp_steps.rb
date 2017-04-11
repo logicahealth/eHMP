@@ -50,23 +50,6 @@ Given(/^user searches for patient "(.*?)"$/) do |search_value|
   expect(driver.find_element(:id, "linkHelp-mySite")).to be_true
 end
 
-And(/^selects it$/) do
-  patient_search = PatientSearch2.instance
-  driver = TestSupport.driver
-
-  patient_search.wait_until_element_present("Confirm", DefaultLogin.wait_time)
-  expect(patient_search.static_dom_element_exists? "Confirm").to be_true
-
-  results = TestSupport.driver.find_element(:css, "#patient-search-confirmation div.patientName")
-  expect(patient_search.perform_action("Confirm")).to be_true
-
-  patient_search.wait_until_element_present("Confirm Flag", DefaultLogin.wait_time)
-  expect(driver.find_element(:id, "linkHelp-patient_search_restricted")).to be_true
-  # deliberate use of wait time other then the DefaultLogin.wait_time
-  #expect(patient_search.wait_until_element_present("patientSearch", 60)).to be_true
-  wait_until_dom_has_confirmflag_or_patientsearch
-end
-
 def verify_common_help_buttons
   PobProblemsApplet.new.wait_for_btn_applet_help
   expect(PobProblemsApplet.new).to have_btn_applet_help, "help icon not present on Problmes Applet"
@@ -146,37 +129,4 @@ Then(/^the On-line Help page is opened by clicking on the On-line Help icon$/) d
       p "Error: #{e}"
     end
   }
-end
-
-Then(/^the tooltip is present on "(.*?)"$/) do |tooltip_type|
-  driver = TestSupport.driver
-  case tooltip_type
-  when "Column header"
-    column_tltip = driver.find_elements(:xpath, "//div[@id='vitals-observations-gist']/div/span[@tooltip-data-key]")
-    #p column_tltip
-    expect(column_tltip.length).to eq(3)
-
-  when "Letter symbol"
-    letter_tltip = driver.find_elements(:xpath, "//div[@id='patientDemographic-cwad']/span[@tooltip-data-key]")
-    #p letter_tltip
-    expect(letter_tltip.length).to eq(5)
-
-  when "Icons from toolbar"
-    driver.find_element(:id, "vitals_problem_name_BPS").click
-    tlbr_icon_tltip = driver.find_elements(:xpath, "//div[@id='vitals-observations-gist-items']//a[@tooltip-data-key]")
-    #p tlbr_icon_tltip
-    expect(tlbr_icon_tltip.length).to eq(30)
-
-  when "Timeline"
-    timeln_tltip = driver.find_elements(:xpath, "//div[@id='globalDatePicker-compact']//*[@tooltip-data-key]")
-    #p timeln_tltip
-    expect(timeln_tltip.length).to eq(2)
-
-  when "Status bar"
-    status_tltip = driver.find_elements(:xpath, "//div[@id='patientSyncStatusRegion']/div/span[@data-toggle='tooltip']")
-    # p status_tltip
-    expect(status_tltip.length).to be > 1
-  else
-    p "Can not find option!"
-  end
 end

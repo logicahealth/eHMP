@@ -62,7 +62,7 @@ var sampleVprEncounter = {
     locationName: 'Family Practice Clinic',
     facilityName: 'DOD',
     facilityCode: 'DOD',
-    appoinmentStatus: 'Complete',
+    appointmentStatus: 'Complete',
     typeName: 'OUTPATIENT',
     typeDisplayName: 'OUTPATIENT',
     dispositionName: 'Released w/o Limitations',
@@ -85,7 +85,7 @@ describe('dodEncounterToVPR', function(){
         expect(result.locationName).toEqual(sampleVprEncounter.locationName);
         expect(result.facilityName).toEqual(sampleVprEncounter.facilityName);
         expect(result.facilityCode).toEqual(sampleVprEncounter.facilityCode);
-        expect(result.appoinmentStatus).toEqual(sampleVprEncounter.appoinmentStatus);
+        expect(result.appointmentStatus).toEqual(sampleVprEncounter.appointmentStatus);
         expect(result.typeName).toEqual(sampleVprEncounter.typeName);
         expect(result.typeDisplayName).toEqual(sampleVprEncounter.typeDisplayName);
         expect(result.dispositionName).toEqual(sampleVprEncounter.dispositionName);

@@ -36,7 +36,7 @@ action :execute do
 
   ruby_block "ro_install:execute" do
     block do
-      shell = Greenletters::Process.new("sh", :transcript => new_resource.log, :timeout => 10)
+      shell = Greenletters::Process.new(node[:jds][:shell], :transcript => new_resource.log, :timeout => 10)
       prompt = /#{new_resource.namespace}>/
 
       # For non-standard RO files, accept and log.
@@ -49,15 +49,30 @@ action :execute do
         process.write("0\r")
       end
 
-      # start the shell, set up GTM environment and start GTM shell
+      # start the shell
       shell.start!
-      shell.wait_for(:output, /sh-[0-9\.]+#/) do | process, match |
-        process.write("#{node[:jds][:session]}\n")
+
+      # Start Cache session
+      shell.wait_for(:output, node[:jds][:shell_prompt]) do | process, match |
+        process.write("#{node[:jds][:session]}\r")
+      end
+
+      # Login
+      if new_resource.cache_username != nil
+        shell.wait_for(:output, /Username/) do | process, match |
+          process.write("#{new_resource.cache_username}\r")
+        end
+      end
+
+      if new_resource.cache_password != nil
+        shell.wait_for(:output, /Password/) do | process, match |
+          process.write("#{new_resource.cache_password}\r")
+        end
       end
 
       # Change namespace
       shell.wait_for(:output, /USER>/) do | process, match |
-        process.write("ZN \"#{new_resource.namespace}\"\n")
+        process.write("ZN \"#{new_resource.namespace}\"\r")
       end
 
       # Set user and setup programmer environment
@@ -83,13 +98,13 @@ action :execute do
         process.write("Yes\r")
       end
       shell.wait_for(:output, prompt) do | process, match |
-        process.write("h\n")
+        process.write("h\r")
       end
 
-      shell.wait_for(:output, /sh-[0-9\.]+#/) do | process, match |
-        process.write("exit\n")
+      shell.wait_for(:output, node[:jds][:shell_prompt]) do | process, match |
+        process.write("exit\r")
       end
       shell.wait_for(:exit)
-    end # end block
-  end # end ruby_block
+    end
+  end
 end

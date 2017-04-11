@@ -1,6 +1,6 @@
 <div class="container-fluid">
     <div class="gdt-padding">
-        <div class="pull-left btn-group btn-group-xs">
+        <div class="pull-left btn-group btn-group-xs right-margin-xl">
             <button id="allRangeGlobal" name="allRangeGlobal" type="button" class="gdt-btn daterange btn btn-default" title="Press enter to select all years">All</button>
             <button id="2yrRangeGlobal" name="2yrRangeGlobal" type="button" class="gdt-btn daterange btn btn-default" title="Press enter to select the last 2 years">2yr</button>
             <button id="1yrRangeGlobal" name="1yrRangeGlobal" type="button" class="gdt-btn daterange btn btn-default" title="Press enter to select last year">1yr</button>
@@ -10,7 +10,7 @@
             <button id="72hrRangeGlobal" name="72hrRangeGlobal" type="button" class="gdt-btn daterange btn btn-default" title="Press enter to select the last 72 hours">72hr</button>
             <button id="24hrRangeGlobal" name="24hrRangeGlobal" type="button" class="gdt-btn daterange btn btn-default" title="Press enter to select the last 24 hours">24hr</button>
         </div>
-        <div class="form-inline pull-right">
+        <div class="form-inline pull-left">
             <label for="filterFromDateGlobal" class="font-size-12 color-grey-darker">From</label>
             <div class="input-group date right-margin-sm" id="customDateFromGlobal">
                 <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
@@ -22,6 +22,9 @@
                 <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                 <input type="text" class="form-control input-sm gdt-input left-padding-xs right-padding-xs" id="filterToDateGlobal" name="filterToDateGlobal" size="11" title="Enter end of date range in the following format, MM/DD/YYYY (cannot be prior to today's date)" />
             </div>
+        </div>
+        <div class="pull-right text-right">
+            {{{helpIconLink 'gdf'}}}
         </div>
     </div>
     <div class="scroll-no-padding">

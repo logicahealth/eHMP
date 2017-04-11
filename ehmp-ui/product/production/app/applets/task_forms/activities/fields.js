@@ -4,7 +4,7 @@ define([
     'underscore',
     'handlebars',
     'app/applets/task_forms/common/utils/utils',
-    'hbs!app/applets/task_forms/activities/consults/templates/request_Template',
+    'hbs!app/applets/task_forms/activities/order.consult/templates/request/request_Template',
     'app/applets/task_forms/common/views/alertView'
 ], function(Backbone, Marionette, _, Handlebars, Utils, RequestTemplate, AlertView) {
     "use strict";
@@ -86,7 +86,7 @@ define([
                 items: [{
                     control: 'button',
                     extraClasses: ['btn-default', 'btn-sm', 'pull-left'],
-                    id: 'modal-delete-button',
+                    id: 'task-order-entry-delete-button',
                     label: 'Delete',
                     title: 'Press enter to delete',
                     type: 'button'
@@ -155,6 +155,7 @@ define([
                 label: 'Scheduled Date',
                 tite: 'Enter in a date in the following format: MM/DD/YYYY',
                 placeholder: 'MM/DD/YYYY',
+                startDate: new Date(),
                 required: 'true',
                 diabled: 'true',
                 hidden: 'true'
@@ -242,13 +243,29 @@ define([
                 },
                 pickList: []
             }, {
-                control: 'input',
-                name: 'attention',
+                control: 'select',
+                name: 'acceptingProvider',
+                extraClasses: 'top-margin-sm',
                 label: 'Attention',
-                title: 'Enter in member\'s name',
                 required: 'true',
-                diabled: 'true',
-                hidden: 'true'
+                disabled: 'true',
+                hidden: 'true',
+                title: 'Press enter to open search filter text',
+                showFilter: true,
+                options: {
+                    placeholder: 'Member to assign to',
+                    minimumInputLength: 2,
+                    language: {
+                        inputTooShort: function() {
+                            return 'Enter at least 2 characters of the person\'s name';
+                        }
+                    }
+                },
+                attributeMapping: {
+                    label: 'name',
+                    value: 'personID'
+                },
+                pickList: []
             }, {
                 control: 'container',
                 extraClasses: ['top-padding-sm', 'bottom-padding-xs', 'econsult-reminder-text'],
@@ -332,8 +349,8 @@ define([
                 dismissible: false
             }, {
                 control: "container",
-                extraClasses: ["order-summary", "col-xs-8"],
-                template: Handlebars.compile('<h5>Order</h5><div class="well all-padding-xs top-margin-xs">{{summary}}</div>')
+                extraClasses: ["order-summary", "col-xs-12"],
+                template: Handlebars.compile('<div class="well bottom-padding-xl top-padding-sm all-padding-sm"><div class="col-xs-10 left-padding-no"><span class="font-size-14"><strong>{{summary}}</strong></span></div><div class="col-xs-2"><div class="sign-activityId"><button type="button" class="btn btn-link all-padding-sm top-padding-no" title="Press enter to view details">View Details</button></div></div></div>')
             }, {
                 control: "input",
                 name: "signature_code",
@@ -368,13 +385,6 @@ define([
                 items: [{
                     control: 'button',
                     extraClasses: ['btn-default', 'btn-sm'],
-                    id: 'modal-activity-detail-button',
-                    label: 'View Activity Detail',
-                    title: 'Press enter to view the activity detail',
-                    type: 'button'
-                }, {
-                    control: 'button',
-                    extraClasses: ['btn-default', 'btn-sm'],
                     id: 'modal-cancel-button',
                     label: 'Cancel',
                     name: 'cancel',
@@ -385,6 +395,7 @@ define([
                     extraClasses: ['btn-primary', 'btn-sm'],
                     id: 'modal-sign-button',
                     label: 'Accept',
+                    name: 'sign-accept',
                     title: 'Press enter to accept',
                     type: 'button'
                 }]

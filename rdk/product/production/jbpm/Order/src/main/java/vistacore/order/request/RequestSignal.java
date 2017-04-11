@@ -15,9 +15,9 @@ public class RequestSignal implements java.io.Serializable
    private java.lang.String executionUserName;
    private java.lang.String executionUserId;
    private java.lang.String executionDateTime;
-   private String data;
-
    private java.lang.String actionId;
+
+   private vistacore.order.request.RequestSignalData data;
 
    public RequestSignal()
    {
@@ -73,16 +73,6 @@ public class RequestSignal implements java.io.Serializable
       this.executionDateTime = executionDateTime;
    }
 
-   public java.lang.String getData()
-   {
-      return this.data;
-   }
-
-   public void setData(java.lang.String data)
-   {
-      this.data = data;
-   }
-
    public java.lang.String getActionText()
    {
       return this.actionText;
@@ -103,10 +93,20 @@ public class RequestSignal implements java.io.Serializable
       this.actionId = actionId;
    }
 
+   public vistacore.order.request.RequestSignalData getData()
+   {
+      return this.data;
+   }
+
+   public void setData(vistacore.order.request.RequestSignalData data)
+   {
+      this.data = data;
+   }
+
    public RequestSignal(java.lang.String name, java.lang.String actionText,
          java.lang.String history, java.lang.String executionUserName,
          java.lang.String executionUserId, java.lang.String executionDateTime,
-         java.lang.String data, java.lang.String actionId)
+         java.lang.String actionId, vistacore.order.request.RequestSignalData data)
    {
       this.name = name;
       this.actionText = actionText;
@@ -114,8 +114,8 @@ public class RequestSignal implements java.io.Serializable
       this.executionUserName = executionUserName;
       this.executionUserId = executionUserId;
       this.executionDateTime = executionDateTime;
-      this.data = data;
       this.actionId = actionId;
+      this.data = data;
    }
 
 }

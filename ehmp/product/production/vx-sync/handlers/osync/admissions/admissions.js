@@ -5,8 +5,8 @@ var async = require('async');
 var errorUtil = require(global.VX_UTILS + 'error');
 var rpcUtil = require(global.VX_UTILS + '/rpc-util');
 var nullUtils = require(global.VX_UTILS + 'null-utils');
-var parseRpcResponseAdmissions = require(global.VX_UTILS + 'patient-sync-utils').parseRpcResponseAdmissions;
-var jobUtil = require(global.VX_UTILS + 'osync-job-utils');
+var parseRpcResponseAdmissions = require(global.OSYNC_UTILS + 'patient-sync-utils').parseRpcResponseAdmissions;
+var jobUtil = require(global.OSYNC_UTILS + 'osync-job-utils');
 
 /**
  * Takes a job and validates all of the fields of that job to make sure it's a valid one.<br/>

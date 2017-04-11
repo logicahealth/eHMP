@@ -94,8 +94,8 @@ define([
             this.model = new Backbone.Model(this.appletScreenConfig);
             this.AppletView = this.AppletView || options.AppletView;
             this.options = options;
-            this.predefinedScreen = dd(options)('screenModule')('config')('predefined').val;
-            if (!dd(this.predefinedScreen).exists) {
+            this.predefinedScreen = _.get(options, 'screenModule.config.predefined');
+            if (_.isUndefined(this.predefinedScreen)) {
                 this.predefinedScreen = true;
             }
             this.model.set('cid', this.cid);
@@ -169,7 +169,7 @@ define([
         },
         createPredefinedButtons: function() {
             var viewConfig = Utils.appletUtils.getViewTypeConfig(this.options, this.model.get('viewType'));
-            if (dd(viewConfig)('chromeOptions')('additionalButtons').val && viewConfig.chromeOptions.additionalButtons instanceof Array) {
+            if (_.isArray(_.get(viewConfig, 'chromeOptions.additionalButtons'))) {
                 _.forEach(viewConfig.chromeOptions.additionalButtons, function(item) {
                     if (item.id && item.view) {
                         this.buttonCollection.add(new ButtonViewModel({
@@ -382,12 +382,15 @@ define([
             var filterName = this.$('.applet-filter-title').text();
             ADK.SessionStorage.setAppletStorageModel(instanceId, 'filterName', filterName, true, workspaceId);
 
-            var self = this;
+            var maximizeScreenId = this.model.get('maximizeScreen');
+            var filterText = ADK.SessionStorage.getAppletStorageModel(instanceId, 'filterText', true) || '';
+
             ADK.Messaging.reply("applet:maximized", function() {
                 return new MaximizedAppletModel({
                     instanceId: instanceId,
                     workspaceId: workspaceId,
-                    filterName: filterName
+                    filterName: filterName,
+                    filterText: filterText
                 });
             });
             SessionStorage.set.sessionModel('lastWorkspace', new Backbone.Model({
@@ -397,10 +400,11 @@ define([
                 'id': this.options.appletConfig.instanceId
             }));
 
-            Navigation.navigate(this.model.get('maximizeScreen'), {fromMinimizedToMaximized: true});
+            Navigation.navigate(maximizeScreenId, {fromMinimizedToMaximized: true});
         },
         minimizeApplet: function(event) {
             $('.tooltip').tooltip('hide');
+            Messaging.stopReplying('applet:maximized');
             Navigation.back();
         },
         onClickButton: function(type, event) {

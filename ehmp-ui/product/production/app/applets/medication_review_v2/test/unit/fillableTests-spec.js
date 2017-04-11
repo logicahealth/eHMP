@@ -110,7 +110,7 @@ define(["jquery",
                 testData.fillsRemaining = 25;
                 testData.fillableStatus = 'Fillable for';
                 var result = AppletHelper.getFillableData(testData);
-                expect(result.description).toBe('This medication is Active and fillable for 24m. ');
+                expect(result.description).toBe('This medication is Active and fillable for 23m. ');
             });
             it("Confirm 731 days displays as years, not months", function() {
                 testData.daysSupply = 30;
@@ -237,7 +237,7 @@ define(["jquery",
                 testData.fillsRemaining = 2;
                 testData.fillableStatus = 'Fillable for';
                 var result = AppletHelper.getFillableData(testData);
-                expect(result.description).toBe('This medication is Active and fillable for 5m. ');
+                expect(result.description).toBe('This medication is Active and fillable for 4m. ');
             });
             it("Confirm fillable for 2m", function() {
                 testData.daysSupply = 90;

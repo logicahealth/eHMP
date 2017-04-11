@@ -78,11 +78,12 @@ Scenario: News feed applet displays all of the lab visits for a given patient in
 @f144_newsfeed_refresh 
 Scenario: News feed applet displays all of the same details after applet is refreshed
   # Given user is logged into eHMP-UI
-  And user searches for and selects "ZZZRETFOURFORTYSEVEN"
-  When user navigates to Timeline Applet
+  Given user searches for and selects "ZZZRETFOURFORTYSEVEN"
+  And user navigates to Timeline Applet
   And the user has selected All within the global date picker
   And the NewsFeed Applet table contains data rows
   When user refreshes Timeline Applet
   Then the message on the Timline Applet does not say "An error has occurred"
+  And the NewsFeed Applet table contains data rows
 
   

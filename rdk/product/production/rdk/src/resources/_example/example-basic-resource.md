@@ -10,7 +10,7 @@ Example resource
 
 + Parameters
 
-	+ myQueryParam (string, required) - Example query parameter
+    + myQueryParam (string, required) - Example query parameter
 
 + Response 200 (application/json)
 
@@ -34,9 +34,9 @@ Example resource
 
 + Request (applicaton/json)
 
-	+ Body
+    + Body
 
-			"My message"
+           "My message"
 
 + Response 200 (application/json)
 

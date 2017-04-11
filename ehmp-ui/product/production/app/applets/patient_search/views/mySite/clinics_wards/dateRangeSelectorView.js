@@ -7,7 +7,7 @@ define([
     'marionette',
     'underscore',
     'hbs!app/applets/patient_search/templates/mySite/clinics_wards/dateRangeSelectorTemplate'
-], function($, InputMask, DatePicker, Moment, Backbone, Marionette, _, dateRangeSelectorTemplate) {
+], function($, InputMask, DatePicker, moment, Backbone, Marionette, _, dateRangeSelectorTemplate) {
     "use strict";
 
     var dateFormat = 'YYYYMMDD';
@@ -33,7 +33,7 @@ define([
             'changeDate .input-group.date': function(event) {
                 // with update to latest datepicker, changeDate is now triggered by any keyup.
                 // need to ensure date is valid before updating other buttons
-                var dateIsValid = new Moment(new Date(event.target.value)).isValid();
+                var dateIsValid = moment(new Date(event.target.value)).isValid();
                 if (dateIsValid) {
                     this.removeActiveButton.apply(this, arguments);
                     this.monitorCustomDateRange.apply(this, arguments);
@@ -212,8 +212,8 @@ define([
             var commonOptions = {
                 showOnFocus: false,
                 todayBtn: 'linked',
-                startDate: new Moment().subtract(2, 'year').format('MM/DD/YYYY'),
-                endDate: new Moment().add(2, 'year').format('MM/DD/YYYY')
+                startDate: moment().subtract(2, 'year').format('MM/DD/YYYY'),
+                endDate: moment().add(2, 'year').format('MM/DD/YYYY')
             };
             ADK.utils.dateUtils.datepicker(this.ui.FromInput, _.defaults({
                 initialDate: fromDate

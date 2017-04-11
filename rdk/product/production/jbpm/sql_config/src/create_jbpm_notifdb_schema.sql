@@ -126,12 +126,15 @@ END;
 --  DDL for Type RECIPIENT_OBJ
 --------------------------------------------------------
 
-  CREATE OR REPLACE TYPE "RECIPIENT_OBJ" AS OBJECT(
+  CREATE OR REPLACE TYPE "RECIPIENT_OBJ" FORCE AS OBJECT(
   "userId" VARCHAR2(255),
   "teamId" VARCHAR2(255),
-  "role" VARCHAR2(255),
+  "teamType" VARCHAR2(255),
+  "teamFocus" VARCHAR2(255),
+  "teamRole" VARCHAR2(255),
   "patientId" VARCHAR2(255),
-  "teamFoci" VARCHAR2(255),
+  "patientAssignment" NUMBER(1,0),
+  "facility" VARCHAR2(255),
   "salience" NUMBER(3)
 );
 
@@ -294,19 +297,88 @@ END;
 --  DDL for Table RECIPIENTS
 --------------------------------------------------------
 DECLARE sql_statement VARCHAR2(1024);
+R_COUNT NUMBER;
+P_COUNT NUMBER;
 BEGIN
-
+  SELECT COUNT(*) INTO R_COUNT FROM DBA_TABLES WHERE OWNER = 'NOTIFDB' AND TABLE_NAME = 'RECIPIENTS';
+  IF R_COUNT = 0
+  THEN
   sql_statement:='
   CREATE TABLE "NOTIFDB"."RECIPIENTS" 
    (  "ID" NUMBER(19,0), 
   "USER_ID" VARCHAR2(255), 
   "TEAM_ID" VARCHAR2(255), 
-  "ROLE" VARCHAR2(255), 
+  "TEAM_TYPE" VARCHAR2(255), 
+  "TEAM_FOCUS" VARCHAR2(255), 
+  "TEAM_ROLE" VARCHAR2(255), 
   "PATIENT_ID" VARCHAR2(255), 
-  "TEAM_FOCI" VARCHAR2(255), 
+  "PATIENT_ASSIGNMENT" NUMBER(1,0), 
+  "FACILITY" VARCHAR2(255), 
   "SALIENCE" NUMBER(3,0)
    )';
    execute immediate sql_statement;
+   ELSE
+    SELECT COUNT(*) INTO P_COUNT FROM DBA_TAB_COLS WHERE OWNER = 'NOTIFDB'
+                              AND  TABLE_NAME = 'RECIPIENTS'
+                              AND COLUMN_NAME = 'TEAM_FOCI';
+      IF P_COUNT = 1
+      THEN
+        sql_statement:='ALTER TABLE "NOTIFDB"."RECIPIENTS"
+              RENAME COLUMN TEAM_FOCI TO TEAM_FOCUS';
+
+      execute immediate sql_statement;
+      END IF;
+    SELECT COUNT(*) INTO P_COUNT FROM DBA_TAB_COLS WHERE OWNER = 'NOTIFDB'
+                              AND  TABLE_NAME = 'RECIPIENTS'
+                              AND COLUMN_NAME = 'ROLE';
+      IF P_COUNT = 1
+      THEN
+        sql_statement:='ALTER TABLE "NOTIFDB"."RECIPIENTS"
+              RENAME COLUMN ROLE TO "TEAM_ROLE"';
+
+      execute immediate sql_statement;
+      END IF;
+    SELECT COUNT(*) INTO P_COUNT FROM DBA_TAB_COLS WHERE OWNER = 'NOTIFDB'
+                              AND  TABLE_NAME = 'RECIPIENTS'
+                              AND COLUMN_NAME = 'TEAM_TYPE';
+      IF P_COUNT = 0
+      THEN
+        sql_statement:='ALTER TABLE "NOTIFDB"."RECIPIENTS"
+              ADD
+              (
+                "TEAM_TYPE" VARCHAR2(255)
+              )';
+
+      execute immediate sql_statement;
+      END IF;
+    SELECT COUNT(*) INTO P_COUNT FROM DBA_TAB_COLS WHERE OWNER = 'NOTIFDB'
+                              AND  TABLE_NAME = 'RECIPIENTS'
+                              AND COLUMN_NAME = 'PATIENT_ASSIGNMENT';
+      IF P_COUNT = 0
+      THEN
+        sql_statement:='ALTER TABLE "NOTIFDB"."RECIPIENTS"
+              ADD
+              (
+                "PATIENT_ASSIGNMENT" NUMBER(1, 0)
+              )';
+
+      execute immediate sql_statement;
+      END IF;
+    SELECT COUNT(*) INTO P_COUNT FROM DBA_TAB_COLS WHERE OWNER = 'NOTIFDB'
+                              AND  TABLE_NAME = 'RECIPIENTS'
+                              AND COLUMN_NAME = 'FACILITY';
+      IF P_COUNT = 0
+      THEN
+        sql_statement:='ALTER TABLE "NOTIFDB"."RECIPIENTS"
+              ADD
+              (
+                "FACILITY" VARCHAR2(255)
+              )';
+
+      execute immediate sql_statement;
+      END IF;
+  END IF;
+
     EXCEPTION
       WHEN OTHERS THEN
         IF SQLCODE = -955 THEN
@@ -321,7 +393,7 @@ END;
 --  DDL for View NOTIFICATIONS_VIEW
 --------------------------------------------------------
 
-  CREATE OR REPLACE FORCE VIEW "NOTIFDB"."NOTIFICATIONS_VIEW" ("PRODUCER_ID", "DESCRIPTION", "ID", "PATIENT_ID", "MESSAGE_SUBJECT", "MESSAGE_BODY", "RESOLUTION", "RESOLUTION_STATE", "EXPIRATION", "EXT_REFID", "NAV_EVENT", "NAV_CHANNEL", "NAV_PARAMETER", "PERMISSIONS", "REC_USER_ID", "TEAM_ID", "ROLE", "REC_PATIENT_ID", "TEAM_FOCI", "SALIENCE", "ITEM", "CREATEDON", "HIST_USER_ID", "ACTION_TYPE") AS 
+CREATE OR REPLACE FORCE VIEW "NOTIFDB"."NOTIFICATIONS_VIEW" ("PRODUCER_ID", "DESCRIPTION", "ID", "PATIENT_ID", "MESSAGE_SUBJECT", "MESSAGE_BODY", "RESOLUTION", "RESOLUTION_STATE", "EXPIRATION", "EXT_REFID", "NAV_EVENT", "NAV_CHANNEL", "NAV_PARAMETER", "PERMISSIONS", "REC_USER_ID", "TEAM_ID", "TEAM_ROLE", "REC_PATIENT_ID", "TEAM_FOCUS", "SALIENCE", "TEAM_TYPE", "PATIENT_ASSIGNMENT", "FACILITY", "ITEM", "CREATEDON", "HIST_USER_ID", "ACTION_TYPE") AS
   SELECT PRODUCERS.USER_ID AS PRODUCER_ID,
   PRODUCERS.DESCRIPTION,
   NOTIFICATIONS.ID,
@@ -338,10 +410,13 @@ END;
   NOTIFICATIONS.PERMISSIONS,
   RECIPIENTS.USER_ID AS REC_USER_ID,
   RECIPIENTS.TEAM_ID,
-  RECIPIENTS.ROLE,
+  RECIPIENTS.TEAM_ROLE,
   RECIPIENTS.PATIENT_ID AS REC_PATIENT_ID,
-  RECIPIENTS.TEAM_FOCI,
+  RECIPIENTS.TEAM_FOCUS,
   RECIPIENTS.SALIENCE,
+  RECIPIENTS.TEAM_TYPE,
+  RECIPIENTS.PATIENT_ASSIGNMENT,
+  RECIPIENTS.FACILITY,
   ASSOCIATEDITEMS.ITEM,
   H.DATE_TIME AS CREATEDON,
   HISTORY.USER_ID AS HIST_USER_ID,
@@ -357,7 +432,7 @@ LEFT JOIN ASSOCIATEDITEMS
 ON NOTIFICATIONS.ID = ASSOCIATEDITEMS.NOTIFICATION_ID
 INNER JOIN HISTORY
 ON NOTIFICATIONS.ID = HISTORY.NOTIFICATION_ID
-LEFT JOIN 
+LEFT JOIN
   (SELECT HISTORY.DATE_TIME, HISTORY.NOTIFICATION_ID FROM HISTORY WHERE LOWER(HISTORY.ACTION_TYPE) = 'created') H
 ON NOTIFICATIONS.ID = H.NOTIFICATION_ID;
 /
@@ -580,7 +655,7 @@ PROCEDURE ADD_NOTIFICATION (
   ntf_message_body in nvarchar2,
   ntf_resolution in varchar2,
   ntf_resolution_state in number,
-  ntf_expiration in date,
+  ntf_expiration in varchar2,
   ntf_ext_refid in varchar2,
   nav_channel varchar2,
   nav_event varchar2,
@@ -593,9 +668,12 @@ PROCEDURE ADD_RECIPIENT (
   v_ntfid varchar2,
   v_user_id varchar2,
   v_team_id varchar2,
-  v_role varchar2,
+  v_team_type varchar2,
+  v_team_focus varchar2,
+  v_team_role varchar2,
   v_patient_id varchar2,
-  v_team_foci varchar2,
+  v_patient_assignment number,
+  v_facility varchar2,
   v_salience varchar2
 );
 
@@ -653,12 +731,14 @@ PROCEDURE RESOLVE_NOTIFS_BY_REF_ID (
   p_user_id VARCHAR2
 );
 
-procedure GET_NOTIF_ROUTE (
-  p_team_id NUMBER,
-  p_team_foci NUMBER,
-  p_icn VARCHAR2,
-  p_role VARCHAR2,
-  p_st_number VARCHAR2,
+PROCEDURE GET_NOTIF_ROUTE (
+  p_team_id IN NUMBER,
+  p_team_focus IN NUMBER,
+  p_team_type IN NUMBER,
+  p_team_role IN NUMBER,
+  p_patient_id IN VARCHAR2,
+  p_patient_assignment IN NUMBER,
+  p_facility IN VARCHAR2,
   ntf_recordset OUT SYS_REFCURSOR
 );
 
@@ -679,7 +759,7 @@ PROCEDURE ADD_NOTIFICATION (
   ntf_message_body in nvarchar2,
   ntf_resolution in varchar2,
   ntf_resolution_state in number,
-  ntf_expiration in date,
+  ntf_expiration in varchar2,
   ntf_ext_refid in varchar2,
   nav_channel varchar2,
   nav_event varchar2,
@@ -696,7 +776,7 @@ BEGIN
   BEGIN
     INSERT INTO PRODUCERS (USER_ID,DESCRIPTION) values (prd_user_id,prd_desc) RETURNING ID INTO n_id ;
     INSERT INTO NOTIFICATIONS (PRODUCER_ID,PATIENT_ID,MESSAGE_SUBJECT,MESSAGE_BODY,RESOLUTION, RESOLUTION_STATE,EXPIRATION,EXT_REFID, NAV_CHANNEL,NAV_EVENT,NAV_PARAMETER,PERMISSIONS)
-                VALUES (n_id,ntf_patient_id,ntf_message_subject,ntf_message_body,ntf_resolution,ntf_resolution_state,ntf_expiration,ntf_ext_refid,nav_channel,nav_event,nav_parameter,permissions)
+                VALUES (n_id,ntf_patient_id,ntf_message_subject,ntf_message_body,ntf_resolution,ntf_resolution_state,to_timestamp(ntf_expiration, 'YYYY-MM-DD"T"HH24:MI:SS.ff3"Z"'),ntf_ext_refid,nav_channel,nav_event,nav_parameter,permissions)
                 RETURNING ID INTO n_ntfid;
     INSERT INTO HISTORY (NOTIFICATION_ID,USER_ID,ACTION_TYPE,DATE_TIME) select n_ntfid, prd_user_id,'created', to_date(to_char(sysdate,'dd/mm/yyyy hh24:mi:ss'),'dd/mm/yyyy hh24:mi:ss') from dual;
   END;
@@ -706,9 +786,12 @@ PROCEDURE ADD_RECIPIENT (
   v_ntfid varchar2,
   v_user_id varchar2,
   v_team_id varchar2,
-  v_role varchar2,
+  v_team_type varchar2,
+  v_team_focus varchar2,
+  v_team_role varchar2,
   v_patient_id varchar2,
-  v_team_foci varchar2,
+  v_patient_assignment number,
+  v_facility varchar2,
   v_salience varchar2
 )
 AS
@@ -716,7 +799,9 @@ BEGIN
   declare
     n_rcp_id number(19);
   begin
-    insert into recipients(USER_ID,TEAM_ID,ROLE,PATIENT_ID,TEAM_FOCI,SALIENCE) VALUES (v_user_id,v_team_id,v_role,v_patient_id,v_team_foci,v_salience) RETURNING ID INTO n_rcp_id;
+    insert into recipients(USER_ID, TEAM_ID, TEAM_TYPE, TEAM_FOCUS, TEAM_ROLE, PATIENT_ID, PATIENT_ASSIGNMENT, FACILITY, SALIENCE)
+      VALUES (v_user_id, v_team_id, v_team_type, v_team_focus, v_team_role, v_patient_id, v_patient_assignment, v_facility, v_salience)
+        RETURNING ID INTO n_rcp_id;
     insert into NOTIF_RECIP(NOTIFICATION_ID,RECIPIENT_ID) VALUES(v_ntfid,n_rcp_id);
   end;
 END;
@@ -826,16 +911,19 @@ BEGIN
   FOR rcp_cursor IN (
     SELECT r.USER_ID,
           r.TEAM_ID,
-          r.ROLE,
+          r.TEAM_TYPE,
+          r.TEAM_FOCUS,
+          r.TEAM_ROLE,
           r.PATIENT_ID,
-          r.TEAM_FOCI,
+          r.PATIENT_ASSIGNMENT,
+          r.FACILITY,
           r.SALIENCE
     FROM RECIPIENTS r
     INNER JOIN NOTIF_RECIP nr ON r.ID = nr.RECIPIENT_ID
     WHERE nr.NOTIFICATION_ID = p_ntf_id)
   LOOP
-  recipient := recipient_obj(rcp_cursor.USER_ID, rcp_cursor.TEAM_ID, rcp_cursor.ROLE,
-                  rcp_cursor.PATIENT_ID, rcp_cursor.TEAM_FOCI, rcp_cursor.SALIENCE);
+  recipient := recipient_obj(rcp_cursor.USER_ID, rcp_cursor.TEAM_ID, rcp_cursor.TEAM_TYPE, rcp_cursor.TEAM_FOCUS, rcp_cursor.TEAM_ROLE,
+                  rcp_cursor.PATIENT_ID, rcp_cursor.PATIENT_ASSIGNMENT, rcp_cursor.FACILITY, rcp_cursor.SALIENCE);
   pipe ROW(recipient);
   END LOOP;
 END;
@@ -911,29 +999,40 @@ BEGIN
 END;
 
 PROCEDURE GET_NOTIF_ROUTE (
-  p_team_id in NUMBER,
-  p_team_foci in NUMBER,
-  p_icn in VARCHAR2,
-  p_role in VARCHAR2,
-  p_st_number in VARCHAR2,
+  p_team_id IN NUMBER,
+  p_team_focus IN NUMBER,
+  p_team_type IN NUMBER,
+  p_team_role IN NUMBER,
+  p_patient_id IN VARCHAR2,
+  p_patient_assignment IN NUMBER,
+  p_facility IN VARCHAR2,
   ntf_recordset OUT SYS_REFCURSOR
 ) AS
+  v_facilities varchar_array;
+  v_count NUMBER;
   BEGIN
+    v_facilities := SPLIT_STRING_BY_COMMA(p_facility);
+    v_count := v_facilities.COUNT;
     OPEN ntf_recordset FOR
-      SELECT s.STAFF_IEN AS "ien",s.STAFF_ID, t.TEAM_ID, tr.CODE, t.VA_INSTITUTION_ID,si.STATIONNUMBER,pas.ICN,tr.PCM_STD_TEAM_ROLE_ID  
-      FROM PCMM.STAFF s 
-      JOIN PCMM.TEAM_MEMBERSHIP tm ON tm.STAFF_ID = s.STAFF_ID 
-      JOIN PCMM.TEAM t on t.TEAM_ID = tm.TEAM_ID 
+      SELECT s.STAFF_IEN AS "userId",
+        t.TEAM_ID AS "teamId",
+        t.PCM_STD_TEAM_FOCUS_ID AS "teamFocus",
+        t.PCM_STD_TEAM_CARE_TYPE_ID AS "teamType",
+        tm.PCM_STD_TEAM_ROLE_ID AS "teamRole",
+        pas.ICN AS "patientId",
+        si.STATIONNUMBER AS "division"
+      FROM PCMM.STAFF s
+      JOIN PCMM.TEAM_MEMBERSHIP tm ON tm.STAFF_ID = s.STAFF_ID
+      JOIN PCMM.TEAM t ON t.TEAM_ID = tm.TEAM_ID
       LEFT JOIN sdsadm.STD_Institution si ON si.ID = t.VA_INSTITUTION_ID
-      LEFT JOIN (select pa.TEAM_ID,p.ICN from PCMM.TEAM_PATIENT_ASSIGN pa JOIN PCMM.PCMM_PATIENT p 
-            ON p.PCMM_PATIENT_ID = pa.PCMM_PATIENT_ID and p.ICN is not null) pas on pas.TEAM_ID = t.TEAM_ID
-      LEFT JOIN PCMM.PCM_STD_TEAM_ROLE tr ON tr.PCM_STD_TEAM_ROLE_ID = tm.PCM_STD_TEAM_ROLE_ID
-      WHERE (p_role is null or tr.CODE = p_role)
-      AND (p_team_id is null or t.TEAM_ID = p_team_id)
-      AND (p_team_foci IS null or t.PCM_STD_TEAM_FOCUS_ID = p_team_foci)
-      AND (p_icn is null or pas.ICN = p_icn)
-      AND (p_role is null or tr.CODE = p_role)
-      AND (p_st_number is null or si.STATIONNUMBER = p_st_number);
+      LEFT JOIN (SELECT pa.TEAM_ID, p.ICN FROM PCMM.TEAM_PATIENT_ASSIGN pa JOIN PCMM.PCMM_PATIENT p
+            ON p.PCMM_PATIENT_ID = pa.PCMM_PATIENT_ID AND p.ICN IS NOT NULL) pas ON pas.TEAM_ID = t.TEAM_ID
+      WHERE (p_team_id IS NULL OR t.TEAM_ID = p_team_id)
+      AND (p_team_focus IS NULL OR t.PCM_STD_TEAM_FOCUS_ID = p_team_focus)
+      AND (p_team_type IS NULL OR t.PCM_STD_TEAM_CARE_TYPE_ID = p_team_type)
+      AND (p_team_role IS NULL OR tm.PCM_STD_TEAM_ROLE_ID = p_team_role)
+      AND (p_patient_id IS NULL OR p_patient_assignment = 0 OR (p_patient_assignment = 1 AND pas.ICN = p_patient_id))
+      AND (v_count = 0 OR si.STATIONNUMBER IN (SELECT TO_CHAR(COLUMN_VALUE) FROM TABLE(v_facilities)));
   END GET_NOTIF_ROUTE;
 
 END notifs_pkg;

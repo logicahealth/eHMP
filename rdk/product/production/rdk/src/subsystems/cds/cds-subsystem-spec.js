@@ -1,16 +1,16 @@
-/*jslint node: true */
 'use strict';
 
 var cds = require('./cds-subsystem');
 var httpMocks = require('node-mocks-http');
 var cdsSpecUtil = require('../../resources/cds-spec-util/cds-spec-util');
-var mongo = require('mongoskin');
+var MongoClient = require('mongodb').MongoClient;
 var _ = require('lodash');
+
 
     describe('CDS Subsystem Configurations Found.', function () {
 
         var req = buildRequest();
-        cds.getSubsystemConfig(req.app);
+        cds.getSubsystemConfig(req.app, req.app.logger);
 
         describe('Testing CDS Configuration', function() {
 
@@ -25,7 +25,7 @@ var _ = require('lodash');
 
             it('sets and configures mongodb\'s presence correctly', function () {
 
-                req.app.subsystems.cds.getSubsystemConfig(req.app);
+                req.app.subsystems.cds.getSubsystemConfig(req.app, req.app.logger);
 
                 expect(cds.isCDSMongoServerConfigured()).not.to.be.undefined();
                 expect(cds.isCDSMongoServerConfigured()).to.eql(true);
@@ -42,22 +42,24 @@ var _ = require('lodash');
         it('MongoDB connection facility is functional', function() {
 
             //Create the mocked MongoDB functions that are used by the code that we're testing...
-            db = cdsSpecUtil.createMockDb({
+            //db = cdsSpecUtil.createMockDb({
                 //fill in extra items if needed for future tests, etc...
-            });
+            //});
 
-            sinon.stub(mongo, 'db').returns(db);
+            sinon.stub(MongoClient, 'connect', function(string, options, callback) {
+                callback(null, cdsSpecUtil.createMockDb());
+            });
 
             var count = cds.getCDSDBCount();
 
-            cds.getCDSDB('test1', function(error, dbConnection) {
+            cds.getCDSDB('test1', null, function(error, dbConnection) {
 
                 expect(cds.getCDSDBCount()).to.eql(count+1);
                 expect(dbConnection.open).not.to.be.undefined();
 
             });
 
-            cds.getCDSDB('test2', function(error, dbConnection) {
+            cds.getCDSDB('test2', null, function(error, dbConnection) {
 
                 expect(cds.getCDSDBCount()).to.eql(count+2);
                 expect(dbConnection.open).not.to.be.undefined();
@@ -96,8 +98,8 @@ var _ = require('lodash');
                     host: 'foo',
                     port: '42',
                     options: 'ssl=true',
-                    username: 'PW',
-                    password: 'PW'
+                    username: 'cdsuser',
+                    password: 'abc123'
                 },
                 cdsInvocationServer: {
                     host: 'bar',

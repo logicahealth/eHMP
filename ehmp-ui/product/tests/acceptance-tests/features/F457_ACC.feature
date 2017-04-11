@@ -6,8 +6,8 @@ Background:
     When user attempts login
         |field     | value  |
         |Facility  |PANORAMA|
-        |AccessCode|vk1234  |
-        |VerifyCode|vk1234!!|
+        |AccessCode|PW      |
+        |VerifyCode|PW    !!|
         |SignIn    ||
     And the patient search screen is displayed
 

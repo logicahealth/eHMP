@@ -38,12 +38,12 @@ describe('jmeadows-order-xformer', function() {
         'orderDate': 18000000,
         'orderDetail': 'CARDIAC PROFILE',
         'orderResult': null,
-        'orderid': null,
+        'orderid': '130512-00010',
         'orderingProvider': {
             'name': 'FORBES, ATTEND'
         },
         'startDate': null,
-        'status': null,
+        'status': 'Ordered',
         'type': 'LAB'
     };
 
@@ -52,7 +52,7 @@ describe('jmeadows-order-xformer', function() {
         'facilityName': 'DOD',
         'name': 'CARDIAC PROFILE',
         'content': 'CARDIAC PROFILE',
-        'statusName': '',
+        'statusName': 'Ordered',
         'providerDisplayName': 'Forbes, Attend',
         'service': 'LR',
         'kind': 'Laboratory',
@@ -60,6 +60,7 @@ describe('jmeadows-order-xformer', function() {
         'pid': 'DOD;' + mockEdipi,
         'summary': 'CARDIAC PROFILE',
         'entered': '19700101000000',
+        'orderNumber': '130512-00010',
         'providerName': 'FORBES, ATTEND',
         'codes': [{
             'code': '1000',

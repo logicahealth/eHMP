@@ -44,14 +44,14 @@ define(['backbone', 'jasminejquery', 'moment', 'app/applets/immunizations/writeb
                 var model = getFormModelInstance({administrationDateHistorical: date, administeredHistorical: 'historical'});
                 var errorMessage = ValidationUtil.validateModel(model);
                 expect(errorMessage).toEqual('Validation errors. Please fix.');
-                expect(model.get('errorModel').get('administrationDateHistorical')).toEqual('Administration Date must be in the past.');
+                expect(model.get('errorModel').get('administrationDateHistorical')).toEqual('Administration date must be in the past');
             });
             it('should fail validation if vis date offered is in the future', function(){
                 var date = moment().add(1, 'days').format('MM/DD/YYYY');
                 var model = getFormModelInstance({visDateOffered: date, administeredHistorical: 'administered'});
                 var errorMessage = ValidationUtil.validateModel(model);
                 expect(errorMessage).toEqual('Validation errors. Please fix.');
-                expect(model.get('errorModel').get('visDateOffered')).toEqual('VIS Date Offered must be in the past.');
+                expect(model.get('errorModel').get('visDateOffered')).toEqual('VIS date offered must be in the past');
             });
         });
 
@@ -118,21 +118,21 @@ define(['backbone', 'jasminejquery', 'moment', 'app/applets/immunizations/writeb
                 var date = moment().add(7, 'days').format('MM/DD/YYYY');
                 var model = getFormModelInstance({administrationDateHistorical: date});
                 ValidationUtil.validateAdminDate(model, date);
-                expect(model.get('errorModel').get('administrationDateHistorical')).toEqual('Administration Date must be in the past.');
+                expect(model.get('errorModel').get('administrationDateHistorical')).toEqual('Administration date must be in the past');
             });
 
             it('Should fail if future date - fuzzy year', function(){
                 var date = moment().add(1, 'years').format('YYYY');
                 var model = getFormModelInstance({administrationDateHistorical: date});
                 ValidationUtil.validateAdminDate(model, date);
-                expect(model.get('errorModel').get('administrationDateHistorical')).toEqual('Administration Date must be in the past.');
+                expect(model.get('errorModel').get('administrationDateHistorical')).toEqual('Administration date must be in the past');
             });
 
             it('Should fail if future date - fuzzy month/year', function(){
                 var date = moment().add(1, 'months').format('MM/YYYY');
                 var model = getFormModelInstance({administrationDateHistorical: date});
                 ValidationUtil.validateAdminDate(model, date);
-                expect(model.get('errorModel').get('administrationDateHistorical')).toEqual('Administration Date must be in the past.');
+                expect(model.get('errorModel').get('administrationDateHistorical')).toEqual('Administration date must be in the past');
             });
         });
 
@@ -147,7 +147,7 @@ define(['backbone', 'jasminejquery', 'moment', 'app/applets/immunizations/writeb
                 var date = moment().add(7, 'days').format('MM/DD/YYYY');
                 var model = getFormModelInstance({visDateOffered: date});
                 ValidationUtil.validateVisDate(model, date);
-                expect(model.get('errorModel').get('visDateOffered')).toEqual('VIS Date Offered must be in the past.');
+                expect(model.get('errorModel').get('visDateOffered')).toEqual('VIS date offered must be in the past');
             });
         });
     });

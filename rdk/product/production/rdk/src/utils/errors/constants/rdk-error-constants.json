@@ -1,0 +1,74 @@
+{
+    "200": {
+        "1000": "OK"
+    },
+    "201": {
+        "1000": "Created"
+    },
+    "202": {
+        "1000": "Accepted"
+    },
+    "204": {
+        "1000": "No Content"
+    },
+    "301": {
+        "1000": "Moved Permanently"
+    },
+    "303": {
+        "1000": "See Other"
+    },
+    "304": {
+        "1000": "Not Modified"
+    },
+    "307": {
+        "1000": "Temporary Redirect"
+    },
+    "308": {
+        "1000": "Permanent Redirect"
+    },
+    "400": {
+        "1000": "Bad Request",
+        "1001": "Missing Required Credential",
+        "1002": "Invalid Site Code Provided"
+    },
+    "401": {
+        "1000": "Unauthorized",
+        "1001": "No Result",
+        "1002": "No session could be established. Please log in."
+    },
+    "403": {
+        "1000": "Forbidden",
+        "1001": "You are not an authorized user of eHMP. Please contact your local access control coordinator (ACC) for assistance."
+    },
+    "404": {
+        "1000": "Not Found"
+    },
+    "406": {
+        "1000": "Not Acceptable"
+    },
+    "409": {
+        "1000": "Conflict"
+    },
+    "410": {
+        "1000": "Gone"
+    },
+    "412": {
+        "1000": "Precondition Failed"
+    },
+    "415": {
+        "1000": "Unsupported Media Type"
+    },
+    "500": {
+        "1000": "Internal Server Error",
+        "1001": "There was an error trying to regenerate an express session for a new user",
+        "1002": "Error destroying session",
+        "1003": "Could not locate session to end",
+        "1004": "Could not locate session to refresh"
+    },
+    "502": {
+        "1000": "Bad Gateway"
+    },
+    "503": {
+        "1000": "Service Unavailable"
+    }
+}

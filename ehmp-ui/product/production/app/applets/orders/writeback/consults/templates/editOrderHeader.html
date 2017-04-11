@@ -1,0 +1,14 @@
+<div class="row">
+    <div class="col-xs-6">
+        <h5 class="font-size-16">{{ consultName }}</h5>
+    </div>
+    <div class="col-xs-6 text-right">
+        <span class="btn btn-icon" data-toggle="tooltip" title="{{#if instructions}} {{instructions}} {{else}} No Information {{/if}}">
+            <i class="fa fa-info-circle font-size-16"></i>
+        </span>
+        <span class="sr-only">{{#if instructions}} {{instructions}} {{else}} No Information {{/if}}</span>
+        <h5 class="text-uppercase font-size-16 inline-display">{{ state }}<br />
+            <small class="color-pure-black"><strong>{{ subState }}</strong></small>
+        </h5>
+    </div>
+</div>

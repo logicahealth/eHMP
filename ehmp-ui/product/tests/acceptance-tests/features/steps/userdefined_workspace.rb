@@ -5,7 +5,7 @@ class WorkspaceManager < AccessBrowserV2
     add_verify(CucumberLabel.new('Alert title'), VerifyText.new, AccessHtmlElement.new(:css, '#alert-region .modal-title'))
     add_action(CucumberLabel.new('Alert Confirm Delete'), ClickAction.new, AccessHtmlElement.new(:css, '#alert-region .btn-danger'))
     add_action(CucumberLabel.new('Alert Confirm Cancel'), ClickAction.new, AccessHtmlElement.new(:css, '#alert-region .btn-default'))
-    add_action(CucumberLabel.new('Close Workspace Manager'), ClickAction.new, AccessHtmlElement.new(:css, '#doneEditing'))
+    add_action(CucumberLabel.new('Close Workspace Manager'), ClickAction.new, AccessHtmlElement.new(:css, '.panel-heading .done-editing'))
 
     workspaces = AccessHtmlElement.new(:css, 'div.workspace-table div.table-row')
     add_verify(CucumberLabel.new('workspace count'), VerifyXpathCount.new(workspaces), workspaces)

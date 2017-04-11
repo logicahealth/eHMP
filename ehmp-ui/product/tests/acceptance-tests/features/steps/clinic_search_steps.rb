@@ -24,7 +24,7 @@ class ClinicSearch < AccessBrowserV2
 
     clinics_list = AccessHtmlElement.new(:css, '#clinics-location-list-results .list-group .locationDisplayName')
     add_verify(CucumberLabel.new('Clinic list'), VerifyXpathCount.new(clinics_list), clinics_list)
-    clinic_search_results = AccessHtmlElement.new(:css, '.patient-search-results .list-group span')
+    clinic_search_results = AccessHtmlElement.new(:css, '.patient-search-results .list-group > div')
     add_verify(CucumberLabel.new('Clinic Search List'), VerifyXpathCount.new(clinic_search_results), clinic_search_results)
 
     add_action(CucumberLabel.new('Today'), ClickAction.new, AccessHtmlElement.new(:id, 'today-clinicDate'))
@@ -33,7 +33,10 @@ class ClinicSearch < AccessBrowserV2
     add_verify(CucumberLabel.new('Tomorrow Active'), VerifyActiveRange.new, AccessHtmlElement.new(:id, 'tomorrow-clinicDate'))
 
     add_action(CucumberLabel.new('From Date'), SendKeysAction.new, AccessHtmlElement.new(:id, 'filter-from-date-clinic'))
+    add_action(CucumberLabel.new('Control - ClinicSearch - From Date'), SendKeysAction.new, AccessHtmlElement.new(:id, 'filter-from-date-clinic'))
     add_action(CucumberLabel.new('To Date'), SendKeysAction.new, AccessHtmlElement.new(:id, 'filter-to-date-clinic'))
+    add_action(CucumberLabel.new('Control - ClinicSearch - To Date'), SendKeysAction.new, AccessHtmlElement.new(:id, 'filter-to-date-clinic'))
+    
     add_verify(CucumberLabel.new('From Date value'), VerifyValue.new, AccessHtmlElement.new(:id, 'filter-from-date-clinic'))
     add_verify(CucumberLabel.new('To Date value'), VerifyValue.new, AccessHtmlElement.new(:id, 'filter-to-date-clinic'))
 
@@ -106,11 +109,24 @@ Then(/^the Today button is selected$/) do
 end
 
 When(/^the user enters Clinic start date "([^"]*)"$/) do |arg1|
-  expect(@clinic_search.perform_action('From Date', arg1)).to eq(true)
+  @ehmp = PobPatientSearch.new
+  @ehmp.wait_until_fld_clinic_start_date_visible
+  size = @ehmp.fld_clinic_start_date.value.length
+  for i in 0...size
+    # input_element.send_keys(:backspace)
+    @ehmp.fld_clinic_start_date.native.send_keys(:backspace)
+  end
+  @ehmp.fld_clinic_start_date.native.send_keys arg1
 end
 
 When(/^the user enters Clinic end date "([^"]*)"$/) do |arg1|
-  expect(@clinic_search.perform_action('To Date', arg1)).to eq(true)
+  @ehmp = PobPatientSearch.new
+  @ehmp.wait_until_fld_clinic_to_date_visible
+  size = @ehmp.fld_clinic_to_date.value.length
+  for i in 0...size
+    @ehmp.fld_clinic_to_date.native.send_keys(:backspace)
+  end
+  @ehmp.fld_clinic_to_date.native.send_keys arg1
 end
 
 When(/^the user applies date filter$/) do
@@ -162,7 +178,10 @@ Then(/^the clinic results displays appointments between "([^"]*)" and "([^"]*)"$
   p expected_from_date
   p expected_to_date
   regex = Regexp.new("\\d{2}\/\\d{2}\/\\d{4} \\d{2}:\\d{2}")
-  elements = TestSupport.driver.find_elements(:css, 'div.user_info-ps-td-datetime')
+  @ehmp = PobPatientSearch.new
+  @ehmp.wait_until_fld_clinic_datetime_visible(30)
+  elements = @ehmp.fld_clinic_datetime
+  # elements = TestSupport.driver.find_elements(:css, 'div.user_info-ps-td-datetime')  
   p "length: #{elements.length}"
   elements.each do | element |
     text = element.text
@@ -188,8 +207,10 @@ Then(/^the clinic results displays No results found\.$/) do
 end
 
 When(/^a list of clinic results is displayed$/) do
-  expect(@clinic_search.wait_until_action_element_visible("Clinic Search List", 30)).to eq(true)
-  expect(@clinic_search.wait_until_xpath_count_greater_than('Clinic Search List', 0, 30)).to eq(true)
+  @ehmp = PobPatientSearch.new
+  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_table_row_load_time)
+  @ehmp.wait_for_fld_clinic_list_group
+  wait.until { @ehmp.fld_clinic_list_group.length > 0 }
 end
 
 Then(/^the Clinic patient name "([^"]*)" is displayed$/) do |arg1|
@@ -249,4 +270,19 @@ Then(/^the following Preset Date Range buttons are not selected$/) do |table|
   table.rows.each do |row|
     expect(@clinic_search.perform_verification("#{row[0]} Active", false)).to eq(true), "#{row[0]}"
   end
+end
+
+Then(/^the Clinic start date is set to Today's date$/) do
+  patient_search_page = PobPatientSearch.new
+  patient_search_page.wait_for_fld_clinic_start_date
+  expect(patient_search_page).to have_fld_clinic_start_date
+  expect(patient_search_page.fld_clinic_start_date.value).to eq(Date.today.strftime("%m/%d/%Y"))
+end
+
+Then(/^the Clinic end date is set to Tomorrow's date$/) do
+  patient_search_page = PobPatientSearch.new
+  patient_search_page.wait_for_fld_clinic_to_date
+  expect(patient_search_page).to have_fld_clinic_to_date
+  
+  expect(patient_search_page.fld_clinic_to_date.value).to eq(Date.today.next_day(1).strftime("%m/%d/%Y"))
 end

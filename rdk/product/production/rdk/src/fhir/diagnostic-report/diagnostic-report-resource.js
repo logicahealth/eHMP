@@ -49,7 +49,16 @@ var fhirToJDSAttrMap = [{
     definition: 'http://www.hl7.org/FHIR/2015May/datatypes.html#dateTime',
     description: 'This is the date/time the diagnostic was done.  The prefixes >, >=, <=, < and != may be used on the parameter value (e.g. date=>2015-01-15). The following date formats are permitted: yyyy-mm-ddThh:mm:ss (exact date search), yyyy-mm-dd (within given day), yyyy-mm (within given month), yyyy (within given year). A single date parameter can be used for an exact date search (e.g. date=2015-01-26T08:30:00) or an implicit range (e.g. date=2015-01, searches all dates in January 2015). Two date parameters can be used to specify an explicitly bounded range. When using a pair of date parameters, the parameters should bind both ends of the range. One should have a less-than operator (<, <=) while the other a greater-than operator (>, >=).',
     searchable: true
+},{
+    fhirName: '_sort',
+    vprName: '',
+    dataType: 'string',
+    definition: 'http://hl7.org/FHIR/2015May/datatypes.html#string',
+    description: 'Sort criteria. Ascending order by default, order is specified with the following variants:  _sort:asc (ascending), _sort:desc (descending). Supported sort properties: date, identifier, issued, performer, result, service, specimen, status.',
+    searchable: true
 }];
+confUtils.addCountAttribute(fhirToJDSAttrMap); //adding the _count attribute that is common to (almost) all endpoints.
+
 
 // Issue call to Conformance registration
 conformance.register(confUtils.domains.DIAGNOSTIC_REPORT, createConformanceData());
@@ -85,11 +94,23 @@ var accessionServiceCategories = ['LAB', 'OTH', 'SP', 'CP', 'AP'];
 
 function getResourceConfig() {
     return [{
-        name: 'diagnosticreport-diagnosticreport',
+        name: 'fhir-diagnostic-report',
         path: '',
         get: getDiagnosticReports,
         subsystems: ['patientrecord', 'jds', 'solr', 'jdsSync', 'authorization'],
-        requiredPermissions: [],
+        requiredPermissions: ['read-fhir'],
+        isPatientCentric: true,
+        interceptors: {
+            fhirPid: true,
+            validatePid: false
+        },
+        permitResponseFormat: true
+    },{
+        name: 'fhir-diagnostic-report-search',
+        path: '_search',
+        post: getDiagnosticReports,
+        subsystems: ['patientrecord', 'jds', 'solr', 'jdsSync', 'authorization'],
+        requiredPermissions: ['read-fhir'],
         isPatientCentric: true,
         interceptors: {
             fhirPid: true,
@@ -118,6 +139,7 @@ function validateParams(params, onSuccess, onError) {
  * @api {get} /fhir/patient/{id}/diagnosticreport Get Diagnostic Reports
  * @apiName getDiagnosticReport
  * @apiGroup Diagnostic Report
+ * @apiParam {String} id The patient id
  * @apiParam {String} [domain] The domain to filter on.  Choices include: lab', rad, ap
  * @apiParam {String} [service] The diagnostic discipline/department which created the report
  * @apiParam {Number} [_count] The number of results to show.
@@ -128,34 +150,34 @@ function validateParams(params, onSuccess, onError) {
  *
  * @apiExample {js} Request Examples:
  *      // DiagnosticReport limiting results count
- *      http://IPADDRESS:POR/resource/fhir/patient/9E7A;253/diagnosticreport?_count=1
+ *      http://IP           /resource/fhir/patient/9E7A;253/diagnosticreport?_count=1
  *
  *      // DiagnosticReport exact date search
- *      http://IPADDRESS:POR/resource/fhir/patient/9E7A;253/diagnosticreport?date=2015-01-26T13:45:00
+ *      http://IP           /resource/fhir/patient/9E7A;253/diagnosticreport?date=2015-01-26T13:45:00
  *
  *      // DiagnosticReport on a day
- *      http://IPADDRESS:POR/resource/fhir/patient/9E7A;253/diagnosticreport?date=2015-01-26
+ *      http://IP           /resource/fhir/patient/9E7A;253/diagnosticreport?date=2015-01-26
  *
  *      // DiagnosticReport on a month
- *      http://IPADDRESS:POR/resource/fhir/patient/9E7A;253/diagnosticreport?date=2015-01
+ *      http://IP           /resource/fhir/patient/9E7A;253/diagnosticreport?date=2015-01
  *
  *      // DiagnosticReport on a year
- *      http://IPADDRESS:POR/resource/fhir/patient/9E7A;253/diagnosticreport?date=2015
+ *      http://IP           /resource/fhir/patient/9E7A;253/diagnosticreport?date=2015
  *
  *      // DiagnosticReport outside a date range (e.g. DiagnosticReports not occuring on January 2015)
- *      http://IPADDRESS:POR/resource/fhir/patient/9E7A;253/diagnosticreport?date=!=2015-01
+ *      http://IP           /resource/fhir/patient/9E7A;253/diagnosticreport?date=!=2015-01
  *
  *      // DiagnosticReport Explicit date range
- *      http://IPADDRESS:POR/resource/fhir/patient/9E7A;253/diagnosticreport?date=>=2014-06&date=<=2014-09-20
+ *      http://IP           /resource/fhir/patient/9E7A;253/diagnosticreport?date=>=2014-06&date=<=2014-09-20
  *
  *      // DiagnosticReport sorted by date (sorts by DiagnosticReport.appliesDateTime)
- *      http://IPADDRESS:POR/resource/fhir/patient/9E7A;253/diagnosticreport?_sort=date
+ *      http://IP           /resource/fhir/patient/9E7A;253/diagnosticreport?_sort=date
  *
  *      // DiagnosticReport sorted by date in descending order
- *      http://IPADDRESS:POR/resource/fhir/patient/9E7A;253/diagnosticreport?_sort:desc=date
+ *      http://IP           /resource/fhir/patient/9E7A;253/diagnosticreport?_sort:desc=date
  *
  *      // DiagnosticReport sorted by performer (sorts by DiagnosticReport.performer.display)
- *      http://IPADDRESS:POR/resource/fhir/patient/9E7A;253/diagnosticreport?_sort=performer
+ *      http://IP           /resource/fhir/patient/9E7A;253/diagnosticreport?_sort=performer
  *
  * @apiSuccess {json} data Json object conforming to the <a href="http://www.hl7.org/FHIR/2015May/diagnosticreport.html">DiagnosticReport FHIR DTSU2 specification</a>.
  * @apiSuccessExample Success-Response:

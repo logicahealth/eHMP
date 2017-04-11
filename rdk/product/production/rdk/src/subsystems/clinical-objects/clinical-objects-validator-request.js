@@ -126,15 +126,6 @@ function validateDates(errorMessages, urgency, earliest, latest, ehmpState) {
         if(earliestDate > latestDate) {
             errorMessages.push("Latest date is before earliest date");
         }
-
-        var currentDate = new Date();
-        currentDate.setHours(0,0,0,0);
-
-        if(earliestDate < currentDate) {
-            errorMessages.push("Earliest date cannot be before today. Earliest: "+ earliestDate+ "("+earliest+")" + ", today: "+ currentDate);
-        } else if (latestDate < currentDate) {
-            errorMessages.push("Latest date cannot be before today. Latest: "+ latestDate + ", today: "+ currentDate);
-        }
     }
 }
 
@@ -169,9 +160,6 @@ function validateForPerson(errorMessages, model, appConfig, ehmpState, next) {
     var tasks = startValidationTaskList(errorMessages);
 
     if (_.has(model, 'route')) {
-        if (_.keys(model.route).length > 2) {
-            errorMessages.push('request \'route\' field contained unexpected data');
-        }
 
         if (model.route.facility) {
             tasks.push(validateAssignedFacility.bind(null, model.route.facility, ehmpState, appConfig));
@@ -207,9 +195,6 @@ function validateForMyTeams(errorMessages, model, appConfig, ehmpState, next) {
     var tasks = startValidationTaskList(errorMessages);
 
     if (_.has(model, 'route')) {
-        if (_.keys(model.route).length > 5) {
-            errorMessages.push('request \'route\' field contained unexpected data');
-        }
 
         if (_.has(model, 'route.team')) {
             tasks.push(validateAssignedTeam.bind(null, model.route.team, ehmpState, appConfig));
@@ -233,9 +218,6 @@ function validateForAnyTeam(errorMessages, model, appConfig, ehmpState, next) {
     var tasks = startValidationTaskList(errorMessages);
 
     if (_.has(model, 'route')) {
-        if (_.keys(model.route).length > 6) {
-            errorMessages.push('request \'route\' field contained unexpected data');
-        }
 
         if (model.route.facility) {
             tasks.push(validateAssignedFacility.bind(null, model.route.facility, ehmpState, appConfig));
@@ -374,7 +356,7 @@ function isValidFacilityCode(fc) {
 module.exports._isValidFacilityCode = isValidFacilityCode;
 
 function isValidRoutingCode(rc) {
-    var pattern = /((\[TM:\(\d+\)\/TR:\(\d+\)\/PA:\(1\)\],)*\[TM:\(\d+\)\/TR:\(\d+\)\/PA:\(1\)\]|(\[TM:\(\d+\)\/TR:\(\d+\)\],)*\[TM:\(\d+\)\/TR:\(\d+\)\])/;
+    var pattern = /((\[TM:.+\(\d+\)\/TR:.+\(\d+\)\/PA:\(1\)\],)*\[TM:.+\(\d+\)\/TR:.+\(\d+\)\/PA:\(1\)\]|(\[TM:.+\(\d+\)\/TR:.+\(\d+\)\],)*\[TM:.+\(\d+\)\/TR:.+\(\d+\)\])/;
     var match = pattern.exec(rc);
     if (_.isArray(match) && (match.length > 0)) {
         return match[0] === rc;

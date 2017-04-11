@@ -56,4 +56,11 @@ oracledbPool.prototype.getConnection = function(callback) {
     return callback(null, connection);
 };
 
+/**
+ * Simulates the OracleDB Pool class _logStats method - no-op
+ */
+oracledbPool.prototype._logStats = function() {
+    return;
+};
+
 module.exports = oracledbPool;

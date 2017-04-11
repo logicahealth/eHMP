@@ -1,7 +1,6 @@
 'use strict';
 
 var moment = require('moment');
-var dd = require('drilldown');
 var async = require('async');
 var httpUtil = require('../../core/rdk').utils.http;
 var _ = require('lodash');
@@ -41,7 +40,7 @@ module.exports.create = function(writebackContext, callback) {
             logger.warn('Failed to write note to pJDS.');
             return callback(err);
         }
-        var location = dd(response)('headers')('location').val;
+        var location = _.get(response, 'headers.location');
         if (!location) {
             message = 'Clinical object create did not return the location.';
             logger.error(message, response);
@@ -97,7 +96,7 @@ module.exports.createAddendum = function(writebackContext, callback) {
             logger.warn('Failed to write addendum to pJDS.');
             return callback(err);
         }
-        var location = dd(response)('headers')('location').val;
+        var location = _.get(response, 'headers.location');
         if (!location) {
             message = 'Clinical object create did not return the location.';
             logger.error(message, response);
@@ -197,7 +196,7 @@ module.exports.updateAddendum = function(writebackContext, callback) {
  *      to get the entire note for deleting the associated process.
  */
 module.exports.getNote = function(writebackContext, callback) {
-    // TODO: refactor to allow multi-sign
+    // FUTURE-TODO: refactor to allow multi-sign
     var logger = writebackContext.logger;
     var uid = writebackContext.model.uid ? writebackContext.model.uid : writebackContext.signedNotes[0].clinicalObject.uid;
     var appConfig = writebackContext.appConfig;
@@ -277,7 +276,7 @@ module.exports.delete = function(writebackContext, callback) {
 };
 
 module.exports.getAddendum = function(writebackContext, callback) {
-    // TODO: refactor to allow multi-sign
+    // FUTURE-TODO: refactor to allow multi-sign
     var uid = writebackContext.model.uid ? writebackContext.model.uid : writebackContext.signedAddendums[0].clinicalObject.uid;
     var logger = writebackContext.logger;
     var appConfig = writebackContext.appConfig;
@@ -384,6 +383,69 @@ module.exports.signNotes = function(writebackContext, callback) {
             }
             return callback(null);
         }
+    });
+};
+
+module.exports.preSignNotes = function(writebackContext, callback) {
+
+    writebackContext.notes = [];
+    _.set(writebackContext, 'vprResponse.failures', {});
+    var logger = writebackContext.logger;
+    var errorObject = {
+        error: 'Failed to lock these notes for signing in pJDS - did not attempt to sign in VistA.',
+        notes: []
+    };
+    async.each(writebackContext.model.signItems, function(note, cb) {
+        preSignNote(writebackContext, note, function(err, response) {
+            if (err) {
+                errorObject.notes.push({
+                    uid: note.uid,
+                    error: err,
+                    response: response
+                });
+            } else {
+                writebackContext.notes.push(note);
+            }
+            cb();
+        });
+    }, function(err) {
+        if (err) {
+            logger.error('Something went wrong', err);
+        } else {
+            if (errorObject.notes.length > 0) {
+                if (writebackContext.notes.length === 0) {
+                    errorObject.error = 'Failed to presign any of the notes in pJDS. Did not attempt to sign in VistA.';
+                    return callback(errorObject);
+                }
+            }
+            return callback(null);
+        }
+    });
+};
+
+var preSignNote = function(writebackContext, note, cb) {
+    var logger = writebackContext.logger;
+    var appConfig = writebackContext.appConfig;
+
+    var errors = [];
+    note.signLock = true;
+    var clinicalObj = clinicalObjUtil.wrapUpdateNote(errors, note);
+
+    if (!_.isEmpty(errors) || !clinicalObj) {
+        logger.error(errors, 'Failed to wrap the note into a clinical object.');
+        return setImmediate(cb, errors);
+    }
+
+    clinicalObjSubsystem.update(logger, appConfig, clinicalObj.uid, clinicalObj, function(err, response) {
+        if (err) {
+            logger.warn({
+                unsignedNoteWriteError: err
+            }, 'Error calling the JDS notes update endpoint');
+
+            logger.warn('Failed to update note in JDS.');
+            return cb(err, response);
+        }
+        return cb(null);
     });
 };
 

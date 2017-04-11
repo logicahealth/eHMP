@@ -32,7 +32,7 @@ function initializeRequestAudit(req, authInfo) {
         req.audit.authUserId = authDuz[authSite];
     }
 
-    if(_.has(authInfo, 'systemName')){
+    if (_.has(authInfo, 'systemName')) {
         req.audit.authUserId = authInfo.systemName;
     }
 
@@ -69,7 +69,7 @@ function registerEvents(req, res) {
     res.on('close', onClose);
 
     res.on('timeout', function onTimeout(err) {
-        req.logger.error('response timeout when calling middleware');
+        req.logger.error(err, 'response timeout when calling middleware');
         return res.status(rdk.httpstatus.internal_server_error).rdkSend('There was an error processing your request. The error has been logged.');
     });
 

@@ -1,15 +1,14 @@
-/*
-    TODO: Using ORWDX SAVE until RPC wrapper is in place
- */
 'use strict';
 
 var fhirUtils = require('../../../fhir/common/utils/fhir-converter');
+var locationUtils = require('../../../utils/location-util');
 var filemanDateUtil = require('../../../utils/fileman-date-converter');
 var rpcClientFactory = require('../../core/rpc-client-factory');
 var ordersUtils = require('../common/orders-utils');
 var orderChecks = require('../common/orders-common-check-vista-writer');
 var lockPatient = require('../common/orders-common-patient-lock');
 var vprOrders = require('../common/orders-common-vpr-order');
+var nullchecker = require('../../../core/rdk').utils.nullchecker;
 
 module.exports.create = function(writebackContext, callback) {
     writebackContext.vistaConfig.noReconnect = true;
@@ -164,7 +163,11 @@ module.exports.update = function(writebackContext, callback) {
  */
 function saveOrder(updateJds, writebackContext, rpcClient, callback) {
     var rpcName = 'ORWDX SAVE';
-    rpcClient.execute(rpcName, getParameters(writebackContext.model), function(err, data) {
+    var dfn = writebackContext.interceptorResults.patientIdentifiers.dfn;
+    if(nullchecker.isNullish(dfn)){
+        return callback('Missing required patient identifiers');
+    }
+    rpcClient.execute(rpcName, getParameters(dfn, writebackContext.model), function(err, data) {
         lockPatient.unlockPatient(writebackContext);
         if (err) {
             return callback(err, data);
@@ -203,12 +206,12 @@ function saveOrder(updateJds, writebackContext, rpcClient, callback) {
  * @param model The request JSON
  * @returns {Array}
  */
-function getParameters(model) {
+function getParameters(dfn, model) {
     var parameters = [];
-    if (model && model.dfn && model.provider && model.location && model.inputList) {
-        parameters.push(model.dfn);
+    if (model && dfn && model.provider && model.location && model.inputList) {
+        parameters.push(dfn);
         parameters.push(model.provider);
-        parameters.push(model.location.split(':').pop());
+        parameters.push(locationUtils.getLocationIEN(model.location));
         parameters.push(model.orderDialog);
         parameters.push(model.displayGroup);
         parameters.push(model.quickOrderDialog);
@@ -219,7 +222,7 @@ function getParameters(model) {
         }
         var inputList = {};
         for (var i in model.inputList) {
-            inputList[model.inputList[i].inputKey + ',1'] = model.inputList[i].inputValue; //TODO instance
+            inputList[model.inputList[i].inputKey + ',1'] = model.inputList[i].inputValue; //FUTURE-TODO need further research on instance for future features
         }
         //convert collection date/time
         if ((inputList['28,1'] !== 'LC') && (inputList['6,1'] !== 'TODAY')) {
@@ -227,7 +230,7 @@ function getParameters(model) {
         }
 
         if (model.commentList) {
-            var wpInstance = '15,1'; //TODO instance
+            var wpInstance = '15,1'; //FUTURE-TODO need further research on instance for future features
             inputList[wpInstance] = 'ORDIALOG("WP",' + wpInstance + ')';
             for (i = 1; i <= model.commentList.length; i++) {
                 inputList['"WP",' + wpInstance + ',' + i + ',0'] = model.commentList[i - 1].comment;
@@ -235,7 +238,7 @@ function getParameters(model) {
         }
         if (model.orderCheckList) {
             inputList['"ORCHECK"'] = '' + model.orderCheckList.length;
-            for (var j in model.orderCheckList) {
+            for (var j = 0; j <  model.orderCheckList.length; j++) {
                 var orderCheck = model.orderCheckList[j].orderCheck.split('^');
                 var index = j + 1;
                 inputList['"ORCHECK","' + orderCheck[0] + '","' + orderCheck[2] + '","' + index + '"'] =
@@ -244,7 +247,11 @@ function getParameters(model) {
         } else {
             inputList['"ORCHECK"'] = '0';
         }
-        inputList['"ORTS"'] = '0'; //TODO specialty
+        if (model.specialtyId) {
+            inputList['"ORTS"'] = model.specialtyId;
+        } else {
+            inputList['"ORTS"'] = '0';
+        }
         parameters.push(inputList);
         parameters.push('');
         parameters.push('');

@@ -29,12 +29,12 @@ define([
                 'consult': 'fa-user-md'
             }
         }
-        // TODO: Add cases as we add support for more orderable types
+        // Add new icon-type mappings when new orderable types are added.
     };
 
     function getOrderableIcon(item) {
         // set the icons according to orderable type (e.g. lab, consult, etc.)
-        return dd(orderableIconMap)(item.type)(item.domain)(item.subDomain).val;
+        return _.get(orderableIconMap, [item.type, item.domain, item.subDomain]);
     }
 
     var OrderSearchResultModel = Backbone.Model.extend({
@@ -48,9 +48,6 @@ define([
         parse: function(response, options) {
             var results = [];
 
-            // TODO:  We're currently getting just orderables but in the future we'll include
-            // results from other groups (e.g. order-sets, quick-orders, etc.). Groups will be
-            // included if there are matching results.
             if (!_.isEmpty(response.data)) {
                 results.push({
                     name: 'Orders',
@@ -59,6 +56,8 @@ define([
                         parse: true
                     })
                 });
+                // Add new groups here if including results from other groups (e.g. order-sets, quick-orders, etc.).
+                // Groups will be included if there are matching results.
             }
             return results;
         }

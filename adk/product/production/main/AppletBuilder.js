@@ -7,7 +7,7 @@ define([
     'use strict';
     var appletBuilder = {
         build: function(marionetteApp, appletPojo) {
-            var builtApplet = marionetteApp.module(appletPojo.id, defineAppletModule);
+            var builtApplet = marionetteApp.module('Applets.' + appletPojo.id, defineAppletModule);
 
             function defineAppletModule(appletModule, app, backbone, marionette, $, _) {
                 appletModule.id = appletPojo.id;
@@ -68,7 +68,7 @@ define([
             loadApplets: function() {
                 var shouldLoadRemaining = true;
                 var sortedApplets = this.sortApplets(this.applets, [_.filter(this.applets, function(appletConfig) {
-                    return _.isBoolean(appletConfig.requiredByLayout) ? appletConfig.requiredByLayout : _.includes(appletConfig.requiredByLayout, WorkspaceContextRepository.currentContext.get('id'));
+                    return _.isBoolean(appletConfig.requiredByLayout) ? appletConfig.requiredByLayout : _.includes(appletConfig.requiredByLayout, WorkspaceContextRepository.currentContextId);
                 }), WorkspaceContextRepository.currentWorkspace.get('applets')]);
                 var priorityAppletsComplete = this.requireApplets(sortedApplets.priorityApplets);
                 priorityAppletsComplete.done(_.bind(function() {
@@ -175,7 +175,7 @@ define([
             },
             buildAppletModules: function() {
                 _.each(this.applets, function(applet) {
-                    var appletModule = this.marionetteApp.module(applet.id);
+                    var appletModule = this.marionetteApp.module('Applets.' + applet.id);
                     appletModule.buildPromise = $.Deferred();
                 }, this);
             },

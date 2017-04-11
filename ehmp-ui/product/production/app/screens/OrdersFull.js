@@ -4,7 +4,7 @@ define([
 ], function(Backbone, Marionette) {
     'use strict';
 
-    function onAddOrderClicked(event) {
+    function onAddOrderClicked(event) { //most likely dead code
         var channel = ADK.Messaging.getChannel('addOrderRequestChannel');
         var deferredResponse = channel.request('addOrderModal');
 

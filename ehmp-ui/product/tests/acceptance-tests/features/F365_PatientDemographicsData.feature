@@ -49,7 +49,7 @@ Feature: F365 - Enhance Patient Header - Include Non-Local Demographics by Site
     And the Patient's Marital status value is displayed
     And the Patient's Religion value is displayed
 
-@F365-3.InpatientPanorama @US5116 @US5587 @US4456 @F365-3.4 @DE3104 @debug
+@F365-3.InpatientPanorama @US5116 @US5587 @US4456 @F365-3.4 @DE3104
 	Scenario:  Patient Information: Demographic drop down "Data" in Panorama for Inpatient
 	# Given user is logged into eHMP-UI
 	When user searches for and selects "twentythree,inpatient"
@@ -79,7 +79,7 @@ Feature: F365 - Enhance Patient Header - Include Non-Local Demographics by Site
 
 @F365-3.3_InPatientKodak2 @US5116 @US5587 @DE1309 @DE2103
 	Scenario: Patient Information: Demographic drop down "Data" in Kodak for Inpatient
-	When POB user is logged into EHMP-UI with facility as  "KODAK" accesscode as  "mx1234" verifycode as  "mx1234!!"
+	When POB user is logged into EHMP-UI with facility as  "KODAK" accesscode as  "PW    " verifycode as  "PW    !!"
 	And staff view screen is displayed
     And Navigate to Patient Search Screen
     And user searches for and selects "twentythree,inpatient"
@@ -101,7 +101,7 @@ Feature: F365 - Enhance Patient Header - Include Non-Local Demographics by Site
 
 @F365-3.3_InPatientKodak2 @US5116 @US5587 @DE1309 @DE2103 @future @DE4560
     Scenario: Patient Information: Demographic drop down "Data" in Kodak for Inpatient
-    When POB user is logged into EHMP-UI with facility as  "KODAK" accesscode as  "mx1234" verifycode as  "mx1234!!"
+    When POB user is logged into EHMP-UI with facility as  "KODAK" accesscode as  "PW    " verifycode as  "PW    !!"
     And staff view screen is displayed
     And Navigate to Patient Search Screen
     And user searches for and selects "twentythree,inpatient"
@@ -117,7 +117,7 @@ Feature: F365 - Enhance Patient Header - Include Non-Local Demographics by Site
 
 @F365-3.4_OutPatientKodak @US5116 @US5587 @DE1309 @DE2103
 	Scenario: Patient Information: Demographic drop down "Data" in Kodak for Outpatient
-	When POB user is logged into EHMP-UI with facility as  "KODAK" accesscode as  "mx1234" verifycode as  "mx1234!!"
+	When POB user is logged into EHMP-UI with facility as  "KODAK" accesscode as  "PW    " verifycode as  "PW    !!"
     And staff view screen is displayed
     And Navigate to Patient Search Screen
     And user searches for and selects "twentythree,patient"
@@ -139,7 +139,7 @@ Feature: F365 - Enhance Patient Header - Include Non-Local Demographics by Site
 
 @F365-3.4_OutPatientKodak @US5116 @US5587 @DE1309 @DE2103 @future @DE4560
     Scenario: Patient Information: Demographic drop down "Data" in Kodak for Outpatient
-    When POB user is logged into EHMP-UI with facility as  "KODAK" accesscode as  "mx1234" verifycode as  "mx1234!!"
+    When POB user is logged into EHMP-UI with facility as  "KODAK" accesscode as  "PW    " verifycode as  "PW    !!"
     And staff view screen is displayed
     And Navigate to Patient Search Screen
     And user searches for and selects "twentythree,patient"

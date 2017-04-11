@@ -5,7 +5,6 @@ var nullchecker = rdk.utils.nullchecker;
 var _ = require('lodash');
 var _s = require('underscore.string');
 module.exports.addSpecializedResultsToResponse = addSpecializedResultsToResponse;
-module.exports._addDetailInfo = addDetailInfo;
 module.exports._updateCumulativeResponseData = updateCumulativeResponseData;
 module.exports._transformSolrHighlightingToHmpObject = transformSolrHighlightingToHmpObject;
 module.exports._transformSolrItemsToHmpFormat = transformSolrItemsToHmpFormat;
@@ -13,7 +12,7 @@ module.exports._buildResponseObjectSkeleton = buildResponseObjectSkeleton;
 module.exports._getSearchedDomainFromSolrResponse = getSearchedDomainFromSolrResponse;
 module.exports._isGroupingEnabled = isGroupingEnabled;
 
-function addSpecializedResultsToResponse(specializedSolrResults, reqQuery, facetMap) {
+function addSpecializedResultsToResponse(specializedSolrResults, reqQuery) {
     var hmpEmulatedResponseObject = buildResponseObjectSkeleton(reqQuery);
 
     _.each(specializedSolrResults, function (specializedSolrResult) {
@@ -26,45 +25,13 @@ function addSpecializedResultsToResponse(specializedSolrResults, reqQuery, facet
             return false;
         }
 
-        // TODO check safety of deep document
-//        transformSolrItemsToHmpFormat(specializedSolrResult, hmpEmulatedResponseObject);
         hmpEmulatedResponseObject = transformSolrItemsToHmpFormat(specializedSolrResult, hmpEmulatedResponseObject);
-        hmpEmulatedResponseObject = updateCumulativeResponseData(specializedSolrResult, facetMap, hmpEmulatedResponseObject);
-        hmpEmulatedResponseObject = addDetailInfo(specializedSolrResult, hmpEmulatedResponseObject);
+        hmpEmulatedResponseObject = updateCumulativeResponseData(specializedSolrResult, hmpEmulatedResponseObject);
     });
     return hmpEmulatedResponseObject;
 }
 
-
-/**
- * Add the information that the client uses to dig down into search results
- * @param specializedSolrResult
- * @param hmpEmulatedResponseObject
- * @returns {*}
- */
-function addDetailInfo(specializedSolrResult, hmpEmulatedResponseObject) {
-    // TODO: implement
-    return hmpEmulatedResponseObject;
-}
-
-
-function updateCumulativeResponseData(specializedSolrResult, facetMap, hmpEmulatedResponseObject) {
-    var facetQueries = ((specializedSolrResult || {}).facet_counts || {}).facet_queries || {};
-    var facetFields = ((specializedSolrResult || {}).facet_counts || {}).facet_fields || {};
-
-    var humanizedFacetResults = hmpEmulatedResponseObject.data.facets;
-    _.each(facetMap, function (humanizedFacetKey, solrFacetKey) {
-        var facetValue = facetQueries[solrFacetKey];
-        if (!humanizedFacetResults.hasOwnProperty(humanizedFacetKey)) {
-            humanizedFacetResults[humanizedFacetKey] = 0;
-        }
-        if (humanizedFacetKey === 'all' && facetFields.domain && facetFields.domain.length > 0) {
-            var domainSpecificKey = 'domain:' + facetFields.domain[0];
-            humanizedFacetResults[domainSpecificKey] = facetValue;
-            // do not accumulate foundItemsTotal and unfilteredtotal here because the 'all' facet is not guaranteed to be accurate
-        }
-        humanizedFacetResults[humanizedFacetKey] += facetValue;
-    });
+function updateCumulativeResponseData(specializedSolrResult, hmpEmulatedResponseObject) {
     if (isGroupingEnabled(specializedSolrResult)) {
         _.each(specializedSolrResult.grouped, function (group_field) {
             var itemsFound = group_field.matches || 0;
@@ -77,7 +44,6 @@ function updateCumulativeResponseData(specializedSolrResult, facetMap, hmpEmulat
         hmpEmulatedResponseObject.data.unfilteredTotal += itemsFound;
     }
 
-    hmpEmulatedResponseObject.data.facets = humanizedFacetResults;
     hmpEmulatedResponseObject.data.elapsed += specializedSolrResult.responseHeader.QTime;
 
     return hmpEmulatedResponseObject;
@@ -153,12 +119,10 @@ function transformSolrHighlightingToHmpObject(specializedSolrResult, hmpEmulated
 
     // use _.each() instead of for..in to allow function scope and more concise syntax
     _.each(highlighting, function (highlightedFields, highlightedUid) {
-        _.each(highlightedFields, function (highlights) {
-            _.each(hmpEmulatedResponseObject.data.items, function (item) {
-                if (item.uid === highlightedUid) {
-                    item.highlights = (item.highlights || []).concat(highlights);
-                }
-            });
+        _.each(hmpEmulatedResponseObject.data.items, function (item) {
+            if (item.uid === highlightedUid) {
+                item.highlights = highlightedFields;
+            }
         });
     });
 
@@ -284,7 +248,6 @@ function buildResponseObjectSkeleton(reqQuery) {
     data.elapsed = 0;  // QTime header from solr response
     data.foundItemsTotal = 0;  // data points; not the number of returned result summaries
     data.unfilteredTotal = 0;  // see PatientSearch.java:200, probably equal to facets.all
-    data.facets = {};  // tee-minus stuff, see emulatedHmpGetRelativeDate()
     data.corrections = [];  // never used in HMP
     data.mode = 'SEARCH';  // see NOTES for more modes
     data.items = [];

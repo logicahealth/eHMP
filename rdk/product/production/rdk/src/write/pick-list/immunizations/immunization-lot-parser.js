@@ -33,6 +33,8 @@ function addRecordEntry(logger, records, fields) {
         _.last(records).lowSupplyAlert = fields[1];
     } else if (fields[0] === 'NDC CODE (VA)') {
         _.last(records).ndcCodeVa = fields[1];
+    } else if (fields[0] === 'ASSOCIATED VA FACILITY') {
+        _.last(records).associatedFacility = fields[1];
     } else {
         throw new Error('Unrecognized field: ' + fields[0]);
     }

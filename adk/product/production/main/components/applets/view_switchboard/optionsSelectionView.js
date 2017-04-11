@@ -205,22 +205,27 @@ define([
                 saveGridsterAppletsConfig();
             };
             $(this.containerRegion.el).attr('data-view-type', viewType);
-            var regularMaxSize = [8, 12];
-            if (viewType === "summary") {
-                gridster.resize_widget($(this.containerRegion.el), 4, 4, callback);
-                gridster.set_widget_max_size($(this.containerRegion.el), regularMaxSize);
-            } else if (viewType === "expanded") {
-                var expandedMaxSize = [12, 12];
-                gridster.resize_widget($(this.containerRegion.el), 8, 6, callback);
-                gridster.set_widget_max_size($(this.containerRegion.el), expandedMaxSize);
-            } else if (viewType === "gist") {
-                gridster.resize_widget($(this.containerRegion.el), 4, 3, callback);
-                gridster.set_widget_max_size($(this.containerRegion.el), regularMaxSize);
-            }
-            this.containerRegion.$el.find('.applet-options-button').focus();
+
+            var containerElement = this.containerRegion.$el;
+
+            var maxSize = ADK.utils.getViewTypeMaxSize(viewType);
+            var minSize = ADK.utils.getViewTypeMinSize(viewType);
+            var size = ADK.utils.getViewTypeSize(viewType);
+            gridster.resize_widget(containerElement, size.x, size.y, callback);
+            gridster.set_widget_max_size(containerElement, [maxSize.x, maxSize.y]);
+            gridster.set_widget_min_size(containerElement, [minSize.x, minSize.y]);
+            this.forceInlineWidgetBounds(containerElement, minSize, maxSize); // Because Gridster doesn't do this on its own
+
+            containerElement.find('.applet-options-button').focus();
         },
         addLi: function(collectionView, buffer, options) {
             collectionView.$el.append(buffer).append('<li class="col-xs-' + options.width + ' ' + options.divClass + '-box text-center"><button type="button" aria-label="Press enter to remove applet." class="btn btn-icon options-box ' + options.divClass + '" data-viewtype="' + options.dataViewType + '"><i class="' + options.iconClass + '"></i></button><p>' + options.buttonText + '</p></li>');
+        },
+        forceInlineWidgetBounds: function($widget, minSize, maxSize) {
+            $widget.data('minSizex', minSize.x).attr('data-min-sizex', minSize.x);
+            $widget.data('minSizey', minSize.y).attr('data-min-sizey', minSize.y);
+            $widget.data('maxSizex', maxSize.x).attr('data-max-sizex', maxSize.x);
+            $widget.data('maxSizey', maxSize.y).attr('data-max-sizey', maxSize.y);
         },
         attachBuffer: function(collectionView, buffer) {
             this.addLi(collectionView, buffer, {

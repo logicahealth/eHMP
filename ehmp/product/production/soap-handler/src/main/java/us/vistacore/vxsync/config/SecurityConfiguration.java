@@ -20,13 +20,13 @@ public class SecurityConfiguration {
 		}
 	}
 	public void setKsPassword(String ksPassword) {
-		this.ksVsID        sPassword;
+		this.ksPassword = ksPassword;
 		if(ksPassword != null && !ksPassword.equals("")) {
 			System.setProperty("javax.net.ssl.keyStorePassword", new String(ksPassword));
 		}
 	}
 	public void setTsPassword(String tsPassword) {
-		this.tsVsID        sPassword;
+		this.tsPassword = tsPassword;
 		if(tsPassword != null && !tsPassword.equals("")) {
 			System.setProperty("javax.net.ssl.trustStorePassword", new String(tsPassword));
 		}

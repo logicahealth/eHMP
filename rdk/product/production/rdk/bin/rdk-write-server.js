@@ -6,7 +6,7 @@ var rdk = require('../src/core/rdk');
 
 var ROOT = path.resolve(__dirname, '..');
 
-var app = rdk.appfactory().defaultConfigFilename('../../config/rdk-write-server-config.json').argv(process.argv).build();
+var app = rdk.appfactory().defaultConfigFilename(ROOT + '/config/rdk-write-server-config.json').argv(process.argv).build();
 
 //notes
 //med-orders
@@ -22,8 +22,6 @@ app.register('/patient/:pid/allergies', ROOT + '/src/write/allergies/allergies-r
 //Removed in order to Disable Encounter Form: app.register('/patient/:pid/encounters', ROOT + '/src/write/encounters/encounters-resources');
 
 app.register('/patient/:pid/immunizations', ROOT + '/src/write/immunizations/immunizations-resources');
-
-app.register('/patient/:pid/orders-print', ROOT + '/src/write/orders-print/orders-print-resources');
 
 app.register('/patient/:pid/orders', ROOT + '/src/write/orders/orders-resources');
 

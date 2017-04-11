@@ -29,32 +29,34 @@ class DocumentsAppletModalDetail < ADKContainer
     add_action(CucumberLabel.new('First Imaging Row'), ClickAction.new, AccessHtmlElement.new(:css, "[data-instanceid='documents'] [data-row-instanceid='urn-va-image-ABCD-10199V865898-7029773-8699-1'] td:nth-child(2)"))
     add_action(CucumberLabel.new('First Crisis Note Row'), ClickAction.new, AccessHtmlElement.new(:css, "[data-instanceid='documents'] [data-row-instanceid='urn-va-document-9E7A-231-1693'] td:nth-child(2)"))
     add_action(CucumberLabel.new('First Lab Report Row'), ClickAction.new, AccessHtmlElement.new(:css, "[data-instanceid='documents'] [data-row-instanceid='urn-va-document-9E7A-17-MI-7029773-859869'] td:nth-child(2)"))
-    add_action(CucumberLabel.new('First Administrative Note Row'), ClickAction.new, AccessHtmlElement.new(:css, "[data-instanceid='documents'] [data-row-instanceid='urn-va-document-DOD-0000000014-1000004201'] td:nth-child(2)"))
+    add_action(CucumberLabel.new('First Administrative Note Row'), ClickAction.new, AccessHtmlElement.new(:css, "#data-grid-documents [data-row-instanceid='urn-va-document-DOD-0000000014-1000004201'] td.handlebars-cell.flex-width-2.sortable"))
     add_action(CucumberLabel.new('First Progress Note DoD* Row'), ClickAction.new, AccessHtmlElement.new(:css, "[data-instanceid='documents'] [data-row-instanceid='urn-va-document-DOD-0000000011-1000003813'] td:nth-child(2)"))
+    
+    add_verify(CucumberLabel.new('Documents Rows'), VerifyXpathCount.new(rows), rows)
+    add_action(CucumberLabel.new('First Imaging Row'), ClickAction.new, AccessHtmlElement.new(:css, "#data-grid-documents [data-row-instanceid='urn-va-image-ABCD-10199V865898-7029773-8699-1'] > td.sortable.renderable > i"))
+    add_action(CucumberLabel.new('First Thumbnail'), ClickAction.new, AccessHtmlElement.new(:css, "[id='urn:va:image:9E7A:3:6849870.8462-10'] img")) 
   end
 end
 
+Given(/^there is at least one document of type "([^"]*)"$/) do |document_type|
+  @ehmp = PobDocumentsList.new
+  @ehmp.wait_for_fld_document_rows_type
+  expect(@ehmp.document_types).to include(document_type)
+end
+
 When(/^the user views the first Documents event "(.*?)" detail view$/) do |event_type|
-  documents_applet = DocumentsAppletModalDetail.instance
-  expect(documents_applet.wait_until_xpath_count_greater_than('Documents Rows', 0)).to eq(true), "Test requires at least 1 row to be displayed"
-  first_event_row = "First " + event_type + " Row"
-  expect(documents_applet.perform_action(first_event_row)).to eq(true)
+  @ehmp = PobDocumentsList.new
+  @ehmp.wait_for_fld_document_rows_type
+  expect(@ehmp.fld_document_rows_type.length).to be > 0
+  expect(object_exists_in_list(@ehmp.fld_document_rows_type, event_type)).to eq(true), "#{event_type} was not found in the rows"
+  click_an_object_from_list(@ehmp.fld_document_rows_type, event_type)
 end
 
 Then(/^the Documents event "(.*?)" Detail modal displays$/) do |event_type, table|
-#  case event_type
-#  when 'Visit' , 'Admission' , 'Discharge' , 'Appointment' , 'Encounter'
-#    modal = TimelineAppletModalDetail.instance
-#  when 'Surgery' , 'Procedure'
-#    modal = TimelineAppletSurgeryProcedureModalDetail.instance
-#  when 'Immunization'
-#    modal = TimelineAppletImmunizationModalDetail.instance
-#  when 'Lab'
-#    modal = TimelineAppletLabModalDetail.instance
-#  end
-  modal = DocumentsAppletModalDetail.instance
-  table.rows.each do | row |
-    expect(modal.am_i_visible?(row[0])).to eq(true)
+  @ehmp = DocumentDetail.new
+  @ehmp.wait_for_fld_documents_row_headers
+  table.rows.each do |headers|
+    expect(object_exists_in_list(@ehmp.fld_documents_row_headers, "#{headers[0]}")).to eq(true), "#{headers[0]} is not visible on the modal"
   end
 end
 

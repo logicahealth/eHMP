@@ -26,7 +26,7 @@ describe('Medication Administration Conformance Statement', function() {
 
         it('verifies conformance search parameters are valid', function() {
             expect(builtConformance.searchParam[0].name).to.eql('subject.identifier');
-            expect(builtConformance.searchParam[1].name).to.eql('limit');
+            expect(builtConformance.searchParam[1].name).to.eql('_count');
         });
     });
 });
@@ -56,7 +56,7 @@ describe('Medication Administration Conformance Statement', function() {
 describe('Medication Administration FHIR Resource', function() {
     it('Verifies correct resource name and path', function() {
         var config = MedAdmin.getResourceConfig()[0];
-        expect(config.name).to.eql('medicationadministration-medicationAdministration');
+        expect(config.name).to.eql('fhir-medication-administration');
         expect(config.path).to.eql('');
     });
 });

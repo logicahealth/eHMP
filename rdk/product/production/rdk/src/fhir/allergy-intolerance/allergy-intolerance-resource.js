@@ -34,11 +34,13 @@ var fhirToJDSAttrMap = [{
     description: 'The uid of the allergy.',
     searchable: true
 }];
+conformanceUtils.addCountAttribute(fhirToJDSAttrMap); //adding the _count attribute that is common to (almost) all endpoints.
+
 
 // Issue call to Conformance registration
 conformance.register(conformanceUtils.domains.ALLERGY_INTOLERANCE, createAllergyIntoleranceConformanceData());
 
-function createAllergyIntoleranceConformanceData() {   
+function createAllergyIntoleranceConformanceData() {
    var resourceType = conformanceUtils.domains.ALLERGY_INTOLERANCE;
    var profileReference = 'http://hl7.org/fhir/2015MAY/allergyintolerance.html';
    var interactions = [ 'read', 'search-type' ];
@@ -47,18 +49,28 @@ function createAllergyIntoleranceConformanceData() {
            interactions, fhirToJDSAttrMap);
 }
 
-// TODO-FUTURE:
+// FUTURE-TODO:
 // As JSON.parse and JSON.stringify work in a blocking manner perhaps we should switch to a streaming parser as this one:
 // https://github.com/dominictarr/JSONStream
 
 
 function getResourceConfig() {
     return [{
-        name: 'allergyIntolerance-allergyintolerances',
+        name: 'fhir-allergy-intolerance',
         path: '',
         get: getAllergyIntolerances,
         subsystems: ['patientrecord', 'jds', 'solr', 'jdsSync', 'authorization'],
-        requiredPermissions: [],
+        interceptors: { fhirPid: true },
+        requiredPermissions: ['read-fhir'],
+        isPatientCentric: true,
+        permitResponseFormat: true
+    },{
+        name: 'fhir-allergy-intolerance-search',
+        path: '_search',
+        post: getAllergyIntolerances,
+        subsystems: ['patientrecord', 'jds', 'solr', 'jdsSync', 'authorization'],
+        interceptors: { fhirPid: true },
+        requiredPermissions: ['read-fhir'],
         isPatientCentric: true,
         permitResponseFormat: true
     }];
@@ -116,7 +128,7 @@ function getAllergyData(req, domain, callback) {
     var pid = req.param('subject.identifier');
     var uid = req.param('uid');
     var start = req.param('start') || 0;
-    var limit = req.param('limit');
+    var limit = req.param('_count');
     var config = req.app.config;
 
     if (nullchecker.isNullish(pid)) {
@@ -233,6 +245,7 @@ function createIntolerance(item) {
 
     fhirItem.resource = {};
     fhirItem.resource.resourceType = 'AllergyIntolerance';
+    fhirItem.resource.id = item.uid;
     fhirItem.resource.text = {
         'status': 'generated',
         'div': '<div>' + _.escape(item.summary) + '</div>'

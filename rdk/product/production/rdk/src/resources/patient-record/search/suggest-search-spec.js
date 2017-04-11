@@ -30,7 +30,7 @@ var defaultRequest = {
             },
             "solrClient": {
                 "core": "vpr",
-                "zooKeeperConnection": "IPADDRESS:PORT"
+                "zooKeeperConnection": "IP            "
             },
         }
     },

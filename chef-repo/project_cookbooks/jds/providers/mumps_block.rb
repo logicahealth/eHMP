@@ -15,28 +15,32 @@ action :execute do
 
   ruby_block "mumps_block:execute:#{new_resource.command.hash}" do
     block do
-      shell = Greenletters::Process.new("sh", :transcript => new_resource.log, :timeout => node[:jds][:shell_timeout_seconds])
+      shell = Greenletters::Process.new(node[:jds][:shell], :transcript => new_resource.log, :timeout => node[:jds][:shell_timeout_seconds])
 
-      # start the shell, set up cache environment and start cache shell
+      # start the shell
       shell.start!
-      shell.wait_for(:output, /sh-[0-9\.]+#/) do | process, match |
-        process.write("#{node[:jds][:session]}\n")
+
+      # Start Cache session
+      shell.wait_for(:output, node[:jds][:shell_prompt]) do | process, match |
+        process.write("#{node[:jds][:session]}\r")
+      end
+
+      # Login
+      if new_resource.cache_username != nil
+        shell.wait_for(:output, /Username/) do | process, match |
+          process.write("#{new_resource.cache_username}\r")
+        end
+      end
+
+      if new_resource.cache_password != nil
+        shell.wait_for(:output, /Password/) do | process, match |
+          process.write("#{new_resource.cache_password}\r")
+        end
       end
 
       # Change namespace
       shell.wait_for(:output, /USER>/) do | process, match |
-        process.write("ZN \"#{new_resource.namespace}\"\n")
-      end
-
-      if new_resource.programmer_mode
-        # Set user and setup programmer environment
-        shell.wait_for(:output, /#{node[:jds][:prompt]}/) do | process, match |
-          process.write("S DUZ=#{new_resource.duz}\r")
-          if new_resource.programmer_mode
-            process.write("D ^XUP\r")
-            process.write("^\r")
-          end
-        end
+        process.write("ZN \"#{new_resource.namespace}\"\r")
       end
 
       prompt = /#{new_resource.namespace}>/
@@ -48,12 +52,12 @@ action :execute do
       end
 
       shell.wait_for(:output, prompt) do | process, match |
-        process.write("h\n")
+        process.write("h\r")
       end
-      shell.wait_for(:output, /sh-[0-9\.]+#/) do | process, match |
-        process.write("exit\n")
+      shell.wait_for(:output, node[:jds][:shell_prompt]) do | process, match |
+        process.write("exit\r")
       end
       shell.wait_for(:exit)
-    end # end block
-  end # end ruby_block
+    end
+  end
 end

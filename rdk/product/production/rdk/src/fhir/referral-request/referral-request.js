@@ -39,7 +39,7 @@ function convertToFhir(result, req) {
 function convertToReferralRequest(jdsItem, req) {
     var pid = req.query['subject.identifier'];
 
-    var fhirItem = new fhirResource.ReferralRequest(helpers.generateUUID(), jdsToFHIRStatusMap.get(jdsItem.statusName));
+    var fhirItem = new fhirResource.ReferralRequest(jdsItem.uid, jdsToFHIRStatusMap.get(jdsItem.statusName));
     fhirItem.identifier = new fhirResource.Identifier(jdsItem.uid, constants.referralRequest.REFERRAL_REQUEST_UID_IDENTIFIER_SYSTEM);
     if (nullchecker.isNotNullish(jdsItem.consultProcedure)) {
         fhirItem.type = new fhirResource.CodeableConcept(jdsItem.consultProcedure);

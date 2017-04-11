@@ -3,7 +3,8 @@
 var rdk = require('../../core/rdk');
 var _ = require('lodash');
 var jdsFilter = require('jds-filter');
-var jds = rdk.utils.jds;
+var jds = require('../../subsystems/jds/jds-subsystem');
+var jdsDomains = require('../../subsystems/jds/jds-domains');
 var nullchecker = rdk.utils.nullchecker;
 var async = require('async');
 var immunizationDupes = require('./patient-record-immunization-dupes');
@@ -12,7 +13,7 @@ var documentSignatures = require('./patient-record-document-view-signatures');
 
 var getResourceConfig = function() {
 
-    return _.map(jds.Domains.domains, function(domain) {
+    return _.map(jdsDomains.domains, function(domain) {
         var perms = getPermissions(domain.name);
 
         return {
@@ -127,12 +128,11 @@ function getDomain(index, name, req, res) {
 
         response = removeDuplicates(index, req, response);
 
-        if (index === 'docs-view' || index === 'document') {
+        if (index === 'document'|| index === 'docs-view') {
             documentSignatures.processAddenda(req, response, function(error, result) {
                 if (error) {
-                    res.status(500).rdkSend(error);
+                    return res.status(500).rdkSend(error);
                 }
-
                 return res.status(statusCode).rdkSend(result);
             });
         } else {

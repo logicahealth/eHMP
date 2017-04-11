@@ -1,7 +1,6 @@
 'use strict';
 
 var _ = require('lodash');
-var dd = require('drilldown');
 var filemanDateUtil = require('../../utils/fileman-date-converter');
 var nullChecker = require('../../utils/nullchecker');
 var paramUtil = require('../../utils/param-converter');
@@ -87,7 +86,7 @@ function create (writebackContext, callback) {
     var errors = [];
     var model = writebackContext.model;
     // dfn is now part of the interceptor results...
-    model.dfn = dd(writebackContext)('interceptorResults')('patientIdentifiers')('dfn').val;
+    model.dfn = _.get(writebackContext, 'interceptorResults.patientIdentifiers.dfn');
 
     validateInput(writebackContext.logger, model, errors);
 
@@ -99,7 +98,7 @@ function enteredInError(writebackContext, callback) {
     var errors = [];
     var model = writebackContext.model;
     // dfn is now part of the interceptor results...
-    model.dfn = dd(writebackContext)('interceptorResults')('patientIdentifiers')('dfn').val;
+    model.dfn = _.get(writebackContext, 'interceptorResults.patientIdentifiers.dfn');
     model.ien = writebackContext.resourceId;
     model.enteredBy = writebackContext.duz[writebackContext.siteHash];
 

@@ -15,7 +15,6 @@
             Options -Indexes
         </IfModule>
 
-        # TODO: mod_gzip instead?
         <IfModule mod_deflate.c>
             # Compress HTML, CSS, JavaScript, Text, XML and fonts
             AddOutputFilterByType DEFLATE application/javascript
@@ -273,6 +272,6 @@
         #   The home of a custom SSL log file. Use this when you want a
         #   compact non-error SSL logfile on a virtual host basis.
         CustomLog logs/ssl_request_log \
-                  "%t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %b"
+                  "%a %s %{rdk.sid}C %{X-Request-ID}o %t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %B %D \"%{User-agent}i\""
 
 </VirtualHost>

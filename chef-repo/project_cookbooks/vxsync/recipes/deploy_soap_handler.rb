@@ -23,7 +23,7 @@ node[:terminology][:artifacts].each do |name, attributes|
     use_conditional_get true
     source artifact_source
     mode   "0755"
-    notifies :delete, "directory[#{artifact_dir}]", :immediately    
+    notifies :delete, "directory[#{artifact_dir}]", :immediately
   end
 
   directory artifact_dir do
@@ -74,7 +74,7 @@ pgd = find_node_by_role("pgd", node[:stack], "mocks")
 vler = find_node_by_role("vler", node[:stack], "mocks")
 jmeadows = find_node_by_role("jmeadows", node[:stack], "mocks")
 mvi = find_node_by_role("mvi", node[:stack], "mocks")
-vxsync = find_node_by_role("vxsync", node[:stack])
+vxsync = node
 
 template "#{node[:soap_handler][:home_dir]}/config.json" do
   source 'config.json.erb'
@@ -111,7 +111,7 @@ template "/etc/bluepill/soap_handler.pill" do
     :log_directory => "/tmp"
   )
   notifies :execute, "vxsync_reset_sync[reset_vxsync]", :delayed
-end 
+end
 
 service "soap_handler" do
   provider Chef::Provider::Service::Upstart

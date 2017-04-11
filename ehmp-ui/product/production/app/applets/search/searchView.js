@@ -9,7 +9,7 @@ define([
     "jquery.inputmask",
     "bootstrap-datepicker",
     "underscore"
-], function(Backbone, Marionette, Moment, searchUtil, searchTemplate, searchResultTemplate, searchResultGroupTemplate, inputmask, datepicker, underscore) {
+], function(Backbone, Marionette, moment, searchUtil, searchTemplate, searchResultTemplate, searchResultGroupTemplate, inputmask, datepicker, underscore) {
     "use strict";
 
     var SuggestResultsModel = Backbone.Model.extend({
@@ -38,6 +38,18 @@ define([
         initialize: function() {
             var self = this;
             var storageText = ADK.SessionStorage.getAppletStorageModel('search', 'searchText');
+
+            var Collection = Backbone.Collection.extend({
+                model: Backbone.Model.extend({
+                    'idAttribute': 'uid',
+                    parse: function(resp) {
+                        resp.displayTitle = _.camelCase(resp.localTitle);
+                        return resp;
+                    }
+                })
+            });
+            this.collection = new Collection();
+            this.searchResults = new Collection();
 
             this.clearDateFilters();
             this.listenTo(ADK.Messaging.getChannel('search'), 'newSearch', function() {
@@ -92,6 +104,11 @@ define([
 
         events: {
             'click .search-result-item': 'onSelectSearchResult',
+            'keydown .search-result-item': function(e) {
+                if (e.which === 13) {
+                    this.onSelectSearchResult(e);
+                }
+            },
             'show.bs.collapse .collapse': 'onExpandGroup',
             'hide.bs.collapse .collapse': 'onCollapseGroup',
 
@@ -115,8 +132,6 @@ define([
 
 
         doSubmitSearch: function() {
-
-            //console.log(this.searchTerm);
             var fetchOptions = {
                 criteria: {
                     "query": this.searchTerm
@@ -125,7 +140,7 @@ define([
             };
             fetchOptions.patient = ADK.PatientRecordService.getCurrentPatient();
             fetchOptions.resourceTitle = 'patient-record-search-text';
-            this.searchResults = ADK.PatientRecordService.fetchCollection(fetchOptions);
+            ADK.PatientRecordService.fetchCollection(fetchOptions, this.searchResults);
             this.preSearchTime = new Date().getTime();
             this.listenTo(this.searchResults, 'sync', this.fillSearchResultsTemplate);
             this.listenTo(this.searchResults, 'error', this.onError);
@@ -161,6 +176,17 @@ define([
                 }
             });
             return keywords;
+        },
+
+        getHighlights: function(highlightedText) {
+            var highlights = [];
+            var regex = new RegExp('<span class="cpe-search-term-match">(.*?)<\/span>', 'g');
+            var match = regex.exec(highlightedText);
+            while (match) {
+                highlights.push(match[1].toString().trim());
+                match = regex.exec(highlightedText);
+            }
+            return _.uniq(highlights);
         },
 
         fillSearchResultsTemplate: function() {
@@ -210,21 +236,25 @@ define([
                 var items = groupedResults[groupName],
                     cleanGroupName = groupName.replace(/[^a-zA-Z0-9]/g, ""),
                     groupId = 'result-group-' + cleanGroupName,
-                    highlightedGroupName = ADK.utils.stringUtils.addSearchResultElementHighlighting(groupName, this.getKeywords()),
+                    highlightedGroupName = _.get(items[0], 'attributes.highlights.kind'),
                     calcount = 0,
                     i,
                     itemCount;
 
-                    for (i = 0; i < items.length; i++) {
-                        itemCount = items[i];
-                        if (!_.isUndefined(_.get(itemCount, 'attributes.count'))) {
-                            calcount += parseInt(_.get(itemCount, 'attributes.count') );
-                        } else {
-                            calcount ++;
-                        }
-                    }
+                if (!highlightedGroupName) {
+                    highlightedGroupName = ADK.utils.stringUtils.addSearchResultElementHighlighting(groupName, this.getKeywords());
+                }
 
-                    var $group = $(me.searchResultGroupTemplate({
+                for (i = 0; i < items.length; i++) {
+                    itemCount = items[i];
+                    if (!_.isUndefined(_.get(itemCount, 'attributes.count'))) {
+                        calcount += parseInt(_.get(itemCount, 'attributes.count'));
+                    } else {
+                        calcount++;
+                    }
+                }
+
+                var $group = $(me.searchResultGroupTemplate({
                         groupName: highlightedGroupName,
                         titleElemId: 'result-group-title-' + cleanGroupName,
                         groupId: groupId,
@@ -239,8 +269,10 @@ define([
                 for (i = 0; i < items.length; i++) { //iterate over each item in the result group
                     IDNumCount++;
 
-                        var item = items[i],
-                        where = ADK.utils.stringUtils.addSearchResultElementHighlighting(item.attributes.where, this.getKeywords()),
+                    var item = items[i],
+                        highlightedWhere = _.get(item, 'attributes.highlights.where'),
+                        highlightedDomain = _.get(item, 'attributes.highlights.kind'),
+                        highlightedSummary = _.get(item, 'attributes.highlights.summary'),
                         summary = (item.attributes.summary || '').replace("\n", ""),
                         uid = item.attributes.uid,
                         datetime = me.util.doDatetimeConversion(item.attributes.datetime),
@@ -251,7 +283,7 @@ define([
                         count = (item.attributes.count).toString();
                     }
                     if (typeof(item.attributes.highlights) !== 'undefined') {
-                        var AllHighlights = item.attributes.highlights;
+                        var AllHighlights = _.values(_.omit(item.attributes.highlights, ['summary', 'where', 'kind']));
                         for (var h = 0; h < AllHighlights.length; h++) {
                             var currentHighlight = AllHighlights[h].toString().replace(/\uFFFD/g, "");
                             highlights = highlights + "... " + currentHighlight + " ...<br>";
@@ -271,16 +303,25 @@ define([
 
 
                         var groupOnText = summary;
+                        var docSearchText = summary; //default
                         if (type === 'problem') {
                             groupOnText = item.attributes.icd_code;
+                            docSearchText = item.attributes.icd_code;
                             //console.log(groupOnText);
                         }
                         var subGroupType = type;
                         if (kind === 'surgical pathology') {
                             subGroupType = kind;
                             groupOnText = item.attributes.group_name;
+                            docSearchText = item.attributes.group_name;
 
                         }
+
+                        //Documents should search by the local_title, not the summary, which can be a calculated value
+                        if (type === 'document') {
+                            docSearchText = item.attributes.local_title;
+                        }
+
                         var cleanGroupName2 = summary.replace(/[^a-zA-Z0-9]/g, ""),
                             subgroupIdCount = subgroupIdCounts[cleanGroupName2] = (subgroupIdCounts[cleanGroupName2] || 0) + 1,
                             subGroupId = 'result-subGroup-' + cleanGroupName2 + '-' + subgroupIdCount,
@@ -295,7 +336,8 @@ define([
                                 groupOnText: groupOnText,
                                 subGroupItems: subGroupList,
                                 subGroupClass: 'topLevelItem documentSubgroup dataUnfetched',
-                                datetime: datetime
+                                datetime: datetime,
+                                docSearchText: docSearchText
                             });
 
 
@@ -305,17 +347,30 @@ define([
                             sortText: summary.toString()
                         });
                     } else {
-                        var summaryPlus = summary;
-
-                        if (item.attributes.problem_status !== undefined) {
-                            summaryPlus = item.attributes.problem_status + ':' + summary;
-                            if (item.attributes.acuity_name !== undefined) {
-                                summaryPlus = item.attributes.problem_status + '(' + item.attributes.acuity_name + '): ' + summary;
+                        if (highlightedSummary) {
+                            var fullSummaryHl = "";
+                            for (var hl = 0; hl < highlightedSummary.length; hl++) {
+                                fullSummaryHl = fullSummaryHl + highlightedSummary[hl].toString().replace(/\uFFFD/g, "");
                             }
+                            highlightedSummary = ADK.utils.stringUtils.addSearchResultElementHighlighting(summary, this.getHighlights(fullSummaryHl));
+                        } else {
+                            var summaryPlus = summary;
+
+                            if (item.attributes.problem_status !== undefined) {
+                                summaryPlus = item.attributes.problem_status + ':' + summary;
+                                if (item.attributes.acuity_name !== undefined) {
+                                    summaryPlus = item.attributes.problem_status + '(' + item.attributes.acuity_name + '): ' + summary;
+                                }
+                            }
+                            highlightedSummary = ADK.utils.stringUtils.addSearchResultElementHighlighting(summaryPlus, this.getKeywords());
+                        }
+                        if (!highlightedWhere) {
+                            highlightedWhere = ADK.utils.stringUtils.addSearchResultElementHighlighting(item.attributes.where, this.getKeywords());
+                        }
+                        if (!highlightedDomain) {
+                            highlightedDomain = ADK.utils.stringUtils.addSearchResultElementHighlighting(item.attributes.kind, this.getKeywords());
 
                         }
-                        var highlightedSummary = ADK.utils.stringUtils.addSearchResultElementHighlighting(summaryPlus, this.getKeywords());
-                        var highlightedDomain = ADK.utils.stringUtils.addSearchResultElementHighlighting(item.attributes.kind, this.getKeywords());
                         var entry = me.searchResultTemplate({
                             Class: "topLevelItem search-result-item all-padding-xs searchResultItem-filterable",
                             resultId: IDNumCount,
@@ -325,7 +380,7 @@ define([
                             highlights: highlights,
                             datetime: datetime,
                             domain: highlightedDomain,
-                            facility: where,
+                            facility: highlightedWhere,
                             basicResult: true,
                             singleResult: true
                         });
@@ -431,6 +486,12 @@ define([
                     var signer = drillDownItem.signer_display_name;
                     var highlights = '';
                     var datetime = self.util.doDatetimeConversion(drillDownItem.datetime);
+                    var codes = [{
+                        code: _.get(drillDownItem, 'codes_code[0]', {}),
+                        display: _.get(drillDownItem, 'codes_display[0]', {}),
+                        system: _.get(drillDownItem, 'codes_system[0]', {})
+                    }];
+                    drillDownItem.codes = codes;
 
                     if ((datetime === null || datetime === "" || datetime === "Unknown") && drillDownItem.observed !== undefined) {
                         datetime = self.util.doDatetimeConversion(drillDownItem.observed);
@@ -443,6 +504,10 @@ define([
                         highlights = '<p class="all-margin-no">...' + snippets[uid].body.join(" ... </p><p class='all-margin-no'>...") + '...</p>';
                     }
 
+                    self.collection.add(drillDownItem, {
+                        merge: true,
+                        parse: true
+                    });
 
                     var subGroupEntryItem = self.searchResultTemplate({
                         Class: "subgroupItem search-result-item all-padding-xs searchResultItem-filterable",
@@ -472,11 +537,11 @@ define([
         },
         checkforSubGroups: function(subGroup) {
 
-            var group_value = subGroup.attr('groupOnText');
+            var docSearchText = subGroup.attr('docSearchText').toString();
             var drilldown_type = subGroup.attr('subGroupType');
             var $subGroupList = subGroup.find($('.group-content'));
 
-            this.getDocumentDrilldownData(group_value.toString(), $subGroupList, drilldown_type);
+            this.getDocumentDrilldownData(docSearchText, $subGroupList, drilldown_type);
             subGroup.removeClass('dataUnfetched');
             subGroup.removeClass('searchResultItem-filterable');
             subGroup.addClass('dataFetched');
@@ -537,7 +602,8 @@ define([
             this.doDateFilterCommon(moment().subtract('hours', 24), '#24hr-range-text-search', '24hr', '24hr-range');
         },
         doCustomDateFilter: function(event) {
-            event.preventDefault();
+            if (event) event.preventDefault();
+
             this.$('.active-range').removeClass('active-range');
             var toDateText = this.$('#toDateText').val();
             var fromDateText = this.$('#fromDateText').val();
@@ -629,8 +695,6 @@ define([
             return hasCustomRangeValuesBeenSetCorrectly;
         },
         doDateFilter: function(displayAll) {
-
-
             var items = $('.search-results .searchResultItem-filterable');
             var filteredOut = 0;
             var fromTimeInMilisec = null;
@@ -677,14 +741,12 @@ define([
 
             } //end for-loop
             var results = this.totalResults - filteredOut;
-            this.$('.number-of-results').html(results.toString());
+            this.$('.number-of-results').html(results.toString() + " results");
 
 
             this.changeEntireSearchResultGroupVisibility();
         },
         changeEntireSearchResultGroupVisibility: function() {
-
-
             var groups = $('.dataFetched');
 
             for (var i = 0; i < groups.length; i++) {
@@ -717,27 +779,22 @@ define([
                     nextGroup.css("display", "none");
             }
         },
-        onSelectSearchResult: function(event) {
-            var self = this;
-            if (event.type == "click" || event.keyCode == 13) {
-                event.preventDefault();
-                var $resultContainer = $(event.target).closest('.search-result-item'),
-                    uid = $resultContainer.attr('data-uid'),
-                    currentPatient = ADK.PatientRecordService.getCurrentPatient();
-                var model = _.find(self.searchResults.models, function(item) {
-                    return item.attributes.uid === uid;
-                });
-                ADK.Messaging.getChannel('search').trigger('resultClicked', {
-                    uid: uid,
-                    patient: {
-                        icn: currentPatient.attributes.icn,
-                        pid: currentPatient.attributes.pid
-                    },
-                    model: model
-                });
-            }
+        onSelectSearchResult: function(e) {
+            event.preventDefault();
+            var $resultContainer = $(event.target).closest('.search-result-item'),
+                uid = $resultContainer.attr('data-uid'),
+                currentPatient = ADK.PatientRecordService.getCurrentPatient();
+            var model = this.collection.find({'uid':uid}) || this.searchResults.find({uid: uid});
+            ADK.Messaging.getChannel('search').trigger('resultClicked', {
+                uid: uid,
+                patient: {
+                    icn: currentPatient.attributes.icn,
+                    pid: currentPatient.attributes.pid
+                },
+                model: model
+            });
         },
-        accordionExpandCollapse: function(caret1, caret2, accordionState ){
+        accordionExpandCollapse: function(caret1, caret2, accordionState) {
             var groupIcon = this.$(event.target).closest('.search-group').find('button.btn-accordion:first');
             groupIcon.children('.fa').removeClass(caret1).addClass(caret2);
             var accordionHeading = groupIcon.find('.text-uppercase').text().trim();

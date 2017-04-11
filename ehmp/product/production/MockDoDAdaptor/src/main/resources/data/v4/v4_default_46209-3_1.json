@@ -78,7 +78,10 @@
         "interval": null,
         "numberOfRefills": "0",
         "comment": null,
-        "priorOrderNumber": null,
+        "priorOrderNumber": {
+          "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13",
+          "id": null
+        },
         "priority": "ROUTINE",
         "quantity": "30",
         "requestedDispenseAmount": "30",
@@ -155,7 +158,10 @@
         "interval": null,
         "numberOfRefills": "0",
         "comment": null,
-        "priorOrderNumber": null,
+        "priorOrderNumber": {
+          "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13",
+          "id": null
+        },
         "priority": "ROUTINE",
         "quantity": "7",
         "requestedDispenseAmount": "7",
@@ -232,7 +238,10 @@
         "interval": null,
         "numberOfRefills": "0",
         "comment": null,
-        "priorOrderNumber": null,
+        "priorOrderNumber": {
+          "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13",
+          "id": null
+        },
         "priority": "ROUTINE",
         "quantity": "60",
         "requestedDispenseAmount": "60",
@@ -309,7 +318,10 @@
         "interval": null,
         "numberOfRefills": "0",
         "comment": null,
-        "priorOrderNumber": null,
+        "priorOrderNumber": {
+          "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13",
+          "id": null
+        },
         "priority": "ROUTINE",
         "quantity": "60",
         "requestedDispenseAmount": "60",
@@ -386,7 +398,10 @@
         "interval": null,
         "numberOfRefills": "0",
         "comment": null,
-        "priorOrderNumber": null,
+        "priorOrderNumber": {
+          "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13",
+          "id": null
+        },
         "priority": "ROUTINE",
         "quantity": "1",
         "requestedDispenseAmount": "1",
@@ -460,7 +475,10 @@
         "interval": null,
         "numberOfRefills": "3",
         "comment": null,
-        "priorOrderNumber": null,
+        "priorOrderNumber": {
+          "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13",
+          "id": null
+        },
         "priority": "20071102140200",
         "quantity": "20",
         "requestedDispenseAmount": "20",
@@ -531,7 +549,10 @@
         "interval": null,
         "numberOfRefills": "2",
         "comment": null,
-        "priorOrderNumber": null,
+        "priorOrderNumber": {
+          "assigningAuthority": "2.16.840.1.113883.3.42.126.100001.13",
+          "id": null
+        },
         "priority": "20071102140200",
         "quantity": "30",
         "requestedDispenseAmount": "30",

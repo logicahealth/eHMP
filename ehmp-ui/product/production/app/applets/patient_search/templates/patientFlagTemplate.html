@@ -12,16 +12,14 @@
     </div>
     <div class="flags-wrapper">
         {{#each patientRecordFlag}}
-        <div class="sensitivePanel panel panel-danger">
+        <div class="sensitivePanel panel panel-danger bottom-margin-no">
             <div class="panel-heading">
                 <h4 class="panel-title">
-                    <a data-toggle="collapse" data-parent="#accordion" href="#ackMessagePanel_{{nameUnderscored}}">
-                        <span class="flex-grow-loose">{{name}}</span>
-                        <span class="label label-warning{{#compare category 'I (NATIONAL)'}} label-danger{{/compare}} flex-grow-fixed">Category {{category}}</span>
-                    </a>
+                    <span class="flex-grow-loose">{{name}}</span>
+                    <span class="label label-warning{{#compare category 'I (NATIONAL)'}} label-danger{{/compare}} flex-grow-fixed color-pure-black">Category {{category}}</span>
                 </h4>
             </div>
-            <div id="ackMessagePanel_{{nameUnderscored}}" class="panel-collapse collapse in ackMessagePanel">
+            <div class="panel-collapse collapse in ackMessagePanel">
                 <div class="panel-body">
                     <h5>{{text}}</h5>
                     <div class="patientInfo row">
@@ -50,6 +48,8 @@
         {{/each}}
     </div>
     <div class="confirmation-div">
-        <button type="button" id="confirmFlaggedPatinetButton" class="confirm btn btn-success btn-block btn-lg" title="Press enter to confirm">Confirm</button>
+        <button type="button" id="confirmFlaggedPatinetButton" class="confirm btn btn-success btn-block btn-lg" title="Press enter to confirm this patient" data-loading-text="<i class='fa fa-spinner fa-spin'></i><span aria-live='assertive' role='progressbar'> Loading Patient Data </span>">
+            <span aria-hidden="true">Confirm</span>
+        </button>
     </div>
 </div>

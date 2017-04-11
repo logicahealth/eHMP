@@ -4,7 +4,6 @@ var rdk = require('../../core/rdk');
 var nullchecker = rdk.utils.nullchecker;
 var _ = require('lodash');
 var async = require('async');
-var dd = require('drilldown');
 
 function getIdsArray(id, req, callback) {
     var responseObject = {
@@ -29,10 +28,10 @@ function getIdsArray(id, req, callback) {
 }
 
 function getNamesFromPids(pidToNameMap, req, cb) {
-    //http://IP_ADDRESS:PORT/vpr/9E7A;3,9E7A;8,9E7A;253/find/patient
-    //http://IP_ADDRESS:PORT/vpr/9E7A;100013/find/patient?filter=in(pid,["9E7A;100013"])
-    //http://IP_ADDRESS:PORT/data/index/pt-select-pid?range=9E7A;3,9E7A;8
-    var jdsUrlStringLimit = dd(req)('app')('config')('jdsServer')('urlLengthLimit').val || 120;
+    //http://IP             /vpr/9E7A;3,9E7A;8,9E7A;253/find/patient
+    //http://IP             /vpr/9E7A;100013/find/patient?filter=in(pid,["9E7A;100013"])
+    //http://IP             /data/index/pt-select-pid?range=9E7A;3,9E7A;8
+    var jdsUrlStringLimit = _.get(req, 'app.config.jdsServer.urlLengthLimit') || 120;
     var jdsServer = req.app.config.jdsServer;
     var preSegmentUrl = '/data/index/pt-select-pid?range=';
     var maxSegmentLength = jdsUrlStringLimit - (jdsServer.baseUrl.length + preSegmentUrl.length);

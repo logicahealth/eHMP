@@ -375,7 +375,7 @@ function consultSignal(req, note, signal, writebackContext, taskCallback) {
 
     // Special case appends this field because it has to
     if (signal === 'COMPLETE') {
-        signalContent.signalBody.actionText = 'Completed, Admin';
+        signalContent.signalBody.actionText = 'Completed, by Note';
         signalContent.signalBody.actionId = 1;
         signalContent.signalBody.visit = {
             'location': location,
@@ -437,25 +437,57 @@ function changestateJson(writebackContext, state) {
     return {
         'taskid': writebackContext.model.taskId ? writebackContext.model.taskId.toString() : '',
         'state': state,
-        'deploymentid': writebackContext.deploymentId
+        'deploymentId': writebackContext.deploymentId
     };
 }
 
 function getDeploymentId(deployments) {
-    deployments = deployments.sort(function(a, b) {
-        //example: VistaCore:General_Medicine:2.0.0.1
-        var anums = a.deploymentId.split(':')[2].split('.');
-        var bnums = b.deploymentId.split(':')[2].split('.');
-        var length = anums.length > bnums.length ? anums.length : bnums.length;
-        for (var i = 0; i < length; i++) {
-            var thisPart = i < anums.length ? anums[i] : 0;
-            var thatPart = i < bnums.length ? bnums[i] : 0;
-            if (thisPart !== thatPart) {
-                return thatPart - thisPart;
+    //This is nearly identical to the versionCompare method in
+    //'../../resources/activitymanagement/activities/eventprocessor/activity-event-process-resource')
+    //The one difference is it splits on v1.deploymentId instead of just v1.
+    deployments = deployments.sort(
+        function versionCompare(v1, v2) {
+            // Split version numbers to its parts
+            var v1parts = v1.deploymentId.split('.');
+            var v2parts = v2.deploymentId.split('.');
+
+            // Push 0 to the end of the version number that might be shorter
+            //      ie. 1.2.3 and 1.2.3.4 => 1.2.3.0 and 1.2.3.4
+            while (v1parts.length < v2parts.length) {
+                v1parts.push('0');
             }
+
+            while (v2parts.length < v1parts.length) {
+                v2parts.push('0');
+            }
+
+            // Convert all values to numbers
+            var convert = function(val) {
+                val = val.replace(/\D/g, '');
+                return Number(val);
+            };
+            v1parts = v1parts.map(convert);
+            v2parts = v2parts.map(convert);
+
+            for (var i = 0; i < v1parts.length; i++) {
+                if (v1parts[i] === v2parts[i]) {
+                    continue;
+                } else if (v1parts[i] > v2parts[i]) {
+                    return -1;
+                } else if (v1parts[i] < v2parts[i]) {
+                    return 1;
+                }
+            }
+
+            return 0;
         }
-        return 0;
+    );
+
+    _.each(deployments, function(deployment) {
+        console.log('getDeploymentId.deployment.deploymentId=' + deployment.deploymentId);
     });
+
+    console.log('getDeploymentId.deployments[0].deploymentId=' + deployments[0].deploymentId);
     return deployments[0].deploymentId;
 }
 

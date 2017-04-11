@@ -12,6 +12,7 @@ function RpcCall(rpcName, params) {
     this.params = params || [];
 }
 
+
 /*
 Variadic:
 create(rpcName)

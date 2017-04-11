@@ -1,5 +1,6 @@
 package gov.va.signalregistrationservice.util;
 
+import gov.va.ehmp.services.utils.Logging;
 import gov.va.signalregistrationservice.entities.EventListener;
 import gov.va.signalregistrationservice.entities.EventMatchAction;
 import gov.va.signalregistrationservice.entities.EventMatchCriteria;
@@ -25,27 +26,29 @@ import com.google.gson.JsonObject;
 public class RegistrationUtil {
 
 	private static void recurse(JsonElement json, String prefix, Map<String, String> map) {
-				
 		if (json == null) {
 			return;
 		}
 		
 		if (json.isJsonPrimitive()) {
-    		map.put(prefix, json.getAsString());
+			map.put(prefix, json.getAsString());
 		}	
 		else if (json.isJsonArray()) {
-        	int ind = 0;        	
-            for (JsonElement e : json.getAsJsonArray()) {
-        		recurse(e, prefix + "[" + ind++ + "]", map);
-            }        	
-        } else {
-
-        	prefix = prefix.length() > 0?prefix.concat("."):prefix;
-            for (Map.Entry<String, JsonElement> entry : json.getAsJsonObject().entrySet()) {
-                recurse(entry.getValue(), prefix + entry.getKey(), map);
-            }        	
-        }
-    }
+			int ind = 0;
+			for (JsonElement e : json.getAsJsonArray()) {
+				recurse(e, prefix + "[" + (ind++) + "]", map);
+			}
+		} else if (json.isJsonObject()) {
+			prefix = prefix.length() > 0 ? prefix.concat(".") : prefix;
+			for (Map.Entry<String, JsonElement> entry : json.getAsJsonObject().entrySet()) {
+				recurse(entry.getValue(), prefix + entry.getKey(), map);
+			}
+		}
+		else {
+			Logging.info("Json was not a primitive, jsonArray, or jsonObject - treating as null");
+			return;
+		}
+	}
 	
 	/*
 	 * This method flattens an object like {foo:{bar:false}} to {"foo.bar":false} and returns map with key-value pairs
@@ -55,10 +58,10 @@ public class RegistrationUtil {
 		Map<String, String> map = new LinkedHashMap<>();
 		
 		if (json != null && json.isJsonObject()) {
-        	 recurse(json, "", map);
+			recurse(json, "", map);
 		}
 
-	    return map;
+		return map;
 	}
 
 	/*
@@ -67,7 +70,7 @@ public class RegistrationUtil {
 	public static String buildSuccessResponse() {
 		String response = new String();
 		
-		JsonObject outputObj = new JsonObject();				
+		JsonObject outputObj = new JsonObject();
 		outputObj.addProperty("status", 200);
 		
 		Gson gson = new GsonBuilder().create();
@@ -82,9 +85,9 @@ public class RegistrationUtil {
 	public static void createEventListener(EntityManager em,
 			String eventActionScope,
 			String apiVersion,
-			String eventDescription, 
+			String eventDescription,
 			String eventName,
-			BigDecimal eventMatchCriteriaId, 
+			BigDecimal eventMatchCriteriaId,
 			BigDecimal eventMatchActionId) {
 		
 		em.persist(new EventListener(eventActionScope, apiVersion, eventDescription, eventName, eventMatchActionId, eventMatchCriteriaId));
@@ -93,7 +96,7 @@ public class RegistrationUtil {
 	/*
 	 * Insert row(s) into SIMPLE_MATCH
 	 * */
-	public static void createSimpleMatchRecords(EntityManager em, 
+	public static void createSimpleMatchRecords(EntityManager em,
 			JsonObject matchJsonObject, 
 			BigDecimal eventMatchCriteriaId) {
 		
@@ -106,11 +109,11 @@ public class RegistrationUtil {
 	/*
 	 * Insert row into EVENT_MATCH_ACTION
 	 * */
-	public static BigDecimal createMatchAction(EntityManager em, 
-			long processInstanceId, 
-			String signalName, 
+	public static BigDecimal createMatchAction(EntityManager em,
+			long processInstanceId,
+			String signalName,
 			String signalContent,
-			String processDefinitionId, 
+			String processDefinitionId,
 			String version) {
 		
 		Query query = em.createNativeQuery("select ACTIVITYDB.AM_EVENT_MATCH_ACTION_ID_SEQ.nextval from dual");
@@ -122,7 +125,7 @@ public class RegistrationUtil {
 
 	/*
 	 * Insert row into EVENT_MATCH_CRITERIA
-	 * */
+	 **/
 	public static BigDecimal createMatchCriteria(EntityManager em) {
 		
 		Query query = em.createNativeQuery("select ACTIVITYDB.AM_EVENT_MATCH_CRITERIA_ID_SEQ.nextval from dual");
@@ -133,7 +136,7 @@ public class RegistrationUtil {
 		return eventMatchCriteriaId;
 	}
 	
-	public static EntityManager getEntityManager(KieSession ksession) {		
+	public static EntityManager getEntityManager(KieSession ksession) {
 		Environment env = ksession.getEnvironment();
 		EntityManagerFactory entityManagerFactory = (EntityManagerFactory)env.get(EnvironmentName.ENTITY_MANAGER_FACTORY);
 		

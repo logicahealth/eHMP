@@ -2,8 +2,9 @@
 define([
     'backbone',
     'jquery',
+    'moment',
     'api/Messaging'
-], function(Backbone, $, Messaging) {
+], function(Backbone, $, moment, Messaging) {
     'use strict';
 
     var infoButtonUtils = {};

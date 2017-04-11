@@ -10,7 +10,7 @@ describe('The note-objects-madlib-generator-numeric-lab-result test for', functi
         it ('lab results parses the correct content', function () {
             var result = {
                 'data':  {
-                    'displayName': 'BLOOD',
+                    'typeName': 'BLOOD',
                     'specimen' : 'CBD',
                     'observed': '20150411',
                     'interpretationName': 'High',
@@ -26,7 +26,7 @@ describe('The note-objects-madlib-generator-numeric-lab-result test for', functi
         it ('handles date normalization in the madlib generation process', function () {
             var result = {
                 'data' : {
-                    'displayName': 'GLUCOSE',
+                    'typeName': 'GLUCOSE',
                     'specimen' : 'SERUM',
                     'observed': '20150129151700',
                     'interpretationName': 'High alert',
@@ -42,7 +42,7 @@ describe('The note-objects-madlib-generator-numeric-lab-result test for', functi
         it ('handles madlib generation with missing attributes', function () {
             var result = {
                 'data' : {
-                    'displayName': 'WBC',
+                    'typeName': 'WBC',
                     'specimen' : 'BLOOD',
                     'observed': '20150329',
                     'result': '2300',

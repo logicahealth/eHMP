@@ -6,7 +6,7 @@ import org.joda.time.format.DateTimeParserBucket;
 import java.util.Locale;
 
 /**
- * TODO: Complete documentation for PointInTimeParserBucket
+ * Class for managing bucket a point in time of intervals.
  */
 class PointInTimeParserBucket extends DateTimeParserBucket {
 

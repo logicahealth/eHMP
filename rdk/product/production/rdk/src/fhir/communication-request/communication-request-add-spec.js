@@ -1,6 +1,7 @@
 'use strict';
 
 var addHandler = require('./communication-request-add');
+var httpUtil = require('../../utils/http');
 
 function stubRequest() {
     var logger = {
@@ -13,7 +14,9 @@ function stubRequest() {
     };
     var app = {
         config: {
-            generalPurposeJdsServer: ''
+            generalPurposeJdsServer: {
+                baseUrl: 'http://localhost'
+            }
         }
     };
     var req = {
@@ -32,7 +35,8 @@ function stubResponse() {
     return res;
 }
 describe('When adding a communication request', function() {
-    var callback, spyEnqueue, message;
+    var spyEnqueue;
+    var message;
     var req = stubRequest();
     var res = stubResponse();
 
@@ -44,11 +48,10 @@ describe('When adding a communication request', function() {
 
     beforeEach(function() {
         spyEnqueue = sinon.spy(queue, 'enqueue');
-        callback = sinon.spy();
 
         message = {
             recipient: [{
-                reference: 'provider/pu1234'
+                reference: 'provider/PW    '
             }, {
                 reference: 'patient/9E7A;10045'
             }],
@@ -62,24 +65,33 @@ describe('When adding a communication request', function() {
 
     afterEach(function() {
         spyEnqueue.reset();
-        callback.reset();
     });
 
     it('a single communication request is added to multiple recipient queues', function(done) {
+        var body = {};
+        var response = {};
+        response.body = body;
+        response.headers = [];
+        sinon.stub(httpUtil, 'put', function(options, callback) {
+            return callback(null, response, body);
+        });
 
+        var callCount = 0;
+        var callback = function() {
+            callCount++;
+            expect(callCount).to.equal(1);
+            var queueNames = spyEnqueue.args[0][0];
+            expect(queueNames.length).to.be(2);
+            expect(queueNames).must.include('provider/PW    ');
+            expect(queueNames).must.include('patient/9E7A;10045');
+
+            var queueMessage = spyEnqueue.args[0][1];
+            expect(queueMessage.identifier).to.not.be.undefined();
+            expect(queueMessage.identifier.value).to.not.be.undefined();
+            expect(queueMessage.resourceType).to.be('CommunicationRequest');
+
+            done();
+        };
         addHandler.handle(queue, message, callback, req, res);
-        expect(callback.callCount).to.be(1);
-
-        var queueNames = spyEnqueue.args[0][0];
-        expect(queueNames.length).to.be(2);
-        expect(queueNames).must.include('provider/pu1234');
-        expect(queueNames).must.include('patient/9E7A;10045');
-
-        var queueMessage = spyEnqueue.args[0][1];
-        expect(queueMessage.identifier).to.not.be.undefined();
-        expect(queueMessage.identifier.value).to.not.be.undefined();
-        expect(queueMessage.resourceType).to.be('CommunicationRequest');
-
-        done();
     });
 });

@@ -24,7 +24,6 @@ tasks.each { taskName ->
 		include ':production:jbpm'
 		include ':production:jbpm:authentication'
 		include ':production:jbpm:event-listeners'
-		include ':production:jbpm:VistaTasks'
 		include ':production:jbpm:FITLabProject'
 		include ':production:jbpm:FOBTLabService'
 		include ':production:jbpm:CDSInvocationService'

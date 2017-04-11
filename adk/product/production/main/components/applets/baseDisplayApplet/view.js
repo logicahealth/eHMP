@@ -290,16 +290,6 @@ define([
                     this.$(row).attr(attrs);
                 }, this);
             }
-
-            var el, i;
-
-            _.each(this.appletOptions.columns, function(column, index) {
-                i = index + 1;
-                el = $(applet).find('thead th:nth-child(' + i + ') a');
-                if (el.length === 0)
-                    el = $(applet).find('thead th:nth-child(' + i + ')');
-                $(el).attr('tooltip-data-key', column.hoverTip);
-            });
         },
         onError: function(collection, resp) {
             if (resp.statusText === "abort") {
@@ -329,6 +319,11 @@ define([
                 return;
             }
             var collection = this.appletOptions.collection;
+
+            if(!!collection.xhr) {
+                // If we're currently refreshing, then skip.
+                return;
+            }
 
             this.loading();
             this.setAppletView();

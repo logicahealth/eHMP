@@ -15,10 +15,10 @@ Scenario Outline: Verify different marital status
 	  | entry.content.maritalStatus.coding.display | "<marital_display>"|
 Examples:
       | patient_id | marital_code | marital_display |
-#      | 9E7A;35    | UNK          | unknown         |   TODO: sensitive patient causes false failure
+#      | 9E7A;35    | UNK          | unknown         |
       | 9E7A;11    | D            | Divorced        |
       |	9E7A;13    |L			  | Legally Separated   |
-#      | 9E7A;1     | M            | Married         |   TODO: sensitive patient causes false failure
+#      | 9E7A;1     | M            | Married         |
       | 9E7A;4     | S            | Never Married       |
-#      | 9E7A;50    | W            | Widowed         |   TODO: sensitive patient causes false failure
+#      | 9E7A;50    | W            | Widowed         |
 	 

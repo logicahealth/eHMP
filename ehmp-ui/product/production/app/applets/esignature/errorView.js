@@ -23,7 +23,7 @@ define([
         this.showModal = function() {
             var errorView = new ADK.UI.Alert({
                 title: 'Error',
-                icon:  'icon-error',
+                icon:  'icon-circle-exclamation',
                 messageView: errorBodyView,
                 footerView: errorFooterView
             });

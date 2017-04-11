@@ -22,7 +22,7 @@ TMP2ARY(ARY) ; convert JSON object in ^TMP($J) to array
  S HTTPREQ("store")="vpr" ; normally this gets set in RESPOND^VPRJRSP
  D PAGE^VPRJRUT("^TMP($J)",0,999,.SIZE,.PREAMBLE)
  N SRC,N,I,J
- S N=0,SRC(N)="{""apiVersion"":""1.0"",""data"":{""totalItems"":"_^TMP($J,"total")_",""items"":["
+ S N=0,SRC(N)="{""data"":{""totalItems"":"_^TMP($J,"total")_",""items"":["
  S I="" F  S I=$O(^TMP($J,$J,I)) Q:I=""  D
  . I I S SRC(N)=SRC(N)_","
  . S J=0 F  S J=$O(^TMP($J,$J,I,J)) Q:'J  D

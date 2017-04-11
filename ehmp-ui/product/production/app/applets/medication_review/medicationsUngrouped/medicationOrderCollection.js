@@ -18,13 +18,15 @@ define([
             }
             var fetchOptions = {
                 resourceTitle: this.defaultResourceTitle,
-                criteria: this.defaultCriteria,
+                cache: true,
+                criteria: options.defaultCriteria || this.defaultCriteria,
                 onSuccess: options.onSuccess,
                 onError: options.onError
             };
             ADK.PatientRecordService.fetchCollection(fetchOptions, this);
         },
         refresh: function(options) {
+            ADK.ResourceService.clearCacheByResourceTitle('patient-record-med');
             this.performFetch(options);
         }
     });

@@ -1,6 +1,6 @@
 class PobCoverSheet < SitePrism::Page
-  set_url '/#cover-sheet'
-  set_url_matcher(/\/#cover-sheet/)
+  set_url '/#/patient/cover-sheet'
+  set_url_matcher(/\/#\/patient\/cover-sheet/)
   # *****************  All_Form_Elements  ******************* #
   # *****************  All_Logo_Elements  ******************* #
   # *****************  All_Field_Elements  ******************* #

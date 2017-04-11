@@ -4,7 +4,6 @@ var _ = require('lodash');
 var nullChecker = require('../../utils/nullchecker');
 var filemanDateUtil = require('../../utils/fileman-date-converter');
 var paramUtil = require('../../utils/param-converter');
-var dd = require('drilldown');
 
 // return a negative number in case of bad input
 function timeFormatter(dateTime) {
@@ -71,7 +70,7 @@ function create(writebackContext, callback) {
     var errors = [];
     var model = writebackContext.model;
     // dfn is now part of the interceptor results...
-    model.dfn = dd(writebackContext)('interceptorResults')('patientIdentifiers')('dfn').val;
+    model.dfn = _.get(writebackContext, 'interceptorResults.patientIdentifiers.dfn');
 
     validateInput(writebackContext.logger, model, errors);
 

@@ -23,7 +23,6 @@ function handle(log, config, environment, job, handlerCallback) {
         return setTimeout(handlerCallback, 0, errorUtil.createFatal('Invalid job', job.type), job);
     }
 
-    // TODO: determine whether not having any domains defined is an error
     if(!config.jmeadows || _.isEmpty(config.jmeadows.domains)) {
         log.warn('jmeadows-sync-request-handler.handle : No domains configured for jmeadows');
         return setTimeout(handlerCallback);

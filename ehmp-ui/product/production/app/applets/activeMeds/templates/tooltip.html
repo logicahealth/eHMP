@@ -9,20 +9,15 @@
         </tr>
     </thead>
     <tbody>
-    {{#if popoverMeds}} 
+    {{#if popoverMeds}}
         {{#each popoverMeds}}
         <tr>
-            <td>{{attributes.overallStartFormat}}</td>
-            <td>{{attributes.normalizedName}}</td>
-            <td>{{attributes.sig}}</td>
-            <td>{{formatTimeSince attributes.age}}</td>
+            <td>{{overallStartFormat}}</td>
+            <td>{{normalizedName}}</td>
+            <td>{{sig}}</td>
+            <td>{{formatTimeSince age}}</td>
         </tr>
         {{/each}}
-        {{#if numberOfMedsNotShownInPopover}}
-        <tr>
-            <td colspan="4" align="center"><strong>{{numberOfMedsNotShownInPopover}} More<strong></td>
-        </tr>
-        {{/if}}
     {{/if}}
     </tbody>
 </table>

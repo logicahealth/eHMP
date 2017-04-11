@@ -8,13 +8,29 @@ var composition = require('./composition');
 
 var getResourceConfig = function() {
     return [{
-        name: 'composition',
+        name: 'fhir-composition',
         path: '',
         get: getComposition,
-        requiredPermissions: [],
+        requiredPermissions: ['read-fhir'],
         isPatientCentric: true,
         permitResponseFormat: true,
-        subsystems: ['patientrecord', 'jds', 'solr', 'authorization']
+        subsystems: ['patientrecord', 'jds', 'solr', 'authorization'],
+        interceptors: {
+            fhirPid: true,
+            validatePid: false
+        }
+    },{
+        name: 'fhir-composition-search',
+        path: '_search',
+        post: getComposition,
+        requiredPermissions: ['read-fhir'],
+        isPatientCentric: true,
+        permitResponseFormat: true,
+        subsystems: ['patientrecord', 'jds', 'solr', 'authorization'],
+        interceptors: {
+            fhirPid: true,
+            validatePid: false
+        }
     }];
 };
 
@@ -47,7 +63,7 @@ function getCompositionData(req, pid, type, callback) {
     var config = req.app.config;
     var jdsResource, jdsPath;
     var start = req.param('start') || 0;
-    var limit = req.param('limit');
+    var limit = req.param('_count');
     var jdsQuery = {
         start: start
     };

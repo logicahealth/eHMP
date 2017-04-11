@@ -23,6 +23,7 @@ task codequality: [
 ]
 
 task :endToEndTests, [:env] => [:environment_setup]
+task :jbpmTests, [:env] => [:environment_setup]
 task :endToEndStableTests, [:env] => [:environment_setup]
 task :endToEndUnstableTests, [:env] => [:environment_setup]
 task :endToEndOncTests, [:env] => [:environment_setup]
@@ -44,6 +45,10 @@ end
 
 Cucumber::Rake::Task.new(:endToEndOncTests) do |t|
   t.cucumber_opts = "features --color --format pretty --tags ~@unstable --tags @onc --tags ~@future --tags ~@UI --tags ~@debug --tags ~@manual -f json_pretty -o cucumber.json -f html -o cucumber.html"
+end
+
+Cucumber::Rake::Task.new(:jbpmTests) do |t|
+  t.cucumber_opts = "features --color --format pretty --tags ~@debug --tags @JBPM -f json_pretty -o cucumber.json -f html -o cucumber.html"
 end
 
 ## Placeholder task for executing all Acceptance Tests for all Mobile Applications
@@ -99,7 +104,7 @@ def environment_endpoints(env)
     ENV["RDK_WRITEBACK_HOST"] = knife_search_for_ip("resource_server")
     ENV["RDK_PICKLIST_PORT"]="7777"
     ENV["RDK_PICKLIST_HOST"] = knife_search_for_ip("resource_server")
-    ENV["Perf_Monitor_IP"] = 'IP____ADDRESS'
+    ENV["Perf_Monitor_IP"] = 'IP           '
   else
     fail "Unrecognized environment type: #{env}. Allowable types are: 'virtualbox' and 'aws'"
   end

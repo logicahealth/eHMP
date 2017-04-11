@@ -13,12 +13,13 @@ define([
     "backbone",
     "marionette",
     "highcharts",
+    "moment",
     "hbs!app/applets/encounters/templets/itemList",
     "hbs!app/applets/encounters/templets/item",
     "app/applets/encounters/appConfig",
     "app/applets/encounters/appUtil",
     "app/applets/encounters/gistConfig"
-], function(_, $, Backbone, Marionette, highcharts, gistView, item, CONFIG, util, gistConfig) { //subItem,
+], function(_, $, Backbone, Marionette, highcharts, moment, gistView, item, CONFIG, util, gistConfig) { //subItem,
     'use strict';
     // Switch ON/OFF debug info
     var DEBUG = CONFIG.debug;
@@ -212,10 +213,11 @@ define([
         }
     };
     var noRecords = Backbone.Marionette.ItemView.extend({
-        template: _.template('<div class="empty-gist-list top-margin-xs left-margin-xs color-grey-darker"><p>No Records Found</p></div>'),
+        template: _.template('<p class="top-padding-xs left-padding-xs color-grey-darkest">No Records Found</p>'),
         attributes: {
             "aria-live": "assertive"
-        }
+        },
+        className: 'background-color-grey-lightest percent-height-100',
     });
 
     var wrongView = Backbone.Marionette.ItemView.extend({
@@ -319,29 +321,27 @@ define([
             this.$el.find("#caret").attr("class", "caret");
         },
         caretOff: function() {
-            this.$el.find("#caret").attr("class", "right-caret"); //this.$el.find('.header').attr("sortDirection", 'none');
+            this.$el.find("#caret").attr("class", "right-caret");
         },
         caretSwitch: function() {
-            var arrowPosition = this.$el.find(".fa").attr("arrowPosition");
+            var theCaret = this.$el.find(".left-side .fa");
+            var arrowPosition = theCaret.attr("arrowPosition");
             if (arrowPosition === "right") {
-                this.$el.find(".fa").attr("arrowPosition", "down");
-                this.$el.find(".fa").addClass("fa-caret-down").removeClass("fa-caret-right");
+                theCaret.attr("arrowPosition", "down");
+                theCaret.addClass("fa-caret-down").removeClass("fa-caret-right");
             } else if (arrowPosition === "down") {
-                this.$el.find(".fa").attr("arrowPosition", "right");
-                this.$el.find(".fa").addClass("fa-caret-right").removeClass("fa-caret-down");
+                theCaret.attr("arrowPosition", "right");
+                theCaret.addClass("fa-caret-right").removeClass("fa-caret-down");
             }
         },
         onClickRightSide: function(event) {
-            if (_.isUndefined($(event.target).attr('aria-describedby'))) {
+            if (_.isUndefined(this.ui.popoverEl.attr('aria-describedby'))) {
                 var eventTarget = $(event.target);
                 eventTarget.trigger('click');
-                eventTarget.focus();
             } else {
                 event.preventDefault();
                 event.stopImmediatePropagation();
             }
-
-
         },
         onClickLeftSide: function(event) {
             event.preventDefault();
@@ -430,9 +430,16 @@ define([
             if (this.collection.length <= 0) {
                 this.$('.enc-gist-list').removeAttr('role');
             }
+            var self = this;
+            _.each(this.$('[data-header-instanceid]'), function(span) {
+                self.$(span).append('<span class="sr-only">( ' + span.getAttribute('data-original-title') + ' )</span>');
+            });
         },
         onDestroy: function() {
             this.$('.enc-gist-list').off();
+        },
+        behaviors: {
+            Tooltip: {}
         }
     });
 

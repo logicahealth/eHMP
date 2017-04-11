@@ -25,7 +25,6 @@ define([
 
     var MINIMUM_NUMBER_OF_COLUMNS = 12;
     var WIDGET_PADDING = 2 * ResizeUtils.dimensions.gridsterWidget.get('GRIDSTER_MARGIN_VALUE');
-    var GRIDSTER_CONTAINER_RIGHT_PADDING = 16;
     var PAGINATION_LEFT_OFFSET = 18;
     var PAGINATION_RIGHT_OFFSET = 75;
     var BROWSER_SCROLLBAR_HEIGHT = 17;
@@ -51,7 +50,7 @@ define([
             this.$widgets.each($.proxy(function(i, widget) {
                 var $widget = $(widget);
                 var data = serializedGrid[i];
-                this.resize_widget($widget, data.sizex, data.sizey);
+                this.resize_widget($widget, data.size_x, data.size_y);
             }, this));
         } catch (e) {}
         this.generate_grid_and_stylesheet();
@@ -63,21 +62,20 @@ define([
         return false;
     };
     Gridster.prototype.set_dom_grid_width = function(cols, model) {
+        var gridsterWidgetModel = model || ResizeUtils.dimensions.gridsterWidget;
+        var extraMargin = gridsterWidgetModel.get('GRIDSTER_MARGIN_VALUE') || 5;  // = left margin of leftmost widget + right margin of rightmost widget
+        var isWorkspaceEditorGridster = Messaging.request('get:adkApp:region', 'modalRegion').currentView;
+
         if (typeof cols === 'undefined') {
             cols = this.get_highest_occupied_cell().col;
         }
         var max_cols = (this.options.autogrow_cols ? this.options.max_cols : this.cols);
         cols = Math.min(max_cols, Math.max(cols, this.options.min_cols));
 
-        var gridsterWidgetModel = model || ResizeUtils.dimensions.gridsterWidget;
-        var extraMargin = gridsterWidgetModel.get('GRIDSTER_MARGIN_VALUE') || 5;
-
-        if (!this.$el.hasClass('freeze-applets')) {
-            var breakPoint = gridsterWidgetModel.get('breakPointValue');
-            var totalNumberOfColumnsFilled = gridsterWidgetModel.get('totalNumberOfColumnsFilled');
-            this.container_width = ((breakPoint * this.min_widget_width) * Math.ceil(totalNumberOfColumnsFilled / breakPoint)) + (extraMargin / 2);
+        if (isWorkspaceEditorGridster) {
+            this.container_width = this.get_highest_occupied_cell().col * (this.min_widget_width + this.resize_max_size_x) + (extraMargin / 2);
         } else {
-            this.container_width = cols * this.min_widget_width + (extraMargin / 2);
+            this.container_width = cols * this.min_widget_width;  // original logic
         }
         this.$el.css({
             'width': this.container_width,
@@ -93,7 +91,7 @@ define([
 
     var layoutView = Backbone.Marionette.LayoutView.extend({
         template: Handlebars.compile('<div class="gridster"></div>'),
-        className: "contentPadding hidden-overflow-y auto-overflow-x full-height",
+        className: "contentPadding hidden-overflow-y auto-overflow-x percent-height-100",
         saveThrottleProperties: {
             lastSave: {
                 time: 0,
@@ -254,15 +252,6 @@ define([
             var resizable = {};
             var draggable = {};
 
-            function gridsterResizeSnap($widget) {
-                var sizeX = parseInt($widget.attr('data-sizex'));
-                var mod = sizeX % 2;
-                if (mod === 1) {
-                    gridster.resize_widget($widget, sizeX + 1);
-                }
-                Messaging.trigger('gridster:resize', $widget);
-            }
-
             if (this.freezeApplets) {
                 resizable = {
                     enabled: false
@@ -276,21 +265,15 @@ define([
             } else {
                 resizable = {
                     enabled: true,
-                    handle_append_to: '',
-                    resize: function(e, ui, $widget) {
-                        gridsterResizeSnap($widget);
-                    },
                     stop: function(e, ui, $widget) {
-                        gridsterResizeSnap($widget);
+                        self.$el.data('jsp').reinitialise(null, true);
                         saveGridsterAppletsConfig();
                     }
                 };
                 draggable = {
                     handle: "div.panel-heading.grid-applet-heading",
-                    ignore_dragging: function() {
-                        return false;
-                    },
                     stop: function(e, ui, $widget) {
+                        self.$el.data('jsp').reinitialise(null, true);
                         saveGridsterAppletsConfig();
                     }
                 };

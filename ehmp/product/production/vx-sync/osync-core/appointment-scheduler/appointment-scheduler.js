@@ -14,7 +14,7 @@ var pollerUtil = require(global.VX_UTILS + 'poller-utils');
 logUtil.initialize(config, 'osync');
 var log = logUtil.get('appointment-scheduler');
 var async = require('async');
-var jobUtil = require(global.VX_UTILS + 'osync-job-utils');
+var jobUtil = require(global.OSYNC_UTILS + 'osync-job-utils');
 var environment = pollerUtil.buildOsyncEnvironment(log, config);
 var oSyncConfig = config.osync;
 

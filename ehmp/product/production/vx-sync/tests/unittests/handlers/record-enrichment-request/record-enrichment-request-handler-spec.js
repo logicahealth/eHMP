@@ -34,7 +34,6 @@ var config = {
             'cpt',
             'diagnosis',
             'document',
-            'factor',
             'immunization',
             'lab',
             'med',

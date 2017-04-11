@@ -1343,6 +1343,7 @@ this.ui.allControls.trigger('control:hidden', false);
 |                                  | **endDate**   | string, Date instance, or Moment instance  | Sets the upper bounds of the date range<br />**Default:** 100 years from the current date.<br />**Example:** `endDate: new Moment()`|
 |                                  | **outputFormat**   | string  | Format to save on the model. Will not affect visible format, as this is handled at a global level.<br />**Default:** `'MM/DD/YYYY'`<br />**Note:** This should be a Moment-compatible string such as "MM/DD/YYYY" or "YYYYMMDD" <br />**Example:** `outputFormat: "DD/MM/YYYY"`|
 |                                  | **flexible**    | boolean    | Enables datejs free-text parsing. "Flexible" refers to the ability to not be restricted by output format (can allow for only MM/YYYY or YYYY formats) or input format (no input masking)<br />**Note:** is limited to a prescribed list of allowed formats. These formats will display in a popover next to datepicker's label.<br />**Example:** `flexible: true`|
+|                                  | **minPrecision** | string or integer | Minimum required level of date "precision" or specificity. Reflected in [model validation](#Utility-Datepicker-Validation) and [help tooltip](#Utility-Datepicker-Restricted-Formats-for-Flexible-Datepicker).<br />**Options:** `'day'`, `'d'`, or `3` (requires DD/MM/YYYY precision), `'month'`, `'m'`, or `2` (MM/YYYY precision), `'year'`, `'y'`, or `1` (DEFAULT, YYYY precision)<br />**Note:** requires `flexible: true`<br />**Example:** `minPrecision: true`|
 
 #### External Model saved to Form Model ####
 When a date is entered, the date is saved in the form of a string on the form model on the attribute specified by the `name` option. This date value will be in the format specified by `outputFormat`. In addition to this string value, a Backbone Model is saved to the form model on an attribute with "_" prepended to the string specified by the `name` option. The attributes of this model is the parsedDate, formattedDate, and format as well as the year, month, and day associated with the selected date.
@@ -3046,7 +3047,7 @@ this.$('.myFieldset').trigger('control:items:update', object)
 ```
 :::
 
-### Popover ###
+### Popover {.copy-link} ###
 > control: **'popover'**
 
 
@@ -3064,17 +3065,71 @@ this.$('.myFieldset').trigger('control:items:update', object)
 |                                  | **extraClasses**| array of strings | Classes to be added to trigger button <br />**Example:** `extraClasses: ["col-md-2", "btn-danger"]`|
 |                                  | **hidden**      | boolean    | Makes control hidden upon initial load<br />**Example:** `hidden: true`|
 |                                  | **options**     | object     | Bootstrap options:<br />**trigger**: (string) Type of event on the button to toggle the popover ( click, hover, focus, manual)<br />**header**: (string) The header content of the popover<br />**placement**: (string) The direction of where the popover appears relative to the trigger button<br />**delay**: (integer) Time to wait in ms for the popover to appear<br />**Example:** `options: {trigger: "click"}`|
+|                                  | **behaviors**   | object     | Form control's behavior hash modeled after [Marionette's view behavior hash][MarionetteBehaviors].<br />**([List of supported behaviors for this control](form-controls.md#Wrappers-Popover-Supported-Behaviors))**|
 
 ::: side-note
-#### Events that can be triggered to change control attributes dynamically ####
+#### Events that can be triggered to change control attributes dynamically {.copy-link} ####
 
-| Event                     | Parameter Type | Description / Example                                                      |
-|:--------------------------|:---------:|:--------------------------------------------------------------------------------|
-| **control:hidden**        | boolean   | Hides/shows the full control <br/>**Example:** `$().trigger('control:hidden', true)` |
-| **control:popover:hidden** | boolean   | Hides/shows the popover content <br/>**Example:** `$().trigger('control:popover:hidden', true)` |
-|**control:items:add**      | object | Adds a control to the popover using the control options specified <br/>**Example:** `$().trigger('control:items:add', {control: 'button', name: 'test'})`|
-|**control:items:remove**      | object | Removes a control to the popover using the control options specified<br />**Note**: the control config specified here must match the one used to add the control <br/>**Example:** `$().trigger('control:items:remove', {control: 'button', name: 'test'})`|
-|**control:items:update**      | object | Updates specified collection to the given models (the form control config) <br/>**Example:** `$().trigger('control:items:update', {control: 'button', name: 'test'})`|
+| Event                      | Parameter Type   | Description / Example                                                                             |
+|:---------------------------|:----------------:|:--------------------------------------------------------------------------------------------------|
+| **control:hidden**         | boolean          | Hides/shows the full control <br/>**Example:** `$().trigger('control:hidden', true)` |
+| **control:popover:hidden** | boolean          | Hides/shows the popover content <br/>**Example:** `$().trigger('control:popover:hidden', true)` |
+|**control:items:add**       | object           | Adds a control to the popover using the control options specified <br/>**Example:** `$().trigger('control:items:add', {control: 'button', name: 'test'})`|
+|**control:items:remove**    | object           | Removes a control to the popover using the control options specified<br />**Note**: the control config specified here must match the one used to add the control <br/>**Example:** `$().trigger('control:items:remove', {control: 'button', name: 'test'})`|
+|**control:items:update**    | object           | Updates specified collection to the given models (the form control config) <br/>**Example:** `$().trigger('control:items:update', {control: 'button', name: 'test'})`|
+
+In addition you can trigger any of the [button control's events](form-controls.md#Basic-Button-Events-that-can-be-triggered-to-change-control-attributes-dynamically) on the button element inside the popover control to change the triggering button's attributes dynamically.
+:::
+
+::: side-note
+#### Supported Behaviors {.copy-link} ####
+
+##### Confirmation {.copy-link} #####
+
+This behavior is used to ask the user to confirm their action before executing / proceeding.
+
+| Required                          | Option Name               | Type   | Description                                                              |
+|:---------------------------------:|:--------------------------|:------:|:-------------------------------------------------------------------------|
+|                                   | **title**                 | string | Text to display in the header of the popover<br />**Default:** _empty string_|
+|<i class="fa fa-check-circle"></i> | **eventToTrigger**        | string | This is the DOM event that will be thrown on the form view's element when the confirmation button inside the popover is clicked.  You can set up a listener in the form's `events` hash to listen for this event and react accordingly. |
+|                                   | **message**               | string | Text to display in the body of the popover<br />**Default:** "All unsaved changes will be lost. Are you sure you want to cancel?" |
+|                                   | **confirmButtonLabel**    | string | Label for the confirm butotn inside the popover<br />**Default:** "Yes" |
+|                                   | **confirmButtonTitle**    | string | HTML title attribute value for the confirm butotn inside the popover<br />**Default:** "Press enter to cancel" |
+|                                   | **dismissButtonLabel**    | string | Label for the dismiss butotn inside the popover<br />**Default:** "No" |
+|                                   | **dismissButtonTitle**    | string | HTML title attribute value for the dismiss butotn inside the popover<br />**Default:** "Press enter to go back" |
+
+::: showcode Confirmation Behavior Example:
+Setting up the behavior on the popover form control object:
+```JavaScript
+{
+    control: 'popover',
+    name: 'formConfirmCancelPopover',
+    label: 'Cancel',
+    behaviors: {
+        Confirmation: {
+            title: 'Warning',
+            eventToTrigger: 'form-confirm-cancel',
+            message: 'Something bad might happen. Are you sure you want to cancel?',
+            confirmButtonLabel: 'Absolutely',
+            confirmButtonTitle: 'Press enter to absolutely cancel this form',
+            ButtonLabel: 'No Way',
+            ButtonTitle: 'Press enter to go back to the form'
+        }
+    }
+}
+```
+Setting up an event listener on the form view to run code when the confirm button in the popover is clicked:
+```JavaScript
+var FormView = ADK.UI.Form.extend({
+    events: {
+        'form-confirm-cancel': function(e) {
+            // Remember this is just a sample
+            writebackUtils.unregisterChecks();
+            this.workflow.close();
+        }
+    }
+});
+```
 
 :::
 
@@ -4299,3 +4354,5 @@ ui: {
 this.ui.Treepicker.trigger('control:picklist:set', collection);
 ```
 :::
+
+[MarionetteBehaviors]: http://marionettejs.com/docs/v2.4.3/marionette.behaviors.html

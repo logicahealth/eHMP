@@ -12,7 +12,7 @@ define([
                 extraClasses: ["modal-body"],
                 items: [{
                     control: "container",
-                    extraClasses: ["container-fluid"],
+                    extraClasses: ['container-fluid', 'flex-display', 'flex-direction-column', 'percent-height-100'],
                     items: [{
                         control: "container",
                         items: [{
@@ -57,22 +57,27 @@ define([
                     }, {
                         //addendum text container
                         control: "container",
-                        extraClasses: ["row"],
+                        extraClasses: ['row', 'notes-textarea-wrapper'],
                         items: [{
                             control: "container",
-                            extraClasses: ["col-xs-12"],
+                            extraClasses: ["col-xs-12", "percent-height-100", 'position-absolute'],
                             items: [{
                                 control: "textarea",
+                                extraClasses:['percent-height-100', 'flex-display', 'flex-direction-column'],
                                 id: "addendumDerivBody",
                                 name: "addendumBody",
                                 title: "Enter in addendum details",
                                 label: "Note Addendum",
-                                rows: 27,
                                 required: true,
                                 maxlength: 1000000, // 1 Megabyte is the maximum for the RDK
                                 charCount: false
                             }]
                         }]
+                    },{
+                        control: "container",
+                        extraClasses: ["row"],
+                        template: Handlebars.compile('{{#if lastSavedDisplayTime}}<div class="bottom-margin-no top-margin-xs col-xs-12 font-size-11"><span id="notes-saved-at-view2">Saved {{lastSavedDisplayTime}}</span></div>{{/if}}'),
+                        modelListeners: ["lastSavedDisplayTime"]
                     }]
                 }]
             }, {
@@ -83,11 +88,6 @@ define([
                     control: "container",
                     extraClasses: ["row"],
                     items: [{
-                        control: "container",
-                        extraClasses: ["col-xs-12"],
-                        template: Handlebars.compile('{{#if lastSavedDisplayTime}}<p><span id="notes-saved-at-view2">Saved {{lastSavedDisplayTime}}</span></p>{{/if}}'),
-                        modelListeners: ["lastSavedDisplayTime"]
-                    }, {
                         control: "container",
                         extraClasses: ["col-xs-12"],
                         items: [{

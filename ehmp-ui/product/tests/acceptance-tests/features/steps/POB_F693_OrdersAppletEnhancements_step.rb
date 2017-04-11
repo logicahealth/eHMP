@@ -1,8 +1,8 @@
 When(/^POB the user clicks the Orders Expand Button$/) do
   @ehmp = PobOrdersApplet.new
-  @ehmp.wait_until_btn_expand_orders_visible
-  expect(@ehmp).to have_btn_expand_orders
-  @ehmp.btn_expand_orders.click
+  @ehmp.wait_until_btn_applet_expand_view_visible
+  expect(@ehmp).to have_btn_applet_expand_view
+  @ehmp.btn_applet_expand_view.click
 end
 
 And(/^POB "(.*?)" applet loaded successfully$/) do |applet_id|
@@ -14,7 +14,7 @@ end
 
 And(/^the Order Date Column Header exist$/) do
   @ehmp = PobOrdersApplet.new
-  expect(@ehmp.btn_orders_date.text.upcase.split("P")[0].strip).to eq("Order Date".upcase)
+  expect(@ehmp.btn_orders_date.text.upcase).to have_text("Order Date".upcase)
 end
 
 And(/^the Orders Results are not sorted in reverse chronological or chronological order$/) do

@@ -15,9 +15,10 @@ class PobMedsReview < PobParentApplet
   element :fld_med_item, :xpath, "//div[contains(@class, 'col-xs-3') and contains(string(), 'methocarbamol')]"
 
   elements :fld_med_review_applet_rows, "[data-appletid='medication_review'] [class='panel-heading meds-item']"
-  elements :fld_inpatient_meds_rows, "[id^='inpatient-accordion'] .panel-heading.meds-item"
-  elements :fld_outpatient_med_rows, "[id^='outpatient-accordion'] .panel-heading.meds-item"
-  elements :fld_panel_all_level_headers, "[class='panel-collapse collapse in'] [class^='bottom-']"
+  elements :fld_inpatient_meds_rows, "#inpatient-medication_review div.medication-layout-view .meds-item .col-xs-3:nth-of-type(1)"
+  elements :fld_outpatient_med_rows, "#outpatient-accordion-medication_review div.medication-layout-view .meds-item .col-xs-3:nth-of-type(1)"
+  # #outpatient-accordion-medication_review div.medication-layout-view .meds-item .col-xs-3:nth-of-type(1)
+  elements :fld_panel_all_level_headers, "[class='panel-collapse collapse in'] strong"
 
   # *****************  All_Button_Elements  ******************* #
   element :btn_toolbar_popover, "[style*='block'] .toolbarPopover [tooltip-data-key='toolbar_detailview']"

@@ -1,4 +1,4 @@
-@US2171 @regression @triage
+@US2171 @regression
 Feature: F144 - eHMP viewer GUI - Immunizations
 #Team Neptune
 
@@ -40,6 +40,9 @@ Scenario: User views the details of an Immunization
       | Date Administered|
 
       | next button     |
+      
+    And the Immunization Detail modal displays disabled fields
+      | button          |
       | previous button |
 
 

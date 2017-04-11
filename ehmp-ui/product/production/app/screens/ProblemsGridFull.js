@@ -1,8 +1,7 @@
 define([
     "backbone",
     "marionette",
-    'app/applets/problems_add_edit/views/problemsAddView'
-], function(Backbone, Marionette, AddView) {
+], function(Backbone, Marionette) {
     'use strict';
     var screenConfig = {
         id: 'problems-full',

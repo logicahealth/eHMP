@@ -3,42 +3,31 @@
 // set up the packages we need
 var rdk = require('../../core/rdk');
 var _ = require('lodash');
-var dd = require('drilldown');
 var ObjectId = require('mongoskin').ObjectID;
 var request = require('request');
 
 // Database
 var dbName = 'schedule';
 var exeCollection = 'cdsjobs';
-var db;
 var agenda;
 var cdsInvocationUrl;
 var agendaJobProcessorName;
+var thisApp;
 
-var isCDSMongoServerAvailable = false;
-var isCDSInvocationServerAvailable = false;
 var testId;
 
+//Called from cds-agenda.init()
 function init(app) {
-    isCDSMongoServerAvailable = dd(app)('subsystems')('cds')('isCDSMongoServerConfigured').invoke();
-    if (!isCDSMongoServerAvailable) {
-        return;
-    }
-    isCDSInvocationServerAvailable = dd(app)('subsystems')('cds')('isCDSInvocationConfigured').invoke();
+    thisApp = app;
+    var isCDSInvocationServerAvailable = _.result(thisApp, 'subsystems.cds.isCDSInvocationConfigured');
     if (!isCDSInvocationServerAvailable) {
         return;
     }
-    app.subsystems.cds.getCDSDB(dbName, function(error, dbConnection) {
-        if (!error) {
-            db = dbConnection;
-        }
-    });
-    cdsInvocationUrl = app.subsystems.cds.getInvocationUrl();
-    agenda = app.subsystems.cds.getAgenda();
-    agendaJobProcessorName = app.subsystems.cds.getAgendaJobProcessorName();
-    testId = app.subsystems.cds.testMongoDBId;
+    agenda = thisApp.subsystems.cds.getAgenda();
+    agendaJobProcessorName = thisApp.subsystems.cds.getAgendaJobProcessorName();
+    testId = thisApp.subsystems.cds.testMongoDBId;
+    cdsInvocationUrl = thisApp.subsystems.cds.getInvocationUrl();
 }
-
 
 // /////////
 // Job
@@ -54,7 +43,6 @@ function init(app) {
  * @apiGroup CDS Scheduler
  *
  * @apiParam {String} [jobname] Job name
- * @apiParam {String} . Return all jobs
  *
  * @apiSuccess (Success 200) {json[]} data A Job array
  *
@@ -68,7 +56,7 @@ function init(app) {
             "data": {
                 "cdsname": "Timeout",
                 "url":
-                        "IPADDRESS:PORT/cds-results-service/core/executeRulesJob"
+                        "IP            /cds-results-service/core/executeRulesJob"
             },
             "type": "normal",
             "priority": 0,
@@ -91,18 +79,17 @@ function init(app) {
  *    "data": null }
  *
  */
-module.exports.getJob = function(req, res) {
-    if (!isCDSMongoServerAvailable || !isCDSInvocationServerAvailable) {
-        var error = !isCDSMongoServerAvailable ? 'CDS persistence store is unavailable.' : 'CDS Invocation server is unavailable.';
-        return res.status(rdk.httpstatus.service_unavailable).rdkSend(error);
+var getJob = function(req, res) {
+    if (_.isUndefined(thisApp)) {
+        return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS schedule resource is unavailable.');
     }
-
     var status = rdk.httpstatus.ok;
     var match = {};
 
     if (req.query.jobname) {
         match.jobname = req.query.jobname;
     }
+
     agenda.jobs(match, function(err, jobs) {
         // Work with jobs
         /*
@@ -117,7 +104,7 @@ module.exports.getJob = function(req, res) {
         res.status(status).rdkSend(message);
     });
 };
-
+module.exports.getJob = getJob;
 
 /**
  * Create a scheduled job
@@ -132,8 +119,8 @@ module.exports.getJob = function(req, res) {
  *
  * @apiParam {String} jobname Job name
  * @apiParam {String} cdsname CDS Job name
- * @apiParam {String} when The time the CDS Job should run
- * @apiParam {String} interval The frequency of running the CDS Job
+ * @apiParam {String} [when] The time the CDS Job should run
+ * @apiParam {String} [interval] The frequency of running the CDS Job
  *
  * @apiSuccess (Success 201) {json} data Job JSON document
  * @apiSuccessExample Success-Response: HTTP/1.1 201 Created { "status": 201,
@@ -144,77 +131,80 @@ module.exports.getJob = function(req, res) {
  *                  "error": "Missing required CDS job name" }
  *
  */
-module.exports.postJob = function(req, res) {
-    if (!isCDSMongoServerAvailable || !isCDSInvocationServerAvailable) {
-        var error = !isCDSMongoServerAvailable ? 'CDS persistence store is unavailable.' : 'CDS Invocation server is unavailable.';
-        return res.status(rdk.httpstatus.service_unavailable).rdkSend(error);
+var postJob = function(req, res) {
+    if (_.isUndefined(thisApp)) {
+        return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS schedule resource is unavailable.');
     }
+    thisApp.subsystems.cds.getCDSDB(dbName, null, function(error, dbConnection) {
+        if (error) {
+            return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS persistence store is unavailable.');
+        }
+        var aj = {};
+        var url = '';
+        var match = {};
+        var jobname = '';
+        var cdsname = '';
+        var when = '';
+        var interval = '';
 
-    var aj = {};
-    var url = '';
-    var match = {};
-    var jobname = '';
-    var cdsname = '';
-    var when = '';
-    var interval = '';
-
-    if (req.query.jobname) {
-        jobname = req.query.jobname;
-        match.jobname = jobname;
-    }
-    if (!jobname) {
-        return res.status(rdk.httpstatus.not_found).rdkSend('Missing required schedule job name');
-    }
-    if (req.query.cdsname) {
-        cdsname = req.query.cdsname;
-    }
-    if (!cdsname) {
-        return res.status(rdk.httpstatus.not_found).rdkSend('Missing required CDS job name');
-    }
-
-    url = req.query.url || cdsInvocationUrl;
-
-    if (req.query.when) {
-        when = req.query.when;
-    }
-    if (req.query.interval) {
-        interval = req.query.interval;
-    }
-
-    db.collection(exeCollection).findOne({
-        name: cdsname
-    }, function(err, result) {
-        if (!result) {
-            return res.status(rdk.httpstatus.not_found).rdkSend('CDS Job \'' + cdsname + '\' does not exist');
+        if (req.query.jobname) {
+            jobname = req.query.jobname;
+            match.jobname = jobname;
+        }
+        if (!jobname) {
+            return res.status(rdk.httpstatus.not_found).rdkSend('Missing required schedule job name');
+        }
+        if (req.query.cdsname) {
+            cdsname = req.query.cdsname;
+        }
+        if (!cdsname) {
+            return res.status(rdk.httpstatus.not_found).rdkSend('Missing required CDS job name');
         }
 
-        agenda.jobs(match, function(err, result) {
-            if (err) {
-                return res.status(rdk.httpstatus.bad_request).rdkSend(err);
-            } else if (!_.isEmpty(result)) {
-                return res.status(rdk.httpstatus.conflict).rdkSend('Job \'' + jobname + '\' exists');
-            }
-            aj = agenda.create(agendaJobProcessorName, {
-                cdsname: cdsname,
-                url: url
-            });
-            aj.attrs.jobname = jobname;
+        url = req.query.url || cdsInvocationUrl;
 
-            if (when) {
-                aj.schedule(req.query.when);
+        if (req.query.when) {
+            when = req.query.when;
+        }
+        if (req.query.interval) {
+            interval = req.query.interval;
+        }
+
+        dbConnection.collection(exeCollection).findOne({
+            name: cdsname
+        }, function(err, result) {
+            if (!result) {
+                return res.status(rdk.httpstatus.not_found).rdkSend('CDS Job \'' + cdsname + '\' does not exist');
             }
-            if (interval) {
-                aj.repeatEvery(req.query.interval);
-            }
-            if (!when) {
-                aj.disable();
-            }
-            aj.save();
-            return res.status(rdk.httpstatus.created).rdkSend('Send Request queued for ' + cdsname);
+
+            agenda.jobs(match, function(err, result) {
+                if (err) {
+                    return res.status(rdk.httpstatus.bad_request).rdkSend(err);
+                } else if (!_.isEmpty(result)) {
+                    return res.status(rdk.httpstatus.conflict).rdkSend('Job \'' + jobname + '\' exists');
+                }
+                aj = agenda.create(agendaJobProcessorName, {
+                    cdsname: cdsname,
+                    url: url
+                });
+                aj.attrs.jobname = jobname;
+
+                if (when) {
+                    aj.schedule(req.query.when);
+                }
+                if (interval) {
+                    aj.repeatEvery(req.query.interval);
+                }
+                if (!when) {
+                    aj.disable();
+                }
+                aj.save();
+                return res.status(rdk.httpstatus.created).rdkSend('Send Request queued for ' + cdsname);
+            });
         });
     });
 };
-
+module.exports.postJob = postJob;
 
 /**
  * Modify a scheduled job
@@ -228,10 +218,10 @@ module.exports.postJob = function(req, res) {
  * @apiHeader {json} content Job object
  *
  * @apiParam {String} jobname Job name
- * @apiParam {String} when The time the job is scheduled to run
- * @apiParam {String} interval The frequency of running the job
- * @apiParam {String} enable Enable the job to be queued
- * @apiParam {String} disable Disable the job from being queued
+ * @apiParam {String} [when] The time the job is scheduled to run
+ * @apiParam {String} [interval] The frequency of running the job
+ * @apiParam {String} [enable] Enable the job to be queued
+ * @apiParam {String} [disable] Disable the job from being queued
  *
  * @apiSuccess (Success 200) {json} data update flag
  * @apiSuccessExample Success-Response: HTTP/1.1 200 Success
@@ -245,12 +235,10 @@ module.exports.postJob = function(req, res) {
  *
  *
  */
-module.exports.putJob = function(req, res) {
-    if (!isCDSMongoServerAvailable || !isCDSInvocationServerAvailable) {
-        var error = !isCDSMongoServerAvailable ? 'CDS persistence store is unavailable.' : 'CDS Invocation server is unavailable.';
-        return res.status(rdk.httpstatus.service_unavailable).rdkSend(error);
+var putJob = function(req, res) {
+    if (_.isUndefined(thisApp)) {
+        return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS schedule resource is unavailable.');
     }
-
     var disable = req.query.hasOwnProperty('disable');
     var enable = req.query.hasOwnProperty('enable');
     var jobname = '';
@@ -302,7 +290,7 @@ module.exports.putJob = function(req, res) {
         });
     });
 };
-
+module.exports.putJob = putJob;
 
 /**
  * Delete a scheduled job
@@ -315,8 +303,8 @@ module.exports.putJob = function(req, res) {
  * @apiDescription This call deletes a scheduled job. Either a jobname, an id,
  *                 or both are required.
  *
- * @apiParam {Number} jobname name of the job
- * @apiParam {Number} id 24 digit HEX number doc id
+ * @apiParam {String} [jobname] name of the job
+ * @apiParam {String} [id] 24 digit HEX number doc id
  *
  * @apiSuccess (Success 200) {Number} data Delete count
  * @apiSuccessExample Success-Response: HTTP/1.1 200 OK { "status" 200,
@@ -327,12 +315,10 @@ module.exports.putJob = function(req, res) {
  *                  "error": "Job not found" }
  *
  */
-module.exports.deleteJob = function(req, res) {
-    if (!isCDSMongoServerAvailable || !isCDSInvocationServerAvailable) {
-        var error = !isCDSMongoServerAvailable ? 'CDS persistence store is unavailable.' : 'CDS Invocation server is unavailable.';
-        return res.status(rdk.httpstatus.service_unavailable).rdkSend(error);
+var deleteJob = function(req, res) {
+    if (_.isUndefined(thisApp)) {
+        return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS schedule resource is unavailable.');
     }
-
     var match = {};
 
     if (req.query.jobname) {
@@ -360,5 +346,5 @@ module.exports.deleteJob = function(req, res) {
         return res.status(rdk.httpstatus.ok).rdkSend(numRemoved);
     });
 };
-
+module.exports.deleteJob = deleteJob;
 module.exports.init = init;

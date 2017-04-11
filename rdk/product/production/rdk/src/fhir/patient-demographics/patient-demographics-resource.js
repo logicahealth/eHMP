@@ -13,7 +13,7 @@ var fhirToJDSAttrMap = [];
 //Issue call to Conformance registration
 conformance.register(confUtils.domains.PATIENT, createConformanceData());
 
-function createConformanceData() {   
+function createConformanceData() {
     var resourceType = confUtils.domains.PATIENT;
     var profileReference = 'http://www.hl7.org/FHIR/2015May/patient.html';
     var interactions = [ 'read' ];
@@ -24,15 +24,41 @@ function createConformanceData() {
 
 var getResourceConfig = function() {
     return [{
-        name: 'patient-demographics',
+        name: 'fhir-patient-demographics',
         path: '',
         get: getPatientDemographics,
         subsystems: ['patientrecord', 'solr', 'jds', 'jdsSync', 'authorization'],
-        requiredPermissions: [],
+        requiredPermissions: ['read-fhir'],
         isPatientCentric: true,
-        permitResponseFormat: true
+        permitResponseFormat: true,
+        interceptors: {
+            fhirPid: true,
+            validatePid: false
+        }
+    },{
+        name: 'fhir-patient-demographics-search',
+        path: '_search',
+        post: getPatientDemographics,
+        subsystems: ['patientrecord', 'solr', 'jds', 'jdsSync', 'authorization'],
+        requiredPermissions: ['read-fhir'],
+        isPatientCentric: true,
+        permitResponseFormat: true,
+        interceptors: {
+            fhirPid: true,
+            validatePid: false
+        }
     }];
 };
+
+//function searchPatientDemographics(req, res) {
+////    res.status(rdk.httpstatus.ok).rdkSend('searchPatientDemographics');
+//    var uri = decodeURI(req.originalUrl);
+//    var uri1 = unescape(req.originalUrl);
+//    req.logger.debug('earchPatientDemographics: ' + req.body);
+//
+//    return getPatientDemographics(req, res);
+//
+//}
 
 function getPatientDemographics(req, res) {
     //res.send(convertToFhir(result));
@@ -137,6 +163,7 @@ function convertToFhir(result) {
 
     var fhirResult = {
         'resourceType': 'Patient',
+        'id': data.uid,
         'extension': [{
             'url': 'http://vistacore.us/fhir/profiles/@main#service-connected',
             'valueCoding': {

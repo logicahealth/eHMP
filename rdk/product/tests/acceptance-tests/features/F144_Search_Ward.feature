@@ -1,4 +1,4 @@
-@F144_SearchWard 
+@F144_SearchWard
 Feature: F144 - eHMP Viewer GUI - Patient Search (Ward)
 
   Background:
@@ -6,9 +6,8 @@ Feature: F144 - eHMP Viewer GUI - Patient Search (Ward)
 
   @F144_SearchWard_1 @vxsync @enrich
   Scenario: User ward searches for wards
-    When the client requests picklist with the parameters and site "9E7A"
+    When the client requests picklist with the parameters for "wards-fetch-list" with the user "9E7A;PW    "
     | paramter name | value                 |
-    | type          | wards-fetch-list      |
     Then a successful response is returned
     And the client receives at least 1 location
 

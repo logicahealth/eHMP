@@ -5,7 +5,6 @@ var _ = require('lodash');
 var httpUtil = rdk.utils.http;
 var fs = require('fs');
 var uds = require('./user-defined-screens-resource');
-var dd = require('drilldown');
 var nullchecker = rdk.utils.nullchecker;
 
 var USER_SCREENS_CONFIG = 'UserScreensConfig';
@@ -45,7 +44,7 @@ function getResourceConfig() {
         path: '/all',
         delete: removeStackedGraphApplet,
         interceptors: interceptors,
-        requiredPermissions: [],
+        requiredPermissions: ['access-general-ehmp'],
         isPatientCentric: false,
         subsystems: ['jdsSync'],
     },
@@ -110,7 +109,7 @@ function getPredefinedStackedGraphData(req, screenId, callback) {
                     }
                     cbwGraphs.push(result);
 
-                    stackedData = dd(result)('userdefinedgraphs').val;
+                    stackedData = _.get(result, 'userdefinedgraphs');
 
                     if(!_.isUndefined(stackedData)) {
                         stackedData.id = screenId;
@@ -230,7 +229,7 @@ function updateStackedGraph(req, res){
         var stackedId = req.param('id');
         var stackedGraphData = {};
 
-        userDefinedGraphData = dd(data)('userDefinedGraphs').val;
+        userDefinedGraphData = _.get(data, 'userDefinedGraphs');
 
         for (count = 0; count < userDefinedGraphData.length; count++) {
             if (userDefinedGraphData[count].id === stackedId) {
@@ -306,7 +305,7 @@ function createStackedGraph(req, res) {
             var stackedGraphData = {};
             var found;
 
-            userDefinedGraphData = dd(data)('userDefinedGraphs').val;
+            userDefinedGraphData = _.get(data, 'userDefinedGraphs');
 
             if(nullchecker.isNotNullish(userDefinedGraphData)) {
                 for (count = 0; count < userDefinedGraphData.length; count++) {
@@ -507,7 +506,7 @@ function removeStackedGraph(req, res) {
             return res.status(rdk.httpstatus.internal_server_error).rdkSend(err);
         }
 
-        userDefinedGraphData = dd(data)('userDefinedGraphs').val;
+        userDefinedGraphData = _.get(data, 'userDefinedGraphs');
         var stackedGraphData = {};
         var count = 0;
 
@@ -646,7 +645,7 @@ function removeStackedGraphApplet(req, res) {
                 return res.status(rdk.httpstatus.internal_server_error).rdkSend(err);
             }
 
-            userDefinedGraphData = dd(data)('userDefinedGraphs').val;
+            userDefinedGraphData = _.get(data, 'userDefinedGraphs');
 
             if (nullchecker.isNotNullish(userDefinedGraphData)) {
                 var stackedGraphData = {};
@@ -742,8 +741,8 @@ function getTypeNameParameter(req) {
 function createScreenIdFromRequest(req, screenType) {
     var uid;
     var userSession = req.session.user;
-    var site = dd(userSession)('site').val;
-    var ien = dd(userSession)('duz')(site).val;
+    var site = _.get(userSession, 'site');
+    var ien = _.get(userSession, ['duz', site]);
 
     if(!_.isUndefined(site) && !_.isUndefined(ien)) {
         uid = site.concat(';').concat(ien);

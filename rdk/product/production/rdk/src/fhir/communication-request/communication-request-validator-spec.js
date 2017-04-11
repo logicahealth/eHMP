@@ -3,14 +3,15 @@
 var _ = require('lodash');
 var validator = require('./communication-request-validator');
 
-describe('When validating a communication request message', function() {
+// FUTURE-TODO: Re-enable (remove .skip) once resource is fully supported/tested end-to-end by system.
+describe.skip('When validating a communication request message', function() {
     var message, callback;
 
     beforeEach(function() {
         message = {resourceType: 'CommunicationRequest', identifier: {value: 'a435'},
             category: {coding: [{code: 'ehmp/msg/category/administrative'}]}, priority: {coding: [{code: 'ehmp/msg/priority/medium'}]},
             status: 'requested', medium: [{coding: [{code: 'ehmp/msg/medium/ui/todo'}]}],
-            recipient: [{reference: 'provider/pu1234'}, {reference: 'patient/9E7A;10045'}],
+            recipient: [{reference: 'provider/PW    '}, {reference: 'patient/9E7A;10045'}],
             payload: [{contentReference: {reference: 'patient/9E7A;10045/lab/123'}}]};
 
         callback = sinon.spy();

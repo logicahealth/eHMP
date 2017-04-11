@@ -3,7 +3,7 @@ var DATASTORE = 'commreq';
 var rdk = require('../../../core/rdk');
 var pjds = rdk.utils.pjdsStore;
 var _ = require('lodash');
-var dd = require('drilldown');
+var async = require('async');
 var httpUtil = rdk.utils.http;
 var querystring = require('querystring');
 
@@ -32,7 +32,7 @@ function getAll(logger, appConfig, jdsQuery, callback) {
 
 function save(queueNames, message, req, res, callback) {
     req.logger.debug('Saving communication request to pjds');
-    _.each(queueNames, function(queueName) {
+    return async.each(queueNames, function(queueName, callback) {
         var pjdsOptions = {
             store: DATASTORE,
             data: message,
@@ -46,9 +46,14 @@ function save(queueNames, message, req, res, callback) {
                     message: error.message
                 });
             }
+            return callback();
         });
+    }, function(err) {
+        if (err) {
+            return callback(err);
+        }
+        return callback();
     });
-    return callback();
 }
 
 function update(queueName, message, req, res, callback) {

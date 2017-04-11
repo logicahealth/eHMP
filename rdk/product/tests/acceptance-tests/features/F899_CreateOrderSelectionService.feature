@@ -1,12 +1,12 @@
 
+@F899
 Feature:F899 - Create Order Selection Service (RESTFul Service) that enables the user to Select an orderable from a Local VistA
 #Team_Europa
 
-@F899_1_Orderables_Search @US11561 @DE4192 @debug
+@F899_1_Orderables_Search @US11561 @DE4192
   Scenario: The returned orderables data contains searching strings
-  Given the client requests picklist with the parameters and site "9E7A"
+  Given the client requests picklist with the parameters for "orderables" with the user "9E7A;PW    "
   | paramter name | value                 |
-  | type          | orderables            |
   | subtype       | All                   |
   | searchString  | URINE                 |
   And a successful response is returned

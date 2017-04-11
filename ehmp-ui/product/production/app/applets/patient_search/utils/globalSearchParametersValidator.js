@@ -8,11 +8,9 @@ define([
     var globalSearchParametersValidator = {
 
         validateGlobalSearchParameterConfiguration: function(data) {
-            if (data['name.last'].trim() === "") {
-                return "lastNameRequiredFailure";
-            } else if ((data['name.first'].trim() === "") && (data['date.birth'] === "") && (data.ssn === "")) {
-                return "twoFieldsRequiredFailure";
-            } else {
+            if ((data['name.last'].trim() === "") || (data['name.first'].trim() === "") || (data.ssn === "")) {
+                return "threeFieldsRequiredFailure";
+            }  else {
                 return "success";
             }
         },

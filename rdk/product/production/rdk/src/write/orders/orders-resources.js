@@ -1,18 +1,15 @@
 'use strict';
 
 var _ = require('lodash');
-var dd = require('drilldown');
 var writebackWorkflow = require('../core/writeback-workflow');
 var writeVprToJds = require('../core/jds-direct-writer');
 var getCommonOrderTasks = require('./common/orders-common-tasks');
 
 var validateOrders = {};
-validateOrders['Medication, Outpatient'] = require('./med/orders-med-validator');
 validateOrders['Laboratory'] = require('./lab/orders-lab-validator');
 validateOrders['Common'] = require('./common/orders-common-validator');
 
 var writeOrderToVista = {};
-writeOrderToVista['Medication, Outpatient'] = require('./med/orders-med-vista-writer');
 writeOrderToVista['Laboratory'] = require('./lab/orders-lab-vista-writer');
 
 var writeToPjds = require('./common/orders-common-pjds-writer');
@@ -29,26 +26,6 @@ module.exports.getResourceConfig = function() {
         requiredPermissions: ['add-lab-order'],
         isPatientCentric: true
     }, {
-        name: 'orders-lab-update',
-        path: '/lab/:resourceId',
-        put: withOrderType('update'),
-        interceptors: {
-            operationalDataCheck: false,
-            synchronize: false
-        },
-        requiredPermissions: [], // TODO set permissions. See https://wiki.vistacore.us/display/VACORE/Writeback+Edition+Permissions
-        isPatientCentric: true
-    }, {
-        name: 'orders-lab-edit',
-        path: '/lab/:resourceId',
-        get: commonOrder('editLab'),
-        interceptors: {
-            operationalDataCheck: false,
-            synchronize: false
-        },
-        requiredPermissions: [], // TODO set permissions. See https://wiki.vistacore.us/display/VACORE/Writeback+Edition+Permissions
-        isPatientCentric: true
-    }, {
         name: 'orders-lab-detail',
         path: '/detail-lab/:resourceId',
         get: commonOrder('detailLab'),
@@ -56,7 +33,7 @@ module.exports.getResourceConfig = function() {
             operationalDataCheck: false,
             synchronize: false
         },
-        requiredPermissions: [], // TODO set permissions. See https://wiki.vistacore.us/display/VACORE/Writeback+Edition+Permissions
+        requiredPermissions: ['read-patient-record'],
         isPatientCentric: true
     }, {
         name: 'orders-lab-sign-details',
@@ -66,7 +43,7 @@ module.exports.getResourceConfig = function() {
             operationalDataCheck: false,
             synchronize: false
         },
-        requiredPermissions: [], // TODO set permissions. See https://wiki.vistacore.us/display/VACORE/Writeback+Edition+Permissions
+        requiredPermissions: ['sign-lab-order'],
         isPatientCentric: true
     }, {
         name: 'orders-lab-discontinue-details',
@@ -76,7 +53,7 @@ module.exports.getResourceConfig = function() {
             operationalDataCheck: false,
             synchronize: false
         },
-        requiredPermissions: [], // TODO set permissions. See https://wiki.vistacore.us/display/VACORE/Writeback+Edition+Permissions
+        requiredPermissions: ['discontinue-lab-order'],
         isPatientCentric: true
     }, {
         name: 'orders-lab-discontinue',
@@ -108,16 +85,25 @@ module.exports.getResourceConfig = function() {
         },
         requiredPermissions: ['add-lab-order'],
         isPatientCentric: true
-    },
-    {
-        name: 'orders-lab-find-draft',
-        path: '/find-draft-lab',
-        post: commonOrder('findDraftLabOrders'),
+    }, {
+        name: 'orders-find-draft',
+        path: '/find-draft',
+        post: commonOrder('findDraftOrders'),
         interceptors: {
             operationalDataCheck: false,
             synchronize: false
         },
-        requiredPermissions: [], // TODO set permissions. See https://wiki.vistacore.us/display/VACORE/Writeback+Edition+Permissions
+        requiredPermissions: ['read-patient-record'],
+        isPatientCentric: true
+    }, {
+        name: 'orders-read-draft',
+        path: '/read-draft/:resourceId',
+        get: commonOrder('readDraftOrder'),
+        interceptors: {
+            operationalDataCheck: false,
+            synchronize: false
+        },
+        requiredPermissions: ['read-patient-record'],
         isPatientCentric: true
     }];
 };
@@ -182,7 +168,7 @@ function commonOrder(action) {
  * @returns {string} valid order type or invalid order type
  */
 function identifyOrderType(req) {
-    //var orderType = dd(req.body)('kind').val;
+    //var orderType = _.get(req.body, 'kind');
     var orderType = req.body.kind;
     /*
      Known order types:
@@ -202,7 +188,6 @@ function identifyOrderType(req) {
         orderType: orderType
     });
     var handledOrderTypes = [
-        'Medication, Outpatient',
         'Laboratory'
     ];
     if (_.include(handledOrderTypes, orderType)) {
@@ -219,13 +204,5 @@ function handleUnhandledOrder(vistaContext, callback) {
 function handleInvalidAction(vistaContext, callback) {
     return setImmediate(callback, 'Unhandled action requested');
 }
-
-var medOrder = {
-    // VPR+ template model for med order
-};
-
-var labOrder = {
-    // VPR+ template model for lab order
-};
 
 module.exports._identifyOrderType = identifyOrderType;

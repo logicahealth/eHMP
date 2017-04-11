@@ -18,37 +18,37 @@ function handle(log, config, environment, handlerCallback) {
     var engine = new UnSyncRulesEngine(log, config, environment);
 
     var lastAccessDays = moment().subtract(config.unsync.lastAccessed, 'days').format('YYYYMMDDHHmmss');
-    log.debug('unsyn-handler.handle(): lastAccessDays: %j', lastAccessDays);
+    log.debug('unsync-handler.handle(): lastAccessDays: %j', lastAccessDays);
 
     environment.jds.getPatientList(lastAccessDays, function(error, response, result) {
         if (error) {
-            log.error('unsyn-handler.handle(): Got error from JDS: %j', error);
+            log.error('unsync-handler.handle(): Got error from JDS: %j', error);
             return handlerCallback('error');
-        };
+        }
         var items = result.items;
         if(items !== undefined && items.length > 0) {
-            log.debug('unsyn-handler.handle(): Number of patients from JDS : %j', items.length);
+            log.debug('unsync-handler.handle(): Number of patients from JDS : %j', items.length);
         } else {
-            log.debug('unsyn-handler.handle(): There are no patients eligible for unsync');
+            log.debug('unsync-handler.handle(): There are no patients eligible for unsync');
             return handlerCallback();
         }
 
         engine.processUnSyncRules(items, function (err, items) {
             if (items !== undefined && !_.isEmpty(items) && !_.isEmpty(items[0])) {
-                log.debug('unsyn-handler.handle(): patientIdentifiers to un sync: %j', items);
+                log.debug('unsync-handler.handle(): patientIdentifiers to un sync: %j', items);
                 return createUnsyncRequest(log, items, config, handlerCallback);
             }
         });
     });
-};
+}
 
 function createUnsyncRequest(log, items, config, handlerCallback) {
     async.each(items, function(item, callBack) {
-        var url = format('%s://%s:%s%s', config.unsync.vxsync.protocol, config.unsync.vxsync.host, config.unsync.vxsync.port, "/sync/clearPatient?");
+        var url = format('%s://%s:%s%s', config.unsync.vxsync.protocol, config.unsync.vxsync.host, config.unsync.vxsync.port, '/sync/clearPatient?');
         if (pidUtils.isIcn(item.patientIdentifiers[0])) {
-            url = url + "icn=" + item.patientIdentifiers[0];
+            url = url + 'icn=' + item.patientIdentifiers[0];
         } else {
-            url = url + "pid=" + item.patientIdentifiers[0];
+            url = url + 'pid=' + item.patientIdentifiers[0];
         }
 
         unSyncPatient(log, url, item.patientIdentifiers[0], function(err) {
@@ -56,13 +56,13 @@ function createUnsyncRequest(log, items, config, handlerCallback) {
                 return callBack(err);
             }
         });
-        log.debug('unsyn-handler.createUnsyncRequest unsync done for patient ', item.patientIdentifiers[0]);
+        log.debug('unsync-handler.createUnsyncRequest unsync done for patient ', item.patientIdentifiers[0]);
         return callBack;
     }, function(err){
         if( err ) {
             return handlerCallback(err);
         } else {
-            log.info('unsyn-handler.createUnsyncRequest un-sync complete for all patients');
+            log.info('unsync-handler.createUnsyncRequest un-sync complete for all patients');
 
             return handlerCallback(null);
         }
@@ -77,20 +77,20 @@ function createUnsyncRequest(log, items, config, handlerCallback) {
  * @param url The url to append the ien to for un-syncing this patient.
  */
 function unSyncPatient(log, url, pid, callback) {
-    request.post(url, function(error, response, body) {
+    request.post(url, function(error, response) {
         if (error) {
-            log.warn('unsyn-handler.unSyncPatient error in unSyncPatient: %j',  error);
+            log.warn('unsync-handler.unSyncPatient error in unSyncPatient: %j',  error);
             return callback(error);
         }
 
         if (validateSync(log, response, pid, callback) === false) {
-            return callback('unsyn-handler.unSyncPatient patient unsync failed');
+            return callback('unsync-handler.unSyncPatient patient unsync failed');
         }
 
-        log.debug('unsyn-handler.unSyncPatient unsync-complete for patient ', pid );
+        log.debug('unsync-handler.unSyncPatient unsync-complete for patient ', pid );
         callback(null);
     }).on('error', function(error) {
-        log.warn("unsyn-handler.unSyncPatient, error: " + error, callback);
+        log.warn('unsync-handler.unSyncPatient, error: ' + error, callback);
     });
 }
 
@@ -103,7 +103,7 @@ function unSyncPatient(log, url, pid, callback) {
  */
 function validateSync(log, response, pid) {
     if (nullUtil.isNullish(response) === false && ( response.statusCode !== 200 && response.statusCode !== 202)) {
-        log.warn('unsyn-handler.unSyncPatient unsync failed for patient ', pid + ' , vx-sync response: %j',  response.body);
+        log.warn('unsync-handler.unSyncPatient unsync failed for patient ', pid + ' , vx-sync response: %j',  response.body);
         return false;
     }
 

@@ -9,6 +9,8 @@ var nullchecker = rdk.utils.nullchecker;
 var _ = require('lodash');
 var errors = require('../common/errors');
 var fhirConstants = require('../common/utils/constants');
+var conformanceUtils = require('../conformance/conformance-utils');
+
 
 var jdsToFHIRStatusMap = {
     'COMPLETE': 'completed',
@@ -94,7 +96,17 @@ var fhirToJDSAttrMap = [{
     description: 'Type of procedure.',
     searchable: false,
     sortable: true
+},{
+    //this is effectively a searchable attribute, and is added here for conformance.
+    fhirName: '_tag',
+    vprName: '',
+    dataType: 'string',
+    definition: 'http://www.hl7.org/FHIR/2015May/datatypes.html#string',
+    description: 'To specify a specific subset, either procedure or educations',
+    searchable: true
 }];
+conformanceUtils.addCountAttribute(fhirToJDSAttrMap); //adding the _count attribute that is common to (almost) all endpoints.
+
 
 /**
  * To contain a simplified object (from fhirToJDSAttrMap) of
@@ -113,7 +125,7 @@ function buildSearchQuery(params) {
     var query = [];
     var dateQuery;
 
-    // TODO-FUTURE
+    // FUTURE-TODO
     // system & code - Not yet truely supported at JDS data level , since codes are not given back up
     // if (nullchecker.isNotNullish(params.code)) {
     //     query.push(fhirToJDSSearch.buildCodeAndSystemQuery(params.code));
@@ -177,7 +189,7 @@ function convertToFhir(items, req) {
 }
 
 function createProcedure(req, jdsItem, pid) {
-    var fhirItem = new fhirResource.Procedure(helpers.generateUUID(), pid);
+    var fhirItem = new fhirResource.Procedure(jdsItem.uid, pid);
 
     fhirItem.text = new fhirResource.Narrative('<div>' + _.escape(jdsItem.oiName || jdsItem.name) + '</div>');
     fhirItem.status = jdsToFHIRStatusMap.get(jdsItem.statusName);
@@ -226,7 +238,7 @@ function createReport(jdsItem, item) {
     var siteHash = fhirUtils.getSiteHash(jdsItem.uid);
     var result = {
         resourceType: 'DiagnosticReport',
-        id: helpers.generateUUID(),
+        id: item.uid,
         text: {
             status: 'generated',
             div: '<div>' + _.escape(item.localTitle) + '</div>'

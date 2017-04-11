@@ -22,7 +22,7 @@ class DefaultLogin
 
   @@cdsinvocation_url = ENV.keys.include?('CDSINVOCATION_IP') && ENV.keys.include?('CDSINVOCATION_PORT') ? 'http://' + ENV['CDSINVOCATION_IP'] + ":" + ENV['CDSINVOCATION_PORT']  : 'http://IPADDRESS:PORT'
 
-  @@cdsdb_url = ENV.keys.include?('CDSDB_IP') && ENV.keys.include?('CDSDB_PORT') ? "http://#{ENV['CDSDB_IP']}:#{ENV['CDSDB_PORT']}" : 'http://IP_ADDRESS:PORT7'
+  @@cdsdb_url = ENV.keys.include?('CDSDB_IP') && ENV.keys.include?('CDSDB_PORT') ? "https://#{ENV['CDSDB_IP']}:#{ENV['CDSDB_PORT']}" : 'https://IP_ADDRESS:PORT7'
 
   @@opencds_url = ENV.keys.include?('OPENCDS_IP') && ENV.keys.include?('OPENCDS_PORT') ? "http://#{ENV['OPENCDS_IP']}:#{ENV['OPENCDS_PORT']}" : 'http://IPADDRESS:PORT'
     

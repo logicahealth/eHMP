@@ -149,6 +149,7 @@ define([
                 this.disableForm();
                 this.model.save();
                 this.showInProgress();
+
                 return false;
             }
         },
@@ -191,10 +192,10 @@ define([
                 this.transferFocusToFirstError();
             },
             'create:success': function(model, resp, options) {
+                this.hideInProgress();
                 var successView = new ADK.UI.Notification({
-                    title: 'Signature Submitted',
-                    icon: 'fa-check',
-                    message: 'Signature successfully submitted with no errors.',
+                    title: 'Success',
+                    message: 'Signature submitted',
                     type: "success"
                 });
                 successView.show();
@@ -202,13 +203,14 @@ define([
                 this.triggerMessages(model, resp);
             },
             'create:error': function(model, resp, options) {
+                this.hideInProgress();
                 var invalidEsig = false;
                 var response = {};
                 var parsing_error = false;
                 try {
                     if (resp.responseText) {
                         response = JSON.parse(resp.responseText);
-                        if (response.message.indexOf('Invalid e-signature') > -1) {
+                        if (response.message.indexOf('Invalid e-signature.') > -1) {
                             invalidEsig = true;
                         }
                         if (resp.responseText.indexOf('ECONNREFUSED') > -1) {
@@ -221,7 +223,7 @@ define([
                             response.message = 'Proxy Error.<br> The proxy server received an invalid response from an upstream server.';
                         }
                     }
-                } catch(e) {
+                } catch (e) {
                     console.error('Error message parsing error:', e.message);
                     console.error('Sign error server message:', resp.responseText);
                     console.error('Error:', response.message);
@@ -236,6 +238,7 @@ define([
                         esigChannel.trigger('esign:cancel');
 
                         var message = 'There was an error saving your note. Contact your System Administrator for assistance.';
+
                         message += response.message ? '<br><strong>' + response.message : '';
                         var input = {
                             message: message,

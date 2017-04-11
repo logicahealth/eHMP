@@ -1,5 +1,8 @@
 .rdk {
   // Overwriting SDK Styles
+  #header {
+    width: 1400px;
+  }
   .navbar {
     border-color: $rdk_color;
     .navbar-brand {

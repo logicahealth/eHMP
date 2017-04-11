@@ -2,11 +2,10 @@
 
 require('../../../env-setup');
 
-var resyncUtil = require(global.VX_ROOT + 'record-update/utils/vista-site-data-resync-util');
+var VistaResyncUtil = require(global.VX_ROOT + 'record-update/utils/vista-site-data-resync-util');
 var log = require(global.VX_DUMMIES + '/dummy-logger');
 var JdsClientDummy = require(global.VX_DUMMIES + 'jds-client-dummy');
-var VistaClientDummy = require(global.VX_DUMMIES + 'vista-client-dummy');
-var jobUtil = require(global.VX_UTILS + 'job-utils');
+var _ = require('underscore');
 
 // NOTE: be sure next line is commented out before pushing
 // log = require('bunyan').createLogger({
@@ -246,6 +245,8 @@ var consultDomainData1 = [{
     'stampTime': 20061217151354
 }];
 
+var updateConfig = {};
+
 describe('vista resync utility', function() {
     describe('retrievePatientList', function() {
         it('Normal path', function() {
@@ -256,10 +257,14 @@ describe('vista resync utility', function() {
                 statusCode: 200
             }], [patientList9E7A, patientListXABY]);
 
+            var dummyVistaClient = {};
+
+            var resyncUtil = new VistaResyncUtil(log, dummyVistaClient, jdsClient, updateConfig);
+
             var done = false;
 
             runs(function() {
-                resyncUtil.retrievePatientList(log, jdsClient, ['9E7A', 'XABY'], null, function(error, result) {
+                resyncUtil.retrievePatientList(['9E7A', 'XABY'], null, function(error, result) {
                     done = true;
                     expect(error).toBeFalsy();
                     expect(result).toBeTruthy();
@@ -292,10 +297,14 @@ describe('vista resync utility', function() {
                 }
             }]);
 
+            var dummyVistaClient = {};
+
+            var resyncUtil = new VistaResyncUtil(log, dummyVistaClient, jdsClient, updateConfig);
+
             var done = false;
 
             runs(function() {
-                resyncUtil.retrievePatientList(log, jdsClient, ['9E7A', 'XABY'], null, function(error, result) {
+                resyncUtil.retrievePatientList(['9E7A', 'XABY'], null, function(error, result) {
                     done = true;
                     expect(error).toBeTruthy();
                     expect(result).toBeFalsy();
@@ -314,10 +323,14 @@ describe('vista resync utility', function() {
                 statusCode: 500
             }, null);
 
+            var dummyVistaClient = {};
+
+            var resyncUtil = new VistaResyncUtil(log, dummyVistaClient, jdsClient, updateConfig);
+
             var done = false;
 
             runs(function() {
-                resyncUtil.retrievePatientList(log, jdsClient, ['9E7A'], null, function(error, result) {
+                resyncUtil.retrievePatientList(['9E7A'], null, function(error, result) {
                     done = true;
                     expect(error).toBeTruthy();
                     expect(result).toBeFalsy();
@@ -334,10 +347,14 @@ describe('vista resync utility', function() {
                 statusCode: 404
             }, null);
 
+            var dummyVistaClient = {};
+
+            var resyncUtil = new VistaResyncUtil(log, dummyVistaClient, jdsClient, updateConfig);
+
             var done = false;
 
             runs(function() {
-                resyncUtil.retrievePatientList(log, jdsClient, ['9E7A'], null, function(error, result) {
+                resyncUtil.retrievePatientList(['9E7A'], null, function(error, result) {
                     done = true;
                     expect(error).toBeTruthy();
                     expect(result).toBeFalsy();
@@ -358,10 +375,14 @@ describe('vista resync utility', function() {
                 statusCode: 200
             }], [syncStatus1, syncStatus2]);
 
+            var dummyVistaClient = {};
+
+            var resyncUtil = new VistaResyncUtil(log, dummyVistaClient, jdsClient, updateConfig);
+
             var done = false;
 
             runs(function() {
-                resyncUtil.retrievePatientSyncStatuses(log, jdsClient, '20071217151553', ['allergy', 'appointment', 'consult', 'vital'], ['9E7A;3', '9E7A;8'], function(error, result) {
+                resyncUtil.retrievePatientSyncStatuses('20071217151553', ['allergy', 'appointment', 'consult', 'vital'], ['9E7A;3', '9E7A;8'], function(error, result) {
                     done = true;
                     expect(error).toBeFalsy();
                     expect(result).toBeTruthy();
@@ -385,10 +406,14 @@ describe('vista resync utility', function() {
                 statusCode: 200
             }], [simpleSyncStatus1]);
 
+            var dummyVistaClient = {};
+
+            var resyncUtil = new VistaResyncUtil(log, dummyVistaClient, jdsClient, updateConfig);
+
             var done = false;
 
             runs(function() {
-                resyncUtil.retrievePatientSyncStatuses(log, jdsClient, null, ['allergy', 'appointment', 'consult', 'vital'], ['9E7A;3'], function(error, result) {
+                resyncUtil.retrievePatientSyncStatuses(null, ['allergy', 'appointment', 'consult', 'vital'], ['9E7A;3'], function(error, result) {
                     done = true;
                     expect(error).toBeFalsy();
                     expect(result).toBeTruthy();
@@ -411,10 +436,14 @@ describe('vista resync utility', function() {
                 statusCode: 500
             }], null);
 
+            var dummyVistaClient = {};
+
+            var resyncUtil = new VistaResyncUtil(log, dummyVistaClient, jdsClient, updateConfig);
+
             var done = false;
 
             runs(function() {
-                resyncUtil.retrievePatientSyncStatuses(log, jdsClient, '20071217151553', ['allergy', 'appointment', 'consult', 'vital'], ['9E7A;3'], function(error, result) {
+                resyncUtil.retrievePatientSyncStatuses('20071217151553', ['allergy', 'appointment', 'consult', 'vital'], ['9E7A;3'], function(error, result) {
                     done = true;
                     expect(error).toBeTruthy();
                     expect(result).toBeFalsy();
@@ -432,10 +461,14 @@ describe('vista resync utility', function() {
                 statusCode: 404
             }], null);
 
+            var dummyVistaClient = {};
+
+            var resyncUtil = new VistaResyncUtil(log, dummyVistaClient, jdsClient, updateConfig);
+
             var done = false;
 
             runs(function() {
-                resyncUtil.retrievePatientSyncStatuses(log, jdsClient, '20071217151553', ['allergy', 'appointment', 'consult', 'vital'], ['9E7A;3'], function(error, result) {
+                resyncUtil.retrievePatientSyncStatuses('20071217151553', ['allergy', 'appointment', 'consult', 'vital'], ['9E7A;3'], function(error, result) {
                     done = true;
                     expect(error).toBeTruthy();
                     expect(result).toBeFalsy();
@@ -450,7 +483,10 @@ describe('vista resync utility', function() {
 
     describe('getDomainsToBeResynced', function() {
         it('Normal path', function() {
-            var resyncDomains = resyncUtil.getDomainsToBeResynced(log, syncStatus1, ['allergy', 'appointment', 'consult', 'vital']);
+
+            var resyncUtil = new VistaResyncUtil(log, {}, {}, updateConfig);
+
+            var resyncDomains = resyncUtil.getDomainsToBeResynced(syncStatus1, ['allergy', 'appointment', 'consult', 'vital']);
             expect(resyncDomains).toBeTruthy();
             expect(resyncDomains).toContain('allergy');
             expect(resyncDomains).toContain('consult');
@@ -477,11 +513,22 @@ describe('vista resync utility', function() {
                 '9E7A;3': ['allergy'],
                 '9E7A;8': ['allergy', 'consult']
             };
-            resyncUtil.getRecordsAndCreateJobs(log, vistaClient, pidsToResyncDomains, 20071217151354, function(error, result) {
+
+            var dummyJdsClient = {};
+
+            var resyncUtil = new VistaResyncUtil(log, vistaClient, dummyJdsClient, updateConfig);
+
+            var jobsSentToBeanstalkByPid = [];
+            spyOn(resyncUtil, 'writeJobsToBeanstalk').andCallFake(function(jobs, callback){
+                jobsSentToBeanstalkByPid.push(jobs);
+                return callback(null, jobs.length);
+            });
+
+            resyncUtil.getRecordsAndCreateJobs(pidsToResyncDomains, 20071217151354, function(error) {
                 expect(error).toBeFalsy();
-                expect(result).toBeTruthy();
-                expect(result.length).toEqual(3);
-                expect(result).toContain(jasmine.objectContaining({
+                var jobsSentToBeanstalk = _.flatten(jobsSentToBeanstalkByPid);
+                expect(jobsSentToBeanstalk.length).toEqual(3);
+                expect(jobsSentToBeanstalk).toContain(jasmine.objectContaining({
                     'type': 'record-update',
                     'timestamp': jasmine.any(String),
                     'patientIdentifier': {
@@ -519,7 +566,7 @@ describe('vista resync utility', function() {
                     },
                     'jobId': jasmine.any(String)
                 }));
-                expect(result).not.toContain(jasmine.objectContaining({
+                expect(jobsSentToBeanstalk).not.toContain(jasmine.objectContaining({
                     'type': 'record-update',
                     'timestamp': jasmine.any(String),
                     'patientIdentifier': {
@@ -579,11 +626,22 @@ describe('vista resync utility', function() {
                 '9E7A;3': ['allergy'],
                 '9E7A;8': ['allergy', 'consult']
             };
-            resyncUtil.getRecordsAndCreateJobs(log, vistaClient, pidsToResyncDomains, null, function(error, result) {
+
+            var dummyJdsClient = {};
+
+            var resyncUtil = new VistaResyncUtil(log, vistaClient, dummyJdsClient, updateConfig);
+
+            var jobsSentToBeanstalkByPid = [];
+            spyOn(resyncUtil, 'writeJobsToBeanstalk').andCallFake(function(jobs, callback){
+                jobsSentToBeanstalkByPid.push(jobs);
+                return callback(null, jobs.length);
+            });
+
+            resyncUtil.getRecordsAndCreateJobs(pidsToResyncDomains, null, function(error) {
                 expect(error).toBeFalsy();
-                expect(result).toBeTruthy();
-                expect(result.length).toEqual(4);
-                expect(result).toContain(jasmine.objectContaining({
+                var jobsSentToBeanstalk = _.flatten(jobsSentToBeanstalkByPid);
+                expect(jobsSentToBeanstalk.length).toEqual(4);
+                expect(jobsSentToBeanstalk).toContain(jasmine.objectContaining({
                     'type': 'record-update',
                     'timestamp': jasmine.any(String),
                     'patientIdentifier': {
@@ -621,7 +679,7 @@ describe('vista resync utility', function() {
                         icn: null
                     }
                 }));
-                expect(result).toContain(jasmine.objectContaining({
+                expect(jobsSentToBeanstalk).toContain(jasmine.objectContaining({
                     'type': 'record-update',
                     'timestamp': jasmine.any(String),
                     'patientIdentifier': {
@@ -662,6 +720,43 @@ describe('vista resync utility', function() {
             });
         });
 
+        it('Error path: Error returned by benastalk', function() {
+            var vistaClient = {
+                getPatientDataByDomain: function(vistaId, dfn, domain, callback) {
+                    if (domain === 'allergy') {
+                        if (dfn === '3') {
+                            callback(null, allergyDomainData1);
+                        } else {
+                            callback(null, allergyDomainData2);
+                        }
+                    } else if (domain === 'consult' && dfn === '8') {
+                        callback(null, consultDomainData1);
+                    }
+                }
+            };
+
+            var pidsToResyncDomains = {
+                '9E7A;3': ['allergy'],
+                '9E7A;8': ['allergy', 'consult']
+            };
+
+            var dummyJdsClient = {};
+
+            var resyncUtil = new VistaResyncUtil(log, vistaClient, dummyJdsClient, updateConfig);
+
+            var jobsSentToBeanstalkByPid = [];
+            spyOn(resyncUtil, 'writeJobsToBeanstalk').andCallFake(function(jobs, callback){
+                jobsSentToBeanstalkByPid.push(_.first(jobs));
+                return callback('Beanstalk error!', 1);
+            });
+
+            resyncUtil.getRecordsAndCreateJobs(pidsToResyncDomains, null, function(error) {
+                expect(error).toBeTruthy();
+                var jobsSentToBeanstalk = _.flatten(jobsSentToBeanstalkByPid);
+                expect(jobsSentToBeanstalk.length).toEqual(1);
+            });
+        });
+
         it('Error path: error from VistA', function() {
             var vistaClient = {
                 getPatientDataByDomain: function(vistaId, dfn, domain, callback) {
@@ -673,7 +768,16 @@ describe('vista resync utility', function() {
                 '9E7A;3': ['allergy'],
                 '9E7A;8': ['allergy', 'consult']
             };
-            resyncUtil.getRecordsAndCreateJobs(log, vistaClient, pidsToResyncDomains, 20071217151354, function(error, result) {
+
+            var dummyJdsClient = {};
+
+            var resyncUtil = new VistaResyncUtil(log, vistaClient, dummyJdsClient, updateConfig);
+
+            spyOn(resyncUtil, 'writeJobsToBeanstalk').andCallFake(function(jobs, callback){
+                return callback(null, jobs.length);
+            });
+
+            resyncUtil.getRecordsAndCreateJobs(pidsToResyncDomains, 20071217151354, function(error, result) {
                 expect(error).toBeTruthy();
                 expect(result).toBeFalsy();
             });

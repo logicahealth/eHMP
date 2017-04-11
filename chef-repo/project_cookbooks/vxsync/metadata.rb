@@ -4,12 +4,12 @@ maintainer_email "vistacore@vistacore.us"
 license          "All rights reserved"
 description      "Installs/Configures vxsync"
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version          "2.0.82"
+version          "2.0.105"
 
 supports "mac_os_x"
 supports "centos"
 
-depends "common", "2.0.10"
+depends "common", "2.0.12"
 
 #############################
 # 3rd party
@@ -20,6 +20,6 @@ depends "yum", "=3.5.4"
 #############################
 # wrapper_cookbook
 #############################
-depends "java_wrapper", "2.0.5"
-depends "nodejs_wrapper", "2.0.3"
-depends "bluepill_wrapper", "2.0.4"
+depends "java_wrapper", "2.0.6"
+depends "nodejs_wrapper", "2.0.4"
+depends "bluepill_wrapper", "2.0.5"

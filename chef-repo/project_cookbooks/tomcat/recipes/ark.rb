@@ -64,3 +64,17 @@ template "/etc/default/#{tomcat_version}" do
   notifies :restart, "service[#{tomcat_version}]", :immediately
 end
 
+cookbook_file "#{node[:tomcat][:home]}/conf/catalina.properties" do
+  source "catalina.properties"
+  owner node[:tomcat][:user]
+  mode "0755"
+  notifies :restart, "service[#{node[:tomcat][:service]}]", :delayed
+end
+
+
+template "#{node['tomcat']['home']}/conf/logging.properties" do
+  source "logging.properties.erb"
+  owner node['tomcat']['user']
+  mode "0755"
+  notifies :restart, "service[#{tomcat_version}]", :delayed
+end

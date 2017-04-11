@@ -134,7 +134,7 @@ module.exports = {
         collection: 'metrics'
     }],
     /*
-     *  definedMetricGroups represents seed data for metrics groups.  TODO: Further assess the need for this, it may not be necessary
+     *  definedMetricGroups represents seed data for metrics groups.
     */
     definedMetricGroups: [{
         'name': 'All Metrics',
@@ -152,12 +152,5 @@ module.exports = {
             'Summary_TotalResults'
         ]
     }],
-    /*
-     * Defined_Metric_Config represents configuration data to be seeded for CDS Metrics Dashboard.  TODO: 'origins' should be dynamically
-     * generated during engine registration
-    */
-    definedMetricConfig: {
-        'origins': ['EngineOne', 'SystemB'],
-        'invocationTypes': ['Direct', 'Background']
-    }
+
 };

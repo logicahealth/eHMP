@@ -13,7 +13,7 @@ import org.springframework.xml.transform.StringSource
 class WsUtil {
 	
 	private static final String KEYSTORE = "src/test/resources/keystore/.keystore"
-	private static final String VsID        PW"
+	private static final String PASSWORD = "PW"
 
     public static String sendToEndpoint(String uri, String request) {
         StringResult result = new StringResult()

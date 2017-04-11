@@ -1,12 +1,14 @@
 'use strict';
-
+//Code was commented out, not removed, for possible reuse at a later date if health factors, aka social-history, are syncd.
 var rdk = require('../../core/rdk');
 var _ = require('lodash');
 var observationResource = require('./observation-resource');
 var vitalsResource = require('./vitals/vitals-resource');
-var healthFactors = require('./health-factors/health-factors');
+////No-Health-Factors ++
+//var healthFactors = require('./health-factors/health-factors');
+//var healthFactorsInputValue = require('./health-factors-spec-data').inputValue;
+////No-Health-Factors --
 var vitalsInputValue = require('./vitals-spec-data').inputValue;
-var healthFactorsInputValue = require('./health-factors-spec-data').inputValue;
 var fhirUtils = require('../common/utils/fhir-converter');
 
 var vitalsJDSPath;
@@ -58,11 +60,14 @@ function testJDSPath(params, vitalsQueryStr, healthFactorsQueryStr) {
     } else {
         expect(vitalsJDSPath).to.equal('/vpr/' + pid + '/find/vital' + vitalsQueryStr);
     }
-    if (healthFactorsQueryStr === null) {
-        expect(healthFactorsJDSPath).to.equal(undefined);
-    } else {
-        expect(healthFactorsJDSPath).to.equal('/vpr/' + pid + '/find/factor/' + healthFactorsQueryStr);
-    }
+////No-Health-Factors ++
+//Code was commented out, not removed, for possible reuse at a later date if health factors are cached.
+//    if (healthFactorsQueryStr === null) {
+//        expect(healthFactorsJDSPath).to.equal(undefined);
+//    } else {
+//        expect(healthFactorsJDSPath).to.equal('/vpr/' + pid + '/find/factor/' + healthFactorsQueryStr);
+//    }
+////No-Health-Factors --
 }
 
 describe('Vitals FHIR Resource', function() {
@@ -91,8 +96,10 @@ describe('Vitals FHIR Resource', function() {
             sinon.stub(rdk.utils.http, 'get', function(options) {
                 if (_.contains(options.url, '/find/vital')) {
                     vitalsJDSPath = options.url;
-                } else {
-                    healthFactorsJDSPath = options.url;
+//// No-Health-Factors ++
+//                } else {
+//                    healthFactorsJDSPath = options.url;
+//// No-Health-Factors --
                 }
             });
         });
@@ -103,9 +110,11 @@ describe('Vitals FHIR Resource', function() {
         it('requests just Vitals when using _tag=vital-signs', function() {
             testJDSPath(createParam('_tag', 'vital-signs'), '', null);
         });
-        it('requests just HealthFactors when using _tag=social-history', function() {
-            testJDSPath(createParam('_tag', 'social-history'), null, '');
-        });
+//// No-Health-Factors ++
+//        it('requests just HealthFactors when using _tag=social-history', function() {
+//            testJDSPath(createParam('_tag', 'social-history'), null, '');
+//        });
+//// No-Health-Factors --
         it('responds with Bad Request when using _tag with invalid domain', function() {
             req.query = _.extend({
                 pid: pid
@@ -216,38 +225,40 @@ describe('Vitals FHIR Resource', function() {
         });
     });
 
-    describe('FHIR HealthFactors DSTU2 Mapping', function() {
-        var req = {
-            'pid': '10107V395912',
-            originalUrl: '/fhir/patient/10107V395912/observation',
-            headers: {
-                host: 'localhost:8888'
-            },
-            protocol: 'http'
-        };
-        var vprHealthFactors = healthFactorsInputValue.data.items;
-        var fhirEntries = healthFactors.convertToFHIRObservations(vprHealthFactors, req);
-
-        it('verifies that given a valid VPR HealthFactors Resource converts to FHIR Observation Resource objects', function() {
-            expect(fhirEntries).to.not.be.undefined();
-        });
-        //------------------------------------------------------------
-        //FOR EACH VPR record found, do certain attribute checks.
-        //------------------------------------------------------------
-        _.each(vprHealthFactors, function(vprV) {
-
-            it('verifies that each VPR HealthFactors Resource has a coresponding FHIR Observation Resource in the collection with the same uid', function() {
-                var fhirVs = _.filter(fhirEntries, function(v) {
-                    return v.resource.identifier[0].value === vprV.uid;
-                });
-                expect(fhirVs).to.not.be.undefined();
-
-                _.each(fhirVs, function(fhirV) {
-                    testHealthFactorsFHIRConversion(fhirV, vprV);
-                });
-            });
-        });
-    });
+////No-Health-Factors ++
+//    describe('FHIR HealthFactors DSTU2 Mapping', function() {
+//        var req = {
+//            'pid': '10107V395912',
+//            originalUrl: '/fhir/patient/10107V395912/observation',
+//            headers: {
+//                host: 'localhost:8888'
+//            },
+//            protocol: 'http'
+//        };
+//        var vprHealthFactors = healthFactorsInputValue.data.items;
+//        var fhirEntries = healthFactors.convertToFHIRObservations(vprHealthFactors, req);
+//
+//        it('verifies that given a valid VPR HealthFactors Resource converts to FHIR Observation Resource objects', function() {
+//            expect(fhirEntries).to.not.be.undefined();
+//        });
+//        //------------------------------------------------------------
+//        //FOR EACH VPR record found, do certain attribute checks.
+//        //------------------------------------------------------------
+//        _.each(vprHealthFactors, function(vprV) {
+//
+//            it('verifies that each VPR HealthFactors Resource has a coresponding FHIR Observation Resource in the collection with the same uid', function() {
+//                var fhirVs = _.filter(fhirEntries, function(v) {
+//                    return v.resource.identifier[0].value === vprV.uid;
+//                });
+//                expect(fhirVs).to.not.be.undefined();
+//
+//                _.each(fhirVs, function(fhirV) {
+//                    testHealthFactorsFHIRConversion(fhirV, vprV);
+//                });
+//            });
+//        });
+//    });
+////No-Health-Factors --
 });
 
 
@@ -409,38 +420,40 @@ function testVitalFHIRConversion(fhirVResoure, vprV) {
     }
 }
 
-function testHealthFactorsFHIRConversion(fhirHFResource, vprV) {
-    if (fhirHFResource !== undefined) {
-        describe('Factor resource attributes', function() {
-            //CHECKING coding
-            expect(fhirHFResource.resource.code.coding[0].display).to.eql(vprV.name);
-
-            //CHECKING status
-            expect(fhirHFResource.resource.status).to.eql('final');
-
-            //CHECK appliesDateTime vs stampTime
-            it('verifies that the healh factor entered date from VPR HealthFactor Resource corresponds to the one from the FHIR HealthFactor Resource', function() {
-                expect(fhirHFResource.resource.appliesDateTime).to.eql(fhirUtils.convertToFhirDateTime(vprV.entered, fhirUtils.getSiteHash(vprV.uid)));
-            });
-
-            //CHECK performer vs Facility
-            expect(fhirHFResource.resource.performer[0].display).to.eql(vprV.facilityName);
-        });
-
-        //CHECK contained
-        describe('Contained Resources', function() {
-            it('verifies that the Organization from the VPR HealthFactor Resource exists in the contained resources from the FHIR HealthFactor Resource', function() {
-                var resOrganization = _.find(fhirHFResource.resource.contained, function(res) {
-                    return res.resourceType === 'Organization';
-                });
-                expect(resOrganization).not.to.be.undefined();
-
-                if (resOrganization !== undefined && vprV.facilityName !== undefined || vprV.facilityCode !== undefined) {
-                    expect(resOrganization.id).not.to.be.undefined();
-                    expect(resOrganization.identifier[0].value).to.eql(vprV.facilityCode);
-                    expect(resOrganization.name).to.eql(vprV.facilityName);
-                }
-            });
-        });
-    } //end-if (fhirHFResource
-}
+////No-Health-Factors ++
+//function testHealthFactorsFHIRConversion(fhirHFResource, vprV) {
+//    if (fhirHFResource !== undefined) {
+//        describe('Factor resource attributes', function() {
+//            //CHECKING coding
+//            expect(fhirHFResource.resource.code.coding[0].display).to.eql(vprV.name);
+//
+//            //CHECKING status
+//            expect(fhirHFResource.resource.status).to.eql('final');
+//
+//            //CHECK appliesDateTime vs stampTime
+//            it('verifies that the healh factor entered date from VPR HealthFactor Resource corresponds to the one from the FHIR HealthFactor Resource', function() {
+//                expect(fhirHFResource.resource.appliesDateTime).to.eql(fhirUtils.convertToFhirDateTime(vprV.entered, fhirUtils.getSiteHash(vprV.uid)));
+//            });
+//
+//            //CHECK performer vs Facility
+//            expect(fhirHFResource.resource.performer[0].display).to.eql(vprV.facilityName);
+//        });
+//
+//        //CHECK contained
+//        describe('Contained Resources', function() {
+//            it('verifies that the Organization from the VPR HealthFactor Resource exists in the contained resources from the FHIR HealthFactor Resource', function() {
+//                var resOrganization = _.find(fhirHFResource.resource.contained, function(res) {
+//                    return res.resourceType === 'Organization';
+//                });
+//                expect(resOrganization).not.to.be.undefined();
+//
+//                if (resOrganization !== undefined && vprV.facilityName !== undefined || vprV.facilityCode !== undefined) {
+//                    expect(resOrganization.id).not.to.be.undefined();
+//                    expect(resOrganization.identifier[0].value).to.eql(vprV.facilityCode);
+//                    expect(resOrganization.name).to.eql(vprV.facilityName);
+//                }
+//            });
+//        });
+//    } //end-if (fhirHFResource
+//}
+////No-Health-Factors --

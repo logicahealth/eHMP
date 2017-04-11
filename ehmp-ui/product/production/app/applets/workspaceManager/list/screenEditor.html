@@ -1,15 +1,16 @@
-<div class="container-fluid full-height" aria-labelledby="workspaceManagerHeading">
+<div class="container-fluid percent-height-100">
     <div class="panel-primary flex-display flex-direction-column">
-        <div class="panel-heading flex-display all-padding-sm background-color-primary-lighter flex-grow-fixed">
+        <div class="panel-heading flex-display flex-grow-fixed">
             <h2 id="workspaceManagerHeading" class="work-manager-header all-margin-no top-padding-xs font-size-14 bold-font flex-grow-loose">Workspace Manager</h2>
             <div class="flex-grow-fixed">
-                {{ui-button "New workspace." srOnlyLabel=true classes="btn-icon addScreen" title="Press enter to add" icon="fa-plus"}}
+                {{{helpIconLink 'workspace_manager' 'fa fa-question font-size-13'}}}
+                {{ui-button "New workspace" srOnlyLabel=true classes="btn-icon addScreen" title="Press enter to add" icon="fa-plus"}}
                 <button id="gridFilterButtonWorkspaceManager" type="button" data-toggle="collapse" data-target="#workspaceFilter" class="btn btn-icon collapsed" title="Press enter to activate filter">
                     <i class="fa fa-filter">
                         <span class="sr-only">Filter workspace</span>
                     </i>
                 </button>
-                {{ui-button "Close workspace" srOnlyLabel=true classes="btn-icon" title="Press enter to close" icon="fa-times" id="doneEditing"}}
+                {{ui-button "Close workspace" srOnlyLabel=true classes="btn-icon done-editing" title="Press enter to close" icon="fa-times"}}
             </div>
         </div>
         <div id="workspaceFilter" class="grid-filter all-padding-no panel-collapse collapse flex-grow-fixed">
@@ -50,6 +51,13 @@
                 </div>
             </div>
             <div id="list-group" class="body flex-grow-loose auto-overflow-y background-color-pure-white" role="rowgroup"></div>
+        </div>
+        <div class="panel-footer flex-display flex-grow-fixed">
+            <div class="percent-width-100">
+                <button type="button" class="btn btn-primary btn-sm pull-right done-editing" title="Press enter to close">
+                    Close
+                </button>
+            </div>
         </div>
     </div>
 </div>

@@ -150,8 +150,7 @@
        | resource.contained.subject.reference            | Patient/9E7A;428              |
        | resource.contained.collection.collectedDateTime | IS_FHIR_FORMATTED_DATE                       |
        | resource.text.status                            | generated                         |
-       # @TODO change to undefined as it appears to be a JSON encoding issue
-       | resource.text.div                               | <div>undefined (NEC)</div>        |
+       | resource.text.div                               | <div>(NEC)</div>        |
        And the results contain lab "anatomic pathology" results
        | field                                          | value                        |
        | resource.name.text                              | LR CYTOPATHOLOGY REPORT      |
@@ -185,8 +184,7 @@
        | resource.contained.subject.reference            | Patient/9E7A;428              |
        | resource.contained.collection.collectedDateTime | IS_FHIR_FORMATTED_DATE                        |
        | resource.text.status                            | generated                         |
-       # @TODO change to from null to undefined for now as it appears to be a JSON conversion issue
-       | resource.text.div                               | <div>undefined (NEC)</div>        |
+       | resource.text.div                               | <div>(NEC)</div>        |
 
  @F138_4_Labs_pathology_fhir @fhir @10146V393772
  Scenario: Client can request lab anatomic pathology results in FHIR format
@@ -227,8 +225,7 @@
        | resource.contained.subject.reference            | Patient/9E7A;301              |
        | resource.contained.collection.collectedDateTime | IS_FHIR_FORMATTED_DATE              |
        | resource.text.status                            | generated                         |
-       # @TODO change to undefined as it appears to be a JSON encoding issue
-       | resource.text.div                               | <div>undefined (PROSTATE CHIPS)</div>  |
+       | resource.text.div                               | <div>(PROSTATE CHIPS)</div>  |
 
 # @F138_5_pathology_fhir @fhir @5123456789V027402
 # Scenario: Client can break the glass when requesting anatomic pathology in FHIR format for a sensitive patient
@@ -239,7 +236,7 @@
 #     Then a successful response is returned
 #     And the results contain
 #       | name          | value                                                                    |
-#       # @TODO change to 7 for now, need to revisit if this is correct
+#       # @FUTURE-TODO change to 7 for now, need to revisit if this is correct
 #       | total         | 7                                                                        |
 
  @F138_6_Labs_pathology_neg_fhir @fhir @10104V248233

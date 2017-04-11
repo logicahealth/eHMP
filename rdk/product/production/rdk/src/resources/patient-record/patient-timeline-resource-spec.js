@@ -1,4 +1,3 @@
-/*jslint node: true*/
 'use strict';
 
 var PatientTimelineResource = require('./patient-timeline-resource');

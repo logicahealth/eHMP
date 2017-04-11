@@ -4,25 +4,27 @@
 		<div class="row top-margin-sm bottom-margin-xs">
 			<div class="col-xs-3">
 				<p>
-					<span><strong>Local Title</strong></span><br />
+					<span><strong>Local title:</strong></span><br />
 					<span>{{localTitle}}</span>
 				</p>
 			</div>
 			<div class="col-xs-3">
 				<p>
-					<span><strong>Date Of Note</strong></span><br />
+					<span><strong>Date of note:</strong></span><br />
 					<span>
 					{{#if radiologyReportBool}}
 						{{formatDate referenceDateTime "MM/DD/YYYY - HH:mm"}}
-					{{else}}
+					{{else if entered}}
 						{{formatDate entered "MM/DD/YYYY - HH:mm"}}
+                    {{else}}
+                        {{formatDate text.0.dateTime "MM/DD/YYYY - HH:mm"}}
 					{{/if}}
 					</span>
 				</p>
 			</div>
 			<div class="col-xs-3">
 				<p>
-					<span><strong>Author</strong></span><br />
+					<span><strong>Author:</strong></span><br />
 					{{#if radiologyReportBool}}
 					<span data-toggle="tooltip" data-placement="right" title="Signed: {{formatDate signedDateTime 'MM/DD/YYYY - HH:mm'}}">
 						{{authorDisplayName}}<i class="left-padding-xs icon-signed"></i>
@@ -34,7 +36,7 @@
 			</div>
 			<div class="col-xs-3">
 				<p>
-					<span><strong>Status</strong></span><br />
+					<span><strong>Status:</strong></span><br />
 					<span class="{{statusDisplayClass}}">
                     {{#if statusDisplayName}}
                         {{statusDisplayName}}

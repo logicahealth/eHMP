@@ -29,14 +29,14 @@ define([
     Backgrid.EmptyRow.prototype = _.extend(Backgrid.EmptyRow.prototype, {
         render: function() {
             this.$el.empty();
-            this.$el.attr("aria-live","assertive");
+            this.$el.attr("aria-live", "assertive");
             var td = document.createElement("td");
             td.setAttribute("colspan", this.columns.length);
             var span = document.createElement("span");
             span.innerHTML = _.result(this, "emptyText");
+            span.className = "color-grey-darkest";
             td.appendChild(span);
-
-            this.el.className = "empty";
+            this.el.className = "empty percent-height-100 background-color-grey-lightest";
             this.el.appendChild(td);
 
             return this;
@@ -67,7 +67,45 @@ define([
                     }
                 });
 
-                var body = options.groupable ? GroupByBody : options.body || undefined;
+                if (_.has(options.collection, 'comparator')) {
+                    options.collection._originalComparator = options.collection.comparator;
+                }
+
+                var DefaultBodySort = {
+                    sort: function(column, direction) {
+                        var collection = this.collection;
+                        if (_.isNull(direction) && _.has(collection, '_originalComparator') && !_.isNull(collection._originalComparator)) {
+                            var comparator = collection._originalComparator;
+                            collection.comparator = comparator;
+                            if (Backbone.PageableCollection && collection instanceof Backbone.PageableCollection) {
+                                collection.setSorting(null && column.get("name"), null, {
+                                    sortValue: column.sortValue()
+                                });
+                                if (collection.fullCollection) {
+                                    collection.fullCollection.comparator = comparator;
+                                    collection.fullCollection.sort();
+                                } else {
+                                    collection.fetch({
+                                        reset: true,
+                                        success: function() {
+                                            collection.trigger("backgrid:sorted", column, direction, collection);
+                                            column.set("direction", direction);
+                                        }
+                                    });
+                                }
+                            } else {
+                                collection.sort();
+                            }
+                            collection.trigger("backgrid:sorted", column, direction, collection);
+                            column.set("direction", direction);
+                            return this;
+                        } else {
+                            return _.bind(Backgrid.Body.prototype.sort, this)(column, direction);
+                        }
+                    }
+                };
+
+                var body = options.groupable ? GroupByBody : options.body ? _.has(options.body, 'sort') ? options.body : options.body.extend(DefaultBodySort) : Backgrid.Body.extend(DefaultBodySort);
 
                 var row;
 
@@ -127,6 +165,7 @@ define([
                 }
                 this.$el.find('table').attr("role", "grid");
                 this.$el.find('table thead tr').attr("role", "row");
+                this.$el.find('table tbody').addClass("auto-overflow-y");
             },
             events: {
                 'click tr.selectable': 'onClickRow',
@@ -170,7 +209,7 @@ define([
                 } catch (e) {
                     console.error('Error destroying gridView in applet:', this.appletConfig.id, e);
                 }
-                $('#mainModal').off('hidden.bs.modal.'+this.cid);
+                $('#mainModal').off('hidden.bs.modal.' + this.cid);
             },
             onEnterRow: function(event) {
                 if (!event.isDefaultPrevented() && (event.which == 13 || event.which == 32)) {
@@ -182,21 +221,24 @@ define([
                     $(event.target).find('a').click();
                 }
             },
-            onClickRow: function(event) {
+            onClickRow: function(event, model) {
                 if (this.options.toolbarOptions) {
                     return;
                 }
-                var row = this.$(event.target).closest("tr");
-                var model = row.data('model');
+
+                if (_.isUndefined(model)) {
+                    this.refocusRow = this.$(event.target).closest("tr");
+                    model = this.refocusRow.data('model');
+                }
                 if (this.options.onClickRow) {
                     this.options.onClickRow(model, event, this);
                 } else if (this.options.DetailsView) {
                     this.expandRow(model, event);
                 }
                 //required for 508 compliance with JAWS in IE
-                $('#mainModal').one('hidden.bs.modal.'+this.cid, _.bind(function () {
-                  row.focus();
-                },this));
+                $('#mainModal').one('hidden.bs.modal.' + this.cid, _.bind(function() {
+                    this.refocusRow.focus();
+                }, this));
             },
             expandRow: function(model, event) {
                 var collection = this.options.collection;
@@ -211,7 +253,10 @@ define([
                 var detailsId = 'details-' + id;
                 var detailsSelector = '#details-' + id;
                 if (this.$(detailsSelector).length === 0) {
-                    row.attr({ 'aria-expanded': 'true', 'title': 'Press enter to collapse accordion' }).focus();
+                    row.attr({
+                        'aria-expanded': 'true',
+                        'title': 'Press enter to collapse accordion'
+                    }).focus();
                     var colspan = row.children().length;
                     var td = $('<td/>').addClass('renderable').attr('colspan', colspan).attr('id', detailsId).addClass('expanded-row');
                     var tr = $('<tr/>');
@@ -236,10 +281,16 @@ define([
                     }
                 } else if (this.$(detailsSelector).hasClass('hide')) {
                     this.$(detailsSelector).removeClass('hide');
-                    row.attr({ 'aria-expanded': 'true', 'title': 'Press enter to collapse accordion' }).focus();
+                    row.attr({
+                        'aria-expanded': 'true',
+                        'title': 'Press enter to collapse accordion'
+                    }).focus();
                 } else {
                     this.$(detailsSelector).addClass('hide');
-                    row.attr({ 'aria-expanded': 'false', 'title': 'Press enter to expand accordion' });
+                    row.attr({
+                        'aria-expanded': 'false',
+                        'title': 'Press enter to expand accordion'
+                    });
                 }
             }
         });

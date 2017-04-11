@@ -9,7 +9,7 @@ require "DomAccess.rb"
 
 class HTTPartyWithBasicAuth
   include HTTParty
-  @@auth = { :VsID        "UN", :VsID        "PW" }
+  @@auth = { :username =>       "PW         ", :password =>        "PW    " }
 
   @@time_start = Time.new
   @@time_done = Time.new
@@ -39,7 +39,7 @@ class HTTPartyWithBasicAuth
 
   def self.get_with_authorization_for_user(path, user, pass)
     @@time_start = Time.new
-    auth = { :VsID        user, :VsID        PW }
+    auth = { :username => user, :password => pass }
     directory = get(path, { :verify => false, :basic_auth => auth, :timeout => 60 })
     @@time_done = Time.new
     return directory

@@ -16,7 +16,7 @@ define([], function() {
         routeName: 'news-feed',
         description: '',
         predefined: true,
-        requiredPermissions: ['read-timeline']
+        requiredPermissions: ['access-general-ehmp']
     }, {
         title: 'Overview',
         id: 'overview',

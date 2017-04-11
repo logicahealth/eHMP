@@ -37,16 +37,16 @@ var hmpServer = 'TheHmpServer';
 var config = {
 	jds: {
 		protocol: 'http',
-		host: 'IP_ADDRESS',
+		host: 'IP        ',
 		port: 9080
 	},
 	'vistaSites': {
 		'9E7A': {
 			'name': 'panorama',
-			'host': 'IP_ADDRESS',
+			'host': 'IP        ',
 			'port': 9210,
-			'accessCode': 'PW',
-			'verifyCode': 'PW',
+			'accessCode': 'PW    ',
+			'verifyCode': 'PW    !!',
 			'localIP': '127.0.0.1',
 			'localAddress': 'localhost',
 			'connectTimeout': 3000,
@@ -54,10 +54,10 @@ var config = {
 		},
 		'C877': {
 			'name': 'kodak',
-			'host': 'IP_ADDRESS',
+			'host': 'IP        ',
 			'port': 9210,
-			'accessCode': 'PW',
-			'verifyCode': 'PW',
+			'accessCode': 'PW    ',
+			'verifyCode': 'PW    !!',
 			'localIP': '127.0.0.1',
 			'localAddress': 'localhost',
 			'connectTimeout': 3000,
@@ -76,16 +76,16 @@ var config = {
 var vistaHdrConfig = {
 	jds: {
 		protocol: 'http',
-		host: 'IP_ADDRESS',
+		host: 'IP        ',
 		port: 9080
 	},
 	'vistaSites': {
 		'9E7A': {
 			'name': 'panorama',
-			'host': 'IP_ADDRESS',
+			'host': 'IP        ',
 			'port': 9210,
-			'accessCode': 'PW',
-			'verifyCode': 'PW',
+			'accessCode': 'PW    ',
+			'verifyCode': 'PW    !!',
 			'localIP': '127.0.0.1',
 			'localAddress': 'localhost',
 			'connectTimeout': 3000,
@@ -93,10 +93,10 @@ var vistaHdrConfig = {
 		},
 		'C877': {
 			'name': 'kodak',
-			'host': 'IP_ADDRESS',
+			'host': 'IP        ',
 			'port': 9210,
-			'accessCode': 'PW',
-			'verifyCode': 'PW',
+			'accessCode': 'PW    ',
+			'verifyCode': 'PW    !!',
 			'localIP': '127.0.0.1',
 			'localAddress': 'localhost',
 			'connectTimeout': 3000,

@@ -70,10 +70,17 @@ function buildLabPanels(req, res) {
             },
             //asynchronously retrieve lab orders in parallel
             function(callback) {
-                //todo refactor using jds filter builder
-                var jdsQuery = 'filter=eq("kind","Laboratory"),exists("summary"),like("results[].uid","urn:va:lab:%25")';
+                var jdsQuery = [];
+                var jdsQueryString = '';
+                jdsQuery.push(['eq', 'kind', 'Laboratory']);
+                jdsQuery.push(['exists', 'summary']);
+                jdsQuery.push(['like', 'results[].uid', 'urn:va:lab:%25']);
+                var filterString = jdsFilter.build(jdsQuery);
+                if(filterString){
+                    jdsQueryString = querystring.stringify(filterString);
+                }
 		        var jdsResource = '/vpr/' + pid + '/index/order';
-                var jdsPath = jdsResource + '?' + jdsQuery;
+                var jdsPath = jdsResource + '?' + jdsQueryString;
 
                 var options = _.extend({}, jdsServer, {
                     url: jdsPath,

@@ -18,7 +18,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;sequence>
  *         &lt;element name="comment" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="dateEntered" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="enteredBy" type="{http://webservice.vds.DNS       /}provider" minOccurs="0"/>
+ *         &lt;element name="enteredBy" type="{http://webservice.vds.med.DNS   /}provider" minOccurs="0"/>
  *         &lt;element name="enteredDate" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="number" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="sequence" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "questionnaireResponseComments", namespace = "http://webservice.vds.DNS       /", propOrder = {
+@XmlType(name = "questionnaireResponseComments", namespace = "http://webservice.vds.med.DNS   /", propOrder = {
     "comment",
     "dateEntered",
     "enteredBy",

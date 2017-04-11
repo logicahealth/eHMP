@@ -21,7 +21,7 @@ def environment_endpoints(env)
   case env
   when "virtualbox"
     p "Running with virtualbox environments"
-    ENV["VXSYNC_IP"] = knife_search_for_ip("vxsync")
+    ENV["VXSYNC_IP"] = knife_search_for_ip("vxsync_client")
     ENV["JDS_IP"] = knife_search_for_ip("jds")
     begin
       ENV["SOLR_IP"] = knife_search_for_ip("solr")
@@ -39,7 +39,7 @@ def environment_endpoints(env)
   when "aws"
     p "Running with aws environments"
     ve_api_machine = ENV["VE_API_NAME"] || "ve-api-local"
-    ENV["VXSYNC_IP"] = knife_search_for_ip("vxsync")
+    ENV["VXSYNC_IP"] = knife_search_for_ip("vxsync_client")
     ENV["JDS_IP"] = knife_search_for_ip("jds")
     ENV["SOLR_IP"] = knife_search_for_ip("solr")
     ENV["MOCKS_IP"] = knife_search_for_ip("mocks")
@@ -63,11 +63,11 @@ def get_worker_config(env)
 
 case env
 when "aws"
-  vxsync_ip = knife_search_for_ip("vxsync")
-  system "scp -i #{ENV['WORKSPACE']}/.chef/keys/vagrantaws_c82a142d5205 -o StrictHostKeyChecking=no ec2-user@#{vxsync_ip}:/opt/vxsync/worker-config.json ."
+  vxsync_ip = knife_search_for_ip("vxsync_client")
+  system "scp -i #{ENV['WORKSPACE']}/.chef/keys/vagrantaws_c82a142d5205 -o StrictHostKeyChecking=no ec2-user@#{vxsync_ip}:/opt/vxsync_client/worker-config.json ."
 when "virtualbox"
-  vxsync_ip = knife_search_for_ip("vxsync")
-  system "scp -i #{ENV['VAGRANT_HOME']}/insecure_private_key vagrant@#{vxsync_ip}:/opt/vxsync/worker-config.json ."
+  vxsync_ip = knife_search_for_ip("vxsync_client")
+  system "scp -i #{ENV['VAGRANT_HOME']}/insecure_private_key vagrant@#{vxsync_ip}:/opt/vxsync_client/worker-config.json ."
 end
 end
 

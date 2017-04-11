@@ -32,11 +32,21 @@ function createConformanceData() {
 
 function getResourceConfig() {
     return [{
-        name: 'medicationdispense-getMedicationDispense',
+        name: 'fhir-medication-dispense',
         path: '',
         get: getMedicationDispense,
         subsystems: ['patientrecord', 'jds', 'solr', 'jdsSync', 'authorization'],
-        requiredPermissions: [],
+        interceptors: { fhirPid: true },
+        requiredPermissions: ['read-fhir'],
+        isPatientCentric: true,
+        permitResponseFormat: true
+    },{
+        name: 'fhir-medication-dispense-search',
+        path: '_search',
+        post: getMedicationDispense,
+        subsystems: ['patientrecord', 'jds', 'solr', 'jdsSync', 'authorization'],
+        interceptors: { fhirPid: true },
+        requiredPermissions: ['read-fhir'],
         isPatientCentric: true,
         permitResponseFormat: true
     }];

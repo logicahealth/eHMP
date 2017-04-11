@@ -18,8 +18,8 @@ end
 def prod_settings(stack)
 	{
 	  "id" => stack,
-	  "ssh_username" => "ec2-user",
-	  "ssh_key" => "#{ENV['HOME']}/Projects/vistacore/.chef/keys/vagrantaws_c82a142d5205",
+	  "ssh_username" => "PW      ",
+	  "ssh_key" => "#{ENV['HOME']}/Projects/vistacore/.chef/keys/redacted",
 	  "jds" => {
 	    "ip_address" => knife_search_for_ip("jds", stack, "aws")
 	  },

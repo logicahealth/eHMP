@@ -133,10 +133,10 @@ public class VlerSoapHandler {
             String htmlDoc;
 
             if (VlerDocumentUtil.isCcdaDoc(xmlDoc)) {
-                htmlDoc = VlerDocumentUtil.xsltCcdaDocument(new String(response.getDocumentResponse().get(0).getDocument()));
+                htmlDoc = VlerDocumentUtil.xsltCcdaDocument(new String(response.getDocumentResponse().get(0).getDocument(), "UTF-8"));
                 vlerRetrieveResponse.setVlerDocType(VLER_DOC_TYPE_CCDA);
             }else {
-                htmlDoc = VlerDocumentUtil.xsltC32Document(new String(response.getDocumentResponse().get(0).getDocument()));
+                htmlDoc = VlerDocumentUtil.xsltC32Document(new String(response.getDocumentResponse().get(0).getDocument(), "UTF-8"));
                 vlerRetrieveResponse.setVlerDocType(VLER_DOC_TYPE_C32);
             }
             htmlDoc = htmlDoc.replaceAll("(\\r|\\n|\\t)", "");

@@ -22,55 +22,41 @@ Then(/^the results contain medication results$/) do |table|
 end
 
 When(/^the client breaks glass and repeats a request for out\-patient medication results for that patient "(.*?)"$/) do |pid|
-  temp = RDKQuery.new('medicationdispense-getMedicationDispense')
-  temp.add_parameter("subject.identifier", pid)
-  #temp.add_parameter("domain", "imun")
-  temp.add_acknowledge("true")
-  p temp.path
-  @response = HTTPartyRDK.get(temp.path)
+  temp = QueryRDKCDSfhir.new
+  path = temp.path + "/composition?subject.identifier=#{pid}"
+  @response = HTTPartyRDK.get(path)
+
 end
 
 When(/^the client requests out\-patient medication results for that sensitive patient "(.*?)"$/) do |pid|
-  temp = RDKQuery.new('medicationdispense-getMedicationDispense')
-  temp.add_parameter("subject.identifier", pid)
-  #temp.add_parameter("domain", "imun")
-  temp.add_acknowledge("false")
-  p temp.path
-  @response = HTTPartyRDK.get(temp.path)
+  temp = QueryRDKCDSfhir.new
+  path = temp.path + "/composition?subject.identifier=#{pid}"
+  @response = HTTPartyRDK.get(path)
 end
 
 When(/^the client breaks glass and repeats a request for in\-patient medication results for that patient "(.*?)"$/) do |pid|
-  temp = RDKQuery.new('medicationadministration-medicationAdministration')
-  temp.add_parameter("subject.identifier", pid)
-  #temp.add_parameter("domain", "imun")
-  temp.add_acknowledge("true")
-  p temp.path
-  @response = HTTPartyRDK.get(temp.path)
+  temp = QueryRDKCDSfhir.new
+  path = temp.path + "/medicationadministration?subject.identifier=" + "#{pid}" + "&_ack=true"
+  type = { "Content-Type" => "application/json" }
+  @response = HTTPartyRDK.get(path)
+  puts @response
 end
 
 When(/^the client requests in\-patient medication results for that sensitive patient "(.*?)"$/) do |pid|
-  temp = RDKQuery.new('medicationadministration-medicationAdministration')
-  temp.add_parameter("subject.identifier", pid)
-  #temp.add_parameter("domain", "imun")
-  temp.add_acknowledge("false")
-  p temp.path
-  @response = HTTPartyRDK.get(temp.path)
+  temp = QueryRDKCDSfhir.new
+  path = temp.path + "/medicationadministration?subject.identifier=" + "#{pid}"
+  @response = HTTPartyRDK.get(path)
+  puts @response
 end
 
 When(/^the client breaks glass and repeats a request for out\-patient medication statement for that patient "(.*?)"$/) do |pid|
-  temp = RDKQuery.new('medicationdstatement-getMedicationStatement')
-  temp.add_parameter("subject.identifier", pid)
-  #temp.add_parameter("domain", "imun")
-  temp.add_acknowledge("true")
-  p temp.path
-  @response = HTTPartyRDK.get(temp.path)
+  temp = QueryRDKCDSfhir.new
+  path = temp.path + "/composition?subject.identifier=#{pid}"
+  @response = HTTPartyRDK.get(path)
 end
 
 When(/^the client requests out\-patient medication statement for that sensitive patient "(.*?)"$/) do |pid|
-  temp = RDKQuery.new('medicationdstatement-getMedicationStatement')
-  temp.add_parameter("subject.identifier", pid)
-  #temp.add_parameter("domain", "imun")
-  temp.add_acknowledge("false")
-  p temp.path
-  @response = HTTPartyRDK.get(temp.path)
+  temp = QueryRDKCDSfhir.new
+  path = temp.path + "/composition?subject.identifier=#{pid}"
+  @response = HTTPartyRDK.get(path)
 end

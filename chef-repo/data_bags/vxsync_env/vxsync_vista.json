@@ -1,0 +1,9 @@
+{
+  "id": "vxsync_vista",
+  "vxsync": {
+    "encrypted_data": "YhYR/fJi32bli/kKWrp+rC4cJGqr4YgAoN12CYc67IrM1EvHZXysfQVIPUUp\n8Gk0\n",
+    "iv": "QKll+KBIfVf4Eg/TTo9jiQ==\n",
+    "version": 1,
+    "cipher": "aes-256-cbc"
+  }
+}

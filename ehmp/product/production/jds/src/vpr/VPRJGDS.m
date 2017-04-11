@@ -91,6 +91,15 @@ CLR(RESULT,ARGS)  ; Clear ALL objects in generic data store!!!
  ; Remove the URLMAP first to make all the URLs disappear
  ; Lock VPRCONFIG to prevent access to the store while it is being deleted
  L +^VPRCONFIG("store",$G(HTTPREQ("store"))):$G(^VPRCONFIG("timeout","gds"),5)
+ ; Remove indexes
+ N INDEXNAME
+ S INDEXNAME=""
+ F  S INDEXNAME=$O(^VPRCONFIG("store",$G(HTTPREQ("store")),"index",INDEXNAME)) Q:INDEXNAME=""  D
+ . K ^VPRMETA("index",INDEXNAME)
+ S INDEXNAME=""
+ F  S INDEXNAME=$O(^VPRMETA("collection",$G(HTTPREQ("store")),"index",INDEXNAME)) Q:INDEXNAME=""  D
+ . K ^VPRMETA("index",INDEXNAME)
+ K ^VPRMETA("collection",$G(HTTPREQ("store")))
  ; Remove the indicator that the database exists
  K ^VPRCONFIG("store",$G(HTTPREQ("store")))
  ; Delete the urlmap using store-index

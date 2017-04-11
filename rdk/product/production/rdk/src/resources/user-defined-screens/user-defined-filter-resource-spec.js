@@ -17,30 +17,35 @@ describe('User Defined Applet Filters', function() {
         expect(resources[0].interceptors).to.eql(interceptors);
         expect(resources[0].healthcheck).not.to.be.undefined();
         expect(resources[0].get).not.to.be.undefined();
+        expect(resources[0].requiredPermissions).to.eql(['access-general-ehmp']);
 
         expect(resources[1].name).to.equal('user-defined-filter');
         expect(resources[1].path).to.equal('');
         expect(resources[1].interceptors).to.eql(interceptors);
         expect(resources[1].healthcheck).not.to.be.undefined();
         expect(resources[1].post).not.to.be.undefined();
+        expect(resources[1].requiredPermissions).to.eql(['access-general-ehmp']);
 
         expect(resources[2].name).to.equal('user-defined-filter');
         expect(resources[2].path).to.equal('');
         expect(resources[2].interceptors).to.eql(interceptors);
         expect(resources[2].healthcheck).not.to.be.undefined();
         expect(resources[2].delete).not.to.be.undefined();
+        expect(resources[2].requiredPermissions).to.eql(['access-general-ehmp']);
 
         expect(resources[3].name).to.equal('user-defined-filter');
         expect(resources[3].path).to.equal('');
         expect(resources[3].interceptors).to.eql(interceptors);
         expect(resources[3].healthcheck).not.to.be.undefined();
         expect(resources[3].put).not.to.be.undefined();
+        expect(resources[3].requiredPermissions).to.eql(['access-general-ehmp']);
 
         expect(resources[4].name).to.equal('user-defined-filter-all');
         expect(resources[4].path).to.equal('/all');
         expect(resources[4].interceptors).to.eql(interceptors);
         expect(resources[4].healthcheck).not.to.be.undefined();
         expect(resources[4].delete).not.to.be.undefined();
+        expect(resources[4].requiredPermissions).to.eql(['access-general-ehmp']);
     });
 
     /*it('correctly creates filter ID from session', function() {

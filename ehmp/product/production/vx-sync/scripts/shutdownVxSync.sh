@@ -9,19 +9,6 @@
 # Kill endpoints
 ps -efa | grep -v 'grep' | grep "node endpoint\|node tools/beanstalk/admin-endpoint" | awk '{print $2}' | xargs kill
 
-#---------------------------------------------------------------------------------------------------------
-# This will wait the specified number of miliseconds for beanstalk to clear and if it hits the timeout
-# and beanstalk still has uncompleted jobs in Ready, Delayed, or Buired state, it will send them to the
-# error log and delete them from beanstalk.
-#---------------------------------------------------------------------------------------------------------
-echo shutdownVxsync.sh: Endpoints have been stopped.  Waiting for handlers to finish processing jobs in beanstalk.
-
-cd /opt/vxsync
-node tools/maintenance/waitForBeanstalkToClear.js --wait 120000 > waitForBeanstalkToClear.output.log
-cd ..
-
-echo shutdownVxsync.sh: Done waiting for beanstalk to be drained...
-
 ps -efa | grep -v 'grep' | grep 'node subscriberHost.js\|node pollerHost.js'
 
 PNUM="$(ps -efa | grep -v 'grep' | grep 'node subscriberHost.js\|node pollerHost.js' | awk '{print $2}')"

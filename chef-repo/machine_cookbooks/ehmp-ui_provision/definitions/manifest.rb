@@ -4,38 +4,29 @@ define :ehmp_ui_manifest, :path => "" do
   overall_version = 0
   unset_versions = []
   versions = {}
-  [
-    "ehmp-ui_provision",
-    "ehmp_provision",
-    "rdk_provision",
-    "cds_provision"
-  ].each { |provision_cookbook|
-    node[provision_cookbook.to_sym][:artifacts].each_pair do |name, coordinates|
-      if coordinates[:version] == "LATEST" || coordinates[:version].nil?
-        unset_versions << name
-      end
-      overall_version += coordinates[:version].to_s.sub("#{release_version}.","").to_i
-      versions[name.to_sym] = coordinates[:version]
-    end
-  }
-  overall_version = "#{release_version}.#{overall_version}"
-  puts "The following artifacts are missing versions...\n#{unset_versions.inspect} \nThis means the overall version number is likely invalid."
-  puts "overall_version = #{overall_version}"
 
-  node.default[:'ehmp-ui_provision'][:manifest][:versions] = versions
-  node.default[:'ehmp-ui_provision'][:manifest][:overall_version] = overall_version
-
-  version_host_path = "/tmp/artifact-versions-shell-#{overall_version}.sh"
-
+  version_host_path = "/tmp/artifact-versions-shell.sh"
   File.open(version_host_path, "w") do |f|
     ENV.each do |key,value|
-      if key.end_with?("_VERSION") || key.end_with?("_PROVISION")
+      if key.end_with?("_VERSION") || key.end_with?("_PROVISION") || key.end_with?("_HASH")
         f.write("export #{key}=#{value}\n")
+      end
+      if key.end_with?("_VERSION") && value != "LATEST" && !value.nil?
+        overall_version += value.to_s.split(".").last.to_i
+        versions[key.to_sym] = value.to_s
       end
     end
   end
 
+  overall_version = "#{release_version}.#{overall_version}"
+  puts "overall_version = #{overall_version}"
   puts "\nAPP_VERSION='#{overall_version}'\n"
+
+  node.default[:'ehmp-ui_provision'][:manifest][:versions] = versions
+  node.default[:'ehmp-ui_provision'][:manifest][:overall_version] = overall_version
+
+  puts "\nAPP_VERSION='#{overall_version}'\n"
+
   if ENV.has_key?("UPLOAD_RELEASE_MANIFEST")
 
     chef_gem 'chef-vault' do
@@ -56,5 +47,5 @@ define :ehmp_ui_manifest, :path => "" do
     end
 
   end
-end
 
+end

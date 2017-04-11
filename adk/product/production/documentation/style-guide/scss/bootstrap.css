@@ -1,7 +1,7 @@
 /*
 Error: File to import not found or unreadable: bootstrap/variables.
-       Load path: /Users/garcesj/Projects/vistacore/adk/product/production/documentation/style-guide/scss
-        on line 8 of /Users/garcesj/Projects/vistacore/adk/product/production/documentation/style-guide/scss/bootstrap.scss
+       Load path: /Users/jonathan.garces/Projects/vistacore/adk/product/production/documentation/style-guide/scss
+        on line 8 of /Users/jonathan.garces/Projects/vistacore/adk/product/production/documentation/style-guide/scss/bootstrap.scss
 
 3:  * Copyright 2011-2015 Twitter, Inc.
 4:  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
@@ -16,7 +16,7 @@ Error: File to import not found or unreadable: bootstrap/variables.
 13: @import "bootstrap/print";
 
 Backtrace:
-/Users/garcesj/Projects/vistacore/adk/product/production/documentation/style-guide/scss/bootstrap.scss:8
+/Users/jonathan.garces/Projects/vistacore/adk/product/production/documentation/style-guide/scss/bootstrap.scss:8
 /Applications/Koala.app/Contents/Resources/app.nw/rubygems/gems/sass-3.4.9/lib/sass/tree/import_node.rb:66:in `rescue in import'
 /Applications/Koala.app/Contents/Resources/app.nw/rubygems/gems/sass-3.4.9/lib/sass/tree/import_node.rb:45:in `import'
 /Applications/Koala.app/Contents/Resources/app.nw/rubygems/gems/sass-3.4.9/lib/sass/tree/import_node.rb:28:in `imported_file'
@@ -54,4 +54,4 @@ Backtrace:
 body:before {
   white-space: pre;
   font-family: monospace;
-  content: "Error: File to import not found or unreadable: bootstrap/variables.\A        Load path: /Users/garcesj/Projects/vistacore/adk/product/production/documentation/style-guide/scss\A         on line 8 of /Users/garcesj/Projects/vistacore/adk/product/production/documentation/style-guide/scss/bootstrap.scss\A \A 3:  * Copyright 2011-2015 Twitter, Inc.\A 4:  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)\A 5:  */\A 6: \A 7: // Core variables and mixins\A 8: @import \"bootstrap/variables\";\A 9: @import \"bootstrap/mixins\";\A 10: \A 11: // Reset and dependencies\A 12: @import \"bootstrap/normalize\";\A 13: @import \"bootstrap/print\";"; }
+  content: "Error: File to import not found or unreadable: bootstrap/variables.\A        Load path: /Users/jonathan.garces/Projects/vistacore/adk/product/production/documentation/style-guide/scss\A         on line 8 of /Users/jonathan.garces/Projects/vistacore/adk/product/production/documentation/style-guide/scss/bootstrap.scss\A \A 3:  * Copyright 2011-2015 Twitter, Inc.\A 4:  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)\A 5:  */\A 6: \A 7: // Core variables and mixins\A 8: @import \"bootstrap/variables\";\A 9: @import \"bootstrap/mixins\";\A 10: \A 11: // Reset and dependencies\A 12: @import \"bootstrap/normalize\";\A 13: @import \"bootstrap/print\";"; }

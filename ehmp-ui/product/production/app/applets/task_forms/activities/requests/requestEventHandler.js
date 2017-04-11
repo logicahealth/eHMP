@@ -1,22 +1,23 @@
 define([
     'async',
+    'moment',
     'app/applets/task_forms/common/utils/eventHandler',
     'app/applets/task_forms/common/utils/taskFetchHelper',
     'app/applets/orders/writeback/common/assignmentType/assignmentTypeUtils',
     'app/applets/task_forms/common/utils/requestCommonUtils'
-], function(Async, EventHandler, TaskFetchHelper, AssignmentTypeUtils, Utils) {
-    "use strict";
+], function(Async, moment, EventHandler, TaskFetchHelper, AssignmentTypeUtils, Utils) {
+    'use strict';
 
     var parseAssignment = function(assignment) {
-        if(assignment === 'opt_me') {
-            return "Me";
-        } else if(assignment === 'opt_person') {
+        if (assignment === 'opt_me') {
+            return 'Me';
+        } else if (assignment === 'opt_person') {
             return 'Person';
-        } else if(assignment === 'opt_myteams') {
+        } else if (assignment === 'opt_myteams') {
             return 'My Teams';
-        } else if(assignment === 'opt_anyteam') {
+        } else if (assignment === 'opt_anyteam') {
             return 'Any Team';
-        } else if(assignment === 'opt_patientteams') {
+        } else if (assignment === 'opt_patientteams') {
             return 'Patient\'s Teams';
         } else {
             return null;
@@ -25,65 +26,111 @@ define([
 
     var parseUrgencyId = function(urgency) {
         var urgencyId;
-        if(urgency === 'routine') {
-            urgencyId =  9;
-        } else if(urgency === 'urgent') {
-            urgencyId =  4;
+        if (urgency === 'routine') {
+            urgencyId = 9;
+        } else if (urgency === 'urgent') {
+            urgencyId = 4;
         }
         return urgencyId;
+    };
+
+    var getUrgencyIdString = function(urgency) {
+        var urgencyId = parseUrgencyId(urgency);
+        if (urgencyId) {
+            return urgencyId.toString();
+        } else {
+            return '';
+        }
     };
 
     var routingCode = function(formModel, formAction) {
         var assignTo = parseAssignment(formModel.get('assignment'));
         var userSession = ADK.UserService.getUserSession().attributes;
         if (assignTo === 'Me') {
-            return userSession.site + ";" + userSession.duz[userSession.site];
+            return userSession.site + ';' + userSession.duz[userSession.site];
         } else if (assignTo === 'Person') {
             return formModel.get('person');
         } else {
             var roles = formModel.get('roles');
             var team = formModel.get('team');
+
+            var friendlyTeamName;
+            var friendlyRoleName;
+            _.each(formModel.get('storedTeamsList'), function(singleTeam){
+                if(singleTeam.teamID == team) {
+                    friendlyTeamName = sanitizedRouteString(singleTeam.teamName);
+                }
+            });
+
             var codes = [];
             _.each(roles, function(role) {
-                codes.push('[TM:(' + team + ')/TR:(' + role + ')]');
+                _.each(formModel.get('storedRolesList'), function(singleRole){
+                    if(singleRole.roleID == role) {
+                        friendlyRoleName = sanitizedRouteString(singleRole.name);
+                    }
+                });
+                codes.push('[TM:' + friendlyTeamName + '(' + team + ')/TR:' + friendlyRoleName + '(' + role + ')]');
+
             });
             return codes.join();
         }
+    };
+
+    var sanitizedRouteString = function(value) {
+        return _.trim(value.replace(/\(|\)|\:|\[|\]|\,/g, '-'));
     };
 
     // Builds and return the parameter object from the UI form
     var buildClinicalObject = function(formModel, formAction, userSession, visitInfo) {
         formAction = formAction || '';
         var requestClinicalObject = {
-            objectType : "requestActivity",
+            objectType: 'requestActivity',
             uid: formModel.get('patientIcn'),
             patientUid: ADK.PatientRecordService.getCurrentPatient().toJSON().uid,
-            authorUid: 'urn:va:user:' + userSession.site + ":" + userSession.duz[userSession.site],
+            authorUid: 'urn:va:user:' + userSession.site + ':' + userSession.duz[userSession.site],
             creationDateTime: formModel.get('creationDateTime') || moment().format('YYYYMMDDHHmmss'),
-            domain: "ehmp-activity",
-            subDomain: "request",
+            domain: 'ehmp-activity',
+            subDomain: 'request',
             visit: {
                 location: visitInfo.locationUid,
                 serviceCategory: visitInfo.serviceCategory,
-                dateTime: visitInfo.dateTime
+                dateTime: visitInfo.dateTime,
+                locationDesc: visitInfo.locationDisplayName
             },
             ehmpState: formAction,
-            displayName: formModel.get('title'),
-            referenceId: "", // For Request Activity this will be empty string since there is not a corresponding Vista/JDS record.
-            instanceName: formModel.get('title'),
+            displayName: Utils.removeWhiteSpace(formModel.get('title')),
+            referenceId: '', // For Request Activity this will be empty string since there is not a corresponding Vista/JDS record.
+            instanceName: Utils.removeWhiteSpace(formModel.get('title')),
             data: {
                 activity: buildActivity(formModel, formAction, userSession),
                 signals: [], // nothing to put here yet
                 requests: [buildRequest(formModel, userSession, visitInfo)],
                 responses: [] // only exists in completed state
 
-            },
+            }
         };
 
-        if (formModel.get('activity.processInstanceId')) {
-            requestClinicalObject.data.signals.push('requestUpdateSignal');
+        if (!_.isEmpty(formModel.get('activity')) && !_.isEmpty(formModel.get('activity').processInstanceId)) {
+            requestClinicalObject.data.signals.push(buildSignalData(formModel, userSession));
         }
         return requestClinicalObject;
+    };
+
+    var buildSignalData = function(formModel, userSession) {
+        var signalBody = new Backbone.Model({
+            objectType: 'requestSignal',
+            name: 'EDT',
+            actionText: 'Edit',
+            actionId: '1',
+            data: {
+                comment: formModel.get('requestDetails')
+            },
+            executionUserId: userSession.site + ';' + userSession.duz[userSession.site],
+            executionUserName: userSession.lastname + ',' + userSession.firstname,
+            executionDateTime: moment.utc().format('YYYYMMDDHHmmss+0000')
+        });
+        return signalBody;
+
     };
 
     var setRouteToRequest = function(formModel, request) {
@@ -91,7 +138,11 @@ define([
             request.route = {};
             if (formModel.get('assignment') === 'opt_person') {
                 request.route.facility = formModel.get('facility');
+                request.route.facilityName = formModel.get('facilityName');
                 request.route.person = formModel.get('person');
+                if (!_.isEmpty(request.route.person) && formModel.has('storedPersonsList')) {
+                    request.route.personName = lookupPersonName(formModel.get('storedPersonsList'), request.route.person);
+                }
             } else {
                 request.route.routingCode = routingCode(formModel);
                 var team = formModel.get('team');
@@ -118,6 +169,7 @@ define([
 
                 if (formModel.get('assignment') === 'opt_anyteam') {
                     request.route.facility = formModel.get('facility');
+                    request.route.facilityName = formModel.get('facilityName');
                 }
             }
         }
@@ -126,19 +178,20 @@ define([
 
     var buildActivity = function(formModel, formAction, userSession) {
         var activity = {
-            objectType : "activity",
+            objectType: 'activity',
             deploymentId: formModel.get('activity') ? formModel.get('activity').deploymentId : formModel.get('deploymentId'),
             processDefinitionId: formModel.get('activity') ? formModel.get('activity').processDefinitionId : 'Order.Request',
-            processInstanceId: formModel.get('activity') ? formModel.get('activity').processInstanceId : "", // Populated when the activity instance is created
+            processInstanceId: formModel.get('activity') ? formModel.get('activity').processInstanceId : '', // Populated when the activity instance is created
             state: formAction,
             initiator: userSession.duz[userSession.site],
             assignTo: parseAssignment(formModel.get('assignment')),
-            timeStamp: "",
+            timeStamp: '',
             urgency: parseUrgencyId(formModel.get('urgency')),
             assignedTo: routingCode(formModel, formAction),
-            instanceName: formModel.get('title'),
+            instanceName: Utils.removeWhiteSpace(formModel.get('title')),
             domain: 'Request',
             sourceFacilityId: ADK.UserService.getUserSession().get('division'),
+            destinationFacilityId: formModel.get('facility') ? formModel.get('facility') : ADK.UserService.getUserSession().get('division'),
             type: 'Order'
         };
 
@@ -147,21 +200,22 @@ define([
 
     var buildRequest = function(formModel, userSession, visitInfo) {
         var request = {
-            objectType : "request",
-            taskinstanceId: "",
-            urgency: formModel.get('urgency'),  // from form
-            earliestDate: moment.utc(formModel.get('earliest')).startOf('day').format('YYYYMMDDHHmmss'),  // from form
-            latestDate: moment.utc(formModel.get('latest')).startOf('day').format('YYYYMMDDHHmmss'),  // from form
-            title: formModel.get('title'), // from form
+            objectType: 'request',
+            taskinstanceId: '',
+            urgency: formModel.get('urgency'), // from form
+            earliestDate: moment(formModel.get('earliest')).startOf('day').utc().format('YYYYMMDDHHmmss'), // from form
+            latestDate: moment(formModel.get('latest')).endOf('day').utc().format('YYYYMMDDHHmmss'), // from form
+            title: Utils.removeWhiteSpace(formModel.get('title')), // from form
             assignTo: parseAssignment(formModel.get('assignment')), // from form
-            request: formModel.get('requestDetails'), // from form
-            submittedByUid: 'urn:va:user:' + userSession.site + ":" + userSession.duz[userSession.site],
+            request: Utils.removeWhiteSpace(formModel.get('requestDetails') || ' '), // from form
+            submittedByUid: 'urn:va:user:' + userSession.site + ':' + userSession.duz[userSession.site],
             submittedByName: userSession.lastname + ',' + userSession.firstname,
-            submittedTimeStamp: moment(),
+            submittedTimeStamp: moment().utc(),
             visit: {
                 location: visitInfo.locationUid,
                 serviceCategory: visitInfo.serviceCategory,
-                dateTime: visitInfo.dateTime
+                dateTime: visitInfo.dateTime,
+                locationDesc: visitInfo.locationDisplayName
             }
         };
         request = setRouteToRequest(formModel, request);
@@ -186,6 +240,22 @@ define([
         return foundTeam ? foundTeam.teamName : null;
     }
 
+    function lookupPersonName(personList, personID) {
+        if (!personList) {
+            return null;
+        }
+
+        var foundPerson = _.find(personList, function(person) {
+            if (!person) {
+                return false;
+            }
+
+            return (personID === person.personID);
+        });
+
+        return foundPerson ? foundPerson.name : null;
+    }
+
     function lookupRoleName(roleList, roleID) {
         if (!roleList) {
             return null;
@@ -205,13 +275,12 @@ define([
     // Close the modal and refresh the todo list applet to fetch new tasks
     var modalCloseAndRefresh = function(e, taskListView) {
         EventHandler.fireCloseEvent(e);
-        // ADK.Messaging.trigger('action:draft:refresh');
+        Utils.triggerRefresh();
     };
 
     // handles all the click events on the form, what is clicked is passed
     // through in formAction
-    var startRequestPost = function(collection, formModel, formAction, userSession, patientContext, visitInfo) {
-        formModel = escapeAll(formModel);
+    var startRequestPost = function(collection, formModel, formAction, userSession, patientContext, visitInfo, form) {
 
         var newestActivity = findLatestRequest(collection);
 
@@ -219,13 +288,14 @@ define([
         formModel.set({
             deploymentId: newestActivity.get('deploymentId'),
             processDefId: newestActivity.get('id'),
-            objectType: "requestActivity",
-            // orderingProviderId: userSession.site + ";" + userSession.duz[userSession.site],
+            objectType: 'requestActivity',
+            // orderingProviderId: userSession.site + ';' + userSession.duz[userSession.site],
             icn: patientContext.get('pid'),
             pid: patientContext.get('pid')
         });
 
         var formModelJSON = formModel.toJSON();
+        var clinicalObject = buildClinicalObject(formModel, formAction, userSession, visitInfo);
 
         var fetchOptions = {
             resourceTitle: 'activities-start',
@@ -235,36 +305,45 @@ define([
                 deploymentId: formModelJSON.deploymentId,
                 processDefId: formModelJSON.processDefId,
                 parameter: {
-                    requestActivity: buildClinicalObject(formModel, formAction, userSession, visitInfo),
+                    requestActivity: clinicalObject,
                     icn: patientContext.get('pid'),
                     pid: patientContext.get('pid'),
                     instanceName: formModel.get('title'),
                     formAction: formAction,
-                    urgency: parseUrgencyId(formModel.get('urgency')).toString(),
+                    urgency: getUrgencyIdString(formModel.get('urgency')),
                     subDomain: 'Request',
                     assignedTo: routingCode(formModel, formAction),
                     type: 'Order',
-                    facility: userSession.site,
+                    facility: userSession.division,
+                    destinationFacility: clinicalObject.data.activity.destinationFacilityId,
                     description: 'Use this activity to request other providers or yourself to complete a patient specific task at any time now or in the future.'
                 }
 
             },
             onSuccess: function(req, res) {
                 modalCloseAndRefresh(res);
-                if(formAction === "draft") {
+                if (formAction === 'draft') {
                     ADK.Messaging.trigger('action:draft:refresh');
                 }
                 displayBanner(formAction, 'Request');
+            },
+            onError: function(req, res) {
+                var errorMessage = JSON.parse(res.responseText).message;
+
+                if (errorMessage) {
+                    formModel.set('errorMessage', errorMessage);
+                }
+
+                form.unBlockUI();
             }
         };
 
         ADK.ResourceService.fetchCollection(fetchOptions);
     };
 
-    var sendSignalPost = function(e, collection, formModel, signalAction, userSession, visitInfo) {
+    var sendSignalPost = function(e, collection, formModel, signalAction, userSession, visitInfo, form) {
         signalAction = signalAction || '';
 
-        formModel = escapeAll(formModel);
         var newestActivity = findLatestRequest(collection);
 
         formModel.set({
@@ -294,10 +373,19 @@ define([
             },
             onSuccess: function(req, res) {
                 modalCloseAndRefresh(res);
-                if(signalAction === "draft") {
+                if (signalAction === 'draft') {
                     ADK.Messaging.trigger('action:draft:refresh');
                 }
                 displayBanner(signalAction, 'Request');
+            },
+            onError: function(req, res) {
+                var errorMessage = JSON.parse(res.responseText).message;
+
+                if (errorMessage) {
+                    formModel.set('errorMessage', errorMessage);
+                }
+
+                form.unBlockUI();
             }
         };
 
@@ -305,7 +393,6 @@ define([
     };
 
     function sendRequestUpdate(collection, formModel, formAction, userSession, patientContext, visitInfo) {
-        formModel = Utils.escapeAll(formModel);
 
         Async.waterfall([
             function(next) {
@@ -316,7 +403,7 @@ define([
                         resourceTitle: 'tasks-update',
                         fetchType: 'POST',
                         criteria: {
-                            deploymentid: formModel.get('activity') ? formModel.get('activity').deploymentId : formModel.get('deploymentId'),
+                            deploymentId: formModel.get('activity') ? formModel.get('activity').deploymentId : formModel.get('deploymentId'),
                             processDefId: formModel.get('activity') ? formModel.get('activity').processDefinitionId : formModel.get('processDefinitionId'),
                             parameter: {
                                 out_activity: buildActivity(formModel, formAction, userSession),
@@ -343,7 +430,7 @@ define([
                     resourceTitle: 'tasks-update',
                     fetchType: 'POST',
                     criteria: {
-                        deploymentid: formModel.get('activity') ? formModel.get('activity').deploymentId : formModel.get('deploymentId'),
+                        deploymentId: formModel.get('activity') ? formModel.get('activity').deploymentId : formModel.get('deploymentId'),
                         processDefId: formModel.get('activity') ? formModel.get('activity').processDefinitionId : formModel.get('processDefinitionId'),
                         parameter: {
                             out_activity: buildActivity(formModel, formAction, userSession),
@@ -388,29 +475,27 @@ define([
     var displayBanner = function(action, activityType, options) {
         var suppressBanner = !!(_.get(options, 'suppressBanner', false));
         if (suppressBanner === false) {
-            var bannerTitle = (_.capitalize(activityType || 'unknown') + ' Draft Activity');
             var message = 'Successfully ' + constructBannerMessage(action);
-
             var successBanner = new ADK.UI.Notification({
-                title: bannerTitle,
+                title: 'Success',
                 message: message,
-                type: "success"
+                type: 'success'
             });
             successBanner.show();
         }
     };
 
     var constructBannerMessage = function(action) {
-        switch(action) {
+        switch (action) {
             case 'delete':
-                return "deleted";
+                return 'deleted';
             case 'draft':
-                return "created draft";
+                return 'created draft';
             default:
                 return action;
         }
     };
-    
+
     // Compare two versions numbers and return the highest one
     function versionCompare(v1, v2) {
         // Split version numbers to its parts
@@ -419,8 +504,8 @@ define([
 
         // Shift 0 to the beginning of the version number that might be shorter
         //      ie. 1.2.3 and 1.2.3.4 => 0.1.2.3 and 1.2.3.4
-        while (v1parts.length < v2parts.length) v1parts.unshift("0");
-        while (v2parts.length < v1parts.length) v2parts.unshift("0");
+        while (v1parts.length < v2parts.length) v1parts.unshift('0');
+        while (v2parts.length < v1parts.length) v2parts.unshift('0');
 
         // Convert all values to numbers
         v1parts = v1parts.map(Number);
@@ -469,22 +554,8 @@ define([
         return requests[newestReq];
     }
 
-    // Escape all the special characters in the models attributes
-    function escapeAll(model) {
-        // Remove this from attributes
-        model.attributes = _.omit(model.attributes, ['_labelsForSelectedValues']);
-
-        _.each(model.attributes, function(value, key) {
-            if (typeof value === 'string') {
-                model.attributes[key] = _.escape(value);
-            }
-        });
-
-        return model;
-    }
-
     var eventHandler = {
-        handleRequest: function(e, formModel, formAction) {
+        handleRequest: function(e, formModel, formAction, form) {
             var userSession = ADK.UserService.getUserSession().attributes;
             var patientContext = ADK.PatientRecordService.getCurrentPatient();
             var visitInfo = ADK.PatientRecordService.getCurrentPatient().get('visit');
@@ -493,14 +564,14 @@ define([
                 resourceTitle: 'activities-available',
                 fetchType: 'GET',
                 viewModel: {
-                    parse: function (response) {
+                    parse: function(response) {
                         response.uniqueId = _.uniqueId();
                         return response;
                     },
                     idAttribute: 'uniqueId'
                 },
                 onSuccess: function(collection) {
-                    startRequestPost(collection, formModel, formAction, userSession, patientContext, visitInfo);
+                    startRequestPost(collection, formModel, formAction, userSession, patientContext, visitInfo, form);
                 }
             };
             //formModel.trigger('draft:saveConsult');
@@ -514,7 +585,7 @@ define([
                 resourceTitle: 'activities-available',
                 fetchType: 'GET',
                 viewModel: {
-                    parse: function (response) {
+                    parse: function(response) {
                         response.uniqueId = _.uniqueId();
                         return response;
                     },
@@ -527,7 +598,7 @@ define([
             //formModel.trigger('draft:saveConsult');
             ADK.ResourceService.fetchCollection(fetchOptions);
         },
-        sendSignal: function(e, formModel, formAction) {
+        sendSignal: function(e, formModel, formAction, form) {
             var userSession = ADK.UserService.getUserSession().attributes;
             var patientContext = ADK.PatientRecordService.getCurrentPatient();
             var visitInfo = ADK.PatientRecordService.getCurrentPatient().get('visit');
@@ -536,7 +607,7 @@ define([
                 resourceTitle: 'activities-available',
                 fetchType: 'GET',
                 viewModel: {
-                    parse: function (response) {
+                    parse: function(response) {
                         response.uniqueId = _.uniqueId();
                         return response;
                     },
@@ -544,7 +615,7 @@ define([
                 },
                 onSuccess: function(collection) {
                     // Find the newest consult deployment
-                    sendSignalPost(e, collection, formModel, formAction, userSession, visitInfo);
+                    sendSignalPost(e, collection, formModel, formAction, userSession, visitInfo, form);
                 }
             };
             ADK.ResourceService.fetchCollection(fetchOptions);

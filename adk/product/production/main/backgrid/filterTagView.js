@@ -1,10 +1,9 @@
 define('main/backgrid/filterTagView', [
     'backbone',
     'marionette',
-    'underscore',
     'api/ResourceService',
     'main/api/WorkspaceFilters'
-], function(Backbone, Marionette, _, ResourceService, WorkspaceFilters) {
+], function(Backbone, Marionette, ResourceService, WorkspaceFilters) {
     'use strict';
 
     var UserDefinedFilter = Backbone.Model.extend({
@@ -47,18 +46,9 @@ define('main/backgrid/filterTagView', [
 
         initialize: function(options) {
             var filter = this.model.get('name');
+
             var workspaceId, instanceId;
-            if (options.onUserWorkspace) {
-                this.template = _.template('<button type="button" class="clear-udaf-tag btn btn-info btn-sm btn-label bottom-margin-sm right-margin-xs" title="Press enter to remove ' + filter + '.">' + filter +
-                    '<i class="fa fa-times-circle left-margin-xs color-white"></i></button>', null, {
-                        variable: null
-                    });
-            } else {
-                this.template = _.template('<span class="label label-info font-size-12 inline-block-display bottom-margin-xs right-margin-xs">' + filter +
-                    '</span>', null, {
-                        variable: null
-                    });
-            }
+
             workspaceId = this.model.get('workspaceId');
             instanceId = this.model.get('instanceId');
 
@@ -71,12 +61,15 @@ define('main/backgrid/filterTagView', [
                 }
             }
         },
-
-        render: function() {
-            this.$el.html(this.template());
-            return this;
+        getTemplate: function() {
+            if (this.options.onUserWorkspace) {
+                return Handlebars.compile(
+                    '<button type="button" class="clear-udaf-tag btn btn-info btn-sm btn-label bottom-margin-sm right-margin-xs" title="Press enter to remove {{name}}.">{{name}}<i class="fa fa-times-circle left-margin-xs color-white"></i></button>'
+                );
+            } else {
+                return Handlebars.compile('<span class="label label-info font-size-12 inline-block-display bottom-margin-xs right-margin-xs">{{name}}</span>');
+            }
         }
-
     });
 
     return filterTagView;

@@ -8,6 +8,8 @@ define([
 ], function(Backbone, Marionette, Handlebars, ActionHandlerMap, Writeback, SignalNames) {
     'use strict';
 
+    var workflow;
+
     var DiscontinueformCheck = ADK.Checks.CheckModel.extend({
         validate: function(attributes, validationOptions) {
             ADK.Checks.unregister('discontinue-consult-form-id');
@@ -21,6 +23,14 @@ define([
         fields: [{
             control: "container",
             template: '<div class="modal-body loading font-size-14 panel-padding all-padding-xs"><i class="fa fa-spinner fa-spin"></i> Loading...</div>',
+        }]
+    });
+
+    var ErrorView = ADK.UI.Form.extend({
+        model: new Backbone.Model.extend({}),
+        fields: [{
+            control: "container",
+            template: '<div class="modal-body loading font-size-14 panel-padding all-padding-xs">There was an error processing your request.</div>',
         }]
     });
 
@@ -96,16 +106,17 @@ define([
                             ADK.UI.Workflow.hide();
                             ADK.UI.Modal.hide();
                             ADK.Checks.unregister('discontinue-consult-form-id');
+                            ADK.Messaging.getChannel('tray-tasks').trigger('action:refresh');
                             ADK.Messaging.getChannel('task_forms').request('activity_detail', {
                                 processId: self.model.get('processId')
                             });
                         },
                         function() {
-                            console.log('Could not update activity signal');
-                            this.$('#submit-accept,#form-cancel-btn').attr('disabled', false);
+                            // error, move to error step
+                            workflow.workflowControllerView.goToIndex(2);
                         });
                     // disable both buttons while the request is made
-                    this.$('#submit-accept,#form-cancel-btn').attr('disabled', true);
+                    self.$('#submit-accept,#form-cancel-btn').attr('disabled', true);
                 }
             },
             modelEvents: {
@@ -150,6 +161,9 @@ define([
             }, {
                 view: buildModalView(model),
                 viewModel: model
+            }, {
+                view: ErrorView,
+                viewModel: model
             }],
             backdrop: true
         });
@@ -169,12 +183,11 @@ define([
             // clone the model to prevent the action modals from polluting the original
             model = model.clone();
 
-            var workflow = _launchActionWorkflow(model);
+            workflow = _launchActionWorkflow(model);
 
             fetchDataForActionWorkflow(model, function() {
-                    // error
-                    // TODO: Handle error
-                    console.log('Error fetching data in preparation for Action Workflow');
+                    // There was an error retrieving data necessary for this particular action modal.
+                    workflow.workflowControllerView.goToIndex(2); // move to error step
                 },
                 function() {
                     // success, move from loading step

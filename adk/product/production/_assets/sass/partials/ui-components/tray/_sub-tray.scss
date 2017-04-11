@@ -14,8 +14,8 @@
             position: absolute;
             z-index: inherit;
             min-height: 300px;
-            overflow-y: auto;
-            background-color: $primary-light-alt;
+            overflow-y: hidden;
+            background-color: $primary-light;
             &.right {
                 left: 0;
                 transform: translateX(0);
@@ -33,6 +33,10 @@
                 -webkit-box-shadow: -6px 0px 12px rgba(0, 0, 0, 0.3);
                 -moz-box-shadow: -6px 0px 12px rgba(0, 0, 0, 0.3);
                 box-shadow: -6px 0px 12px rgba(0, 0, 0, 0.3);
+            }
+            .modal-body {
+                max-height: 360px;
+                overflow-y: auto;
             }
         }
         &.open > .sidebar-tray.sidebar-sub-tray {
@@ -126,7 +130,6 @@
         }
         pre {
             font-size: 12px;
-            font-family: inherit;
             margin: 5px;
         }
         strong {

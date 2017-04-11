@@ -179,11 +179,13 @@ define([
             it('adds a comment to comment region correctly', function() {
                 addNewComment();
             });
-            it('displays edit and delete buttons by default', function() {
+            it('displays edit and delete buttons by default and contains correct title text', function() {
                 // requires addNewComment() to have been called once on this model
                 addNewComment();
                 expect($testPage.find('.control.comment-box .faux-table-container.comments-container .body .table-row:first-of-type button.comment-edit-button')).toHaveLength(1);
                 expect($testPage.find('.control.comment-box .faux-table-container.comments-container .body .table-row:first-of-type button.comment-delete-button')).toHaveLength(1);
+                expect($testPage.find('.control.comment-box .faux-table-container.comments-container .body .table-row:first-of-type button.comment-edit-button').attr('title')).toContain('Press enter to edit comment: New comment');
+                expect($testPage.find('.control.comment-box .faux-table-container.comments-container .body .table-row:first-of-type button.comment-delete-button').attr('title')).toContain('Press enter to delete comment: New comment');
             });
             it('edits correctly', function() {
                 // edit is inline, val of input is comment, all other comments buttons are disabled, and updating the text

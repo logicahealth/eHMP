@@ -21,12 +21,12 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;sequence>
  *         &lt;element name="agency" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="dmisId" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="endpoints" type="{http://webservice.vds.DNS       /}endpoint" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="endpoints" type="{http://webservice.vds.med.DNS   /}endpoint" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
  *         &lt;element name="moniker" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="name" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="permissions" type="{http://webservice.vds.DNS       /}janusPermission" maxOccurs="unbounded" minOccurs="0"/>
- *         &lt;element name="region" type="{http://webservice.vds.DNS       /}region" minOccurs="0"/>
+ *         &lt;element name="permissions" type="{http://webservice.vds.med.DNS   /}janusPermission" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="region" type="{http://webservice.vds.med.DNS   /}region" minOccurs="0"/>
  *         &lt;element name="siteCode" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="status" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
@@ -38,7 +38,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "site", namespace = "http://webservice.vds.DNS       /", propOrder = {
+@XmlType(name = "site", namespace = "http://webservice.vds.med.DNS   /", propOrder = {
     "agency",
     "dmisId",
     "endpoints",

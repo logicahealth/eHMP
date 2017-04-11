@@ -1,7 +1,6 @@
 'use strict';
 
 var _ = require('lodash');
-var dd = require('drilldown');
 
 var healthCheckRegistry = {};
 var resultRegistry = {};
@@ -158,7 +157,7 @@ module.exports.getResourceConfig = function() {
         bypassCsrf: true,
         get: function(req, res) {
             var result = executeAll(req.logger);
-            dd(req)('_resourceConfigItem')('permitResponseFormat').set(true);
+            _.set(req, '_resourceConfigItem.permitResponseFormat', true);
             res.send(createHtmlViewOfHealthCheck(req.logger, result));
         }
     }, {

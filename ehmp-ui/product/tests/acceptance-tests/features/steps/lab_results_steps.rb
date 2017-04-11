@@ -44,7 +44,7 @@ class LabResultsModal < AllApplets
 
     add_verify(CucumberLabel.new("modal - Date Range Text"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#modal-body #dateRangeFilter label"))
     add_verify(CucumberLabel.new("modal - Title - Lab History table"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#mainModal .panel-primary .panel-title"))
-    add_verify(CucumberLabel.new("modal - Title - Lab Graph"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#modal-body .panel-info .panel-title"))
+    add_verify(CucumberLabel.new("modal - Title - Lab Graph"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#mainModal [id='lrGraph'] h5"))
     add_verify(CucumberLabel.new("modal - Lab Graph"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#modal-body #chartContainer"))
     add_verify(CucumberLabel.new("modal - Y-axis Label"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#modal-body #chartContainer .highcharts-axis text"))
     add_verify(CucumberLabel.new("modal - Chart Labels"), VerifyContainsText.new, AccessHtmlElement.new(:css, "#modal-body #chartContainer .highcharts-data-labels g"))
@@ -488,8 +488,13 @@ end
 Then(/^the Lab History table contains rows with data in correct format$/) do
   @ehmp = NumericLabResultsModal.new
   
-  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultLogin.wait_time)
-  wait.until { @ehmp.all_there? }
+  @ehmp.wait_for_btn_previous_lab
+  @ehmp.wait_for_btn_next_lab
+  @ehmp.wait_for_btn_dismiss_lab_modal
+  @ehmp.wait_for_btn_close_lab_modal
+  @ehmp.wait_for_fld_data_table
+  @ehmp.wait_for_fld_data_table_title
+  @ehmp.wait_for_tbl_date_columns
 
   expect(@ehmp.tbl_date_columns.length).to be > 0
   expect(@ehmp.date_column_correct_format?).to eq(true), "All of the values in the date column do not match the acceptable format"
@@ -573,6 +578,24 @@ Then(/^the Total Tests label displays a number$/) do
   expect(elements.perform_verification('modal - Total Tests', '')).to eq(true)
 end
 
+Then(/^the graph has graph points$/) do
+  @ehmp = NumericLabResultsModal.new
+  # more then 0
+  @ehmp.wait_for_graph_points
+  expect(@ehmp.graph_points.length).to be > 0
+end
+
+Then(/^the graph has date range labels$/) do
+  @ehmp = NumericLabResultsModal.new
+  @ehmp.wait_for_graph_date_labels
+  expect(@ehmp.graph_date_labels.length).to be > 0
+  label_format = Regexp.new("\\w{3} \\d{2} \\d{4}")
+  @ehmp.graph_date_labels.each do | graph_label |
+    no_match = label_format.match(graph_label.text).nil?
+    expect(no_match).to eq(false), "#{graph_label.text} does not match expected data format #{label_format}"
+  end
+end
+
 Then(/^the active date control in the Numeric Lab Results applet is the 2yr button$/) do
   @ehmp = PobNumericLabApplet.new
   expect(@ehmp).to have_btn_2yr_range
@@ -587,11 +610,15 @@ end
 Then(/^the Lab History table contains rows with data$/) do
   @ehmp = NumericLabResultsModal.new
   
-  wait = Selenium::WebDriver::Wait.new(:timeout => DefaultLogin.wait_time)
-  wait.until { @ehmp.all_there? }
+  @ehmp.wait_for_btn_previous_lab
+  @ehmp.wait_for_btn_next_lab
+  @ehmp.wait_for_btn_dismiss_lab_modal
+  @ehmp.wait_for_btn_close_lab_modal
+  @ehmp.wait_for_fld_data_table
+  @ehmp.wait_for_fld_data_table_title
 
-  @ehmp.wait_for_tbl_data_rows minimum: 1
-  @ehmp.wait_for_tbl_facility_columns minimum: 1
+  @ehmp.wait_for_tbl_data_rows
+  @ehmp.wait_for_tbl_facility_columns
   expect(@ehmp.tbl_facility_columns.length).to be > 0
 end
 

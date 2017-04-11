@@ -44,31 +44,34 @@ define([
             var $target = $(e.currentTarget),
                 id = $target.attr('id');
 
-            id === 'vhsPrevious' ? this.getPrevModal(id) : this.getNextModal(id);
+            id === 'vhsPrevious' ? this.getPrevModal() : this.getNextModal();
         },
 
         template: HeaderTemplate,
-        getNextModal: function(clickedBtn) {
+        onAttach: function() {
+            this.checkIfModalIsEnd();
+        },
+        checkIfModalIsEnd: function() {
             var next = _.indexOf(modals, this.model) + 1;
             if (next >= modals.length) {
-                this.getModals();
-                next = 0;
+                this.$el.closest('.modal').find('#vhsNext').attr('disabled', true);
             }
+
+            next = _.indexOf(modals, this.model) - 1;
+            if (next < 0) {
+                this.$el.closest('.modal').find('#vhsPrevious').attr('disabled', true);
+            }
+        },
+        getNextModal: function() {
+            var next = _.indexOf(modals, this.model) + 1;
             var model = modals[next];
-            this.setNextPrevModal(model, clickedBtn);
+            this.setNextPrevModal(model);
 
         },
-        getPrevModal: function(clickedBtn) {
-
+        getPrevModal: function() {
             var next = _.indexOf(modals, this.model) - 1;
-            if (next < 0) {
-                this.getModals();
-                next = modals.length - 1;
-            }
             var model = modals[next];
-
-            this.setNextPrevModal(model, clickedBtn);
-
+            this.setNextPrevModal(model);
         },
         getModals: function() {
             modals = [];
@@ -76,14 +79,13 @@ define([
                 modals.push(m);
             });
         },
-        setNextPrevModal: function(model, clickedBtn) {
-
+        setNextPrevModal: function(model) {
             if (this.showNavHeader) {
                 model.attributes.navHeader = true;
             }
 
             var AppletUiHelper = require('app/applets/vista_health_summaries/appletUiHelpers');
-            AppletUiHelper.getDetailView(model, null, dataCollection, true, AppletUiHelper.showModal, clickedBtn);
+            AppletUiHelper.getDetailView(model, null, dataCollection, true, AppletUiHelper.showModal);
         }
 
     });

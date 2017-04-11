@@ -1,4 +1,7 @@
-define(["backbone"], function(Backbone) {
+define([
+    "backbone",
+    "moment"
+], function(Backbone, moment) {
     "use strict";
     var writebackUtils = {
         buildSaveImmunizationModel: function(model, currentPatient, saveImmunizationModel) {
@@ -58,7 +61,6 @@ define(["backbone"], function(Backbone) {
             saveImmunizationModel.set('immunizationNarrative', model.get('immunizationNarrative'));
             saveImmunizationModel.set('adminSite', model.get('anatomicLocation'));
             var expirationDate;
-            var comments = model.get('comments') || '';
             if (model.get('administeredHistorical') === 'administered') {
                 saveImmunizationModel.set('informationSource', '00;1');
                 saveImmunizationModel.set('lotNumber', model.get('lotNumberAdministered'));
@@ -78,8 +80,8 @@ define(["backbone"], function(Backbone) {
                 }
                 expirationDate = model.get('expirationDateAdministered');
                 var orderedByAdministered = model.get('orderedByAdministered');
-                if (!_.isEmpty(orderedByAdministered) && orderedByAdministered.indexOf(':') > 0) {
-                    saveImmunizationModel.set('orderingProviderIEN', orderedByAdministered.slice(orderedByAdministered.lastIndexOf(':') + 1));
+                if (!_.isEmpty(orderedByAdministered) && orderedByAdministered.indexOf(';') > 0) {
+                    saveImmunizationModel.set('orderingProviderIEN', orderedByAdministered.slice(0,orderedByAdministered.lastIndexOf(';')));
                 }
             } else {
                 saveImmunizationModel.set('informationSource', model.get('informationSource'));
@@ -89,32 +91,12 @@ define(["backbone"], function(Backbone) {
                     saveImmunizationModel.set('encounterProviderIEN', administeredByHistorical[0]);
                 }
 
-                var orderedByHistorical = model.get('orderedByHistorical');
-                var addOrderedByToComments = true;
-                if (!_.isEmpty(orderedByHistorical) && orderedByHistorical.indexOf(':') > 0) {
-                    saveImmunizationModel.set('orderingProviderIEN', orderedByHistorical.slice(orderedByHistorical.lastIndexOf(':') + 1));
-                    addOrderedByToComments = false;
-                }
-
                 saveImmunizationModel.set('outsideLocation', model.get('administeredLocation'));
-                if (comments) {
-                    comments += ' - ';
-                }
-                if (model.get('lotNumberHistorical')) {
-                    comments += 'Lot Number: ' + model.get('lotNumberHistorical') + ', ';
-                }
-                if (model.get('manufacturerHistorical')) {
-                    comments += 'Manufacturer: ' + model.get('manufacturerHistorical') + ', ';
-                }
-                if (model.get('expirationDateHistorical')) {
-                    comments += 'Expiration Date: ' + model.get('expirationDateHistorical') + ', ';
-                }
-                if(addOrderedByToComments && !_.isEmpty(orderedByHistorical)){
-                    comments += 'Ordering Provider: ' + orderedByHistorical;
-                }
             }
-            comments = comments.replace(new RegExp('\n', 'g'), ' - ');
-            saveImmunizationModel.set('comment', comments);
+
+            if(!_.isUndefined(model.get('comments'))){
+                saveImmunizationModel.set('comment', model.get('comments'));
+            }
             if (expirationDate) {
                 saveImmunizationModel.set('expirationDate', moment(expirationDate, 'MM/DD/YYYY').format('YYYYMMDD'));
             }

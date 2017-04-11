@@ -13,9 +13,9 @@ module.exports.getResourceConfig = function() {
             operationalDataCheck: false,
             synchronize: false
         },
-        requiredPermissions: [],  // TODO set permissions. See https://wiki.vistacore.us/display/VACORE/Writeback+Edition+Permissions
+        requiredPermissions: ['read-clinical-object'], 
         isPatientCentric: true
-    },{
+    }, {
         name: 'clinical-object-list-get',
         path: '/get-clinical-object-list',
         get: getClinicalObjectList,
@@ -23,9 +23,9 @@ module.exports.getResourceConfig = function() {
             operationalDataCheck: false,
             synchronize: false
         },
-        requiredPermissions: [],  // TODO set permissions. See https://wiki.vistacore.us/display/VACORE/Writeback+Edition+Permissions
+        requiredPermissions: ['read-clinical-object'], 
         isPatientCentric: true
-    },{
+    }, {
         name: 'clinical-object-add',
         path: '',
         post: addClinicalObject,
@@ -33,7 +33,7 @@ module.exports.getResourceConfig = function() {
             operationalDataCheck: false,
             synchronize: false
         },
-        requiredPermissions: [], // TODO set permissions. See https://wiki.vistacore.us/display/VACORE/Writeback+Edition+Permissions
+        requiredPermissions: ['create-clinical-object'], 
         isPatientCentric: true
     }, {
         name: 'clinical-object-update',
@@ -43,7 +43,7 @@ module.exports.getResourceConfig = function() {
             operationalDataCheck: false,
             synchronize: false
         },
-        requiredPermissions: [], // TODO set permissions. See https://wiki.vistacore.us/display/VACORE/Writeback+Edition+Permissions
+        requiredPermissions: ['edit-clinical-object'], 
         isPatientCentric: true
     }, {
         name: 'clinical-object-read',
@@ -53,7 +53,7 @@ module.exports.getResourceConfig = function() {
             operationalDataCheck: false,
             synchronize: false
         },
-        requiredPermissions: [], // TODO set permissions. See https://wiki.vistacore.us/display/VACORE/Writeback+Edition+Permissions
+        requiredPermissions: ['read-clinical-object'], 
         isPatientCentric: true
     }];
 };

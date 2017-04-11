@@ -6,9 +6,8 @@ define([
     'app/applets/documents/detailCommunicator',
     'app/applets/documents/appletHelper',
     'app/applets/documents/docDetailsDisplayer',
-    'app/applets/reports/collectionHandler'
 
-], function (Backbone, Marionette, _, moment, DetailCommunicator, appletHelper, DocDetailsDisplayer, CollectionHandler) {
+], function (Backbone, Marionette, _, moment, DetailCommunicator, appletHelper, DocDetailsDisplayer) {
     "use strict";
     var DEBUG = false;
     var fetchOptions = {
@@ -67,7 +66,7 @@ define([
         hoverTip: 'reports_type'
     }, {
         name: 'authorDisplayName',
-        label: 'Author or Verifier',
+        label: 'Author/Verifier',
         cell: 'string',
         groupable: true,
         groupableOptions: {
@@ -91,20 +90,15 @@ define([
             if (DEBUG) console.log("Reports App -----> init start");
             this._super = ADK.Applets.BaseGridApplet.prototype;
             var self = this;
+            this.modalCollection = new Backbone.Collection();
             var dataGridOptions = {
                 filterEnabled: true, //make sure the filter is actully on screen
 
                 //row click handler
-                onClickRow: function (model, event, that) {
-                    var docType = model.get('kind');
-                    var complexDocBool = model.get('complexDoc');
-                    var resultDocCollection;
-                    var childDocCollection = appletHelper.getChildDocs.call(self, model);
-                    if (complexDocBool) {
-                        resultDocCollection = appletHelper.getResultsFromUid.call(self, model);
-                    }
+                onClickRow: function (model, event) {
                     if (this.parent !== undefined) {
-                        spawnDetailsModal(model, docType, resultDocCollection, childDocCollection);
+                        self.modalCollection.reset(model);
+                        self.getDetailsModal(model);
                     }
                 }
             };
@@ -133,6 +127,9 @@ define([
                 parse: function(resp) {
                     ADK.Enrichment.addFacilityMoniker(resp);
                     appletHelper.parseDocResponse(resp);
+                    if (resp.complexDoc) {
+                        resp.authorDisplayName = appletHelper.stringNormalization(appletHelper.getAuthorVerifier(resp));
+                    }
                     return resp;
                 }
             });
@@ -158,25 +155,40 @@ define([
                 }
             });
         },
+        getDetailsModal: function(detailModel) {
+            spawnDetailsModal(detailModel, this);
+        }
     });
 
     // Helper
-    function spawnDetailsModal(newModel, docType, resultDocCollection, childDocCollection) {
-        if (DEBUG) console.log("Reports App -----> spawnDetailsModal");
-        var deferredViewResponse = DocDetailsDisplayer.getView(newModel, docType, resultDocCollection, childDocCollection);
-        deferredViewResponse.done(function (results) {
-            var modalOptions = {
-                'title': results.title || DocDetailsDisplayer.getTitle(newModel, docType),
-                'size': 'large'
-            };
+    function spawnDetailsModal(newModel, view) {
+        var complexDocBool = newModel.get('complexDoc');
+        var docType = newModel.get('kind');
+        var resultDocCollection = new appletHelper.ResultsDocCollection();
+        var childDocCollection = new appletHelper.ChildDocCollection();
+        appletHelper.getChildDocs.call(view, newModel, childDocCollection);
+        if (complexDocBool) {
+            resultDocCollection = appletHelper.getResultsFromUid.call(view, newModel, resultDocCollection);
+        }
 
-            var modal = new ADK.UI.Modal({
-                view: results.view,
-                options: modalOptions
-            });
-            modal.show();
-            $('#mainModal').modal('show');
+        if (DEBUG) console.log("Reports App -----> spawnDetailsModal");
+
+        var results = DocDetailsDisplayer.getView.call(view, newModel, docType, resultDocCollection, childDocCollection, new Backbone.Collection(newModel));
+        var View = results.view.extend({
+            model: newModel
         });
+        var modalOptions = {
+            'size': 'large',
+            'title': results.title || DocDetailsDisplayer.getTitle(newModel, docType),
+            'nextPreviousCollection': newModel.collection
+        };
+
+        var modal = new ADK.UI.Modal({
+            view: new View(),
+            callbackView: view,
+            options: modalOptions
+        });
+        modal.show();
     }
 
     var applet = {

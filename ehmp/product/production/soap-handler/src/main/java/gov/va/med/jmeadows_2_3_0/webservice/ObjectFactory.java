@@ -24,155 +24,155 @@ import javax.xml.namespace.QName;
 @XmlRegistry
 public class ObjectFactory {
 
-    private final static QName _GetPatientAdmissionsResponse_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getPatientAdmissionsResponse");
-    private final static QName _GetOrderDetail_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getOrderDetail");
-    private final static QName _SetIehrUserProfile_QNAME = new QName("http://webservice.jmeadows.DNS       /", "setIehrUserProfile");
-    private final static QName _LogAudit_QNAME = new QName("http://webservice.jmeadows.DNS       /", "logAudit");
-    private final static QName _GetPatientDemographicsResponse_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getPatientDemographicsResponse");
-    private final static QName _SelectPatient_QNAME = new QName("http://webservice.jmeadows.DNS       /", "selectPatient");
-    private final static QName _GetPatientConsultRequestsResponse_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getPatientConsultRequestsResponse");
-    private final static QName _LoginEnterpriseResponse_QNAME = new QName("http://webservice.jmeadows.DNS       /", "loginEnterpriseResponse");
-    private final static QName _GetOrderDetailResponse_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getOrderDetailResponse");
-    private final static QName _GetMedicationDetail_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getMedicationDetail");
-    private final static QName _GetProgressNote_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getProgressNote");
-    private final static QName _GetJanusGUIConfigResponse_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getJanusGUIConfigResponse");
-    private final static QName _GetPatientOrdersResponse_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getPatientOrdersResponse");
-    private final static QName _GetPatientFormsResponse_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getPatientFormsResponse");
-    private final static QName _GetPatientDemographicsDetailResponse_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getPatientDemographicsDetailResponse");
-    private final static QName _GetPatientOrders_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getPatientOrders");
-    private final static QName _GetProviderOrdersResulted_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getProviderOrdersResulted");
-    private final static QName _GetPatientLabsResponse_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getPatientLabsResponse");
-    private final static QName _GetAuthUserResponse_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getAuthUserResponse");
-    private final static QName _GetPatientLabResults_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getPatientLabResults");
-    private final static QName _GetPatientHistory_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getPatientHistory");
-    private final static QName _SetJanusGUIConfigResponse_QNAME = new QName("http://webservice.jmeadows.DNS       /", "setJanusGUIConfigResponse");
-    private final static QName _GetSitesResponse_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getSitesResponse");
-    private final static QName _UpdateUserSubjectDN_QNAME = new QName("http://webservice.jmeadows.DNS       /", "updateUserSubjectDN");
-    private final static QName _AuditVARestrictedAccessResponse_QNAME = new QName("http://webservice.jmeadows.DNS       /", "auditVARestrictedAccessResponse");
-    private final static QName _GetPatientDemographics_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getPatientDemographics");
-    private final static QName _GetProblemDetail_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getProblemDetail");
-    private final static QName _LookupPatientResponse_QNAME = new QName("http://webservice.jmeadows.DNS       /", "lookupPatientResponse");
-    private final static QName _GetPatientConsultRequests_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getPatientConsultRequests");
-    private final static QName _LoginResponse_QNAME = new QName("http://webservice.jmeadows.DNS       /", "loginResponse");
-    private final static QName _GetPatientClinicalRemindersResponse_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getPatientClinicalRemindersResponse");
-    private final static QName _GetPatientDischargeSummaries_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getPatientDischargeSummaries");
-    private final static QName _GetPatientInsurances_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getPatientInsurances");
-    private final static QName _GetVisitNotesResponse_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getVisitNotesResponse");
-    private final static QName _GetProgressNoteResponse_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getProgressNoteResponse");
-    private final static QName _SelectPatientMVIResponse_QNAME = new QName("http://webservice.jmeadows.DNS       /", "selectPatientMVIResponse");
-    private final static QName _GetMedicationDetailResponse_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getMedicationDetailResponse");
-    private final static QName _GetPatientLabs_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getPatientLabs");
-    private final static QName _GetBHIENoteImage_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getBHIENoteImage");
-    private final static QName _GetConsultReportResponse_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getConsultReportResponse");
-    private final static QName _GetPatientForms_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getPatientForms");
-    private final static QName _GetLabOrderResult_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getLabOrderResult");
-    private final static QName _GetPatientHistoryResponse_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getPatientHistoryResponse");
-    private final static QName _AuditVARestrictedAccess_QNAME = new QName("http://webservice.jmeadows.DNS       /", "auditVARestrictedAccess");
-    private final static QName _GetPatientEncountersResponse_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getPatientEncountersResponse");
-    private final static QName _GetPatientAllergiesResponse_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getPatientAllergiesResponse");
-    private final static QName _GetPatientMedications_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getPatientMedications");
-    private final static QName _GetPatientEncountersReport_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getPatientEncountersReport");
-    private final static QName _GetPatientEncountersReportResponse_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getPatientEncountersReportResponse");
-    private final static QName _GetVLERDocumentList_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getVLERDocumentList");
-    private final static QName _GetVLERDocument_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getVLERDocument");
-    private final static QName _GetPatientImmunizationsResponse_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getPatientImmunizationsResponse");
-    private final static QName _GetUserAlerts_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getUserAlerts");
-    private final static QName _GetProviderConsultsRequestedResponse_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getProviderConsultsRequestedResponse");
-    private final static QName _GetBHIENoteImageResponse_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getBHIENoteImageResponse");
-    private final static QName _GetProviderConsultsReceivedResponse_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getProviderConsultsReceivedResponse");
-    private final static QName _GetProviderFlagsResponse_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getProviderFlagsResponse");
-    private final static QName _GetProviderLabAbnormalResults_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getProviderLabAbnormalResults");
-    private final static QName _GetPatientClinicalReminders_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getPatientClinicalReminders");
-    private final static QName _GetVersionResponse_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getVersionResponse");
-    private final static QName _GetAdmissionDiagnosisResponse_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getAdmissionDiagnosisResponse");
-    private final static QName _GetProviderConsultsReceived_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getProviderConsultsReceived");
-    private final static QName _SetProviderFlags_QNAME = new QName("http://webservice.jmeadows.DNS       /", "setProviderFlags");
-    private final static QName _GetPatientAllergies_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getPatientAllergies");
-    private final static QName _GetServiceErrors_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getServiceErrors");
-    private final static QName _GetPatientAdmissions_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getPatientAdmissions");
-    private final static QName _GetPatientProblemListResponse_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getPatientProblemListResponse");
-    private final static QName _GetAdmissionProcedures_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getAdmissionProcedures");
-    private final static QName _GetPatientProgressNotesResponse_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getPatientProgressNotesResponse");
-    private final static QName _SelectPatientForVASensitive_QNAME = new QName("http://webservice.jmeadows.DNS       /", "selectPatientForVASensitive");
-    private final static QName _GetPatientCurrentVitalsResponse_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getPatientCurrentVitalsResponse");
-    private final static QName _GetPatientImmunizations_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getPatientImmunizations");
-    private final static QName _GetProviderProfileResponse_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getProviderProfileResponse");
-    private final static QName _GetVLERDocumentResponse_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getVLERDocumentResponse");
-    private final static QName _GetClinicalReminderDetail_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getClinicalReminderDetail");
-    private final static QName _GetLoginInfo_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getLoginInfo");
-    private final static QName _GetPatientInsurancesResponse_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getPatientInsurancesResponse");
-    private final static QName _GetPatientLabReportResponse_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getPatientLabReportResponse");
-    private final static QName _GetRadiologyReportResponse_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getRadiologyReportResponse");
-    private final static QName _GetProviderAdmissions_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getProviderAdmissions");
-    private final static QName _GetIehrUserProfile_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getIehrUserProfile");
-    private final static QName _GetPatientEncounters_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getPatientEncounters");
-    private final static QName _GetProviderUnsignedNotes_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getProviderUnsignedNotes");
-    private final static QName _GetWardAdmissionsResponse_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getWardAdmissionsResponse");
-    private final static QName _GetPatientProblemList_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getPatientProblemList");
-    private final static QName _GetConsultReport_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getConsultReport");
-    private final static QName _SelectPatientMVI_QNAME = new QName("http://webservice.jmeadows.DNS       /", "selectPatientMVI");
-    private final static QName _GetPatientLabTestResults_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getPatientLabTestResults");
-    private final static QName _GetClinicalReminderDetailResponse_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getClinicalReminderDetailResponse");
-    private final static QName _GetVisitNotes_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getVisitNotes");
-    private final static QName _GetPatientVitals_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getPatientVitals");
-    private final static QName _GetProviderOrdersPendingResponse_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getProviderOrdersPendingResponse");
-    private final static QName _SetJanusGUIConfig_QNAME = new QName("http://webservice.jmeadows.DNS       /", "setJanusGUIConfig");
-    private final static QName _GetProviderConsultsRequested_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getProviderConsultsRequested");
-    private final static QName _GetPatientMedicationsResponse_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getPatientMedicationsResponse");
-    private final static QName _GetProviderLabAbnormalResultsResponse_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getProviderLabAbnormalResultsResponse");
-    private final static QName _GetPatientDischargeSummariesResponse_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getPatientDischargeSummariesResponse");
-    private final static QName _GetProviderOrdersPending_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getProviderOrdersPending");
-    private final static QName _GetProviderAdmissionsResponse_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getProviderAdmissionsResponse");
-    private final static QName _SelectPatientResponse_QNAME = new QName("http://webservice.jmeadows.DNS       /", "selectPatientResponse");
-    private final static QName _GetAuthUser_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getAuthUser");
-    private final static QName _GetPatientLabReport_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getPatientLabReport");
-    private final static QName _GetPatientAppointmentsResponse_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getPatientAppointmentsResponse");
-    private final static QName _GetProviderUnsignedNotesResponse_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getProviderUnsignedNotesResponse");
-    private final static QName _GetPatientVitalsResponse_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getPatientVitalsResponse");
-    private final static QName _LogAuditResponse_QNAME = new QName("http://webservice.jmeadows.DNS       /", "logAuditResponse");
-    private final static QName _GetProviderFlags_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getProviderFlags");
-    private final static QName _GetProviderProfile_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getProviderProfile");
-    private final static QName _GetProviderAppointmentsResponse_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getProviderAppointmentsResponse");
-    private final static QName _LoginEnterprise_QNAME = new QName("http://webservice.jmeadows.DNS       /", "loginEnterprise");
-    private final static QName _GetAdmissionProceduresResponse_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getAdmissionProceduresResponse");
-    private final static QName _GetWardAdmissions_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getWardAdmissions");
-    private final static QName _GetAllergyDetail_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getAllergyDetail");
-    private final static QName _GetAdmissionDiagnosis_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getAdmissionDiagnosis");
-    private final static QName _GetJanusGUIConfig_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getJanusGUIConfig");
-    private final static QName _GetPatientLabResultsResponse_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getPatientLabResultsResponse");
-    private final static QName _LookupPatient_QNAME = new QName("http://webservice.jmeadows.DNS       /", "lookupPatient");
-    private final static QName _SetProviderFlagsResponse_QNAME = new QName("http://webservice.jmeadows.DNS       /", "setProviderFlagsResponse");
-    private final static QName _GetIehrUserProfileResponse_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getIehrUserProfileResponse");
-    private final static QName _GetAllergyDetailResponse_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getAllergyDetailResponse");
-    private final static QName _GetProblemDetailResponse_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getProblemDetailResponse");
-    private final static QName _GetPatientCurrentVitals_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getPatientCurrentVitals");
-    private final static QName _GetUserAlertsResponse_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getUserAlertsResponse");
-    private final static QName _SetIehrUserProfileResponse_QNAME = new QName("http://webservice.jmeadows.DNS       /", "setIehrUserProfileResponse");
-    private final static QName _GetRadiologyReport_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getRadiologyReport");
-    private final static QName _GetPatientRadsResponse_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getPatientRadsResponse");
-    private final static QName _GetOutpatientProceduresResponse_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getOutpatientProceduresResponse");
-    private final static QName _GetPatientLabTestResultsResponse_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getPatientLabTestResultsResponse");
-    private final static QName _GetPatientDemographicsDetail_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getPatientDemographicsDetail");
-    private final static QName _GetServiceErrorsResponse_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getServiceErrorsResponse");
-    private final static QName _SelectPatientForVASensitiveResponse_QNAME = new QName("http://webservice.jmeadows.DNS       /", "selectPatientForVASensitiveResponse");
-    private final static QName _UpdateUserSubjectDNResponse_QNAME = new QName("http://webservice.jmeadows.DNS       /", "updateUserSubjectDNResponse");
-    private final static QName _GetPatientRads_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getPatientRads");
-    private final static QName _GetAdmissionDetails_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getAdmissionDetails");
-    private final static QName _GetPatientAppointments_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getPatientAppointments");
-    private final static QName _Login_QNAME = new QName("http://webservice.jmeadows.DNS       /", "login");
-    private final static QName _JMeadowsException_QNAME = new QName("http://webservice.jmeadows.DNS       /", "JMeadowsException");
-    private final static QName _GetOutpatientProcedures_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getOutpatientProcedures");
-    private final static QName _GetProviderAppointments_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getProviderAppointments");
-    private final static QName _GetLoginInfoResponse_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getLoginInfoResponse");
-    private final static QName _GetSites_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getSites");
-    private final static QName _GetVLERDocumentListResponse_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getVLERDocumentListResponse");
-    private final static QName _GetPatientProgressNotes_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getPatientProgressNotes");
-    private final static QName _GetAdmissionDetailsResponse_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getAdmissionDetailsResponse");
-    private final static QName _GetLabOrderResultResponse_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getLabOrderResultResponse");
-    private final static QName _GetVersion_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getVersion");
-    private final static QName _GetProviderOrdersResultedResponse_QNAME = new QName("http://webservice.jmeadows.DNS       /", "getProviderOrdersResultedResponse");
-    private final static QName _LookupPatientPDWS_QNAME = new QName("http://webservice.jmeadows.DNS       /", "lookupPatientPDWS");
-    private final static QName _LookupPatientPDWSResponse_QNAME = new QName("http://webservice.jmeadows.DNS       /", "lookupPatientPDWSResponse");
+    private final static QName _GetPatientAdmissionsResponse_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getPatientAdmissionsResponse");
+    private final static QName _GetOrderDetail_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getOrderDetail");
+    private final static QName _SetIehrUserProfile_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "setIehrUserProfile");
+    private final static QName _LogAudit_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "logAudit");
+    private final static QName _GetPatientDemographicsResponse_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getPatientDemographicsResponse");
+    private final static QName _SelectPatient_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "selectPatient");
+    private final static QName _GetPatientConsultRequestsResponse_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getPatientConsultRequestsResponse");
+    private final static QName _LoginEnterpriseResponse_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "loginEnterpriseResponse");
+    private final static QName _GetOrderDetailResponse_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getOrderDetailResponse");
+    private final static QName _GetMedicationDetail_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getMedicationDetail");
+    private final static QName _GetProgressNote_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getProgressNote");
+    private final static QName _GetJanusGUIConfigResponse_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getJanusGUIConfigResponse");
+    private final static QName _GetPatientOrdersResponse_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getPatientOrdersResponse");
+    private final static QName _GetPatientFormsResponse_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getPatientFormsResponse");
+    private final static QName _GetPatientDemographicsDetailResponse_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getPatientDemographicsDetailResponse");
+    private final static QName _GetPatientOrders_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getPatientOrders");
+    private final static QName _GetProviderOrdersResulted_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getProviderOrdersResulted");
+    private final static QName _GetPatientLabsResponse_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getPatientLabsResponse");
+    private final static QName _GetAuthUserResponse_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getAuthUserResponse");
+    private final static QName _GetPatientLabResults_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getPatientLabResults");
+    private final static QName _GetPatientHistory_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getPatientHistory");
+    private final static QName _SetJanusGUIConfigResponse_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "setJanusGUIConfigResponse");
+    private final static QName _GetSitesResponse_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getSitesResponse");
+    private final static QName _UpdateUserSubjectDN_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "updateUserSubjectDN");
+    private final static QName _AuditVARestrictedAccessResponse_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "auditVARestrictedAccessResponse");
+    private final static QName _GetPatientDemographics_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getPatientDemographics");
+    private final static QName _GetProblemDetail_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getProblemDetail");
+    private final static QName _LookupPatientResponse_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "lookupPatientResponse");
+    private final static QName _GetPatientConsultRequests_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getPatientConsultRequests");
+    private final static QName _LoginResponse_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "loginResponse");
+    private final static QName _GetPatientClinicalRemindersResponse_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getPatientClinicalRemindersResponse");
+    private final static QName _GetPatientDischargeSummaries_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getPatientDischargeSummaries");
+    private final static QName _GetPatientInsurances_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getPatientInsurances");
+    private final static QName _GetVisitNotesResponse_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getVisitNotesResponse");
+    private final static QName _GetProgressNoteResponse_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getProgressNoteResponse");
+    private final static QName _SelectPatientMVIResponse_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "selectPatientMVIResponse");
+    private final static QName _GetMedicationDetailResponse_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getMedicationDetailResponse");
+    private final static QName _GetPatientLabs_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getPatientLabs");
+    private final static QName _GetBHIENoteImage_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getBHIENoteImage");
+    private final static QName _GetConsultReportResponse_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getConsultReportResponse");
+    private final static QName _GetPatientForms_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getPatientForms");
+    private final static QName _GetLabOrderResult_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getLabOrderResult");
+    private final static QName _GetPatientHistoryResponse_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getPatientHistoryResponse");
+    private final static QName _AuditVARestrictedAccess_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "auditVARestrictedAccess");
+    private final static QName _GetPatientEncountersResponse_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getPatientEncountersResponse");
+    private final static QName _GetPatientAllergiesResponse_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getPatientAllergiesResponse");
+    private final static QName _GetPatientMedications_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getPatientMedications");
+    private final static QName _GetPatientEncountersReport_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getPatientEncountersReport");
+    private final static QName _GetPatientEncountersReportResponse_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getPatientEncountersReportResponse");
+    private final static QName _GetVLERDocumentList_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getVLERDocumentList");
+    private final static QName _GetVLERDocument_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getVLERDocument");
+    private final static QName _GetPatientImmunizationsResponse_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getPatientImmunizationsResponse");
+    private final static QName _GetUserAlerts_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getUserAlerts");
+    private final static QName _GetProviderConsultsRequestedResponse_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getProviderConsultsRequestedResponse");
+    private final static QName _GetBHIENoteImageResponse_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getBHIENoteImageResponse");
+    private final static QName _GetProviderConsultsReceivedResponse_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getProviderConsultsReceivedResponse");
+    private final static QName _GetProviderFlagsResponse_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getProviderFlagsResponse");
+    private final static QName _GetProviderLabAbnormalResults_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getProviderLabAbnormalResults");
+    private final static QName _GetPatientClinicalReminders_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getPatientClinicalReminders");
+    private final static QName _GetVersionResponse_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getVersionResponse");
+    private final static QName _GetAdmissionDiagnosisResponse_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getAdmissionDiagnosisResponse");
+    private final static QName _GetProviderConsultsReceived_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getProviderConsultsReceived");
+    private final static QName _SetProviderFlags_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "setProviderFlags");
+    private final static QName _GetPatientAllergies_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getPatientAllergies");
+    private final static QName _GetServiceErrors_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getServiceErrors");
+    private final static QName _GetPatientAdmissions_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getPatientAdmissions");
+    private final static QName _GetPatientProblemListResponse_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getPatientProblemListResponse");
+    private final static QName _GetAdmissionProcedures_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getAdmissionProcedures");
+    private final static QName _GetPatientProgressNotesResponse_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getPatientProgressNotesResponse");
+    private final static QName _SelectPatientForVASensitive_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "selectPatientForVASensitive");
+    private final static QName _GetPatientCurrentVitalsResponse_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getPatientCurrentVitalsResponse");
+    private final static QName _GetPatientImmunizations_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getPatientImmunizations");
+    private final static QName _GetProviderProfileResponse_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getProviderProfileResponse");
+    private final static QName _GetVLERDocumentResponse_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getVLERDocumentResponse");
+    private final static QName _GetClinicalReminderDetail_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getClinicalReminderDetail");
+    private final static QName _GetLoginInfo_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getLoginInfo");
+    private final static QName _GetPatientInsurancesResponse_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getPatientInsurancesResponse");
+    private final static QName _GetPatientLabReportResponse_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getPatientLabReportResponse");
+    private final static QName _GetRadiologyReportResponse_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getRadiologyReportResponse");
+    private final static QName _GetProviderAdmissions_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getProviderAdmissions");
+    private final static QName _GetIehrUserProfile_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getIehrUserProfile");
+    private final static QName _GetPatientEncounters_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getPatientEncounters");
+    private final static QName _GetProviderUnsignedNotes_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getProviderUnsignedNotes");
+    private final static QName _GetWardAdmissionsResponse_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getWardAdmissionsResponse");
+    private final static QName _GetPatientProblemList_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getPatientProblemList");
+    private final static QName _GetConsultReport_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getConsultReport");
+    private final static QName _SelectPatientMVI_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "selectPatientMVI");
+    private final static QName _GetPatientLabTestResults_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getPatientLabTestResults");
+    private final static QName _GetClinicalReminderDetailResponse_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getClinicalReminderDetailResponse");
+    private final static QName _GetVisitNotes_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getVisitNotes");
+    private final static QName _GetPatientVitals_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getPatientVitals");
+    private final static QName _GetProviderOrdersPendingResponse_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getProviderOrdersPendingResponse");
+    private final static QName _SetJanusGUIConfig_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "setJanusGUIConfig");
+    private final static QName _GetProviderConsultsRequested_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getProviderConsultsRequested");
+    private final static QName _GetPatientMedicationsResponse_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getPatientMedicationsResponse");
+    private final static QName _GetProviderLabAbnormalResultsResponse_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getProviderLabAbnormalResultsResponse");
+    private final static QName _GetPatientDischargeSummariesResponse_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getPatientDischargeSummariesResponse");
+    private final static QName _GetProviderOrdersPending_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getProviderOrdersPending");
+    private final static QName _GetProviderAdmissionsResponse_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getProviderAdmissionsResponse");
+    private final static QName _SelectPatientResponse_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "selectPatientResponse");
+    private final static QName _GetAuthUser_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getAuthUser");
+    private final static QName _GetPatientLabReport_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getPatientLabReport");
+    private final static QName _GetPatientAppointmentsResponse_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getPatientAppointmentsResponse");
+    private final static QName _GetProviderUnsignedNotesResponse_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getProviderUnsignedNotesResponse");
+    private final static QName _GetPatientVitalsResponse_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getPatientVitalsResponse");
+    private final static QName _LogAuditResponse_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "logAuditResponse");
+    private final static QName _GetProviderFlags_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getProviderFlags");
+    private final static QName _GetProviderProfile_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getProviderProfile");
+    private final static QName _GetProviderAppointmentsResponse_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getProviderAppointmentsResponse");
+    private final static QName _LoginEnterprise_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "loginEnterprise");
+    private final static QName _GetAdmissionProceduresResponse_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getAdmissionProceduresResponse");
+    private final static QName _GetWardAdmissions_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getWardAdmissions");
+    private final static QName _GetAllergyDetail_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getAllergyDetail");
+    private final static QName _GetAdmissionDiagnosis_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getAdmissionDiagnosis");
+    private final static QName _GetJanusGUIConfig_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getJanusGUIConfig");
+    private final static QName _GetPatientLabResultsResponse_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getPatientLabResultsResponse");
+    private final static QName _LookupPatient_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "lookupPatient");
+    private final static QName _SetProviderFlagsResponse_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "setProviderFlagsResponse");
+    private final static QName _GetIehrUserProfileResponse_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getIehrUserProfileResponse");
+    private final static QName _GetAllergyDetailResponse_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getAllergyDetailResponse");
+    private final static QName _GetProblemDetailResponse_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getProblemDetailResponse");
+    private final static QName _GetPatientCurrentVitals_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getPatientCurrentVitals");
+    private final static QName _GetUserAlertsResponse_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getUserAlertsResponse");
+    private final static QName _SetIehrUserProfileResponse_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "setIehrUserProfileResponse");
+    private final static QName _GetRadiologyReport_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getRadiologyReport");
+    private final static QName _GetPatientRadsResponse_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getPatientRadsResponse");
+    private final static QName _GetOutpatientProceduresResponse_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getOutpatientProceduresResponse");
+    private final static QName _GetPatientLabTestResultsResponse_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getPatientLabTestResultsResponse");
+    private final static QName _GetPatientDemographicsDetail_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getPatientDemographicsDetail");
+    private final static QName _GetServiceErrorsResponse_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getServiceErrorsResponse");
+    private final static QName _SelectPatientForVASensitiveResponse_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "selectPatientForVASensitiveResponse");
+    private final static QName _UpdateUserSubjectDNResponse_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "updateUserSubjectDNResponse");
+    private final static QName _GetPatientRads_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getPatientRads");
+    private final static QName _GetAdmissionDetails_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getAdmissionDetails");
+    private final static QName _GetPatientAppointments_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getPatientAppointments");
+    private final static QName _Login_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "login");
+    private final static QName _JMeadowsException_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "JMeadowsException");
+    private final static QName _GetOutpatientProcedures_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getOutpatientProcedures");
+    private final static QName _GetProviderAppointments_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getProviderAppointments");
+    private final static QName _GetLoginInfoResponse_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getLoginInfoResponse");
+    private final static QName _GetSites_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getSites");
+    private final static QName _GetVLERDocumentListResponse_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getVLERDocumentListResponse");
+    private final static QName _GetPatientProgressNotes_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getPatientProgressNotes");
+    private final static QName _GetAdmissionDetailsResponse_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getAdmissionDetailsResponse");
+    private final static QName _GetLabOrderResultResponse_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getLabOrderResultResponse");
+    private final static QName _GetVersion_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getVersion");
+    private final static QName _GetProviderOrdersResultedResponse_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "getProviderOrdersResultedResponse");
+    private final static QName _LookupPatientPDWS_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "lookupPatientPDWS");
+    private final static QName _LookupPatientPDWSResponse_QNAME = new QName("http://webservice.jmeadows.med.DNS   /", "lookupPatientPDWSResponse");
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: gov.va.med.jmeadows_2_3_0.webservice
@@ -1873,7 +1873,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetPatientAdmissionsResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getPatientAdmissionsResponse")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getPatientAdmissionsResponse")
     public JAXBElement<GetPatientAdmissionsResponse> createGetPatientAdmissionsResponse(GetPatientAdmissionsResponse value) {
         return new JAXBElement<GetPatientAdmissionsResponse>(_GetPatientAdmissionsResponse_QNAME, GetPatientAdmissionsResponse.class, null, value);
     }
@@ -1882,7 +1882,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetOrderDetail }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getOrderDetail")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getOrderDetail")
     public JAXBElement<GetOrderDetail> createGetOrderDetail(GetOrderDetail value) {
         return new JAXBElement<GetOrderDetail>(_GetOrderDetail_QNAME, GetOrderDetail.class, null, value);
     }
@@ -1891,7 +1891,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link SetIehrUserProfile }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "setIehrUserProfile")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "setIehrUserProfile")
     public JAXBElement<SetIehrUserProfile> createSetIehrUserProfile(SetIehrUserProfile value) {
         return new JAXBElement<SetIehrUserProfile>(_SetIehrUserProfile_QNAME, SetIehrUserProfile.class, null, value);
     }
@@ -1900,7 +1900,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link LogAudit }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "logAudit")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "logAudit")
     public JAXBElement<LogAudit> createLogAudit(LogAudit value) {
         return new JAXBElement<LogAudit>(_LogAudit_QNAME, LogAudit.class, null, value);
     }
@@ -1909,7 +1909,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetPatientDemographicsResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getPatientDemographicsResponse")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getPatientDemographicsResponse")
     public JAXBElement<GetPatientDemographicsResponse> createGetPatientDemographicsResponse(GetPatientDemographicsResponse value) {
         return new JAXBElement<GetPatientDemographicsResponse>(_GetPatientDemographicsResponse_QNAME, GetPatientDemographicsResponse.class, null, value);
     }
@@ -1918,7 +1918,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link SelectPatient }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "selectPatient")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "selectPatient")
     public JAXBElement<SelectPatient> createSelectPatient(SelectPatient value) {
         return new JAXBElement<SelectPatient>(_SelectPatient_QNAME, SelectPatient.class, null, value);
     }
@@ -1927,7 +1927,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetPatientConsultRequestsResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getPatientConsultRequestsResponse")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getPatientConsultRequestsResponse")
     public JAXBElement<GetPatientConsultRequestsResponse> createGetPatientConsultRequestsResponse(GetPatientConsultRequestsResponse value) {
         return new JAXBElement<GetPatientConsultRequestsResponse>(_GetPatientConsultRequestsResponse_QNAME, GetPatientConsultRequestsResponse.class, null, value);
     }
@@ -1936,7 +1936,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link LoginEnterpriseResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "loginEnterpriseResponse")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "loginEnterpriseResponse")
     public JAXBElement<LoginEnterpriseResponse> createLoginEnterpriseResponse(LoginEnterpriseResponse value) {
         return new JAXBElement<LoginEnterpriseResponse>(_LoginEnterpriseResponse_QNAME, LoginEnterpriseResponse.class, null, value);
     }
@@ -1945,7 +1945,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetOrderDetailResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getOrderDetailResponse")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getOrderDetailResponse")
     public JAXBElement<GetOrderDetailResponse> createGetOrderDetailResponse(GetOrderDetailResponse value) {
         return new JAXBElement<GetOrderDetailResponse>(_GetOrderDetailResponse_QNAME, GetOrderDetailResponse.class, null, value);
     }
@@ -1954,7 +1954,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetMedicationDetail }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getMedicationDetail")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getMedicationDetail")
     public JAXBElement<GetMedicationDetail> createGetMedicationDetail(GetMedicationDetail value) {
         return new JAXBElement<GetMedicationDetail>(_GetMedicationDetail_QNAME, GetMedicationDetail.class, null, value);
     }
@@ -1963,7 +1963,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetProgressNote }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getProgressNote")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getProgressNote")
     public JAXBElement<GetProgressNote> createGetProgressNote(GetProgressNote value) {
         return new JAXBElement<GetProgressNote>(_GetProgressNote_QNAME, GetProgressNote.class, null, value);
     }
@@ -1972,7 +1972,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetJanusGUIConfigResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getJanusGUIConfigResponse")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getJanusGUIConfigResponse")
     public JAXBElement<GetJanusGUIConfigResponse> createGetJanusGUIConfigResponse(GetJanusGUIConfigResponse value) {
         return new JAXBElement<GetJanusGUIConfigResponse>(_GetJanusGUIConfigResponse_QNAME, GetJanusGUIConfigResponse.class, null, value);
     }
@@ -1981,7 +1981,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetPatientOrdersResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getPatientOrdersResponse")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getPatientOrdersResponse")
     public JAXBElement<GetPatientOrdersResponse> createGetPatientOrdersResponse(GetPatientOrdersResponse value) {
         return new JAXBElement<GetPatientOrdersResponse>(_GetPatientOrdersResponse_QNAME, GetPatientOrdersResponse.class, null, value);
     }
@@ -1990,7 +1990,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetPatientFormsResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getPatientFormsResponse")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getPatientFormsResponse")
     public JAXBElement<GetPatientFormsResponse> createGetPatientFormsResponse(GetPatientFormsResponse value) {
         return new JAXBElement<GetPatientFormsResponse>(_GetPatientFormsResponse_QNAME, GetPatientFormsResponse.class, null, value);
     }
@@ -1999,7 +1999,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetPatientDemographicsDetailResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getPatientDemographicsDetailResponse")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getPatientDemographicsDetailResponse")
     public JAXBElement<GetPatientDemographicsDetailResponse> createGetPatientDemographicsDetailResponse(GetPatientDemographicsDetailResponse value) {
         return new JAXBElement<GetPatientDemographicsDetailResponse>(_GetPatientDemographicsDetailResponse_QNAME, GetPatientDemographicsDetailResponse.class, null, value);
     }
@@ -2008,7 +2008,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetPatientOrders }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getPatientOrders")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getPatientOrders")
     public JAXBElement<GetPatientOrders> createGetPatientOrders(GetPatientOrders value) {
         return new JAXBElement<GetPatientOrders>(_GetPatientOrders_QNAME, GetPatientOrders.class, null, value);
     }
@@ -2017,7 +2017,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetProviderOrdersResulted }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getProviderOrdersResulted")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getProviderOrdersResulted")
     public JAXBElement<GetProviderOrdersResulted> createGetProviderOrdersResulted(GetProviderOrdersResulted value) {
         return new JAXBElement<GetProviderOrdersResulted>(_GetProviderOrdersResulted_QNAME, GetProviderOrdersResulted.class, null, value);
     }
@@ -2026,7 +2026,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetPatientLabsResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getPatientLabsResponse")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getPatientLabsResponse")
     public JAXBElement<GetPatientLabsResponse> createGetPatientLabsResponse(GetPatientLabsResponse value) {
         return new JAXBElement<GetPatientLabsResponse>(_GetPatientLabsResponse_QNAME, GetPatientLabsResponse.class, null, value);
     }
@@ -2035,7 +2035,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetAuthUserResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getAuthUserResponse")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getAuthUserResponse")
     public JAXBElement<GetAuthUserResponse> createGetAuthUserResponse(GetAuthUserResponse value) {
         return new JAXBElement<GetAuthUserResponse>(_GetAuthUserResponse_QNAME, GetAuthUserResponse.class, null, value);
     }
@@ -2044,7 +2044,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetPatientLabResults }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getPatientLabResults")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getPatientLabResults")
     public JAXBElement<GetPatientLabResults> createGetPatientLabResults(GetPatientLabResults value) {
         return new JAXBElement<GetPatientLabResults>(_GetPatientLabResults_QNAME, GetPatientLabResults.class, null, value);
     }
@@ -2053,7 +2053,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetPatientHistory }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getPatientHistory")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getPatientHistory")
     public JAXBElement<GetPatientHistory> createGetPatientHistory(GetPatientHistory value) {
         return new JAXBElement<GetPatientHistory>(_GetPatientHistory_QNAME, GetPatientHistory.class, null, value);
     }
@@ -2062,7 +2062,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link SetJanusGUIConfigResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "setJanusGUIConfigResponse")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "setJanusGUIConfigResponse")
     public JAXBElement<SetJanusGUIConfigResponse> createSetJanusGUIConfigResponse(SetJanusGUIConfigResponse value) {
         return new JAXBElement<SetJanusGUIConfigResponse>(_SetJanusGUIConfigResponse_QNAME, SetJanusGUIConfigResponse.class, null, value);
     }
@@ -2071,7 +2071,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetSitesResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getSitesResponse")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getSitesResponse")
     public JAXBElement<GetSitesResponse> createGetSitesResponse(GetSitesResponse value) {
         return new JAXBElement<GetSitesResponse>(_GetSitesResponse_QNAME, GetSitesResponse.class, null, value);
     }
@@ -2080,7 +2080,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link UpdateUserSubjectDN }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "updateUserSubjectDN")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "updateUserSubjectDN")
     public JAXBElement<UpdateUserSubjectDN> createUpdateUserSubjectDN(UpdateUserSubjectDN value) {
         return new JAXBElement<UpdateUserSubjectDN>(_UpdateUserSubjectDN_QNAME, UpdateUserSubjectDN.class, null, value);
     }
@@ -2089,7 +2089,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link AuditVARestrictedAccessResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "auditVARestrictedAccessResponse")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "auditVARestrictedAccessResponse")
     public JAXBElement<AuditVARestrictedAccessResponse> createAuditVARestrictedAccessResponse(AuditVARestrictedAccessResponse value) {
         return new JAXBElement<AuditVARestrictedAccessResponse>(_AuditVARestrictedAccessResponse_QNAME, AuditVARestrictedAccessResponse.class, null, value);
     }
@@ -2098,7 +2098,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetPatientDemographics }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getPatientDemographics")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getPatientDemographics")
     public JAXBElement<GetPatientDemographics> createGetPatientDemographics(GetPatientDemographics value) {
         return new JAXBElement<GetPatientDemographics>(_GetPatientDemographics_QNAME, GetPatientDemographics.class, null, value);
     }
@@ -2107,7 +2107,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetProblemDetail }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getProblemDetail")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getProblemDetail")
     public JAXBElement<GetProblemDetail> createGetProblemDetail(GetProblemDetail value) {
         return new JAXBElement<GetProblemDetail>(_GetProblemDetail_QNAME, GetProblemDetail.class, null, value);
     }
@@ -2116,7 +2116,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link LookupPatientResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "lookupPatientResponse")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "lookupPatientResponse")
     public JAXBElement<LookupPatientResponse> createLookupPatientResponse(LookupPatientResponse value) {
         return new JAXBElement<LookupPatientResponse>(_LookupPatientResponse_QNAME, LookupPatientResponse.class, null, value);
     }
@@ -2125,7 +2125,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetPatientConsultRequests }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getPatientConsultRequests")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getPatientConsultRequests")
     public JAXBElement<GetPatientConsultRequests> createGetPatientConsultRequests(GetPatientConsultRequests value) {
         return new JAXBElement<GetPatientConsultRequests>(_GetPatientConsultRequests_QNAME, GetPatientConsultRequests.class, null, value);
     }
@@ -2134,7 +2134,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link LoginResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "loginResponse")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "loginResponse")
     public JAXBElement<LoginResponse> createLoginResponse(LoginResponse value) {
         return new JAXBElement<LoginResponse>(_LoginResponse_QNAME, LoginResponse.class, null, value);
     }
@@ -2143,7 +2143,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetPatientClinicalRemindersResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getPatientClinicalRemindersResponse")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getPatientClinicalRemindersResponse")
     public JAXBElement<GetPatientClinicalRemindersResponse> createGetPatientClinicalRemindersResponse(GetPatientClinicalRemindersResponse value) {
         return new JAXBElement<GetPatientClinicalRemindersResponse>(_GetPatientClinicalRemindersResponse_QNAME, GetPatientClinicalRemindersResponse.class, null, value);
     }
@@ -2152,7 +2152,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetPatientDischargeSummaries }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getPatientDischargeSummaries")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getPatientDischargeSummaries")
     public JAXBElement<GetPatientDischargeSummaries> createGetPatientDischargeSummaries(GetPatientDischargeSummaries value) {
         return new JAXBElement<GetPatientDischargeSummaries>(_GetPatientDischargeSummaries_QNAME, GetPatientDischargeSummaries.class, null, value);
     }
@@ -2161,7 +2161,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetPatientInsurances }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getPatientInsurances")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getPatientInsurances")
     public JAXBElement<GetPatientInsurances> createGetPatientInsurances(GetPatientInsurances value) {
         return new JAXBElement<GetPatientInsurances>(_GetPatientInsurances_QNAME, GetPatientInsurances.class, null, value);
     }
@@ -2170,7 +2170,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetVisitNotesResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getVisitNotesResponse")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getVisitNotesResponse")
     public JAXBElement<GetVisitNotesResponse> createGetVisitNotesResponse(GetVisitNotesResponse value) {
         return new JAXBElement<GetVisitNotesResponse>(_GetVisitNotesResponse_QNAME, GetVisitNotesResponse.class, null, value);
     }
@@ -2179,7 +2179,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetProgressNoteResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getProgressNoteResponse")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getProgressNoteResponse")
     public JAXBElement<GetProgressNoteResponse> createGetProgressNoteResponse(GetProgressNoteResponse value) {
         return new JAXBElement<GetProgressNoteResponse>(_GetProgressNoteResponse_QNAME, GetProgressNoteResponse.class, null, value);
     }
@@ -2188,7 +2188,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link SelectPatientMVIResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "selectPatientMVIResponse")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "selectPatientMVIResponse")
     public JAXBElement<SelectPatientMVIResponse> createSelectPatientMVIResponse(SelectPatientMVIResponse value) {
         return new JAXBElement<SelectPatientMVIResponse>(_SelectPatientMVIResponse_QNAME, SelectPatientMVIResponse.class, null, value);
     }
@@ -2197,7 +2197,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetMedicationDetailResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getMedicationDetailResponse")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getMedicationDetailResponse")
     public JAXBElement<GetMedicationDetailResponse> createGetMedicationDetailResponse(GetMedicationDetailResponse value) {
         return new JAXBElement<GetMedicationDetailResponse>(_GetMedicationDetailResponse_QNAME, GetMedicationDetailResponse.class, null, value);
     }
@@ -2206,7 +2206,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetPatientLabs }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getPatientLabs")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getPatientLabs")
     public JAXBElement<GetPatientLabs> createGetPatientLabs(GetPatientLabs value) {
         return new JAXBElement<GetPatientLabs>(_GetPatientLabs_QNAME, GetPatientLabs.class, null, value);
     }
@@ -2215,7 +2215,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetBHIENoteImage }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getBHIENoteImage")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getBHIENoteImage")
     public JAXBElement<GetBHIENoteImage> createGetBHIENoteImage(GetBHIENoteImage value) {
         return new JAXBElement<GetBHIENoteImage>(_GetBHIENoteImage_QNAME, GetBHIENoteImage.class, null, value);
     }
@@ -2224,7 +2224,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetConsultReportResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getConsultReportResponse")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getConsultReportResponse")
     public JAXBElement<GetConsultReportResponse> createGetConsultReportResponse(GetConsultReportResponse value) {
         return new JAXBElement<GetConsultReportResponse>(_GetConsultReportResponse_QNAME, GetConsultReportResponse.class, null, value);
     }
@@ -2233,7 +2233,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetPatientForms }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getPatientForms")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getPatientForms")
     public JAXBElement<GetPatientForms> createGetPatientForms(GetPatientForms value) {
         return new JAXBElement<GetPatientForms>(_GetPatientForms_QNAME, GetPatientForms.class, null, value);
     }
@@ -2242,7 +2242,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetLabOrderResult }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getLabOrderResult")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getLabOrderResult")
     public JAXBElement<GetLabOrderResult> createGetLabOrderResult(GetLabOrderResult value) {
         return new JAXBElement<GetLabOrderResult>(_GetLabOrderResult_QNAME, GetLabOrderResult.class, null, value);
     }
@@ -2251,7 +2251,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetPatientHistoryResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getPatientHistoryResponse")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getPatientHistoryResponse")
     public JAXBElement<GetPatientHistoryResponse> createGetPatientHistoryResponse(GetPatientHistoryResponse value) {
         return new JAXBElement<GetPatientHistoryResponse>(_GetPatientHistoryResponse_QNAME, GetPatientHistoryResponse.class, null, value);
     }
@@ -2260,7 +2260,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link AuditVARestrictedAccess }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "auditVARestrictedAccess")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "auditVARestrictedAccess")
     public JAXBElement<AuditVARestrictedAccess> createAuditVARestrictedAccess(AuditVARestrictedAccess value) {
         return new JAXBElement<AuditVARestrictedAccess>(_AuditVARestrictedAccess_QNAME, AuditVARestrictedAccess.class, null, value);
     }
@@ -2269,7 +2269,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetPatientEncountersResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getPatientEncountersResponse")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getPatientEncountersResponse")
     public JAXBElement<GetPatientEncountersResponse> createGetPatientEncountersResponse(GetPatientEncountersResponse value) {
         return new JAXBElement<GetPatientEncountersResponse>(_GetPatientEncountersResponse_QNAME, GetPatientEncountersResponse.class, null, value);
     }
@@ -2278,7 +2278,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetPatientAllergiesResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getPatientAllergiesResponse")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getPatientAllergiesResponse")
     public JAXBElement<GetPatientAllergiesResponse> createGetPatientAllergiesResponse(GetPatientAllergiesResponse value) {
         return new JAXBElement<GetPatientAllergiesResponse>(_GetPatientAllergiesResponse_QNAME, GetPatientAllergiesResponse.class, null, value);
     }
@@ -2287,7 +2287,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetPatientMedications }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getPatientMedications")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getPatientMedications")
     public JAXBElement<GetPatientMedications> createGetPatientMedications(GetPatientMedications value) {
         return new JAXBElement<GetPatientMedications>(_GetPatientMedications_QNAME, GetPatientMedications.class, null, value);
     }
@@ -2296,7 +2296,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetPatientEncountersReport }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getPatientEncountersReport")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getPatientEncountersReport")
     public JAXBElement<GetPatientEncountersReport> createGetPatientEncountersReport(GetPatientEncountersReport value) {
         return new JAXBElement<GetPatientEncountersReport>(_GetPatientEncountersReport_QNAME, GetPatientEncountersReport.class, null, value);
     }
@@ -2305,7 +2305,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetPatientEncountersReportResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getPatientEncountersReportResponse")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getPatientEncountersReportResponse")
     public JAXBElement<GetPatientEncountersReportResponse> createGetPatientEncountersReportResponse(GetPatientEncountersReportResponse value) {
         return new JAXBElement<GetPatientEncountersReportResponse>(_GetPatientEncountersReportResponse_QNAME, GetPatientEncountersReportResponse.class, null, value);
     }
@@ -2314,7 +2314,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetVLERDocumentList }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getVLERDocumentList")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getVLERDocumentList")
     public JAXBElement<GetVLERDocumentList> createGetVLERDocumentList(GetVLERDocumentList value) {
         return new JAXBElement<GetVLERDocumentList>(_GetVLERDocumentList_QNAME, GetVLERDocumentList.class, null, value);
     }
@@ -2323,7 +2323,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetVLERDocument }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getVLERDocument")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getVLERDocument")
     public JAXBElement<GetVLERDocument> createGetVLERDocument(GetVLERDocument value) {
         return new JAXBElement<GetVLERDocument>(_GetVLERDocument_QNAME, GetVLERDocument.class, null, value);
     }
@@ -2332,7 +2332,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetPatientImmunizationsResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getPatientImmunizationsResponse")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getPatientImmunizationsResponse")
     public JAXBElement<GetPatientImmunizationsResponse> createGetPatientImmunizationsResponse(GetPatientImmunizationsResponse value) {
         return new JAXBElement<GetPatientImmunizationsResponse>(_GetPatientImmunizationsResponse_QNAME, GetPatientImmunizationsResponse.class, null, value);
     }
@@ -2341,7 +2341,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetUserAlerts }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getUserAlerts")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getUserAlerts")
     public JAXBElement<GetUserAlerts> createGetUserAlerts(GetUserAlerts value) {
         return new JAXBElement<GetUserAlerts>(_GetUserAlerts_QNAME, GetUserAlerts.class, null, value);
     }
@@ -2350,7 +2350,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetProviderConsultsRequestedResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getProviderConsultsRequestedResponse")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getProviderConsultsRequestedResponse")
     public JAXBElement<GetProviderConsultsRequestedResponse> createGetProviderConsultsRequestedResponse(GetProviderConsultsRequestedResponse value) {
         return new JAXBElement<GetProviderConsultsRequestedResponse>(_GetProviderConsultsRequestedResponse_QNAME, GetProviderConsultsRequestedResponse.class, null, value);
     }
@@ -2359,7 +2359,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetBHIENoteImageResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getBHIENoteImageResponse")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getBHIENoteImageResponse")
     public JAXBElement<GetBHIENoteImageResponse> createGetBHIENoteImageResponse(GetBHIENoteImageResponse value) {
         return new JAXBElement<GetBHIENoteImageResponse>(_GetBHIENoteImageResponse_QNAME, GetBHIENoteImageResponse.class, null, value);
     }
@@ -2368,7 +2368,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetProviderConsultsReceivedResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getProviderConsultsReceivedResponse")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getProviderConsultsReceivedResponse")
     public JAXBElement<GetProviderConsultsReceivedResponse> createGetProviderConsultsReceivedResponse(GetProviderConsultsReceivedResponse value) {
         return new JAXBElement<GetProviderConsultsReceivedResponse>(_GetProviderConsultsReceivedResponse_QNAME, GetProviderConsultsReceivedResponse.class, null, value);
     }
@@ -2377,7 +2377,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetProviderFlagsResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getProviderFlagsResponse")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getProviderFlagsResponse")
     public JAXBElement<GetProviderFlagsResponse> createGetProviderFlagsResponse(GetProviderFlagsResponse value) {
         return new JAXBElement<GetProviderFlagsResponse>(_GetProviderFlagsResponse_QNAME, GetProviderFlagsResponse.class, null, value);
     }
@@ -2386,7 +2386,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetProviderLabAbnormalResults }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getProviderLabAbnormalResults")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getProviderLabAbnormalResults")
     public JAXBElement<GetProviderLabAbnormalResults> createGetProviderLabAbnormalResults(GetProviderLabAbnormalResults value) {
         return new JAXBElement<GetProviderLabAbnormalResults>(_GetProviderLabAbnormalResults_QNAME, GetProviderLabAbnormalResults.class, null, value);
     }
@@ -2395,7 +2395,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetPatientClinicalReminders }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getPatientClinicalReminders")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getPatientClinicalReminders")
     public JAXBElement<GetPatientClinicalReminders> createGetPatientClinicalReminders(GetPatientClinicalReminders value) {
         return new JAXBElement<GetPatientClinicalReminders>(_GetPatientClinicalReminders_QNAME, GetPatientClinicalReminders.class, null, value);
     }
@@ -2404,7 +2404,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetVersionResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getVersionResponse")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getVersionResponse")
     public JAXBElement<GetVersionResponse> createGetVersionResponse(GetVersionResponse value) {
         return new JAXBElement<GetVersionResponse>(_GetVersionResponse_QNAME, GetVersionResponse.class, null, value);
     }
@@ -2413,7 +2413,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetAdmissionDiagnosisResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getAdmissionDiagnosisResponse")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getAdmissionDiagnosisResponse")
     public JAXBElement<GetAdmissionDiagnosisResponse> createGetAdmissionDiagnosisResponse(GetAdmissionDiagnosisResponse value) {
         return new JAXBElement<GetAdmissionDiagnosisResponse>(_GetAdmissionDiagnosisResponse_QNAME, GetAdmissionDiagnosisResponse.class, null, value);
     }
@@ -2422,7 +2422,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetProviderConsultsReceived }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getProviderConsultsReceived")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getProviderConsultsReceived")
     public JAXBElement<GetProviderConsultsReceived> createGetProviderConsultsReceived(GetProviderConsultsReceived value) {
         return new JAXBElement<GetProviderConsultsReceived>(_GetProviderConsultsReceived_QNAME, GetProviderConsultsReceived.class, null, value);
     }
@@ -2431,7 +2431,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link SetProviderFlags }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "setProviderFlags")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "setProviderFlags")
     public JAXBElement<SetProviderFlags> createSetProviderFlags(SetProviderFlags value) {
         return new JAXBElement<SetProviderFlags>(_SetProviderFlags_QNAME, SetProviderFlags.class, null, value);
     }
@@ -2440,7 +2440,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetPatientAllergies }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getPatientAllergies")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getPatientAllergies")
     public JAXBElement<GetPatientAllergies> createGetPatientAllergies(GetPatientAllergies value) {
         return new JAXBElement<GetPatientAllergies>(_GetPatientAllergies_QNAME, GetPatientAllergies.class, null, value);
     }
@@ -2449,7 +2449,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetServiceErrors }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getServiceErrors")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getServiceErrors")
     public JAXBElement<GetServiceErrors> createGetServiceErrors(GetServiceErrors value) {
         return new JAXBElement<GetServiceErrors>(_GetServiceErrors_QNAME, GetServiceErrors.class, null, value);
     }
@@ -2458,7 +2458,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetPatientAdmissions }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getPatientAdmissions")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getPatientAdmissions")
     public JAXBElement<GetPatientAdmissions> createGetPatientAdmissions(GetPatientAdmissions value) {
         return new JAXBElement<GetPatientAdmissions>(_GetPatientAdmissions_QNAME, GetPatientAdmissions.class, null, value);
     }
@@ -2467,7 +2467,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetPatientProblemListResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getPatientProblemListResponse")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getPatientProblemListResponse")
     public JAXBElement<GetPatientProblemListResponse> createGetPatientProblemListResponse(GetPatientProblemListResponse value) {
         return new JAXBElement<GetPatientProblemListResponse>(_GetPatientProblemListResponse_QNAME, GetPatientProblemListResponse.class, null, value);
     }
@@ -2476,7 +2476,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetAdmissionProcedures }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getAdmissionProcedures")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getAdmissionProcedures")
     public JAXBElement<GetAdmissionProcedures> createGetAdmissionProcedures(GetAdmissionProcedures value) {
         return new JAXBElement<GetAdmissionProcedures>(_GetAdmissionProcedures_QNAME, GetAdmissionProcedures.class, null, value);
     }
@@ -2485,7 +2485,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetPatientProgressNotesResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getPatientProgressNotesResponse")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getPatientProgressNotesResponse")
     public JAXBElement<GetPatientProgressNotesResponse> createGetPatientProgressNotesResponse(GetPatientProgressNotesResponse value) {
         return new JAXBElement<GetPatientProgressNotesResponse>(_GetPatientProgressNotesResponse_QNAME, GetPatientProgressNotesResponse.class, null, value);
     }
@@ -2494,7 +2494,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link SelectPatientForVASensitive }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "selectPatientForVASensitive")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "selectPatientForVASensitive")
     public JAXBElement<SelectPatientForVASensitive> createSelectPatientForVASensitive(SelectPatientForVASensitive value) {
         return new JAXBElement<SelectPatientForVASensitive>(_SelectPatientForVASensitive_QNAME, SelectPatientForVASensitive.class, null, value);
     }
@@ -2503,7 +2503,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetPatientCurrentVitalsResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getPatientCurrentVitalsResponse")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getPatientCurrentVitalsResponse")
     public JAXBElement<GetPatientCurrentVitalsResponse> createGetPatientCurrentVitalsResponse(GetPatientCurrentVitalsResponse value) {
         return new JAXBElement<GetPatientCurrentVitalsResponse>(_GetPatientCurrentVitalsResponse_QNAME, GetPatientCurrentVitalsResponse.class, null, value);
     }
@@ -2512,7 +2512,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetPatientImmunizations }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getPatientImmunizations")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getPatientImmunizations")
     public JAXBElement<GetPatientImmunizations> createGetPatientImmunizations(GetPatientImmunizations value) {
         return new JAXBElement<GetPatientImmunizations>(_GetPatientImmunizations_QNAME, GetPatientImmunizations.class, null, value);
     }
@@ -2521,7 +2521,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetProviderProfileResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getProviderProfileResponse")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getProviderProfileResponse")
     public JAXBElement<GetProviderProfileResponse> createGetProviderProfileResponse(GetProviderProfileResponse value) {
         return new JAXBElement<GetProviderProfileResponse>(_GetProviderProfileResponse_QNAME, GetProviderProfileResponse.class, null, value);
     }
@@ -2530,7 +2530,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetVLERDocumentResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getVLERDocumentResponse")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getVLERDocumentResponse")
     public JAXBElement<GetVLERDocumentResponse> createGetVLERDocumentResponse(GetVLERDocumentResponse value) {
         return new JAXBElement<GetVLERDocumentResponse>(_GetVLERDocumentResponse_QNAME, GetVLERDocumentResponse.class, null, value);
     }
@@ -2539,7 +2539,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetClinicalReminderDetail }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getClinicalReminderDetail")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getClinicalReminderDetail")
     public JAXBElement<GetClinicalReminderDetail> createGetClinicalReminderDetail(GetClinicalReminderDetail value) {
         return new JAXBElement<GetClinicalReminderDetail>(_GetClinicalReminderDetail_QNAME, GetClinicalReminderDetail.class, null, value);
     }
@@ -2548,7 +2548,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetLoginInfo }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getLoginInfo")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getLoginInfo")
     public JAXBElement<GetLoginInfo> createGetLoginInfo(GetLoginInfo value) {
         return new JAXBElement<GetLoginInfo>(_GetLoginInfo_QNAME, GetLoginInfo.class, null, value);
     }
@@ -2557,7 +2557,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetPatientInsurancesResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getPatientInsurancesResponse")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getPatientInsurancesResponse")
     public JAXBElement<GetPatientInsurancesResponse> createGetPatientInsurancesResponse(GetPatientInsurancesResponse value) {
         return new JAXBElement<GetPatientInsurancesResponse>(_GetPatientInsurancesResponse_QNAME, GetPatientInsurancesResponse.class, null, value);
     }
@@ -2566,7 +2566,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetPatientLabReportResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getPatientLabReportResponse")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getPatientLabReportResponse")
     public JAXBElement<GetPatientLabReportResponse> createGetPatientLabReportResponse(GetPatientLabReportResponse value) {
         return new JAXBElement<GetPatientLabReportResponse>(_GetPatientLabReportResponse_QNAME, GetPatientLabReportResponse.class, null, value);
     }
@@ -2575,7 +2575,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetRadiologyReportResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getRadiologyReportResponse")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getRadiologyReportResponse")
     public JAXBElement<GetRadiologyReportResponse> createGetRadiologyReportResponse(GetRadiologyReportResponse value) {
         return new JAXBElement<GetRadiologyReportResponse>(_GetRadiologyReportResponse_QNAME, GetRadiologyReportResponse.class, null, value);
     }
@@ -2584,7 +2584,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetProviderAdmissions }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getProviderAdmissions")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getProviderAdmissions")
     public JAXBElement<GetProviderAdmissions> createGetProviderAdmissions(GetProviderAdmissions value) {
         return new JAXBElement<GetProviderAdmissions>(_GetProviderAdmissions_QNAME, GetProviderAdmissions.class, null, value);
     }
@@ -2593,7 +2593,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetIehrUserProfile }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getIehrUserProfile")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getIehrUserProfile")
     public JAXBElement<GetIehrUserProfile> createGetIehrUserProfile(GetIehrUserProfile value) {
         return new JAXBElement<GetIehrUserProfile>(_GetIehrUserProfile_QNAME, GetIehrUserProfile.class, null, value);
     }
@@ -2602,7 +2602,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetPatientEncounters }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getPatientEncounters")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getPatientEncounters")
     public JAXBElement<GetPatientEncounters> createGetPatientEncounters(GetPatientEncounters value) {
         return new JAXBElement<GetPatientEncounters>(_GetPatientEncounters_QNAME, GetPatientEncounters.class, null, value);
     }
@@ -2611,7 +2611,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetProviderUnsignedNotes }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getProviderUnsignedNotes")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getProviderUnsignedNotes")
     public JAXBElement<GetProviderUnsignedNotes> createGetProviderUnsignedNotes(GetProviderUnsignedNotes value) {
         return new JAXBElement<GetProviderUnsignedNotes>(_GetProviderUnsignedNotes_QNAME, GetProviderUnsignedNotes.class, null, value);
     }
@@ -2620,7 +2620,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetWardAdmissionsResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getWardAdmissionsResponse")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getWardAdmissionsResponse")
     public JAXBElement<GetWardAdmissionsResponse> createGetWardAdmissionsResponse(GetWardAdmissionsResponse value) {
         return new JAXBElement<GetWardAdmissionsResponse>(_GetWardAdmissionsResponse_QNAME, GetWardAdmissionsResponse.class, null, value);
     }
@@ -2629,7 +2629,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetPatientProblemList }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getPatientProblemList")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getPatientProblemList")
     public JAXBElement<GetPatientProblemList> createGetPatientProblemList(GetPatientProblemList value) {
         return new JAXBElement<GetPatientProblemList>(_GetPatientProblemList_QNAME, GetPatientProblemList.class, null, value);
     }
@@ -2638,7 +2638,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetConsultReport }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getConsultReport")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getConsultReport")
     public JAXBElement<GetConsultReport> createGetConsultReport(GetConsultReport value) {
         return new JAXBElement<GetConsultReport>(_GetConsultReport_QNAME, GetConsultReport.class, null, value);
     }
@@ -2647,7 +2647,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link SelectPatientMVI }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "selectPatientMVI")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "selectPatientMVI")
     public JAXBElement<SelectPatientMVI> createSelectPatientMVI(SelectPatientMVI value) {
         return new JAXBElement<SelectPatientMVI>(_SelectPatientMVI_QNAME, SelectPatientMVI.class, null, value);
     }
@@ -2656,7 +2656,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetPatientLabTestResults }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getPatientLabTestResults")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getPatientLabTestResults")
     public JAXBElement<GetPatientLabTestResults> createGetPatientLabTestResults(GetPatientLabTestResults value) {
         return new JAXBElement<GetPatientLabTestResults>(_GetPatientLabTestResults_QNAME, GetPatientLabTestResults.class, null, value);
     }
@@ -2665,7 +2665,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetClinicalReminderDetailResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getClinicalReminderDetailResponse")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getClinicalReminderDetailResponse")
     public JAXBElement<GetClinicalReminderDetailResponse> createGetClinicalReminderDetailResponse(GetClinicalReminderDetailResponse value) {
         return new JAXBElement<GetClinicalReminderDetailResponse>(_GetClinicalReminderDetailResponse_QNAME, GetClinicalReminderDetailResponse.class, null, value);
     }
@@ -2674,7 +2674,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetVisitNotes }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getVisitNotes")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getVisitNotes")
     public JAXBElement<GetVisitNotes> createGetVisitNotes(GetVisitNotes value) {
         return new JAXBElement<GetVisitNotes>(_GetVisitNotes_QNAME, GetVisitNotes.class, null, value);
     }
@@ -2683,7 +2683,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetPatientVitals }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getPatientVitals")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getPatientVitals")
     public JAXBElement<GetPatientVitals> createGetPatientVitals(GetPatientVitals value) {
         return new JAXBElement<GetPatientVitals>(_GetPatientVitals_QNAME, GetPatientVitals.class, null, value);
     }
@@ -2692,7 +2692,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetProviderOrdersPendingResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getProviderOrdersPendingResponse")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getProviderOrdersPendingResponse")
     public JAXBElement<GetProviderOrdersPendingResponse> createGetProviderOrdersPendingResponse(GetProviderOrdersPendingResponse value) {
         return new JAXBElement<GetProviderOrdersPendingResponse>(_GetProviderOrdersPendingResponse_QNAME, GetProviderOrdersPendingResponse.class, null, value);
     }
@@ -2701,7 +2701,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link SetJanusGUIConfig }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "setJanusGUIConfig")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "setJanusGUIConfig")
     public JAXBElement<SetJanusGUIConfig> createSetJanusGUIConfig(SetJanusGUIConfig value) {
         return new JAXBElement<SetJanusGUIConfig>(_SetJanusGUIConfig_QNAME, SetJanusGUIConfig.class, null, value);
     }
@@ -2710,7 +2710,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetProviderConsultsRequested }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getProviderConsultsRequested")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getProviderConsultsRequested")
     public JAXBElement<GetProviderConsultsRequested> createGetProviderConsultsRequested(GetProviderConsultsRequested value) {
         return new JAXBElement<GetProviderConsultsRequested>(_GetProviderConsultsRequested_QNAME, GetProviderConsultsRequested.class, null, value);
     }
@@ -2719,7 +2719,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetPatientMedicationsResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getPatientMedicationsResponse")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getPatientMedicationsResponse")
     public JAXBElement<GetPatientMedicationsResponse> createGetPatientMedicationsResponse(GetPatientMedicationsResponse value) {
         return new JAXBElement<GetPatientMedicationsResponse>(_GetPatientMedicationsResponse_QNAME, GetPatientMedicationsResponse.class, null, value);
     }
@@ -2728,7 +2728,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetProviderLabAbnormalResultsResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getProviderLabAbnormalResultsResponse")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getProviderLabAbnormalResultsResponse")
     public JAXBElement<GetProviderLabAbnormalResultsResponse> createGetProviderLabAbnormalResultsResponse(GetProviderLabAbnormalResultsResponse value) {
         return new JAXBElement<GetProviderLabAbnormalResultsResponse>(_GetProviderLabAbnormalResultsResponse_QNAME, GetProviderLabAbnormalResultsResponse.class, null, value);
     }
@@ -2737,7 +2737,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetPatientDischargeSummariesResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getPatientDischargeSummariesResponse")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getPatientDischargeSummariesResponse")
     public JAXBElement<GetPatientDischargeSummariesResponse> createGetPatientDischargeSummariesResponse(GetPatientDischargeSummariesResponse value) {
         return new JAXBElement<GetPatientDischargeSummariesResponse>(_GetPatientDischargeSummariesResponse_QNAME, GetPatientDischargeSummariesResponse.class, null, value);
     }
@@ -2746,7 +2746,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetProviderOrdersPending }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getProviderOrdersPending")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getProviderOrdersPending")
     public JAXBElement<GetProviderOrdersPending> createGetProviderOrdersPending(GetProviderOrdersPending value) {
         return new JAXBElement<GetProviderOrdersPending>(_GetProviderOrdersPending_QNAME, GetProviderOrdersPending.class, null, value);
     }
@@ -2755,7 +2755,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetProviderAdmissionsResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getProviderAdmissionsResponse")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getProviderAdmissionsResponse")
     public JAXBElement<GetProviderAdmissionsResponse> createGetProviderAdmissionsResponse(GetProviderAdmissionsResponse value) {
         return new JAXBElement<GetProviderAdmissionsResponse>(_GetProviderAdmissionsResponse_QNAME, GetProviderAdmissionsResponse.class, null, value);
     }
@@ -2764,7 +2764,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link SelectPatientResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "selectPatientResponse")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "selectPatientResponse")
     public JAXBElement<SelectPatientResponse> createSelectPatientResponse(SelectPatientResponse value) {
         return new JAXBElement<SelectPatientResponse>(_SelectPatientResponse_QNAME, SelectPatientResponse.class, null, value);
     }
@@ -2773,7 +2773,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetAuthUser }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getAuthUser")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getAuthUser")
     public JAXBElement<GetAuthUser> createGetAuthUser(GetAuthUser value) {
         return new JAXBElement<GetAuthUser>(_GetAuthUser_QNAME, GetAuthUser.class, null, value);
     }
@@ -2782,7 +2782,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetPatientLabReport }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getPatientLabReport")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getPatientLabReport")
     public JAXBElement<GetPatientLabReport> createGetPatientLabReport(GetPatientLabReport value) {
         return new JAXBElement<GetPatientLabReport>(_GetPatientLabReport_QNAME, GetPatientLabReport.class, null, value);
     }
@@ -2791,7 +2791,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetPatientAppointmentsResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getPatientAppointmentsResponse")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getPatientAppointmentsResponse")
     public JAXBElement<GetPatientAppointmentsResponse> createGetPatientAppointmentsResponse(GetPatientAppointmentsResponse value) {
         return new JAXBElement<GetPatientAppointmentsResponse>(_GetPatientAppointmentsResponse_QNAME, GetPatientAppointmentsResponse.class, null, value);
     }
@@ -2800,7 +2800,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetProviderUnsignedNotesResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getProviderUnsignedNotesResponse")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getProviderUnsignedNotesResponse")
     public JAXBElement<GetProviderUnsignedNotesResponse> createGetProviderUnsignedNotesResponse(GetProviderUnsignedNotesResponse value) {
         return new JAXBElement<GetProviderUnsignedNotesResponse>(_GetProviderUnsignedNotesResponse_QNAME, GetProviderUnsignedNotesResponse.class, null, value);
     }
@@ -2809,7 +2809,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetPatientVitalsResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getPatientVitalsResponse")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getPatientVitalsResponse")
     public JAXBElement<GetPatientVitalsResponse> createGetPatientVitalsResponse(GetPatientVitalsResponse value) {
         return new JAXBElement<GetPatientVitalsResponse>(_GetPatientVitalsResponse_QNAME, GetPatientVitalsResponse.class, null, value);
     }
@@ -2818,7 +2818,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link LogAuditResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "logAuditResponse")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "logAuditResponse")
     public JAXBElement<LogAuditResponse> createLogAuditResponse(LogAuditResponse value) {
         return new JAXBElement<LogAuditResponse>(_LogAuditResponse_QNAME, LogAuditResponse.class, null, value);
     }
@@ -2827,7 +2827,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetProviderFlags }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getProviderFlags")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getProviderFlags")
     public JAXBElement<GetProviderFlags> createGetProviderFlags(GetProviderFlags value) {
         return new JAXBElement<GetProviderFlags>(_GetProviderFlags_QNAME, GetProviderFlags.class, null, value);
     }
@@ -2836,7 +2836,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetProviderProfile }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getProviderProfile")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getProviderProfile")
     public JAXBElement<GetProviderProfile> createGetProviderProfile(GetProviderProfile value) {
         return new JAXBElement<GetProviderProfile>(_GetProviderProfile_QNAME, GetProviderProfile.class, null, value);
     }
@@ -2845,7 +2845,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetProviderAppointmentsResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getProviderAppointmentsResponse")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getProviderAppointmentsResponse")
     public JAXBElement<GetProviderAppointmentsResponse> createGetProviderAppointmentsResponse(GetProviderAppointmentsResponse value) {
         return new JAXBElement<GetProviderAppointmentsResponse>(_GetProviderAppointmentsResponse_QNAME, GetProviderAppointmentsResponse.class, null, value);
     }
@@ -2854,7 +2854,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link LoginEnterprise }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "loginEnterprise")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "loginEnterprise")
     public JAXBElement<LoginEnterprise> createLoginEnterprise(LoginEnterprise value) {
         return new JAXBElement<LoginEnterprise>(_LoginEnterprise_QNAME, LoginEnterprise.class, null, value);
     }
@@ -2863,7 +2863,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetAdmissionProceduresResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getAdmissionProceduresResponse")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getAdmissionProceduresResponse")
     public JAXBElement<GetAdmissionProceduresResponse> createGetAdmissionProceduresResponse(GetAdmissionProceduresResponse value) {
         return new JAXBElement<GetAdmissionProceduresResponse>(_GetAdmissionProceduresResponse_QNAME, GetAdmissionProceduresResponse.class, null, value);
     }
@@ -2872,7 +2872,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetWardAdmissions }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getWardAdmissions")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getWardAdmissions")
     public JAXBElement<GetWardAdmissions> createGetWardAdmissions(GetWardAdmissions value) {
         return new JAXBElement<GetWardAdmissions>(_GetWardAdmissions_QNAME, GetWardAdmissions.class, null, value);
     }
@@ -2881,7 +2881,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetAllergyDetail }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getAllergyDetail")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getAllergyDetail")
     public JAXBElement<GetAllergyDetail> createGetAllergyDetail(GetAllergyDetail value) {
         return new JAXBElement<GetAllergyDetail>(_GetAllergyDetail_QNAME, GetAllergyDetail.class, null, value);
     }
@@ -2890,7 +2890,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetAdmissionDiagnosis }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getAdmissionDiagnosis")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getAdmissionDiagnosis")
     public JAXBElement<GetAdmissionDiagnosis> createGetAdmissionDiagnosis(GetAdmissionDiagnosis value) {
         return new JAXBElement<GetAdmissionDiagnosis>(_GetAdmissionDiagnosis_QNAME, GetAdmissionDiagnosis.class, null, value);
     }
@@ -2899,7 +2899,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetJanusGUIConfig }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getJanusGUIConfig")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getJanusGUIConfig")
     public JAXBElement<GetJanusGUIConfig> createGetJanusGUIConfig(GetJanusGUIConfig value) {
         return new JAXBElement<GetJanusGUIConfig>(_GetJanusGUIConfig_QNAME, GetJanusGUIConfig.class, null, value);
     }
@@ -2908,7 +2908,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetPatientLabResultsResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getPatientLabResultsResponse")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getPatientLabResultsResponse")
     public JAXBElement<GetPatientLabResultsResponse> createGetPatientLabResultsResponse(GetPatientLabResultsResponse value) {
         return new JAXBElement<GetPatientLabResultsResponse>(_GetPatientLabResultsResponse_QNAME, GetPatientLabResultsResponse.class, null, value);
     }
@@ -2917,7 +2917,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link LookupPatient }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "lookupPatient")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "lookupPatient")
     public JAXBElement<LookupPatient> createLookupPatient(LookupPatient value) {
         return new JAXBElement<LookupPatient>(_LookupPatient_QNAME, LookupPatient.class, null, value);
     }
@@ -2926,7 +2926,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link SetProviderFlagsResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "setProviderFlagsResponse")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "setProviderFlagsResponse")
     public JAXBElement<SetProviderFlagsResponse> createSetProviderFlagsResponse(SetProviderFlagsResponse value) {
         return new JAXBElement<SetProviderFlagsResponse>(_SetProviderFlagsResponse_QNAME, SetProviderFlagsResponse.class, null, value);
     }
@@ -2935,7 +2935,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetIehrUserProfileResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getIehrUserProfileResponse")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getIehrUserProfileResponse")
     public JAXBElement<GetIehrUserProfileResponse> createGetIehrUserProfileResponse(GetIehrUserProfileResponse value) {
         return new JAXBElement<GetIehrUserProfileResponse>(_GetIehrUserProfileResponse_QNAME, GetIehrUserProfileResponse.class, null, value);
     }
@@ -2944,7 +2944,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetAllergyDetailResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getAllergyDetailResponse")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getAllergyDetailResponse")
     public JAXBElement<GetAllergyDetailResponse> createGetAllergyDetailResponse(GetAllergyDetailResponse value) {
         return new JAXBElement<GetAllergyDetailResponse>(_GetAllergyDetailResponse_QNAME, GetAllergyDetailResponse.class, null, value);
     }
@@ -2953,7 +2953,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetProblemDetailResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getProblemDetailResponse")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getProblemDetailResponse")
     public JAXBElement<GetProblemDetailResponse> createGetProblemDetailResponse(GetProblemDetailResponse value) {
         return new JAXBElement<GetProblemDetailResponse>(_GetProblemDetailResponse_QNAME, GetProblemDetailResponse.class, null, value);
     }
@@ -2962,7 +2962,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetPatientCurrentVitals }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getPatientCurrentVitals")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getPatientCurrentVitals")
     public JAXBElement<GetPatientCurrentVitals> createGetPatientCurrentVitals(GetPatientCurrentVitals value) {
         return new JAXBElement<GetPatientCurrentVitals>(_GetPatientCurrentVitals_QNAME, GetPatientCurrentVitals.class, null, value);
     }
@@ -2971,7 +2971,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetUserAlertsResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getUserAlertsResponse")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getUserAlertsResponse")
     public JAXBElement<GetUserAlertsResponse> createGetUserAlertsResponse(GetUserAlertsResponse value) {
         return new JAXBElement<GetUserAlertsResponse>(_GetUserAlertsResponse_QNAME, GetUserAlertsResponse.class, null, value);
     }
@@ -2980,7 +2980,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link SetIehrUserProfileResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "setIehrUserProfileResponse")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "setIehrUserProfileResponse")
     public JAXBElement<SetIehrUserProfileResponse> createSetIehrUserProfileResponse(SetIehrUserProfileResponse value) {
         return new JAXBElement<SetIehrUserProfileResponse>(_SetIehrUserProfileResponse_QNAME, SetIehrUserProfileResponse.class, null, value);
     }
@@ -2989,7 +2989,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetRadiologyReport }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getRadiologyReport")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getRadiologyReport")
     public JAXBElement<GetRadiologyReport> createGetRadiologyReport(GetRadiologyReport value) {
         return new JAXBElement<GetRadiologyReport>(_GetRadiologyReport_QNAME, GetRadiologyReport.class, null, value);
     }
@@ -2998,7 +2998,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetPatientRadsResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getPatientRadsResponse")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getPatientRadsResponse")
     public JAXBElement<GetPatientRadsResponse> createGetPatientRadsResponse(GetPatientRadsResponse value) {
         return new JAXBElement<GetPatientRadsResponse>(_GetPatientRadsResponse_QNAME, GetPatientRadsResponse.class, null, value);
     }
@@ -3007,7 +3007,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetOutpatientProceduresResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getOutpatientProceduresResponse")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getOutpatientProceduresResponse")
     public JAXBElement<GetOutpatientProceduresResponse> createGetOutpatientProceduresResponse(GetOutpatientProceduresResponse value) {
         return new JAXBElement<GetOutpatientProceduresResponse>(_GetOutpatientProceduresResponse_QNAME, GetOutpatientProceduresResponse.class, null, value);
     }
@@ -3016,7 +3016,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetPatientLabTestResultsResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getPatientLabTestResultsResponse")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getPatientLabTestResultsResponse")
     public JAXBElement<GetPatientLabTestResultsResponse> createGetPatientLabTestResultsResponse(GetPatientLabTestResultsResponse value) {
         return new JAXBElement<GetPatientLabTestResultsResponse>(_GetPatientLabTestResultsResponse_QNAME, GetPatientLabTestResultsResponse.class, null, value);
     }
@@ -3025,7 +3025,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetPatientDemographicsDetail }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getPatientDemographicsDetail")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getPatientDemographicsDetail")
     public JAXBElement<GetPatientDemographicsDetail> createGetPatientDemographicsDetail(GetPatientDemographicsDetail value) {
         return new JAXBElement<GetPatientDemographicsDetail>(_GetPatientDemographicsDetail_QNAME, GetPatientDemographicsDetail.class, null, value);
     }
@@ -3034,7 +3034,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetServiceErrorsResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getServiceErrorsResponse")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getServiceErrorsResponse")
     public JAXBElement<GetServiceErrorsResponse> createGetServiceErrorsResponse(GetServiceErrorsResponse value) {
         return new JAXBElement<GetServiceErrorsResponse>(_GetServiceErrorsResponse_QNAME, GetServiceErrorsResponse.class, null, value);
     }
@@ -3043,7 +3043,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link SelectPatientForVASensitiveResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "selectPatientForVASensitiveResponse")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "selectPatientForVASensitiveResponse")
     public JAXBElement<SelectPatientForVASensitiveResponse> createSelectPatientForVASensitiveResponse(SelectPatientForVASensitiveResponse value) {
         return new JAXBElement<SelectPatientForVASensitiveResponse>(_SelectPatientForVASensitiveResponse_QNAME, SelectPatientForVASensitiveResponse.class, null, value);
     }
@@ -3052,7 +3052,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link UpdateUserSubjectDNResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "updateUserSubjectDNResponse")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "updateUserSubjectDNResponse")
     public JAXBElement<UpdateUserSubjectDNResponse> createUpdateUserSubjectDNResponse(UpdateUserSubjectDNResponse value) {
         return new JAXBElement<UpdateUserSubjectDNResponse>(_UpdateUserSubjectDNResponse_QNAME, UpdateUserSubjectDNResponse.class, null, value);
     }
@@ -3061,7 +3061,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetPatientRads }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getPatientRads")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getPatientRads")
     public JAXBElement<GetPatientRads> createGetPatientRads(GetPatientRads value) {
         return new JAXBElement<GetPatientRads>(_GetPatientRads_QNAME, GetPatientRads.class, null, value);
     }
@@ -3070,7 +3070,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetAdmissionDetails }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getAdmissionDetails")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getAdmissionDetails")
     public JAXBElement<GetAdmissionDetails> createGetAdmissionDetails(GetAdmissionDetails value) {
         return new JAXBElement<GetAdmissionDetails>(_GetAdmissionDetails_QNAME, GetAdmissionDetails.class, null, value);
     }
@@ -3079,7 +3079,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetPatientAppointments }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getPatientAppointments")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getPatientAppointments")
     public JAXBElement<GetPatientAppointments> createGetPatientAppointments(GetPatientAppointments value) {
         return new JAXBElement<GetPatientAppointments>(_GetPatientAppointments_QNAME, GetPatientAppointments.class, null, value);
     }
@@ -3088,7 +3088,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link Login }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "login")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "login")
     public JAXBElement<Login> createLogin(Login value) {
         return new JAXBElement<Login>(_Login_QNAME, Login.class, null, value);
     }
@@ -3097,7 +3097,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link JMeadowsException }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "JMeadowsException")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "JMeadowsException")
     public JAXBElement<JMeadowsException> createJMeadowsException(JMeadowsException value) {
         return new JAXBElement<JMeadowsException>(_JMeadowsException_QNAME, JMeadowsException.class, null, value);
     }
@@ -3106,7 +3106,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetOutpatientProcedures }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getOutpatientProcedures")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getOutpatientProcedures")
     public JAXBElement<GetOutpatientProcedures> createGetOutpatientProcedures(GetOutpatientProcedures value) {
         return new JAXBElement<GetOutpatientProcedures>(_GetOutpatientProcedures_QNAME, GetOutpatientProcedures.class, null, value);
     }
@@ -3115,7 +3115,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetProviderAppointments }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getProviderAppointments")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getProviderAppointments")
     public JAXBElement<GetProviderAppointments> createGetProviderAppointments(GetProviderAppointments value) {
         return new JAXBElement<GetProviderAppointments>(_GetProviderAppointments_QNAME, GetProviderAppointments.class, null, value);
     }
@@ -3124,7 +3124,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetLoginInfoResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getLoginInfoResponse")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getLoginInfoResponse")
     public JAXBElement<GetLoginInfoResponse> createGetLoginInfoResponse(GetLoginInfoResponse value) {
         return new JAXBElement<GetLoginInfoResponse>(_GetLoginInfoResponse_QNAME, GetLoginInfoResponse.class, null, value);
     }
@@ -3133,7 +3133,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetSites }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getSites")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getSites")
     public JAXBElement<GetSites> createGetSites(GetSites value) {
         return new JAXBElement<GetSites>(_GetSites_QNAME, GetSites.class, null, value);
     }
@@ -3142,7 +3142,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetVLERDocumentListResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getVLERDocumentListResponse")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getVLERDocumentListResponse")
     public JAXBElement<GetVLERDocumentListResponse> createGetVLERDocumentListResponse(GetVLERDocumentListResponse value) {
         return new JAXBElement<GetVLERDocumentListResponse>(_GetVLERDocumentListResponse_QNAME, GetVLERDocumentListResponse.class, null, value);
     }
@@ -3151,7 +3151,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetPatientProgressNotes }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getPatientProgressNotes")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getPatientProgressNotes")
     public JAXBElement<GetPatientProgressNotes> createGetPatientProgressNotes(GetPatientProgressNotes value) {
         return new JAXBElement<GetPatientProgressNotes>(_GetPatientProgressNotes_QNAME, GetPatientProgressNotes.class, null, value);
     }
@@ -3160,7 +3160,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetAdmissionDetailsResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getAdmissionDetailsResponse")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getAdmissionDetailsResponse")
     public JAXBElement<GetAdmissionDetailsResponse> createGetAdmissionDetailsResponse(GetAdmissionDetailsResponse value) {
         return new JAXBElement<GetAdmissionDetailsResponse>(_GetAdmissionDetailsResponse_QNAME, GetAdmissionDetailsResponse.class, null, value);
     }
@@ -3169,7 +3169,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetLabOrderResultResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getLabOrderResultResponse")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getLabOrderResultResponse")
     public JAXBElement<GetLabOrderResultResponse> createGetLabOrderResultResponse(GetLabOrderResultResponse value) {
         return new JAXBElement<GetLabOrderResultResponse>(_GetLabOrderResultResponse_QNAME, GetLabOrderResultResponse.class, null, value);
     }
@@ -3178,7 +3178,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetVersion }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getVersion")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getVersion")
     public JAXBElement<GetVersion> createGetVersion(GetVersion value) {
         return new JAXBElement<GetVersion>(_GetVersion_QNAME, GetVersion.class, null, value);
     }
@@ -3187,7 +3187,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link GetProviderOrdersResultedResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "getProviderOrdersResultedResponse")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "getProviderOrdersResultedResponse")
     public JAXBElement<GetProviderOrdersResultedResponse> createGetProviderOrdersResultedResponse(GetProviderOrdersResultedResponse value) {
         return new JAXBElement<GetProviderOrdersResultedResponse>(_GetProviderOrdersResultedResponse_QNAME, GetProviderOrdersResultedResponse.class, null, value);
     }
@@ -3196,7 +3196,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link LookupPatientPDWS }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "lookupPatientPDWS")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "lookupPatientPDWS")
     public JAXBElement<LookupPatientPDWS> createLookupPatientPDWS(LookupPatientPDWS value) {
         return new JAXBElement<LookupPatientPDWS>(_LookupPatientPDWS_QNAME, LookupPatientPDWS.class, null, value);
     }
@@ -3205,7 +3205,7 @@ public class ObjectFactory {
      * Create an instance of {@link JAXBElement }{@code <}{@link LookupPatientPDWSResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://webservice.jmeadows.DNS       /", name = "lookupPatientPDWSResponse")
+    @XmlElementDecl(namespace = "http://webservice.jmeadows.med.DNS   /", name = "lookupPatientPDWSResponse")
     public JAXBElement<LookupPatientPDWSResponse> createLookupPatientPDWSResponse(LookupPatientPDWSResponse value) {
         return new JAXBElement<LookupPatientPDWSResponse>(_LookupPatientPDWSResponse_QNAME, LookupPatientPDWSResponse.class, null, value);
     }

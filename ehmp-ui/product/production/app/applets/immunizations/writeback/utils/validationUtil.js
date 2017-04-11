@@ -1,4 +1,6 @@
-define([], function(){
+define([
+    'moment'
+], function(moment){
     "use strict";
 
     return {
@@ -53,7 +55,7 @@ define([], function(){
 
                 var dateMeasured = moment(dateToCompare, 'MM/DD/YYYY');
                 if(dateMeasured.isAfter(today)){
-                   model.errorModel.set({administrationDateHistorical: 'Administration Date must be in the past.'});
+                   model.errorModel.set({administrationDateHistorical: 'Administration date must be in the past'});
                 }
             }
         },
@@ -61,7 +63,7 @@ define([], function(){
             var today = moment();
 
             if(visDateOffered && moment(visDateOffered, 'MM/DD/YYYY').isAfter(moment())){
-                model.errorModel.set({visDateOffered: 'VIS Date Offered must be in the past.'});
+                model.errorModel.set({visDateOffered: 'VIS date offered must be in the past'});
             }
         }
     };

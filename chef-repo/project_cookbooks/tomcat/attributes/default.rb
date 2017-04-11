@@ -36,3 +36,8 @@ default['tomcat']['8']['url'] = "#{node[:nexus_url]}/nexus/content/repositories/
 
 default['tomcat']['user_home'] = "/home/tomcat#{node["tomcat"]["version"]}"
 default['tomcat']['service'] = "tomcat#{node["tomcat"]["version"]}"
+
+# Logging defaults
+default['tomcat']['logging']['fileHandlerLimit'] = 500000
+default['tomcat']['logging']['fileHandlerCount'] = 10
+default['tomcat']['logging']['fileHandlerLevel'] = "SEVERE"

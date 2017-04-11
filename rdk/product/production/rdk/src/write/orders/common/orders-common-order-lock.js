@@ -9,7 +9,7 @@ module.exports.lockOrder = function(orderId, writebackContext, callback) {
         }
 
         var rpcName = 'ORWDX LOCK ORDER';
-        rpcClient.execute(rpcName, orderId, function(err, data) { 
+        rpcClient.execute(rpcName, orderId, function(err, data) {
             var dataString = '' + data;
             if (dataString !== '1') {
                 return callback(dataString.replace('0^', ''), data);
@@ -22,9 +22,9 @@ module.exports.lockOrder = function(orderId, writebackContext, callback) {
 };
 
 module.exports.unlockOrder = function (orderId, writebackContext) {
-    //TODO: Add logging
     rpcClientFactory.getRpcClient(writebackContext, 'OR CPRS GUI CHART', function (error, rpcClient) {
         if (error) {
+            writebackContext.logger.error(error);
             return;
         }
 

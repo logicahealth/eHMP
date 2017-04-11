@@ -48,3 +48,16 @@ Then(/^POB user closes the modal window$/) do
   @ehmp.btn_modal_close.click
   @ehmp.wait_until_btn_modal_close_invisible
 end
+
+Then(/^the detail modal is displayed$/) do
+  @ehmp = PobCommonElements.new
+  @ehmp.wait_until_fld_modal_body_visible
+  expect(@ehmp).to have_fld_modal_body
+end
+
+Then(/^the detail modal title is set$/) do
+  @ehmp = ModalElements.new
+  @ehmp.wait_for_fld_modal_title
+  expect(@ehmp).to have_fld_modal_title
+  expect(@ehmp.fld_modal_title.text.length).to be > 0, "Expected modal title to have a length > 0, title = '#{@ehmp.fld_modal_title.text}'"
+end

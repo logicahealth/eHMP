@@ -103,7 +103,7 @@ define([
             _super = GridApplet.prototype;
             var dataGridOptions = {};
             dataGridOptions.filterEnabled = true; //Defaults to true
-            //dataGridOptions.filterFields = ['summary']; //Defaults to all columns
+            dataGridOptions.filterFields = _.pluck(fullScreenColumns, 'name'); //Defaults to all columns
             if (this.columnsViewType === "summary") {
                 dataGridOptions.columns = summaryColumns;
             } else if (this.columnsViewType === "expanded") {
@@ -196,19 +196,25 @@ define([
             viewModel: viewParseModel
         };
 
-        var response = $.Deferred();
 
-        var data = ADK.PatientRecordService.fetchCollection(fetchOptions);
-        data.on('sync', function() {
-            var detailModel = data.first();
-            response.resolve({
-                view: new ModalView({
-                    model: detailModel
-                })
-            });
-        }, this);
+        var data = ADK.PatientRecordService.createEmptyCollection(fetchOptions);
+        var detailModel = new Backbone.Model();
+        return {
+            view: ModalView.extend({
+                collection: data,
+                collectionEvents: {
+                    'sync': function(collection, resp) {
+                        var model = collection.first();
+                        if(model) this.model.set(model.toJSON());
+                    }
+                },
+                onBeforeShow: function() {
+                    ADK.PatientRecordService.fetchCollection(fetchOptions, this.collection);
+                },
+                model: detailModel
+            })
+        };
 
-        return response.promise();
     });
 
     return applet;

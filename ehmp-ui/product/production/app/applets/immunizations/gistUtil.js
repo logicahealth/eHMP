@@ -13,8 +13,8 @@ define([
             return (reaction ? "Yes" : "No");
         },
         seriesNormalization: function(series) {
-            if (series == '0') {
-                return "";
+            if (series == '0' || _.isEmpty(series)) {
+                return false;
             } else {
                 return series;
             }

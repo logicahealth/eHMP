@@ -19,7 +19,7 @@ function evaluateProcessor(req, res, next) {
 }
 
 function evaluateWithActionNames(req, res, next) {
-    var logger = req.app.logger;
+    var logger = req.logger;
     var jsonParams = req.body;
     logger.debug('asu-subsystem.evaluateWithActionNames: jsonParams %j ', jsonParams);
 
@@ -35,7 +35,7 @@ function evaluateWithActionNames(req, res, next) {
 
 
 function testProcessor(req, res, next) {
-    req.app.logger.info('Inside mocked asu rules endpoint');
+    req.logger.info('Inside mocked asu rules endpoint');
     res.rdkSend({
         isAuthorized: true
     });

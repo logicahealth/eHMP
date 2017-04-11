@@ -43,11 +43,10 @@ define(['main/ADK'], function(ADK) {
     });
 
     var allergies = ADK.Resources.Picklist.Collection.extend({
-        resource: 'write-pick-list',
+        resource: 'write-pick-list-allergies-match',
         model: AllergenGroup,
         params: function(method, options) {
             return {
-                type: 'allergies-match',
                 searchString: options.searchString || '',
                 site: this.user.get('site')
             };

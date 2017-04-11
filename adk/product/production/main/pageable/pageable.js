@@ -59,7 +59,7 @@ define([
          */
         constructor: function (options) {
             Backbone.PageableCollection.apply(this, arguments);
-            this.setClientInfinite(options.isClientInfinte || false);
+            this.setClientInfinite(options.isClientInfinite || false);
         },
 
         /**

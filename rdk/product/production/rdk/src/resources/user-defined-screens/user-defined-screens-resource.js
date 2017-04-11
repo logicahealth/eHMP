@@ -3,7 +3,6 @@
 var rdk = require('../../core/rdk');
 var _ = require('lodash');
 var httpUtil = rdk.utils.http;
-var dd = require('drilldown');
 var userdefinedFilter = require('./user-defined-filter-resource');
 var userDefinedGraph = require('./user-defined-stack-resource');
 var async = require('async');
@@ -18,7 +17,7 @@ function getResourceConfig() {
             operationalDataCheck: false,
             synchronize: false
         },
-        requiredPermissions: [],
+        requiredPermissions: ['access-general-ehmp'],
         isPatientCentric: false
     }];
 }
@@ -44,11 +43,10 @@ function getUserDefinedScreens(req, res) {
     var predefinedScreenIdsString = req.param('predefinedScreens');
 
     if(nullchecker.isNotNullish(predefinedScreenIdsString)) {
-        tasks.push(function (callback) {
-            //Get predefined filter data
-            var predefinedScreensIdsArray = predefinedScreenIdsString.split(',');
-
-            _.each(predefinedScreensIdsArray, function(screenId) {
+        var predefinedScreensIdsArray = predefinedScreenIdsString.split(',');
+        _.each(predefinedScreensIdsArray, function(screenId) {
+            tasks.push(function (callback) {
+                //Get predefined filter data
                 userdefinedFilter.getPredefinedFilterData(req, screenId, function(err, filterData) {
                     if (err) {
                         req.logger.error(err);
@@ -65,11 +63,9 @@ function getUserDefinedScreens(req, res) {
             req.logger.debug({filters: userDefinedFilters}, 'Inside getUserDefinedScreens returned predefined filter data');
         });
 
-        tasks.push(function (callback) {
-            //Get predefined stacked graph data
-            var predefinedScreensIdsArray = predefinedScreenIdsString.split(',');
-
-            _.each(predefinedScreensIdsArray, function(screenId) {
+        _.each(predefinedScreensIdsArray, function(screenId) {
+            tasks.push(function (callback) {
+                //Get predefined stacked graph data
                 userDefinedGraph.getPredefinedStackedGraphData(req, screenId, function(err, stackedGrpahData) {
                     if (err) {
                         req.logger.error(err);
@@ -139,8 +135,8 @@ function getUserDefinedScreens(req, res) {
 function createScreenIdFromRequest(req, screenType) {
     var uid;
     var userSession = req.session.user;
-    var site = dd(userSession)('site').val;
-    var ien = dd(userSession)('duz')(site).val;
+    var site = _.get(userSession, 'site');
+    var ien = _.get(userSession, ['duz', site]);
 
     if(!_.isUndefined(site) && !_.isUndefined(ien)) {
         uid = site.concat(';').concat(ien);

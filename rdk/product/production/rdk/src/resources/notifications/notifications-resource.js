@@ -11,7 +11,7 @@ function getResourceConfig() {
             operationalDataCheck: false,
             synchronize: false
         },
-        requiredPermissions: [],
+        requiredPermissions: ['future-release-not-available-for-use'],
         isPatientCentric: false,
         description: 'Get the list of notifications for the given patient id',
         subsystems: []
@@ -23,7 +23,7 @@ function getResourceConfig() {
             operationalDataCheck: false,
             synchronize: false
         },
-        requiredPermissions: [],
+        requiredPermissions: ['read-task'],
         isPatientCentric: false,
         description: 'Get the list of notifications for the growler',
         subsystems: []
@@ -35,7 +35,7 @@ function getResourceConfig() {
             operationalDataCheck: false,
             synchronize: false
         },
-        requiredPermissions: [],
+        requiredPermissions: ['read-task'],
         isPatientCentric: false,
         description: 'Get the list of notifications for the given user id',
         subsystems: []
@@ -47,7 +47,7 @@ function getResourceConfig() {
             operationalDataCheck: false,
             synchronize: false
         },
-        requiredPermissions: [],
+        requiredPermissions: ['read-task'],
         isPatientCentric: false,
         description: 'Gets the list for global notification list based on the given user id',
         subsystems: []
@@ -59,7 +59,7 @@ function getResourceConfig() {
             operationalDataCheck: false,
             synchronize: false
         },
-        requiredPermissions: [],
+        requiredPermissions: ['read-task'],
         isPatientCentric: false,
         description: 'Gets the count for global notification list based on the given user id',
         subsystems: []
@@ -73,7 +73,7 @@ function getResourceConfig() {
             synchronize: false,
             validateRequestParameters: true
         },
-        requiredPermissions: [],
+        requiredPermissions: ['add-task'],
         isPatientCentric: false,
         description: 'Create a notification',
         subsystems: []
@@ -87,7 +87,7 @@ function getResourceConfig() {
             synchronize: false,
             validateRequestParameters: true
         },
-        requiredPermissions: [],
+        requiredPermissions: ['add-task'],
         isPatientCentric: false,
         description: 'Resolve a notification by id',
         subsystems: []
@@ -101,7 +101,7 @@ function getResourceConfig() {
             synchronize: false,
             validateRequestParameters: true
         },
-        requiredPermissions: [],
+        requiredPermissions: ['add-task'],
         isPatientCentric: false,
         description: 'Resolve notifications by reference id',
         subsystems: []
@@ -115,7 +115,7 @@ function getResourceConfig() {
             synchronize: false,
             validateRequestParameters: true
         },
-        requiredPermissions: [],
+        requiredPermissions: ['read-task'],
         isPatientCentric: false,
         description: 'Get the list of notifications for the given reference id',
         subsystems: []

@@ -7,48 +7,25 @@ Feature: F138 Return of Demographics in FHIR format
   @F138_1_fhir_demographics @US2344-test @fhir @5000000217V519385
   Scenario: Client can request demographics in FHIR format
     Given a patient with "demographics" in multiple VistAs
-    When the client requests demographics for that patient "9E7A;100716"
+    When the client requests demographics for that patient "9E7A;253"
     Then a successful response is returned
     And the results contain
       | demographics_supplemental_list | demographics_values |
       | resourceType                   | Patient             |
        # defined on wiki and found in json
       | text.status           | generated                                   |
-      | text.div              | <div>EIGHT,INPATIENT. SSN: 666000808</div>  |
+      | text.div              | <div>SEVEN,PATIENT. SSN: 666000007</div>  |
       | extension.url              | http://vistacore.us/fhir/profiles/@main#service-connected |
-      | extension.valueCoding.code | N                                                         |
       | extension.valueCoding.display| Service Connected                                         |
         # identifier[ssn]
-       # | identifier.label  | ssn                            |
       | identifier.use    | official                       |
       | identifier.system | http://hl7.org/fhir/sid/us-ssn |
-      | identifier.value  | 666000808                      |
-        # identifier[zzz uid]
-       # | identifier.label  | uid                               |
-      | identifier.system | http://vistacore.us/fhir/id/uid   |
-      | identifier.value  | 100716 |
-        # identifier[y icn]
-       # | identifier.label  | icn                             |
+      | identifier.value  | 666000007                      |
       | identifier.system | http://vistacore.us/fhir/id/icn |
-      | identifier.value  | 5000000217V519385               |
-        #identifier[z dfn]
-       # | identifier.label  | dfn                             |
-      | identifier.system | http://vistacore.us/fhir/id/dfn |
-      | identifier.value  | 100716                          |
-        #identifier pid
-      | identifier.system | http://vistacore.us/fhir/id/pid |
-      | identifier.value  | 100716                     |
-       # only in json, not defined on wiki
-      | resourceType                  | Patient           |
-      | extension.valueCoding.code    | N                 |
-     # | extension.valueCoding.display | Service Connected |
-      | name.text                     | EIGHT,INPATIENT   |
-        #identifier gender
+      | identifier.value  | 10107V395912               |
       |gender                         | male             |
-      |birthDate                      | 1945-03-09        |
-      |address.use                    | home               |
-      |address.city                   | Any Town          |
-
+      |birthDate                      | 1935-04-07        |
+     
   @F138_2_fhir_demographics @US2344_mar_test @fhir @10105V001065
   Scenario: Client can request demographics in FHIR format
     Given a patient with "demographics" in multiple VistAs
@@ -136,10 +113,8 @@ Feature: F138 Return of Demographics in FHIR format
       # defined on wiki and found in json
       | text.status           | generated                                   |
       | text.div              |  <div>BCMA,EIGHT. SSN: 666330008</div>       |
-      #| gender.coding.system  | http://hl7.org/fhir/v3/AdministrativeGender |
       | gender                | male                                        |
       | birthDate             | 1945-04-07                                  |
-      #| extension[service-connected].url
       | extension.url              | http://vistacore.us/fhir/profiles/@main#service-connected |
       | extension.valueCoding.code | Y                                                         |
        # identifier[ssn]

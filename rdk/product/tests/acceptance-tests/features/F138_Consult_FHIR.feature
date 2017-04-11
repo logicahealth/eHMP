@@ -197,7 +197,7 @@
    And the FHIR results contain "no consult"
        | name                          | value                                                 |
 
- @F138_7_fhir_consult @fhir @10110V004877 @DE974 @US8577 @F202-21
+ @F138_7_fhir_consult @fhir @10110V004877 @DE974 @US8577 @F202-21 
  Scenario: Client can request consult results in FHIR format
        Given a patient with "consult" in multiple VistAs
        #And a patient with pid "10110V004877" has been synced through the RDK API
@@ -206,4 +206,4 @@
        And the FHIR results contain "consult"
        | name                           | value                              |
        | resource.resourceType          | ReferralRequest                    |
-       | resource.status                | completed                          |
+       | resource.status                | draft                          |

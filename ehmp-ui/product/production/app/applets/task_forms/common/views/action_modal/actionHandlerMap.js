@@ -61,6 +61,11 @@ define([
         getModalBody: ReleaseConsult.getBodyView,
         onAccept: ReleaseConsult.onAccept
     };
+    actionHandlerMap[SignalNames.CONSULT.RELEASE.ECONSULT] = {
+        title: ReleaseConsult.getTitle,
+        getModalBody: ReleaseConsult.getBodyView,
+        onAccept: ReleaseConsult.onAccept
+    };
     actionHandlerMap[SignalNames.CONSULT.RELEASE.EWL] = {
         title: 'Release EWL',
         getModalBody: ReleaseEWLAction.getBodyView,

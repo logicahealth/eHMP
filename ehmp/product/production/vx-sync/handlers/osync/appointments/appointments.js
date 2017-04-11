@@ -5,8 +5,8 @@ var async = require('async');
 var errorUtil = require(global.VX_UTILS + 'error');
 var rpcUtil = require(global.VX_UTILS + '/rpc-util');
 var nullUtils = require(global.VX_UTILS + 'null-utils');
-var jobUtil = require(global.VX_UTILS + 'osync-job-utils');
-var parseRpcResponseAppointments = require(global.VX_UTILS + 'patient-sync-utils').parseRpcResponseAppointments;
+var jobUtil = require(global.OSYNC_UTILS + 'osync-job-utils');
+var parseRpcResponseAppointments = require(global.OSYNC_UTILS + 'patient-sync-utils').parseRpcResponseAppointments;
 var filemanDateUtil = require(global.VX_UTILS + 'filemanDateUtil');
 var moment = require('moment');
 
@@ -89,7 +89,7 @@ function handle(log, config, environment, job, handlerCallback) {
     if (_.isArray(sites) && sites.length > 0) {
         async.eachSeries(sites, function(site, siteCb) {
             var daysInFuture = config.appointmentsOptions.daysInFuture;
-            var future = now.add(daysInFuture, 'days');
+            var future = now.clone().add(daysInFuture, 'days');
             var endDate = filemanDateUtil.getFilemanDate(future.toDate());
 
             var rpcConfig = configVistaSites[site];

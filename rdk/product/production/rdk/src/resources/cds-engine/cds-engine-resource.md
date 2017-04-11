@@ -16,7 +16,7 @@ Get engine registry
 
     + name (string, optional) - name of engine registry
 
-    + filter (string, optional) - match filter
+    + filter (string, optional) - A mongo db match specification, i.e. `{"name": "engineOne", "type": "OpenCDS", "environment.cpus": 8}`
 
 
 + Response 200 (application/json)
@@ -28,18 +28,13 @@ Get engine registry
 :[Response 500]({{{common}}}/responses/500.md)
 
 
-### Post [POST {{{path}}}/registry{?name}]
+### Post [POST {{{path}}}/registry]
 
 Engine Registry resource
 
 #### Notes
 
 Create an engine registry
-
-+ Parameters
-
-    + name (string, optional) - name of engine registry
-
 
 + Request JSON Message (application/json)
 
@@ -52,18 +47,13 @@ Create an engine registry
 :[Response 500]({{{common}}}/responses/500.md)
 
 
-### Put [PUT {{{path}}}/registry{?name}]
+### Put [PUT {{{path}}}/registry]
 
 Engine Registry resource
 
 #### Notes
 
 Update an engine registry(s)
-
-+ Parameters
-
-    + name (string, optional) - name of engine registry
-
 
 + Request JSON Message (application/json)
 

@@ -23,7 +23,7 @@ var evaluate = function(app) {
             return true;
         },
         permitResponseFormat: true,
-        requiredPermissions: [],
+        requiredPermissions: ['read-document'],
         isPatientCentric: false
     };
 };
@@ -39,7 +39,7 @@ var evaluateWithActionNames = function(app) {
         healthcheck: function() {
             return true;
         },
-        requiredPermissions: [],
+        requiredPermissions: ['read-document'],
         isPatientCentric: false
     };
 };

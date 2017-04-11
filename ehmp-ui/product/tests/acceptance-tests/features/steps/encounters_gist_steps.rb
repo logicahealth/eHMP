@@ -107,8 +107,8 @@ class VisitObject <  ADKContainer
     
     #sorting header definitions  
     add_action(CucumberLabel.new("Visit Type Header"), ClickAction.new, AccessHtmlElement.new(:css, "[data-appletid='encounters'] [data-group-instanceid='panel-Visits'] [data-header-instanceid='name-header']"))
-    add_action(CucumberLabel.new("Hx Occurrence Header"), ClickAction.new, AccessHtmlElement.new(:css, "[data-appletid='encounters'] [data-group-instanceid='panel-Visits'] [data-header-instanceid='count-header2']"))
-    add_action(CucumberLabel.new("Last Header"), ClickAction.new, AccessHtmlElement.new(:css, "[data-appletid='encounters'] [data-group-instanceid='panel-Visits'] [data-header-instanceid='count-header1']"))
+    add_action(CucumberLabel.new("Hx Occurrence Header"), ClickAction.new, AccessHtmlElement.new(:css, "[data-appletid='encounters'] [data-group-instanceid='panel-Visits'] [data-header-instanceid='count-header1']"))
+    add_action(CucumberLabel.new("Last Header"), ClickAction.new, AccessHtmlElement.new(:css, "[data-appletid='encounters'] [data-group-instanceid='panel-Visits'] [data-header-instanceid='count-header2']"))
     
     #Quick View closing
     add_verify(CucumberLabel.new("Quick View Visits"), VerifyText.new, AccessHtmlElement.new(:css, "#encountersTooltipVisits"))
@@ -633,5 +633,54 @@ Then(/^the Encounters Gist Quick View \- Appointments table contains rows$/) do
   rows.each do | row |
     p row.text
     expect(( date_format.match(row.text)).nil?).to eq(false), "#{row.text} does not match expected data format"
+  end
+end
+
+Then(/^the Encounters Gist Quick View \- Appointments Type table contains rows$/) do
+  driver = TestSupport.driver
+  css = "#encounters-Appointment-GENERALINTERNALMEDICINE tbody tr"
+  rows = driver.find_elements(:css, css)
+  expect(rows.length).to be > 0
+  rows = driver.find_elements(:css, "#{css} td:nth-child(1)")
+  date_format = Regexp.new("\\d{2}\/\\d{2}\/\\d{4}")
+  rows.each do | row |
+    p row.text
+    expect(( date_format.match(row.text)).nil?).to eq(false), "#{row.text} does not match expected data format"
+  end
+end
+
+Then(/^Last column is sorted in ascending order in Encounters Gist$/) do
+  encounter_applet = PobEncountersApplet.new
+  encounter_applet.wait_for_fld_visits_last_column
+  start_time = Time.now
+  begin
+    visits_last_columns = encounter_applet.fld_visits_last_column
+    expect(visits_last_columns.length).to be > 1
+    first_visit = visits_last_columns[0]
+    visits_last_columns.each do | next_visit |
+      expect(first_visit.text).to be <= next_visit.text, "#{first_visit.text} is not <= #{next_visit.text}"
+      first_visit = next_visit
+    end
+  rescue => e
+    raise e if (start_time + 30) < Time.now
+    retry
+  end
+end
+
+Then(/^Last column is sorted in descending order in Encounters Gist$/) do
+  encounter_applet = PobEncountersApplet.new
+  encounter_applet.wait_for_fld_visits_last_column
+  start_time = Time.now
+  begin
+    visits_last_columns = encounter_applet.fld_visits_last_column
+    expect(visits_last_columns.length).to be > 1
+    first_visit = visits_last_columns[0]
+    visits_last_columns.each do | next_visit |
+      expect(first_visit.text).to be >= next_visit.text, "#{first_visit.text} is not >= #{next_visit.text}"
+      first_visit = next_visit
+    end
+  rescue => e
+    raise e if (start_time + 30) < Time.now
+    retry
   end
 end

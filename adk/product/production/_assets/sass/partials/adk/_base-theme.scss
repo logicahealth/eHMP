@@ -48,7 +48,7 @@ fieldset[disabled] .btn {
     &.btn-xs {
         padding: 0 10px;
         font-size: 13px;
-        line-height: 1.6;
+        line-height: 1.8;
         border-radius: 20px;
         text-transform: capitalize;
         font-weight: 400;
@@ -67,6 +67,13 @@ fieldset[disabled] .btn {
             background: darken($primary-light, 10%);
             border: none;
             color: $primary-dark;
+        }
+        &[disabled],
+        &[disabled]:hover,
+        &[disabled]:focus,
+        &[disabled]:active  {
+            background-color: $primary-light-alt;
+            color: $primary;
         }
     }
     // color variations

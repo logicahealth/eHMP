@@ -10,7 +10,7 @@ define([
             var PROCESSID = 'Request.';
             var channel = ADK.Messaging.getChannel(appletId);
 
-            channel.reply(PROCESSID + 'Response', function(params) {
+            channel.on(PROCESSID + 'Response', function(params) {
                 var screen = ADK.Messaging.request('get:current:screen').id;
 
                 if (screen === 'provider-centric-view') {
@@ -19,19 +19,19 @@ define([
 
                 ResponseTrayUtils.launchResponseForm(params);
             });
-            channel.reply(PROCESSID + 'Request', function(params) {
+            channel.on(PROCESSID + 'Request', function(params) {
 
                 var screen = ADK.Messaging.request('get:current:screen').id;
                 if (screen === 'provider-centric-view') {
                     ADK.Navigation.navigate('overview');
                 }
-                var requests = params.model.attributes.taskVariables.requestActivity.data.requests;
+                var requests = params.formModel.attributes.requestActivity.data.requests;
                 var modelObj = {
                     request: requests[requests.length - 1],
-                    state: params.model.attributes.taskVariables.state,
-                    activity: params.model.attributes.taskVariables.activity,
-                    taskStatus: params.model.attributes.status,
-                    taskId: params.model.attributes.id
+                    state: params.formModel.attributes.state + ": " + params.formModel.attributes.subState,
+                    activity: params.formModel.attributes.requestActivity.data.activity,
+                    taskStatus: params.formModel.attributes.status,
+                    taskId: params.formModel.attributes.taskId
                 };
 
                 params = Utils.buildEditParameters(modelObj);

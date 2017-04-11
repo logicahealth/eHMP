@@ -3,6 +3,7 @@ define([
     "marionette",
     "underscore",
     "handlebars",
+    "moment",
     "hbs!app/applets/patient_search/templates/confirmationTemplate",
     "hbs!app/applets/patient_search/templates/acknowledgeTemplate",
     "hbs!app/applets/patient_search/templates/patientFlagTemplate"
@@ -11,6 +12,7 @@ define([
     Marionette,
     _,
     Handlebars,
+    moment,
     confirmationTemplate,
     acknowledgeTemplate,
     patientFlagTemplate) {
@@ -30,20 +32,14 @@ define([
             'click button#confirmFlaggedPatinetButton': 'confirmPatient',
             'click button#confirmationButton': 'onClickOfConfirm',
             'change input[type="checkbox"]': 'onClickPreviousWorkspaceCheckbox',
-            'hide.bs.collapse': function() {
-                this.$('#ackMessageCollapse').attr('title', 'Press enter to expand accordion and then arrow down to view content');
-            },
-            'show.bs.collapse': function() {
-                this.$('#ackMessageCollapse').attr('title', 'Press enter to collapse accordion');
-            },
             'affixed.bs.affix': function() {
                 this.$el.addClass("col-md-3");
-                this.$el.parent().addClass("noPadding");
+                this.$el.parent().addClass("all-padding-no");
             },
             'affix-top.bs.affix': function() {
                 if (this.$el.hasClass('col-md-3')) {
                     this.$el.removeClass('col-md-3');
-                    this.$el.parent().removeClass("noPadding");
+                    this.$el.parent().removeClass("all-padding-no");
                 }
             }
         },
@@ -111,7 +107,7 @@ define([
                 if (resp.status === 404) {
                     this.refreshPatientPhoto();
                     this.$(event.currentTarget).html("<i class='fa fa-spinner fa-spin'></i> <span> Syncing Patient Data...</span>");
-                    this.$(event.currentTarget).addClass('disabled').attr('disabled');
+                    this.$(event.currentTarget).addClass('disabled').attr('disabled','disabled');
                     this.$el.find('#screenReaderSyncing').addClass('sr-only').removeClass('hidden').focus();
                     //case of external patient not synced yet, invoke demographic sync from MVI in RDK
                     if (!_.isUndefined(this.model.get('isMVIOrigin')) && this.model.get('isMVIOrigin') === true) {
@@ -330,6 +326,7 @@ define([
                 this.listenTo(this.model, 'last-workspace-synced', function() {
                     ADK.PatientRecordService.getPatientPhoto(self.model);
                     self.showConfirm(confirmationTemplate);
+                    self.stopListening(self.model, 'last-workspace-synced');
                 });
                 ADK.PatientRecordService.getLastWorkspace(this.model);
             }
@@ -574,7 +571,8 @@ define([
             }
             var syncOptions = {
                 resourceTitle: 'synchronization-datastatus',
-                patient: this.model
+                patient: this.model,
+                cache: false
             };
             var self = this;
             syncOptions.onSuccess = function(collection, resp) {
@@ -598,10 +596,9 @@ define([
             // Add a check to sync status response to determine if patient is fully synced or not.
             if (!this.isPatientSynced(resp)) {
                 this.$(event.currentTarget).button('sync');
-                this.$el.find('#screenReaderSyncing').addClass('sr-only').removeClass('hidden').focus();
             } else {
-                this.$(event.currentTarget).button('loading');
                 this.$el.find('#screenReaderLoading').addClass('sr-only').removeClass('hidden').focus();
+                this.$(event.currentTarget).button('loading');
             }
             if (this.model.has('acknowledged')) {
                 this.model.set({
@@ -610,7 +607,8 @@ define([
             }
             var searchOptions = {
                 resourceTitle: 'patient-record-patient',
-                patient: this.model
+                patient: this.model,
+                cache: false
             };
             searchOptions.onError = function(collection, resp) {
                 collection.trigger('patient-record:error', collection, resp);
@@ -702,18 +700,21 @@ define([
             if (collection.xhr) collection.xhr.abort();
         },
         confirmPatient: function(event) {
+            this.$(event.currentTarget).button('loading');
             var patient = this.model;
             this.ccowPatientContextChange(patient, _.bind(function() {
-                ADK.UserDefinedScreens.screensConfigNullCheck();
-                ADK.Messaging.trigger("patient:selected", patient);
-                if (!this.navigation) {
-                    if (_.isFunction(this.callback)) {
-                        this.callback();
-                    }
-                    ADK.UI.Modal.hide();
-                } else {
-                    this.navigateToContextDefaultScreen();
-                }
+              _.delay(_.bind(function() {
+                  ADK.UserDefinedScreens.screensConfigNullCheck();
+                  ADK.Messaging.trigger("patient:selected", patient);
+                  if (!this.navigation) {
+                      if (_.isFunction(this.callback)) {
+                          this.callback();
+                      }
+                      ADK.UI.Modal.hide();
+                  } else {
+                      this.navigateToContextDefaultScreen();
+                  }
+              }, this), 100);
             }, this));
         },
         navigateToContextDefaultScreen: function() {
@@ -729,7 +730,12 @@ define([
             if (!_.isUndefined(this.usePreviousWorkspace) && this.usePreviousWorkspace === true) {
                 previousWorkspaceID = this.model.get('workspaceContext').workspaceId;
             }
-            ADK.Navigation.navigate(previousWorkspaceID || this.workspaceId || ADK.WorkspaceContextRepository.getDefaultScreenOfContext('patient'), options);
+
+            var nextWorkspaceId = previousWorkspaceID || this.workspaceId ||
+                ADK.UserService.getPreferences('defaultScreen.patient') ||
+                ADK.WorkspaceContextRepository.getDefaultScreenOfContext('patient');
+            
+            ADK.Navigation.navigate(nextWorkspaceId, options);
         },
         onBeforeDestroy: function() {
             this.sites = null;

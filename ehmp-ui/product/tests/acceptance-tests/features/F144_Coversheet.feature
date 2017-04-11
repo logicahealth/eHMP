@@ -46,9 +46,10 @@ Scenario: User view vitals on coversheet
     | buttons |
     | Filter Toggle |
 
-@F285_1c_AllergiesDisplay @US4005 
+@F285_1c_AllergiesDisplay @US4005
 Scenario: Verify applet displays expected buttons
-  And user sees the allergy applet on the coversheet page
+#  And user sees the allergy applet on the coversheet page
+  And The applet "ALLERGIES" on the coversheet page has been displayed
   Then the Allergies Applet contains buttons
     | buttons  |
     | Refresh  |

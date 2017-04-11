@@ -12,7 +12,7 @@ define([], function() {
     });
 
     var InformationStatements = ADK.Resources.Picklist.Collection.extend({
-        type: 'immunization-vaccine-info-statement',
+        resource: 'write-pick-list-immunization-vaccine-info-statement',
         model: InformationStatement,
     });
 

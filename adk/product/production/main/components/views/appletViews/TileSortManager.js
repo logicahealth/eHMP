@@ -216,5 +216,13 @@ define([
 
     };
 
+    TileSortManager.removeAllSortsForOneScreenFromSession = function(workspaceId) {
+        var json = UserDefinedScreens.getUserConfigFromSession();
+        var screenIndex = findScreenIndex(json, workspaceId);
+        if (screenIndex === -1) return;
+        json.userDefinedSorts.splice(screenIndex, 1);
+        UserDefinedScreens.saveUserConfigToSession(json);
+    };
+
     return TileSortManager;
 });

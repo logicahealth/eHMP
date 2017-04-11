@@ -1,35 +1,21 @@
-/*jslint node: true */
 'use strict';
 
 var rdk = require('../../core/rdk');
 var nullchecker = rdk.utils.nullchecker;
 var _ = require('lodash');
 var mongo = require('mongoskin');
-var dd = require('drilldown');
 
 var dbName = 'intent';
 var intentCollection = 'cdsintent';
-var db ;
+var thisApp;
+var logger;
 
-var isCDSMongoServerAvailable = false;
-
-module.exports.init = function(app) {
-    isCDSMongoServerAvailable = dd(app)('subsystems')('cds')('isCDSMongoServerConfigured').invoke();
-    if (!isCDSMongoServerAvailable) {
-        return;
-    }
-    app.subsystems.cds.getCDSDB(dbName, function(error, dbConnection) {
-        if (!error) {
-            db = dbConnection;
-            initDb(app);
-        }
-    });
+module.exports.init = function(app, subsystemLogger) {
+    thisApp = app;
+    logger = subsystemLogger;
 };
 
-//
-// Database Init
-//
-function initDb(app) {
+var initDb = function (dbConnection) {
     /*
      * Index for intents
      *
@@ -37,7 +23,7 @@ function initDb(app) {
      * because scopeId is optional.  Unfortunately Mongo doesn't let us have only that 'column' set as sparse,
      * so we have to deal with that programmatically.
      */
-    db.collection(intentCollection).ensureIndex({
+    dbConnection.collection(intentCollection).ensureIndex({
         name: 1,
         scope: 1,
         scopeId: 1
@@ -46,10 +32,12 @@ function initDb(app) {
         unique: true
     }, function(error) {
         if (error) {
-            app.logger.error({error: error}, 'error ensuring ' + intentCollection + ' index');
+            logger.error({error: error}, 'error ensuring ' + intentCollection + ' index');
+            return;
         }
     });
-}
+};
+
 
 // Intent
 
@@ -59,13 +47,13 @@ function initDb(app) {
  * @apiGroup Intent
  * @apiParam {String} [name] Intent name
  * @apiParam {String} [scope] Intent Scope
- * @apiParam {String} scopeId Intent Scope Id
+ * @apiParam {String} [scopeId] Intent Scope Id
  * @apiDescription Returns the intent or intents that match the uri query parameters.  The values for "name"
  * and "scope" are required.  For ease of use, these can be wildcarded by passing in a '*'.  This way we can
  * use this method to either get a single entity or return a list of entities which might be useful for testing
  * or other future uses.
  * @apiExample {js} Example usage:
- * curl -i http://IP_ADDRESS:PORT/resource/cds/intent/registry?name=FirstEngine&scope=Enterprise
+ * curl -i http://IP             /resource/cds/intent/registry?name=FirstEngine&scope=Enterprise
  * @apiSuccess {json} payload Json object containing a list of all datapoint values for the given uri parameters.
  * @apiSuccessExample {json} GetIntent-Response
  * HTTP/1.1 200 OK
@@ -101,44 +89,48 @@ function initDb(app) {
  *    ]
  * }
  */
-module.exports.getIntent = function(req, res) {
-    if (!isCDSMongoServerAvailable) {
-        return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS persistence store is unavailable.');
+var getIntent = function(req, res) {
+    if (_.isUndefined(thisApp)) {
+        return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS intent resource is unavailable.');
     }
-
-    var status = rdk.httpstatus.ok;
-
-    var name = req.query.name;
-    var scope = req.query.scope;
-    var scopeId = req.query.scopeId;
-
-    var match = {};
-    if (name !== '*' && nullchecker.isNotNullish(name)) {
-        match.name = name;
-    }
-    if (scope !== '*' && nullchecker.isNotNullish(scope)) {
-        match.scope = scope;
-    }
-    if (nullchecker.isNotNullish(scopeId)) {
-        if (scopeId !== '*') { //if it's not wildcard, use it.  if it is a wildcard, let them all match
-            match.scopeId = scopeId;
+    thisApp.subsystems.cds.getCDSDB(dbName, initDb, function(error, dbConnection) {
+        if (error) {
+            return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS persistence store is unavailable.');
         }
-    } else {
-        match.scopeId = null;
-    }
+        var status = rdk.httpstatus.ok;
 
-    db.collection(intentCollection).find(match).toArray(function(err, result) {
-        var message = (err === null) ? result : err;
-        if (err === null && _.isEmpty(result)) {
-            return res.status(rdk.httpstatus.not_found).rdkSend('No intents found');
+        var name = req.query.name;
+        var scope = req.query.scope;
+        var scopeId = req.query.scopeId;
+
+        var match = {};
+        if (name !== '*' && nullchecker.isNotNullish(name)) {
+            match.name = name;
         }
-        if (err !== null) {
-            return res.status(rdk.httpstatus.internal_server_error).rdkSend(message);
+        if (scope !== '*' && nullchecker.isNotNullish(scope)) {
+            match.scope = scope;
         }
-        res.status(status).rdkSend({data: message});
+        if (nullchecker.isNotNullish(scopeId)) {
+            if (scopeId !== '*') { //if it's not wildcard, use it.  if it is a wildcard, let them all match
+                match.scopeId = scopeId;
+            }
+        } else {
+            match.scopeId = null;
+        }
+
+        dbConnection.collection(intentCollection).find(match).toArray(function(err, result) {
+            var message = (err === null) ? result : err;
+            if (err === null && _.isEmpty(result)) {
+                return res.status(rdk.httpstatus.not_found).rdkSend('No intents found');
+            }
+            if (err !== null) {
+                return res.status(rdk.httpstatus.internal_server_error).rdkSend(message);
+            }
+            res.status(status).rdkSend({data: message});
+        });
     });
 };
-
+module.exports.getIntent = getIntent;
 
 /**
  * @api {post} /resource/cds/intent/registry Create Intent
@@ -203,44 +195,48 @@ module.exports.getIntent = function(req, res) {
  *    "message": "An intent with that name/scope/scopeId combination existatus, can not be created"
  * }
  */
-module.exports.postIntent = function(req, res) {
-    if (!isCDSMongoServerAvailable) {
-        return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS persistence store is unavailable.');
+var postIntent = function(req, res) {
+    if (_.isUndefined(thisApp)) {
+        return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS intent resource is unavailable.');
     }
-
-    var status = rdk.httpstatus.created;
-    var intent = req.body;
-
-    if (!intent || !intent.name) {
-        return res.status(rdk.httpstatus.bad_request).rdkSend('Missing required intent name');
-    }
-    if (!intent || !intent.scope) {
-        res.status(rdk.httpstatus.bad_request).rdkSend('Missing required intent scope');
-    }
-    var match = {};
-    match.name = intent.name;
-    match.scope = intent.scope;
-    if (nullchecker.isNotNullish(intent.scopeId)) {
-        match.scopeId = intent.scopeId;
-    } else {
-        match.scopeId = null;
-    }
-
-    db.collection(intentCollection).find(match).toArray(function(err, result) {
-        if (!err && result.length > 0) {
-            return res.status(rdk.httpstatus.conflict).rdkSend('An intent with that name/scope/scopeId combination exists.  Status, can not be created');
+    thisApp.subsystems.cds.getCDSDB(dbName, initDb, function(error, dbConnection) {
+        if (error) {
+            return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS persistence store is unavailable.');
         }
-        delete intent._id;
-        db.collection(intentCollection).insert(intent, function(err, result) {
-            var message = (err === null) ? result : err;
-            if (err === null && _.isEmpty(result)) {
-                return res.status(rdk.httpstatus.bad_request).rdkSend(message);
+        var status = rdk.httpstatus.created;
+        var intent = req.body;
+
+        if (!intent || !intent.name) {
+            return res.status(rdk.httpstatus.bad_request).rdkSend('Missing required intent name');
+        }
+        if (!intent || !intent.scope) {
+            res.status(rdk.httpstatus.bad_request).rdkSend('Missing required intent scope');
+        }
+        var match = {};
+        match.name = intent.name;
+        match.scope = intent.scope;
+        if (nullchecker.isNotNullish(intent.scopeId)) {
+            match.scopeId = intent.scopeId;
+        } else {
+            match.scopeId = null;
+        }
+
+        dbConnection.collection(intentCollection).find(match).toArray(function(err, result) {
+            if (!err && result.length > 0) {
+                return res.status(rdk.httpstatus.conflict).rdkSend('An intent with that name/scope/scopeId combination exists.  Status, can not be created');
             }
-            res.status(status).rdkSend(message);
+            delete intent._id;
+            dbConnection.collection(intentCollection).insert(intent, function(err, result) {
+                var message = (err === null) ? result.ops : err;
+                if (err === null && _.isEmpty(result)) {
+                    return res.status(rdk.httpstatus.bad_request).rdkSend(message);
+                }
+                res.status(status).rdkSend(message);
+            });
         });
     });
 };
-
+module.exports.postIntent = postIntent;
 
 /**
  * @api {put} /resource/cds/intent/registry Put Intent
@@ -281,50 +277,54 @@ module.exports.postIntent = function(req, res) {
  *    "message": "Intent does not exist"
  * }
  */
-module.exports.putIntent = function(req, res) {
-    if (!isCDSMongoServerAvailable) {
-        return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS persistence store is unavailable.');
+var putIntent = function(req, res) {
+    if (_.isUndefined(thisApp)) {
+        return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS intent resource is unavailable.');
     }
-
-    var status = rdk.httpstatus.ok;
-    var intent = req.body;
-
-    var name = req.query.name;
-    var scope = req.query.scope;
-    var scopeId = req.query.scopeId;
-
-    if (nullchecker.isNullish(name)) {
-        return res.status(rdk.httpstatus.bad_request).rdkSend('Missing required intent name');
-    }
-    if (nullchecker.isNullish(scope)) {
-        res.status(rdk.httpstatus.bad_request).rdkSend('Missing required intent scope');
-    }
-    var match = {};
-    match.name = name;
-    match.scope = scope;
-    if (nullchecker.isNotNullish(scopeId)) {
-        match.scopeId = scopeId;
-    } else {
-        match.scopeId = null;
-    }
-
-    intent.name = name;
-    intent.scope = scope;
-    db.collection(intentCollection).find(match).toArray(function(err, result) {
-        if (err || result.length === 0) {
-            return res.status(rdk.httpstatus.not_found).rdkSend('Intent does not exist');
+    thisApp.subsystems.cds.getCDSDB(dbName, initDb, function(error, dbConnection) {
+        if (error) {
+            return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS persistence store is unavailable.');
         }
-        db.collection(intentCollection).update(match, intent, function(err, result) {
-            var message = (err === null) ? result : err;
-            if (err === null && result !== 1) {
-                status = rdk.httpstatus.not_found;
-                return res.status(status).rdkSend(message);
+        var status = rdk.httpstatus.ok;
+        var intent = req.body;
+
+        var name = req.query.name;
+        var scope = req.query.scope;
+        var scopeId = req.query.scopeId;
+
+        if (nullchecker.isNullish(name)) {
+            return res.status(rdk.httpstatus.bad_request).rdkSend('Missing required intent name');
+        }
+        if (nullchecker.isNullish(scope)) {
+            res.status(rdk.httpstatus.bad_request).rdkSend('Missing required intent scope');
+        }
+        var match = {};
+        match.name = name;
+        match.scope = scope;
+        if (nullchecker.isNotNullish(scopeId)) {
+            match.scopeId = scopeId;
+        } else {
+            match.scopeId = null;
+        }
+
+        intent.name = name;
+        intent.scope = scope;
+        dbConnection.collection(intentCollection).find(match).toArray(function(err, result) {
+            if (err || result.length === 0) {
+                return res.status(rdk.httpstatus.not_found).rdkSend('Intent does not exist');
             }
-            res.status(status).rdkSend(message);
+            dbConnection.collection(intentCollection).update(match, intent, function(err, result) {
+                var message = (err === null) ? result : err;
+                if (err === null && result !== 1) {
+                    status = rdk.httpstatus.not_found;
+                    return res.status(status).rdkSend(message);
+                }
+                res.status(status).rdkSend(message);
+            });
         });
     });
 };
-
+module.exports.putIntent = putIntent;
 
 /**
  * @api {delete} /resource/cds/intent/registry Delete Intent
@@ -344,30 +344,35 @@ module.exports.putIntent = function(req, res) {
  *    message": 1
  * }
  */
-module.exports.deleteIntent = function(req, res) {
-    if (!isCDSMongoServerAvailable) {
-        return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS persistence store is unavailable.');
+var deleteIntent = function(req, res) {
+    if (_.isUndefined(thisApp)) {
+        return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS intent resource is unavailable.');
     }
-
-    var status = rdk.httpstatus.ok;
-    var name = req.query.name;
-    var scope = req.query.scope;
-    var scopeId = req.query.scopeId;
-
-    var match = {};
-    match.name = name;
-    match.scope = scope;
-    if (nullchecker.isNotNullish(scopeId)) {
-        match.scopeId = scopeId;
-    } else {
-        match.scopeId = null;
-    }
-
-    db.collection(intentCollection).remove(match, function(err, result) {
-        var message = (err === null) ? result : err;
-        if (err === null && result === 0) {
-            return res.status(rdk.httpstatus.not_found).rdkSend(message);
+    thisApp.subsystems.cds.getCDSDB(dbName, initDb, function(error, dbConnection) {
+        if (error) {
+            return res.status(rdk.httpstatus.service_unavailable).rdkSend('CDS persistence store is unavailable.');
         }
-        res.status(status).rdkSend(message);
+        var status = rdk.httpstatus.ok;
+        var name = req.query.name;
+        var scope = req.query.scope;
+        var scopeId = req.query.scopeId;
+
+        var match = {};
+        match.name = name;
+        match.scope = scope;
+        if (nullchecker.isNotNullish(scopeId)) {
+            match.scopeId = scopeId;
+        } else {
+            match.scopeId = null;
+        }
+
+        dbConnection.collection(intentCollection).remove(match, function(err, result) {
+            var message = (err === null) ? result : err;
+            if (err === null && result === 0) {
+                return res.status(rdk.httpstatus.not_found).rdkSend(message);
+            }
+            res.status(status).rdkSend(message);
+        });
     });
 };
+module.exports.deleteIntent = deleteIntent;

@@ -7,12 +7,11 @@ Feature: F711 - Integrate dynamic picklists for Immunizations forms
 
 @F711_1_immunization_statment @US9003
 Scenario: Endpoint for Vaccine Information Statement File (PXVIMM VIS)
-  When the client requests picklist with the parameters and site "9E7A"
+  When the client requests picklist with the parameters for "immunization-vaccine-info-statement" with the user "9E7A;PW    "
       | paramter name | value                               |
-      | type          | immunization-vaccine-info-statement |
-      
+
   Then a successful response is returned
-  And the picklist result contains 
+  And the picklist result contains
       | field         | value                    |
       | record        | 1 OF 80                  |
       | ien           | 1                        |
@@ -29,12 +28,11 @@ Scenario: Endpoint for Vaccine Information Statement File (PXVIMM VIS)
 
 @F711_2_immunization_info_source_file @US9004
 Scenario: Endpoint for Immunization Info Source File (PXVIMM INFO SOURCE)
-  When the client requests picklist with the parameters and site "9E7A"
+  When the client requests picklist with the parameters for "immunization-info-source" with the user "9E7A;PW    "
       | paramter name | value                    |
-      | type          | immunization-info-source |
-      
+
   Then a successful response is returned
-  And the picklist result contains 
+  And the picklist result contains
       | field   | value                                          |
       | ien     | 17                                              |
       | name    | HISTORICAL INFORMATION - FROM BIRTH CERTIFICATE |
@@ -44,12 +42,11 @@ Scenario: Endpoint for Immunization Info Source File (PXVIMM INFO SOURCE)
 
 @F711_3_immunization_admin_route @US9005
 Scenario: Endpoint for Immunization Administration Route File (PXVIMM ADMIN ROUTE)
-  When the client requests picklist with the parameters and site "9E7A"
+  When the client requests picklist with the parameters for "immunization-admin-route" with the user "9E7A;PW    "
       | paramter name | value                    |
-      | type          | immunization-admin-route |
-      
+
   Then a successful response is returned
-  And the picklist result contains 
+  And the picklist result contains
       | field   | value       |
       | ien     | 1           |
       | name    | INTRADERMAL |
@@ -58,12 +55,11 @@ Scenario: Endpoint for Immunization Administration Route File (PXVIMM ADMIN ROUT
 
 @F711_4_immunization_admin_site @US9006
 Scenario: Endpoint for Immunization Administration Site File (PXVIMM ADMIN SITE)
-  When the client requests picklist with the parameters and site "9E7A"
+  When the client requests picklist with the parameters for "immunization-admin-site" with the user "9E7A;PW    "
       | paramter name | value                    |
-      | type          | immunization-admin-site |
-      
+
   Then a successful response is returned
-  And the picklist result contains 
+  And the picklist result contains
       | field   | value        |
       | ien     | 2            |
       | name    | LEFT DELTOID |
@@ -73,9 +69,8 @@ Scenario: Endpoint for Immunization Administration Site File (PXVIMM ADMIN SITE)
 
 @F711_5_immunization_manufacturer @US9007
 Scenario: Endpoint for Immunization Manufacturers File (PXVIMM IMM MAN)
-  When the client requests picklist with the parameters and site "9E7A"
+  When the client requests picklist with the parameters for "immunization-manufacturer" with the user "9E7A;PW    "
       | paramter name | value                     |
-      | type          | immunization-manufacturer |
 
   Then a successful response is returned
   And the picklist result contains
@@ -91,9 +86,8 @@ Scenario: Endpoint for Immunization Manufacturers File (PXVIMM IMM MAN)
 
 @F711_6_immunization_lot @US9008
 Scenario: | Endpoint for Immunization Lot File (PXVIMM IMM LOT)
-  When the client requests picklist with the parameters and site "9E7A"
+  When the client requests picklist with the parameters for "immunization-lot" with the user "9E7A;PW    "
       | paramter name | value            |
-      | type          | immunization-lot |
 
   Then a successful response is returned
   And the picklist result contains
@@ -110,11 +104,10 @@ Scenario: | Endpoint for Immunization Lot File (PXVIMM IMM LOT)
       | ndcCodeVa      | EMPTY                                              |
 
 
-@F711_7_immunization_data @US10263 @debug
+@F711_7_immunization_data @US10263
 Scenario: | Endpoint for Immunization Data (PXVIMM IMMDATA)
-  When the client requests picklist with the parameters and site "9E7A"
+  When the client requests picklist with the parameters for "immunization-data" with the user "9E7A;PW    "
       | paramter name | value             |
-      | type          | immunization-data |
 
   Then a successful response is returned
   And the picklist result contains
@@ -135,4 +128,4 @@ Scenario: | Endpoint for Immunization Data (PXVIMM IMMDATA)
       | cdcProductName     | CONTAINS ACAM2000           |
       | synonym            | EMPTY                       |
 
-    
+

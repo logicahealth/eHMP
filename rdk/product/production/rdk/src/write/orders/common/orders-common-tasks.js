@@ -9,7 +9,8 @@ var validTasks = {
 	signDetailsLab: [require('./orders-common-sign-details-vista-writer')],
 	signOrdersLab: [require('./orders-common-sign-vista-writer')],
 	saveDraftLabOrder: [require('./orders-common-save-draft-write')],
-	findDraftLabOrders: [require('./orders-common-find-draft')]
+	findDraftOrders: [require('./orders-common-find-draft')],
+	readDraftOrder: [require('./orders-common-read-draft')]
 };
 
 /**

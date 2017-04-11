@@ -18,7 +18,7 @@ var httpUtil = rdk.utils.http;
  */
 var defaultOptions = {
     jdsServer: {
-        baseUrl: 'http://IP_ADDRESS:PORT'
+        baseUrl: 'http://IP             '
     },
     defaultExpirationTime: 1000 * 60 * 60 * 24 * 14
 };
@@ -67,7 +67,7 @@ module.exports = function(session) {
      * @api public
      */
     JDSStore.prototype.get = function(sid, callback) {
-        mylogger.debug('In connect-jds.get method with passed in sid:' + sid);
+        mylogger.debug({sid: sid}, 'In connect-jds.get method with passed in sid:' + sid);
         if (!sid) {
             return setImmediate(callback);
         }
@@ -79,7 +79,7 @@ module.exports = function(session) {
         var jdsOptions = _.extend({}, jdsServer, {
             url: jdsResource + '/' + sid, //JDS team decided to just append sit to URL for get
             timeout: 120000,
-            logger: mylogger,
+            logger: mylogger.child({sid: sid}),
             json: true
         });
         mylogger.debug({sid: sid}, 'In connect-jds.get method with passed in sid: %s. Before httpUtil.get call', sid);
@@ -144,7 +144,7 @@ module.exports = function(session) {
         var jdsOptions = _.extend({}, jdsServer, {
             url: jdsResource,
             timeout: 120000,
-            logger: mylogger,
+            logger: mylogger.child({sid: sid}),
             body: content
         });
         mylogger.debug({sid: sid, session: s}, 'In connect-jds.set method with passed in sid:' + sid + ' and session. Before httpUtil.post call');
@@ -184,7 +184,7 @@ module.exports = function(session) {
         var jdsOptions = _.extend({}, jdsServer, {
             url: jdsResource + '/' + sid, //JDS Team decided to just append the SID onto the URL as it made things easier for them
             timeout: 120000,
-            logger: mylogger
+            logger: mylogger.child({sid: sid})
         });
         mylogger.debug({sid: sid}, 'In connect-jds.destroy method with passed in sid:' + sid + '. Before httpUtil.get call');
         httpUtil.get(jdsOptions,

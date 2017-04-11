@@ -1400,7 +1400,7 @@ describe('jds-client.js', function() {
                 }, 10000);
             };
 
-            it('Verify clear, store, retreive, delete functionality.', function() {
+            it('Verify clear, store, retrieve, delete functionality.', function() {
                 clearOperationalData();
                 storeOperationalData();
                 retrieveOperationalData();

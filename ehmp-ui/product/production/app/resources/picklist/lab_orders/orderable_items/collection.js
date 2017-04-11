@@ -6,7 +6,7 @@ define([], function() {
     });
 
     var OrderableItems = ADK.Resources.Picklist.Collection.extend({
-        type: 'lab-order-orderable-items',
+        resource: 'write-pick-list-lab-order-orderable-items',
         model: OrderableItem,
         params: function(method, options) {
             return {

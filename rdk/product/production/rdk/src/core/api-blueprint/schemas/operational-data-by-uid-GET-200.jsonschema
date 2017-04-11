@@ -1,0 +1,23 @@
+{
+	"title": "Returns Operational data by uid",
+	"type": "object",
+	"required": [
+		"data"
+	],
+	"properties": {
+		"data": {
+			"type": "object",
+			"required": [
+				"items"
+			],
+			"properties": {
+				"items": {
+					"type": "array",
+					"items": {
+						"type": "object"
+					}
+				}
+			}
+		}
+	}
+}

@@ -1,3 +1,34 @@
+body[data-full-screen="true"].medication-review{
+    #content-region {
+        .panel-body {
+            height: auto;
+        }
+    }
+    [data-appletid="medication_review"]{
+        .grid-applet-panel{
+            overflow-y: hidden;
+            display: flex;
+            flex-direction: column;
+            .meds-review-main-region{
+                flex-grow: 1;
+                flex-shrink: 1;
+                position: relative;
+                padding: 0;
+                min-height: 200px; //phantomjs flex fallback
+                min-height: calc(2vh - 2vh); //phantomjs flex fallback recovery (this equals to zero, but phantomjs doesn't know about vh, so it will fall back to the previous measure)
+                & > div {
+                    position: absolute;
+                    width: 100%;
+                    height: 100%;
+                    overflow-y: auto;
+                    padding: 10px 15px;
+                }
+            }
+        }
+    }
+}
+
+
 [data-appletid="medication_review"] {
     &.panel-body {
         background-color: $primary-lightest;
@@ -11,8 +42,19 @@
     $defaultLineHeight: 13px; /* would prefer EM or REM, but messes up 23px tile height */
 
     div .meds-review-main-region {
-        margin: 0px 0 0 0;
-        padding: 10px 15px;
+        margin: 0;
+        flex-grow: 1;
+        flex-shrink: 1;
+        position: relative;
+        min-height: 200px; //phantomjs flex height fallback
+        min-height: calc(2vh - 2vh); // phantomjs flex fallback recovery
+        .meds-review-container {
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            padding: 10px 15px;
+            overflow-y: auto;
+        }
     }
     .header {
         margin-top: 3px;
@@ -57,6 +99,11 @@
         &.medication-item-list-region {
             border-bottom: 1px solid $grey-light;
             margin-bottom: 5px;
+            .medication-layout-view {
+                &:focus, &:hover {
+                    background-color: $primary-lightest;
+                }
+            }
         }
     }
     .panel-group .panel+.panel {
@@ -99,10 +146,10 @@
         overflow-y: auto;
         font-size: 12px;
         word-wrap: break-word;
-        text-transform: capitalize;
         h4 {
             padding: 0px;
             margin: 0px;
+            text-transform: capitalize;
         }
         h5 {
             text-transform: uppercase;
@@ -128,9 +175,6 @@
             font-family: inherit;
             margin: 5px;
             text-transform: none;
-        }
-        strong {
-            color: $grey-darker;
         }
         .detail-modal-text-transform-none {
             text-transform: none;

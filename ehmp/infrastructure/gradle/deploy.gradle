@@ -660,7 +660,7 @@ def chooseStableBuild(String repoName, String buildType, String artifactVersionN
 def getVersionParams(String repoName, String buildType) {
   def protocol = 'https://'
   def serverName = 'ci.vistacore.us'
-  def branchName = new File('../infrastructure/properties/releaseVersion').text.trim()
+  def branchName = new File('../infrastructure/properties/jenkinsVersion').text.trim()
   def jobName = "${repoName}-${buildType}-build-${branchName}"
   def restEndPointBuildList = "${protocol}${serverName}/job/${jobName}/lastStableBuild/api/xml"
   def conn = restEndPointBuildList.toURL().openConnection()

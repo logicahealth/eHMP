@@ -1,4 +1,6 @@
-define([], function() {
+define([
+    'moment'
+], function(moment) {
     var formUidCounter = 0;
     var note = ADK.Resources.Writeback.Model.extend({
         resource: 'notes-add',
@@ -95,7 +97,7 @@ define([], function() {
                 'encounterDateTime': null,
                 'patientStatus': (ADK.PatientRecordService.getCurrentPatient().patientStatusClass() === 'Inpatient') ? 'INPATIENT' : 'OUTPATIENT',
                 'entered': null,
-                'facilityName': (ADK.PatientRecordService.getCurrentPatient().get('homeFacility')) ? ADK.PatientRecordService.getCurrentPatient().get('homeFacility').name : 'None',
+                'facilityName': 'None',
                 'formUid': '' + formUidCounter++,
                 'isInterdisciplinary': 'false',
                 'lastUpdateTime': null,
@@ -138,19 +140,19 @@ define([], function() {
             if (options.validationType && options.validationType === 'sign') {
                 if (_.isEmpty(attributes.text[0].content)) {
                     this.errorModel.set({
-                        "text.0.content": 'Note body is required before signing.'
+                        "text.0.content": 'Note body is required before signing'
                     });
                 }
             }
 
             if (!_.isEmpty(this.errorModel.toJSON())) {
-                return 'Correct validation errors before saving.';
+                return 'Correct validation errors before saving';
             }
         },
         validateTitle: function(attributes) {
             if (_.isEmpty(attributes.documentDefUid)) {
                 this.errorModel.set({
-                    documentDefUidUnique: 'Enter in a Note Title'
+                    documentDefUidUnique: 'Enter in a note title'
                 });
                 return false;
             }
@@ -162,14 +164,14 @@ define([], function() {
 
             if (inputTime === null || inputTime === undefined || inputTime === '') {
                 this.errorModel.set({
-                    derivReferenceTime: 'Enter a time.'
+                    derivReferenceTime: 'Enter a time'
                 });
                 return false;
             }
 
             if (!this.isTime(inputTime)) {
                 this.errorModel.set({
-                    derivReferenceTime: 'Enter a valid time.'
+                    derivReferenceTime: 'Enter a valid time'
                 });
                 return false;
             }
@@ -198,15 +200,9 @@ define([], function() {
                 });
                 return false;
             }
-            if (!this.isDate(inputDate)) {
-                this.errorModel.set({
-                    derivReferenceDate: 'Enter a valid date'
-                });
-                return false;
-            }
             if (inputDate && moment(inputDate).startOf('day').isAfter(moment().startOf('day'))) {
                 this.errorModel.set({
-                    derivReferenceDate: 'Reference Date must not be in the future'
+                    derivReferenceDate: 'Reference date must not be in the future'
                 });
                 return false;
             }

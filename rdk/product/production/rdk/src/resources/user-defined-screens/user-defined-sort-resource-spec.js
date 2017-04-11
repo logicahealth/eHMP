@@ -14,6 +14,7 @@ describe('User Defined Applet Tile Sort', function() {
         });
         expect(resources[0].healthcheck).not.to.be.undefined();
         expect(resources[0].post).not.to.be.undefined();
+        expect(resources[0].requiredPermissions).to.eql(['access-general-ehmp']);
 
         expect(resources[1].name).to.equal('user-defined-sort');
         expect(resources[1].path).to.equal('');
@@ -23,6 +24,7 @@ describe('User Defined Applet Tile Sort', function() {
         });
         expect(resources[1].healthcheck).not.to.be.undefined();
         expect(resources[1].delete).not.to.be.undefined();
+        expect(resources[1].requiredPermissions).to.eql(['access-general-ehmp']);
     });
 
     it('correctly creates tile sort ID from session', function() {

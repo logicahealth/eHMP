@@ -68,6 +68,10 @@ define([
     });
 
     var WorkspaceContextRepository = Marionette.Object.extend({
+        userContextPreferences: [{
+            name: 'defaultScreen',
+            originalName: 'originalDefaultScreen'
+        }],
         initialize: function(options) {
             this.sessionSynchronized = {};
             this.runtimeContextConfig = {};
@@ -129,6 +133,9 @@ define([
             Object.defineProperty(this, 'currentContextDefaultScreen', {
                 get: function() {
                     return this.currentContext.get('defaultScreen');
+                },
+                set: function(defaultScreen) {
+                    this.currentContext.set('defaultScreen', defaultScreen);
                 }
             });
 
@@ -148,6 +155,12 @@ define([
                         this.saveRuntimeContextConfigToSession();
                     }
                     this.currentWorkspaceAndContext.set('workspace', newWorkspace);
+                }
+            });
+
+            Object.defineProperty(this, 'currentContextId', {
+                get: function () {
+                    return this.currentContext.get('id');
                 }
             });
 
@@ -200,10 +213,6 @@ define([
                 this.sessionSynchronized[WORKSPACE_COLLECTION] = true;
             }
         },
-        //saveWorkspacesToSession: function() {
-        //SessionStorage.set.sessionCollection(WORKSPACE_COLLECTION, this._workspaces);
-        // this.sessionSynchronized[WORKSPACE_COLLECTION] = true;
-        //},
         loadRuntimeContextConfigFromSession: function() {
             if (!this.sessionSynchronized[RUNTIME_CONTEXT_CONFIG]) {
                 var jsonObj = SessionStorage.get.sessionObject(RUNTIME_CONTEXT_CONFIG, null, true);
@@ -251,8 +260,16 @@ define([
             if (!_.isObject(promise)) {
                 promise = $.Deferred();
             }
-            var workspaceModule = ADK.ADKApp[routeIdsConfig.workspaceId];
+            var workspaceModule = ADK.ADKApp.Screens[routeIdsConfig.workspaceId];
             if (_.isUndefined(workspaceModule)) {
+                workspaceModule = ADK.ADKApp.Screens[this.currentContextDefaultScreen];
+                if (_.isUndefined(workspaceModule)){
+                    if (this.currentContext.has('originalDefaultScreen') && this.currentContextDefaultScreen !== this.currentContext.get('originalDefaultScreen')){
+                        this.currentContextDefaultScreen = this.currentContext.get('originalDefaultScreen');
+                    } else {
+                        this.currentContext = _.isEqual(this.userDefaultContext, this.currentContext) ? this.appDefaultContext :this.userDefaultContext;
+                    }
+                }
                 routeIdsConfig = {
                     workspaceId: this.currentContextDefaultScreen,
                     contextId: this.currentContext.get('id')
@@ -260,7 +277,7 @@ define([
                 this.navigateTo(routeIdsConfig, promise);
                 return promise;
             }
-            $.when(ADK.ADKApp[routeIdsConfig.workspaceId].buildPromise).done(_.bind(function() {
+            $.when(ADK.ADKApp.Screens[routeIdsConfig.workspaceId].buildPromise).done(_.bind(function() {
                 var routeModelsConfig = this.getRouteModels(routeIdsConfig.workspaceId, routeIdsConfig.contextId);
 
                 var workspaceId = routeModelsConfig.workspaceModel.get('id');
@@ -272,7 +289,7 @@ define([
 
                 var newRouteIdsConfig = routeModelsConfig.contextModel.get('navigateTo')(workspaceId);
                 if (!_.isEqual(routeIdsConfig.workspaceId, newRouteIdsConfig.workspaceId)) { ///FIX THIS LATER
-                    $.when(ADK.ADKApp[newRouteIdsConfig.workspaceId].buildPromise).done(_.bind(function() {
+                    $.when(ADK.ADKApp.Screens[newRouteIdsConfig.workspaceId].buildPromise).done(_.bind(function() {
                         this.navigateTo(newRouteIdsConfig, promise);
                     }, this));
                 } else {
@@ -290,7 +307,6 @@ define([
             this._workspaces.add(workspace);
         },
         removeWorkspace: function(workspaceName) {
-            //TODO-WC Have we ensured that the workspaces will always have a unique id?
             var matchedWorkspace = this._workspaces.get(workspaceName);
             if (matchedWorkspace) {
                 this._workspaces.remove(matchedWorkspace);
@@ -313,6 +329,16 @@ define([
         },
         getWorkspacePermissions: function(workspaceId) {
             return this.getWorkspace(workspaceId).get('requiredPermissions') || [];
+        },
+        resetWorkspaceContexts: function() {
+            var userContextPreferences = this.userContextPreferences;
+            this.contexts.each(function(context) {
+                _.each(userContextPreferences, function(propertyToReset) {
+                    if (context.has(propertyToReset.originalName)) {
+                        context.set(propertyToReset.name, context.get(propertyToReset.originalName));
+                    }
+                });
+            });
         }
     });
 

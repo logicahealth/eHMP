@@ -1,1 +1,1 @@
-VXSYNC_LOG_SUFFIX=admin-endpoint node tools/beanstalk/admin-endpoint.js --port <%= @options[:port] %> >  <%= @process_log %>
+VXSYNC_LOG_SUFFIX=admin-endpoint node tools/beanstalk/admin-endpoint.js --beanstalk-port <%= @beanstalk_port %> --port <%= @options[:port] %> >  <%= @process_log %>

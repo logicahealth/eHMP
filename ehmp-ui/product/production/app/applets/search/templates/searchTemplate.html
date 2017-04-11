@@ -1,13 +1,13 @@
-<div class="search-applet-main left-padding-md right-padding-md" tabindex="0">
-    <div class="row search-result-header all-padding-sm background-color-pure-white bottom-border-grey-light">
-        <div class="col-xs-1 background-color-primary all-padding-xs font-size-14 badge">
-            <span class="number-of-results">0 results</span>
+<div class="search-applet-main container-fluid background-color-pure-white" tabindex="0">
+    <div class="row all-padding-sm bottom-border-grey-light search-result-header">
+        <div class="col-xs-2 all-padding-no">
+            <span class="badge font-size-14 background-color-primary number-of-results">0 results</span>
         </div>
-        <div class="col-xs-10 search-results-filter btn-date-range">
+        <div class="col-xs-10 search-results-filter btn-date-range right-padding-no left-padding-xs right-margin-no">
             <form class="form-inline">
                 <fieldset>
                     <legend class="sr-only">Date Range Filter</legend>
-                    <div class="btn-group btn-group-xs right-margin-md">
+                    <div class="btn-group btn-group-xs">
                         <button id="all-range-text-search" name="all-range-search-record" type="button" class="btn btn-sm btn-default active-range" title="Press enter to select all years">All</button>
                         <button id="2yr-range-text-search" name="2yr-range-search-record" type="button" class="btn btn-sm btn-default" title="Press enter to select the last 2 years">2yr</button>
                         <button id="1yr-range-text-search" name="1yr-range-search-record" type="button" class="btn btn-sm btn-default" title="Press enter to select last year">1yr</button>
@@ -21,8 +21,8 @@
                         <label for="fromDateText">From</label>
                         <div id="custom-date-range1-search-record" class="input-group date">
                             <span id="fromCalendar" class="input-group-addon" aria-hidden="true">
-                        <i class="fa fa-calendar"></i>
-                    </span>
+                                <i class="fa fa-calendar"></i>
+                            </span>
                             <input type="text" placeholder="MM/DD/YYYY" class="form-control input-sm" id="fromDateText" name="filter-from-date-search-record" title="Enter start of date range in MM/DD/YYYY format" />
                         </div>
                     </div>
@@ -30,22 +30,25 @@
                         <label for="toDateText">To</label>
                         <div id="custom-date-range2-search-record" class="input-group date">
                             <span id="toCalendar" class="input-group-addon" aria-hidden="true">
-                        <i class="fa fa-calendar"></i>
-                    </span>
+                                <i class="fa fa-calendar"></i>
+                            </span>
                             <input type="text" placeholder="MM/DD/YYYY" class="form-control input-sm" id="toDateText" name="filter-to-date-search-record" title="Enter end of date range in MM/DD/YYYY format" />
                         </div>
                     </div>
-                    <button id="custom-range-apply" name="custom-range-apply-search-record" type="submit" class="btn btn-sm btn-primary left-margin-sm" title="Press enter to apply custom date range" disabled>Apply</button>
+                    <button id="custom-range-apply" name="custom-range-apply-search-record" type="submit" class="btn btn-sm btn-primary left-margin-xs" title="Press enter to apply custom date range" disabled>Apply</button>
                 </fieldset>
             </form>
         </div>
-    </div>
-    <div class="row top-padding-sm auto-overflow">
-        <div class="col-xs-12">
-            <p>Search is still under development and may not return all expected results. Review the patient record manually to ensure accuracy.</p>
+        <div class="col-xs-1 pixel-width-10 pull-right left-padding-no">
+            {{{helpIconLink 'record_search'}}}
         </div>
-        <div class="col-xs-12 search-spinner">
-            <p>
+    </div>
+    <div class="row auto-overflow">
+        <div class="col-xs-12 all-padding-no">
+            <p class="all-padding-sm">Search is still under development and may not return all expected results. Review the patient record manually to ensure accuracy.</p>
+        </div>
+        <div class="col-xs-12 all-padding-no search-spinner">
+            <p class="all-padding-sm">
                 <i class="fa fa-spinner fa-spin right-padding-xs"></i> Loading...
             </p>
         </div>

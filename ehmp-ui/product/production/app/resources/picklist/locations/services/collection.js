@@ -8,7 +8,7 @@ define([], function() {
     });
 
     var Services = ADK.Resources.Picklist.Collection.extend({
-        type: 'services-fetch-list',
+        resource: 'write-pick-list-services-fetch-list',
         model: Service
     });
 

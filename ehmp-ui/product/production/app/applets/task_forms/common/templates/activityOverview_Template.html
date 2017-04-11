@@ -25,15 +25,15 @@
 </div>
 
 <div>
-    <p><strong>History of {{ PROCESSNAME }}</strong></p>
-    <hr aria-hidden="true">
+    <h5>History of {{ PROCESSNAME }}</h5>
+    <hr aria-hidden="true" />
     {{#each taskHistory}}
     <div class="row left-padding-xs bottom-margin-sm clearfix">
-        <div class="col-md-2 text-right">
+        <div class="col-xs-2 text-right">
             <span class="bold-font block-display">{{ providerName }}</span>
             <span>{{ actionDate }}</span>
         </div>
-        <div class="col-md-10">
+        <div class="col-xs-10">
             <span class="bold-font block-display">{{ actionTitle }}</span>
             <span>{{ actionComment }}</span>
         </div>

@@ -25,7 +25,7 @@ define([], function() {
     });
 
     var Data = ADK.Resources.Picklist.Collection.extend({
-        type: 'immunization-data',
+        resource: 'write-pick-list-immunization-data',
         model: ImmunizationType,
     });
 

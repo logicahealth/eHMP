@@ -19,7 +19,7 @@ var expected_type = 'json';
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 
-app.get('/repositories.DNS       /fpds/:domain', function(req, res) {
+app.get('/repositories.med.DNS   /fpds/:domain', function(req, res) {
     var templateId = req.param('templateId');
     var filterId = req.param('filterId');
     var clientName = req.param('clientName');

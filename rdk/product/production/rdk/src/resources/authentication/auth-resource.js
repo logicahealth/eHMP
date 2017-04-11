@@ -1,16 +1,14 @@
 'use strict';
+var _ = require('lodash');
+var resourceList = [];
 
-//user authentication resources
-var getSession = require('./get-session');
-var refreshToken = require('./refresh-token');
-var destroySession = require('./destroy-session');
-var listResource = require('./list-resource');
+/**TODO remove this facility list and use the new facility list resource */
+//facility list resource
+var listResource = require('../facility/list');
 
-//system authentication resources
-var getSystemSession = require('./systems/get-session');
-var refreshSystemSession = require('./systems/refresh-session');
-var destroySystemSession = require('./systems/destroy-session');
-
+var apiResource = require('./api/api-resource');
+var systemsResource = require('./systems/systems-resource');
+var ssoResource = require('./sso/sso-resource');
 
 /**
  * Returns the configuration for the authentication resources
@@ -24,43 +22,9 @@ var destroySystemSession = require('./systems/destroy-session');
  *
  */
 function getResourceConfig() {
-    return [{
-        name: 'authentication-authentication',
-        path: '',
-        post: getSession,
-        interceptors: {
-            synchronize: false
-        },
-        requiredPermissions: [],
-        isPatientCentric: false,
-        bypassCsrf: true
-    }, {
-        name: 'authentication-refreshToken',
-        path: '',
-        get: refreshToken,
-        //we do not want to re-authenticate here just refresh the token
-        interceptors: {
-            audit: false,
-            metrics: false,
-            authentication: false,
-            operationalDataCheck: false,
-            synchronize: false
-        },
-        requiredPermissions: [],
-        isPatientCentric: false
-    }, {
-        name: 'authentication-destroySession',
-        path: '',
-        delete: destroySession,
-        //we are trying to destroy the session so don't re-authenticate here
-        interceptors: {
-            authentication: false,
-            operationalDataCheck: false,
-            synchronize: false
-        },
-        requiredPermissions: [],
-        isPatientCentric: false
-    }, {
+    var resourceList = [];
+
+    resourceList.push({
         name: 'authentication-list',
         path: '/list',
         get: listResource.get,
@@ -72,76 +36,9 @@ function getResourceConfig() {
         requiredPermissions: [],
         isPatientCentric: false,
         bypassCsrf: true
-    },{
-        name: 'authentication-internal-systems-authenticate',
-        path: '/systems/internal',
-        post: getSystemSession,
-        interceptors: {
-            authentication: false,
-            systemAuthentication: true,
-            operationalDataCheck: false,
-            synchronize: false
-        },
-        requiredPermissions: [],
-        isPatientCentric: false,
-        bypassCsrf: true
-    },{
-        name: 'authentication-internal-systems-destroy-session',
-        path: '/systems/internal',
-        delete: destroySystemSession,
-        interceptors: {
-            authentication: false,
-            operationalDataCheck: false,
-            synchronize: false
-        },
-        requiredPermissions: [],
-        isPatientCentric: false
-    },{
-        name: 'authentication-internal-systems-refresh-session',
-        path: '/systems/internal',
-        get: refreshSystemSession,
-        interceptors: {
-            authentication: false,
-            operationalDataCheck: false,
-            synchronize: false
-        },
-        requiredPermissions: [],
-        isPatientCentric: false
-    },{
-        name: 'authentication-external-systems-authenticate',
-        path: '/systems/external',
-        post: getSystemSession,
-        interceptors: {
-            authentication: false,
-            systemAuthentication: true,
-            operationalDataCheck: false,
-            synchronize: false
-        },
-        requiredPermissions: [],
-        isPatientCentric: false
-    },{
-        name: 'authentication-external-systems-destroy-session',
-        path: '/systems/external',
-        delete: destroySystemSession,
-        interceptors: {
-            authentication: false,
-            operationalDataCheck: false,
-            synchronize: false
-        },
-        requiredPermissions: [],
-        isPatientCentric: false
-    },{
-        name: 'authentication-external-systems-refresh-session',
-        path: '/systems/external',
-        get: refreshSystemSession,
-        interceptors: {
-            authentication: false,
-            operationalDataCheck: false,
-            synchronize: false
-        },
-        requiredPermissions: [],
-        isPatientCentric: false
-    }];
+    });
+    //TODO change this from union to concat for speed when updating to lodash 4+
+    return _.union(resourceList, apiResource, systemsResource, ssoResource);
 }
 
 module.exports.getResourceConfig = getResourceConfig;

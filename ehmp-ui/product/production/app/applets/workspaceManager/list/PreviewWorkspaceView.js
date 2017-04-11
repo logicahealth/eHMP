@@ -16,7 +16,7 @@ define([
                 'screenId': this.screenId,
                 'screenTitle': this.screenTitle
             });
-            var template = ADK.UserDefinedScreens.getGridsterTemplateForPreview(ADK.ADKApp[this.screenId]);
+            var template = ADK.UserDefinedScreens.getGridsterTemplateForPreview(ADK.ADKApp.Screens[this.screenId]);
             if (this.screenId === 'documents-list')
                 template = this.getTemplateForDocumentsList();
             this.model.set('gridsterTemplate', template);

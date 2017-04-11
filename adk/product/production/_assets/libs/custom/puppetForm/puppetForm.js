@@ -42,7 +42,7 @@
     // A collection of field models.
     var Form = PuppetForm.Form = Backbone.Marionette.CompositeView.extend({
         tagName: "form",
-        template: _.template('<p class="sr-only">* indicates a required field.</p>'),
+        template: _.template('<p class="sr-only">* indicates a required field. Tab to enter form.</p>'),
         attributes: {
             'action': '#',
             'method': PuppetForm.formDefaultMethod
@@ -79,6 +79,7 @@
             }, this.events);
             this.delegateEvents(events);
             this.model.errorModel = options.errorModel || this.model.errorModel || new Backbone.Model();
+            this.model._formView = this;
             this._setUpModelEvents();
             this.onInitialize(options);
         },
@@ -262,21 +263,21 @@
 
 
     var CommonEventsFunctions = PuppetForm.CommonEventsFunctions = {
-        setBooleanFieldOption: function(attribute, booleanValue, e) {
+        setBooleanFieldOption: function(attribute, booleanValue, e, options) {
             if (_.isBoolean(booleanValue)) {
-                this.field.set(attribute, booleanValue);
+                this.field.set(attribute, booleanValue, options || {});
             }
             e.stopPropagation();
         },
-        setStringFieldOption: function(attribute, stringValue, e) {
+        setStringFieldOption: function(attribute, stringValue, e, options) {
             if (_.isString(stringValue)) {
                 this.field.set(attribute, stringValue);
             }
             e.stopPropagation();
         },
-        setIntegerFieldOption: function(attribute, intValue, e) {
+        setIntegerFieldOption: function(attribute, intValue, e, options) {
             if (_.isNumber(intValue)) {
-                this.field.set(attribute, intValue);
+                this.field.set(attribute, intValue, options || {});
             }
             e.stopPropagation();
         },

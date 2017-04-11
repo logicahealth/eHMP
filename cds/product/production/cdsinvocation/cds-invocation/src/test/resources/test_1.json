@@ -5,7 +5,7 @@
     "link": [
         {
             "relation": "self",
-            "url": "http://127.0.0.1:8888/resource/fhir/medicationdispense?subject.identifier=10107V395912&accessCode=pu1234&verifyCode=pu1234!!&site=9E7A"
+            "url": "http://127.0.0.1:8888/resource/fhir/medicationdispense?subject.identifier=10107V395912&accessCode=PW    &verifyCode=PW    !!&site=9E7A&division=500"
         }
     ],
     "total": 36,

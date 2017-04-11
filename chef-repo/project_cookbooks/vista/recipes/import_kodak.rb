@@ -143,7 +143,9 @@ vista_mumps_block "Delete EHMP,SEVEN's medications" do
   command [
     "S DFN=100895 S RXID=0 F  S RXID=$O(^PS(55,DFN,\"P\",RXID)) Q:+RXID'=RXID  S RX=$G(^PS(55,DFN,\"P\",RXID,0)),DA=RX,DIK=\"^PSRX(\" D ^DIK S DA(1)=DFN,DA=RXID,DIK=\"^PS(55,DFN,\"\"P\"\",\" D ^DIK",
     "S DFN=100895 S RXID=0 F  S RXID=$O(^PS(55,DFN,\"IV\",RXID)) Q:+RXID'=RXID  S DA(1)=DFN,DA=RXID,DIK=\"^PS(55,DFN,\"\"IV\"\",\" D ^DIK",
-    "S DFN=100895 S RXID=0 F  S RXID=$O(^PS(55,DFN,\"IVBCMA\",RXID)) Q:+RXID'=RXID  S DA(1)=DFN,DA=RXID,DIK=\"^PS(55,DFN,\"\"IVBCMA\"\",\" D ^DIK"
+    "S DFN=100895 S RXID=0 F  S RXID=$O(^PS(55,DFN,\"IVBCMA\",RXID)) Q:+RXID'=RXID  S DA(1)=DFN,DA=RXID,DIK=\"^PS(55,DFN,\"\"IVBCMA\"\",\" D ^DIK",
+    "S DATE=0 F  S DATE=$O(^OR(100,\"AW\",\"100895;DPT(\",4,DATE)) Q:+DATE'=DATE  S ORIEN=0 F  S ORIEN=$O(^OR(100,\"AW\",\"100895;DPT(\",4,DATE,ORIEN)) Q:+ORIEN'=ORIEN  S DA=ORIEN,DIK=\"^OR(100,\" D ^DIK",
+    "S DATE=0 F  S DATE=$O(^OR(100,\"AW\",\"100895;DPT(\",23,DATE)) Q:+DATE'=DATE  S ORIEN=0 F  S ORIEN=$O(^OR(100,\"AW\",\"100895;DPT(\",23,DATE,ORIEN)) Q:+ORIEN'=ORIEN  S DA=ORIEN,DIK=\"^OR(100,\" D ^DIK"
   ]
   log node[:vista][:chef_log]
 end
@@ -175,14 +177,26 @@ vista_mumps_block "Modify picklist values in Kodak only" do
   log node[:vista][:chef_log]
 end
 
-26.times do |i|
-  alph = ("a".."z").to_a
+number_strings = ["ONE", "TWO", "THREE", "FOUR", "FIVE", "SIX", "SEVEN", "EIGHT", "NINE"]
 
-  number = alph[i]
-  vista_patient "Create a patient" do
-    name "KODAK,#{number}"
-    sex "FEMALE"
-    dob "01/01/1955"
+9.times do |t|
+
+  patient_name = "Kodak,#{number_strings[t]}"
+
+  vista_flag "Create an appointment" do
+    duz       1
+    programmer_mode true
+    namespace node[:vista][:namespace]
+    log node[:vista][:chef_log]
+    patient patient_name
     not_if { node[:vista][:no_reset] }
   end
+end
+
+vista_reindex_parameters "Delete AC cross references in parameters file" do
+  duz       1
+  programmer_mode true
+  namespace node[:vista][:namespace]
+  log node[:vista][:chef_log]
+  not_if { node[:vista][:no_reset] }
 end

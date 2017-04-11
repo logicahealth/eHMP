@@ -33,11 +33,13 @@ import org.bson.types.ObjectId;
 
 import com.cognitive.cds.invocation.model.EngineInfo;
 import com.cognitive.cds.invocation.model.EngineInstanceState;
+import com.cognitive.cds.invocation.mongo.exception.CDSDBConnectionException;
 import com.cognitive.cds.invocation.util.JsonUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.FindOneAndReplaceOptions;
 
 /**
@@ -94,8 +96,14 @@ public class EngineInfoDao {
 	protected EngineInfo fetchEngine(String name) {
 		EngineInfo engine = null;
 
-		mongoDbDao.setDatabase("engine");
-		MongoCollection<Document> collection = mongoDbDao.getCollection("engines");
+		MongoDatabase database = null;
+		try {
+			database = mongoDbDao.getMongoClient().getDatabase("engine");
+		} catch (CDSDBConnectionException e1) {
+			logger.error("========> mongoDbDao.getMongoClient().getDatabase: " + e1.toString(),e1);
+			return engine;
+		}
+		MongoCollection<Document> collection = database.getCollection("engines");
 		logger.info("Engines Count: " + collection.count());
 
 		Document filter = new Document();
@@ -109,32 +117,35 @@ public class EngineInfoDao {
 				engine.setId(engine.get_id().toHexString());
 
 			} catch (IOException e) {
-				logger.error("========> Deserialize: " + e.toString());
+				logger.error("========> Deserialize: " + e.toString(),e);
 			}
 		}
 		return engine;
 	}
 
 	public String createEngine(EngineInfo engineInfo) throws JsonProcessingException {
-		mongoDbDao.setDatabase("engine");
+
 		try {
+			MongoDatabase database = mongoDbDao.getMongoClient().getDatabase("engine");
 			ObjectId id = new ObjectId();
 			String json = mapper.writeValueAsString(engineInfo);
 			Document doc = Document.parse(json);
 			doc.put("_id", id);
-			mongoDbDao.getCollection("engines").insertOne(doc);
+			database.getCollection("engines").insertOne(doc);
 
 			return id.toHexString();
 
 		} catch (Exception e) {
-			logger.error("=======> intentMapping Insert Exception: " + e.toString());
+			logger.error("=======> intentMapping Insert Exception: " + e.toString(),e);
 		}
 		return null;
 	}
 
-	public boolean updateEngineInstanceState(EngineInstanceState engineInstanceState) throws JsonProcessingException {
-		mongoDbDao.setDatabase("engine");
+	public boolean updateEngineInstanceState(EngineInstanceState engineInstanceState) 
+			throws JsonProcessingException {
+
 		try {
+			MongoDatabase database = mongoDbDao.getMongoClient().getDatabase("engine");
 			String json = mapper.writeValueAsString(engineInstanceState);
 			logger.debug("=====> engineInstanceState json to write: " + json);
 			Document filter = new Document();
@@ -146,12 +157,12 @@ public class EngineInfoDao {
 			FindOneAndReplaceOptions options = new FindOneAndReplaceOptions();
 			options.upsert(true);
 			doc.remove("_id");
-			mongoDbDao.getCollection("instance").findOneAndReplace(filter, doc, options);
+			database.getCollection("instance").findOneAndReplace(filter, doc, options);
 			logger.debug("=====> engineInstanceState " + doc.toJson());
 			return true;
 
 		} catch (Exception e) {
-			logger.error("=======> EngineInstanceState - Insert/Update Exception EngineInstanceState: " + e.toString());
+			logger.error("=======> EngineInstanceState - Insert/Update Exception EngineInstanceState: " + e.toString(),e);
 			return false;
 		}
 	}
@@ -159,8 +170,14 @@ public class EngineInfoDao {
 	public ArrayList<EngineInstanceState> getActiveEngines(String type) {
 
 		ArrayList<EngineInstanceState> engines = new ArrayList<EngineInstanceState>();
-		mongoDbDao.setDatabase("engine");
-		MongoCollection<Document> collection = mongoDbDao.getCollection("instance");
+		MongoDatabase database = null;
+		try {
+			database = mongoDbDao.getMongoClient().getDatabase("engine");
+		} catch (CDSDBConnectionException e1) {
+			logger.error("=======> mongoDbDao.getMongoClient().getDatabase: " + e1.toString(),e1);
+			return engines;
+		}
+		MongoCollection<Document> collection = database.getCollection("instance");
 		logger.debug("Total engine instance count: " + collection.count());
 
 		Document filter = new Document();
@@ -173,7 +190,7 @@ public class EngineInfoDao {
 				EngineInstanceState eng = (EngineInstanceState) JsonUtils.getMapper().readValue(json, EngineInstanceState.class);
 				engines.add(eng);
 			} catch (Exception e) {
-				logger.error("=======> EngineState - intentMapping Insert Exception EngineState: " + e.toString());
+				logger.error("=======> EngineState - intentMapping Insert Exception EngineState: " + e.toString(),e);
 			}
 		}
 		logger.debug("Total active engine instance count: " + engines.size() + " of type: " + type);

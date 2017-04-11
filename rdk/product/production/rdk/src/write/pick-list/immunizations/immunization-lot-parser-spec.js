@@ -18,6 +18,8 @@ describe('unit test to validate immunization-lot', function() {
         'DOSES UNUSED^300' + '\r\n' +
         'LOW SUPPLY ALERT^' + '\r\n' +
         'NDC CODE (VA)^' + '\r\n' +
+        'ASSOCIATED VA FACILITY^500' + '\r\n' +
+
 
         'RECORD^2 OF 20' + '\r\n' +
         'LOT NUMBER^EHMP0001' + '\r\n' +
@@ -28,6 +30,7 @@ describe('unit test to validate immunization-lot', function() {
         'DOSES UNUSED^200' + '\r\n' +
         'LOW SUPPLY ALERT^10' + '\r\n' +
         'NDC CODE (VA)^' + '\r\n' +
+        'ASSOCIATED VA FACILITY^646' + '\r\n' +
 
         'RECORD^3 OF 20' + '\r\n' +
         'LOT NUMBER^EHMP00010EXP' + '\r\n' +
@@ -214,7 +217,8 @@ describe('unit test to validate immunization-lot', function() {
                 "expirationDate": "",
                 "dosesUnused": "300",
                 "lowSupplyAlert": "",
-                "ndcCodeVa": ""
+                "ndcCodeVa": "",
+                "associatedFacility": "500"
             },
             {
                 "record": "2 OF 20",
@@ -225,7 +229,8 @@ describe('unit test to validate immunization-lot', function() {
                 "expirationDate": "DEC 01, 2015",
                 "dosesUnused": "200",
                 "lowSupplyAlert": "10",
-                "ndcCodeVa": ""
+                "ndcCodeVa": "",
+                "associatedFacility": "646"
             },
             {
                 "record": "3 OF 20",

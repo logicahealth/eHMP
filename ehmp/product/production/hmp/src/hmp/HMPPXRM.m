@@ -1,4 +1,4 @@
-HMPPXRM ;SLC/AGP,ASMR/RRB,CK - Clinical Reminders routine. ;Apr 27, 2016 10:35:07
+HMPPXRM ;SLC/AGP,ASMR/RRB,CK - Clinical Reminders routine;May 15, 2016 14:15
  ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1**;May 15, 2016;Build 1
  ;Per VA Directive 6402, this routine should not be modified.
  ;

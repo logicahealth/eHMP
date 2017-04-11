@@ -1,5 +1,4 @@
 'use strict';
-var dd = require('drilldown');
 var _ = require('lodash');
 
 var clinicalObjectSubsystem = require('../../subsystems/clinical-objects/clinical-objects-subsystem');
@@ -24,7 +23,7 @@ function addImmunization(writebackContext, callback) {
             return callback(result);
         }
 
-        var referenceId = dd(result)('headers')('location').val || '';
+        var referenceId = _.get(result, 'headers.location') || '';
         referenceId = referenceId.substring(referenceId.indexOf('urn:va:ehmp'));
         if (_.isEmpty(referenceId)) {
             writebackContext.vprResponse = null;
@@ -73,7 +72,7 @@ function addImmunizationNote(writebackContext, callback) {
 
         writebackContext.logger.debug({lastVprResponse: writebackContext.vprResponse});
 
-        var referenceId = dd(result)('headers')('location').val || '';
+        var referenceId = _.get(result, 'headers.location') || '';
         referenceId = referenceId.substring(referenceId.indexOf('urn:va:ehmp'));
         if (_.isEmpty(referenceId)) {
             writebackContext.vprResponse = null;

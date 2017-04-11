@@ -1,10 +1,13 @@
 define([
     'underscore',
+    'moment',
     'app/applets/task_forms/common/views/activityOverview',
     'app/applets/task_forms/activities/simple_activity/utils/popupView',
     'app/applets/orders/tray/requests/requestTrayUtils',
-    'hbs!app/applets/task_forms/activities/simple_activity/templates/lockedModalFooterTemplate'
-], function(_, ActivityOverview, PopupView, RequestTrayUtils, LockedModalFooterTemplate) {
+    'hbs!app/applets/task_forms/activities/simple_activity/templates/lockedModalFooterTemplate',
+    'app/applets/todo_list/statusView',
+    'hbs!app/applets/todo_list/templates/statusModalFooterTemplate'
+], function(_, moment, ActivityOverview, PopupView, RequestTrayUtils, LockedModalFooterTemplate, StatusView, StatusModalFooterTemplate) {
     "use strict";
 
     function resolveHelper(response, modalView, footerView, closeOnESC) {
@@ -33,11 +36,11 @@ define([
 
             var channel = ADK.Messaging.getChannel('task_forms');
             channel.reply('activity_detail', function(params) {
-                ActivityOverview.startActivityDetails(params.processId);
+                ActivityOverview.startActivityDetails(params.processId, params.readOnly);
             });
 
             channel.reply('edit:request', function(params) {
-                var contextType = ADK.WorkspaceContextRepository.currentContext.get('id');
+                var contextType = ADK.WorkspaceContextRepository.currentContextId;
                 if (contextType === 'staff') {
                     ADK.PatientRecordService.setCurrentPatient(params.pid, {
                         navigation: true,
@@ -69,11 +72,58 @@ define([
                 var userId = site + ';' + duz;
                 var status = taskObj.get('status');
                 var ownerId = taskObj.get('actualOwnerId');
+                var processInstanceId = taskObj.get('processInstanceId');
                 taskObj.set('lockedDate', moment(taskObj.get('statusTimeStamp')).format('MM/DD/YYYY HH:mm'));
+                if (status === 'Completed') {
+                    var headerView = Backbone.Marionette.ItemView.extend({
+                        template: Handlebars.compile('<div class="container-fluid"><div class="row"><div class="col-xs-11"><h4 class="modal-title" id="mainModalLabel"><i class="fa fa-check color-secondary right-padding-sm" aria-hidden="true"></i>Task Completed</h4></div><div class="col-xs-1 text-right top-margin-sm"><button type="button" class="close btn btn-icon btn-xs left-margin-sm" data-dismiss="modal" title="Press enter to close."><i class="fa fa-times fa-lg"></i></button></div></div></div>')
+                    });
 
-                if (status === 'Ready' || (status === 'Reserved' && (ownerId === userId)) || (status === 'InProgress' && (ownerId === userId))) {
+                    var footerView = Backbone.Marionette.ItemView.extend({
+                        template: StatusModalFooterTemplate,
+                        model: new Backbone.Model({
+                            params: {
+                                processId: processInstanceId
+                            }
+                        }),
+                        events: {
+                            'click #activDetailBtn': 'activDetail'
+                        },
+                        event: event,
+                        activDetail: function(event) {
+                            event.preventDefault();
+                            ADK.Messaging.getChannel('task_forms').request('activity_detail', this.model.get('params'));
+                        }
+                    });
+
+                    var reason = 'This task was completed and no further actions are required.';
+                    var modalModel = {
+                        reason: reason
+                    };
+                    var view = new StatusView({
+                        model: new Backbone.Model(modalModel)
+                    });
+                    var modalOptions = {
+                        'size': 'normal',
+                        'headerView': headerView,
+                        'footerView': footerView
+                    };
+                    var modal = new ADK.UI.Modal({
+                        view: view,
+                        options: modalOptions
+                    });
+                    modal.show();
+                } else if (status === 'Ready' || (status === 'Reserved' && (ownerId === userId)) || (status === 'InProgress' && (ownerId === userId))) {
                     //If the task isn't 'locked' proceed to form
                     launchForm(params, taskObj);
+                } else if (status === 'Completed') {
+                    if (params.taskDefinitionId === 'Consult.Triage') {
+                        launchForm(params, taskObj);
+                    } else {
+                        params.formModel = taskObj;
+                        ADK.Messaging.getChannel('task_forms').trigger('Consult.Review', params);
+                    }
+
                 } else {
                     //Else we need to show the locked modal and ask if the user wants to unlock the task.
                     lockModal(params, taskObj);
@@ -86,7 +136,7 @@ define([
     //If task is 'locked' this is the code that's run before the form is launched.
     var lockModal = function(params, taskObj) {
         var headerView = Backbone.Marionette.ItemView.extend({
-            template: Handlebars.compile('<h4 class="modal-title"><i class="fa fa-lock font-size-18 left-padding-sm right-padding-xs" aria-hidden="true"></i>Task is Currently Locked</h4>')
+            template: Handlebars.compile('<div class="container-fluid"><div class="row"><div class="col-xs-11"><h4 class="modal-title" id="mainModalLabel"><i class="fa fa-lock font-size-18 right-padding-xs" aria-hidden="true"></i>Task is Currently Locked</h4></div><div class="col-xs-1 text-right top-margin-sm"><button type="button" class="close btn btn-icon btn-xs left-margin-sm" data-dismiss="modal" title="Press enter to close."><i class="fa fa-times fa-lg"></i></button></div></div></div>')
         });
         var view = new PopupView({
             model: taskObj
@@ -107,6 +157,7 @@ define([
                     this.fetchUnlock();
                 },
                 activDetail: function(event) {
+                    ADK.UI.Modal.hide();
                     ActivityOverview.startActivityDetails(params.activityId);
                 },
                 onSuccess: function(obj) {
@@ -132,7 +183,7 @@ define([
                         cache: false,
                         criteria: {
                             taskid: this.model.get('id').toString(),
-                            deploymentid: this.model.get('deploymentId'),
+                            deploymentId: this.model.get('deploymentId'),
                             state: "release",
                             parameter: {}
                         },
@@ -168,7 +219,7 @@ define([
 
         var formModel = buildFormModel(taskObj.get('variables'));
         $.extend(formModel, _.pick(params, ['activityId', 'taskDefinitionId', 'taskId', 'taskName']));
-        $.extend(formModel, _.pick(taskObj.attributes, ['deploymentId', 'processId', 'processInstanceId']));
+        $.extend(formModel, _.pick(taskObj.attributes, ['deploymentId', 'processId', 'processInstanceId', 'status']));
         params.formModel = new Backbone.Model(formModel);
         ADK.Messaging.getChannel('task_forms').trigger(params.taskDefinitionId, params);
     };
@@ -176,13 +227,17 @@ define([
     var buildFormModel = function(processVariables) {
         // Values to pull out of the clinical object to be used for the forms
         var PICK = [
+            'processInstanceId',
             'consultOrder',
+            'requestActivity',
             'state',
             'icn',
             'signalOwner_internal',
             'deploymentId',
             'clinicalObjectUid',
-            'notificationDate'
+            'notificationDate',
+            'status',
+            'consultClinicalObjectJSON'
         ];
         var parts = _.pick(arrToObj(processVariables), PICK);
 
@@ -195,7 +250,10 @@ define([
             deploymentId: parts.deploymentId,
             consultOrder: parts.consultOrder,
             clinicalObjectUid: parts.clinicalObjectUid,
-            notificationDate: parts.notificationDate
+            notificationDate: parts.notificationDate,
+            requestActivity: parts.requestActivity,
+            status: parts.status,
+            cdsIntentResults: _.get(parts, 'consultClinicalObjectJSON.data.consultOrders[0].cdsIntentResult.data.results', null)
         });
 
         // Parse state into state and substate

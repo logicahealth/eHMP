@@ -9,9 +9,9 @@ var port = require('yargs')
 require('../env-setup');
 var bodyParser = require('body-parser');
 var multer = require('multer');
-require('http').globalAgent.maxSockets = Infinity;
 
 var config = require(global.VX_ROOT + 'worker-config');
+require('http').globalAgent.maxSockets = config.endpointMaxSockets || 5;
 var logUtil = require(global.VX_UTILS + 'log');
 var log = logUtil.initialize(config).get('sync-endpoint');
 var pollerUtils = require(global.VX_UTILS + 'poller-utils');

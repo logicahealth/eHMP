@@ -1,13 +1,24 @@
 define([
-    'backbone'
-], function(Backbone) {
+    'backbone',
+    'moment'
+], function(Backbone, moment) {
     "use strict";
 
     var currentUser = ADK.UserService.getUserSession();
+
+    var errorMessageContainer = {
+        control: "alertBanner",
+        name: "errorMessage",
+        title: "Unable To Submit",
+        extraClasses: ["col-xs-12"],
+        type: "danger",
+        dismissible: false
+    };
+
     var FormFields = [{
         control: "container",
         extraClasses: ["modal-body"],
-        items: [{
+        items: [errorMessageContainer, {
             control: "container",
             extraClasses: ["container-fluid"],
             items: [{
@@ -45,9 +56,6 @@ define([
         }]
     }];
 
-
-
-
     var formView = ADK.UI.Form.extend({
         model: new Backbone.Model.extend({}),
         fields: FormFields,
@@ -61,13 +69,13 @@ define([
         onSubmit: function(e) {
             e.preventDefault();
             this.model.set({
-                modifiedOn: moment().format(ADK.utils.dateUtils.defaultOptions().placeholder),
-                location: currentUser.get('facility'),
-                modifiedBy: currentUser.get('firstname') + ' ' + currentUser.get('lastname')
+                touchedOn: moment().format('YYYYMMDDHHmmss'),
+                siteHash: currentUser.get('site'),
+                touchedBy: currentUser.get('uid'),
+                edited: true
             });
             this.model.trigger('custom_save', this.model);
             //add here any notification or alert
-            ADK.UI.Workflow.hide();
         },
         onCancel: function(e) {
             ADK.UI.Workflow.hide();

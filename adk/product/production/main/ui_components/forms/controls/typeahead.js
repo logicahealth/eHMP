@@ -153,10 +153,10 @@ define([
             this.field.get('fetchFunction')(searchInput, setPickList, onFetchError, needMoreInput);
         },
         onFetchError: function(searchInput) {
-            console.error('TODO implement onFetchError');
+            console.error('Implement onFetchError callback function');
         },
         needMoreInput: function (searchInput) {
-            console.error('TODO implement needMoreInput');
+            console.error('Implement needMoreInput callback function');
         },
         listenToPickList: function() {
             var self = this;

@@ -18,7 +18,7 @@ define([], function() {
         value: function() {
             return this.get('ien');
         },
-        toPicklist: function(){
+        toPicklist: function() {
             return {
                 ien: this.get('ien'),
                 labCollect: this.get('labCollect'),
@@ -61,7 +61,7 @@ define([], function() {
     });
 
     var samples = ADK.Resources.Picklist.Collection.extend({
-        type: 'lab-all-samples',
+        resource: 'write-pick-list-lab-all-samples',
         model: SamplesGroup,
         params: function(method, options) {
             return { //allergies.fetch({'searchString': 'ABC'})

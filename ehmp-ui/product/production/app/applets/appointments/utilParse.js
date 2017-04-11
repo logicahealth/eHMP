@@ -33,19 +33,25 @@ define([
         return model.get('typeDisplayName');
     };
 
-    Util.getProviderDisplayName = function(response) {
-        if (response.providers) {
-            response.providerDisplayName = response.providers[0].providerDisplayName;
-        }
-        return response;
-    };
-
     Util.getFormattedDecription = function(response) {
         if (response.kind) {
             response.formattedDescription = response.kind;
         }else{
             if (response.description && !response.kind) {
                 response.formattedDescription = response.description;
+            }
+        }
+        return response;
+    };
+    Util.getFormattedStatus = function(response) {
+        if (response.appointmentStatus) {
+            var lowerStatus = response.appointmentStatus.toLowerCase();
+            response.status = _.capitalize(lowerStatus);
+        } else if( response.appoinmentStatus ) {
+            var lowerStatusCompleteFlag = response.appoinmentStatus.toLowerCase();
+            if(lowerStatusCompleteFlag === 'complete' || lowerStatusCompleteFlag === 'completed')
+            {
+                response.status = "Completed";
             }
         }
         return response;

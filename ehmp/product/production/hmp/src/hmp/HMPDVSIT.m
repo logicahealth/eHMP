@@ -1,5 +1,5 @@
 HMPDVSIT ;SLC/MKB,ASMR/RRB - Visit/Encounter extract;8/2/11  15:29
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**;Sep 01, 2011;Build 63
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**3**;Sep 02, 2016;Build 63
  ;Per VA Directive 6402, this routine should not be modified.
  ;
  ; External References          DBIA#
@@ -15,7 +15,7 @@ HMPDVSIT ;SLC/MKB,ASMR/RRB - Visit/Encounter extract;8/2/11  15:29
  ; DIC                           2051
  ; DILFD                         2055
  ; DIQ                           2056
- ; ICDCODE                       3990
+ ; ICDEX                         5747
  ; ICPTCOD                       1995
  ; PXAPI,^TMP("PXKENC",$J        1894
  ; SDOE                          2546
@@ -117,9 +117,9 @@ POV(VISIT) ; -- return the primary Purpose of Visit as ICD^ProviderNarrative
  ;
 ICD(IEN) ; -- return code^description for ICD code, or "^" if error
  N X0,HMPX,N,I,X,Y S IEN=+$G(IEN)
- S X0=$$ICDDX^ICDCODE(IEN) I X0<0 Q "^"
+ S X0=$$ICDDX^ICDEX(IEN) I X0<0 Q "^"  ;Sep 1, 2016 - PB - DE5033 changed to use new API to get ICD code
  S Y=$P(X0,U,2)_U_$P(X0,U,4)       ;ICD Code^Dx name
- S N=$$ICDD^ICDCODE($P(Y,U),"HMPX") ;ICD Description
+ S N=$$ICDD^ICDEX($P(Y,U),"HMPX") ;ICD Description  Sep 1, 2016 - PB - DE5033 changed to use new API to get ICD code
  I N>0,$L($G(HMPX(1))) S $P(Y,U,2)=HMPX(1)
  Q Y
  ;
@@ -206,7 +206,7 @@ PTF(DFN,PTF) ; -- return ICD code^description for a PTF record
  N HMPPTF,N,HMPX
  D:$G(PTF) RPC^DGPTFAPI(.HMPPTF,+PTF) I $G(HMPPTF(0))<1 Q "^"
  S Y=$P($G(HMPPTF(1)),U,3)_U
- S N=$$ICDD^ICDCODE(Y,"HMPX") ;ICD Description
+ S N=$$ICDD^ICDEX(Y,"HMPX") ;ICD Description Sep 1, 2016 - PB - DE5033 changed to use new API to get ICD code
  I N>0,$L($G(HMPX(1))) S Y=Y_HMPX(1)
  Q Y
  ;

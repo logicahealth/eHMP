@@ -113,11 +113,10 @@ define([
 
             this.triggerMethod('render', this);
             var dataInfoButton = this.$el.find('td:nth-child(2)').text();
-            if(_.isUndefined(this.behaviorTriggers) && dataInfoButton.indexOf('Panel') !== 1)
-            {
+            var activeId =  _.get(this.el, "ownerDocument.activeElement.id");
+            if (_.isUndefined(this.behaviorTriggers) && dataInfoButton.indexOf('Panel') !== 1 && activeId !== "mainModalDialog" && activeId !== "mainModal") {
                 this.$el.find('td:first-child').prepend("<span class='sr-only toolbar-instructions'>Press enter to view additional details.</span>");
             }
-            
             return ret;
         },
         setElement: function() {

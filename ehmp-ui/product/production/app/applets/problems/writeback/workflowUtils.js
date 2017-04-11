@@ -69,7 +69,13 @@ define([
             workflowOptions.steps.push({
                 view: AddEditProblemsView,
                 viewModel: formModel,
-                stepTitle: 'Edit Problem'
+                stepTitle: 'Edit Problem',
+                onBeforeShow: function() {
+                    var currentForm = this.workflowControllerView.getCurrentFormView();
+                    currentForm.stopListening(currentForm.model, 'change.inputted', currentForm.registerChecks);
+                    currentForm.unregisterChecks.apply(currentForm);
+                    currentForm.listenToOnce(currentForm.model, 'change', currentForm.registerChecks);
+                }                
             });
 
             var workflowController = new ADK.UI.Workflow(workflowOptions);

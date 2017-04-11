@@ -60,9 +60,9 @@ function fetchMvi1309FileName(patientId) {
     else if (patientId === "5000002725V255208^NI^200M^USVHA")
         return "ICN 5000002725V255208";
     else if (patientId === "5000002726V030023^NI^200M^USVHA")
-        return "ICN 5000002726V030023"
+        return "ICN 5000002726V030023";
     else if (patientId === "5000002727V162545^NI^200M^USVHA")
-        return "ICN 5000002727V162545"
+        return "ICN 5000002727V162545";
     else if (patientId === "5000002728V316997^NI^200M^USVHA")
         return "ICN 5000002728V316997";
     else if (patientId === "5000002729V474882^NI^200M^USVHA")

@@ -216,7 +216,7 @@ define([
                 parse: AppletHelper.parseLabResponse
             };
             typeName = fetchName;
-            modalDisplayName = this.model.attributes.displayName;
+            modalDisplayName = this.model.attributes.typeName;
 
             this.fetchOptions.pageable = true;
             this.fetchOptions.cache = false;

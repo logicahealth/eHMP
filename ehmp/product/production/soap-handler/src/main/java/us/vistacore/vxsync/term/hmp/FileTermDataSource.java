@@ -17,10 +17,10 @@ import java.util.Set;
  * This is only capable of serving one mapping table.  If you have more than one mapping table
  * use multiple instances of this.
  *
- * TODO: There can be multiple mappings (primary and secondary), these are not being dealt with yet.
+ * FUTURETODO: There can be multiple mappings (primary and secondary), these are not being dealt with yet.
  *
  * Created by IntelliJ IDEA.
- * User: VHAISLBRAYB
+ * User: DNS   BRAYB
  * Date: 6/10/11
  * Time: 10:26 AM
  */
@@ -41,7 +41,7 @@ public class FileTermDataSource extends AbstractTermDataSource implements ITermD
         props.setProperty("field.target.idx", TargetConceptFieldIdx + "");
         props.setProperty("table.size", "N/A");
 
-        // TODO: Should we let this lazy load?
+        // FUTURETODO: Should we let this lazy load?
         init();
     }
     
@@ -77,7 +77,7 @@ public class FileTermDataSource extends AbstractTermDataSource implements ITermD
             String targetCode = targetFieldIdx <= tokens.length ? tokens[targetFieldIdx-1] : null;
 
             if (srcCode != null && targetCode != null && srcCode.length() > 0 && targetCode.length() > 0) {
-                // TODO: Here is where we need to store multiple mappings potentially,
+                // FUTURETODO: Here is where we need to store multiple mappings potentially,
                 // currently we are just blindly replacing any existing mapping with a new one.
                 map.put(srcCode, targetCode);
             }
@@ -97,19 +97,16 @@ public class FileTermDataSource extends AbstractTermDataSource implements ITermD
 
 	@Override
 	public Set<String> getCodeSystemList() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	
 	@Override
 	public Map<String, Object> getCodeSystemMap() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Map<String, Object> getConceptData(String urn) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 }

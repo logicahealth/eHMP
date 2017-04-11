@@ -1,42 +1,45 @@
 define([
     'async',
+    'moment',
     'app/applets/task_forms/common/utils/eventHandler',
     'app/applets/task_forms/common/utils/taskFetchHelper',
     'app/applets/orders/writeback/common/assignmentType/assignmentTypeUtils',
     'app/applets/task_forms/common/utils/requestCommonUtils'
-], function(Async, EventHandler, TaskFetchHelper, AssignmentTypeUtils, Utils) {
-    "use strict";
+], function(Async, moment, EventHandler, TaskFetchHelper, AssignmentTypeUtils, Utils) {
+    'use strict';
 
-    var REQUEST_CLARIFICATION = 'Return for Clarification';
-    var REQUEST_DECLINE = 'Decline';
-    var REQUEST_COMPLETE = 'Mark as Complete';
-    var REQUEST_REASSIGN = 'Reassign';
+    var REQUEST_CLARIFICATION = 'clarification';
+    var REQUEST_DECLINE = 'decline';
+    var REQUEST_COMPLETE = 'complete';
+    var REQUEST_REASSIGN = 'reassign';
 
     var buildResponse = function(formModel, formAction, action, request, userSession) {
         var visitInfo = ADK.PatientRecordService.getCurrentPatient().get('visit');
         var response = {
-            objectType: "request",
+            objectType: 'request',
             taskInstanceId: formModel.get('data').activity.processInstanceId,
             action: action,
-            request: formModel.get('request') ? formModel.get('request') : formModel.get('comment'),
-            assignTo: '', // TODO: this will change for the reassign scenario
+            request: Utils.removeWhiteSpace(formModel.get('request') ? formModel.get('request') : formModel.get('comment')),
             submittedByUid: 'urn:va:user:' + userSession.site + ":" + userSession.duz[userSession.site],
             submittedByName: userSession.lastname + ',' + userSession.firstname,
-            submittedTimeStamp: moment(),
+            submittedTimeStamp: moment().utc(),
             route: {},
             visit: {
                 location: visitInfo.locationUid,
                 serviceCategory: visitInfo.serviceCategory,
                 dateTime: visitInfo.dateTime
             },
-            earliestDate: moment.utc(formModel.get('earliestDateText')).startOf('day').format('YYYYMMDDHHmmss'),
-            latestDate: moment.utc(formModel.get('latestDateText')).startOf('day').format('YYYYMMDDHHmmss')
+            earliestDate: moment(formModel.get('earliestDateText')).startOf('day').utc().format('YYYYMMDDHHmmss'),
+            latestDate: moment(formModel.get('latestDateText')).endOf('day').utc().format('YYYYMMDDHHmmss')
         };
 
-        if(action === REQUEST_CLARIFICATION || action === REQUEST_DECLINE ) {
+        if (action === REQUEST_CLARIFICATION || action === REQUEST_DECLINE ) {
             response.assignTo = 'Person';
             response.route.person = routingCode(formModel, formAction);
             response.route.facility = formModel.get('data').activity.sourceFacilityId;
+        } else if (action === REQUEST_REASSIGN) {
+            response.assignTo = parseAssignment(formModel.get('assignment'));
+            setRouteToResponse(formModel, response);
         }
         return response;
     };
@@ -44,27 +47,27 @@ define([
     var buildActivity = function(formModel, activity, action) {
         if (activity === null) {
             activity = {};
-
         }
-        if(action === REQUEST_CLARIFICATION || action === REQUEST_DECLINE ) {
+        if (action === REQUEST_CLARIFICATION || action === REQUEST_DECLINE ) {
             activity.assignedTo = routingCode(formModel);
+        } else if (action === REQUEST_REASSIGN) {
+            activity.assignedTo = routingCodeAll(formModel);
         }
         return activity;
     };
 
     var routingCode = function(formModel) {
         var authorUid = formModel.get('authorUid');
-        return authorUid.substring(authorUid.indexOf("user") + 5, authorUid.length).replace(':', ';');
+        return authorUid.substring(authorUid.indexOf('user') + 5, authorUid.length).replace(':', ';');
     };
 
     function startResponsePost(collection, formModel, formAction, action, data) {
-        formModel = Utils.escapeAll(formModel);
 
         var newestActivity = Utils.findLatestRequest(collection);
         var userSession = ADK.UserService.getUserSession().attributes;
         var patientContext = ADK.PatientRecordService.getCurrentPatient();
 
-        data.activity.objectType = "activity";
+        data.activity.objectType = 'activity';
         Async.waterfall([
             function(next) {
                 if (formModel.get('taskStatus').toLowerCase() === 'inprogress') {
@@ -74,7 +77,7 @@ define([
                         resourceTitle: 'tasks-update',
                         fetchType: 'POST',
                         criteria: {
-                            deploymentid: data.activity.deploymentId,
+                            deploymentId: data.activity.deploymentId,
                             processDefId: data.activity.processDefinitionId,
                             parameter: {
                                 out_activity: buildActivity(formModel, data.activity, action),
@@ -102,7 +105,7 @@ define([
                     resourceTitle: 'tasks-update',
                     fetchType: 'POST',
                     criteria: {
-                        deploymentid: data.activity.deploymentId,
+                        deploymentId: data.activity.deploymentId,
                         processDefId: data.activity.processDefinitionId,
                         parameter: {
                             out_activity: buildActivity(formModel, data.activity, action),
@@ -134,10 +137,10 @@ define([
                 errorBanner.show();
             } else {
                 var alertMessageMap = {
-                    'Mark as Complete': 'Successfully completed.',
-                    'Return for Clarification': 'Successfully returned for clarification',
-                    'Decline': 'Successfully declined',
-                    'Reassign': 'Successfully reassigned'
+                    complete: 'Successfully completed.',
+                    clarification: 'Successfully returned for clarification',
+                    decline: 'Successfully declined',
+                    reassign: 'Successfully reassigned'
                 };
                 var successBanner = new ADK.UI.Notification({
                     type: 'success',
@@ -151,9 +154,115 @@ define([
         });
     }
 
+    /*
+     * The following functions are to support reassign
+     */
+    var parseAssignment = function(assignment) {
+        if (assignment === 'opt_me') {
+            return "Me";
+        } else if (assignment === 'opt_person') {
+            return 'Person';
+        } else if (assignment === 'opt_myteams') {
+            return 'My Teams';
+        } else if (assignment === 'opt_anyteam') {
+            return 'Any Team';
+        } else if (assignment === 'opt_patientteams') {
+            return 'Patient\'s Teams';
+        } else {
+            return null;
+        }
+    };
+    var routingCodeAll = function(formModel) {
+        var assignTo = parseAssignment(formModel.get('assignment'));
+        var userSession = ADK.UserService.getUserSession().attributes;
+        if (assignTo === 'Me') {
+            return userSession.site + ";" + userSession.duz[userSession.site];
+        } else if (assignTo === 'Person') {
+            return formModel.get('person');
+        } else {
+            var roles = formModel.get('roles');
+            var team = formModel.get('team');
+            var codes = [];
+            _.each(roles, function(role) {
+                codes.push('[TM:(' + team + ')/TR:(' + role + ')]');
+            });
+            return codes.join();
+        }
+    };
+    var setRouteToResponse = function(formModel, response) {
+        if (formModel.get('assignment') !== 'opt_me') {
+            response.route = {};
+            if (formModel.get('assignment') === 'opt_person') {
+                response.route.facility = formModel.get('facility');
+                response.route.person = formModel.get('person');
+            } else {
+                response.route.routingCode = routingCodeAll(formModel);
+                var team = formModel.get('team');
+                if (!_.isEmpty(team) && formModel.has('storedTeamsList')) {
+                    response.route.team = {
+                        code: team,
+                        name: lookupTeamName(formModel.get('storedTeamsList'), team)
+                    };
+                }
+
+                var roles = formModel.get('roles');
+                if (_.isArray(roles) && formModel.has('storedRolesList')) {
+                    var processedRoles = [];
+                    _.each(roles, function(role) {
+                        if (!_.isEmpty(role)) {
+                            processedRoles.push({
+                                code: role,
+                                name: lookupRoleName(formModel.get('storedRolesList'), role)
+                            });
+                        }
+                    });
+                    response.route.assignedRoles = processedRoles;
+                }
+
+                if (formModel.get('assignment') === 'opt_anyteam') {
+                    response.route.facility = formModel.get('facility');
+                }
+            }
+        }
+        return response;
+    };
+    function lookupTeamName(teamList, teamID) {
+        if (!teamList) {
+            return null;
+        }
+
+        var foundTeam = _.find(teamList, function(team) {
+            if (!team) {
+                return false;
+            }
+
+            return ((teamID === team.teamID) || (parseInt(teamID, 10) === team.teamID));
+        });
+
+        return foundTeam ? foundTeam.teamName : null;
+    }
+
+    function lookupRoleName(roleList, roleID) {
+        if (!roleList) {
+            return null;
+        }
+
+        var foundRole = _.find(roleList, function(role) {
+            if (!role) {
+                return false;
+            }
+
+            return ((roleID === role.roleID) || (parseInt(roleID, 10) === role.roleID));
+        });
+
+        return foundRole ? foundRole.name : null;
+    }
+
+
     // Close the modal and refresh the todo list applet to fetch new tasks
     var modalCloseAndRefresh = function(e) {
         EventHandler.fireCloseEvent(e);
+        Utils.triggerRefresh();
     };
 
     var eventHandler = {
@@ -177,6 +286,10 @@ define([
             EventHandler.fireCloseEvent(e);
         },
         fetchHelper: TaskFetchHelper,
+        REQUEST_CLARIFICATION: REQUEST_CLARIFICATION,
+        REQUEST_DECLINE: REQUEST_DECLINE,
+        REQUEST_COMPLETE: REQUEST_COMPLETE,
+        REQUEST_REASSIGN: REQUEST_REASSIGN
     };
 
     return eventHandler;

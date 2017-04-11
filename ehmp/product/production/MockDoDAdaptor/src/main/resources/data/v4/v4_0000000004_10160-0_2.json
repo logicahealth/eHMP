@@ -47,6 +47,7 @@
         "prescription": "O",
         "active": false,
         "comment": "NONE\n^O^",
+        "careSetting": "O",
         "dispensingPharmacy": {
           "name": "MAIN PHARMACY"
         },
@@ -86,21 +87,38 @@
               "end": "2013-04-23T15:06:00"
             },
             "fillNumber": "0",
-            "quantity": "90",
-            "units": [
-              {
-                "display": "mg",
-                "primary": true
-              }
-            ]
+            "quantity": {
+              "raw": "90",
+              "value": 90,
+              "units": [
+                {
+                  "display": "mg",
+                  "primary": true
+                }
+              ]
+            }
           }
         ],
-        "drug": [
+        "drugs": [
           {
-            "display": "SOTALOL HCL, 80 MG, TABLET, ORAL",
-            "code": "3000272497",
-            "system": "2.16.840.1.113883.3.42.126.100001.16",
-            "primary": true
+            "drug": [
+              {
+                "display": "SOTALOL HCL, 80 MG, TABLET, ORAL",
+                "code": "3000272497",
+                "system": "2.16.840.1.113883.3.42.126.100001.16",
+                "primary": true
+              }
+            ],
+            "dosage": {
+              "raw": "90",
+              "value": 90,
+              "units": [
+                {
+                  "display": "mg",
+                  "primary": true
+                }
+              ]
+            }
           }
         ],
         "numberOfRefills": 0,
@@ -108,7 +126,16 @@
           "name": "P20462",
           "primary": true
         },
-        "quantity": "90",
+        "quantity": {
+          "raw": "90",
+          "value": 90,
+          "units": [
+            {
+              "display": "mg",
+              "primary": true
+            }
+          ]
+        },
         "refillsRemaining": 0,
         "rxNumber": {
           "id": "130423-00008"
@@ -120,13 +147,7 @@
             "primary": true
           }
         ],
-        "daysSupply": 30,
-        "units": [
-          {
-            "display": "mg",
-            "primary": true
-          }
-        ]
+        "daysSupply": 30
       },
       {
         "repository": {
@@ -161,6 +182,7 @@
         "prescription": "O",
         "active": false,
         "comment": "^O^\nNONE",
+        "careSetting": "O",
         "dispensingPharmacy": {
           "name": "MAIN PHARMACY"
         },
@@ -200,21 +222,38 @@
               "end": "2013-04-19T18:23:00"
             },
             "fillNumber": "0",
-            "quantity": "30",
-            "units": [
-              {
-                "display": "mg",
-                "primary": true
-              }
-            ]
+            "quantity": {
+              "raw": "30",
+              "value": 30,
+              "units": [
+                {
+                  "display": "mg",
+                  "primary": true
+                }
+              ]
+            }
           }
         ],
-        "drug": [
+        "drugs": [
           {
-            "display": "Albuterol Sulfate 0.83mg/mL, Nebulization solution, Inhalation",
-            "code": "15451500",
-            "system": "2.16.840.1.113883.3.42.126.100001.16",
-            "primary": true
+            "drug": [
+              {
+                "display": "Albuterol Sulfate 0.83mg/mL, Nebulization solution, Inhalation",
+                "code": "15451500",
+                "system": "2.16.840.1.113883.3.42.126.100001.16",
+                "primary": true
+              }
+            ],
+            "dosage": {
+              "raw": "30",
+              "value": 30,
+              "units": [
+                {
+                  "display": "mg",
+                  "primary": true
+                }
+              ]
+            }
           }
         ],
         "numberOfRefills": 0,
@@ -222,7 +261,16 @@
           "name": "DOCTOR, ALPHA",
           "primary": true
         },
-        "quantity": "30",
+        "quantity": {
+          "raw": "30",
+          "value": 30,
+          "units": [
+            {
+              "display": "mg",
+              "primary": true
+            }
+          ]
+        },
         "refillsRemaining": 0,
         "rxNumber": {
           "id": "130419-00011"
@@ -234,13 +282,7 @@
             "primary": true
           }
         ],
-        "daysSupply": 90,
-        "units": [
-          {
-            "display": "mg",
-            "primary": true
-          }
-        ]
+        "daysSupply": 90
       }
     ]
   }

@@ -3,9 +3,8 @@ Feature:F899 - Orderable Pick-list Service
 
 @F899_1_Orderables_alltypes @US12254
   Scenario: Create Endpoint for 'All' Order type with search string
-  When the client requests picklist with the parameters and site "9E7A"
+  When the client requests picklist with the parameters for "orderables" with the user "9E7A;PW    "
   | paramter name | value                 |
-  | type          | orderables            |
   | subtype       | All                   |
   | searchString  | URINE                 |
   Then a successful response is returned
@@ -17,9 +16,8 @@ Feature:F899 - Orderable Pick-list Service
   | synonym         | PROV URINE          |
   | typeOfOrderable | lab                 |
 
-  When the client requests picklist with the parameters and site "C877"
+  When the client requests picklist with the parameters for "orderables" with the user "9E7A;PW    "
   | paramter name | value                 |
-  | type          | orderables            |
   | searchString  | URINE                 |
   Then a successful response is returned
   And there are 56 orderables in the results
@@ -33,18 +31,16 @@ Feature:F899 - Orderable Pick-list Service
 
 @F899_2_Orderables_alltypes @US12254
   Scenario: searching for orderables without searchString
-  When the client requests picklist with the parameters and site "9E7A"
+  When the client requests picklist with the parameters for "orderables" with the user "9E7A;PW    "
   | paramter name | value      |
-  | type          | orderables |
   | subtype       | all        |
   Then a successful response is returned
 
 
 @F899_3_Orderables_labs @US12254
   Scenario: Create Endpoint for 'Lab' Order type with search string
-  When the client requests picklist with the parameters and site "C877"
+  When the client requests picklist with the parameters for "orderables" with the user "C877;PW    "
   | paramter name | value                                   |
-  | type          | orderables |
   | subtype       | Lab   |
   | searchString  | Blood |
   Then a successful response is returned
@@ -57,29 +53,23 @@ Feature:F899 - Orderable Pick-list Service
   | typeOfOrderable | lab                     |
 
 
-@F899_4_Orderables_alltypes @US12254
+@F899_4_Orderables_alltypes @US12254 @future
   Scenario: Get orderables
   Given an order-set for the user
   And a quick-order for the user
   And an enterprise-orderable for the user
-  When the user requests orderables of type ""
+  When the user requests orderables of type "lab"
   Then a successful response is returned
-  And there are 5 orderables in the results
+  And there are 2 orderables in the results
   And the orderables results contain
   | field           | value                       |
   | name            | HYPERSEGMENTED NEUTROPHILS  |
   | typeOfOrderable | lab                         |
   | name            | HYPERSEGMENTED NEUTROPHILS  |
   | typeOfOrderable | lab                         |
-  | name            | Hypertensive Patient OS2    |
-  | typeOfOrderable | set                         |
-  | name            | Hypertensive Patient QO     |
-  | typeOfOrderable | quick                       |
-  | name            | Hypertensive Patient EO     |
-  | typeOfOrderable | entr                        |
 
 
-@F899_5_Orderables_singletypes @US12254
+@F899_5_Orderables_singletypes @US12254 @future
   Scenario: Get single types of orderables
   Given an order-set for the user
   And a quick-order for the user
@@ -111,7 +101,7 @@ Feature:F899 - Orderable Pick-list Service
   | typeOfOrderable | set                         |
 
 
-@F899_6_Orderables_multipletypes @US12254
+@F899_6_Orderables_multipletypes @US12254 @future
   Scenario: Get multiple (but not all) types of orderables
   Given an order-set for the user
   And a quick-order for the user
@@ -156,8 +146,8 @@ Feature:F899 - Orderable Pick-list Service
   Then a successful response is returned
   And there are 1 orderables in the results
   And the orderables results contain
-  | field           | value                       |
-  | name            | Hypertensive Patient EO     |
-  | typeOfOrderable | entr                        |
+  | field               | value                       |
+  | name                | Rheumatology     |
+  | facility-enterprise | enterprise                        |
 
 

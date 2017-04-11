@@ -20,6 +20,9 @@ template "/etc/bluepill/#{node[:asu][:service]}.pill" do
     :name => node[:asu][:service],
     :working_directory => node[:asu][:home_dir],
     :log_directory => node[:asu][:log_dir],
+    :pid_directory => node[:asu][:pid_dir],
+    :base_directory => node[:asu][:base_dir]
   )
+  notifies :stop, "service[#{node[:asu][:service]}]", :before
   notifies :restart, "service[#{node[:asu][:service]}]"
 end

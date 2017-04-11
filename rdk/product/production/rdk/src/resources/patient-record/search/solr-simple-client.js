@@ -7,7 +7,6 @@ var ForeverAgent = require('forever-agent');
 
 module.exports.executeSolrQuery = executeSolrQuery;
 module.exports.compileQueryParameters = compileQueryParameters;
-module.exports.generateFacetMap = generateFacetMap;
 module.exports.emulatedHmpGetRelativeDate = emulatedHmpGetRelativeDate;
 module.exports.escapeQueryChars = escapeQueryChars;
 
@@ -17,7 +16,7 @@ var foreverAgent = new ForeverAgent();
 function initSolr(solrConfig, req) {
     //initClient only needs to be called once.
     if (solrClient === null){
-        req.logger.error('SolrSmartClient.InitClient called');
+        req.logger.info('SolrSmartClient.InitClient called');
         solrClient = solrSmartClient.initClient(solrConfig.core, solrConfig.zooKeeperConnection, req.logger, foreverAgent);
     }
 }
@@ -51,20 +50,6 @@ function compileQueryParameters(queryParameters) {
         queryParameters['hl.fl'] = queryParameters['hl.fl'].join(',');
     }
     return queryParameters;
-}
-
-
-function generateFacetMap() {
-    var facetMap = {
-        '{!ex=dt}datetime:[* TO *]': 'all'
-    };
-    // relative date solr facets
-    ['T-24h', 'T-72h', 'T-7d', 'T-1m', 'T-3m', 'T-1y', 'T-2y'].forEach(function(teeMinus) {
-        var solrFacet = '{!ex=dt}datetime:[' + emulatedHmpGetRelativeDate(teeMinus) + ' TO *]';
-        facetMap[solrFacet] = teeMinus;
-    });
-
-    return facetMap;
 }
 
 

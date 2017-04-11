@@ -60,7 +60,7 @@ define([
             var self = this;
             appletUtil.getPermissionSets(function(permissionSets, errorMessage) {
                 if (errorMessage) {
-                    appletUtil.appletAlert.warning(self.parentCollection, 'Error Retrieving Permission Sets', errorMessage);
+                    appletUtil.appletAlert.warning(self.parentCollection, 'Error Retrieving Permissions', errorMessage);
                 } else {
                     self.ui.permissionSetsPicklistControl.trigger('control:picklist:set', permissionSets);
                 }
@@ -140,17 +140,17 @@ define([
                 items: [{
                     control: "input",
                     name: "lastNameValue",
-                    label: "Last Name",
+                    label: "Last name",
                     extraClasses: ["col-xs-6"],
                     srOnlyLabel: false,
-                    title: "Enter the Last Name of the user"
+                    title: "Enter at least three letters of the user's Last Name"
                 }, {
                     control: "input",
                     name: "firstNameValue",
-                    label: "First Name",
+                    label: "First name",
                     extraClasses: ["col-xs-6"],
                     srOnlyLabel: false,
-                    title: "Enter the First Name of the user"
+                    title: "Enter at least three letters of the user's First Name"
                 }]
             }, {
                 control: "container",
@@ -161,7 +161,7 @@ define([
                     extraClasses: ["col-xs-6", "permission-sets-picklist"],
                     pickList: appletUtil.permissionSets,
                     srOnlyLabel: false,
-                    label: "Select Permission Set",
+                    label: "Select permission set",
                     title: "Use up and down arrows to view options and then press enter to select",
                 }, {
                     control: "input",
@@ -201,7 +201,7 @@ define([
                             extraClasses: ["col-xs-6"],
                             items: [{
                                 control: "checkbox",
-                                label: "Include Inactive VistA Users",
+                                label: "Include inactive VistA users",
                                 name: "vistaCheckboxValue",
                                 title: "Press spacebar to toggle checkbox.",
                             }]
@@ -210,7 +210,7 @@ define([
                             extraClasses: ["col-xs-6"],
                             items: [{
                                 control: "checkbox",
-                                label: "Include Inactive eHMP Users",
+                                label: "Include inactive eHMP users",
                                 name: "ehmpCheckboxValue",
                                 title: "Press spacebar to toggle checkbox.",
                             }]

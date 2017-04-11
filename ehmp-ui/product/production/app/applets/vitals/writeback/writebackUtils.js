@@ -1,7 +1,8 @@
 define([
     'backbone',
     'app/applets/vitals/utils/picklistUtils',
-], function(Backbone, picklistUtils) {
+    'moment'
+], function(Backbone, picklistUtils, moment) {
     "use strict";
 
     function updatePickList(form, controlType, controlName, pickList) {

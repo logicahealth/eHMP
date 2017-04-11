@@ -102,8 +102,9 @@ function createJobsToPublish(self, patientIdentifiers) {
     var vlerList = idUtil.extractPidBySite(patientIdentifiers, 'VLER');
     self.log.debug('source-sync-job-factory.createJobsToPublish: VLER identifiers in the list: %j', vlerList);
 
-    var pgdList = idUtil.extractPidBySite(patientIdentifiers, 'DAS');
-    self.log.debug('source-sync-job-factory.createJobsToPublish: DAS (pgd) identifiers in the list: %j', pgdList);
+    // PGD no longer exists so this code is obsolete
+    // var pgdList = idUtil.extractPidBySite(patientIdentifiers, 'DAS');
+    // self.log.debug('source-sync-job-factory.createJobsToPublish: DAS (pgd) identifiers in the list: %j', pgdList);
 
     var jobs = [];
 
@@ -119,13 +120,14 @@ function createJobsToPublish(self, patientIdentifiers) {
         jobs = jobs.concat(createVistaHdrJobs(self, hdrList));
     }
 
+    // If we have DoD identifiers, then create a JMeadows job
+    if ((dodList) && (dodList.length >= 1) && !isSecondarySiteDisabled(self.config, 'jmeadows')) {
+        jobs = jobs.concat(createJmeadowsJob(self, _.first(dodList)));
+    }
+
     // If we have an ICN then create the jobs for the secondary sites.
     //---------------------------------------------------------------
     if (icnList.length > 0) {
-        if ((dodList) && (dodList.length >= 1) && !isSecondarySiteDisabled(self.config, 'jmeadows')) {
-            jobs = jobs.concat(createJmeadowsJob(self, _.first(dodList)));
-        }
-
         // if HDR is in REQ/RES mode and we have some hdr  IDs - then eadd them.
         //-----------------------------------------------------------------------
         if ((!idUtil.isHdrPubSubMode(self.config)) && (hdrList) && (hdrList.length >= 1) && !isSecondarySiteDisabled(self.config, 'hdr')) {
@@ -137,6 +139,7 @@ function createJobsToPublish(self, patientIdentifiers) {
              jobs = jobs.concat(createVlerJob(self, _.first(vlerList)));
          }
 
+        // PGD no longer exists so this code is obsolete
         // if ((pgdList) && (pgdList.length >= 1)) {
         //     jobs = jobs.concat(createVlerJob(self, _.first(vlerList)));
         // }

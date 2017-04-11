@@ -19,10 +19,10 @@ module.exports.create = function(writebackContext, callback) {
                 parameters.push(new RpcParameter.literal('MYPARAM'));
                 rpcClient.execute(rpcName, parameters, function(error, result) {
                     if (error) {
-                        callback(error);
+                        return callback(error);
                     }
-                    //TODO: result processing
-                    callback(null, result);
+                    //implementers: result processing here
+                    return callback(null, result);
                 });
             },
             function secondVistaCall(callback) {
@@ -31,18 +31,18 @@ module.exports.create = function(writebackContext, callback) {
                 parameters.push(new RpcParameter.literal('MYPARAM'));
                 rpcClient.execute(rpcName, parameters, function(error, result) {
                     if (error) {
-                        callback(error);
+                        return callback(error);
                     }
-                    //TODO: result processing
-                    callback(null, result);
+                    //implementers: result processing here
+                    return callback(null, result);
                 });
             }
         ], function(err, data) {
             if(err) {
                 return callback(err, data);
             }
-            writebackContext.vprModel = null;  // TODO set this by the VistA response
-            var error = null;  // TODO set error if trouble writing back
+            writebackContext.vprModel = null;  // implementers: set this by the VistA response
+            var error = null;  // implementers: set error if trouble writing back
             return callback(error);
         });
     });
@@ -54,11 +54,11 @@ function otherVistaFunction(writebackContext, rpcClient, callback) {
     parameters.push(new RpcParameter.literal('MYPARAM'));
 
     rpcClient.execute(rpcName, parameters, function(error, result) {
-            if (error) {
-                callback(error);
-            }
-            //TODO: result processing
-            callback(null, result);
+        if (error) {
+            return callback(error);
+        }
+        //implementers: result processing here
+        return callback(null, result);
     });
 }
 
@@ -79,7 +79,7 @@ module.exports.update = function(writebackContext, callback) {
             if(error) {
                 return callback(error, result);
             }
-            writebackContext.vprModel = null;  // TODO set this by the VistA response
+            writebackContext.vprModel = null;  // implementers: set this by the VistA response
             return callback(error);
         });
     });
@@ -103,8 +103,8 @@ module.exports.readNexTime = function(writebackContext, callback) {
         if(err) {
             return callback(err, data);
         }
-        writebackContext.vprModel = null;  // TODO set this by the VistA response
-        var error = null;  // TODO set error if trouble writing back
+        writebackContext.vprModel = null;  // implementers: set this by the VistA response
+        var error = null;  // implementers: set error if trouble writing back
         return callback(error);
     });
 };

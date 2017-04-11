@@ -18,7 +18,7 @@ module.exports.getResourceConfig = function(app) {
             operationalDataCheck: true,
             synchronize: true
         },
-        requiredPermissions: [], // TODO set permissions. See https://wiki.vistacore.us/display/VACORE/Writeback+Edition+Permissions
+        requiredPermissions: ['read-patient-record'],
         isPatientCentric: false,
         get: fetchSupportData
     }];
@@ -30,7 +30,7 @@ module.exports.getResourceConfig = function(app) {
  * Parsed RPC response is returned.
  */
 function fetchSupportData(req, res) {
-    var log = req.app.logger;
+    var log = req.logger;
     var type = req.param('type');
     var site = req.param('site');
 

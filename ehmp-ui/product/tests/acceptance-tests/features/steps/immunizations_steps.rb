@@ -47,17 +47,17 @@ class ImmunizationsDetailModal < ADKContainer
   include Singleton
   def initialize
     super 
-    add_verify(CucumberLabel.new('Name Label'), VerifyText.new, AccessHtmlElement.new(:xpath, "//h5[string() = 'Name']"))
-    add_verify(CucumberLabel.new('Name'), VerifyText.new, AccessHtmlElement.new(:xpath, "//h5[string() = 'Name']/following-sibling::p"))
+    add_verify(CucumberLabel.new('Name Label'), VerifyText.new, AccessHtmlElement.new(:xpath, "//div[@id='modal-body']/descendant::div[@class='row']/descendant::strong[string()='Name:']"))
+    add_verify(CucumberLabel.new('Name'), VerifyText.new, AccessHtmlElement.new(:xpath, "//div[@class='row']/descendant::strong[string()='Name:']/parent::span/following-sibling::span"))
 
-    add_verify(CucumberLabel.new('Series Label'), VerifyText.new, AccessHtmlElement.new(:xpath, "//h5[string() = 'Series']"))
-    add_verify(CucumberLabel.new('Series'), VerifyText.new, AccessHtmlElement.new(:xpath, "//h5[string() = 'Series']/following-sibling::p"))
+    add_verify(CucumberLabel.new('Series Label'), VerifyText.new, AccessHtmlElement.new(:xpath, "//div[@id='modal-body']/descendant::div[@class='row']/descendant::strong[string()='Series:']"))
+    add_verify(CucumberLabel.new('Series'), VerifyText.new, AccessHtmlElement.new(:xpath, "//div[@class='row']/descendant::strong[string()='Series:']/parent::span/following-sibling::span"))
 
-    add_verify(CucumberLabel.new('Date Administered Label'), VerifyText.new, AccessHtmlElement.new(:xpath, "//h5[string() = 'Date Administered']"))
-    add_verify(CucumberLabel.new('Date Administered'), VerifyText.new, AccessHtmlElement.new(:xpath, "//h5[string() = 'Date Administered']/following-sibling::p"))
+    add_verify(CucumberLabel.new('Date Administered Label'), VerifyText.new, AccessHtmlElement.new(:xpath, "//div[@id='modal-body']/descendant::div[@class='row']/descendant::strong[string()='Date administered:']"))
+    add_verify(CucumberLabel.new('Date Administered'), VerifyText.new, AccessHtmlElement.new(:xpath, "//div[@class='row']/descendant::strong[string()='Date administered:']/parent::span/following-sibling::span"))
 
-    add_action(CucumberLabel.new('next button'), ClickAction.new, AccessHtmlElement.new(:id, 'immunizationsNext'))
-    add_action(CucumberLabel.new('previous button'), ClickAction.new, AccessHtmlElement.new(:id, 'immunizationsPrevious'))
+    add_action(CucumberLabel.new('next button'), ClickAction.new, AccessHtmlElement.new(:id, 'toNext'))
+    add_action(CucumberLabel.new('previous button'), ClickAction.new, AccessHtmlElement.new(:id, 'toPrevious'))
     add_action(CucumberLabel.new('close button'), ClickAction.new, AccessHtmlElement.new(:id, 'modal-close-button'))
   end
 end
@@ -307,4 +307,20 @@ Given(/^the user notes the first (\d+) immunizations$/) do |num_immunizations|
   @titles = @ehmp.summary_immunization_names num_immunizations.to_i
   expect(@titles.length).to be > num_immunizations.to_i
   @titles = @titles[0..num_immunizations.to_i - 1]
+end
+
+Then(/^the Immunization Expanded applet table contains headers$/) do |table|
+  @ehmp = PobImmunizationsApplet.new
+  existing_headers = @ehmp.immunization_table_headers
+  table.rows.each do | header_text |
+    expect(existing_headers).to include header_text[0]
+  end
+end
+
+Then(/^the Immunization Detail modal displays disabled fields$/) do |table|
+  modal = ImmunizationsDetailModal.instance
+  table.rows.each do | row |
+    expect(modal.get_element(row[0]).displayed?).to eq(true), "#{row[0]} is not displayed"
+    expect(modal.get_element(row[0]).enabled?).to eq(false), "#{row[0]} is enabled"
+  end
 end

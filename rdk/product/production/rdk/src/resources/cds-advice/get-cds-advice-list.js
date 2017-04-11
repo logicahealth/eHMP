@@ -2,7 +2,6 @@
 
 var rdk = require('../../core/rdk');
 var _ = require('lodash');
-var dd = require('drilldown');
 var nullchecker = rdk.utils.nullchecker;
 var httpUtil = rdk.utils.http;
 var auditUtil = require('../../utils/audit');
@@ -148,14 +147,14 @@ function mergeLists(adviceList, reminders, workProducts) {
  * @param {callback} callback The provided callback when complete
  */
 function getClinicalRemindersList(req, res, next, pid, callback) {
-    if (!dd(req)('interceptorResults')('patientIdentifiers')('dfn').exists) {
+    if (_.isUndefined(_.get(req, 'interceptorResults.patientIdentifiers.dfn'))) {
         req.logger.error('CDS Advice - Error retrieving clinical reminders, DFN is nullish.');
         return callback(null, []); // Return empty list here!
     }
     req.logger.info('retrieve clinical reminder list');
     var dfn = req.interceptorResults.patientIdentifiers.dfn;
-    req.logger.debug('DFN: ' + dfn);
-    var vistaConfig = getVistaRpcConfiguration(req.app.config, req.session.user.site, req.session.user);
+    req.logger.trace('DFN: ' + dfn);
+    var vistaConfig = getVistaRpcConfiguration(req.app.config, req.session.user);
 
     RpcClient.callRpc(req.logger, vistaConfig, 'ORQQPX REMINDERS LIST', [RpcParameter.literal(dfn)], function(error, result) {
         if (error) {
@@ -224,7 +223,7 @@ function getClinicalRemindersList(req, res, next, pid, callback) {
  */
 function getRulesResultsList(req, res, pid, use, callback) {
 
-    if (!dd(req.app)('subsystems')('cds')('isCDSMongoServerConfigured').exists || !req.app.subsystems.cds.isCDSMongoServerConfigured()) {
+    if (!_.result(req, 'app.subsystems.cds.isCDSMongoServerConfigured')) {
         return callback(null, []);
     }
 
@@ -248,11 +247,11 @@ function getRulesResultsList(req, res, pid, use, callback) {
 
     req.logger.info('CDS Advice - service post called');
     httpUtil.post(config, function(err, response, body) {
-        req.logger.debug('callback from fetch()');
+        req.logger.trace('callback from fetch()');
 
         if (err || !body) {
             // there was an error calling the invocationserver
-            req.logger.debug({
+            req.logger.error({
                 invocationError: err
             }, 'CDS Advice: cds invocation server returned error');
             return callback(null, []); // Return empty list here!
@@ -260,7 +259,7 @@ function getRulesResultsList(req, res, pid, use, callback) {
         if (body.status && body.status.code !== '0' /* 0 == OK*/ ) {
             var invocationError = getInvocationError(body.status.info);
             // HTTP request was successful but the CDS Invocation service reported an error.
-            req.logger.debug({
+            req.logger.error({
                 invocationError: invocationError
             }, 'CDS Advice: cds invocation server returned error');
             return callback(null, []); // Return empty list here!
@@ -290,7 +289,7 @@ function getInvocationError(info) {
  *
  * @apiparam {string} pid The patient identifier
  * @apiparam {string} use The CDS Use (Intent)
- * @apiparam {string} readStatus The advice read status
+ * @apiparam {string} [readStatus] The advice read status
  *
  * @apiSuccessExample Success-Response:
  *     HTTP/1.1 200 OK
@@ -325,10 +324,10 @@ function getCDSAdviceList(req, res, next) {
     var useCachedValue = req.param('cache');
     var readStatus = req.param('readStatus');
 
-    req.logger.debug('PID: ' + pid);
-    req.logger.debug('USE: ' + use);
-    req.logger.debug('USE CACHED RESULTS: ' + useCachedValue);
-    req.logger.debug('READSTATUS: ' + readStatus);
+    req.logger.trace('PID: ' + pid);
+    req.logger.trace('USE: ' + use);
+    req.logger.trace('USE CACHED RESULTS: ' + useCachedValue);
+    req.logger.trace('READSTATUS: ' + readStatus);
 
     // Audit this access
     req.audit.dataDomain = 'CDS';
@@ -343,14 +342,12 @@ function getCDSAdviceList(req, res, next) {
     }
 
     //if we scope this to the session, we can get it here: 'req.session.id';
-    var cachedObj = adviceCache.get(req.session.id, pid, use);
+    var cachedObj = adviceCache.get(req.session, pid, use);
 
     if (useCachedValue === 'true' && cachedObj && cachedObj.readStatus === readStatus) {
-        req.logger.debug({
-            sessionId: req.session.id,
+        req.logger.trace({
             pid: pid,
-            use: use,
-            value: cachedObj.data
+            use: use
         }, 'CDS Advice cache hit');
         return res.status(rdk.httpstatus.ok).rdkSend(cachedObj.data);
     }
@@ -378,7 +375,13 @@ function getCDSAdviceList(req, res, next) {
                     items: mergedList
                 }
             };
-            adviceCache.set(req.session.id, pid, use, mergedList, readStatus);
+            adviceCache.set(req.session, pid, use, mergedList, readStatus);
+
+            req.logger.trace({
+                pid: pid,
+                use: use,
+                readStatus: readStatus
+            }, 'CDS Advice set cache');
 
             return res.status(rdk.httpstatus.ok).rdkSend(responseBody);
         }
@@ -391,8 +394,8 @@ function getCDSAdviceList(req, res, next) {
  * @apiName setReadStatus
  * @apiGroup CDS Advice
  *
- * @apiParam {String} id The id of the work product.
- * @apiParam {String} readStatus The readStatus of the workproduct.  Supported values are 'true' and 'false'.
+ * @apiParam {string} id The id of the work product.
+ * @apiParam {string} value The readStatus of the workproduct.  Supported values are 'true' and 'false'.
  *
  * @apiDescription Sets the 'read' status of an assigned work product in the database.
  *
@@ -416,16 +419,16 @@ function setReadStatus(req, res) {
     var readStatus = req.param('value');
     var provider = getKeyValue(req.session.user.duz);
 
-    req.logger.debug('ID: ' + id);
-    req.logger.debug('READSTATUS: ' + readStatus);
-    req.logger.debug('PROVIDER: ' + provider);
+    req.logger.trace('ID: ' + id);
+    req.logger.trace('READSTATUS: ' + readStatus);
+    req.logger.trace('PROVIDER: ' + provider);
 
     if (nullchecker.isNullish(id) || nullchecker.isNullish(readStatus) || nullchecker.isNullish(provider)) {
         var error = 'Missing required parameters. The following parameters are required: id, value.';
         req.logger.error('CDS Read Status - ' + error);
         return res.status(rdk.httpstatus.bad_request).rdkSend(error);
     }
-    cdsWorkProduct.setReadStatus(id, readStatus, provider, function(body, error) {
+    cdsWorkProduct.setReadStatus(req.logger, id, readStatus, provider, function(body, error) {
         if (error) {
             req.logger.error('CDS Read Status - ' + error);
             return res.status(rdk.httpstatus.not_found).rdkSend(error);

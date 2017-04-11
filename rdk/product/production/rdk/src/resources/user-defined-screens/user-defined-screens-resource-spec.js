@@ -24,7 +24,7 @@ describe('User Defined Screens Get Resource', function() {
                 operationalDataCheck: false,
                 synchronize: false
             });
-            expect(resources[0].requiredPermissions).to.eql([]);
+            expect(resources[0].requiredPermissions).to.eql(['access-general-ehmp']);
         });
     });
 

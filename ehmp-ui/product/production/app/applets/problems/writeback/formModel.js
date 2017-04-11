@@ -1,7 +1,8 @@
 define([
     'backbone',
+    'moment',
     'app/applets/problems/writeback/validationUtils'
-], function(Backbone, validationUtils) {
+], function(Backbone, moment, validationUtils) {
     'use strict';
     return Backbone.Model.extend({
         defaults: {

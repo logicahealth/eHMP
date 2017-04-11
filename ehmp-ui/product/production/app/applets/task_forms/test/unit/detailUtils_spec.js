@@ -10,7 +10,7 @@ define(['jquery', 'backbone', 'marionette', 'jasminejquery', 'app/applets/task_f
             it('Should fill in normal fields properly', function(){
                 var model = new Backbone.Model({
                     'facilityRequestDivisionId': '500',
-                    'healthIndicator': false,
+                    'healthIndicator': 0,
                     'domain': 'Consult',
                     'state': 'Draft'
                 });
@@ -21,9 +21,8 @@ define(['jquery', 'backbone', 'marionette', 'jasminejquery', 'app/applets/task_f
                 Util.enrichSingleActivityModel(model, facilityMonikers, 'staff');
                 expect(model.get('facilityRequestedName')).toEqual('Camp Master');
                 expect(model.get('isStaffView')).toEqual(true);
-                expect(model.get('isConsult')).toEqual(true);
                 expect(model.get('state')).toEqual('Draft');
-                expect(model.get('healthIndicator')).toEqual(false);
+                expect(model.get('healthIndicator')).toEqual(true);
             });
 
             it('Should fill in other cases', function(){
@@ -40,10 +39,9 @@ define(['jquery', 'backbone', 'marionette', 'jasminejquery', 'app/applets/task_f
                 Util.enrichSingleActivityModel(model, facilityMonikers, 'patient');
                 expect(model.get('facilityRequestedName')).toEqual('');
                 expect(model.get('isStaffView')).toEqual(false);
-                expect(model.get('isConsult')).toEqual(false);
                 expect(model.get('state')).toEqual('Unreleased');
                 expect(model.get('substate')).toEqual('Pre-order workup');
-                expect(model.get('healthIndicator')).toEqual(true);
+                expect(model.get('healthIndicator')).toEqual(false);
             });
         });
     });

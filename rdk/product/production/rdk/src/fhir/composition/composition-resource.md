@@ -1,6 +1,10 @@
 # Group FHIR
 
-## Composition [{{{path}}}{?subject.identifier}{&type}{&start}{&limit}]
+## Composition [{{{path}}}]
+
+### Get [GET {{{path}}}{?subject.identifier}{&type}{&start}{&_count}]
+
+Converts a vpr document into a composition FHIR resource.
 
 + Parameters
 
@@ -10,12 +14,8 @@
 
     :[start]({{{common}}}/parameters/start.md)
 
-    :[limit]({{{common}}}/parameters/limit.md)
+    :[_count]({{{common}}}/parameters/count.md)
 
-
-### Fhir composition [GET]
-
-Converts a vpr document into a composition FHIR resource.
 
 + Response 200 (application/json)
 
@@ -35,6 +35,29 @@ Converts a vpr document into a composition FHIR resource.
     + Schema
 
             :[Schema]({{{common}}}/schemas/400.jsonschema)
+
+:[Response 404]({{{common}}}/responses/404.md)
+
+:[Response 500]({{{common}}}/responses/500.md)
+
+### Get [POST {{{path}}}/_search{?subject.identifier}{&type}{&start}{&_count}]
+
+Converts a vpr document into a composition FHIR resource.
+
++ Parameters
+
+    :[subject.identifier]({{{common}}}/parameters/subject.identifier.md)
+
+    + type (string, optional) - type
+
+    :[start]({{{common}}}/parameters/start.md)
+
+    :[_count]({{{common}}}/parameters/count.md)
+
+
++ Response 200 (application/json)
+
++ Response 400 (application/json)
 
 :[Response 404]({{{common}}}/responses/404.md)
 

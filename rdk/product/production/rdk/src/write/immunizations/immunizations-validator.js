@@ -1,7 +1,6 @@
 'use strict';
 
 var _ = require('lodash');
-var dd = require('drilldown');
 
 function validateInput(logger, model, errors) {
     if (!_.isArray(errors)) {
@@ -38,7 +37,7 @@ function add (writebackContext, callback) {
     var errors = [];
     var model = writebackContext.model;
     // dfn is now part of the interceptor results...
-    model.encounterPatientDFN = dd(writebackContext)('interceptorResults')('patientIdentifiers')('dfn').val;
+    model.encounterPatientDFN = _.get(writebackContext, 'interceptorResults.patientIdentifiers.dfn');
 
     validateInput(writebackContext.logger, model, errors);
 

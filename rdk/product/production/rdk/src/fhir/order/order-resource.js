@@ -26,6 +26,7 @@ var fhirToJDSAttrMap = [{
     description: 'What action is being ordered.  Valid values are: DiagnosticOrder | MedicationPrescription | NutritionOrder | ProcedureRequest | DeviceUse',
     searchable: true
 }];
+confUtils.addCountAttribute(fhirToJDSAttrMap); //adding the _count attribute that is common to (almost) all endpoints.
 
 // Issue call to Conformance registration
 conformance.register(confUtils.domains.ORDER, createOrderConformanceData());
@@ -90,11 +91,21 @@ var statusMedPrescriptionMap = {
 
 function getResourceConfig() {
     return [{
-        name: 'order-order',
+        name: 'fhir-order',
         path: '',
         get: getFhirOrders,
         subsystems: ['patientrecord', 'jds', 'solr', 'jdsSync', 'authorization'],
-        requiredPermissions: [],
+        interceptors: { fhirPid: true },
+        requiredPermissions: ['read-fhir'],
+        isPatientCentric: true,
+        permitResponseFormat: true
+    },{
+        name: 'fhir-order-search',
+        path: '_search',
+        post: getFhirOrders,
+        subsystems: ['patientrecord', 'jds', 'solr', 'jdsSync', 'authorization'],
+        interceptors: { fhirPid: true },
+        requiredPermissions: ['read-fhir'],
         isPatientCentric: true,
         permitResponseFormat: true
     }];
@@ -112,7 +123,7 @@ function getOrders(req, res, startFrom, previousResults) {
 
     startFrom = startFrom || 0;
     previousResults = previousResults || [];
-    var limit = req.param('limit');
+    var limit = req.param('_count');
 
     //======================================
     // detail.display = DiagnosticOrder | MedicationPrescription | NutritionOrder | ProcedureRequest | DeviceUse
@@ -217,7 +228,7 @@ function createOrders(item, req, parentUid) {
     // Every Order.id should be newly generated.
     // Any Child re-refencing should be done via the identifier attribute node
     //=========================================================================
-    var order = new fhirResource.Order(helpers.generateUUID(), fhirUtils.convertToFhirDateTime(item.entered, siteHash));
+    var order = new fhirResource.Order(item.uid, fhirUtils.convertToFhirDateTime(item.entered, siteHash));
     var childOrders = [];
     order.extension = [];
 
@@ -498,7 +509,7 @@ function createDiagnosticOrder(item, order) {
 
     //console.log('uid='+item.uid + 'order.sbject='+order.subject.reference + 'item.pid='+ item.pid);
     //fhirItem.subject = new fhirResource.ReferenceResource('Patient/' + pid); // REQUIRED
-    var diagOrder = new fhirResource.DiagnosticOrder(helpers.generateUUID(),
+    var diagOrder = new fhirResource.DiagnosticOrder(item.uid,
         new fhirResource.ReferenceResource('Patient/' + item.pid),
         statusDiagOrderMap[item.statusName], order.source);
 

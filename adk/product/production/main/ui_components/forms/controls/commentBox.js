@@ -153,10 +153,10 @@ define([
                 '{{#if userIsAllowedEditDelete}}' +
                 '<span>',
                 '{{#if allowEdit}}<button type="button" ' + (this.field.get('disabled') || this._internalModel.get('editMode') ? 'disabled="disabled"' : '') +
-                'class="comment-edit-button font-size-12 btn btn-icon right-padding-xs left-padding-xs" title="Press enter to edit comment: {{comment}}{{#if showAuthor}} {{timeStamp}}{{/if}}{{#if showTimeStamp}} - {{name}}{{/if}}">' +
+                'class="comment-edit-button font-size-12 btn btn-icon right-padding-xs left-padding-xs" title="Press enter to edit comment: {{comment}} {{timeStamp}} - {{name}}">' +
                 '<i class="fa fa-pencil"></i></button>{{/if}}',
                 '{{#if allowDelete}}<button type="button" ' + (this.field.get('disabled') || this._internalModel.get('editMode') ? 'disabled="disabled"' : '') +
-                'class="comment-delete-button font-size-12 button btn btn-icon right-padding-xs left-padding-xs" title="Press enter to delete this comment">' +
+                'class="comment-delete-button font-size-12 button btn btn-icon right-padding-xs left-padding-xs" title="Press enter to delete comment: {{comment}} {{timeStamp}} - {{name}}">' +
                 '<i class="fa fa-trash"></i></button>{{/if}}',
                 '</span>' +
                 '{{/if}}',
@@ -332,6 +332,14 @@ define([
         },
         onDomRefresh: function() {
             this.focusEditButton();
+        },
+        serializeModel: function(model) {
+            var data = _.defaults({
+                comment: model.get(this.attributeMapping.comment),
+                timeStamp: model.get(this.attributeMapping.timeStamp),
+                name: (model.get(this.attributeMapping.author) ? model.get(this.attributeMapping.author).name : ''),
+            }, _.defaults(this.field.attributes, this.defaults));
+            return data;
         }
     });
 
@@ -556,14 +564,14 @@ define([
                 });
                 var deleteCommentAlert = new ADK.UI.Alert({
                     title: "Comment Deleted",
-                    icon: "icon-warning",
+                    icon: "icon-triangle-exclamation",
                     messageView: Backbone.Marionette.ItemView.extend({
                         template: Handlebars.compile(['<p>You have deleted a comment.</p>'].join('\n'))
                     }),
                     footerView: Backbone.Marionette.ItemView.extend({
                         template: Handlebars.compile([
                             '{{ui-button "Restore" type="button" classes="btn-sm btn-default restore-button" title="Press enter to restore."}}',
-                            '{{ui-button "Okay" type="button" classes="btn-sm btn-primary no-button" title="Press enter to continue."}}'
+                            '{{ui-button "OK" type="button" classes="btn-sm btn-primary no-button" title="Press enter to continue."}}'
                         ].join('\n')),
                         ui: {
                             'NoButton': '.no-button',

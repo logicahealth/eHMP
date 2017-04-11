@@ -2,7 +2,7 @@
 
 usage() {
     echo "curl-rdk: send authenticated requests to RDK-based servers"
-    echo "Usage: curl-rdk [-s 9E7A] [-u pu1234] [-p 'pu1234!!'] <url> [CURL-ARGS...]"
+    echo "Usage: curl-rdk [-s 9E7A] [-u PW    ] [-p 'PW    !!'] <url> [CURL-ARGS...]"
     exit 1
 }
 
@@ -36,8 +36,8 @@ parse_arguments() {
         shift
     done
     SITE="${SITE:-9E7A}"
-    ACCESS_CODE="${ACCESS_CODE:-pu1234}"
-    VERIFY_CODE="${VERIFY_CODE:-pu1234!!}"
+    ACCESS_CODE="${ACCESS_CODE:-PW    }"
+    VERIFY_CODE="${VERIFY_CODE:-PW    !!}"
     [[ -z "$URL" ]] && usage
 }
 

@@ -21,23 +21,36 @@ public class WorkItemUtil {
 	 * 
 	 * @throws EhmpServicesException If workItem is null, the paramName is null or empty, the object returned is null, or if what is returned is not a String.
 	 */
-	public static String extractStringParam(WorkItem workItem, String paramName) throws EhmpServicesException {
+	public static String extractOptionalStringParam(WorkItem workItem, String paramName) throws EhmpServicesException {
 		if (workItem == null) {
-			throw new EhmpServicesException(HttpStatus.BAD_REQUEST, "workItem was null");			
+			throw new EhmpServicesException(HttpStatus.BAD_REQUEST, "workItem was null");
 		}
 		if (paramName == null || paramName.isEmpty()) {
-			throw new EhmpServicesException(HttpStatus.BAD_REQUEST, "paramName was null or empty");			
+			throw new EhmpServicesException(HttpStatus.BAD_REQUEST, "paramName was null or empty");	
 		}
 		
 		Object obj  = workItem.getParameter(paramName);
 		if (obj == null) {
-			throw new EhmpServicesException(HttpStatus.BAD_REQUEST, "Required parameter '" + paramName + "' is not provided.");
+			return null;
 		}
 		if (!(obj instanceof java.lang.String)) {
 			throw new EhmpServicesException(HttpStatus.BAD_REQUEST, "Required parameter '" + paramName + "' was not a String as expected.");
 		}
 		
 		String retvalue = (String)obj;
+		return retvalue;
+	}
+	
+	/**
+	 * Extracts the given parameter from the work item, validates it's of type String and then returns it.
+	 * 
+	 * @throws EhmpServicesException If workItem is null, the paramName is null or empty, the object returned is null, or if what is returned is not a String.
+	 */
+	public static String extractRequiredStringParam(WorkItem workItem, String paramName) throws EhmpServicesException {
+		String retvalue = extractOptionalStringParam(workItem, paramName);
+		if (retvalue == null)
+			throw new EhmpServicesException(HttpStatus.BAD_REQUEST, "Required parameter '" + paramName + "' is not provided.");
+		
 		return retvalue;
 	}
 
@@ -47,8 +60,8 @@ public class WorkItemUtil {
 	 * 
 	 * @throws EhmpServicesException If workItem is null, the paramName is null or empty, the object returned is null, or if what is returned is not a long.
 	 */
-	public static long extractLongParam(WorkItem workItem, String paramName) throws EhmpServicesException {
-		String paramValue = extractStringParam(workItem, paramName);		
+	public static long extractRequiredLongParam(WorkItem workItem, String paramName) throws EhmpServicesException {
+		String paramValue = extractRequiredStringParam(workItem, paramName);
 		try {
 			return Long.parseLong(paramValue);
 		} 
@@ -99,7 +112,7 @@ public class WorkItemUtil {
 	private static String buildResponse(int status, Map<String,String> map) {
 		String response = new String();
 		
-		JsonObject outputObj = new JsonObject();				
+		JsonObject outputObj = new JsonObject();
 		outputObj.addProperty("status", status);
 		if (map != null) {
 			Iterator<String> it = map.keySet().iterator();

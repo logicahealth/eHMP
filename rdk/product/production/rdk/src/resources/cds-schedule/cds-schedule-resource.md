@@ -12,8 +12,6 @@ Get scheduled job(s)
 
 + Parameters
 
-    + id (string, optional) - id of schedule job
-
     + jobname (string, optional) - name of schedule job
 
 
@@ -94,7 +92,7 @@ Schedule resource
 
 #### Notes
 
-Delete a sceduled job
+Delete a scheduled job. One of the parameters (id, jobname) is required, not both.
 
 + Parameters
 

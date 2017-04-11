@@ -45,12 +45,6 @@ public class VxSoapHandler extends Application<VxSoapConfiguration> {
         if (configuration.getServicesEnabled().getAllFlag() == true || configuration.getServicesEnabled().getHdr() == true) {
             environment.jersey().register(new VxHdrResource(template, defaultName));
         }
-        if (configuration.getServicesEnabled().getAllFlag() == true || configuration.getServicesEnabled().getVler() == true) {
-            environment.jersey().register(new VxVlerResource(template, defaultName));
-        }
-        if (configuration.getServicesEnabled().getAllFlag() == true || configuration.getServicesEnabled().getPgd() == true) {
-            environment.jersey().register(new VxPgdResource(template, defaultName));
-        }
         if (configuration.getServicesEnabled().getAllFlag() == true || configuration.getServicesEnabled().getDod().getAllergy() == true) {
             environment.jersey().register(new VxDodAllergyResource(template, defaultName));
         }

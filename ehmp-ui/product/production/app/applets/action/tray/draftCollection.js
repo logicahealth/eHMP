@@ -1,11 +1,8 @@
-define([
-    'main/ADK'
-], function (ADK) {
+define([], function () {
     'use strict';
 
     var draftCollection = ADK.Resources.Writeback.Collection.extend({
-        resource: 'clinical-object-find',
-        vpr: 'clinical-objects',
+        resource: 'orders-find-draft',
         idAttribute: 'uid',
 
         parse: function (resp) {

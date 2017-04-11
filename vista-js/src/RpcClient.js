@@ -14,12 +14,14 @@ config = {
     port: ,
     accessCode: ,
     verifyCode: ,
+    division: ,
     context: ,
     localIP: ,
-    localAddress ,
-    connectTimeout ,
-    sendTimeout ,
-    noReconnect
+    localAddress: ,
+    connectTimeout: ,
+    sendTimeout: ,
+    noReconnect: ,
+    noMetrics:
 };
 */
 function RpcClient(logger, config) {
@@ -123,6 +125,7 @@ RpcClient.prototype._connect = function _connect(callback) {
         greeting: this.greetingCommand.bind(this),
         signon: this.signonCommand.bind(this),
         verify: this.verifyCommand.bind(this),
+        division: this.divisionCommand.bind(this),
         context: this.contextCommand.bind(this)
     }, function(error, results) {
         if (error) {
@@ -142,39 +145,43 @@ RpcClient.prototype._createSender = function _createSender() {
 /*
 variadic function:
 execute(rpcCall, callback)
+execute(startTime, rpcCall, callback)
 execute(rpcName, [param]..., callback)
+execute(startTime, pcName, [param]..., callback)
 */
-RpcClient.prototype.execute = function execute(rpcCall, callback) {
+RpcClient.prototype.execute = function execute(startTime, rpcCall, callback) {
     this.logger.debug('RpcClient.execute(%s:%s)', this.config.host, this.config.port);
-    this.logger.debug('%s:%s -> %s', this.config.host, this.config.port, rpcCall);
 
-    if (arguments.length < 2) {
-        // no arguments won't even get this far
-        callback = arguments[0];
+    // Start: Variadic disambiguation
+    var args = _.toArray(arguments);
+
+    if (_.isNumber(args[0])) {
+        startTime = args.shift();
+    } else {
+        startTime = Date.now();
+    }
+
+    if (args.length < 2) {
+        callback = args[0];
         return setTimeout(callback, 0, 'Insufficient number of arguments');
     }
 
-    // if (_.isUndefined(this.sender) || _.isNull(this.sender)) {
-    //     // TODO: attempt to connect automatically if this condition is met?
-    //     return setTimeout(callback, 0, 'RpcClient is not connected to the Vista server');
-    // }
-
-    var args = _.toArray(arguments);
     callback = args.pop();
 
     var rpcCallParams = args;
     if (_.isArray(_.first(args))) {
         rpcCallParams = _.first(rpcCallParams);
     }
+    // End: Variadic disambiguation
 
-    this.logger.debug('RpcClient.execute(%s:%s) -> rpcCallParams: %s', this.config.host, this.config.port, rpcCallParams);
+    this.logger.debug('RpcClient.execute(%s:%s) -> rpcCallParams: %j', this.config.host, this.config.port, rpcCallParams);
     rpcCall = RpcCall.create(rpcCallParams);
 
     if (!rpcCall) {
         return setTimeout(callback, 0, 'Invalid arguments for rpcCall');
     }
 
-    var task = this._execute.bind(this, rpcCall);
+    var task = this._execute.bind(this, startTime, rpcCall);
     task.callback = callback;
     task.command = 'execute';
 
@@ -184,42 +191,49 @@ RpcClient.prototype.execute = function execute(rpcCall, callback) {
 
 /*
 variadic function:
-_executeRpc(rpcCall, callback)
-_executeRpc(rpcName, [param]..., callback)
+_execute(rpcCall, callback)
+_execute(startTime, rpcName, callback)
 */
-RpcClient.prototype._execute = function _execute(rpcCall, callback) {
+RpcClient.prototype._execute = function _execute(startTime, rpcCall, callback) {
     this.logger.debug('RpcClient._execute(%s:%s)', this.config.host, this.config.port);
-    this.logger.debug(rpcCall);
+
+    if (arguments.length < 3) {
+        callback = arguments[1];
+        rpcCall = arguments[0];
+        startTime = -1;
+    }
 
     var rpcString = RpcSerializer.buildRpcString(rpcCall);
 
     var self = this;
     if (_.isUndefined(self.sender) || _.isNull(self.sender)) {
         return setTimeout(callback, 0, 'Connection not initialized');
-        // return self._connect(function(error) {
-        //     if (error) {
-        //         return callback(error);
-        //     }
-
-        //     self.sender.send(rpcString, callback);
-        // });
     }
 
     this.sender.send(rpcString, function(error, result) {
-        // if (error) {
-        //     return self._connect(function(error) {
-        //         if (error) {
-        //             return callback(error);
-        //         }
-
-        //         self.sender.send(rpcString, callback);
-        //     });
-        // }
-
+        logMetrics(self.logger, self.config, rpcCall, startTime);
         callback(error, result);
     });
 };
 
+function logMetrics(logger, config, rpcCall, startTime) {
+    if (config.noMetrics || startTime < 0) {
+        return;
+    }
+
+    var metrics = {
+        elapsedMilliseconds: Date.now() - startTime,
+        host: config.host,
+        port: config.port,
+        rpc: _.isString(rpcCall) ? rpcCall : rpcCall.rpcName
+    };
+
+    if (!_.isEmpty(rpcCall.params)) {
+        metrics.parameters = rpcCall.params;
+    }
+
+    logger.info(metrics, 'Vista-RPC-Metric - Call Elapsed Time');
+}
 
 RpcClient.prototype.close = function close(callback) {
     callback = callback || function() {};
@@ -315,7 +329,8 @@ RpcClient.prototype.verifyCommand = function verifyCommand(callback) {
         var parts = result.split('\r\n');
 
         if (parts[0] === '0') {
-            return callback('No DUZ returned from login request', result);
+            var err = parts.length < 3 || parts[3] === '0' ? 'No DUZ returned from login request' : parts[3];
+            return callback(err, result);
         }
 
         var response = {
@@ -326,6 +341,80 @@ RpcClient.prototype.verifyCommand = function verifyCommand(callback) {
         };
 
         callback(null, response);
+    });
+};
+
+RpcClient.prototype.divisionCommand = function divisionCommand(callback) {
+    /*
+    division is an optional parameter. If one is passed we need to perform the following actions:
+    1. Get the User information to get the list of divisions for the user
+    2. Make sure the division asked for is in the list
+    3. Set the division requested, if more than one division is possible for the user
+    */
+    var self = this;
+    self.logger.debug('RpcClient.divisionCommand(%s:%s)', self.config.host, self.config.port);
+
+    // If we don't have a division quit this call
+    if ((this.config.division === null) || (this.config.division === undefined)) {
+        self.logger.debug('RpcClient.divisionCommand(%s:%s) - No division passed, skipping this call', self.config.host, self.config.port);
+        return callback(null, 0);
+    }
+
+    // Force the division to a string for a compare later
+    var division = String(this.config.division);
+    self.logger.debug('RpcClient.divisionCommand(%s:%s) - Attempting to set division %s', self.config.host, self.config.port, division);
+
+    // Get the list of the user's divisions
+    var rpcString = RpcSerializer.buildRpcString('XUS DIVISION GET');
+    this.sender.send(rpcString, function divisionGetCallback(error, result) {
+        if (error) {
+            self.logger.debug('RpcClient.divisionCommand(%s:%s) - Get divisions error: %j', self.config.host, self.config.port, error);
+            return callback(error, result);
+        }
+
+        self.logger.debug('RpcClient.divisionCommand(%s:%s) - Get divisions received: %j', self.config.host, self.config.port, result);
+        if (result === '0\r\n') {
+            self.logger.debug('only one division');
+            // This follows the pattern CPRS/RPC Broker Client has.
+            // This is the case that the user doesn't have any configured divisions and the kernel default is used.
+            self.logger.debug('RpcClient.divisionCommand(%s:%s) - Single division user found', self.config.host, self.config.port);
+            return callback(null, division);
+        }
+
+        // Delete the first and last array element to remove the count and rpc broker footer
+        // and only get division responses
+        var divisions = result.split('\r\n');
+        divisions.splice(0, 1);
+        divisions.splice(divisions.length - 1, 1);
+
+        // List of divisions call was successful, verify requested division is in the list
+        var divisionFound = divisions.some(function(response) {
+            var pieces = response.split('^');
+            if (String(pieces[2]) === division) {
+                self.logger.debug('RpcClient.divisionCommand(%s:%s) - Requested division found for this user', self.config.host, self.config.port);
+                return true;
+            }
+        });
+
+        if (divisionFound) {
+            var rpcString = RpcSerializer.buildRpcString('XUS DIVISION SET', RpcParameter.literal(division));
+            self.sender.send(rpcString, function divisionSetCallback(error, result) {
+                if (error) {
+                    self.logger.debug('RpcClient.divisionCommand(%s:%s) - Set division error: %j', self.config.host, self.config.port, error);
+                    return callback(error, result);
+                }
+
+                self.logger.debug('RpcClient.divisionCommand(%s:%s) - Set division received: %j', self.config.host, self.config.port, result);
+                if (result === '0') {
+                    // Unable to set division
+                    return callback('Unable to set requested division', result);
+                }
+                return callback(null, division);
+            });
+        } else {
+            return callback('Selected division not found for this user', result);
+        }
+
     });
 };
 
@@ -408,6 +497,8 @@ function callRpc(logger, config, rpc, parameters, callback) {
         client = new RpcClient(args.shift(), args.shift());
     }
 
+    var startTime = Date.now();
+
     callback = args.pop();
     rpc = args.shift();
     parameters = args;
@@ -420,7 +511,7 @@ function callRpc(logger, config, rpc, parameters, callback) {
             return callback(error);
         }
 
-        client.execute(rpc, parameters, function(error, result) {
+        client.execute(startTime, rpc, parameters, function(error, result) {
             client.close();
             return callback(error, result);
         });
@@ -456,10 +547,13 @@ function authenticate(logger, config, callback) {
     var authError;
     var authResult;
 
+    var startTime = Date.now();
+
     client.connect(function(error, result) {
         authError = error;
         authResult = result;
 
+        logMetrics(logger, config, 'AUTHENTICATE', startTime);
         client.close();
         callback(authError, authResult);
     });

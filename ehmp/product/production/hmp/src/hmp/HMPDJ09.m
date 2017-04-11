@@ -1,5 +1,5 @@
 HMPDJ09 ;SLC/MKB,ASMR/RRB,OB,MAT,CPC,HM - PCE;Apr 13, 2016 16:04:25
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1**;May 15, 2016;Build 1
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1,2**;May 15, 2016;Build 11
  ;Per VA Directive 6402, this routine should not be modified.
  ;
  ;DE4068 - reworked all PCRMINDX references to include ICD10
@@ -240,7 +240,7 @@ VIMM(DA,IMDATA,VISIT) ;VIMM2.0 Return data for a specified V IMMUNIZATION entry.
  N CT,X,WP,COUNT
  S X=$$GET1^DIQ(9000010.11,IEN,1101,"","WP"),COUNT=0
  I $D(WP(1)) S CT="" D
- . F  S CT=$O(WP(CT)) Q:CT=""  S COUNT=COUNT+1 
+ . F  S CT=$O(WP(CT)) Q:CT=""  S COUNT=COUNT+1
  I COUNT>0 S IMDATA("REMARKS")="",CT="" D
  . F  S CT=$O(WP(CT)) Q:CT=""  D
  . . S IMDATA("REMARKS")=$S(CT'=COUNT:IMDATA("REMARKS")_WP(CT)_" "_$C(13)_$C(10),CT=COUNT:IMDATA("REMARKS")_WP(CT),1:0)

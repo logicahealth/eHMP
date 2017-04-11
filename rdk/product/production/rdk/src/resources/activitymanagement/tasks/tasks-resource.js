@@ -36,7 +36,7 @@ function getResourceConfig() {
             operationalDataCheck: false,
             synchronize: false
         },
-        requiredPermissions: [],
+        requiredPermissions: ['edit-task'],
         isPatientCentric: false,
         description: 'Update a given task state',
         subsystems: ['jbpm']

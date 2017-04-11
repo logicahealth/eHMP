@@ -19,11 +19,11 @@ import javax.xml.datatype.XMLGregorianCalendar;
  * <pre>
  * &lt;complexType name="medication">
  *   &lt;complexContent>
- *     &lt;extension base="{http://webservice.vds.DNS       /}dataBean">
+ *     &lt;extension base="{http://webservice.vds.med.DNS   /}dataBean">
  *       &lt;sequence>
  *         &lt;element name="active" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="comment" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="currentProvider" type="{http://webservice.vds.DNS       /}provider" minOccurs="0"/>
+ *         &lt;element name="currentProvider" type="{http://webservice.vds.med.DNS   /}provider" minOccurs="0"/>
  *         &lt;element name="daysSupply" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="drugName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="fillOrderDate" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/>
@@ -31,9 +31,9 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *         &lt;element name="medId" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="medType" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="orderIEN" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="orderingProvider" type="{http://webservice.vds.DNS       /}provider" minOccurs="0"/>
+ *         &lt;element name="orderingProvider" type="{http://webservice.vds.med.DNS   /}provider" minOccurs="0"/>
  *         &lt;element name="pharmacyId" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="prescriptionFills" type="{http://webservice.vds.DNS       /}prescriptionFill" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="prescriptionFills" type="{http://webservice.vds.med.DNS   /}prescriptionFill" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element name="quantity" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="RXNumber" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="refills" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -48,7 +48,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "medication", namespace = "http://webservice.vds.DNS       /", propOrder = {
+@XmlType(name = "medication", namespace = "http://webservice.vds.med.DNS   /", propOrder = {
     "active",
     "comment",
     "currentProvider",

@@ -10,16 +10,34 @@ var async = require('async');
 var confUtils = require('../conformance/conformance-utils');
 var conformance = require('../conformance/conformance-resource');
 
+//---------------------------------------------------------------
+// NOTE: ONLY allowable _tag filters are the enumerations below
+// NOTE: if no _tag filter are given then  procedure request will
+//       pull BOTH educations and non-educations procedure data.
+//---------------------------------------------------------------
+var allowableDomains = {
+    PROCEDURE: 'procedure',
+    EDUCATIONS: 'educations',
+    getAll: function() {return this.PROCEDURE + ', ' + this.EDUCATIONS;}
+};
+
 function getResourceConfig() {
     return [{
-        name: 'procedure-procedure',
+        name: 'fhir-procedure',
         path: '',
         get: getProcedure,
         subsystems: ['patientrecord', 'jds', 'solr', 'jdsSync', 'authorization'],
-        interceptors: {
-            fhirPid: true
-        },
-        requiredPermissions: [],
+        interceptors: { fhirPid: true },
+        requiredPermissions: ['read-fhir'],
+        isPatientCentric: true,
+        permitResponseFormat: true
+    },{
+        name: 'fhir-procedure-search',
+        path: '_search',
+        post: getProcedure,
+        subsystems: ['patientrecord', 'jds', 'solr', 'jdsSync', 'authorization'],
+        interceptors: { fhirPid: true },
+        requiredPermissions: ['read-fhir'],
         isPatientCentric: true,
         permitResponseFormat: true
     }];
@@ -28,7 +46,7 @@ function getResourceConfig() {
 //Issue call to Conformance registration
 conformance.register(confUtils.domains.PROCEDURE, createConformanceData());
 
-function createConformanceData() {   
+function createConformanceData() {
     var resourceType = confUtils.domains.PROCEDURE;
     var profileReference = 'http://www.hl7.org/FHIR/2015May/procedure.html';
     var interactions = [ 'read', 'search-type'];
@@ -41,13 +59,15 @@ function createConformanceData() {
  * @api {get} /fhir/patient/{id}/procedure Get Procedure
  * @apiName getProcedure
  * @apiGroup Procedure
+ * @apiParam {String} id The patient id
  * @apiParam {Number} [_count] The number of results to show.
+ * @apiParam {String} [_tag] To specify a specific subset, either procedure or educations
  *
  * @apiDescription Converts a vpr 'procedure' resource into a FHIR 'procedure' resource.
  *
  * @apiExample {js}  Examples:
  *      // Limiting results count
- *      http://IPADDRESS:POR/resource/fhir/patient/9E7A;253/procedure?_count=1
+ *      http://IP           /resource/fhir/patient/9E7A;253/procedure?_count=1
  *
  * @apiSuccess {json} data Json object conforming to the <a href="http://www.hl7.org/FHIR/2015May/procedure.html">Procedure  FHIR DTSU2 specification</a>.
  * @apiSuccessExample Success-Response:
@@ -173,15 +193,19 @@ function getProcedure(req, res) {
 
 
         var tasks;
-        switch (domainFilter) {
-            case 'procedure':
-                tasks = [buildTask(req, res, procedure)];
-                break;
-            case 'educations':
-                tasks = [buildTask(req, res, educations)];
-                break;
-            default:
-                tasks = [buildTask(req, res, procedure), buildTask(req, res, educations)];
+        if (nullchecker.isNullish(domainFilter)) {
+            tasks = [buildTask(req, res, procedure), buildTask(req, res, educations)];
+        } else {
+            switch (domainFilter) {
+                case allowableDomains.PROCEDURE:
+                    tasks = [buildTask(req, res, procedure)];
+                    break;
+                case allowableDomains.EDUCATIONS:
+                    tasks = [buildTask(req, res, educations)];
+                    break;
+                default:
+                    return res.status(rdk.httpstatus.bad_request).send('Invalid _tag parameter.  Only allowable _tag values are:' + allowableDomains.getAll());
+            }
         }
 
         async.parallel(tasks, function(err, results) {
@@ -215,7 +239,7 @@ function validateParams(params, onSuccess, onError) {
     fhirToJDSSearch.validateCommonParams(params, function() {
         // validate date
         fhirToJDSSearch.validateDateParams(params, ['date'], onSuccess, onError );
-        // TODO-FUTURE: add validation for code param
+        // FUTURE-TODO: add validation for code param
     }, onError);
 }
 

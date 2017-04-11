@@ -1,11 +1,11 @@
 'use strict';
 
-var _ = require('lodash');
+var _ = require('underscore');
 var async = require('async');
-var rpcUtil = require(global.VX_UTILS + '/rpc-util');
-var jobUtil = require(global.VX_UTILS + 'osync-job-utils');
+
+var patientListVistaRetriever = require(global.OSYNC_UTILS + 'patient-list-vista-retriever');
+var jobUtil = require(global.OSYNC_UTILS + 'osync-job-utils');
 var nullUtils = require(global.VX_UTILS + 'null-utils');
-var parseRpcResponsePatientList = require(global.VX_UTILS + 'patient-sync-utils').parseRpcResponsePatientList;
 
 /**
  * Takes a job and validates all of the fields of that job to make sure it's a valid one.<br/>
@@ -31,8 +31,8 @@ function validate(job) {
             if (nullUtils.isNullish(u)) {
                 return 'patientlist.validate: a user was null';
             }
-            if (nullUtils.isNullish(u.duz) || _.isEmpty(u.duz)) {
-                return 'patientlist.validate: a user.duz was null or empty';
+            if (nullUtils.isNullish(u.site) || nullUtils.isNullish(u.id)) {
+                return 'patientlist.validate: a user was null or empty';
             }
         }
     }
@@ -40,90 +40,57 @@ function validate(job) {
     return null;
 }
 
-function getPatientList(log, config, environment, duz, job, callback) {
-    var configVistaSites = config.vistaSites;
-    var sites = _.keys(configVistaSites);
-    if (_.isArray(sites) && sites.length > 0) {
-        async.eachSeries(sites, function(site, siteCb) {
-            if (nullUtils.isNullish(duz[site])) {
-                return siteCb();
-            }
+function publishSingleValidationMessage(log, config, environment, patient, callback) {
+    var singlePatientJob = {};
+    singlePatientJob.source = 'patient lists';
+    singlePatientJob.patient = patient;
+    singlePatientJob.siteId = patient.siteId;
+    singlePatientJob.jobId = undefined;
+    singlePatientJob.jpid = undefined;
 
-            var rpcConfig = configVistaSites[site];
-            rpcConfig.context = config.rpcContext;
+    var jobToPublish = jobUtil.createValidationJob(log, config, environment, singlePatientJob);
+    environment.publisherRouter.publish(jobToPublish, function(error) {
+        if (error) {
+            return callback(error);
+        }
 
-            rpcUtil.standardRPCCall(log, rpcConfig, 'HMP DEFAULT PATIENT LIST', duz[site], null, function (error, data) {
-                if (error) {
-                    log.warn('An error occurred retrieving the patient list data for active user ' + duz[site] + ' from site ' + configVistaSites[site].host + ':' + configVistaSites[site].port + ':' + error + ' -- data contained: ' + data);
-                    return siteCb(); // We don't want to bail completely--we still want to try the other sites, so don't pass the error along to siteCb().
-                }
+        setTimeout(callback, (config.delay && _.isNumber(config.delay)) ? config.delay : 500);
+    });
 
-                if (nullUtils.isNullish(data) || _.isEmpty(data)) {
-                    log.debug('patientlist: the data returned was empty');
-                    return siteCb();
-                }
-
-                parseRpcResponsePatientList(log, data, function(err, patients) {
-                    if (err) {
-                        log.warn('An error occurred while parsing the patient list data for active user ' + duz[site] + ' from site ' + configVistaSites[site].host + ':' + configVistaSites[site].port + ':' + err + ' -- data contained: ' + data);
-                        return siteCb(); // We don't want to bail completely--we still want to try the other sites, so don't pass the error along to siteCb().
-                    }
-
-                    async.eachSeries(patients, function(patient, cb) {
-                        log.debug('processing ' + JSON.stringify(patient));
-
-                        var singlePatientJob = _.cloneDeep(job);
-                        singlePatientJob.source = 'patient lists';
-                        singlePatientJob.patient = patient;
-                        singlePatientJob.siteId = site;
-                        singlePatientJob.jobId = undefined;
-                        singlePatientJob.jpid = undefined;
-
-                        var jobToPublish = jobUtil.createValidationJob(log, config, environment, singlePatientJob);
-                        environment.publisherRouter.publish(jobToPublish, function(error, results) {
-                            if (error) {
-                                return cb(error);
-                            }
-
-                            setTimeout(cb, (config.delay && _.isNumber(config.delay)) ? config.delay : 500);
-                        });
-                    }, function(err) {
-                        if (err) {
-                            return siteCb(err);
-                        }
-
-                        log.debug('Finished processing site ' + configVistaSites[site].host + ':' + configVistaSites[site].port + ' for active user ' + duz[site]);
-                        siteCb();
-                    });
-                });
-            });
-        }, function(err) {
-            if (err) {
-                log.warn('An error occurred retrieving the patient list(s) for the active user ' + JSON.stringify(duz) + ': ' + err);
-                // We don't necessarily want to bail on all active users just because one failed, so don't pass this error to callback().
-                return callback();
-            }
-
-            log.debug('Finished retrieving patient list(s) for the active user ' + JSON.stringify(duz));
-            callback();
-        });
-    } else {
-        callback();
-    }
 }
 
 function handle(log, config, environment, job, handlerCallback) {
-    log.debug('patientlist.handle : received request to sync for active users: ' + JSON.stringify(job));
+    log.debug('patientlist.handle: Received request to sync for active users: %j', job);
 
-    var error = validate(job);
-    if (error) {
-        return handlerCallback(error);
+    var errorMessage = validate(job);
+    if (errorMessage) {
+        return handlerCallback(errorMessage);
     }
 
-    async.eachSeries(job.users, function(user, cb) {
-        if (nullUtils.isNotNullish(user.duz)) {
-            getPatientList(log, config, environment, user.duz, job, cb);
-        }
+    async.eachSeries(job.users, function(user, callback) {
+        patientListVistaRetriever.getPatientListForOneUser(log, config, user, function(error, patientList) {
+            if (error) {
+                return callback(error);
+            }
+
+            async.eachSeries(patientList, function(patient, cb) {
+                log.debug('patientlist.handle: Processing %j', patient);
+
+                publishSingleValidationMessage(log, config, environment, patient, function(err) {
+                    if (err) {
+                        return cb(err);
+                    }
+                    cb();
+                });
+            }, function(err) {
+                if (err) {
+                    return callback(err);
+                }
+
+                log.debug('patientlist.handle: Finished processing for active user %s at site %', user.id, user.site);
+                setTimeout(callback, 0);
+            });
+        });
     }, function(err) {
         if (err) {
             return handlerCallback(err);

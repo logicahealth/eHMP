@@ -9,7 +9,7 @@ define([
         className: "list-group-item row-layout simple",
         template: Handlebars.compile('{{name}}'),
         onShow: function() {
-            this.$el.val(this.model.get('siteCode'));
+            this.$el.val(this.model.get('siteCode')).attr('data-division', this.model.get('division'));
         }
     });
     var FacilityListView = Backbone.Marionette.CompositeView.extend({

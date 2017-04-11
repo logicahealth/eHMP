@@ -14,7 +14,7 @@ node.default[:machine][:stack] = ENV['SLAVE_NAME']
 instance_type = ENV["INSTANCE_TYPE"] || "m3.xlarge"
 
 node.default[:machine][:convergence_options].merge! ({
-  install_sh_url: "#{node[:common][:nexus_url]}/nexus/content/repositories/filerepo/vistacore/chef-install/slave/install/1.0.slave/install-1.0.slave.sh"
+  install_sh_url: "#{node[:common][:nexus_url]}/nexus/content/repositories/environment/vistacore/chef-install/install/1.0.3.slave/install-1.0.3.slave.sh"
 })
 
 machine_options = {
@@ -25,7 +25,7 @@ machine_options = {
     :security_group_ids => ["sg-a06097c6", "sg-2946b14f"]
   },
   :image_id => "ami-2f5f134a",
-  :ssh_username => "ec2-user",
+  :ssh_VsID        "PW      ",
   :aws_tags => set_ec2_tags,
   :convergence_options => node[:machine][:convergence_options]
 }

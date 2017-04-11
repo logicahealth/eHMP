@@ -51,5 +51,5 @@ action :execute do
       not_if { item_exists?("http://localhost:#{new_resource.port}/#{store}/?filter=eq(facility,#{facility})", "items") }
     end
   }
-  
+
 end

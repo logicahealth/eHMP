@@ -1,4 +1,3 @@
-/*jslint node: true*/
 'use strict';
 var rdk = require('../../core/rdk');
 var _ = require('lodash');
@@ -29,53 +28,53 @@ var map = {
         return this.vaStatus[vaStatus.toUpperCase()] || this.vaStatus._default_;
     },
     routeName: {
-        'AP': ['Apply Externally', 'TODO'],
-        'B': ['Buccal', 'TODO'],
-        'DT': ['Dental', 'TODO'],
-        'EP': ['Epidural', 'TODO'],
-        'ET': ['Endotrachial Tube', 'TODO'],
-        'GTT': ['Gastrostomy Tube', 'TODO'],
-        'GU': ['GU Irrigant', 'TODO'],
-        'IA': ['Intra-arterial', 'TODO'],
-        'IB': ['Intrabursal', 'TODO'],
-        'IC': ['Intracardiac', 'TODO'],
-        'ICV': ['Intracervical (uterus)', 'TODO'],
-        'ID': ['Intradermal', 'TODO'],
-        'IH': ['Inhalation', 'TODO'],
-        'IHA': ['Intrahepatic Artery', 'TODO'],
-        'IM': ['Intramuscular', 'TODO'],
-        'IMR': ['Immerse (Soak) Body Part', 'TODO'],
-        'IN': ['Intranasal', 'TODO'],
-        'IO': ['Intraocular', 'TODO'],
-        'IP': ['Intraperitoneal', 'TODO'],
-        'IS': ['Intrasynovial', 'TODO'],
-        'IT': ['Intrathecal', 'TODO'],
-        'IU': ['Intrauterine', 'TODO'],
-        'IV': ['Intravenous', 'TODO'],
-        'MM': ['Mucous Membrane', 'TODO'],
-        'MTH': ['Mouth/Throat', 'TODO'],
-        'NG': ['Nasogastric', 'TODO'],
-        'NP': ['Nasal Prongs', 'TODO'],
-        'NS': ['Nasal', 'TODO'],
-        'NT': ['Nasotrachial Tube', 'TODO'],
-        'OP': ['Ophthalmic', 'TODO'],
-        'OT': ['Otic', 'TODO'],
-        'OTH': ['Other/Miscellaneous', 'TODO'],
-        'PF': ['Perfusion', 'TODO'],
-        'PO': ['Oral', 'TODO'],
-        'PR': ['Rectal', 'TODO'],
-        'RM': ['Rebreather Mask', 'TODO'],
-        'SC': ['Subcutaneous', 'TODO'],
-        'SD': ['Soaked Dressing', 'TODO'],
-        'SL': ['Sublingual', 'TODO'],
-        'TD': ['Transdermal', 'TODO'],
-        'TL': ['Translingual', 'TODO'],
-        'TP': ['Topical', 'TODO'],
-        'TRA': ['Tracheostomy', 'TODO'],
-        'UR': ['Urethral', 'TODO'],
-        'VG': ['Vaginal', 'TODO'],
-        'VM': ['Ventimask', 'TODO'],
-        'WND': ['Wound', 'TODO']
+        'AP': ['Apply Externally', 'FUTURE-TODO'],
+        'B': ['Buccal', 'FUTURE-TODO'],
+        'DT': ['Dental', 'FUTURE-TODO'],
+        'EP': ['Epidural', 'FUTURE-TODO'],
+        'ET': ['Endotrachial Tube', 'FUTURE-TODO'],
+        'GTT': ['Gastrostomy Tube', 'FUTURE-TODO'],
+        'GU': ['GU Irrigant', 'FUTURE-TODO'],
+        'IA': ['Intra-arterial', 'FUTURE-TODO'],
+        'IB': ['Intrabursal', 'FUTURE-TODO'],
+        'IC': ['Intracardiac', 'FUTURE-TODO'],
+        'ICV': ['Intracervical (uterus)', 'FUTURE-TODO'],
+        'ID': ['Intradermal', 'FUTURE-TODO'],
+        'IH': ['Inhalation', 'FUTURE-TODO'],
+        'IHA': ['Intrahepatic Artery', 'FUTURE-TODO'],
+        'IM': ['Intramuscular', 'FUTURE-TODO'],
+        'IMR': ['Immerse (Soak) Body Part', 'FUTURE-TODO'],
+        'IN': ['Intranasal', 'FUTURE-TODO'],
+        'IO': ['Intraocular', 'FUTURE-TODO'],
+        'IP': ['Intraperitoneal', 'FUTURE-TODO'],
+        'IS': ['Intrasynovial', 'FUTURE-TODO'],
+        'IT': ['Intrathecal', 'FUTURE-TODO'],
+        'IU': ['Intrauterine', 'FUTURE-TODO'],
+        'IV': ['Intravenous', 'FUTURE-TODO'],
+        'MM': ['Mucous Membrane', 'FUTURE-TODO'],
+        'MTH': ['Mouth/Throat', 'FUTURE-TODO'],
+        'NG': ['Nasogastric', 'FUTURE-TODO'],
+        'NP': ['Nasal Prongs', 'FUTURE-TODO'],
+        'NS': ['Nasal', 'FUTURE-TODO'],
+        'NT': ['Nasotrachial Tube', 'FUTURE-TODO'],
+        'OP': ['Ophthalmic', 'FUTURE-TODO'],
+        'OT': ['Otic', 'FUTURE-TODO'],
+        'OTH': ['Other/Miscellaneous', 'FUTURE-TODO'],
+        'PF': ['Perfusion', 'FUTURE-TODO'],
+        'PO': ['Oral', 'FUTURE-TODO'],
+        'PR': ['Rectal', 'FUTURE-TODO'],
+        'RM': ['Rebreather Mask', 'FUTURE-TODO'],
+        'SC': ['Subcutaneous', 'FUTURE-TODO'],
+        'SD': ['Soaked Dressing', 'FUTURE-TODO'],
+        'SL': ['Sublingual', 'FUTURE-TODO'],
+        'TD': ['Transdermal', 'FUTURE-TODO'],
+        'TL': ['Translingual', 'FUTURE-TODO'],
+        'TP': ['Topical', 'FUTURE-TODO'],
+        'TRA': ['Tracheostomy', 'FUTURE-TODO'],
+        'UR': ['Urethral', 'FUTURE-TODO'],
+        'VG': ['Vaginal', 'FUTURE-TODO'],
+        'VM': ['Ventimask', 'FUTURE-TODO'],
+        'WND': ['Wound', 'FUTURE-TODO']
     },
     getrouteNameDesc: function(jdsCode) {
 
@@ -130,7 +129,7 @@ function convertToFhir(items, req) {
 //--------------------------------------
 function buildMedicationDispense(item) {
 
-    var md = new fhirResource.MedicationDispense();
+    var md = new fhirResource.MedicationDispense(item.uid);
     md.contained = [];
 
     //  md.text = ...
@@ -309,7 +308,7 @@ function createMedicationResource(item) {
     //--------------------------------------
     // SET medication.codes
     // NOTE:  JDS source can return multiple codes but FHIR can only hold 1.
-    // TODO:  Need to loop through all codes found from source,
+    // FUTURE-TODO:  Need to loop through all codes found from source,
     //        and store 1st one in fhirItem.code,
     //        then put rest in localized extensions (sim. to rxncodes).
     //--------------------------------------

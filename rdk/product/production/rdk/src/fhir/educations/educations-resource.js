@@ -12,7 +12,7 @@ var conceptCategory = 'ED';
 
 var getResourceConfig = function() {
     return [{
-        name: 'educations-educations',
+        name: 'fhir-educations',
         path: '',
         get: getEducations,
         subsystems: ['patientrecord', 'jds', 'authorization'],

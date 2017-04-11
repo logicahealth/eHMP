@@ -6,7 +6,6 @@ var _ = require('lodash');
 var nullChecker = rdk.utils.nullchecker;
 var async = require('async');
 var searchJds = require('./search-jds');
-var dd = require('drilldown');
 var S = require('string');
 var sensitivityUtils = rdk.utils.sensitivity;
 var searchUtil = require('./results-parser');
@@ -62,14 +61,17 @@ module.exports.getResourceConfig = function() {
 
 /**
  *
- * @param req - req
- * @param logMessagePrefix - Used when logging messages to show who is calling this - useful for debugging.
- * @param jdsServer - req.app.config.jdsServer - connectivity information for jdsServer.
- * @param {Object} searchOptions - The search options
- * @param {string} searchOptions.site - The site you want to search for patients on.
- * @param {string} searchOptions.searchType - The type of search.  Can be ICN, PID, LAST5, or NAME.
- * @param {string} searchOptions.searchString - the string that you are searching for using icn, pid, last5, or name.
- * @param callback - The function to call when we have retrieved all of the data.
+ * Retrieves patient information from VistA and/or JDS.
+ *
+ * @param {Object} req - The request object.
+ * @param {string} logMessagePrefix - Used when logging messages to show who is calling this - useful for debugging.
+ * @param {Object} jdsServer - Connectivity information for JDS. Pulled from req.app.config.jdsServer
+ * @param {Object} searchOptions - The search options for the patient search query.
+ * @param {string} searchOptions.site - The site to search for patients on.
+ * @param {string} searchOptions.searchType - The type of search to perform. Can be ICN, PID, LAST5, or NAME.
+ * @param {string} searchOptions.searchString - The string to search on. ICN for ICN search, PID for PID search,
+ *                 first letter of last name + last 4 of SSN for last5 search, full or partial name for name search.
+ * @param {function} callback - The function to call when all of the patient data has been retrieved.
  */
 module.exports.callPatientSearch = function(req, logMessagePrefix, jdsServer, searchOptions, callback) {
     var logger = req.logger;
@@ -87,6 +89,8 @@ module.exports.callPatientSearch = function(req, logMessagePrefix, jdsServer, se
     var hasHmpPatientSelectRpc = _.result(req, 'app.config.vistaSites[' + site + '].hasHmpPatientSelectRpc', null);
     logger.debug('%s beginning with hasHmpPatientSelectRpc set to %s', logMessagePrefix, hasHmpPatientSelectRpc);
 
+    // If the site is configured to have the HMP PATIENT SELECT RPC, call it to retrieve the patient search results.
+    // Otherwise, get the patient search results from JDS.
     if (hasHmpPatientSelectRpc !== false) {
         logger.debug('%s performing hmpPatientSelect.fetch using site=%s &searchType=%s &searchString=%s', logMessagePrefix, site, searchType, searchString);
         hmpPatientSelect.fetch(req, searchOptions, site, function(error, response) {
@@ -124,16 +128,28 @@ module.exports.callPatientSearch = function(req, logMessagePrefix, jdsServer, se
                     message: response
                 });
             }
-
-            hmpPatientSelectCB(response, {
-                req: req,
-                jdsServer: jdsServer,
-                hasDGAccess: hasDGAccess,
-                logMessagePrefix: logMessagePrefix,
-                finalCB: callback,
-                sensitivePatientAcknowleged: sensitivePatientAcknowleged,
-                searchOptions: searchOptions
-            });
+            // If we're doing a patient search (i.e. NAME or LAST5), there's no need to call JDS.
+            // If we're doing patient selection, we do need to call JDS to get the unmasked SSN.
+            if (searchType === 'NAME' || searchType === 'LAST5') {
+                hmpPatientSelectSearchCB(response, {
+                    req: req,
+                    hasDGAccess: hasDGAccess,
+                    logMessagePrefix: logMessagePrefix,
+                    finalCB: callback,
+                    sensitivePatientAcknowleged: sensitivePatientAcknowleged,
+                    searchOptions: searchOptions
+                });
+            } else {
+                hmpPatientSelectSelectionCB(response, {
+                    req: req,
+                    jdsServer: jdsServer,
+                    hasDGAccess: hasDGAccess,
+                    logMessagePrefix: logMessagePrefix,
+                    finalCB: callback,
+                    sensitivePatientAcknowleged: sensitivePatientAcknowleged,
+                    searchOptions: searchOptions
+                });
+            }
         });
     } else {
         logger.debug('%s performing pt-select search instead of hmpPatientSelect using site=%s &searchType=%s &searchString=%s', logMessagePrefix, site, searchType, searchString);
@@ -170,7 +186,7 @@ var ptSelectCB = function(err, response, logger, options) {
     finalPatientSearchCallback(err, response, logger, options);
 };
 
-var hmpPatientSelectCB = function(response, options) {
+var hmpPatientSelectSelectionCB = function(response, options) {
     var req = options.req;
     var logger = req.logger;
     var jdsServer = options.jdsServer;
@@ -178,7 +194,7 @@ var hmpPatientSelectCB = function(response, options) {
     var sensitivePatientAcknowleged = options.sensitivePatientAcknowleged;
     var searchOptions = options.searchOptions;
     var site = searchOptions.site;
-    var logMessagePrefix = options.logMessagePrefix ? options.logMessagePrefix + '.hmpPatientSelectCB' : 'patientSearch.hmpPatientSelectCB';
+    var logMessagePrefix = options.logMessagePrefix ? options.logMessagePrefix + '.hmpPatientSelectSelectionCB' : 'patientSearch.hmpPatientSelectSelectionCB';
 
     if (!_.isEmpty(_.result(req, 'app.config.vistaSites[' + site + ']', {}))) {
         //set the config to have hasHmpPatientSelectRpc
@@ -187,18 +203,23 @@ var hmpPatientSelectCB = function(response, options) {
     }
     async.mapSeries(response, function(patient, cb) {
         logger.debug('%s sensitive flag was %s for patient %s;', logMessagePrefix, patient.sensitive, patient.fullName);
-        var options = _.create(searchOptions, {
-            searchString: patient.pid,
-            searchType: 'PID'
-        });
+
+        // If patient is sensitive and the user doesn't have DG access and they haven't acknowledged that the patient is sensitive,
+        // hide the sensitive fields and return the patient data.
         if (patient.sensitive && !sensitivePatientAcknowleged && !hasDGAccess) {
             logger.trace(patient, logMessagePrefix + ' has an _ack of ' + sensitivePatientAcknowleged);
-            patient = sensitivityUtils.hideSensitiveFields(patient)
+            patient = sensitivityUtils.hideSensitiveFields(patient);
             patient = searchUtil.transformPatient(patient, false);
             return setImmediate(cb, null, patient);
         }
 
         logger.debug('%s checking for patient in JDS', logMessagePrefix);
+
+        // Set up call to retrieve full SSN from JDS since the VistA data masks it out
+        var options = _.create(searchOptions, {
+            searchString: patient.pid,
+            searchType: 'PID'
+        });
         searchJds.getPatients(req, options, jdsServer, function(err, jdsResult) {
             if (err) {
                 return cb(err);
@@ -241,6 +262,56 @@ var hmpPatientSelectCB = function(response, options) {
     });
 };
 
+/**
+ * Processes response from RPC search in the context of a full name or last 5 search.
+ *
+ * @param {Object} response - results from HMP PATIENT SELECT.
+ * @param {Object} options - contains relevant info for processing the results.
+ */
+var hmpPatientSelectSearchCB = function(response, options) {
+    var req = options.req;
+    var logger = req.logger;
+    var hasDGAccess = options.hasDGAccess;
+    var sensitivePatientAcknowleged = options.sensitivePatientAcknowleged;
+    var searchOptions = options.searchOptions;
+    var site = searchOptions.site;
+    var logMessagePrefix = options.logMessagePrefix ? options.logMessagePrefix + '.hmpPatientSelectSearchCB' : 'patientSearch.hmpPatientSelectSearchCB';
+
+    if (!_.isEmpty(_.result(req, 'app.config.vistaSites[' + site + ']', {}))) {
+        //set the config to have hasHmpPatientSelectRpc
+        req.app.config.vistaSites[site].hasHmpPatientSelectRpc = true;
+        logger.trace(req.app.config.vistaSites[site]);
+    }
+    async.mapSeries(response, function(patient, cb) {
+
+        patient = sensitivityUtils.removeSensitiveFields(patient);
+
+        if (patient.sensitive && !sensitivePatientAcknowleged && !hasDGAccess) {
+            patient = sensitivityUtils.hideSensitiveFields(patient);
+        }
+
+        patient = searchUtil.transformPatient(patient, false);
+        return cb(null, patient);
+
+    }, function(err, patients) {
+        var retvalue = {
+            apiVersion: '1.0',
+            data: {
+                totalItems: 0,
+                currentItemCount: 0,
+                items: []
+            }
+        };
+        //format the RPC data to look like the JDS data that we used to send back
+        if (!_.isEmpty(patients)) {
+            retvalue.data.totalItems = patients.length;
+            retvalue.data.currentItemCount = patients.length;
+            retvalue.data.items = patients;
+        }
+        finalPatientSearchCallback(err, retvalue, logger, options);
+    });
+};
+
 function finalPatientSearchCallback(err, data, logger, options) {
     var logMessagePrefix = options.logMessagePrefix ? options.logMessagePrefix + '.finalPatientSearchCallback' : 'patientSearch.finalPatientSearchCallback';
     if (err) {
@@ -251,6 +322,16 @@ function finalPatientSearchCallback(err, data, logger, options) {
     options.finalCB(null, data);
 }
 
+/**
+ * Retrieves patient demographic information from JDS based on a given PID.
+ *
+ * @param {Object} req - The request object.
+ * @param {string} logMessagePrefix - Used when logging messages to show who is calling this - useful for debugging.
+ * @param {string} site - The site to search for patients in.
+ * @param {string} searchType - The type of search to perform. Can be ICN, PID, LAST5, or NAME.
+ * @param {string} pid - The PID of the patient to search for.
+ * @param {function} callback - The function to call when all of the data has been retrieved.
+ */
 module.exports.callJDSPatientSearch = function(req, logMessagePrefix, site, searchType, pid, callback) {
     var LOG_MESSAGE_PREFIX = 'patient-search-resource.callJDSPatientSearch';
     if (!logMessagePrefix) {
@@ -260,7 +341,9 @@ module.exports.callJDSPatientSearch = function(req, logMessagePrefix, site, sear
     }
     var logger = req.logger;
     var sensitivePatientAcknowleged = _.result(req, 'query._ack') || _.result(req, 'params._ack') || _.result(req, 'body._ack') || false;
+
     var hasDGAccess = _.result(req, 'session.user.dgSensitiveAccess', 'false') === 'true';
+
     var options = _.extend({}, req.app.config.jdsServer, {
         url: '/vpr/' + pid,
         logger: logger,
@@ -296,10 +379,17 @@ module.exports.callJDSPatientSearch = function(req, logMessagePrefix, site, sear
             }
             patient = searchUtil.transformPatient(patient, true);
         });
+
         return callback(null, result);
     });
 };
 
+/**
+ * Removes unnecessary attributes from a patient.
+ *
+ * @param {object} patient - The patient to remove attributes from.
+ * @return {object} cleanedPatient - The patient, with unnecessary attributes removed.
+ */
 function cleanJDSPatientAttributes(patient) {
     var cleanedPatient = _.pick(patient, JDSPatientAttributeWhitelist);
     return cleanedPatient;
@@ -478,7 +568,7 @@ function parseFilter(logger, logMessagePrefix, filter) {
 }
 /**
  * Pass in 'req.query.filter' and the response which contains data.items that need to be ordered.
- * Example: http://IP_ADDRESS:PORT/resource/locations/clinics/patients?uid=urn:va:location:9E7A:23&filter=eq(familyName,%22EIGHT%22)
+ * Example: http://IP             /resource/locations/clinics/patients?uid=urn:va:location:9E7A:23&filter=eq(familyName,%22EIGHT%22)
  *
  * @param logger - req.logger - The logger
  * @param logMessagePrefix - Used when logging messages to show who is calling this - useful for debugging.
@@ -545,11 +635,6 @@ function getSiteFromPid(pid) {
 module.exports.getSite = function(logger, logMessagePrefix, pid, req) {
     logger.debug(logMessagePrefix + '_getSite retrieving site');
     var site;
-    if (dd(req)('session')('user')('site').exists) {
-        site = req.session.user.site;
-        req.logger.debug(logMessagePrefix + '_getSite obtained site (' + site + ') from req.session.user.site');
-        return site;
-    }
     req.logger.debug(logMessagePrefix + '_getSite pid=' + pid);
     site = getSiteFromPid(pid);
     if (nullChecker.isNotNullish(site)) {
@@ -562,6 +647,11 @@ module.exports.getSite = function(logger, logMessagePrefix, pid, req) {
             req.logger.debug(logMessagePrefix + '_getSite obtained site (' + site + ') from request');
             return site;
         }
+    }
+    if (_.has(req, 'session.user.site')) {
+        site = req.session.user.site;
+        req.logger.debug(logMessagePrefix + '_getSite obtained site (' + site + ') from req.session.user.site');
+        return site;
     }
     req.logger.error(logMessagePrefix + '_getSite unable to obtain site from request');
     return null;

@@ -17,6 +17,9 @@ define([
 
     var DateRangeHeaderView = Backbone.Marionette.ItemView.extend({
         template: dateRangeHeaderTemplate,
+        modelEvents: {
+            'change': 'render'
+        },
         initialize: function() {
 
             this.listenTo(this.model, 'change', this.render);
@@ -183,7 +186,6 @@ define([
 
             this.model.set('fromDate', fromDate);
             this.model.set('toDate', toDate);
-            //TODO: Remove this once the new Resource is Created
             this.sharedDateRange.set('fromDate', fromDate);
             this.sharedDateRange.set('toDate', toDate);
 
@@ -313,8 +315,11 @@ define([
             }
         },
         fetchDateRangeFilteredCollection: function() {
-            ADK.PatientRecordService.fetchCollection(this.fetchOptions);
-            this.parentView.leftColumn.show(ADK.Views.Loading.create());
+            ADK.PatientRecordService.fetchCollection(this.fetchOptions, this.collection);
+            var parentView = this.parentView;
+            parentView.leftColumn.show(ADK.Views.Loading.create());
+            parentView.chart.show(ADK.Views.Loading.create());
+            parentView.totalTestModel.clear();
         },
         setFetchOptions: function(fetchOptions) {
             this.fetchOptions = fetchOptions;

@@ -6,18 +6,25 @@ var clinicalObject = require('../../../subsystems/clinical-objects/clinical-obje
  * Finds all draft orders with a specific patientUid and authorUid
  */
 module.exports = function(writebackContext, callback) {
+    var logger = writebackContext.logger;
+    var model = writebackContext.model;
+    var appConfig = writebackContext.appConfig;
+    var loadReference = writebackContext.loadReference;
 
-    writebackContext.model.domain = 'order';
-    writebackContext.model.ehmpState = 'draft';
-
-    clinicalObject.find(writebackContext.logger, writebackContext.appConfig,
-        writebackContext.model, writebackContext.loadReference,
-        function(err, model) {
-            if (err) {
-                return callback(err);
-            }
-            writebackContext.vprResponse = model;
-            return callback(null, writebackContext.vprResponse);
-        });
+    clinicalObject.find(logger, appConfig, model, loadReference, function(err, response) {
+        if (isClinicalObjectNotFound(err)) {
+            err = undefined;
+            response = {};
+        }
+        if (err) {
+            return callback(err);
+        }
+        writebackContext.vprResponse = response;
+        return callback(null, response);
+    });
 
 };
+
+function isClinicalObjectNotFound(err) {
+    return (err && (err.length === 1) && (err[0] === clinicalObject.CLINICAL_OBJECT_NOT_FOUND)) ? true : false;
+}

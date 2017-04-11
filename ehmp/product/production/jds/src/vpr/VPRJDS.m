@@ -1,5 +1,4 @@
 VPRJDS ;SLC/KCM -- Save JSON objects
- ;;1.0;JSON DATA STORE;;Sep 01, 2012
  ;
 SAVE(JSON) ; Save a JSON encoded object
  N UID,COLL,KEY,OBJECT,OLDOBJ,VPRJERR,INDEXER,TLTARY,STAMP,OLDSTAMP,SOURCESTAMP,SOURCE,DOMAIN
@@ -21,17 +20,19 @@ SAVE(JSON) ; Save a JSON encoded object
  ; Get the old(er) object
  S OLDSTAMP=""
  S OLDSTAMP=$O(^VPRJD(UID,""),-1)
- ; Only index based on this one if this metastamp is newer than the one onfile
- I OLDSTAMP'="",OLDSTAMP<STAMP S OLDOBJ="" M OLDOBJ=^VPRJD(UID,OLDSTAMP)
- I STAMP>OLDSTAMP D BLDTLT^VPRJCT1(COLL,.OBJECT,.TLTARY) Q:$G(HTTPERR) ""
+ ; Get the old object if STAMP is equal or greater than OLDSTAMP
+ I OLDSTAMP'="",STAMP'<OLDSTAMP S OLDOBJ="" M OLDOBJ=^VPRJD(UID,OLDSTAMP)
+ ; Rebuild template if STAMP is equal or greater than OLDSTAMP
+ I STAMP'<OLDSTAMP D BLDTLT^VPRJCT1(COLL,.OBJECT,.TLTARY) Q:$G(HTTPERR) ""
  K ^VPRJD(UID,STAMP)
  K ^VPRJDJ("JSON",UID,STAMP)
  ;
  M ^VPRJDJ("JSON",UID,STAMP)=JSON
- I STAMP>OLDSTAMP M ^VPRJDJ("TEMPLATE",UID)=TLTARY
+ ; Merge template array if STAMP is equal or greater than OLDSTAMP
+ I STAMP'<OLDSTAMP M ^VPRJDJ("TEMPLATE",UID)=TLTARY
  M ^VPRJD(UID,STAMP)=OBJECT
  ; Set stored flags
- ; UID format: urn:va:{domain}:{siteHash}:{local identifier} 
+ ; UID format: urn:va:{domain}:{siteHash}:{local identifier}
  S SOURCE=$P(UID,":",4)
  S SOURCESTAMP=""
  S DOMAIN=COLL
@@ -81,7 +82,7 @@ DELCTN(COLL,SYSID) ; Delete a collection given its name
 DELSITE(SITE) ; Delete an entire site
  I '$L(SITE) D SETERROR^VPRJRER(208) QUIT
  N UID,ARGS
- S UID="" 
+ S UID=""
  F  S UID=$O(^VPRJD(UID)) Q:UID=""  D
  . Q:$P(UID,":",4)'=SITE
  . D DELETE(UID) ; Delete each object for our given site

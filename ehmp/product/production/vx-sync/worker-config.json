@@ -1,7 +1,7 @@
 {
-  "VXSYNC_IP": "IPADDRES",
+  "VXSYNC_IP": "IP      ",
   "vxsync": {
-    "configRefresh": 0,
+    "configRefresh": 60000,
     "rules": {
       "accept-all": {
       },
@@ -14,6 +14,10 @@
       "expiration": {
         "default": 3600000,
         "dod": 3600000
+      },
+      "error-cooldown": {
+        "default": 600000,
+        "DOD": 600000
       }
     },
     "eventPrioritizationRules": {
@@ -25,29 +29,30 @@
         }
     },
     "retrySync": {"maxRetries": 3},
+    "endpointMaxSockets": 5,
     "maxMetastampSize": 10485760,
     "vistaAssigningAuthority": "USVHA",
     "vistaSites": {
-        "C877": {
-          "name": "KODAK",
-          "host": "IP_ADDRESS",
+        "9E7A": {
+          "name": "PANORAMA",
+          "host": "IP        ",
           "port": 9210,
           "accessCode": "PW",
-          "verifyCode": "PW",
+          "verifyCode": "PW!!",
           "localIP": "127.0.0.1",
-          "stationNumber": "507",
+          "stationNumber": "500",
           "localAddress": "localhost",
           "connectTimeout": 3000,
           "sendTimeout": 20000
       },
-        "9E7A": {
-          "name": "PANORAMA",
-          "host": "IP_ADDRESS",
+        "C877": {
+          "name": "KODAK",
+          "host": "IP        ",
           "port": 9210,
           "accessCode": "PW",
-          "verifyCode": "PW",
+          "verifyCode": "PW!!",
           "localIP": "127.0.0.1",
-          "stationNumber": "500",
+          "stationNumber": "507",
           "localAddress": "localhost",
           "connectTimeout": 3000,
           "sendTimeout": 20000
@@ -60,7 +65,6 @@
         "appointment",
         "diagnosis",
         "document",
-        "factor",
         "immunization",
         "lab",
         "med",
@@ -123,6 +127,7 @@
         "defaults": {
             "host": "127.0.0.1",
             "port": "5400",
+            "adminPort": "5401",
             "method": "GET",
             "timeout": 60000
         },
@@ -182,7 +187,6 @@
             "consult",
             "cpt",
             "document",
-            "factor",
             "immunization",
             "image",
             "lab",
@@ -195,39 +199,32 @@
             "visit",
             "vital"
         ],
-        "hdrSites": {
-             "2939": {
-                 "stationNumber": 536
-             },
-             "FFC7": {
-                 "stationNumber": 551
-             }
-        },
         "operationMode": "REQ/RES",
         "defaults": {
             "host": "localhost",
             "port": "5400",
+            "adminPort": "5401",
             "method": "GET",
             "timeout": 60000
         },
         "blackList": [
-
+                
                 {
                    "siteHash": "2927",
                    "stationNumber": "202"
                 }
                 ,
                 {
-                   "siteHash": "",
+                   "siteHash": "A8C2",
                    "stationNumber": "504"
                 }
         ],
         "disabled": false,
         "pubsubConfig": {
-          "host": "IP_ADDRESS",
+          "host": "IP        ",
           "port": 8999,
           "protocol": "http",
-          "path": "repositories.DNS       /fpds/vpr/",
+          "path": "repositories.med.DNS   /fpds/vpr/",
           "server": "HMPTest",
           "clientName": "eHMP",
           "_type": "json",
@@ -308,9 +305,6 @@
         "problem": {
             "path": "/hdr/getData?domain=problem"
         },
-        "factor": {
-            "path": "/hdr/getData?domain=factor"
-        },
         "roadtrip": {
             "path": "/hdr/getData?domain=roadtrip"
         },
@@ -338,6 +332,7 @@
         "defaults": {
             "host": "localhost",
             "port": "5400",
+            "adminPort": "5401",
             "method": "GET",
             "timeout": 60000
         },
@@ -354,7 +349,7 @@
             "consult",
             "cpt",
             "document",
-            "factor",
+            "education",
             "immunization",
             "lab",
             "med",
@@ -376,8 +371,8 @@
           "error-request"
         ],
         "primary": [
-          "vista-C877-subscribe-request",
           "vista-9E7A-subscribe-request",
+          "vista-C877-subscribe-request",
           "enterprise-sync-request",
           "vista-operational-subscribe-request"
         ],
@@ -432,7 +427,6 @@
               "hdr-sync-consult-request",
               "hdr-sync-cpt-request",
               "hdr-sync-document-request",
-              "hdr-sync-factor-request",
               "hdr-sync-image-request",
               "hdr-sync-immunization-request",
               "hdr-sync-lab-request",
@@ -451,7 +445,6 @@
               "hdr-xform-consult-vpr",
               "hdr-xform-cpt-vpr",
               "hdr-xform-document-vpr",
-              "hdr-xform-factor-vpr",
               "hdr-xform-image-vpr",
               "hdr-xform-immunization-vpr",
               "hdr-xform-lab-vpr",
@@ -508,7 +501,6 @@
               "hdr-sync-consult-request",
               "hdr-sync-cpt-request",
               "hdr-sync-document-request",
-              "hdr-sync-factor-request",
               "hdr-sync-image-request",
               "hdr-sync-immunization-request",
               "hdr-sync-lab-request",
@@ -527,7 +519,6 @@
               "hdr-xform-consult-vpr",
               "hdr-xform-cpt-vpr",
               "hdr-xform-document-vpr",
-              "hdr-xform-factor-vpr",
               "hdr-xform-image-vpr",
               "hdr-xform-immunization-vpr",
               "hdr-xform-lab-vpr",
@@ -609,9 +600,9 @@
         },
         "vista-operational-subscribe-request": {
         },
-        "vista-C877-subscribe-request": {
-        },
         "vista-9E7A-subscribe-request": {
+        },
+        "vista-C877-subscribe-request": {
         },
         "jmeadows-sync-request": {
         },
@@ -693,8 +684,6 @@
         },
         "hdr-sync-document-request": {
         },
-        "hdr-sync-factor-request": {
-        },
         "hdr-sync-image-request": {
         },
         "hdr-sync-immunization-request": {
@@ -728,8 +717,6 @@
         "hdr-xform-cpt-vpr": {
         },
         "hdr-xform-document-vpr": {
-        },
-        "hdr-xform-factor-vpr": {
         },
         "hdr-xform-image-vpr": {
         },
@@ -793,19 +780,16 @@
         }
       }
     },
-    "publishTubes": [
-    ],
-
         "jds": {
             "protocol": "http",
-            "host": "IP_ADDRESS",
+            "host": "IP        ",
             "port": "9082",
             "timeout": 300000
         },
 
         "solrClient": {
             "core": "vpr",
-            "zooKeeperConnection": "IP_ADDRESS:PORT"
+            "zooKeeperConnection": "IP             "
         },
 
         "mvi": {
@@ -839,115 +823,212 @@
     },
 
     "error-processing": {
-      "record-enrichment": {
-        "ignoreSeverity": true,
-        "loopDelayMillis": 30000,
-        "jobTypes": [
-          "record-enrichment"
-        ]
-      },
-      "activity-management": {
-        "ignoreSeverity": true,
-        "loopDelayMillis": 30000,
-        "jobTypes": [
-          "activity-management-event"
-        ]
-      },
-      "jmeadows": {
-        "loopDelayMillis": 30000,
-        "jobTypes": [
-          "jmeadows-sync-request",
+      "jdsGetErrorLimit" : 1000,
+      "profiles": {
+        "catastrophic-recovery": {
+          "enabled": false,
+          "ignoreSeverity": true,
+          "loopDelayMillis": 30000,
+          "jobTypes": [
+            "error-request",
+            "operational-store-record",
+            "solr-record-storage",
+            "store-record",
+            "record-enrichment",
+            "event-prioritization-request",
+            "vista-record-processor-request",
+            "vista-9E7A-data-poller",
+            "vista-C877-data-poller",
+            "vista-9E7A-subscribe-request",
+            "vista-C877-subscribe-request",
+            "hdr-xform-allergy-vpr",
+            "hdr-xform-appointment-vpr",
+            "hdr-xform-consult-vpr",
+            "hdr-xform-cpt-vpr",
+            "hdr-xform-document-vpr",
+            "hdr-xform-image-vpr",
+            "hdr-xform-immunization-vpr",
+            "hdr-xform-lab-vpr",
+            "hdr-xform-med-vpr",
+            "hdr-xform-order-vpr",
+            "hdr-xform-patient-vpr",
+            "hdr-xform-pov-vpr",
+            "hdr-xform-problem-vpr",
+            "hdr-xform-procedure-vpr",
+            "hdr-xform-surgery-vpr",
+            "hdr-xform-vital-vpr",
+            "hdr-xform-visit-vpr",
+            "hdr-sync-allergy-request",
+            "hdr-sync-appointment-request",
+            "hdr-sync-consult-request",
+            "hdr-sync-cpt-request",
+            "hdr-sync-document-request",
+            "hdr-sync-image-request",
+            "hdr-sync-immunization-request",
+            "hdr-sync-lab-request",
+            "hdr-sync-med-request",
+            "hdr-sync-order-request",
+            "hdr-sync-patient-request",
+            "hdr-sync-pov-request",
+            "hdr-sync-problem-request",
+            "hdr-sync-procedure-request",
+            "hdr-sync-surgery-request",
+            "hdr-sync-vital-request",
+            "hdr-sync-visit-request",
+            "hdr-sync-request",
+            "jmeadows-cda-document-conversion",
+            "jmeadows-pdf-document-transform",
+            "jmeadows-document-retrieval",
+            "jmeadows-xform-allergy-vpr",
+            "jmeadows-xform-appointment-vpr",
+            "jmeadows-xform-consult-vpr",
+            "jmeadows-xform-demographics-vpr",
+            "jmeadows-xform-dischargeSummary-vpr",
+            "jmeadows-xform-encounter-vpr",
+            "jmeadows-xform-immunization-vpr",
+            "jmeadows-xform-lab-vpr",
+            "jmeadows-xform-medication-vpr",
+            "jmeadows-xform-note-vpr",
+            "jmeadows-xform-order-vpr",
+            "jmeadows-xform-problem-vpr",
+            "jmeadows-xform-progressNote-vpr",
+            "jmeadows-xform-radiology-vpr",
+            "jmeadows-xform-vital-vpr",
+            "jmeadows-sync-allergy-request",
+            "jmeadows-sync-appointment-request",
+            "jmeadows-sync-consult-request",
+            "jmeadows-sync-demographics-request",
+            "jmeadows-sync-dischargeSummary-request",
+            "jmeadows-sync-encounter-request",
+            "jmeadows-sync-immunization-request",
+            "jmeadows-sync-lab-request",
+            "jmeadows-sync-medication-request",
+            "jmeadows-sync-note-request",
+            "jmeadows-sync-order-request",
+            "jmeadows-sync-problem-request",
+            "jmeadows-sync-progressNote-request",
+            "jmeadows-sync-radiology-request",
+            "jmeadows-sync-vital-request",
+            "jmeadows-sync-request",
+            "vler-sync-request",
+            "vler-xform-vpr",
+            "enterprise-sync-request"
+          ]
+        },
+        "record-enrichment": {
+          "enabled": false,
+          "ignoreSeverity": true,
+          "loopDelayMillis": 30000,
+          "jobTypes": [
+            "record-enrichment"
+          ]
+        },
+        "activity-management": {
+          "enabled": false,
+          "ignoreSeverity": true,
+          "loopDelayMillis": 30000,
+          "jobTypes": [
+            "activity-management-event"
+          ]
+        },
+        "jmeadows": {
+          "enabled": false,
+          "loopDelayMillis": 30000,
+          "jobTypes": [
+            "jmeadows-sync-request",
 
-          "jmeadows-sync-allergy-request",
-          "jmeadows-sync-appointment-request",
-          "jmeadows-sync-consult-request",
-          "jmeadows-sync-demographics-request",
-          "jmeadows-sync-dischargeSummary-request",
-          "jmeadows-sync-encounter-request",
-          "jmeadows-sync-immunization-request",
-          "jmeadows-sync-lab-request",
-          "jmeadows-sync-medication-request",
-          "jmeadows-sync-note-request",
-          "jmeadows-sync-order-request",
-          "jmeadows-sync-problem-request",
-          "jmeadows-sync-progressNote-request",
-          "jmeadows-sync-radiology-request",
-          "jmeadows-sync-vital-request",
+            "jmeadows-sync-allergy-request",
+            "jmeadows-sync-appointment-request",
+            "jmeadows-sync-consult-request",
+            "jmeadows-sync-demographics-request",
+            "jmeadows-sync-dischargeSummary-request",
+            "jmeadows-sync-encounter-request",
+            "jmeadows-sync-immunization-request",
+            "jmeadows-sync-lab-request",
+            "jmeadows-sync-medication-request",
+            "jmeadows-sync-note-request",
+            "jmeadows-sync-order-request",
+            "jmeadows-sync-problem-request",
+            "jmeadows-sync-progressNote-request",
+            "jmeadows-sync-radiology-request",
+            "jmeadows-sync-vital-request",
 
-          "jmeadows-xform-allergy-vpr",
-          "jmeadows-xform-appointment-vpr",
-          "jmeadows-xform-consult-vpr",
-          "jmeadows-xform-demographics-vpr",
-          "jmeadows-xform-dischargeSummary-vpr",
-          "jmeadows-xform-encounter-vpr",
-          "jmeadows-xform-immunization-vpr",
-          "jmeadows-xform-lab-vpr",
-          "jmeadows-xform-medication-vpr",
-          "jmeadows-xform-note-vpr",
-          "jmeadows-xform-order-vpr",
-          "jmeadows-xform-problem-vpr",
-          "jmeadows-xform-progressNote-vpr",
-          "jmeadows-xform-radiology-vpr",
-          "jmeadows-xform-vital-vpr"
-        ]
-      },
-      "hdr": {
-        "loopDelayMillis": 30000,
-        "jobTypes": [
-          "hdr-sync-request",
+            "jmeadows-xform-allergy-vpr",
+            "jmeadows-xform-appointment-vpr",
+            "jmeadows-xform-consult-vpr",
+            "jmeadows-xform-demographics-vpr",
+            "jmeadows-xform-dischargeSummary-vpr",
+            "jmeadows-xform-encounter-vpr",
+            "jmeadows-xform-immunization-vpr",
+            "jmeadows-xform-lab-vpr",
+            "jmeadows-xform-medication-vpr",
+            "jmeadows-xform-note-vpr",
+            "jmeadows-xform-order-vpr",
+            "jmeadows-xform-problem-vpr",
+            "jmeadows-xform-progressNote-vpr",
+            "jmeadows-xform-radiology-vpr",
+            "jmeadows-xform-vital-vpr"
+          ]
+        },
+        "hdr": {
+          "enabled": false,
+          "loopDelayMillis": 30000,
+          "jobTypes": [
+            "hdr-sync-request",
 
-          "hdr-sync-allergy-request",
-          "hdr-sync-appointment-request",
-          "hdr-sync-consult-request",
-          "hdr-sync-cpt-request",
-          "hdr-sync-document-request",
-          "hdr-sync-factor-request",
-          "hdr-sync-image-request",
-          "hdr-sync-immunization-request",
-          "hdr-sync-lab-request",
-          "hdr-sync-med-request",
-          "hdr-sync-order-request",
-          "hdr-sync-patient-request",
-          "hdr-sync-pov-request",
-          "hdr-sync-problem-request",
-          "hdr-sync-procedure-request",
-          "hdr-sync-surgery-request",
-          "hdr-sync-vital-request",
-          "hdr-sync-visit-request",
+            "hdr-sync-allergy-request",
+            "hdr-sync-appointment-request",
+            "hdr-sync-consult-request",
+            "hdr-sync-cpt-request",
+            "hdr-sync-document-request",
+            "hdr-sync-image-request",
+            "hdr-sync-immunization-request",
+            "hdr-sync-lab-request",
+            "hdr-sync-med-request",
+            "hdr-sync-order-request",
+            "hdr-sync-patient-request",
+            "hdr-sync-pov-request",
+            "hdr-sync-problem-request",
+            "hdr-sync-procedure-request",
+            "hdr-sync-surgery-request",
+            "hdr-sync-vital-request",
+            "hdr-sync-visit-request",
 
-          "hdr-xform-allergy-vpr",
-          "hdr-xform-appointment-vpr",
-          "hdr-xform-consult-vpr",
-          "hdr-xform-cpt-vpr",
-          "hdr-xform-document-vpr",
-          "hdr-xform-factor-vpr",
-          "hdr-xform-image-vpr",
-          "hdr-xform-immunization-vpr",
-          "hdr-xform-lab-vpr",
-          "hdr-xform-med-vpr",
-          "hdr-xform-order-vpr",
-          "hdr-xform-patient-vpr",
-          "hdr-xform-pov-vpr",
-          "hdr-xform-problem-vpr",
-          "hdr-xform-procedure-vpr",
-          "hdr-xform-surgery-vpr",
-          "hdr-xform-vital-vpr",
-          "hdr-xform-visit-vpr"
-        ]
-      },
-      "vler": {
-        "loopDelayMillis": 30000,
-        "jobTypes": [
-          "vler-sync-request",
-          "vler-xform-vpr"
-        ]
-      },
-      "pgd": {
-        "loopDelayMillis": 30000,
-        "jobTypes": [
-          "pgd-sync-request",
-          "pgd-xform-vpr"
-        ]
+            "hdr-xform-allergy-vpr",
+            "hdr-xform-appointment-vpr",
+            "hdr-xform-consult-vpr",
+            "hdr-xform-cpt-vpr",
+            "hdr-xform-document-vpr",
+            "hdr-xform-image-vpr",
+            "hdr-xform-immunization-vpr",
+            "hdr-xform-lab-vpr",
+            "hdr-xform-med-vpr",
+            "hdr-xform-order-vpr",
+            "hdr-xform-patient-vpr",
+            "hdr-xform-pov-vpr",
+            "hdr-xform-problem-vpr",
+            "hdr-xform-procedure-vpr",
+            "hdr-xform-surgery-vpr",
+            "hdr-xform-vital-vpr",
+            "hdr-xform-visit-vpr"
+          ]
+        },
+        "vler": {
+          "enabled": false,
+          "loopDelayMillis": 30000,
+          "jobTypes": [
+            "vler-sync-request",
+            "vler-xform-vpr"
+          ]
+        },
+        "pgd": {
+          "enabled": false,
+          "loopDelayMillis": 30000,
+          "jobTypes": [
+            "pgd-sync-request",
+            "pgd-xform-vpr"
+          ]
+        }
       }
     },
 
@@ -964,7 +1045,13 @@
     "loggers": [
       {
         "name": "root",
-        "level": "warn"
+        "streams": [{
+            "level": "warn",
+            "type": "rotating-file",
+            "path": "/var/log/vxsync/vxsync.log",
+            "period": "1d",
+            "count": 7
+        }]
       }
     ],
     "metrics": [
@@ -984,12 +1071,13 @@
         "runOnSchedule": true,
         "delay": 500,
         "duplicatePatientListResetMillis": 86400000,
-        "rpcContext": "HMP UI CONTEXT",
+        "rpcContext": "HMP SYNCHRONIZATION CONTEXT",
         "configRefresh": 0,
         "scheduledRunAtHour": 3,
         "scheduledRunAtMinutes": 15,
-        "syncUrl": "http://IPADDRESS:POR/sync/doLoad",
-        "statusUrl": "http://IPADDRESS:POR/sync/status",
+        "syncUrl": "http://IP           /sync/doLoad",
+        "statusUrl": "http://IP           /sync/status",
+        "mixedEnvironmentMode": true,
         "activeUserThresholdDays": 30,
         "jobs": {
             "activeUsers": true,
@@ -1022,7 +1110,7 @@
             },
             "repoDefaults": {
                 "host": "127.0.0.1",
-                "port": 5000,
+                "port": 5001,
                 "tubename": "osync",
                 "tubePrefix": "osync-",
                 "jobTypeForTube": true
@@ -1044,12 +1132,18 @@
         },
         "jds": {
             "protocol": "http",
-            "host": "IP_ADDRESS",
+            "host": "IP        ",
             "port": 9080,
             "timeout": 60000,
             "jdsSaveURI": "/user/set/this",
             "jdsGetURI": "/user/get",
             "osyncjobfrequency": 172800000
+        },
+        "pjds": {
+            "protocol": "http",
+            "host": "IP        ",
+            "port": 9080,
+            "timeout": 60000
         },
         "loggers": [{
             "name": "root",
@@ -1057,8 +1151,8 @@
                 "level": "debug",
                 "type": "rotating-file",
                 "path": "/var/log/osync/osync.log",
-                "period": "1h",
-                "count": 2
+                "period": "1d",
+                "count": 7
             }]
         }, {
             "name": "valid_patients",
@@ -1066,8 +1160,8 @@
                 "level": "debug",
                 "type": "rotating-file",
                 "path": "/var/log/osync/osync_valid_patients.log",
-                "period": "1h",
-                "count": 2
+                "period": "1d",
+                "count": 7
             }]
         }, {
             "name": "results",
@@ -1075,8 +1169,8 @@
                 "level": "debug",
                 "type": "rotating-file",
                 "path": "/var/log/osync/osync_results.log",
-                "period": "1h",
-                "count": 2
+                "period": "1d",
+                "count": 7
             }]
         }],
         "metrics": [{
@@ -1093,7 +1187,7 @@
       },
       "vxsync": {
         "protocol": "http",
-        "host": "IPADDRES",
+        "host": "IP      ",
         "port": "8080",
         "timeout": 300000
       },

@@ -127,7 +127,7 @@ VistaRecordProcessor.prototype._processSyncStartJob = function(syncStartJob, cal
     if (!syncStartJob.pid) {
         self.log.error('VistaRecordProcessor._processSyncStartJob: Failed to process - syncStart did not contain a pid.');
 
-        // TODO:   Push this to an error message location.  We do not want to error out the entire set of messages for one problem.
+        // FUTURETODO:   Push this to an error message location.  We do not want to error out the entire set of messages for one problem.
         //--------------------------------------------------------------------------------------------------------------------------
         //return setTimeout(callback, 0, 'Failed to process syncStart - there was no pid in the message.');
 
@@ -189,7 +189,7 @@ VistaRecordProcessor.prototype._processOPDSyncStartJob = function(OPDsyncStartJo
     if (!OPDsyncStartJob.metaStamp) {
         self.log.error('VistaRecordProcessor._processOPDSyncStartJob: Failed to process - OPDsyncStart did not contain a metaStamp for systemId: %s.', OPDsyncStartJob.systemId);
 
-        // TODO:   Push this to an error message location.  We do not want to error out the entire set of messages for one problem.
+        // FUTURETODO:   Push this to an error message location.  We do not want to error out the entire set of messages for one problem.
         //--------------------------------------------------------------------------------------------------------------------------
         // return setTimeout(callback, 0, util.format('Failed to process syncStart for pid: %s.  There was no metaStamp in the message.', syncStartJob.pid));
 
@@ -199,7 +199,7 @@ VistaRecordProcessor.prototype._processOPDSyncStartJob = function(OPDsyncStartJo
     var tasks = [
         self._storeOperationalMetaStamp.bind(self, OPDsyncStartJob.metaStamp, OPDsyncStartJob.systemId) //,
 
-        // TODO:  Store completed job once rootJobId and jobId can be received in the operational data sync start message
+        // FUTURETODO:  Store completed job once rootJobId and jobId can be received in the operational data sync start message
         //--------------------------------------------------------------------------------------------------------------------------
         //self._storeCompletedJob.bind(self, OPDsyncStartJob.rootJobId, OPDsyncStartJob.jobId, OPDsyncStartJob.systemId)
     ];
@@ -239,7 +239,7 @@ VistaRecordProcessor.prototype._storeMetaStamp = function(metaStamp, patientIden
         if (error) {
             self.log.error('VistaRecordProcessor._storeMetaStamp:  Received error while attempting to store metaStamp for pid: %s.  Error: %s;  Response: %j; metaStamp:[%j]', patientIdentifier.value, error, response, metaStamp);
 
-            // TODO:   Push this to an error message location.  We do not want to error out the entire set of messages for one problem.
+            // FUTURETODO:   Push this to an error message location.  We do not want to error out the entire set of messages for one problem.
             //--------------------------------------------------------------------------------------------------------------------------
             //return callback(util.format('Received error while attempting to store metaStamp for pid: %s.  Error: %s;  Response: %j; metaStamp:[%j]', syncStartJob.pid, error, response, syncStartJob.metaStamp), null);
 
@@ -250,7 +250,7 @@ VistaRecordProcessor.prototype._storeMetaStamp = function(metaStamp, patientIden
         if (!response) {
             self.log.error('VistaRecordProcessor._storeMetaStamp:  Failed to store metaStamp for pid: %s - no response returned.  Error: %s;  Response: %j; metaStamp:[%j]', patientIdentifier.value, error, response, metaStamp);
 
-            // TODO:   Push this to an error message location.  We do not want to error out the entire set of messages for one problem.
+            // FUTURETODO:   Push this to an error message location.  We do not want to error out the entire set of messages for one problem.
             //--------------------------------------------------------------------------------------------------------------------------
             // return callback(util.format('Failed to store metaStamp for pid: %s - no response returned.  Error: %s;  Response: %j; metaStamp:[%j]', syncStartJob.pid, error, response, syncStartJob.metaStamp), null);
 
@@ -261,7 +261,7 @@ VistaRecordProcessor.prototype._storeMetaStamp = function(metaStamp, patientIden
         if (response.statusCode !== 200) {
             self.log.error('VistaRecordProcessor._storeMetaStamp:  Failed to store metaStamp for pid: %s - incorrect status code returned. Error: %s;  Response: %j; metaStamp:[%j]', patientIdentifier.value, error, response, metaStamp);
 
-            // TODO:   Push this to an error message location.  We do not want to error out the entire set of messages for one problem.
+            // FUTURETODO:   Push this to an error message location.  We do not want to error out the entire set of messages for one problem.
             //--------------------------------------------------------------------------------------------------------------------------
             // return callback(util.format('Failed to store metaStamp for pid: %s - incorrect status code returned.  Error: %s;  Response: %j; metaStamp:[%j]', syncStartJob.pid, error, response, syncStartJob.metaStamp), null);
 
@@ -299,7 +299,7 @@ VistaRecordProcessor.prototype._storeOperationalMetaStamp = function(metaStamp, 
         if (error) {
             self.log.error('VistaRecordProcessor._storeOpeationalMetaStamp:  Received error while attempting to store metaStamp for site: %s.  Error: %s;  Response: %j; metaStamp:[%j]', siteId, error, response, metaStamp);
 
-            // TODO:   Push this to an error message location.  We do not want to error out the entire set of messages for one problem.
+            // FUTURETODO:   Push this to an error message location.  We do not want to error out the entire set of messages for one problem.
             //--------------------------------------------------------------------------------------------------------------------------
             //return callback(util.format('Received error while attempting to store metaStamp for pid: %s.  Error: %s;  Response: %j; metaStamp:[%j]', syncStartJob.pid, error, response, syncStartJob.metaStamp), null);
 
@@ -310,7 +310,7 @@ VistaRecordProcessor.prototype._storeOperationalMetaStamp = function(metaStamp, 
         if (!response) {
             self.log.error('VistaRecordProcessor._storeOperationalMetaStamp:  Failed to store metaStamp for site: %s - no response returned.  Error: %s;  Response: %j; metaStamp:[%j]', siteId, error, response, metaStamp);
 
-            // TODO:   Push this to an error message location.  We do not want to error out the entire set of messages for one problem.
+            // FUTURETODO:   Push this to an error message location.  We do not want to error out the entire set of messages for one problem.
             //--------------------------------------------------------------------------------------------------------------------------
             // return callback(util.format('Failed to store metaStamp for pid: %s - no response returned.  Error: %s;  Response: %j; metaStamp:[%j]', syncStartJob.pid, error, response, syncStartJob.metaStamp), null);
 
@@ -321,7 +321,7 @@ VistaRecordProcessor.prototype._storeOperationalMetaStamp = function(metaStamp, 
         if (response.statusCode !== 200) {
             self.log.error('VistaRecordProcessor._storeOperationalMetaStamp:  Failed to store metaStamp for site: %s - incorrect status code returned. Error: %s;  Response: %j; metaStamp:[%j]', siteId, error, response, metaStamp);
 
-            // TODO:   Push this to an error message location.  We do not want to error out the entire set of messages for one problem.
+            // FUTURETODO:   Push this to an error message location.  We do not want to error out the entire set of messages for one problem.
             //--------------------------------------------------------------------------------------------------------------------------
             // return callback(util.format('Failed to store metaStamp for pid: %s - incorrect status code returned.  Error: %s;  Response: %j; metaStamp:[%j]', syncStartJob.pid, error, response, syncStartJob.metaStamp), null);
 
@@ -364,7 +364,7 @@ VistaRecordProcessor.prototype._storeCompletedJob = function(rootJobId, jobId, d
         if (error) {
             self.log.error('VistaRecordProcessor._storeCompletedJob:  Received error while retrieving patient identifiers for pid: %s; error: %s; response: %j', patientIdentifier.value, error, response);
 
-            // TODO:   Push this to an error message location.  We do not want to error out the entire set of messages for one problem.
+            // FUTURETODO:   Push this to an error message location.  We do not want to error out the entire set of messages for one problem.
             //--------------------------------------------------------------------------------------------------------------------------
             //return callback(util.format('Received error while attempting to store metaStamp for pid: %s.  Error: %s;  Response: %j; metaStamp:[%j]', syncStartJob.pid, error, response, syncStartJob.metaStamp), null);
 
@@ -375,7 +375,7 @@ VistaRecordProcessor.prototype._storeCompletedJob = function(rootJobId, jobId, d
         if (!response) {
             self.log.error('VistaRecordProcessor._storeCompletedJob:  Failed to retrieve patient identifiers for pid: %s; error: %s; response: %j', patientIdentifier.value, error, response);
 
-            // TODO:   Push this to an error message location.  We do not want to error out the entire set of messages for one problem.
+            // FUTURETODO:   Push this to an error message location.  We do not want to error out the entire set of messages for one problem.
             //--------------------------------------------------------------------------------------------------------------------------
             // return callback(util.format('Failed to store metaStamp for pid: %s - no response returned.  Error: %s;  Response: %j; metaStamp:[%j]', syncStartJob.pid, error, response, syncStartJob.metaStamp), null);
 
@@ -386,7 +386,7 @@ VistaRecordProcessor.prototype._storeCompletedJob = function(rootJobId, jobId, d
         if (response.statusCode !== 200) {
             self.log.error('VistaRecordProcessor._storeCompletedJob:  Failed to retrieve patient identifiers for pid: %s - incorrect status code returned. Error: %s;  Response: %j', patientIdentifier.value, error, response);
 
-            // TODO:   Push this to an error message location.  We do not want to error out the entire set of messages for one problem.
+            // FUTURETODO:   Push this to an error message location.  We do not want to error out the entire set of messages for one problem.
             //--------------------------------------------------------------------------------------------------------------------------
             // return callback(util.format('Failed to store metaStamp for pid: %s - incorrect status code returned.  Error: %s;  Response: %j; metaStamp:[%j]', syncStartJob.pid, error, response, syncStartJob.metaStamp), null);
 
@@ -426,7 +426,7 @@ VistaRecordProcessor.prototype._storeCompletedJob = function(rootJobId, jobId, d
             if (error) {
                 self.log.error('VistaRecordProcessor._storeCompletedJob:  Received error while storing job: %j pid: %s; error: %s; response: %j; result: %j', pollerJob, patientIdentifier.value, error, response, result);
 
-                // TODO:   Push this to an error message location.  We do not want to error out the entire set of messages for one problem.
+                // FUTURETODO:   Push this to an error message location.  We do not want to error out the entire set of messages for one problem.
                 //--------------------------------------------------------------------------------------------------------------------------
                 //return callback(util.format('Received error while storing job: %j pid: %s; error: %s; response: %j; result: %j', pollerJob, patientIdentifier.value, error, response, result), null);
 
@@ -437,7 +437,7 @@ VistaRecordProcessor.prototype._storeCompletedJob = function(rootJobId, jobId, d
             if (!response) {
                 self.log.error('VistaRecordProcessor._storeCompletedJob:  Failed to store job: %j pid: %s; error: %s; response: %j; result: %j', pollerJob, patientIdentifier.value, error, response, result);
 
-                // TODO:   Push this to an error message location.  We do not want to error out the entire set of messages for one problem.
+                // FUTURETODO:   Push this to an error message location.  We do not want to error out the entire set of messages for one problem.
                 //--------------------------------------------------------------------------------------------------------------------------
                 // return callback(util.format('Failed to store job: %j pid: %s; error: %s; response: %j; result: %j', pollerJob, patientIdentifier.value, error, response, result), null);
 
@@ -448,7 +448,7 @@ VistaRecordProcessor.prototype._storeCompletedJob = function(rootJobId, jobId, d
             if (response.statusCode !== 200) {
                 self.log.error('VistaRecordProcessor._storeCompletedJob:  Failed to store job - incorrect status code.  job: %j pid: %s; error: %s; response: %j; result: %j', pollerJob, patientIdentifier.value, error, response, result);
 
-                // TODO:   Push this to an error message location.  We do not want to error out the entire set of messages for one problem.
+                // FUTURETODO:   Push this to an error message location.  We do not want to error out the entire set of messages for one problem.
                 //--------------------------------------------------------------------------------------------------------------------------
                 // return callback(util.format('Failed to store job - incorrect status code.  job: %j pid: %s; error: %s; response: %j; result: %j', pollerJob, patientIdentifier.value, error, response, result), null);
 

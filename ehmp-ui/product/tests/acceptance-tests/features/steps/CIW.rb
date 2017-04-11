@@ -49,19 +49,6 @@ Given(/^user navigates to User Defined Workspace manager$/) do
   @ehmp.btn_workspace_manager.click
 end
 
-# Given(/^user creates New User defined workspace "(.*?)"$/) do |workspace_name|
-#   aa = CIW.instance
-#   @ehmp = PobWorkspaceManager.new
-#   @ehmp.wait_until_btn_add_workspace_visible
-
-#   if !aa.am_i_visible?(workspace_name)    
-#     expect(aa.perform_action("Add New Workspace")).to be_true, "Error when attempting to click on Add New Workspace"
-#     expect(aa.wait_until_element_present(workspace_name, DefaultLogin.wait_time)).to be_true, "User Defined Workspace #{workspace_name} is not present"
-#   else
-#     expect(aa.am_i_visible?(workspace_name)).to be_true, "Workspace #{workspace_name} already exists"
-#   end
-# end
-
 Given(/^user names the workspace "(.*?)" with description "(.*?)"$/) do |workspace_name, description|
   aa = CIW.instance
   aa.wait_until_action_element_visible("Workspace-Name Text Filter", DefaultLogin.wait_time)

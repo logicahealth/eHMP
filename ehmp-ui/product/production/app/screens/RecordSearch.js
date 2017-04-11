@@ -76,27 +76,34 @@ define([
         if (channelName) {
             // display spinner in modal while detail view is loading
             var channel = ADK.Messaging.getChannel(channelName),
-                deferredResponse = channel.request('detailView', clickedResult);
+                response = channel.request('detailView', clickedResult);
 
-            if (!deferredResponse) {
+            if (!response) {
                 return;
             }
-            var modal = new ADK.UI.Modal({
-                view: ADK.Views.Loading.create(),
-                options: {
-                    size: "large",
-                    title: "Loading..."
-                }
-            });
 
             var showOptions = {triggerElement: $(':focus')};
-            modal.show(showOptions);
 
-            // request detail view from whatever applet is listening for this domain
-            deferredResponse.done(function(response) {
-                var modalOptions = {
+            var bodyView = new response.view();
+            bodyView.listenTo(bodyView, 'render', function() {
+                highlightHtmlElement(this.$el, keywords);
+            });
+            if(_.isFunction(bodyView.getRegions)) {
+                _.each(bodyView.getRegions(), function(region) {
+                    region.listenTo(region, 'before:show', function(view) {
+                        highlightHtmlElement(view.$el, keywords);
+                    });
+                });
+            }
+            var modalOptions = {
                     size: "large",
-                    title: ADK.utils.stringUtils.addSearchResultElementHighlighting(response.title, keywords)
+                    title: function() {
+                        var title = _.result(response, 'title') || _.result(bodyView, 'title');
+                        return ADK.utils.stringUtils.addSearchResultElementHighlighting(title, keywords);
+                    },
+                    showLoading: true,
+                    loadingTitle: 'Loading...',
+                    resourceEntity: response.resourceEntity || bodyView.collection
                 };
                 if (response.headerView) {
                     modalOptions.headerView = response.headerView;
@@ -106,27 +113,10 @@ define([
                     modalOptions.footerView = response.footerView;
                 }
                 var modal = new ADK.UI.Modal({
-                    view: response.view,
+                    view: bodyView,
                     options: modalOptions
                 });
                 modal.show(showOptions);
-                highlightHtmlElement(response.view.$el, keywords);
-            });
-            deferredResponse.fail(function(response) {
-                var errorMsg = _.isString(response) ? response : response && _.isString(response.statusText) ? response.statusText : "An error occurred";
-                var modal = new ADK.UI.Modal({
-                    view: new ErrorView({
-                        model: new Backbone.Model({
-                            error: errorMsg
-                        })
-                    }),
-                    options: {
-                        size: "large",
-                        title: "An Error Occurred"
-                    }
-                });
-                modal.show(modalShowOptions);
-            });
         } else {
             // no detail view available; use the default placeholder view
             var modalView = new ADK.UI.Modal({

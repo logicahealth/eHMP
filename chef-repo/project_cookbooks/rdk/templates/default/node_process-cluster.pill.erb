@@ -3,7 +3,7 @@ Bluepill.application("<%= @name %>", :log_file => "/var/log/bluepill-<%= @name %
     app.process("<%= @name %>-<%= index %>") do |process|
       process.working_dir = "<%= @working_directory %>"
       process.environment = { "NODE_ENV" => "<%= node[:development] ? "development" : "production" %>" }
-      process.pid_file = "<%= @log_directory %>/<%= @name %>-<%= index %>.pid"
+      process.pid_file = "<%= @pid_directory %>/<%= @name %>-<%= index %>.pid"
       process.daemonize = true
       <% if @dev_deploy %>
       process.start_command = "/usr/local/bin/node --debug=<%= @debug_port - 1 + index %> <%= @deploy_path %> <%= "--port #{@port - 1 + index}" if @port %> --config <%= @config_file %>-<%= index %>.json"

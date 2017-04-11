@@ -13,7 +13,12 @@
             }
         }
     }
-    // flex styling for nested tables in lab results panel
+    .grid-container .gist-item-list .gist-item .selectable.flex-width-2 {
+        padding-right: 0px;
+    }
+    .faux-table .table-row .table-cell {
+        padding-right: 0px;
+    }
     .applet-div-chrome-container .gridContainer .grid-container>div .data-grid > table {
         &.backgrid {
             tr {
@@ -35,8 +40,7 @@
                 }
                 tr {
                     th:nth-child(1),
-                    td:nth-child(1)
-                    {
+                    td:nth-child(1) {
                         flex: 2;
                         padding-left: 75px;
                     }

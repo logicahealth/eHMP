@@ -47,8 +47,8 @@ describe "Test opencds" do
     response = HTTParty.get(
       "#{url}/protected", 
       :basic_auth => {
-          :username        'PW',
-          :password      'PW'
+          :username =>         'UN',
+          :password =>        'PW'
       },
       :query => {}, 
       :headers => {

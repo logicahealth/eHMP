@@ -4,12 +4,13 @@ define([
     'marionette',
     'handlebars',
     'highcharts',
+    'moment',
     'hbs!app/applets/medication_review/medicationsGroupedByType/superAccordionRow/medTypeRow',
     'app/applets/medication_review/medicationsGroupedByType/superAccordionRow/medTypeRowModel',
     'app/applets/medication_review/medicationsGroupedByName/subAccordionList/medNameListCollection',
     'app/applets/medication_review/medicationsGroupedByName/subAccordionRow/medNameRowView',
     'app/applets/medication_review/medicationsGroupedByName/subAccordionRow/graph/highchartConfig'
-], function(_, Backbone, Marionette, Handlebars, Highcharts, MedTypeRow, MedTypeRowModel, MedNameListCollection, MedNameRowView, HighchartConfig) {
+], function(_, Backbone, Marionette, Handlebars, Highcharts, moment, MedTypeRow, MedTypeRowModel, MedNameListCollection, MedNameRowView, HighchartConfig) {
     'use strict';
     var EmptyView = Backbone.Marionette.ItemView.extend({
         template: Handlebars.compile('<p class="empty-medlist">No Records Found</p>')
@@ -48,6 +49,20 @@ define([
                     $(event.currentTarget).find('.panel-heading > .row').click();
                 }
             },
+            'shown.bs.collapse': function() {
+                this.redrawGraph();
+                this.ui.caret.removeClass('fa-chevron-right');
+                this.ui.caret.addClass('fa-chevron-down');
+                this.ui.accordionButton.attr("title", "Press enter to collapse " + this.model.get('medicationDisplayType') + " accordion.");
+                if (this.$el.find('.empty-medlist').length) {
+                    this.ui.accordionPanel.removeAttr('tabindex');
+                }
+            },
+            'hidden.bs.collapse': function() {
+                this.ui.caret.removeClass('fa-chevron-down');
+                this.ui.caret.addClass('fa-chevron-right');
+                this.ui.accordionButton.attr("title", "Press enter to expand " + this.model.get('medicationDisplayType') + " accordion.");
+            }
         },
         initialize: function(options) {
             this.model.set("appletInstanceId", options.appletInstanceId);
@@ -112,23 +127,6 @@ define([
             }
             this.$el.find('svg').attr('focusable', false);
             this.$el.find('svg').attr('aria-hidden', true);
-
-            var self = this;
-            this.$el.on('shown.bs.collapse', function() {
-                self.redrawGraph();
-                self.ui.caret.removeClass('fa fa-chevron-right');
-                self.ui.caret.addClass('fa fa-chevron-down');
-                self.ui.accordionButton.attr("title","Press enter to collapse " + self.model.get('medicationDisplayType') + " accordion.");
-                if(self.$el.find('.empty-medlist')){
-                    self.ui.accordionPanel.removeAttr('tabindex');
-                }
-
-            });
-            this.$el.on('hidden.bs.collapse', function() {
-                self.ui.caret.removeClass('fa fa-chevron-down');
-                self.ui.caret.addClass('fa fa-chevron-right');
-                self.ui.accordionButton.attr("title","Press enter to expand " + self.model.get('medicationDisplayType') + " accordion.");
-            });
         },
         onBeforeShow: function() {
             this.resetToDefaultSort();

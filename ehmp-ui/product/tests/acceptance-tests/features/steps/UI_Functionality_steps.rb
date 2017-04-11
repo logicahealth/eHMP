@@ -7,78 +7,6 @@ $LOAD_PATH.unshift path unless $LOAD_PATH.include?(path)
 
 require 'all_applets.rb'
 
-class ClinicalReminderCoverSheet < AccessBrowserV2
-  include Singleton
-  def initialize
-    super
-    add_action(CucumberLabel.new("Clinical Reminder"), ClickAction.new, AccessHtmlElement.new(:id, "clinical_reminders-title"))
-    add_verify(CucumberLabel.new("Clinical Reminder"), VerifyText.new, AccessHtmlElement.new(:id, "clinical_reminders-title"))
-    add_verify(CucumberLabel.new("Due Date"), VerifyText.new, AccessHtmlElement.new(:id, "clinical_reminders-dueDateFormatted"))
-  end
-end #ClinicalReminderCoverSheet
-
-#Find ClinicalReminder Coversheet Headers 
-Then(/^the ClinicalReminder coversheet table contains headers$/) do |table|
-  verify_clinical_reminder_headers(ClinicalReminderCoverSheet.instance, table)
-end
-
-class ClinicalReminderSecondary < AccessBrowserV2
-  include Singleton
-  def initialize
-    super
-    add_verify(CucumberLabel.new("Clinical Reminder"), VerifyText.new, AccessHtmlElement.new(:id, "clinical_reminders-title"))
-    add_verify(CucumberLabel.new("Due Date"), VerifyText.new, AccessHtmlElement.new(:id, "clinical_reminders-dueDateFormatted"))
-    add_verify(CucumberLabel.new("Done Date"), VerifyText.new, AccessHtmlElement.new(:id, "clinical_reminders-doneDateFormatted"))
-  end
-end #ClinicalReminderSecondary
-
-#Find ClinicalReminder Secondary view Headers 
-Then(/^the ClinicalReminder secondary view contains headers$/) do |table|
-  verify_clinical_reminders_headers(ClinicalReminderSecondary.instance, table)
-end
-
-def verify_clinical_reminder_headers(access_browser_instance, table)
-  driver = TestSupport.driver
-  con = ClinicalReminderCoverSheet.instance
-  con.wait_until_action_element_visible("Clinical Reminder", 30)
-  expect(con.static_dom_element_exists?("Clinical Reminder")).to be_true
-  #headers = driver.find_elements(:css, "#grid-panel-clinical_reminders th")
-  headers = driver.find_elements(:css, "#data-grid-clinical_reminders th")
-  expect(headers.length).to_not eq(0)
-  expect(headers.length).to eq(table.rows.length)
-  elements = access_browser_instance
-  table.rows.each do |header_text|
-    does_exist = elements.static_dom_element_exists? header_text[0]
-    p "#{header_text[0]} was not found" unless does_exist
-    expect(does_exist).to be_true
-  end #table
-end #verify_table_headers
-
-#Find rows in the ClinicalReminders Coversheet
-Then(/^the ClinicalReminder table contains rows$/) do |table|
-  driver = TestSupport.driver
-  num_of_rows = driver.find_elements(:css, "#data-grid-clinical_reminders>tbody>tr")
-  #Loop through rows in cucumber   
-  table.rows.each do |row_defined_in_cucumber|
-    matched = false
-    p "Checking new row"
-    #Loop through UI rows
-    for i in 1..num_of_rows.length
-      row_data = driver.find_elements(:xpath, ".//*[@id='data-grid-clinical_reminders']/tbody/tr[#{i}]/td")
-      if row_defined_in_cucumber.length != row_data.length
-        matched = false
-      else 
-        matched = avoid_block_nesting(row_defined_in_cucumber, row_data)
-      end
-      if matched
-        break 
-      end
-    end # for loop  
-    p "could not match data: #{row_defined_in_cucumber}" unless matched  
-    expect(matched).to be_true
-  end #do loop  
-end #Clinical Reminders coversheet
-
 class CommunityHealthSummariesCoverSheet < AllApplets
   include Singleton
   attr_reader :appletid
@@ -93,13 +21,6 @@ class CommunityHealthSummariesCoverSheet < AllApplets
 
     add_action(CucumberLabel.new("Header Date"), ClickAction.new, AccessHtmlElement.new(:css, "#ccd_grid-referenceDateDisplay a"))
     add_action(CucumberLabel.new("Header Authoring Institution"), ClickAction.new, AccessHtmlElement.new(:css, "[data-appletid='ccd_grid'] [data-header-instanceid='ccd_grid-authorDisplayName'] a"))
-    # Community Health Applet buttons
-    # add_action(CucumberLabel.new("Control - Applet - Expand View"), ClickAction.new, AccessHtmlElement.new(:css, "#{appletid_css} .applet-maximize-button"))
-    # add_action(CucumberLabel.new("Control - Applet - Filter Toggle"), ClickAction.new, AccessHtmlElement.new(:css, "#{appletid_css} .applet-filter-button"))
-    # add_action(CucumberLabel.new("Control - Applet - Text Filter"), SendKeysAction.new, AccessHtmlElement.new(:css, "#{appletid_css} .form-search input"))
-    # add_action(CucumberLabel.new("Control - Applet - Refresh"), ClickAction.new, AccessHtmlElement.new(:css, "#{appletid_css} .applet-refresh-button"))
-    # add_action(CucumberLabel.new("Control - Applet - Help"), SendKeysAction.new, AccessHtmlElement.new(:css, '[data-appletid=ccd_grid] button.applet-help-button'))
-    # add_action(CucumberLabel.new("Control - Applet - Minimize View"), ClickAction.new, AccessHtmlElement.new(:css, "#{appletid_css} .applet-minimize-button"))
     
     add_applet_buttons appletid_css
 
@@ -245,23 +166,6 @@ Then(/^the Allergies Single Page contains headers$/) do |table|
   verify_allergies_table_headers(AllergiesSinglePage.instance, table)
 end
 
-class AllergiesModalPage < AccessBrowserV2
-  include Singleton
-  def initialize
-    super
-    #add_verify(CucumberLabel.new("Close"), VerifyText.new, AccessHtmlElement.new(:id, "modal-close-button"))
-    #add_action(CucumberLabel.new("Close"), SendKeysAndEnterAction.new, AccessHtmlElement.new(:id, "modal-close-button"))
-    #add_action(CucumberLabel.new("Close"), ClickAction.new, AccessHtmlElement.new(:id, "modal-close-button"))
-    #add_verify(CucumberLabel.new("Close"), VerifyText.new, AccessHtmlElement.new(:xpath, //*[@id='modal-footer']/div/div[2]/button))
-    #add_action(CucumberLabel.new("Close"), SendKeysAndEnterAction.new, AccessHtmlElement.new(:xpath, //*[@id='modal-footer']/div/div[2]/button))
-    #add_action(CucumberLabel.new("Modal Close Button"), ClickAction.new, AccessHtmlElement.new(:css,.btn.btn-default)
-    #add_verify(CucumberLabel.new("Modal Close Button"), VerifyText.new, AccessHtmlElement.new(:xpath, //*[@id='modal-footer']/div/div[2]/button))   
-    #add_action(CucumberLabel.new("Occasional, uncontrolled chest pain (ICD-9-CM 411.1)"), ClickAction.new, AccessHtmlElement.new(:id, "mainModalLabel"))
-    add_action(CucumberLabel.new("ModalBody"), ClickAction.new, AccessHtmlElement.new(:id, "modal-body")) 
-    add_verify(CucumberLabel.new("Drug Classes:"), VerifyText.new, AccessHtmlElement.new(:xpath, "//*[@id='modal-body']/div/div[3]/div[1]"))
-  end
-end # Allergies Modal View
-
 def verify_allergy_table_headers(access_browser_instance, table)
   driver = TestSupport.driver
   con = AllergiesCoverSheet.instance
@@ -384,19 +288,6 @@ Then(/^the Allergies coversheet does not contains rows$/) do |table|
     expect(matched).to be_false
   end #do loop  
 end #Allergies coversheet
-
-# class AppointmentsCoverSheet < AccessBrowserV2
-#   include Singleton
-#   def initialize
-#     super
-#     add_verify(CucumberLabel.new("Date"), VerifyText.new, AccessHtmlElement.new(:id, "appointments-dateTimeFormatted"))
-#     add_verify(CucumberLabel.new("Description"), VerifyText.new, AccessHtmlElement.new(:id, "appointments-formattedDescription"))
-#     add_verify(CucumberLabel.new("Location"), VerifyText.new, AccessHtmlElement.new(:id, "appointments-locationName"))
-#     add_verify(CucumberLabel.new("Status"), VerifyText.new, AccessHtmlElement.new(:id, "appointments-appointmentStatus"))
-#     add_verify(CucumberLabel.new("Provider"), VerifyText.new, AccessHtmlElement.new(:id, "appointments-providerDisplayName"))
-#     add_verify(CucumberLabel.new("Facility"), VerifyText.new, AccessHtmlElement.new(:id, "appointments-facilityMoniker"))
-#   end
-# end #AppointmentCoverSheet
 
 Then(/^the Appointments coversheet table contains headers$/) do |table|
   verify_appointment_table_headers(AppointmentsCoverSheet.instance, table)
@@ -581,7 +472,7 @@ class ScreenManager < AccessBrowserV2
     add_action(CucumberLabel.new("Workspace Manager Delete Button"), ClickAction.new, AccessHtmlElement.new(:css, "#mainOverlayRegion > div > div > div.addEditFormRegion > div > div > div:nth-child(4) > div.col-md-2 > button")) 
     add_action(CucumberLabel.new("Confirm Delete"), ClickAction.new, AccessHtmlElement.new(:id, "workspace-delete")) 
     add_action(CucumberLabel.new("Cancel Button"), ClickAction.new, AccessHtmlElement.new(:xpath, " .//*[@id='mainOverlayRegion']/div/div/div[3]/div/div/div[3]/div/button[1]"))
-    add_action(CucumberLabel.new("Close Button"), ClickAction.new, AccessHtmlElement.new(:xpath, " .//*[@id='doneEditing']"))      
+    add_action(CucumberLabel.new("Close Button"), ClickAction.new, AccessHtmlElement.new(:css, ".panel-heading .done-editing"))      
     add_verify(CucumberLabel.new("Workspace Manager Filter Field"), VerifyText.new, AccessHtmlElement.new(:xpath, ".//*[@id='searchScreens']"))
     add_action(CucumberLabel.new("Workspace Manager Filter Field"), SendKeysAndEnterAction, AccessHtmlElement.new(:xpath, ".//*[@id='searchScreens']"))  
     add_verify(CucumberLabel.new("test"), VerifyText.new, AccessHtmlElement.new(:xpath, ".//*[@id='screens-carousel']/div[1]/div[2]/div/div"))
@@ -722,25 +613,6 @@ When(/^the user enters "(.*?)" in the "(.*?)"$/) do |text, html_element|
   navigation.wait_until_action_element_visible(html_element, DefaultLogin.wait_time)
   expect(navigation.perform_action(html_element, text)).to be_true, "Error when attempting to enter '#{text}' into #{html_element}"
 end
-#Then(/^the user click on Workspace Manager Button and enters "([^"]*)"$/) do |element|
-#  con = ScreenManager.instance
-#  driver = TestSupport.driver
-#  TestSupport.wait_for_page_loaded
-#  @i = 0
-#   while @i < 1
-#     @i +=1
-#     con.perform_action('Workspace Manager Button')
-#     con.perform_action('Add New WorkSheet')
-#     #sleep(2)
-#     con.perform_action("Title", element + @i.to_s )
-#     #sleep(2)
-#     con.perform_action("Description", element + @i.to_s)
-#     #sleep(2)
-#     con.perform_action('AddLoadButton')
-#     sleep(2)
-#     con.perform_action('Done Button')
-#   end
-#end
 
 When(/^update the test screen$/) do
   screen = ScreenManager.instance
@@ -835,54 +707,6 @@ Then(/^the user adds "([^"]*)" on title field$/) do |element|
   con.wait_until_action_element_visible("Title", 20)
   con.perform_action("Title", element)  
 end 
-
-# When(/^the user enters text "(.*?)" in the "(.*?)" control (?:on|in) the "(.*?)"$/) do |input_text, control_name, parent_name|
-#   container_key = get_container_key(control_name, parent_name)
-#   input_and_enter_into_control(container_key.container, container_key.modal_or_applet, container_key.control_name, input_text)
-# end
-
-# def input_and_enter_into_control(container, modal_or_applet, control_name, input_text)
-#   attempts ||= 0
-
-#   control_key = "Control - #{modal_or_applet} - #{control_name}"
-#   #p "control_key is #{control_key}"
-#   wait = Selenium::WebDriver::Wait.new(:timeout => 15)
-#   wait.until { container.get_element(control_key) }
-
-#   input_element = container.get_element(control_key)
-
-#   # need to clear what is currently in the input
-#   # clear() seems to not work correctly with placeholders
-#   for i in 0...input_element.attribute("value").size
-#     input_element.send_keys(:backspace)
-#   end
-
-#   # if you just want to clear the input (empty input text)
-#   unless input_text.strip.empty?
-#     input_element.send_keys(input_text)
-#     input_element.submit
-
-#     # because of race conditions, sometimes the value doesn't get input correctly
-#     if input_element.attribute("value") != input_text
-#       fail
-#     end
-#   end # unless
-# rescue => e
-#   attempts += 1
-
-#   if attempts < 3
-#     p "Attemping retry of input."
-#     sleep 2
-#     retry
-#   else
-#     p "!! Error attempting input on - #{control_name} !!"
-#     raise e
-#   end # if/else
-# #else # succesful begin
-# #  p "Input - #{control_name}"
-# end
-
-# Then user sees validation message
   
 Then(/the user enters values for both fields "([^"]*)" for title and enters "([^"]*)" for description and verify add and load button is "([^"]*)"$/) do |element1, element2, _disable_or_enable|   
   con = ScreenManager.instance
@@ -905,49 +729,9 @@ Then(/^the "(.*?)" is not listed in the workspace manager page$/) do |arg1|
   wait = Selenium::WebDriver::Wait.new(:timeout => DefaultTiming.default_wait_time)
   wait.until { !ScreenManager.instance.static_dom_element_exists? arg1  }
 end  
-#Then(/^the user click on Workspace Manager Button and deletes the screen$/) do
-#  con = ScreenManager.instance
-#  driver = TestSupport.driver
-#  TestSupport.wait_for_page_loaded
-#     @i = 0
-#     while @i < 2  do
-#       @i +=1
-#       con.perform_action('Workspace Manager Button')
-#      # sleep(5)
-#       con.perform_action("First Applet" )
-#       sleep(2)
-#       con.perform_action("Delete Button")
-#       sleep(2)
-#       con.perform_action('Close')
-#       sleep(2)
-#       #con.perform_action('Done Button')
-#    end
-#end
      
 And(/^the user drags and drops Allergies$/) do
   dragAndDrop(ScreenManager.instance)
-end
- 
-def mouse_move(_access_browser_instance)
-  con = ScreenManager.instance
-  driver = TestSupport.driver
-  #mouseMove(access_browser_instance)
-  #Actions builder = new Actions (driver);  
-  #       builder.keyDown(Keys.CONTROL)
-  #           .click(someElement)
-  #           .click(someOtherElement)
-  #           .keyUp(Keys.CONTROL);
-    
-  #       Action selectMultiple = builder.build(); 
-  #       selectMultiple.perform();
-  #       
-  #    Actions builder = new Actions(driver);
-  #  
-  #    Action dragAndDrop = builder.clickAndHold(someElement)
-  #        .moveToElement(otherElement)
-  #        .release(otherElement)
-  #        .build();
-  #    dragAndDrop.perform();
 end
     
 def xpath_to_modal(_column1)
@@ -981,60 +765,6 @@ Then(/^user sees carousel display$/) do |sourceElement|
   @browser.action.click_and_hold(sourceElement).perform 
   @browser.action.move_to(targetElement).release.perform    
   @browser.action.drag_and_drop(sourceElement, targetElement).perform
-  #    el1 = @driver.find_element(:css, "div.captcha div.sliderCaptcha div.arrow")
-  #    
-  #    el_in_between = @driver.find_element(:css, "div.something")
-  #    
-  #    @browser.action.click_and_hold(el1).perform
-  #    
-  #    sleep 0.5
-  #    
-  #    @browser.action.move_to(el_in_between).perform
-  #    
-  #    el2 = @driver.find_element(:css, "div.captcha div.sliderCaptcha div.dottedBorder")
-  #    
-  #    @browser.action.move_to(el2).release.perform          
-   
-  #new Actions(browser).dragAndDrop(draggable, to).build().perform(); 
-  #  p sourceElement
-  #  Actions dragAndDrop = builder.clickAndHold(sourceElement).perform()
-  #    builder.mouseMove(sourceElement)
-  #     WebElement otherElement 
-  #            moveToElement(otherElement)
-  #            release(otherElement)
-  #           build();
-  #            dragAndDrop.perform();
-  #actions=Actions.new("driver");
-  #driver.get("http://IP_ADDRESS/#workspace1)
-  # sourceElement = driver.find_element(:xpath, ".//*[@id='applets-carousel']/div[1]/div[2]/div[1]/div[1]/p")
-
-  #actions.clickAndHold(sourceElement).perform()
-  #driver.get("http://IP_ADDRESS/#workspace1")
-  #WebElement draggable = driver.find_element(:xpath, ".//*[@id='applets-carousel']/div[1]/div[2]/div[1]/div[1]")
-  #draggable.highlight
-  #new Actions(driver).dragAndDropBy(draggable, 200, 10).build().perform(); 
-
-  #    WebElement draggable = @driver.findElement(By.xpath(".//*[@id='applets-carousel']/div[1]/div[2]/div[1]/div[2]/p"));
-  #    new Actions(browser).dragAndDropBy(draggable, 200, 10).build().perform(); 
-  # 
-  #    new Actions(browser).dragAndDrop(draggable, to).build().perform(); 
-  #   
-    
-  #    actions=Actions.new("driver");
-  #    actions.clickAndHold(sourceElement).perform();
-  #    dispatchMouseEvent(sourceElement, "dragstart");
-  #    # Target element exists only after 'dragstart' event so we locate it here.
-  #    #WebElement targetElement = getElement(targetElementLocator);
-  #    WebElement targetElement = sourceElement[120,30];
-  #    actions.moveToElement(targetElement).perform();
-  #    dispatchMouseEvent(targetElement, "drop");
-  #    dispatchMouseEvent(sourceElement, "dragend");
-  #    actions.release().perform();
-  #    sleep(10)
-  #table.rows.each do | column1 |
-  #      xpath = xpath_to_modal(column1)
-  #      p "looking for #{xpath}"
-  #      expect(driver.find_elements(:xpath, xpath).length > 0).to be_true, "could not find row with #{column1}"
 end
 
 def drag_and_drop(_access_browser_instance)    
@@ -1042,98 +772,14 @@ def drag_and_drop(_access_browser_instance)
   expect(con.static_dom_element_exists?("sourceElement")).to be_true
   action = Actions.new("driver")
   WebElement draggable = driver.find_element(:xpath, ".//*[@id='applets-carousel']/div[1]/div[2]/div[1]/div[2]")
-  #new Actions(driver).dragAndDropBy(draggable, 200, 10).build().perform(); 
-  #    WebElement draggable = browser.findElement(By.xpath(".//*[@id='applets-carousel']/div[1]/div[2]/div[1]/div[2]/p"));
-  #    new Actions(browser).dragAndDropBy(draggable, 200, 10).build().perform();  
-  #    WebElement draggable = @driver.findElement(By.xpath(".//*[@id='applets-carousel']/div[1]/div[2]/div[1]/div[2]/p"));
-  #    new Actions(browser).dragAndDropBy(draggable, 200, 10).build().perform(); 
-  # 
-  #    new Actions(browser).dragAndDrop(draggable, to).build().perform(); 
-  #   
-  #        action = Actions.new("driver")
-  #    action.DragAndDrop(draggable, to).Release(draggable).Build().Perform();
-  #    action.ClickAndHold(draggable).MoveToElement(to).Release(draggable).Build().Perform();
-  #
-     
-  #    Action dragAndDrop = builder.clickAndHold(sourceElement)
-  #    builder.mouseMove(sourceElement)
-  #    WebElement otherElement 
-  #           moveToElement(otherElement)
-  #           release(otherElement)
-  #           build();
-  #           dragAndDrop.perform();
-           
-  #p @web_driver
-  #Code for drag and drop looks like this 
-  
-  #  selenium.type("id=screenName", "screen"); 
-  #  selenium.mouseOver("//*[@id ='screenToolIcons']"); // object default position 
-  #  selenium.mouseOver("//*[@id='inputbox']"); // object id 
-  #  selenium.focus("//*[@id='inputbox']"); 
-  #  selenium.mouseDown("//*[@id='inputbox']"); 
-  #  selenium.mouseMoveAt("//*[@id='inputbox']","// 
-  #  *[@id='droppableCanvas']"); // moving between layers 
-  #  selenium.mouseDownAt("//*[@id='inputbox']", "200,200"); 
-  #  selenium.mouseUpAt("//*[@id='droppableCanvas']", "200,200"); //place 
-  #  object in specified location 
-  #  selenium.click("//*[@id='droppableCanvas']"); 
-  
-      
+
   driver = TestSupport.driver
   p driver
-  driver.get("http://IP_ADDRESS/#Workspace1")
-          
-  #    con.perform_action('Done Button')
-  #  p '----------------'
-  #  ts = driver.find_elements(:xpath, "//*")
-  #  ts.each do |t|
-  #    p t
-  #    t.highlight()
-  #  end
+  driver.get("http://IP        /#Workspace1")
   
-  p source_element = driver.find_element(:css, "#doneEditing")
+  p source_element = driver.find_element(:css, ".panel-heading .done-editing")
   sourceElement.click
   p '----------------'
-  #sleep(10)
-  #   p sourceElement = driver.find_element(:xpath, ".//*[@id='applets-carousel']/div[1]/div[2]/div[1]/div[2]/p")
-  #    targetElement = @driver.find_element(:xpath, ".//*[@id='66d03000bc49']/div[2]/p[1]")  
-  #    @browser.action.click_and_hold(sourceElement).perform 
-  #    @browser.action.move_to(targetElement).release.perform    
-  #@browser.action.drag_and_drop(sourceElement, targetElement).perform
-  #    el1 = @driver.find_element(:css, "div.captcha div.sliderCaptcha div.arrow")
-  #    
-  #    el_in_between = @driver.find_element(:css, "div.something")
-  #    
-  #    @browser.action.click_and_hold(el1).perform
-  #    
-  #    sleep 0.5
-  #    
-  #    @browser.action.move_to(el_in_between).perform
-  #    
-  #    el2 = @driver.find_element(:css, "div.captcha div.sliderCaptcha div.dottedBorder")
-  #    
-  #    @browser.action.move_to(el2).release.perform          
-  #    driver.get("http://IP_ADDRESS/#trial1");
-  #    #driver=Browser.new("http://IP_ADDRESS/#trial1")
-  #    WebElement draggable = driver.findElement(By.xpath(".//*[@id='applets-carousel']/div[1]/div[2]/div[1]/div[2]/p"))
-  #      draggable.click
-  #      sleep(8)
-  #    WebElement to = driver.findElement(By.xpath(".//*[@id='66d03000bc49']/div[2]/p[1]"))
-  #    
-  #    builder = Actions.new("driver");  
-  #       builder.keyDown(Keys.CONTROL)
-  #           click(sourceElement)
-  #           #click(someOtherElement)
-  #           keyUp(Keys.CONTROL);
-  #
-  #       
-  #    builder1 = new Actions.new("driver");
-  #  
-  #    Action dragAndDrop = builder.clickAndHold(draggable)
-  #        moveToElement(to)
-  #        release(to)
-  #        build();
-  #        dragAndDrop.perform();
         
   actions=Actions.new("driver")
   actions.clickAndHold(sourceElement).perform
@@ -1147,24 +793,6 @@ def drag_and_drop(_access_browser_instance)
   actions.release.perform
   #sleep(10)
 end
-   
-#    def dispatchMouseEvent(eventTarget, eventType)
-#      #int halfWidth = eventTarget.getSize().getWidth() / 2;
-#      #int halfHeight = eventTarget.getSize().getHeight() / 2;
-#      #Point locationOnScreen = ((Locatable) eventTarget).getCoordinates().onScreen();
-#      #Calculate the coordinates of the center of the element.
-#      int screenX = 132
-#      int screenY = 90
-#      #int clientX = halfWidth + eventTarget.getLocation().x;
-#      #int clientY = halfHeight + eventTarget.getLocation().y;
-#   
-#      JavascriptExecutor javascriptExecutor = (JavascriptExecutor) getDriver();
-#      javascriptExecutor.executeScript("var e = document.createEvent(\"MouseEvents\");"
-#          + "e.initMouseEvent(\"" + eventType
-#          + "\", true, true, arguments[0].ownerDocument.defaultView, 0, " + screenX + ", " + screenY
-#          + ", " + clientX + ", " + clientY + ", " + "false, false, false, false, 0, null);"
-#          + "arguments[0].dispatchEvent(e);", eventTarget);
-#    end 
     
 Then(/^the user click on Allergies Filter Button$/) do 
   con= Navigation.instance
@@ -1195,80 +823,17 @@ Given(/^user enter "(.*?)" in the search box$/) do |_search_value|
   #expect(login_elements.static_dom_element_exists? "search").to be_true
 end
 
-#Click a button 
-#When(/^the user click the "(.*?)"$/) do |arg1|
-#  aa = Navigation.instance
-#  TestSupport.wait_for_page_loaded
-#  aa.wait_until_action_element_visible(arg1, 10)
-#  aa.perform_action(arg1)
-#  TestSupport.wait_for_page_loaded
-#end
-
-#Perform any selection or button click
-When(/^the user click the "(.*?)"$/) do |html_action_element|
-  navigation = AllergiesModalPage.instance
-  navigation.wait_until_action_element_visible(html_action_element, 40)
-  expect(navigation.perform_action(html_action_element)).to be_true, "Error when attempting to excercise #{html_action_element}"
-end
-
 Then(/^the user click on Appointments ScrollDown Button$/) do 
   con= AppointmentsSinglePage.instance
   TestSupport.wait_for_page_loaded
   con.perform_action('ScrollDown Button')
 end
 
-#When (/^the user selects "(.*?)"$/) do |arg1|
-#  con= AppointmentsSinglePage.instance
-#  TestSupport.wait_for_page_loaded
-#  aa.wait_until_action_element_visible(arg1, 10)
-#  aa.perform_action(arg1)
-#  sleep 15
-#end
-
-#Then(/^the user selects "(.*?)" in the "(.*?)" dropdown$/) do |selection, control_name|
-#  driver = TestSupport.driver
-#  sleep 0.2
-#  #@apc.wait_until_element_present("Table - Appointments Applet", 15)
-#  wait_and_perform(@apc, "applet - Appointments Type dropdown")
-#  wait = Selenium::WebDriver::Wait.new(:timeout => 5)
-#  sleep 0.2
-#  wait.until { @apc.get_elements("applet - Appointments Type dropdowns").size > 1 }
-#  dropdown_elements = [@apc.get_elements("applet - Appointments Type dropdowns")]
-#  desired_element = nil
-#
-##  dropdown_elements.each do |element|
-##  p element
-#  for i in 1..dropdown_elements.length
-#  element=[driver.find_elements(:id, "appts-dropdown-menu-site")]
-#    if element.include?(selection)
-#      p element.text
-#      desired_element = element
-#      break
-#    end
-#  end
-#  if desired_element == nil
-#    fail
-#  else
-#    desired_element.click
-#  end
-#end
-
 Then(/^the user selects "(.*?)"$/) do |html_element|
   navigation = AppointmentsSinglePage.instance
   navigation.wait_until_element_visible(html_element, 10)
   expect(navigation.perform_action(html_action_element)).to be_true, "Error when attempting to excercise #{html_action_element}"
-  #sleep 10
 end
-
-#Then(/^the user selects "(.*?)"$/) do |search_value|
-#  vadod_button = AppointmentsSinglePage.instance
-#  vadod_button = AppointmentsSinglePage.instance
-#  vadod_button.perform_action("ALL VA+DOD Link") if vadod_button.static_dom_element_exists? "ALL VA+DOD Link"
-#  vadod_button.wait_until_element_present("ALL VA+DOD Link", DefaultLogin.wait_time)  
-#  expect(vadod_button.perform_action("ALL VA+DOD Link")).to be_true
-#  vadod_button.wait_until_element_present("ALL VA+DOD Link", DefaultLogin.wait_time)
-#  expect(vadod_button.static_dom_element_exists? "ALL VA+DOD Link").to be_true
-#end
 
 #Enter Search Term
 When(/^the user enter "(.*?)" into the "(.*?)"$/) do |arg1, arg2|
@@ -1313,26 +878,6 @@ def verify_coversheet_dropdown_headers(_access_browser_instance, _table)
   con = CoversheetDropdown.instance
   con.wait_until_action_element_visible("Coversheet", 60)
   expect(con.static_dom_element_exists?("Coversheet")).to be_true
-  #con.wait_until_action_element_visible("Timeline", 60)
-  #expect(con.static_dom_element_exists?("Timeline")).to be_true
-  #con.wait_until_action_element_visible("Meds Review, 60)
-  #expect(con.static_dom_element_exists?("Meds Review")).to be_true
-  #con.wait_until_action_element_visible("Documents, 60)
-  #expect(con.static_dom_element_exists?("Documents")).to be_true
-  #con.wait_until_action_element_visible("Overview, 60)
-  #expect(con.static_dom_element_exists?("Overview")).to be_true
-  #con.perform_verification("Description", "Hyperlipidemia")
-  # headers = driver.find_elements(:xpath, "//*[@id='data-grid-problems']")
-  #headers = driver.find_elements(:css, "#grid-panel-problems th") 
-  #headers = driver.find_elements(:css, "#grid-panel- th") 
-  #expect(headers.length).to_not eq(0)
-  #expect(headers.length).to eq(table.rows.length)
-  #elements = access_browser_instance
-  #table.rows.each do | header_text |
-  # does_exist = elements.static_dom_element_exists? header_text[0]
-  #p "#{header_text[0]} was not found" unless does_exist
-  #expect(does_exist).to be_true
-  #end #table
 end
 
 class ActiveProblemsCoverSheet < AccessBrowserV2
@@ -1397,123 +942,19 @@ class ActiveProblemsModalPage < AccessBrowserV2
   end
 end # Active Problems Modal View
 
-#Then(/^the Active Problems Modal Page contains headers$/) do |table|
-#verify_problems_table_headers(ActiveProblemsSinglePage.instance, table)
-#end
-class AllergiesOverlay < AccessBrowserV2
-  include Singleton
-  def initialize
-    super
-    #add_verify(CucumberLabel.new("Gist View"), VerifyText.new, AccessHtmlElement.new(:css, ".click-gist"))
-    add_verify(CucumberLabel.new("Gist View"), VerifyText.new, AccessHtmlElement.new(:css, "#grid-panel-allergy_grid .options-box"))
-    add_verify(CucumberLabel.new("Summary View"), VerifyText.new, AccessHtmlElement.new(:css, "#grid-panel-allergy_grid .options-box-summary"))
-    add_verify(CucumberLabel.new("Expand View"), VerifyText.new, AccessHtmlElement.new(:css, "#grid-panel-allergy_grid .options-box-expanded"))
-  end
-end
-
-Then(/^the Allergies Overlay Page contains headers$/) do |table|
-  verify_allergies_overlay_headers(AllergiesOverlay.instance, table)
-end
-
 def xpath_to_modal_row(column1, column2)
   #xpath = "//div[@id='modal-body']/descendant::div[contains(string(), '#{column1}')]/following-sibling::div[contains(string(), '#{column2}')]"
   xpath = "//div[@id='modal-body']/descendant::div[contains(@class, 'row')]/descendant::div[contains(string(), '#{column1}')]/following-sibling::div[contains(string(), '#{column2}')]"
   return xpath
 end
 
-Then(/^user sees Active Problems Modal table display$/) do |table|
-  driver = TestSupport.driver
-  aa = ActiveProblemsModalPage.instance
-  aa.wait_until_action_element_visible("ModalBody", 10)
-  table.rows.each do |column1, column2|
-    xpath = xpath_to_modal_row(column1, column2)
-    p "looking for #{xpath}"
-    expect(driver.find_elements(:xpath, xpath).length > 0).to be_true, "could not find row with #{column1}, #{column2}"
-  end
-end
-
-def verify_allergies_overlay_headers(_access_browser_instance, _table)
-  driver = TestSupport.driver
-  con = AllergiesOverlay.instance
-  con.wait_until_action_element_visible("Gist View", 60)
-  expect(con.static_dom_element_exists?("Gist View")).to be_true
-  con.wait_until_action_element_visible("Summary View", 30)
-  expect(con.static_dom_element_exists?("Summary View")).to be_true
-  con.wait_until_action_element_visible("Expand View", 30)
-  expect(con.static_dom_element_exists?("Expand View")).to be_true
-  #con.perform_verification("Description", "Hyperlipidemia")
-  # headers = driver.find_elements(:xpath, "//*[@id='data-grid-problems']")
-  #headers = driver.find_elements(:css, "#grid-panel-problems th") 
-  #headers = driver.find_elements(:css, "#grid-panel- th") 
-  #expect(headers.length).to_not eq(0)
-  #expect(headers.length).to eq(table.rows.length)
-  #elements = access_browser_instance
-  #table.rows.each do | header_text |
-  # does_exist = elements.static_dom_element_exists? header_text[0]
-  #p "#{header_text[0]} was not found" unless does_exist
-  #expect(does_exist).to be_true
-  #end #table
-end #verify_table_headers
-
-Then(/^user sees Allergies Modal table display$/) do |table|
-  driver = TestSupport.driver
-  aa = AllergiesModalPage.instance
-  aa.wait_until_action_element_visible("ModalBody", 30)
-  table.rows.each do |column1, column2|
-    xpath = xpath_to_modal_row(column1, column2)
-    p "looking for #{xpath}"
-    expect(driver.find_elements(:xpath, xpath).length > 0).to be_true, "could not find row with #{column1}, #{column2}"
-  end
-end
-
-#Then(/^user sees Active Problems Modal table display$/) do |table| 
-#  driver = TestSupport.driver
-#    #num_of_rows = driver.find_elements(:css, "#modal-header div")
-#    num_of_rows = driver.find_elements(:id, "modal-body")
-#    #Loop through rows in cucumber   
-#    table.rows.each do | row_defined_in_cucumber |
-#      matched = false
-#      #Loop through UI rows
-#      for i in 1..num_of_rows.length
-#        row_data = driver.find_elements(:id, "modal-body")     
-#        if row_defined_in_cucumber.length != row_data.length
-#          matched = false
-#        else 
-#          matched = avoid_block_nesting(row_defined_in_cucumber, row_data)            
-#        end         
-#        if matched
-#          break 
-#        end
-#      end # for loop  
-#      p "could not match data: #{row_defined_in_cucumber}" unless matched  
-#      driver.save_screenshot("incorrect_rows.png") unless matched
-#      expect(matched).to be_true
-#    end#do loop  
-#end
-
-When(/^the user enters in the search field "(.*?)"$/) do
-  con= ActiveProblemsCoverSheet.instance
-  TestSupport.wait_for_page_loaded
-  con.perform_action('problemsFilterSearch', 'Diabetes Mellitus Type II or unspecified')
-end
-
-#When(/^user enters "(.*?)" in the search box$/) do |search_value|
 When(/^use enters "(.*?)" in the search box$/) do |_search_value|
   driver = TestSupport.driver
   con = ActiveProblemsCoverSheet.instance
   TestSupport.wait_for_page_loaded
 
-  #login_elements = Search.instance
   login_elements = ActiveProblemsCoverSheet.instance
   login_elements.perform_action("Problems Filter Field") if login_elements.static_dom_element_exists? "Problems Filter Field"
-  #con.perform_action('Search')
-  #expect(login_elements.static_dom_element_exists? "search").to be_true
-end
-
-Then(/^the user click on Problems Expand View$/) do 
-  con= ActiveProblemsCoverSheet.instance
-  TestSupport.wait_for_page_loaded
-  con.perform_action('Problems Expand View')
 end
 
 def verify_problem_table_headers(access_browser_instance, table)
@@ -1521,9 +962,6 @@ def verify_problem_table_headers(access_browser_instance, table)
   con = ActiveProblemsCoverSheet.instance
   con.wait_until_action_element_visible("Description", 60)
   expect(con.static_dom_element_exists?("Description")).to be_true
-  #con.perform_verification("Description", "Hyperlipidemia")
-  # headers = driver.find_elements(:xpath, "//*[@id='data-grid-problems']")
-  #headers = driver.find_elements(:css, "#grid-panel-problems th") 
   headers = driver.find_elements(:css, "#data-grid-problems th") 
   expect(headers.length).to_not eq(0)
   expect(headers.length).to eq(table.rows.length)
@@ -1553,78 +991,4 @@ def verify_problems_table_headers(access_browser_instance, table)
     expect(does_exist).to be_true
   end #table
 end #verify_table_headers
-
-#Find rows in Active Problems table
-Then(/^user sees Active Problems table display$/) do |table|
-  driver = TestSupport.driver
-  aa = ActiveProblemsSinglePage.instance
-  aa.wait_until_action_element_visible("problemsTable", 30)
-  #TestSupport.wait_for_page_loaded
-  #TestSupport.wait_for_jquery_completed
-  aa.wait_until_xpath_count_greater_than("Number of rows", 2)
-  browser_elements_list = driver.find_elements(:xpath, "//table[@id='data-grid-problems']/descendant::tr")
-  con = VerifyTableValue.new 
-  #  print "list size : " 
-  #  p browser_elements_list.length     
-  matched = con.perform_table_verification(browser_elements_list, "#data-grid-problems", table)
-  expect(matched).to be_true
-end
-
-#Find rows in the Problems Coversheet
-Then(/^the Active Problems coversheet contains rows$/) do |table|
-  driver = TestSupport.driver
-  con = ActiveProblemsSinglePage.instance
-  con.wait_until_action_element_visible("Description", 60)
-  expect(con.static_dom_element_exists?("Description")).to be_true
-  #con.perform_verification("Description", "Hypertension")
-  num_of_rows = driver.find_elements(:css, "#data-grid-problems>tbody>tr")
-  p num_of_rows.length
-  #Loop through rows in cucumber   
-  table.rows.each do |row_defined_in_cucumber|
-    matched = false
-    p "Checking new row"
-    #Loop through UI rows
-    for i in 1..num_of_rows.length
-      row_data = driver.find_elements(:xpath, ".//*[@id='data-grid-problems']/tbody/tr[#{i}]/td")
-      if row_defined_in_cucumber.length != row_data.length
-        matched = false
-      else 
-        matched = avoid_block_nesting(row_defined_in_cucumber, row_data)
-      end
-      if matched
-        break 
-      end
-    end # for loop  
-    # p "could not match data: #{row_defined_in_cucumber}" unless matched  
-    expect(matched).to be_true
-  end #do loop  
-end #Problems coversheet
-
-#Check to make sure rows are not in the Problems Coversheet
-Then(/^the Active Problems coversheet does not contains rows$/) do |table|
-  driver = TestSupport.driver
-  num_of_rows = driver.find_elements(:css, "#data-grid-problems>tbody>tr")
-  p num_of_rows.length
-  #Loop through rows in cucumber   
-  table.rows.each do |row_defined_in_cucumber|
-    matched = false
-    p "Checking new row"
-    #Loop through UI rows
-    for i in 1..num_of_rows.length
-      row_data = driver.find_elements(:xpath, ".//*[@id='data-grid-problems']/tbody/tr[#{i}]/td")
-      if row_defined_in_cucumber.length != row_data.length
-        matched = false
-      else 
-        matched = avoid_block_nesting(row_defined_in_cucumber, row_data)
-      end
-      if matched
-        break 
-      end
-    end # for loop  
-    #p "Found a match for: #{row_defined_in_cucumber}" unless !matched  
-    expect(matched).to be_false
-  end #do loop  
-end #Problems coversheet
-
-
 

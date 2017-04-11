@@ -36,12 +36,6 @@ define(['jquery', 'backbone', 'marionette', 'jasminejquery', 'testUtil', 'app/ap
                 expect(response.facilityColor).toEqual('nonDOD');
             });
 
-            it("Test getProviderDisplayName ", function() {
-                response = Util.getProviderDisplayName(response);
-
-                expect(response.providerDisplayName).toEqual('Tdnurse,One');
-            });
-
             it("Test typeName sets Other", function() {
                 response.typeDisplayName = 'Event (Historical)';
                 response = Util.getFormattedDisplayTypeName(response);
@@ -76,22 +70,6 @@ define(['jquery', 'backbone', 'marionette', 'jasminejquery', 'testUtil', 'app/ap
                 "patientClassCode": "urn:va:patient-class:AMB",
                 "categoryCode": "urn:va:encounter-category:OV",
                 "categoryName": "Outpatient Visit",
-                "providers": [{
-                    "primary": true,
-                    "role": "P",
-                    "providerUid": "urn:va:user:9E7A:10000000016",
-                    "providerName": "TDNURSE,ONE",
-                    "providerDisplayName": "Tdnurse,One",
-                    "summary": "EncounterProvider{uid='null'}"
-                }],
-                "primaryProvider": {
-                    "primary": true,
-                    "role": "P",
-                    "providerUid": "urn:va:user:9E7A:10000000016",
-                    "providerName": "TDNURSE,ONE",
-                    "providerDisplayName": "Tdnurse,One",
-                    "summary": "EncounterProvider{uid='null'}"
-                },
                 "stopCodeUid": "urn:va:stop-code:435",
                 "encounterType": "P"
             };

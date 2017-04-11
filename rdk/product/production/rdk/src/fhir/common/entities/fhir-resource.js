@@ -169,23 +169,26 @@ function Bundle(link, entry, totalResults) {
 }
 module.exports.Bundle = Bundle;
 
-function MedicationStatement(identifier, status, patient) {
+function MedicationStatement(id, identifier, status, patient) {
     this.resourceType = 'MedicationStatement';
+    this.id = id;
     this.status = status || '';
     this.patient = patient || new ReferenceResource();
 }
 module.exports.MedicationStatement = MedicationStatement;
 
-function MedicationDispense(identifier, status, patient, dispenser) {
+function MedicationDispense(id, identifier, status, patient, dispenser) {
     this.resourceType = 'MedicationDispense';
+    this.id = id;
     this.status = status || '';
     this.patient = patient || new ReferenceResource();
     this.dispenser = dispenser || new ReferenceResource();
 }
 module.exports.MedicationDispense = MedicationDispense;
 
-function DiagnosticReport(name, status, issued, subject, performer) {
+function DiagnosticReport(id, name, status, issued, subject, performer) {
     this.resourceType = 'DiagnosticReport';
+    this.id = id;
     this.name = name || new CodeableConcept();
     this.status = DiagnosticReportStatus[status] || '';
     this.issued = issued || null; //dateTime
@@ -227,21 +230,6 @@ function Practitioner(id, name) {
     }
 }
 module.exports.Practitioner = Practitioner;
-
-/**
- * This is the DSTU1 version of the Practitioner object. This is currently in
- * use by orderResource. #US8265
- *
- * TODO: Delete this once the Order FHIR resource gets migrated to DSTU2.
- */
-function Practitioner_DSTU1(id, name) {
-    this.resourceType = 'Practitioner';
-    this._id = id || '';
-    if (nullchecker.isNotNullish(name)) {
-        this.name = name;
-    }
-}
-module.exports.Practitioner_DSTU1 = Practitioner_DSTU1;
 
 function HumanName(fullName, text, use) {
     this.text = text;
@@ -430,34 +418,6 @@ function Identifier(value, system, use, type, assigner, period) {
     }
 }
 module.exports.Identifier = Identifier;
-
-/**
- * This is the DSTU1 version of the Identifier object. This is currently in
- * use by orderResource. #US8265
- *
- * TODO: Delete this once the Order FHIR resource gets migrated to DSTU2.
- */
-function Identifier_DSTU1(value, system, use, label, assigner, period) {
-    if (nullchecker.isNotNullish(use)) {
-        this.use = use;
-    }
-    if (nullchecker.isNotNullish(label)) {
-        this.label = label;
-    }
-    if (nullchecker.isNotNullish(system)) {
-        this.system = system;
-    }
-    if (nullchecker.isNotNullish(value)) {
-        this.value = value;
-    }
-    if (nullchecker.isNotNullish(period)) {
-        this.period = period;
-    }
-    if (nullchecker.isNotNullish(assigner)) {
-        this.assigner = assigner;
-    }
-}
-module.exports.Identifier_DSTU1 = Identifier_DSTU1;
 
 var NarrativeStatus = {
     generated: 'generated',

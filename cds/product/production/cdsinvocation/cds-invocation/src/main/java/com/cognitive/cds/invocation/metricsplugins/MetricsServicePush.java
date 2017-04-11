@@ -26,6 +26,7 @@ package com.cognitive.cds.invocation.metricsplugins;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 import javax.annotation.PostConstruct;
 import javax.ws.rs.core.MediaType;
@@ -39,22 +40,19 @@ import com.cognitive.cds.invocation.model.CallMetrics;
 import com.cognitive.cds.invocation.model.Metrics;
 
 /**
- * @author Jerry Goodnough
- * @version 1.0
- * @created 11-Dec-2014 9:10:42 AM
+ * A class which can POST Metrics to a REST client.  MetricsServicePush 
+ * uses a singleton WebClient which does not need to be thread safe
+ * because it only does a POST with no payload response.
  */
 public class MetricsServicePush implements CDSMetricsIFace {
 
     private String metricsEndpoint;
     private String sl4fjLogger; // FOR LOGGING RUNTIME CONDITION
+    private volatile WebClient client;
+    private static final AtomicReference<String> LOCK = new AtomicReference<>();
     
     public org.slf4j.Logger log;
-    
-    public MetricsServicePush() {
-    }
-
-    public void finalize() throws Throwable { }
-
+ 
     @PostConstruct
     void initialize() {
         log = LoggerFactory.getLogger(sl4fjLogger);
@@ -68,36 +66,44 @@ public class MetricsServicePush implements CDSMetricsIFace {
     @Override
     public boolean updateMetrics(List<CallMetrics> metricsList) {
         
-        Response response;
-        
         //WRAPPER "metrics" object .. expected by server side.
         Metrics m = new Metrics();
         m.setMetrics(metricsList);
         
         try {
-            //--------------------------------------
-            // parse Object to Json string, 
-            // then can send to metric DB write service.
-            //--------------------------------------
-            List<Object> providers = new ArrayList<Object>();
-            providers.add(new com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider());
-
-            WebClient client = WebClient.create(metricsEndpoint, providers);
-            response = client.accept(MediaType.APPLICATION_JSON)
-                               .type(MediaType.APPLICATION_JSON)
-                               .post(m);
+        	Response response = getClient().post(m);
             
+            if (response.getStatus() >= 300) {
+                log.error("HTTP Error: "+ Integer.toString(response.getStatus()));
+                return false;
+            }
         } catch (Exception ex) {
-            log.error(ex.getMessage());
+            log.error(ex.getMessage(),ex);
             return false;
         }
         
-        if (response.getStatus() >= 300) {
-            log.error("HTTP Error: "+ Integer.toString(response.getStatus()));
-            return false;
-        }
         return true;
     }
+    
+    
+    /**
+     * Thread safe creation of a WebClient 
+     * @return
+     */
+    private WebClient getClient() {
+    	if(client == null) {
+    		synchronized(LOCK) {
+    			if(client == null) {
+    	            List<Object> providers = new ArrayList<Object>();
+    	            providers.add(new com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider());
+    	            this.client = WebClient.create(metricsEndpoint, providers)
+    	            		.accept(MediaType.APPLICATION_JSON).type(MediaType.APPLICATION_JSON);
+    			}
+    		}
+    	}
+    	return client;
+    }
+    
     
     // SPRING SETTERs/GETTERs
     public String getMetricsEndpoint() {

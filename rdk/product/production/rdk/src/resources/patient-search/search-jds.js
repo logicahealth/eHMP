@@ -6,7 +6,6 @@ var jdsFilter = require('jds-filter');
 var rdk = require('../../core/rdk');
 var utils = rdk.utils;
 var httpUtil = utils.http;
-var dd = require('drilldown');
 var pidValidator = utils.pidValidator;
 
 /**
@@ -39,7 +38,7 @@ module.exports.hasSensitivityFlag = function(req, searchOptions, jdsServer, mast
             },
             function(response, callback) {
                 //changed _.any to _.some since any was listed as an alias in 3.10 but not moving forward.
-                var sensitivePatientExists = _.some(dd(response)('data')('items').val, function(item) {
+                var sensitivePatientExists = _.some(_.get(response, 'data.items'), function(item) {
                     return item.sensitive;
                 });
                 callback(null, sensitivePatientExists);

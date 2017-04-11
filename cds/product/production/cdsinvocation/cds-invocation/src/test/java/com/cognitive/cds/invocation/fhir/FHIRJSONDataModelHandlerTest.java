@@ -31,6 +31,8 @@ import static org.junit.Assert.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -442,18 +444,19 @@ public class FHIRJSONDataModelHandlerTest {
     @Test
     public void testResolveOperation() {
     	assertTrue("Operation dateEqual statements are unequal.", instance.resolveOperation("dateEqual").equals("="));
-    	assertTrue("Operation dateLessThan statements are unequal.", instance.resolveOperation("dateLessThan").equals("=<"));
-    	assertTrue("Operation dateLessThanOrEqual statements are unequal.", instance.resolveOperation("dateLessThanOrEqual").equals("=<="));
-    	assertTrue("Operation dateGreaterThan statements are unequal.", instance.resolveOperation("dateGreaterThan").equals("=>"));
-    	assertTrue("Operation dateGreaterThanOrEqual statements are unequal.", instance.resolveOperation("dateGreaterThanOrEqual").equals("=>="));
+    	assertTrue("Operation dateLessThan statements are unequal.", instance.resolveOperation("dateLessThan").equals("=" + instance.urlEncode("<")));
+    	assertTrue("Operation dateLessThanOrEqual statements are unequal.", instance.resolveOperation("dateLessThanOrEqual").equals("=" + instance.urlEncode("<") + "="));
+    	assertTrue("Operation dateGreaterThan statements are unequal.", instance.resolveOperation("dateGreaterThan").equals("=" + instance.urlEncode(">") ));
+    	assertTrue("Operation dateGreaterThanOrEqual statements are unequal.", instance.resolveOperation("dateGreaterThanOrEqual").equals("=" + instance.urlEncode(">") + "="));
     }
     
     @Test 
     public void testResolveDateParams() {
     	String period = "90d";
-    	String testStmt = "date=<="+instance.resolvePeriodToDate(period);
+    	String testStmt = "date=" + instance.urlEncode("<") + "=" + instance.resolvePeriodToDate(period);
     	StringBuffer query = new StringBuffer("patient/##SUBJECT.ID##/diagnosticreport?domain=lab&amp;date=##dateLessThanOrEqual-90d##");
-    	assertTrue("Test query does not contain "+testStmt, instance.resolveDateParams(query).toString().contains(testStmt));
+    	String resolvedDateParam = instance.resolveDateParams(query).toString();
+    	assertTrue("Test query does not contain "+testStmt,  resolvedDateParam.contains(testStmt));
     }
     
     

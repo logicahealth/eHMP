@@ -32,7 +32,7 @@ describe('For API version stability,', function() {
     user = JSON.parse(fs.readFileSync('versioning-tests/pu1234.json', {encoding: 'utf8'}));
     versioningConfig = loadVersioningConfig();
 
-    // TODO: get rid of this skip list
+    // FUTURE-TODO: get rid of this skip list
     var skip = [
         '/fhir/',// the services are changing to the 1.0 spec
         '/asu-resource',// missing the asu config
@@ -49,7 +49,7 @@ describe('For API version stability,', function() {
 
     var filePaths = _.keys(resources).sort();
     _.each(filePaths, function(filePath) {
-        // TODO: kill these skip tests
+        // FUTURE-TODO: kill these skip tests
         if (_.contains(filePath, '/write/') && !_.contains(filePath, '/write/pick-list/')) {
             return;
         }
@@ -104,7 +104,7 @@ describe('For API version stability,', function() {
                             done();
                         }
                     });
-    
+
                     it('should not change its parameters', function() {
                         verifyUnchangedParameters(resource, method);
                     });
@@ -182,17 +182,17 @@ function prepareRequests(resource, method, callback) {
             prepareRequest(resource, method, IncludeParams.required, 404),
             prepareRequest(resource, method, IncludeParams.required, 500)
         ];
-// TODO: use the first request to determine the number of external calls, then create requests
+// FUTURE-TODO: use the first request to determine the number of external calls, then create requests
 // that simulate failure for each one in turn. This would also avoid the 404/500 requests for
 // VistaJS resources.
 
-// TODO: maybe create separate requests for each member of enum parameters.
+// FUTURE-TODO: maybe create separate requests for each member of enum parameters.
 
-// TODO: if a resource has multiple request types (like permission-sets-resource), test each one.
+// FUTURE-TODO: if a resource has multiple request types (like permission-sets-resource), test each one.
         if (mockParameters.parametersFor(resource, method).length > 0) {
             requests.push(prepareRequest(resource, method, IncludeParams.all));
             requests.push(prepareRequest(resource, method, IncludeParams.none));
-// TODO: support invalid
+// FUTURE-TODO: support invalid
             // requests.push(prepareRequest(resource, method, IncludeParams.invalid));
         }
 
@@ -400,7 +400,7 @@ function checkResponse(response, request, resource) {
         var error = 'Unexpected status code: ' + response.statusCode + ' not listed in API Blueprint documentation for ' + resource.filePath;
         expect(expectedStatusCode, error).to.be.true();
 
-// TODO: verify that all documented status codes were exercised?
+// FUTURE-TODO: verify that all documented status codes were exercised?
     }
 
     if (checkSchema) {

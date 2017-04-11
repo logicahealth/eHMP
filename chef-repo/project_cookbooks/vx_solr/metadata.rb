@@ -4,12 +4,12 @@ maintainer_email 'team-milkyway@vistacore.us'
 license          'MIT'
 description      'Installs the solr search engine.'
 long_description 'See README.md'
-version          "2.0.23"
+version          "2.0.30"
 
 supports 'redhat'
 supports 'centos'
 
-depends "common", "2.0.10"
+depends "common", "2.0.12"
 
 #############################
 # 3rd party
@@ -18,5 +18,5 @@ depends "common", "2.0.10"
 #############################
 # wrapper_cookbook
 #############################
-depends "solr_wrapper", "2.0.5"
-depends "zookeeper-cluster_wrapper", "2.0.2"
+depends "solr_wrapper", "2.0.6"
+depends "zookeeper-cluster_wrapper", "2.0.3"

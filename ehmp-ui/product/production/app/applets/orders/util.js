@@ -7,233 +7,10 @@ define([
     "use strict";
 
     var Util = {};
-
-    Util.getStatusStyle = function(response) {
-        switch (response.statusName.toUpperCase()) {
-            case ('PENDING'):
-                response.statusStyle = 'label label-warning';
-                break;
-            case ('COMPLETE'):
-                response.statusStyle = 'label label-success';
-                break;
-            case ('EXPIRED'):
-                response.statusStyle = 'label label-danger';
-                break;
-            case ('DISCONTINUED'):
-                response.statusStyle = 'label label-info';
-                break;
-            case ('ACTIVE'):
-                response.statusStyle = 'label label-success';
-                break;
-            default:
-                response.statusStyle = 'label label-default';
-        }
-
-        return response;
-    };
-
-    Util.getFacilityColor = function(response) {
-
-        if (response.facilityCode && response.facilityCode == 'DOD') {
-            response.facilityColor = 'DOD';
-        } else {
-            response.facilityColor = 'nonDOD';
-        }
-
-        return response;
-    };
-
-    Util.getSigners = function(response) {
-        var clinicians = response.clinicians;
-
-        _.each(clinicians, function(clinician) {
-
-            switch (clinician.role) {
-                case 'S':
-                    response.provider = clinician.name;
-                    break;
-                case 'N':
-                    response.nurse = clinician.name;
-                    break;
-                case 'C':
-                    response.clerk = clinician.name;
-                    break;
-                case 'R':
-                    response.chart = clinician.name;
-                    break;
-            }
-
-        });
-
-        return response;
-    };
-
-    Util.getEnteredFormatted = function(response) {
+    //Parsing function for calling orders resource
+    Util.parseOrderResponse = function(response, displayGroup) {
         if (response.entered) {
             response.enteredFormatted = ADK.utils.formatDate(response.entered);
-        }
-        return response;
-    };
-
-    // Added by PG: 20141001 Update for LabSummary Data
-    Util.parseLabSampleString = function(labSampleStr) {
-
-        var endLimits = [" I", " LC", " SP", " WC"];
-        var labCollectionMessage = ['Immediate COLLECT', 'LAB COLLECT', 'SEND PATIENT', 'WARD COLLECT'];
-        var labCollectionMsgIndex = 1;
-        var labCollectionArray = ['', '', '']; // [Collection By, Sample, Specimen]
-        var indexOf3S = labSampleStr.indexOf("   ");
-        var indexOfLBN = labSampleStr.indexOf("LB #");
-        var indOfType;
-        var balStr;
-        if (indexOfLBN > 1) {
-            balStr = labSampleStr.substr(0, indexOfLBN).trim();
-            if (indexOf3S < 0) {
-                indexOf3S = 0;
-            }
-
-            for (var i = 0; i < endLimits.length; i++) {
-                indOfType = balStr.indexOf(endLimits[i], indexOf3S);
-                if (indOfType > 1) {
-                    // Now we find a lab type..
-                    labCollectionArray[0] = labCollectionMessage[i];
-                    // trim..
-                    balStr = balStr.substr(0, indOfType + 1);
-                    break;
-                }
-            }
-
-            var spFirst = balStr.lastIndexOf(" ", indexOf3S - 1);
-            if (indexOf3S === 0) {
-                // Then there is only one that is specimen.
-                spFirst = balStr.indexOf(" ");
-                while (spFirst > -1) {
-                    balStr = balStr.substr(spFirst, balStr.length).trim();
-                    spFirst = balStr.indexOf(" ");
-                }
-            } else {
-                spFirst = balStr.lastIndexOf(" ", indexOf3S - 1);
-                balStr = balStr.substr(spFirst, balStr.length).trim();
-            }
-
-            var ssLabs;
-            ssLabs = balStr.split("   ");
-            if (ssLabs.length > 1) {
-                labCollectionArray[1] = ssLabs[0];
-                labCollectionArray[2] = ssLabs[1];
-            } else {
-                if (indexOf3S === 0) {
-                    labCollectionArray[2] = ssLabs[0];
-                } else {
-                    labCollectionArray[1] = ssLabs[0];
-                    labCollectionArray[2] = '';
-                }
-            }
-
-            return labCollectionArray;
-
-        } else {
-            labCollectionArray[0] = 'Not Found';
-            labCollectionArray[1] = 'Not Found';
-            labCollectionArray[2] = 'Not Found';
-
-            return labCollectionArray;
-        }
-
-    };
-    // End by PG: 20141001 Update for LabSummary Data
-
-
-    // Added by PG: 20140930 Update for LabData: PG
-    Util.trimSampleString = function(sampleStr) {
-
-        var endLimits = [" I", " LC", " SP", " WC"];
-        var labCollectionMessage = ['Immediate COLLECT', 'LAB COLLECT', 'SEND PATIENT', 'WARD COLLECT'];
-        var labCollectionMsgIndex = 1;
-        var labCollectionArray = ['', '', '']; // [Collection By, Sample, Specimen]
-        var indexOf3S = sampleStr.indexOf("   ");
-        var indexOfLBN = sampleStr.indexOf("LB #");
-
-        var indOfType;
-        var balStr;
-        if (indexOfLBN > 1) {
-            balStr = sampleStr.substr(0, indexOfLBN).trim();
-
-            if (indexOf3S < 0) {
-                indexOf3S = 0;
-            }
-
-            for (var i = 0; i < endLimits.length; i++) {
-                indOfType = balStr.indexOf(endLimits[i], indexOf3S);
-
-                if (indOfType > 1) {
-                    // Now we find a lab type..
-                    labCollectionArray[0] = labCollectionMessage[i];
-                    // trim..
-                    balStr = balStr.substr(0, indOfType + 1);
-                    break;
-                }
-            }
-
-            var spFirst = balStr.lastIndexOf(" ", indexOf3S - 1);
-            if (indexOf3S === 0) {
-                // Then there is only one that is specimen.
-                spFirst = balStr.indexOf(" ");
-                while (spFirst > -1) {
-                    balStr = balStr.substr(spFirst, balStr.length).trim();
-                    spFirst = balStr.indexOf(" ");
-                }
-            } else {
-                spFirst = balStr.lastIndexOf(" ", indexOf3S - 1);
-                balStr = balStr.substr(spFirst, balStr.length).trim();
-            }
-
-            var ssLabs; // = balStr.split("<|>");
-            ssLabs = balStr.split("   ");
-            if (ssLabs.length > 1) {
-                labCollectionArray[1] = ssLabs[0];
-                labCollectionArray[2] = ssLabs[1];
-            } else {
-                if (indexOf3S === 0) {
-                    labCollectionArray[2] = ssLabs[0];
-                } else {
-                    labCollectionArray[1] = ssLabs[0];
-                    labCollectionArray[2] = '';
-                }
-            }
-
-            return labCollectionArray;
-
-        } else {
-            labCollectionArray[0] = 'Not Found';
-            labCollectionArray[1] = 'Not Found';
-            labCollectionArray[2] = 'Not Found';
-            return labCollectionArray;
-        }
-
-    };
-    // End by PG: 20140930 Update for LabData: PG
-
-    Util.splitLongSummaryText = function(response) {
-        if (response.summary && response.summary.length > 160) {
-            response.shortSummary = response.summary.substr(0, 160);
-            response.longSummary = true;
-        } else {
-            response.shortSummary = response.summary;
-            response.longSummary = false;
-        }
-        return response;
-    };
-
-    Util.parseOrderResponse = function(response) {
-
-        response = Util.getEnteredFormatted(response);
-        response = Util.getSigners(response);
-        response = Util.splitLongSummaryText(response);
-        response = Util.getOrdersFlag(response);
-
-        if(response.statusName === 'DISCONTINUED'){
-            response.isDiscontinuedOrder = true;
         }
         //DE448 - Fix the Stop and Start dates for order display
         if (response.stop) {
@@ -244,10 +21,8 @@ define([
             response.start = Util.parseForOrderStopStartDate(response.start);
             response.startHasTime = response.start.length > 8;
         }
-
-        if(response.service === 'OR')
-        {
-            response.kind = 'Text Order';
+        if (!response.displayGroup) {
+            response.displayGroup = displayGroup;
         }
 
         ADK.Enrichment.addFacilityMoniker(response);
@@ -255,60 +30,18 @@ define([
         return response;
     };
 
-    Util.getOrdersFlag = function (response) {
-        response.isFlagged = '';
-        if(response.orderFlags){
-            if(_.size(response.orderFlags) > 0){
-                var orderFlagsCol = response.orderFlags;
-                var lastElement = _.last(orderFlagsCol);
-                if(lastElement.orderFlaggedBy)
-                    response.isFlagged = '1';
+    //Grabbing Order Id for other parts of applet
+    Util.getFieldFromUid = function(uid, field) {
+        var uidFields = ['siteCode', 'orderId'];
+        if (_.includes(uidFields, field) && _.isString(uid) && uid.split(':').length == 6) {
+            switch (field) {
+                case 'siteCode':
+                    return uid.split(':')[3];
+                case 'orderId':
+                    return _.last(uid.split(':')) + ';1';
             }
         }
-        return response;
-    };
-
-    // Added by PG: 20141028 Update for Signature Data
-    Util.parseForSignature = function(arraySignors) {
-
-        var signatureDetails = {
-            byName: '',
-            onDate: ''
-        }; // Name, date
-        // Take the latest one.
-        if (!_.isUndefined(arraySignors) && !_.isNull(arraySignors)) {
-            var s = arraySignors.length;
-            if (s > 0) {
-                signatureDetails.byName = arraySignors[s - 1].name + ' on '; // Add format 'on' here to avoid display issues
-                signatureDetails.onDate = arraySignors[s - 1].signedDateTime; //yyyyMMddhhmm
-            }
-        }
-        return signatureDetails;
-    };
-
-    Util.getSiteCodeFromUid = function(uid) {
-        var siteCode = '';
-        if (_.isString(uid)) {
-            if (uid.split(':').length == 6) {
-                siteCode = uid.split(':')[3];
-            }
-        }
-        return siteCode;
-    };
-
-    Util.parseForOrderNumber = function(dataStr, isLab) {
-
-        var balStr = '';
-        if (isLab) {
-            var indexOfLBN = dataStr.indexOf("LB #");
-            if (indexOfLBN > 1) {
-                balStr = dataStr.substr(indexOfLBN + 4).trim();
-            }
-        } else {
-            var lastOfColon = dataStr.lastIndexOf(":");
-            balStr = dataStr.substr(lastOfColon + 1).trim();
-        }
-        return balStr;
+        return '';
     };
 
     // The state of the "discontinue/cancel" and "sign" controls are based on the corresponding order state.
@@ -324,11 +57,11 @@ define([
         return !Util.isUnsigned(model);
     };
     Util.isPending = function(model) {
-        var status = (model.get('statusName') || model.get('vistaStatus') || '');
+        var status = (model.get('statusName') || model.get('vistaStatus') || '').toUpperCase();
         return (status === 'PENDING');
     };
     Util.isUnreleased = function(model) {
-        var status = (model.get('statusName') || model.get('vistaStatus') || '');
+        var status = (model.get('statusName') || model.get('vistaStatus') || '').toUpperCase();
         return (status === 'UNRELEASED');
     };
 
@@ -355,7 +88,7 @@ define([
 
     //Disable buttons for discontinue/cancel/sign due to writeback limitation for orders created from remote site
     Util.isRemoteSiteMatch = function(model) {
-        return (this.getSiteCodeFromUid(model.get('uid')) === ADK.UserService.getUserSession().get('site'));
+        return (this.getFieldFromUid(model.get('uid'), 'siteCode') === ADK.UserService.getUserSession().get('site'));
     };
 
     Util.getDiscontinueBtnStatus = function(model) {
@@ -394,8 +127,8 @@ define([
     Util.parseForOrderStopStartDate = function(dataStr) {
 
         var myDate = dataStr;
-        var indexOfZeroTime = dataStr.indexOf("0000");
-        if (indexOfZeroTime > 1) {  //Check for 0000 in the time
+        var pattern = new RegExp(/^\d{8}0000/);
+        if (pattern.test(dataStr)) {  //Check for 0000 in the time
              //This date/time is at 00:00 so we need to move the date to the previous day and
              //subtract 1 minute to go from 00:00 to 23:59 on the previous day
              var month;
@@ -420,6 +153,27 @@ define([
              myDate =  tmpDate.getUTCFullYear().toString() + month + day + "2359";  //Previous Day at 23:59 pm
         }
         return myDate;
+    };
+
+    // Determined by the VxSync jMeadows order transform code. This captures the mapping between DoD record order
+    // service code and VistA display group. If the order type filter starts malfunctioning, Check here.
+    var ORDER_DOD_SERVICE_TO_DISPLAY_GROUP_MAP = {
+        PSJ: 'I RX',
+        PSO: 'O RX',
+        PSH: 'NV RX',
+        PSIV: 'IV RX',
+        PSG: 'I RX',
+        GMRA: 'ALG',
+        GMRC: 'CSLT',
+        RA: 'XRAY',
+        FH: 'DIET',
+        LR: 'LAB',
+        OR: 'NURS',
+        ZZRV: 'V/M'
+    };
+
+    Util.getDisplayGroupFromDoDService = function(service) {
+        return service && ORDER_DOD_SERVICE_TO_DISPLAY_GROUP_MAP[service];
     };
 
     return Util;

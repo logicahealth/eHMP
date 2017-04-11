@@ -254,14 +254,6 @@
 					self.settings.onShown.call(this);
 				}
 			});
-
-			setTimeout(function() {
-				if (!hasAnimation) {
-					if ($.isFunction(self.settings.onShown)) {
-						self.settings.onShown.call(this);
-					}
-				}
-			}, 600);
 		},
 		bind: function() {
 			var self = this;

@@ -22,3 +22,11 @@ template("#{node[:tomcat][:home]}/shared/classes/cds-engine-agent.properties") d
   mode "0755"
   notifies :restart, "service[#{node[:tomcat][:service]}]", :delayed
 end
+
+
+template "#{node['tomcat']['home']}/shared/classes/cds-engine-agent-log4j2.xml" do
+  source "cds-engine-agent-log4j2.xml.erb"
+  owner node['tomcat']['user']
+  mode "0755"
+  notifies :restart, "service[#{node[:tomcat][:service]}]", :delayed
+end

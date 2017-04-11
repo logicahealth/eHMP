@@ -65,6 +65,10 @@ function getEncounterData(req, res, next) {
     var locationIEN = locationUtil.getLocationIEN(locationUid);
     var dateTimeMoment = paramUtil.convertWriteBackInputDate(dateTime);
     var filemanDate = filemanDateUtil.getFilemanDateTimeWithSeconds(dateTimeMoment.toDate());
+
+    if(nullchecker.isNullish(dfn)){
+        return res.status(500).rdkSend('Missing required patient identifiers.');
+    }
     //this will be replaced with an RPC call ORWCV VST
     var visitString = locationIEN + ';' + filemanDate + ';' + serviceCategory;
 

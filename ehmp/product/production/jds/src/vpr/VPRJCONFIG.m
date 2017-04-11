@@ -28,6 +28,8 @@ SETUP ;
  S:'$G(^VPRCONFIG("timeout","pthash")) ^VPRCONFIG("timeout","pthash")=1
  S:'$G(^VPRCONFIG("timeout","jpid")) ^VPRCONFIG("timeout","jpid")=30
  ;
+ ; Garbage Collector
+ S:'$G(^VPRCONFIG("timeout","gc")) ^VPRCONFIG("timeout","gc")=30
  ; Generic Data Store
  S:'$G(^VPRCONFIG("timeout","gds")) ^VPRCONFIG("timeout","gds")=30
  ;
@@ -75,7 +77,7 @@ ADDSTORE(DB,GLOBAL,VER)
  S UDB=$$UP^VPRJRUT(DB)
  S VER=$G(VER,1) ; Default version to 1 unless specified
  ; ensure DB isn't created
- I $D(^VPRCONFIG("store",DB)) D SETERROR^VPRJRER(254)
+ I $D(^VPRCONFIG("store",DB)) D SETERROR^VPRJRER(254) Q
  S ^VPRCONFIG("store",DB)=""
  S ^VPRCONFIG("store",DB,"global")=$S($L($G(GLOBAL))>1:GLOBAL,1:"VPRJ"_UDB)
  S ^VPRCONFIG("store",DB,"version")=VER
@@ -242,6 +244,8 @@ URLMAP ; map URLs to entry points (HTTP methods handled within entry point)
  ;;GET;tasks/gc/patient;PAT^VPRJGC
  ;;GET;tasks/gc/data/{site};DATA^VPRJGC
  ;;GET;tasks/gc/data;DATA^VPRJGC
+ ;;GET;tasks/gc/job/{id};JOB^VPRJGC
+ ;;GET;tasks/gc/job;JOB^VPRJGC
  ;;POST;error/set/this;SET^VPRJERR
  ;;PUT;error/set/this;SET^VPRJERR
  ;;GET;error/get/{id};GET^VPRJERR

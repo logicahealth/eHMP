@@ -95,7 +95,7 @@ define([
                 control: "container",
                 extraClasses: "bottom-margin-no",
                 tagName: "p",
-                template: Handlebars.compile('NOTE: To mark CLIO records as "Enter in Error" use the Flowsheet application.')
+                template: Handlebars.compile('NOTE: Vital Signs entered using the Flowsheets application can only be removed by the Flowsheets application.')
             };
 
             var reasonContainer = {
@@ -220,7 +220,7 @@ define([
                 });
 
                 var ErrorFooterView = Backbone.Marionette.ItemView.extend({
-                    template: Handlebars.compile('{{ui-button "OK" classes="btn-primary" title="Click button to close modal"}}'),
+                    template: Handlebars.compile('{{ui-button "OK" classes="btn-primary btn-sm" title="Press enter to close"}}'),
                     events: {
                         'click .btn-primary': function() {
                             ADK.UI.Alert.hide();
@@ -301,7 +301,7 @@ define([
                         e.preventDefault();
                         var cancelAlertView = new ADK.UI.Alert({
                             title: 'Cancel',
-                            icon: 'icon-cancel',
+                            icon: 'icon-triangle-exclamation',
                             messageView: CancelMessageView,
                             footerView: CancelFooterView
                         });
@@ -331,9 +331,9 @@ define([
                         eieModel.enteredInError({
                             success: function() {
                                 var saveSuccessAlertView = new ADK.UI.Notification({
-                                    title: 'Vitals Entered in Error Submitted',
-                                    icon: 'fa-check',
-                                    message: 'Vitals successfully marked entered in error.'
+                                    title: 'Success',
+                                    type: 'success',
+                                    message: 'Vitals marked as entered in error'
                                 });
                                 saveSuccessAlertView.show();
                                 ADK.UI.Workflow.hide();
@@ -344,8 +344,8 @@ define([
                             },
                             error: function(model, error) {
                                 var errorAlertView = new ADK.UI.Alert({
-                                    title: 'Save Failed (System Error)',
-                                    icon: 'icon-error',
+                                    title: 'Error',
+                                    icon: 'icon-circle-exclamation',
                                     messageView: ErrorMessageView,
                                     footerView: ErrorFooterView,
                                     form: self

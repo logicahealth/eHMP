@@ -44,17 +44,17 @@
   },
   "hdr" :
   {
-    "uri" : "IP_ADDRESS:PORT",
-    "path": "/repositories.DNS       /fpds/",
+    "uri" : "IP             ",
+    "path": "/repositories.med.DNS   /fpds/",
     "protocol": "http"
   },
   "pgd" : {
-    "uri" : "IP_ADDRESS",
+    "uri" : "IP        ",
     "retry" : 3,
     "protocol": "http"
   },
   "vler" : {
-    "host" : "IP_ADDRESS",
+    "host" : "IP        ",
     "port": 80,
     "protocol": "http",
     "docquerypath": "/VLERMockDocQuery/NHINAdapterGatewayDocQuery/EntityDocQuery",
@@ -68,7 +68,7 @@
   },
   "jmeadows-version": "2.3.3.0.2",
   "jmeadows-v2.3.0" : {
-    "host" : "IP_ADDRESS",
+    "host" : "IP        ",
     "port": 80,
     "protocol": "http",
     "retry" : 3,
@@ -82,7 +82,7 @@
     "parallelismmin" : 4
   },
   "jmeadows-v2.3.1" : {
-    "host" : "IP_ADDRESS",
+    "host" : "IP        ",
     "port": 80,
     "protocol": "http",
     "retry" : 3,
@@ -96,7 +96,7 @@
     "parallelismmin" : 4
   },
   "jmeadows-v2.3.3.0.2" : {
-    "host" : "IP_ADDRESS",
+    "host" : "IP        ",
     "port": 80,
     "protocol": "http",
     "retry" : 3,
@@ -110,7 +110,7 @@
     "parallelismmin" : 4
   },
   "mvi" : {
-    "host" : "IP_ADDRESS",
+    "host" : "IP        ",
     "path" : "/mvi",
     "port" : 8896,
     "protocol" : "http",

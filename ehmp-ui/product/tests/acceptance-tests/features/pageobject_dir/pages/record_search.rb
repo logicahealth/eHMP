@@ -16,6 +16,7 @@ class PobRecordSearch < SitePrism::Page
   elements :fld_main_group, 'div.mainGroup'
   elements :btn_expand_main_group, '.mainGroup > button'
   elements :btn_expand_sub_group, '.documentSubgroup > button'
+  elements :fld_search_results_data_rows, '.search-result-item'
   elements :fld_search_result_items_displayed, ".search-result-item[style='display: block;']"
   elements :fld_search_result_items_hidden, ".search-result-item[style='display: none;']"
   elements :fld_search_result_dates, ".subgroupItem .row > div:nth-of-type(1)"

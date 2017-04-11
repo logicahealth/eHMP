@@ -145,6 +145,8 @@ define([
             this.model.set(modelAttributes, {silent: true});
             this.fields = getDiscontinueFields(modelAttributes);
 
+            this.listenTo(this.model, 'change:reason', this.onReasonChange);
+
             ADK.UI.Form.prototype.initialize.apply(this, arguments);
         },
         onRender: function() {
@@ -192,11 +194,17 @@ define([
         onReasonSuccess: function(model, resp) {
             this.ui.discontinue_reason.trigger('control:disabled', false);
             this.ui.discontinue_reason.trigger('control:picklist:set', model.get('reasonListItems'));
-            this.ui.discontinue.trigger('control:disabled', false);
         },
         onReasonError: function() {
             this.showErrorMessage("Unable to retrieve discontinue reasons due to a system error. Try again later.", "System Error");
             this.ui.discontinue.trigger('control:disabled', true);
+        },
+        onReasonChange: function() {
+            if (this.model.get('reason')) {
+                this.ui.discontinue.trigger('control:disabled', false);
+            } else {
+                this.ui.discontinue.trigger('control:disabled', true);
+            }
         },
         showInProgress: function() {
             this.ui.inprogress_container.trigger('control:hidden', false);

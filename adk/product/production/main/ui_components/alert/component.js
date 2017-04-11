@@ -17,6 +17,11 @@ define([
     });
 
     var AlertView = Backbone.Marionette.LayoutView.extend({
+        behaviors: {
+            ZIndex: {
+                eventString: 'show.bs.modal'
+            }
+        },
         collection: new Backbone.Collection(),
         model: new AlertModel(),
         className: 'modal alert-modal',
@@ -26,6 +31,15 @@ define([
             'tabindex': '-1',
             'id': 'mainAlert',
             'data-backdrop': 'static'
+        },
+        events: {
+            'shown.bs.modal': function(){
+                var ADK_AlertRegion = Messaging.request('get:adkApp:region', 'alertRegion');
+                var $alertBackdrop = ADK_AlertRegion.currentView.$el.data('bs.modal').$backdrop;
+                if (_.isNumber(ADK_AlertRegion.currentView.$el.zIndex()) && $alertBackdrop instanceof jQuery && $alertBackdrop.length > 0){
+                    $alertBackdrop.css('z-index', ADK_AlertRegion.currentView.$el.zIndex()-1);
+                }
+            }
         },
         initialize: function(alertOptions) {
             this.model.set(alertOptions);
@@ -75,20 +89,7 @@ define([
                     $triggerElem.focus();
                 });
 
-                ADK_AlertRegion.currentView.$el.one('shown.bs.modal', function(e) {
-                    $('.modal-backdrop').last().css('z-index', '1052');
-                });
-                ADK_AlertRegion.currentView.$el.one('hidden.bs.modal', function(e) {
-                    $('.modal-backdrop').css('z-index', '1030');
-                });
-
-                var zIndex = 1053;
-                if ($('.modal:visible').length >= 1) {
-                    zIndex = Math.max.apply(null, Array.prototype.map.call($('.modal:visible'), function(el) {
-                        return +el.style.zIndex;
-                    })) + 1111;
-                }
-                ADK_AlertRegion.currentView.$el.modal('show').css('z-index', zIndex);
+                ADK_AlertRegion.currentView.$el.modal('show');
 
                 return ADK_AlertRegion.currentView;
             }

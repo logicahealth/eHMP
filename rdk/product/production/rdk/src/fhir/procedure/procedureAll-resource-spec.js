@@ -69,6 +69,42 @@ describe('FHIR Procedure DSTU2 Mapping', function() {
         expect(res.status.calledWith(rdk.httpstatus.ok)).to.be.true();
 
     });
+
+    it('Test Retrieval of invalid _tag parameter.', function() {
+        req = {
+            query: {
+                pid: pid,
+                _tag: 'unknown'
+            },
+            app: {
+                config: {
+                    jdsServer: {}
+                }
+            },
+            logger: {
+                debug: nop,
+                error: nop
+            },
+            headers: {
+                host: 'localhost:8888'
+            },
+            protocol: 'http'
+        };
+
+
+        sinon.stub(async, 'parallel', function(fcnArray, callback) {
+            callback(null, [
+                inputValueEducations,
+                inputValueProcedure
+            ]);
+        });
+
+        sinon.spy(res, 'status');
+        procedureResource.getProcedure(req, res);
+
+        expect(res.status.calledWith(rdk.httpstatus.bad_request)).to.be.true();
+
+    });
 });
 
 describe('Composition FHIR conformance', function() {
@@ -86,7 +122,7 @@ describe('Composition FHIR conformance', function() {
 
     it('conformance data searchParam is returned', function() {
 
-        expect(conformanceData.searchParam.length).to.equal(3);
+        expect(conformanceData.searchParam.length).to.equal(5);
 
         expect(conformanceData.searchParam[0].name).to.equal('subject.identifier');
         expect(conformanceData.searchParam[0].type).to.equal('string');

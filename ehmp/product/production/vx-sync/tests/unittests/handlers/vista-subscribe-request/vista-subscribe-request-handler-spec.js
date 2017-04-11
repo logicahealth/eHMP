@@ -12,10 +12,10 @@ var config = {
     'vistaSites': {
         '9E7A': {
             'name': 'panorama',
-            'host': 'IP_ADDRESS',
+            'host': 'IP        ',
             'port': 9210,
-            'accessCode': 'pu1234',
-            'verifyCode': 'pu1234!!',
+            'accessCode': 'PW    ',
+            'verifyCode': 'PW    !!',
             'localIP': '127.0.0.1',
             'localAddress': 'localhost',
             'connectTimeout': 3000,
@@ -23,10 +23,10 @@ var config = {
         },
         'C877': {
             'name': 'kodak',
-            'host': 'IP_ADDRESS',
+            'host': 'IP        ',
             'port': 9210,
-            'accessCode': 'pu1234',
-            'verifyCode': 'pu1234!!',
+            'accessCode': 'PW    ',
+            'verifyCode': 'PW    !!',
             'localIP': '127.0.0.1',
             'localAddress': 'localhost',
             'connectTimeout': 3000,
@@ -40,7 +40,6 @@ var config = {
         'appointment',
         'diagnosis',
         'document',
-        'factor',
         'immunization',
         'lab',
         'med',
@@ -276,7 +275,7 @@ describe('vista-subscribe-request-handler.js', function() {
 
                 // _createNewJobStatus was called
                 //--------------------------------
-                expect(jobStatusUpdaterDummy.createJobStatus.calls.length).toEqual(28);
+                expect(jobStatusUpdaterDummy.createJobStatus.calls.length).toEqual(27);
                 expect(jobStatusUpdaterDummy.createJobStatus).toHaveBeenCalledWith(jasmine.objectContaining({
                     type : 'vista-9E7A-data-allergy-poller',
                     patientIdentifier : { type : 'pid', value : pid },
@@ -313,7 +312,7 @@ describe('vista-subscribe-request-handler.js', function() {
 
                 // _createNewJobStatus was called
                 //--------------------------------
-                expect(jobStatusUpdaterDummy.createJobStatus.calls.length).toEqual(28);
+                expect(jobStatusUpdaterDummy.createJobStatus.calls.length).toEqual(27);
                 expect(jobStatusUpdaterDummy.createJobStatus).toHaveBeenCalledWith(jasmine.objectContaining({
                     type : 'vistahdr-84F0-data-allergy-poller',
                     patientIdentifier : { type : 'pid', value : hdrPid },

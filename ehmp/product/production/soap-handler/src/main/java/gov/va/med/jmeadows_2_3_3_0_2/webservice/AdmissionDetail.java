@@ -17,11 +17,11 @@ import javax.xml.bind.annotation.XmlType;
  * <pre>
  * &lt;complexType name="admissionDetail">
  *   &lt;complexContent>
- *     &lt;extension base="{http://webservice.vds.DNS       /}patientAdmission">
+ *     &lt;extension base="{http://webservice.vds.med.DNS   /}patientAdmission">
  *       &lt;sequence>
  *         &lt;element name="detailText" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="diagnoses" type="{http://webservice.vds.DNS       /}diagnosis" maxOccurs="unbounded" minOccurs="0"/>
- *         &lt;element name="procedures" type="{http://webservice.vds.DNS       /}procedure" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="diagnoses" type="{http://webservice.vds.med.DNS   /}diagnosis" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="procedures" type="{http://webservice.vds.med.DNS   /}procedure" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/extension>
  *   &lt;/complexContent>
@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "admissionDetail", namespace = "http://webservice.vds.DNS       /", propOrder = {
+@XmlType(name = "admissionDetail", namespace = "http://webservice.vds.med.DNS   /", propOrder = {
     "detailText",
     "diagnoses",
     "procedures"

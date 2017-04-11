@@ -4,7 +4,8 @@ define([
     'hbs!app/applets/medication_review/medicationsGroupedByName/subAccordionRow/medNameRow',
     'app/applets/medication_review/medicationsGroupedByName/subAccordionRow/subAccordionRowPanel/medNameRowPanelView',
     'app/applets/medication_review/medicationsGroupedByName/subAccordionRow/subAccordionRowHeader/graphingGroupCollection',
-    'app/applets/medication_review/medicationsGroupedByName/subAccordionRow/subAccordionRowHeader/graphingGroupCollectionView'
+    'app/applets/medication_review/medicationsGroupedByName/subAccordionRow/subAccordionRowHeader/graphingGroupCollectionView',
+    'jquery.scrollTo'
 ], function(Backbone, Marionette, MedNameRow, MedNameRowPanelView, GraphingGroupCollection, GraphingGroupCollectionView) {
     'use strict';
 
@@ -15,7 +16,8 @@ define([
             collapse_container: '.collapse',
             medsItemRow: '.meds-item',
             medicationNameLayoutRow: '[data-medication-container=medication-list]',
-            medNameListToolabr: '[data-toolbar=appletToolbar]'
+            medNameListToolabr: '[data-toolbar=appletToolbar]',
+            medsReviewContainer: '.meds-review-container'
         },
         attributes: function() {
             var dataCode = this.model.has('dataCode') ? this.model.get('dataCode') : '';
@@ -77,24 +79,24 @@ define([
             this.ui.medNameListToolabr.focus();
         },
         onClick: function(event) {
-            function isScrolledIntoView(el) {
-                var $el = $(el);
-                var $container = $('.grid-applet-panel');
+            var self = this;
+            var toolbarHeight = 25;
 
-                var containerViewTop = $container.scrollTop();
-                var containerViewBottom = containerViewTop + $container.height();
-
-                if (!$el.offset()) return;
-                var elTop = $el.offset().top;
-                var elBottom = elTop + $el.height();
-
-                return ((containerViewTop < elTop) && (containerViewBottom > elBottom));
+            function elementInView(el) {
+                var elBounds = el.getBoundingClientRect();
+                return (
+                    elBounds.top >= 0 &&
+                    elBounds.bottom <= self.ui.medsReviewContainer.innerHeight
+                );
             }
-            $(this.medicationDetailPanel.$el.selector).on('hide.bs.collapse', function(e) {
-                if (event.currentTarget !== e.currentTarget) {
-                    if (isScrolledIntoView(event.currentTarget) === false) {
-                        event.currentTarget.scrollIntoView(false);
-                    }
+            $(this.medicationDetailPanel.$el.selector).on('hidden.bs.collapse', function(e) {
+                if (event.currentTarget !== e.currentTarget && !elementInView(event.currentTarget)) {
+                    $(self.ui.medsReviewContainer.selector).scrollTo(self.ui.medsItemRow, 0, { offset: -toolbarHeight });
+                }
+            });
+            $(this.medicationDetailPanel.$el.selector).on('shown.bs.collapse', function(e) {
+                if (event.currentTarget !== e.currentTarget && !elementInView(this.parentElement)) {
+                    $(self.ui.medsReviewContainer.selector).scrollTo(this.parentElement, 0, { offset: -toolbarHeight });
                 }
             });
 

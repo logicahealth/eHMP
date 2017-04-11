@@ -3,9 +3,10 @@ define([
     'marionette',
     'jquery',
     'handlebars',
+    'moment',
     'hbs!app/applets/notes/subtray/noteObjectTemplate',
     'hbs!app/applets/notes/subtray/noteObjectSubtrayTemplate'
-], function(Backbone, Marionette, $, Handlebars, NoteObjectTemplate, NoteSubtrayTemplate) {
+], function(Backbone, Marionette, $, Handlebars, moment, NoteObjectTemplate, NoteSubtrayTemplate) {
     'use strict';
     var LINE_LENGTH = 90;
     var noteObjectChannel = ADK.Messaging.getChannel('note-subtray');
@@ -20,7 +21,7 @@ define([
     });
 
     var NoResultsView = Backbone.Marionette.ItemView.extend({
-        template: Handlebars.compile('<div aria-live="assertive"><p class="error-message padding" role="alert">No Note Objects found.</p></div>'),
+        template: Handlebars.compile('<div aria-live="assertive"><p class="error-message padding" role="alert">No note objects found.</p></div>'),
         tagName: "p"
     });
     var ErrorView = Backbone.Marionette.ItemView.extend({

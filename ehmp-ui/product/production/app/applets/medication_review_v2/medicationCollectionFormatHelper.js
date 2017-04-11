@@ -1,6 +1,7 @@
 define([
+    "moment",
     "app/applets/medication_review_v2/appletHelper"
-], function(appletHelper) {
+], function(moment, appletHelper) {
     "use strict";
 
     /* Overlap Logic

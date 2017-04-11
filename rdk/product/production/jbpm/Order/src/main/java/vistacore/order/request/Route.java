@@ -23,6 +23,10 @@ public class Route implements java.io.Serializable
 
    private vistacore.order.request.RequestIdentifier teamCareType;
 
+   private java.lang.String facilityName;
+
+   private java.lang.String personName;
+
    public Route()
    {
    }
@@ -98,12 +102,35 @@ public class Route implements java.io.Serializable
       this.teamCareType = teamCareType;
    }
 
-   public Route(java.lang.String facility, java.lang.String person,
+   public java.lang.String getFacilityName()
+   {
+      return this.facilityName;
+   }
+
+   public void setFacilityName(java.lang.String facilityName)
+   {
+      this.facilityName = facilityName;
+   }
+
+   public java.lang.String getPersonName()
+   {
+      return this.personName;
+   }
+
+   public void setPersonName(java.lang.String personName)
+   {
+      this.personName = personName;
+   }
+
+   public Route(
+         java.lang.String facility,
+         java.lang.String person,
          vistacore.order.request.RequestIdentifier team,
          java.lang.Boolean patientAssignment,
          java.util.List<vistacore.order.request.RequestIdentifier> assignedRoles,
          java.lang.String routingCode,
-         vistacore.order.request.RequestIdentifier teamCareType)
+         vistacore.order.request.RequestIdentifier teamCareType,
+         java.lang.String facilityName, java.lang.String personName)
    {
       this.facility = facility;
       this.person = person;
@@ -112,6 +139,8 @@ public class Route implements java.io.Serializable
       this.assignedRoles = assignedRoles;
       this.routingCode = routingCode;
       this.teamCareType = teamCareType;
+      this.facilityName = facilityName;
+      this.personName = personName;
    }
 
 }

@@ -34,11 +34,11 @@ public abstract class PatientIdentifier {
 		} else if(Dfn.isIdType(idString)) {
 			return new Dfn(idString);
 		} else if(idString.contains("^")) {
-			if(MviEdipi.isIdType(idString)) {
+			if(MviEdipi.isEdipiType(idString)) {
 				return new MviEdipi(idString);
-			} else if(MviIcn.isIdType(idString)) {
+			} else if(MviIcn.isIcnType(idString)) {
 				return new MviIcn(idString);
-			} else if(MviDfn.isIdType(idString)) {
+			} else if(MviDfn.isDfnType(idString)) {
 				return new MviDfn(idString);
 			}
 		} else if(Icn.isIdType(idString)) {

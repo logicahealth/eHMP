@@ -9,7 +9,6 @@ define([], function() {
     });
 
     var NoteProblems = ADK.Resources.Picklist.Collection.extend({
-        type: 'notes-problem',
         model: NoteProblem,
         getUrl: function(method, options) {
             var pid = this.patient.get('pid');

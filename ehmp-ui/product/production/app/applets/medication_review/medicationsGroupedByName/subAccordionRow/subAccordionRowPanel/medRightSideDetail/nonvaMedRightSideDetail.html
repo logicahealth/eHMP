@@ -21,12 +21,12 @@
         </div>
         <div class="col-xs-3">
             <p>
-                <span><strong>Ordering Provider</strong></span><br />
+                <span><strong>Ordering provider:</strong></span><br />
                 {{#if orders}}
                     {{#each orders}}
                         <span>
                             {{#if providerName}}
-                                {{providerName}}{{#if ordered}} <span class="text-lowercase">on</span> {{formatDate ordered "MM/DD/YYYY HH:mm"}}{{/if}}
+                                {{providerName}}{{#if ordered}} <span class="text-lowercase">on</span> {{formatDate ordered "MM/DD/YYYY"}}{{/if}}
                             {{else}}
                                 No Data
                             {{/if}}
@@ -39,7 +39,7 @@
         </div>
         <div class="col-xs-3">
             <p>
-                <span><strong>Ordering Location</strong></span><br />
+                <span><strong>Ordering location:</strong></span><br />
                 {{#if orders}}
                     {{#each orders}}
                         <span>{{#if locationName}}{{locationName}}{{else}}No Data{{/if}}</span><br />
@@ -51,7 +51,7 @@
         </div>
         <div class="col-xs-3">
             <p>
-                <span><strong>Order Text</strong></span><br />
+                <span><strong>Order text:</strong></span><br />
                 <span>{{name}} {{strength}}</span>
             </p>
         </div>
@@ -59,10 +59,10 @@
     <div class="row">
         <div class="col-xs-3">
             <p>
-                <span><strong>Start Date/Time</strong></span><br />
+                <span><strong>Start date/time:</strong></span><br />
                 <span>
                     {{#if overallStart}}
-                        {{formatDate overallStart "MM/DD/YYYY HH:mm"}}
+                        {{formatDate overallStart "MM/DD/YYYY"}}
                     {{else}}
                         No Data
                     {{/if}}
@@ -71,7 +71,7 @@
         </div>
         <div class="col-xs-3">
             <p>
-                <span><strong>Order Number</strong></span><br />
+                <span><strong>Order number:</strong></span><br />
                 <span>{{slicedOrderUid}}</span>
             </p>
         </div>

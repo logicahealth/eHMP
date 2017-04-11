@@ -1,5 +1,5 @@
-HMPPTRPC ;ASMR/MBS,CK - Patient Select RPC ; 02/25/2016 21:35
- ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1**;May 15, 2016;Build 1
+HMPPTRPC ;ASMR/MBS,CK - Patient Select RPC;May 15, 2016 14:15
+ ;;2.0;ENTERPRISE HEALTH MANAGEMENT PLATFORM;**1,2**;May 15, 2016;Build 11
  ;Per VA Directive 6402, this routine should not be modified.
  ; ROUTINE          IA#
  ; XLFSTR          10104

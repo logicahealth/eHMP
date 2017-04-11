@@ -16,7 +16,10 @@ var dummyLogger = {
 var dummyConfig = {
     vistaSites: {
         'AAAA': {
-            division: '1',
+            division: [{
+                id: '1',
+                name: 'ABB'
+            }],
             abbreviation: 'ABB'
         }
     }

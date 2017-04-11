@@ -27,8 +27,8 @@ package com.cognitive.cds.invocation.fhir;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.locks.ReentrantLock;
 
-import javax.annotation.PostConstruct;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -36,35 +36,24 @@ import org.apache.cxf.jaxrs.client.WebClient;
 
 
 /**
- * Base Authentication object
+ * A RDK client for FHIR objects that provides thread safe
+ * authenticated connections.
  * 
  * @author tnguyen
  *
- *         Todo:
- * 
- *         1) Investigate WebClient/Client caching
  */
 public class FhirClient {
 
-    private static FhirClient fhirClient;// = new FhirClient();
-    private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(FhirClient.class);
+    private static final org.slf4j.Logger LOGGER = org.slf4j.LoggerFactory.getLogger(FhirClient.class);
     private String authURL;
     private String baseURL;
-    private WebClient webClient;
+    
+    // Singular instance of WebClient used to spawn others for thread safety
+    private volatile WebClient webClient;
+    
+    // Used to guarantee webClient is not initialized multiple times in succession
+    private final ReentrantLock lock = new ReentrantLock();
 
-    public FhirClient() {
-    }
-
-    @PostConstruct
-    private void init() throws IOException {
-        fhirClient = this;
-        webClient = getClient();
-    }
-
-    /* Static 'instance' method */
-    public static FhirClient getInstance() {
-        return fhirClient;
-    }
 
     public String getAuthURL() {
         return authURL;
@@ -99,74 +88,83 @@ public class FhirClient {
         // If the webClient was already cfg and initialized, refresh the RDK session (if can't then Auth a new RDK session)
         // else, cfg, initialize and Authenticate a new RDK session.
         //-----------------------------------------------------------------------------------
-        if (this.webClient != null) {
+        if (webClient != null) {
         	
             // Check to see if cn refresh the existing RDK session.
-            // Note that refresh only works agaisnt a current valid RDK session.
-            // So check to see if refresh return is valid (200), if not, then initiate a POST Auth
-
-            logger.info("Refreshing RDK client");
-            response = this.webClient.get();
+            // Note that refresh only works against a current valid RDK session.
+            // So check to see if refresh return is valid (200), if not, then initiate a POST Auth        	
+            LOGGER.info("Refreshing RDK client");
+            response = webClient.get();
             int status = response.getStatus();
             
-            if (status != 200) {
-                logger.info("RDK session timed out so initiate a new RDK session");
-                this.webClient = createWebClient();
+            if (status == 401) {
+                LOGGER.info("RDK session timed out so initiate a new RDK session");
+                createWebClient();
             }
             
         } else {
-        	
-            logger.info("Creating inital WebClient");
-            this.webClient = createWebClient();
-        
+            LOGGER.info("Creating inital WebClient");
+            createWebClient();
         }
-        return this.webClient;
+        
+        // Return a thread safe client
+        boolean inheritHeaders = true;
+        WebClient client = WebClient.fromClient(webClient, inheritHeaders);
+        return client;
     }
 
-    public void updateClient(WebClient client) {
-        this.webClient = client;
-    }
     
     /**
      * createWebClient
-     * 
-     * Synchronized because WebClient is not thread safe as per documentation.
      * 
      * http://cxf.apache.org/docs/jax-rs-client-api.html
      * 
      * @return
      * @throws IOException
      */
-    private synchronized WebClient createWebClient() throws IOException {
+    private void createWebClient() throws IOException {
     	
     	Response response;
     	List<Object> providers = new ArrayList<Object>();
         providers.add(new com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider());
 
-        WebClient client = WebClient.create(this.baseURL, providers);
+        lock.lock();
+        try {
+        	// Check to see if initialization is still necessary
+        	if( webClient == null || webClient.get().getStatus() != 200 ) {
+        		
+                WebClient client = WebClient.create(this.baseURL, providers);
 
-        // MAINTAIN SESSION for multi request using same session(cookie)
-        WebClient
-                .getConfig(client)
-                .getRequestContext()
-                .put(org.apache.cxf.message.Message.MAINTAIN_SESSION, Boolean.TRUE);
+                // MAINTAIN SESSION for multi request using same session(cookie)
+                WebClient
+                        .getConfig(client)
+                        .getRequestContext()
+                        .put(org.apache.cxf.message.Message.MAINTAIN_SESSION, Boolean.TRUE);
 
-        response = client.path(authURL)
-                .accept(MediaType.APPLICATION_JSON)
-                .type(MediaType.APPLICATION_JSON)
-                .header("Authorization", "CDS")
-                .post(null);
-        // check response
-        int status = response.getStatus();
-        if (status != 200) {
-            throw new IOException("WebClient creation, authentication failed, status code: " + status );
+                response = client.path(authURL)
+                        .accept(MediaType.APPLICATION_JSON).type(MediaType.APPLICATION_JSON)
+                        .header("Authorization", "CDS")
+                        .post(null);
+                
+                // check response
+                int status = response.getStatus();
+                if (status != 200) {
+                	webClient = null;
+                    throw new IOException("WebClient creation, authentication failed, status code: " + status );
+                }
+                
+                LOGGER.info("Create WebClient - created and authenticated");
+                
+                // Set this webClient to the authorized client.
+                client.replacePath("/");
+                webClient = client.replaceHeader("Authorization", "Bearer " + response.getHeaderString("X-Set-JWT"));
+                
+                LOGGER.info("CSRF Bearer set: " + response.getHeaderString("X-Set-JWT"));        
+        		
+        	}
         }
-        
-        logger.info("Create WebClient - created and authenticated");
-        
-        client.replaceHeader("Authorization", "Bearer " + response.getHeaderString("X-Set-JWT"));
-        logger.info("CSRF Bearer set: " + response.getHeaderString("X-Set-JWT"));
-        
-        return client;
+        finally {
+        	lock.unlock();
+        }
     }
 }

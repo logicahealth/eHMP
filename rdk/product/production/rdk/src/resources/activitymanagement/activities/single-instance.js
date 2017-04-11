@@ -4,15 +4,18 @@ var _ = require('lodash');
 var async = require('async');
 var querystring = require('querystring');
 var jdsFilter = require('jds-filter');
-var dd = require('drilldown');
 var rdk = require('../../../core/rdk');
 var clinicalObjectSubsystem = require('../../../subsystems/clinical-objects/clinical-objects-subsystem');
+var filterAsuDocuments = require('../../../subsystems/jds/jds-subsystem').filterAsuDocuments;
 var httpUtil = rdk.utils.http;
-var activityDb = rdk.utils.pooledJbpmDatabase;
+var activityDb = require('../../../subsystems/jbpm/jbpm-subsystem');
 var actionsJson = require('./activity-instance-actions');
+var resultUtils = rdk.utils.results;
 
 function transformQueryResults(req, instanceId, data, callback) {
-    req.logger.debug({data: data});
+    req.logger.debug({
+        data: data
+    });
     var results = {};
     if (_.isEmpty(data)) {
         req.logger.debug('No results found');
@@ -34,10 +37,8 @@ function transformQueryResults(req, instanceId, data, callback) {
     results.clinicalObjectUID = data.CLINICALOBJECTUID;
     results.state = data.STATE;
     results.processDefinitionId = data.PROCESSDEFINITIONID;
+    results.facilityRequestDivisionId = data.FACILITYID;
 
-    var site = req.site;
-    var vistaSites = req.app.config.vistaSites;
-    results.facilityRequestDivisionId = dd(vistaSites[site])('division').val;
     var urgency = data.URGENCY;
 
     if (!_.isUndefined(urgency)) {
@@ -89,49 +90,6 @@ function transformHistoryQueryResults(req, results, data, callback) {
     });
 }
 
-function composeInstanceQuery(instanceId) {
-
-    return 'SELECT TO_CHAR(AM_PROCESSINSTANCE.STATESTARTDATE, \'YYYYMMDDhhmmss\') as startedDateTime, ' +
-        'AM_PROCESSINSTANCE.PROCESSNAME as activityName, ' +
-        'AM_PROCESSINSTANCE.PROCESSDEFINITIONID as processDefinitionId, ' +
-        'AM_PROCESSINSTANCE.DESCRIPTION as activityDescription, ' +
-        'AM_PROCESSINSTANCE.DOMAIN as domain, ' +
-        'AM_PROCESSINSTANCE.DEPLOYMENTID as deploymentId, ' +
-        'AM_PROCESSINSTANCE.ICN as pid, ' +
-        'AM_PROCESSINSTANCE.CREATEDBYID as userID, ' +
-        'AM_PROCESSINSTANCE.ACTIVITYHEALTHY as healthIndicator, ' +
-        'AM_PROCESSINSTANCE.ACTIVITYHEALTHDESCRIPTION as healthIndicatorReason, ' +
-        'AM_PROCESSINSTANCE.CLINICALOBJECTUID as clinicalObjectUID, ' +
-        'AM_PROCESSINSTANCE.STATE as state, ' +
-        'AM_PROCESSINSTANCE.URGENCY, ' +
-        'AM_PROCESSINSTANCE.INSTANCENAME, ' +
-        'TO_CHAR(AM_PROCESSINSTANCE.INITIATIONDATE, \'YYYYMMDD\') as initiationDate ' +
-        'FROM ACTIVITYDB.AM_PROCESSINSTANCE  ' +
-        'WHERE ' +
-        '   ACTIVITYDB.AM_PROCESSINSTANCE.PROCESSINSTANCEID=' + instanceId;
-}
-
-function composeHistoryQuery(instanceId) {
-    return 'SELECT ti.TASKNAME as TASKNAME, ' +
-        'ti.HISTORYACTION as SIGNALACTION, ' +
-        'ti.HISTORY as SIGNALHISTORY, ' +
-        'ti.ACTUALOWNER as SIGNALOWNERNAME, ' +
-        'TO_CHAR(ti.STATUSTIMESTAMP, \'YYYYMMDDhhmmss\') as STATUSTIMESTAMP ' +
-        'FROM ACTIVITYDB.AM_TASKINSTANCE ti ' +
-        'WHERE ti.PROCESSINSTANCEID = ' + instanceId + ' AND ' +
-        'ti.HISTORY IS NOT NULL ' +
-        'UNION ' +
-        'SELECT si.NAME as TASKNAME, ' +
-        'si.ACTION as SIGNALACTION, ' +
-        'si.HISTORY as SIGNALHISTORY, ' +
-        'si.OWNER as SIGNALOWNERNAME, ' +
-        'TO_CHAR(si.STATUSTIMESTAMP, \'YYYYMMDDhhmmss\') as STATUSTIMESTAMP ' +
-        'FROM ACTIVITYDB.AM_SIGNALINSTANCE si ' +
-        'WHERE si.PROCESSED_SIGNAL_ID = ' + instanceId + ' AND ' +
-        'si.HISTORY IS NOT NULL ' +
-        'ORDER BY STATUSTIMESTAMP DESC';
-}
-
 function getTaskDetails(req, callback) {
     var instanceId = parseInt(req.query.id);
 
@@ -139,14 +97,19 @@ function getTaskDetails(req, callback) {
         return callback('invalid query parameters');
     }
 
-    var query = composeInstanceQuery(instanceId);
-    activityDb.doQuery(req, req.app.config.jbpm.activityDatabase, query, function (err, data) {
+    var procParams = {
+        p_process_instance_id: instanceId
+    };
+
+    var procQuery = 'BEGIN ACTIVITIES.getInstance(:p_process_instance_id, :recordset); END;';
+
+    activityDb.doExecuteProcWithParams(req, req.app.config.jbpm.activityDatabase, procQuery, procParams, function (err, data) {
         if (err) {
             req.logger.error(err);
             return callback(err);
         }
 
-        data = data[0];
+        data = resultUtils.unescapeSpecialCharacters(data, ['ACTIVITYHEALTHDESCRIPTION', 'INSTANCENAME'])[0];
         // if no data was found
         if (_.isUndefined(data)) {
             req.logger.debug('query returned no results');
@@ -171,9 +134,13 @@ function getTaskHistory(req, results, callback) {
         return callback('invalid query parameters');
     }
 
-    var query = composeHistoryQuery(instanceId);
+    var procParams = {
+        p_process_instance_id: instanceId
+    };
 
-    activityDb.doQuery(req, req.app.config.jbpm.activityDatabase, query, function (err, data) {
+    var procQuery = 'BEGIN ACTIVITIES.getActivityHistory(:p_process_instance_id, :recordset); END;';
+
+    activityDb.doExecuteProcWithParams(req, req.app.config.jbpm.activityDatabase, procQuery, procParams, function (err, data) {
         if (err) {
             req.logger.error(err);
             return callback(err);
@@ -191,15 +158,17 @@ function getTaskHistory(req, results, callback) {
 }
 
 function _getPatientDemographics(logger, patient, results) {
-    logger.error({patient: patient});
+    logger.trace({
+        patient: patient
+    });
 
     if (_.isUndefined(patient)) {
         logger.error('undefined patient');
         return undefined;
     }
 
-    if (_.isUndefined(dd(patient)('genderName').val) || _.isUndefined(dd(patient)('displayName').val) ||
-        _.isUndefined(dd(patient)('birthDate').val) || _.isUndefined(dd(patient)('last4').val)) {
+    if (_.isUndefined(_.get(patient, 'genderName')) || _.isUndefined(_.get(patient, 'displayName')) ||
+        _.isUndefined(_.get(patient, 'birthDate')) || _.isUndefined(_.get(patient, 'last4'))) {
         logger.error('malformed patient');
         return undefined;
     }
@@ -218,7 +187,9 @@ function _getPatientDemographics(logger, patient, results) {
     results.firstName = parts[1];
     results.lastName = parts[0];
 
-    logger.error({results: results});
+    logger.trace({
+        results: results
+    });
     return results;
 }
 
@@ -231,7 +202,7 @@ function getPatientDemographics(req, results, callback) {
 
     var patientID = results.pid;
 
-    var path = '/vpr/pid/' + patientID;
+    var path = '/data/index/pt-select-pid?range=' + patientID;
     var options = _.extend({}, req.app.config.jdsServer, {
         url: path,
         logger: req.logger,
@@ -259,7 +230,9 @@ function getUserDemographicsQuery(req, userID) {
     var logger = req.logger;
 
     if (_.isUndefined(userID)) {
-        logger.error({error: 'undefined userID'});
+        logger.error({
+            error: 'undefined userID'
+        });
         return undefined;
     }
 
@@ -273,7 +246,7 @@ function getUserDemographicsQuery(req, userID) {
         json: true
     });
 
-    logger.error({query: options});
+    logger.debug(options, 'getUserDemographicsQuery options');
 
     return options;
 }
@@ -293,6 +266,42 @@ function getClinicalObjectDetails(req, results, callback) {
         }
         results.clinicalObject = object;
         return callback(null, results);
+    });
+}
+
+function getNoteClinicalObjectDetails(req, results, callback) {
+    if (_.isEmpty(results)) {
+        req.logger.debug('no results for note clinical object details');
+        return callback(null, '');
+    }
+
+    var noteClinicalObjectUid = _.get(results, 'clinicalObject.data.completion.noteClinicalObjectUid');
+    if (_.isEmpty(noteClinicalObjectUid)) {
+        req.logger.debug('could not find note clinical object');
+        return callback(null, results);
+    }
+
+    var logger = req.logger;
+    var clinObjects = clinicalObjectSubsystem.read(logger, req.app.config, noteClinicalObjectUid, true, function (err, object) {
+        if (err) {
+            logger.debug('error retrieving clinical object for note');
+            return callback(null, results);
+        }
+
+        var details = {
+            data: {
+                items: []
+            }
+        };
+        details.data.items.push(object.data);
+
+        //Run through the ASU rules
+        filterAsuDocuments(req, details, function (err, response) {
+            if (!err && !_.isEmpty(response)) {
+                results.associatedNoteClinicalObject = object;
+            }
+            return callback(null, results);
+        });
     });
 }
 
@@ -320,7 +329,7 @@ function pidToNameLookup(req, userID, callback) {
 
 function lookupActions(logger, results, records, callback) {
     if (_.isEmpty(results)) {
-        req.logger.debug('no results');
+        logger.debug('no results');
         return callback(null, '');
     }
 
@@ -330,7 +339,11 @@ function lookupActions(logger, results, records, callback) {
     results.actions = retVal;
 
     if (_.isEmpty(domain) || _.isEmpty(stateInformation) || _.isEmpty(records)) {
-        logger.error({domain: domain, state: state, records: records});
+        logger.error({
+            domain: domain,
+            state: state,
+            records: records
+        });
         return callback(null, results);
     }
 
@@ -369,7 +382,10 @@ function lookupActions(logger, results, records, callback) {
         index++;
     }
 
-    logger.error({state: stateInformation, error: 'failed to retrieve actions'});
+    logger.error({
+        state: stateInformation,
+        error: 'failed to retrieve actions'
+    });
     return callback(null, results);
 }
 
@@ -404,9 +420,10 @@ function get(req, res) {
     var taskHistory = getTaskHistory.bind(null, req);
     var patientDetails = getPatientDemographics.bind(null, req);
     var clinicalObject = getClinicalObjectDetails.bind(null, req);
+    var noteClinicalObject = getNoteClinicalObjectDetails.bind(null, req);
     var actions = getActions.bind(null, req);
 
-    async.waterfall([taskDetails, taskHistory, patientDetails, clinicalObject, actions],
+    async.waterfall([taskDetails, taskHistory, patientDetails, clinicalObject, noteClinicalObject, actions],
         function (err, results) {
             if (err) {
                 logger.error(err);
@@ -425,8 +442,6 @@ module.exports._getUserDemographicsQuery = getUserDemographicsQuery;
 module.exports._getPatientDemographics = _getPatientDemographics;
 module.exports._transformQueryResults = transformQueryResults;
 module.exports._transformHistoryQueryResults = transformHistoryQueryResults;
-module.exports._composeInstanceQuery = composeInstanceQuery;
-module.exports._composeHistoryQuery = composeHistoryQuery;
 module.exports._getTaskDetails = getTaskDetails;
 module.exports._getTaskHistory = getTaskHistory;
 module.exports.getClinicalObjectDetails = getClinicalObjectDetails;

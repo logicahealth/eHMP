@@ -27,7 +27,7 @@ module.exports.getResourceConfig = function(app) {
             synchronize: false,
             convertPid: true
         },
-        requiredPermissions: [],
+        requiredPermissions: ['sign-note'],
         isPatientCentric: true
     }];
 };
@@ -129,7 +129,7 @@ function generateMadlib(noteObject, logger, appConfig, callback) {
         }
 
         var errors = [];
-        madlibStringGenerator.generateMadlibString(errors, noteObject, sourceClinicalObject);
+        madlibStringGenerator.generateMadlibString(errors, noteObject, sourceClinicalObject, appConfig);
 
         if (!_.isEmpty(errors)) {
             return callback(errors);

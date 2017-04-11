@@ -7,8 +7,9 @@ define([
     'app/applets/task_forms/activities/order.consult/views/associatedNotes_View',
     'app/applets/task_forms/activities/order.consult/views/prerequisites_View',
     'app/applets/task_forms/activities/order.consult/views/request_View',
+    'app/applets/task_forms/activities/order.consult/utils',
     'hbs!app/applets/task_forms/activities/order.consult/templates/activityDetails_Template'
-    ], function(Backbone, Marionette, _, Handlebars, CurrentAppointmentView, AssociatedNotesView, PrequisitesView, RequestView, ConsultDetailsTemplate) {
+    ], function(Backbone, Marionette, _, Handlebars, CurrentAppointmentView, AssociatedNotesView, PrequisitesView, RequestView, Utils, ConsultDetailsTemplate) {
         'use strict';
         return Backbone.Marionette.LayoutView.extend({
             template: ConsultDetailsTemplate,
@@ -19,6 +20,7 @@ define([
                 prerequisitesRegion: '#prerequisitesRegion'
             },
             initialize: function(options){
+                Utils.enrichConsultModel(this.model);
                 this.currentAppointmentsView = new CurrentAppointmentView({model: this.model});
                 this.associatedNotesView = new AssociatedNotesView({model: this.model});
                 this.prerequisitesView = new PrequisitesView({model: this.model});

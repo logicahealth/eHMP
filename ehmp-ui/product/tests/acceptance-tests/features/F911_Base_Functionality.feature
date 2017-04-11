@@ -17,9 +17,13 @@ Scenario: The cover sheet screen should load without issue
   Then the Community Health Summaries applet Summary is displayed
   And 'An error has occured' is not displayed in any of the coversheet applets
 
-@TC416 @TC417 @TC418 @TC419 @TC420 @TC421 @TC422 @TC423
+@TC416 @TC417 @TC418 @TC419 @TC420 @TC421 @TC422 @TC423 @DE6976 @three
 Scenario: The overview screen should load without issue
 #  Given user is logged into eHMP-UI
+  Given POB user is logged into EHMP-UI with facility as  "PANORAMA" accesscode as  "TWO1234" verifycode as  "TWO1234!!"
+  Then staff view screen is displayed
+  Then Navigate to Patient Search Screen
+  Then the patient search screen is displayed
   And user searches for and selects "BCMA,Eight"
   Then Overview is active
   Then the Numeric Lab Results Trend applet is displayed
@@ -28,8 +32,9 @@ Scenario: The overview screen should load without issue
   Then the Active Medications Trend applet is displayed
   Then the Problems Trend applet is displayed
   Then the Allergies Trend applet is displayed
-  Then the Problems Trend applet is displayed
+  Then the Reports Summary applet is displayed
   Then the Encounters Trend applet is displayed
+  Then the Clinical Reminders Summary applet is displayed
   And 'An error has occured' is not displayed in any of the overview applets
 
 @TC408 @DE1786

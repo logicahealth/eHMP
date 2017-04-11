@@ -4,7 +4,7 @@ require('../../../env-setup');
 var format = require('util').format;
 var _ = require('lodash');
 var errorUtil = require(global.VX_UTILS + 'error');
-var jobUtil = require(global.VX_UTILS + 'osync-job-utils');
+var jobUtil = require(global.OSYNC_UTILS + 'osync-job-utils');
 var logUtil = require(global.VX_UTILS + 'log');
 var async = require('async');
 

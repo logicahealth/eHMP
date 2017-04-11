@@ -20,12 +20,15 @@ var params = {
     fullConfig: {
         jdsServer: {},
         vistaSites: {
-            "ABCD": {
-                division: 100
+            'ABCD': {
+                division: [{
+                    id: '100',
+                    name: 'ABBBAA'
+                }]
             }
         }
     },
-    facilityID: 100
+    facilityID: '100'
 };
 
 var people = {
@@ -85,11 +88,11 @@ describe('people for facilities fetch list', function() {
     it('returns expected JSON', function(done) {
         fetch(dummyLogger, dummyConfig, function(err, result) {
             expect(result).to.be.truthy();
-            expect(_.get(result[0], "personID")).to.be("ABCD;uno1");
-            expect(_.get(result[0], "name")).to.be("lasties, firsties");
+            expect(_.get(result[0], 'personID')).to.be('ABCD;uno1');
+            expect(_.get(result[0], 'name')).to.be('lasties, firsties');
 
-            expect(_.get(result[1], "personID")).to.be("ABCD;dos2");
-            expect(_.get(result[1], "name")).to.be("Do, John (Supreme Commander)");
+            expect(_.get(result[1], 'personID')).to.be('ABCD;dos2');
+            expect(_.get(result[1], 'name')).to.be('Do, John (Supreme Commander)');
             done();
         }, params);
     });

@@ -28,5 +28,7 @@
  When the client requests Educations standalone resource for patient "9E7A;227"
  Then a "404" code response is returned
  
- 
-     
+ @DE5449
+ Scenario:  Verify that a user issues a request with an unsupported _tag value,
+ When the client issues a request with an unsupported _tag value "badtag" for patient "9E7A;227"
+ Then a "400" code response is returned

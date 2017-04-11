@@ -21,8 +21,10 @@ define([
                     icon: 'icon-concept-relationship',
                     srMessage: 'Press enter to view related concepts.',
                     view: ButtonView.extend({
+                        behaviors: {
+                            CRS: {}
+                        },
                         options: bOptions,
-
                         onRender: function() {
                             var target = this.getOption('targetView') || this.getOption('targetElement');
                             if (!_.isEmpty(target)) {
@@ -32,7 +34,6 @@ define([
                                 }
                             }
                         },
-
                         attributes: _.extend({}, ButtonView.prototype.attributes, {
                             'tooltip-data-key': 'toolbar_crs',
                             'button-type': 'crs-button-toolbar'
@@ -61,7 +62,7 @@ define([
                         onRender: function() {
                             var target = this.getOption('targetView') || this.getOption('targetElement');
                             if (!_.isEmpty(target) && target.model) {
-                                if (target.model.get('collection') && target.model.get('collection').length === 0) {
+                                if ((target.model.get('collection') && target.model.get('collection').length === 0) || !!this.options.detailsViewDisabled) {
                                     this.$el.prop('disabled', true);
                                 }
                             }
@@ -206,17 +207,30 @@ define([
                                     var pop = targetElement.$('[data-toggle=popover]');
                                     pop.trigger('click');
                                 }
-                                var toggleSrMessageText;
-                                this.$('.sr-only:contains("open")').length > 0 ? toggleSrMessageText = 'close' : toggleSrMessageText = 'open';
-                                this.$('.sr-only').text('Press enter to ' + toggleSrMessageText + ' the quicklook table');
+                                this.quickLookState();
                                 this.$el.focus();
+                            },
+                            'blur': function(){
+                                if(this.$('.sr-only:contains("close")').length > 0) {
+                                    Messaging.getChannel('toolbar').trigger('close:quicklooks');
+                                    this.quickLookState();
+                                }
                             }
                         }),
+                        quickLookState: function(){
+                            var toggleSrMessageText = (this.$('.sr-only:contains("open")').length > 0 ? 'close' : 'open');
+                            this.$('.sr-only').text('Press enter to ' + toggleSrMessageText + ' the quicklook table');
+                        },
                         initialize: function() {
                             ButtonView.prototype.initialize.apply(this, arguments);
                             var targetElement = this.getOption('targetView') || this.getOption('targetElement');
                             var pop = targetElement.$('[data-toggle=popover]');
                         },
+                        onRender: function() {
+                            if (!!this.options.quickLooksDisabled){
+                                this.$el.prop('disabled', true);
+                            }
+                        }
                     })
                 };
             case 'submenubutton':
@@ -290,7 +304,6 @@ define([
                                 return ButtonView.extend({
                                     attributes: _.extend({}, ButtonView.prototype.attributes, {
                                         'button-type': 'submenu-button-toolbar',
-                                        'tooltip-data-key': 'toolbar_submenu',
                                         'disabled': true
                                     }),
                                     onRender: function() {
@@ -303,8 +316,22 @@ define([
                                     tagName: 'a',
                                     attributes: _.extend({}, ButtonView.prototype.attributes, {
                                         'button-type': 'submenu-button-toolbar',
-                                        'tooltip-data-key': 'toolbar_submenu',
+                                        'tooltip-data-key': 'toolbar_associatedworkspace',
                                         'href': this.collection.models[0].get('url')
+                                    }),
+                                    events: _.extend({}, ButtonView.prototype.attributes, {
+                                        'click': function(e) {
+                                            e.preventDefault();
+                                            this.destroy();
+                                            this.$el.tooltip('destroy');
+                                            ADK.Navigation.navigate(this.$el.attr('href'));
+                                        },
+                                        'keydown': function(e) {
+                                            if (!/(13|32)/.test(e.which) || this.$el.is('.disabled, :disabled')) return;
+                                            e.preventDefault();
+                                            e.stopPropagation();
+                                            this.$el.trigger('click');
+                                        }
                                     })
                                 });
                             }
@@ -322,8 +349,7 @@ define([
                                 container: 'body',
                                 ButtonView: ButtonView.extend({
                                     attributes: _.extend({}, ButtonView.prototype.attributes, {
-                                        'button-type': 'submenu-button-toolbar',
-                                        'tooltip-data-key': 'toolbar_submenu'
+                                        'button-type': 'submenu-button-toolbar'
                                     })
                                 })
                             });
@@ -495,10 +521,9 @@ define([
                                             break;
                                     }
                                 }
-
-                                this.$el.focus();
+                                $(startTile).focus();
+                                this.$el.focus();                                 
                             }
-
                         },
                         onDestroy: function() {
                             this.$el.closest('.toolbar-active').removeClass('dragging-row');

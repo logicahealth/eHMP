@@ -10,7 +10,7 @@ function loadPatient(logger, syncConfig, job, callback) {
     logger.debug('demographics-sync.loadPatient: Initiating load/sync for patient identifier %j.', patientIdentifier);
 
     var options = {
-        url: syncConfig.protocol + '://' + syncConfig.host + ':' + syncConfig.port + syncConfig.patientDemoSyncPath,
+        url: syncConfig.protocol + '://' + syncConfig.host + ':' + syncConfig.port + syncConfig.patientSyncDemoPath,
         method: 'POST',
         json: createSyncData(job)};
 

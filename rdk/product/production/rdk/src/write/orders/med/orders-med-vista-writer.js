@@ -20,8 +20,8 @@ module.exports.create = function(writebackContext, callback) {
             if(err) {
                 return callback(err, data);
             }
-            writebackContext.vprModel = null;  // TODO set this by the VistA response
-            var error = null;  // TODO set error if trouble writing back
+            writebackContext.vprModel = null;  // set this by the VistA response
+            var error = null;  // set error if trouble writing back
             return callback(error);
         });
     });
@@ -43,8 +43,8 @@ module.exports.update = function(writebackContext, callback) {
             if(err) {
                 return callback(err, data);
             }
-            writebackContext.vprModel = null;  // TODO set this by the VistA response
-            var error = null;  // TODO set error if trouble writing back
+            writebackContext.vprModel = null;  // set this by the VistA response
+            var error = null;  // set error if trouble writing back
             return callback(error);
         });
     });

@@ -1,4 +1,3 @@
-/*jslint node: true */
 'use strict';
 
 var vitalsValidator = require('./vitals-validator');

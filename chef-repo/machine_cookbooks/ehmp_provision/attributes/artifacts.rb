@@ -52,14 +52,22 @@ default[:ehmp_provision][:artifacts] = {
   	:version => ENV["NODEMOCKSERVICES_VERSION"],
   	:release => true
 	},
-	:hmp => {
+	:kodak_hmp => {
 		:repo => "releases",
 		:group => "us.vistacore.ehmp",
   	:artifact => "hmp",
   	:extension => "zip",
-  	:version => ENV["HMP_VERSION"],
+  	:version => ENV["KODAK_HMP_VERSION"] || ENV["HMP_VERSION"],
   	:release => true
 	},
+  :panorama_hmp => {
+    :repo => "releases",
+    :group => "us.vistacore.ehmp",
+    :artifact => "hmp",
+    :extension => "zip",
+    :version => ENV["PANORAMA_HMP_VERSION"] || ENV["HMP_VERSION"],
+    :release => true
+  },
 	:kodak_cache => {
 		:repo => "releases",
 		:group => "us.vistacore",

@@ -14,6 +14,7 @@ define([
         addTooltips: function(collection, limit) {
             for (var i = 0; i < collection.models.length; i++) {
                 var attr = collection.models[i].attributes;
+
                 if (attr.oldValues) {
                     attr.limitedoldValues = attr.oldValues.splice(1, limit);
                     if ((attr.oldValues.length - attr.limitedoldValues.length) > 0) {
@@ -33,7 +34,7 @@ define([
             response = Util.getResultedFormatted(response);
             response = Util.getDisplayName(response);
             response = Util.getTypeName(response);
-            response = Util.noVitlasNoRecord(response);
+            response = Util.noVitalsNoRecord(response);
             response = Util.getFormattedHeight(response);
             response = Util.getResultUnits(response);
             response = Util.getMetricResultUnits(response);
@@ -46,27 +47,23 @@ define([
             ADK.Enrichment.addFacilityMoniker(response);
             return response;
         },
-        filterCollection: function(coll) {
+        filterCollection: function(coll, appletId, viewType) {
             var KnownTypes = {
                 expanded: ['BP', 'P', 'R', 'T', 'PO2', 'PN', 'WT', 'HT', 'BMI', 'CG'],
                 summary: ['BP', 'P', 'R', 'T', 'PO2', 'PN', 'WT', 'BMI', 'HT', 'CG'],
                 gist: ['BPS', 'BPD', 'P', 'R', 'T', 'PO2', 'PN', 'WT', 'HT', 'BMI', 'CG']
 
             };
-            var _self = this;
-            var resultColl = [];
-            var knownTypes = KnownTypes[this.appletConfig.viewType];
 
-            if (coll.length === 0 && _self.dataGridOptions.appletConfig.viewType !== 'expanded') {
-                return Util.setNoRecords(resultColl, knownTypes, knownTypes);
-            }
+            var resultColl = [];
+            var knownTypes = KnownTypes[viewType];
 
             coll.models.forEach(function(model) {
-                model.set('applet_id', _self.dataGridOptions.appletId);
+                model.set('applet_id', appletId);
                 model.attributes = collectionHandler.parseModel(model.attributes);
             });
 
-            var splitBloodPressure = _self.dataGridOptions.appletConfig.viewType !== 'expanded';
+            var splitBloodPressure = viewType !== 'expanded';
             coll = Util.buildCollection(coll, splitBloodPressure);
 
             coll.reset(_.filter(coll.models, function(model) {
@@ -74,14 +71,16 @@ define([
                     return false;
                 else
                     return true;
-            }));
+            }), {
+                silent: true
+            });
 
             var allTypes = $.unique(coll.pluck('displayName'));
             var displayTypes = knownTypes.filter(function(el) {
                 return allTypes.indexOf(el) != -1;
             });
 
-            if (_self.dataGridOptions.appletConfig.viewType === 'expanded') {
+            if (viewType === 'expanded') {
                 resultColl = _.sortBy(coll.models, function(model) {
                     return model.get('observed');
                 });
@@ -129,6 +128,10 @@ define([
                                 displayModel.set('graphOptions', gistConfiguration.graphOptions.BMI());
                                 break;
                             case 'PN':
+                                if (_.isNumber(displayModel.get('result'))) {
+                                    displayModel.set('result', displayModel.get('result').toString());
+                                }
+
                                 displayModel.set('graphOptions', gistConfiguration.graphOptions.PN());
                                 break;
                             case 'PO2':

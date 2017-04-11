@@ -8,34 +8,35 @@ var cdsSubsystem = require('../../subsystems/cds/cds-subsystem');
 
 var mockReqResUtil = cdsSpecUtil.mockReqResUtil;
 var appReference = cdsSpecUtil.createAppReference;
+var collectionFunctions = {};
 
 function createIntentJson(name, scope) {
     var intentJson = {
-        'description':'A Mock Intent',
-        'globalName':'Enterprise//FirstEngine',
-        'governance':null,
-        'id':'',
-        'invocations':[{
-            'dataFormat':'application/json+fhir',
-            'dataQueries':null,
-            'engineName':'engineOne',
-            'name':null,
-            'rules':[{
-                'id':'genderAgeRule',
+        'description': 'A Mock Intent',
+        'globalName': 'Enterprise//FirstEngine',
+        'governance': null,
+        'id': '',
+        'invocations': [{
+            'dataFormat': 'application/json+fhir',
+            'dataQueries': null,
+            'engineName': 'engineOne',
+            'name': null,
+            'rules': [{
+                'id': 'genderAgeRule',
                 'properties': {
-                    'delay':'10'
+                    'delay': '10'
                 }
             }]
         }],
         //'name':'FirstEngine',
         //'scope':'Enterprise',
-        'scopeId':null
+        'scopeId': null
     };
     //making these optional for required parameter testing...
-    if(name) {
+    if (name) {
         intentJson.name = name;
     }
-    if(scope) {
+    if (scope) {
         intentJson.scope = scope;
     }
     return intentJson;
@@ -83,36 +84,33 @@ describe('CDS Intent Resource', function() {
 
     describe('List endpoint HTTP response codes', function() {
         var db;
-        var collectionFunctions;
 
         beforeEach(function() {
-            collectionFunctions = {
-                find: function() {
-                    return {
-                        toArray: function(callback) {
-                            callback(null, []);
-                        }
-                    };
-                },
-                insert: function(postIntentJson, callback) {
-                    var echo = [];
-                    postIntentJson._id = 'mongodb12345678';
-                    echo.push(postIntentJson);
-                    callback(null, echo); // can mock a response here...
-                },
-                update: function(match, intent, callback){
-                    callback(null, ['1']);
-                },
-                ensureIndex: function() {
-                    return;
-                },
-                remove: function() {
-                    return;
-                }
+            collectionFunctions.find = function() {
+                return {
+                    toArray: function(callback) {
+                        callback(null, []);
+                    }
+                };
+            };
+            collectionFunctions.insert = function(postIntentJson, callback) {
+                var echo = [];
+                postIntentJson._id = 'mongodb12345678';
+                echo.push(postIntentJson);
+                callback(null, echo); // can mock a response here...
+            };
+            collectionFunctions.update = function(match, intent, callback) {
+                callback(null, ['1']);
+            };
+            collectionFunctions.ensureIndex = function() {
+                return;
+            };
+            collectionFunctions.remove = function() {
+                return;
             };
             db = cdsSpecUtil.createMockDb(collectionFunctions);
 
-            sinon.stub(cdsSubsystem, 'getCDSDB', function(dbName, callback) {
+            sinon.stub(cdsSubsystem, 'getCDSDB', function(dbName, initDb, callback) {
                 callback(null, db);
             });
             intent.init(appReference());
@@ -160,7 +158,7 @@ describe('CDS Intent Resource', function() {
                 echo.push(postIntentJson);
                 callback(null, echo); // can mock a response here...
             };
-            collectionFunctions.update= function(match, intent, callback){
+            collectionFunctions.update = function(match, intent, callback) {
                 callback(null, ['1']);
             };
 
@@ -195,7 +193,7 @@ describe('CDS Intent Resource', function() {
                 echo.push(postIntentJson);
                 callback(null, echo); // can mock a response here...
             };
-            collectionFunctions.update = function(match, intent, callback){
+            collectionFunctions.update = function(match, intent, callback) {
                 callback(null, ['1']);
             };
 
@@ -220,7 +218,7 @@ describe('CDS Intent Resource', function() {
                     }
                 };
             };
-            collectionFunctions.update = function(match, intent, callback){
+            collectionFunctions.update = function(match, intent, callback) {
                 callback(null, 1);
             };
 
@@ -259,7 +257,7 @@ describe('CDS Intent Resource', function() {
         it('deleteIntent responds HTTP not found when trying to delete an intent that does not exist', function() {
 
             //Create the mocked MongoDB functions that are used by the code that we're testing...
-            collectionFunctions.remove = function(match, callback){
+            collectionFunctions.remove = function(match, callback) {
                 callback(null, 0);
             };
 

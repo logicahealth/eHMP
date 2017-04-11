@@ -1,4 +1,3 @@
-/*jslint node: true */
 'use strict';
 
 var jdsSyncConfig = require('./jds-sync-config');
@@ -75,7 +74,7 @@ describe('jds-sync-config\'s', function() {
                     host: 'hmphost',
                     port: 3,
                     accessCode: '9E7A;500',
-                    verifyCode: 'ep1234;ep1234!!'
+                    verifyCode: 'PW    ;PW    !!'
                 },
                 jdsSync: {
                     settings: {

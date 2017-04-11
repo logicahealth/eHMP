@@ -1,124 +1,150 @@
+<div class="detail-modal-content">
     <div class="row">
         <div class="col-xs-12">
-            <h5 class="all-margin-no all-padding-no">Name</h5>
             <p>
-{{#if cdcFullVaccineName}}
-            {{cdcFullVaccineName}}
-{{else if standardizedName}}
-            {{standardizedName}}
-{{else}}
-            {{qualifiedName}}
-{{/if}}
+                <span class="right-padding-xs"><strong>Name:</strong></span>
+                <span>
+                    {{#if cdcFullVaccineName}}
+                        {{cdcFullVaccineName}}
+                    {{else if standardizedName}}
+                        {{standardizedName}}
+                    {{else}}
+                        {{qualifiedName}}
+                    {{/if}}
+                </span>
             </p>
         </div>
     </div>
+    <div class="row">
+        {{#if administeredDateTime}}
+        <div class="col-xs-3">
+            <p>
+                <span><strong>Date administered:</strong></span><br />
+                <span>{{administeredFormatted}}</span>
+            </p>
+        </div>
+        {{/if}}
+        {{#if seriesName}}
+        <div class="col-xs-3">
+            <p>
+                <span><strong>Series:</strong></span><br />
+                <span>{{seriesName}}</span>
+            </p>
+        </div>
+        {{/if}}
+        {{#if manufacturer}}
+        <div class="col-xs-3">
+            <p>
+                <span><strong>Manufacturer:</strong></span><br />
+                <span>{{manufacturer}}</span>
+            </p>
+        </div>
+        {{/if}}
+        {{#if lotNumber}}
+        <div class="col-xs-3">
+            <p>
+                <span><strong>Lot #:</strong></span><br />
+                <span>{{lotNumber}}</span>
+            </p>
+        </div>
+        {{/if}}
+        {{#if expirationDate}}
+        <div class="col-xs-3">
+            <p>
+                <span><strong>Expiration date:</strong></span><br />
+                <span>{{formatDate expirationDate "MM/DD/YYYY"}}</span>
+            </p>
+        </div>
+        {{/if}}
+        {{#if locationName}}
+        <div class="col-xs-3">
+            <p>
+                <span><strong>Location:</strong></span><br />
+                <span>{{locationName}}</span>
+            </p>
+        </div>
+        {{/if}}
+        {{#if dosage}}
+        <div class="col-xs-3">
+            <p>
+                <span><strong>Dosage/Unit:</strong></span><br />
+                <span>{{dosage}}{{dosageUnits}}</span>
+            </p>
+        </div>
+        {{/if}}
+        {{#ifExp routeOfAdministration "||" siteOfAdministration}}
+        <div class="col-xs-3">
+            <p>
+                <span><strong>Admin route/site:</strong></span><br />
+                <span>{{routeOfAdministration}} {{siteOfAdministration}}</span>
+            </p>
+        </div>
+        {{/ifExp}}
+    </div>
+    {{#if vis}}
 
-<div class="row">
-    {{#if administeredDateTime}}
-    <div class="col-xs-3">
-        <h5 class="all-margin-no all-padding-no">Date Administered</h5>
-        <p>{{administeredFormatted}}</p>
+            <div class="row">
+                <div class="col-xs-12">
+                    <p>
+                        <span><strong>Vaccine Information Statement(s) (VIS):</strong></span><br />
+                        {{#each vis}}
+                            <span>{{visName}} - Edition Date: {{formatDate editionDate}} ({{language}})</span><br />
+                        {{/each}}
+                    </p>
+                </div>
+            </div>
+
+    {{/if}}
+    {{#if performerName}}
+    <div class="row">
+        <div class="col-xs-3">
+            <p>
+                <span><strong>Administered by:</strong></span><br />
+                <span>{{performerName}}</span>
+            </p>
+        </div>
     </div>
     {{/if}}
-    {{#if seriesName}}
-    <div class="col-xs-3">
-        <h5 class="all-margin-no all-padding-no">Series</h5>
-        <p>{{seriesName}}</p>
+    {{#if orderingProvider}}
+    <div class="row">
+        <div class="col-xs-3">
+            <p>
+                <span><strong>Ordering provider:</strong></span><br />
+                <span>{{orderingProvider}}</span>
+            </p>
+        </div>
     </div>
     {{/if}}
-</div>
-<div class="row">
-    {{#if manufacturer}}
-    <div class="col-xs-3">
-        <h5 class="all-margin-no all-padding-no">Manufacturer</h5>
-        <p>{{manufacturer}}</p>
+    {{#if eventInformationSource}}
+    <div class="row">
+        <div class="col-xs-12">
+            <p>
+                <span><strong>Information source:</strong></span><br />
+                <span>{{eventInformationSource}}</span>
+            </p>
+        </div>
     </div>
     {{/if}}
-    {{#if lotNumber}}
-    <div class="col-xs-3">
-        <h5 class="all-margin-no all-padding-no">Lot #</h5>
-        <p>{{lotNumber}}</p>
+    {{#if comment}}
+    <div class="row">
+        <div class="col-xs-12">
+            <p>
+                <span><strong>Comment:</strong></span><br />
+                <span>{{comment}}</span>
+            </p>
+        </div>
     </div>
     {{/if}}
-    {{#if expirationDate}}
-    <div class="col-xs-3">
-        <h5 class="all-margin-no all-padding-no">Expiration Date</h5>
-        <p>{{formatDate expirationDate "MM/DD/YYYY"}}</p>
-    </div>
-    {{/if}}
-</div>
-<div class="row">
-    {{#if locationName}}
-    <div class="col-xs-3">
-        <h5 class="all-margin-no all-padding-no">Location</h5>
-        <p>{{locationName}}</p>
-    </div>
-    {{/if}}
-    {{#if dosage}}
-    <div class="col-xs-3">
-        <h5 class="all-margin-no all-padding-no">Dosage/Unit</h5>
-        <p>{{dosage}}{{dosageUnits}}</p>
-    </div>
-    {{/if}}
-    {{#ifExp routeOfAdministration "||" siteOfAdministration}}
-    <div class="col-xs-3">
-        <h5 class="all-margin-no all-padding-no">Admin Route/Site</h5>
-        <p>{{routeOfAdministration}} {{siteOfAdministration}}</p>
-    </div>
-    {{/ifExp}}
-</div>
-{{#if vis}}
-<div class="row">
-    <div class="col-xs-12">
-        <h5 class="all-margin-no all-padding-no">Vaccine Information Statement(s) (VIS)</h5>
-        {{#each vis}}
-            <div>{{visName}} - Edition Date: {{formatDate editionDate}} ({{language}})</div>
-        {{/each}}
-        <p></p>
-    </div>
-</div>
-{{/if}}
-{{#if performerName}}
-<div class="row">
-    <div class="col-xs-3">
-        <h5 class="all-margin-no all-padding-no">Administered By</h5>
-        <p>{{performerName}}</p>
-    </div>
-</div>
-{{/if}}
-{{#if orderingProvider}}
-<div class="row">
-    <div class="col-xs-3">
-        <h5 class="all-margin-no all-padding-no">Ordering Provider</h5>
-        <p>{{orderingProvider}}</p>
-    </div>
-</div>
-{{/if}}
-{{#if eventInformationSource}}
-<div class="row">
-    <div class="col-xs-12">
-        <h5 class="all-margin-no all-padding-no">Information Source</h5>
-        <p>{{eventInformationSource}}</p>
-    </div>
-</div>
-{{/if}}
-{{#if comment}}
-<div class="row">
-    <div class="col-xs-12">
-        <h5 class="all-margin-no all-padding-no">Comment</h5>
-        <p>{{comment}}</p>
-    </div>
-</div>
-{{/if}}
-<hr aria-hidden="true" />
-<form class="form-inline top-margin-sm">
-    <div id="dateRangeFilter"></div>
-</form>
-<div class="row">
-    <div class="col-md-12" id="lrDataTableView" accesskey="r">
-        <div class="panel panel-primary">
-            <div class="table-responsive">
-                <div class="js-backgrid"></div>
+    <hr aria-hidden="true" />
+    <form class="form-inline top-margin-sm">
+        <div id="dateRangeFilter"></div>
+    </form>
+    <div class="row bottom-margin-lg">
+        <div class="col-xs-12" id="lrDataTableView" accesskey="r">
+            <div class="panel panel-primary bottom-margin-no bottom-padding-no">
+                <div class="table-responsive">
+                    <div class="js-backgrid"></div>
+                </div>
             </div>
         </div>
     </div>

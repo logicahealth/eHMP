@@ -20,7 +20,7 @@ class MedicationGistContainer <  AllApplets
     add_verify(CucumberLabel.new("Count"), VerifyContainsText.new, AccessHtmlElement.new(:id, 'count'))
     add_verify(CucumberLabel.new("Graphic"), VerifyContainsText.new, AccessHtmlElement.new(:id, 'graphic'))
     add_verify(CucumberLabel.new("Age"), VerifyContainsText.new, AccessHtmlElement.new(:id, 'ageAdjust'))
-    add_verify(CucumberLabel.new('Empty Med Row'), VerifyText.new, AccessHtmlElement.new(:css, '[data-appletid=activeMeds] .grid-container div.empty-gist-list'))
+    add_verify(CucumberLabel.new('Empty Med Row'), VerifyText.new, AccessHtmlElement.new(:css, '[data-appletid=activeMeds] .grid-container p.color-grey-darkest'))
 
     add_verify(CucumberLabel.new("Medication Gist Items"), VerifyContainsText.new, AccessHtmlElement.new(:id, 'activeMeds-interventions-gist-items'))
     

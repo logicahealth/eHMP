@@ -13,7 +13,7 @@ define([], function() {
                 resourceTitle: 'tasks-update',
                 fetchType: 'POST',
                 criteria: {
-                    deploymentid: taskModel.get('DEPLOYMENTID'),
+                    deploymentId: taskModel.get('DEPLOYMENTID'),
                     taskid: taskModel.get('TASKID')
                 }
             };
@@ -69,7 +69,7 @@ define([], function() {
                 resourceTitle: 'tasks-update',
                 fetchType: 'POST',
                 criteria: {
-                    deploymentid: model.get('DEPLOYMENTID'),
+                    deploymentId: model.get('DEPLOYMENTID'),
                     taskid: model.get('TASKID')
                 }
             };
@@ -88,6 +88,7 @@ define([], function() {
             var TrayView = ADK.Messaging.request("tray:writeback:actions:trayView");
             if (TrayView) {
                 TrayView.$el.trigger('tray.reset');
+                TrayView.$el.trigger('tray.loaderHide');
             }
             ADK.UI.Workflow.hide() ;
         }

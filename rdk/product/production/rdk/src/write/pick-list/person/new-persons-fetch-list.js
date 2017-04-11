@@ -40,7 +40,7 @@ var dateConverter = require('../../../utils/fileman-date-converter');
  * @param params Object which can contain optional and/or required parameters as described above.
  */
 module.exports.fetch = function(logger, configuration, callback, params) {
-    var newPersonsType = '';
+    var newPersonsType = _.get(params, 'newPersonsType') || '';
     var date = _.get(params, 'date');
 
     if (!validate.isWholeNumber(date)) {

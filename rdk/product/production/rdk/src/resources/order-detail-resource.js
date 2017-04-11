@@ -1,4 +1,3 @@
-/* jslint node: true */
 /* jshint -W069 */ /* added exemption for uses of object['field'] over dot-notation, as this is consistent for the order object */
 'use strict';
 
@@ -44,14 +43,14 @@ function getOrderDetail(req, res) {
     if (nullchecker.isNullish(orderId)) {
         return res.status(rdk.httpstatus.bad_request).rdkSend('Missing id parameter');
     } else if (nullchecker.isNullish(dfn)) {
-        return res.status(rdk.httpstatus.bad_request).rdkSend('Missing dfn parameter');
+        return res.status(rdk.httpstatus.bad_request).rdkSend('Missing required patient identifiers');
     } else if (nullchecker.isNullish(pid)) {
-        return res.status(rdk.httpstatus.bad_request).rdkSend('Missing pid parameter');
+        return res.status(rdk.httpstatus.bad_request).rdkSend('Missing required patient identifiers');
     } else {
         req.logger.info('single order detail resource GET called for orderId:' + orderId + ' and patient DFN:' + dfn);
     }
 
-    var vistaConfig = getVistaRpcConfiguration(req.app.config, req.session.user.site, req.session.user);
+    var vistaConfig = getVistaRpcConfiguration(req.app.config, req.session.user);
 
     RpcClient.callRpc(req.logger, vistaConfig, 'ORQOR DETAIL', [orderId, dfn], function(error, result) {
         if (error) {

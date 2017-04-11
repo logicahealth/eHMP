@@ -37,8 +37,17 @@ var originalVaImageRecord = {
     'name': 'ANKLE 2 VIEWS',
     'pid': 'HDR;10108V420871',
     'providers': [{
+        'providerName': 'PROGRAMMER,FIVE',
+        'providerUid': 'urn:va:user:ABCD:119',
+        'providerRole': 'Verifier'
+    },{
         'providerName': 'WARDCLERK,SIXTYTHREE',
-        'providerUid': 'urn:va:user:ABCD:11273'
+        'providerUid': 'urn:va:user:ABCD:11273',
+        'providerRole': 'Primary'
+    },{
+        'providerName': 'PROVIDER,SEVEN',
+        'providerUid': 'urn:va:user:ABCD:990',
+        'providerRole': 'Requestor'
     }],
     'results': [{
         'localTitle': 'ANKLE 2 VIEWS',
@@ -88,6 +97,9 @@ describe('record-enrichment-image-xformer.js', function() {
                     // checking.  We just have to make sure that at least one enrichment
                     // occurred.
                     //----------------------------------------------------------------------
+                    // The below assertions also ensure that the "Primary" provider is
+                    // correctly stored in the root-level provider fields, regardless of
+                    // the provider's position in the providers array.
                     expect(record.providerName).toBe('WARDCLERK,SIXTYTHREE');
                     expect(record.providerDisplayName).toBe('Wardclerk,Sixtythree');
                     finished = true;

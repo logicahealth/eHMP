@@ -169,7 +169,7 @@
  	| resource.identifier.value				| CONTAINS urn:va:vital:9E7A:100184			 |
  	| resource.code.coding.system			| http://loinc.org									     |
  	| resource.code.coding.code				| 8310-5											           |
- 	| resource.code.coding.display		| BODY TEMPERATURE									     |
+ 	| resource.code.coding.display		| Body temperature									     |
  	| resource.text.div						    | CONTAINS TEMPERATURE 98.7 F						 |
  	| resource.valueQuantity.value			    | 98.7												     |
   | resource.valueQuantity.units          | F			    			               	 |
@@ -181,7 +181,7 @@
  	| resource.identifier.value				| CONTAINS urn:va:vital:9E7A:100184		 |
  	| resource.code.coding.system			| http://loinc.org									   |
  	| resource.code.coding.code				| 8867-4											         |
- 	| resource.code.coding.display  	| HEART BEAT										       |
+ 	| resource.code.coding.display  	| Heart rate										       |
  	| resource.text.div						    | CONTAINS PULSE 72 /min							 |
  	| resource.valueQuantity.value		      | 72												     |
   | resource.valueQuantity.units          | /min			    			           |
@@ -200,7 +200,7 @@
  	| resource.identifier.value				| CONTAINS urn:va:vital:9E7A:100184		|
  	| resource.code.coding.system			| http://loinc.org									  |
  	| resource.code.coding.code				| 8310-5											        |
- 	| resource.code.coding.display  	| BODY TEMPERATURE									  |
+ 	| resource.code.coding.display  	| Body temperature									  |
  	| resource.text.div						    | CONTAINS TEMPERATURE 98.7 F					|
  	| resource.valueQuantity.value		    | 98.7												    |
   | resource.valueQuantity.units        | F			    			               	|
@@ -212,7 +212,7 @@
  	| resource.identifier.value				        | CONTAINS urn:va:vital:9E7A:100184					|
  	| resource.code.coding.system			        | http://loinc.org						        			|
  	| resource.code.coding.code				        | 8867-4							              				|
- 	| resource.code.coding.display			      | HEART BEAT						            				|
+ 	| resource.code.coding.display			      | Heart rate						            				|
  	| resource.text.div						            | CONTAINS PULSE 72 /min				      			|
  	| resource.valueQuantity.value			      | 72												                |
   | resource.valueQuantity.units            | /min			    			                      |

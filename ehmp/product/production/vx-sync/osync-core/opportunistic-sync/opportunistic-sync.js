@@ -1,6 +1,7 @@
 'use strict';
 
 require('../../env-setup');
+var activeUserCleanup = require('./active-user-cleanup');
 
 var cron = require('node-schedule');
 
@@ -35,3 +36,16 @@ if (oSyncConfig.runOnSchedule === true) {
         handler.handle(log, oSyncConfig, environment, function(){});
     });
 }
+
+//Setup Delete ActiveUsers cron job
+var rule = new cron.RecurrenceRule();
+rule.dayOfWeek = [5,6,0,1,2,3,4];
+rule.hour = Number(oSyncConfig.scheduledRunAtHour + 2);
+rule.minute = Number(oSyncConfig.scheduledRunAtMinutes);
+
+log.info('opportunistic-sync: active cleanup schedule job...' + rule.hour);
+cron.scheduleJob(rule, function() {
+    log.debug(rule);
+    log.debug('opportunistic-sync: Starting active user cleanup.');
+    activeUserCleanup.removeInactiveUsers(log, oSyncConfig);
+});

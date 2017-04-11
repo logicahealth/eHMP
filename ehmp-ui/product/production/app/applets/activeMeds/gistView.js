@@ -1,12 +1,11 @@
 define([
     "app/applets/activeMeds/gistConfig",
-    "app/applets/activeMeds/medicationCollectionHandler",
+    "app/applets/activeMeds/medicationCollectionHandler"
 ], function(GistConfig, CollectionHandler) {
     "use strict";
 
     var GistView = ADK.AppletViews.InterventionsGistView.extend({
         initialize: function(options) {
-            var self = this;
             this._super = ADK.AppletViews.InterventionsGistView.prototype;
             var patientType = ADK.PatientRecordService.getCurrentPatient().patientStatusClass();
 
@@ -14,7 +13,6 @@ define([
                 filterFields: GistConfig.filterFields,
                 gistModel: GistConfig.gistModel,
                 collection: CollectionHandler.fetchMedsCollection(GistConfig.fetchOptions, patientType, 'gist'),
-                collectionParser: GistConfig.transformCollection,
                 gistHeaders: GistConfig.gistHeaders,
                 enableTileSorting: true,
                 onClickRow: function(model, event) {
@@ -37,22 +35,20 @@ define([
         },
         onCustomFilter: function(search) {
             var self = this;
-            if (GistConfig.shadowCollection === undefined) {
-                return;
-            }
 
-            var filtered = GistConfig.shadowCollection.filter(function(item) {
+            var filtered = _.filter(this.appletOptions.collection.originalModels,function(item) {
                 var filterString = '';
                 _.each(self.appletOptions.filterFields, function(field) {
+                    var products = item.products;
                     if (field === 'drugClassName') {
-                        var productLength = item.get('products') !== undefined ? item.get('products').length : 0;
+                        var productLength = products !== undefined ? products.length : 0;
                         for (var i = 0; i < productLength; i++) {
-                            if (item.get('products')[i].drugClassName !== undefined) {
-                                filterString = filterString + ' ' + item.get('products')[i].drugClassName;
+                            if (products[i].drugClassName !== undefined) {
+                                filterString = filterString + ' ' + products[i].drugClassName;
                             }
                         }
                     } else {
-                        filterString = filterString + ' ' + item.get(field);
+                        filterString = filterString + ' ' + item[field];
                     }
 
                 });
@@ -62,12 +58,11 @@ define([
                     return true;
                 }
             });
-            var filteredCollection = new Backbone.Collection();
-            filteredCollection.reset(filtered);
-            this.appletOptions.collection.reset(filteredCollection.models);
+            this.appletOptions.collection.reset(filtered);
+
         },
         onClearCustomFilter: function(search) {
-            this.appletOptions.collection.reset(GistConfig.shadowCollection.models);
+            this.appletOptions.collection.reset(this.appletOptions.collection.originalModels);
             if (search) {
                 this.onCustomFilter(search);
             }

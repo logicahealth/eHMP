@@ -6,49 +6,36 @@ define([
 ], function(Backbone, Marionette, _, modalTemplate) {
     'use strict';
 
-
-    var DischargeModel = Backbone.Model.extend({
-        defaults: {},
-    });
-
-    var dischargeModel = new DischargeModel();
-
-
     return Backbone.Marionette.ItemView.extend({
         template: modalTemplate,
-        model: DischargeModel,
+        modelEvents: {
+            'change': 'render'
+        },
+        serializeModel: function(model) {
+            var JSON = model.toJSON();
+            var summaryStatusClass = '',
+                lcName = _.get(JSON, 'statusDisplayName', '').toLowerCase();
 
-        initialize: function(options) {
-            //for intigration within the documents tab
-            var toFilter = options && options.model,
-                summaryStatusDisplayName = toFilter.get('statusDisplayName'),
-                lcName = summaryStatusDisplayName.toLowerCase(),
-                summaryStatusClass = '';
-
-            if (lcName === 'completed') {
-                summaryStatusClass = 'text-success';
-            } else if (lcName === 'retracted') {
-                summaryStatusClass = 'text-danger';
+            if (lcName === 'completed' || JSON.summaryStatusDisplayName === 'complete' ) {
+                JSON.summaryStatusDisplayName = 'Completed';
+            } else {
+                JSON.summaryStatusDisplayName = JSON.statusDisplayName;
+                if (lcName === 'retracted') {
+                    summaryStatusClass = 'text-danger';
+                }
             }
-
-            dischargeModel.set({
-                'filterDocId': toFilter.get('uid'),
-                'summaryFacilityName': toFilter.get('facilityName'),
-                'summaryLocalTitle': toFilter.get('localTitle'),
-                'summaryDateTime': toFilter.get('referenceDateTime'),
-                'summaryKind': toFilter.get('kind'),
-                'summaryEntered': toFilter.get('entered'),
-                'summaryAuthorDisplayName': toFilter.get('authorDisplayName'),
-                'summaryCosignerDisplayName': toFilter.get('cosignerDisplayName'),
-                'summaryAttendingDisplayName': toFilter.get('attendingDisplayName'),
-                'summaryStatusDisplayName': summaryStatusDisplayName,
-                'summaryStatusClass': summaryStatusClass,
-                'summaryText': toFilter.get('text')[0].content
-            });
-
-            this.model = dischargeModel;
-
+            JSON.filterDocId = JSON.uid;
+            JSON.summaryFacilityName = JSON.facilityName;
+            JSON.summaryLocalTitle = JSON.localTitle;
+            JSON.summaryDateTime = JSON.referenceDateTime;
+            JSON.summaryKind = JSON.kind;
+            JSON.summaryEntered = JSON.entered;
+            JSON.summaryAuthorDisplayName = JSON.authorDisplayName;
+            JSON.summaryCosignerDisplayName = JSON.cosignerDisplayName;
+            JSON.summaryAttendingDisplayName = JSON.attendingDisplayName;
+            JSON.summaryStatusClass = summaryStatusClass;
+            JSON.summaryText = _.get(JSON.text[0], 'content');
+            return JSON;
         }
-
     });
 });

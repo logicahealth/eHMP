@@ -4,6 +4,7 @@ var getVistaRpcConfiguration = require('../../../utils/rpc-config').getVistaRpcC
 var RpcClient = require('vista-js').RpcClient;
 var async = require('async');
 var _ = require('lodash');
+var nullchecker = require('../../../core/rdk').utils.nullchecker;
 
 /**
  * Returns VPR order object by calling HMP GET PATIENT DATA JSON
@@ -12,16 +13,19 @@ var _ = require('lodash');
  * @param callback The callback
  */
 var getVprOrder = function(writebackContext, orderUid, callback) {
+    if(nullchecker.isNullish(writebackContext.interceptorResults.patientIdentifiers.dfn)){
+        return callback(new Error('Missing required patient identifiers'));
+    }
 
     var rpcName = 'HMP GET PATIENT DATA JSON';
 
     var rpcParams = {
-        '"patientId"': writebackContext.model.dfn,
+        '"patientId"': writebackContext.interceptorResults.patientIdentifiers.dfn,
         '"domain"': 'order',
         '"uid"': orderUid
     };
 
-    var rpcConfig = getVistaRpcConfiguration(writebackContext.appConfig, writebackContext.siteHash);
+    var rpcConfig = getVistaRpcConfiguration(writebackContext.appConfig, writebackContext.vistaConfig);
 
     rpcConfig.context = 'HMP SYNCHRONIZATION CONTEXT';
 
@@ -95,7 +99,7 @@ var toUidFromLegacyOrderData = function(writebackContext, orderData) {
  * @returns uid
  */
 var toUid = function(writebackContext, orderId) {
-    return 'urn:va:order:' + writebackContext.siteHash + ':' + writebackContext.model.dfn + ':' + orderId;
+    return 'urn:va:order:' + writebackContext.siteHash + ':' + writebackContext.interceptorResults.patientIdentifiers.dfn + ':' + orderId;
 };
 
 module.exports.getVprOrder = getVprOrder;
